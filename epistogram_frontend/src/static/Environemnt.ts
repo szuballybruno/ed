@@ -9,8 +9,10 @@ export type LoggingKeysType =
     'VIDEO_POPUPS' |
     'PLAYBACK' |
     'FILE UPLOAD' |
-    'AUTO SCROLL' | 
-    'BUSY';
+    'AUTO SCROLL' |
+    'BUSY' |
+    'AUTO NAV' | 
+    'EVENT BUS';
 
 export const Environment = (() => {
 
@@ -22,10 +24,10 @@ export const Environment = (() => {
     const isLocalhost = process.env.REACT_APP_IS_LOCALHOST === 'true';
 
     const currentOrigin = window.location.origin;
-    const getAuthHandshakeIntervalInMs = 5 * 60 * 1000; // 5 minutes
+    const getAuthHandshakeIntervalInMs = 1000 * 30; //5 * 60 * 1000; // 5 minutes
     const eventPoolingIntervalInMs = 5 * 60 * 1000; // 5 mins
     const loggingEnabled = false;
-    const loggingEnabledKeys: LoggingKeysType[] = ['WARNING', 'VIDEO_POPUPS', 'MUTATIONS', 'AUTO SCROLL', 'BUSY'];
+    const loggingEnabledKeys: LoggingKeysType[] = ['WARNING', 'AUTO NAV', 'EVENT BUS'];
 
     const getAssetUrl = (path: string, assetUrlPath?: string) => {
 

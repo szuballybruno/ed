@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { LoadingStateType } from '../../../models/types';
-import { useGetCurrentAppRoute } from '../../../static/frontendHelpers';
+import { DictionaryOfT, useGetCurrentAppRoute } from '../../../static/frontendHelpers';
 import { Logger } from '../../../static/Logger';
 
 export type ErrorType = null | { message: string };
@@ -17,8 +17,7 @@ type BusyStateType = {
     key: string
 }
 
-type EveryKeyIsT<T> = { [K: string]: T };
-type StateType = EveryKeyIsT<BusyStateType>;
+type StateType = DictionaryOfT<BusyStateType>;
 
 export const useBusyBarContext = () => {
 

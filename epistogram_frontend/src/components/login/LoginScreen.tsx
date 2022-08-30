@@ -1,17 +1,18 @@
 import { Box, Flex } from '@chakra-ui/layout';
 import React, { useContext, useEffect, useState } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
-import { useLogInUser } from '../../services/api/authenticationApiService';
+import { AuthenticationStateType, useLogInUser } from '../../services/api/authenticationApiService';
 import { useNavigation } from '../../services/core/navigatior';
 import { useShowErrorDialog } from '../../services/core/notifications';
 import { Environment } from '../../static/Environemnt';
 import { useIsScreenWiderThan } from '../../static/frontendHelpers';
 import { useQueryVal } from '../../static/locationHelpers';
+import { Logger } from '../../static/Logger';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoEntry } from '../controls/EpistoEntry';
 import { EpistoFont } from '../controls/EpistoFont';
 import { PageRootContainer } from '../PageRootContainer';
-import { AuthenticationStateContext,  RefetchUserAsyncContext } from '../system/AuthenticationFrame';
+import { AuthenticationStateContext, RefetchUserAsyncContext } from '../system/AuthenticationFrame';
 import { useAuthorizationContext } from '../system/AuthorizationContext';
 import { LoadingFrame } from '../system/LoadingFrame';
 import { useEpistoDialogLogic } from '../universal/epistoDialog/EpistoDialogLogic';
@@ -26,6 +27,7 @@ const LoginScreen = () => {
     const refetchUser = useContext(RefetchUserAsyncContext);
     const { hasPermission } = useAuthorizationContext();
     const dest = useQueryVal('dest');
+    const [isUpToDate, setIsUpToDate] = useState(false);
 
     // state
     const [errorMessage, setErrorMessage] = useState('');
@@ -80,11 +82,22 @@ const LoginScreen = () => {
         // TODO
     };
 
+    useEffect(() => {
+
+        refetchUser()
+            .then(() => setIsUpToDate(true));
+    }, [refetchUser]);
+
     // watch for auth state change
     // and navigate to home page if athenticated
     useEffect(() => {
 
+        if (!isUpToDate)
+            return;
+
         if (authState === 'authenticated') {
+
+            Logger.logScoped('AUTO NAV', `Auth state is ${'authenticated' as AuthenticationStateType}, navigating...`);
 
             if (hasPermission('ACCESS_APPLICATION')) {
 
@@ -104,7 +117,7 @@ const LoginScreen = () => {
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [authState]);
+    }, [authState, isUpToDate]);
 
     // keydown
     useEffect(() => {

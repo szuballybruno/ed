@@ -439,7 +439,7 @@ export const useRedirectOnExactMatch = (opts: {
         if (!isMatchingRouteExactly)
             return;
 
-            navigate2(redirectRoute, params);
+        navigate2(redirectRoute, params);
     }, [isMatchingRouteExactly]);
 };
 
@@ -696,6 +696,8 @@ export const useEventTrigger = () => {
         fireEvent
     };
 };
+
+export type DictionaryOfT<T> = { [K: string]: T };
 
 export type EventTriggerType = ReturnType<typeof useEventTrigger>;
 

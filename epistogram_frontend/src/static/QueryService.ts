@@ -4,6 +4,7 @@ import { EMPTY_ARRAY } from '../helpers/emptyArray';
 import { LoadingStateType } from '../models/types';
 import { httpGetAsync } from '../services/core/httpClient';
 import { ErrorWithCode } from '../shared/types/ErrorWithCode';
+import { eventBus } from './EventBus';
 
 export type QueryResultState<T> = {
     state: LoadingStateType;
@@ -15,48 +16,9 @@ export type QueryResult<T> = QueryResultState<T> & {
     refetch: () => Promise<void>;
 }
 
-type QueryEventType = (queryResultState: QueryResultState<any>) => void;
-
-type QueryServiceState = {
-    eventSubscriptions: QueryEventType[]
-}
-
-// export const QueryServiceContext = createContext<QueryServiceState>({ eventSubscriptions: [] });
-
-const queryServiceContext: QueryServiceState = {
-    eventSubscriptions: []
-};
-
-const useFireEvent = () => {
-
-    // const queryServiceContext = useContext(QueryServiceContext);
-
-    const fireEvent = useCallback((queryResultState: QueryResultState<any>) => {
-
-        queryServiceContext
-            .eventSubscriptions
-            .forEach(event => event(queryResultState));
-    }, [queryServiceContext]);
-
-    return {
-        fireEvent
-    };
-};
-
-const useScubscribeEvent = () => {
-
-    // const queryServiceContext = useContext(queryServiceContext);
-
-    const scubscribeEvent = useCallback((fn: QueryEventType) => {
-
-        queryServiceContext
-            .eventSubscriptions = [...queryServiceContext.eventSubscriptions, fn];
-    }, [queryServiceContext]);
-
-    return {
-        scubscribeEvent
-    };
-};
+export type QueryEventData = {
+    route: string;
+} & QueryResultState<any>;
 
 const useXQuery = <T extends Object>(url: string, queryParams?: any, isEnabled?: boolean): QueryResult<T | null> => {
 
@@ -129,12 +91,13 @@ const useXQuery = <T extends Object>(url: string, queryParams?: any, isEnabled?:
         error
     ]);
 
-    const { fireEvent } = useFireEvent();
-
     useEffect(() => {
 
-        fireEvent(qr);
-    }, [fireEvent, qr]);
+        const data: QueryEventData = { ...qr, route: url };
+
+        eventBus
+            .fireEvent('onquery', data);
+    }, [url, qr]);
 
     return qr;
 };
@@ -151,6 +114,5 @@ const useXQueryArray = <T>(url: string, queryParams?: any, isEnabled?: boolean):
 
 export const QueryService = {
     useXQuery,
-    useXQueryArray,
-    useScubscribeEvent
+    useXQueryArray
 };

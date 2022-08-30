@@ -1,19 +1,37 @@
 import { useEffect } from 'react';
+import { applicationRoutes } from '../../configuration/applicationRoutes';
+import { useNavigation } from '../../services/core/navigatior';
+import { eventBus } from '../../static/EventBus';
 import { PropsWithChildren } from '../../static/frontendHelpers';
-import { QueryService } from '../../static/QueryService';
+import { Logger } from '../../static/Logger';
+import { QueryEventData } from '../../static/QueryService';
 
 export const QuerySubscriptionFrame = ({ children }: PropsWithChildren) => {
 
-    const { scubscribeEvent } = QueryService.useScubscribeEvent();
+    const { navigate2 } = useNavigation();
 
     useEffect(() => {
 
-        scubscribeEvent(x => {
+        eventBus
+            .scubscribeEvent('onquery', 'forbiddenWatcher', (x: QueryEventData) => {
 
-            if (x.error?.code === 'forbidden')
-                console.log('Forbidden!');
-        });
-    }, [scubscribeEvent]);
+                if (x.error?.code === 'forbidden') {
+
+                    Logger.logScoped('AUTO NAV', 'Forbidden, navigating to login page...');
+                    navigate2(applicationRoutes.loginRoute);
+                }
+            });
+
+        eventBus
+            .scubscribeEvent('onquery', 'noPermissionWatcher', (x: QueryEventData) => {
+
+                if (x.error?.code === 'no permission') {
+
+                    Logger.logScoped('AUTO NAV', 'No permission to access resource, navigating to home page...');
+                    navigate2(applicationRoutes.homeRoute);
+                }
+            });
+    }, [navigate2]);
 
     return (
         <>
