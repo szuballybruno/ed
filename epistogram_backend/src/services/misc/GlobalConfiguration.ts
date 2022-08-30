@@ -31,7 +31,7 @@ export class GlobalConfiguration {
             setNewPasswordTokenSecret: 'sdajwd99839d8y9ac9ayw7dya398yd9aysdas'
         },
         tokenLifespans: {
-            accessTokenLifespanInS: 1 * 1 * 5, // 10s
+            accessTokenLifespanInS: 2 * 60 * 60, // 2 hours 
             refreshTokenLifespanInS: 72 * 60 * 60, // 72 hours
             setNewPasswordTokenLifespanInS: 8 * 60 * 60, // 8 hours,
             registrationTokenLifespanInS: 127 * 60 * 60, // 127 hours,

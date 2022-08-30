@@ -1,6 +1,13 @@
+import { Flex } from '@chakra-ui/react';
+import { Refresh } from '@mui/icons-material';
 import moment from 'moment';
-import { createContext, FC, useContext } from 'react';
+import { createContext, FC, useContext, useEffect, useState } from 'react';
+import { Environment } from '../../static/Environemnt';
 import { eventBus } from '../../static/EventBus';
+import { reloadPage } from '../../static/frontendHelpers';
+import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoFont } from '../controls/EpistoFont';
+import { FullscreenOverlay } from '../universal/FullscreenOverlay';
 
 class SessionWatcher {
 
@@ -36,7 +43,7 @@ class SessionWatcher {
         console.log('Activity... time: ' + activityDate);
 
         const gapInAtivity = this._lastHandshakeDate < moment(activityDate)
-            .subtract(5, 's')
+            .subtract(Environment.sessionHangThresholdInMs, 'ms')
             .toDate();
 
         if (!gapInAtivity)
@@ -55,7 +62,50 @@ export const useSessionWatcherContext = () => useContext(SessionWatcherContext);
 
 export const SessionWatcherFrame: FC = ({ children }) => {
 
+    const [showOverlay, setShowOverlay] = useState(false);
+
+    useEffect(() => {
+
+        eventBus
+            .scubscribeEvent('onActivityGap', 'overlayOnActivityGap', () => {
+
+                setShowOverlay(true);
+            });
+    }, []);
+
     return <SessionWatcherContext.Provider value={sessionWatcherInstance}>
-        {children}
+        <FullscreenOverlay
+            overlayContent={<Flex
+                pos="absolute"
+                className="whall"
+                align='center'
+                justify="center">
+
+                <Flex
+                    p="30px"
+                    borderRadius="10px"
+                    bg="white"
+                    direction="column"
+                    align="center">
+
+                    <EpistoFont>
+                        Session expired, try refreshing the page!
+                    </EpistoFont>
+
+                    <EpistoButton
+                        margin={{
+                            top: 'px10'
+                        }}
+                        variant="colored"
+                        icon={<Refresh></Refresh>}
+                        onClick={() => reloadPage()}>
+                        Refresh
+                    </EpistoButton>
+                </Flex>
+            </Flex>}
+            visible={showOverlay}>
+
+            {children}
+        </FullscreenOverlay>
     </SessionWatcherContext.Provider>;
 };

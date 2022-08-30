@@ -1,6 +1,7 @@
-import { Box, Flex } from '@chakra-ui/react';
+import { Flex } from '@chakra-ui/react';
 import { PropsWithChildren } from '../../../static/frontendHelpers';
 import { EpistoFont } from '../../controls/EpistoFont';
+import { FullscreenOverlay } from '../../universal/FullscreenOverlay';
 
 export const GlobalErrorOverlay = ({
     children,
@@ -13,38 +14,25 @@ export const GlobalErrorOverlay = ({
 
 
     return (
-        <Flex
-            id={GlobalErrorOverlay.name}
-            position='relative'
-            className="whall">
-
-            {children}
-
-            {visible && <Flex
-                className="whall"
-                position="absolute"
+        <FullscreenOverlay
+            visible={visible}
+            overlayContent={<Flex
                 align="center"
                 justify="center"
-                zIndex="2">
-
-                <Box
-                    className="whall"
-                    position="absolute"
-                    bg="black"
-                    opacity="0.1" />
+                zIndex="200"
+                className="whall">
 
                 <Flex
-                    align="center"
-                    justify="center"
-                    background="white"
-                    zIndex="200"
-                    p="30px">
+                    p="30px"
+                    bg="white">
 
                     <EpistoFont>
                         {error?.message ?? 'An unknown technical error occured. Try refreshing the page, or coming back later.'}
                     </EpistoFont>
                 </Flex>
-            </Flex>}
-        </Flex>
+            </Flex>}>
+
+            {children}
+        </FullscreenOverlay>
     );
 };
