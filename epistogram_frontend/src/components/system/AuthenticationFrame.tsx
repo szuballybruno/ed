@@ -49,17 +49,20 @@ const AuthFirewall = (props: PropsWithChildren & {
     const { hasPermission } = useAuthorizationContext();
     const isUnauthorized = !!currentRoute.isUnauthorized;
 
-    // check for error before render, redirect to login if necessary
+    // check for error before render, 
+    // redirect to login if necessary
     useEffect(() => {
 
+        const isCurrentRouteLogin = currentRoute.route.getAbsolutePath() === applicationRoutes.loginRoute.route.getAbsolutePath();
+
         // error
-        if (authState === 'error') {
+        if (authState === 'error' && !isCurrentRouteLogin) {
 
             Logger.logScoped('AUTO NAV', `Auth state: ${authState}. Redirecting to login.`);
 
             navigate2(loginRoute);
         }
-    }, [authState, navigate2, loginRoute]);
+    }, [authState, navigate2, loginRoute, currentRoute]);
 
     Logger.logScoped('AUTH', `Current route: ${currentRoute.route.getAbsolutePath()} IsUnrestricted: ${isUnauthorized}`);
 

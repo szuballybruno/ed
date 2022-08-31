@@ -2,27 +2,32 @@ import { readFileSync } from 'fs';
 import { createTransport } from 'nodemailer';
 import { User } from '../models/entity/User';
 import { EpistoEmail } from '../models/EpistoEmail';
+import { Id } from '../shared/types/versionId';
 import { replaceAll } from '../utilities/helpers';
+import { DomainProviderService } from './DomainProviderService';
 import { GlobalConfiguration } from './misc/GlobalConfiguration';
 import { UrlService } from './UrlService';
 
 export class EmailService {
 
-    private _config: GlobalConfiguration;
-    private _assetUrlService: UrlService;
+    constructor(
+        private _config: GlobalConfiguration,
+        private _assetUrlService: UrlService,
+        private _domainProviderService: DomainProviderService) {
 
-    constructor(config: GlobalConfiguration, assetUrlService: UrlService) {
-
-        this._config = config;
-        this._assetUrlService = assetUrlService;
     }
 
     sendInvitaitionMailAsync = async (
         invitationToken: string,
         userEmail: string,
-        userFullName: string) => {
+        userFullName: string,
+        comapnyId: Id<'Company'>) => {
 
-        const url = `${this._config.misc.frontendUrl}/registration?token=${invitationToken}&isInvited=true`;
+        const domain = await this
+            ._domainProviderService
+            .getDomainByCompanyAsync(comapnyId);
+
+        const url = `${domain}/registration?token=${invitationToken}&isInvited=true`;
 
         const epistoEmail = {
             to: userEmail,
@@ -44,7 +49,10 @@ export class EmailService {
         user: User,
         generatedPassword: string) => {
 
-        const epistogramAppUrl = this._config.misc.frontendUrl;
+        const domain = await this
+            ._domainProviderService
+            .getDomainAsync(user.id);
+
         const { email, firstName, lastName } = user;
 
         const epistoEmail = {
@@ -55,7 +63,7 @@ export class EmailService {
                 params: {
                     epistogramLogoUrl: this._assetUrlService.getAssetUrl('images/logo.png'),
                     generatedPassword: generatedPassword,
-                    epistogramAppUrl: epistogramAppUrl
+                    epistogramAppUrl: domain
                 }
             }
         } as EpistoEmail;

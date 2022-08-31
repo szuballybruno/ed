@@ -1,13 +1,15 @@
 
+import { AuthenticationController } from '../api/AuthenticationController';
 import { CourseProgressController } from '../api/CourseProgressController';
 import { PlaylistController } from '../api/PlaylistController';
 import { LoggerService } from '../services/LoggerService';
 import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
 import { ORMConnectionService } from '../services/ORMConnectionService/ORMConnectionService';
 import { SQLConnectionService } from '../services/sqlServices/SQLConnectionService';
+import { AuthenticationMiddleware } from '../turboImplementations/AuthenticationMiddleware';
+import { AuthorizationMiddleware } from '../turboImplementations/AuthorizationMiddleware';
 import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
-import { ActionWrapperFunctionType, GetServiceProviderType, ITurboRequest, ITurboResponse, IXTurboExpressListener } from '../utilities/XTurboExpress/XTurboExpressTypes';
-import { AuthenticationController } from '../api/AuthenticationController';
+import { ActionWrapperFunctionType, ITurboRequest, ITurboResponse, IXTurboExpressListener } from '../utilities/XTurboExpress/XTurboExpressTypes';
 import { CoinTransactionsController } from './../api/CoinTransactionsController';
 import { CommentController } from './../api/CommentController';
 import { CompanyController } from './../api/CompanyController';
@@ -38,9 +40,8 @@ import { UserProgressController } from './../api/UserProgressController';
 import { UserStatsController } from './../api/UserStatsController';
 import { VideoController } from './../api/VideoController';
 import { VideoRatingController } from './../api/VideoRatingController';
-import { AuthenticationMiddleware } from '../turboImplementations/AuthenticationMiddleware';
-import { AuthorizationMiddleware } from '../turboImplementations/AuthorizationMiddleware';
 import { TurboExpressBuilder } from './../utilities/XTurboExpress/TurboExpress';
+import { ServiceProviderInitializator } from './initApp';
 import { ServiceProvider } from './servicesDI';
 
 export const actionWrapper: ActionWrapperFunctionType = async (serviceProvider: ServiceProvider, action: () => Promise<any>) => {
@@ -96,15 +97,17 @@ export const actionWrapper: ActionWrapperFunctionType = async (serviceProvider: 
 };
 
 export const initTurboExpress = (
-    singletonProvider: ServiceProvider,
-    getServiceProvider: GetServiceProviderType,
+    initializator: ServiceProviderInitializator,
     listener: IXTurboExpressListener) => {
+
+    const singletonProvider = initializator
+        .getSingletonProvider();
 
     const globalConfig = singletonProvider.getService(GlobalConfiguration);
     const loggerService = singletonProvider.getService(LoggerService);
 
     const turboExpress = new TurboExpressBuilder<ActionParams, ITurboRequest, ITurboResponse>(loggerService, listener)
-        .setServicesCreationFunction(getServiceProvider)
+        .setServicesCreationFunction(initializator.getInitializedTransientServices.bind(initializator))
         .addActionWrapperFunction(actionWrapper)
         .setPort(globalConfig.misc.hostPort)
         .setTurboMiddleware<void, ActionParams>(AuthenticationMiddleware)

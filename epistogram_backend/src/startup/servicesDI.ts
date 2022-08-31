@@ -1,6 +1,8 @@
 import { CourseCompletionService } from '../services/CourseCompletionService';
 import { CourseProgressService } from '../services/CourseProgressService';
+import { DomainProviderService } from '../services/DomainProviderService';
 import { FileSystemService } from '../services/FileSystemService';
+import { ParametrizedConstructor } from '../services/misc/advancedTypes/ParametrizedConstructor';
 import { createDBSchema } from '../services/misc/dbSchema';
 import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
 import { PlaylistService } from '../services/PlaylistService';
@@ -103,8 +105,6 @@ export const instansiateSingletonServices = (rootDir: string) => {
         .getClassBuilder()
         .addClassInstance(XDBMSchemaType, dbSchema)
         .addClassInstance(GlobalConfiguration, globalConfiguration)
-        .addClass(UrlService, [GlobalConfiguration])
-        .addClass(MapperService, [UrlService])
         .addClass(LoggerService, [GlobalConfiguration])
         .addClass(SQLPoolService, [GlobalConfiguration])
         .getContainer();
@@ -115,7 +115,7 @@ export const instansiateSingletonServices = (rootDir: string) => {
     return new ServiceProvider(instances);
 };
 
-export const getTransientServiceContainer = (singletonProvider: ServiceProvider) => {
+export const getTransientServiceContainer = (singletonProvider: ServiceProvider): DependencyContainer<ParametrizedConstructor<any>> => {
 
     // create transients
     const container = XDependency
@@ -124,12 +124,12 @@ export const getTransientServiceContainer = (singletonProvider: ServiceProvider)
         // add singleton instances 
         .addClassInstance(GlobalConfiguration, singletonProvider.getService(GlobalConfiguration))
         .addClassInstance(XDBMSchemaType, singletonProvider.getService(XDBMSchemaType))
-        .addClassInstance(MapperService, singletonProvider.getService(MapperService))
-        .addClassInstance(UrlService, singletonProvider.getService(UrlService))
         .addClassInstance(LoggerService, singletonProvider.getService(LoggerService))
         .addClassInstance(SQLPoolService, singletonProvider.getService(SQLPoolService))
 
         // add transient signatures
+        .addClass(UrlService, [GlobalConfiguration, DomainProviderService])
+        .addClass(MapperService, [UrlService])
         .addClass(HashService, [GlobalConfiguration])
         .addClass(SQLConnectionService, [SQLPoolService, LoggerService])
         .addClass(TypeORMConnectionService, [GlobalConfiguration, XDBMSchemaType])
@@ -143,7 +143,8 @@ export const getTransientServiceContainer = (singletonProvider: ServiceProvider)
         .addClass(CoinAcquireService, [CoinTransactionService, ORMConnectionService, EventService, GlobalConfiguration, LoggerService])
         .addClass(UserSessionActivityService, [ORMConnectionService, CoinAcquireService, LoggerService])
         .addClass(ActivationCodeService, [ORMConnectionService])
-        .addClass(EmailService, [GlobalConfiguration, UrlService])
+        .addClass(DomainProviderService, [ORMConnectionService, GlobalConfiguration])
+        .addClass(EmailService, [GlobalConfiguration, UrlService, DomainProviderService])
         .addClass(VersionSaveService, [ORMConnectionService, LoggerService])
         .addClass(SignupService, [EmailService, SQLFunctionsService, ORMConnectionService, MapperService, AuthorizationService])
         .addClass(QuestionAnswerService, [ORMConnectionService, SQLFunctionsService, CoinAcquireService, VersionSaveService, LoggerService])
@@ -152,7 +153,7 @@ export const getTransientServiceContainer = (singletonProvider: ServiceProvider)
         .addClass(UserService, [ORMConnectionService, MapperService, TeacherInfoService, HashService, RoleService, AuthorizationService])
         .addClass(TokenService, [GlobalConfiguration])
         .addClass(AuthenticationService, [ORMConnectionService, UserService, TokenService, UserSessionActivityService, HashService, PermissionService, GlobalConfiguration, LoggerService])
-        .addClass(PasswordChangeService, [UserService, TokenService, EmailService, UrlService, ORMConnectionService, GlobalConfiguration, HashService, AuthorizationService])
+        .addClass(PasswordChangeService, [UserService, TokenService, EmailService, UrlService, ORMConnectionService, GlobalConfiguration, HashService, AuthorizationService, DomainProviderService])
         .addClass(SeedService, [XDBMSchemaType, GlobalConfiguration, SQLConnectionService, LoggerService])
         .addClass(RecreateDBService, [CreateDBService, SeedService, XDBMSchemaType, SQLConnectionService, LoggerService])
         .addClass(QuestionService, [ORMConnectionService, VersionSaveService, MapperService])

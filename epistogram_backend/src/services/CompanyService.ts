@@ -151,7 +151,8 @@ export class CompanyService extends QueryServiceBase<Company> {
                 await this._ormService
                     .createAsync(Company, {
                         name: 'New company',
-                        deletionDate: null
+                        deletionDate: null,
+                        domain: ''
                     });
             },
             auth: async () => {

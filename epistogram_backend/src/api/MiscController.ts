@@ -1,5 +1,6 @@
 import { JobTitle } from '../models/entity/JobTitle';
 import { AuthorizationService } from '../services/AuthorizationService';
+import { DomainProviderService } from '../services/DomainProviderService';
 import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
 import { MiscService } from '../services/MiscService';
 import { ORMConnectionService } from '../services/ORMConnectionService/ORMConnectionService';
@@ -21,6 +22,7 @@ export class MiscController implements XController<MiscController> {
     private _config: GlobalConfiguration;
     private _courseBridgeService: UserCourseBridgeService;
     private _authorizationService: AuthorizationService;
+    private _domainProviderService: DomainProviderService;
 
     constructor(serviceProvider: ServiceProvider) {
 
@@ -31,6 +33,7 @@ export class MiscController implements XController<MiscController> {
         this._config = serviceProvider.getService(GlobalConfiguration);
         this._courseBridgeService = serviceProvider.getService(UserCourseBridgeService);
         this._authorizationService = serviceProvider.getService(AuthorizationService);
+        this._domainProviderService = serviceProvider.getService(DomainProviderService);
     }
 
     @XControllerAction(apiRoutes.misc.getCurrentCourseItemCode)
@@ -93,18 +96,12 @@ export class MiscController implements XController<MiscController> {
 
     }
 
-    getRegistrationLinkAction(params: ActionParams) {
+    async getRegistrationLinkAction(params: ActionParams) {
 
-        return {
-            action: async () => {
+        const domain = await this
+            ._domainProviderService
+            .getDomainAsync(params.principalId.getId());
 
-                return Promise.resolve(`${this._config.misc.frontendUrl}/registration?token=${this._tokenService.createRegistrationToken()}`);
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(params.principalId, 'ACCESS_APPLICATION');
-            }
-        };
-
+        return Promise.resolve(`${domain}/registration?token=${this._tokenService.createRegistrationToken()}`);
     }
 }

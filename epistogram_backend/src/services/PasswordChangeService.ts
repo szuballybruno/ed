@@ -4,6 +4,7 @@ import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 import { Id } from '../shared/types/versionId';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { AuthorizationService } from './AuthorizationService';
+import { DomainProviderService } from './DomainProviderService';
 import { EmailService } from './EmailService';
 import { HashService } from './HashService';
 import { GlobalConfiguration } from './misc/GlobalConfiguration';
@@ -31,7 +32,8 @@ export class PasswordChangeService {
         ormService: ORMConnectionService,
         config: GlobalConfiguration,
         hashService: HashService,
-        authorizationService: AuthorizationService) {
+        authorizationService: AuthorizationService,
+        private _domainProviderService: DomainProviderService) {
 
         this._hashService = hashService;
         this._ormService = ormService;
@@ -64,8 +66,9 @@ export class PasswordChangeService {
                 resetPasswordToken: token
             });
 
-        const resetUrl = this._urlService
-            .getFrontendUrl(`/set-new-password?token=${token}`);
+        const resetUrl = await this
+            ._urlService
+            .getFrontendUrl(user.id, `/set-new-password?token=${token}`);
 
         await this._emailService
             .sendSelfPasswordResetMailAsync(user, resetUrl);
@@ -76,40 +79,34 @@ export class PasswordChangeService {
      * an email will be sent out with the pw change link. 
      * The old password will be requested from the user an an extra safety step. 
      */
-    requestPasswordChangeAuthenticatedAsync(principalId: PrincipalId, oldPassword: string) {
+    async requestPasswordChangeAuthenticatedAsync(principalId: PrincipalId, oldPassword: string) {
 
-        return {
-            action: async () => {
-                const userId = Id
-                    .create<'User'>(principalId.toSQLValue());
+        const userId = Id
+            .create<'User'>(principalId.toSQLValue());
 
-                const resetPawsswordToken = this._tokenService
-                    .createSetNewPasswordToken(userId);
+        const resetPawsswordToken = this._tokenService
+            .createSetNewPasswordToken(userId);
 
-                const user = await this._userService
-                    .getUserById(userId);
+        const user = await this._userService
+            .getUserById(userId);
 
-                if (!await this._hashService.comparePasswordAsync(oldPassword, user.password))
-                    throw new ErrorWithCode('Wrong password!', 'bad request');
+        if (!await this._hashService.comparePasswordAsync(oldPassword, user.password))
+            throw new ErrorWithCode('Wrong password!', 'bad request');
 
-                await this._ormService
-                    .save(User, {
-                        id: user.id,
-                        resetPasswordToken: resetPawsswordToken
-                    });
+        await this._ormService
+            .save(User, {
+                id: user.id,
+                resetPasswordToken: resetPawsswordToken
+            });
 
-                const resetPawsswordUrl = this._config.misc.frontendUrl + `/set-new-password?token=${resetPawsswordToken}`;
+        const domain = this
+            ._domainProviderService
+            .getDomainAsync(principalId.getId());
 
-                await this._emailService
-                    .sendResetPasswordMailAsync(user, resetPawsswordUrl);
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
-            }
-        };
+        const resetPawsswordUrl = `${domain}/set-new-password?token=${resetPawsswordToken}`;
 
-
+        await this._emailService
+            .sendResetPasswordMailAsync(user, resetPawsswordUrl);
     }
 
     /**

@@ -1,10 +1,14 @@
+import { Id } from '../shared/types/versionId';
+import { DomainProviderService } from './DomainProviderService';
 import { GlobalConfiguration } from './misc/GlobalConfiguration';
 
 export class UrlService {
 
     private _config: GlobalConfiguration;
 
-    constructor(globalConfig: GlobalConfiguration) {
+    constructor(
+        globalConfig: GlobalConfiguration,
+        private _domainProviderService: DomainProviderService) {
 
         this._config = globalConfig;
     }
@@ -23,9 +27,15 @@ export class UrlService {
         return this.getAssetUrl(assetPath);
     };
 
-    getFrontendUrl = (ending: string) => {
+    async getFrontendUrl(userId: Id<'User'>, ending: string) {
 
-        ending = ('/' + ending).replace('//', '/');
-        return this._config.misc.frontendUrl + ending;
-    };
+        const domain = await this
+            ._domainProviderService
+            .getDomainAsync(userId);
+
+        const endingProcessed = ('/' + ending)
+            .replace('//', '/');
+
+        return `${domain}${endingProcessed}`;
+    }
 }

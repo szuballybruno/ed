@@ -7,10 +7,9 @@ import { log } from './services/misc/logger';
 import { CreateDBService } from './services/sqlServices/CreateDBService';
 import { SQLConnectionService } from './services/sqlServices/SQLConnectionService';
 import './shared/logic/jsExtensions';
-import { initServiceProvider } from './startup/initApp';
+import { ServiceProviderInitializator } from './startup/initApp';
 import { initTurboExpress } from './startup/instatiateTurboExpress';
 import { recreateDBAsync } from './startup/recreateDB';
-import { ServiceProvider } from './startup/servicesDI';
 import { XTurboExpressListener } from './turboImplementations/XTurboExpressListener';
 import { snoozeAsync } from './utilities/helpers';
 import { GetServiceProviderType } from './utilities/XTurboExpress/XTurboExpressTypes';
@@ -37,19 +36,18 @@ const lightRecreateDBAsync = async (getServiceProviderAsync: GetServiceProviderT
         .releaseConnectionClient();
 };
 
-const startServerAsync = async (
-    singletonServiceProvider: ServiceProvider,
-    getServiceProviderAsync: () => Promise<ServiceProvider>) => {
+const startServerAsync = async (initializator: ServiceProviderInitializator) => {
 
-    // 
-    // INIT TURBO EXPRESS LISTENER
     const listener = new XTurboExpressListener(
-        singletonServiceProvider.getService(LoggerService),
-        singletonServiceProvider.getService(GlobalConfiguration));
+        initializator
+            .getSingletonProvider()
+            .getService(LoggerService),
+        initializator
+    );
 
     // 
     // INIT TURBO EXPRESS
-    const turboExpress = initTurboExpress(singletonServiceProvider, getServiceProviderAsync, listener);
+    const turboExpress = initTurboExpress(initializator, listener);
 
     // 
     // LISTEN (start server)
@@ -69,19 +67,19 @@ const main = async () => {
 
     log(`MODE FLAGS: [${isPurgeMode ? 'PURGE' : ''}${isLightRecreateMode ? 'LIGHT RECREATE' : ''}${isShortLife ? 'SHORT LIFE' : ''}]`);
 
-    const { getServiceProviderAsync, singletonServiceProvider } = initServiceProvider(rootDir);
+    const initializator = new ServiceProviderInitializator(rootDir);
 
     if (isPurgeMode)
-        await recreateDBAsync(getServiceProviderAsync);
+        await recreateDBAsync(initializator.getInitializedTransientServices.bind(initializator));
 
     if (isLightRecreateMode)
-        await lightRecreateDBAsync(getServiceProviderAsync);
+        await lightRecreateDBAsync(initializator.getInitializedTransientServices.bind(initializator));
 
     if (isKeepAlive)
         await snoozeAsync(9999999);
 
     if (!isShortLife)
-        await startServerAsync(singletonServiceProvider, getServiceProviderAsync);
+        await startServerAsync(initializator);
 };
 
 await main();

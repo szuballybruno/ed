@@ -243,7 +243,7 @@ export class RegistrationService {
                 .logScoped('REGISTRATION', 'Sending mail... to: ' + email);
 
             await this._emailService
-                .sendInvitaitionMailAsync(invitationToken, email, getFullName(createdUser));
+                .sendInvitaitionMailAsync(invitationToken, email, getFullName(createdUser), companyId);
         }
 
         return { invitationToken, createdUser };

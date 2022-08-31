@@ -6,8 +6,8 @@ import { UserSeedDataType } from './seed_users';
 export const getCompanyOwnerBridgeSeedData = (
     users: UserSeedDataType,
     companies: CompaniesSeedDataType) => getSeedList<CompanyOwnerBridge>()({
-    PCWorld: {
-        companyId: companies.PCWorld.id,
+    Henkel: {
+        companyId: companies.Henkel.id,
         userId: users.tomStrand.id
     },
     EpistoGram: {

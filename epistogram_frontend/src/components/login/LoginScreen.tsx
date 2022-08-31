@@ -84,16 +84,15 @@ const LoginScreen = () => {
 
     useEffect(() => {
 
-        refetchUser()
-            .then(() => setIsUpToDate(true));
+        Logger.logScoped('AUTH', 'Refetching user...');
+
+        // refetchUser()
+        //     .then(() => setIsUpToDate(true));
     }, [refetchUser]);
 
     // watch for auth state change
     // and navigate to home page if athenticated
     useEffect(() => {
-
-        if (!isUpToDate)
-            return;
 
         if (authState === 'authenticated') {
 
@@ -117,7 +116,7 @@ const LoginScreen = () => {
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [authState, isUpToDate]);
+    }, [authState]);
 
     // keydown
     useEffect(() => {

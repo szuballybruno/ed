@@ -7,37 +7,37 @@ export const getCourseAccessBridgeSeedData = (
     companies: CompaniesSeedDataType,
     courses: CourseSeedDataType) => getSeedList<CourseAccessBridge>()({
 
-        // pcworld
-        pw_course_obs: {
-            companyId: companies.PCWorld.id,
+        // henkel
+        henkel_course_obs: {
+            companyId: companies.Henkel.id,
             courseId: courses.course_obs.id,
             userId: null
         },
-        episto_course_obs: {
-            companyId: companies.PCWorld.id,
-            courseId: courses.course_obs.id,
-            userId: null
-        },
-        episto_course_linkedin: {
-            companyId: companies.PCWorld.id,
-            courseId: courses.course_linked_in.id,
-            userId: null
-        },
-        episto_course_ads: {
-            companyId: companies.PCWorld.id,
-            courseId: courses.course_google_ads.id,
-            userId: null
-        },
-
-        // episto
-        pw_course_pp: {
+        henkel_course_pp: {
             companyId: companies.EpistoGram.id,
             courseId: courses.course_powerPoint.id,
             userId: null
         },
-        pw_course_word: {
+        henkel_course_word: {
             companyId: companies.EpistoGram.id,
             courseId: courses.course_word.id,
+            userId: null
+        },
+
+        // episto
+        episto_course_obs: {
+            companyId: companies.Henkel.id,
+            courseId: courses.course_obs.id,
+            userId: null
+        },
+        episto_course_linkedin: {
+            companyId: companies.Henkel.id,
+            courseId: courses.course_linked_in.id,
+            userId: null
+        },
+        episto_course_ads: {
+            companyId: companies.Henkel.id,
+            courseId: courses.course_google_ads.id,
             userId: null
         },
         episto_course_excel: {

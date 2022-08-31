@@ -54,8 +54,9 @@ export class GlobalConfiguration {
     misc = {
         hostPort: GlobalConfiguration.getEnvConfigEntry('HOST_PORT'),
         environmentName: GlobalConfiguration.getEnvConfigEntry('ENVIRONMENT_NAME'),
-        frontendUrl: GlobalConfiguration.getEnvConfigEntry('FRONTEND_URL'),
+        // frontendUrl: GlobalConfiguration.getEnvConfigEntry('FRONTEND_URL'),
         isLocalhost: GlobalConfiguration.getEnvConfigEntry('IS_LOCALHOST') === 'true',
+        localhostDomain: 'http://localhost:3000',
         accessTokenCookieName: 'accessToken',
         refreshTokenCookieName: 'refreshToken',
         isUnderMaintanence: GlobalConfiguration.getEnvConfigEntry('IS_UNDER_MAINTENANCE') === 'true',

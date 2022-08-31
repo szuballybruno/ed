@@ -28,7 +28,7 @@ export const Environment = (() => {
     const eventPoolingIntervalInMs = 5 * 60 * 1000; // 5 mins
     const sessionHangThresholdInMs = 2 * 60 * 60 * 1000; // 2 hours
     const loggingEnabled = false;
-    const loggingEnabledKeys: LoggingKeysType[] = ['WARNING', 'AUTO NAV', 'EVENT BUS'];
+    const loggingEnabledKeys: LoggingKeysType[] = ['WARNING', 'AUTO NAV', 'EVENT BUS', 'AUTH'];
 
     const getAssetUrl = (path: string, assetUrlPath?: string) => {
 
