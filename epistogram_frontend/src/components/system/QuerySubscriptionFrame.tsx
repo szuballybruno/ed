@@ -13,16 +13,6 @@ export const QuerySubscriptionFrame = ({ children }: PropsWithChildren) => {
     useEffect(() => {
 
         eventBus
-            .scubscribeEvent('onquery', 'forbiddenWatcher', (x: QueryEventData) => {
-
-                if (x.error?.code === 'forbidden') {
-
-                    Logger.logScoped('AUTO NAV', 'Forbidden, navigating to login page...');
-                    navigate2(applicationRoutes.loginRoute);
-                }
-            });
-
-        eventBus
             .scubscribeEvent('onquery', 'noPermissionWatcher', (x: QueryEventData) => {
 
                 if (x.error?.code === 'no permission') {

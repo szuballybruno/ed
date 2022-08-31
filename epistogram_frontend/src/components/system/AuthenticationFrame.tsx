@@ -55,11 +55,11 @@ const AuthFirewall = (props: PropsWithChildren & {
         // error
         if (authState === 'error') {
 
-            Logger.logScoped('AUTH', `Auth state: ${authState}. Redirecting to login.`);
+            Logger.logScoped('AUTO NAV', `Auth state: ${authState}. Redirecting to login.`);
 
             navigate2(loginRoute);
         }
-    }, [authState]);
+    }, [authState, navigate2, loginRoute]);
 
     Logger.logScoped('AUTH', `Current route: ${currentRoute.route.getAbsolutePath()} IsUnrestricted: ${isUnauthorized}`);
 

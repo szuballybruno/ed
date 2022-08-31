@@ -26,7 +26,7 @@ export const Environment = (() => {
     const currentOrigin = window.location.origin;
     const getAuthHandshakeIntervalInMs = 5 * 60 * 1000; // 5 minutes
     const eventPoolingIntervalInMs = 5 * 60 * 1000; // 5 mins
-    const sessionHangThresholdInMs = 5 * 60 * 1000; // 5 mins
+    const sessionHangThresholdInMs = 2 * 60 * 60 * 1000; // 2 hours
     const loggingEnabled = false;
     const loggingEnabledKeys: LoggingKeysType[] = ['WARNING', 'AUTO NAV', 'EVENT BUS'];
 
