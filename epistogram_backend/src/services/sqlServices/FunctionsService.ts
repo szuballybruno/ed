@@ -75,55 +75,6 @@ export class SQLFunctionsService {
         }
     };
 
-    answerSignupQuestionFn = (userId: Id<'User'>, questionId: Id<'Question'>, answerVersionId: Id<'AnswerVersion'>) => {
-
-        return this.execSQLFunctionAsync(
-            'answer_signup_question_fn',
-            [
-                userId,
-                questionId,
-                answerVersionId
-            ]);
-    };
-
-    answerQuestionFn = async (
-        userId: Id<'User'>,
-        answerSessionId: Id<'AnswerSession'>,
-        questionVersionId: Id<'QuestionVersion'>,
-        answerIds: Id<'Answer'>[],
-        elapsedSeconds: number,
-        isPractiseAnswer: boolean) => {
-
-        type ReType = {
-            correct_answer_ids: Id<'Answer'>[],
-            given_answer_id: Id<'GivenAnswer'>,
-            streak_id: Id<'GivenAnswerStreak'>,
-            streak_length: number,
-            is_correct: boolean,
-        };
-
-        const result = await this
-            .execSQLFunctionAsync<ReType>(
-                'answer_question_fn',
-                [
-                    userId,
-                    answerSessionId,
-                    questionVersionId,
-                    answerIds,
-                    elapsedSeconds,
-                    isPractiseAnswer
-                ],
-                true);
-
-        return {
-            correctAnswerIds: result.correct_answer_ids,
-            givenAnswerId: result.given_answer_id,
-            streakId: result.streak_id,
-            streakLength: result.streak_length,
-            isCorrect: result.is_correct
-        };
-    };
-
     insertCoinAcquiredFn = (params: InsertCoinFnParamsType) => {
 
         return this.execSQLFunctionAsync<number>(
