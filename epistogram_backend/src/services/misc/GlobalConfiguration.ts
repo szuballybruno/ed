@@ -14,8 +14,8 @@ export type LogScopeType =
     'REGISTRATION' |
     'VERSION SAVE' |
     'COINS' |
-    'SERVER' | 
-    'ERROR' | 
+    'SERVER' |
+    'ERROR' |
     'FILE UPLOAD';
 
 export class GlobalConfiguration {
@@ -54,13 +54,12 @@ export class GlobalConfiguration {
     misc = {
         hostPort: GlobalConfiguration.getEnvConfigEntry('HOST_PORT'),
         environmentName: GlobalConfiguration.getEnvConfigEntry('ENVIRONMENT_NAME'),
-        // frontendUrl: GlobalConfiguration.getEnvConfigEntry('FRONTEND_URL'),
-        isLocalhost: GlobalConfiguration.getEnvConfigEntry('IS_LOCALHOST') === 'true',
-        localhostDomain: 'http://localhost:3000',
+        isLocalhost: GlobalConfiguration.getEnvConfigEntry('IS_LOCALHOST', 'bool'),
+        domainTemplate: GlobalConfiguration.getEnvConfigEntry('DOMAIN_TEMPLATE'),
         accessTokenCookieName: 'accessToken',
         refreshTokenCookieName: 'refreshToken',
-        isUnderMaintanence: GlobalConfiguration.getEnvConfigEntry('IS_UNDER_MAINTENANCE') === 'true',
-        videoCompletedPercentage: GlobalConfiguration.getEnvConfigEntryInt('VIDEO_COMPLETED_PERCENTAGE')
+        isUnderMaintanence: GlobalConfiguration.getEnvConfigEntry('IS_UNDER_MAINTENANCE', 'bool'),
+        videoCompletedPercentage: GlobalConfiguration.getEnvConfigEntry('VIDEO_COMPLETED_PERCENTAGE', 'int')
     };
 
     fileStorage = {
@@ -81,9 +80,9 @@ export class GlobalConfiguration {
         port: parseInt(GlobalConfiguration.getEnvConfigEntry('DB_PORT')),
         serviceUserName: GlobalConfiguration.getEnvConfigEntry('DB_SERVICE_USER_NAME'),
         serviceUserPassword: GlobalConfiguration.getEnvConfigEntry('DB_SERVICE_USER_PASSWORD'),
-        isOrmLoggingEnabled: GlobalConfiguration.getEnvConfigEntry('DB_IS_ORM_LOGGING_ENABLED') === 'true',
-        isDangerousDBPurgeEnabled: GlobalConfiguration.getEnvConfigEntry('IS_DANGEROUS_DB_PURGE_ENABLED') === 'true',
-        isHostedOnGCP: GlobalConfiguration.getEnvConfigEntry('IS_HOSTED_ON_GCP') === 'true',
+        isOrmLoggingEnabled: GlobalConfiguration.getEnvConfigEntry('DB_IS_ORM_LOGGING_ENABLED', 'bool'),
+        isDangerousDBPurgeEnabled: GlobalConfiguration.getEnvConfigEntry('IS_DANGEROUS_DB_PURGE_ENABLED', 'bool'),
+        isHostedOnGCP: GlobalConfiguration.getEnvConfigEntry('IS_HOSTED_ON_GCP', 'bool'),
     };
 
     logging = {
@@ -152,25 +151,46 @@ export class GlobalConfiguration {
         return this.rootDirectory + path;
     };
 
-    static getEnvConfigEntry = (entryName: string, allowEmptyStr?: boolean) => {
+    static getEnvConfigEntry(entryName: string): string;
+    static getEnvConfigEntry(entryName: string, type: 'bool'): boolean;
+    static getEnvConfigEntry(entryName: string, type: 'int'): number;
+    static getEnvConfigEntry(entryName: string, type?: 'string' | 'bool' | 'int'): string | boolean | number {
 
         const fullEntryName = entryName;
         const value = process.env[fullEntryName];
 
-        if (!value && value !== 'false' && !allowEmptyStr)
+        if (value === '' || value === undefined || value === null)
             throw new Error(`Unable to load .env variable '${fullEntryName}' in env '${GlobalConfiguration.getCurrentEnvironmentName()}'!`);
 
-        // log(entryName + ' -> ' + value);
-        return value ?? '';
-    };
+        /**
+         * bool
+         */
+        if (type === 'bool') {
 
-    static getEnvConfigEntryInt = (entryName: string, allowEmptyStr?: boolean) => {
+            if (!(value === 'false' || value === 'true'))
+                throw new Error(`Unable to load .env variable ${fullEntryName}. It's not formatted as a boolean.`);
 
-        const value = GlobalConfiguration
-            .getEnvConfigEntry(entryName, allowEmptyStr);
+            return value === 'true';
+        }
 
-        return parseInt(value);
-    };
+        /**
+         * int
+         */
+        if (type === 'int') {
+
+            const asInt = parseInt(value);
+
+            if (Number.isNaN(asInt))
+                throw new Error(`Unable to load .env variable ${fullEntryName}. It's not formatted as a int.`);
+
+            return asInt;
+        }
+
+        /**
+         * string
+         */
+        return value;
+    }
 
     static initGlobalConfig = (rootDirectory: string) => {
 

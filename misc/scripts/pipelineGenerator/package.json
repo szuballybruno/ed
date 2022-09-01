@@ -5,8 +5,8 @@
   "main": "src/main.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "genp": "tsc & node dist/main.js",
-    "genc": "tsc & node dist/main.js --genc & out/configGen.bat"
+    "generatePipelines": "tsc & node dist/main.js",
+    "generateLocalConfig": "tsc & node dist/main.js --genc & out/configGen.bat"
   },
   "keywords": [],
   "author": "",

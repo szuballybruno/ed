@@ -6,8 +6,7 @@ type DomainPrefixType = 'local' | 'app' | 'demo' | 'dev';
 export type EnvConfigBaseType = {
 
     misc: {
-        FRONTEND_URL: string;
-        FRONTEND_DOMAIN: string;
+        DOMAIN_TEMPLATE: string;
         ENVIRONMENT_NAME: string;
         HOST_PORT: number;
         JWT_SIGN_SECRET: string;
@@ -74,7 +73,7 @@ const getBaseConfig = (
     envName: EnvNameType,
     override: (config: EnvConfigBaseType) => void): EnvConfigBaseType => {
 
-    const config = ({
+    const config: EnvConfigBaseType = ({
         gcp: {
             BRANCH_NAME: branchName,
             BACKEND_URL: `api.${domainPrefix}.epistogram.com`,
@@ -83,8 +82,7 @@ const getBaseConfig = (
         },
 
         misc: {
-            FRONTEND_URL: `https://${domainPrefix}.epistogram.com`,
-            FRONTEND_DOMAIN: 'run.app',
+            DOMAIN_TEMPLATE: `https://${branchName}.$DOMAIN$`,
             ENVIRONMENT_NAME: envName,
             HOST_PORT: 5000,
             JWT_SIGN_SECRET: secrets.JWT_SIGN_SECRET, // 'adsasdsd',
@@ -120,28 +118,27 @@ const getBaseConfig = (
     return config;
 };
 
-export const environemnts: EnvConfigBaseType[] = [
+export const environemntConfigs: EnvConfigBaseType[] = [
 
     // prod
     getBaseConfig('main', 'app', 'prod', config => {
 
+        config.misc.DOMAIN_TEMPLATE = 'http://$DOMAIN$';
         config.gcp.MIN_INSTANCE_COUNT = 1;
     }),
 
     // demo
     getBaseConfig('demo', 'demo', 'demo', config => {
-
     }),
 
     // dev
     getBaseConfig('dev', 'dev', 'dev', config => {
-
     })
 ];
 
 export const localConfig = getBaseConfig('local', 'local', 'local', config => {
 
-    config.misc.FRONTEND_URL = 'http://localhost:3000';
+    config.misc.DOMAIN_TEMPLATE = 'http://localhost:3000';
 
     config.misc.IS_HOSTED_ON_GCP = false;
     config.misc.IS_LOCALHOST = true;
@@ -151,9 +148,9 @@ export const localConfig = getBaseConfig('local', 'local', 'local', config => {
 
     config.database.DB_NAME = 'localhostDB';
     config.database.DB_HOST_ADDRESS = 'localhost';
-    config.database.DB_PORT = '7000';
+    config.database.DB_PORT = '7014';
     config.database.DB_SERVICE_USER_NAME = 'dev_service_user';
-    config.database.DB_SERVICE_USER_PASSWORD = 'admin';
+    config.database.DB_SERVICE_USER_PASSWORD = 'epistogram';
     config.database.DB_IS_ORM_LOGGING_ENABLED = false;
 });
 

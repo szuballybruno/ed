@@ -5,12 +5,12 @@ export const getCompaniesSeedData = () => getSeedList<Company>()({
     Henkel: {
         deletionDate: null,
         name: 'Henkel',
-        domain: 'https://henkel.epistogram.com'
+        domain: 'henkel.epistogram.com'
     },
     EpistoGram: {
         deletionDate: null,
         name: 'EpistoGram',
-        domain: 'https://dev.epistogram.com'
+        domain: 'epistogram.com'
     }
 });
 

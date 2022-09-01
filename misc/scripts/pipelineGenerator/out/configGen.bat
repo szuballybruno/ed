@@ -5,8 +5,7 @@ echo BACKEND_URL = api.local.epistogram.com >> C:\GitRepositories\epistogram\mis
 echo MIN_INSTANCE_COUNT = 0 >> C:\GitRepositories\epistogram\misc\scripts\pipelineGenerator\dist/../../../../epistogram_backend/config/config.env
 echo IS_UNDER_MAINTENANCE = false >> C:\GitRepositories\epistogram\misc\scripts\pipelineGenerator\dist/../../../../epistogram_backend/config/config.env
 echo \# ---- misc >> C:\GitRepositories\epistogram\misc\scripts\pipelineGenerator\dist/../../../../epistogram_backend/config/config.env
-echo FRONTEND_URL = http://localhost:3000 >> C:\GitRepositories\epistogram\misc\scripts\pipelineGenerator\dist/../../../../epistogram_backend/config/config.env
-echo FRONTEND_DOMAIN = run.app >> C:\GitRepositories\epistogram\misc\scripts\pipelineGenerator\dist/../../../../epistogram_backend/config/config.env
+echo DOMAIN_TEMPLATE = http://localhost:3000 >> C:\GitRepositories\epistogram\misc\scripts\pipelineGenerator\dist/../../../../epistogram_backend/config/config.env
 echo ENVIRONMENT_NAME = local >> C:\GitRepositories\epistogram\misc\scripts\pipelineGenerator\dist/../../../../epistogram_backend/config/config.env
 echo HOST_PORT = 5000 >> C:\GitRepositories\epistogram\misc\scripts\pipelineGenerator\dist/../../../../epistogram_backend/config/config.env
 echo JWT_SIGN_SECRET = ${{secrets.JWT_SIGN_SECRET}} >> C:\GitRepositories\epistogram\misc\scripts\pipelineGenerator\dist/../../../../epistogram_backend/config/config.env
@@ -24,8 +23,7 @@ echo MAIL_SENDER_PASSWORD = ${{secrets.MAIL_SENDER_PASSWORD}} >> C:\GitRepositor
 echo \# ---- database >> C:\GitRepositories\epistogram\misc\scripts\pipelineGenerator\dist/../../../../epistogram_backend/config/config.env
 echo DB_NAME = localhostDB >> C:\GitRepositories\epistogram\misc\scripts\pipelineGenerator\dist/../../../../epistogram_backend/config/config.env
 echo DB_HOST_ADDRESS = localhost >> C:\GitRepositories\epistogram\misc\scripts\pipelineGenerator\dist/../../../../epistogram_backend/config/config.env
-echo DB_PORT = 7000 >> C:\GitRepositories\epistogram\misc\scripts\pipelineGenerator\dist/../../../../epistogram_backend/config/config.env
+echo DB_PORT = 7014 >> C:\GitRepositories\epistogram\misc\scripts\pipelineGenerator\dist/../../../../epistogram_backend/config/config.env
 echo DB_SERVICE_USER_NAME = dev_service_user >> C:\GitRepositories\epistogram\misc\scripts\pipelineGenerator\dist/../../../../epistogram_backend/config/config.env
-echo DB_SERVICE_USER_PASSWORD = admin >> C:\GitRepositories\epistogram\misc\scripts\pipelineGenerator\dist/../../../../epistogram_backend/config/config.env
+echo DB_SERVICE_USER_PASSWORD = epistogram >> C:\GitRepositories\epistogram\misc\scripts\pipelineGenerator\dist/../../../../epistogram_backend/config/config.env
 echo DB_IS_ORM_LOGGING_ENABLED = false >> C:\GitRepositories\epistogram\misc\scripts\pipelineGenerator\dist/../../../../epistogram_backend/config/config.env
-echo IS_DANGEROUS_DB_PURGE_ENABLED = true >> C:\GitRepositories\epistogram\misc\scripts\pipelineGenerator\dist/../../../../epistogram_backend/config/config.env

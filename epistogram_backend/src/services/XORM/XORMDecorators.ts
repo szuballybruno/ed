@@ -43,6 +43,10 @@ export const XOneToMany = <TCurrentEntity = never>() => {
     };
 };
 
+/**
+ * Example of usage:
+ * --> XManyToOne<GivenAnswer>()(() => QuestionVersion, x => x.givenAnswers)
+ */
 export const XManyToOne = <TCurrentEntity = never>() => {
 
     return <TRelationEntity>(

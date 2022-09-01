@@ -30,10 +30,7 @@ export class DomainProviderService {
             .where('id', '=', 'companyId')
             .getSingle();
 
-        if (this._globalConfig.misc.isLocalhost)
-            return this._globalConfig.misc.localhostDomain;
-
-        return company.domain;
+        return this._applyTemplate(company.domain);
     }
 
     async getAllDomainsAsync(): Promise<string[]> {
@@ -44,11 +41,19 @@ export class DomainProviderService {
             .getMany();
 
         const domains = companies
-            .map(x => x.domain);
-
-        if (this._globalConfig.misc.isLocalhost)
-            return [...domains, this._globalConfig.misc.localhostDomain];
+            .map(x => this._applyTemplate(x.domain));
 
         return domains;
+    }
+
+    private _applyTemplate(domain: string) {
+
+        const token = '$DOMAIN$';
+        const template = this._globalConfig.misc.domainTemplate;
+
+        if (template.includes(token))
+            return template.replace(token, domain);
+
+        return template;
     }
 }

@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import { EnvConfigBaseType, environemnts, localConfig } from './envs';
+import { EnvConfigBaseType, environemntConfigs, localConfig } from './envs';
 import { removeAllFilesInFolder, replaceAll, writeFile } from './helpers';
 
 (() => {
@@ -65,9 +65,9 @@ import { removeAllFilesInFolder, replaceAll, writeFile } from './helpers';
         removeAllFilesInFolder(outputDirectoryPath);
 
         const envGroupKeys = Object
-            .keys(environemnts[0]);
+            .keys(environemntConfigs[0]);
 
-        environemnts
+        environemntConfigs
             .forEach(environemnt => {
 
                 const replaceValues = envGroupKeys
