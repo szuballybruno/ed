@@ -1,9 +1,9 @@
-import { Id } from '../types/versionId';
-import { CoinAcquireResultDTO } from './CoinAcquireResultDTO';
+import {Id} from '../types/versionId';
+import {CoinAcquireResultDTO} from './CoinAcquireResultDTO';
 
 export type AnswerResultDTO = {
-    givenAnswerIds: Id<'Answer'>[];
-    correctAnswerIds: Id<'Answer'>[];
+    givenAnswerVersionIds: Id<'AnswerVersion'>[];
+    correctAnswerVersionIds: Id<'AnswerVersion'>[];
     isCorrect: boolean;
     coinAcquires: {
         normal: CoinAcquireResultDTO | null;

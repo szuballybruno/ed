@@ -25,10 +25,10 @@ export const VideoQuestionnaire = (props: {
     const autoCloseSecs = 8;
     const [showUpTime, setShowUpTime] = useState<Date>(new Date());
 
-    const handleAnswerQuestionAsync = async (answerIds: Id<'Answer'>[]) => {
+    const handleAnswerQuestionAsync = async (answerVersionIds: Id<'AnswerVersion'>[]) => {
 
         const timeElapsed = epochDates(new Date(), showUpTime);
-        await answerQuestionAsync(answerSessionId, answerIds, question.questionVersionId, timeElapsed);
+        await answerQuestionAsync(answerSessionId, answerVersionIds, question.questionVersionId, timeElapsed);
         onAnswered();
     };
 
@@ -61,7 +61,7 @@ export const VideoQuestionnaire = (props: {
 
         <QuesitionView
             answerQuesitonAsync={handleAnswerQuestionAsync}
-            correctAnswerIds={answerResult?.correctAnswerIds ?? []}
+            correctAnswerVersionIds={answerResult?.correctAnswerVersionIds ?? []}
             loadingProps={{ loadingState: answerQuestionState, error: answerQuestionError }}
             question={question}
             coinsAcquired={answerResult?.coinAcquires?.normal?.amount ?? null}

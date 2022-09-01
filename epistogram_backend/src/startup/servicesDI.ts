@@ -74,7 +74,7 @@ export class ServiceProvider {
 
     constructor(services: any) {
 
-        this._services = { ...this._services, ...services };
+        this._services = {...this._services, ...services};
     }
 
     getService<T>(ct: CTAnyArgs<T>) {
@@ -92,12 +92,12 @@ export class ServiceProvider {
 
 export const instansiateSingletonServices = (rootDir: string) => {
 
-    // 
+    //
     // INIT GLOBAL CONFIG
     const globalConfiguration = GlobalConfiguration
         .initGlobalConfig(rootDir);
 
-    // 
+    //
     // INIT DB SCHEMA
     const dbSchema = createDBSchema();
 
@@ -109,7 +109,7 @@ export const instansiateSingletonServices = (rootDir: string) => {
         .addClass(SQLPoolService, [GlobalConfiguration])
         .getContainer();
 
-    const { instances } = XDependency
+    const {instances} = XDependency
         .instantiate(container);
 
     return new ServiceProvider(instances);
@@ -121,7 +121,7 @@ export const getTransientServiceContainer = (singletonProvider: ServiceProvider)
     const container = XDependency
         .getClassBuilder()
 
-        // add singleton instances 
+        // add singleton instances
         .addClassInstance(GlobalConfiguration, singletonProvider.getService(GlobalConfiguration))
         .addClassInstance(XDBMSchemaType, singletonProvider.getService(XDBMSchemaType))
         .addClassInstance(LoggerService, singletonProvider.getService(LoggerService))
@@ -146,7 +146,7 @@ export const getTransientServiceContainer = (singletonProvider: ServiceProvider)
         .addClass(DomainProviderService, [ORMConnectionService, GlobalConfiguration])
         .addClass(EmailService, [GlobalConfiguration, UrlService, DomainProviderService])
         .addClass(VersionSaveService, [ORMConnectionService, LoggerService])
-        .addClass(SignupService, [EmailService, SQLFunctionsService, ORMConnectionService, MapperService, AuthorizationService])
+        .addClass(SignupService, [EmailService, SQLFunctionsService, ORMConnectionService, MapperService, AuthorizationService, QuestionAnswerService])
         .addClass(QuestionAnswerService, [ORMConnectionService, SQLFunctionsService, CoinAcquireService, VersionSaveService, LoggerService])
         .addClass(TeacherInfoService, [ORMConnectionService, MapperService, AuthorizationService])
         .addClass(RoleService, [ORMConnectionService, MapperService, AuthorizationService])
@@ -196,7 +196,7 @@ export const getTransientServiceContainer = (singletonProvider: ServiceProvider)
 
 export const instatiateServices = (container: DependencyContainer<DepHierarchyFunction>): ServiceProvider => {
 
-    const { instances } = XDependency
+    const {instances} = XDependency
         .instatiateOnly(container);
 
     return new ServiceProvider(instances);

@@ -1,11 +1,21 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Relation } from 'typeorm';
-import { IsDeletedFlag, XJoinColumn, XManyToOne, XViewColumn } from '../../services/XORM/XORMDecorators';
-import { Id } from '../../shared/types/versionId';
-import { AnswerGivenAnswerBridge } from './AnswerGivenAnswerBridge';
-import { AnswerSession } from './AnswerSession';
-import { CoinTransaction } from './CoinTransaction';
-import { GivenAnswerStreak } from './GivenAnswerStreak';
-import { QuestionVersion } from './question/QuestionVersion';
+import {
+    Column,
+    CreateDateColumn,
+    DeleteDateColumn,
+    Entity,
+    JoinColumn,
+    ManyToOne,
+    OneToMany,
+    PrimaryGeneratedColumn,
+    Relation
+} from 'typeorm';
+import {IsDeletedFlag, XJoinColumn, XManyToOne, XViewColumn} from '../../services/XORM/XORMDecorators';
+import {Id} from '../../shared/types/versionId';
+import {AnswerGivenAnswerBridge} from './AnswerGivenAnswerBridge';
+import {AnswerSession} from './AnswerSession';
+import {CoinTransaction} from './CoinTransaction';
+import {GivenAnswerStreak} from './GivenAnswerStreak';
+import {QuestionVersion} from './question/QuestionVersion';
 
 @Entity()
 export class GivenAnswer {
@@ -17,9 +27,9 @@ export class GivenAnswer {
     @IsDeletedFlag()
     @DeleteDateColumn()
     @XViewColumn()
-    deletionDate: Date;
+    deletionDate: Date | null;
 
-    @CreateDateColumn({ default: () => 'now()', type: 'timestamptz' })
+    @CreateDateColumn({default: () => 'now()', type: 'timestamptz'})
     @XViewColumn()
     creationDate: Date;
 
@@ -27,11 +37,11 @@ export class GivenAnswer {
     @XViewColumn()
     isCorrect: boolean;
 
-    @Column({ type: 'double precision' })
+    @Column({type: 'double precision'})
     @XViewColumn()
     elapsedSeconds: number;
 
-    @Column({ default: false })
+    @Column({default: false})
     @XViewColumn()
     isPractiseAnswer: boolean;
 
@@ -52,14 +62,14 @@ export class GivenAnswer {
     @XViewColumn()
     answerSessionId: Id<'AnswerSession'>;
     @ManyToOne(_ => AnswerSession, x => x.givenAnswers)
-    @JoinColumn({ name: 'answer_session_id' })
+    @JoinColumn({name: 'answer_session_id'})
     answerSession: Relation<AnswerSession>;
 
     // givenAnswerStreakBridges
-    @Column({ nullable: true, type: 'int' })
+    @Column({nullable: true, type: 'int'})
     @XViewColumn()
     givenAnswerStreakId: Id<'GivenAnswerStreak'> | null;
-    @JoinColumn({ name: 'given_answer_streak_id' })
+    @JoinColumn({name: 'given_answer_streak_id'})
     @ManyToOne(_ => GivenAnswerStreak, x => x.givenAnswers)
     givenAnswerStreak: GivenAnswerStreak;
 
@@ -72,7 +82,7 @@ export class GivenAnswer {
     @JoinColumn()
     answerBridges: AnswerGivenAnswerBridge[];
 
-    // coin acquires 
+    // coin acquires
     @JoinColumn()
     @OneToMany(_ => CoinTransaction, x => x.givenAnswer)
     coinAcquires: CoinTransaction[];

@@ -1,8 +1,8 @@
-import { TaskCodeType } from '../../models/Types';
-import { Id } from '../../shared/types/versionId';
-import { GlobalConfiguration } from '../misc/GlobalConfiguration';
-import { logObject } from '../misc/logger';
-import { SQLConnectionService } from './SQLConnectionService';
+import {TaskCodeType} from '../../models/Types';
+import {Id} from '../../shared/types/versionId';
+import {GlobalConfiguration} from '../misc/GlobalConfiguration';
+import {logObject} from '../misc/logger';
+import {SQLConnectionService} from './SQLConnectionService';
 
 export type InsertCoinFnParamsType = {
     userId: Id<'User'>,
@@ -42,7 +42,7 @@ export class SQLFunctionsService {
             .forEach((x, index) => argsIndicies
                 .push(`$${index + 1}`));
 
-        // create statement 
+        // create statement
         const statement = `SELECT ${isMultiResult ? '* FROM' : ''} ${fnName}(${argsIndicies.join(',')})`;
 
         const result = await this._connectionService
@@ -61,8 +61,7 @@ export class SQLFunctionsService {
             }
 
             return returnObject;
-        }
-        else {
+        } else {
 
             const fnReturnValue = firstRow[fnName];
 
@@ -74,55 +73,6 @@ export class SQLFunctionsService {
 
             return fnReturnValue as T;
         }
-    };
-
-    answerSignupQuestionFn = (userId: Id<'User'>, questionId: Id<'Question'>, answerId: Id<'Answer'>) => {
-
-        return this.execSQLFunctionAsync(
-            'answer_signup_question_fn',
-            [
-                userId,
-                questionId,
-                answerId
-            ]);
-    };
-
-    answerQuestionFn = async (
-        userId: Id<'User'>,
-        answerSessionId: Id<'AnswerSession'>,
-        questionVersionId: Id<'QuestionVersion'>,
-        answerIds: Id<'Answer'>[],
-        elapsedSeconds: number,
-        isPractiseAnswer: boolean) => {
-
-        type ReType = {
-            correct_answer_ids: Id<'Answer'>[],
-            given_answer_id: Id<'GivenAnswer'>,
-            streak_id: Id<'GivenAnswerStreak'>,
-            streak_length: number,
-            is_correct: boolean,
-        };
-
-        const result = await this
-            .execSQLFunctionAsync<ReType>(
-                'answer_question_fn',
-                [
-                    userId,
-                    answerSessionId,
-                    questionVersionId,
-                    answerIds,
-                    elapsedSeconds,
-                    isPractiseAnswer
-                ],
-                true);
-
-        return {
-            correctAnswerIds: result.correct_answer_ids,
-            givenAnswerId: result.given_answer_id,
-            streakId: result.streak_id,
-            streakLength: result.streak_length,
-            isCorrect: result.is_correct
-        };
     };
 
     insertCoinAcquiredFn = (params: InsertCoinFnParamsType) => {

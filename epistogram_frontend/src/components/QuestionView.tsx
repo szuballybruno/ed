@@ -11,8 +11,8 @@ import {QuestionnaierAnswer} from './universal/QuestionnaireAnswer';
 import {QuestionnaireLayout} from './universal/QuestionnaireLayout';
 
 export const QuesitionView = (props: {
-    answerQuesitonAsync: (answerId: Id<'Answer'>[]) => Promise<void>,
-    correctAnswerIds: Id<'Answer'>[],
+    answerQuesitonAsync: (answerVersionId: Id<'AnswerVersion'>[]) => Promise<void>,
+    correctAnswerVersionIds: Id<'AnswerVersion'>[],
     question: QuestionDTO,
     loadingProps: LoadingFramePropsType,
     onlyShowAnswers?: boolean,
@@ -23,7 +23,7 @@ export const QuesitionView = (props: {
 
     const {
         answerQuesitonAsync,
-        correctAnswerIds,
+        correctAnswerVersionIds,
         question,
         loadingProps,
         onlyShowAnswers,
@@ -33,20 +33,20 @@ export const QuesitionView = (props: {
         ...css
     } = props;
 
-    const isAnswered = correctAnswerIds.length > 0;
+    const isAnswered = correctAnswerVersionIds.length > 0;
 
-    const [selectedAnswerId, setSelectedAnswerId] = useState<Id<'Answer'> | null>(null);
+    const [selectedAnswerVersionId, setSelectedAnswerVersionId] = useState<Id<'AnswerVersion'> | null>(null);
 
-    const handleSelectedAnswerAsync = async (answerId: Id<'Answer'>) => {
+    const handleSelectedAnswerVersionAsync = async (answerVersionId: Id<'AnswerVersion'>) => {
 
-        setSelectedAnswerId(answerId);
-        await answerQuesitonAsync([answerId]);
+        setSelectedAnswerVersionId(answerVersionId);
+        await answerQuesitonAsync([answerVersionId]);
     };
 
     // reset when question id changed
     useEffect(() => {
 
-        setSelectedAnswerId(null);
+        setSelectedAnswerVersionId(null);
     }, [question.questionVersionId]);
 
     // bonus coin
@@ -82,9 +82,9 @@ export const QuesitionView = (props: {
             .answers
             .map((answer, index) => {
 
-                const answerId = answer.answerId;
-                const isSelected = selectedAnswerId === answerId;
-                const isCorrect = isAnswered && correctAnswerIds.some(x => x === answerId);
+                const answerVersionId = answer.answerVersionId;
+                const isSelected = selectedAnswerVersionId === answerVersionId;
+                const isCorrect = isAnswered && correctAnswerVersionIds.some(x => x === answerVersionId);
                 const isIncorrect = isAnswered && isSelected && !isCorrect;
 
                 return <QuestionnaierAnswer
@@ -93,7 +93,7 @@ export const QuesitionView = (props: {
                     isIncorrect={isIncorrect}
                     isSelected={isSelected}
                     mb="8px"
-                    onClick={() => handleSelectedAnswerAsync(answer.answerId)} >
+                    onClick={() => handleSelectedAnswerVersionAsync(answer.answerVersionId)} >
 
                     <EpistoFont
                         isAutoFontSize

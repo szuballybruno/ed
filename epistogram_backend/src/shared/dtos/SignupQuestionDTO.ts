@@ -1,8 +1,8 @@
-import { Id } from '../types/versionId';
-import { SignupAnswerDTO } from './SignupAnswerDTO';
+import {Id} from '../types/versionId';
+import {SignupAnswerDTO} from './SignupAnswerDTO';
 
 export type SignupQuestionDTO = {
-    questionId: Id<'Question'>;
+    questionVersionId: Id<'QuestionVersion'>;
     questionText: string;
     imageUrl: string;
     typeId: number;

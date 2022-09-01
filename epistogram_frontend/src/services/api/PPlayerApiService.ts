@@ -24,10 +24,10 @@ export const PlayerApiService = {
 
         const queryRes = usePostData<AnswerQuestionDTO, AnswerResultDTO>(apiRoutes.player.answerVideoQuestion);
 
-        const answerQuestionAsync = (answerSessionId: Id<'AnswerSession'>, answerIds: Id<'Answer'>[], questionVersionId: Id<'QuestionVersion'>, elapsedSeconds: number) => {
+        const answerQuestionAsync = (answerSessionId: Id<'AnswerSession'>, answerVersionIds: Id<'AnswerVersion'>[], questionVersionId: Id<'QuestionVersion'>, elapsedSeconds: number) => {
 
             const dto = {
-                answerIds,
+                answerVersionIds,
                 questionVersionId,
                 answerSessionId,
                 elapsedSeconds

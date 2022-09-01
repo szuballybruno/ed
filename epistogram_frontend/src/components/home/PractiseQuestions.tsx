@@ -37,9 +37,9 @@ export const PractiseQuestions = (props: {
     const currentCourseItemCodeWrapper = useCurrentCourseItemCode();
     const currentCourseItemCode = currentCourseItemCodeWrapper?.currentCourseItemCode;
 
-    const handleAnswerQuestionAsync = async (answerId: Id<'Answer'>[]) => {
+    const handleAnswerQuestionAsync = async (answerVersionId: Id<'AnswerVersion'>[]) => {
 
-        await answerQuestionAsync(answerId, practiseQuestion!.questionVersionId);
+        await answerQuestionAsync(answerVersionId, practiseQuestion!.questionVersionId);
     };
 
     useEffect(() => {
@@ -107,7 +107,7 @@ export const PractiseQuestions = (props: {
 
                         <QuesitionView
                             answerQuesitonAsync={handleAnswerQuestionAsync}
-                            correctAnswerIds={answerResults?.correctAnswerIds ?? []}
+                            correctAnswerVersionIds={answerResults?.correctAnswerVersionIds ?? []}
                             loadingProps={{loadingState: answerQuestionState, error: answerQuestionError}}
                             question={practiseQuestion}
                             onlyShowAnswers={isAnswered}

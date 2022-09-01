@@ -189,7 +189,7 @@ const marray = [
                         const viewAsQuestion = questionGrouping.items.first();
 
                         return {
-                            questionId: viewAsQuestion.questionId,
+                            questionVersionId: viewAsQuestion.questionVersionId,
                             questionText: viewAsQuestion.questionText,
                             imageUrl: assetUrlService.getAssetUrl(viewAsQuestion.imageUrl),
                             typeId: viewAsQuestion.typeId,
@@ -198,7 +198,7 @@ const marray = [
                                 .map(viewAsAnswer => {
 
                                     return {
-                                        answerId: viewAsAnswer.answerId,
+                                        answerVersionId: viewAsAnswer.answerVersionId,
                                         answerText: viewAsAnswer.answerText,
                                         isGiven: viewAsAnswer.isGivenAnswer
                                     } as SignupAnswerDTO;
@@ -1293,7 +1293,7 @@ export const toQuestionDTO = (lqav: QuestionDataView[]) => {
                     .items
                     .map(viewAsAnswer => {
                         return instantiate<AnswerDTO>({
-                            answerId: viewAsAnswer.answerId,
+                            answerVersionId: viewAsAnswer.answerVersionId,
                             answerText: viewAsAnswer.answerText
                         });
                     })
@@ -1311,7 +1311,7 @@ export const toSignupDataDTO = (questions: SignupQuestionView[], isCompletedSign
                 const viewAsQuestion = questionGrouping.items.first();
 
                 return {
-                    questionId: viewAsQuestion.questionId,
+                    questionVersionId: viewAsQuestion.questionVersionId,
                     questionText: viewAsQuestion.questionText,
                     imageUrl: viewAsQuestion.imageUrl,
                     typeId: viewAsQuestion.typeId,
@@ -1320,7 +1320,7 @@ export const toSignupDataDTO = (questions: SignupQuestionView[], isCompletedSign
                         .map(viewAsAnswer => {
 
                             return {
-                                answerId: viewAsAnswer.answerId,
+                                answerVersionId: viewAsAnswer.answerVersionId,
                                 answerText: viewAsAnswer.answerText,
                                 isGiven: viewAsAnswer.isGivenAnswer
                             } as SignupAnswerDTO;

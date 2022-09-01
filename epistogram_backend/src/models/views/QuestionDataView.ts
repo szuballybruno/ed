@@ -1,6 +1,6 @@
-import { ViewColumn, ViewEntity } from 'typeorm';
-import { XViewColumn } from '../../services/XORM/XORMDecorators';
-import { Id } from '../../shared/types/versionId';
+import {ViewColumn, ViewEntity} from 'typeorm';
+import {XViewColumn} from '../../services/XORM/XORMDecorators';
+import {Id} from '../../shared/types/versionId';
 
 @ViewEntity({
     synchronize: false,
@@ -55,7 +55,7 @@ export class QuestionDataView {
 
     @ViewColumn()
     @XViewColumn()
-    answerId: Id<'Answer'>;
+    answerVersionId: Id<'AnswerVersion'>;
 
     @ViewColumn()
     @XViewColumn()
