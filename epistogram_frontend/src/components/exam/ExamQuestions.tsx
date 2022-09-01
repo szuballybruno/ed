@@ -15,6 +15,7 @@ import {ExamAbortDialog} from './ExamAbortDialog';
 import {ExamLayout} from './ExamLayout';
 import {ExamLayoutContent} from './ExamLayoutContent';
 import {QuestionAnswer} from './QuestionAnswer';
+import {Logger} from '../../static/Logger';
 
 export const ExamQuestions = (props: {
     exam: ExamPlayerDataDTO,
@@ -44,31 +45,31 @@ export const ExamQuestions = (props: {
         onNextOverNavigation: onExamFinished
     });
 
-    const [completedQuestionIds, setCompletedQuestionIds] = useState<Id<'QuestionVersion'>[]>([]);
+    const [completedQuestionVersionIds, setCompletedQuestionVersionIds] = useState<Id<'QuestionVersion'>[]>([]);
 
     const showError = useShowErrorDialog();
     const { saveExamAnswer, saveExamAnswerState } = useSaveExamAnswer();
     const currentQuestion = questionPaging.currentItem!;
 
-    const [selectedAnswerVersionIds, setSelectedAnswerVersionIds] = useState<{
+    const [selectedAnswers, setSelectedAnswers] = useState<{
         answerVersionId: Id<'AnswerVersion'>,
         questionVersionId: Id<'QuestionVersion'>
     }[]>([]);
 
-    const hasSelectedAnswer = selectedAnswerVersionIds.length > 0;
+    const hasSelectedAnswer = selectedAnswers.length > 0;
     const [showUpTime, setShowUpTime] = useState<Date>(new Date());
     const abortDialog = useEpistoDialogLogic(ExamAbortDialog);
     const isLastQuestion = questionPaging.currentIndex === questions.length - 1;
 
     const removeCompletedQuestion = (questionVersionId: Id<'QuestionVersion'>) => {
 
-        setCompletedQuestionIds(completedQuestionIds
+        setCompletedQuestionVersionIds(current => current
             .filter(x => x !== questionVersionId));
     };
 
     const addCompletedQuestion = (questionVersionId: Id<'QuestionVersion'>) => {
 
-        setCompletedQuestionIds([...completedQuestionIds, questionVersionId]);
+        setCompletedQuestionVersionIds([...completedQuestionVersionIds, questionVersionId]);
     };
 
     const handleOpenAbortDialog = () => {
@@ -92,22 +93,42 @@ export const ExamQuestions = (props: {
             const questionVersionId = currentQuestion
                 .questionVersionId;
 
-            const anyAnswersSelected = currentQuestion
-                .answers
-                .map(x => selectedAnswerVersionIds
-                    .some(y => y.answerVersionId === x.answerVersionId));
+            const isAnsweredPreviously = completedQuestionVersionIds
+                .any(questionVersionId);
+
+            const selectedAnswerVersionIds = selectedAnswers
+                .map(x => x.answerVersionId);
+
+            const currentQuestionAnswerVersionIds = currentQuestion.answers
+                .map(x => x.answerVersionId);
+
+            const anyAnswersSelected = selectedAnswerVersionIds
+                .some(x => currentQuestionAnswerVersionIds
+                    .includes(x));
+
+            Logger.logScoped('EXAM', 'anyAnswersSelected: ' + anyAnswersSelected);
 
             // TODO this will definitely cause bugs in the future
             // answered questions state should come from the server
             // selected any answers
-            if (anyAnswersSelected) {
+            if (anyAnswersSelected && !isAnsweredPreviously) {
 
                 addCompletedQuestion(questionVersionId);
 
                 // Important, that it only sends the answers for the current question!
                 await saveExamAnswer({
                     answerSessionId: answerSessionId,
-                    answerVersionIds: selectedAnswerVersionIds
+                    answerVersionIds: selectedAnswers
+                        .filter(x => x.questionVersionId === questionVersionId)
+                        .map(x => x.answerVersionId),
+                    questionVersionId,
+                    elapsedSeconds: timeElapsed
+                });
+            } else if (anyAnswersSelected && isAnsweredPreviously) {
+
+                await saveExamAnswer({
+                    answerSessionId: answerSessionId,
+                    answerVersionIds: selectedAnswers
                         .filter(x => x.questionVersionId === questionVersionId)
                         .map(x => x.answerVersionId),
                     questionVersionId,
@@ -172,11 +193,11 @@ export const ExamQuestions = (props: {
 
         if (isSelected) {
 
-            setSelectedAnswerVersionIds([...selectedAnswerVersionIds, {answerVersionId, questionVersionId}]);
+            setSelectedAnswers([...selectedAnswers, {answerVersionId, questionVersionId}]);
         }
         else {
 
-            setSelectedAnswerVersionIds(selectedAnswerVersionIds
+            setSelectedAnswers(selectedAnswers
                 .filter(x => x.answerVersionId !== answerVersionId));
         }
     };
@@ -191,7 +212,7 @@ export const ExamQuestions = (props: {
         {/* abort dialog */}
         <ExamAbortDialog
             dialogLogic={abortDialog}
-            answeredQuestionsCount={completedQuestionIds.length}
+            answeredQuestionsCount={completedQuestionVersionIds.length}
             handleAbortExam={handleAbortExam}
             handleExamFinished={onExamFinished}
             questions={questions} />
@@ -212,7 +233,7 @@ export const ExamQuestions = (props: {
             stepperLogic={{
                 ids: questions.map(x => x.questionVersionId),
                 currentId: currentQuestion.questionVersionId,
-                completedIds: completedQuestionIds,
+                completedIds: completedQuestionVersionIds,
                 selectCurrentHandler: handleSelectCurrent
             }}
             headerCenterText={exam.title}
@@ -252,7 +273,7 @@ export const ExamQuestions = (props: {
                             .answers
                             .map((answer, index) => {
 
-                                const isAnswerSelected = selectedAnswerVersionIds
+                                const isAnswerSelected = selectedAnswers
                                     .some(x => x.answerVersionId === answer.answerVersionId);
 
                                 return <QuestionAnswer

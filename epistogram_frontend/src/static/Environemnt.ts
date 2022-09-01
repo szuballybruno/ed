@@ -11,7 +11,8 @@ export type LoggingKeysType =
     'FILE UPLOAD' |
     'AUTO SCROLL' |
     'BUSY' |
-    'AUTO NAV' | 
+    'AUTO NAV' |
+    'EXAM' |
     'EVENT BUS';
 
 export const Environment = (() => {
@@ -28,7 +29,7 @@ export const Environment = (() => {
     const eventPoolingIntervalInMs = 5 * 60 * 1000; // 5 mins
     const sessionHangThresholdInMs = 2 * 60 * 60 * 1000; // 2 hours
     const loggingEnabled = false;
-    const loggingEnabledKeys: LoggingKeysType[] = ['WARNING', 'AUTO NAV', 'EVENT BUS', 'AUTH'];
+    const loggingEnabledKeys: LoggingKeysType[] = ['WARNING', 'EXAM'];
 
     const getAssetUrl = (path: string, assetUrlPath?: string) => {
 
