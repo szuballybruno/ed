@@ -81,7 +81,6 @@ export class GlobalConfiguration {
         serviceUserName: GlobalConfiguration.getEnvConfigEntry('DB_SERVICE_USER_NAME'),
         serviceUserPassword: GlobalConfiguration.getEnvConfigEntry('DB_SERVICE_USER_PASSWORD'),
         isOrmLoggingEnabled: GlobalConfiguration.getEnvConfigEntry('DB_IS_ORM_LOGGING_ENABLED', 'bool'),
-        isDangerousDBPurgeEnabled: GlobalConfiguration.getEnvConfigEntry('IS_DANGEROUS_DB_PURGE_ENABLED', 'bool'),
         isHostedOnGCP: GlobalConfiguration.getEnvConfigEntry('IS_HOSTED_ON_GCP', 'bool'),
     };
 
