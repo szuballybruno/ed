@@ -51,7 +51,7 @@ export const ShopAndNotifications = (props: {
                 paddingRight={isLowHeight ? 0 : '10px'}
                 align="center"
                 marginRight={isLowHeight ? 0 : '15px'}
-                flexShrink="0">
+                shrink={0}>
 
                 {/* shop button */}
                 <EpistoButton
