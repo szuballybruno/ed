@@ -78,7 +78,7 @@ export const getUserSeedData = (companies: CompaniesSeedDataType, jobTitles: Job
         firstName: 'Tom',
         lastName: 'Strand',
         password: ADMIN_PASSWORD_HASHED,
-        companyId: companies.PCWorld.id,
+        companyId: companies.Henkel.id,
         jobTitleId: jobTitles.user.id,
         isGod: false
     },
@@ -103,7 +103,7 @@ export const getUserSeedData = (companies: CompaniesSeedDataType, jobTitles: Job
         firstName: 'Liz',
         lastName: 'Blue',
         password: ADMIN_PASSWORD_HASHED,
-        companyId: companies.PCWorld.id,
+        companyId: companies.Henkel.id,
         jobTitleId: jobTitles.user.id,
         isGod: false
     }

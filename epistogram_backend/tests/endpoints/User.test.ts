@@ -63,7 +63,7 @@ const testGetBriefUserDataAction = async (testParams: TestParams) => {
         contextCourseId: null
     }, {
         permissionCode: 'VIEW_COMPANY_USERS',
-        contextCompanyId: companiesSeedData.PCWorld.id,
+        contextCompanyId: companiesSeedData.Henkel.id,
         contextCommentId: null,
         contextCourseId: null
     }];
@@ -101,7 +101,7 @@ const testGetEditUserDataAction = async (testParams: TestParams) => {
         contextCourseId: null
     }, {
         permissionCode: 'EDIT_COMPANY_USER',
-        contextCompanyId: companiesSeedData.PCWorld.id,
+        contextCompanyId: companiesSeedData.Henkel.id,
         contextCommentId: null,
         contextCourseId: null
     }];
@@ -141,7 +141,7 @@ const testGetUserAdministrationUserListAction = async (testParams: TestParams) =
         contextCourseId: null
     }, {
         permissionCode: 'VIEW_COMPANY_USERS',
-        contextCompanyId: companiesSeedData.PCWorld.id,
+        contextCompanyId: companiesSeedData.Henkel.id,
         contextCommentId: null,
         contextCourseId: null
     }];
@@ -179,7 +179,7 @@ const testDeleteUserAction = async (testParams: TestParams) => {
         contextCourseId: null
     }, {
         permissionCode: 'DELETE_COMPANY_USER',
-        contextCompanyId: companiesSeedData.PCWorld.id,
+        contextCompanyId: companiesSeedData.Henkel.id,
         contextCommentId: null,
         contextCourseId: null
     }];

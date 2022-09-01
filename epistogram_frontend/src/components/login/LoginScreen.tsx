@@ -1,17 +1,18 @@
 import { Box, Flex } from '@chakra-ui/layout';
 import React, { useContext, useEffect, useState } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
-import { useLogInUser } from '../../services/api/authenticationApiService';
+import { AuthenticationStateType, useLogInUser } from '../../services/api/authenticationApiService';
 import { useNavigation } from '../../services/core/navigatior';
 import { useShowErrorDialog } from '../../services/core/notifications';
 import { Environment } from '../../static/Environemnt';
 import { useIsScreenWiderThan } from '../../static/frontendHelpers';
 import { useQueryVal } from '../../static/locationHelpers';
+import { Logger } from '../../static/Logger';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoEntry } from '../controls/EpistoEntry';
 import { EpistoFont } from '../controls/EpistoFont';
 import { PageRootContainer } from '../PageRootContainer';
-import { AuthenticationStateContext,  RefetchUserAsyncContext } from '../system/AuthenticationFrame';
+import { AuthenticationStateContext, RefetchUserAsyncContext } from '../system/AuthenticationFrame';
 import { useAuthorizationContext } from '../system/AuthorizationContext';
 import { LoadingFrame } from '../system/LoadingFrame';
 import { useEpistoDialogLogic } from '../universal/epistoDialog/EpistoDialogLogic';
@@ -20,12 +21,13 @@ import { LoginPasswordResetDialog } from './LoginPasswordResetDialog';
 const LoginScreen = () => {
 
     // util
-    const { navigate, navigateToHref } = useNavigation();
+    const { navigate2, navigateToHref } = useNavigation();
     const showErrorDialog = useShowErrorDialog();
     const authState = useContext(AuthenticationStateContext);
     const refetchUser = useContext(RefetchUserAsyncContext);
     const { hasPermission } = useAuthorizationContext();
     const dest = useQueryVal('dest');
+    const [isUpToDate, setIsUpToDate] = useState(false);
 
     // state
     const [errorMessage, setErrorMessage] = useState('');
@@ -80,11 +82,21 @@ const LoginScreen = () => {
         // TODO
     };
 
+    useEffect(() => {
+
+        Logger.logScoped('AUTH', 'Refetching user...');
+
+        // refetchUser()
+        //     .then(() => setIsUpToDate(true));
+    }, [refetchUser]);
+
     // watch for auth state change
     // and navigate to home page if athenticated
     useEffect(() => {
 
         if (authState === 'authenticated') {
+
+            Logger.logScoped('AUTO NAV', `Auth state is ${'authenticated' as AuthenticationStateType}, navigating...`);
 
             if (hasPermission('ACCESS_APPLICATION')) {
 
@@ -94,12 +106,12 @@ const LoginScreen = () => {
                 }
                 else {
 
-                    navigate(applicationRoutes.homeRoute);
+                    navigate2(applicationRoutes.homeRoute);
                 }
             }
             else {
 
-                navigate(applicationRoutes.signupRoute);
+                navigate2(applicationRoutes.signupRoute);
             }
         }
 
@@ -277,7 +289,7 @@ const LoginScreen = () => {
                             </EpistoFont>
 
                             <EpistoFont
-                                onClick={() => navigate(applicationRoutes.registerViaActivationCodeRoute)}
+                                onClick={() => navigate2(applicationRoutes.registerViaActivationCodeRoute)}
                                 fontSize="fontSmall"
                                 style={{
                                     color: '--deepBlue',

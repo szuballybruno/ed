@@ -4,6 +4,7 @@ import { AuthDataDTO } from '../../shared/dtos/AuthDataDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
 import { ErrorWithCode } from '../../shared/types/ErrorWithCode';
 import { Environment } from '../../static/Environemnt';
+import { eventBus } from '../../static/EventBus';
 import { httpGetAsync, usePostDataUnsafe } from '../core/httpClient';
 
 export type AuthenticationStateType = 'loading' | 'authenticated' | 'forbidden' | 'error';
@@ -22,7 +23,14 @@ export const useGetAuthHandshake = () => {
 
     const qr = useQuery(
         'useGetAuthHandshake',
-        () => httpGetAsync(apiRoutes.authentication.establishAuthHandshake), {
+        () => {
+
+            const res = httpGetAsync(apiRoutes.authentication.establishAuthHandshake);
+
+            eventBus.fireEvent('onAuthHandshake', {});
+
+            return res;
+        }, {
         retry: false,
         refetchOnWindowFocus: false,
         refetchInterval: Environment.getAuthHandshakeIntervalInMs,

@@ -59,7 +59,6 @@ export const HomePageCourseStats = (props: {
                     ? <Grid
                         background='transparent'
                         boxShadow="unset"
-                        direction="column"
                         w='550px'
                         minW={'550px'}
                         p="10px"

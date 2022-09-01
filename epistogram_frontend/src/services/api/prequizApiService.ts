@@ -2,14 +2,14 @@ import { PrequizQuestionDTO } from '../../shared/dtos/PrequizQuestionDTO';
 import { PrequizUserAnswerDTO } from '../../shared/dtos/PrequizUserAnswerDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
 import { Id } from '../../shared/types/versionId';
-import { useReactQuery2 } from '../../static/frontendHelpers';
+import { QueryService } from '../../static/QueryService';
 import { usePostDataUnsafe } from '../core/httpClient';
 
 export const PrequizApiService = {
 
     usePrequizQuestions: (courseId: Id<'Course'>) => {
 
-        const qr = useReactQuery2<PrequizQuestionDTO[]>(apiRoutes.prequiz.getQuestions, { courseId });
+        const qr = QueryService.useXQuery<PrequizQuestionDTO[]>(apiRoutes.prequiz.getQuestions, { courseId });
 
         return {
             questions: qr.data ?? [],
@@ -20,7 +20,7 @@ export const PrequizApiService = {
 
     usePrequizUserAnswer: (courseId: Id<'Course'>, questionId: Id<'Question'> | null) => {
 
-        const qr = useReactQuery2<PrequizUserAnswerDTO>(apiRoutes.prequiz.getUserAnswer, { questionId, courseId }, !!questionId);
+        const qr = QueryService.useXQuery<PrequizUserAnswerDTO>(apiRoutes.prequiz.getUserAnswer, { questionId, courseId }, !!questionId);
 
         return {
             userAnswer: qr.data,

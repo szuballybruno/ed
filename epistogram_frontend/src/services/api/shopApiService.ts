@@ -7,12 +7,12 @@ import { ShopItemDTO } from '../../shared/dtos/ShopItemDTO';
 import { ShopItemEditDTO } from '../../shared/dtos/ShopItemEditDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
 import { Id } from '../../shared/types/versionId';
-import { useReactQuery2 } from '../../static/frontendHelpers';
+import { QueryService } from '../../static/QueryService';
 import { usePostDataUnsafe, usePostMultipartDataUnsafe } from '../core/httpClient';
 
 export const useShopItems = () => {
 
-    const qr = useReactQuery2<ShopItemDTO[]>(apiRoutes.shop.getShopItems);
+    const qr = QueryService.useXQuery<ShopItemDTO[]>(apiRoutes.shop.getShopItems);
 
     return {
         shopItems: qr.data ?? [],
@@ -24,7 +24,7 @@ export const useShopItems = () => {
 
 export const useShopItemCategories = () => {
 
-    const qr = useReactQuery2<ShopItemCategoryDTO[]>(apiRoutes.shop.getShopItemCategories);
+    const qr = QueryService.useXQuery<ShopItemCategoryDTO[]>(apiRoutes.shop.getShopItemCategories);
 
     return {
         shopItemCategories: qr.data ?? [],
@@ -35,7 +35,7 @@ export const useShopItemCategories = () => {
 
 export const useAdminShopItems = () => {
 
-    const qr = useReactQuery2<ShopItemAdminShortDTO[]>(apiRoutes.shop.getAdminShopItems);
+    const qr = QueryService.useXQuery<ShopItemAdminShortDTO[]>(apiRoutes.shop.getAdminShopItems);
 
     return {
         adminShopItems: qr.data ?? [],
@@ -46,7 +46,7 @@ export const useAdminShopItems = () => {
 
 export const useShopItemEditData = (shopItemId: Id<'ShopItem'>) => {
 
-    const qr = useReactQuery2<ShopItemEditDTO>(apiRoutes.shop.getShopItemEditData, { shopItemId });
+    const qr = QueryService.useXQuery<ShopItemEditDTO>(apiRoutes.shop.getShopItemEditData, { shopItemId });
 
     return {
         shopItemEditData: qr.data,
@@ -58,7 +58,7 @@ export const useShopItemEditData = (shopItemId: Id<'ShopItem'>) => {
 
 export const useShopItemBriefData = (shopItemId: Id<'ShopItem'> | null) => {
 
-    const qr = useReactQuery2<ShopItemBriefData>(apiRoutes.shop.getShopItemBriefData, { shopItemId }, !!shopItemId);
+    const qr = QueryService.useXQuery<ShopItemBriefData>(apiRoutes.shop.getShopItemBriefData, { shopItemId }, !!shopItemId);
 
     return {
         shopItemBriefData: qr.data,
@@ -69,7 +69,7 @@ export const useShopItemBriefData = (shopItemId: Id<'ShopItem'> | null) => {
 
 export const usePrivateCourses = () => {
 
-    const qr = useReactQuery2<CourseShopItemListDTO[]>(apiRoutes.shop.getPrivateCourseList);
+    const qr = QueryService.useXQuery<CourseShopItemListDTO[]>(apiRoutes.shop.getPrivateCourseList);
 
     return {
         privateCourses: qr.data ?? [],

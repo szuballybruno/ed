@@ -35,9 +35,9 @@ export class EpistoRoute {
         return this.removeDuplicateBreak(this._relativePath + (this._matchMore ? '/*' : ''));
     }
 
-    isMatchMore() {
+    isExact() {
 
-        return this._matchMore;
+        return !this._matchMore;
     }
 
     private removeDuplicateBreak(path: string) {
@@ -46,12 +46,13 @@ export class EpistoRoute {
     }
 }
 
-export type ApplicationRoute<T = void> = {
+export type ApplicationRoute<TParams = void, TQuery = void> = {
     title: string;
     route: EpistoRoute;
     icon?: JSX.Element;
     navAction?: () => void;
-    paramsType?: T;
+    paramsType?: TParams;
+    queryType?: TQuery;
     isUnauthorized?: boolean;
     ignoreAccessAppRestriction?: boolean;
     isAuthoirziedToVisit?: (hasPermission: HasPermissionFnType) => boolean

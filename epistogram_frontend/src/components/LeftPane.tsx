@@ -21,7 +21,7 @@ export const LeftPane = ({
 
     const homeRoute = applicationRoutes.rootHomeRoute;
     const { hasPermission } = useAuthorizationContext();
-    const { navigate } = useNavigation();
+    const { navigate2 } = useNavigation();
 
     return (
         <FlexFloat
@@ -59,7 +59,7 @@ export const LeftPane = ({
                     onClick={() => {
 
                         if (hasPermission('ACCESS_APPLICATION'))
-                            navigate(homeRoute);
+                            navigate2(homeRoute);
                     }} />
             </Flex>
 

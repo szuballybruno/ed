@@ -1,10 +1,10 @@
-import {AnswerQuestionDTO} from '../../shared/dtos/AnswerQuestionDTO';
-import {AnswerResultDTO} from '../../shared/dtos/AnswerResultDTO';
-import {QuestionDTO} from '../../shared/dtos/QuestionDTO';
-import {apiRoutes} from '../../shared/types/apiRoutes';
-import {Id} from '../../shared/types/versionId';
-import {useReactQuery2} from '../../static/frontendHelpers';
-import {usePostData} from '../core/httpClient';
+import { AnswerQuestionDTO } from '../../shared/dtos/AnswerQuestionDTO';
+import { AnswerResultDTO } from '../../shared/dtos/AnswerResultDTO';
+import { QuestionDTO } from '../../shared/dtos/QuestionDTO';
+import { apiRoutes } from '../../shared/types/apiRoutes';
+import { Id } from '../../shared/types/versionId';
+import { QueryService } from '../../static/QueryService';
+import { usePostData } from '../core/httpClient';
 
 export const useAnswerPractiseQuestion = () => {
 
@@ -31,7 +31,7 @@ export const useAnswerPractiseQuestion = () => {
 
 export const usePractiseQuestion = () => {
 
-    const qr = useReactQuery2<QuestionDTO>(apiRoutes.questions.getPractiseQuestions);
+    const qr = QueryService.useXQuery<QuestionDTO>(apiRoutes.questions.getPractiseQuestions);
 
     return {
         practiseQuestion: qr.data,

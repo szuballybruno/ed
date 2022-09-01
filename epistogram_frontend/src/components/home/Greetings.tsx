@@ -11,7 +11,7 @@ import { CurrentUserContext } from '../system/AuthenticationFrame';
 
 export const Greetings = () => {
 
-    const { navigate } = useNavigation();
+    const { navigate2 } = useNavigation();
     const { firstName } = useContext(CurrentUserContext);
 
     return <Flex
@@ -59,7 +59,7 @@ export const Greetings = () => {
                 <EpistoButton
                     variant={'colored'}
                     onClick={() => {
-                        navigate(applicationRoutes.availableCoursesRoute);
+                        navigate2(applicationRoutes.availableCoursesRoute);
                     }}>
 
                     {translatableTexts.practiseQuestions.goToCourses}

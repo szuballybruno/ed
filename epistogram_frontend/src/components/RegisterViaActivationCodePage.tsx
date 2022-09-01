@@ -21,7 +21,7 @@ export const RegisterViaActivationCodePage = () => {
     } = useRegisterUserViaActivationCode();
 
     const showError = useShowErrorDialog();
-    const { navigate } = useNavigation();
+    const { navigate2 } = useNavigation();
 
     // state 
     const [registrationSuccessful, setRegistrationSuccessful] = useState(false);

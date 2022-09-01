@@ -1,6 +1,7 @@
 import { Flex } from '@chakra-ui/react';
 import { ReactNode, useCallback } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
+import { ApplicationRoute } from '../../../models/types';
 import { CourseApiService } from '../../../services/api/courseApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { Id } from '../../../shared/types/versionId';
@@ -19,7 +20,7 @@ export const CourseAdministartionFrame = (params: {
     const { children, isAnySelected, noHeightOverflow } = params;
 
     // util
-    const { navigate } = useNavigation();
+    const { navigate2 } = useNavigation();
     const courseId = Id
         .create<'Course'>(useIntParam('courseId')!);
     const isMatchingCurrentUrl = useIsMatchingCurrentRoute();
@@ -37,7 +38,7 @@ export const CourseAdministartionFrame = (params: {
     // func
     const navToCourse = useCallback((courseId: Id<'Course'>) => {
 
-        const url = (() => {
+        const route = (() => {
 
             const base = applicationRoutes.administrationRoute.coursesRoute;
 
@@ -50,8 +51,8 @@ export const CourseAdministartionFrame = (params: {
             return base.courseDetailsRoute;
         })();
 
-        navigate(url, { courseId });
-    }, [courseId, navigate, isMatchingCurrentUrl, applicationRoutes]);
+        navigate2(route as ApplicationRoute<any, any>, { courseId });
+    }, [courseId, navigate2, isMatchingCurrentUrl, applicationRoutes]);
 
     return (
         <Flex

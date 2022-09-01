@@ -4,6 +4,7 @@ import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 import { Id } from '../shared/types/versionId';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { AuthorizationService } from './AuthorizationService';
+import { DomainProviderService } from './DomainProviderService';
 import { EmailService } from './EmailService';
 import { HashService } from './HashService';
 import { GlobalConfiguration } from './misc/GlobalConfiguration';
@@ -31,7 +32,8 @@ export class PasswordChangeService {
         ormService: ORMConnectionService,
         config: GlobalConfiguration,
         hashService: HashService,
-        authorizationService: AuthorizationService) {
+        authorizationService: AuthorizationService,
+        private _domainProviderService: DomainProviderService) {
 
         this._hashService = hashService;
         this._ormService = ormService;
@@ -47,39 +49,29 @@ export class PasswordChangeService {
      * This will request a passowrd change for a user that's not authenticated, 
      * an email will be sent out with the pw change link.
      */
-    requestPasswordChangeAsync(principalId: PrincipalId, email: string) {
+    async requestPasswordChangeAsync(email: string) {
 
-        return {
-            action: async () => {
-                const user = await this._userService
-                    .getUserByEmailAsync(email);
+        const user = await this._userService
+            .getUserByEmailOrFailAsync(email);
 
-                if (!user)
-                    throw new Error('Can not reset passowrd, user does not exists.');
+        const token = this._tokenService
+            .createSetNewPasswordToken(user.id);
 
-                const token = this._tokenService
-                    .createSetNewPasswordToken(user.id);
+        // save user's reset token in DB, it's only valid this way
+        // some benefits are you can not use the token twice,
+        // since it's going to be removed after it's been used  
+        await this._ormService
+            .save(User, {
+                id: user.id,
+                resetPasswordToken: token
+            });
 
-                // save user's reset token in DB, it's only valid this way
-                // some benefits are you can not use the token twice,
-                // since it's going to be removed after it's been used  
-                await this._ormService
-                    .save(User, {
-                        id: user.id,
-                        resetPasswordToken: token
-                    });
+        const resetUrl = await this
+            ._urlService
+            .getFrontendUrl(user.id, `/set-new-password?token=${token}`);
 
-                const resetUrl = this._urlService
-                    .getFrontendUrl(`/set-new-password?token=${token}`);
-
-                await this._emailService
-                    .sendSelfPasswordResetMailAsync(user, resetUrl);
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
-            }
-        };
+        await this._emailService
+            .sendSelfPasswordResetMailAsync(user, resetUrl);
     }
 
     /**
@@ -87,88 +79,72 @@ export class PasswordChangeService {
      * an email will be sent out with the pw change link. 
      * The old password will be requested from the user an an extra safety step. 
      */
-    requestPasswordChangeAuthenticatedAsync(principalId: PrincipalId, oldPassword: string) {
+    async requestPasswordChangeAuthenticatedAsync(principalId: PrincipalId, oldPassword: string) {
 
-        return {
-            action: async () => {
-                const userId = Id
-                    .create<'User'>(principalId.toSQLValue());
+        const userId = Id
+            .create<'User'>(principalId.toSQLValue());
 
-                const resetPawsswordToken = this._tokenService
-                    .createSetNewPasswordToken(userId);
+        const resetPawsswordToken = this._tokenService
+            .createSetNewPasswordToken(userId);
 
-                const user = await this._userService
-                    .getUserById(userId);
+        const user = await this._userService
+            .getUserById(userId);
 
-                if (!await this._hashService.comparePasswordAsync(oldPassword, user.password))
-                    throw new ErrorWithCode('Wrong password!', 'bad request');
+        if (!await this._hashService.comparePasswordAsync(oldPassword, user.password))
+            throw new ErrorWithCode('Wrong password!', 'bad request');
 
-                await this._ormService
-                    .save(User, {
-                        id: user.id,
-                        resetPasswordToken: resetPawsswordToken
-                    });
+        await this._ormService
+            .save(User, {
+                id: user.id,
+                resetPasswordToken: resetPawsswordToken
+            });
 
-                const resetPawsswordUrl = this._config.misc.frontendUrl + `/set-new-password?token=${resetPawsswordToken}`;
+        const domain = this
+            ._domainProviderService
+            .getDomainAsync(principalId.getId());
 
-                await this._emailService
-                    .sendResetPasswordMailAsync(user, resetPawsswordUrl);
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
-            }
-        };
+        const resetPawsswordUrl = `${domain}/set-new-password?token=${resetPawsswordToken}`;
 
-
+        await this._emailService
+            .sendResetPasswordMailAsync(user, resetPawsswordUrl);
     }
 
     /**
      * This will set a new password for the user.
      */
-    setNewPasswordAsync(
-        principalId: PrincipalId,
+    async setNewPasswordAsync(
         password: string,
         passwordCompare: string,
         passwordResetToken: string) {
 
-        return {
-            action: async () => {
+        // verify new password with compare password 
+        if (validatePassowrd(password, passwordCompare))
+            throw new ErrorWithCode('Password is invalid.', 'bad request');
 
-                // verify new password with compare password 
-                if (validatePassowrd(password, passwordCompare))
-                    throw new ErrorWithCode('Password is invalid.', 'bad request');
+        // verify token
+        const tokenPayload = this._tokenService
+            .verifySetNewPasswordToken(passwordResetToken);
 
-                // verify token
-                const tokenPayload = this._tokenService
-                    .verifySetNewPasswordToken(passwordResetToken);
+        const userId = tokenPayload.userId;
 
-                const userId = tokenPayload.userId;
+        // get user 
+        const user = await this._userService
+            .getUserById(userId);
 
-                // get user 
-                const user = await this._userService
-                    .getUserById(userId);
+        // verify user reset password token
+        if (user.resetPasswordToken !== passwordResetToken)
+            throw new ErrorWithCode('Wrong token.', 'bad request');
 
-                // verify user reset password token
-                if (user.resetPasswordToken !== passwordResetToken)
-                    throw new ErrorWithCode('Wrong token.', 'bad request');
+        // hash new password
+        const hashedPassword = await this._hashService
+            .hashPasswordAsync(password);
 
-                // hash new password
-                const hashedPassword = await this._hashService
-                    .hashPasswordAsync(password);
-
-                // save new values 
-                await this._ormService
-                    .save(User, {
-                        id: user.id,
-                        resetPasswordToken: null,
-                        password: hashedPassword
-                    } as User);
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
-            }
-        };
+        // save new values 
+        await this._ormService
+            .save(User, {
+                id: user.id,
+                resetPasswordToken: null,
+                password: hashedPassword
+            } as User);
     }
 }

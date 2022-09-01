@@ -1,14 +1,14 @@
 import bodyParser from 'body-parser';
 import express, { Application, Request, Response } from 'express';
 import fileUpload from 'express-fileupload';
+import { DomainProviderService } from '../services/DomainProviderService';
 import { LoggerService } from '../services/LoggerService';
-import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
-import { getCORSMiddleware } from '../services/misc/middlewareService';
+import { getCORSMiddleware } from '../services/misc/CORSMiddleware';
+import { ServiceProviderInitializator } from '../startup/initApp';
 import { respondError } from '../startup/initTurboExpressListener';
 import { ITurboRequest, ITurboResponse, IXTurboExpressListener, RegisterEndpointOptsType } from '../utilities/XTurboExpress/XTurboExpressTypes';
 import { TurboRequest } from './TurboRequest';
 import { TurboResponse } from './TurboResponse';
-
 
 export class XTurboExpressListener implements IXTurboExpressListener {
 
@@ -16,11 +16,26 @@ export class XTurboExpressListener implements IXTurboExpressListener {
 
     constructor(
         private _loggerService: LoggerService,
-        globalConfig: GlobalConfiguration) {
+        private _initializator: ServiceProviderInitializator) {
 
         this._expressServer = express();
 
-        this._setExpressMiddleware(getCORSMiddleware(globalConfig));
+        const getCourseDomains: () => Promise<string[]> = async () => {
+
+            const domains = await this._initializator
+                .useTransientServicesContextAsync(async serviceProvider => {
+
+                    const domainPrivider = serviceProvider
+                        .getService(DomainProviderService);
+
+                    return await domainPrivider
+                        .getAllDomainsAsync();
+                });
+
+            return domains;
+        };
+
+        this._setExpressMiddleware(getCORSMiddleware(getCourseDomains));
         this._setExpressMiddleware(bodyParser.json({ limit: '32mb' }));
         this._setExpressMiddleware(bodyParser.urlencoded({ limit: '32mb', extended: true }));
         this._setExpressMiddleware(fileUpload());

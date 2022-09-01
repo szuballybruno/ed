@@ -61,10 +61,12 @@ export const AdminEditUserControl = ({
 
     const { coinBalance, coinBalanceStatus, coinBalanceError, refetchCoinBalance } = useCoinBalanceOfUser(mode === 'EDIT' ? editedUserId : null);
     const { giftCoinsToUserAsync, giftCoinsToUserState } = useGiftCoinsToUser();
-    const { roleAssignCompanies } = useRoleAssignCompanies();
-    const { jobTitles } = useJobTitles();
+    const { roleAssignCompanies, roleAssignCompaniesError, roleAssignCompaniesState } = useRoleAssignCompanies();
+    const { jobTitles, jobTitlesError, jobTitlesStatus } = useJobTitles();
 
-    useSetBusy(useCoinBalanceOfUser, coinBalanceStatus);
+    useSetBusy(useCoinBalanceOfUser, coinBalanceStatus, coinBalanceError);
+    useSetBusy(useRoleAssignCompanies, roleAssignCompaniesState, roleAssignCompaniesError);
+    useSetBusy(useJobTitles, jobTitlesStatus, jobTitlesError);
 
     useEffect(() => {
 

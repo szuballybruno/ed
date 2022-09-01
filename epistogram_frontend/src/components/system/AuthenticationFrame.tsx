@@ -44,22 +44,25 @@ const AuthFirewall = (props: PropsWithChildren & {
     const dest = useCurrentUrlPathname();
     const loginRoute = applicationRoutes.loginRoute;
     const signupRoute = applicationRoutes.signupRoute;
-    const { navigate } = useNavigation();
+    const { navigate2 } = useNavigation();
     const currentRoute = useGetCurrentAppRoute();
     const { hasPermission } = useAuthorizationContext();
     const isUnauthorized = !!currentRoute.isUnauthorized;
 
-    // check for error before render, redirect to login if necessary
+    // check for error before render, 
+    // redirect to login if necessary
     useEffect(() => {
 
+        const isCurrentRouteLogin = currentRoute.route.getAbsolutePath() === applicationRoutes.loginRoute.route.getAbsolutePath();
+
         // error
-        if (authState === 'error') {
+        if (authState === 'error' && !isCurrentRouteLogin) {
 
-            Logger.logScoped('AUTH', `Auth state: ${authState}. Redirecting to login.`);
+            Logger.logScoped('AUTO NAV', `Auth state: ${authState}. Redirecting to login.`);
 
-            navigate(loginRoute);
+            navigate2(loginRoute);
         }
-    }, [authState]);
+    }, [authState, navigate2, loginRoute, currentRoute]);
 
     Logger.logScoped('AUTH', `Current route: ${currentRoute.route.getAbsolutePath()} IsUnrestricted: ${isUnauthorized}`);
 
@@ -76,7 +79,7 @@ const AuthFirewall = (props: PropsWithChildren & {
 
         Logger.logScoped('AUTH', `Auth state: ${authState}. Redirecting...`);
 
-        navigate(loginRoute, undefined, { dest });
+        navigate2(loginRoute, {}, { dest });
 
         return <div></div>;
     }
@@ -89,7 +92,7 @@ const AuthFirewall = (props: PropsWithChildren & {
         Logger.logScoped('AUTH', `canaccess: ${canAccess} ignore: ${ignoreAccessAppRestriction} isunauth: ${isUnauthorized}`);
         Logger.logScoped('AUTH', `Auth state: ${authState}. No ${'ACCESS_APPLICATION' as PermissionCodeType} permission. Redirecting...`);
 
-        navigate(signupRoute, undefined);
+        navigate2(signupRoute);
 
         return <div></div>;
     }

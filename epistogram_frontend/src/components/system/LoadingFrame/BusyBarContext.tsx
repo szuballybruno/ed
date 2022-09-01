@@ -1,8 +1,9 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { LoadingStateType } from '../../../models/types';
-import { useForceUpdate, useGetCurrentAppRoute } from '../../../static/frontendHelpers';
+import { DictionaryOfT, useGetCurrentAppRoute } from '../../../static/frontendHelpers';
+import { Logger } from '../../../static/Logger';
 
-export type ErrorType = Object | null;
+export type ErrorType = null | { message: string };
 
 export type LoadingFramePropsType = {
     loadingState?: LoadingStateType | LoadingStateType[],
@@ -16,12 +17,21 @@ type BusyStateType = {
     key: string
 }
 
+type StateType = DictionaryOfT<BusyStateType>;
+
 export const useBusyBarContext = () => {
 
-    const stateRef = useRef<{ [K: string]: BusyStateType }>({});
-    const forceUpdate = useForceUpdate();
+    const [managerState, setManagerState] = useState<StateType>({});
 
     const setBusy = useCallback((key: string, loadingState: LoadingStateType, error?: ErrorType) => {
+
+        if (!key || key === '')
+            throw new Error('Key cant be null or undefiend or empty string!');
+
+        if (managerState[key]?.loadingState === loadingState)
+            return;
+
+        Logger.logScoped('BUSY', `Setting busy... ${key} - ${loadingState} - ${error?.message}`);
 
         const state: BusyStateType = {
             key,
@@ -29,40 +39,44 @@ export const useBusyBarContext = () => {
             loadingState
         };
 
-        const newState = { ...stateRef.current };
-        newState[key] = state;
+        const newManagerState = { ...managerState };
+        newManagerState[key] = state;
 
-        stateRef.current = newState;
-        forceUpdate();
-    }, []);
+        setManagerState(newManagerState);
+    }, [managerState]);
 
-    const { error, isBusy } = useMemo(() => {
+    const { error, isError, isBusy } = useMemo(() => {
 
         const states = Object
-            .values(stateRef.current);
+            .values(managerState);
 
         const isBusy = states
-            .any(x => !!x.error || x.loadingState === 'error' || x.loadingState === 'loading');
+            .some(x => x.loadingState === 'loading');
+
+        const isError = states
+            .some(x => !!x.error || x.loadingState === 'error');
 
         const error = states
             .filter(x => !!x.error)[0]?.error ?? null;
 
-        return { isBusy, error };
-    }, [stateRef.current]);
+        return { isBusy, isError, error };
+    }, [managerState]);
 
     const appRoute = useGetCurrentAppRoute();
 
     useEffect(() => {
 
-        stateRef.current = {};
-        forceUpdate();
+        setManagerState({});
     }, [appRoute]);
 
-    return {
+    const busyStateOut = {
         setBusy,
         error,
-        isBusy
+        isBusy,
+        isError
     };
+
+    return busyStateOut;
 };
 
 export type BusyBarContextType = ReturnType<typeof useBusyBarContext>;
@@ -71,11 +85,14 @@ export const BusyBarContext = createContext<BusyBarContextType>({} as BusyBarCon
 
 export const useSetBusy = (loadingFunction: (...args: any[]) => any, loadingState: LoadingStateType, error?: ErrorType) => {
 
+    if (!loadingFunction.name || loadingFunction.name === '')
+        throw new Error('Loading function has no valid name!');
+
     const { setBusy } = useContext(BusyBarContext);
 
     useEffect(() => {
 
         setBusy(loadingFunction.name, loadingState, error);
-    }, [setBusy, loadingState, error]);
+    }, [setBusy, loadingState, error, loadingFunction]);
 };
 

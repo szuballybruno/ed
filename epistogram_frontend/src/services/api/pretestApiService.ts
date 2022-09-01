@@ -2,14 +2,14 @@ import { PretestDataDTO } from '../../shared/dtos/PretestDataDTO';
 import { PretestResultDTO } from '../../shared/dtos/PretestResultDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
 import { Id } from '../../shared/types/versionId';
-import { useReactQuery2 } from '../../static/frontendHelpers';
+import { QueryService } from '../../static/QueryService';
 import { usePostDataUnsafe } from '../core/httpClient';
 
 export const PretestApiService = {
 
     usePretestData: (courseId: Id<'Course'>) => {
 
-        const qr = useReactQuery2<PretestDataDTO>(apiRoutes.pretest.getPretestData, { courseId });
+        const qr = QueryService.useXQuery<PretestDataDTO>(apiRoutes.pretest.getPretestData, { courseId });
 
         return {
             pretestData: qr.data,
@@ -20,7 +20,7 @@ export const PretestApiService = {
 
     usePretestResults: (courseId: Id<'Course'>) => {
 
-        const qr = useReactQuery2<PretestResultDTO>(apiRoutes.pretest.getPretestResults, { courseId });
+        const qr = QueryService.useXQuery<PretestResultDTO>(apiRoutes.pretest.getPretestResults, { courseId });
 
         return {
             pretestResults: qr.data,

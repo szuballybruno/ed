@@ -56,7 +56,7 @@ export const DesktopNavbar = ({
         })
         .getArray() as ApplicationRoute[];
 
-    const { navigateToPlayer, navigate } = useNavigation();
+    const { navigateToPlayer, navigate2 } = useNavigation();
 
     // context
     const { isAuthenticated } = useAuthorizationContext();
@@ -82,7 +82,7 @@ export const DesktopNavbar = ({
                         <EpistoButton
                             variant="plain"
                             key={index}
-                            onClick={() => navigate(route)}>
+                            onClick={() => navigate2(route)}>
 
                             {route.icon}
                         </EpistoButton>
@@ -103,7 +103,7 @@ export const DesktopNavbar = ({
                         <NavbarButton
                             key={index}
                             menuName={route.title}
-                            onClick={() => navigate(route)} />
+                            onClick={() => navigate2(route)} />
                     ))}
 
                 {/* continue course button */}
@@ -124,7 +124,7 @@ export const DesktopNavbar = ({
                                 variant="plain"
                                 key={index}
                                 onClick={() => {
-                                    navigate(route);
+                                    navigate2(route);
                                 }}>
 
                                 {route.icon}
@@ -164,9 +164,9 @@ export const DesktopNavbar = ({
                     }}
                     alt=""
                     // onClick={(//user?.userActivity?.canAccessApplication
-                    //     ? () => navigate(applicationRoutes.homeRoute)
+                    //     ? () => navigate2(applicationRoutes.homeRoute)
                     //     : undefined}
-                    onClick={() => navigate(applicationRoutes.homeRoute)} />
+                    onClick={() => navigate2(applicationRoutes.homeRoute)} />
             )}
 
             {/* menu items */}

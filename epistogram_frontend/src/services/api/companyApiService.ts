@@ -1,14 +1,14 @@
 import { CompanyEditDataDTO } from '../../shared/dtos/company/CompanyEditDataDTO';
 import { CompanyDTO } from '../../shared/dtos/company/CompanyDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
-import { useReactQuery2 } from '../../static/frontendHelpers';
+import { QueryService } from '../../static/QueryService';
 import { usePostDataUnsafe } from '../core/httpClient';
 import { RoleAssignCompanyDTO } from '../../shared/dtos/company/RoleAssignCompanyDTO';
 import { Id } from '../../shared/types/versionId';
 
 export const useCompaniesAdmin = () => {
 
-    const qr = useReactQuery2<CompanyDTO[]>(apiRoutes.companies.getCompaniesAdmin);
+    const qr = QueryService.useXQuery<CompanyDTO[]>(apiRoutes.companies.getCompaniesAdmin);
 
     return {
         companies: qr.data ?? [],
@@ -20,7 +20,7 @@ export const useCompaniesAdmin = () => {
 
 export const useRoleAssignCompanies = () => {
 
-    const qr = useReactQuery2<RoleAssignCompanyDTO[]>(apiRoutes.companies.getRoleAssignCompanies);
+    const qr = QueryService.useXQuery<RoleAssignCompanyDTO[]>(apiRoutes.companies.getRoleAssignCompanies);
 
     return {
         roleAssignCompanies: qr.data ?? [],
@@ -62,7 +62,7 @@ export const useSaveCompany = () => {
 
 export const useCompanies = () => {
 
-    const qr = useReactQuery2<CompanyDTO[]>(apiRoutes.companies.getCompanies);
+    const qr = QueryService.useXQuery<CompanyDTO[]>(apiRoutes.companies.getCompanies);
 
     return {
         companies: qr.data ?? [],
@@ -72,7 +72,7 @@ export const useCompanies = () => {
 
 export const useCompanyEditData = (companyId: Id<'Company'>) => {
 
-    const qr = useReactQuery2<CompanyEditDataDTO>(apiRoutes.companies.getCompanyEditData, { companyId });
+    const qr = QueryService.useXQuery<CompanyEditDataDTO>(apiRoutes.companies.getCompanyEditData, { companyId });
 
     return {
         companyEditData: qr.data,
@@ -82,7 +82,7 @@ export const useCompanyEditData = (companyId: Id<'Company'>) => {
 
 export const useAvailableCompaniesForRoleCreation = () => {
 
-    const qr = useReactQuery2<CompanyDTO[]>(apiRoutes.companies.getAvailableCompaniesForRoleCreation);
+    const qr = QueryService.useXQuery<CompanyDTO[]>(apiRoutes.companies.getAvailableCompaniesForRoleCreation);
 
     return {
         companies: qr.data ?? [],

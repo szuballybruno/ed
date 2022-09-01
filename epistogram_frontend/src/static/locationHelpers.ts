@@ -19,10 +19,36 @@ export const useIntParam = (name: string): number | null => {
     return parsed;
 };
 
-export const useRouteParams = <T>(route: ApplicationRoute<T>) => {
+export const useRouteParams = <TParams, TQuery>(route: ApplicationRoute<TParams, TQuery>) => {
+
+    return useRouteValues(route).params;
+};
+
+export const useRouteQuery = <TParams, TQuery>(route: ApplicationRoute<TParams, TQuery>) => {
+
+    return useRouteValues(route).query;
+};
+
+export const useRouteValues = <TParams, TQuery>(route: ApplicationRoute<TParams, TQuery>) => {
+
+    const queryObj = useSearchParams()[0];
+    const query = {} as any;
+    const keysIterator = queryObj.keys();
+
+    let result = keysIterator.next();
+    while (!result.done) {
+
+        const key = result.value;
+        query[key] = queryObj.get(key);
+        result = keysIterator.next();
+    }
 
     const params = useParams();
-    return new XSafeObjectWrapper<T>(params as any);
+
+    return {
+        params: new XSafeObjectWrapper<TParams>(params as any),
+        query: new XSafeObjectWrapper<TQuery>(query as any)
+    };
 };
 
 /**

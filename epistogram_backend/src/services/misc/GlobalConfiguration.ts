@@ -31,7 +31,7 @@ export class GlobalConfiguration {
             setNewPasswordTokenSecret: 'sdajwd99839d8y9ac9ayw7dya398yd9aysdas'
         },
         tokenLifespans: {
-            accessTokenLifespanInS: 2 * 60 * 60, // 2 hours
+            accessTokenLifespanInS: 2 * 60 * 60, // 2 hours 
             refreshTokenLifespanInS: 72 * 60 * 60, // 72 hours
             setNewPasswordTokenLifespanInS: 8 * 60 * 60, // 8 hours,
             registrationTokenLifespanInS: 127 * 60 * 60, // 127 hours,
@@ -54,8 +54,9 @@ export class GlobalConfiguration {
     misc = {
         hostPort: GlobalConfiguration.getEnvConfigEntry('HOST_PORT'),
         environmentName: GlobalConfiguration.getEnvConfigEntry('ENVIRONMENT_NAME'),
-        frontendUrl: GlobalConfiguration.getEnvConfigEntry('FRONTEND_URL'),
+        // frontendUrl: GlobalConfiguration.getEnvConfigEntry('FRONTEND_URL'),
         isLocalhost: GlobalConfiguration.getEnvConfigEntry('IS_LOCALHOST') === 'true',
+        localhostDomain: 'http://localhost:3000',
         accessTokenCookieName: 'accessToken',
         refreshTokenCookieName: 'refreshToken',
         isUnderMaintanence: GlobalConfiguration.getEnvConfigEntry('IS_UNDER_MAINTENANCE') === 'true',

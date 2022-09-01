@@ -1,6 +1,7 @@
 import { PropsWithChildren } from '../../../static/frontendHelpers';
 import { BusyBar } from './BusyBar';
 import { BusyBarContext, useBusyBarContext } from './BusyBarContext';
+import { GlobalErrorOverlay } from './GlobalErrorOverlay';
 
 export const BusyBarFrame = ({ children }: PropsWithChildren) => {
 
@@ -12,6 +13,11 @@ export const BusyBarFrame = ({ children }: PropsWithChildren) => {
         <BusyBar
             isBusy={state.isBusy} />
 
-        {children}
+        <GlobalErrorOverlay
+            error={state.error}
+            visible={state.isError}>
+
+            {children}
+        </GlobalErrorOverlay>
     </BusyBarContext.Provider>;
 };

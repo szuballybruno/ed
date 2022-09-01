@@ -29,9 +29,8 @@ export const ItemEditDialog = ({
 
     const handleCallback = useCallback((questionMutations: QuestionMutationsType, answerMutations: AnswerMutationsType) => {
 
-        Logger.logScoped('MUTATIONS', 'Finishing item edits. Final mutations: ');
-        Logger.logScoped('MUTATIONS', questionMutations);
-        Logger.logScoped('MUTATIONS', answerMutations);
+        Logger.logScoped('MUTATIONS', 'Finishing item edits. Question mutations: ', questionMutations);
+        Logger.logScoped('MUTATIONS', 'Finishing item edits. Answer mutations: ', answerMutations);
 
         dialogLogic.closeDialog();
         callback(questionMutations, answerMutations);

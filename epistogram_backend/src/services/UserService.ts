@@ -80,7 +80,7 @@ export class UserService {
 
         const res = await this._ormService
             .withResType<ResType>()
-            .query(User, {editedUserId})
+            .query(User, { editedUserId })
             .selectFrom(x => x
                 .columns(User, '*')
                 .columns(TeacherInfo, {
@@ -221,9 +221,9 @@ export class UserService {
                 { companyId: user.companyId }
             );
 
-       const searchTextLower = searchText?.toLowerCase();
+        const searchTextLower = searchText?.toLowerCase();
 
-       // TODO CHECK VIEW COMPANY USERS PERMISSION
+        // TODO CHECK VIEW COMPANY USERS PERMISSION
         const users = await this._ormService
             .query(AdminUserListView)
             .getMany();
@@ -439,7 +439,7 @@ export class UserService {
      * Get a user by it's email address.
      * Which is also a unique identifier, like the id.
      */
-    getUserByEmailAsync = async (email: string) => {
+    async getUserByEmailAsync(email: string) {
 
         const user = await this._ormService
             .query(User, { email })
@@ -447,7 +447,22 @@ export class UserService {
             .getOneOrNull();
 
         return user;
-    };
+    }
+
+    /**
+     * Get a user by it's email address.
+     * Which is also a unique identifier, like the id.
+     */
+    async getUserByEmailOrFailAsync(email: string) {
+
+        const user = await this
+            .getUserByEmailAsync(email);
+
+        if (!user)
+            throw new Error(`User not found by email "${email}"!`);
+
+        return user;
+    }
 
     /**
      * Set user's avatar file id.

@@ -1,40 +1,27 @@
-import { useNavigate } from 'react-router-dom';
-import { applicationRoutes, ApplicationRoutesType } from '../../configuration/applicationRoutes';
-import { CourseStageNameType } from '../../shared/types/sharedTypes';
-import { ApplicationRoute } from '../../models/types';
-import { getUrl } from '../../static/frontendHelpers';
 import { useCallback } from 'react';
-import { Environment } from '../../static/Environemnt';
+import { useNavigate } from 'react-router-dom';
+import { applicationRoutes } from '../../configuration/applicationRoutes';
+import { ApplicationRoute } from '../../models/types';
+import { CourseStageNameType } from '../../shared/types/sharedTypes';
 import { Id } from '../../shared/types/versionId';
+import { getUrl } from '../../static/frontendHelpers';
 import { Logger } from '../../static/Logger';
 
 export const useNavigation = () => {
 
     const domNavigate = useNavigate();
 
-    /**
-     * @deprecated use "navigate2"
-     */
-    const navigate = useCallback((route: ApplicationRoute, params?: any, query?: any) => {
-
-        const replacedPath = getUrl(route.route.getAbsolutePath(), params, query);
-
-        Logger.logScoped('ROUTING', 'Navigating to: ' + replacedPath);
-
-        domNavigate(replacedPath);
-    }, [domNavigate, getUrl, Environment.loggingEnabled]);
-
-    const navigate2 = <T>(routeOrFn: (ApplicationRoute<T>) | ((routes: ApplicationRoutesType) => ApplicationRoute<T>), ...args: T extends void ? [] : [T]) => {
+    const navigate2 = <TParams, TQuery>(
+        route: (ApplicationRoute<TParams, TQuery>),
+        ...args: TParams extends void
+            ? TQuery extends void
+            ? []
+            : [TQuery]
+            : TQuery extends void
+            ? [TParams]
+            : [TParams, TQuery]) => {
 
         const [params] = args;
-
-        const route = typeof routeOrFn === 'function'
-            ? routeOrFn(applicationRoutes)
-            : routeOrFn as ApplicationRoute<T>;
-
-        if (!params)
-            Logger.logScoped('WARNING', 'Navigating without parameters! Route: ' + route.route.getAbsolutePath());
-
         const replacedPath = getUrl(route.route.getAbsolutePath(), params);
 
         Logger.logScoped('ROUTING', 'Navigating to: ' + replacedPath);
@@ -58,7 +45,7 @@ export const useNavigation = () => {
     /**
      * @deprecated use "navigate2"
      */
-    const navigateToCourseDetails = (courseId: Id<'Course'>, descriptorCode?: string) => navigate(applicationRoutes.courseDetailsRoute, { courseId }, { descriptorCode });
+    const navigateToCourseDetails = (courseId: Id<'Course'>, descriptorCode?: string) => navigate2(applicationRoutes.courseDetailsRoute, { courseId }, { descriptorCode });
 
     /**
      * @deprecated use "navigate2"
@@ -108,11 +95,10 @@ export const useNavigation = () => {
         navigate2(applicationRoutes.playerRoute.prequizGreetingRoute, { courseId });
     };
 
-    const navigateToAdminCourseList = () => navigate(applicationRoutes.administrationRoute.coursesRoute);
+    const navigateToAdminCourseList = () => navigate2(applicationRoutes.administrationRoute.coursesRoute);
 
     return {
         history,
-        navigate,
         navigate2,
         navigateToPlayer,
         navigateToCourseDetails,

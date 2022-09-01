@@ -33,7 +33,7 @@ export const useEpistoDialogLogic = <TParams = void,>(
 
         xlogic.openDialog();
     }, [
-        xlogic.openDialog,
+        xlogic,
         setButtons,
         setTitle,
         setDescription,

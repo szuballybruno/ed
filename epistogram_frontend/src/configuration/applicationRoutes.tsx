@@ -12,17 +12,17 @@ import { translatableTexts } from '../static/translatableTexts';
 
 export type ApplicationRoutesType = {
     matchAll: ApplicationRoute;
-    loginRoute: ApplicationRoute;
+    loginRoute: ApplicationRoute<any, any>;
     underMaintanenceRoute: ApplicationRoute;
     registrationRoute: ApplicationRoute<{ token: string, isInvited: boolean }>;
     signupRoute: ApplicationRoute;
-    setNewPasswordRoute: ApplicationRoute;
+    setNewPasswordRoute: ApplicationRoute<void, { token: string }>;
     registerViaActivationCodeRoute: ApplicationRoute;
     homeRoute: ApplicationRoute;
     rootHomeRoute: ApplicationRoute;
     shopRoute: ApplicationRoute;
     availableCoursesRoute: ApplicationRoute;
-    courseDetailsRoute: ApplicationRoute;
+    courseDetailsRoute: ApplicationRoute<{ courseId: Id<'Course'> }, { descriptorCode: string }>;
     playerRoute: ApplicationRoute & {
         watchRoute: ApplicationRoute<{ descriptorCode: string }>;
         prequizGreetingRoute: ApplicationRoute<{ courseId: Id<'Course'> }>;
@@ -64,12 +64,12 @@ export type ApplicationRoutesType = {
         shopRoute: ApplicationRoute & {
             overviewRoute: ApplicationRoute;
             addRoute: ApplicationRoute;
-            editRoute: ApplicationRoute;
+            editRoute: ApplicationRoute<{ shopItemId: Id<'ShopItem'> }>;
         };
         personalityAssessmentRoute: ApplicationRoute & {
             indexRoute: ApplicationRoute,
-            editTipsRoute: ApplicationRoute & {
-                editTipRoute: ApplicationRoute;
+            editTipsRoute: ApplicationRoute<{ traitCategoryId: Id<'PersonalityTraitCategory'>, isMax: boolean }> & {
+                editTipRoute: ApplicationRoute<{ traitCategoryId: Id<'PersonalityTraitCategory'>, isMax: boolean, dailyTipId: Id<'DailyTip'> }>;
             };
         };
         myCompanyRoute: ApplicationRoute;
@@ -127,6 +127,7 @@ export const getApplicationRoutes = (): ApplicationRoutesType => {
         setNewPasswordRoute: {
             title: translatableTexts.routeTitles.setNewPassword,
             route: new EpistoRoute('/', 'set-new-password'),
+            isUnauthorized: true
         },
 
         registerViaActivationCodeRoute: {

@@ -25,6 +25,10 @@ export class Company {
     @XViewColumn()
     name: string;
 
+    @Column()
+    @XViewColumn()
+    domain: string;
+
     // TO MANY
 
     // users 

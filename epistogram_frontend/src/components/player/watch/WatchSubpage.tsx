@@ -23,7 +23,7 @@ import {EpistoButton} from '../../controls/EpistoButton';
 export const WatchSubpage = () => {
 
     const warningDialogLogic = useEpistoDialogLogic('warn3');
-    const { navigate, navigateToPlayer } = useNavigation();
+    const { navigate2, navigateToPlayer } = useNavigation();
     const urlPlaylistItemCode = useStringParam('descriptorCode')!;
     const [isSidebarHidden, setIsSidebarHidden] = useState(false);
     const [isScrolledFromTop, setIsScrolledFromTop] = useState(false);
@@ -91,7 +91,7 @@ export const WatchSubpage = () => {
         // TODO: Create a proper error message: 'Video doesn't exists' with
         //       options to navigate to available courses
         if (playerDataStatus === 'error')
-            return navigate(applicationRoutes.homeRoute);
+            return navigate2(applicationRoutes.homeRoute);
     }, [playerDataStatus]);
 
     // redirect if current item should be locked
@@ -137,7 +137,7 @@ export const WatchSubpage = () => {
 
     const handleContinueCourse = () => {
 
-        Logger.logScoped('PLAYBACK','Continue course, next item code: ' + nextPlaylistItemCode);
+        Logger.logScoped('PLAYBACK', 'Continue course, next item code: ' + nextPlaylistItemCode);
 
         if (nextPlaylistItemCode)
             navigateToPlayer(nextPlaylistItemCode);

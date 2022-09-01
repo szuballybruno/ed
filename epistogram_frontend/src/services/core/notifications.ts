@@ -37,6 +37,8 @@ export const useShowErrorDialog = () => {
 
     const showErrorDialog = useCallback((descriptionOrError?: any, title?: string) => {
 
+        console.error('Opening error dialog... '  + descriptionOrError);
+
         errorDialogLogic
             .openDialog({
                 title: title ?? 'Ismeretlen hiba',

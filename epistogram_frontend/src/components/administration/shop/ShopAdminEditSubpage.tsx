@@ -26,7 +26,7 @@ import { Id } from '../../../shared/types/versionId';
 export const ShopAdminEditSubpage = () => {
 
     //util
-    const { navigate } = useNavigation();
+    const { navigate2 } = useNavigation();
 
     const shopItemId = Id
         .create<'ShopItem'>(useIntParam('shopItemId')!);

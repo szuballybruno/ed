@@ -1,12 +1,15 @@
 import { Flex } from '@chakra-ui/layout';
 import { useMediaQuery } from '@chakra-ui/react';
+import { useState } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { useOverviewPageDTO } from '../../services/api/miscApiService';
 import { useActiveCourses } from '../../services/api/userProgressApiService';
 import { useNavigation } from '../../services/core/navigatior';
+import { Environment } from '../../static/Environemnt';
 import { usePaging } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { ContentPane } from '../ContentPane';
+import { EpistoFont } from '../controls/EpistoFont';
 import { PlaylistItem } from '../courseItemList/PlaylistItem';
 import { LeftPane } from '../LeftPane';
 import { PageRootContainer } from '../PageRootContainer';
@@ -18,16 +21,13 @@ import { CourseProgressDisplay } from './CourseProgressDisplay';
 import { HomePageCourseStats } from './HomePageCourseStats';
 import { HomePageUserStats } from './HomePageUserStats';
 import { PractiseQuestions } from './PractiseQuestions';
-import {EpistoFont} from '../controls/EpistoFont';
-import {Environment} from '../../static/Environemnt';
-import React, {useState} from 'react';
 
 const HomePage = () => {
 
     const { pageDTO, status, error } = useOverviewPageDTO();
-    const { navigate } = useNavigation();
+    const { navigate2 } = useNavigation();
 
-    useSetBusy(useOverviewPageDTO, status);
+    useSetBusy(useOverviewPageDTO, status, error);
 
     const [isSmallerThan1400] = useMediaQuery('(min-width: 1400px)');
     const [coinsAcquired, setCoinsAcquired] = useState(false);
@@ -67,7 +67,7 @@ const HomePage = () => {
             {/* no current course  */}
             {!pageDTO?.currentCourseProgress && <FlexListItem
                 px="10"
-                onClick={() => navigate(applicationRoutes.availableCoursesRoute)}
+                onClick={() => navigate2(applicationRoutes.availableCoursesRoute)}
                 midContent={<Flex>
 
                     <Flex

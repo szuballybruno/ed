@@ -2,13 +2,15 @@ import { Company } from '../../models/entity/Company';
 import { getSeedList } from '../../services/sqlServices/SeedService';
 
 export const getCompaniesSeedData = () => getSeedList<Company>()({
-    PCWorld: {
+    Henkel: {
         deletionDate: null,
-        name: 'PCWorld'
+        name: 'Henkel',
+        domain: 'https://henkel.epistogram.com'
     },
     EpistoGram: {
         deletionDate: null,
-        name: 'EpistoGram'
+        name: 'EpistoGram',
+        domain: 'https://dev.epistogram.com'
     }
 });
 

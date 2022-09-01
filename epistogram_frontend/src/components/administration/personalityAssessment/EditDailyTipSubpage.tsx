@@ -14,7 +14,7 @@ import { AdminSubpageHeader } from '../AdminSubpageHeader';
 export const EditDailyTipSubpage = () => {
 
     //util
-    const { navigate } = useNavigation();
+    const { navigate2 } = useNavigation();
     const showError = useShowErrorDialog();
     const traitCategoryId = Id
         .create<'PersonalityTraitCategory'>(useIntParam('traitCategoryId')!);

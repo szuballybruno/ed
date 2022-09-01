@@ -2,11 +2,11 @@ import { PersonalityTraitCategoryDTO } from '../../shared/dtos/PersonalityTraitC
 import { PersonalityTraitCategoryShortDTO } from '../../shared/dtos/PersonalityTraitCategoryShortDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
 import { Id } from '../../shared/types/versionId';
-import { useReactQuery2 } from '../../static/frontendHelpers';
+import { QueryService } from '../../static/QueryService';
 
 export const usePersonalityTraitCategories = () => {
 
-    const qr = useReactQuery2<PersonalityTraitCategoryShortDTO[]>(apiRoutes.personalityAssessment.getPersonalityTraitCategories);
+    const qr = QueryService.useXQuery<PersonalityTraitCategoryShortDTO[]>(apiRoutes.personalityAssessment.getPersonalityTraitCategories);
 
     return {
         personalityTraitCategories: qr.data ?? [],
@@ -18,7 +18,7 @@ export const usePersonalityTraitCategories = () => {
 
 export const usePersonalityTraitCategoryDetails = (personalityTraitCategoryId: Id<'PersonalityTraitCategory'>, isMax: boolean) => {
 
-    const qr = useReactQuery2<PersonalityTraitCategoryDTO>(
+    const qr = QueryService.useXQuery<PersonalityTraitCategoryDTO>(
         apiRoutes.personalityAssessment.getPersonalityTraitCategoryDetails,
         { personalityTraitCategoryId, isMax });
 

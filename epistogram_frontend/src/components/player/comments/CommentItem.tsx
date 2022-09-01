@@ -53,7 +53,6 @@ export const CommentItem = (props: {
             h='80px'>
 
             <Avatar
-                alt="Surányi Ildikó"
                 src={avatarUrl} />
         </Flex>
 

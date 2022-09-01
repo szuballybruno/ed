@@ -2,12 +2,12 @@ import { DailyTipDTO } from '../../shared/dtos/DailyTipDTO';
 import { DailyTipEditDataDTO } from '../../shared/dtos/DailyTipEditDataDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
 import { Id } from '../../shared/types/versionId';
-import { useReactQuery2 } from '../../static/frontendHelpers';
+import { QueryService } from '../../static/QueryService';
 import { usePostDataUnsafe } from '../core/httpClient';
 
 export const useDailyTip = () => {
 
-    const qr = useReactQuery2<DailyTipDTO>(apiRoutes.dailyTip.getDailyTip);
+    const qr = QueryService.useXQuery<DailyTipDTO>(apiRoutes.dailyTip.getDailyTip);
 
     return {
         dailyTipData: qr.data,
@@ -18,7 +18,7 @@ export const useDailyTip = () => {
 
 export const useDailyTipEditData = (dailyTipId: Id<'DailyTip'>) => {
 
-    const qr = useReactQuery2<DailyTipEditDataDTO>(apiRoutes.dailyTip.getDailyTipEditData, { dailyTipId });
+    const qr = QueryService.useXQuery<DailyTipEditDataDTO>(apiRoutes.dailyTip.getDailyTipEditData, { dailyTipId });
 
     return {
         dailyTipEditData: qr.data,

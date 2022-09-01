@@ -1,16 +1,12 @@
 import { useMediaQuery } from '@chakra-ui/react';
 import quantize from 'quantize';
 import React, { ComponentType, MutableRefObject, ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useQuery } from 'react-query';
 import { useLocation } from 'react-router-dom';
 import { applicationRoutes } from '../configuration/applicationRoutes';
-import { EMPTY_ARRAY } from '../helpers/emptyArray';
-import { ApplicationRoute, LoadingStateType } from '../models/types';
-import { httpGetAsync } from '../services/core/httpClient';
+import { ApplicationRoute, EpistoRoute } from '../models/types';
 import { useNavigation } from '../services/core/navigatior';
 import { useShowErrorDialog } from '../services/core/notifications';
 import { validatePassowrd } from '../shared/logic/sharedLogic';
-import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 import { ErrorCodeType, RoleIdEnum } from '../shared/types/sharedTypes';
 import { Id } from '../shared/types/versionId';
 import { CSSOptionsType, getCSSClassKeyFromOptions } from '../styles/globalCssTypes';
@@ -29,7 +25,7 @@ export const iterate = <T>(n: number, fn: (index) => T) => {
     return results;
 };
 
-export const useStateAndRef = <T>(defaultValue: T): [MutableRefObject<T>, T, (state: T) => void]=> {
+export const useStateAndRef = <T>(defaultValue: T): [MutableRefObject<T>, T, (state: T) => void] => {
 
     const [stateValue, stateSetter] = useState(defaultValue);
     const ref = useRef(stateValue);
@@ -362,39 +358,68 @@ export const useIsMatchingCurrentRoute = () => {
 
 export const useGetCurrentAppRoute = () => {
 
+    const currentUrl = useCurrentUrlPathname();
     const isMatching = useIsMatchingCurrentRoute();
-
     const isRouteProp = (x: any) => !!x.route;
 
-    const getMatchingRoutes = (appRoute: ApplicationRoute<any>): ApplicationRoute<any> => {
+    const isMatchingRoute = (route: ApplicationRoute<any>) => {
 
-        // get subroutes 
+        const match = route.route.getAbsolutePath() === '/'
+            ? {
+                isMatchingRouteExactly: true,
+                isMatchingRoute: true
+            }
+            : isMatching(route);
+
+        const didmatch = route.route.isExact()
+            ? match.isMatchingRouteExactly
+            : match.isMatchingRoute;
+
+        // console.log(`Checking route "${route.route.getAbsolutePath()}" isMatching: ${didmatch}`);
+
+        return didmatch;
+    };
+
+    const getMatchingRoute = (appRoute: ApplicationRoute<any>): ApplicationRoute<any> | null => {
+
+        /**
+         * If not matching route, return
+         */
+        if (!isMatchingRoute(appRoute))
+            return null;
+
+        /**
+         * Matching route, and it's not an exact route, 
+         * return the matched route 
+         */
+        if (appRoute.route.isExact())
+            return appRoute;
+
+        /**
+         * get matching subroute
+         */
         const subRoutes = Object
             .values(appRoute)
             .filter(x => isRouteProp(x)) as ApplicationRoute<any>[];
 
-        // exit if no subroutes found
-        if (subRoutes.length === 0)
-            return appRoute;
+        const matchingSubRoute = subRoutes
+            .map(x => getMatchingRoute(x))
+            .firstOrNull(x => !!x);
 
-        // get matching subroute and repeat
-        const matchingRoute = subRoutes
-            .firstOrNull((x: any) => {
-
-                const match = isMatching(x);
-
-                return x.route.isMatchMore()
-                    ? match.isMatchingRoute
-                    : match.isMatchingRouteExactly;
-            });
-
-        if (!matchingRoute)
-            return appRoute;
-
-        return getMatchingRoutes(matchingRoute);
+        return matchingSubRoute;
     };
 
-    return getMatchingRoutes(applicationRoutes as any);
+    const rootRoute: ApplicationRoute<any> = {
+        route: new EpistoRoute('', '/', '*'),
+        title: 'Root',
+        ...applicationRoutes
+    };
+
+    const matchingRoute = getMatchingRoute(rootRoute);
+    if (!matchingRoute)
+        throw new Error(`No route matched "${currentUrl}"`);
+
+    return matchingRoute;
 };
 
 export const useRedirectOnExactMatch = (opts: {
@@ -407,14 +432,14 @@ export const useRedirectOnExactMatch = (opts: {
 
     const isMatching = useIsMatchingCurrentRoute();
     const { isMatchingRouteExactly } = isMatching(route);
-    const { navigate } = useNavigation();
+    const { navigate2 } = useNavigation();
 
     useEffect(() => {
 
         if (!isMatchingRouteExactly)
             return;
 
-        navigate(redirectRoute, params);
+        navigate2(redirectRoute, params);
     }, [isMatchingRouteExactly]);
 };
 
@@ -660,92 +685,6 @@ export const usePasswordEntryState = () => {
 
 export type PropsWithChildren = { children: ReactNode };
 
-export type QueryResult<T> = {
-    state: LoadingStateType;
-    refetch: () => Promise<void>;
-    data: T;
-    error: ErrorWithCode | null;
-}
-
-export const useReactQuery2 = <T extends Object>(url: string, queryParams?: any, isEnabled?: boolean): QueryResult<T | null> => {
-
-    const queryValues1 = (queryParams
-        ? Object.values(queryParams)
-        : [])
-        .filter(x => !!x);
-
-    const queryValues = queryValues1.length > 0
-        ? queryValues1
-        : EMPTY_ARRAY;
-
-    const getFunction = useCallback(() => {
-
-        return httpGetAsync(url, queryParams);
-    }, [url, queryParams]);
-
-    const queryingEnabled = isEnabled === false ? false : true;
-
-    const queryResult = useQuery(
-        [url, ...queryValues],
-        getFunction,
-        {
-            retry: false,
-            refetchOnWindowFocus: false,
-            keepPreviousData: true,
-            enabled: queryingEnabled
-        });
-
-    const state = useMemo((): LoadingStateType => {
-
-        if (queryResult.isIdle)
-            return 'idle';
-
-        if (queryResult.isFetching)
-            return 'loading';
-
-        if (queryResult.isError)
-            return 'error';
-
-        return 'success';
-    }, [queryResult.isIdle, queryResult.isFetching, queryResult.isError]);
-
-    const refetch = useCallback(async () => {
-
-        if (!queryingEnabled)
-            return;
-
-        await queryResult.refetch();
-    }, [queryingEnabled, queryResult.refetch]);
-
-    const data = useMemo((): T => {
-
-        return queryResult.data
-            ? queryResult.data
-            : null;
-    }, [queryResult.data]);
-
-    const error = queryResult.error as ErrorWithCode | null;
-
-    return {
-        state,
-        refetch,
-        data,
-        error
-    };
-};
-
-export const useXQueryArray = <T>(url: string, queryParams?: any, isEnabled?: boolean): QueryResult<T[]> => {
-
-    const { data, ...qr } = useReactQuery2<T[]>(url, queryParams, isEnabled);
-
-    const empty = useMemo(() => [], []);
-
-    return {
-        ...qr,
-        data: data ?? empty
-    };
-};
-
 export const useEventTrigger = () => {
 
     const [state, setState] = useState(1);
@@ -757,6 +696,8 @@ export const useEventTrigger = () => {
         fireEvent
     };
 };
+
+export type DictionaryOfT<T> = { [K: string]: T };
 
 export type EventTriggerType = ReturnType<typeof useEventTrigger>;
 

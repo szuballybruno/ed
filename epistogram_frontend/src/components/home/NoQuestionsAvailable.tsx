@@ -7,7 +7,7 @@ import {applicationRoutes} from '../../configuration/applicationRoutes';
 
 export const NoQuestionsAvailable = () => {
 
-    const { navigate } = useNavigation();
+    const { navigate2 } = useNavigation();
     return <Flex pr="20px">
 
         <Flex direction={'column'}>
@@ -31,7 +31,7 @@ export const NoQuestionsAvailable = () => {
 
                 {/* TODO Currently not working with EpistoFont: needs <a> tag */}
                 <a
-                    onClick={() => navigate(applicationRoutes.availableCoursesRoute)}
+                    onClick={() => navigate2(applicationRoutes.availableCoursesRoute)}
                     style={{
                         color: 'var(--epistoTeal)',
                         fontWeight: 'bold',

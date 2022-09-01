@@ -1,4 +1,4 @@
-import { useReactQuery2 } from '../../static/frontendHelpers';
+import { QueryService } from '../../static/QueryService';
 import { CoinTransactionDTO } from '../../shared/dtos/CoinTransactionDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
 import { usePostDataUnsafe } from '../core/httpClient';
@@ -6,7 +6,7 @@ import { Id } from '../../shared/types/versionId';
 
 export const useCoinTransactions = () => {
 
-    const qr = useReactQuery2<CoinTransactionDTO[]>(apiRoutes.coinTransactions.getCoinTransactions);
+    const qr = QueryService.useXQuery<CoinTransactionDTO[]>(apiRoutes.coinTransactions.getCoinTransactions);
 
     return {
         coinTransactions: qr.data ?? [],
@@ -17,7 +17,7 @@ export const useCoinTransactions = () => {
 
 export const useCoinBalance = () => {
 
-    const qr = useReactQuery2<number>(apiRoutes.coinTransactions.getCoinBalance);
+    const qr = QueryService.useXQuery<number>(apiRoutes.coinTransactions.getCoinBalance);
 
     return {
         coinBalance: qr.data ?? 0,
@@ -29,7 +29,7 @@ export const useCoinBalance = () => {
 
 export const useCoinBalanceOfUser = (userId: Id<'User'> | null) => {
 
-    const qr = useReactQuery2<number>(apiRoutes.coinTransactions.getCoinBalanceOfUser, { userId }, !!userId);
+    const qr = QueryService.useXQuery<number>(apiRoutes.coinTransactions.getCoinBalanceOfUser, { userId }, !!userId);
 
     return {
         coinBalance: qr.data ?? 0,

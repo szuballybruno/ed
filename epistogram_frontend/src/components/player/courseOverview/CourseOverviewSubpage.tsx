@@ -11,7 +11,7 @@ export const CourseOverviewSubpage = () => {
 
     const { courseOverviewData } = useCourseOverviewData();
 
-    const { navigate } = useNavigation();
+    const { navigate2 } = useNavigation();
 
     /**
     * Összesen ennyi videót néztél meg
@@ -68,7 +68,7 @@ export const CourseOverviewSubpage = () => {
                 {
                     title: 'Vissza a tanfolyamkeresobe',
                     action: () => {
-                        navigate(applicationRoutes.availableCoursesRoute);
+                        navigate2(applicationRoutes.availableCoursesRoute);
                     },
                 },
             ]}>

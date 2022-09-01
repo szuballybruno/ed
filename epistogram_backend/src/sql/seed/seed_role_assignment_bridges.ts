@@ -10,11 +10,11 @@ export const getRoleAssignmentBridgeSeedData = (
     users: UserSeedDataType
 ) => getSeedList<RoleAssignmentBridge>()({
 
-    pcworld_company_user_role: {
+    henkel_company_user_role: {
         roleId: roles.Company_User.id,
-        assigneeCompanyId: companies.PCWorld.id,
+        assigneeCompanyId: companies.Henkel.id,
         assigneeUserId: null,
-        contextCompanyId: companies.PCWorld.id,
+        contextCompanyId: companies.Henkel.id,
     },
 
     episto_company_user_role: {
