@@ -18,11 +18,14 @@ RETURNS TABLE
 )
 AS $$
 
+
 DECLARE
 	var_correct_answer_ids integer[];
 	var_answer_version_ids integer[];
 	var_given_answer_id integer;
 	var_is_previous_streak_out_of_date boolean;
+    var_is_answered_before boolean;
+    var_removed_given_answers integer[];
 
 	var_streak_length integer;
 	var_is_correct boolean;
@@ -32,6 +35,38 @@ DECLARE
 	var_previous_streak_end_date timestamptz;
 
 BEGIN
+
+    -- is answered before in the same answer_session
+    SELECT
+        COUNT(ga.id) > 0
+    FROM public.given_answer ga
+
+    LEFT JOIN public.answer_session ase
+    ON ase.id = ga.answer_session_id
+
+    WHERE ga.question_version_id = param_question_version_id
+    AND ase.id = param_answer_session_id
+
+    INTO var_is_answered_before;
+
+    IF var_is_answered_before IS TRUE
+        THEN
+            DELETE FROM public.answer_given_answer_bridge agab
+            WHERE agab.given_answer_id IN (57, 60);
+                    /*SELECT
+                        ga.id
+                    FROM public.given_answer ga
+
+                    WHERE ga.answer_session_id = param_answer_session_id
+                    AND ga.question_version_id = param_question_version_id*/
+
+
+            DELETE FROM public.given_answer ga
+            WHERE ga.question_version_id = param_question_version_id
+            AND ga.answer_session_id = param_answer_session_id;
+
+    END IF;
+
 
 	-- CORRECT ANSWER IDS
 	SELECT ARRAY

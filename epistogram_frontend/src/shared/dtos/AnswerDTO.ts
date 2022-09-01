@@ -1,6 +1,6 @@
-import { Id } from '../types/versionId';
+import {Id} from '../types/versionId';
 
 export type AnswerDTO = {
-    answerId: Id<'Answer'>,
+    answerVersionId: Id<'AnswerVersion'>,
     answerText: string;
 }

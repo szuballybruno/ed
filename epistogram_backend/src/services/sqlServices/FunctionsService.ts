@@ -1,8 +1,8 @@
-import { TaskCodeType } from '../../models/Types';
-import { Id } from '../../shared/types/versionId';
-import { GlobalConfiguration } from '../misc/GlobalConfiguration';
-import { logObject } from '../misc/logger';
-import { SQLConnectionService } from './SQLConnectionService';
+import {TaskCodeType} from '../../models/Types';
+import {Id} from '../../shared/types/versionId';
+import {GlobalConfiguration} from '../misc/GlobalConfiguration';
+import {logObject} from '../misc/logger';
+import {SQLConnectionService} from './SQLConnectionService';
 
 export type InsertCoinFnParamsType = {
     userId: Id<'User'>,
@@ -42,7 +42,7 @@ export class SQLFunctionsService {
             .forEach((x, index) => argsIndicies
                 .push(`$${index + 1}`));
 
-        // create statement 
+        // create statement
         const statement = `SELECT ${isMultiResult ? '* FROM' : ''} ${fnName}(${argsIndicies.join(',')})`;
 
         const result = await this._connectionService
@@ -61,8 +61,7 @@ export class SQLFunctionsService {
             }
 
             return returnObject;
-        }
-        else {
+        } else {
 
             const fnReturnValue = firstRow[fnName];
 
@@ -76,14 +75,14 @@ export class SQLFunctionsService {
         }
     };
 
-    answerSignupQuestionFn = (userId: Id<'User'>, questionId: Id<'Question'>, answerId: Id<'Answer'>) => {
+    answerSignupQuestionFn = (userId: Id<'User'>, questionId: Id<'Question'>, answerVersionId: Id<'AnswerVersion'>) => {
 
         return this.execSQLFunctionAsync(
             'answer_signup_question_fn',
             [
                 userId,
                 questionId,
-                answerId
+                answerVersionId
             ]);
     };
 

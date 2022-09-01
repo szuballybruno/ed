@@ -1,10 +1,10 @@
-import { AuthorizationService } from '../services/AuthorizationService';
-import { PractiseQuestionService } from '../services/PractiseQuestionService';
-import { AnswerQuestionDTO } from '../shared/dtos/AnswerQuestionDTO';
-import { apiRoutes } from '../shared/types/apiRoutes';
-import { ServiceProvider } from '../startup/servicesDI';
-import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
-import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
+import {AuthorizationService} from '../services/AuthorizationService';
+import {PractiseQuestionService} from '../services/PractiseQuestionService';
+import {AnswerQuestionDTO} from '../shared/dtos/AnswerQuestionDTO';
+import {apiRoutes} from '../shared/types/apiRoutes';
+import {ServiceProvider} from '../startup/servicesDI';
+import {ActionParams} from '../utilities/XTurboExpress/ActionParams';
+import {XControllerAction} from '../utilities/XTurboExpress/XTurboExpressDecorators';
 
 export class QuestionController {
 
@@ -18,11 +18,11 @@ export class QuestionController {
         this._authorizationService = serviceProvider.getService(AuthorizationService);
     }
 
-    @XControllerAction(apiRoutes.questions.answerPractiseQuestion, { isPost: true })
+    @XControllerAction(apiRoutes.questions.answerPractiseQuestion, {isPost: true})
     answerPractiseQuestionAction = async (params: ActionParams) => {
 
         const dto = params
-            .getBody<AnswerQuestionDTO>(['answerIds', 'questionVersionId'])
+            .getBody<AnswerQuestionDTO>(['answerVersionIds', 'questionVersionId'])
             .data;
 
         return this._practiseQuestionService

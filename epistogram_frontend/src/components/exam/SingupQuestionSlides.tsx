@@ -1,16 +1,16 @@
-import { Flex } from '@chakra-ui/react';
-import { FormControlLabel, Radio, RadioGroup } from '@mui/material';
-import { usePaging } from '../../static/frontendHelpers';
-import { SignupQuestionDTO } from '../../shared/dtos/SignupQuestionDTO';
-import { useShowErrorDialog } from '../../services/core/notifications';
-import { LinearProgressWithLabel } from '../signup/ProgressIndicator';
-import { SignupWrapper } from '../signup/SignupWrapper';
-import { EpistoFont } from '../controls/EpistoFont';
-import { Id } from '../../shared/types/versionId';
+import {Flex} from '@chakra-ui/react';
+import {FormControlLabel, Radio, RadioGroup} from '@mui/material';
+import {usePaging} from '../../static/frontendHelpers';
+import {SignupQuestionDTO} from '../../shared/dtos/SignupQuestionDTO';
+import {useShowErrorDialog} from '../../services/core/notifications';
+import {LinearProgressWithLabel} from '../signup/ProgressIndicator';
+import {SignupWrapper} from '../signup/SignupWrapper';
+import {EpistoFont} from '../controls/EpistoFont';
+import {Id} from '../../shared/types/versionId';
 
 export const useSignupQuestionsState = (options: {
     questions: SignupQuestionDTO[],
-    answerQuestionAsync: (answerId: Id<'Answer'>, questionId: Id<'Question'>) => Promise<void>,
+    answerQuestionAsync: (answerVersionId: Id<'AnswerVersion'>, questionVersionId: Id<'QuestionVersion'>) => Promise<void>,
     upperTitle?: string,
     onPrevoiusOverNavigation?: () => void,
     onNextOverNavigation?: () => void,
@@ -76,11 +76,11 @@ export const SingupQuestionSlides = (props: { state: SignupQuestionsStateType })
         allowQuickNext
     } = state;
 
-    const handleAnswerSelectedAsync = async (answerId: Id<'Answer'>) => {
+    const handleAnswerSelectedAsync = async (answerVersionId: Id<'AnswerVersion'>) => {
 
         try {
 
-            await answerQuestionAsync(answerId, currentQuestion!.questionId);
+            await answerQuestionAsync(answerVersionId, currentQuestion!.questionVersionId);
 
             if (allowQuickNext)
                 handleNext();
@@ -115,15 +115,15 @@ export const SingupQuestionSlides = (props: { state: SignupQuestionsStateType })
         </FlexFloat>
     }*/}
 
-    const selectedAnswerId = (currentQuestion?.answers ?? [])
-        .filter(x => x.isGiven)[0]?.answerId as null | Id<'Answer'>;
+    const selectedAnswerVersionId = (currentQuestion?.answers ?? [])
+        .filter(x => x.isGiven)[0]?.answerVersionId as null | Id<'AnswerVersion'>;
 
     return <>
         {currentQuestion && <SignupWrapper
             title={currentQuestion!.questionText}
             upperTitle={upperTitle}
             nextButtonTitle="Következő"
-            onNext={selectedAnswerId ? handleNext : undefined}
+            onNext={selectedAnswerVersionId ? handleNext : undefined}
             currentImage={currentQuestion!.imageUrl!}
             onNavPrevious={questionnaireState.previous}
             bottomComponent={<LinearProgressWithLabel value={questionnaireProgressbarValue} />}
@@ -137,23 +137,23 @@ export const SingupQuestionSlides = (props: { state: SignupQuestionsStateType })
                 name="radioGroup1"
                 onChange={(e) => {
 
-                    const selectedAnswerId = Id.create<'Answer'>(parseInt(e.currentTarget.value));
-                    handleAnswerSelectedAsync(selectedAnswerId);
+                    const selectedAnswerVersionId = Id.create<'AnswerVersion'>(parseInt(e.currentTarget.value));
+                    handleAnswerSelectedAsync(selectedAnswerVersionId);
                 }}>
                 {currentQuestion!
                     .answers
                     .map((answer) => <FormControlLabel
-                        key={Id.read(answer.answerId)}
-                        value={answer.answerId}
+                        key={Id.read(answer.answerVersionId)}
+                        value={answer.answerVersionId}
                         style={{
                             margin: '5px 0px 0px 0px',
-                            backgroundColor: answer.answerId === selectedAnswerId ? '#7CC0C24F' : 'white',
+                            backgroundColor: answer.answerVersionId === selectedAnswerVersionId ? '#7CC0C24F' : 'white',
                             padding: '5px 10px',
                             border: '1px solid var(--mildGrey)',
                             borderRadius: '6px'
 
                         }}
-                        control={<Radio checked={answer.answerId === selectedAnswerId} />}
+                        control={<Radio checked={answer.answerVersionId === selectedAnswerVersionId} />}
                         label={answer.answerText} />)}
             </RadioGroup>
         </SignupWrapper>}

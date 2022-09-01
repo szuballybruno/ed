@@ -1,20 +1,20 @@
-import { Grid } from '@chakra-ui/layout';
-import { Flex } from '@chakra-ui/react';
-import { useState } from 'react';
-import { useSaveExamAnswer } from '../../services/api/examApiService';
-import { useShowErrorDialog } from '../../services/core/notifications';
-import { ExamPlayerDataDTO } from '../../shared/dtos/ExamPlayerDataDTO';
-import { Id } from '../../shared/types/versionId';
-import { Environment } from '../../static/Environemnt';
-import { epochDates, usePaging } from '../../static/frontendHelpers';
-import { translatableTexts } from '../../static/translatableTexts';
-import { EpistoFont } from '../controls/EpistoFont';
-import { LoadingFrame } from '../system/LoadingFrame';
-import { useEpistoDialogLogic } from '../universal/epistoDialog/EpistoDialogLogic';
-import { ExamAbortDialog } from './ExamAbortDialog';
-import { ExamLayout } from './ExamLayout';
-import { ExamLayoutContent } from './ExamLayoutContent';
-import { QuestionAnswer } from './QuestionAnswer';
+import {Grid} from '@chakra-ui/layout';
+import {Flex} from '@chakra-ui/react';
+import {useState} from 'react';
+import {useSaveExamAnswer} from '../../services/api/examApiService';
+import {useShowErrorDialog} from '../../services/core/notifications';
+import {ExamPlayerDataDTO} from '../../shared/dtos/ExamPlayerDataDTO';
+import {Id} from '../../shared/types/versionId';
+import {Environment} from '../../static/Environemnt';
+import {epochDates, usePaging} from '../../static/frontendHelpers';
+import {translatableTexts} from '../../static/translatableTexts';
+import {EpistoFont} from '../controls/EpistoFont';
+import {LoadingFrame} from '../system/LoadingFrame';
+import {useEpistoDialogLogic} from '../universal/epistoDialog/EpistoDialogLogic';
+import {ExamAbortDialog} from './ExamAbortDialog';
+import {ExamLayout} from './ExamLayout';
+import {ExamLayoutContent} from './ExamLayoutContent';
+import {QuestionAnswer} from './QuestionAnswer';
 
 export const ExamQuestions = (props: {
     exam: ExamPlayerDataDTO,
@@ -50,9 +50,12 @@ export const ExamQuestions = (props: {
     const { saveExamAnswer, saveExamAnswerState } = useSaveExamAnswer();
     const currentQuestion = questionPaging.currentItem!;
 
-    const [selectedAnswerIds, setSelectedAnswerIds] = useState<Id<'Answer'>[]>([]);
+    const [selectedAnswerVersionIds, setSelectedAnswerVersionIds] = useState<{
+        answerVersionId: Id<'AnswerVersion'>,
+        questionVersionId: Id<'QuestionVersion'>
+    }[]>([]);
 
-    const hasSelectedAnswer = selectedAnswerIds.length > 0;
+    const hasSelectedAnswer = selectedAnswerVersionIds.length > 0;
     const [showUpTime, setShowUpTime] = useState<Date>(new Date());
     const abortDialog = useEpistoDialogLogic(ExamAbortDialog);
     const isLastQuestion = questionPaging.currentIndex === questions.length - 1;
@@ -74,16 +77,16 @@ export const ExamQuestions = (props: {
     };
 
     /**
-     * Answers a question. 
+     * Answers a question.
      * Saves the answer to client side state,
-     * and also sends it to the server. 
+     * and also sends it to the server.
      * TODO: This is a known bug, should be fixed.
      */
     const handleAnswerQuestionAsync = async () => {
 
         try {
 
-            // get elapsed time 
+            // get elapsed time
             const timeElapsed = epochDates(new Date(), showUpTime);
 
             const questionVersionId = currentQuestion
@@ -91,25 +94,28 @@ export const ExamQuestions = (props: {
 
             const anyAnswersSelected = currentQuestion
                 .answers
-                .some(x => selectedAnswerIds
-                    .includes(x.answerId));
+                .map(x => selectedAnswerVersionIds
+                    .some(y => y.answerVersionId === x.answerVersionId));
 
-            // TODO this will definitely cause bugs in the future 
+            // TODO this will definitely cause bugs in the future
             // answered questions state should come from the server
-            // selected any answers 
+            // selected any answers
             if (anyAnswersSelected) {
 
                 addCompletedQuestion(questionVersionId);
 
+                // Important, that it only sends the answers for the current question!
                 await saveExamAnswer({
                     answerSessionId: answerSessionId,
-                    answerIds: selectedAnswerIds!,
+                    answerVersionIds: selectedAnswerVersionIds
+                        .filter(x => x.questionVersionId === questionVersionId)
+                        .map(x => x.answerVersionId),
                     questionVersionId,
                     elapsedSeconds: timeElapsed
                 });
             }
 
-            // no answers are selected 
+            // no answers are selected
             else {
 
                 removeCompletedQuestion(questionVersionId);
@@ -158,16 +164,20 @@ export const ExamQuestions = (props: {
         questionPaging.setItem(itemIndex);
     };
 
-    const setAnswerSelectedState = (answerId: Id<'Answer'>, isSelected: boolean) => {
+    const setAnswerSelectedState = (
+        answerVersionId: Id<'AnswerVersion'>,
+        questionVersionId: Id<'QuestionVersion'>,
+        isSelected: boolean
+    ) => {
 
         if (isSelected) {
 
-            setSelectedAnswerIds([...selectedAnswerIds, answerId]);
+            setSelectedAnswerVersionIds([...selectedAnswerVersionIds, {answerVersionId, questionVersionId}]);
         }
         else {
 
-            setSelectedAnswerIds(selectedAnswerIds
-                .filter(x => x !== answerId));
+            setSelectedAnswerVersionIds(selectedAnswerVersionIds
+                .filter(x => x.answerVersionId !== answerVersionId));
         }
     };
 
@@ -226,7 +236,7 @@ export const ExamQuestions = (props: {
             <ExamLayoutContent
                 title={currentQuestion.questionText}>
 
-                {/* answers */}
+                    {/* answers */}
                 <Flex
                     direction={'row'}
                     justifyContent={'center'}
@@ -242,13 +252,13 @@ export const ExamQuestions = (props: {
                             .answers
                             .map((answer, index) => {
 
-                                const isAnswerSelected = selectedAnswerIds
-                                    .some(x => x === answer.answerId);
+                                const isAnswerSelected = selectedAnswerVersionIds
+                                    .some(x => x.answerVersionId === answer.answerVersionId);
 
                                 return <QuestionAnswer
                                     key={index}
                                     minWidth={400}
-                                    onClick={(isSelected) => setAnswerSelectedState(answer.answerId, isSelected)}
+                                    onClick={(isSelected) => setAnswerSelectedState(answer.answerVersionId, currentQuestion.questionVersionId, isSelected)}
                                     answerText={answer.answerText}
                                     isSelected={isAnswerSelected} />;
                             })}

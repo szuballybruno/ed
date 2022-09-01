@@ -1,8 +1,8 @@
-import { Id } from '../types/versionId';
+import {Id} from '../types/versionId';
 
 export type AnswerQuestionDTO = {
     questionVersionId: Id<'QuestionVersion'>;
-    answerIds: Id<'Answer'>[];
+    answerVersionIds: Id<'AnswerVersion'>[];
     answerSessionId: Id<'AnswerSession'>;
     elapsedSeconds: number;
 }

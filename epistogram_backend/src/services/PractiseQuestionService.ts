@@ -1,16 +1,16 @@
-import { AnswerSession } from '../models/entity/AnswerSession';
-import { PractiseQuestionInfoView } from '../models/views/PractiseQuestionInfoView';
-import { AnswerQuestionDTO } from '../shared/dtos/AnswerQuestionDTO';
-import { Id } from '../shared/types/versionId';
-import { isXMinutesAgo } from '../utilities/helpers';
-import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
-import { AuthorizationService } from './AuthorizationService';
-import { MapperService } from './MapperService';
-import { GlobalConfiguration } from './misc/GlobalConfiguration';
-import { ServiceBase } from './misc/ServiceBase';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
-import { QuestionAnswerService } from './QuestionAnswerService';
-import { QuestionService } from './QuestionService';
+import {AnswerSession} from '../models/entity/AnswerSession';
+import {PractiseQuestionInfoView} from '../models/views/PractiseQuestionInfoView';
+import {AnswerQuestionDTO} from '../shared/dtos/AnswerQuestionDTO';
+import {Id} from '../shared/types/versionId';
+import {isXMinutesAgo} from '../utilities/helpers';
+import {PrincipalId} from '../utilities/XTurboExpress/ActionParams';
+import {AuthorizationService} from './AuthorizationService';
+import {MapperService} from './MapperService';
+import {GlobalConfiguration} from './misc/GlobalConfiguration';
+import {ServiceBase} from './misc/ServiceBase';
+import {ORMConnectionService} from './ORMConnectionService/ORMConnectionService';
+import {QuestionAnswerService} from './QuestionAnswerService';
+import {QuestionService} from './QuestionService';
 
 export class PractiseQuestionService extends ServiceBase {
 
@@ -32,14 +32,14 @@ export class PractiseQuestionService extends ServiceBase {
     }
 
     /**
-     * Get Principal's practise question, 
-     * or return null if there's none 
+     * Get Principal's practise question,
+     * or return null if there's none
      */
     getPractiseQuestionAsync = async (principalId: PrincipalId) => {
 
         const infoViews = await this
             ._ormService
-            .query(PractiseQuestionInfoView, { principalId })
+            .query(PractiseQuestionInfoView, {principalId})
             .where('userId', '=', 'principalId')
             .getMany();
 
@@ -58,9 +58,9 @@ export class PractiseQuestionService extends ServiceBase {
     };
 
     /**
-     * Answer a Practise question 
+     * Answer a Practise question
      * by the Principal account
-     * returns AnswerResultDTO, with coin acquire data, and correct answers   
+     * returns AnswerResultDTO, with coin acquire data, and correct answers
      */
     async answerPractiseQuestionAsync(principalId: PrincipalId, qu: AnswerQuestionDTO) {
 
@@ -71,11 +71,11 @@ export class PractiseQuestionService extends ServiceBase {
 
         return await this
             ._questionAnswerService
-            .saveGivenAnswerAsync({
+            .saveGivenAnswersAsync({
                 userId,
                 answerSessionId: practiseAnswerSession.id,
                 questionVersionId: qu.questionVersionId,
-                answerIds: qu.answerIds,
+                answerVersionIds: qu.answerVersionIds,
                 isExamQuestion: false,
                 elapsedSeconds: 0,
                 isPractiseAnswer: true
@@ -85,12 +85,12 @@ export class PractiseQuestionService extends ServiceBase {
     // ------------- PRIVATE
 
     /**
-     * Get practise answer session 
+     * Get practise answer session
      */
     private _getUserPractiseAnswerSession = async (userId: Id<'User'>) => {
 
         return this._ormService
-            .query(AnswerSession, { userId })
+            .query(AnswerSession, {userId})
             .where('isPractise', '=', 'true')
             .and('userId', '=', 'userId')
             .getSingle();

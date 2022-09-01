@@ -1,11 +1,11 @@
-import { AnswerSignupQuestionDTO } from '../shared/dtos/AnswerSignupQuestionDTO';
-import { PersonalityAssessmentService } from '../services/PersonalityAssessmentService';
-import { SignupService } from '../services/SignupService';
-import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
-import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
-import { apiRoutes } from '../shared/types/apiRoutes';
-import { ServiceProvider } from '../startup/servicesDI';
-import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
+import {AnswerSignupQuestionDTO} from '../shared/dtos/AnswerSignupQuestionDTO';
+import {PersonalityAssessmentService} from '../services/PersonalityAssessmentService';
+import {SignupService} from '../services/SignupService';
+import {ActionParams} from '../utilities/XTurboExpress/ActionParams';
+import {XControllerAction} from '../utilities/XTurboExpress/XTurboExpressDecorators';
+import {apiRoutes} from '../shared/types/apiRoutes';
+import {ServiceProvider} from '../startup/servicesDI';
+import {XController} from '../utilities/XTurboExpress/XTurboExpressTypes';
 
 export class SignupController implements XController<SignupController> {
 
@@ -18,11 +18,11 @@ export class SignupController implements XController<SignupController> {
         this._personalityAssessmentService = serviceProvider.getService(PersonalityAssessmentService);
     }
 
-    @XControllerAction(apiRoutes.signup.answerSignupQuestion, { isPost: true })
+    @XControllerAction(apiRoutes.signup.answerSignupQuestion, {isPost: true})
     answerSignupQuestionAction(params: ActionParams) {
 
         const dto = params
-            .getBody<AnswerSignupQuestionDTO>(['answerId', 'questionId'])
+            .getBody<AnswerSignupQuestionDTO>(['answerVersionId', 'questionVersionId'])
             .data;
 
         return this._signupService

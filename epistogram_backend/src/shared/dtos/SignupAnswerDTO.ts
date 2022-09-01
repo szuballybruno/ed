@@ -1,7 +1,7 @@
-import { Id } from '../types/versionId';
+import {Id} from '../types/versionId';
 
 export type SignupAnswerDTO = {
-    answerId: Id<'Answer'>,
+    answerVersionId: Id<'AnswerVersion'>,
     answerText: string;
     isGiven: boolean;
 }
