@@ -28,7 +28,7 @@ export const Environment = (() => {
     const getAuthHandshakeIntervalInMs = 5 * 60 * 1000; // 5 minutes
     const eventPoolingIntervalInMs = 5 * 60 * 1000; // 5 mins
     const sessionHangThresholdInMs = 2 * 60 * 60 * 1000; // 2 hours
-    const loggingEnabled = false;
+    const loggingEnabled = true;
     const loggingEnabledKeys: LoggingKeysType[] = ['WARNING', 'EXAM'];
 
     const getAssetUrl = (path: string, assetUrlPath?: string) => {

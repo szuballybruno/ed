@@ -7,18 +7,31 @@ declare global {
     interface Array<T> {
 
         remove(func: (item: T) => boolean): Array<T>;
+
         orderBy(func: (item: T) => number | string | Date): Array<T>;
+
         groupBy<TKey>(func: (item: T) => TKey): Grouping<T, TKey>[];
+
         isDistinctBy<TKey>(func: (item: T) => TKey): boolean;
+
         any(funcOrItem?: T | ((item: T) => boolean)): boolean;
+
         none(func?: (item: T) => boolean): boolean;
+
         all(func: (item: T) => boolean): boolean;
+
         findLastIndex(func: (item: T) => boolean): number | null;
+
         single(func?: (item: T) => boolean): T;
+
         first(func?: (item: T) => boolean): T;
+
         last(func?: (item: T) => boolean): T;
+
         firstOrNull(func?: (item: T) => boolean): T | null;
+
         count(func: (item: T) => boolean): number;
+
         insert(index: number, newItem: T): Array<T>;
     }
 
@@ -28,6 +41,11 @@ declare global {
 
     interface String {
         trimChar(char: string): string;
+    }
+
+    interface Window {
+        Tawk_API: any;
+        Tawk_LoadStart
     }
 }
 
@@ -78,8 +96,7 @@ Array.prototype.groupBy = function <T, TKey>(func: (item: T) => TKey) {
             if (existingKey) {
 
                 currentGroup.items.push(item);
-            }
-            else {
+            } else {
 
                 groups
                     .push({
