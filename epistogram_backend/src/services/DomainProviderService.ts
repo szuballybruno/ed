@@ -30,7 +30,7 @@ export class DomainProviderService {
             .where('id', '=', 'companyId')
             .getSingle();
 
-        return this._applyTemplate(company.domain);
+        return this.applyTemplate(company.domain);
     }
 
     async getAllDomainsAsync(): Promise<string[]> {
@@ -41,12 +41,12 @@ export class DomainProviderService {
             .getMany();
 
         const domains = companies
-            .map(x => this._applyTemplate(x.domain));
+            .map(x => this.applyTemplate(x.domain));
 
         return domains;
     }
 
-    private _applyTemplate(domain: string) {
+    applyTemplate(domain: string) {
 
         const token = '$DOMAIN$';
         const template = this._globalConfig.misc.domainTemplate;

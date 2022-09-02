@@ -187,7 +187,7 @@ export const getTransientServiceContainer = (singletonProvider: ServiceProvider)
         .addClass(UserProgressService, [MapperService, ORMConnectionService, TempomatService, AuthorizationService])
         .addClass(CommentService, [ORMConnectionService, MapperService, AuthorizationService])
         .addClass(LikeService, [ORMConnectionService, MapperService, AuthorizationService])
-        .addClass(CompanyService, [ORMConnectionService, MapperService, AuthorizationService])
+        .addClass(CompanyService, [ORMConnectionService, MapperService, AuthorizationService, DomainProviderService])
         .getContainer();
 
     return XDependency

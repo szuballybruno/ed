@@ -37,6 +37,7 @@ export class ActionParams<
     TResponse extends ITurboResponse = ITurboResponse> {
 
     isMultipart: boolean;
+    companyId: Id<'Company'>;
     private _principalId: PrincipalId;
 
     get principalId() {
@@ -50,10 +51,12 @@ export class ActionParams<
     constructor(
         public req: TRequest,
         public res: TResponse,
-        userId: Id<'User'>) {
+        userId: Id<'User'>,
+        companyId: Id<'Company'>) {
 
         this._principalId = new PrincipalId(Id.read(userId));
         this.isMultipart = !!this.req.body.document;
+        this.companyId = companyId;
     }
 
     getBody<T = any>(notNullOrUndefined: (keyof T)[] = []) {

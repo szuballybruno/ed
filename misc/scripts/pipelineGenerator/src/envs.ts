@@ -123,7 +123,7 @@ export const environemntConfigs: EnvConfigBaseType[] = [
     // prod
     getBaseConfig('main', 'app', 'prod', config => {
 
-        config.misc.DOMAIN_TEMPLATE = 'http://$DOMAIN$';
+        config.misc.DOMAIN_TEMPLATE = 'https://$DOMAIN$';
         config.gcp.MIN_INSTANCE_COUNT = 1;
     }),
 
@@ -138,7 +138,7 @@ export const environemntConfigs: EnvConfigBaseType[] = [
 
 export const localConfig = getBaseConfig('local', 'local', 'local', config => {
 
-    config.misc.DOMAIN_TEMPLATE = 'http://localhost:3000';
+    config.misc.DOMAIN_TEMPLATE = 'http://local.$DOMAIN$';
 
     config.misc.IS_HOSTED_ON_GCP = false;
     config.misc.IS_LOCALHOST = true;

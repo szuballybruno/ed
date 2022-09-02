@@ -47,7 +47,7 @@
     "react-error-overlay": "6.0.10"
   },
   "scripts": {
-    "start": "cross-env BROWSER=none react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",

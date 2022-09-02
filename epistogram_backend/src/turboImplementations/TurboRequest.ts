@@ -8,6 +8,7 @@ export class TurboRequest implements ITurboRequest {
     body: any;
     query: any;
     files: any;
+    origin: string;
 
     constructor(private _req: Request) {
 
@@ -15,6 +16,7 @@ export class TurboRequest implements ITurboRequest {
         this.query = this._req.query;
         this.path = this._req.path;
         this.files = this._req.files;
+        this.origin = this._req.headers.origin ?? '';
     }
 
     getCookies() {

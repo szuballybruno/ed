@@ -10,6 +10,7 @@ import { PermissionCodeType } from '../shared/types/sharedTypes';
 import { Id } from '../shared/types/versionId';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { AuthorizationService } from './AuthorizationService';
+import { DomainProviderService } from './DomainProviderService';
 import { MapperService } from './MapperService';
 import { QueryServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
@@ -21,32 +22,25 @@ export class CompanyService extends QueryServiceBase<Company> {
     constructor(
         ormService: ORMConnectionService,
         mapperService: MapperService,
-        private authoirzationService: AuthorizationService) {
+        private _authoirzationService: AuthorizationService,
+        private _domainProviderService: DomainProviderService) {
 
         super(mapperService, ormService, Company);
-
-        this._authorizationService = authoirzationService;
     }
 
-    getPrincipalCompaniesAsync(principalId: PrincipalId) {
+    /**
+     * TODO
+     * Does something wtf is this?
+     */
+    async getPrincipalCompaniesAsync(principalId: PrincipalId) {
 
-        return {
-            action: async () => {
-                const companies = await this._ormService
-                    .query(CompanyView, { principalId })
-                    .where('userId', '=', 'principalId')
-                    .getMany();
+        const companies = await this._ormService
+            .query(CompanyView, { principalId })
+            .where('userId', '=', 'principalId')
+            .getMany();
 
-                return this._mapperService
-                    .mapTo(CompanyDTO, [companies]);
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
-            }
-        };
-
-
+        return this._mapperService
+            .mapTo(CompanyDTO, [companies]);
     }
 
     /**
@@ -64,6 +58,30 @@ export class CompanyService extends QueryServiceBase<Company> {
 
         return this._mapperService
             .mapTo(CompanyDTO, [companies]);
+    }
+
+    /**
+     * Returns a comapny by domain
+     */
+    async getCompanyByDomainAsync(domain: string) {
+
+        const companies = await this
+            ._ormService
+            .query(Company)
+            .getMany();
+
+        const mapped = companies
+            .filter(x => this
+                ._domainProviderService
+                .applyTemplate(x.domain) === domain);
+
+        const result = mapped
+            .firstOrNull();
+
+        if (!result)
+            throw new Error('Domain is unrecognised, no company found pointing to it.');
+
+        return result;
     }
 
     getRoleAssignCompaniesAsync(principalId: PrincipalId) {

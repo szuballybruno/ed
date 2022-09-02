@@ -1,4 +1,3 @@
-import { DiscountCode } from '../models/entity/DiscountCode';
 import { User } from '../models/entity/User';
 import { AuthDataDTO } from '../shared/dtos/AuthDataDTO';
 import { ErrorWithCode } from '../shared/types/ErrorWithCode';
@@ -35,51 +34,54 @@ export class AuthenticationService {
         return tokenPayload;
     };
 
-    async establishAuthHandshakeAsync(refreshToken: string | null) {
+    /**
+     * Acquires a new access token by a refresh token
+     */
+    async establishAuthHandshakeAsync(refreshToken: string | null, companyId: Id<'Company'>) {
 
         this._loggerService
             .logScoped('GENERIC', 'Establishing auth handshake...');
 
-        await this._ormService
-            .save(DiscountCode, [
-                {
-                    id: Id.create<'DiscountCode'>(1),
-                    code: 'upd1',
-                    userId: null
-                },
-                {
-                    id: Id.create<'DiscountCode'>(1),
-                    code: 'upd2',
-                    userId: null
-                }
-            ]);
-
+        /**
+         * Check and verify refresh token
+         */
         if (!refreshToken)
             throw new ErrorWithCode('Refresh token not found!', 'forbidden');
 
         const { userId } = this._tokenService
             .verifyRefreshToken(refreshToken);
 
-        // get user 
+        /**
+         * Check user 
+         */
         const currentUser = await this._userService
             .getUserDTOById(userId);
 
         if (!currentUser)
             throw new Error('User not found by id.');
 
-        // save session activity
+        /**
+         * Check user company
+         */
+        await this.authorizeUserByCompanyAsync(userId, companyId);
+
+        /**
+         * Save activity
+         */
         await this._userSessionActivityService
             .saveUserSessionActivityAsync(currentUser.id, 'generic');
 
-        // get permissions 
+        /**
+         * Get user's permissions 
+         */
         const permissions = await this._permissionService
             .getPermissionMatrixAsync(userId, currentUser.companyId);
 
-        // get new tokens
-        const {
-            accessToken: newAccessToken,
-            refreshToken: newRefreshToken
-        } = await this._renewUserSessionAsync(userId, refreshToken);
+        /**
+         * Get new tokens for user 
+         */
+        const tokens = await this
+            ._renewUserSessionAsync(userId, refreshToken);
 
         const authData: AuthDataDTO = {
             currentUser,
@@ -88,45 +90,71 @@ export class AuthenticationService {
 
         return {
             authData,
-            newAccessToken,
-            newRefreshToken
+            newAccessToken: tokens.accessToken,
+            newRefreshToken: tokens.refreshToken
         };
     }
 
-    logInUser = async (email: string, password: string) => {
+    /**
+     * Acquires new tokens for the user
+     * creates session activity 
+     */
+    async logInUserAsync(email: string, password: string, companyId: Id<'Company'>) {
 
-        // further validate request 
+        /**
+         * Check if sent credentials are valid 
+         */
         if (!email || !password)
             throw new ErrorWithCode('Email or password is null.', 'bad request');
 
-        // authenticate
+        /**
+         * Check if user exists by email
+         */
         const user = await this._userService
             .getUserByEmailAsync(email);
 
         if (!user)
             throw new ErrorWithCode('Invalid email.', 'forbidden');
 
+        /**
+         * Check company
+         */
+        await this.authorizeUserByCompanyAsync(user, companyId);
+
+        /**
+         * Check password 
+         */
         const isPasswordCorrect = await this._hashService
             .comparePasswordAsync(password, user.password);
 
         if (!isPasswordCorrect)
             throw new ErrorWithCode('Invalid password.', 'forbidden');
 
+        /**
+         * Save session activity
+         */
         const userId = user.id;
 
         await this._userSessionActivityService
             .saveUserSessionActivityAsync(userId, 'login');
 
-        // get auth tokens 
+        /**
+         * Get new auth tokens
+         */
         const tokens = await this.getUserLoginTokens(user);
 
-        // set user current refresh token 
+        /**
+         * Pair new refresh token to user 
+         */
         await this._userService
             .setUserActiveRefreshToken(userId, tokens.refreshToken);
 
         return tokens;
-    };
+    }
 
+    /**
+     * Logs out a user  
+     */
     logOutUserAsync = async (principalId: PrincipalId) => {
 
         await this._userSessionActivityService
@@ -137,6 +165,9 @@ export class AuthenticationService {
             .removeRefreshToken(principalId.getId());
     };
 
+    /**
+     * Creates user tokens
+     */
     getUserLoginTokens = async (user: User) => {
 
         // get tokens
@@ -148,6 +179,21 @@ export class AuthenticationService {
             refreshToken
         };
     };
+
+    /**
+     * Checks if company id matches user's company,
+     * otherwise throws error 
+     */
+    async authorizeUserByCompanyAsync(userIdOrUser: Id<'User'> | User, companyId: Id<'Company'>) {
+
+        const user = typeof userIdOrUser === 'number'
+            ? await this._ormService
+                .getSingleById(User, userIdOrUser)
+            : userIdOrUser as User;
+
+        if (user.companyId !== companyId)
+            throw new ErrorWithCode('User company differs from provided comapny id!', 'forbidden');
+    }
 
     private _renewUserSessionAsync = async (userId: Id<'User'>, prevRefreshToken: string) => {
 

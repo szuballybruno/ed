@@ -39,6 +39,7 @@ export interface ITurboRequest {
     path: string;
     body: any;
     query: any;
+    origin: string;
     files: { file: any };
     getCookie(key: string): string | null;
     hasFiles(): boolean;
