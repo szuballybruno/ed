@@ -82,7 +82,7 @@ const getBaseConfig = (
         },
 
         misc: {
-            DOMAIN_TEMPLATE: `https://${branchName}.$DOMAIN$`,
+            DOMAIN_TEMPLATE: `https://${branchName}.[DOMAIN]`,
             ENVIRONMENT_NAME: envName,
             HOST_PORT: 5000,
             JWT_SIGN_SECRET: secrets.JWT_SIGN_SECRET, // 'adsasdsd',
@@ -123,7 +123,7 @@ export const environemntConfigs: EnvConfigBaseType[] = [
     // prod
     getBaseConfig('main', 'app', 'prod', config => {
 
-        config.misc.DOMAIN_TEMPLATE = 'https://$DOMAIN$';
+        config.misc.DOMAIN_TEMPLATE = 'https://[DOMAIN]';
         config.gcp.MIN_INSTANCE_COUNT = 1;
     }),
 
@@ -138,7 +138,7 @@ export const environemntConfigs: EnvConfigBaseType[] = [
 
 export const localConfig = getBaseConfig('local', 'local', 'local', config => {
 
-    config.misc.DOMAIN_TEMPLATE = 'http://local.$DOMAIN$';
+    config.misc.DOMAIN_TEMPLATE = 'http://local.[DOMAIN]';
 
     config.misc.IS_HOSTED_ON_GCP = false;
     config.misc.IS_LOCALHOST = true;

@@ -48,12 +48,17 @@ export class DomainProviderService {
 
     applyTemplate(domain: string) {
 
-        const token = '$DOMAIN$';
+        const token = '[DOMAIN]';
         const template = this._globalConfig.misc.domainTemplate;
 
-        if (template.includes(token))
-            return template.replace(token, domain);
+        console.log(`Applying CORS template. Token: ${token} Template: ${template}`);
 
-        return template;
+        const res = template.includes(token)
+            ? template.replace(token, domain)
+            : template;
+
+        console.log(`Final CORS domain with template applied: ${res}`);
+
+        return res;
     }
 }

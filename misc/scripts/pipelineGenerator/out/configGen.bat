@@ -5,7 +5,7 @@ echo BACKEND_URL = api.local.epistogram.com >> C:\GitRepositories\epistogram\mis
 echo MIN_INSTANCE_COUNT = 0 >> C:\GitRepositories\epistogram\misc\scripts\pipelineGenerator\dist/../../../../epistogram_backend/config/config.env
 echo IS_UNDER_MAINTENANCE = false >> C:\GitRepositories\epistogram\misc\scripts\pipelineGenerator\dist/../../../../epistogram_backend/config/config.env
 echo \# ---- misc >> C:\GitRepositories\epistogram\misc\scripts\pipelineGenerator\dist/../../../../epistogram_backend/config/config.env
-echo DOMAIN_TEMPLATE = http://local.$DOMAIN$ >> C:\GitRepositories\epistogram\misc\scripts\pipelineGenerator\dist/../../../../epistogram_backend/config/config.env
+echo DOMAIN_TEMPLATE = http://local.[DOMAIN] >> C:\GitRepositories\epistogram\misc\scripts\pipelineGenerator\dist/../../../../epistogram_backend/config/config.env
 echo ENVIRONMENT_NAME = local >> C:\GitRepositories\epistogram\misc\scripts\pipelineGenerator\dist/../../../../epistogram_backend/config/config.env
 echo HOST_PORT = 5000 >> C:\GitRepositories\epistogram\misc\scripts\pipelineGenerator\dist/../../../../epistogram_backend/config/config.env
 echo JWT_SIGN_SECRET = ${{secrets.JWT_SIGN_SECRET}} >> C:\GitRepositories\epistogram\misc\scripts\pipelineGenerator\dist/../../../../epistogram_backend/config/config.env
