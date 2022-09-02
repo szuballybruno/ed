@@ -10,7 +10,7 @@ export const getCompaniesSeedData = () => getSeedList<Company>()({
     EpistoGram: {
         deletionDate: null,
         name: 'EpistoGram',
-        domain: 'epistogram.epistogram.com'
+        domain: 'epistogram.com'
     }
 });
 
