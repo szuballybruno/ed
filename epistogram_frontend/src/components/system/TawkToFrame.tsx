@@ -1,74 +1,99 @@
-import {PropsWithChildren} from '../../static/frontendHelpers';
-import {Logger} from '../../static/Logger';
-import {useEffect} from 'react';
-import {useLocation} from 'react-router-dom';
+import { useEffect, useRef } from 'react';
+import { PropsWithChildren } from '../../static/frontendHelpers';
 
-export const tawkToLoadScripts = async () => {
+type TawkAttributes = {
+    name: string,
+    email: string
+};
 
-    await (() => {
+class TawkAPI {
 
-        const s1 = document.createElement('script');
-        const s0 = document.getElementsByTagName('script')[0];
+    private _underlyingApi: any;
 
-        s1.async = true;
-        //s1.src = `https://embed.tawk.to/${process.env.REACT_APP_TAWKTO_ID}`;
-        s1.src = 'https://embed.tawk.to/61e2e69ab84f7301d32b2de8/1fpf59jfu';
-        s1.setAttribute('crossorigin', '*');
+    constructor(underlyingApi: any) {
 
-        if (!s0.parentNode) {
+        this._underlyingApi = underlyingApi;
+    }
 
-            Logger.log('No parent node...');
-            return;
-        }
+    /**
+     * Load API 
+     */
+    static loadAsync(): Promise<TawkAPI> {
 
-        s0.parentNode.insertBefore(s1, s0);
-    })();
+        const createScriptNode = (customize: (scriptElement: HTMLScriptElement) => void) => {
+
+            const scriptNode1 = document.createElement('script');
+            const scriptNode2 = document.getElementsByTagName('script')[0];
+
+            customize(scriptNode1);
+
+            if (!scriptNode2.parentNode)
+                throw new Error('No parent node!');
+
+            scriptNode2.parentNode.insertBefore(scriptNode1, scriptNode2);
+
+            return scriptNode1;
+        };
+
+        return new Promise((res, rej) => {
+
+            window.Tawk_API = {
+                onLoad: () => {
+
+                    res(new TawkAPI(window.Tawk_API));
+                }
+            };
+
+            createScriptNode(scriptElement => {
+
+                scriptElement.async = true;
+                scriptElement.src = 'https://embed.tawk.to/61e2e69ab84f7301d32b2de8/1fpf59jfu';
+                scriptElement.setAttribute('crossorigin', '*');
+            });
+        });
+    }
+
+    /**
+     * Set attributes 
+     */
+    setAttributesAsync(attributes: TawkAttributes): Promise<void> {
+        return new Promise((res, rej) => {
+
+            this._underlyingApi.setAttributes(attributes, rej);
+            res();
+        });
+    }
 };
 
 export const TawkToFrame = (props: PropsWithChildren) => {
 
-    const location = useLocation();
+    const tawkApiRef = useRef<TawkAPI | null>(null);
 
-   useEffect(() => {
+    /**
+     * Load api
+     */
+    useEffect(() => {
 
-       Logger.log('Initializing Tawk.to frame...');
-       window.Tawk_API = window.Tawk_API || {};
-       window.Tawk_LoadStart = new Date();
+        TawkAPI
+            .loadAsync()
+            .then(api => tawkApiRef.current = api);
+    }, []);
 
-       tawkToLoadScripts()
-           .catch((e) => {
-               Logger.log('Failed to initialize Tawk.to ' + e);
-           });
+    /**
+     * Set location
+     */
+    useEffect(() => {
 
-       window.Tawk_API.onLoad = () => {
+        if (!tawkApiRef.current)
+            return;
 
-           Logger.log('Chat loaded');
-           Logger.log('Asd: ' + JSON.stringify(window.Tawk_API));
-
-           window.Tawk_API.setAttributes(
-               {
-                   name : 'Mpengler Sanfréd',
-                   email : 'endre.marosi@epistogram.com'
-               },
-               (error) => {
-                   Logger.log('Cannot initiate Tawk.to ' + error);
-               }
-           );
-       };
-
-       window.Tawk_API.onChatMaximized = () => {
-
-           Logger.log('Chat maximized');
-
-           const page_path = location.pathname + location.search;
-           window.Tawk_API.addEvent('current-path', {
-               'path': page_path,
-           }, (error) => {
-
-               Logger.log('Cannot maximize Tawk.to ' + error);
-           });
-       };
-   }, []);
+        tawkApiRef
+            .current
+            .setAttributesAsync({
+                name: 'Mpengler Sanfréd',
+                email: 'endre.marosi@epistogram.com'
+            });
+    }, [tawkApiRef]);
 
     return (
         <>
