@@ -4,10 +4,13 @@ import { PrequizController } from '../../src/api/PrequizController';
 import { PretestController } from '../../src/api/PretestController';
 import { Video } from '../../src/models/entity/video/Video';
 import { getItemCode } from '../../src/services/misc/encodeService';
+import { AnswerQuestionDTO } from '../../src/shared/dtos/AnswerQuestionDTO';
 import { PlayerDataDTO } from '../../src/shared/dtos/PlayerDataDTO';
+import { instantiate } from '../../src/shared/logic/sharedLogic';
 import { PlaylistItemCode } from '../../src/shared/types/PlaylistItemCode';
 import { Id } from '../../src/shared/types/versionId';
 import { getAnswersSeedData } from '../../src/sql/seed/seed_answers';
+import { getAnswerVersionsSeedData } from '../../src/sql/seed/seed_answer_versions';
 import { getCourseSeedData } from '../../src/sql/seed/seed_courses';
 import { getExamSeedData } from '../../src/sql/seed/seed_exams';
 import { getPrequizAnswersSeedData } from '../../src/sql/seed/seed_prequiz_answers';
@@ -145,19 +148,19 @@ export const finishPrequiz = async ({ api, cookies }: TestParams) => {
 export const answerExamQuestion = async (
     testParams: TestParams,
     questionVersionId: Id<'QuestionVersion'>,
-    answerId: Id<'Answer'>,
+    answerVersionIds: Id<'AnswerVersion'>[],
     answerSessionId: Id<'AnswerSession'>
 ) => {
 
     return testParams
         .api
         .callEndpoint(ExamController, 'answerExamQuestionAction', {
-            body: {
-                answerIds: [answerId],
+            body: instantiate<AnswerQuestionDTO>({
+                answerVersionIds: answerVersionIds,
                 answerSessionId: answerSessionId,
                 elapsedSeconds: 13.831,
                 questionVersionId: questionVersionId
-            },
+            }),
             cookies: testParams.cookies
         });
 };
@@ -166,11 +169,12 @@ export const answerPretestExamQuestions = async ({ testParams, pretestData }: { 
 
     const questionsSeedData = testParams.getSeedData(getQuestionVersionsSeedData);
     const answersSeedData = testParams.getSeedData(getAnswersSeedData);
+    const answersVersionsSeedData = testParams.getSeedData(getAnswerVersionsSeedData);
 
     const answerResult1 = await answerExamQuestion(
         testParams,
         questionsSeedData.question_version_pretest_excel_1.id,
-        answersSeedData.answer_pretest_excel_1_3_T.id,
+        [answersVersionsSeedData.answer_version_pretest_excel_1_3_T.id],
         pretestData.response.data.answerSessionId
     );
 
@@ -180,7 +184,7 @@ export const answerPretestExamQuestions = async ({ testParams, pretestData }: { 
     const answerResult2 = await answerExamQuestion(
         testParams,
         questionsSeedData.question_version_pretest_excel_2.id,
-        answersSeedData.answer_pretest_excel_2_2_F.id,
+        [answersVersionsSeedData.answer_version_pretest_excel_2_2_F.id],
         pretestData.response.data.answerSessionId
     );
 
@@ -190,7 +194,7 @@ export const answerPretestExamQuestions = async ({ testParams, pretestData }: { 
     const answerResult3 = await answerExamQuestion(
         testParams,
         questionsSeedData.question_version_pretest_excel_3.id,
-        answersSeedData.answer_pretest_excel_3_1_T.id,
+        [answersVersionsSeedData.answer_version_pretest_excel_3_1_T.id],
         pretestData.response.data.answerSessionId
     );
 
@@ -200,7 +204,7 @@ export const answerPretestExamQuestions = async ({ testParams, pretestData }: { 
     const answerResult4 = await answerExamQuestion(
         testParams,
         questionsSeedData.question_version_pretest_excel_4.id,
-        answersSeedData.answer_pretest_excel_4_1_T.id,
+        [answersVersionsSeedData.answer_version_pretest_excel_4_1_T.id],
         pretestData.response.data.answerSessionId
     );
 
@@ -210,7 +214,7 @@ export const answerPretestExamQuestions = async ({ testParams, pretestData }: { 
     const answerResult5 = await answerExamQuestion(
         testParams,
         questionsSeedData.question_version_pretest_excel_5.id,
-        answersSeedData.answer_pretest_excel_5_3_T.id,
+        [answersVersionsSeedData.answer_version_pretest_excel_5_3_T.id],
         pretestData.response.data.answerSessionId
     );
 
@@ -378,7 +382,7 @@ export const answerExamQuestions = async (testParams: TestParams, pd: PlayerData
     const res = await answerExamQuestion(
         testParams,
         firstQuestionVersionId,
-        examQuesitons.first().answers.first().answerId,
+        [examQuesitons.first().answers.first().answerVersionId],
         answerSessionId);
 
     expect(res.response.code)

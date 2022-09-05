@@ -1,8 +1,8 @@
-import {ClassType} from '../../src/services/misc/advancedTypes/ClassType';
-import {respondError} from '../../src/startup/initTurboExpressListener';
-import {throwNotImplemented} from '../../src/utilities/helpers';
-import {ITurboExpressLayer} from '../../src/utilities/XTurboExpress/ITurboExpressLayer';
-import {getControllerActionMetadatas} from '../../src/utilities/XTurboExpress/XTurboExpressDecorators';
+import { ClassType } from '../../src/services/misc/advancedTypes/ClassType';
+import { respondError } from '../../src/startup/initTurboExpressListener';
+import { throwNotImplemented } from '../../src/utilities/helpers';
+import { ITurboExpressLayer } from '../../src/utilities/XTurboExpress/ITurboExpressLayer';
+import { getControllerActionMetadatas } from '../../src/utilities/XTurboExpress/XTurboExpressDecorators';
 import {
     ITurboRequest,
     ITurboResponse,
@@ -40,7 +40,11 @@ export class TestTurboResponse<TData = any> implements ITurboResponse {
 
     getCookieOrFail(key: string) {
 
-        return this.cookies.single(x => x.key === key).value;
+        const cookieVal = this.getCookie(key);
+        if (!cookieVal)
+            throw new Error(`Cookie not found by key ${key}`);
+
+        return cookieVal;
     }
 
     clearCookie() {
@@ -58,7 +62,7 @@ export class TestListener implements IXTurboExpressListener {
 
     private _endpoints: RegisterEndpointOptsType<ITurboRequest, ITurboResponse>[] = [];
 
-    constructor(private _throwError: boolean = false, private  _logResError: boolean = false) {
+    constructor(private _throwError: boolean = false, private _logResError: boolean = false) {
 
     }
 
@@ -89,10 +93,11 @@ export class TestListener implements IXTurboExpressListener {
         const res = new TestTurboResponse();
 
         // test request
-        const req: ITurboRequest = {
+        const mockTurboRequest: ITurboRequest = {
             body: opt.body ?? {},
             query: opt.query ?? {},
             files: { file: null },
+            origin: 'http://local.epistogram.com',
             getCookie: (key) => (opt.cookies ?? []).firstOrNull(x => x.key === key)?.value ?? null,
             getSingleFile: () => opt.query.params.files,
             hasFiles: () => false,
@@ -102,7 +107,7 @@ export class TestListener implements IXTurboExpressListener {
         try {
 
             const result = await endpoint
-                .action(req, res);
+                .action(mockTurboRequest, res);
 
             res.respond(200, result);
         }
