@@ -1,7 +1,7 @@
-import { ViewColumn, ViewEntity } from 'typeorm';
-import { XViewColumn } from '../../services/XORM/XORMDecorators';
-import { CourseStageNameType } from '../../shared/types/sharedTypes';
-import { Id } from '../../shared/types/versionId';
+import {ViewColumn, ViewEntity} from 'typeorm';
+import {XViewColumn} from '../../services/XORM/XORMDecorators';
+import {CourseStageNameType} from '../../shared/types/sharedTypes';
+import {Id} from '../../shared/types/versionId';
 
 @ViewEntity({
     synchronize: false,
@@ -63,6 +63,10 @@ export class AvailableCourseView {
 
     @ViewColumn()
     @XViewColumn()
+    categoryId: Id<'CourseCategory'>;
+
+    @ViewColumn()
+    @XViewColumn()
     categoryName: string;
 
     @ViewColumn()
@@ -82,14 +86,14 @@ export class AvailableCourseView {
     teacherLastName: string;
 
     @XViewColumn()
-	totalVideoSumLengthSeconds: number;
-	
+    totalVideoSumLengthSeconds: number;
+
     @XViewColumn()
     totalVideoCount: number;
 
     @XViewColumn()
-	difficulty: number;
-	
+    difficulty: number;
+
     @XViewColumn()
     benchmark: number;
 }

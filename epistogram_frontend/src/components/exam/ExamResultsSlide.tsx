@@ -1,19 +1,19 @@
-import { Flex } from '@chakra-ui/react';
-import { ExpandMore } from '@mui/icons-material';
-import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
-import React, { useEffect } from 'react';
-import { applicationRoutes } from '../../configuration/applicationRoutes';
-import { useExamResults } from '../../services/api/examApiService';
-import { useNavigation } from '../../services/core/navigatior';
-import { ExamPlayerDataDTO } from '../../shared/dtos/ExamPlayerDataDTO';
-import { Id } from '../../shared/types/versionId';
-import { ArrayBuilder } from '../../static/frontendHelpers';
-import { translatableTexts } from '../../static/translatableTexts';
-import { ChipSmall } from '../administration/courses/ChipSmall';
-import { EpistoFont } from '../controls/EpistoFont';
-import { ExamLayout } from './ExamLayout';
-import { ExamResultStats } from './ExamResultStats';
-import { QuestionAnswer } from './QuestionAnswer';
+import {Flex} from '@chakra-ui/react';
+import {ExpandMore} from '@mui/icons-material';
+import {Accordion, AccordionDetails, AccordionSummary} from '@mui/material';
+import React, {useEffect} from 'react';
+import {applicationRoutes} from '../../configuration/applicationRoutes';
+import {useExamResults} from '../../services/api/examApiService';
+import {useNavigation} from '../../services/core/navigatior';
+import {ExamPlayerDataDTO} from '../../shared/dtos/ExamPlayerDataDTO';
+import {Id} from '../../shared/types/versionId';
+import {ArrayBuilder} from '../../static/frontendHelpers';
+import {translatableTexts} from '../../static/translatableTexts';
+import {ChipSmall} from '../administration/courses/ChipSmall';
+import {EpistoFont} from '../controls/EpistoFont';
+import {ExamLayout} from './ExamLayout';
+import {ExamResultStats} from './ExamResultStats';
+import {QuestionAnswer} from './QuestionAnswer';
 
 export const ExamResultsSlide = (props: {
     exam: ExamPlayerDataDTO,
@@ -39,6 +39,8 @@ export const ExamResultsSlide = (props: {
 
     return <ExamLayout
         justify='flex-start'
+        maxH='calc(100vh - 120px)'
+        overflowY='scroll'
         isHeightMaximized={false}
         headerCenterText={exam.title}
         showFooterButtonsOnTop
@@ -71,6 +73,8 @@ export const ExamResultsSlide = (props: {
             direction="column"
             className='roundBorders mildShadow'
             width='100%'
+            height='100%'
+            flex='1'
             background='var(--transparentWhite70)'
             px='20px'
             justify='flex-start'>
@@ -117,8 +121,7 @@ export const ExamResultsSlide = (props: {
                     m='10px 5px 5px 5px'
                     pb='20px'
                     boxSizing='border-box'
-                    height='fit-content'
-                    overflow="visible">
+                    height='fit-content'>
 
                     {questionsAnswers
                         .map((question, index) => {

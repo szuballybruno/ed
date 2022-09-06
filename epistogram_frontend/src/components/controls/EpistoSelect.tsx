@@ -1,5 +1,5 @@
 import React from 'react';
-import { translatableTexts } from '../../static/translatableTexts';
+import {translatableTexts} from '../../static/translatableTexts';
 
 const defaultKey = '___default___';
 
@@ -51,7 +51,6 @@ export const EpistoSelect = <TItem,>(props: EpistoSelectPropsType<TItem>) => {
             background: 'transparent',
             outline: 'none',
             padding: '10px 10px',
-            marginTop: '5px',
             cursor: 'pointer',
             pointerEvents: isDisabled ? 'none' : undefined
         }}>

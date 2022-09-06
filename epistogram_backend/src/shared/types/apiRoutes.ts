@@ -1,4 +1,4 @@
-import { Id } from './versionId';
+import {Id} from './versionId';
 
 export type RouteParameterType<TBody = any, TQuery = any> = { body?: TBody, query?: TQuery };
 export type ParametrizedRouteType<T extends RouteParameterType> = string & T;
@@ -135,6 +135,7 @@ export const apiRoutes = {
         getUserVideoStats: '/userstats/get-user-video-stats',
         getUserExamStats: '/userstats/get-user-exam-stats',
         getUserLearningOverviewData: '/userstats/get-user-learning-overview-data',
+        getCompanyUsersPerformanceSummary: '/userstats/get-company-users-performance-summary',
         getUserCourseStatsOverviewData: '/userstats/get-user-course-stats-overview-data'
     },
 

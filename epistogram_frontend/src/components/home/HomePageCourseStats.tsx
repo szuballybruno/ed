@@ -1,15 +1,13 @@
-import { Flex, Grid } from '@chakra-ui/react';
-import { ArrowBack, ArrowForward, FiberManualRecord } from '@mui/icons-material';
-import { useEffect } from 'react';
-import { useRecommendedItemQuota, useUserCourseProgressChartData } from '../../services/api/userProgressApiService';
-import { UserActiveCourseDTO } from '../../shared/dtos/UserActiveCourseDTO';
-import { Environment } from '../../static/Environemnt';
-import { PagingType } from '../../static/frontendHelpers';
-import { EpistoButton } from '../controls/EpistoButton';
-import { FlexFloat } from '../controls/FlexFloat';
+import {Flex, Grid} from '@chakra-ui/react';
+import {useEffect} from 'react';
+import {useRecommendedItemQuota, useUserCourseProgressChartData} from '../../services/api/userProgressApiService';
+import {UserActiveCourseDTO} from '../../shared/dtos/UserActiveCourseDTO';
+import {Environment} from '../../static/Environemnt';
+import {PagingType} from '../../static/frontendHelpers';
+import {FlexFloat} from '../controls/FlexFloat';
 import StatisticsCard from '../statisticsCard/StatisticsCard';
-import { UserProgressChart } from '../universal/charts/UserProgressChart';
-import { NoProgressChartYet } from './NoProgressChartYet';
+import {UserProgressChart} from '../universal/charts/UserProgressChart';
+import {NoProgressChartYet} from './NoProgressChartYet';
 
 export const HomePageCourseStats = (props: {
     activeCoursesPaging: PagingType<UserActiveCourseDTO>
@@ -136,32 +134,6 @@ export const HomePageCourseStats = (props: {
             </FlexFloat>
         </Flex>
 
-        {/* navigation buttons */}
-        <Flex
-            flex='1'
-            h="30px"
-            mt='10px'
-            align="center"
-            justify="center">
 
-            <EpistoButton onClick={() => activeCoursesPaging.previous()}>
-                <ArrowBack />
-            </EpistoButton>
-
-            {activeCoursesPaging
-                .items
-                .map((x, index) => <FiberManualRecord
-                    key={index}
-                    style={{
-                        width: '10px',
-                        height: '8px',
-                        color: index === activeCoursesPaging.currentIndex ? 'black' : 'gray'
-                    }} />)}
-
-            <EpistoButton onClick={() => activeCoursesPaging.next()}>
-                <ArrowForward />
-            </EpistoButton>
-
-        </Flex>
     </Flex >;
 };

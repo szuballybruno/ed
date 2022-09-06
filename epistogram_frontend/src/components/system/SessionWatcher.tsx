@@ -1,13 +1,13 @@
-import { Flex } from '@chakra-ui/react';
-import { Refresh } from '@mui/icons-material';
+import {Flex} from '@chakra-ui/react';
+import {Refresh} from '@mui/icons-material';
 import moment from 'moment';
-import { createContext, FC, useContext, useEffect, useState } from 'react';
-import { Environment } from '../../static/Environemnt';
-import { eventBus } from '../../static/EventBus';
-import { reloadPage } from '../../static/frontendHelpers';
-import { EpistoButton } from '../controls/EpistoButton';
-import { EpistoFont } from '../controls/EpistoFont';
-import { FullscreenOverlay } from '../universal/FullscreenOverlay';
+import {createContext, FC, useContext, useEffect, useState} from 'react';
+import {Environment} from '../../static/Environemnt';
+import {eventBus} from '../../static/EventBus';
+import {reloadPage} from '../../static/frontendHelpers';
+import {EpistoButton} from '../controls/EpistoButton';
+import {EpistoFont} from '../controls/EpistoFont';
+import {FullscreenOverlay} from '../universal/FullscreenOverlay';
 
 class SessionWatcher {
 
@@ -18,13 +18,13 @@ class SessionWatcher {
         this._lastHandshakeDate = new Date();
 
         /**
-         * notify on focus to detect users 
+         * notify on focus to detect users
          * coming back from windows sleep mode
          */
         window.onfocus = () => this._notifyActivity();
 
         /**
-         * Subscribe to query service 
+         * Subscribe to query service
          * to get latest auth handshake date
          */
         eventBus
@@ -32,7 +32,7 @@ class SessionWatcher {
 
                 const handshakeTime = new Date();
 
-                console.log('Handskae... time: ' + handshakeTime);
+                console.log('Handshake... time: ' + handshakeTime);
                 this._lastHandshakeDate = handshakeTime;
             });
     }
@@ -52,7 +52,7 @@ class SessionWatcher {
         console.log('Activity gap!');
         eventBus.fireEvent('onActivityGap', {});
     };
-};
+}
 
 export const sessionWatcherInstance = new SessionWatcher();
 
@@ -89,7 +89,7 @@ export const SessionWatcherFrame: FC = ({ children }) => {
                     align="center">
 
                     <EpistoFont>
-                        Session expired, try refreshing the page!
+                        Lejárt munkamenet, kérjük frissítsd az oldalt.
                     </EpistoFont>
 
                     <EpistoButton
@@ -99,7 +99,8 @@ export const SessionWatcherFrame: FC = ({ children }) => {
                         variant="colored"
                         icon={<Refresh></Refresh>}
                         onClick={() => reloadPage()}>
-                        Refresh
+
+                        Újratöltés
                     </EpistoButton>
                 </Flex>
             </Flex>}

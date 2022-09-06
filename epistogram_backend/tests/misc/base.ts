@@ -1,17 +1,17 @@
-import { AuthenticationController } from '../../src/api/AuthenticationController';
-import { GlobalConfiguration } from '../../src/services/misc/GlobalConfiguration';
-import { SQLConnectionService } from '../../src/services/sqlServices/SQLConnectionService';
-import { XDBMSchemaType } from '../../src/services/XDBManager/XDBManagerTypes';
-import { initJsExtensions } from '../../src/shared/logic/jsExtensions';
-import { initServiceProvider } from '../../src/startup/initApp';
-import { initTurboExpress } from '../../src/startup/instatiateTurboExpress';
-import { recreateDBAsync } from '../../src/startup/recreateDB';
-import { ServiceProvider } from '../../src/startup/servicesDI';
-import { customIt } from './customHooks';
-import { JestLogger } from './jestLogger';
-import { normalizeJestConsole } from './normalizeConsole';
-import { srcFolder } from './rootProvider';
-import { TestCookie, TestListener } from './TestListener';
+import {AuthenticationController} from '../../src/api/AuthenticationController';
+import {GlobalConfiguration} from '../../src/services/misc/GlobalConfiguration';
+import {SQLConnectionService} from '../../src/services/sqlServices/SQLConnectionService';
+import {XDBMSchemaType} from '../../src/services/XDBManager/XDBManagerTypes';
+import {initJsExtensions} from '../../src/shared/logic/jsExtensions';
+import {initServiceProvider} from '../../src/startup/initApp';
+import {initTurboExpress} from '../../src/startup/instatiateTurboExpress';
+import {recreateDBAsync} from '../../src/startup/recreateDB';
+import {ServiceProvider} from '../../src/startup/servicesDI';
+import {customIt} from './customHooks';
+import {JestLogger} from './jestLogger';
+import {normalizeJestConsole} from './normalizeConsole';
+import {srcFolder} from './rootProvider';
+import {TestCookie, TestListener} from './TestListener';
 
 initJsExtensions();
 normalizeJestConsole();
@@ -40,7 +40,7 @@ const loginUserAsync = async (api: ApiType) => {
 
     const accessToken = loginResult.getCookieOrFail('accessToken');
 
-    return { accessToken };
+    return {accessToken};
 };
 
 const _setupTest = (opts: {
@@ -53,9 +53,9 @@ const _setupTest = (opts: {
 
     JestLogger.logMain('Initializing integration tests...');
 
-    const { tests, title, throwError } = opts;
+    const {tests, title, throwError} = opts;
 
-    const { getServiceProviderAsync, singletonServiceProvider } = initServiceProvider(srcFolder, singletonProvider => {
+    const {getServiceProviderAsync, singletonServiceProvider} = initServiceProvider(srcFolder, singletonProvider => {
 
         /**
          * OVERRIDE SETTINGS

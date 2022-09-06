@@ -1,26 +1,28 @@
-import { Flex } from '@chakra-ui/layout';
-import { useMediaQuery } from '@chakra-ui/react';
-import { useState } from 'react';
-import { applicationRoutes } from '../../configuration/applicationRoutes';
-import { useOverviewPageDTO } from '../../services/api/miscApiService';
-import { useActiveCourses } from '../../services/api/userProgressApiService';
-import { useNavigation } from '../../services/core/navigatior';
-import { Environment } from '../../static/Environemnt';
-import { usePaging } from '../../static/frontendHelpers';
-import { translatableTexts } from '../../static/translatableTexts';
-import { ContentPane } from '../ContentPane';
-import { EpistoFont } from '../controls/EpistoFont';
-import { PlaylistItem } from '../courseItemList/PlaylistItem';
-import { LeftPane } from '../LeftPane';
-import { PageRootContainer } from '../PageRootContainer';
-import { useSetBusy } from '../system/LoadingFrame/BusyBarContext';
-import { DashboardSection } from '../universal/DashboardSection';
-import { FlexListItem } from '../universal/FlexListItem';
-import { FlexListTitleSubtitle } from '../universal/FlexListTitleSubtitle';
-import { CourseProgressDisplay } from './CourseProgressDisplay';
-import { HomePageCourseStats } from './HomePageCourseStats';
-import { HomePageUserStats } from './HomePageUserStats';
-import { PractiseQuestions } from './PractiseQuestions';
+import {Flex} from '@chakra-ui/layout';
+import {useMediaQuery} from '@chakra-ui/react';
+import {useState} from 'react';
+import {applicationRoutes} from '../../configuration/applicationRoutes';
+import {useOverviewPageDTO} from '../../services/api/miscApiService';
+import {useActiveCourses} from '../../services/api/userProgressApiService';
+import {useNavigation} from '../../services/core/navigatior';
+import {Environment} from '../../static/Environemnt';
+import {usePaging} from '../../static/frontendHelpers';
+import {translatableTexts} from '../../static/translatableTexts';
+import {ContentPane} from '../ContentPane';
+import {EpistoFont} from '../controls/EpistoFont';
+import {PlaylistItem} from '../courseItemList/PlaylistItem';
+import {LeftPane} from '../LeftPane';
+import {PageRootContainer} from '../PageRootContainer';
+import {useSetBusy} from '../system/LoadingFrame/BusyBarContext';
+import {DashboardSection} from '../universal/DashboardSection';
+import {FlexListItem} from '../universal/FlexListItem';
+import {FlexListTitleSubtitle} from '../universal/FlexListTitleSubtitle';
+import {CourseProgressDisplay} from './CourseProgressDisplay';
+import {HomePageCourseStats} from './HomePageCourseStats';
+import {HomePageUserStats} from './HomePageUserStats';
+import {PractiseQuestions} from './PractiseQuestions';
+import {EpistoButton} from '../controls/EpistoButton';
+import {ArrowBack, ArrowForward, FiberManualRecord} from '@mui/icons-material';
 
 const HomePage = () => {
 
@@ -145,7 +147,34 @@ const HomePage = () => {
                     minHeight="200px"
                     m="0 0 10px 0"
                     flex='1'
-                    title={'Kurzus során nyújtott teljesítményed'}>
+                    justify='center'
+                    headerContent={
+                        <Flex
+                        flex='1'
+                        h="30px"
+                        align="center"
+                        justify="flex-end">
+
+                        <EpistoButton onClick={() => activeCoursesPaging.previous()}>
+                        <ArrowBack />
+                        </EpistoButton>
+
+                    {activeCoursesPaging
+                        .items
+                        .map((x, index) => <FiberManualRecord
+                        key={index}
+                        style={{
+                        width: '10px',
+                        height: '8px',
+                        color: index === activeCoursesPaging.currentIndex ? 'black' : 'gray'
+                    }} />)}
+
+                        <EpistoButton onClick={() => activeCoursesPaging.next()}>
+                        <ArrowForward />
+                        </EpistoButton>
+
+                        </Flex>}
+                    title={'Kurzus során nyújtott teljesítményed: ' + activeCoursesPaging.currentItem?.title}>
 
                     <HomePageCourseStats
                         activeCoursesPaging={activeCoursesPaging} />

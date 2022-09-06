@@ -1,24 +1,24 @@
-import { Box, Flex, GridItem, useMediaQuery } from '@chakra-ui/react';
-import { Select, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import {Box, Flex, GridItem, useMediaQuery} from '@chakra-ui/react';
+import {Select, ToggleButton, ToggleButtonGroup} from '@mui/material';
 import React from 'react';
-import { CourseApiService } from '../services/api/courseApiService';
-import { useNavigation } from '../services/core/navigatior';
-import { useShowErrorDialog } from '../services/core/notifications';
-import { AvailableCourseDTO } from '../shared/dtos/AvailableCourseDTO';
-import { OrderType } from '../shared/types/sharedTypes';
-import { Id } from '../shared/types/versionId';
-import { distinctByAllKeys } from '../static/frontendHelpers';
-import { translatableTexts } from '../static/translatableTexts';
-import { ContentPane } from './ContentPane';
-import { EpistoButton } from './controls/EpistoButton';
-import { EpistoFlex } from './controls/EpistoFlex';
-import { EpistoFont } from './controls/EpistoFont';
-import { EpistoGrid } from './controls/EpistoGrid';
-import { LeftPane } from './LeftPane';
-import { PageRootContainer } from './PageRootContainer';
-import { useSetBusy } from './system/LoadingFrame/BusyBarContext';
+import {CourseApiService} from '../services/api/courseApiService';
+import {useNavigation} from '../services/core/navigatior';
+import {useShowErrorDialog} from '../services/core/notifications';
+import {AvailableCourseDTO} from '../shared/dtos/AvailableCourseDTO';
+import {OrderType} from '../shared/types/sharedTypes';
+import {Id} from '../shared/types/versionId';
+import {distinctByAllKeys} from '../static/frontendHelpers';
+import {translatableTexts} from '../static/translatableTexts';
+import {ContentPane} from './ContentPane';
+import {EpistoButton} from './controls/EpistoButton';
+import {EpistoFlex} from './controls/EpistoFlex';
+import {EpistoFont} from './controls/EpistoFont';
+import {EpistoGrid} from './controls/EpistoGrid';
+import {LeftPane} from './LeftPane';
+import {PageRootContainer} from './PageRootContainer';
+import {useSetBusy} from './system/LoadingFrame/BusyBarContext';
 import CourseTile from './universal/CourseTile';
-import { EpistoSearch } from './universal/EpistoSearch';
+import {EpistoSearch} from './universal/EpistoSearch';
 
 const AvailableCoursesPage = () => {
 
@@ -47,10 +47,10 @@ const AvailableCoursesPage = () => {
 
     const categoryOptions = distinctByAllKeys(courses
         .map((course, index) => ({
-            subCategoryId: course.subCategoryId,
-            subCategoryName: course.subCategoryName
+            categoryId: course.categoryId,
+            categoryName: course.categoryName
         })),
-        ['subCategoryId']
+        ['categoryId']
     );
 
     const navigateToDetailsPage = (course: AvailableCourseDTO) => {
@@ -88,9 +88,9 @@ const AvailableCoursesPage = () => {
                     orientation={'vertical'}>
 
                     {categoryOptions
-                        .sort((a, b) => a.subCategoryName > b.subCategoryName
+                        .sort((a, b) => a.categoryName > b.categoryName
                             ? 1
-                            : a.subCategoryName < b.subCategoryName
+                            : a.categoryName < b.categoryName
                                 ? -1
                                 : 0)
                         .map((categoryOption, index) => {
@@ -105,7 +105,7 @@ const AvailableCoursesPage = () => {
                                     border: 'none'
                                 }}
                                 onClick={() => {
-                                    setFilterCategoryId(categoryOption.subCategoryId);
+                                    setFilterCategoryId(categoryOption.categoryId);
                                 }}
                                 key={index}>
                                 <Flex
@@ -114,11 +114,11 @@ const AvailableCoursesPage = () => {
                                     p="3px"
                                     height="30px"
                                     m="2px 10px 2px 0px"
-                                    bgColor={filterCategoryId === categoryOption.subCategoryId
+                                    bgColor={filterCategoryId === categoryOption.categoryId
                                         ? 'var(--deepBlue)'
                                         : 'var(--epistoTeal)'} />
 
-                                {categoryOption.subCategoryName}
+                                {categoryOption.categoryName}
                             </ToggleButton>;
                         })}
                 </ToggleButtonGroup>

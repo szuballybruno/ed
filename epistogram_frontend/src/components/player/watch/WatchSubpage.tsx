@@ -194,7 +194,7 @@ export const WatchSubpage = () => {
                         {/* main column */}
                         <Box
                             id="mainColumn"
-                            overflowY='scroll'
+                            overflowY={videoPlayerData ? 'scroll' : 'unset'}
                             className="whall" >
 
                             {/* VIDEO  */}

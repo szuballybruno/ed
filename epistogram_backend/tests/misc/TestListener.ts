@@ -30,7 +30,7 @@ export class TestTurboResponse<TData = any> implements ITurboResponse {
     setCookie(key: string, value: string) {
 
         this.cookies = this.cookies.filter(x => x.key !== key);
-        this.cookies.push({ key, value });
+        this.cookies.push({key, value});
     }
 
     getCookie(key: string) {
@@ -50,7 +50,7 @@ export class TestTurboResponse<TData = any> implements ITurboResponse {
 
     respond(code: number, data?: any) {
 
-        this.response = { code, data };
+        this.response = {code, data};
     }
 }
 
@@ -58,7 +58,7 @@ export class TestListener implements IXTurboExpressListener {
 
     private _endpoints: RegisterEndpointOptsType<ITurboRequest, ITurboResponse>[] = [];
 
-    constructor(private _throwError: boolean = false, private  _logResError: boolean = false) {
+    constructor(private _throwError: boolean = false, private _logResError: boolean = false) {
 
     }
 
@@ -92,7 +92,8 @@ export class TestListener implements IXTurboExpressListener {
         const req: ITurboRequest = {
             body: opt.body ?? {},
             query: opt.query ?? {},
-            files: { file: null },
+            files: {file: null},
+            origin: '',
             getCookie: (key) => (opt.cookies ?? []).firstOrNull(x => x.key === key)?.value ?? null,
             getSingleFile: () => opt.query.params.files,
             hasFiles: () => false,
@@ -105,8 +106,7 @@ export class TestListener implements IXTurboExpressListener {
                 .action(req, res);
 
             res.respond(200, result);
-        }
-        catch (e) {
+        } catch (e) {
 
             if (this._throwError)
                 throw e;

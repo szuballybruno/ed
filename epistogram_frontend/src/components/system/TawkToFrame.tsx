@@ -1,12 +1,12 @@
-import { useEffect, useRef } from 'react';
-import { PropsWithChildren } from '../../static/frontendHelpers';
+import React, {createContext, useContext, useEffect, useRef} from 'react';
+import {PropsWithChildren} from '../../static/frontendHelpers';
 
 type TawkAttributes = {
     name: string,
     email: string
 };
 
-class TawkAPI {
+export class TawkAPI {
 
     private _underlyingApi: any;
 
@@ -16,7 +16,7 @@ class TawkAPI {
     }
 
     /**
-     * Load API 
+     * Load API
      */
     static loadAsync(): Promise<TawkAPI> {
 
@@ -37,13 +37,6 @@ class TawkAPI {
 
         return new Promise((res, rej) => {
 
-            window.Tawk_API = {
-                onLoad: () => {
-
-                    res(new TawkAPI(window.Tawk_API));
-                }
-            };
-
             createScriptNode(scriptElement => {
 
                 scriptElement.async = true;
@@ -53,8 +46,12 @@ class TawkAPI {
         });
     }
 
+    toggle() {
+        return this._underlyingApi.toggle;
+    }
+
     /**
-     * Set attributes 
+     * Set attributes
      */
     setAttributesAsync(attributes: TawkAttributes): Promise<void> {
         return new Promise((res, rej) => {
@@ -63,6 +60,17 @@ class TawkAPI {
             res();
         });
     }
+}
+
+export type TawkContextType = {
+    toggle: () => void
+}
+
+export const TawkContext = createContext<TawkContextType>({} as TawkContextType);
+
+export const useTawkApi = () => {
+
+    return useContext(TawkContext);
 };
 
 export const TawkToFrame = (props: PropsWithChildren) => {
@@ -77,6 +85,7 @@ export const TawkToFrame = (props: PropsWithChildren) => {
         TawkAPI
             .loadAsync()
             .then(api => tawkApiRef.current = api);
+
     }, []);
 
     /**
@@ -95,9 +104,23 @@ export const TawkToFrame = (props: PropsWithChildren) => {
             });
     }, [tawkApiRef]);
 
+    const toggle = () => {
+
+        if (!tawkApiRef.current)
+            return;
+
+        tawkApiRef.current.toggle();
+    };
+
+    const tawkContext = {
+        toggle
+    };
+
     return (
-        <>
+        <TawkContext.Provider
+            value={tawkContext}>
+
             {props.children}
-        </>
+        </TawkContext.Provider>
     );
 };

@@ -1,32 +1,33 @@
-
-import { CourseLearningStatsView } from '../models/views/CourseLearningStatsView';
-import { HomePageStatsView } from '../models/views/HomePageStatsView';
-import { ImproveYourselfPageStatsView } from '../models/views/ImproveYourselfPageStatsView';
-import { MostProductiveTimeRangeView } from '../models/views/MostProductiveTimeRangeView';
-import { UserCourseStatsView, UserCourseStatsViewWithTempomatData } from '../models/views/UserCourseStatsView';
-import { UserDailyActivityChartView } from '../models/views/UserDailyActivityChartView';
-import { UserExamStatsView } from '../models/views/UserExamStatsView';
-import { UserLearningOverviewStatsView } from '../models/views/UserLearningOverviewStatsView';
-import { UserLearningPageStatsView } from '../models/views/UserLearningPageStatsView';
-import { UserPerformanceView } from '../models/views/UserPerformanceView';
-import { UserSpentTimeRatioView } from '../models/views/UserSpentTimeRatioView';
-import { UserVideoStatsView } from '../models/views/UserVideoStatsView';
-import { CourseLearningDTO } from '../shared/dtos/CourseLearningDTO';
-import { HomePageStatsDTO } from '../shared/dtos/HomePageStatsDTO';
-import { ImproveYourselfPageStatsDTO } from '../shared/dtos/ImproveYourselfPageStatsDTO';
-import { UserCourseStatsDTO } from '../shared/dtos/UserCourseStatsDTO';
-import { UserCourseStatsOverviewDTO } from '../shared/dtos/UserCourseStatsOverviewDTO';
-import { UserExamStatsDTO } from '../shared/dtos/UserExamStatsDTO';
-import { UserLearningOverviewDataDTO } from '../shared/dtos/UserLearningOverviewDataDTO';
-import { UserLearningPageStatsDTO } from '../shared/dtos/UserLearningPageStatsDTO';
-import { UserVideoStatsDTO } from '../shared/dtos/UserVideoStatsDTO';
-import { Id } from '../shared/types/versionId';
-import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
-import { AuthorizationService } from './AuthorizationService';
-import { MapperService } from './MapperService';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
-import { TempomatService } from './TempomatService';
-import { UserProgressService } from './UserProgressService';
+import {CourseLearningStatsView} from '../models/views/CourseLearningStatsView';
+import {HomePageStatsView} from '../models/views/HomePageStatsView';
+import {ImproveYourselfPageStatsView} from '../models/views/ImproveYourselfPageStatsView';
+import {MostProductiveTimeRangeView} from '../models/views/MostProductiveTimeRangeView';
+import {UserCourseStatsView, UserCourseStatsViewWithTempomatData} from '../models/views/UserCourseStatsView';
+import {UserDailyActivityChartView} from '../models/views/UserDailyActivityChartView';
+import {UserExamStatsView} from '../models/views/UserExamStatsView';
+import {UserLearningOverviewStatsView} from '../models/views/UserLearningOverviewStatsView';
+import {UserLearningPageStatsView} from '../models/views/UserLearningPageStatsView';
+import {UserPerformanceView} from '../models/views/UserPerformanceView';
+import {UserSpentTimeRatioView} from '../models/views/UserSpentTimeRatioView';
+import {UserVideoStatsView} from '../models/views/UserVideoStatsView';
+import {CourseLearningDTO} from '../shared/dtos/CourseLearningDTO';
+import {HomePageStatsDTO} from '../shared/dtos/HomePageStatsDTO';
+import {ImproveYourselfPageStatsDTO} from '../shared/dtos/ImproveYourselfPageStatsDTO';
+import {UserCourseStatsDTO} from '../shared/dtos/UserCourseStatsDTO';
+import {UserCourseStatsOverviewDTO} from '../shared/dtos/UserCourseStatsOverviewDTO';
+import {UserExamStatsDTO} from '../shared/dtos/UserExamStatsDTO';
+import {UserLearningOverviewDataDTO} from '../shared/dtos/UserLearningOverviewDataDTO';
+import {UserLearningPageStatsDTO} from '../shared/dtos/UserLearningPageStatsDTO';
+import {UserVideoStatsDTO} from '../shared/dtos/UserVideoStatsDTO';
+import {Id} from '../shared/types/versionId';
+import {PrincipalId} from '../utilities/XTurboExpress/ActionParams';
+import {AuthorizationService} from './AuthorizationService';
+import {MapperService} from './MapperService';
+import {ORMConnectionService} from './ORMConnectionService/ORMConnectionService';
+import {TempomatService} from './TempomatService';
+import {UserProgressService} from './UserProgressService';
+import {User} from '../models/entity/User';
+import {TempomatCalculationDataView} from '../models/views/TempomatCalculationDataView';
 
 export class UserStatsService {
 
@@ -59,7 +60,7 @@ export class UserStatsService {
                     .getId();
 
                 const stats = await this._ormService
-                    .query(HomePageStatsView, { userId })
+                    .query(HomePageStatsView, {userId})
                     .where('userId', '=', 'userId')
                     .getSingle();
 
@@ -86,7 +87,7 @@ export class UserStatsService {
                     .getId();
 
                 const stats = await this._ormService
-                    .query(UserLearningPageStatsView, { userId })
+                    .query(UserLearningPageStatsView, {userId})
                     .where('userId', '=', 'userId')
                     .getSingle();
 
@@ -112,17 +113,17 @@ export class UserStatsService {
                 const userId = principalId.toSQLValue();
 
                 const stats = await this._ormService
-                    .query(ImproveYourselfPageStatsView, { userId })
+                    .query(ImproveYourselfPageStatsView, {userId})
                     .where('userId', '=', 'userId')
                     .getSingle();
 
                 const mostProductiveTimeRangeView = await this._ormService
-                    .query(MostProductiveTimeRangeView, { userId })
+                    .query(MostProductiveTimeRangeView, {userId})
                     .where('userId', '=', 'userId')
                     .getMany();
 
                 const userDailyActivityChartView = await this._ormService
-                    .query(UserDailyActivityChartView, { userId })
+                    .query(UserDailyActivityChartView, {userId})
                     .where('userId', '=', 'userId')
                     .getMany();
 
@@ -141,7 +142,7 @@ export class UserStatsService {
      * TODO: Filter courses by permissions
      * TODO: Rearrange the view, so when the user hasn't
      *       started a course yet, return all the courses with empty
-     *       data, instead of [] 
+     *       data, instead of []
      */
     getUserCourseStatsAsync(principalId: PrincipalId, userId: Id<'User'>) {
 
@@ -149,7 +150,7 @@ export class UserStatsService {
             action: async () => {
 
                 const stats = await this._ormService
-                    .query(UserCourseStatsView, { userId })
+                    .query(UserCourseStatsView, {userId})
                     .where('userId', '=', 'userId')
                     .getMany();
 
@@ -194,7 +195,7 @@ export class UserStatsService {
             action: async () => {
 
                 const stats = await this._ormService
-                    .query(UserVideoStatsView, { userId, courseId })
+                    .query(UserVideoStatsView, {userId, courseId})
                     .where('userId', '=', 'userId')
                     .and('courseId', '=', 'courseId')
                     .getMany();
@@ -222,7 +223,7 @@ export class UserStatsService {
             action: async () => {
 
                 const stats = await this._ormService
-                    .query(UserExamStatsView, { userId, courseId })
+                    .query(UserExamStatsView, {userId, courseId})
                     .where('userId', '=', 'userId')
                     .and('courseId', '=', 'courseId')
                     .getMany();
@@ -249,16 +250,16 @@ export class UserStatsService {
         return {
             action: async () => {
                 const userSpentTimeRatio = await this._ormService
-                    .query(UserSpentTimeRatioView, { userId })
+                    .query(UserSpentTimeRatioView, {userId})
                     .where('userId', '=', 'userId')
                     .getOneOrNull();
 
                 const courses = await this._ormService
-                    .query(CourseLearningStatsView, { userId })
+                    .query(CourseLearningStatsView, {userId})
                     .where('userId', '=', 'userId')
                     .getMany();
 
-                // in progress courses 
+                // in progress courses
                 const inProgressCourses = courses
                     .filter(x => x.isStarted && !x.isCompleted);
 
@@ -266,7 +267,7 @@ export class UserStatsService {
                     .mapTo(CourseLearningDTO, [inProgressCourses]);
 
                 const stats = await this._ormService
-                    .query(UserLearningOverviewStatsView, { userId })
+                    .query(UserLearningOverviewStatsView, {userId})
                     .where('userId', '=', 'userId')
                     .getSingle();
 
@@ -329,13 +330,13 @@ export class UserStatsService {
                     : principalId.getId();
 
                 const courseStats = await this._ormService
-                    .query(UserCourseStatsView, { userId: currentUserId, courseId })
+                    .query(UserCourseStatsView, {userId: currentUserId, courseId})
                     .where('userId', '=', 'userId')
                     .and('courseId', '=', 'courseId')
                     .getSingle();
 
                 const userSpentTimeRatio = await this._ormService
-                    .query(UserSpentTimeRatioView, { userId: currentUserId })
+                    .query(UserSpentTimeRatioView, {userId: currentUserId})
                     .where('userId', '=', 'userId')
                     .getSingle();
 
@@ -356,10 +357,58 @@ export class UserStatsService {
 
     };
 
+    async calculateCompanyProductivityAsync(companyId: Id<'Company'>) {
+
+        const userPerformanceViews = await this._ormService
+            .query(UserPerformanceView, {companyId})
+            .innerJoin(User, x => x
+                .on('companyId', '=', 'companyId')
+                .and('id', '=', 'userId', UserPerformanceView))
+            .getMany();
+
+        const companyAvgPerformancePercentage = userPerformanceViews
+            .reduce((total, next) => total + next.performancePercentage, 0) / userPerformanceViews.length;
+
+        if (!userPerformanceViews) {
+            return;
+        }
+
+        const tempomatCalculationViews = await this._ormService
+            .query(TempomatCalculationDataView, {companyId})
+            .innerJoin(User, x => x
+                .on('companyId', '=', 'companyId')
+                .and('id', '=', 'userId', TempomatCalculationDataView))
+            .getMany();
+
+        console.log('Tempomat calculation views ' + JSON.stringify(tempomatCalculationViews));
+
+        const companyTempomatValues = tempomatCalculationViews
+            .map(x => {
+                return this._tempomatService
+                    .calculateTempomatValues(x);
+            });
+
+        console.log('CompanyTempomatValues ' + JSON.stringify(companyTempomatValues));
+
+        const lagBehindPercentages = companyTempomatValues
+            .filter(x => (x !== null && x.lagBehindPercentage !== null))
+            .map(x => x.lagBehindPercentage);
+
+        console.log('lagBehindPercentages ' + JSON.stringify(lagBehindPercentages));
+
+        const companyAvgLagBehindPercentage = lagBehindPercentages
+            .reduce((total, next) => total + next, 0) / lagBehindPercentages.length;
+
+        console.log('companyAvgLagBehindPercentage ' + JSON.stringify(companyAvgLagBehindPercentage));
+
+        return this
+            .calculateProductivity(companyAvgPerformancePercentage, companyAvgLagBehindPercentage);
+    }
+
     calculateProductivityAsync = async (userId: Id<'User'>) => {
 
         const userPerformanceView = await this._ormService
-            .query(UserPerformanceView, { userId })
+            .query(UserPerformanceView, {userId})
             .where('userId', '=', 'userId')
             .getMany();
 
@@ -377,10 +426,15 @@ export class UserStatsService {
         const avgPerformancePercentage = userPerformanceViewFiltered
             .reduce((total, next) => total + next.performancePercentage, 0) / userPerformanceViewFiltered.length;
 
-
         const avgLagBehindPercentage = await this
             ._tempomatService
             .getAvgLagBehindPercentage(userId) || 0;
+
+        return this
+            .calculateProductivity(avgPerformancePercentage, avgLagBehindPercentage);
+    };
+
+    private calculateProductivity(avgPerformancePercentage: number, avgLagBehindPercentage: number) {
 
         const lagBehindPoints = 100 - avgLagBehindPercentage;
 
@@ -393,5 +447,5 @@ export class UserStatsService {
             : productivityPercentage;
 
         return compensatedProductivityPerformance;
-    };
+    }
 }

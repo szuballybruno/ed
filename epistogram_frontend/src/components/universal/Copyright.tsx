@@ -2,7 +2,7 @@ import React from 'react';
 import {Flex} from '@chakra-ui/react';
 
 export const Copyright = () => <Flex
-    background='var(--transparentWhite90)'
+    background='transparent'
     width="100%"
     justify="center"
     py="10px">
