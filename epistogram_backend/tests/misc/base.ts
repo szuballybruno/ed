@@ -1,17 +1,17 @@
-import {AuthenticationController} from '../../src/api/AuthenticationController';
-import {GlobalConfiguration} from '../../src/services/misc/GlobalConfiguration';
-import {SQLConnectionService} from '../../src/services/sqlServices/SQLConnectionService';
-import {XDBMSchemaType} from '../../src/services/XDBManager/XDBManagerTypes';
-import {initJsExtensions} from '../../src/shared/logic/jsExtensions';
-import {initServiceProvider} from '../../src/startup/initApp';
-import {initTurboExpress} from '../../src/startup/instatiateTurboExpress';
-import {recreateDBAsync} from '../../src/startup/recreateDB';
-import {ServiceProvider} from '../../src/startup/servicesDI';
-import {customIt} from './customHooks';
-import {JestLogger} from './jestLogger';
-import {normalizeJestConsole} from './normalizeConsole';
-import {srcFolder} from './rootProvider';
-import {TestCookie, TestListener} from './TestListener';
+import { AuthenticationController } from '../../src/api/AuthenticationController';
+import { GlobalConfiguration } from '../../src/services/misc/GlobalConfiguration';
+import { SQLConnectionService } from '../../src/services/sqlServices/SQLConnectionService';
+import { XDBMSchemaType } from '../../src/services/XDBManager/XDBManagerTypes';
+import { initJsExtensions } from '../../src/shared/logic/jsExtensions';
+import { ServiceProviderInitializator } from '../../src/startup/initApp';
+import { initTurboExpress } from '../../src/startup/instatiateTurboExpress';
+import { recreateDBAsync } from '../../src/startup/recreateDB';
+import { ServiceProvider } from '../../src/startup/servicesDI';
+import { customIt } from './customHooks';
+import { JestLogger } from './jestLogger';
+import { normalizeJestConsole } from './normalizeConsole';
+import { srcFolder } from './rootProvider';
+import { TestCookie, TestListener } from './TestListener';
 
 initJsExtensions();
 normalizeJestConsole();
@@ -40,7 +40,7 @@ const loginUserAsync = async (api: ApiType) => {
 
     const accessToken = loginResult.getCookieOrFail('accessToken');
 
-    return {accessToken};
+    return { accessToken };
 };
 
 const _setupTest = (opts: {
@@ -53,9 +53,9 @@ const _setupTest = (opts: {
 
     JestLogger.logMain('Initializing integration tests...');
 
-    const {tests, title, throwError} = opts;
+    const { tests, title, throwError } = opts;
 
-    const {getServiceProviderAsync, singletonServiceProvider} = initServiceProvider(srcFolder, singletonProvider => {
+    const initializator = new ServiceProviderInitializator(srcFolder, singletonProvider => {
 
         /**
          * OVERRIDE SETTINGS
@@ -65,8 +65,9 @@ const _setupTest = (opts: {
             .overrideLogScopes([]);
     });
 
+    const getServiceProviderAsync = initializator.getInitializedTransientServices.bind(initializator);
     const api = new TestListener(throwError);
-    const turboExpress = initTurboExpress(singletonServiceProvider, getServiceProviderAsync, api);
+    const turboExpress = initTurboExpress(initializator, api);
     const testParamsContainer: { testParams: TestParams } = {} as any;
     const getTestParams = () => {
 
@@ -74,7 +75,7 @@ const _setupTest = (opts: {
 
         const testParams = testParamsContainer.testParams;
         if (!testParams)
-            throw new Error('Error, test init data is missing!');
+            throw new Error('Error, test params data is missing!');
 
         return testParams;
     };
@@ -82,83 +83,76 @@ const _setupTest = (opts: {
     JestLogger.logMain('Setting timeout to 99999...');
     jest.setTimeout(999999);
 
+    const initTestAsync = async () => {
+
+        JestLogger.logMain('Running init tests...');
+
+        /**
+         * PURGE
+         */
+        if (opts.purge) {
+
+            JestLogger.logMain('Purging db...');
+            await recreateDBAsync(getServiceProviderAsync);
+        }
+
+        /**
+         * INIT MAIN SERVICE PROVIDER
+         */
+        const mainServiceProvider = await getServiceProviderAsync();
+
+        /**
+         * LOGIN USER
+         */
+        JestLogger.logMain('Logging in user...');
+        const accessToken = opts.loginEnabled
+            ? (await loginUserAsync(api)).accessToken
+            : '';
+
+        /**
+         * SET INIT DATA
+         */
+        JestLogger.logMain('Setting init data...');
+        const testParams = {
+            serviceProvider: mainServiceProvider,
+            api,
+            accessToken,
+            getSeedData: mainServiceProvider.getService(XDBMSchemaType).seed.getSeedData,
+            cookies: [
+                {
+                    key: 'accessToken',
+                    value: accessToken
+                }
+            ]
+        };
+
+        return testParams;
+    };
+
+    const destructTestsAsync = async (testParams: TestParams) => {
+
+        JestLogger.logMain('Running destruct tests...');
+
+        await testParams
+            .serviceProvider
+            .getService(SQLConnectionService)
+            .releaseConnectionClient();
+
+        await testParams
+            .serviceProvider
+            .getService(SQLConnectionService)
+            .endPoolAsync();
+    };
+
     /**
      * --------------------- Init tests
      */
-    describe('[INIT] Init tests...', () => {
-        customIt('should init tests', async () => {
+    describe('Integration test wrapper.', () => {
+        customIt('Wrap & run integration tests.', async () => {
 
-            JestLogger.logMain('Running init tests...');
-
-            /**
-             * PURGE
-             */
-            if (opts.purge) {
-
-                JestLogger.logMain('Purging db...');
-                await recreateDBAsync(getServiceProviderAsync);
-            }
-
-            /**
-             * INIT MAIN SERVICE PROVIDER
-             */
-            const mainServiceProvider = await getServiceProviderAsync();
-
-            /**
-             * LOGIN USER
-             */
-            JestLogger.logMain('Logging in user...');
-            const accessToken = opts.loginEnabled
-                ? (await loginUserAsync(api)).accessToken
-                : '';
-
-            /**
-             * SET INIT DATA
-             */
-            JestLogger.logMain('Setting init data...');
-            testParamsContainer.testParams = {
-                serviceProvider: mainServiceProvider,
-                api,
-                accessToken,
-                getSeedData: mainServiceProvider.getService(XDBMSchemaType).seed.getSeedData,
-                cookies: [
-                    {
-                        key: 'accessToken',
-                        value: accessToken
-                    }
-                ]
-            };
-        });
-    });
-
-    /**
-     * Run tests
-     */
-
-    describe(title, () => {
-        customIt('is running the integration test.', async () => {
-
-            await tests(getTestParams);
-        });
-    });
-
-    /**
-     * ----------------------- Destruct tests
-     */
-    describe('[DESCRTUCT] Destruct tests...', () => {
-        customIt('should descruct tests.', async () => {
-
-            JestLogger.logMain('Running destruct tests...');
-
-            await getTestParams()
-                .serviceProvider
-                .getService(SQLConnectionService)
-                .releaseConnectionClient();
-
-            await getTestParams()
-                .serviceProvider
-                .getService(SQLConnectionService)
-                .endPoolAsync();
+            const testParams = await initTestAsync();
+            await tests(() => testParams);
+            await destructTestsAsync(testParams);
         });
     });
 };
