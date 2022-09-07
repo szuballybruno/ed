@@ -2,6 +2,7 @@ import { Box, Flex } from '@chakra-ui/layout';
 import React, { useContext, useEffect, useState } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { AuthenticationStateType, useLogInUser } from '../../services/api/authenticationApiService';
+import { useCompanyDetailsByDomain } from '../../services/api/companyApiService';
 import { useNavigation } from '../../services/core/navigatior';
 import { useShowErrorDialog } from '../../services/core/notifications';
 import { Environment } from '../../static/Environemnt';
@@ -42,6 +43,9 @@ const LoginScreen = () => {
 
     // http 
     const { loginUserAsync, loginUserState } = useLogInUser();
+    const { companyDetails } = useCompanyDetailsByDomain(window.location.origin);
+
+    console.log(companyDetails);
 
     // func
     const handleLoginUserAsync = async () => {

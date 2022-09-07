@@ -6,6 +6,7 @@ import { usePostDataUnsafe, usePostMultipartDataUnsafe } from '../core/httpClien
 import { RoleAssignCompanyDTO } from '../../shared/dtos/company/RoleAssignCompanyDTO';
 import { Id } from '../../shared/types/versionId';
 import { useCallback } from 'react';
+import { CompanyPublicDTO } from '../../shared/dtos/company/CompanyPublicDTO';
 
 export const useCompaniesAdmin = () => {
 
@@ -92,5 +93,15 @@ export const useAvailableCompaniesForRoleCreation = () => {
     return {
         companies: qr.data ?? [],
         companiesState: qr.state
+    };
+};
+
+export const useCompanyDetailsByDomain = (domain: string) => {
+
+    const { data, state, error } = QueryService.useXQuery<CompanyPublicDTO>(apiRoutes.companies.getCompanyDetailsByDomain, { domain });
+    return {
+        companyDetails: data,
+        companyDetailsError: error,
+        companyDetailsState: state
     };
 };

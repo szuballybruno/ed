@@ -7,13 +7,17 @@ type SafeObjCastType =
     | 'string' | 'int' | 'float' | 'boolean'
     | 'string[]' | 'int[]' | 'float[]' | 'boolean[]'
     | 'custom'
-    | 'any[]';
+    | 'any[]'
+    | 'any';
 
 export class XSafeObjectWrapper<TObject> {
 
     data: TObject;
 
     constructor(data: TObject) {
+
+        if (!data)
+            throw new Error('Object is null or undefined!');
 
         this.data = data;
     }
@@ -23,7 +27,9 @@ export class XSafeObjectWrapper<TObject> {
      */
     getValueOrNull<TValue>(getter: (data: TObject) => TValue, castType: SafeObjCastType, fn?: SafeObjectValidatorFunctionType<TValue>): TValue | null {
 
-        if (getter(this.data) === undefined || getter(this.data) === null)
+        const value = getter(this.data);
+
+        if (value === undefined || value === null)
             return null;
 
         try {
@@ -53,14 +59,19 @@ export class XSafeObjectWrapper<TObject> {
     getValue<TValue>(getter: (data: TObject) => TValue, castType: 'custom', fn: SafeObjectValidatorFunctionType<TValue>): TValue;
     getValue<TValue>(getter: (data: TObject) => TValue, castType: SafeObjCastType, fn?: SafeObjectValidatorFunctionType<TValue>): TValue {
 
+        const value = getter(this.data);
+        if (value === null || value === undefined)
+            throw new Error('Value null or undefined!');
+
         return this.getValueCore(getter, castType, fn);
     }
 
     private getValueCore<TValue>(getter: (data: TObject) => TValue, castType: SafeObjCastType, fn?: SafeObjectValidatorFunctionType<TValue>): any {
 
         const value = getter(this.data) as any;
-        if (value === null || value === undefined)
-            throw new Error('Value null or undefined!');
+
+        if (castType === 'any')
+            return value;
 
         if (castType === 'string[]')
             return this.parseArray(value, x => x);

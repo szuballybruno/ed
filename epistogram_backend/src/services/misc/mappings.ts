@@ -65,6 +65,7 @@ import { CoinTransactionDTO } from '../../shared/dtos/CoinTransactionDTO';
 import { CommentListDTO } from '../../shared/dtos/CommentListDTO';
 import { CompanyDTO } from '../../shared/dtos/company/CompanyDTO';
 import { CompanyEditDataDTO } from '../../shared/dtos/company/CompanyEditDataDTO';
+import { CompanyPublicDTO } from '../../shared/dtos/company/CompanyPublicDTO';
 import { CourseBriefData } from '../../shared/dtos/CourseBriefData';
 import { CourseCategoryDTO } from '../../shared/dtos/CourseCategoryDTO';
 import { CourseDetailsDTO } from '../../shared/dtos/CourseDetailsDTO';
@@ -843,6 +844,17 @@ const marray = [
                 coverUrl: urlService.getAssetUrlNullable(coverFilePath),
             });
         }),
+    epistoMappingsBuilder
+        .addMapping(CompanyPublicDTO, ([urlService]) => (company: Company, logoFilePath: string | null, coverFilePath: string | null) => instantiate<CompanyPublicDTO>({
+            name: company.name,
+            legalName: company.legalName,
+            backdropColor: company.backdropColor,
+            domain: company.domain,
+            primaryColor: company.primaryColor,
+            secondaryColor: company.secondaryColor,
+            logoUrl: urlService.getAssetUrlNullable(logoFilePath),
+            coverUrl: urlService.getAssetUrlNullable(coverFilePath),
+        })),
     // TODO: unused mapping, check DTO's and endpoints too
     epistoMappingsBuilder
         .addMapping(CourseStatDTO, () => (view: AvailableCourseView) => {

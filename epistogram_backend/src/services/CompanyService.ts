@@ -7,6 +7,7 @@ import { UserPermissionView } from '../models/views/UserPermissionView';
 import { UserRoleAssignCompanyView } from '../models/views/UserRoleAssignCompanyView';
 import { CompanyDTO } from '../shared/dtos/company/CompanyDTO';
 import { CompanyEditDataDTO } from '../shared/dtos/company/CompanyEditDataDTO';
+import { CompanyPublicDTO } from '../shared/dtos/company/CompanyPublicDTO';
 import { RoleAssignCompanyDTO } from '../shared/dtos/company/RoleAssignCompanyDTO';
 import { PermissionCodeType } from '../shared/types/sharedTypes';
 import { Id } from '../shared/types/versionId';
@@ -243,5 +244,40 @@ export class CompanyService {
                 primaryColor: dto.primaryColor,
                 secondaryColor: dto.secondaryColor,
             });
+    }
+
+    /**
+     * getCompanyDetailsByDomainAsync
+     */
+    async getCompanyDetailsByDomainAsync(domain: string) {
+
+        const comps = await this
+            ._ormService
+            .query(Company)
+            .getMany();
+
+        const comp = comps
+            .firstOrNull(x => this
+                ._domainProviderService
+                .applyTemplate(x.domain) === domain);
+
+        if (!comp)
+            return null;
+
+        const logoFile = comp.logoFileId
+            ? await this
+                ._ormService
+                .getSingleById(StorageFile, comp.logoFileId)
+            : null;
+
+        const coverFile = comp.coverFileId
+            ? await this
+                ._ormService
+                .getSingleById(StorageFile, comp.coverFileId)
+            : null;
+
+        return this
+            ._mapperService
+            .mapTo(CompanyPublicDTO, [comp, logoFile?.filePath ?? null, coverFile?.filePath ?? null]);
     }
 }
