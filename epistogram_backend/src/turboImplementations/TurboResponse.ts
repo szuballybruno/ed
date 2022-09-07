@@ -15,9 +15,9 @@ export class TurboResponse implements ITurboResponse {
         this._res.cookie(key, value, opts);
     }
 
-    clearCookie(key: string): void {
+    clearCookie(key: string, opts: ICookieOptions): void {
 
-        this._res.clearCookie(key);
+        this._res.clearCookie(key, opts);
     }
 
     respond(code: number, data?: any) {

@@ -1,3 +1,4 @@
+import { CookieOptions } from 'express';
 import { UploadedFile } from 'express-fileupload';
 import { PermissionCodeType } from '../../shared/types/PermissionCodesType';
 import { ServiceProvider } from '../../startup/servicesDI';
@@ -28,12 +29,7 @@ export type XController<T> = {
     [K in keyof T]: (params: ActionParams) => ControllerActionReturnType;
 }
 
-export interface ICookieOptions {
-    secure?: boolean;
-    httpOnly?: boolean;
-    expires?: Date;
-    sameSite?: 'none';
-}
+export type ICookieOptions = CookieOptions;
 
 export interface ITurboRequest {
     path: string;
@@ -49,7 +45,7 @@ export interface ITurboRequest {
 export type ITurboResponse = {
     respond(code: number, data?: any): void;
     setCookie(key: string, value: string, opts: ICookieOptions): void;
-    clearCookie(key: string): void;
+    clearCookie(key: string, opts: ICookieOptions): void;
 };
 
 export type RegisterEndpointOptsType<TRequest, TResponse> = {
