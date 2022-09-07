@@ -36,9 +36,10 @@ export class ActionParams<
     TRequest extends ITurboRequest = ITurboRequest,
     TResponse extends ITurboResponse = ITurboResponse> {
 
+    private _principalId: PrincipalId;
     isMultipart: boolean;
     companyId: Id<'Company'>;
-    private _principalId: PrincipalId;
+    files: XSafeObjectWrapper<{ [K: string]: UploadedFile; }>;
 
     get principalId() {
 
@@ -57,6 +58,7 @@ export class ActionParams<
         this._principalId = new PrincipalId(Id.read(userId));
         this.isMultipart = !!this.req.body.document;
         this.companyId = companyId;
+        this.files = this.getFiles();
     }
 
     getBody<T = any>(notNullOrUndefined: (keyof T)[] = []) {
@@ -92,7 +94,7 @@ export class ActionParams<
 
     getFiles() {
 
-        return this.req.files;
+        return new XSafeObjectWrapper<{ [K: string]: UploadedFile }>(this.req.files ?? {});
     }
 
     getSingleFile() {

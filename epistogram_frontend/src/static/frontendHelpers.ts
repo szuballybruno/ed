@@ -25,6 +25,31 @@ export const iterate = <T>(n: number, fn: (index) => T) => {
     return results;
 };
 
+type SetterFnType<TState> = (state: TState) => void;
+type SetStateFnType<TState> = (setterFnOrState: SetterFnType<TState> | Partial<TState>) => void;
+
+export const useStateObject = <TState extends {}>(obj: TState): [TState, SetStateFnType<TState>] => {
+
+    const forceUpdate = useForceUpdate();
+    const state = useRef(obj).current;
+
+    const setState = useCallback<SetStateFnType<TState>>((setterFnOrState) => {
+
+        if (typeof setterFnOrState === 'function') {
+
+            (setterFnOrState as any)(state);
+        }
+        else {
+
+            Object.assign(state, setterFnOrState);
+        }
+
+        forceUpdate();
+    }, [state, forceUpdate]);
+
+    return [state, setState];
+};
+
 export const useStateAndRef = <T>(defaultValue: T): [MutableRefObject<T>, T, (state: T) => void] => {
 
     const [stateValue, stateSetter] = useState(defaultValue);
@@ -313,6 +338,10 @@ export const valuesCompareTest = (valNames: string[]) => {
         });
 };
 
+/**
+ * Value ref compare test, using react's useEffect hook.
+ * Logs the label on every ref change - and react refresh trigger of course.
+ */
 export const useValueCompareTest = (value: any, label: string) => {
 
     useEffect(() => {

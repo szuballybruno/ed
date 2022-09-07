@@ -1,4 +1,6 @@
+import { UploadedFile } from 'express-fileupload';
 import { Company } from '../models/entity/Company';
+import { StorageFile } from '../models/entity/StorageFile';
 import { User } from '../models/entity/User';
 import { CompanyView } from '../models/views/CompanyView';
 import { UserPermissionView } from '../models/views/UserPermissionView';
@@ -11,21 +13,18 @@ import { Id } from '../shared/types/versionId';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { AuthorizationService } from './AuthorizationService';
 import { DomainProviderService } from './DomainProviderService';
+import { FileService } from './FileService';
 import { MapperService } from './MapperService';
-import { QueryServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 
-export class CompanyService extends QueryServiceBase<Company> {
-
-    private _authorizationService: AuthorizationService;
+export class CompanyService {
 
     constructor(
-        ormService: ORMConnectionService,
-        mapperService: MapperService,
-        private _authoirzationService: AuthorizationService,
-        private _domainProviderService: DomainProviderService) {
-
-        super(mapperService, ormService, Company);
+        private _ormService: ORMConnectionService,
+        private _mapperService: MapperService,
+        private _authorizationService: AuthorizationService,
+        private _domainProviderService: DomainProviderService,
+        private _fileService: FileService) {
     }
 
     /**
@@ -71,7 +70,7 @@ export class CompanyService extends QueryServiceBase<Company> {
             .getMany();
 
         const mapped = companies
-            .filter(x => this
+            .filter(x => x.domain && this
                 ._domainProviderService
                 .applyTemplate(x.domain) === domain);
 
@@ -84,135 +83,165 @@ export class CompanyService extends QueryServiceBase<Company> {
         return result;
     }
 
-    getRoleAssignCompaniesAsync(principalId: PrincipalId) {
+    /**
+     * Get companies for role assign list 
+     */
+    async getRoleAssignCompaniesAsync(principalId: PrincipalId) {
 
-        return {
-            action: async () => {
-                const comapanies = await this
-                    ._ormService
-                    .query(UserRoleAssignCompanyView, { principalId })
-                    .where('userId', '=', 'principalId')
-                    .getMany();
+        await this._authorizationService
+            .checkPermissionAsync(principalId, 'CREATE_COMPANIES');
 
-                return comapanies
-                    .map((x): RoleAssignCompanyDTO => ({
-                        name: x.companyName,
-                        id: x.companyId,
-                        canAssignRole: x.canAssign
-                    }));
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'CREATE_COMPANIES');
-            }
-        };
+        const comapanies = await this
+            ._ormService
+            .query(UserRoleAssignCompanyView, { principalId })
+            .where('userId', '=', 'principalId')
+            .getMany();
 
-
+        return comapanies
+            .map((x): RoleAssignCompanyDTO => ({
+                name: x.companyName,
+                id: x.companyId,
+                canAssignRole: x.canAssign
+            }));
     }
 
-    getAvailableCompaniesForNewRolesAsync(principalId: PrincipalId) {
+    /**
+     * Get new role companies list 
+     */
+    async getAvailableCompaniesForNewRolesAsync(principalId: PrincipalId) {
 
-        return {
-            action: async () => {
-                const permissionCode: PermissionCodeType = 'ASSIGN_CUSTOM_ROLES';
+        await this._authorizationService
+            .checkPermissionAsync(principalId, 'CREATE_COMPANIES');
 
-                const companies = await this._ormService
-                    .query(Company, { principalId, permissionCode })
-                    .select(Company)
-                    .innerJoin(User, builder => builder
-                        .on('id', '=', 'principalId'))
-                    .innerJoin(UserPermissionView, builder => builder
-                        .on('assigneeUserId', '=', 'id', User)
-                        .and('permissionCode', '=', 'permissionCode')
-                        .and('contextCompanyId', '=', 'id', Company))
-                    .getMany();
+        const permissionCode: PermissionCodeType = 'ASSIGN_CUSTOM_ROLES';
 
-                return this._mapperService
-                    .mapTo(CompanyDTO, [companies]);
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'CREATE_COMPANIES');
-            }
-        };
+        const companies = await this._ormService
+            .query(Company, { principalId, permissionCode })
+            .select(Company)
+            .innerJoin(User, builder => builder
+                .on('id', '=', 'principalId'))
+            .innerJoin(UserPermissionView, builder => builder
+                .on('assigneeUserId', '=', 'id', User)
+                .and('permissionCode', '=', 'permissionCode')
+                .and('contextCompanyId', '=', 'id', Company))
+            .getMany();
 
-
+        return this._mapperService
+            .mapTo(CompanyDTO, [companies]);
     }
 
-    getCompanyEditDataAsync(principalId: PrincipalId, companyId: Id<'Company'>) {
+    /**
+     * Get edit data
+     */
+    async getCompanyEditDataAsync(principalId: PrincipalId, companyId: Id<'Company'>) {
 
-        return {
-            action: async () => {
+        await this._authorizationService
+            .checkPermissionAsync(principalId, 'EDIT_COMPANY', { companyId });
 
-                const comp = await this._ormService
-                    .query(Company, { companyId })
-                    .where('id', '=', 'companyId')
-                    .getSingle();
+        const comp = await this._ormService
+            .withResType<Company>()
+            .query(Company, { companyId })
+            .where('id', '=', 'companyId')
+            .getSingle();
 
-                return this._mapperService
-                    .mapTo(CompanyEditDataDTO, [comp]);
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'EDIT_COMPANY', { companyId });
-            }
-        };
+        const logoFile = comp.logoFileId
+            ? await this
+                ._ormService
+                .getSingleById(StorageFile, comp.logoFileId)
+            : null;
 
+        const coverFile = comp.coverFileId
+            ? await this
+                ._ormService
+                .getSingleById(StorageFile, comp.coverFileId)
+            : null;
 
+        return this._mapperService
+            .mapTo(CompanyEditDataDTO, [
+                comp,
+                logoFile?.filePath ?? null,
+                coverFile?.filePath ?? null
+            ]);
     }
 
-    createCompanyAsync(principalId: PrincipalId) {
+    /**
+     * Create new company 
+     */
+    async createCompanyAsync(principalId: PrincipalId) {
 
-        return {
-            action: async () => {
+        await this._authorizationService
+            .checkPermissionAsync(principalId, 'CREATE_COMPANIES');
 
-                await this._ormService
-                    .createAsync(Company, {
-                        name: 'New company',
-                        deletionDate: null,
-                        domain: ''
-                    });
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'CREATE_COMPANIES');
-            }
-        };
-
-
+        await this._ormService
+            .createAsync(Company, {
+                name: 'New company',
+                deletionDate: null,
+                domain: '',
+                backdropColor: null,
+                coverFileId: null,
+                legalName: null,
+                isCustomDomainCompany: false,
+                logoFileId: null,
+                primaryColor: null,
+                secondaryColor: null
+            });
     }
 
-    deleteCompanyAsync(principalId: PrincipalId, companyId: Id<'Company'>) {
+    /**
+     * Delete company 
+     */
+    async deleteCompanyAsync(principalId: PrincipalId, companyId: Id<'Company'>) {
 
-        return {
-            action: async () => {
+        await this._authorizationService
+            .checkPermissionAsync(principalId, 'DELETE_COMPANIES');
 
-                await this._ormService
-                    .softDelete(Company, [companyId]);
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'DELETE_COMPANIES');
-            }
-        };
-
-
+        await this._ormService
+            .softDelete(Company, [companyId]);
     }
 
-    saveCompanyAsync(principalId: PrincipalId, dto: CompanyEditDataDTO) {
+    /**
+     * Save updated company 
+     */
+    async saveCompanyAsync(
+        principalId: PrincipalId,
+        dto: CompanyEditDataDTO,
+        logoFile: UploadedFile | null,
+        coverFile: UploadedFile | null) {
 
-        return {
-            action: async () => {
-                await this._ormService
-                    .save(Company, {
-                        id: dto.id,
-                        name: dto.name
-                    });
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'EDIT_COMPANY', { companyId: dto.id });
-            }
-        };
+        await this._authorizationService
+            .checkPermissionAsync(principalId, 'EDIT_COMPANY', { companyId: dto.id });
+
+        if (logoFile)
+            await this
+                ._fileService
+                .uploadAssigendFileAsync({
+                    entitySignature: Company,
+                    entityId: dto.id,
+                    fileBuffer: logoFile.data,
+                    fileCode: 'company_logo',
+                    storageFileIdField: 'logoFileId'
+                });
+
+        if (coverFile)
+            await this
+                ._fileService
+                .uploadAssigendFileAsync({
+                    entitySignature: Company,
+                    entityId: dto.id,
+                    fileBuffer: coverFile.data,
+                    fileCode: 'company_cover',
+                    storageFileIdField: 'coverFileId'
+                });
+
+        await this._ormService
+            .save(Company, {
+                id: dto.id,
+                name: dto.name,
+                legalName: dto.legalName,
+                domain: dto.domain,
+                backdropColor: dto.backdropColor,
+                primaryColor: dto.primaryColor,
+                secondaryColor: dto.secondaryColor,
+            });
     }
 }

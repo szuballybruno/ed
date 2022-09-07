@@ -78,8 +78,19 @@ export class CompanyController implements XController<CompanyController> {
     @XControllerAction(apiRoutes.companies.saveCompany, { isPost: true })
     saveCompanyAction(params: ActionParams) {
 
+        const dto = params
+            .getBody<CompanyEditDataDTO>()
+            .data;
+
+        const logoFile = params
+            .files
+            .getValueOrNull(x => x.logoFile, 'any');
+
+        const coverFile = params
+            .files
+            .getValueOrNull(x => x.coverFile, 'any');
+
         return this._compService
-            .saveCompanyAsync(params.principalId, params
-                .getBody<CompanyEditDataDTO>().data);
+            .saveCompanyAsync(params.principalId, dto, logoFile, coverFile);
     }
 }

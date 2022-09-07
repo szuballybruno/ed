@@ -4,7 +4,7 @@ import { FlexFloat } from './FlexFloat';
 
 export const EpistoPopper = (props: {
     isOpen: boolean,
-    target: any,
+    target: HTMLElement | null,
     placementX?: 'left' | 'center' | 'right',
     handleClose: () => void,
     children?: ReactNode,
@@ -17,7 +17,6 @@ export const EpistoPopper = (props: {
         open={isOpen && !!target}
         anchorEl={target}
         onClose={handleClose}
-        // BackdropComponent={() => <Box></Box>}
         anchorOrigin={{
             vertical: 'bottom',
             horizontal: placementX ?? 'center',
@@ -25,10 +24,11 @@ export const EpistoPopper = (props: {
         elevation={0}
         className="normalizeChild">
 
-        <FlexFloat style={style}
-borderRadius="10px"
-direction="column"
-p="20px">
+        <FlexFloat
+            style={style}
+            borderRadius="10px"
+            direction="column"
+            p="20px">
             {children}
         </FlexFloat>
     </Popover>;

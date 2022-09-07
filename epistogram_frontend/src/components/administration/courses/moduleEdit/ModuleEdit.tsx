@@ -6,7 +6,7 @@ import { Id } from '../../../../shared/types/versionId';
 import { EpistoEntry } from '../../../controls/EpistoEntry';
 import { EpistoLabel } from '../../../controls/EpistoLabel';
 import { IXMutator } from '../../../lib/XMutator/XMutatorCore';
-import { SelectImage } from '../../../universal/SelectImage';
+import { EpistoImageSelector } from '../../../universal/EpistoImageSelector';
 
 export const ModuleEdit = ({
     mutator,
@@ -29,7 +29,7 @@ export const ModuleEdit = ({
                 text="Üdvözlő kép"
                 isOverline>
 
-                <SelectImage
+                <EpistoImageSelector
                     width="220px"
                     height="130px"
                     background="#DDD"
@@ -42,13 +42,13 @@ export const ModuleEdit = ({
                             field: 'imageFilePath',
                             newValue: src
                         })}
-                    setImageFile={file => saveCoverFile({ moduleVersionId: dto.versionId }, file)}>
+                    setImageFile={file => saveCoverFile({ moduleVersionId: dto.versionId }, { file })}>
 
                     {dto.imageFilePath && <Image
                         className="whall"
                         objectFit="cover"
                         src={dto.imageFilePath ?? ''} />}
-                </SelectImage>
+                </EpistoImageSelector>
             </EpistoLabel>
 
             <EpistoEntry

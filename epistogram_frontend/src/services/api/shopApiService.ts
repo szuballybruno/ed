@@ -99,7 +99,7 @@ export const useSaveShopItem = () => {
     const qr = usePostMultipartDataUnsafe<ShopItemEditDTO>(apiRoutes.shop.saveShopItem);
 
     return {
-        saveShopItemAsync: qr.postMultipartDataAsync,
+        saveShopItemAsync: (dto: ShopItemEditDTO, file?: File) => qr.postMultipartDataAsync(dto, file ? { file } : undefined),
         saveShopItemState: qr.state
     };
 };

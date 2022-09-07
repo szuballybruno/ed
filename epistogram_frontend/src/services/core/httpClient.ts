@@ -146,22 +146,22 @@ export const usePostMultipartDataUnsafe = <TData>(url: string | ParametrizedRout
 
     const [state, setState] = useState<LoadingStateType>('idle');
 
-    const postMultipartDataAsync = async (data?: TData, file?: File) => {
+    const postMultipartDataAsync = useCallback(async (data?: TData, files?: FilesObject) => {
 
         try {
 
             setState('loading');
 
-            await postMultipartAsync(url, file, data);
+            await postMultipartAsync(url, files, data);
 
             setState('idle');
         }
         catch (e) {
 
-            setState('idle');
+            setState('error');
             throw e;
         }
-    };
+    }, [url]);
 
     return {
         postMultipartDataAsync,
@@ -212,18 +212,32 @@ export const usePostData = <TData, TResult>(url: string) => {
     };
 };
 
+type FileData = {
+    code: string,
+    file: File
+}
+
+type FilesObject = {
+    [K: string]: File | null;
+}
+
 /**
  * Post multipart form data. 
  * This allows sending files to the server, and also a data object as json.
  */
-export const postMultipartAsync = async (url: string, file?: File, data?: any) => {
+export const postMultipartAsync = async (url: string, files?: FilesObject, data?: any) => {
 
     const formData = new FormData();
 
     // append file data
-    if (file) {
+    if (files) {
 
-        formData.append('file', file);
+        Object
+            .keys(files)
+            .map((key): [string, File | null] => [key, files[key]])
+            .filter(([, file]) => !!file)
+            .forEach(([key, file]) => formData
+                .append(key, file!));
     }
 
     // append json data 

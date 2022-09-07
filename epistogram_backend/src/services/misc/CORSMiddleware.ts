@@ -8,7 +8,6 @@ export const getCORSMiddleware = (getCorsDomains: () => Promise<string[]>) => {
                 try {
 
                     const domains = await getCorsDomains();
-                    console.log(`CORS domains: ${domains.join('; ')}`);
 
                     callback(null, domains);
                 }

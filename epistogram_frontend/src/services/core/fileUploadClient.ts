@@ -24,7 +24,7 @@ export const uploadeFileChunksAsync = async (urlEnding: string, file: File, data
 
         Logger.logScoped('FILE UPLOAD', `Uploading chunk: #${chunkIndex} - ${currentChunkArrayBuffer.byteLength * 0.000001}mb`);
 
-        await postMultipartAsync(url, new File([currentChunkArrayBuffer], 'chunk'), {
+        await postMultipartAsync(url, { file: new File([currentChunkArrayBuffer], 'chunk') }, {
             chunkIndex,
             chunksCount,
             ...data

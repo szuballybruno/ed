@@ -4,22 +4,49 @@ import { getIsDeletedDecoratorPropertyData } from './XORMDecorators';
 import { XQueryBuilderCore } from './XQueryBuilderCore';
 import { CrossJoinCondition, ExpressionPart, InnerJoinCondition, LeftJoinCondition, OperationType, SimpleExpressionPart, SQLStaticValueType, CheckExpression, SelectCondition, ColumnSelectObjType, SelectColumnsType, SQLBracketType, ClosingBracketCondition, ParamConstraintType, OrderByExpression } from './XORMTypes';
 
-// class JoinBuilder<TEntity, TParams extends ParamConstraintType<TParams>> {
+// TODO IMPLEMENT ALIASES
+// type ClassType<T> = {new (): T};
+// type GetClassType<TClass> = TClass extends ClassType<infer T> ? T : void;
 
-//     private _builder: XQueryBuilder<TEntity, TParams>;
-//     private _entityClassType: ClassType<TEntity>;
-//     private _params: TParams | undefined;
-
-//     constructor(
-//         entityClassType: ClassType<TEntity>,
-//         builder: XQueryBuilder<TEntity, TParams>,
-//         params: TParams | undefined) {
-
-//         this._builder = builder;
-//         this._entityClassType = entityClassType;
-//         this._params = params;
-//     }
+// class C1 {
+//     c1prop1: number = 1;
+//     c1prop2: string = '2';
 // }
+
+// class C2 {
+//     c2prop: number = 1;
+// }
+
+// type AliasTable = {
+//     [K: string]: ClassType<any>;
+// }
+
+// const setAliasTable = <T extends AliasTable,>(table: T) => {
+
+//     return table;
+// }
+
+// const aliasTable = setAliasTable({
+//     hello: C1,
+//     name: C2
+// });
+
+// type GetAliasTableClassType<TAliasTable extends AliasTable, TAlias extends keyof TAliasTable> = {
+//     [K in keyof TAliasTable]: K extends TAlias ? TAliasTable[K] : void
+// }[TAlias];
+
+// const columns = <
+//     TAliasTable extends AliasTable, 
+//     TSearch extends keyof TAliasTable>(
+//         alias: TAliasTable, 
+//         search: TSearch,
+//         columnNames: (keyof GetClassType<GetAliasTableClassType<TAliasTable, TSearch>>)[]) => {
+
+//     return {} as GetAliasTableClassType<TAliasTable, TSearch>;
+// }
+
+// const ret = columns(aliasTable, 'hello', ['c1prop1', 'c1prop2']);
+
 
 type SelectBuilderBackrefType<TResult> = {
     columnSelects: SelectColumnsType<any, TResult>[]

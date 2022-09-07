@@ -40,7 +40,7 @@ export interface ITurboRequest {
     body: any;
     query: any;
     origin: string;
-    files: { file: any };
+    files: { [K: string]: UploadedFile };
     getCookie(key: string): string | null;
     hasFiles(): boolean;
     getSingleFile(): UploadedFile;

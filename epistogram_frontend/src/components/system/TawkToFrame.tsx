@@ -37,10 +37,10 @@ class TawkAPI {
 
         return new Promise((res, rej) => {
 
-            window.Tawk_API = {
+            (window as any).Tawk_API = {
                 onLoad: () => {
 
-                    res(new TawkAPI(window.Tawk_API));
+                    res(new TawkAPI((window as any).Tawk_API));
                 }
             };
 
