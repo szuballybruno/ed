@@ -1,7 +1,7 @@
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 
 export const Copyright = () => <EpistoFlex2
-    background='var(--transparentWhite90)'
+    background='transparent'
     width="100%"
     justify="center"
     py="10px">

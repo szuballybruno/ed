@@ -218,6 +218,7 @@ export const ExamQuestions = (props: {
             questions={questions} />
 
         <ExamLayout
+            maxH='calc(100vh - 120px)'
             headerLeftItem={(
                 <EpistoFlex2 align="center">
                     <img
@@ -255,6 +256,9 @@ export const ExamQuestions = (props: {
             isFirst={questionPaging.currentIndex === 0}>
 
             <ExamLayoutContent
+                style={{
+                    maxHeight: '100%'
+                }}
                 title={currentQuestion.questionText}>
 
                 {/* answers */}

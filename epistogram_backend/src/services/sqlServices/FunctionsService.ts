@@ -75,23 +75,6 @@ export class SQLFunctionsService {
         }
     };
 
-    insertCoinAcquiredFn = (params: InsertCoinFnParamsType) => {
-
-        return this.execSQLFunctionAsync<number>(
-            'insert_coin_transaction',
-            [
-                params.userId,
-                params.amount,
-                params.activitySessionId,
-                params.videoId,
-                params.givenAnswerId,
-                params.givenAnswerStreakId,
-                params.activityStreakId,
-                params.shopItemId
-            ]
-        );
-    };
-
     getUserSessionFirstActivityId = (
         userId: Id<'User'>,
         sessionActivityId: Id<'ActivitySession'>) => {

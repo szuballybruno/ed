@@ -1,14 +1,15 @@
-import { ArrowBack } from '@mui/icons-material';
-import React, { ReactNode } from 'react';
-import { PagingType } from '../../../static/frontendHelpers';
-import { EpistoButton } from '../../controls/EpistoButton';
-import { EpistoFlex2 } from '../../controls/EpistoFlex';
-import { EpistoFont } from '../../controls/EpistoFont';
-import { SegmentedButton } from '../../controls/SegmentedButton';
-import { EpistoDialog, } from '../../universal/epistoDialog/EpistoDialog';
-import { EpistoDialogLogicType } from '../../universal/epistoDialog/EpistoDialogTypes';
-import { EpistoPaging } from '../../universal/EpistoPaging';
-import { ChipSmall } from './ChipSmall';
+import {Flex} from '@chakra-ui/react';
+import {ArrowBack} from '@mui/icons-material';
+import React, {ReactNode} from 'react';
+import {PagingType} from '../../../static/frontendHelpers';
+import {EpistoButton} from '../../controls/EpistoButton';
+import {EpistoFont} from '../../controls/EpistoFont';
+import {SegmentedButton} from '../../controls/SegmentedButton';
+import {EpistoDialog,} from '../../universal/epistoDialog/EpistoDialog';
+import {EpistoDialogLogicType} from '../../universal/epistoDialog/EpistoDialogTypes';
+import {EpistoPaging} from '../../universal/EpistoPaging';
+import {ChipSmall} from './ChipSmall';
+import {segmentedButtonStyles} from '../../controls/segmentedButtonStyles';
 
 export type EditDialogSubpage = {
     isFocused?: boolean,
@@ -137,6 +138,7 @@ export const EditDialogBase = <TParams,>(props: {
 
                     {/* tab selector */}
                     {!hideTabs && <SegmentedButton
+                        stylePreset={segmentedButtonStyles.default}
                         paging={paging}
                         getDisplayValue={x => x.title} />}
 

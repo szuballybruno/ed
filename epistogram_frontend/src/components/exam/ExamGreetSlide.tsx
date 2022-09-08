@@ -1,13 +1,13 @@
+import {Flex} from '@chakra-ui/react';
 import React from 'react';
-import { ExamPlayerDataDTO } from '../../shared/dtos/ExamPlayerDataDTO';
-import { Environment } from '../../static/Environemnt';
-import { ArrayBuilder } from '../../static/frontendHelpers';
+import {ExamPlayerDataDTO} from '../../shared/dtos/ExamPlayerDataDTO';
+import {Environment} from '../../static/Environemnt';
+import {ArrayBuilder} from '../../static/frontendHelpers';
 
-import { translatableTexts } from '../../static/translatableTexts';
-import { EpistoFlex2 } from '../controls/EpistoFlex';
-import { EpistoFont } from '../controls/EpistoFont';
-import { ExamLayout } from './ExamLayout';
-import { ExamResultStats } from './ExamResultStats';
+import {translatableTexts} from '../../static/translatableTexts';
+import {EpistoFont} from '../controls/EpistoFont';
+import {ExamLayout} from './ExamLayout';
+import {ExamResultStats} from './ExamResultStats';
 
 export const ExamGreetSlide = (props: {
     exam: ExamPlayerDataDTO,
@@ -20,7 +20,10 @@ export const ExamGreetSlide = (props: {
     } = props;
 
     return <ExamLayout
+        className='whall'
         justify='flex-start'
+        overflowY='scroll'
+        maxH='calc(100vh - 120px)'
         headerCenterText={exam.title}
         footerButtons={new ArrayBuilder()
             .addIf(exam.canTakeAgain, {

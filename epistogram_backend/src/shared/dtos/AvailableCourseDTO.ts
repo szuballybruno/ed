@@ -1,5 +1,5 @@
-import { CourseStageNameType } from '../types/sharedTypes';
-import { Id } from '../types/versionId';
+import {CourseStageNameType} from '../types/sharedTypes';
+import {Id} from '../types/versionId';
 
 export class AvailableCourseDTO {
     courseId: Id<'Course'>;
@@ -7,14 +7,15 @@ export class AvailableCourseDTO {
     thumbnailImageURL: string;
     title: string;
     teacherName: string;
+    categoryId: Id<'CourseCategory'>;
     categoryName: string;
     stageName: CourseStageNameType;
     subCategoryId: Id<'CourseCategory'>;
     subCategoryName: string;
     isComplete: boolean;
     courseLength: number;
-	totalVideoSumLengthSeconds: number;
+    totalVideoSumLengthSeconds: number;
     totalVideoCount: number;
-	difficulty: number;
+    difficulty: number;
     benchmark: number;
 }

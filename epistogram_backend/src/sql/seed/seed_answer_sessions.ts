@@ -46,6 +46,15 @@ export const getAnswerSessionSeedData = (users: UserSeedDataType, examVersions: 
         videoVersionId: null,
         userId: users.tomStrand.id,
     },
+
+    // Needed for tempomat testing
+    ase_pretest_marosi: {
+        startDate: new Date(Date.now() - (8485 * 60 * 1000)), // current date - 5 days 21 hours 25 minutes,
+        isPractise: false,
+        examVersionId: examVersions.exam_version_pretest_excel.id,
+        videoVersionId: null,
+        userId: users.marosiEndre.id,
+    }
 });
 
 export type AnswerSessionSeedDataType = ReturnType<typeof getAnswerSessionSeedData>;

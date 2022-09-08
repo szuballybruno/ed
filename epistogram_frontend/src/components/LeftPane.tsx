@@ -1,14 +1,14 @@
-import { applicationRoutes } from '../configuration/applicationRoutes';
-import { useNavigation } from '../services/core/navigatior';
-import { startUserGuideHelp } from '../services/core/userGuidingService';
-import { Environment } from '../static/Environemnt';
-import { PropsWithChildren } from '../static/frontendHelpers';
-import { translatableTexts } from '../static/translatableTexts';
-import { EpistoButton } from './controls/EpistoButton';
+import {applicationRoutes} from '../configuration/applicationRoutes';
+import {useNavigation} from '../services/core/navigatior';
+import {Environment} from '../static/Environemnt';
+import {PropsWithChildren} from '../static/frontendHelpers';
+import {translatableTexts} from '../static/translatableTexts';
+import {EpistoButton} from './controls/EpistoButton';
 import { EpistoFlex2 } from './controls/EpistoFlex';
-import { EpistoFont } from './controls/EpistoFont';
-import { FlexFloat } from './controls/FlexFloat';
-import { useAuthorizationContext } from './system/AuthorizationContext';
+import {EpistoFont} from './controls/EpistoFont';
+import {FlexFloat} from './controls/FlexFloat';
+import {useAuthorizationContext} from './system/AuthorizationContext';
+import {useTawkApi} from './system/TawkToFrame';
 
 export const LeftPane = ({
     padding,
@@ -22,6 +22,7 @@ export const LeftPane = ({
     const homeRoute = applicationRoutes.rootHomeRoute;
     const { hasPermission } = useAuthorizationContext();
     const { navigate2 } = useNavigation();
+    const {toggle} = useTawkApi();
 
     return (
         <FlexFloat
@@ -121,7 +122,7 @@ export const LeftPane = ({
 
                 <EpistoButton
                     variant='colored'
-                    onClick={() => startUserGuideHelp()}>
+                    onClick={() => toggle()}>
 
                     {translatableTexts.leftPane.assistantButtonTitle}
                 </EpistoButton>

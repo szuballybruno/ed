@@ -1,14 +1,14 @@
 import React from 'react';
-import { useFinishExam, useStartExam } from '../../../services/api/examApiService';
-import { useNavigation } from '../../../services/core/navigatior';
-import { useShowErrorDialog } from '../../../services/core/notifications';
-import { ExamPlayerDataDTO } from '../../../shared/dtos/ExamPlayerDataDTO';
-import { Id } from '../../../shared/types/versionId';
-import { usePaging } from '../../../static/frontendHelpers';
-import { ExamGreetSlide } from '../../exam/ExamGreetSlide';
-import { ExamQuestions } from '../../exam/ExamQuestions';
-import { ExamResultsSlide } from '../../exam/ExamResultsSlide';
-import { EpistoPaging } from '../../universal/EpistoPaging';
+import {useFinishExam, useStartExam} from '../../../services/api/examApiService';
+import {useNavigation} from '../../../services/core/navigatior';
+import {useShowErrorDialog} from '../../../services/core/notifications';
+import {ExamPlayerDataDTO} from '../../../shared/dtos/ExamPlayerDataDTO';
+import {Id} from '../../../shared/types/versionId';
+import {usePaging} from '../../../static/frontendHelpers';
+import {ExamGreetSlide} from '../../exam/ExamGreetSlide';
+import {ExamQuestions} from '../../exam/ExamQuestions';
+import {ExamResultsSlide} from '../../exam/ExamResultsSlide';
+import {EpistoPaging} from '../../universal/EpistoPaging';
 
 export const ExamPlayer = (props: {
     exam: ExamPlayerDataDTO,
@@ -94,8 +94,6 @@ export const ExamPlayer = (props: {
 
     return <EpistoPaging
         flex="1"
-        pt='10px'
-        pb='100px'
         slides={examWorkflowPages}
         index={examWorkflowSlides.currentIndex} />;
 };

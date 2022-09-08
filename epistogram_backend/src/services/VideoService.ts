@@ -30,33 +30,24 @@ export class VideoService {
         private _fileSystemService: FileSystemService) {
     }
 
-    answerVideoQuestionAsync(
+    async answerVideoQuestionAsync(
         principalId: PrincipalId,
         answerSessionId: Id<'AnswerSession'>,
         questionVersionId: Id<'QuestionVersion'>,
         answerVersionIds: Id<'AnswerVersion'>[],
         elapsedSeconds: number) {
 
-        return {
-            action: async () => {
+        // validation comes here
 
-                // validation comes here
-
-                return this._questionAnswerService
-                    .saveGivenAnswersAsync({
-                        userId: principalId.getId(),
-                        answerSessionId,
-                        questionVersionId,
-                        answerVersionIds,
-                        isExamQuestion: false,
-                        elapsedSeconds
-                    });
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
-            }
-        };
+        return this._questionAnswerService
+            .saveGivenAnswersAsync({
+                userId: principalId.getId(),
+                answerSessionId,
+                questionVersionId,
+                answerVersionIds,
+                isExamQuestion: false,
+                elapsedSeconds
+            });
 
     }
 
@@ -99,7 +90,6 @@ export class VideoService {
                 thumbnailFileId: thumbnailFileId
             });
     };
-
 
     /**
      * Get questions for a particular video.

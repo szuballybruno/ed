@@ -923,6 +923,7 @@ const marray = [
                     return instantiate<AvailableCourseDTO>({
                         courseId: view.courseId,
                         title: view.title,
+                        categoryId: view.categoryId,
                         categoryName: view.categoryName,
                         subCategoryId: view.subCategoryId,
                         subCategoryName: view.subCategoryName,

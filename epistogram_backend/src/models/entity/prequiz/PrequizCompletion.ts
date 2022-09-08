@@ -1,19 +1,19 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { XJoinColumn, XManyToOne, XViewColumn } from '../../../services/XORM/XORMDecorators';
-import { Id } from '../../../shared/types/versionId';
-import { Course } from '../course/Course';
-import { User } from '../User';
+import {Column, Entity, PrimaryGeneratedColumn} from 'typeorm';
+import {XJoinColumn, XManyToOne, XViewColumn} from '../../../services/XORM/XORMDecorators';
+import {Id} from '../../../shared/types/versionId';
+import {Course} from '../course/Course';
+import {User} from '../User';
 
 @Entity()
 export class PrequizCompletion {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: Id<'PrequizAnswer'>;
+    id: Id<'PrequizCompletion'>;
 
     // TO ONE
 
-    // course 
+    // course
     @Column()
     @XViewColumn()
     courseId: Id<'Course'>;

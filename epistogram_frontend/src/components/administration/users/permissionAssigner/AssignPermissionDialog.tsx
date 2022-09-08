@@ -1,17 +1,18 @@
-import { useEffect, useMemo, useState } from 'react';
-import { useRoleAssignCompanies } from '../../../../services/api/companyApiService';
-import { CourseApiService } from '../../../../services/api/courseApiService';
-import { useAssignablePermissions } from '../../../../services/api/rolesApiService';
-import { AssignablePermissionDTO } from '../../../../shared/dtos/AssignablePermissionDTO';
-import { RoleAssignCompanyDTO } from '../../../../shared/dtos/company/RoleAssignCompanyDTO';
-import { CoursePermissionAssignDTO } from '../../../../shared/dtos/CoursePermissionAssignDTO';
-import { UserPermissionDTO } from '../../../../shared/dtos/role/UserPermissionDTO';
-import { userPermissionsEqual } from '../../../../shared/logic/sharedLogic';
-import { Id } from '../../../../shared/types/versionId';
-import { ArrayBuilder, usePaging } from '../../../../static/frontendHelpers';
-import { SegmentedButton } from '../../../controls/SegmentedButton';
-import { EpistoDialogLogicType } from '../../../universal/epistoDialog/EpistoDialogTypes';
-import { AssignAuthItemDialog, SelectType } from './AssignAuthItemDialog';
+import {useEffect, useMemo, useState} from 'react';
+import {useRoleAssignCompanies} from '../../../../services/api/companyApiService';
+import {CourseApiService} from '../../../../services/api/courseApiService';
+import {useAssignablePermissions} from '../../../../services/api/rolesApiService';
+import {AssignablePermissionDTO} from '../../../../shared/dtos/AssignablePermissionDTO';
+import {RoleAssignCompanyDTO} from '../../../../shared/dtos/company/RoleAssignCompanyDTO';
+import {CoursePermissionAssignDTO} from '../../../../shared/dtos/CoursePermissionAssignDTO';
+import {UserPermissionDTO} from '../../../../shared/dtos/role/UserPermissionDTO';
+import {userPermissionsEqual} from '../../../../shared/logic/sharedLogic';
+import {Id} from '../../../../shared/types/versionId';
+import {ArrayBuilder, usePaging} from '../../../../static/frontendHelpers';
+import {SegmentedButton} from '../../../controls/SegmentedButton';
+import {EpistoDialogLogicType} from '../../../universal/epistoDialog/EpistoDialogTypes';
+import {AssignAuthItemDialog, SelectType} from './AssignAuthItemDialog';
+import {segmentedButtonStyles} from '../../../controls/segmentedButtonStyles';
 
 export const AssignPermissionDialog = (props: {
     dialgoLogic: EpistoDialogLogicType,
@@ -42,7 +43,7 @@ export const AssignPermissionDialog = (props: {
         setSelectedPermission(assignablePermissionList.firstOrNull());
     }, [assignablePermissionList]);
 
-    // assemble permission dto 
+    // assemble permission dto
     const permissionDTO = useMemo((): UserPermissionDTO | undefined => {
 
         if (!selectedPermission)
@@ -62,7 +63,7 @@ export const AssignPermissionDialog = (props: {
         };
     }, [selectedCompany, selectedPermission]);
 
-    // check for role conflicts 
+    // check for role conflicts
     const isRoleConflicting = useMemo(() => {
 
         if (!permissionDTO)
@@ -129,6 +130,7 @@ export const AssignPermissionDialog = (props: {
         userId={userId} >
 
         <SegmentedButton
+            stylePreset={segmentedButtonStyles.default}
             paging={paging} />;
 
     </AssignAuthItemDialog>;

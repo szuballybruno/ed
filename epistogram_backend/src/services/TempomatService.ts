@@ -1,14 +1,15 @@
-import { UserCourseBridge } from '../models/entity/UserCourseBridge';
-import { TempomatCalculationDataView } from '../models/views/TempomatCalculationDataView';
-import { UserCourseProgressView } from '../models/views/UserCourseProgressView';
-import { TempomatModeType } from '../shared/types/sharedTypes';
-import { Id } from '../shared/types/versionId';
-import { addDays, dateDiffInDays, relativeDiffInPercentage } from '../utilities/helpers';
-import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
-import { AuthorizationService } from './AuthorizationService';
-import { EventService } from './EventService';
-import { LoggerService } from './LoggerService';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import {UserCourseBridge} from '../models/entity/UserCourseBridge';
+import {TempomatCalculationDataView} from '../models/views/TempomatCalculationDataView';
+import {UserCourseProgressView} from '../models/views/UserCourseProgressView';
+import {TempomatModeType} from '../shared/types/sharedTypes';
+import {Id} from '../shared/types/versionId';
+import {addDays, dateDiffInDays, relativeDiffInPercentage} from '../utilities/helpers';
+import {PrincipalId} from '../utilities/XTurboExpress/ActionParams';
+import {AuthorizationService} from './AuthorizationService';
+import {EventService} from './EventService';
+import {LoggerService} from './LoggerService';
+import {ORMConnectionService} from './ORMConnectionService/ORMConnectionService';
+import {instantiate} from '../shared/logic/sharedLogic';
 
 type CalculateTempomatValuesArgs = {
     tempomatMode: TempomatModeType,
@@ -18,6 +19,16 @@ type CalculateTempomatValuesArgs = {
     totalItemCount: number,
     totalCompletedItemCount: number,
     tempomatAdjustmentValue: number,
+}
+
+export type CalculatedTempomatValueType = {
+    previsionedCompletionDate: Date,
+    recommendedItemsPerDay: number,
+    recommendedItemsPerWeek: number,
+    originalPrevisionedCompletionDate: Date,
+    requiredCompletionDate: Date,
+    startDate: Date,
+    lagBehindPercentage: number
 }
 
 export class TempomatService {
@@ -34,7 +45,7 @@ export class TempomatService {
     }
 
     /**
-     * Set tempomat mode 
+     * Set tempomat mode
      */
     setTempomatModeAsync(principalId: PrincipalId, courseId: Id<'Course'>, tempomatMode: TempomatModeType) {
 
@@ -43,7 +54,7 @@ export class TempomatService {
                 const userId = principalId.toSQLValue();
 
                 const bridge = await this._ormService
-                    .query(UserCourseBridge, { courseId, userId })
+                    .query(UserCourseBridge, {courseId, userId})
                     .where('courseId', '=', 'courseId')
                     .and('userId', '=', 'userId')
                     .getSingle();
@@ -66,7 +77,7 @@ export class TempomatService {
      */
     async handleLagBehindAsync(userCourseProgressView: UserCourseProgressView) {
 
-        const { courseId, userId, lagBehindPercentage } = userCourseProgressView;
+        const {courseId, userId, lagBehindPercentage} = userCourseProgressView;
 
         if (lagBehindPercentage < 35)
             return;
@@ -81,7 +92,7 @@ export class TempomatService {
     }
 
     /**
-     * Temp mode  
+     * Temp mode
      */
     getTempomatModeAsync(principalId: PrincipalId, courseId: Id<'Course'>) {
 
@@ -90,7 +101,7 @@ export class TempomatService {
                 const userId = principalId.toSQLValue();
 
                 const bridge = await this._ormService
-                    .query(UserCourseBridge, { courseId, userId })
+                    .query(UserCourseBridge, {courseId, userId})
                     .where('courseId', '=', 'courseId')
                     .and('userId', '=', 'userId')
                     .getSingle();
@@ -113,20 +124,20 @@ export class TempomatService {
 
         return await this
             ._ormService
-            .query(TempomatCalculationDataView, { courseId, userId })
+            .query(TempomatCalculationDataView, {courseId, userId})
             .where('courseId', '=', 'courseId')
             .and('userId', '=', 'userId')
             .getSingle();
     }
 
     /**
-     * Gets all tempomat calc datas associated with user 
+     * Gets all tempomat calc datas associated with user
      */
     async getTempomatCalculationDatasAsync(userId: Id<'User'>) {
 
         return await this
             ._ormService
-            .query(TempomatCalculationDataView, { userId })
+            .query(TempomatCalculationDataView, {userId})
             .where('userId', '=', 'userId')
             .getMany();
     }
@@ -162,12 +173,12 @@ export class TempomatService {
     }
 
     /**
-     * Calc tempomat values 
+     * Calc tempomat values
      */
     async calculateTempomatValuesAsync(userId: Id<'User'>, courseId: Id<'Course'>) {
 
         const tempomatCalculationData = await this._ormService
-            .query(TempomatCalculationDataView, { userId, courseId })
+            .query(TempomatCalculationDataView, {userId, courseId})
             .where('userId', '=', 'userId')
             .and('courseId', '=', 'courseId')
             .getSingle();
@@ -176,9 +187,9 @@ export class TempomatService {
     }
 
     /**
-     * Calc tempomat values 
+     * Calc tempomat values
      */
-    calculateTempomatValues(opts: CalculateTempomatValuesArgs) {
+    calculateTempomatValues(opts: CalculateTempomatValuesArgs): CalculatedTempomatValueType {
 
         const {
             originalPrevisionedCompletionDate,
@@ -190,9 +201,6 @@ export class TempomatService {
             requiredCompletionDate
         } = opts;
 
-        if (!startDate)
-            return null;
-
         const previsionedCompletionDate = this
             ._calculatePrevisionedDate(
                 originalPrevisionedCompletionDate,
@@ -203,7 +211,7 @@ export class TempomatService {
                 tempomatAdjustmentValue
             );
 
-        const { recommendedItemsPerDay, recommendedItemsPerWeek } = this
+        const {recommendedItemsPerDay, recommendedItemsPerWeek} = this
             ._calculateRecommendedItemsPerDay(
                 startDate,
                 previsionedCompletionDate,
@@ -220,7 +228,7 @@ export class TempomatService {
                 previsionedCompletionDate
             );
 
-        return {
+        return instantiate<CalculatedTempomatValueType>({
             previsionedCompletionDate,
             recommendedItemsPerDay,
             recommendedItemsPerWeek,
@@ -228,7 +236,7 @@ export class TempomatService {
             requiredCompletionDate,
             startDate,
             lagBehindPercentage
-        };
+        });
     }
 
     /**
@@ -236,29 +244,29 @@ export class TempomatService {
      */
 
     /**
-    * Calculates the current previsioned date for every tempomat mode
-    * * LIGHT MODE: Push the previsioned day by lag behind days
-    *      1. First subtract the START DATE from the ORIGINAL ESTIMATION
-    *      2. Then you got the ORIGINAL PREVISIONED LENGTH
-    *      3. Then divide the VIDEOS COUNT with the ORIGINAL PREVISIONED LENGTH
-    *      4. Then you got the ORIGINAL ESTIMATED VIDEOS PER DAY
-    *      5. Then you need the DAYS SPENT FROM START DATE
-    *      6. Which you first need to multiply by the ORIGINAL ESTIMATED VIDEOS PER DAY
-    *         to get HOW MANY VIDEOS YOU SHOULD HAVE WATCHED BY NOW
-    *      7. AND then multiply DAYS SPENT FROM START
-    *         DATE by WATCHED VIDEOS FROM START DATE TO CURRENT DATE to get
-    *         HOW MANY VIDEOS YOU HAVE WATCHED BY NOW
-    *      8. For the last step, you need to subtract the HOW MANY VIDEOS YOU SHOULD HAVE WATCHED BY NOW by
-    *         HOW MANY VIDEOS YOU HAVE WATCHED BY NOW to get your LAG BEHIND DAYS COUNT
-    *         That LAG BEHIND DAYS COUNT then added to the NEW PREVISIONED COMPLETION DATE so
-    *         the PREVISIONED VIDEOS PER DAY remains the same
-    *
-    * * AUTO, BALANCED MODE: Push the previsioned day LESS then the lag behind
-    *      1. ... same steps
-    *      2. Plus you need to multiply by the ACTUAL ADJUSTMENT VALUE (e.g. 0.2) that
-    *         comes from the PRETEST, so you push the NEW PREVISIONED COMPLETION DATE LESS
-    *         then on LIGHT MODE and the PREVISIONED VIDEOS PER DAY will be a little bit HIGHER
-    */
+     * Calculates the current previsioned date for every tempomat mode
+     * * LIGHT MODE: Push the previsioned day by lag behind days
+     *      1. First subtract the START DATE from the ORIGINAL ESTIMATION
+     *      2. Then you got the ORIGINAL PREVISIONED LENGTH
+     *      3. Then divide the VIDEOS COUNT with the ORIGINAL PREVISIONED LENGTH
+     *      4. Then you got the ORIGINAL ESTIMATED VIDEOS PER DAY
+     *      5. Then you need the DAYS SPENT FROM START DATE
+     *      6. Which you first need to multiply by the ORIGINAL ESTIMATED VIDEOS PER DAY
+     *         to get HOW MANY VIDEOS YOU SHOULD HAVE WATCHED BY NOW
+     *      7. AND then multiply DAYS SPENT FROM START
+     *         DATE by WATCHED VIDEOS FROM START DATE TO CURRENT DATE to get
+     *         HOW MANY VIDEOS YOU HAVE WATCHED BY NOW
+     *      8. For the last step, you need to subtract the HOW MANY VIDEOS YOU SHOULD HAVE WATCHED BY NOW by
+     *         HOW MANY VIDEOS YOU HAVE WATCHED BY NOW to get your LAG BEHIND DAYS COUNT
+     *         That LAG BEHIND DAYS COUNT then added to the NEW PREVISIONED COMPLETION DATE so
+     *         the PREVISIONED VIDEOS PER DAY remains the same
+     *
+     * * AUTO, BALANCED MODE: Push the previsioned day LESS than the lag behind
+     *      1. ... same steps
+     *      2. Plus you need to multiply by the ACTUAL ADJUSTMENT VALUE (e.g. 0.2) that
+     *         comes from the PRETEST, so you push the NEW PREVISIONED COMPLETION DATE LESS
+     *         than on LIGHT MODE and the PREVISIONED VIDEOS PER DAY will be a bit HIGHER
+     */
     private _calculatePrevisionedDate(
         originalPrevisionedCompletionDate: Date,
         totalItemCount: number,
@@ -307,7 +315,7 @@ export class TempomatService {
     }
 
     /**
-     * Calculates the lag behind from three dates. 
+     * Calculates the lag behind from three dates.
      * @returns A positive int percentage when there is lag from
      * the original estimation or null because it cannot be determined
      */
@@ -325,7 +333,7 @@ export class TempomatService {
 
     /**
      * Calculates recommended items per day from either the
-     * required or the previsioned completion date 
+     * required or the previsioned completion date
      * because it cannot be determined
      */
     private _calculateRecommendedItemsPerDay(
@@ -351,7 +359,7 @@ export class TempomatService {
 
         const recommendedItemsPerWeek = recommendedItemsPerDay * 7;
 
-        return { recommendedItemsPerDay, recommendedItemsPerWeek };
+        return {recommendedItemsPerDay, recommendedItemsPerWeek};
     }
 
     private _calculateOriginalPrevisionedLength(originalPrevisionedCompletionDate: Date, startDate: Date) {

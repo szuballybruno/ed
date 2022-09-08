@@ -18,7 +18,6 @@ import {PlayerDataDTO} from '../../../shared/dtos/PlayerDataDTO';
 import {applicationRoutes} from '../../../configuration/applicationRoutes';
 import {Logger} from '../../../static/Logger';
 import {useScrollIntoView} from '../../system/AutoScrollContext';
-import {EpistoButton} from '../../controls/EpistoButton';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 
 export const WatchSubpage = () => {
@@ -174,28 +173,14 @@ export const WatchSubpage = () => {
                     direction="column"
                     error={[playerDataError]}>
 
-
-                    <EpistoButton
-                        onClick={() => {
-                            scroll();
-                        }}
-                        style={{
-                            position: 'fixed',
-                            top: 20,
-                            left: '50%',
-                            zIndex: 100000000
-                        }}>
-                        Scroll
-                    </EpistoButton>
-
-                    <EpistoFlex2
+                    <Flex
                         //px="20px"
                         height='calc(100% - 70px)'>
 
                         {/* main column */}
                         <Box
                             id="mainColumn"
-                            overflowY='scroll'
+                            overflowY={videoPlayerData ? 'scroll' : 'unset'}
                             className="whall" >
 
                             {/* VIDEO  */}

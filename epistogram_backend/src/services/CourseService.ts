@@ -1,41 +1,41 @@
-import { UploadedFile } from 'express-fileupload';
-import { CourseData } from '../models/entity/course/CourseData';
-import { CourseVersion } from '../models/entity/course/CourseVersion';
-import { CourseAccessBridge } from '../models/entity/CourseAccessBridge';
-import { CourseCategory } from '../models/entity/CourseCategory';
-import { TeacherInfo } from '../models/entity/TeacherInfo';
-import { User } from '../models/entity/User';
-import { AvailableCourseView } from '../models/views/AvailableCourseView';
-import { CourseAdminContentView } from '../models/views/CourseAdminContentView';
-import { CourseAdminDetailedView } from '../models/views/CourseAdminDetailedView';
-import { CourseAdminShortView } from '../models/views/CourseAdminShortView';
-import { CourseDetailsView } from '../models/views/CourseDetailsView';
-import { LatestCourseVersionView } from '../models/views/LatestCourseVersionView';
-import { PlaylistView } from '../models/views/PlaylistView';
-import { CourseAdminListItemDTO } from '../shared/dtos/admin/CourseAdminListItemDTO';
-import { CourseContentAdminDTO } from '../shared/dtos/admin/CourseContentAdminDTO';
-import { CourseContentItemAdminDTO } from '../shared/dtos/admin/CourseContentItemAdminDTO';
-import { AvailableCourseDTO } from '../shared/dtos/AvailableCourseDTO';
-import { CourseBriefData } from '../shared/dtos/CourseBriefData';
-import { CourseDetailsDTO } from '../shared/dtos/CourseDetailsDTO';
-import { CourseDetailsEditDataDTO } from '../shared/dtos/CourseDetailsEditDataDTO';
-import { CreateCourseDTO } from '../shared/dtos/CreateCourseDTO';
-import { ModuleEditDTO } from '../shared/dtos/ModuleEditDTO';
-import { Mutation } from '../shared/dtos/mutations/Mutation';
-import { PlaylistModuleDTO } from '../shared/dtos/PlaylistModuleDTO';
-import { OrderType } from '../shared/types/sharedTypes';
-import { Id } from '../shared/types/versionId';
-import { orderByProperty, throwNotImplemented } from '../utilities/helpers';
-import { VersionMigrationContainer } from '../utilities/misc';
-import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
-import { AuthorizationResult } from '../utilities/XTurboExpress/XTurboExpressTypes';
-import { AuthorizationService } from './AuthorizationService';
-import { FileService } from './FileService';
-import { MapperService } from './MapperService';
-import { createCharSeparatedList } from './misc/mappings';
-import { ModuleService } from './ModuleService';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
-import { PretestService } from './PretestService';
+import {UploadedFile} from 'express-fileupload';
+import {CourseData} from '../models/entity/course/CourseData';
+import {CourseVersion} from '../models/entity/course/CourseVersion';
+import {CourseAccessBridge} from '../models/entity/CourseAccessBridge';
+import {CourseCategory} from '../models/entity/CourseCategory';
+import {TeacherInfo} from '../models/entity/TeacherInfo';
+import {User} from '../models/entity/User';
+import {AvailableCourseView} from '../models/views/AvailableCourseView';
+import {CourseAdminContentView} from '../models/views/CourseAdminContentView';
+import {CourseAdminDetailedView} from '../models/views/CourseAdminDetailedView';
+import {CourseAdminShortView} from '../models/views/CourseAdminShortView';
+import {CourseDetailsView} from '../models/views/CourseDetailsView';
+import {LatestCourseVersionView} from '../models/views/LatestCourseVersionView';
+import {PlaylistView} from '../models/views/PlaylistView';
+import {CourseAdminListItemDTO} from '../shared/dtos/admin/CourseAdminListItemDTO';
+import {CourseContentAdminDTO} from '../shared/dtos/admin/CourseContentAdminDTO';
+import {CourseContentItemAdminDTO} from '../shared/dtos/admin/CourseContentItemAdminDTO';
+import {AvailableCourseDTO} from '../shared/dtos/AvailableCourseDTO';
+import {CourseBriefData} from '../shared/dtos/CourseBriefData';
+import {CourseDetailsDTO} from '../shared/dtos/CourseDetailsDTO';
+import {CourseDetailsEditDataDTO} from '../shared/dtos/CourseDetailsEditDataDTO';
+import {CreateCourseDTO} from '../shared/dtos/CreateCourseDTO';
+import {ModuleEditDTO} from '../shared/dtos/ModuleEditDTO';
+import {Mutation} from '../shared/dtos/mutations/Mutation';
+import {PlaylistModuleDTO} from '../shared/dtos/PlaylistModuleDTO';
+import {OrderType} from '../shared/types/sharedTypes';
+import {Id} from '../shared/types/versionId';
+import {filterByProperty, orderByProperty, throwNotImplemented} from '../utilities/helpers';
+import {VersionMigrationContainer} from '../utilities/misc';
+import {PrincipalId} from '../utilities/XTurboExpress/ActionParams';
+import {AuthorizationResult} from '../utilities/XTurboExpress/XTurboExpressTypes';
+import {AuthorizationService} from './AuthorizationService';
+import {FileService} from './FileService';
+import {MapperService} from './MapperService';
+import {createCharSeparatedList} from './misc/mappings';
+import {ModuleService} from './ModuleService';
+import {ORMConnectionService} from './ORMConnectionService/ORMConnectionService';
+import {PretestService} from './PretestService';
 
 export class CourseService {
 
@@ -50,7 +50,7 @@ export class CourseService {
 
     /**
      * Returns courses that the principal can use as context
-     * when assigning permissions to a user 
+     * when assigning permissions to a user
      */
     getPermissionAssignCoursesAsync(principalId: PrincipalId, userId: Id<'User'>) {
 
@@ -79,7 +79,7 @@ export class CourseService {
     async getCourseViewAsync(userId: Id<'User'>, courseId: Id<'Course'>) {
 
         const view = await this._ormService
-            .query(AvailableCourseView, { courseId, userId })
+            .query(AvailableCourseView, {courseId, userId})
             .where('courseId', '=', 'courseId')
             .and('userId', '=', 'courseId')
             .getSingle();
@@ -88,7 +88,7 @@ export class CourseService {
     }
 
     /**
-     * Returns course brief data async 
+     * Returns course brief data async
      */
     getCourseBriefDataAsync(
         principalId: PrincipalId,
@@ -113,7 +113,7 @@ export class CourseService {
     }
 
     /**
-     * Returns course detals 
+     * Returns course detals
      */
     getCourseDetailsAsync(
         principalId: PrincipalId,
@@ -123,13 +123,13 @@ export class CourseService {
         return {
             action: async () => {
                 const courseDetailsView = await this._ormService
-                    .query(CourseDetailsView, { principalId, courseId })
+                    .query(CourseDetailsView, {principalId, courseId})
                     .where('userId', '=', 'principalId')
                     .and('courseId', '=', 'courseId')
                     .getSingle();
 
                 const moduleViews = await this._ormService
-                    .query(PlaylistView, { principalId, courseId })
+                    .query(PlaylistView, {principalId, courseId})
                     .where('userId', '=', 'principalId')
                     .and('courseId', '=', 'courseId')
                     .getMany();
@@ -151,7 +151,7 @@ export class CourseService {
 
 
     /**
-     * Creates a new course 
+     * Creates a new course
      */
     createCourseAsync(
         userId: PrincipalId,
@@ -189,13 +189,13 @@ export class CourseService {
             },
             auth: async () => {
 
-                const { companyId } = await this._ormService
-                    .query(User, { userId })
+                const {companyId} = await this._ormService
+                    .query(User, {userId})
                     .where('id', '=', 'userId')
                     .getSingle();
 
                 return this._authorizationService
-                    .checkPermissionAsync(userId, 'EDIT_COMPANY_COURSES', { companyId });
+                    .checkPermissionAsync(userId, 'EDIT_COMPANY_COURSES', {companyId});
             }
         };
     }
@@ -222,13 +222,13 @@ export class CourseService {
             },
             auth: async () => {
 
-                const { companyId } = await this._ormService
-                    .query(User, { userId })
+                const {companyId} = await this._ormService
+                    .query(User, {userId})
                     .where('id', '=', 'userId')
                     .getSingle();
 
                 return this._authorizationService
-                    .checkPermissionAsync(userId, 'EDIT_COMPANY_COURSES', { companyId });
+                    .checkPermissionAsync(userId, 'EDIT_COMPANY_COURSES', {companyId});
             }
         };
     }
@@ -239,7 +239,7 @@ export class CourseService {
     async getCourseIdOrFailAsync(playlistItemCode: string) {
 
         const playlistViewByItemCode = await this._ormService
-            .query(PlaylistView, { playlistItemCode })
+            .query(PlaylistView, {playlistItemCode})
             .where('playlistItemCode', '=', 'playlistItemCode')
             .getOneOrNull();
 
@@ -247,7 +247,7 @@ export class CourseService {
             return playlistViewByItemCode.courseId;
 
         const playlistViewByModuleCode = await this._ormService
-            .query(PlaylistView, { moduleCode: playlistItemCode, itemOrderIndex: 0 })
+            .query(PlaylistView, {moduleCode: playlistItemCode, itemOrderIndex: 0})
             .where('moduleCode', '=', 'moduleCode')
             .and('itemOrderIndex', '=', 'itemOrderIndex')
             .getOneOrNull();
@@ -269,9 +269,9 @@ export class CourseService {
         return {
             action: async () => {
 
-                // get course 
+                // get course
                 const view = await this._ormService
-                    .query(CourseAdminDetailedView, { courseId })
+                    .query(CourseAdminDetailedView, {courseId})
                     .where('courseId', '=', 'courseId')
                     .getSingle();
 
@@ -290,22 +290,23 @@ export class CourseService {
             },
             auth: async () => {
 
-                const { companyId } = await this._ormService
-                    .query(User, { userId })
+                const {companyId} = await this._ormService
+                    .query(User, {userId})
                     .where('id', '=', 'userId')
                     .getSingle();
 
                 return this._authorizationService
-                    .checkPermissionAsync(userId, 'EDIT_COMPANY_COURSES', { companyId });
+                    .checkPermissionAsync(userId, 'EDIT_COMPANY_COURSES', {companyId});
             }
         };
 
     }
+
     /**
-     * Saves the course details 
+     * Saves the course details
      * without incrementing version
-     * version incrementation is only necessary when 
-     * adding breaking changes, like modifying exams, 
+     * version incrementation is only necessary when
+     * adding breaking changes, like modifying exams,
      * or playlist order indices. Changing the course name, or description etc.
      * is not considered a breaking change.
      */
@@ -319,7 +320,7 @@ export class CourseService {
 
                 const cv = await this._ormService
                     .withResType<CourseVersion>()
-                    .query(LatestCourseVersionView, { courseId: dto.courseId })
+                    .query(LatestCourseVersionView, {courseId: dto.courseId})
                     .select(CourseVersion)
                     .leftJoin(CourseVersion, x => x
                         .on('id', '=', 'versionId', LatestCourseVersionView))
@@ -354,13 +355,13 @@ export class CourseService {
             },
             auth: async () => {
 
-                const { companyId } = await this._ormService
-                    .query(User, { userId })
+                const {companyId} = await this._ormService
+                    .query(User, {userId})
                     .where('id', '=', 'userId')
                     .getSingle();
 
                 return this._authorizationService
-                    .checkPermissionAsync(userId, 'EDIT_COMPANY_COURSES', { companyId });
+                    .checkPermissionAsync(userId, 'EDIT_COMPANY_COURSES', {companyId});
             }
         };
 
@@ -379,12 +380,12 @@ export class CourseService {
         return {
             action: async () => {
                 const views = await this._ormService
-                    .query(CourseAdminContentView, { courseId })
+                    .query(CourseAdminContentView, {courseId})
                     .where('courseId', '=', 'courseId')
                     .getMany();
 
                 const courseVersionId = (await this._ormService
-                    .query(LatestCourseVersionView, { courseId })
+                    .query(LatestCourseVersionView, {courseId})
                     .where('courseId', '=', 'courseId')
                     .getSingle())
                     .versionId;
@@ -412,7 +413,7 @@ export class CourseService {
     }
 
     /**
-     * Saves the course content 
+     * Saves the course content
      */
     async saveCourseContentAsync(
         userId: PrincipalId,
@@ -424,11 +425,11 @@ export class CourseService {
         if (itemMutations.length === 0 && moduleMutations.length === 0)
             return;
 
-        // save course 
-        const { courseVersionMigrations } = await this
+        // save course
+        const {courseVersionMigrations} = await this
             ._saveCourseVersionAsync(courseId);
 
-        // save modules 
+        // save modules
         await this
             ._moduleService
             .saveModulesAsync({
@@ -439,51 +440,7 @@ export class CourseService {
     }
 
     /**
-     * Save course version 
-     * TODO use version save service
-     * @deprecated
-     */
-    private async _saveCourseVersionAsync(courseId: Id<'Course'>) {
-
-        // get old version id 
-        const oldCourseVersionId = (await this._ormService
-            .query(LatestCourseVersionView, { courseId })
-            .where('courseId', '=', 'courseId')
-            .getSingle())
-            .versionId;
-
-        // create new version
-        const newCourseVersionId = await this
-            ._createNewCourseVersionAsync(courseId, oldCourseVersionId);
-
-        const courseVersionMigrations = new VersionMigrationContainer([oldCourseVersionId], [newCourseVersionId], ['Course']);
-
-        return { courseVersionMigrations };
-    }
-
-    /**
-     * TODO use version save service
-     * @deprecated 
-     */
-    private async _createNewCourseVersionAsync(courseId: Id<'Course'>, oldVersionId: Id<'CourseVersion'>) {
-
-        const oldDataId = (await this._ormService
-            .query(CourseVersion, { oldVersionId })
-            .where('id', '=', 'oldVersionId')
-            .getSingle())
-            .courseDataId;
-
-        const newVersionId = await this._ormService
-            .createAsync(CourseVersion, {
-                courseId,
-                courseDataId: oldDataId
-            });
-
-        return newVersionId;
-    }
-
-    /**
-     * Returns admin list items 
+     * Returns admin list items
      */
     getAdminCoursesAsync(
         userId: PrincipalId
@@ -526,19 +483,19 @@ export class CourseService {
             },
             auth: async () => {
 
-                const { companyId } = await this._ormService
-                    .query(User, { userId })
+                const {companyId} = await this._ormService
+                    .query(User, {userId})
                     .where('id', '=', 'userId')
                     .getSingle();
 
                 return this._authorizationService
-                    .checkPermissionAsync(userId, 'EDIT_COMPANY_COURSES', { companyId });
+                    .checkPermissionAsync(userId, 'EDIT_COMPANY_COURSES', {companyId});
             }
         };
     }
 
     /**
-     * Returns the currently available courses. 
+     * Returns the currently available courses.
      */
     getAvailableCoursesAsync(
         principalId: PrincipalId,
@@ -554,33 +511,37 @@ export class CourseService {
             action: async () => {
 
                 const courses = await this._ormService
-                    .query(AvailableCourseView, { principalId })
+                    .query(AvailableCourseView, {principalId})
                     .where('userId', '=', 'principalId')
                     .and('canView', '=', 'true')
                     .getMany();
 
+                console.log('CategoryId ' + filterCategoryId);
+
                 // TODO refactor
-                // const filteredCoursesBySearchTerm =
-                //     filterByProperty(courses, 'title', searchTerm);
+                // IMPORTANT NOTE: DO NOT COMMENT OUT SOMETHING THAT IS WORKING, IF
+                // YOU DON'T REFACTOR IT RIGHT AT THE MOMENT. IF IT WORKS, DON'T FIX IT!
+                const filteredCoursesBySearchTerm =
+                    filterByProperty(courses, 'title', searchTerm);
 
-                // const filteredCoursesByCategoryId =
-                //     filterByProperty(filteredCoursesBySearchTerm, 'subCategoryId', filterCategoryId);
+                const filteredCoursesByCategoryId =
+                    filterByProperty(filteredCoursesBySearchTerm, 'categoryId', filterCategoryId);
 
-                // const filteredCoursesByIsFeatured =
-                //     filterByProperty(filteredCoursesByCategoryId, 'isFeatured', isFeatured);
+                const filteredCoursesByIsFeatured =
+                    filterByProperty(filteredCoursesByCategoryId, 'isFeatured', isFeatured);
 
-                // const filteredCoursesByIsRecommended =
-                //     filterByProperty(filteredCoursesByIsFeatured, 'isFeatured', isRecommended);
+                const filteredCoursesByIsRecommended =
+                    filterByProperty(filteredCoursesByIsFeatured, 'isFeatured', isRecommended);
 
                 const orderedCourses = (() => {
 
                     if (orderBy === 'nameASC')
-                        return orderByProperty(courses, 'title', 'asc');
+                        return orderByProperty(filteredCoursesByIsRecommended, 'title', 'asc');
 
                     if (orderBy === 'nameDESC')
-                        return orderByProperty(courses, 'title', 'desc');
+                        return orderByProperty(filteredCoursesByIsRecommended, 'title', 'desc');
 
-                    return courses;
+                    return filteredCoursesByIsRecommended;
                 })();
 
                 return this._mapperService
@@ -590,10 +551,10 @@ export class CourseService {
     }
 
     /**
-     * Creates a course access bridge, 
+     * Creates a course access bridge,
      * which opens access to a course for a specified user.
      * This can be used to dinamically allow or disallow access to a course, by the user.
-     * Like when purchased from the shop, or got limited access etc... 
+     * Like when purchased from the shop, or got limited access etc...
      */
     async createCourseAccessBridge(
         userId: Id<'User'>,
@@ -605,5 +566,49 @@ export class CourseService {
                 courseId,
                 userId
             } as CourseAccessBridge);
+    }
+
+    /**
+     * Save course version
+     * TODO use version save service
+     * @deprecated
+     */
+    private async _saveCourseVersionAsync(courseId: Id<'Course'>) {
+
+        // get old version id
+        const oldCourseVersionId = (await this._ormService
+            .query(LatestCourseVersionView, {courseId})
+            .where('courseId', '=', 'courseId')
+            .getSingle())
+            .versionId;
+
+        // create new version
+        const newCourseVersionId = await this
+            ._createNewCourseVersionAsync(courseId, oldCourseVersionId);
+
+        const courseVersionMigrations = new VersionMigrationContainer([oldCourseVersionId], [newCourseVersionId], ['Course']);
+
+        return {courseVersionMigrations};
+    }
+
+    /**
+     * TODO use version save service
+     * @deprecated
+     */
+    private async _createNewCourseVersionAsync(courseId: Id<'Course'>, oldVersionId: Id<'CourseVersion'>) {
+
+        const oldDataId = (await this._ormService
+            .query(CourseVersion, {oldVersionId})
+            .where('id', '=', 'oldVersionId')
+            .getSingle())
+            .courseDataId;
+
+        const newVersionId = await this._ormService
+            .createAsync(CourseVersion, {
+                courseId,
+                courseDataId: oldDataId
+            });
+
+        return newVersionId;
     }
 }

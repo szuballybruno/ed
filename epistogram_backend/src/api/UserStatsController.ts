@@ -1,10 +1,10 @@
-import { UserStatsService } from '../services/UserStatsService';
-import { apiRoutes } from '../shared/types/apiRoutes';
-import { Id } from '../shared/types/versionId';
-import { ServiceProvider } from '../startup/servicesDI';
-import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
-import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
-import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
+import {UserStatsService} from '../services/UserStatsService';
+import {apiRoutes} from '../shared/types/apiRoutes';
+import {Id} from '../shared/types/versionId';
+import {ServiceProvider} from '../startup/servicesDI';
+import {ActionParams} from '../utilities/XTurboExpress/ActionParams';
+import {XControllerAction} from '../utilities/XTurboExpress/XTurboExpressDecorators';
+import {XController} from '../utilities/XTurboExpress/XTurboExpressTypes';
 
 export class UserStatsController implements XController<UserStatsController> {
 
@@ -94,6 +94,20 @@ export class UserStatsController implements XController<UserStatsController> {
 
         return this._userStatsService
             .getUserLearningOverviewDataAsync(params.principalId, userId);
+    }
+
+    @XControllerAction(apiRoutes.userStats.getCompanyUsersPerformanceSummary)
+    getCompanyUsersPerformanceSummaryAction(params: ActionParams) {
+
+        const query = params
+            .getQuery<any>();
+
+        const companyId = Id
+            .create<'Company'>(query
+                .getValue(x => x.companyId, 'int'));
+
+        return this._userStatsService
+            .calculateCompanyProductivityAsync(companyId);
     }
 
     @XControllerAction(apiRoutes.userStats.getUserCourseStatsOverviewData)

@@ -1,15 +1,15 @@
-import { PrequizCompletion } from '../models/entity/prequiz/PrequizCompletion';
-import { PrequizUserAnswer } from '../models/entity/prequiz/PrequizUserAnswer';
-import { PrequizQuestionView } from '../models/views/PrequizQuestionView';
-import { PrequizAnswerDTO } from '../shared/dtos/PrequizAnswerDTO';
-import { PrequizQuestionDTO } from '../shared/dtos/PrequizQuestionDTO';
-import { PrequizUserAnswerDTO } from '../shared/dtos/PrequizUserAnswerDTO';
-import { Id } from '../shared/types/versionId';
-import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
-import { AuthorizationService } from './AuthorizationService';
-import { MapperService } from './MapperService';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
-import { UserCourseBridgeService } from './UserCourseBridgeService';
+import {PrequizCompletion} from '../models/entity/prequiz/PrequizCompletion';
+import {PrequizUserAnswer} from '../models/entity/prequiz/PrequizUserAnswer';
+import {PrequizQuestionView} from '../models/views/PrequizQuestionView';
+import {PrequizAnswerDTO} from '../shared/dtos/PrequizAnswerDTO';
+import {PrequizQuestionDTO} from '../shared/dtos/PrequizQuestionDTO';
+import {PrequizUserAnswerDTO} from '../shared/dtos/PrequizUserAnswerDTO';
+import {Id} from '../shared/types/versionId';
+import {PrincipalId} from '../utilities/XTurboExpress/ActionParams';
+import {AuthorizationService} from './AuthorizationService';
+import {MapperService} from './MapperService';
+import {ORMConnectionService} from './ORMConnectionService/ORMConnectionService';
+import {UserCourseBridgeService} from './UserCourseBridgeService';
 
 export class PrequizService {
 
@@ -31,7 +31,7 @@ export class PrequizService {
     }
 
     /**
-     * Returns a list of prequiz questions 
+     * Returns a list of prequiz questions
      */
     getPrequizQuestionsAsync(principalId: PrincipalId, courseId: Id<'Course'>) {
 
@@ -67,7 +67,7 @@ export class PrequizService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .checkPermissionAsync(principalId, 'WATCH_COURSE', { courseId });
+                    .checkPermissionAsync(principalId, 'WATCH_COURSE', {courseId});
             }
         };
 
@@ -75,7 +75,7 @@ export class PrequizService {
     }
 
     /**
-     * Returns an answer that the user 
+     * Returns an answer that the user
      * has previously given to the specified quesiton
      */
     getUserAnswerAsync(
@@ -90,7 +90,7 @@ export class PrequizService {
                     .create<'User'>(principalId.toSQLValue());
 
                 const userAnswer = await this._ormService
-                    .query(PrequizUserAnswer, { userId, questionId, courseId })
+                    .query(PrequizUserAnswer, {userId, questionId, courseId})
                     .where('userId', '=', 'userId')
                     .and('questionId', '=', 'questionId')
                     .and('courseId', '=', 'courseId')
@@ -108,7 +108,7 @@ export class PrequizService {
             },
             auth: async () => {
                 return this._authorizationService
-                    .checkPermissionAsync(principalId, 'WATCH_COURSE', { courseId });
+                    .checkPermissionAsync(principalId, 'WATCH_COURSE', {courseId});
             }
         };
 
@@ -118,71 +118,57 @@ export class PrequizService {
     /**
      * Answers a prequiz question
      */
-    answerPrequizQuestionAsync(
+    async answerPrequizQuestionAsync(
         principalId: PrincipalId,
         questionId: Id<'PrequizQuestion'>,
         courseId: Id<'Course'>,
         answerId: Id<'PrequizAnswer'> | null,
         value: number | null) {
 
-        return {
-            action: async () => {
-                const userId = Id
-                    .create<'User'>(principalId.toSQLValue());
+        const userId = Id
+            .create<'User'>(principalId.toSQLValue());
 
-                const previousAnswer = await this._ormService
-                    .query(PrequizUserAnswer, { userId, questionId, courseId })
-                    .where('userId', '=', 'userId')
-                    .and('questionId', '=', 'questionId')
-                    .and('courseId', '=', 'courseId')
-                    .getOneOrNull();
+        const previousAnswer = await this._ormService
+            .query(PrequizUserAnswer, {userId, questionId, courseId})
+            .where('userId', '=', 'userId')
+            .and('questionId', '=', 'questionId')
+            .and('courseId', '=', 'courseId')
+            .getOneOrNull();
 
-                if (previousAnswer) {
-                    await this._ormService
-                        .save(PrequizUserAnswer, {
-                            id: previousAnswer.id,
-                            answerId,
-                            questionId,
-                            courseId,
-                            userId,
-                            value
-                        });
-                } else {
-                    await this._ormService
-                        .createAsync(PrequizUserAnswer, {
-                            answerId,
-                            questionId,
-                            courseId,
-                            userId,
-                            value
-                        });
-                }
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'WATCH_COURSE', { courseId });
-            }
-        };
+        if (previousAnswer) {
+            await this._ormService
+                .save(PrequizUserAnswer, {
+                    id: previousAnswer.id,
+                    answerId,
+                    questionId,
+                    courseId,
+                    userId,
+                    value
+                });
+        } else {
+            await this._ormService
+                .createAsync(PrequizUserAnswer, {
+                    answerId,
+                    questionId,
+                    courseId,
+                    userId,
+                    value
+                });
+        }
+
     }
 
     /**
      * Finish prequiz
      */
-    finishPrequiz(principalId: PrincipalId, courseId: Id<'Course'>) {
+    async finishPrequiz(principalId: PrincipalId, courseId: Id<'Course'>) {
 
-        return {
-            action: async () => {
-                await this
-                    ._ormService
-                    .createAsync(PrequizCompletion, {
-                        courseId,
-                        userId: principalId.getId()
-                    });
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'WATCH_COURSE', { courseId });
-            }
-        };
+        await this
+            ._ormService
+            .createAsync(PrequizCompletion, {
+                courseId,
+                userId: principalId.getId()
+            });
+
     }
 }

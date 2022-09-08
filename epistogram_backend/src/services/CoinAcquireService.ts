@@ -7,6 +7,7 @@ import {ORMConnectionService} from './ORMConnectionService/ORMConnectionService'
 import {Id} from '../shared/types/versionId';
 import {GlobalConfiguration} from './misc/GlobalConfiguration';
 import {LoggerService} from './LoggerService';
+import {CoinTransaction} from '../models/entity/CoinTransaction';
 
 export class CoinAcquireService {
 
@@ -48,10 +49,10 @@ export class CoinAcquireService {
     /**
      * Reward user after a question is answered correctly for the first time
      */
-    acquireQuestionAnswerCoinsAsync = async (userId: Id<'User'>, questionVersionId: Id<'QuestionVersion'>) => {
+    acquireQuestionAnswerCoinsAsync = async (userId: Id<'User'>, givenAnswerId: Id<'GivenAnswer'>) => {
 
         const coinsForQuestion = await this._coinTransactionService
-            .getCoinsForQuestionAsync(userId, questionVersionId);
+            .getCoinsForQuestionAsync(userId, givenAnswerId);
 
         /**
          * do not reward user if the question is already answered
@@ -60,7 +61,7 @@ export class CoinAcquireService {
         if (coinsForQuestion.length > 0) {
 
             this._loggerService
-                .logScoped('COINS', `Already rewarded user for this question version (${questionVersionId}). Skipping coin aquires...`);
+                .logScoped('COINS', `Already rewarded user for this question version (${coinsForQuestion}). Skipping coin aquires...`);
 
             return null;
         }
@@ -69,11 +70,18 @@ export class CoinAcquireService {
          * Checks passed, insert coin
          */
         //TODO REMOVE GIVEN ANSWER FROM MAKE COIN TRANSACTION -> REMOVE SQL FUNCTION
-        await this._coinTransactionService
-            .makeCoinTransactionAsync({
+        await this._ormService
+            .createAsync(CoinTransaction, {
                 userId,
                 amount: this._config.coinRewardAmounts.questionCorrectAnswer,
-                givenAnswerId: Id.create<'GivenAnswer'>(0)
+                activitySessionId: null,
+                activityStreakId: null,
+                givenAnswerId: givenAnswerId,
+                givenAnswerStreakId: null,
+                videoId: null,
+                creationDate: new Date(Date.now()),
+                isGifted: false,
+                shopItemId: null
             });
 
         const dto: CoinAcquireResultDTO = {

@@ -50,11 +50,11 @@ const scrollIntoView = (parent, child) => {
     if (parentTop >= clientTop - 100) {
 
         Logger.logScoped('AUTO SCROLL', 'Parent top is larger or equal to client top, which means scrolling up');
-        scrollTo(parent, -(parentTop - clientTop + 100), 300);
+        scrollTo(parent, -(parentTop - clientTop + 400), 300);
     } else if (clientBottom > parentBottom) {
 
         Logger.logScoped('AUTO SCROLL', 'Client bottom is larger than parent bottom, which means scrolling down');
-        scrollTo(parent, clientBottom - parentBottom, 300);
+        scrollTo(parent, clientBottom - parentBottom + 400, 300);
     }
 };
 

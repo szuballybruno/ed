@@ -203,6 +203,13 @@ import {getVideoVersionSeedData} from '../../sql/seed/seed_video_versions';
 import {XDependency} from '../../utilities/XDInjection/XDInjector';
 import {XDBMSchemaType} from '../XDBManager/XDBManagerTypes';
 import {ParametrizedFunction} from './advancedTypes/ParametrizedFunction';
+import {getActivitySessionSeedData} from '../../sql/seed/seed_activity_sessions';
+import {getPrequizCompletionSeedData} from '../../sql/seed/seed_pretest_completion';
+import {getGivenAnswerSeedData} from '../../sql/seed/seed_given_answers';
+import {getAnswerGivenAnswerBridgeSeedData} from '../../sql/seed/seed_answer_given_answer_bridges';
+import {getCourseItemCompletionSeedData} from '../../sql/seed/seed_course_item_completion';
+import {getGivenAnswerStreakSeedData} from '../../sql/seed/seed_given_answer_streak';
+import {UserPerformanceComparisonStatsView} from '../../models/views/UserPerformanceComparisonStatsView';
 
 export const createDBSchema = (): XDBMSchemaType => {
 
@@ -238,6 +245,8 @@ export const createDBSchema = (): XDBMSchemaType => {
         .addFunction(getDiscountCodesSeedData, [getShopItemSeedData], DiscountCode)
         .addFunction(getCourseRatingQuestionSeedData, [getCourseRatingGroupSeedData], CourseRatingQuestion)
         .addFunction(getUserSeedData, [getCompaniesSeedData, getJobTitlesSeedData], User)
+        .addFunction(getActivitySessionSeedData, [getUserSeedData], ActivitySession)
+        .addFunction(getPrequizCompletionSeedData, [getUserSeedData, getCourseSeedData], PrequizCompletion)
         .addFunction(getCompanyOwnerBridgeSeedData, [getUserSeedData, getCompaniesSeedData], CompanyOwnerBridge)
         .addFunction(getTeacherInfoSeedData, [getUserSeedData], TeacherInfo)
         .addFunction(getAnswerSessionSeedData, [getUserSeedData, getExamVersionsSeedData], AnswerSession)
@@ -254,8 +263,12 @@ export const createDBSchema = (): XDBMSchemaType => {
         .addFunction(getQuestionVersionsSeedData, [getQuestionSeedData, getQuestionDatasSeedData, getExamVersionsSeedData, getVideoVersionSeedData, getPersonalityTraitCategoriesSeed], QuestionVersion)
         .addFunction(getAnswerDatasSeedData, [getQuestionDatasSeedData], AnswerData)
         .addFunction(getAnswerVersionsSeedData, [getAnswersSeedData, getAnswerDatasSeedData, getQuestionVersionsSeedData], AnswerVersion)
+        .addFunction(getGivenAnswerStreakSeedData, [getUserSeedData], GivenAnswerStreak)
+        .addFunction(getGivenAnswerSeedData, [getUserSeedData, getCourseSeedData, getQuestionVersionsSeedData, getAnswerSessionSeedData, getGivenAnswerStreakSeedData], GivenAnswer)
+        .addFunction(getAnswerGivenAnswerBridgeSeedData, [getAnswerVersionsSeedData, getGivenAnswerSeedData], AnswerGivenAnswerBridge)
+        .addFunction(getCourseItemCompletionSeedData, [getUserSeedData, getExamVersionsSeedData, getQuestionVersionsSeedData, getAnswerSessionSeedData], CourseItemCompletion)
         .addFunction(getCourseAccessBridgeSeedData, [getCompaniesSeedData, getCourseSeedData], CourseAccessBridge)
-        .addFunction(getUserCourseBridgeSeedData, [getUserSeedData, getCourseSeedData, getVideosSeedData], UserCourseBridge)
+        .addFunction(getUserCourseBridgeSeedData, [getUserSeedData, getCourseSeedData, getVideosSeedData, getCourseItemCompletionSeedData], UserCourseBridge)
         .addFunction(getUserVideoProgressBridgeSeedData, [getUserSeedData, getVideoVersionSeedData, getVideoFilesSeedData], UserVideoProgressBridge)
         .addFunction(getRoleAssignmentBridgeSeedData, [getCompaniesSeedData, getRolesSeedData, getUserSeedData], RoleAssignmentBridge)
         .addFunction(getPermissionAssignmentBridgeSeedData, [getCompaniesSeedData, getCourseSeedData, getPermissionsSeedData, getUserSeedData], PermissionAssignmentBridge)
@@ -356,6 +369,7 @@ export const createDBSchema = (): XDBMSchemaType => {
             UserInactiveCourseView,
             HomePageStatsView,
             UserEngagementView,
+            UserPerformanceComparisonStatsView,
             UserLearningOverviewStatsView,
             UserCourseStatsView,
             UserVideoStatsView,
@@ -369,7 +383,6 @@ export const createDBSchema = (): XDBMSchemaType => {
         functionScripts: [
             'acquire_task_lock_fn',
             'create_daily_tip_fn',
-            'insert_coin_transaction',
             'get_user_session_first_activity_id'
         ],
 
@@ -486,7 +499,7 @@ export const createDBSchema = (): XDBMSchemaType => {
             CourseItemCompletion,
             ConstantValue,
             CourseCompletion
-        ],
+        ]
     };
 
     return new XDBMSchemaType(schema);

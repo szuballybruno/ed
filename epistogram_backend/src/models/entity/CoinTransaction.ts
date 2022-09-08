@@ -1,13 +1,13 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
-import { XViewColumn } from '../../services/XORM/XORMDecorators';
-import { Id } from '../../shared/types/versionId';
-import { ActivitySession } from './ActivitySession';
-import { ActivityStreak } from './ActivityStreak';
-import { GivenAnswer } from './GivenAnswer';
-import { GivenAnswerStreak } from './GivenAnswerStreak';
-import { ShopItem } from './ShopItem';
-import { User } from './User';
-import { Video } from './video/Video';
+import {Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation} from 'typeorm';
+import {XViewColumn} from '../../services/XORM/XORMDecorators';
+import {Id} from '../../shared/types/versionId';
+import {ActivitySession} from './ActivitySession';
+import {ActivityStreak} from './ActivityStreak';
+import {GivenAnswer} from './GivenAnswer';
+import {GivenAnswerStreak} from './GivenAnswerStreak';
+import {ShopItem} from './ShopItem';
+import {User} from './User';
+import {Video} from './video/Video';
 
 @Entity()
 export class CoinTransaction {
@@ -16,7 +16,7 @@ export class CoinTransaction {
     @XViewColumn()
     id: Id<'CoinTransaction'>;
 
-    @CreateDateColumn({ default: () => 'now()', type: 'timestamptz' })
+    @CreateDateColumn({default: () => 'now()', type: 'timestamptz'})
     @XViewColumn()
     creationDate: Date;
 
@@ -24,79 +24,79 @@ export class CoinTransaction {
     @XViewColumn()
     amount: number;
 
-    @Column({ default: false })
+    @Column({default: false})
     @XViewColumn()
     isGifted: boolean;
 
     // TO ONE
 
     //
-    // user  
+    // user
     //
     @Column()
     @XViewColumn()
     userId: Id<'User'>;
     @ManyToOne(_ => User, x => x.coinAcquires)
-    @JoinColumn({ name: 'user_id' })
+    @JoinColumn({name: 'user_id'})
     user: Relation<User>;
 
     //
-    // user session activity 
+    // user session activity
     //
-    @Column({ nullable: true, type: 'int' })
+    @Column({nullable: true, type: 'int'})
     @XViewColumn()
-    activitySessionId: Id<'ActivitySession'>;
-    @JoinColumn({ name: 'activity_session_id' })
+    activitySessionId: Id<'ActivitySession'> | null;
+    @JoinColumn({name: 'activity_session_id'})
     @ManyToOne(_ => ActivitySession, x => x.coinAcquires)
     activitySession: Relation<ActivitySession> | null;
 
     //
-    // video 
+    // video
     //
-    @Column({ nullable: true, type: 'int' })
+    @Column({nullable: true, type: 'int'})
     @XViewColumn()
-    videoId: Id<'Video'>;
-    @JoinColumn({ name: 'video_id' })
+    videoId: Id<'Video'> | null;
+    @JoinColumn({name: 'video_id'})
     @ManyToOne(_ => Video, x => x.coinAcquires)
     video: Relation<Video> | null;
 
     //
-    // given answer  
+    // given answer
     //
-    @Column({ nullable: true, type: 'int' })
+    @Column({nullable: true, type: 'int'})
     @XViewColumn()
-    givenAnswerId: Id<'GivenAnswer'>;
-    @JoinColumn({ name: 'given_answer_id' })
+    givenAnswerId: Id<'GivenAnswer'> | null;
+    @JoinColumn({name: 'given_answer_id'})
     @ManyToOne(_ => GivenAnswer, x => x.coinAcquires)
     givenAnswer: Relation<GivenAnswer> | null;
 
     //
-    // given answer streak 
+    // given answer streak
     //
-    @Column({ nullable: true, type: 'int' })
+    @Column({nullable: true, type: 'int'})
     @XViewColumn()
-    givenAnswerStreakId: Id<'GivenAnswerStreak'>;
-    @JoinColumn({ name: 'given_answer_streak_id' })
+    givenAnswerStreakId: Id<'GivenAnswerStreak'> | null;
+    @JoinColumn({name: 'given_answer_streak_id'})
     @ManyToOne(_ => GivenAnswerStreak, x => x.coinAcquires)
     givenAnswerStreak: Relation<GivenAnswerStreak> | null;
 
-    // 
+    //
     // activity streak
     //
-    @Column({ nullable: true, type: 'int' })
+    @Column({nullable: true, type: 'int'})
     @XViewColumn()
-    activityStreakId: Id<'ActivityStreak'>;
-    @JoinColumn({ name: 'activity_streak_id' })
+    activityStreakId: Id<'ActivityStreak'> | null;
+    @JoinColumn({name: 'activity_streak_id'})
     @ManyToOne(_ => ActivityStreak, x => x.coinAcquires)
     activityStreak: Relation<ActivityStreak> | null;
 
-    // 
-    // shop item 
     //
-    @Column({ nullable: true, type: 'int' })
+    // shop item
+    //
+    @Column({nullable: true, type: 'int'})
     @XViewColumn()
-    shopItemId: Id<'ShopItem'>;
-    @JoinColumn({ name: 'shop_item_id' })
+    shopItemId: Id<'ShopItem'> | null;
+    @JoinColumn({name: 'shop_item_id'})
     @ManyToOne(_ => ShopItem, x => x.coinAcquires)
     shopItem: Relation<ShopItem> | null;
 }

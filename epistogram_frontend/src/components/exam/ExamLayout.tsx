@@ -1,11 +1,10 @@
-import { FlexProps } from '@chakra-ui/react';
-import { ArrowBack } from '@mui/icons-material';
-import { ReactNode } from 'react';
-import { isString } from '../../static/frontendHelpers';
-import { EpistoButton } from '../controls/EpistoButton';
-import { EpistoFlex2 } from '../controls/EpistoFlex';
-import { EpistoFont } from '../controls/EpistoFont';
-import { EpistoStepper, StepperLogicType } from '../universal/EpistoStepper';
+import {Flex, FlexProps} from '@chakra-ui/react';
+import {ArrowBack} from '@mui/icons-material';
+import {ReactNode} from 'react';
+import {isString} from '../../static/frontendHelpers';
+import {EpistoButton} from '../controls/EpistoButton';
+import {EpistoFont} from '../controls/EpistoFont';
+import {EpistoStepper, StepperLogicType} from '../universal/EpistoStepper';
 
 type ExamLayoutButtonProps = {
     title: string,
@@ -86,16 +85,20 @@ export const ExamLayout = (props: {
         </EpistoFlex2>;
     };
 
-    return <EpistoFlex2
-        minH='calc(100vh - 120px)'
-        maxH={isHeightMaximized ? '1080px' : 'unset'}
+    return <Flex
+        id='ExamLayout-root'
+        minH='calc(100vh - 200px)'
+        maxH={isHeightMaximized ? '100vh - 120px' : 'unset'}
+        height='100%'
         width='100%'
         px='5px'
         direction="column"
-        alignItems="center">
+        alignItems="center"
+        {...css}>
 
         {/* header */}
-        <EpistoFlex2
+        <Flex
+            id='ExamLayout-header'
             direction={'row'}
             alignItems={'center'}
             position={!isHeightMaximized ? 'sticky' : undefined}
@@ -104,7 +107,8 @@ export const ExamLayout = (props: {
             background={!isHeightMaximized ? 'white' : 'var(--transparentWhite70)'}
             width="100%"
             zIndex='1000'
-            height={60}
+            height='60px'
+            minH='60px'
             pl={20}>
 
             <EpistoFlex2 minWidth="200">
@@ -144,7 +148,8 @@ export const ExamLayout = (props: {
         </EpistoFlex2>
 
         {/* content */}
-        <EpistoFlex2
+        <Flex
+            id='ExamLayout-content'
             flex="1"
             my="20px"
             minH="300px"
@@ -158,12 +163,14 @@ export const ExamLayout = (props: {
         </EpistoFlex2>
 
         {/* footer */}
-        <EpistoFlex2
+        <Flex
+            id='ExamLayout-footer'
             width="100%"
             className="roundBorders mildShadow"
             background="var(--transparentWhite70)"
             height="60px"
             align='center'
+            mb='5px'
             p={20}>
 
             {/* back button */}

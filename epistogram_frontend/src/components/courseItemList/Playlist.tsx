@@ -47,17 +47,23 @@ export const Playlist = (props: {
             .items
             .some(x => x.state === 'current'))[0];
 
+    useEffect(() => {
+
+        // open all modules by default
+        setExpandedNodeIds(
+            modules.map(x => x.moduleId)
+        );
+    }, [modules]);
+
     // funcs
     const handleToggle = (moduleId: Id<'Module'>) => {
 
         if (expandedNodeIds.some(x => x === moduleId)) {
 
-            console.log('Set expanded nodes if');
             setExpandedNodeIds(expandedNodeIds.filter(x => x !== moduleId));
         }
         else {
 
-            console.log('Set expanded nodes else');
             setExpandedNodeIds([...expandedNodeIds, moduleId]);
         }
     };
@@ -102,7 +108,7 @@ export const Playlist = (props: {
 
                     return <CollapseItem
                         key={index}
-                        isOpen={true}
+                        isOpen={isOpen}
                         style={{
                             pointerEvents: isLocked || unclickable ? 'none' : 'all',
                             color: isLocked ? 'gray' : undefined

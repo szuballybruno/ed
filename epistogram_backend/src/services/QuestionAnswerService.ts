@@ -121,7 +121,8 @@ export class QuestionAnswerService {
             normal: canAcquireCoin
                 ? await this
                     ._coinAcquireService
-                    .acquireQuestionAnswerCoinsAsync(userId, questionVersionId)
+                    .acquireQuestionAnswerCoinsAsync(userId, savedGivenAnswers
+                        .first().givenAnswerId)
                 : null,
             bonus: canAcquireCoin
                 ? await this
@@ -245,8 +246,8 @@ export class QuestionAnswerService {
         // Creates new AnswerGivenAnswerBridge3
         await this._ormService
             .createAsync(AnswerGivenAnswerBridge, {
-                givenAnswerId: Id.read(createdGivenAnswer),
-                answerVersionId: Id.read(answerVersionId),
+                givenAnswerId: createdGivenAnswer,
+                answerVersionId: answerVersionId,
                 deletionDate: null
             });
 

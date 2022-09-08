@@ -19,7 +19,7 @@ export class AnswerGivenAnswerBridge {
     // given answer
     @Column()
     @XViewColumn()
-    givenAnswerId: number;
+    givenAnswerId: Id<'GivenAnswer'>;
     @ManyToOne(_ => GivenAnswer, x => x.answerBridges)
     @JoinColumn({name: 'given_answer_id'})
     givenAnswer: Relation<GivenAnswer>;
@@ -27,7 +27,7 @@ export class AnswerGivenAnswerBridge {
     // answer
     @Column()
     @XViewColumn()
-    answerVersionId: number;
+    answerVersionId: Id<'AnswerVersion'>;
     @ManyToOne(_ => AnswerVersion, x => x.givenAnswerBridges)
     @XJoinColumn<AnswerGivenAnswerBridge>('answerVersionId')
     answerVersion: Relation<AnswerVersion>;

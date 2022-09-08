@@ -18,13 +18,13 @@ class SessionWatcher {
         this._lastHandshakeDate = new Date();
 
         /**
-         * notify on focus to detect users 
+         * notify on focus to detect users
          * coming back from windows sleep mode
          */
         window.onfocus = () => this._notifyActivity();
 
         /**
-         * Subscribe to query service 
+         * Subscribe to query service
          * to get latest auth handshake date
          */
         eventBus
@@ -32,7 +32,7 @@ class SessionWatcher {
 
                 const handshakeTime = new Date();
 
-                console.log('Handskae... time: ' + handshakeTime);
+                console.log('Handshake... time: ' + handshakeTime);
                 this._lastHandshakeDate = handshakeTime;
             });
     }
@@ -89,7 +89,7 @@ export const SessionWatcherFrame: FC<PropsWithChildren> = ({ children }) => {
                     align="center">
 
                     <EpistoFont>
-                        Session expired, try refreshing the page!
+                        Lejárt munkamenet, kérjük frissítsd az oldalt.
                     </EpistoFont>
 
                     <EpistoButton
@@ -99,7 +99,8 @@ export const SessionWatcherFrame: FC<PropsWithChildren> = ({ children }) => {
                         variant="colored"
                         icon={<Refresh></Refresh>}
                         onClick={() => reloadPage()}>
-                        Refresh
+
+                        Újratöltés
                     </EpistoButton>
                 </EpistoFlex2>
             </EpistoFlex2>}

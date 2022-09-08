@@ -1,7 +1,7 @@
-import { Button, ButtonProps } from '@mui/material';
-import { CSSProperties, forwardRef, ReactNode } from 'react';
-import { useCSSOptionClasses } from '../../static/frontendHelpers';
-import { CSSOptionsType } from '../../styles/globalCssTypes';
+import {Button, ButtonProps} from '@mui/material';
+import {CSSProperties, forwardRef, ReactNode} from 'react';
+import {useCSSOptionClasses} from '../../static/frontendHelpers';
+import {CSSOptionsType} from '../../styles/globalCssTypes';
 
 export type EpistoButtonPropsType = {
     children?: string | ReactNode,

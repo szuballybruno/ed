@@ -1,18 +1,18 @@
-import { dirname } from 'path';
+import {dirname} from 'path';
 import 'reflect-metadata'; // needs to be imported for TypeORM
-import { fileURLToPath } from 'url';
-import { LoggerService } from './services/LoggerService';
-import { GlobalConfiguration } from './services/misc/GlobalConfiguration';
-import { log } from './services/misc/logger';
-import { CreateDBService } from './services/sqlServices/CreateDBService';
-import { SQLConnectionService } from './services/sqlServices/SQLConnectionService';
+import {fileURLToPath} from 'url';
+import {LoggerService} from './services/LoggerService';
+import {GlobalConfiguration} from './services/misc/GlobalConfiguration';
+import {log} from './services/misc/logger';
+import {CreateDBService} from './services/sqlServices/CreateDBService';
+import {SQLConnectionService} from './services/sqlServices/SQLConnectionService';
 import './shared/logic/jsExtensions';
-import { ServiceProviderInitializator } from './startup/initApp';
-import { initTurboExpress } from './startup/instatiateTurboExpress';
-import { recreateDBAsync } from './startup/recreateDB';
-import { XTurboExpressListener } from './turboImplementations/XTurboExpressListener';
-import { snoozeAsync } from './utilities/helpers';
-import { GetServiceProviderType } from './utilities/XTurboExpress/XTurboExpressTypes';
+import {ServiceProviderInitializator} from './startup/initApp';
+import {initTurboExpress} from './startup/instatiateTurboExpress';
+import {recreateDBAsync} from './startup/recreateDB';
+import {XTurboExpressListener} from './turboImplementations/XTurboExpressListener';
+import {snoozeAsync} from './utilities/helpers';
+import {GetServiceProviderType} from './utilities/XTurboExpress/XTurboExpressTypes';
 
 const rootDir = dirname(fileURLToPath(import.meta.url));
 
@@ -45,11 +45,11 @@ const startServerAsync = async (initializator: ServiceProviderInitializator) => 
         initializator
     );
 
-    // 
+    //
     // INIT TURBO EXPRESS
     const turboExpress = initTurboExpress(initializator, listener);
 
-    // 
+    //
     // LISTEN (start server)
     turboExpress.listen();
 };
