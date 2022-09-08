@@ -383,7 +383,6 @@ export const createDBSchema = (): XDBMSchemaType => {
         functionScripts: [
             'acquire_task_lock_fn',
             'create_daily_tip_fn',
-            'insert_coin_transaction',
             'get_user_session_first_activity_id'
         ],
 
@@ -500,7 +499,7 @@ export const createDBSchema = (): XDBMSchemaType => {
             CourseItemCompletion,
             ConstantValue,
             CourseCompletion
-        ],
+        ]
     };
 
     return new XDBMSchemaType(schema);

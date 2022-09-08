@@ -211,7 +211,6 @@ export class UserStatsService {
             }
         };
 
-
     }
 
     /**
@@ -238,7 +237,6 @@ export class UserStatsService {
                     .checkPermissionAsync(principalId, 'ACCESS_ADMIN');
             }
         };
-
 
     }
 
@@ -314,7 +312,6 @@ export class UserStatsService {
             }
         };
 
-
     }
 
     getUserCourseStatsOverviewData = (
@@ -358,6 +355,7 @@ export class UserStatsService {
 
     };
 
+    // TODO: REFACTOR!
     async calculateCompanyProductivityAsync(companyId: Id<'Company'>) {
 
         const userPerformanceViews = await this._ormService
@@ -428,7 +426,6 @@ export class UserStatsService {
             };
 
         });
-
 
         const statsViewsExtendedFiltered = statsViewsExtended
             .flat(0);

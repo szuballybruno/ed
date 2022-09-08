@@ -1,5 +1,5 @@
 import {ToggleButton, ToggleButtonGroup} from '@mui/material';
-import {CSSProperties} from 'react';
+import {CSSProperties, ReactNode} from 'react';
 import {PagingType} from '../../static/frontendHelpers';
 import {SegmentedButtonStyleType} from './segmentedButtonStyles';
 
@@ -38,7 +38,7 @@ export const SegmentedButton = <T,>(props: {
                             value={index}
                             onClick={() => paging.setItem(index)}>
 
-                            {disp(item)}
+                            {disp(item) as ReactNode}
                         </ToggleButton>
                     );
                 })}
