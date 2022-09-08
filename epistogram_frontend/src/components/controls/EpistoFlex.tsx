@@ -1,4 +1,5 @@
 import { Flex, FlexProps } from '@chakra-ui/layout';
+import { FC, forwardRef } from 'react';
 import { PropsWithChildren, useCSSOptionClasses } from '../../static/frontendHelpers';
 import { CSSOptionsFlex } from '../../styles/globalCssTypes';
 import classes from './css/EpistoFlex.module.css';
@@ -19,11 +20,13 @@ export const EpistoFlex: React.FC<CSSOptionsFlex & PropsWithChildren> = ({
     );
 };
 
-export const EpistoFlex2: React.FC<FlexProps & { ref?: any }> = (props) => {
+type EpistoFlex2Props = FlexProps;
 
-    // const { cssOptionClasses } = useCSSOptionClasses(cssOptions);
+export const EpistoFlex2: FC<EpistoFlex2Props> = forwardRef<HTMLDivElement, FlexProps>((props, ref) => {
 
     return (
-        <Flex {...props} />
+        <Flex
+            {...props}
+            ref={ref} />
     );
-};
+});

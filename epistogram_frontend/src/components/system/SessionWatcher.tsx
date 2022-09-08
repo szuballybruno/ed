@@ -9,8 +9,6 @@ import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { FullscreenOverlay } from '../universal/FullscreenOverlay';
 
-console.log('seesion watcher');
-
 class SessionWatcher {
 
     private _lastHandshakeDate: Date;
