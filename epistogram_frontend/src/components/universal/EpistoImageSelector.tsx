@@ -1,8 +1,9 @@
-import { Box, BoxProps, Flex } from '@chakra-ui/layout';
-import { useRef, useState } from 'react';
-import { HiddenFileUploadInput } from './HiddenFileUploadInput';
-import { Edit } from '@mui/icons-material';
 import { Image } from '@chakra-ui/image';
+import { Box, BoxProps } from '@chakra-ui/layout';
+import { Edit } from '@mui/icons-material';
+import { useRef, useState } from 'react';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { HiddenFileUploadInput } from './HiddenFileUploadInput';
 
 export const EpistoImageSelector = ({
     children,
@@ -47,7 +48,7 @@ export const EpistoImageSelector = ({
                 src={src} />
             : children}
 
-        <Flex
+        <EpistoFlex2
             position="absolute"
             display={isInteractionBlocked ? 'none' : undefined}
             className="whall"
@@ -62,6 +63,6 @@ export const EpistoImageSelector = ({
             opacity={isHovered ? 1 : 0}>
 
             <Edit />
-        </Flex>
+        </EpistoFlex2>
     </Box>;
 };

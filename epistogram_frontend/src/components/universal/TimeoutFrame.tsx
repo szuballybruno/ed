@@ -1,5 +1,6 @@
-import { Box, Flex, FlexProps } from '@chakra-ui/layout';
+import { Box, FlexProps } from '@chakra-ui/layout';
 import { ReactTimerType } from '../../helpers/reactTimer';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 
 export const TimeoutFrame = (props: { reactTimer: ReactTimerType } & FlexProps) => {
 
@@ -15,7 +16,7 @@ export const TimeoutFrame = (props: { reactTimer: ReactTimerType } & FlexProps) 
         reactTimer.start();
     };
 
-    return <Flex
+    return <EpistoFlex2
         position="relative"
         onMouseEnter={() => pauseTimeout()}
         onMouseLeave={() => resumeTimeout()}
@@ -36,5 +37,5 @@ export const TimeoutFrame = (props: { reactTimer: ReactTimerType } & FlexProps) 
         <Box position="relative">
             {children}
         </Box>
-    </Flex>;
+    </EpistoFlex2>;
 };

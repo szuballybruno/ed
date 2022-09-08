@@ -1,6 +1,7 @@
-import {Flex, FlexProps} from '@chakra-ui/layout';
-import {Checkbox} from '@mui/material';
-import {ForwardedRef, forwardRef, ReactNode} from 'react';
+import { FlexProps } from '@chakra-ui/layout';
+import { Checkbox } from '@mui/material';
+import { ForwardedRef, forwardRef, ReactNode } from 'react';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 
 export const FlexListItem = forwardRef((props: FlexProps & {
     onClick?: () => void,
@@ -22,7 +23,7 @@ export const FlexListItem = forwardRef((props: FlexProps & {
         setIsChecked,
         ...css } = props;
 
-    return <Flex
+    return <EpistoFlex2
         ref={ref}
         id="flexListItem"
         //className="shadowOnHover"
@@ -34,7 +35,7 @@ export const FlexListItem = forwardRef((props: FlexProps & {
         onClick={onClick}
         {...css}>
 
-        {setIsChecked && <Flex
+        {setIsChecked && <EpistoFlex2
             alignItems={'center'}
             justifyContent={'center'}>
 
@@ -42,24 +43,24 @@ export const FlexListItem = forwardRef((props: FlexProps & {
                 checked={isChecked}
                 onChange={x => setIsChecked(x.currentTarget.checked)}
                 style={{ alignSelf: 'center' }} />
-        </Flex>}
+        </EpistoFlex2>}
 
-        {thumbnailContent && <Flex
+        {thumbnailContent && <EpistoFlex2
             alignItems={'center'}
             justifyContent={'center'}>
 
             {thumbnailContent}
-        </Flex>}
+        </EpistoFlex2>}
 
-        <Flex
+        <EpistoFlex2
             flex="1"
             px="10px"
             alignItems={'center'}
             justifyContent={'flex-start'}>
 
             {midContent}
-        </Flex>
+        </EpistoFlex2>
 
         {endContent}
-    </Flex>;
+    </EpistoFlex2>;
 });

@@ -1,4 +1,4 @@
-import {Box, Flex} from '@chakra-ui/react';
+import {Box} from '@chakra-ui/react';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
@@ -9,6 +9,7 @@ import {PlaylistItemDTO} from '../../shared/dtos/PlaylistItemDTO';
 import {PlaylistModuleDTO} from '../../shared/dtos/PlaylistModuleDTO';
 import {Id} from '../../shared/types/versionId';
 import {EpistoButton} from '../controls/EpistoButton';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 import {EpistoFont} from '../controls/EpistoFont';
 import {CollapseItem} from '../universal/CollapseItem';
 import {FlexList} from '../universal/FlexList';
@@ -82,7 +83,7 @@ export const Playlist = (props: {
     }, [isModuleSelected, currentItem, currentModule]);
 
     return (
-        <Flex
+        <EpistoFlex2
             id="courseItemListRoot"
             direction="column"
             zIndex='4'
@@ -106,7 +107,7 @@ export const Playlist = (props: {
                             pointerEvents: isLocked || unclickable ? 'none' : 'all',
                             color: isLocked ? 'gray' : undefined
                         }}
-                        header={() => <Flex
+                        header={() => <EpistoFlex2
                             bg={isSelected ? 'var(--deepBlue)' : undefined}
                             color={headercolor}
                             justify="space-between"
@@ -117,7 +118,7 @@ export const Playlist = (props: {
                             pl="5px">
 
                             {/* open/close */}
-                            <Flex align="center">
+                            <EpistoFlex2 align="center">
 
                                 <EpistoButton onClick={() => handleToggle(module.moduleId)}>
 
@@ -132,7 +133,7 @@ export const Playlist = (props: {
                                 <EpistoFont>
                                     {module.moduleName}
                                 </EpistoFont>
-                            </Flex>
+                            </EpistoFlex2>
 
                             {/* play */}
                             <Box width="50px">
@@ -145,7 +146,7 @@ export const Playlist = (props: {
                                     <PlayArrowIcon style={{ color: 'var(--epistoTeal)' }} />
                                 </EpistoButton>}
                             </Box>
-                        </Flex>}>
+                        </EpistoFlex2>}>
 
                         <FlexList
                             id="courseItemListContainer"
@@ -159,6 +160,6 @@ export const Playlist = (props: {
                         </FlexList>
                     </CollapseItem>;
                 })}
-        </Flex>
+        </EpistoFlex2>
     );
 };

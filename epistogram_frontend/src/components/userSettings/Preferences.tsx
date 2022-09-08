@@ -1,5 +1,4 @@
-import { Flex } from '@chakra-ui/layout';
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { useUploadAvatarFile } from '../../services/api/fileApiService';
 import { useRequestPasswordChangeAuthenticated } from '../../services/api/passwordChangeApiService';
 import { UserApiService } from '../../services/api/userApiService';
@@ -8,6 +7,7 @@ import { reloadPage } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoEntry } from '../controls/EpistoEntry';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { ProfileImage } from '../ProfileImage';
 import { CurrentUserContext, RefetchUserAsyncContext } from '../system/AuthenticationFrame';
@@ -121,13 +121,13 @@ export const Preferences = () => {
             className="largeSoftShadow"
             marginBottom="10px">
 
-            <Flex
+            <EpistoFlex2
                 direction='column'
                 ml='10px'
                 maxW='500px'>
 
                 {/* profile image selector */}
-                <Flex
+                <EpistoFlex2
                     justify="flex-start"
                     mt='20px'
                     pl='5px'
@@ -147,10 +147,10 @@ export const Preferences = () => {
                             ref={imageRef}
                             className="whall" />
                     </EpistoImageSelector>
-                </Flex>
+                </EpistoFlex2>
 
                 {/* inputs container */}
-                <Flex
+                <EpistoFlex2
                     px='10px'
                     direction="column"
                     justify="flex-start"
@@ -187,7 +187,7 @@ export const Preferences = () => {
                     </EpistoFont>}
 
                     {/* password change options */}
-                    <Flex
+                    <EpistoFlex2
                         direction="column"
                         justify="flex-start"
                         align="center"
@@ -205,7 +205,7 @@ export const Preferences = () => {
                             {translatableTexts.preferences.changePassword}
                         </EpistoButton>}
 
-                        {isPasswordChangeOpen && <Flex
+                        {isPasswordChangeOpen && <EpistoFlex2
                             width="100%"
                             direction="column"
                             flex="1">
@@ -217,7 +217,7 @@ export const Preferences = () => {
                                 labelVariant='top'
                                 setValue={setCurrentPassword} />
 
-                            <Flex mt="20px"
+                            <EpistoFlex2 mt="20px"
                                 width="100%">
 
                                 <EpistoButton
@@ -244,14 +244,14 @@ export const Preferences = () => {
 
                                     {translatableTexts.preferences.sendResetMail}
                                 </EpistoButton>
-                            </Flex>
-                        </Flex>}
-                    </Flex>
+                            </EpistoFlex2>
+                        </EpistoFlex2>}
+                    </EpistoFlex2>
 
 
-                </Flex>
+                </EpistoFlex2>
 
-            </Flex>
+            </EpistoFlex2>
 
             {!isPasswordChangeOpen && <EpistoButton
                 isDisabled={!isChanged}

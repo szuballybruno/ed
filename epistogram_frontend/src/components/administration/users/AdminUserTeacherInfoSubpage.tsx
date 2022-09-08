@@ -1,4 +1,3 @@
-import { Flex } from '@chakra-ui/react';
 import { Checkbox, Slider } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
@@ -12,6 +11,7 @@ import { useRouteParams } from '../../../static/locationHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoEntry } from '../../controls/EpistoEntry';
+import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { EpistoLabel } from '../../controls/EpistoLabel';
 import { AdminBreadcrumbsHeader } from '../AdminBreadcrumbsHeader';
@@ -115,7 +115,7 @@ export const AdminUserTeacherInfoSubpage = (props: {
                 applicationRoutes.administrationRoute.usersRoute.teacherInfoRoute
             ]}>
 
-            <Flex
+            <EpistoFlex2
                 flex="1"
                 direction="column"
                 width="100%"
@@ -180,10 +180,10 @@ export const AdminUserTeacherInfoSubpage = (props: {
 
                     {/* Teacher badges */}
                     <EpistoLabel text={translatableTexts.administration.teacherInfoSubpage.teacherBadges}>
-                        <Flex flexWrap={'wrap'}>
+                        <EpistoFlex2 flexWrap={'wrap'}>
                             {allBadges
                                 .map((badge, index) => {
-                                    return <Flex
+                                    return <EpistoFlex2
                                         key={index}
                                         flexDir={'column'}
                                         justifyContent={'space-between'}
@@ -195,12 +195,12 @@ export const AdminUserTeacherInfoSubpage = (props: {
                                         boxSizing={'border-box'}
                                         m={5}>
 
-                                        <Flex>
+                                        <EpistoFlex2>
                                             <img src={badge.icon}
                                                 alt={''} />
-                                        </Flex>
+                                        </EpistoFlex2>
 
-                                        <Flex>
+                                        <EpistoFlex2>
                                             <Checkbox
                                                 checked={selectedBadges.some(x => x === badge.name)}
                                                 onChange={(_, y) => {
@@ -218,10 +218,10 @@ export const AdminUserTeacherInfoSubpage = (props: {
                                             <EpistoFont fontSize={'fontSmall'}>
                                                 {badge.name}
                                             </EpistoFont>
-                                        </Flex>
-                                    </Flex>;
+                                        </EpistoFlex2>
+                                    </EpistoFlex2>;
                                 })}
-                        </Flex>
+                        </EpistoFlex2>
                     </EpistoLabel>
 
                     {/* submit button */}
@@ -235,7 +235,7 @@ export const AdminUserTeacherInfoSubpage = (props: {
                 </EditSection>
 
 
-            </Flex>
+            </EpistoFlex2>
         </AdminSubpageHeader>
     </AdminBreadcrumbsHeader>;
 };

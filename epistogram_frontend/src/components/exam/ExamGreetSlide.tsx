@@ -1,10 +1,10 @@
-import { Flex } from '@chakra-ui/react';
 import React from 'react';
 import { ExamPlayerDataDTO } from '../../shared/dtos/ExamPlayerDataDTO';
 import { Environment } from '../../static/Environemnt';
 import { ArrayBuilder } from '../../static/frontendHelpers';
 
 import { translatableTexts } from '../../static/translatableTexts';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { ExamLayout } from './ExamLayout';
 import { ExamResultStats } from './ExamResultStats';
@@ -29,7 +29,7 @@ export const ExamGreetSlide = (props: {
             })
             .getArray()}>
 
-        <Flex
+        <EpistoFlex2
             direction="column"
             align="center"
             justify='center'
@@ -73,7 +73,7 @@ export const ExamGreetSlide = (props: {
                 </EpistoFont>
 
                 {/* stats */}
-                <Flex
+                <EpistoFlex2
                     mt="20px"
                     align="center"
                     justify="center"
@@ -81,8 +81,8 @@ export const ExamGreetSlide = (props: {
 
                     <ExamResultStats
                         stats={exam.examStats} />
-                </Flex>
+                </EpistoFlex2>
             </>}
-        </Flex>
+        </EpistoFlex2>
     </ExamLayout>;
 };

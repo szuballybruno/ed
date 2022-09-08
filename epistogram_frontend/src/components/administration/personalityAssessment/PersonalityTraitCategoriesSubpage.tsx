@@ -1,4 +1,3 @@
-import { Flex } from '@chakra-ui/react';
 import Edit from '@mui/icons-material/Edit';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { PersonalityTraitCategoryShortDTO } from '../../../shared/dtos/PersonalityTraitCategoryShortDTO';
@@ -11,6 +10,7 @@ import { FlexListItem } from '../../universal/FlexListItem';
 import { FlexListTitleSubtitle } from '../../universal/FlexListTitleSubtitle';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { Id } from '../../../shared/types/versionId';
+import { EpistoFlex2 } from '../../controls/EpistoFlex';
 
 export const PersonalityTraitCategoriesSubpage = () => {
 
@@ -74,7 +74,7 @@ export const PersonalityTraitCategoriesSubpage = () => {
                                     title={personalityTraitCategory.title}
                                     subTitle={personalityTraitCategory.label} />
                             )}
-                            endContent={<Flex
+                            endContent={<EpistoFlex2
                                 align="center"
                                 justifyContent={'flex-end'}
                                 height="100%"
@@ -108,7 +108,7 @@ export const PersonalityTraitCategoriesSubpage = () => {
                                             {x.icon}
                                         </EpistoButton>
                                     ))}
-                            </Flex>} />
+                            </EpistoFlex2>} />
                     ))}
 
             </AdminSubpageHeader>

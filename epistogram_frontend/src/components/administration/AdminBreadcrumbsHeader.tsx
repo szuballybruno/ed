@@ -1,4 +1,4 @@
-import { Box, Flex, FlexProps } from '@chakra-ui/react';
+import { Box, FlexProps } from '@chakra-ui/react';
 import { GridOn, List } from '@mui/icons-material';
 import { FormControl, FormGroup, Switch } from '@mui/material';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
@@ -12,6 +12,7 @@ import { UserApiService } from '../../services/api/userApiService';
 import { getKeys } from '../../shared/logic/sharedLogic';
 import { Id } from '../../shared/types/versionId';
 import { ArrayBuilder, useIsMatchingCurrentRoute } from '../../static/frontendHelpers';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 
 const Content = (props: {
@@ -23,15 +24,15 @@ const Content = (props: {
     const { iconComponent, isCurrent, title } = props;
 
     return (
-        <Flex>
+        <EpistoFlex2>
 
-            {iconComponent && <Flex
+            {iconComponent && <EpistoFlex2
                 width={27}
                 height="100%"
                 m={'2px 10px 2px 2px'}>
 
                 {iconComponent}
-            </Flex>}
+            </EpistoFlex2>}
 
             <EpistoFont
                 style={{
@@ -44,7 +45,7 @@ const Content = (props: {
 
                 {title}
             </EpistoFont>
-        </Flex>
+        </EpistoFlex2>
     );
 };
 
@@ -136,12 +137,12 @@ export const AdminBreadcrumbsHeader = (props: {
         ? { title: subRouteName! }
         : null;
 
-    return <Flex
+    return <EpistoFlex2
         id={AdminBreadcrumbsHeader.name}
         flex="1"
         direction={'column'}>
 
-        <Flex
+        <EpistoFlex2
             justify="space-between"
             minH="38px">
 
@@ -179,16 +180,16 @@ export const AdminBreadcrumbsHeader = (props: {
                     <GridOn />
                 </FormControl>
             </FormGroup>}
-        </Flex>
+        </EpistoFlex2>
 
         {/* children  */}
-        <Flex
+        <EpistoFlex2
             direction="row"
             mt="10px"
             flex="1"
             {...css}>
 
             {children}
-        </Flex>
-    </Flex >;
+        </EpistoFlex2>
+    </EpistoFlex2 >;
 };

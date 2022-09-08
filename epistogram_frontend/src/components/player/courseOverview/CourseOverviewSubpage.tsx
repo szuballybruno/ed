@@ -1,8 +1,8 @@
-import { Flex } from '@chakra-ui/react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { useCourseOverviewData } from '../../../services/api/miscApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { isNullOrUndefined } from '../../../static/frontendHelpers';
+import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoGrid } from '../../controls/EpistoGrid';
 import { ExamLayout } from '../../exam/ExamLayout';
 import StatisticsCard from '../../statisticsCard/StatisticsCard';
@@ -73,7 +73,7 @@ export const CourseOverviewSubpage = () => {
                 },
             ]}>
 
-            <Flex
+            <EpistoFlex2
                 flex='1'
                 background='var(--transparentWhite70)'
                 direction="column"
@@ -98,7 +98,7 @@ export const CourseOverviewSubpage = () => {
                                 p="10px 10px 10px 30px" />;
                         })}
                 </EpistoGrid>
-            </Flex>
+            </EpistoFlex2>
         </ExamLayout>
     );
 };

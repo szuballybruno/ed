@@ -1,4 +1,4 @@
-import { Box, Flex, FlexProps } from '@chakra-ui/react';
+import { Box, FlexProps } from '@chakra-ui/react';
 import { Done, LocalOffer } from '@mui/icons-material';
 import React from 'react';
 import { ShopItemDTO } from '../../shared/dtos/ShopItemDTO';
@@ -9,6 +9,7 @@ import { EpistoButton } from '../controls/EpistoButton';
 import { FlexFloat } from '../controls/FlexFloat';
 import { EpistoFont } from '../controls/EpistoFont';
 import { Environment } from '../../static/Environemnt';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 
 export const ShopItem = (props: {
     shopItem: ShopItemDTO,
@@ -64,7 +65,7 @@ export const ShopItem = (props: {
                 alt="" />
 
             {/* is purchased label */}
-            {isPurchased && <Flex
+            {isPurchased && <EpistoFlex2
                 position="absolute"
                 align="center"
                 width="100%"
@@ -90,16 +91,16 @@ export const ShopItem = (props: {
 
                     Megvásárolva
                 </EpistoFont>
-            </Flex>}
+            </EpistoFlex2>}
 
             {/*  purchase overlay 
-            {isPurchased && <Flex
+            {isPurchased && <EpistoFlex2
                 className="whall"
                 position="absolute"
                 align="flex-start"
                 justify="flex-end">
 
-                <Flex
+                <EpistoFlex2
                     background="gold"
                     p="5px 5px 5px 10px"
                     borderRadius="0 0 0 10px"
@@ -115,9 +116,9 @@ export const ShopItem = (props: {
                     </EpistoFont>
 
                     <StarsIcon style={{ color: "white" }}></StarsIcon>
-                </Flex>
+                </EpistoFlex2>
 
-            </Flex>} */}
+            </EpistoFlex2>} */}
         </Box>
 
         {/* title */}
@@ -125,7 +126,7 @@ export const ShopItem = (props: {
             flexBasis="80px"
             zIndex={1}>
 
-            <Flex direction="column"
+            <EpistoFlex2 direction="column"
                 p="10px" >
 
                 {/* category  */}
@@ -145,15 +146,15 @@ export const ShopItem = (props: {
 
                     {name}
                 </EpistoFont>
-            </Flex>
+            </EpistoFlex2>
         </Box>
 
         {/* prices */}
         {!isPurchased &&
-            <Flex alignItems={'center'}
+            <EpistoFlex2 alignItems={'center'}
                 justifyContent={'center'}
                 mb="5px">
-                <Flex alignItems={'center'}>
+                <EpistoFlex2 alignItems={'center'}>
                     <LocalOffer style={{
                         height: 17,
                         transform: 'scaleX(-1)'
@@ -174,11 +175,11 @@ export const ShopItem = (props: {
 
                     {/* currency price
                 {currencyPrice && `\xa0 és csak ${currencyPrice}Ft`}*/}
-                </Flex>
-            </Flex>}
+                </EpistoFlex2>
+            </EpistoFlex2>}
 
         {/* buttons */}
-        <Flex height="40px"
+        <EpistoFlex2 height="40px"
             margin="5px 5px 5px 5px">
 
             {/* item details */}
@@ -201,6 +202,6 @@ export const ShopItem = (props: {
                         ? translatableTexts.shop.buyAgain
                         : translatableTexts.shop.buy}
             </EpistoButton>}
-        </Flex>
+        </EpistoFlex2>
     </FlexFloat>;
 };

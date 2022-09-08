@@ -1,4 +1,3 @@
-import { Flex } from '@chakra-ui/react';
 import { Delete } from '@mui/icons-material';
 import Edit from '@mui/icons-material/Edit';
 import { useState } from 'react';
@@ -17,6 +16,7 @@ import { EpistoRoutes } from '../../universal/EpistoRoutes';
 import { ShopAdminEditSubpage } from './ShopAdminEditSubpage';
 import { useRedirectOnExactMatch } from '../../../static/frontendHelpers';
 import { Id } from '../../../shared/types/versionId';
+import { EpistoFlex2 } from '../../controls/EpistoFlex';
 
 export const ShopAdminSubpage = () => {
 
@@ -133,7 +133,7 @@ export const ShopAdminSubpage = () => {
                                         action: () => handleAddNewAsync()
                                     }
                                 ]} />
-                            <Flex
+                            <EpistoFlex2
                                 mt="5px"
                                 borderRadius="5px"
                                 background="var(--transparentWhite70)"
@@ -159,7 +159,7 @@ export const ShopAdminSubpage = () => {
                                                     title={shopItem.name}
                                                     subTitle={shopItem.shopItemCategoryId + ''} />
                                             )}
-                                            endContent={<Flex
+                                            endContent={<EpistoFlex2
                                                 align="center"
                                                 justifyContent={'flex-end'}
                                                 height="100%"
@@ -178,9 +178,9 @@ export const ShopAdminSubpage = () => {
                                                             {x.icon}
                                                         </EpistoButton>
                                                     ))}
-                                            </Flex>} />
+                                            </EpistoFlex2>} />
                                     ))}
-                            </Flex>
+                            </EpistoFlex2>
 
 
                         </AdminSubpageHeader>

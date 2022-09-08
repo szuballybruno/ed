@@ -1,5 +1,5 @@
-import { Flex } from '@chakra-ui/react';
 import { LinearProgress } from '@mui/material';
+import { EpistoFlex2 } from '../../controls/EpistoFlex';
 
 export const BusyBar = ({
     isBusy
@@ -8,7 +8,7 @@ export const BusyBar = ({
 }) => {
 
     return (
-        <Flex
+        <EpistoFlex2
             position="absolute"
             top="0"
             left="0"
@@ -26,7 +26,7 @@ export const BusyBar = ({
                         height: 3
                     }} />
             )}
-        </Flex>
+        </EpistoFlex2>
     );
 };
 

@@ -1,4 +1,4 @@
-import {Box, Flex, Grid} from '@chakra-ui/react';
+import {Box, Grid} from '@chakra-ui/react';
 import {Slider} from '@mui/material';
 import {useEffect, useState} from 'react';
 import {PrequizApiService} from '../../../services/api/prequizApiService';
@@ -15,6 +15,7 @@ import {ExamLayoutContent} from '../../exam/ExamLayoutContent';
 import {QuestionAnswer} from '../../exam/QuestionAnswer';
 import {CourseApiService} from '../../../services/api/courseApiService';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
+import { EpistoFlex2 } from '../../controls/EpistoFlex';
 
 export const PrequizSubpage = () => {
 
@@ -96,7 +97,7 @@ export const PrequizSubpage = () => {
     return (
         <ExamLayout
             headerLeftItem={(
-                <Flex align="center">
+                <EpistoFlex2 align="center">
 
                     <img
                         alt=""
@@ -106,7 +107,7 @@ export const PrequizSubpage = () => {
                     <EpistoFont style={{ marginLeft: '10px' }}>
                         {totalQuestionsCount}/{currentQuestionIndex + 1}
                     </EpistoFont>
-                </Flex>
+                </EpistoFlex2>
             )}
             headerCenterText={'Kurzus előtti felmérő' + (courseBriefData?.title
                 ? ' - ' + courseBriefData?.title
@@ -127,9 +128,9 @@ export const PrequizSubpage = () => {
                     : question?.text!}>
 
                 {question?.isNumeric
-                    ? <Flex direction="column"
+                    ? <EpistoFlex2 direction="column"
                         align="center">
-                        <Flex justify="space-between">
+                        <EpistoFlex2 justify="space-between">
                             <EpistoFont>
                                 {question.minLabel}
                             </EpistoFont>
@@ -139,9 +140,9 @@ export const PrequizSubpage = () => {
                             <EpistoFont>
                                 {question.maxLabel}
                             </EpistoFont>
-                        </Flex>
+                        </EpistoFlex2>
 
-                        <Flex
+                        <EpistoFlex2
                             width='100%'
                             align='center'
                             justify='stretch'
@@ -183,10 +184,10 @@ export const PrequizSubpage = () => {
 
                                 {paging.currentIndex === 2 ? '10 óra' : '10'}
                             </EpistoFont>
-                        </Flex>
+                        </EpistoFlex2>
 
 
-                    </Flex>
+                    </EpistoFlex2>
                     : <Grid
                         templateColumns="repeat(2, 1fr)"
                         gridAutoRows="minmax(0,1fr)"

@@ -1,8 +1,8 @@
-import { Flex } from '@chakra-ui/react';
 import { ArrowBack } from '@mui/icons-material';
 import React, { ReactNode } from 'react';
 import { PagingType } from '../../../static/frontendHelpers';
 import { EpistoButton } from '../../controls/EpistoButton';
+import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { SegmentedButton } from '../../controls/SegmentedButton';
 import { EpistoDialog, } from '../../universal/epistoDialog/EpistoDialog';
@@ -49,14 +49,14 @@ export const EditDialogBase = <TParams,>(props: {
         fullScreenX
         fullScreenY>
 
-        <Flex
+        <EpistoFlex2
             overflowY="scroll"
             className="roundBorders"
             flex="1"
             flexDirection="column">
 
             {/* header */}
-            <Flex
+            <EpistoFlex2
                 background="rgba(255,255,255,0.97)"
                 direction="row"
                 align='center'
@@ -72,11 +72,11 @@ export const EditDialogBase = <TParams,>(props: {
                 flex="1">
 
                 {/* unfocused header display */}
-                {!focusedTab && <Flex
+                {!focusedTab && <EpistoFlex2
                     direction="column"
                     justify='center'>
 
-                    <Flex align="center">
+                    <EpistoFlex2 align="center">
 
                         <EpistoFont
                             fontSize={'fontLarge'}
@@ -93,14 +93,14 @@ export const EditDialogBase = <TParams,>(props: {
                         {chipText && <ChipSmall
                             text={chipText}
                             color={chipColor} />}
-                    </Flex>
+                    </EpistoFlex2>
 
                     <EpistoFont
                         fontSize={'fontMid'}>
 
                         {subTitle}
                     </EpistoFont>
-                </Flex>}
+                </EpistoFlex2>}
 
                 {/* focused header display */}
                 {focusedTab && <>
@@ -117,7 +117,7 @@ export const EditDialogBase = <TParams,>(props: {
                     </EpistoButton>
 
                     {/* header */}
-                    <Flex
+                    <EpistoFlex2
                         align='center'
                         justify='center'
                         className='whall'>
@@ -130,10 +130,10 @@ export const EditDialogBase = <TParams,>(props: {
 
                             {paging.currentItem?.title}
                         </EpistoFont>
-                    </Flex>
+                    </EpistoFlex2>
                 </>}
 
-                <Flex paddingRight='20px'>
+                <EpistoFlex2 paddingRight='20px'>
 
                     {/* tab selector */}
                     {!hideTabs && <SegmentedButton
@@ -141,8 +141,8 @@ export const EditDialogBase = <TParams,>(props: {
                         getDisplayValue={x => x.title} />}
 
                     {!focusedTab && headerButtons}
-                </Flex>
-            </Flex>
+                </EpistoFlex2>
+            </EpistoFlex2>
 
             {/* tab renderer */}
             <EpistoPaging
@@ -151,7 +151,7 @@ export const EditDialogBase = <TParams,>(props: {
 
             {/* footer */}
             {footer}
-        </Flex>
+        </EpistoFlex2>
 
     </EpistoDialog>;
 };

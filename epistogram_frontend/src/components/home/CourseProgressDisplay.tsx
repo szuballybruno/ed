@@ -1,8 +1,9 @@
-import { Flex, FlexProps } from '@chakra-ui/layout';
+import { FlexProps } from '@chakra-ui/layout';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { LinearProgress } from '@mui/material';
 import { useNavigation } from '../../services/core/navigatior';
 import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 
 export const CourseProgressDisplay = (props: {
@@ -22,11 +23,11 @@ export const CourseProgressDisplay = (props: {
     };
 
     return (
-        <Flex
+        <EpistoFlex2
             direction="column"
             {...css}>
 
-            <Flex align="center">
+            <EpistoFlex2 align="center">
 
                 {/* title  */}
                 <EpistoFont>
@@ -40,9 +41,9 @@ export const CourseProgressDisplay = (props: {
                             color: 'var(--epistoTeal)'
                         }} />
                 </EpistoButton>
-            </Flex>
+            </EpistoFlex2>
 
-            <Flex align="center">
+            <EpistoFlex2 align="center">
 
                 {/* progress bar */}
                 <LinearProgress
@@ -57,7 +58,7 @@ export const CourseProgressDisplay = (props: {
                 <EpistoFont>
                     {`${roundValue}%`}
                 </EpistoFont>
-            </Flex>
-        </Flex>
+            </EpistoFlex2>
+        </EpistoFlex2>
     );
 };

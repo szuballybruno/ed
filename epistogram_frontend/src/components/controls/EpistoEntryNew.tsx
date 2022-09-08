@@ -1,6 +1,6 @@
-import { Flex } from '@chakra-ui/layout';
 import { InputAdornment, TextField } from '@mui/material';
 import { forwardRef, useEffect, useState } from 'react';
+import { EpistoFlex2 } from './EpistoFlex';
 import { EpistoFont } from './EpistoFont';
 
 // state
@@ -116,7 +116,7 @@ export const EpistoEntryNew = forwardRef<HTMLInputElement, EpistoEntryNewPropsTy
         value
     } = state;
 
-    return <Flex direction="column"
+    return <EpistoFlex2 direction="column"
 mt={marginTop ?? '10px'}
 flex={flex}
 style={style}>
@@ -171,5 +171,5 @@ style={style}>
                 // margin: "10px 0px 10px 0px",
                 // padding: "2px"
             }} />
-    </Flex>;
+    </EpistoFlex2>;
 });

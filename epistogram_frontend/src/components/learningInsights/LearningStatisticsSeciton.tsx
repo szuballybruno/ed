@@ -1,5 +1,5 @@
-import { Flex } from '@chakra-ui/layout';
 import React, { ReactNode } from 'react';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoHeader } from '../EpistoHeader';
 import classes from './learningStatistics.module.scss';
 
@@ -7,7 +7,7 @@ export const LearningStatisticsSeciton = (props: {
     title: string,
     children: ReactNode
 }) => {
-    return <Flex width="100%"
+    return <EpistoFlex2 width="100%"
         maxW="100%"
         direction="column"
         p="20px">
@@ -20,5 +20,5 @@ export const LearningStatisticsSeciton = (props: {
             {props.children}
         </div>
 
-    </Flex>;
+    </EpistoFlex2>;
 };

@@ -1,4 +1,3 @@
-import { Flex } from '@chakra-ui/react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useUserPermissions, useUserRoles } from '../../../../services/api/rolesApiService';
 import { ChangeSet } from '../../../../shared/dtos/changeSet/ChangeSet';
@@ -10,6 +9,7 @@ import { EpistoIcons } from '../../../../static/EpistoIcons';
 import { EventTriggerType, useHandleAddRemoveItems, useSubscribeEventTrigger } from '../../../../static/frontendHelpers';
 import { EpistoButton } from '../../../controls/EpistoButton';
 import { EpistoDataGrid, GridColumnType } from '../../../controls/EpistoDataGrid';
+import { EpistoFlex2 } from '../../../controls/EpistoFlex';
 import { EpistoFont } from '../../../controls/EpistoFont';
 import { EpistoLabel } from '../../../controls/EpistoLabel';
 import { LoadingFrame } from '../../../system/LoadingFrame';
@@ -40,7 +40,7 @@ type PermissionRowType = {
 }
 
 const AuthItemRowTitle = (props: { title: string, state: StateType }) => (
-    <Flex>
+    <EpistoFlex2>
         <EpistoFont>
             {props.title}
         </EpistoFont>
@@ -50,7 +50,7 @@ const AuthItemRowTitle = (props: { title: string, state: StateType }) => (
 
         {props.state === 'removed' && <EpistoIcons.DeleteOutline
             style={{ color: 'var(--mildRed)' }} />}
-    </Flex>
+    </EpistoFlex2>
 );
 
 const AuthItemRemoveButton = (props: {
@@ -430,7 +430,7 @@ export const PermissionAssignerControl = (props: {
                 flex="1"
                 text="Roles">
 
-                <Flex
+                <EpistoFlex2
                     justify="flex-end"
                     py="6px">
 
@@ -440,7 +440,7 @@ export const PermissionAssignerControl = (props: {
 
                         Add
                     </EpistoButton>
-                </Flex>
+                </EpistoFlex2>
 
                 <EpistoDataGrid
                     id="roles_datagrid"
@@ -456,7 +456,7 @@ export const PermissionAssignerControl = (props: {
                 flex="1"
                 text="Permissions">
 
-                <Flex
+                <EpistoFlex2
                     justify="flex-end"
                     py="6px">
 
@@ -466,7 +466,7 @@ export const PermissionAssignerControl = (props: {
 
                         Add
                     </EpistoButton>
-                </Flex>
+                </EpistoFlex2>
 
                 <EpistoDataGrid
                     id="permissions_datagrid"

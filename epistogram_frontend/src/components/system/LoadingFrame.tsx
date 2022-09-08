@@ -1,9 +1,10 @@
-import {Flex, FlexProps, Text} from '@chakra-ui/react';
+import { FlexProps, Text} from '@chakra-ui/react';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import {LinearProgress} from '@mui/material';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {LoadingStateType} from '../../models/types';
 import {isArray} from '../../static/frontendHelpers';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 import {EpistoHeader} from '../EpistoHeader';
 
 type ErrorType = any | any[];
@@ -108,7 +109,7 @@ export const LoadingFrame = (props: FlexProps & LoadingFramePropsType) => {
         return () => cancelTimeout();
     }, [cancelTimeout]);
 
-    return <Flex
+    return <EpistoFlex2
         id="loadigFrameRoot"
         position="relative"
         {...rootProps}>
@@ -117,7 +118,7 @@ export const LoadingFrame = (props: FlexProps & LoadingFramePropsType) => {
         {renderContent && props.children}
 
         {/* overlay */}
-        {showOverlay && <Flex
+        {showOverlay && <EpistoFlex2
             id="loadingFrameCenterFlex"
             flex="1"
             justify="center"
@@ -131,17 +132,17 @@ export const LoadingFrame = (props: FlexProps & LoadingFramePropsType) => {
             p="30px">
 
             {/* error */}
-            {currentLoadingState === 'error' && <Flex
+            {currentLoadingState === 'error' && <EpistoFlex2
                 align="center"
                 direction="column">
 
                 <ErrorOutlineIcon style={{ width: '100px', height: '100px' }}></ErrorOutlineIcon>
                 <EpistoHeader text='Az alkalmazás betöltése sikertelen'></EpistoHeader>
                 <Text maxWidth="300px">{singleError?.message}</Text>
-            </Flex>}
+            </EpistoFlex2>}
 
             {/* loading */}
-            {currentLoadingState === 'loading' && <Flex
+            {currentLoadingState === 'loading' && <EpistoFlex2
                 id="loadingDisplayContainer"
                 position='fixed'
                 top='0'
@@ -154,8 +155,8 @@ export const LoadingFrame = (props: FlexProps & LoadingFramePropsType) => {
                         height: 3,
                         width: '100%'
                     }} />
-            </Flex>}
-        </Flex>}
-    </Flex>;
+            </EpistoFlex2>}
+        </EpistoFlex2>}
+    </EpistoFlex2>;
 };
 

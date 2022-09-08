@@ -1,8 +1,8 @@
-import { Flex } from '@chakra-ui/react';
 import { useState } from 'react';
 import { CourseApiService } from '../../../../services/api/courseApiService';
 import { UserApiService } from '../../../../services/api/userApiService';
 import { Id } from '../../../../shared/types/versionId';
+import { EpistoFlex2 } from '../../../controls/EpistoFlex';
 import { EpistoFont } from '../../../controls/EpistoFont';
 import { EpistoTab, EpistoTabs } from '../../../controls/EpistoTabs';
 import { TabPanel } from '../../../courseDetails/TabPanel';
@@ -62,9 +62,9 @@ export const AdminUserCourseContentDialog = (props: {
             },
             {
                 title: 'Kommentek/kérdések',
-                component: <Flex>
+                component: <EpistoFlex2>
                     Kommentek/kérdések
-                </Flex>
+                </EpistoFlex2>
             }
         ]
         : [];
@@ -75,13 +75,13 @@ export const AdminUserCourseContentDialog = (props: {
         fullScreenY
         logic={dialogLogic}>
 
-        <Flex
+        <EpistoFlex2
             className="roundBorders whall"
             flex="1"
             flexDirection="column">
 
             {/* tabs */}
-            <Flex
+            <EpistoFlex2
                 background="rgba(255,255,255,0.97)"
                 direction="row"
                 justify="space-between"
@@ -94,10 +94,10 @@ export const AdminUserCourseContentDialog = (props: {
                 className="mildShadow"
                 zIndex="1000">
 
-                <Flex
+                <EpistoFlex2
                     align="center"
                     h="50px">
-                    <Flex
+                    <EpistoFlex2
                         h="50px"
                         direction="column"
                         mr="20px">
@@ -115,8 +115,8 @@ export const AdminUserCourseContentDialog = (props: {
                         <EpistoFont fontSize={'fontMid'}>
                             {userFullName}
                         </EpistoFont>
-                    </Flex>
-                </Flex>
+                    </EpistoFlex2>
+                </EpistoFlex2>
 
                 <EpistoTabs>
                     {/*                     
@@ -169,10 +169,10 @@ export const AdminUserCourseContentDialog = (props: {
                                 label={x.title} />;
                         })}
                 </EpistoTabs>
-            </Flex>
+            </EpistoFlex2>
 
             { /* tab contents */}
-            <Flex
+            <EpistoFlex2
                 flex='1'
                 className='whall'>
 
@@ -188,7 +188,7 @@ export const AdminUserCourseContentDialog = (props: {
 
                         {x.component}
                     </TabPanel>)}
-            </Flex>
-        </Flex>
+            </EpistoFlex2>
+        </EpistoFlex2>
     </EpistoDialog>;
 };

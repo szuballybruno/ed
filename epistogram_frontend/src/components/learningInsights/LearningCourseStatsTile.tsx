@@ -1,10 +1,11 @@
-import { Box, Flex, FlexProps, Text } from '@chakra-ui/react';
+import { Box, FlexProps, Text } from '@chakra-ui/react';
 import { LinearProgress } from '@mui/material';
 import React from 'react';
 import { CourseLearningDTO } from '../../shared/dtos/CourseLearningDTO';
 import { Environment } from '../../static/Environemnt';
 import { formatTimespan, roundNumber } from '../../static/frontendHelpers';
 import { EpistoButton, EpistoButtonPropsType } from '../controls/EpistoButton';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { FlexFloat } from '../controls/FlexFloat';
 import { SmallStat } from '../universal/SmallStat';
@@ -63,13 +64,13 @@ export const LearningCourseStatsTile = (props: {
                 alt="" />
 
             {/* is complete label */}
-            {isComplete && <Flex
+            {isComplete && <EpistoFlex2
                 position="absolute"
                 top={10}
                 right={0}
                 justify="flex-end">
 
-                <Flex
+                <EpistoFlex2
                     direction="row"
                     justifyContent="space-around"
                     alignItems="center"
@@ -93,12 +94,12 @@ export const LearningCourseStatsTile = (props: {
 
                         Teljesítve!
                     </Text>
-                </Flex>
-            </Flex>}
+                </EpistoFlex2>
+            </EpistoFlex2>}
         </Box>
 
         {/* content */}
-        <Flex p="10px"
+        <EpistoFlex2 p="10px"
             direction="column">
 
             {/* category  */}
@@ -121,7 +122,7 @@ export const LearningCourseStatsTile = (props: {
             </EpistoFont>
 
             {/* small stats */}
-            <Flex mt={7}
+            <EpistoFlex2 mt={7}
                 justify="space-evenly">
 
                 {/* spent time  */}
@@ -138,10 +139,10 @@ export const LearningCourseStatsTile = (props: {
                 <SmallStat
                     iconUrl={Environment.getAssetUrl('images/rightanswerontile3D.png')}
                     text={`${totalVideoQuestionCount}/${answeredVideoQuestionCount}`} />
-            </Flex>
+            </EpistoFlex2>
 
             {/* course progress bar chart */}
-            <Flex
+            <EpistoFlex2
                 direction={'row'}
                 alignItems={'center'}
                 mt={7}
@@ -155,16 +156,16 @@ export const LearningCourseStatsTile = (props: {
                     }}
                     value={progressPercentage} />
 
-                <Flex m="0 5px 0 20px">
+                <EpistoFlex2 m="0 5px 0 20px">
 
                     {`${progressPercentage}%`}
-                </Flex>
+                </EpistoFlex2>
 
-            </Flex>
-        </Flex>
+            </EpistoFlex2>
+        </EpistoFlex2>
 
         {/* buttons */}
-        <Flex mt="10px">
+        <EpistoFlex2 mt="10px">
 
             {actionButtons.map((button, index) => {
                 return <EpistoButton
@@ -176,6 +177,6 @@ export const LearningCourseStatsTile = (props: {
                 </EpistoButton>;
             })}
 
-        </Flex>
+        </EpistoFlex2>
     </FlexFloat>;
 };

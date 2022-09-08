@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { MoreVert } from '@mui/icons-material';
 import { IconButton, Menu, MenuItem } from '@mui/material';
 import classes from './css/stylesheet.module.css';
-import { Flex } from '@chakra-ui/react';
+import { EpistoFlex2 } from './controls/EpistoFlex';
 
 export default function OverflowMenu(props: {
   children: any,
@@ -33,7 +33,7 @@ export default function OverflowMenu(props: {
     return null;
 
   return (
-    <Flex minWidth={40}
+    <EpistoFlex2 minWidth={40}
       width={40}
       alignItems={'center'}
       justifyContent={'center'}
@@ -70,6 +70,6 @@ export default function OverflowMenu(props: {
             );
           })}
       </Menu>
-    </Flex>
+    </EpistoFlex2>
   );
 }

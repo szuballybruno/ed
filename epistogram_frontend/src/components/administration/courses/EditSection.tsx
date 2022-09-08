@@ -1,5 +1,6 @@
-import { Flex, FlexProps } from '@chakra-ui/react';
+import { FlexProps } from '@chakra-ui/react';
 import { ReactNode } from 'react';
+import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
 
 export const EditSection = (props: {
@@ -11,13 +12,13 @@ export const EditSection = (props: {
 
     const { children, title, isFirst, rightSideComponent, ...css } = props;
 
-    return <Flex
+    return <EpistoFlex2
         direction="column"
         p="20px"
         mt="10px"
         {...css}>
 
-        <Flex align="flex-start"
+        <EpistoFlex2 align="flex-start"
 justify="space-between">
 
             <EpistoFont
@@ -31,7 +32,7 @@ justify="space-between">
             </EpistoFont>
 
             {rightSideComponent}
-        </Flex>
+        </EpistoFlex2>
 
         {/* <EpistoHeader
             text={title}
@@ -40,5 +41,5 @@ justify="space-between">
             m="5px 10px 0px 0" /> */}
 
         {children}
-    </Flex>;
+    </EpistoFlex2>;
 };

@@ -1,6 +1,6 @@
-import { Flex } from '@chakra-ui/react';
 import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
 import { Id } from '../../../shared/types/versionId';
+import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoSearch } from '../../controls/EpistoSearch';
 import { ProfileImage } from '../../ProfileImage';
 import { FlexList } from '../../universal/FlexList';
@@ -17,7 +17,7 @@ export const AdminUserList = ({
     navigationFunction: (userId: Id<'User'>) => void
 }) => {
 
-    return <Flex
+    return <EpistoFlex2
         className="roundBorders"
         direction="column"
         minW="350px"
@@ -61,5 +61,5 @@ export const AdminUserList = ({
                     />;
                 })}
         </FlexList>
-    </Flex>;
+    </EpistoFlex2>;
 };

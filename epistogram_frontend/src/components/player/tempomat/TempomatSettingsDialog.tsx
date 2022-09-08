@@ -1,10 +1,11 @@
-import { Divider, Flex, Image } from '@chakra-ui/react';
+import { Divider, Image } from '@chakra-ui/react';
 import { useSetTempomatMode } from '../../../services/api/tempomatApiService';
 import { useShowErrorDialog } from '../../../services/core/notifications';
 import { TempomatModeType } from '../../../shared/types/sharedTypes';
 import { Id } from '../../../shared/types/versionId';
 import { Environment } from '../../../static/Environemnt';
 import { translatableTexts } from '../../../static/translatableTexts';
+import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { EpistoDialog, } from '../../universal/epistoDialog/EpistoDialog';
 import { EpistoDialogLogicType } from '../../universal/epistoDialog/EpistoDialogTypes';
@@ -53,7 +54,7 @@ export const TempomatSettingsDialog = (props: {
             closeButtonType='top'
             logic={tempomatDialogLogic} >
 
-            <Flex direction="column"
+            <EpistoFlex2 direction="column"
                 align="center"
                 flex="1" >
                 <Divider
@@ -61,7 +62,7 @@ export const TempomatSettingsDialog = (props: {
                     w="calc(100% - 20px)"
                     background="grey" />
 
-                <Flex
+                <EpistoFlex2
                     justify="space-between"
                     padding="5px">
 
@@ -92,21 +93,21 @@ export const TempomatSettingsDialog = (props: {
                         isSelected={tempomatMode === 'strict'}
                         description={translatableTexts.tempomat.strictModeDescription}
                         onClick={() => handleSetTempomatMode('strict')} />
-                </Flex>
+                </EpistoFlex2>
 
                 <Divider
                     h="1px"
                     w="calc(100% - 20px)"
                     background="grey" />
 
-                <Flex
+                <EpistoFlex2
                     h="150px"
                     align="center"
                     justify="center"
                     my="20px"
                     flex="1">
 
-                    <Flex
+                    <EpistoFlex2
                         mx="10px"
                         align="center">
 
@@ -119,9 +120,9 @@ export const TempomatSettingsDialog = (props: {
                         }}>
                             2022.03.14.
                         </EpistoFont>
-                    </Flex>
+                    </EpistoFlex2>
 
-                    <Flex
+                    <EpistoFlex2
                         mx="10px"
                         align="center">
 
@@ -135,9 +136,9 @@ export const TempomatSettingsDialog = (props: {
                         <EpistoFont>
                             Módosítom a kitűzött befejezési dátumot
                         </EpistoFont>
-                    </Flex>
-                </Flex>
-            </Flex>
+                    </EpistoFlex2>
+                </EpistoFlex2>
+            </EpistoFlex2>
         </EpistoDialog >
     );
 };

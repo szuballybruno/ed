@@ -1,10 +1,10 @@
-import { Flex } from '@chakra-ui/react';
 import { useUserCourseStatsOverviewData } from '../../../services/api/userStatsApiService';
 import { Id } from '../../../shared/types/versionId';
 import { defaultCharts } from '../../../static/defaultChartOptions';
 import { Environment } from '../../../static/Environemnt';
 import { roundNumber } from '../../../static/frontendHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
+import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { NoProgressChartYet } from '../../home/NoProgressChartYet';
 import StatisticsCard from '../../statisticsCard/StatisticsCard';
 import { EpistoPieChart } from '../../universal/charts/base_charts/EpistoPieChart';
@@ -46,20 +46,20 @@ export const AdminUserCourseStatsOverview = ({
         ? userCourseStatsOverviewData.userActivityDistributionChartData.noActivityPercentage
         : 0;
 
-    return <Flex
+    return <EpistoFlex2
         direction="column"
         p="20px"
         flex="1">
 
-        <Flex
+        <EpistoFlex2
             flex="1">
 
-            <Flex
+            <EpistoFlex2
                 h="350px"
                 flex="1"
                 align="stretch">
 
-                <Flex flex="1">
+                <EpistoFlex2 flex="1">
 
                     <EpistoPieChart
                         title="Teljesítmény"
@@ -68,8 +68,8 @@ export const AdminUserCourseStatsOverview = ({
                             { value: 100 - performancePercentage, name: `Teljesítmény ${performancePercentage}%` }
                         ]}
                         options={defaultCharts.twoSegmentRedDoughnut} />
-                </Flex>
-                <Flex flex="1">
+                </EpistoFlex2>
+                <EpistoFlex2 flex="1">
 
                     <EpistoPieChart
                         title="Haladás"
@@ -78,8 +78,8 @@ export const AdminUserCourseStatsOverview = ({
                             { value: 100 - courseProgressPercentage, name: `Haladás ${roundNumber(courseProgressPercentage)}%` },
                         ]}
                         options={defaultCharts.twoSegmentGreenDoughnut} />
-                </Flex>
-                <Flex flex="1">
+                </EpistoFlex2>
+                <EpistoFlex2 flex="1">
 
                     <EpistoPieChart
                         title="Aktivitás eloszlása"
@@ -102,10 +102,10 @@ export const AdminUserCourseStatsOverview = ({
                             }
                         ]}
                         options={defaultCharts.twoSegmentGreenDoughnut} />
-                </Flex>
-            </Flex>
+                </EpistoFlex2>
+            </EpistoFlex2>
 
-            <Flex
+            <EpistoFlex2
                 h="350px"
                 className="roundBorders"
                 flex="1"
@@ -115,8 +115,8 @@ export const AdminUserCourseStatsOverview = ({
                 {userCourseStatsOverviewData
                     ? <UserProgressChart userProgress={userCourseStatsOverviewData.progressChartData} />
                     : <NoProgressChartYet />}
-            </Flex>
-        </Flex>
+            </EpistoFlex2>
+        </EpistoFlex2>
 
         <div
             style={{
@@ -162,5 +162,5 @@ export const AdminUserCourseStatsOverview = ({
                 iconPath={Environment.getAssetUrl('images/rightanswer3D.png')}
                 isOpenByDefault={false} />
         </div>
-    </Flex>;
+    </EpistoFlex2>;
 };

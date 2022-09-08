@@ -1,4 +1,3 @@
-import { Flex } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { translatableTexts } from '../static/translatableTexts';
 import { FlexFloat } from './controls/FlexFloat';
@@ -7,6 +6,7 @@ import { EpistoHeader } from './EpistoHeader';
 import { EpistoFont } from './controls/EpistoFont';
 import { Environment } from '../static/Environemnt';
 import { EpistoTab, EpistoTabs } from './controls/EpistoTabs';
+import { EpistoFlex2 } from './controls/EpistoFlex';
 
 export const LearningCurves = () => {
 
@@ -23,14 +23,14 @@ export const LearningCurves = () => {
     //     };
     // };
 
-    return <Flex
+    return <EpistoFlex2
         direction="row"
         flexWrap="wrap"
         mt="10px"
         width="100%">
 
         {/* left wrapper */}
-        <Flex
+        <EpistoFlex2
             className="roundBorders"
             flex="1"
             minWidth="300px"
@@ -50,7 +50,7 @@ export const LearningCurves = () => {
                 variant="strongSub"
                 m="5px 10px 0 10px" />
 
-            <Flex my="10px">
+            <EpistoFlex2 my="10px">
 
                 <EpistoTabs
                     value={currentTab}
@@ -86,7 +86,7 @@ export const LearningCurves = () => {
                             flexDirection: 'row',
                         }} />
                 </EpistoTabs>
-            </Flex>
+            </EpistoFlex2>
 
             <TabPanel
                 value={currentTab}
@@ -107,7 +107,7 @@ export const LearningCurves = () => {
                 </EpistoFont>
             </TabPanel>
 
-        </Flex>
+        </EpistoFlex2>
 
         {/* right wrapper */}
         <FlexFloat
@@ -139,5 +139,5 @@ export const LearningCurves = () => {
                 {translatableTexts.homePage.noStatsYet}
             </EpistoFont>
         </FlexFloat>
-    </Flex>;
+    </EpistoFlex2>;
 };

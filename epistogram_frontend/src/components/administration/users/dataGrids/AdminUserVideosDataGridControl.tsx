@@ -1,4 +1,3 @@
-import { Flex } from '@chakra-ui/react';
 import { useCallback } from 'react';
 import { useUserVideoStats } from '../../../../services/api/userStatsApiService';
 import { UserVideoStatsDTO } from '../../../../shared/dtos/UserVideoStatsDTO';
@@ -8,6 +7,7 @@ import { secondsToTime } from '../../../../static/frontendHelpers';
 import { useIntParam } from '../../../../static/locationHelpers';
 import { EpistoButton } from '../../../controls/EpistoButton';
 import { EpistoDataGrid, GridColumnType } from '../../../controls/EpistoDataGrid';
+import { EpistoFlex2 } from '../../../controls/EpistoFlex';
 import { EpistoFont } from '../../../controls/EpistoFont';
 import { LoadingFrame } from '../../../system/LoadingFrame';
 import { ChipSmall } from '../../courses/ChipSmall';
@@ -179,12 +179,12 @@ export const AdminUserVideosDataGridControl = (props: {
                 getKey={getRowKey}
                 rows={rows}
                 columns={columns} />
-            : <Flex
+            : <EpistoFlex2
                 flex='1'
                 align='center'
                 justify='center'>
 
                 A felhasználó még egyetlen videót sem kezdett el ebben a kurzusban
-            </Flex>}
+            </EpistoFlex2>}
     </LoadingFrame>;
 };

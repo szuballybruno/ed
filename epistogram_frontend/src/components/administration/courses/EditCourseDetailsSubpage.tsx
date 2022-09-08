@@ -1,4 +1,4 @@
-import { Flex, Image } from '@chakra-ui/react';
+import { Image } from '@chakra-ui/react';
 import { Slider } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
@@ -13,6 +13,7 @@ import { Id } from '../../../shared/types/versionId';
 import { iterate } from '../../../static/frontendHelpers';
 import { useIntParam } from '../../../static/locationHelpers';
 import { EpistoEntry } from '../../controls/EpistoEntry';
+import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoLabel } from '../../controls/EpistoLabel';
 import { EpistoSelect } from '../../controls/EpistoSelect';
 import { LoadingFrame } from '../../system/LoadingFrame';
@@ -197,11 +198,11 @@ export const EditCourseDetailsSubpage = () => {
                 ]}>
 
                 {/* Course edit */}
-                <Flex direction="row"
+                <EpistoFlex2 direction="row"
                     flex="1">
 
                     {/* left pane  */}
-                    <Flex direction="column"
+                    <EpistoFlex2 direction="column"
                         flex="1"
                         mr="5px">
 
@@ -358,10 +359,10 @@ export const EditCourseDetailsSubpage = () => {
                                 setValue={setPrevCompletedCount} />
 
                         </EditSection>
-                    </Flex>
+                    </EpistoFlex2>
 
                     {/* right pane  */}
-                    <Flex direction="column"
+                    <EpistoFlex2 direction="column"
                         flex="1"
                         ml="5px">
 
@@ -418,7 +419,7 @@ export const EditCourseDetailsSubpage = () => {
                                 initialValue={{ text: '', value: 0 }}
                                 setItems={x => setHumanSkillBenefits(x)}
                                 renderChild={(item, onItemChanged) => (
-                                    <Flex
+                                    <EpistoFlex2
                                         flexDir={'row'}
                                         alignItems={'center'}
                                         my={3}
@@ -445,11 +446,11 @@ export const EditCourseDetailsSubpage = () => {
                                             marks
                                             min={0}
                                             max={10} />
-                                    </Flex>
+                                    </EpistoFlex2>
                                 )} />
 
                             {/* radar chart */}
-                            <Flex mt="30px"
+                            <EpistoFlex2 mt="30px"
                                 minH="300px"
                                 align="center"
                                 justify="center">
@@ -471,10 +472,10 @@ export const EditCourseDetailsSubpage = () => {
                                         width: '400px',
                                         height: '300px'
                                     }} /> */}
-                            </Flex>
+                            </EpistoFlex2>
                         </EditSection>
-                    </Flex>
-                </Flex>
+                    </EpistoFlex2>
+                </EpistoFlex2>
             </AdminSubpageHeader>
         </CourseAdministartionFrame>
     </LoadingFrame >;

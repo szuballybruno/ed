@@ -1,7 +1,8 @@
-import { Box, Flex, FlexProps } from '@chakra-ui/react';
+import { Box, FlexProps } from '@chakra-ui/react';
 import { ArrowDropDown, ArrowDropUp, ArrowRight, FiberManualRecord, Fullscreen, FullscreenExit, Lock } from '@mui/icons-material';
 import React, { useState } from 'react';
 import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { FlexFloat } from '../controls/FlexFloat';
 
@@ -81,7 +82,7 @@ const StatisticsCard = (props: StatisticsCardProps & FlexProps) => {
         {...css}>
 
         {/* locked overlay */}
-        {isComingSoon && <Flex
+        {isComingSoon && <EpistoFlex2
             title="Ez az adat jelenleg nem áll rendelkezésre. Nézz vissza később."
             flexDir={'column'}
             alignItems={'flex-end'}
@@ -98,9 +99,9 @@ const StatisticsCard = (props: StatisticsCardProps & FlexProps) => {
                 height: '20px',
                 margin: 10
             }} />
-        </Flex>}
+        </EpistoFlex2>}
 
-        {additionalInfo && <Flex
+        {additionalInfo && <EpistoFlex2
             align="center"
             p="5px 10px 5px 0"
             position="absolute"
@@ -118,12 +119,12 @@ const StatisticsCard = (props: StatisticsCardProps & FlexProps) => {
 
                 {[additionalInfo?.value, additionalInfo?.suffix]}
             </EpistoFont>
-        </Flex>}
+        </EpistoFlex2>}
 
 
 
         {/* open state */}
-        {isOpen && <Flex
+        {isOpen && <EpistoFlex2
             flex="1"
             className="roundBorders"
             align="center"
@@ -138,10 +139,10 @@ const StatisticsCard = (props: StatisticsCardProps & FlexProps) => {
 
             {children}
 
-        </Flex>}
+        </EpistoFlex2>}
 
         {/* closed state */}
-        {!isOpen && <Flex flex="1"
+        {!isOpen && <EpistoFlex2 flex="1"
             align="center">
 
             {/* image */}
@@ -155,17 +156,17 @@ const StatisticsCard = (props: StatisticsCardProps & FlexProps) => {
                     }}
                     alt=""
                     src={iconPath} />
-                : <Flex w='20px' />}
+                : <EpistoFlex2 w='20px' />}
 
             {/* texts */}
-            <Flex
+            <EpistoFlex2
                 maxWidth='calc(100% - 80px)'
                 width='calc(100% - 80px)'
                 direction="column"
                 pr="10px">
 
                 {/* value and suffix */}
-                <Flex
+                <EpistoFlex2
                     width='100%'
                     align="flex-end">
 
@@ -195,14 +196,14 @@ const StatisticsCard = (props: StatisticsCardProps & FlexProps) => {
 
                         {suffix}
                     </EpistoFont>
-                </Flex>
+                </EpistoFlex2>
 
                 {/* title */}
                 <EpistoFont fontSize="fontSmall" >
                     {title}
                 </EpistoFont>
-            </Flex>
-        </Flex>}
+            </EpistoFlex2>
+        </EpistoFlex2>}
 
         {additionalFunction && <EpistoButton
             onClick={() => additionalFunction()}

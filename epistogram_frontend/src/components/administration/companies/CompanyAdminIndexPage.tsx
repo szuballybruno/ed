@@ -1,4 +1,3 @@
-import { Flex } from '@chakra-ui/react';
 import { Add, Delete, Edit } from '@mui/icons-material';
 import { memo } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
@@ -6,6 +5,7 @@ import { useCompaniesAdmin, useCreateCompany, useDeleteCompany } from '../../../
 import { useNavigation } from '../../../services/core/navigatior';
 import { usePostCallback } from '../../../static/frontendHelpers';
 import { EpistoButton } from '../../controls/EpistoButton';
+import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { LoadingFrame } from '../../system/LoadingFrame';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
@@ -46,7 +46,7 @@ export const CompanyAdminIndexPage = memo(() => {
 
                 {companies
                     .map((company, index) => (
-                        <Flex
+                        <EpistoFlex2
                             key={index}
                             align='center'>
 
@@ -63,7 +63,7 @@ export const CompanyAdminIndexPage = memo(() => {
                                 onClick={handleDeleteCompany}>
                                 <Delete />
                             </EpistoButton>
-                        </Flex>
+                        </EpistoFlex2>
                     ))}
 
             </AdminSubpageHeader>

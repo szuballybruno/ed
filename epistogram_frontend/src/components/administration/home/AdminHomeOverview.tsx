@@ -1,4 +1,4 @@
-import { Flex, FlexProps } from '@chakra-ui/react';
+import { FlexProps } from '@chakra-ui/react';
 import { ArrowBack, ArrowForward, ArrowRight, FiberManualRecord } from '@mui/icons-material';
 import { ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -7,6 +7,7 @@ import { useActiveCourses } from '../../../services/api/userProgressApiService';
 import { Environment } from '../../../static/Environemnt';
 import { usePaging } from '../../../static/frontendHelpers';
 import { EpistoButton } from '../../controls/EpistoButton';
+import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { EpistoGrid } from '../../controls/EpistoGrid';
 import StatisticsCard from '../../statisticsCard/StatisticsCard';
@@ -19,14 +20,14 @@ const AdminSectionWithButton = (props: {
     headerContent?: ReactNode
 } & FlexProps) => {
     const { title, children, headerContent, ...css } = props;
-    return <Flex
+    return <EpistoFlex2
         direction="column"
         className="roundBorders"
         background="var(--transparentWhite70)"
         p="20px"
         {...css}>
 
-        <Flex
+        <EpistoFlex2
             h="40px"
             w="100%"
             align="center"
@@ -37,10 +38,10 @@ const AdminSectionWithButton = (props: {
             </EpistoFont>
 
             {headerContent}
-        </Flex>
+        </EpistoFlex2>
 
         {children}
-    </Flex>;
+    </EpistoFlex2>;
 };
 
 export const AdminHomeOverview = () => {
@@ -57,7 +58,7 @@ export const AdminHomeOverview = () => {
             applicationRoutes.administrationRoute.homeRoute.overviewRoute,
             applicationRoutes.administrationRoute.homeRoute.detailsRoute
         ]}>
-        <Flex flex="3"
+        <EpistoFlex2 flex="3"
             direction="column">
 
             <AdminSectionWithButton
@@ -122,16 +123,16 @@ export const AdminHomeOverview = () => {
 
                 <FlexListItem
                     thumbnailContent={
-                        <Flex
+                        <EpistoFlex2
                             align="center"
                             justify="center"
                             className="square60 circle"
                             background="red">
 
                             18
-                        </Flex>}
+                        </EpistoFlex2>}
                     midContent={
-                        <Flex direction="column">
+                        <EpistoFlex2 direction="column">
                             <EpistoFont style={{
                                 fontWeight: 'bold'
                             }}>
@@ -140,7 +141,7 @@ export const AdminHomeOverview = () => {
                             <EpistoFont>
                                 Nincs esetleg valamilyen billentyűkombináció arra, hogy gyorsan lehessen oszlopokat elrejteni?
                             </EpistoFont>
-                        </Flex>
+                        </EpistoFlex2>
                     }
                     endContent={
                         <EpistoButton>
@@ -156,16 +157,16 @@ export const AdminHomeOverview = () => {
 
                 <FlexListItem
                     thumbnailContent={
-                        <Flex
+                        <EpistoFlex2
                             align="center"
                             justify="center"
                             className="square60 circle"
                             background="var(--mildOrange)">
 
                             10
-                        </Flex>}
+                        </EpistoFlex2>}
                     midContent={
-                        <Flex direction="column">
+                        <EpistoFlex2 direction="column">
                             <EpistoFont style={{
                                 fontWeight: 'bold'
                             }}>
@@ -174,7 +175,7 @@ export const AdminHomeOverview = () => {
                             <EpistoFont>
                                 Miután diavetítő módba lépek, a képernyő elsötétül. Ez mitől lehet?
                             </EpistoFont>
-                        </Flex>
+                        </EpistoFlex2>
                     }
                     endContent={
                         <EpistoButton>
@@ -190,16 +191,16 @@ export const AdminHomeOverview = () => {
 
                 <FlexListItem
                     thumbnailContent={
-                        <Flex
+                        <EpistoFlex2
                             align="center"
                             justify="center"
                             className="square60 circle"
                             background="yellow">
 
                             8
-                        </Flex>}
+                        </EpistoFlex2>}
                     midContent={
-                        <Flex direction="column">
+                        <EpistoFlex2 direction="column">
                             <EpistoFont style={{
                                 fontWeight: 'bold'
                             }}>
@@ -208,7 +209,7 @@ export const AdminHomeOverview = () => {
                             <EpistoFont>
                                 A formátummásolás címeknél egyszerűen nem akar működni, de csak ott. Mi lehet a probléma?
                             </EpistoFont>
-                        </Flex>
+                        </EpistoFlex2>
                     }
                     endContent={
                         <EpistoButton>
@@ -219,16 +220,16 @@ export const AdminHomeOverview = () => {
 
                 <FlexListItem
                     thumbnailContent={
-                        <Flex
+                        <EpistoFlex2
                             align="center"
                             justify="center"
                             className="square60 circle"
                             background="lightgreen">
 
                             3
-                        </Flex>}
+                        </EpistoFlex2>}
                     midContent={
-                        <Flex direction="column">
+                        <EpistoFlex2 direction="column">
                             <EpistoFont style={{
                                 fontWeight: 'bold'
                             }}>
@@ -237,7 +238,7 @@ export const AdminHomeOverview = () => {
                             <EpistoFont>
                                 MAC-et használok, és fekete kijelzőt látok csak, a hangot szépen felveszi, de kép nincs. Mit lehet ilyenkor csinálni?
                             </EpistoFont>
-                        </Flex>
+                        </EpistoFlex2>
                     }
                     endContent={
                         <EpistoButton>
@@ -247,8 +248,8 @@ export const AdminHomeOverview = () => {
                     }></FlexListItem>
 
             </AdminSectionWithButton>
-        </Flex>
-        <Flex flex="2"
+        </EpistoFlex2>
+        <EpistoFlex2 flex="2"
             h="fit-content">
             <AdminSectionWithButton
                 m="10px 0 0 10px"
@@ -261,12 +262,12 @@ export const AdminHomeOverview = () => {
                     </EpistoButton>}>
 
                 {/* active course thumbnail */}
-                <Flex
+                <EpistoFlex2
                     align="center"
                     h="200px"
                     padding="20px">
 
-                    <Flex flex="1">
+                    <EpistoFlex2 flex="1">
                         <img
                             src={currentCourse?.coverFilePath ?? ''}
                             alt=""
@@ -274,16 +275,16 @@ export const AdminHomeOverview = () => {
                                 objectFit: 'contain'
                             }}
                             className="roundBorders" />
-                    </Flex>
+                    </EpistoFlex2>
 
-                    <Flex flex="1"
+                    <EpistoFlex2 flex="1"
                         direction="column"
                         p="20px">
                         <EpistoFont>
                             Microsoft Excel Alapok
                         </EpistoFont>
                         {/* navigation buttons */}
-                        <Flex
+                        <EpistoFlex2
                             h="30px"
                             align="center"
                             justify="center">
@@ -306,11 +307,11 @@ export const AdminHomeOverview = () => {
                                 <ArrowForward />
                             </EpistoButton>
 
-                        </Flex>
+                        </EpistoFlex2>
 
-                    </Flex>
+                    </EpistoFlex2>
 
-                </Flex>
+                </EpistoFlex2>
 
 
 
@@ -370,6 +371,6 @@ export const AdminHomeOverview = () => {
                         suffix="kérdés" />
                 </EpistoGrid>
             </AdminSectionWithButton>
-        </Flex>
+        </EpistoFlex2>
     </AdminSubpageHeader>;
 };

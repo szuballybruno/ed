@@ -1,9 +1,9 @@
-import { Flex } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useDailyTip } from '../../services/api/dailyTipApiService';
 import { useImproveYourselfPageStats } from '../../services/api/userStatsApiService';
 import { defaultCharts } from '../../static/defaultChartOptions';
 import { translatableTexts } from '../../static/translatableTexts';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoGrid } from '../controls/EpistoGrid';
 import StatisticsCard from '../statisticsCard/StatisticsCard';
@@ -26,10 +26,10 @@ export const ImproveYourselfSection = () => {
         setAsd(improveYourselfPageStats?.mostProductiveTimeRangeChartData);
     }, [improveYourselfPageStats]);
 
-    return <Flex
+    return <EpistoFlex2
         minH='300px'>
 
-        <Flex
+        <EpistoFlex2
             flex='1'
             p='20px'
             align='center'>
@@ -39,9 +39,9 @@ export const ImproveYourselfSection = () => {
                     ? dailyTipData.description
                     : 'A napi tipped megtekintéséhez ki kell töltened a tanulási stílust felmérő kérdőívet.'}
             </EpistoFont>
-        </Flex>
+        </EpistoFlex2>
 
-        <Flex
+        <EpistoFlex2
             flex='1'
             p='20px'>
 
@@ -78,14 +78,14 @@ export const ImproveYourselfSection = () => {
                                 data: improveYourselfPageStats?.mostProductiveTimeRangeChartData!
                             }]}
                             options={defaultCharts.blueGreenBarChart2} />
-                        : <Flex
+                        : <EpistoFlex2
                             align='center'
                             justify='center'>
 
                             <EpistoFont>
                                 {'A diagram betöltése sikertelen'}
                             </EpistoFont>
-                        </Flex>}
+                        </EpistoFlex2>}
 
 
                 </StatisticsCard>
@@ -110,16 +110,16 @@ export const ImproveYourselfSection = () => {
                             yAxisLabel="Belépések időtartama"
                             yAxisLabelSuffix=" perc"
                             options={defaultCharts.blueGreenBarChart} />
-                        : <Flex
+                        : <EpistoFlex2
                             align='center'
                             justify='center'>
 
                             <EpistoFont>
                                 {'A diagram betöltése sikertelen'}
                             </EpistoFont>
-                        </Flex>}
+                        </EpistoFlex2>}
                 </StatisticsCard>
             </EpistoGrid>
-        </Flex>
-    </Flex>;
+        </EpistoFlex2>
+    </EpistoFlex2>;
 }; 

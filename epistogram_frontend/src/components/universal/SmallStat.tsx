@@ -1,9 +1,9 @@
-import { Flex } from '@chakra-ui/react';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 
 export const SmallStat = (props: { title?: string, iconUrl: string, text: string }) => {
 
-    return <Flex
+    return <EpistoFlex2
         align="center"
         title={props.title}
         mr={5}>
@@ -26,5 +26,5 @@ export const SmallStat = (props: { title?: string, iconUrl: string, text: string
 
             {props.text}
         </EpistoFont>
-    </Flex>;
+    </EpistoFlex2>;
 };

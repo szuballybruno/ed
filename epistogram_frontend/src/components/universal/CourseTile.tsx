@@ -1,8 +1,9 @@
-import { Box, Flex, FlexProps, Text } from '@chakra-ui/react';
+import { Box, FlexProps, Text } from '@chakra-ui/react';
 import { AvailableCourseDTO } from '../../shared/dtos/AvailableCourseDTO';
 import { Environment } from '../../static/Environemnt';
 import { formatTimespan } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { FlexFloat } from '../controls/FlexFloat';
 import { SmallStat } from './SmallStat';
@@ -45,13 +46,13 @@ const CourseTile = (props: {
                 alt="" />
 
             {/* is complete overlay */}
-            {isComplete && <Flex
+            {isComplete && <EpistoFlex2
                 position="absolute"
                 top={10}
                 right={0}
                 justify="flex-end">
 
-                <Flex
+                <EpistoFlex2
                     direction="row"
                     justifyContent="space-around"
                     alignItems="center"
@@ -74,16 +75,16 @@ const CourseTile = (props: {
 
                         {translatableTexts.availableCourses.courseDone}
                     </Text>
-                </Flex>
-            </Flex>}
+                </EpistoFlex2>
+            </EpistoFlex2>}
         </Box>
 
         {/* content  */}
-        <Flex p="10px"
+        <EpistoFlex2 p="10px"
             direction={'column'}
             flex="1">
 
-            <Flex direction="column"
+            <EpistoFlex2 direction="column"
                 flex="5">
 
                 {/* category  */}
@@ -96,14 +97,14 @@ const CourseTile = (props: {
                 </EpistoFont>
 
                 {/* title */}
-                <Flex direction="column">
+                <EpistoFlex2 direction="column">
                     <Text fontWeight={'600'}
                         fontSize="15px">{courseTitle}</Text>
-                </Flex>
-            </Flex>
+                </EpistoFlex2>
+            </EpistoFlex2>
 
             {/* small stats  */}
-            <Flex mt={7}
+            <EpistoFlex2 mt={7}
                 mb="3px"
                 justify="space-between">
 
@@ -130,10 +131,10 @@ const CourseTile = (props: {
                     title="1-5-ig ennyire érékelték a hallgatók a tanfolyamot"
                     iconUrl={Environment.getAssetUrl('images/star3D.png')}
                     text={course.benchmark + ''} />
-            </Flex>
+            </EpistoFlex2>
 
             {/* rating */}
-            <Flex
+            <EpistoFlex2
                 alignItems={'center'}
                 mt={7}>
 
@@ -143,9 +144,9 @@ const CourseTile = (props: {
                     iconUrl={Environment.getAssetUrl('images/flag3D.png')}
                     text={courseTeacherName} />
 
-            </Flex>
+            </EpistoFlex2>
 
-        </Flex>
+        </EpistoFlex2>
 
         {/* buttons */}
         {props.children}

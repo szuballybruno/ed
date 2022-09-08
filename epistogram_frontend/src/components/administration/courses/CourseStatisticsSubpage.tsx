@@ -1,8 +1,9 @@
-import { Flex, Grid } from '@chakra-ui/react';
+import { Grid } from '@chakra-ui/react';
 import React from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { defaultCharts } from '../../../static/defaultChartOptions';
 import { Environment } from '../../../static/Environemnt';
+import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { StatisticsGroupType } from '../../learningInsights/LearningStatistics';
 import StatisticsCard from '../../statisticsCard/StatisticsCard';
 import { EpistoBarChart } from '../../universal/charts/base_charts/EpistoBarChart';
@@ -169,7 +170,7 @@ export const CourseStatisticsSubpage = () => {
 
                 {adminHomeDetailsStatistics
                     .map((section, index) => {
-                        return <Flex key={index}
+                        return <EpistoFlex2 key={index}
                             mt="10px">
 
                             <Grid
@@ -184,7 +185,7 @@ export const CourseStatisticsSubpage = () => {
                                         {...item} />;
                                 })}
                             </Grid>
-                        </Flex>;
+                        </EpistoFlex2>;
                     })}
             </AdminSubpageHeader >
         </CourseAdministartionFrame >

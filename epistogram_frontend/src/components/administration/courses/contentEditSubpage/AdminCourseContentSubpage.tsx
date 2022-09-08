@@ -1,4 +1,3 @@
-import { Flex } from '@chakra-ui/react';
 import { Add, Edit } from '@mui/icons-material';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { applicationRoutes } from '../../../../configuration/applicationRoutes';
@@ -14,6 +13,7 @@ import { Id } from '../../../../shared/types/versionId';
 import { useIntParam } from '../../../../static/locationHelpers';
 import { translatableTexts } from '../../../../static/translatableTexts';
 import { EpistoDataGrid } from '../../../controls/EpistoDataGrid';
+import { EpistoFlex2 } from '../../../controls/EpistoFlex';
 import { useXMutatorNew } from '../../../lib/XMutator/XMutatorReact';
 import { useSetBusy } from '../../../system/LoadingFrame/BusyBarContext';
 import { EpistoDialog } from '../../../universal/epistoDialog/EpistoDialog';
@@ -364,7 +364,7 @@ export const AdminCourseContentSubpage = () => {
                     onClose={closeAddPopper} />
 
                 {/* data grid */}
-                <Flex
+                <EpistoFlex2
                     flex="1"
                     overflow="hidden">
 
@@ -379,7 +379,7 @@ export const AdminCourseContentSubpage = () => {
                                 right: ['quickMenu']
                             }
                         }} />
-                </Flex>
+                </EpistoFlex2>
             </AdminSubpageHeader>
         </CourseAdministartionFrame>
     );

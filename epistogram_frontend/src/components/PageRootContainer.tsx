@@ -1,6 +1,7 @@
-import {Flex, FlexProps, Image} from '@chakra-ui/react';
+import { FlexProps, Image} from '@chakra-ui/react';
 import React, {ReactNode, useEffect} from 'react';
 import {gradientBackgroundGenerator} from '../services/core/gradientBackgroundGenerator';
+import { EpistoFlex2 } from './controls/EpistoFlex';
 import {EpistoGrid} from './controls/EpistoGrid';
 
 export const PageRootContainer = (props: {
@@ -19,7 +20,7 @@ export const PageRootContainer = (props: {
 
     const gradients = gradientBackgroundGenerator();
 
-    return <Flex
+    return <EpistoFlex2
         id="pageRootContainer"
         maxWidth={noMaxWidth ? undefined : '1920px'}
         margin="0 auto"
@@ -46,13 +47,13 @@ export const PageRootContainer = (props: {
 
                 {gradients
                     .map((gradient, index) => {
-                        return <Flex
+                        return <EpistoFlex2
                             key={index}
                             padding="20px"
                             filter="blur(8px)"
                             background={gradient}>
 
-                        </Flex>;
+                        </EpistoFlex2>;
                     })}
             </EpistoGrid>}
 
@@ -65,5 +66,5 @@ export const PageRootContainer = (props: {
 
         {props.children}
 
-    </Flex>;
+    </EpistoFlex2>;
 };

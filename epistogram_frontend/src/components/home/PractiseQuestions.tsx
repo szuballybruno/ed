@@ -1,4 +1,3 @@
-import {Flex} from '@chakra-ui/layout';
 import {useCurrentCourseItemCode} from '../../services/api/miscApiService';
 import {useAnswerPractiseQuestion, usePractiseQuestion} from '../../services/api/questionApiService';
 import {Id} from '../../shared/types/versionId';
@@ -12,6 +11,7 @@ import {EpistoConinImage} from '../universal/EpistoCoinImage';
 import {Greetings} from './Greetings';
 import {NoQuestionsAvailable} from './NoQuestionsAvailable';
 import React, {Dispatch, SetStateAction, useEffect} from 'react';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 
 export const PractiseQuestions = (props: {
     setCoinsAcquired: Dispatch<SetStateAction<boolean>>
@@ -63,11 +63,11 @@ export const PractiseQuestions = (props: {
         {/* if practise question is found */}
         {practiseQuestion
             ? (
-                <Flex
+                <EpistoFlex2
                     className="whall"
                     wrap="wrap">
 
-                    <Flex
+                    <EpistoFlex2
                         position="absolute"
                         top="-35"
                         right="10"
@@ -85,10 +85,10 @@ export const PractiseQuestions = (props: {
                         </EpistoFont>
 
 
-                    </Flex>
+                    </EpistoFlex2>
 
                     {/* question section */}
-                    <Flex
+                    <EpistoFlex2
                         flex="1"
                         direction="column"
                         margin="auto"
@@ -114,7 +114,7 @@ export const PractiseQuestions = (props: {
                             coinsAcquired={answerResults?.coinAcquires?.normal?.amount ?? null}
                             bonusCoinsAcquired={answerResults?.coinAcquires?.bonus ?? null}/>
 
-                        <Flex
+                        <EpistoFlex2
                             justifyContent="center"
                             display={isAnswered ? undefined : 'none'}>
 
@@ -140,9 +140,9 @@ export const PractiseQuestions = (props: {
 
                                 {translatableTexts.practiseQuestions.nextQuestion}
                             </EpistoButton>
-                        </Flex>
-                    </Flex>
-                </Flex>
+                        </EpistoFlex2>
+                    </EpistoFlex2>
+                </EpistoFlex2>
             )
             : currentCourseItemCode
                 ? <NoQuestionsAvailable/>

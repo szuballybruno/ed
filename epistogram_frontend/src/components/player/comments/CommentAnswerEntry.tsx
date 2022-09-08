@@ -1,10 +1,10 @@
-import { Flex } from '@chakra-ui/react';
 import { Avatar, Checkbox } from '@mui/material';
 import { useContext, useState } from 'react';
 import { Id } from '../../../shared/types/versionId';
 import { Environment } from '../../../static/Environemnt';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoEntry } from '../../controls/EpistoEntry';
+import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { CurrentUserContext } from '../../system/AuthenticationFrame';
 
@@ -48,12 +48,12 @@ export const CommentAnswerEntry = (props: {
         setIsAnonymous(false);
     };
 
-    return <Flex
+    return <EpistoFlex2
         direction="column"
         marginLeft={currentReplyCommentId ? '45px' : 0}
         marginTop={currentReplyCommentId ? '10px' : 0}>
 
-        <Flex
+        <EpistoFlex2
             flex='1'
             align='center'>
 
@@ -81,19 +81,19 @@ export const CommentAnswerEntry = (props: {
                 value={comment}
                 setValue={setComment}
                 placeholder={currentReplyCommentId ? 'Ide írd a válaszodat' : 'Ide írd a kommentedet/kérdésedet'} />
-        </Flex>
+        </EpistoFlex2>
 
 
         {isStartedEditing && comment &&
-            <Flex
+            <EpistoFlex2
                 justify="space-between"
                 align="center"
                 m="10px 0">
 
-                <Flex direction="column">
+                <EpistoFlex2 direction="column">
 
                     {!currentReplyCommentId &&
-                        <Flex align="center">
+                        <EpistoFlex2 align="center">
 
                             <Checkbox
                                 onChange={() =>
@@ -103,9 +103,9 @@ export const CommentAnswerEntry = (props: {
                             <EpistoFont>
                                 Ez egy kérdés
                             </EpistoFont>
-                        </Flex>}
+                        </EpistoFlex2>}
 
-                    <Flex align="center">
+                    <EpistoFlex2 align="center">
 
                         <Checkbox
                             onChange={() =>
@@ -115,10 +115,10 @@ export const CommentAnswerEntry = (props: {
                         <EpistoFont>
                             Közzététel névtelenül
                         </EpistoFont>
-                    </Flex>
-                </Flex>
+                    </EpistoFlex2>
+                </EpistoFlex2>
 
-                <Flex>
+                <EpistoFlex2>
                     <EpistoButton
                         variant="outlined"
                         style={{
@@ -134,7 +134,7 @@ export const CommentAnswerEntry = (props: {
 
                         Közzététel
                     </EpistoButton>
-                </Flex>
-            </Flex>}
-    </Flex>;
+                </EpistoFlex2>
+            </EpistoFlex2>}
+    </EpistoFlex2>;
 };

@@ -1,4 +1,3 @@
-import { Flex } from '@chakra-ui/react';
 import { useMemo } from 'react';
 import { getVirtualId } from '../../../../services/core/idService';
 import { Id } from '../../../../shared/types/versionId';
@@ -7,7 +6,7 @@ import { formatSeconds } from '../../../../static/frontendHelpers';
 import { EpistoButton } from '../../../controls/EpistoButton';
 import { EpistoCheckbox } from '../../../controls/EpistoCheckbox';
 import { GridColumnType } from '../../../controls/EpistoDataGrid';
-import { EpistoFlex } from '../../../controls/EpistoFlex';
+import { EpistoFlex, EpistoFlex2 } from '../../../controls/EpistoFlex';
 import { EpistoFont } from '../../../controls/EpistoFont';
 import { ChipSmall } from '../ChipSmall';
 import { QuestionEditGridLogicType } from './QuestionEditGridLogic';
@@ -61,11 +60,11 @@ export const useQuestionEditGridColumns = (logic: QuestionEditGridLogicType) => 
                                 {row.questionText}
                             </EpistoFont>
                         </EpistoFlex>
-                        : <Flex>
+                        : <EpistoFlex2>
                             <EpistoFont margin={{ left: 'px20' }}>
                                 {row.text}
                             </EpistoFont>
-                        </Flex>;
+                        </EpistoFlex2>;
                 },
                 editHandler: ({ value, row }) => row.isQuestionHeader
                     ? mutateQuestion({
@@ -87,7 +86,7 @@ export const useQuestionEditGridColumns = (logic: QuestionEditGridLogicType) => 
                 width: 90,
                 renderCell: ({ row }) => {
 
-                    return <Flex>
+                    return <EpistoFlex2>
 
                         {/* delete question */}
                         {row.isQuestionHeader && <EpistoButton
@@ -135,7 +134,7 @@ export const useQuestionEditGridColumns = (logic: QuestionEditGridLogicType) => 
                                     newValue: isCorrect
                                 });
                             }} />}
-                    </Flex >;
+                    </EpistoFlex2 >;
                 }
             } as GridColumnType<RowSchema, string, 'rowKey'>,
         ];
@@ -148,7 +147,7 @@ export const useQuestionEditGridColumns = (logic: QuestionEditGridLogicType) => 
                 width: 140,
                 renderCell: ({ row }) => {
                     return row.isQuestionHeader
-                        ? <Flex>
+                        ? <EpistoFlex2>
 
                             {/* timer secs */}
                             <EpistoFont>
@@ -170,7 +169,7 @@ export const useQuestionEditGridColumns = (logic: QuestionEditGridLogicType) => 
                                 }}>
                                 <EpistoIcons.Timer />
                             </EpistoButton>}
-                        </Flex>
+                        </EpistoFlex2>
                         : <></>;
                 }
             } as GridColumnType<RowSchema, string, 'questionShowUpTimeSeconds'>;

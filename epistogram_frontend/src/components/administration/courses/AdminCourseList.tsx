@@ -1,9 +1,9 @@
 import { Image } from '@chakra-ui/image';
-import { Flex } from '@chakra-ui/layout';
 import { memo } from 'react';
 import { CourseAdminListItemDTO } from '../../../shared/dtos/admin/CourseAdminListItemDTO';
 import { Id } from '../../../shared/types/versionId';
 import { useIntParam } from '../../../static/locationHelpers';
+import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoSearch } from '../../controls/EpistoSearch';
 import { ForceNoOverflowY } from '../../controls/ForceNoOverflowY';
 import { FlexList } from '../../universal/FlexList';
@@ -23,7 +23,7 @@ export const AdminCourseList = memo((props: {
     const courseId = Id
         .create<'Course'>(useIntParam('courseId')!);
 
-    return <Flex
+    return <EpistoFlex2
         className="roundBorders"
         direction="column"
         mr="5px"
@@ -64,7 +64,7 @@ export const AdminCourseList = memo((props: {
                         /*       align="center"
                               mb="1"
                               thumbnailContent={
-                                  <Flex
+                                  <EpistoFlex2
                                       className="roundBorders"
                                       style={{
                                           height: '40px',
@@ -73,7 +73,7 @@ export const AdminCourseList = memo((props: {
                                       overflow="hidden">
   
                                       
-                                  </Flex>
+                                  </EpistoFlex2>
                               }
                               midContent={isMinimized
                                   ? undefined
@@ -86,7 +86,7 @@ export const AdminCourseList = memo((props: {
                     })}
             </FlexList>
         </ForceNoOverflowY>
-    </Flex>;
+    </EpistoFlex2>;
 }, (prev, next) => {
 
     return prev.onCourseClick === next.onCourseClick

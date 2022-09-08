@@ -1,4 +1,3 @@
-import { Flex } from '@chakra-ui/react';
 import { Add, Delete, Edit } from '@mui/icons-material';
 import { memo, useCallback, useMemo } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
@@ -8,6 +7,7 @@ import { Id } from '../../../shared/types/versionId';
 import { usePostCallback } from '../../../static/frontendHelpers';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoDataGrid, GridColumnType } from '../../controls/EpistoDataGrid';
+import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { LoadingFrame } from '../../system/LoadingFrame';
 import { EpistoDialog } from '../../universal/epistoDialog/EpistoDialog';
@@ -95,7 +95,7 @@ export const RoleAdminIndexPage = memo(() => {
                 renderCell: (x) => {
 
                     return (
-                        <Flex>
+                        <EpistoFlex2>
                             <EpistoButton
                                 onClick={() => handleEdit(x.row.roleId)}>
 
@@ -107,7 +107,7 @@ export const RoleAdminIndexPage = memo(() => {
 
                                 <Delete></Delete>
                             </EpistoButton>
-                        </Flex>
+                        </EpistoFlex2>
                     );
                 }
             }

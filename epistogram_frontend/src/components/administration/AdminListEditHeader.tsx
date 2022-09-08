@@ -1,9 +1,9 @@
-import { Flex } from '@chakra-ui/layout';
 import { Close } from '@mui/icons-material';
 import { ButtonType } from '../../models/types';
 import { Id } from '../../shared/types/versionId';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoCheckbox } from '../controls/EpistoCheckbox';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoSearch } from '../controls/EpistoSearch';
 import { BulkEditButtons, BulkEditButtonType } from './BulkEditButtons';
@@ -25,7 +25,7 @@ export const AdminListEditHeader = (props: {
     const isSingleSelected = selectedIdsNullSafe.length === 1;
     const selectionCount = selectedIdsNullSafe.length;
 
-    return <Flex
+    return <EpistoFlex2
         bg="var(--transparentWhite70)"
         className="roundBorders"
         direction="row"
@@ -34,7 +34,7 @@ export const AdminListEditHeader = (props: {
         height="60px">
 
         {/* all/none selection */}
-        <Flex>
+        <EpistoFlex2>
 
             {/* select all */}
             <EpistoButton
@@ -85,17 +85,17 @@ export const AdminListEditHeader = (props: {
                         }} />
                 </div>
             </EpistoButton>
-        </Flex >
+        </EpistoFlex2 >
 
         {/* spacer */}
-        <Flex flex={1} />
+        <EpistoFlex2 flex={1} />
 
         {/* bulk edit buttons */}
         {isSingleSelected && <BulkEditButtons
             buttons={headerButtons ?? []} />}
 
         {/* search */}
-        <Flex
+        <EpistoFlex2
             height="100%"
             direction={'row'}
             justifyContent={'flex-start'}
@@ -109,10 +109,10 @@ export const AdminListEditHeader = (props: {
                     if (onSearchChanged)
                         onSearchChanged(x.target.value);
                 }} />
-        </Flex>
+        </EpistoFlex2>
 
         {/* order by */}
-        <Flex
+        <EpistoFlex2
             className="align-center"
             height="100%"
             mx={10}>
@@ -125,7 +125,7 @@ export const AdminListEditHeader = (props: {
                 defaultValue="Rendezés...">
 
             </EpistoSelect> */}
-        </Flex>
+        </EpistoFlex2>
 
         {/* buttons */}
         {(buttons ?? [])
@@ -142,5 +142,5 @@ export const AdminListEditHeader = (props: {
                     {x.title}
                 </EpistoButton>
             ))}
-    </Flex >;
+    </EpistoFlex2 >;
 };

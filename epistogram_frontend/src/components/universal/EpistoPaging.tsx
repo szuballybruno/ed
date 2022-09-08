@@ -1,4 +1,5 @@
-import { Box, Flex, FlexProps } from '@chakra-ui/react';
+import { Box, FlexProps } from '@chakra-ui/react';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 
 export const EpistoPaging = (props: FlexProps & {
     slides: ((isCurrent: boolean) => JSX.Element)[],
@@ -27,7 +28,7 @@ export const EpistoPaging = (props: FlexProps & {
         : <></>;
 
     return (
-        <Flex
+        <EpistoFlex2
             flex="1"
             id="slidesDisplayRoot"
             {...flex}>
@@ -35,6 +36,6 @@ export const EpistoPaging = (props: FlexProps & {
             {alwaysRender
                 ? renderSlides()
                 : renderCurrentSlide}
-        </Flex>
+        </EpistoFlex2>
     );
 };

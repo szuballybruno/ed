@@ -1,4 +1,4 @@
-import { Box, Flex } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import { useRef, useState } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { useNavigation } from '../../services/core/navigatior';
@@ -6,6 +6,7 @@ import { Environment } from '../../static/Environemnt';
 
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { ProfileImage } from '../ProfileImage';
 import { useAuthorizationContext } from '../system/AuthorizationContext';
@@ -47,7 +48,7 @@ export const ShopAndNotifications = (props: {
                 close={() => setSettingsPopperOpen(false)}
                 isOpen={settingsPopperOpen} />
 
-            <Flex
+            <EpistoFlex2
                 paddingRight={isLowHeight ? 0 : '10px'}
                 align="center"
                 marginRight={isLowHeight ? 0 : '15px'}
@@ -99,7 +100,7 @@ export const ShopAndNotifications = (props: {
                         className="square50"
                         ref={userSettingsRef} />
                 )}
-            </Flex>
+            </EpistoFlex2>
         </>}
     </>;
 };

@@ -1,4 +1,3 @@
-import { Flex } from '@chakra-ui/layout';
 import { Input } from '@chakra-ui/react';
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import React, { useState } from 'react';
@@ -6,6 +5,7 @@ import { useRequestPasswordChange } from '../../services/api/passwordChangeApiSe
 import { showNotification, useShowErrorDialog } from '../../services/core/notifications';
 import { getEventValueCallback } from '../../static/frontendHelpers';
 import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoLabel } from '../controls/EpistoLabel';
 import { FlexFloat } from '../controls/FlexFloat';
@@ -46,14 +46,14 @@ export const LoginPasswordResetDialog = (params: {
             closeButtonType="top"
             logic={passwordResetDialogLogic}>
 
-            <Flex
+            <EpistoFlex2
                 id="dialogFlex"
                 width="500px"
                 direction="column"
                 align="center">
 
                 {/* head */}
-                <Flex
+                <EpistoFlex2
                     bg="var(--deepBlue)"
                     p="20px"
                     alignSelf="stretch"
@@ -64,7 +64,7 @@ export const LoginPasswordResetDialog = (params: {
                         className="fontLight"
                         text="Jelszó visszaállítása" />
 
-                </Flex>
+                </EpistoFlex2>
 
                 {/* desc */}
                 <EpistoFont
@@ -131,7 +131,7 @@ export const LoginPasswordResetDialog = (params: {
 
                     Mehet
                 </EpistoButton>
-            </Flex>
+            </EpistoFlex2>
         </EpistoDialog>
     );
 };

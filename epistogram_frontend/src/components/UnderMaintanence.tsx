@@ -1,16 +1,16 @@
-import { Flex } from '@chakra-ui/layout';
 import { Environment } from '../static/Environemnt';
+import { EpistoFlex2 } from './controls/EpistoFlex';
 import { EpistoFont } from './controls/EpistoFont';
 import { EpistoHeader } from './EpistoHeader';
 
 export const UnderMaintanence = () => {
 
-    return <Flex align="center"
+    return <EpistoFlex2 align="center"
         justify="center"
         width="100vw"
         height="100vh">
 
-        <Flex direction="column"
+        <EpistoFlex2 direction="column"
             align="center">
             <img
                 alt=""
@@ -31,6 +31,6 @@ export const UnderMaintanence = () => {
                 Ha bármilyen kérdésed lenne, írj bátran a <a style={{ color: 'blue' }}
                     href="mailto:support@epistogram.com">support@epistogram.com</a> e-mail címre
             </EpistoFont>
-        </Flex>
-    </Flex>;
+        </EpistoFlex2>
+    </EpistoFlex2>;
 };

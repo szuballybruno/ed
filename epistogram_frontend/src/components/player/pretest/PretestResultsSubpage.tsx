@@ -1,4 +1,4 @@
-import { Flex, Grid, Image } from '@chakra-ui/react';
+import { Grid, Image } from '@chakra-ui/react';
 import { CourseApiService } from '../../../services/api/courseApiService';
 import { PretestApiService } from '../../../services/api/pretestApiService';
 import { useNavigation } from '../../../services/core/navigatior';
@@ -8,6 +8,7 @@ import { Id } from '../../../shared/types/versionId';
 import { Environment } from '../../../static/Environemnt';
 import { useIntParam } from '../../../static/locationHelpers';
 import { EpistoButton } from '../../controls/EpistoButton';
+import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
 import StatisticsCard from '../../statisticsCard/StatisticsCard';
 import { LoadingFrame } from '../../system/LoadingFrame';
@@ -16,7 +17,7 @@ export const PretestDateInfo = (props: {
     description: string,
     date: Date
 }) => {
-    return <Flex justify="center"
+    return <EpistoFlex2 justify="center"
         align="center"
         flex='1'
         mx='30px'
@@ -29,7 +30,7 @@ export const PretestDateInfo = (props: {
             src={Environment.getAssetUrl('/images/tempomatdatechange.png')}
         />
 
-        <Flex
+        <EpistoFlex2
             flex='1'
             marginRight='20px'>
 
@@ -37,7 +38,7 @@ export const PretestDateInfo = (props: {
 
                 {props.description}
             </EpistoFont>
-        </Flex>
+        </EpistoFlex2>
 
 
         <EpistoFont
@@ -54,7 +55,7 @@ export const PretestDateInfo = (props: {
                     day: '2-digit'
                 })}
         </EpistoFont>
-    </Flex>;
+    </EpistoFlex2>;
 };
 
 export const PretestResultsSubpage = () => {
@@ -90,7 +91,7 @@ export const PretestResultsSubpage = () => {
             error={pretestResultsError}
             direction="column">
 
-            <Flex
+            <EpistoFlex2
                 flex="1"
                 direction="column"
                 minHeight='calc(100vh - 100px)'
@@ -100,7 +101,7 @@ export const PretestResultsSubpage = () => {
                 className="roundBorders largeSoftShadow"
                 background="var(--transparentWhite70)">
 
-                <Flex
+                <EpistoFlex2
                     position='absolute'
                     top='20px'
                     align="center"
@@ -114,7 +115,7 @@ export const PretestResultsSubpage = () => {
 
                         Előzetes felmérés kiértékelése
                     </EpistoFont>
-                </Flex>
+                </EpistoFlex2>
 
 
                 <Grid
@@ -177,13 +178,13 @@ export const PretestResultsSubpage = () => {
 
                 </Grid>
 
-                <Flex
+                <EpistoFlex2
                     direction='column'
                     align='center'
                     maxW='1120px'
                     justify='flex-start'>
 
-                    <Flex
+                    <EpistoFlex2
                         px="10px"
                         pb='40px'
                         pt='50px'
@@ -196,10 +197,10 @@ export const PretestResultsSubpage = () => {
                             Mivel kevesebb, mint 50%-ot értél el a felmérő teszten, számodra a Kezdő üzemmódot ajánlanánk. Ebben az esetben folyamatosan haladhatsz a videókkal, de nem tudsz szabadon elindítani újat, csak az éppen aktuálisan következőt (ekkor felnyílik a lakat ikon). A videókban csak addig a pontig tudsz előre tekerni, ameddig már egyszer eljutottál.
                             Bármikor átválthatsz azonban Haladó módra, ahol ezek a korlátozások megszűnnek!
                         </EpistoFont>
-                    </Flex>
+                    </EpistoFlex2>
 
                     {
-                        pretestResults && <Flex
+                        pretestResults && <EpistoFlex2
                             my="15px"
                             justify="center"
                             align="center">
@@ -220,11 +221,11 @@ export const PretestResultsSubpage = () => {
 
                                 Inkább haladó üzemmóddal kezdek
                             </EpistoButton>
-                        </Flex>
+                        </EpistoFlex2>
                     }
 
-                </Flex>
-            </Flex>
+                </EpistoFlex2>
+            </EpistoFlex2>
         </LoadingFrame >
     );
 };

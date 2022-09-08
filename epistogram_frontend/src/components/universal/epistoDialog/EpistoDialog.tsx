@@ -1,8 +1,8 @@
-import { Flex } from '@chakra-ui/layout';
 import { Close } from '@mui/icons-material';
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { ButtonType } from '../../../models/types';
 import { EpistoButton } from '../../controls/EpistoButton';
+import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoHeader } from '../../EpistoHeader';
 import { XDialog } from '../../lib/XDialog/XDialog';
 import { EpistoDialogLogicType } from './EpistoDialogTypes';
@@ -44,7 +44,7 @@ export const EpistoDialog = <TParams = any>(props: {
         logic={logic.xlogic}>
 
         {/* episto dialog root */}
-        <Flex
+        <EpistoFlex2
             id="episto_dialog_root"
             direction="column"
             width={fullScreenX ? '90%' : undefined}
@@ -74,7 +74,7 @@ export const EpistoDialog = <TParams = any>(props: {
                 Bezárás
             </Close>}
 
-            <Flex
+            <EpistoFlex2
                 id="dialogContentFlex"
                 padding={children ? '0px' : '10px'}
                 flex="1"
@@ -85,11 +85,11 @@ export const EpistoDialog = <TParams = any>(props: {
 
                 {/* react node contnet */}
                 {children}
-            </Flex>
+            </EpistoFlex2>
 
             {/* buttons */}
             {dialogButtons.length > 0 && <>
-                <Flex
+                <EpistoFlex2
                     p="10px"
                     flexDirection="row-reverse">
 
@@ -106,8 +106,8 @@ export const EpistoDialog = <TParams = any>(props: {
                             }}>
                             {x.title}
                         </EpistoButton>)}
-                </Flex>
+                </EpistoFlex2>
             </>}
-        </Flex>
+        </EpistoFlex2>
     </XDialog>;
 };

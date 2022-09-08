@@ -1,6 +1,6 @@
-import { Flex } from '@chakra-ui/react';
 import { LinearProgress } from '@mui/material';
 import { Environment } from '../../static/Environemnt';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 
 
@@ -18,12 +18,12 @@ export const RecommendedItemQuota = (props: {
         : 'Heti ajánlott videók';
 
     return (
-        <Flex
+        <EpistoFlex2
             flex='1'
             mb="10px"
             direction="column">
 
-            <Flex
+            <EpistoFlex2
                 direction={isDeadlineSet ? 'row' : 'column'}
                 justify='space-between'
                 align={isDeadlineSet ? 'center' : 'flex-start'}>
@@ -32,7 +32,7 @@ export const RecommendedItemQuota = (props: {
                     {label}
                 </EpistoFont>
 
-                <Flex
+                <EpistoFlex2
                     align="center">
 
                     <img
@@ -59,8 +59,8 @@ export const RecommendedItemQuota = (props: {
                         fontSize="fontSmall">
                         videó
                     </EpistoFont>
-                </Flex>
-            </Flex>
+                </EpistoFlex2>
+            </EpistoFlex2>
 
             <LinearProgress
                 value={Math.min(100, completedCount / recommendedItemCount * 100)}
@@ -72,6 +72,6 @@ export const RecommendedItemQuota = (props: {
                     marginTop: 10,
                     height: '5px'
                 }} />
-        </Flex>
+        </EpistoFlex2>
     );
 };

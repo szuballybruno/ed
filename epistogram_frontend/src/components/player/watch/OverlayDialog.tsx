@@ -1,6 +1,7 @@
-import { Box, Flex } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import Button from '@mui/material/Button';
 import { ReactNode } from 'react';
+import { EpistoFlex2 } from '../../controls/EpistoFlex';
 
 export const OverlayDialog = (props: {
     children: ReactNode,
@@ -19,7 +20,7 @@ export const OverlayDialog = (props: {
         {props.children}
 
         {/* close button */}
-        <Flex mt="20px"
+        <EpistoFlex2 mt="20px"
 justify="flex-end"
 display={props.showCloseButton ? 'flex' : 'none'}>
             <Button
@@ -31,6 +32,6 @@ display={props.showCloseButton ? 'flex' : 'none'}>
                 }}>
                 Bezárás
             </Button>
-        </Flex>
+        </EpistoFlex2>
     </Box>;
 };

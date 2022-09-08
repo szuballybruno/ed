@@ -1,7 +1,7 @@
-import { Flex } from '@chakra-ui/layout';
 import { NavLink } from 'react-router-dom';
 import { ApplicationRoute } from '../models/types';
 import { isCurrentRoute } from '../static/frontendHelpers';
+import { EpistoFlex2 } from './controls/EpistoFlex';
 import { EpistoFont } from './controls/EpistoFont';
 
 export const NavigationLinkList = (props: {
@@ -11,7 +11,7 @@ export const NavigationLinkList = (props: {
 
     const { routes } = props;
 
-    return <Flex direction="column">
+    return <EpistoFlex2 direction="column">
         {routes
             .map((route, index) => {
 
@@ -20,7 +20,7 @@ export const NavigationLinkList = (props: {
                 return <NavLink
                     to={route.route.getAbsolutePath()}
                     key={index}>
-                    <Flex
+                    <EpistoFlex2
                         p="5px 15px"
                         align="center">
 
@@ -39,8 +39,8 @@ export const NavigationLinkList = (props: {
                             {route.title}
                         </EpistoFont>}
 
-                    </Flex>
+                    </EpistoFlex2>
                 </NavLink>;
             })}
-    </Flex >;
+    </EpistoFlex2 >;
 };

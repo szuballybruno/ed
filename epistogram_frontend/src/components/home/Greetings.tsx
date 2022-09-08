@@ -1,4 +1,3 @@
-import { Flex } from '@chakra-ui/react';
 import { Player } from '@lottiefiles/react-lottie-player';
 import { useContext } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
@@ -6,6 +5,7 @@ import { useNavigation } from '../../services/core/navigatior';
 import { Environment } from '../../static/Environemnt';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { CurrentUserContext } from '../system/AuthenticationFrame';
 
@@ -14,11 +14,11 @@ export const Greetings = () => {
     const { navigate2 } = useNavigation();
     const { firstName } = useContext(CurrentUserContext);
 
-    return <Flex
+    return <EpistoFlex2
         direction="row"
         alignItems="center">
 
-        <Flex
+        <EpistoFlex2
             direction="column"
             justifyContent="flex-start"
             height="100%">
@@ -50,7 +50,7 @@ export const Greetings = () => {
                 {translatableTexts.practiseQuestions.initialGreetingsThird}
             </EpistoFont>
 
-            <Flex
+            <EpistoFlex2
                 direction="column"
                 width="100%"
                 alignItems="center"
@@ -64,16 +64,16 @@ export const Greetings = () => {
 
                     {translatableTexts.practiseQuestions.goToCourses}
                 </EpistoButton>
-            </Flex>
-        </Flex>
+            </EpistoFlex2>
+        </EpistoFlex2>
 
-        <Flex>
+        <EpistoFlex2>
             <Player
                 autoplay
                 loop
                 src={Environment.getAssetUrl('lottie_json/initial_greetings.json')}
                 style={{ height: '300px', width: '300px' }}
             />
-        </Flex>
-    </Flex>;
+        </EpistoFlex2>
+    </EpistoFlex2>;
 };

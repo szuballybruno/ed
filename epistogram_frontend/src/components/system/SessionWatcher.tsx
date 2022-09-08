@@ -1,4 +1,3 @@
-import { Flex } from '@chakra-ui/react';
 import { Refresh } from '@mui/icons-material';
 import moment from 'moment';
 import { createContext, FC, useContext, useEffect, useState } from 'react';
@@ -6,6 +5,7 @@ import { Environment } from '../../static/Environemnt';
 import { eventBus } from '../../static/EventBus';
 import { PropsWithChildren, reloadPage } from '../../static/frontendHelpers';
 import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { FullscreenOverlay } from '../universal/FullscreenOverlay';
 
@@ -75,13 +75,13 @@ export const SessionWatcherFrame: FC<PropsWithChildren> = ({ children }) => {
 
     return <SessionWatcherContext.Provider value={sessionWatcherInstance}>
         <FullscreenOverlay
-            overlayContent={<Flex
+            overlayContent={<EpistoFlex2
                 pos="absolute"
                 className="whall"
                 align='center'
                 justify="center">
 
-                <Flex
+                <EpistoFlex2
                     p="30px"
                     borderRadius="10px"
                     bg="white"
@@ -101,8 +101,8 @@ export const SessionWatcherFrame: FC<PropsWithChildren> = ({ children }) => {
                         onClick={() => reloadPage()}>
                         Refresh
                     </EpistoButton>
-                </Flex>
-            </Flex>}
+                </EpistoFlex2>
+            </EpistoFlex2>}
             visible={showOverlay}>
 
             {children}

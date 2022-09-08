@@ -1,6 +1,7 @@
 import { Image } from '@chakra-ui/image';
-import { Flex, FlexProps } from '@chakra-ui/layout';
+import { FlexProps } from '@chakra-ui/layout';
 import { forwardRef, useContext } from 'react';
+import { EpistoFlex2 } from './controls/EpistoFlex';
 import { EpistoFont } from './controls/EpistoFont';
 import { CurrentUserContext } from './system/AuthenticationFrame';
 
@@ -28,13 +29,13 @@ export const ProfileImage = forwardRef<HTMLDivElement, ProfileImageProps>((props
     const showSingature = !url;
     const showImage = !!url;
 
-    return <Flex
+    return <EpistoFlex2
         p="4px"
         className={className + ' circle'}
         boxShadow="inset -7px -2px 20px 0px rgba(124,192,194,0.9)"
         {...css}>
 
-        <Flex
+        <EpistoFlex2
             className={'circle'}
             flex="1"
             ref={ref}
@@ -58,6 +59,6 @@ export const ProfileImage = forwardRef<HTMLDivElement, ProfileImageProps>((props
 
                 {signature.toUpperCase()}
             </EpistoFont>
-        </Flex>
-    </Flex >;
+        </EpistoFlex2>
+    </EpistoFlex2 >;
 });

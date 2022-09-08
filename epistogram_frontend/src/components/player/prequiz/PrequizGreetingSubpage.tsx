@@ -1,8 +1,8 @@
-import { Flex } from '@chakra-ui/react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { useNavigation } from '../../../services/core/navigatior';
 import { Environment } from '../../../static/Environemnt';
 import { useRouteParams } from '../../../static/locationHelpers';
+import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { ExamLayout } from '../../exam/ExamLayout';
 
@@ -26,7 +26,7 @@ export const PrequizGreetingSubpage = () => {
                 action: gotToPrequiz
             }]}>
 
-            <Flex
+            <EpistoFlex2
                 direction="column"
                 align="center"
                 justify='center'
@@ -58,7 +58,7 @@ export const PrequizGreetingSubpage = () => {
 
                     {'A tanfolyam előtt feltennénk neked pár kérdést, így pontosan tudni fogjuk, mennyi időt tudsz rászánni a tanulásra!'}
                 </EpistoFont>
-            </Flex>
+            </EpistoFlex2>
         </ExamLayout>
     );
 };

@@ -1,4 +1,4 @@
-import { Flex, FlexProps } from '@chakra-ui/layout';
+import { FlexProps } from '@chakra-ui/layout';
 import { Accordion, AccordionButton, AccordionItem, AccordionPanel, AccordionIcon, Box } from '@chakra-ui/react';
 import { InfoOutlined } from '@mui/icons-material';
 import React, { useRef, useState } from 'react';
@@ -9,6 +9,7 @@ import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoPopper } from '../controls/EpistoPopper';
 import { PersonalityChart } from '../universal/charts/PersonalityChart';
 import { EpistoFont } from '../controls/EpistoFont';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 
 export const PersonalityAssessment = (props: FlexProps) => {
 
@@ -42,7 +43,7 @@ export const PersonalityAssessment = (props: FlexProps) => {
         {...css}>
 
         {/* left wrapper */}
-        <Flex
+        <EpistoFlex2
             direction="row"
             flexWrap="wrap"
             align="flex-start"
@@ -51,7 +52,7 @@ export const PersonalityAssessment = (props: FlexProps) => {
             width="100%">
 
             {/* personality chart panel */}
-            <Flex
+            <EpistoFlex2
                 className="roundBorders"
                 justify="center"
                 direction="column"
@@ -62,17 +63,17 @@ export const PersonalityAssessment = (props: FlexProps) => {
 
                 {personalityData?.chartData && <PersonalityChart
                     data={personalityData.chartData} />}
-            </Flex>
+            </EpistoFlex2>
 
             {/* personality info accordions */}
-            <Flex
+            <EpistoFlex2
                 flex="1"
                 minWidth="300px"
                 direction="column"
                 pl="10px">
 
                 {/* expand all */}
-                <Flex
+                <EpistoFlex2
                     justifyContent="space-between"
                     mb="10px">
 
@@ -150,7 +151,7 @@ export const PersonalityAssessment = (props: FlexProps) => {
                             ? 'Összes kibontása'
                             : 'Összecsukás'}
                     </EpistoButton>
-                </Flex>
+                </EpistoFlex2>
 
 
                 <Accordion
@@ -192,7 +193,7 @@ export const PersonalityAssessment = (props: FlexProps) => {
                             </AccordionItem>;
                         })}
                 </Accordion>
-            </Flex>
-        </Flex>
+            </EpistoFlex2>
+        </EpistoFlex2>
     </LoadingFrame >;
 };

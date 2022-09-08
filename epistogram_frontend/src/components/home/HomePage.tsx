@@ -1,4 +1,3 @@
-import { Flex } from '@chakra-ui/layout';
 import { useMediaQuery } from '@chakra-ui/react';
 import { useState } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
@@ -9,6 +8,7 @@ import { Environment } from '../../static/Environemnt';
 import { usePaging } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { ContentPane } from '../ContentPane';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { PlaylistItem } from '../courseItemList/PlaylistItem';
 import { LeftPane } from '../LeftPane';
@@ -40,7 +40,7 @@ const HomePage = () => {
         <LeftPane>
 
             {/* current course items and progress */}
-            {pageDTO?.currentCourseProgress && <Flex
+            {pageDTO?.currentCourseProgress && <EpistoFlex2
                 className='roundBorders'
                 mx="10px"
                 direction="column">
@@ -51,7 +51,7 @@ const HomePage = () => {
                     continueItemCode={pageDTO.currentCourseProgress.continueItemCode}
                     mb="5px" />
 
-                <Flex
+                <EpistoFlex2
                     direction="column"
                     mt="5px">
 
@@ -61,16 +61,16 @@ const HomePage = () => {
                                 key={index}
                                 playlistItem={playlistItem} />
                         ))}
-                </Flex>
-            </Flex>}
+                </EpistoFlex2>
+            </EpistoFlex2>}
 
             {/* no current course  */}
             {!pageDTO?.currentCourseProgress && <FlexListItem
                 px="10"
                 onClick={() => navigate2(applicationRoutes.availableCoursesRoute)}
-                midContent={<Flex>
+                midContent={<EpistoFlex2>
 
-                    <Flex
+                    <EpistoFlex2
                         className="roundBorders"
                         boxShadow="inset -1px -1px 2px 1px rgba(0,0,0,0.10)"
                         p="3px"
@@ -81,22 +81,22 @@ const HomePage = () => {
                         isSelected={false}
                         title={translatableTexts.homePage.availableCoursesLinkTitle}
                         subTitle={translatableTexts.homePage.availableCoursesText} />
-                </Flex>} />}
+                </EpistoFlex2>} />}
         </LeftPane>
 
         <ContentPane
             noMaxWidth>
 
-            <Flex
+            <EpistoFlex2
                 direction="column"
                 minWidth={isSmallerThan1400 ? '1060px' : undefined}>
 
-                <Flex wrap="wrap">
+                <EpistoFlex2 wrap="wrap">
 
                     {/* test your knowledge */}
                     <DashboardSection
                         title={translatableTexts.homePage.practiseTitle}
-                        headerContent={coinsAcquired && <Flex
+                        headerContent={coinsAcquired && <EpistoFlex2
                             borderRadius="5px"
                             p="7px"
                             align="center">
@@ -110,7 +110,7 @@ const HomePage = () => {
                                 className="square25"
                                 style={{ margin: '0px 0px 4px 4px' }} />
 
-                        </Flex>}
+                        </EpistoFlex2>}
                         background="var(--transparentIntenseBlue85)"
                         className="largeSoftShadow roundBorders"
                         color="white"
@@ -135,7 +135,7 @@ const HomePage = () => {
 
                         <HomePageUserStats />
                     </DashboardSection>
-                </Flex>
+                </EpistoFlex2>
 
                 {/* stats */}
                 <DashboardSection
@@ -150,7 +150,7 @@ const HomePage = () => {
                     <HomePageCourseStats
                         activeCoursesPaging={activeCoursesPaging} />
                 </DashboardSection>
-            </Flex>
+            </EpistoFlex2>
         </ContentPane>
     </PageRootContainer>;
 };

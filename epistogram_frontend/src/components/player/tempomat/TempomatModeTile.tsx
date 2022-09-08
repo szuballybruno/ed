@@ -1,5 +1,5 @@
-import { Flex } from '@chakra-ui/react';
 import { TempomatModeType } from '../../../shared/types/sharedTypes';
+import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { TempomatModeImage } from './TempomatModeImage';
 
@@ -13,7 +13,7 @@ export const TempomatModeTile = (props: {
 
     const { isSelected, tempomatMode, onClick } = props;
 
-    return <Flex
+    return <EpistoFlex2
         flex="1"
         direction="column"
         p="10px"
@@ -52,5 +52,5 @@ export const TempomatModeTile = (props: {
 
             {props.description}
         </EpistoFont>
-    </Flex >;
+    </EpistoFlex2 >;
 };

@@ -1,4 +1,4 @@
-import { Box, Container, Flex } from '@chakra-ui/react';
+import { Box, Container } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { CourseApiService } from '../../services/api/courseApiService';
 import { useNavigation } from '../../services/core/navigatior';
@@ -12,6 +12,7 @@ import { useAdminCourseContentDialogLogic } from '../administration/users/adminC
 import { AdminUserCourseContentDialog } from '../administration/users/adminCourseContentDialog/AdminUserCourseContentDialog';
 import { ContentPane } from '../ContentPane';
 import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoTab, EpistoTabs } from '../controls/EpistoTabs';
 import { EpistoHeader } from '../EpistoHeader';
@@ -150,10 +151,10 @@ const CourseDetailsPage = () => {
                 text={courseDetails?.title ?? ''} />
 
             {/* content */}
-            <Flex>
+            <EpistoFlex2>
 
                 {/* left pane */}
-                <Flex flex="1"
+                <EpistoFlex2 flex="1"
                     direction={'column'}
                     mr={30}>
 
@@ -163,7 +164,7 @@ const CourseDetailsPage = () => {
                     </Container>
 
                     {/* briefing info items */}
-                    <Flex mt="20px"
+                    <EpistoFlex2 mt="20px"
                         justify="space-evenly">
 
                         <CourseDetailsBriefingInfoItem
@@ -192,10 +193,10 @@ const CourseDetailsPage = () => {
                             icon={Environment.getAssetUrl('/course_page_icons/about_learning_experience.svg')}
                             title={translatableTexts.courseDetails.briefingInfoItems.learningExperience}
                             subTitle={courseDetails?.benchmark + ' / 5 pont'} />
-                    </Flex>
+                    </EpistoFlex2>
 
                     {/* tabs */}
-                    <Flex
+                    <EpistoFlex2
                         direction="column"
                         flex="1"
                         width="100%"
@@ -258,7 +259,7 @@ const CourseDetailsPage = () => {
                             </EpistoTabs>
                         </Box>
 
-                        <Flex flex="1">
+                        <EpistoFlex2 flex="1">
                             { /* tab contents */}
                             {tabs
                                 .map((x, index) => <TabPanel
@@ -271,15 +272,15 @@ const CourseDetailsPage = () => {
 
                                     {courseDetails && x.component}
                                 </TabPanel>)}
-                        </Flex>
-                    </Flex>
-                </Flex>
+                        </EpistoFlex2>
+                    </EpistoFlex2>
+                </EpistoFlex2>
 
                 {/* Right pane */}
-                <Flex direction={'column'}
+                <EpistoFlex2 direction={'column'}
                     minWidth="400px"
                     flexBasis="400px">
-                    <Flex
+                    <EpistoFlex2
                         direction={'column'}
                         alignItems={'center'}
                         margin={10}
@@ -289,7 +290,7 @@ const CourseDetailsPage = () => {
                         borderWidth={1}
                         borderRadius={10}
                         shadow={'#00000024 0px 0px 5px 0px'}>
-                        <Flex width="100%"
+                        <EpistoFlex2 width="100%"
                             height={230}
                             justifyContent={'center'}
                             p={10}>
@@ -300,7 +301,7 @@ const CourseDetailsPage = () => {
                                     objectFit: 'cover'
                                 }}
                                 alt={''} />
-                        </Flex>
+                        </EpistoFlex2>
 
                         {/* sidebar infos list */}
                         {sidebarInfos
@@ -321,15 +322,15 @@ const CourseDetailsPage = () => {
                                             alt={''} />
                                     )}
                                     midContent={(
-                                        <Flex flex={1}
+                                        <EpistoFlex2 flex={1}
                                             p={5}>
                                             <EpistoFont>
                                                 {sidebarInfo.name}
                                             </EpistoFont>
-                                        </Flex>
+                                        </EpistoFlex2>
                                     )}
                                     endContent={(
-                                        <Flex
+                                        <EpistoFlex2
                                             direction={'row'}
                                             mx={4}
                                             justifyContent={'space-between'}
@@ -338,11 +339,11 @@ const CourseDetailsPage = () => {
                                             <EpistoFont>
                                                 {sidebarInfo.value}
                                             </EpistoFont>
-                                        </Flex>
+                                        </EpistoFlex2>
                                     )} />
                             ))}
 
-                        <Flex>
+                        <EpistoFlex2>
                             {/* start coures */}
                             <EpistoButton
                                 style={{
@@ -395,13 +396,13 @@ const CourseDetailsPage = () => {
 
                                 {translatableTexts.learningOverview.myStatisticsTitle}
                             </EpistoButton>}
-                        </Flex>
+                        </EpistoFlex2>
 
 
-                    </Flex>
+                    </EpistoFlex2>
 
-                </Flex>
-            </Flex>
+                </EpistoFlex2>
+            </EpistoFlex2>
 
         </ContentPane>
     </PageRootContainer>;

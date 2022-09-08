@@ -1,21 +1,21 @@
-import {Grid} from '@chakra-ui/layout';
-import {Flex} from '@chakra-ui/react';
-import {useState} from 'react';
-import {useSaveExamAnswer} from '../../services/api/examApiService';
-import {useShowErrorDialog} from '../../services/core/notifications';
-import {ExamPlayerDataDTO} from '../../shared/dtos/ExamPlayerDataDTO';
-import {Id} from '../../shared/types/versionId';
-import {Environment} from '../../static/Environemnt';
-import {epochDates, usePaging} from '../../static/frontendHelpers';
-import {translatableTexts} from '../../static/translatableTexts';
-import {EpistoFont} from '../controls/EpistoFont';
-import {LoadingFrame} from '../system/LoadingFrame';
-import {useEpistoDialogLogic} from '../universal/epistoDialog/EpistoDialogLogic';
-import {ExamAbortDialog} from './ExamAbortDialog';
-import {ExamLayout} from './ExamLayout';
-import {ExamLayoutContent} from './ExamLayoutContent';
-import {QuestionAnswer} from './QuestionAnswer';
-import {Logger} from '../../static/Logger';
+import { Grid } from '@chakra-ui/layout';
+import { useState } from 'react';
+import { useSaveExamAnswer } from '../../services/api/examApiService';
+import { useShowErrorDialog } from '../../services/core/notifications';
+import { ExamPlayerDataDTO } from '../../shared/dtos/ExamPlayerDataDTO';
+import { Id } from '../../shared/types/versionId';
+import { Environment } from '../../static/Environemnt';
+import { epochDates, usePaging } from '../../static/frontendHelpers';
+import { translatableTexts } from '../../static/translatableTexts';
+import { EpistoFont } from '../controls/EpistoFont';
+import { LoadingFrame } from '../system/LoadingFrame';
+import { useEpistoDialogLogic } from '../universal/epistoDialog/EpistoDialogLogic';
+import { ExamAbortDialog } from './ExamAbortDialog';
+import { ExamLayout } from './ExamLayout';
+import { ExamLayoutContent } from './ExamLayoutContent';
+import { QuestionAnswer } from './QuestionAnswer';
+import { Logger } from '../../static/Logger';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 
 export const ExamQuestions = (props: {
     exam: ExamPlayerDataDTO,
@@ -193,7 +193,7 @@ export const ExamQuestions = (props: {
 
         if (isSelected) {
 
-            setSelectedAnswers([...selectedAnswers, {answerVersionId, questionVersionId}]);
+            setSelectedAnswers([...selectedAnswers, { answerVersionId, questionVersionId }]);
         }
         else {
 
@@ -219,7 +219,7 @@ export const ExamQuestions = (props: {
 
         <ExamLayout
             headerLeftItem={(
-                <Flex align="center">
+                <EpistoFlex2 align="center">
                     <img
                         alt=""
                         src={Environment.getAssetUrl('course_page_icons/curriculum_test.svg')}
@@ -228,7 +228,7 @@ export const ExamQuestions = (props: {
                     <EpistoFont style={{ marginLeft: '10px' }}>
                         {questions.length}/{questionPaging.currentIndex + 1}
                     </EpistoFont>
-                </Flex>
+                </EpistoFlex2>
             )}
             stepperLogic={{
                 ids: questions.map(x => x.questionVersionId),
@@ -257,8 +257,8 @@ export const ExamQuestions = (props: {
             <ExamLayoutContent
                 title={currentQuestion.questionText}>
 
-                    {/* answers */}
-                <Flex
+                {/* answers */}
+                <EpistoFlex2
                     direction={'row'}
                     justifyContent={'center'}
                     pt={10}
@@ -284,7 +284,7 @@ export const ExamQuestions = (props: {
                                     isSelected={isAnswerSelected} />;
                             })}
                     </Grid>
-                </Flex>
+                </EpistoFlex2>
             </ExamLayoutContent>
         </ExamLayout>
     </LoadingFrame>;

@@ -1,6 +1,6 @@
-import { Flex } from '@chakra-ui/layout';
 import { ReactNode } from 'react';
 import { isString } from '../../static/frontendHelpers';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 
 export const FlexListTitleSubtitle = ({ title, subTitle, isSelected }: {
@@ -9,7 +9,7 @@ export const FlexListTitleSubtitle = ({ title, subTitle, isSelected }: {
     subTitle: string | ReactNode
 }) => {
 
-    return <Flex direction="column">
+    return <EpistoFlex2 direction="column">
 
         <EpistoFont
             fontSize2='normal'
@@ -27,5 +27,5 @@ export const FlexListTitleSubtitle = ({ title, subTitle, isSelected }: {
                 {subTitle}
             </EpistoFont>
             : subTitle}
-    </Flex >;
+    </EpistoFlex2 >;
 };

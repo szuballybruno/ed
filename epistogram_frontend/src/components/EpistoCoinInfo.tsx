@@ -1,5 +1,6 @@
-import { Flex, FlexProps } from '@chakra-ui/layout';
+import { FlexProps } from '@chakra-ui/layout';
 import { useCoinBalance } from '../services/api/coinTransactionsApiService';
+import { EpistoFlex2 } from './controls/EpistoFlex';
 import { EpistoFont } from './controls/EpistoFont';
 import { EpistoConinImage } from './universal/EpistoCoinImage';
 
@@ -7,7 +8,7 @@ export const EpistoConinInfo = (props: {} & FlexProps) => {
 
     const { coinBalance } = useCoinBalance();
 
-    return <Flex align="center"
+    return <EpistoFlex2 align="center"
         {...props}>
 
         {/* coin value  */}
@@ -20,5 +21,5 @@ export const EpistoConinInfo = (props: {} & FlexProps) => {
 
         {/* coin image */}
         <EpistoConinImage />
-    </Flex>;
+    </EpistoFlex2>;
 };

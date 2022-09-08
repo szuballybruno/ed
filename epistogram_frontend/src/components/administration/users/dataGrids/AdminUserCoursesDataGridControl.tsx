@@ -1,4 +1,4 @@
-import { Flex, Image } from '@chakra-ui/react';
+import { Image } from '@chakra-ui/react';
 import { TextField } from '@mui/material';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { DateTime } from 'luxon';
@@ -12,6 +12,7 @@ import { secondsToTime } from '../../../../static/frontendHelpers';
 import { useIntParam } from '../../../../static/locationHelpers';
 import { EpistoButton } from '../../../controls/EpistoButton';
 import { EpistoDataGrid, GridColumnType } from '../../../controls/EpistoDataGrid';
+import { EpistoFlex2 } from '../../../controls/EpistoFlex';
 import { EpistoFont } from '../../../controls/EpistoFont';
 import { LoadingFrame } from '../../../system/LoadingFrame';
 import { CircularProgressWithLabel } from '../../courses/AdminCourseUserProgressSubpage';
@@ -246,7 +247,7 @@ export const AdminUserCoursesDataGridControl = (props: {
             width: 250,
             resizable: true,
             renderCell: (params) => params.value !== null
-                ? <Flex align="center">
+                ? <EpistoFlex2 align="center">
 
                     <Image
                         h="30px"
@@ -271,7 +272,7 @@ export const AdminUserCoursesDataGridControl = (props: {
                                     ? 'Megengedő mód'
                                     : 'Szigorú mód'}
                     </EpistoFont>
-                </Flex>
+                </EpistoFlex2>
                 : <EmptyCell />
         }),
         columnDefGen('requiredCompletionDateColumn', {
@@ -334,13 +335,13 @@ export const AdminUserCoursesDataGridControl = (props: {
                 getKey={getRowKey}
                 rows={rows}
                 columns={columns} />
-            : <Flex
+            : <EpistoFlex2
                 flex='1'
                 align='center'
                 justify='center'>
 
                 A felhasználó még egyetlen kurzust sem kezdett el
-            </Flex>}
+            </EpistoFlex2>}
     </LoadingFrame>;
 };
 

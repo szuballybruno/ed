@@ -1,6 +1,7 @@
-import { Box, Flex } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import { ReactNode } from 'react';
 import { PropsWithChildren } from '../../static/frontendHelpers';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 
 export const FullscreenOverlay = ({
     children,
@@ -12,7 +13,7 @@ export const FullscreenOverlay = ({
 } & PropsWithChildren) => {
 
     return (
-        <Flex
+        <EpistoFlex2
             id={FullscreenOverlay.name}
             position='relative'
             className="whall">
@@ -33,6 +34,6 @@ export const FullscreenOverlay = ({
 
                 {overlayContent}
             </Box>}
-        </Flex>
+        </EpistoFlex2>
     );
 };

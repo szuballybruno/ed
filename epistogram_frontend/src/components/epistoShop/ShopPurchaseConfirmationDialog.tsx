@@ -1,4 +1,3 @@
-import { Flex } from '@chakra-ui/react';
 import { useEffect } from 'react';
 import { usePurchaseShopItem } from '../../services/api/shopApiService';
 import { useNavigation } from '../../services/core/navigatior';
@@ -7,6 +6,7 @@ import { ShopItemDTO } from '../../shared/dtos/ShopItemDTO';
 import { usePaging } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoDialog } from '../universal/epistoDialog/EpistoDialog';
 import { EpistoDialogLogicType } from '../universal/epistoDialog/EpistoDialogTypes';
@@ -54,7 +54,7 @@ export const ShopPurchaseConfirmationDialog = (props: {
     }, [dialogLogic.isOpen]);
 
     const confirmationSlide = () => (
-        <Flex direction="column"
+        <EpistoFlex2 direction="column"
             align="center"
             w="500px">
 
@@ -97,11 +97,11 @@ export const ShopPurchaseConfirmationDialog = (props: {
 
                 {translatableTexts.shop.purchaseConfirmationDialog.unlock}
             </EpistoButton>
-        </Flex>
+        </EpistoFlex2>
     );
 
     const feedbackSlide = () => (
-        <Flex
+        <EpistoFlex2
             direction="column"
             align="center"
             w="500px"
@@ -147,7 +147,7 @@ export const ShopPurchaseConfirmationDialog = (props: {
 
                 {translatableTexts.shop.purchaseConfirmationDialog.itemPage}
             </EpistoButton>}
-        </Flex>
+        </EpistoFlex2>
     );
 
     return <EpistoDialog

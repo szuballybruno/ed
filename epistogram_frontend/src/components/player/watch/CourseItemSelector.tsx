@@ -1,4 +1,4 @@
-import {Divider, Flex} from '@chakra-ui/layout';
+import {Divider} from '@chakra-ui/layout';
 import {useEffect, useRef, useState} from 'react';
 import {CourseApiService} from '../../../services/api/courseApiService';
 import {useTempomatMode} from '../../../services/api/tempomatApiService';
@@ -19,6 +19,7 @@ import {TempomatSettingsDialog} from '../tempomat/TempomatSettingsDialog';
 import {TempomatTempoInfo} from '../tempomat/TempomatTempoInfo';
 import {KeyboardArrowUp} from '@mui/icons-material';
 import {useScrollIntoView} from '../../system/AutoScrollContext';
+import { EpistoFlex2 } from '../../controls/EpistoFlex';
 
 export const CourseItemSelector = (props: {
     mode: CourseModeType,
@@ -114,7 +115,7 @@ export const CourseItemSelector = (props: {
             logic={dialogLogic}
             closeButtonType="top">
 
-            <Flex
+            <EpistoFlex2
                 w='450px'
                 h='120px'
                 align='center'
@@ -122,11 +123,11 @@ export const CourseItemSelector = (props: {
                 padding='20px'>
 
                 Biztosan váltasz haladó módra? Ez a művelet nem vonható vissza!
-            </Flex>
+            </EpistoFlex2>
         </EpistoDialog>
 
         {/* Tempomat */}
-        <Flex
+        <EpistoFlex2
             align="center"
             padding="20px"
             position='sticky'
@@ -136,13 +137,13 @@ export const CourseItemSelector = (props: {
             height="100px">
 
             {/* tempomat tempo  */}
-            {!recommendedItemQuota?.isDeadlineSet && <Flex
+            {!recommendedItemQuota?.isDeadlineSet && <EpistoFlex2
                 flex="1">
 
                 <TempomatTempoInfo
                     tempomatMode={tempomatMode ?? 'auto'}
                     onClick={() => tempomatDialogLogic.openDialog()} />
-            </Flex>}
+            </EpistoFlex2>}
 
             {!recommendedItemQuota?.isDeadlineSet && <Divider
                 flexBasis="1px"
@@ -152,16 +153,16 @@ export const CourseItemSelector = (props: {
                 background="grey" />}
 
             {/* daily recommended video count */}
-            <Flex flex="1">
+            <EpistoFlex2 flex="1">
 
                 <RecommendedItemQuota
                     isDaily
                     isDeadlineSet={recommendedItemQuota?.isDeadlineSet ?? false}
                     completedCount={recommendedItemQuota?.completedToday ?? 0}
                     recommendedItemCount={recommendedItemQuota?.recommendedItemsPerDay ?? 0} />
-            </Flex>
+            </EpistoFlex2>
 
-        </Flex>
+        </EpistoFlex2>
 
         {/* option to enable advanced mode
         IF STARTED COURSE  IN BEGINNER MODE */}
@@ -185,7 +186,7 @@ export const CourseItemSelector = (props: {
                 position: 'relative'
             }}>
 
-            <Flex
+            <EpistoFlex2
                 height="50px"
                 padding="0 20px"
                 justify="center">
@@ -231,7 +232,7 @@ export const CourseItemSelector = (props: {
 
                     <FilterAlt />
                 </EpistoButton>
-            </Flex>
+            </EpistoFlex2>
 
             <EpistoButton
                 ref={ref}

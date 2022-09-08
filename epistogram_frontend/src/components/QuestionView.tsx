@@ -1,10 +1,11 @@
-import {Flex, FlexProps} from '@chakra-ui/react';
+import { FlexProps} from '@chakra-ui/react';
 import React, {useEffect, useState} from 'react';
 import {showNotification} from '../services/core/notifications';
 import {CoinAcquireResultDTO} from '../shared/dtos/CoinAcquireResultDTO';
 import {QuestionDTO} from '../shared/dtos/QuestionDTO';
 import {Id} from '../shared/types/versionId';
 import {Environment} from '../static/Environemnt';
+import { EpistoFlex2 } from './controls/EpistoFlex';
 import {EpistoFont} from './controls/EpistoFont';
 import {LoadingFramePropsType} from './system/LoadingFrame';
 import {QuestionnaierAnswer} from './universal/QuestionnaireAnswer';
@@ -107,7 +108,7 @@ export const QuesitionView = (props: {
                 </QuestionnaierAnswer>;
             })}
 
-        {(!!coinsAcquired && showCoinsAcquired) && <Flex
+        {(!!coinsAcquired && showCoinsAcquired) && <EpistoFlex2
             mt="10px"
             borderRadius="5px"
             p="7px"
@@ -121,6 +122,6 @@ export const QuesitionView = (props: {
                 src={Environment.getAssetUrl('images/epistoCoin.png')}
                 className="square25"
                 style={{ margin: '0px 0px 4px 4px' }} />
-        </Flex>}
+        </EpistoFlex2>}
     </QuestionnaireLayout>;
 };

@@ -1,15 +1,16 @@
-import {Flex, FlexProps} from '@chakra-ui/react';
-import React, {useEffect, useState} from 'react';
-import {useReactTimer} from '../../helpers/reactTimer';
-import {PlayerApiService} from '../../services/api/PPlayerApiService';
-import {QuestionDTO} from '../../shared/dtos/QuestionDTO';
-import {Id} from '../../shared/types/versionId';
-import {epochDates} from '../../static/frontendHelpers';
-import {translatableTexts} from '../../static/translatableTexts';
-import {EpistoButton} from '../controls/EpistoButton';
-import {EpistoFont} from '../controls/EpistoFont';
-import {QuesitionView} from '../QuestionView';
-import {TimeoutFrame} from './TimeoutFrame';
+import { FlexProps } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
+import { useReactTimer } from '../../helpers/reactTimer';
+import { PlayerApiService } from '../../services/api/PPlayerApiService';
+import { QuestionDTO } from '../../shared/dtos/QuestionDTO';
+import { Id } from '../../shared/types/versionId';
+import { epochDates } from '../../static/frontendHelpers';
+import { translatableTexts } from '../../static/translatableTexts';
+import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { EpistoFont } from '../controls/EpistoFont';
+import { QuesitionView } from '../QuestionView';
+import { TimeoutFrame } from './TimeoutFrame';
 
 export const VideoQuestionnaire = (props: {
     question: QuestionDTO,
@@ -55,7 +56,7 @@ export const VideoQuestionnaire = (props: {
         setShowUpTime(new Date());
     }, [isShowing]);
 
-    return <Flex
+    return <EpistoFlex2
         zIndex='6'
         direction="column">
 
@@ -69,7 +70,7 @@ export const VideoQuestionnaire = (props: {
             bonusCoinsAcquired={answerResult?.coinAcquires?.bonus ?? null}
             {...css} />
 
-        <Flex display={isAnswered ? undefined : 'none'}
+        <EpistoFlex2 display={isAnswered ? undefined : 'none'}
             justify="flex-end">
 
             <EpistoButton
@@ -91,6 +92,6 @@ export const VideoQuestionnaire = (props: {
                     </EpistoFont>
                 </TimeoutFrame>
             </EpistoButton>
-        </Flex>
-    </Flex>;
+        </EpistoFlex2>
+    </EpistoFlex2>;
 };

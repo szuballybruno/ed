@@ -1,11 +1,10 @@
-import { Flex } from '@chakra-ui/react';
 import { useCallback, useMemo, useState } from 'react';
 import { CourseItemApiService } from '../../../../services/api/CourseItemApiService';
 import { Id } from '../../../../shared/types/versionId';
 import { useStateAndRef } from '../../../../static/frontendHelpers';
 import { translatableTexts } from '../../../../static/translatableTexts';
 import { EpistoButton } from '../../../controls/EpistoButton';
-import { EpistoFlex } from '../../../controls/EpistoFlex';
+import { EpistoFlex, EpistoFlex2 } from '../../../controls/EpistoFlex';
 import { EpistoReactPlayer } from '../../../controls/EpistoReactPlayer';
 import { useQuestionEditGridLogic } from '../questionsEditGrid/QuestionEditGridLogic';
 import { AnswerMutationsType, QuestionMutationsType } from '../questionsEditGrid/QuestionEditGridTypes';
@@ -46,13 +45,13 @@ export const VideoEditor = ({
         onClose(logic.questionMutations, logic.answerMutations);
     }, [onClose, logic]);
 
-    return <Flex
+    return <EpistoFlex2
         direction="column"
         flex="1"
         padding="10px">
 
         {/* video preview */}
-        <Flex
+        <EpistoFlex2
             className="mildShadow"
             height="300px">
 
@@ -67,14 +66,14 @@ export const VideoEditor = ({
                     overflow: 'hidden'
                 }}
                 url={videoUrl} />
-        </Flex>
+        </EpistoFlex2>
 
         {/* questions list */}
-        <Flex flex="1">
+        <EpistoFlex2 flex="1">
 
             <QuestionsEditGrid
                 logic={logic} />
-        </Flex>
+        </EpistoFlex2>
 
         {/* footer */}
         <EpistoFlex
@@ -91,5 +90,5 @@ export const VideoEditor = ({
                 {translatableTexts.misc.ok}
             </EpistoButton>
         </EpistoFlex>
-    </Flex>;
+    </EpistoFlex2>;
 };

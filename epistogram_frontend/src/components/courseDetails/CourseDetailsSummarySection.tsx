@@ -1,9 +1,10 @@
-import { Flex, Grid } from '@chakra-ui/react';
+import { Grid } from '@chakra-ui/react';
 import DoneIcon from '@mui/icons-material/Done';
 import React from 'react';
 import { CourseDetailsDTO } from '../../shared/dtos/CourseDetailsDTO';
 import { defaultCharts } from '../../static/defaultChartOptions';
 import { translatableTexts } from '../../static/translatableTexts';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoHeader } from '../EpistoHeader';
 import { EpistoRadarChart } from '../universal/charts/base_charts/EpistoRadarChart';
@@ -14,7 +15,7 @@ export const CourseDetailsSummarySection = (props: {
 
     const { courseDetails } = props;
 
-    return <Flex
+    return <EpistoFlex2
         mt={10}
         width="100%"
         direction={'column'}
@@ -53,7 +54,7 @@ export const CourseDetailsSummarySection = (props: {
 
             {courseDetails
                 .skillBenefits
-                .map((skillBenefit, index) => <Flex
+                .map((skillBenefit, index) => <EpistoFlex2
                     key={index}
                     align="center">
 
@@ -69,7 +70,7 @@ export const CourseDetailsSummarySection = (props: {
                     <EpistoFont>
                         {skillBenefit}
                     </EpistoFont>
-                </Flex>)}
+                </EpistoFlex2>)}
         </Grid>
 
         {/* humam skill benefits title */}
@@ -80,17 +81,17 @@ export const CourseDetailsSummarySection = (props: {
             mt={40} />
 
         {/* humam skill benefits */}
-        <Flex width="100%"
+        <EpistoFlex2 width="100%"
             mb={100}>
 
             {/* human skill benefits description */}
-            <Flex direction={'column'}
+            <EpistoFlex2 direction={'column'}
                 minWidth={'50%'} >
                 {courseDetails.humanSkillBenefitsDescription}
-            </Flex>
+            </EpistoFlex2>
 
             {/* human skill benefits chart  */}
-            <Flex direction={'column'}
+            <EpistoFlex2 direction={'column'}
                 minWidth={'50%'}>
                 <EpistoRadarChart
                     title=""
@@ -108,7 +109,7 @@ export const CourseDetailsSummarySection = (props: {
                         width: '400px',
                         height: '300px'
                     }} />
-            </Flex>
-        </Flex>
-    </Flex>;
+            </EpistoFlex2>
+        </EpistoFlex2>
+    </EpistoFlex2>;
 };

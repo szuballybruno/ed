@@ -1,4 +1,3 @@
-import { Flex } from '@chakra-ui/react';
 import { House } from '@mui/icons-material';
 import { Chip } from '@mui/material';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -14,6 +13,7 @@ import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoCheckbox } from '../../controls/EpistoCheckbox';
 import { EpistoDataGrid, GridColumnType } from '../../controls/EpistoDataGrid';
 import { EpistoEntry } from '../../controls/EpistoEntry';
+import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoLabel } from '../../controls/EpistoLabel';
 import { EpistoSelect } from '../../controls/EpistoSelect';
 import { LoadingFrame } from '../../system/LoadingFrame';
@@ -139,7 +139,7 @@ export const EditRoleControl = (props: {
                 {isCustomRole && <EpistoLabel
                     text="Owner company">
 
-                    <Flex align="center">
+                    <EpistoFlex2 align="center">
                         <House></House>
 
                         <EpistoSelect
@@ -148,7 +148,7 @@ export const EditRoleControl = (props: {
                             getCompareKey={x => x?.id + ''}
                             getDisplayValue={x => x?.name + ''}
                             onSelected={setSelectedCompany} />
-                    </Flex>
+                    </EpistoFlex2>
                 </EpistoLabel>}
 
                 <EpistoLabel
@@ -172,7 +172,7 @@ export const EditRoleControl = (props: {
                         columns={columns} />
                 </EpistoLabel>
 
-                <Flex justify="flex-end">
+                <EpistoFlex2 justify="flex-end">
                     <EpistoButton
                         variant='colored'
                         style={{
@@ -183,7 +183,7 @@ export const EditRoleControl = (props: {
 
                         {saveButton.title}
                     </EpistoButton>
-                </Flex>
+                </EpistoFlex2>
             </LoadingFrame>
         </EpistoDialog>
     </>;

@@ -1,9 +1,9 @@
-import { Flex } from '@chakra-ui/react';
 import { useCallback, useMemo } from 'react';
 import { CourseItemApiService } from '../../../../services/api/CourseItemApiService';
 import { Id } from '../../../../shared/types/versionId';
 import { translatableTexts } from '../../../../static/translatableTexts';
 import { EpistoButton } from '../../../controls/EpistoButton';
+import { EpistoFlex2 } from '../../../controls/EpistoFlex';
 import { LoadingFrame } from '../../../system/LoadingFrame';
 import { useQuestionEditGridLogic } from '../questionsEditGrid/QuestionEditGridLogic';
 import { AnswerMutationsType, QuestionMutationsType } from '../questionsEditGrid/QuestionEditGridTypes';
@@ -47,7 +47,7 @@ export const ExamEditor = ({
             background: 'var(--transparentWhite90)'
         }}>
 
-        <Flex
+        <EpistoFlex2
             flex='1'
             direction='column'>
 
@@ -56,7 +56,7 @@ export const ExamEditor = ({
                 logic={logic} />
 
             {/* buttons */}
-            <Flex
+            <EpistoFlex2
                 width="100%"
                 marginTop="10px"
                 justify="flex-end">
@@ -79,7 +79,7 @@ export const ExamEditor = ({
 
                     {translatableTexts.misc.ok}
                 </EpistoButton>
-            </Flex>
-        </Flex>
+            </EpistoFlex2>
+        </EpistoFlex2>
     </LoadingFrame>;
 };

@@ -1,5 +1,4 @@
-import { Flex } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useRegisterUserViaActivationCode } from '../services/api/registrationApiService';
 import { useNavigation } from '../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../services/core/notifications';
@@ -8,6 +7,7 @@ import { Environment } from '../static/Environemnt';
 import { translatableTexts } from '../static/translatableTexts';
 import { EpistoButton } from './controls/EpistoButton';
 import { EpistoEntryNew, useEpistoEntryState } from './controls/EpistoEntryNew';
+import { EpistoFlex2 } from './controls/EpistoFlex';
 import { EpistoFont } from './controls/EpistoFont';
 import { validateAllEntries } from './controls/logic/controlsLogic';
 import { PageRootContainer } from './PageRootContainer';
@@ -79,7 +79,7 @@ export const RegisterViaActivationCodePage = () => {
 
     return <PageRootContainer>
 
-        <Flex
+        <EpistoFlex2
             justify={'center'}
             background="gradientBlueBackground"
             py="60px"
@@ -88,7 +88,7 @@ export const RegisterViaActivationCodePage = () => {
             width="100%">
 
             {/* content */}
-            <Flex
+            <EpistoFlex2
                 wrap={'wrap'}
                 background="var(--transparentWhite70)"
                 zIndex="6"
@@ -100,7 +100,7 @@ export const RegisterViaActivationCodePage = () => {
                 overflow="hidden"
                 position={'relative'}>
 
-                <Flex
+                <EpistoFlex2
                     direction="column"
                     align="center"
                     justify="center"
@@ -133,7 +133,7 @@ export const RegisterViaActivationCodePage = () => {
                         }}
                         alt="" />
 
-                </Flex>
+                </EpistoFlex2>
 
                 {/* form */}
                 <LoadingFrame
@@ -145,7 +145,7 @@ export const RegisterViaActivationCodePage = () => {
                     flex="5">
 
                     {/* Redeem title */}
-                    <Flex
+                    <EpistoFlex2
                         minH="80px"
                         direction="column"
                         justify="center"
@@ -160,10 +160,10 @@ export const RegisterViaActivationCodePage = () => {
 
                             {translatableTexts.registerViaActivationCodePage.redeemYourCode}
                         </EpistoFont>
-                    </Flex>
+                    </EpistoFlex2>
 
                     {/* Redeem info input fields */}
-                    <Flex
+                    <EpistoFlex2
                         direction="column">
 
                         <EpistoEntryNew
@@ -197,10 +197,10 @@ export const RegisterViaActivationCodePage = () => {
                             placeholder={translatableTexts.registerViaActivationCodePage.activationCode.placeholder}
                             name="activationCode"
                             height="30px" />
-                    </Flex>
+                    </EpistoFlex2>
 
                     {/* registration button */}
-                    <Flex
+                    <EpistoFlex2
                         align="center"
                         justify="center"
                         minH={80}>
@@ -216,9 +216,9 @@ export const RegisterViaActivationCodePage = () => {
 
                             {translatableTexts.registerViaActivationCodePage.signup}
                         </EpistoButton>
-                    </Flex>
+                    </EpistoFlex2>
 
-                    <Flex
+                    <EpistoFlex2
                         justify="space-between"
                         align="center"
                         height={80}>
@@ -243,10 +243,10 @@ export const RegisterViaActivationCodePage = () => {
                                 {translatableTexts.registerViaActivationCodePage.buySubscription}
                             </a>
                         </EpistoFont>
-                    </Flex>
+                    </EpistoFlex2>
 
 
-                    <Flex
+                    <EpistoFlex2
                         position="fixed"
                         align="center"
                         justify="center"
@@ -257,7 +257,7 @@ export const RegisterViaActivationCodePage = () => {
                         left="0"
                         display={registrationSuccessful ? undefined : 'none'}>
 
-                        <Flex
+                        <EpistoFlex2
                             className="roundBorders mildShadow"
                             background="white"
                             align="center"
@@ -271,9 +271,9 @@ export const RegisterViaActivationCodePage = () => {
                                 {emailEntryState.value}
                                 {translatableTexts.registerViaActivationCodePage.signupSuccessfulDescriptions[1]}
                             </EpistoFont>
-                        </Flex>
+                        </EpistoFlex2>
 
-                    </Flex>
+                    </EpistoFlex2>
 
                 </LoadingFrame>
 
@@ -314,7 +314,7 @@ export const RegisterViaActivationCodePage = () => {
                     }}
                     src={Environment.getAssetUrl('/images/bg-art-6.png')}
                     alt="" />
-            </Flex>
-        </Flex >
+            </EpistoFlex2>
+        </EpistoFlex2 >
     </PageRootContainer >;
 };

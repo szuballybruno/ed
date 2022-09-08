@@ -1,4 +1,3 @@
-import { Flex } from '@chakra-ui/react';
 import { Delete } from '@mui/icons-material';
 import Edit from '@mui/icons-material/Edit';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
@@ -14,6 +13,7 @@ import { FlexListItem } from '../../universal/FlexListItem';
 import { FlexListTitleSubtitle } from '../../universal/FlexListTitleSubtitle';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { Id } from '../../../shared/types/versionId';
+import { EpistoFlex2 } from '../../controls/EpistoFlex';
 
 export const EditPersonalityTraitCategorySubpage = () => {
 
@@ -104,7 +104,7 @@ export const EditPersonalityTraitCategorySubpage = () => {
                 ]}
                 subRouteLabel={pageLabel ?? ''}>
 
-                <Flex
+                <EpistoFlex2
                     bg="var(--deepBlue)"
                     align="center"
                     justify="flex-end"
@@ -119,7 +119,7 @@ export const EditPersonalityTraitCategorySubpage = () => {
 
                         Add tip
                     </EpistoButton>
-                </Flex>
+                </EpistoFlex2>
 
                 {tips
                     .map((tip, index) => (
@@ -132,7 +132,7 @@ export const EditPersonalityTraitCategorySubpage = () => {
                                     title={`Tipp ${tip.id}`}
                                     subTitle={tip.description.substring(0, 30)} />
                             )}
-                            endContent={<Flex
+                            endContent={<EpistoFlex2
                                 align="center">
 
                                 {/* go to edit */}
@@ -150,7 +150,7 @@ export const EditPersonalityTraitCategorySubpage = () => {
                                             {x.icon}
                                         </EpistoButton>
                                     ))}
-                            </Flex>} />
+                            </EpistoFlex2>} />
                     ))}
 
             </AdminSubpageHeader>

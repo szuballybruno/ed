@@ -1,4 +1,4 @@
-import { Box, Flex, GridItem, useMediaQuery } from '@chakra-ui/react';
+import { Box, GridItem, useMediaQuery } from '@chakra-ui/react';
 import { Select, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import React from 'react';
 import { CourseApiService } from '../services/api/courseApiService';
@@ -11,7 +11,7 @@ import { distinctByAllKeys } from '../static/frontendHelpers';
 import { translatableTexts } from '../static/translatableTexts';
 import { ContentPane } from './ContentPane';
 import { EpistoButton } from './controls/EpistoButton';
-import { EpistoFlex } from './controls/EpistoFlex';
+import { EpistoFlex, EpistoFlex2 } from './controls/EpistoFlex';
 import { EpistoFont } from './controls/EpistoFont';
 import { EpistoGrid } from './controls/EpistoGrid';
 import { LeftPane } from './LeftPane';
@@ -108,7 +108,7 @@ const AvailableCoursesPage = () => {
                                     setFilterCategoryId(categoryOption.subCategoryId);
                                 }}
                                 key={index}>
-                                <Flex
+                                <EpistoFlex2
                                     className="roundBorders"
                                     boxShadow="inset -1px -1px 2px 1px rgba(0,0,0,0.10)"
                                     p="3px"
@@ -127,7 +127,7 @@ const AvailableCoursesPage = () => {
 
         <ContentPane noMaxWidth>
 
-            <Flex
+            <EpistoFlex2
                 id="coursesPanelRoot"
                 direction="column"
                 align="stretch"
@@ -135,7 +135,7 @@ const AvailableCoursesPage = () => {
                 minWidth={isSmallerThan1400 ? '1060px' : undefined}>
 
                 {/* search */}
-                <Flex
+                <EpistoFlex2
                     id="courseSearchRoot"
                     direction="row"
                     align="center"
@@ -223,7 +223,7 @@ const AvailableCoursesPage = () => {
                         <option value={'nameASC'}>{translatableTexts.availableCourses.sortOptions.aToZ}</option>
                         <option value={'nameDESC'}>{translatableTexts.availableCourses.sortOptions.zToA}</option>
                     </Select>
-                </Flex>
+                </EpistoFlex2>
 
                 <Box id="scrollContainer"
                     className="whall">
@@ -244,7 +244,7 @@ const AvailableCoursesPage = () => {
                                         course={course}
                                         key={index}>
 
-                                        <Flex mb="10px">
+                                        <EpistoFlex2 mb="10px">
 
                                             {/* details */}
                                             <EpistoButton
@@ -261,13 +261,13 @@ const AvailableCoursesPage = () => {
 
                                                 {translatableTexts.availableCourses.startCourse}
                                             </EpistoButton>
-                                        </Flex>
+                                        </EpistoFlex2>
                                     </CourseTile>
                                 </GridItem>;
                             })}
                     </EpistoGrid>
                 </Box>
-            </Flex>
+            </EpistoFlex2>
         </ContentPane>
     </PageRootContainer >;
 };

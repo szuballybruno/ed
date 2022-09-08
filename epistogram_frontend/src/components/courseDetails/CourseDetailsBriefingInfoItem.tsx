@@ -1,6 +1,7 @@
-import { Flex, FlexProps } from '@chakra-ui/react';
+import { FlexProps } from '@chakra-ui/react';
 import React, { ReactNode } from 'react';
 import { isString } from '../../static/frontendHelpers';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 
 export const CourseDetailsBriefingInfoItem = (props: {
@@ -11,7 +12,7 @@ export const CourseDetailsBriefingInfoItem = (props: {
 
     const { title, icon, subTitle, ...css } = props;
 
-    return <Flex
+    return <EpistoFlex2
         direction={'row'}
         minWidth={200}
         flex='1'
@@ -23,7 +24,7 @@ export const CourseDetailsBriefingInfoItem = (props: {
         shadow={'#00000024 0px 0px 3px 0px'}
         {...css}>
 
-        <Flex
+        <EpistoFlex2
             width={60}
             align={'center'}
             justify={'center'}>
@@ -36,9 +37,9 @@ export const CourseDetailsBriefingInfoItem = (props: {
                 src={icon as any}
                 alt={''}
                 className="square50" />}
-        </Flex>
+        </EpistoFlex2>
 
-        <Flex
+        <EpistoFlex2
             ml={5}
             width={135}
             direction={'column'}
@@ -59,6 +60,6 @@ export const CourseDetailsBriefingInfoItem = (props: {
 
                 {subTitle}
             </EpistoFont>
-        </Flex>
-    </Flex>;
+        </EpistoFlex2>
+    </EpistoFlex2>;
 };

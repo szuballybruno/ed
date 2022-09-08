@@ -1,4 +1,4 @@
-import {Box, Flex} from '@chakra-ui/react';
+import {Box} from '@chakra-ui/react';
 import {useEffect, useMemo, useState} from 'react';
 import {PlayerApiService} from '../../../services/api/PPlayerApiService';
 import {useNavigation} from '../../../services/core/navigatior';
@@ -19,6 +19,7 @@ import {applicationRoutes} from '../../../configuration/applicationRoutes';
 import {Logger} from '../../../static/Logger';
 import {useScrollIntoView} from '../../system/AutoScrollContext';
 import {EpistoButton} from '../../controls/EpistoButton';
+import { EpistoFlex2 } from '../../controls/EpistoFlex';
 
 export const WatchSubpage = () => {
 
@@ -148,12 +149,12 @@ export const WatchSubpage = () => {
     return (
         isDeleted
             ? <>
-                <Flex
+                <EpistoFlex2
                     className='whall'
                     align='center'
                     justify='center'>
 
-                    <Flex
+                    <EpistoFlex2
                         background='white'
                         padding='100px'
                         borderRadius='15px'>
@@ -161,8 +162,8 @@ export const WatchSubpage = () => {
                         <EpistoFont>
                             Course has been deleted!
                         </EpistoFont>
-                    </Flex>
-                </Flex>
+                    </EpistoFlex2>
+                </EpistoFlex2>
             </>
             : <>
                 <EpistoDialog logic={warningDialogLogic} />
@@ -187,7 +188,7 @@ export const WatchSubpage = () => {
                         Scroll
                     </EpistoButton>
 
-                    <Flex
+                    <EpistoFlex2
                         //px="20px"
                         height='calc(100% - 70px)'>
 
@@ -228,7 +229,7 @@ export const WatchSubpage = () => {
                         </Box>
 
                         {/* right sidebar */}
-                        <Flex
+                        <EpistoFlex2
                             id="courseItemListSidebar"
                             justify="flex-start"
                             zIndex="4"
@@ -238,7 +239,7 @@ export const WatchSubpage = () => {
                             opacity={isSidebarHidden ? 0 : 1}
                             transition="0.5s">
 
-                            {isDesktopView && <Flex
+                            {isDesktopView && <EpistoFlex2
                                 ref={setParent}
                                 direction="column"
                                 id="courseItemSelectorRoot"
@@ -256,9 +257,9 @@ export const WatchSubpage = () => {
                                     canChangeMode={playerDataWithDefaults.canChangeMode}
                                     isPlayerLoaded={isPlayerLoaded}
                                     refetchPlayerData={refetchPlayerData}/>
-                            </Flex>}
-                        </Flex>
-                    </Flex>
+                            </EpistoFlex2>}
+                        </EpistoFlex2>
+                    </EpistoFlex2>
                 </LoadingFrame>
             </>
     );

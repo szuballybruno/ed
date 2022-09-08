@@ -1,5 +1,5 @@
-import { Flex } from '@chakra-ui/react';
 import React, { ReactNode } from 'react';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoDialog } from '../universal/epistoDialog/EpistoDialog';
 import { useEpistoDialogLogic } from '../universal/epistoDialog/EpistoDialogLogic';
 import { EpistoDialogLogicType } from '../universal/epistoDialog/EpistoDialogTypes';
@@ -13,13 +13,13 @@ const ErrorDialog = ({ dialogLogic }: { dialogLogic: EpistoDialogLogicType }) =>
         title='Asd!'
         logic={dialogLogic}>
 
-        <Flex
+        <EpistoFlex2
             p='15px'
             width='400px'>
 
             An error has occured!
             Please try again later.
-        </Flex>
+        </EpistoFlex2>
     </EpistoDialog>;
 };
 

@@ -1,4 +1,4 @@
-import {Box, Flex} from '@chakra-ui/react';
+import {Box} from '@chakra-ui/react';
 import {Divider} from '@mui/material';
 import {useCallback, useEffect, useState} from 'react';
 import {useReactTimer} from '../../../helpers/reactTimer';
@@ -34,6 +34,7 @@ import {VideoRating} from './VideoRating';
 import {PlaylistModuleDTO} from '../../../shared/dtos/PlaylistModuleDTO';
 import {Id} from '../../../shared/types/versionId';
 import {Logger} from '../../../static/Logger';
+import { EpistoFlex2 } from '../../controls/EpistoFlex';
 
 const autoplayTimeoutInS = 3;
 
@@ -243,7 +244,7 @@ export const WatchView = (props: {
     return <>
 
         {/* video player */}
-        <Flex justify="center">
+        <EpistoFlex2 justify="center">
             <VideoPlayer
                 //height="calc((var(--playerWidth) - 420px) / 1.80)"
                 className="largeSoftShadow"
@@ -322,7 +323,7 @@ export const WatchView = (props: {
                     </OverlayDialog>
                 </AbsoluteFlexOverlay>
             </VideoPlayer>
-        </Flex>
+        </EpistoFlex2>
 
         {/* under video info */}
         <Box
@@ -342,14 +343,14 @@ export const WatchView = (props: {
                 refetchPlayerData={refetchPlayerData}
                 modules={modules} />}
 
-            <Flex
+            <EpistoFlex2
                 id="titleAndSegmentedButtonFlex"
                 justify="space-between"
                 py="20px"
                 flexWrap="wrap"
                 align="center">
 
-                <Flex direction="column"
+                <EpistoFlex2 direction="column"
                     flex="5">
 
                     <EpistoFont
@@ -363,11 +364,11 @@ export const WatchView = (props: {
 
                     <EpistoHeader variant="sub"
                         text={videoPlayerData!.subTitle} />
-                </Flex>
+                </EpistoFlex2>
 
                 {/* ratings */}
                 <VideoRating videoVersionId={videoPlayerData!.videoVersionId} />
-            </Flex>
+            </EpistoFlex2>
 
             <Divider
                 style={{

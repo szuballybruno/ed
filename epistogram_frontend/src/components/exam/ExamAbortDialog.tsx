@@ -1,7 +1,7 @@
-import { Flex } from '@chakra-ui/react';
 import { useCallback } from 'react';
 import { QuestionDTO } from '../../shared/dtos/QuestionDTO';
 import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoDialog } from '../universal/epistoDialog/EpistoDialog';
 import { EpistoDialogLogicType } from '../universal/epistoDialog/EpistoDialogTypes';
@@ -46,7 +46,7 @@ export const ExamAbortDialog = ({
             title='Biztosan befejezed ezt a vizsgát?'
             logic={dialogLogic}>
 
-            <Flex
+            <EpistoFlex2
                 direction='column'
                 p='20px'>
 
@@ -67,7 +67,7 @@ export const ExamAbortDialog = ({
                 </EpistoFont>
 
                 {/* buttons */}
-                <Flex
+                <EpistoFlex2
                     my='10px'
                     flex='1'>
 
@@ -95,7 +95,7 @@ export const ExamAbortDialog = ({
 
                         Befejezem
                     </EpistoButton>
-                </Flex>
+                </EpistoFlex2>
 
                 {/* cancel */}
                 <EpistoButton
@@ -105,7 +105,7 @@ export const ExamAbortDialog = ({
                     Átnézem mégegyszer
                 </EpistoButton>
 
-            </Flex>
+            </EpistoFlex2>
         </EpistoDialog>
     );
 };

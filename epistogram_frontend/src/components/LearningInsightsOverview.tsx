@@ -1,15 +1,16 @@
-import { Flex, useMediaQuery } from '@chakra-ui/react';
+import { useMediaQuery } from '@chakra-ui/react';
 import { ImproveYourselfSection } from './learningInsights/ImproveYourselfSection';
 import { LearningStatistics } from './learningInsights/LearningStatistics';
 import { DashboardSection } from './universal/DashboardSection';
 import { PersonalityAssessment } from './learningInsights/PersonalityAssessment';
 import { Id } from '../shared/types/versionId';
+import { EpistoFlex2 } from './controls/EpistoFlex';
 
 export const LearningInsightsOverview = () => {
 
     const [isSmallerThan1400] = useMediaQuery('(min-width: 1400px)');
 
-    return <Flex
+    return <EpistoFlex2
         flex='1'
         direction="column"
         pb="40px"
@@ -47,5 +48,5 @@ export const LearningInsightsOverview = () => {
 
             <ImproveYourselfSection />
         </DashboardSection>
-    </Flex>;
+    </EpistoFlex2>;
 };

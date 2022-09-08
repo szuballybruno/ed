@@ -1,4 +1,4 @@
-import { Box, Flex } from '@chakra-ui/layout';
+import { Box } from '@chakra-ui/layout';
 import React, { useContext, useEffect, useState } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { AuthenticationStateType, useLogInUser } from '../../services/api/authenticationApiService';
@@ -11,6 +11,7 @@ import { useQueryVal } from '../../static/locationHelpers';
 import { Logger } from '../../static/Logger';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoEntry } from '../controls/EpistoEntry';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { PageRootContainer } from '../PageRootContainer';
 import { AuthenticationStateContext, RefetchUserAsyncContext } from '../system/AuthenticationFrame';
@@ -143,7 +144,7 @@ const LoginScreen = () => {
 
     return <PageRootContainer>
 
-        <Flex
+        <EpistoFlex2
             justify={'center'}
             background="gradientBlueBackground"
             py="60px"
@@ -166,12 +167,12 @@ const LoginScreen = () => {
                 overflow="hidden"
                 position={'relative'}>
 
-                <Flex
+                <EpistoFlex2
                     wrap={'wrap'}
                     className="whall"
                     maxW="700px">
 
-                    <Flex
+                    <EpistoFlex2
                         direction="column"
                         align="center"
                         justify="center"
@@ -203,9 +204,9 @@ const LoginScreen = () => {
                             }}
                             alt="" />
 
-                    </Flex>
+                    </EpistoFlex2>
 
-                    <Flex
+                    <EpistoFlex2
                         id="form"
                         direction="column"
                         justify="center"
@@ -213,7 +214,7 @@ const LoginScreen = () => {
                         flex="1">
 
 
-                        <Flex
+                        <EpistoFlex2
                             direction="column"
                             width="100%"
                             alignItems="flex-start">
@@ -223,7 +224,7 @@ const LoginScreen = () => {
                                 Örülünk, hogy ismét itt vagy velünk!
                             </EpistoFont>
 
-                        </Flex>
+                        </EpistoFlex2>
 
                         <Box width="100%">
 
@@ -283,7 +284,7 @@ const LoginScreen = () => {
                             Bejelentkezés
                         </EpistoButton>
 
-                        <Flex
+                        <EpistoFlex2
                             direction={'row'}
                             justifyContent={'space-between'}
                             width="100%">
@@ -302,9 +303,9 @@ const LoginScreen = () => {
 
                                 Aktiváld a PCWorld Ultimate kódodat az alábbi oldalon
                             </EpistoFont>
-                        </Flex>
-                    </Flex>
-                </Flex>
+                        </EpistoFlex2>
+                    </EpistoFlex2>
+                </EpistoFlex2>
 
                 {/* Magic powder top-left */}
                 <img
@@ -344,7 +345,7 @@ const LoginScreen = () => {
                     src={Environment.getAssetUrl('/images/bg-art-6.png')}
                     alt="" />
             </LoadingFrame>
-        </Flex>
+        </EpistoFlex2>
     </PageRootContainer>;
 };
 

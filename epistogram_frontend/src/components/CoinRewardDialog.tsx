@@ -1,8 +1,8 @@
 import { Box } from '@chakra-ui/layout';
-import { Flex } from '@chakra-ui/react';
 import { Player } from '@lottiefiles/react-lottie-player';
 import { Environment } from '../static/Environemnt';
 import { EpistoButton } from './controls/EpistoButton';
+import { EpistoFlex2 } from './controls/EpistoFlex';
 import { EpistoFont } from './controls/EpistoFont';
 import { EpistoDialog } from './universal/epistoDialog/EpistoDialog';
 import { EpistoDialogLogicType } from './universal/epistoDialog/EpistoDialogTypes';
@@ -20,7 +20,7 @@ export const CoinRewardDialog = (props: {
         return <></>;
 
     return <EpistoDialog logic={dialogLogic}>
-        <Flex
+        <EpistoFlex2
             direction="column"
             borderRadius="5px"
             border="solid 5px var(--epistoTeal)"
@@ -47,7 +47,7 @@ export const CoinRewardDialog = (props: {
                 {text}
             </EpistoFont>
 
-            <Flex align="flex-end"
+            <EpistoFlex2 align="flex-end"
                 mt="10px">
 
                 <EpistoFont fontSize="fontGiant"
@@ -74,7 +74,7 @@ export const CoinRewardDialog = (props: {
 
                     Begyűjtöm!
                 </EpistoButton>
-            </Flex>
-        </Flex>
+            </EpistoFlex2>
+        </EpistoFlex2>
     </EpistoDialog>;
 };

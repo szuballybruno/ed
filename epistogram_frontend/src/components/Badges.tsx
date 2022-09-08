@@ -1,5 +1,5 @@
-import { Flex } from '@chakra-ui/react';
 import { Environment } from '../static/Environemnt';
+import { EpistoFlex2 } from './controls/EpistoFlex';
 
 export const Badges = () => {
 
@@ -14,13 +14,13 @@ export const Badges = () => {
 
     return (
 
-        <Flex
+        <EpistoFlex2
             direction="row"
             justify="flex-start"
             padding="10px">
 
             {badges
-                .map((badge, index) => <Flex
+                .map((badge, index) => <EpistoFlex2
                     key={index}
                     className="roundBorders"
                     background="orange"
@@ -36,7 +36,7 @@ export const Badges = () => {
                         }}
                         src={badge}
                         alt="" />
-                </Flex>)}
-        </Flex>
+                </EpistoFlex2>)}
+        </EpistoFlex2>
     );
 };

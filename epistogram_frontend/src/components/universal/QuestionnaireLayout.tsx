@@ -1,5 +1,6 @@
-import { Flex, FlexProps } from '@chakra-ui/react';
+import { FlexProps } from '@chakra-ui/react';
 import React, { ReactNode } from 'react';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoText } from '../controls/EpistoText';
 import { LoadingFrame, LoadingFramePropsType } from '../system/LoadingFrame';
 
@@ -16,7 +17,7 @@ export const QuestionnaireLayout = (props: {
     const { title, answerAction, contentClickable, children, loadingProps, onlyShowAnswers, buttonWrapperStyles, ...css } = props;
 
     return (
-        <Flex
+        <EpistoFlex2
             id="questionnaireLayoutRoot"
             zIndex='6'
             direction="column"
@@ -25,7 +26,7 @@ export const QuestionnaireLayout = (props: {
             {...css}>
 
             {/* header */}
-            <Flex
+            <EpistoFlex2
                 display={onlyShowAnswers === true ? 'none' : undefined}
                 direction="column"
                 align="center"
@@ -33,19 +34,19 @@ export const QuestionnaireLayout = (props: {
                 alignSelf="center">
 
                 {/* title */}
-                <Flex align="center">
+                <EpistoFlex2 align="center">
 
                     <EpistoText
                         isAutoFontSize
                         text={title}
                         style={{ width: '100%', fontSize: 17, fontWeight: 500 }} />
-                </Flex>
+                </EpistoFlex2>
 
-            </Flex>
+            </EpistoFlex2>
 
             {/* content */}
             <LoadingFrame {...loadingProps}>
-                <Flex
+                <EpistoFlex2
                     style={{ ...buttonWrapperStyles }}
                     id="answersListContainer"
                     direction="column"
@@ -53,8 +54,8 @@ export const QuestionnaireLayout = (props: {
                     mt="20px"
                     pointerEvents={contentClickable ? 'all' : 'none'}>
                     {children}
-                </Flex>
+                </EpistoFlex2>
             </LoadingFrame>
-        </Flex>
+        </EpistoFlex2>
     );
 };

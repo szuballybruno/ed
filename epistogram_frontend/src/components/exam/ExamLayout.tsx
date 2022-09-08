@@ -1,8 +1,9 @@
-import { Flex, FlexProps } from '@chakra-ui/react';
+import { FlexProps } from '@chakra-ui/react';
 import { ArrowBack } from '@mui/icons-material';
 import { ReactNode } from 'react';
 import { isString } from '../../static/frontendHelpers';
 import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoStepper, StepperLogicType } from '../universal/EpistoStepper';
 
@@ -63,29 +64,29 @@ export const ExamLayout = (props: {
     };
 
     const HeaderButtons = () => {
-        return <Flex>
+        return <EpistoFlex2>
 
             {/* other buttons */}
             {headerButtons && headerButtons
                 .map((x, i) => <ExamLayoutButton
                     key={i}
                     {...x} />)}
-        </Flex>;
+        </EpistoFlex2>;
     };
 
     const FooterButtons = () => {
 
-        return <Flex>
+        return <EpistoFlex2>
 
             {/* other buttons */}
             {footerButtons && footerButtons
                 .map((x, i) => <ExamLayoutButton
                     key={i}
                     {...x} />)}
-        </Flex>;
+        </EpistoFlex2>;
     };
 
-    return <Flex
+    return <EpistoFlex2
         minH='calc(100vh - 120px)'
         maxH={isHeightMaximized ? '1080px' : 'unset'}
         width='100%'
@@ -94,7 +95,7 @@ export const ExamLayout = (props: {
         alignItems="center">
 
         {/* header */}
-        <Flex
+        <EpistoFlex2
             direction={'row'}
             alignItems={'center'}
             position={!isHeightMaximized ? 'sticky' : undefined}
@@ -106,7 +107,7 @@ export const ExamLayout = (props: {
             height={60}
             pl={20}>
 
-            <Flex minWidth="200">
+            <EpistoFlex2 minWidth="200">
 
                 {headerLeftItem && (
                     isString(headerLeftItem)
@@ -119,9 +120,9 @@ export const ExamLayout = (props: {
                             headerLeftItem
                         )
                 )}
-            </Flex>
+            </EpistoFlex2>
 
-            <Flex
+            <EpistoFlex2
                 flex="1"
                 align="center"
                 justify="center">
@@ -129,21 +130,21 @@ export const ExamLayout = (props: {
                 <EpistoFont>
                     {headerCenterText}
                 </EpistoFont>
-            </Flex>
+            </EpistoFlex2>
 
-            <Flex minWidth="200"
+            <EpistoFlex2 minWidth="200"
                 justify="flex-end"
                 pr='10px'>
 
                 {headerButtons && <HeaderButtons />}
 
                 {(showFooterButtonsOnTop && !headerButtons) && <FooterButtons />}
-            </Flex>
+            </EpistoFlex2>
 
-        </Flex>
+        </EpistoFlex2>
 
         {/* content */}
-        <Flex
+        <EpistoFlex2
             flex="1"
             my="20px"
             minH="300px"
@@ -154,10 +155,10 @@ export const ExamLayout = (props: {
             {...css}>
 
             {children}
-        </Flex>
+        </EpistoFlex2>
 
         {/* footer */}
-        <Flex
+        <EpistoFlex2
             width="100%"
             className="roundBorders mildShadow"
             background="var(--transparentWhite70)"
@@ -174,7 +175,7 @@ export const ExamLayout = (props: {
             })}
 
             {/* progress line */}
-            <Flex
+            <EpistoFlex2
                 flex={1}
                 px={10}
                 justify='center'
@@ -182,9 +183,9 @@ export const ExamLayout = (props: {
 
                 {stepperLogic && <EpistoStepper stepperLogic={stepperLogic} />}
 
-            </Flex>
+            </EpistoFlex2>
 
             <FooterButtons />
-        </Flex>
-    </Flex>;
+        </EpistoFlex2>
+    </EpistoFlex2>;
 };

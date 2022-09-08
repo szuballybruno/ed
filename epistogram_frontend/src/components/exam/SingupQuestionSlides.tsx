@@ -1,12 +1,12 @@
-import {Flex} from '@chakra-ui/react';
-import {FormControlLabel, Radio, RadioGroup} from '@mui/material';
-import {usePaging} from '../../static/frontendHelpers';
-import {SignupQuestionDTO} from '../../shared/dtos/SignupQuestionDTO';
-import {useShowErrorDialog} from '../../services/core/notifications';
-import {LinearProgressWithLabel} from '../signup/ProgressIndicator';
-import {SignupWrapper} from '../signup/SignupWrapper';
-import {EpistoFont} from '../controls/EpistoFont';
-import {Id} from '../../shared/types/versionId';
+import { FormControlLabel, Radio, RadioGroup } from '@mui/material';
+import { useShowErrorDialog } from '../../services/core/notifications';
+import { SignupQuestionDTO } from '../../shared/dtos/SignupQuestionDTO';
+import { Id } from '../../shared/types/versionId';
+import { usePaging } from '../../static/frontendHelpers';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { EpistoFont } from '../controls/EpistoFont';
+import { LinearProgressWithLabel } from '../signup/ProgressIndicator';
+import { SignupWrapper } from '../signup/SignupWrapper';
 
 export const useSignupQuestionsState = (options: {
     questions: SignupQuestionDTO[],
@@ -127,9 +127,9 @@ export const SingupQuestionSlides = (props: { state: SignupQuestionsStateType })
             currentImage={currentQuestion!.imageUrl!}
             onNavPrevious={questionnaireState.previous}
             bottomComponent={<LinearProgressWithLabel value={questionnaireProgressbarValue} />}
-            upperComponent={<Flex alignItems={'center'}
+            upperComponent={<EpistoFlex2 alignItems={'center'}
                 justifyContent={'flex-end'}
-                width={'30%'}><EpistoFont>{questionnaireProgressLabel}</EpistoFont></Flex>}>
+                width={'30%'}><EpistoFont>{questionnaireProgressLabel}</EpistoFont></EpistoFlex2>}>
 
             <RadioGroup
                 id="answers"

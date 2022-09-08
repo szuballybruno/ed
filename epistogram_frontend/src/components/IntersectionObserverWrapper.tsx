@@ -1,8 +1,8 @@
 import React from 'react';
 import OverflowMenu from './OverflowMenu';
 import classes from './css/stylesheet.module.css';
-import { Flex } from '@chakra-ui/react';
 import { FlexProps } from '@chakra-ui/layout';
+import { EpistoFlex2 } from './controls/EpistoFlex';
 
 export default function IntersectionObserverWrap(props: { children: JSX.Element[] } & FlexProps) {
 
@@ -45,8 +45,8 @@ export default function IntersectionObserverWrap(props: { children: JSX.Element[
   }, []);
 
 
-  return (<Flex overflow={'hidden'}>
-    <Flex className={classes.toolbarWrapper}
+  return (<EpistoFlex2 overflow={'hidden'}>
+    <EpistoFlex2 className={classes.toolbarWrapper}
       overflow={'hidden'}
       ref={navRef}
       {...css}>
@@ -56,12 +56,12 @@ export default function IntersectionObserverWrap(props: { children: JSX.Element[
         });
       })}
 
-    </Flex>
+    </EpistoFlex2>
     <OverflowMenu
       visibilityMap={visibilityMap}
       className={classes.overflowStyle}>
       {props.children}
     </OverflowMenu>
-  </Flex>
+  </EpistoFlex2>
   );
 }

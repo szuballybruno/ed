@@ -1,4 +1,4 @@
-import { Flex, useMediaQuery } from '@chakra-ui/react';
+import { useMediaQuery } from '@chakra-ui/react';
 import { ReactNode } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { ApplicationRoute } from '../../models/types';
@@ -7,6 +7,7 @@ import { Environment } from '../../static/Environemnt';
 import { ArrayBuilder } from '../../static/frontendHelpers';
 import { Logger } from '../../static/Logger';
 import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { useAuthorizationContext } from '../system/AuthorizationContext';
 import { NavbarButton } from '../universal/NavbarButton';
 import { ContinueCourseButton } from './ContinueCourseButton';
@@ -75,7 +76,7 @@ export const DesktopNavbar = ({
 
     const MinimalRender = () => {
 
-        return <Flex>
+        return <EpistoFlex2>
             {menuItems
                 .map((route, index) => {
                     return (
@@ -88,13 +89,13 @@ export const DesktopNavbar = ({
                         </EpistoButton>
                     );
                 })}
-        </Flex>;
+        </EpistoFlex2>;
     };
 
     const MidRender = () => {
 
         return (
-            <Flex height="50px"
+            <EpistoFlex2 height="50px"
                 flex="1 0 600px">
 
                 {/* menu items */}
@@ -109,14 +110,14 @@ export const DesktopNavbar = ({
                 {/* continue course button */}
                 <ContinueCourseButton
                     currentCourseItemCode={currentCourseItemCode} />
-            </Flex>
+            </EpistoFlex2>
         );
     };
 
     const LargeRender = () => {
 
         return (
-            <Flex>
+            <EpistoFlex2>
                 {menuItems
                     .map((route, index) => {
                         return (
@@ -135,14 +136,14 @@ export const DesktopNavbar = ({
                 {/* continue watching  */}
                 <ContinueCourseButton
                     currentCourseItemCode={currentCourseItemCode} />
-            </Flex>
+            </EpistoFlex2>
         );
     };
 
     Logger.logScoped('RENDER', 'Rendering navbar');
 
     return (
-        <Flex
+        <EpistoFlex2
             align="center"
             width="100%"
             flex="1"
@@ -186,6 +187,6 @@ export const DesktopNavbar = ({
                     isLowHeight={isLowHeight}
                     isMinimalMode={isMinimalMode} />
             </>}
-        </Flex >
+        </EpistoFlex2 >
     );
 };

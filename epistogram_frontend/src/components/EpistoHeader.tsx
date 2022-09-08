@@ -1,7 +1,8 @@
-import {Flex, FlexProps} from '@chakra-ui/layout';
+import { FlexProps} from '@chakra-ui/layout';
 import {Divider} from '@mui/material';
 import {EpistoFont} from './controls/EpistoFont';
 import {ReactNode} from 'react';
+import { EpistoFlex2 } from './controls/EpistoFlex';
 
 export const EpistoHeader = (props: {
     text: string,
@@ -24,12 +25,12 @@ export const EpistoHeader = (props: {
         return 'h6';
     })();
 
-    return <Flex
+    return <EpistoFlex2
         id='epistoHeaderRoot'
         direction='column'
         {...css}>
 
-        <Flex
+        <EpistoFlex2
             align='center'
             justify='space-between'
             h='25px'>
@@ -49,8 +50,8 @@ export const EpistoHeader = (props: {
             </EpistoFont>
 
             {children}
-        </Flex>
+        </EpistoFlex2>
 
         {!!showDivider && <Divider style={{background: 'var(--transparentWhite70)', marginTop: '10px'}}/>}
-    </Flex>;
+    </EpistoFlex2>;
 };

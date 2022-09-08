@@ -1,4 +1,3 @@
-import { Flex } from '@chakra-ui/react';
 import { useCallback } from 'react';
 import { useUserExamStats } from '../../../../services/api/userStatsApiService';
 import { UserExamStatsDTO } from '../../../../shared/dtos/UserExamStatsDTO';
@@ -8,6 +7,7 @@ import { secondsToTime } from '../../../../static/frontendHelpers';
 import { useIntParam } from '../../../../static/locationHelpers';
 import { EpistoButton } from '../../../controls/EpistoButton';
 import { EpistoDataGrid, GridColumnType } from '../../../controls/EpistoDataGrid';
+import { EpistoFlex2 } from '../../../controls/EpistoFlex';
 import { EpistoFont } from '../../../controls/EpistoFont';
 import { LoadingFrame } from '../../../system/LoadingFrame';
 import { ChipSmall } from '../../courses/ChipSmall';
@@ -168,12 +168,12 @@ export const AdminUserExamsDataGridControl = (props: {
                 getKey={getRowKey}
                 rows={rows}
                 columns={columns} />
-            : <Flex
+            : <EpistoFlex2
                 flex='1'
                 align='center'
                 justify='center'>
 
                 A felhasználó még egyetlen vizsgát sem végzett el ebben a kurzusban
-            </Flex>}
+            </EpistoFlex2>}
     </LoadingFrame>;
 };

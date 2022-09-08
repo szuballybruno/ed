@@ -3,12 +3,12 @@ import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import VolumeDownIcon from '@mui/icons-material/VolumeDown';
 import VolumeMuteIcon from '@mui/icons-material/VolumeMute';
 import VolumeOffIcon from '@mui/icons-material/VolumeOff';
-import { Flex } from '@chakra-ui/react';
 import { Fullscreen, Pause, PlayArrow } from '@mui/icons-material';
 import { Slider } from '@mui/material';
 import { secondsToTime } from '../../../static/frontendHelpers';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoFont } from '../../controls/EpistoFont';
+import { EpistoFlex2 } from '../../controls/EpistoFlex';
 
 export const VideoControls = (props: {
     controlsVisible: boolean,
@@ -44,7 +44,7 @@ export const VideoControls = (props: {
         setVolume
     } = props;
 
-    return <Flex
+    return <EpistoFlex2
         background="linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.6814075972185749) 100%)"
         color="white"
         display="flex"
@@ -154,5 +154,5 @@ export const VideoControls = (props: {
 
             <Fullscreen />
         </button>
-    </Flex >;
+    </EpistoFlex2 >;
 };

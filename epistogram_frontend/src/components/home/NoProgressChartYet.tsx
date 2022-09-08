@@ -1,12 +1,12 @@
 
-import { Flex } from '@chakra-ui/react';
 import { Environment } from '../../static/Environemnt';
 import { translatableTexts } from '../../static/translatableTexts';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 
 export const NoProgressChartYet = () => {
 
-    return <Flex
+    return <EpistoFlex2
         flex='1'
         direction='column'
         justify='center'>
@@ -28,5 +28,5 @@ export const NoProgressChartYet = () => {
             }}>
             {translatableTexts.homePage.noStatsYet}
         </EpistoFont>
-    </Flex>;
+    </EpistoFlex2>;
 };

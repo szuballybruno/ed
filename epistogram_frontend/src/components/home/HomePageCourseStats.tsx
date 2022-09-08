@@ -1,4 +1,4 @@
-import { Flex, Grid } from '@chakra-ui/react';
+import { Grid } from '@chakra-ui/react';
 import { ArrowBack, ArrowForward, FiberManualRecord } from '@mui/icons-material';
 import { useEffect } from 'react';
 import { useRecommendedItemQuota, useUserCourseProgressChartData } from '../../services/api/userProgressApiService';
@@ -6,6 +6,7 @@ import { UserActiveCourseDTO } from '../../shared/dtos/UserActiveCourseDTO';
 import { Environment } from '../../static/Environemnt';
 import { PagingType } from '../../static/frontendHelpers';
 import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { FlexFloat } from '../controls/FlexFloat';
 import StatisticsCard from '../statisticsCard/StatisticsCard';
 import { UserProgressChart } from '../universal/charts/UserProgressChart';
@@ -37,14 +38,14 @@ export const HomePageCourseStats = (props: {
             }) || 'Ismeretlen'
         : 'Ismeretlen';
 
-    return <Flex
+    return <EpistoFlex2
         mt='10px'
         flex='1'
         minHeight='450px'
         minWidth='100%'
         direction='column'>
 
-        <Flex
+        <EpistoFlex2
             minHeight='400px'
             width='100%'
             align='center'
@@ -52,7 +53,7 @@ export const HomePageCourseStats = (props: {
             justify='space-between'
             flex='1'>
 
-            <Flex
+            <EpistoFlex2
                 flex='2'>
 
                 {recommendedItemQuota
@@ -101,7 +102,7 @@ export const HomePageCourseStats = (props: {
                             isOpenByDefault={false} />
 
                     </Grid>
-                    : <Flex
+                    : <EpistoFlex2
                         align='center'
                         justify='center'
                         textAlign='center'
@@ -114,11 +115,8 @@ export const HomePageCourseStats = (props: {
                         }}>
 
                         Itt fognak megjelenni a kurzussal kapcsolatos statisztikáid, amint elkezdesz egy új kurzust
-                    </Flex>}
-            </Flex>
-
-
-
+                    </EpistoFlex2>}
+            </EpistoFlex2>
 
             {/* chart item  */}
             <FlexFloat
@@ -134,10 +132,10 @@ export const HomePageCourseStats = (props: {
                     ? <UserProgressChart userProgress={userProgressData!} />
                     : <NoProgressChartYet />}
             </FlexFloat>
-        </Flex>
+        </EpistoFlex2>
 
         {/* navigation buttons */}
-        <Flex
+        <EpistoFlex2
             flex='1'
             h="30px"
             mt='10px'
@@ -162,6 +160,6 @@ export const HomePageCourseStats = (props: {
                 <ArrowForward />
             </EpistoButton>
 
-        </Flex>
-    </Flex >;
+        </EpistoFlex2>
+    </EpistoFlex2 >;
 };

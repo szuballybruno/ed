@@ -1,7 +1,7 @@
-import { Flex } from '@chakra-ui/layout';
 import { DashboardSection } from './universal/DashboardSection';
 import { EpistoGrid } from './controls/EpistoGrid';
 import { ExamTile } from './universal/ExamTile';
+import { EpistoFlex2 } from './controls/EpistoFlex';
 
 const finisedExams = [
     {
@@ -14,7 +14,7 @@ const finisedExams = [
 
 export const MyExams = () => {
 
-    return <Flex direction="column"
+    return <EpistoFlex2 direction="column"
         width="100%">
         <DashboardSection variant="noShadow"
             title="Teljesített vizsgáim">
@@ -25,5 +25,5 @@ export const MyExams = () => {
                     .map((x, index) => <ExamTile key={index} />)}
             </EpistoGrid>
         </DashboardSection>
-    </Flex>;
+    </EpistoFlex2>;
 };

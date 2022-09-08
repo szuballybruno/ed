@@ -1,4 +1,5 @@
-import { Flex, FlexProps } from '@chakra-ui/react';
+import { FlexProps } from '@chakra-ui/react';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 
 export const PlaylistItemTypeIcon = (props: {
     color: string
@@ -6,7 +7,7 @@ export const PlaylistItemTypeIcon = (props: {
 
     const { color, ...css } = props;
 
-    return <Flex
+    return <EpistoFlex2
         alignSelf="stretch"
         className="roundBorders"
         boxShadow="inset -1px -1px 2px 1px rgba(0,0,0,0.10)"

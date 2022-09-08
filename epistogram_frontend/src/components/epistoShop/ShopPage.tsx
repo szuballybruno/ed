@@ -1,4 +1,4 @@
-import { Box, Flex, GridItem, useMediaQuery } from '@chakra-ui/react';
+import { Box, GridItem, useMediaQuery } from '@chakra-ui/react';
 import { Select, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { useState } from 'react';
 import { useCoinBalance } from '../../services/api/coinTransactionsApiService';
@@ -7,6 +7,7 @@ import { ShopItemDTO } from '../../shared/dtos/ShopItemDTO';
 import { Id } from '../../shared/types/versionId';
 import { translatableTexts } from '../../static/translatableTexts';
 import { ContentPane } from '../ContentPane';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoGrid } from '../controls/EpistoGrid';
 import { EpistoConinInfo } from '../EpistoCoinInfo';
@@ -99,7 +100,7 @@ export const ShopPage = () => {
                             onClick={() => setCategoryFilterId(category.id)}
                             key={index}>
 
-                            <Flex
+                            <EpistoFlex2
                                 className="roundBorders"
                                 boxShadow="inset -1px -1px 2px 1px rgba(0,0,0,0.10)"
                                 p="3px"
@@ -115,7 +116,7 @@ export const ShopPage = () => {
 
         {/* content */}
         <ContentPane noMaxWidth>
-            <Flex
+            <EpistoFlex2
                 id="coursesPanelRoot"
                 direction="column"
                 pb="40px"
@@ -124,7 +125,7 @@ export const ShopPage = () => {
                 minWidth={isSmallerThan1400 ? '1060px' : undefined}>
 
                 {/* search */}
-                <Flex
+                <EpistoFlex2
                     direction="row"
                     align="center"
                     justify="space-between"
@@ -132,7 +133,7 @@ export const ShopPage = () => {
                     p="20px 0">
 
                     {/* user coin balance */}
-                    <Flex align="center"
+                    <EpistoFlex2 align="center"
                         flex="3"
                         pr="20px"
                         minWidth="300px">
@@ -149,7 +150,7 @@ export const ShopPage = () => {
                         </EpistoFont>
 
                         <EpistoConinInfo />
-                    </Flex>
+                    </EpistoFlex2>
 
                     {/* search */}
                     <EpistoSearch height="40px"
@@ -182,7 +183,7 @@ export const ShopPage = () => {
                         <option value={30}>{translatableTexts.availableCourses.sortOptions.newToOld}</option>
                         <option value={30}>{translatableTexts.availableCourses.sortOptions.oldToNew}</option>
                     </Select>
-                </Flex>
+                </EpistoFlex2>
 
                 {/* shop items */}
                 {hasItems && <Box
@@ -208,12 +209,12 @@ export const ShopPage = () => {
                     </EpistoGrid>
                 </Box>}
 
-                {!hasItems && <Flex className="whall">
+                {!hasItems && <EpistoFlex2 className="whall">
                     <EpistoFont>
                         Ez a kategória még üres, de már dolgozunk a feltöltésén, nézz vissza a közeljövőben!
                     </EpistoFont>
-                </Flex>}
-            </Flex>
+                </EpistoFlex2>}
+            </EpistoFlex2>
         </ContentPane>
     </PageRootContainer>;
 };

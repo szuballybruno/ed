@@ -1,7 +1,7 @@
-import { Flex } from '@chakra-ui/react';
 import { ReactNode } from 'react';
 import { Id } from '../../../../shared/types/versionId';
 import { EpistoButton } from '../../../controls/EpistoButton';
+import { EpistoFlex2 } from '../../../controls/EpistoFlex';
 import { EpistoFont } from '../../../controls/EpistoFont';
 import { EpistoLabel } from '../../../controls/EpistoLabel';
 import { EpistoSelect, EpistoSelectPropsType } from '../../../controls/EpistoSelect';
@@ -29,7 +29,7 @@ export const AssignAuthItemDialog = (props: {
             closeButtonType="top"
             logic={dialgoLogic}>
 
-            <Flex
+            <EpistoFlex2
                 direction="column"
                 width="400px"
                 py="50px"
@@ -69,7 +69,7 @@ export const AssignAuthItemDialog = (props: {
 
                     Add
                 </EpistoButton>
-            </Flex>
+            </EpistoFlex2>
         </EpistoDialog>
     );
 };

@@ -1,4 +1,4 @@
-import { Flex, Image } from '@chakra-ui/react';
+import { Image } from '@chakra-ui/react';
 import { Checkbox } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { CourseShopItemListDTO } from '../../../shared/dtos/CourseShopItemListDTO';
@@ -22,6 +22,7 @@ import { EpistoFont } from '../../controls/EpistoFont';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { useIntParam } from '../../../static/locationHelpers';
 import { Id } from '../../../shared/types/versionId';
+import { EpistoFlex2 } from '../../controls/EpistoFlex';
 
 export const ShopAdminEditSubpage = () => {
 
@@ -200,7 +201,7 @@ export const ShopAdminEditSubpage = () => {
                 onSave={handleSaveAsync}>
 
                 <EpistoLabel text={translatableTexts.administration.shopAdminEditSubpage.courseOrItem}>
-                    <Flex align="center">
+                    <EpistoFlex2 align="center">
                         <Checkbox
                             checked={isCourse}
                             onChange={(x, y) => setIsCourse(y)}
@@ -209,7 +210,7 @@ export const ShopAdminEditSubpage = () => {
                         <EpistoFont>
                             {translatableTexts.administration.shopAdminEditSubpage.isThisACourse}
                         </EpistoFont>
-                    </Flex>
+                    </EpistoFlex2>
 
                     {isCourse && <EpistoSelect
                         getCompareKey={x => x?.id + ''}
@@ -258,7 +259,7 @@ export const ShopAdminEditSubpage = () => {
                 </EpistoLabel>
 
                 <EpistoLabel text={translatableTexts.administration.shopAdminEditSubpage.purchaseLimit}>
-                    <Flex align="center">
+                    <EpistoFlex2 align="center">
 
                         <Checkbox
                             checked={isPurchaseLimited}
@@ -273,7 +274,7 @@ export const ShopAdminEditSubpage = () => {
                             type="number"
                             postfix={translatableTexts.administration.shopAdminEditSubpage.purchaseLimitPostfix}
                             disabled={isCourse || !isPurchaseLimited} />
-                    </Flex>
+                    </EpistoFlex2>
                 </EpistoLabel>
 
                 <EpistoEntry
@@ -294,33 +295,33 @@ export const ShopAdminEditSubpage = () => {
 
                 <EpistoLabel text={translatableTexts.administration.shopAdminEditSubpage.couponCodes}>
 
-                    <Flex>
+                    <EpistoFlex2>
 
                         {/* codes */}
-                        <Flex
+                        <EpistoFlex2
                             direction="column"
                             marginRight="20px"
                             flex="1">
 
-                            <Flex>
+                            <EpistoFlex2>
                                 <EpistoButton
                                     variant="colored"
                                     onClick={handleDeleteAll}>
 
-                                    <Flex>
+                                    <EpistoFlex2>
                                         {translatableTexts.misc.removeAll}
 
                                         <DeleteSweepIcon
                                             style={{
                                                 marginLeft: '5px'
                                             }} />
-                                    </Flex>
+                                    </EpistoFlex2>
                                 </EpistoButton>
-                            </Flex>
+                            </EpistoFlex2>
 
                             {discountCodes
                                 .map((x, index) => (
-                                    <Flex
+                                    <EpistoFlex2
                                         key={index}
                                         m="5px"
                                         justify="space-between">
@@ -338,15 +339,15 @@ export const ShopAdminEditSubpage = () => {
 
                                             <DeleteIcon />
                                         </EpistoButton>}
-                                    </Flex>
+                                    </EpistoFlex2>
                                 ))}
-                        </Flex>
+                        </EpistoFlex2>
 
                         {/* add codes */}
-                        <Flex flex="1"
+                        <EpistoFlex2 flex="1"
                             direction="column">
 
-                            <Flex align="center"
+                            <EpistoFlex2 align="center"
                                 justify="space-between">
                                 <EpistoFont>
                                     {`${translatableTexts.administration.shopAdminEditSubpage.addedCodes} ${addedCodes.length}`}
@@ -358,7 +359,7 @@ export const ShopAdminEditSubpage = () => {
 
                                     {translatableTexts.misc.add}
                                 </EpistoButton>
-                            </Flex>
+                            </EpistoFlex2>
 
                             <EpistoEntry
                                 flex="1"
@@ -366,8 +367,8 @@ export const ShopAdminEditSubpage = () => {
                                 value={addCodesField}
                                 setValue={setAddCodesField}
                                 isMultiline />
-                        </Flex>
-                    </Flex>
+                        </EpistoFlex2>
+                    </EpistoFlex2>
                 </EpistoLabel>
 
             </AdminSubpageHeader>

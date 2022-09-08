@@ -1,7 +1,8 @@
-import { Divider, Flex, Grid, Tooltip } from '@chakra-ui/react';
+import { Divider, Grid, Tooltip } from '@chakra-ui/react';
 import React, { ReactNode, useState } from 'react';
 import { defaultCharts } from '../../../../static/defaultChartOptions';
 import { iterate } from '../../../../static/frontendHelpers';
+import { EpistoFlex2 } from '../../../controls/EpistoFlex';
 import { EpistoFont } from '../../../controls/EpistoFont';
 import { EpistoReactPlayer } from '../../../controls/EpistoReactPlayer';
 import { EpistoSelect } from '../../../controls/EpistoSelect';
@@ -32,12 +33,12 @@ export const AdminVideoStatisticsModalPage = () => {
     };
     const [playedSeconds, setPlayedSeconds] = useState(0);
 
-    return <Flex direction="column"
+    return <EpistoFlex2 direction="column"
         overflowY="scroll"
         p="20px">
 
         {/* First statistics card section */}
-        <Flex mt="10px">
+        <EpistoFlex2 mt="10px">
 
             <Grid
                 className="whall"
@@ -58,13 +59,13 @@ export const AdminVideoStatisticsModalPage = () => {
                         {...item} />;
                 })}
             </Grid>
-        </Flex>
+        </EpistoFlex2>
 
         {/* Video stats with player */}
-        <Flex mt="30px">
+        <EpistoFlex2 mt="30px">
 
             {/* Video player with hotspots slider */}
-            <Flex
+            <EpistoFlex2
                 align="flex-start"
                 m="5px 5px 0 0"
                 position="relative"
@@ -83,7 +84,7 @@ export const AdminVideoStatisticsModalPage = () => {
                     }}
                     url={'https://storage.googleapis.com/epistogram_bucket_prod/videos/video_247_1642259265423.mp4'} />
 
-                <Flex
+                <EpistoFlex2
                     background="linear-gradient(180deg, rgba(190,190,190,0.55) 0%, rgba(240,240,240,1) 20%, rgba(255,255,255,1) 100%)"
                     align="center"
                     borderRadius="0 0 7px 7px"
@@ -95,22 +96,22 @@ export const AdminVideoStatisticsModalPage = () => {
                     bottom="0">
 
                     <HotspotsSlider valueLabelComponent={ValueLabelComponent} />
-                </Flex>
-            </Flex>
+                </EpistoFlex2>
+            </EpistoFlex2>
 
             {/* Video statistics */}
-            <Flex
+            <EpistoFlex2
                 m="5px 0 0 5px"
                 flex="1">
 
-                <Flex
+                <EpistoFlex2
                     direction="column"
                     className="roundBorders"
                     p="15px"
                     flex="1"
                     background="var(--transparentWhite70)">
 
-                    <Flex justify="space-between">
+                    <EpistoFlex2 justify="space-between">
 
                         <EpistoFont fontSize="fontLarge">
 
@@ -123,21 +124,21 @@ export const AdminVideoStatisticsModalPage = () => {
                             selectedValue={'Ismétlések aránya'}
                             onSelected={() => 1}
                             getCompareKey={() => 'asd'} />
-                    </Flex>
+                    </EpistoFlex2>
 
-                    <Flex flex="1" >
+                    <EpistoFlex2 flex="1" >
 
-                        <Flex
+                        <EpistoFlex2
                             direction="row"
                             flex="1"
                             pt="10px">
 
-                            <Flex
+                            <EpistoFlex2
                                 direction="column"
                                 justify="space-between"
                                 flex="2">
 
-                                <Flex
+                                <EpistoFlex2
                                     direction="column">
 
                                     <EpistoFont
@@ -149,7 +150,7 @@ export const AdminVideoStatisticsModalPage = () => {
                                         Kritikus pontok a videóban
                                     </EpistoFont>
 
-                                    <Flex
+                                    <EpistoFlex2
                                         justify="space-between">
 
                                         <EpistoFont
@@ -163,10 +164,10 @@ export const AdminVideoStatisticsModalPage = () => {
 
                                             38 felhasználó
                                         </EpistoFont>
-                                    </Flex>
-                                </Flex>
+                                    </EpistoFlex2>
+                                </EpistoFlex2>
 
-                                <Flex direction="column">
+                                <EpistoFlex2 direction="column">
                                     {adminExamStatisticsListItems.map((item, index) => {
 
                                         return <AdminExamStatisticsListItem
@@ -174,8 +175,8 @@ export const AdminVideoStatisticsModalPage = () => {
                                             title={item.title}
                                             color={item.color} />;
                                     })}
-                                </Flex>
-                            </Flex>
+                                </EpistoFlex2>
+                            </EpistoFlex2>
 
                             <Divider
                                 orientation="vertical"
@@ -183,7 +184,7 @@ export const AdminVideoStatisticsModalPage = () => {
                                 w="1px"
                                 m="0 10px" />
 
-                            <Flex
+                            <EpistoFlex2
                                 direction="column"
                                 flex="3">
 
@@ -196,7 +197,7 @@ export const AdminVideoStatisticsModalPage = () => {
                                     Általános statisztika
                                 </EpistoFont>
 
-                                <Flex
+                                <EpistoFlex2
                                     justify="space-between">
 
                                     <EpistoFont
@@ -210,16 +211,16 @@ export const AdminVideoStatisticsModalPage = () => {
 
                                         38%
                                     </EpistoFont>
-                                </Flex>
-                            </Flex>
-                        </Flex>
-                        <Flex>
+                                </EpistoFlex2>
+                            </EpistoFlex2>
+                        </EpistoFlex2>
+                        <EpistoFlex2>
 
-                        </Flex>
-                    </Flex>
-                </Flex>
-            </Flex>
-        </Flex>
+                        </EpistoFlex2>
+                    </EpistoFlex2>
+                </EpistoFlex2>
+            </EpistoFlex2>
+        </EpistoFlex2>
 
         {/* Video low points */}
         <DashboardSection
@@ -271,5 +272,5 @@ export const AdminVideoStatisticsModalPage = () => {
                     {...item} />;
             })}
         </Grid>
-    </Flex>;
+    </EpistoFlex2>;
 };

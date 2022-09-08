@@ -1,11 +1,11 @@
-import { Flex } from '@chakra-ui/react';
 import { ReactNode } from 'react';
 import { translatableTexts } from '../../static/translatableTexts';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 
 const MobileBlock = () => {
 
-    return <Flex
+    return <EpistoFlex2
         background="var(--gradientBlueBackground)"
         align="center"
         justify="center"
@@ -13,7 +13,7 @@ const MobileBlock = () => {
         height="100vh"
         width="100vw">
 
-        <Flex
+        <EpistoFlex2
             className="roundBorders"
             background="var(--transparentWhite70)"
             direction="column"
@@ -30,8 +30,8 @@ const MobileBlock = () => {
 
                 {translatableTexts.preventMobileFrame.descriptions[2]}
             </EpistoFont>
-        </Flex>
-    </Flex>;
+        </EpistoFlex2>
+    </EpistoFlex2>;
 };
 
 export const PreventMobileFrame = (props: { children: ReactNode }) => {

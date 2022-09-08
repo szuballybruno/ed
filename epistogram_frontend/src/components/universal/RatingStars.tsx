@@ -1,7 +1,7 @@
-import { Flex } from '@chakra-ui/react';
 import { useState } from 'react';
 import { Environment } from '../../static/Environemnt';
 import { isNullOrUndefined, iterate } from '../../static/frontendHelpers';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 
 export const RatingStars = (props: {
     setSelectedIndex: (index: number) => void,
@@ -17,7 +17,7 @@ export const RatingStars = (props: {
     });
 
     return <>
-        <Flex>
+        <EpistoFlex2>
             {iterate(5, (index) => (
                 <img
                     key={index}
@@ -41,6 +41,6 @@ export const RatingStars = (props: {
 
                     }} />
             ))}
-        </Flex>
+        </EpistoFlex2>
     </>;
 };

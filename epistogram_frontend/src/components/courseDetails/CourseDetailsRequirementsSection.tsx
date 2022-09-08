@@ -1,8 +1,8 @@
-import { Flex } from '@chakra-ui/react';
 import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
 import React from 'react';
 import { CourseDetailsDTO } from '../../shared/dtos/CourseDetailsDTO';
 import { translatableTexts } from '../../static/translatableTexts';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoHeader } from '../EpistoHeader';
 
@@ -10,7 +10,7 @@ export const CourseDetailsRequirementsSection = (props: { courseDetails: CourseD
 
     const { courseDetails } = props;
 
-    return <Flex
+    return <EpistoFlex2
         mt={10}
         width="100%"
         height={500}
@@ -25,11 +25,11 @@ export const CourseDetailsRequirementsSection = (props: { courseDetails: CourseD
             mt={40} />
 
         {/* technical requirements */}
-        <Flex direction="column">
+        <EpistoFlex2 direction="column">
             {courseDetails
                 .technicalRequirements
                 .map((x, index) => (
-                    <Flex
+                    <EpistoFlex2
                         key={index}
                         align="center">
 
@@ -40,8 +40,8 @@ export const CourseDetailsRequirementsSection = (props: { courseDetails: CourseD
                         <EpistoFont>
                             {x}
                         </EpistoFont>
-                    </Flex>
+                    </EpistoFlex2>
                 ))}
-        </Flex>
-    </Flex>;
+        </EpistoFlex2>
+    </EpistoFlex2>;
 };

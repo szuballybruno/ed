@@ -1,9 +1,10 @@
-import { Flex, Image } from '@chakra-ui/react';
+import { Image } from '@chakra-ui/react';
 import { MutableRefObject } from 'react';
 import { ModuleApiService } from '../../../../services/api/MModuleApiService';
 import { ModuleEditDTO } from '../../../../shared/dtos/ModuleEditDTO';
 import { Id } from '../../../../shared/types/versionId';
 import { EpistoEntry } from '../../../controls/EpistoEntry';
+import { EpistoFlex2 } from '../../../controls/EpistoFlex';
 import { EpistoLabel } from '../../../controls/EpistoLabel';
 import { IXMutator } from '../../../lib/XMutator/XMutatorCore';
 import { EpistoImageSelector } from '../../../universal/EpistoImageSelector';
@@ -19,7 +20,7 @@ export const ModuleEdit = ({
     const { saveCoverFile } = ModuleApiService.useSaveCoverFile();
 
     return (
-        <Flex
+        <EpistoFlex2
             padding="10px"
             bg="white"
             width="100%"
@@ -75,6 +76,6 @@ export const ModuleEdit = ({
                         newValue: x
                     })}
                 isMultiline />
-        </Flex>
+        </EpistoFlex2>
     );
 };

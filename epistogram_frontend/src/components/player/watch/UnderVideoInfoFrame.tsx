@@ -1,5 +1,5 @@
-import { Flex } from '@chakra-ui/react';
 import { PagingType } from '../../../static/frontendHelpers';
+import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { SegmentedButton } from '../../controls/SegmentedButton';
 
@@ -15,12 +15,12 @@ export const UnderVideoInfoFrame = (props: {
         paging
     } = props;
 
-    return <Flex
+    return <EpistoFlex2
         flex='1'
         direction={'column'}
         pb="100px">
 
-        <Flex
+        <EpistoFlex2
             height='50px'
             mt='50px'
             mb='10px'
@@ -38,8 +38,8 @@ export const UnderVideoInfoFrame = (props: {
 
             <SegmentedButton
                 paging={paging} />
-        </Flex>
+        </EpistoFlex2>
 
         {children}
-    </Flex>;
+    </EpistoFlex2>;
 };

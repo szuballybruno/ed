@@ -1,4 +1,3 @@
-import { Flex } from '@chakra-ui/react';
 import { applicationRoutes } from '../configuration/applicationRoutes';
 import { useNavigation } from '../services/core/navigatior';
 import { startUserGuideHelp } from '../services/core/userGuidingService';
@@ -6,6 +5,7 @@ import { Environment } from '../static/Environemnt';
 import { PropsWithChildren } from '../static/frontendHelpers';
 import { translatableTexts } from '../static/translatableTexts';
 import { EpistoButton } from './controls/EpistoButton';
+import { EpistoFlex2 } from './controls/EpistoFlex';
 import { EpistoFont } from './controls/EpistoFont';
 import { FlexFloat } from './controls/FlexFloat';
 import { useAuthorizationContext } from './system/AuthorizationContext';
@@ -40,7 +40,7 @@ export const LeftPane = ({
             boxShadow="3px 0px 15px 5px rgba(0,0,0,0.1)">
 
             {/* logo link */}
-            <Flex
+            <EpistoFlex2
                 width="100%"
                 alignItems={'center'}
                 justifyContent="flex-start"
@@ -61,7 +61,7 @@ export const LeftPane = ({
                         if (hasPermission('ACCESS_APPLICATION'))
                             navigate2(homeRoute);
                     }} />
-            </Flex>
+            </EpistoFlex2>
 
             {/* magic powder top right */}
             <img
@@ -94,7 +94,7 @@ export const LeftPane = ({
                 alt="" />
 
             {/* tina image */}
-            <Flex
+            <EpistoFlex2
                 direction="column"
                 position="absolute"
                 bottom="160"
@@ -109,10 +109,10 @@ export const LeftPane = ({
 
                     {translatableTexts.leftPane.assistantDescription}
                 </EpistoFont>
-            </Flex>
+            </EpistoFlex2>
 
             {/* tina button */}
-            <Flex
+            <EpistoFlex2
                 direction="column"
                 position="absolute"
                 bottom="100"
@@ -125,7 +125,7 @@ export const LeftPane = ({
 
                     {translatableTexts.leftPane.assistantButtonTitle}
                 </EpistoButton>
-            </Flex>
+            </EpistoFlex2>
         </FlexFloat>
     );
 };

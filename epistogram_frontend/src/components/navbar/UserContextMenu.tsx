@@ -1,4 +1,4 @@
-import { Divider, Flex } from '@chakra-ui/react';
+import { Divider } from '@chakra-ui/react';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { MutableRefObject, useContext } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
@@ -9,6 +9,7 @@ import { Environment } from '../../static/Environemnt';
 import { ArrayBuilder } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoPopper } from '../controls/EpistoPopper';
 import { EpistoConinInfo } from '../EpistoCoinInfo';
@@ -85,7 +86,7 @@ export const UserContextMenu = (props: {
                 <EpistoButton
                     onClick={() => navigate2(applicationRoutes.administrationRoute.homeRoute.overviewRoute)}>
 
-                    <Flex className="whall"
+                    <EpistoFlex2 className="whall"
                         m="5px"
                         align="center">
                         {applicationRoutes.administrationRoute.icon}
@@ -101,7 +102,7 @@ export const UserContextMenu = (props: {
 
                             {applicationRoutes.administrationRoute.title}
                         </EpistoFont>
-                    </Flex>
+                    </EpistoFlex2>
                 </EpistoButton>
             )} */}
 
@@ -114,7 +115,7 @@ export const UserContextMenu = (props: {
                         style={{ background: menuItem.color }}
                         onClick={menuItem.onClick}>
 
-                        <Flex className="whall"
+                        <EpistoFlex2 className="whall"
                             m="5px"
                             align="center">
                             {menuItem.icon}
@@ -130,7 +131,7 @@ export const UserContextMenu = (props: {
                             >
                                 {menuItem.name}
                             </EpistoFont>
-                        </Flex>
+                        </EpistoFlex2>
                     </EpistoButton>
                 ))}
 

@@ -1,4 +1,3 @@
-import { Flex } from '@chakra-ui/react';
 import { ExpandMore } from '@mui/icons-material';
 import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
 import React, { useEffect } from 'react';
@@ -10,6 +9,7 @@ import { Id } from '../../shared/types/versionId';
 import { ArrayBuilder } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { ChipSmall } from '../administration/courses/ChipSmall';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { ExamLayout } from './ExamLayout';
 import { ExamResultStats } from './ExamResultStats';
@@ -67,7 +67,7 @@ export const ExamResultsSlide = (props: {
             })
             .getArray()}>
 
-        <Flex
+        <EpistoFlex2
             direction="column"
             className='roundBorders mildShadow'
             width='100%'
@@ -89,28 +89,28 @@ export const ExamResultsSlide = (props: {
                 stats={examResults?.examStats ?? null} />
 
             {/* results */}
-            <Flex
+            <EpistoFlex2
                 id="resultsRoot"
                 flex="1"
                 direction="column">
 
                 {/* list header */}
-                <Flex
+                <EpistoFlex2
                     alignItems={'center'}
                     mt="20px"
                     justifyContent={'space-between'}>
 
-                    <Flex flex='1'>
+                    <EpistoFlex2 flex='1'>
                         <EpistoFont
                             className="fontHuge">
                             {translatableTexts.exam.questionsLabel}
                         </EpistoFont>
-                    </Flex>
+                    </EpistoFlex2>
 
-                </Flex>
+                </EpistoFlex2>
 
                 {/* answers */}
-                <Flex
+                <EpistoFlex2
                     id="answersRoot"
                     direction={'column'}
                     flex={1}
@@ -146,28 +146,28 @@ export const ExamResultsSlide = (props: {
                                     aria-controls="panel1a-content"
                                     id="panel1a-header">
 
-                                    <Flex flex='1'>
+                                    <EpistoFlex2 flex='1'>
                                         <EpistoFont margin={{ right: 'px5' }}>
                                             {question.text}
                                         </EpistoFont>
                                         <EpistoFont>
                                             ({question.score}/{question.maxScore} pont)
                                         </EpistoFont>
-                                    </Flex>
+                                    </EpistoFlex2>
 
-                                    <Flex width='100px'>
+                                    <EpistoFlex2 width='100px'>
                                         <ChipSmall
                                             style={{
                                                 margin: '0 10px'
                                             }}
                                             text={displayState.text}
                                             color={displayState.color} />
-                                    </Flex>
+                                    </EpistoFlex2>
                                 </AccordionSummary>
 
                                 {/* answers */}
                                 <AccordionDetails>
-                                    <Flex
+                                    <EpistoFlex2
                                         direction="column"
                                         flex={1}>
                                         {question
@@ -181,12 +181,12 @@ export const ExamResultsSlide = (props: {
                                                     isSelected={answer.isGiven}
                                                     isCorrect={answer.isCorrect} />;
                                             })}
-                                    </Flex>
+                                    </EpistoFlex2>
                                 </AccordionDetails>
                             </Accordion>;
                         })}
-                </Flex>
-            </Flex>
-        </Flex>
+                </EpistoFlex2>
+            </EpistoFlex2>
+        </EpistoFlex2>
     </ExamLayout>;
 };

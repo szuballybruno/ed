@@ -1,10 +1,10 @@
-import { Flex } from '@chakra-ui/react';
 import { CSSProperties, useState } from 'react';
 import { LoadingStateType } from '../../../models/types';
 import { useShowErrorDialog } from '../../../services/core/notifications';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { CoinRewardDialog } from '../../CoinRewardDialog';
 import { EpistoButton } from '../../controls/EpistoButton';
+import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoGrid } from '../../controls/EpistoGrid';
 import { LoadingFrame } from '../../system/LoadingFrame';
 import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogLogic';
@@ -113,14 +113,14 @@ export const DebugPage = () => {
                     Change loadingState to loading for 5 sec
                 </EpistoButton>
 
-                <Flex
+                <EpistoFlex2
                     className='roundBorders'
                     align='center'
                     justify='center'
                     background={getLoadingStateColor()}>
 
                     Current loading state: {loadingState}
-                </Flex>
+                </EpistoFlex2>
             </EpistoGrid>
 
             <CoinRewardDialog

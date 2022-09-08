@@ -1,4 +1,3 @@
-import { Flex } from '@chakra-ui/react';
 import { Divider } from '@mui/material';
 import React, { useContext, useState } from 'react';
 import { useComments, useCreateComment, useCreateLike, useDeleteLike } from '../../../services/api/commentApiService';
@@ -8,6 +7,7 @@ import { CommentListDTO } from '../../../shared/dtos/CommentListDTO';
 import { Id } from '../../../shared/types/versionId';
 import { PagingType } from '../../../static/frontendHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
+import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { CurrentUserContext } from '../../system/AuthenticationFrame';
 import { UnderVideoInfoFrame } from '../watch/UnderVideoInfoFrame';
 import { CommentAnswerEntry } from './CommentAnswerEntry';
@@ -119,7 +119,7 @@ const Comments = (props: {
         {threads
             .map((thread, index) => {
 
-                return <Flex
+                return <EpistoFlex2
                     direction='column'
                     key={index}>
 
@@ -144,7 +144,7 @@ const Comments = (props: {
                             currentReplyUserFullName={currentReplyUserFullName}
                             setCurrentReplyUserFullName={setCurrentReplyUserFullName} />
                     }
-                </Flex>;
+                </EpistoFlex2>;
             })}
     </UnderVideoInfoFrame>;
 };

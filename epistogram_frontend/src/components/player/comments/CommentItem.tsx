@@ -1,9 +1,10 @@
-import { Flex, Divider, Avatar } from '@chakra-ui/react';
+import { Divider, Avatar } from '@chakra-ui/react';
 import { ThumbUpAlt } from '@mui/icons-material';
 import { CommentListDTO } from '../../../shared/dtos/CommentListDTO';
 import { Id } from '../../../shared/types/versionId';
 import { ChipSmall } from '../../administration/courses/ChipSmall';
 import { EpistoButton } from '../../controls/EpistoButton';
+import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
 
 export const CommentItem = (props: {
@@ -39,7 +40,7 @@ export const CommentItem = (props: {
         }
     };
 
-    return <Flex
+    return <EpistoFlex2
         mt="30px"
         pl={parentCommentId ? '20px' : undefined}>
 
@@ -48,24 +49,24 @@ export const CommentItem = (props: {
                 variant="fullWidth"
                 orientation="vertical" />}
 
-        <Flex
+        <EpistoFlex2
             p="20px"
             h='80px'>
 
             <Avatar
                 src={avatarUrl} />
-        </Flex>
+        </EpistoFlex2>
 
-        <Flex
+        <EpistoFlex2
             flex='1'
             direction="column">
 
-            <Flex
+            <EpistoFlex2
                 flex='1'
                 justify="space-between"
                 align="center">
 
-                <Flex
+                <EpistoFlex2
                     align={'center'}>
 
                     <h4
@@ -105,8 +106,8 @@ export const CommentItem = (props: {
                             marginLeft: 10
                         }}
                         color={'var(--intenseOrange)'} />}
-                </Flex>
-            </Flex>
+                </EpistoFlex2>
+            </EpistoFlex2>
 
             <p
                 style={{
@@ -117,7 +118,7 @@ export const CommentItem = (props: {
                 {' '}
             </p>
 
-            <Flex
+            <EpistoFlex2
                 flex='1'>
 
                 <EpistoButton
@@ -148,7 +149,7 @@ export const CommentItem = (props: {
 
                     Válasz
                 </EpistoButton>
-            </Flex>
-        </Flex>
-    </Flex>;
+            </EpistoFlex2>
+        </EpistoFlex2>
+    </EpistoFlex2>;
 };

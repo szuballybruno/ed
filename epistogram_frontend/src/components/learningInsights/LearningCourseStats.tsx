@@ -1,9 +1,9 @@
-import { Flex } from '@chakra-ui/react';
 import { CourseProgressApiService } from '../../services/api/CourseProgressApiService';
 import { useNavigation } from '../../services/core/navigatior';
 import { CourseLearningDTO } from '../../shared/dtos/CourseLearningDTO';
 import { useAdminCourseContentDialogLogic } from '../administration/users/adminCourseContentDialog/AdminCourseContentDialogLogic';
 import { AdminUserCourseContentDialog } from '../administration/users/adminCourseContentDialog/AdminUserCourseContentDialog';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoGrid } from '../controls/EpistoGrid';
 import { useCurrentUserId } from '../system/AuthenticationFrame';
@@ -82,13 +82,13 @@ export const LearningCourseStats = () => {
                         })
                     }
                 </EpistoGrid>
-                : <Flex p="100px">
+                : <EpistoFlex2 p="100px">
 
                     <EpistoFont fontSize="fontHuge">
 
                         Még nem kezdtel el egyetlen kurzust sem.
                     </EpistoFont>
-                </Flex>}
+                </EpistoFlex2>}
         </DashboardSection>
 
         {/* completed courses */}
@@ -125,13 +125,13 @@ export const LearningCourseStats = () => {
 
                 </EpistoGrid>
 
-                : <Flex p="100px">
+                : <EpistoFlex2 p="100px">
 
                     <EpistoFont fontSize="fontHuge">
 
                         Még nem végeztél el egyetlen kurzust sem.
                     </EpistoFont>
-                </Flex>}
+                </EpistoFlex2>}
         </DashboardSection >
     </LoadingFrame>;
 };

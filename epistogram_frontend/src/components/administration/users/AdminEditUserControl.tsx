@@ -1,4 +1,4 @@
-import { Box, Divider, Flex } from '@chakra-ui/react';
+import { Box, Divider } from '@chakra-ui/react';
 import { Checkbox } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
@@ -18,6 +18,7 @@ import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoEntry } from '../../controls/EpistoEntry';
 import { EpistoEntryNew, useEpistoEntryState } from '../../controls/EpistoEntryNew';
+import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { EpistoLabel } from '../../controls/EpistoLabel';
 import { EpistoSelect } from '../../controls/EpistoSelect';
@@ -158,13 +159,13 @@ export const AdminEditUserControl = ({
             setPermissionsChangeSet(data.assignedPermissions);
     }, [setRolesChangeSet, setPermissionsChangeSet]);
 
-    return <Flex direction="column"
+    return <EpistoFlex2 direction="column"
         flex="1">
 
-        <Flex flex="1">
+        <EpistoFlex2 flex="1">
 
             {/* left column */}
-            <Flex direction="column"
+            <EpistoFlex2 direction="column"
                 flex="1">
 
                 {/* basic info section */}
@@ -172,7 +173,7 @@ export const AdminEditUserControl = ({
                     title="Alapadatok">
 
                     {/* first & last name */}
-                    <Flex flex="1"
+                    <EpistoFlex2 flex="1"
                         justify="space-between">
 
                         <EpistoEntry
@@ -195,7 +196,7 @@ export const AdminEditUserControl = ({
                             setValue={setFirstName}
                             labelVariant={'top'}
                             label={translatableTexts.misc.firstName} />
-                    </Flex>
+                    </EpistoFlex2>
 
                     {/* email */}
                     <EpistoEntry
@@ -210,7 +211,7 @@ export const AdminEditUserControl = ({
                 <EditSection title="Cég és beosztás">
 
                     {/* company */}
-                    {canSetInvitedUserCompany && <Flex
+                    {canSetInvitedUserCompany && <EpistoFlex2
                         direction="column"
                         align="stretch"
                         mt="5px"
@@ -233,10 +234,10 @@ export const AdminEditUserControl = ({
                             onSelected={setSelectedCompany}
                             getDisplayValue={x => '' + x?.name}
                             getCompareKey={company => '' + company?.id} />
-                    </Flex>}
+                    </EpistoFlex2>}
 
                     {/* job title */}
-                    {canSetInvitedUserCompany && <Flex
+                    {canSetInvitedUserCompany && <EpistoFlex2
                         direction="column"
                         align="stretch"
                         mt="5px"
@@ -259,9 +260,9 @@ export const AdminEditUserControl = ({
                             onSelected={setSelectedJobTitle}
                             getDisplayValue={jt => '' + jt?.name}
                             getCompareKey={jt => '' + jt?.id} />
-                    </Flex>}
+                    </EpistoFlex2>}
                 </EditSection>
-            </Flex>
+            </EpistoFlex2>
 
             <Divider orientation='vertical'
                 h="calc(100% - 20px)"
@@ -307,7 +308,7 @@ export const AdminEditUserControl = ({
                                 isOverline
                                 text="EpistoCoin hozzáadása">
 
-                                <Flex align="center"
+                                <EpistoFlex2 align="center"
                                     flex="1"
                                     mt="10px">
                                     <EpistoEntryNew
@@ -326,7 +327,7 @@ export const AdminEditUserControl = ({
 
                                         Hozzáadás
                                     </EpistoButton>
-                                </Flex>
+                                </EpistoFlex2>
 
                             </EpistoLabel>
                         </EditSection>
@@ -347,7 +348,7 @@ export const AdminEditUserControl = ({
                         {translatableTexts.administration.editUserControl.selectAsTeacher}
                     </EpistoFont>
 
-                    <Flex align="center">
+                    <EpistoFlex2 align="center">
                         <Checkbox
                             checked={isTeacher}
                             onChange={(_, x) => setIsTeacher(x)} />
@@ -357,10 +358,10 @@ export const AdminEditUserControl = ({
 
                             {translatableTexts.administration.editUserControl.selectUserAsTeacher}
                         </EpistoFont>
-                    </Flex>
+                    </EpistoFlex2>
                 </EditSection>
             </Box>
-        </Flex>
+        </EpistoFlex2>
 
         {/* access management */}
         <EditSection title="Jogosultságkezelés">
@@ -385,5 +386,5 @@ export const AdminEditUserControl = ({
                 }
             }}
             onSaveCallback={handleSaveUserAsync} />
-    </Flex>;
+    </EpistoFlex2>;
 };

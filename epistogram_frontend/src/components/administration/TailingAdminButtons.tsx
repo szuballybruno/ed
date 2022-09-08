@@ -1,6 +1,6 @@
-import { Flex } from '@chakra-ui/layout';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 
 export const TailingAdminButtons = (props: {
     onSaveCallback: () => void,
@@ -10,7 +10,7 @@ export const TailingAdminButtons = (props: {
     const { onDeleteCallback, onSaveCallback } = props;
 
     return (
-        <Flex direction='column'>
+        <EpistoFlex2 direction='column'>
 
             {/* save button */}
             <EpistoButton
@@ -32,6 +32,6 @@ export const TailingAdminButtons = (props: {
 
                 {translatableTexts.misc.remove}
             </EpistoButton>
-        </Flex>
+        </EpistoFlex2>
     );
 };

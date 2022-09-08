@@ -1,8 +1,8 @@
-import { Flex } from '@chakra-ui/react';
 import { InfoOutlined } from '@mui/icons-material';
 import { TempomatModeType } from '../../../shared/types/sharedTypes';
 import { Environment } from '../../../static/Environemnt';
 import { EpistoButton } from '../../controls/EpistoButton';
+import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { TempomatModeImage } from './TempomatModeImage';
 
@@ -28,10 +28,10 @@ export const TempomatTempoInfo = (props: {
     })();
 
     return (
-        <Flex direction="column">
+        <EpistoFlex2 direction="column">
 
             {/* Current speed title and info */}
-            <Flex
+            <EpistoFlex2
                 align="center">
 
                 <EpistoFont fontSize="fontSmall">
@@ -44,13 +44,13 @@ export const TempomatTempoInfo = (props: {
                     style={{
                         height: '15px'
                     }} />
-            </Flex>
+            </EpistoFlex2>
 
             {/* Current speed and settings button */}
             <EpistoButton
                 onClick={onClick}>
 
-                <Flex
+                <EpistoFlex2
                     align="center"
                     flex="1">
 
@@ -78,8 +78,8 @@ export const TempomatTempoInfo = (props: {
                             width: '20px',
                             marginRight: 5
                         }} />
-                </Flex>
+                </EpistoFlex2>
             </EpistoButton>
-        </Flex>
+        </EpistoFlex2>
     );
 };

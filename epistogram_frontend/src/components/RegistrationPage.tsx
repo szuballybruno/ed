@@ -1,5 +1,4 @@
 import { Image } from '@chakra-ui/image';
-import { Flex } from '@chakra-ui/layout';
 import { Checkbox, TextField } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
 import { applicationRoutes } from '../configuration/applicationRoutes';
@@ -11,6 +10,7 @@ import { usePasswordEntryState } from '../static/frontendHelpers';
 import { useQueryVal } from '../static/locationHelpers';
 import { translatableTexts } from '../static/translatableTexts';
 import { EpistoButton } from './controls/EpistoButton';
+import { EpistoFlex2 } from './controls/EpistoFlex';
 import { EpistoFont } from './controls/EpistoFont';
 import { RefetchUserAsyncContext } from './system/AuthenticationFrame';
 import { LoadingFrame } from './system/LoadingFrame';
@@ -80,7 +80,7 @@ export const RegistrationPage = () => {
         }
     };
 
-    return <Flex
+    return <EpistoFlex2
         background="var(--gradientBlueBackground)"
         height="100vh"
         direction="column"
@@ -102,13 +102,13 @@ export const RegistrationPage = () => {
             boxShadow="#00000024 10px 30px 50px 0px">
 
 
-            <Flex width="100%"
+            <EpistoFlex2 width="100%"
                 maxH={50}
                 my="25px"
                 justifyContent={'center'}>
                 <Image width="50%"
                     src={Environment.getAssetUrl('/images/logo.svg')} />
-            </Flex>
+            </EpistoFlex2>
 
             {!isInvited && <EpistoFont>{translatableTexts.registrationPage.learningStyleSurvey}</EpistoFont>}
 
@@ -168,7 +168,7 @@ export const RegistrationPage = () => {
                 </TextField>
             </>}
 
-            <Flex direction={'row'}
+            <EpistoFlex2 direction={'row'}
                 alignItems={'center'}>
 
                 <Checkbox
@@ -194,7 +194,7 @@ export const RegistrationPage = () => {
 
                     {translatableTexts.registrationPage.privacyPolicyDescriptionParts[2]}
                 </EpistoFont>
-            </Flex>
+            </EpistoFlex2>
 
 
             <EpistoButton
@@ -210,5 +210,5 @@ export const RegistrationPage = () => {
                 {translatableTexts.registrationPage.letsStart}
             </EpistoButton>
         </LoadingFrame>
-    </Flex>;
+    </EpistoFlex2>;
 };

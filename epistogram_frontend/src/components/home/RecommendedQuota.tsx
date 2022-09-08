@@ -1,8 +1,9 @@
-import { Flex, FlexProps } from '@chakra-ui/layout';
+import { FlexProps } from '@chakra-ui/layout';
 import { useDailyTip } from '../../services/api/dailyTipApiService';
 import { useRecommendedItemQuota } from '../../services/api/userProgressApiService';
 import { UserActiveCourseDTO } from '../../shared/dtos/UserActiveCourseDTO';
 import { PagingType } from '../../static/frontendHelpers';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { RecommendedItemQuota } from './RecommendedItemQuota';
 
 export const RecommendedQuota = (props: { activeCoursesPaging: PagingType<UserActiveCourseDTO> } & FlexProps) => {
@@ -14,21 +15,21 @@ export const RecommendedQuota = (props: { activeCoursesPaging: PagingType<UserAc
     const { recommendedItemQuota } = useRecommendedItemQuota(currentCourse?.courseId);
 
     if (!currentCourse)
-        return <Flex>
+        return <EpistoFlex2>
             TODO NO ACTIVE COURSE SCREEN
-        </Flex>;
+        </EpistoFlex2>;
 
-    return <Flex
+    return <EpistoFlex2
         direction="column"
         height="100%"
         justify="center"
         {...css}>
 
         {/* recommended item quota */}
-        <Flex align="center">
+        <EpistoFlex2 align="center">
 
             {/* quota */}
-            <Flex
+            <EpistoFlex2
                 flex="1"
                 align="flex-start"
                 p="10px 10px 10px 20px"
@@ -46,10 +47,10 @@ export const RecommendedQuota = (props: { activeCoursesPaging: PagingType<UserAc
                 <RecommendedItemQuota
                     completedCount={recommendedItemQuota?.completedThisWeek ?? 0}
                     recommendedItemCount={recommendedItemQuota?.recommendedItemsPerWeek ?? 0} />
-            </Flex>
+            </EpistoFlex2>
 
             {/* active course thumbnail */}
-            <Flex
+            <EpistoFlex2
                 minWidth="250px"
                 flex="1"
                 padding="20px">
@@ -57,13 +58,13 @@ export const RecommendedQuota = (props: { activeCoursesPaging: PagingType<UserAc
                     src={currentCourse?.coverFilePath ?? ''}
                     alt=""
                     className="roundBorders" />
-            </Flex>
-        </Flex>
+            </EpistoFlex2>
+        </EpistoFlex2>
 
 
 
         {/* text daily tip */}
-        {dailyTipData?.description && <Flex
+        {dailyTipData?.description && <EpistoFlex2
             direction="column"
             align="center"
             justify="flex-start"
@@ -74,6 +75,6 @@ export const RecommendedQuota = (props: { activeCoursesPaging: PagingType<UserAc
             {/* <EpistoFont>
                 {dailyTipData?.description}
             </EpistoFont> */}
-        </Flex>}
-    </Flex >;
+        </EpistoFlex2>}
+    </EpistoFlex2 >;
 };

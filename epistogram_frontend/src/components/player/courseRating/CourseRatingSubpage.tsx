@@ -1,4 +1,3 @@
-import { Flex } from '@chakra-ui/react';
 import { Slider } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useCourseRatingGroups, useSaveCourseRatingGroupAnswers } from '../../../services/api/courseRatingApiService';
@@ -9,6 +8,7 @@ import { ArrayBuilder, usePaging } from '../../../static/frontendHelpers';
 import { useIntParam } from '../../../static/locationHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoEntry } from '../../controls/EpistoEntry';
+import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { ExamLayout } from '../../exam/ExamLayout';
 import { ExamLayoutContent } from '../../exam/ExamLayoutContent';
@@ -108,7 +108,7 @@ export const CourseRatingSubpage = () => {
                     }}
                     title={currentRatingGroup?.name ?? ''}>
 
-                    <Flex
+                    <EpistoFlex2
                         direction="column"
                         align="center"
                         width="100%">
@@ -132,7 +132,7 @@ export const CourseRatingSubpage = () => {
                                 };
 
                                 return (
-                                    <Flex
+                                    <EpistoFlex2
                                         key={index}
                                         direction="column"
                                         mb="25px"
@@ -170,10 +170,10 @@ export const CourseRatingSubpage = () => {
                                                     width: '100%'
                                                 }} />
                                         </>}
-                                    </Flex>
+                                    </EpistoFlex2>
                                 );
                             })}
-                    </Flex>
+                    </EpistoFlex2>
                 </ExamLayoutContent>
             </ExamLayout >
         </LoadingFrame >

@@ -1,10 +1,10 @@
-import { Flex } from '@chakra-ui/react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { ApplicationRoute } from '../../models/types';
 import { useNavigation } from '../../services/core/navigatior';
 import { Environment } from '../../static/Environemnt';
 import { ArrayBuilder } from '../../static/frontendHelpers';
 import { RouteHelpers } from '../../static/RouteHelpers';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { NavigationLinkList } from '../NavigationLinkList';
 import { useAuthorizationContext } from '../system/AuthorizationContext';
 
@@ -26,7 +26,7 @@ export const AdminLeftPane = () => {
         .getArray();
 
     return (
-        <Flex
+        <EpistoFlex2
             id={AdminLeftPane.name}
             borderRadius="none"
             bg="white"
@@ -41,7 +41,7 @@ export const AdminLeftPane = () => {
             boxShadow="3px 0px 15px 5px rgba(0,0,0,0.1)">
 
             {/* logo link */}
-            <Flex width="100%"
+            <EpistoFlex2 width="100%"
                 alignItems={'center'}
                 justifyContent="center"
                 mt="10px"
@@ -59,11 +59,11 @@ export const AdminLeftPane = () => {
 
                         navigate2(applicationRoutes.homeRoute);
                     }} />
-            </Flex>
+            </EpistoFlex2>
 
             <NavigationLinkList
                 isNoText
                 routes={menuItems} />
-        </Flex>
+        </EpistoFlex2>
     );
 };

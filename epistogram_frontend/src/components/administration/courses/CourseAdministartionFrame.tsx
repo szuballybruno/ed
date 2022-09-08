@@ -1,4 +1,3 @@
-import { Flex } from '@chakra-ui/react';
 import { ReactNode, useCallback } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { ApplicationRoute } from '../../../models/types';
@@ -7,6 +6,7 @@ import { useNavigation } from '../../../services/core/navigatior';
 import { Id } from '../../../shared/types/versionId';
 import { setPageTitle, useIsMatchingCurrentRoute } from '../../../static/frontendHelpers';
 import { useIntParam } from '../../../static/locationHelpers';
+import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { AdminBreadcrumbsHeader } from '../AdminBreadcrumbsHeader';
 import { AdminCourseList } from './AdminCourseList';
@@ -55,7 +55,7 @@ export const CourseAdministartionFrame = (params: {
     }, [courseId, navigate2, isMatchingCurrentUrl, applicationRoutes]);
 
     return (
-        <Flex
+        <EpistoFlex2
             id={CourseAdministartionFrame.name}
             flex="1"
             overflowY="scroll">
@@ -72,7 +72,7 @@ export const CourseAdministartionFrame = (params: {
                 {/* content pane */}
                 {isAnySelected
                     ? children
-                    : <Flex
+                    : <EpistoFlex2
                         justify="center"
                         className="whall"
                         bg="white">
@@ -83,9 +83,9 @@ export const CourseAdministartionFrame = (params: {
                             }}>
                             Kérlek válassz ki egy kurzust
                         </EpistoFont>
-                    </Flex>}
+                    </EpistoFlex2>}
 
             </AdminBreadcrumbsHeader>
-        </Flex>
+        </EpistoFlex2>
     );
 };

@@ -1,6 +1,6 @@
-import { Flex } from '@chakra-ui/react';
 import { Check } from '@mui/icons-material';
 import { Id } from '../../shared/types/versionId';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 
 export type StepperLogicType<T extends string> = {
@@ -43,7 +43,7 @@ export const EpistoStepper = <T extends string>(props: EpistoStepperProps<T>) =>
             .any(id);
     };
 
-    return <Flex>
+    return <EpistoFlex2>
 
         {ids
             .map((id, index) => {
@@ -52,12 +52,12 @@ export const EpistoStepper = <T extends string>(props: EpistoStepperProps<T>) =>
                 const isCompleted = getIsCompleted(id);
                 const isSkipped = index < currentIndex && !isCompleted;
 
-                return <Flex
+                return <EpistoFlex2
                     align='center'
                     key={Id.read(id)}>
 
                     {/* stepper dot */}
-                    <Flex
+                    <EpistoFlex2
                         onClick={() => selectCurrentHandler(id)}
                         align='center'
                         justify='center'
@@ -73,15 +73,15 @@ export const EpistoStepper = <T extends string>(props: EpistoStepperProps<T>) =>
                         </EpistoFont>}
 
                         {isCompleted && <Check />}
-                    </Flex>
+                    </EpistoFlex2>
 
                     {/* divider */}
-                    {idsCount !== index && <Flex
+                    {idsCount !== index && <EpistoFlex2
                         px='5px'
                         mx='5px'
                         py='1px'
                         background='lightgrey' />}
-                </Flex>;
+                </EpistoFlex2>;
             })}
-    </Flex>;
+    </EpistoFlex2>;
 };

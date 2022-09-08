@@ -1,5 +1,4 @@
 import { FlexProps } from '@chakra-ui/layout';
-import { Flex } from '@chakra-ui/react';
 import React, { ReactNode } from 'react';
 import { useParams } from 'react-router-dom';
 import { ApplicationRoute, ButtonType } from '../../models/types';
@@ -7,6 +6,7 @@ import { useNavigation } from '../../services/core/navigatior';
 import { useIsMatchingCurrentRoute } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoTab, EpistoTabs } from '../controls/EpistoTabs';
 
 export const AdminSubpageHeader = (props: {
@@ -70,7 +70,7 @@ export const AdminSubpageHeader = (props: {
 
     const currentMatchingAbsUrl = currentMatchingRoute?.route?.getAbsolutePath();
 
-    return <Flex
+    return <EpistoFlex2
         id={AdminSubpageHeader.name}
         direction={'column'}
         className="whall roundBorders"
@@ -80,7 +80,7 @@ export const AdminSubpageHeader = (props: {
 
         {/* tabs */}
         {(tabMenuItems || onSave) && (
-            <Flex
+            <EpistoFlex2
                 className="roundBorders"
                 background={isInverseBackground ? 'var(--transparentWhite70)' : undefined}
                 flexDirection="row"
@@ -89,7 +89,7 @@ export const AdminSubpageHeader = (props: {
                 height={60}>
 
                 {/* tabs */}
-                <Flex
+                <EpistoFlex2
                     p="10px"
                     flex="1">
 
@@ -144,10 +144,10 @@ export const AdminSubpageHeader = (props: {
                                     value={tabRoute.route.getAbsolutePath()} />;
                             })}
                     </EpistoTabs>}
-                </Flex>
+                </EpistoFlex2>
 
                 {/* header buttons */}
-                <Flex>
+                <EpistoFlex2>
 
                     {/* header buttons */}
                     {headerButtons && headerButtons
@@ -173,17 +173,17 @@ export const AdminSubpageHeader = (props: {
 
                         {translatableTexts.misc.save}
                     </EpistoButton>}
-                </Flex>
-            </Flex>
+                </EpistoFlex2>
+            </EpistoFlex2>
         )}
 
         {/* children  */}
-        <Flex
+        <EpistoFlex2
             direction="row"
             flex="1"
             {...css}>
 
             {children}
-        </Flex>
-    </Flex >;
+        </EpistoFlex2>
+    </EpistoFlex2 >;
 };

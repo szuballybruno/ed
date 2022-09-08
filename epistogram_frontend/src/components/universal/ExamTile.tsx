@@ -1,20 +1,20 @@
-import { Box, css, Flex, FlexProps, Text } from '@chakra-ui/react';
-import React from 'react';
+import { Box, css, FlexProps, Text } from '@chakra-ui/react';
 import { Environment } from '../../static/Environemnt';
 import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 
 export const ExamTile = (props: {
     className?: string,
 } & FlexProps) => {
 
-    const ExamTileResultLabel = () => <Flex
+    const ExamTileResultLabel = () => <EpistoFlex2
         position="absolute"
         bottom={10}
         left={1}
         justify="flex-end">
 
-        <Flex
+        <EpistoFlex2
             direction="row"
             justifyContent="space-around"
             alignItems="center"
@@ -28,16 +28,16 @@ export const ExamTile = (props: {
                 color="var(--epistoTeal)">
                 65%-os eredmény
             </Text>
-        </Flex>
-    </Flex>;
+        </EpistoFlex2>
+    </EpistoFlex2>;
 
-    const ExamTileTopPercentLabel = () => <Flex
+    const ExamTileTopPercentLabel = () => <EpistoFlex2
         position="absolute"
         bottom={10}
         right={1}
         justify="flex-end">
 
-        <Flex
+        <EpistoFlex2
             direction="row"
             justifyContent="space-around"
             alignItems="center"
@@ -51,10 +51,10 @@ export const ExamTile = (props: {
                 color="white">
                 top 30% cégen belül
             </Text>
-        </Flex>
-    </Flex>;
+        </EpistoFlex2>
+    </EpistoFlex2>;
 
-    return <Flex
+    return <EpistoFlex2
         className="whall"
         direction="column"
         borderRadius="10px"
@@ -67,7 +67,7 @@ export const ExamTile = (props: {
         {...css}>
 
         {/* image  */}
-        <Flex direction={'column'}>
+        <EpistoFlex2 direction={'column'}>
 
             <Box
                 flex="1"
@@ -98,11 +98,11 @@ export const ExamTile = (props: {
                             src={Environment.getAssetUrl('/courseCoverImages/1.png')}
                             alt="" />
 
-                        <Flex position="relative">
+                        <EpistoFlex2 position="relative">
 
                             <ExamTileResultLabel />
                             <ExamTileTopPercentLabel />
-                        </Flex>
+                        </EpistoFlex2>
                     </Box>
                 </Box>
             </Box>
@@ -112,7 +112,7 @@ export const ExamTile = (props: {
                 flexBasis="80px"
                 zIndex={1}>
 
-                <Flex
+                <EpistoFlex2
                     direction="column"
                     p="10px">
 
@@ -121,7 +121,7 @@ export const ExamTile = (props: {
                         {'Irodai alkalmazások'}
                     </EpistoFont>
 
-                    <Flex direction="column">
+                    <EpistoFlex2 direction="column">
 
                         <EpistoFont
                             style={{
@@ -131,11 +131,11 @@ export const ExamTile = (props: {
 
                             {'Menüszalagok használata az Excelben'}
                         </EpistoFont>
-                    </Flex>
+                    </EpistoFlex2>
 
-                    <Flex mt={7}>
+                    <EpistoFlex2 mt={7}>
 
-                        <Flex
+                        <EpistoFlex2
                             direction={'row'}
                             alignItems={'center'}
                             mr={5}
@@ -157,9 +157,9 @@ export const ExamTile = (props: {
                                 }}>
                                 {'52 perc'}
                             </EpistoFont>
-                        </Flex>
+                        </EpistoFlex2>
 
-                        <Flex
+                        <EpistoFlex2
                             direction={'row'}
                             alignItems={'center'}
                             mr={5}
@@ -178,15 +178,15 @@ export const ExamTile = (props: {
                                 style={{ color: 'grey' }}>
                                 {'65%-os eredmény'}
                             </EpistoFont>
-                        </Flex>
-                    </Flex>
+                        </EpistoFlex2>
+                    </EpistoFlex2>
 
-                    <Flex
+                    <EpistoFlex2
                         direction={'row'}
                         alignItems={'center'}
                         mt={7}>
 
-                        <Flex
+                        <EpistoFlex2
                             direction={'row'}
                             alignItems={'center'}
                             mr={5}
@@ -204,9 +204,9 @@ export const ExamTile = (props: {
                             <EpistoFont>
                                 {'8.9/10 nehézség'}
                             </EpistoFont>
-                        </Flex>
+                        </EpistoFlex2>
 
-                        <Flex
+                        <EpistoFlex2
                             direction={'row'}
                             alignItems={'center'}
                             mr={5}
@@ -224,17 +224,17 @@ export const ExamTile = (props: {
                             <EpistoFont>
                                 {'16/23 helyes válasz'}
                             </EpistoFont>
-                        </Flex>
-                    </Flex>
-                </Flex>
+                        </EpistoFlex2>
+                    </EpistoFlex2>
+                </EpistoFlex2>
             </Box>
-        </Flex>
+        </EpistoFlex2>
 
-        <Flex
+        <EpistoFlex2
             direction="column"
             minH="50px">
 
-            <Flex
+            <EpistoFlex2
                 width="100%"
                 justifyContent="space-between"
                 p="5">
@@ -252,7 +252,7 @@ export const ExamTile = (props: {
                     }}>
                     Újrapróbálom
                 </EpistoButton>
-            </Flex>
-        </Flex>
-    </Flex>;
+            </EpistoFlex2>
+        </EpistoFlex2>
+    </EpistoFlex2>;
 };

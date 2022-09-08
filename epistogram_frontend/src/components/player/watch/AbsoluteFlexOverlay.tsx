@@ -1,5 +1,6 @@
-import { Flex, FlexProps } from '@chakra-ui/react';
+import { FlexProps } from '@chakra-ui/react';
 import { ReactNode } from 'react';
+import { EpistoFlex2 } from '../../controls/EpistoFlex';
 
 export const AbsoluteFlexOverlay = (props: {
     children: ReactNode,
@@ -9,7 +10,7 @@ export const AbsoluteFlexOverlay = (props: {
 
     const { children, isVisible, hasPointerEvents, ...css } = props;
 
-    return <Flex
+    return <EpistoFlex2
         id="questionnaireOverlay"
         position="absolute"
         width="100%"
@@ -22,7 +23,7 @@ export const AbsoluteFlexOverlay = (props: {
         pointerEvents={isVisible && hasPointerEvents ? 'all' : 'none'}
         {...css}>
 
-        <Flex
+        <EpistoFlex2
             width='100vw'
             height='100vh'
             position='fixed'
@@ -30,5 +31,5 @@ export const AbsoluteFlexOverlay = (props: {
             zIndex='5'/>
 
         {isVisible && children}
-    </Flex>;
+    </EpistoFlex2>;
 };

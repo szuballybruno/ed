@@ -1,11 +1,10 @@
-import { Flex } from '@chakra-ui/react';
 import { Delete, Edit } from '@mui/icons-material';
 import { MutableRefObject } from 'react';
 import { ModuleEditDTO } from '../../../../shared/dtos/ModuleEditDTO';
 import { Id } from '../../../../shared/types/versionId';
 import { EpistoButton } from '../../../controls/EpistoButton';
 import { EpistoEntry } from '../../../controls/EpistoEntry';
-import { EpistoFlex } from '../../../controls/EpistoFlex';
+import { EpistoFlex, EpistoFlex2 } from '../../../controls/EpistoFlex';
 import { EpistoFont } from '../../../controls/EpistoFont';
 import { IXMutator } from '../../../lib/XMutator/XMutatorCore';
 import { FlexListItem } from '../../../universal/FlexListItem';
@@ -21,11 +20,11 @@ export const ModuleList = ({
 }) => {
 
     return (
-        <Flex
+        <EpistoFlex2
             flex="1"
             p="20px">
 
-            <Flex
+            <EpistoFlex2
                 flex="1"
                 direction="column"
                 className="roundBorders largeSoftShadow"
@@ -42,7 +41,7 @@ export const ModuleList = ({
                         Modulok
                     </EpistoFont>} />
 
-                <Flex direction='column'>
+                <EpistoFlex2 direction='column'>
                     {mutator
                         .current
                         .mutatedItems
@@ -73,7 +72,7 @@ export const ModuleList = ({
                                                 : undefined
                                         }} />
                                 )}
-                                endContent={<Flex>
+                                endContent={<EpistoFlex2>
 
                                     <EpistoButton
                                         onClick={() => editModule(module.versionId)}>
@@ -87,11 +86,11 @@ export const ModuleList = ({
 
                                         <Delete />
                                     </EpistoButton>
-                                </Flex>
+                                </EpistoFlex2>
                                 } />
                         </EpistoFlex>)}
-                </Flex>
-            </Flex>
-        </Flex>
+                </EpistoFlex2>
+            </EpistoFlex2>
+        </EpistoFlex2>
     );
 };

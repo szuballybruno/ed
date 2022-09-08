@@ -1,4 +1,3 @@
-import {Flex} from '@chakra-ui/react';
 import {ReplayCircleFilled} from '@mui/icons-material';
 import {useNavigation} from '../../services/core/navigatior';
 import {PlaylistItemDTO} from '../../shared/dtos/PlaylistItemDTO';
@@ -8,6 +7,7 @@ import {FlexListTitleSubtitle} from '../universal/FlexListTitleSubtitle';
 import {PlaylistItemTypeIcon} from './PlaylistItemTypeIcon';
 import {useScrollIntoView} from '../system/AutoScrollContext';
 import {useEffect} from 'react';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 //import {useScrollIntoView} from '../system/AutoScrollContext';
 
 export const PlaylistItem = (
@@ -63,7 +63,7 @@ export const PlaylistItem = (
             }}
             isLocked={isLocked}
             onClick={navigate}
-            midContent={<Flex align="center">
+            midContent={<EpistoFlex2 align="center">
 
                 {state === 'current' &&
                     <PlaylistItemTypeIcon
@@ -89,8 +89,8 @@ export const PlaylistItem = (
                     title={title}
                     isSelected={state === 'current'}
                     subTitle={subTitle} />
-            </Flex>}
-            endContent={<Flex>
+            </EpistoFlex2>}
+            endContent={<EpistoFlex2>
 
                 {shouldRepeatVideo &&
                     <ReplayCircleFilled
@@ -101,7 +101,7 @@ export const PlaylistItem = (
 
                 {(type === 'exam' && correctAnswerRate)
                     && <ChipSmall text={correctAnswerRate + '%'} />}
-            </Flex>
+            </EpistoFlex2>
             }>
         </FlexListItem >
     );

@@ -1,16 +1,16 @@
-import { Flex } from '@chakra-ui/layout';
 import { useNavigation } from '../../services/core/navigatior';
 import { Environment } from '../../static/Environemnt';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoFont } from '../controls/EpistoFont';
 import {applicationRoutes} from '../../configuration/applicationRoutes';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 
 export const NoQuestionsAvailable = () => {
 
     const { navigate2 } = useNavigation();
-    return <Flex pr="20px">
+    return <EpistoFlex2 pr="20px">
 
-        <Flex direction={'column'}>
+        <EpistoFlex2 direction={'column'}>
 
             <EpistoFont
                 style={{
@@ -41,15 +41,15 @@ export const NoQuestionsAvailable = () => {
                     {translatableTexts.practiseQuestions.noMoreQuestionsGoWatchVideosButton}
                 </a>
             </EpistoFont>
-        </Flex>
+        </EpistoFlex2>
 
-        <Flex>
+        <EpistoFlex2>
             <img
                 src={Environment.getAssetUrl('/images/welcome3D.png')}
                 alt=""
                 style={{
                     objectFit: 'contain',
                 }} />
-        </Flex>
-    </Flex>;
+        </EpistoFlex2>
+    </EpistoFlex2>;
 };

@@ -1,5 +1,5 @@
-import { Flex } from '@chakra-ui/react';
 import { PropsWithChildren } from '../../static/frontendHelpers';
+import { EpistoFlex2 } from './EpistoFlex';
 
 export const ForceNoOverflowY = (props: PropsWithChildren & {
     disabled?: boolean
@@ -8,19 +8,19 @@ export const ForceNoOverflowY = (props: PropsWithChildren & {
     return (<>
         {props.disabled
             ? props.children
-            : <Flex
+            : <EpistoFlex2
                 id={ForceNoOverflowY.name}
                 flex="1"
                 width="100%"
                 position="relative">
 
-                <Flex
+                <EpistoFlex2
                     position='absolute'
                     className="whall"
                     overflow="scroll">
 
                     {props.children}
-                </Flex>
-            </Flex>}
+                </EpistoFlex2>
+            </EpistoFlex2>}
     </>);
 };

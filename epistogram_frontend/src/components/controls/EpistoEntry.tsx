@@ -1,8 +1,8 @@
-import { Flex } from '@chakra-ui/layout';
 import { InputAdornment, TextField } from '@mui/material';
 import { Ref, useEffect, useState } from 'react';
 import { ClassBuilder } from '../../helpers/classBuilder';
 import { translatableTexts } from '../../static/translatableTexts';
+import { EpistoFlex2 } from './EpistoFlex';
 import { EpistoFont } from './EpistoFont';
 
 export type EpistoEntryPropsType<TValue extends number | string | null> = {
@@ -104,7 +104,7 @@ export const EpistoEntry = <TValue extends number | string | null,>(props: Epist
         return newVal;
     };
 
-    return <Flex
+    return <EpistoFlex2
         direction="column"
         mt={marginTop ?? '10px'}
         flex={flex}
@@ -173,5 +173,5 @@ export const EpistoEntry = <TValue extends number | string | null,>(props: Epist
             }}
             onBlur={onFocusLost ? (x) => onFocusLost(handleNewValue(x.currentTarget.value), x) : undefined}
             onChange={x => onChanged(handleNewValue(x.currentTarget.value))} />
-    </Flex >;
+    </EpistoFlex2 >;
 };

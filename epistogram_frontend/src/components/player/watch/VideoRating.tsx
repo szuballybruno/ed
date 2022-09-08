@@ -1,10 +1,10 @@
-import { Flex } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useRateVideoDifficulty, useRateVideoExperience, useVideoRating } from '../../../services/api/videoRatingApiService';
 import { useShowErrorDialog } from '../../../services/core/notifications';
 import { Id } from '../../../shared/types/versionId';
 import { Environment } from '../../../static/Environemnt';
 import { translatableTexts } from '../../../static/translatableTexts';
+import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { RatingStars } from '../../universal/RatingStars';
 
@@ -66,10 +66,10 @@ export const VideoRating = (props: { videoVersionId: Id<'VideoVersion'> }) => {
     }, [videoRating]);
 
     return (
-        <Flex direction="column">
+        <EpistoFlex2 direction="column">
 
             {/* experience rating */}
-            {!showDificultyRating && <Flex
+            {!showDificultyRating && <EpistoFlex2
                 mx="10px"
                 direction="column"
                 align="flex-end">
@@ -86,10 +86,10 @@ export const VideoRating = (props: { videoVersionId: Id<'VideoVersion'> }) => {
                 <RatingStars
                     setSelectedIndex={handleRateVideoExperienceAsync}
                     selectedIndex={experienceRating} />
-            </Flex>}
+            </EpistoFlex2>}
 
             {/* difficulty rating */}
-            {showDificultyRating && <Flex
+            {showDificultyRating && <EpistoFlex2
                 mx="10px"
                 direction="column"
                 align="flex-end">
@@ -107,7 +107,7 @@ export const VideoRating = (props: { videoVersionId: Id<'VideoVersion'> }) => {
                     selectedIndex={difficultyRating}
                     setSelectedIndex={handleRateVideoDifficultyAsync}
                     iconUrl={Environment.getAssetUrl('images/difficulty3D.png')} />
-            </Flex>}
-        </Flex>
+            </EpistoFlex2>}
+        </EpistoFlex2>
     );
 };

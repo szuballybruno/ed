@@ -1,7 +1,7 @@
-import { Flex } from '@chakra-ui/react';
-import React, { CSSProperties, ReactNode } from 'react';
+import { CSSProperties, ReactNode } from 'react';
+import { Environment } from '../../static/Environemnt';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
-import {Environment} from '../../static/Environemnt';
 
 export const ExamLayoutContent = (props: {
     children: ReactNode,
@@ -12,7 +12,7 @@ export const ExamLayoutContent = (props: {
     const { children, title, style } = props;
 
     return (
-        <Flex
+        <EpistoFlex2
             id="examLayoutContentRoot"
             className='roundBorders mildShadow'
             direction={'column'}
@@ -23,12 +23,12 @@ export const ExamLayoutContent = (props: {
             flex={1}
             style={style}>
 
-            <Flex
+            <EpistoFlex2
                 p='200px'
                 direction='column'>
 
                 {/* header */}
-                <Flex
+                <EpistoFlex2
                     id="examLayoutContentHeader"
                     p='20px 0 40px 0'
                     minW='400px'
@@ -49,10 +49,10 @@ export const ExamLayoutContent = (props: {
                     <EpistoFont fontWeight='heavy'>
                         {title}
                     </EpistoFont>
-                </Flex>
+                </EpistoFlex2>
 
                 {/* answers */}
-                <Flex
+                <EpistoFlex2
                     id="examLayoutContentContainer"
                     direction={'row'}
                     minW='500px'
@@ -60,9 +60,9 @@ export const ExamLayoutContent = (props: {
                     pt={10}>
 
                     {children}
-                </Flex>
-            </Flex>
+                </EpistoFlex2>
+            </EpistoFlex2>
 
-        </Flex>
+        </EpistoFlex2>
     );
 };

@@ -1,9 +1,10 @@
-import { Box, Flex, Image, useMediaQuery } from '@chakra-ui/react';
+import { Box, Image, useMediaQuery } from '@chakra-ui/react';
 import { ArrowBack } from '@mui/icons-material';
 import React, { ReactNode } from 'react';
 import { Environment } from '../../static/Environemnt';
 import { hasValue, isString, useIsDesktopView } from '../../static/frontendHelpers';
 import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoHeader } from '../EpistoHeader';
 
@@ -43,7 +44,7 @@ export const SignupWrapper = (props: {
     const isDesktop = useIsDesktopView();
     const [isSmallerThan1400] = useMediaQuery('(min-width: 1350px)');
 
-    return <Flex
+    return <EpistoFlex2
         id="signupWrapperRoot"
         direction="column"
         alignItems="center"
@@ -55,7 +56,7 @@ export const SignupWrapper = (props: {
         position="relative">
 
         {/* header */}
-        <Flex
+        <EpistoFlex2
             id="header"
             direction="column"
             width="100%"
@@ -64,7 +65,7 @@ export const SignupWrapper = (props: {
             maxH="100px">
 
             {/* logo */}
-            <Flex
+            <EpistoFlex2
                 height={50}
                 width="100%"
                 hidden={window.innerWidth > 1000}
@@ -73,15 +74,15 @@ export const SignupWrapper = (props: {
 
                 <Image maxH={50}
                     src={Environment.getAssetUrl('/images/logo.svg')} />
-            </Flex>
+            </EpistoFlex2>
 
             {/* header top */}
-            <Flex
+            <EpistoFlex2
                 id="titleAligner"
                 height="80px"
                 justify="space-between">
 
-                <Flex
+                <EpistoFlex2
                     height={80}
                     width="100%"
                     hidden={window.innerWidth < 1000}
@@ -90,14 +91,14 @@ export const SignupWrapper = (props: {
 
                     <Image maxH={80}
                         src={Environment.getAssetUrl('/images/logo.svg')} />
-                </Flex>
+                </EpistoFlex2>
 
-            </Flex>
+            </EpistoFlex2>
 
-        </Flex>
+        </EpistoFlex2>
 
         {/* content aligner */}
-        <Flex
+        <EpistoFlex2
             id="contentAligner"
             align="center"
             justify="center"
@@ -106,7 +107,7 @@ export const SignupWrapper = (props: {
             overflowY={'scroll'}>
 
             {/* content */}
-            <Flex
+            <EpistoFlex2
                 id="content"
                 wrap="nowrap"
                 justify="center"
@@ -115,7 +116,7 @@ export const SignupWrapper = (props: {
                 height={'90%'}>
 
                 {/* image */}
-                {hasImage && <Flex
+                {hasImage && <EpistoFlex2
                     flex="5"
                     align="center"
                     flexShrink={1}
@@ -133,10 +134,10 @@ export const SignupWrapper = (props: {
                             margin: '0 30px'
                         }}
                         src={currentImage!} />
-                </Flex>}
+                </EpistoFlex2>}
 
                 {/* question content */}
-                <Flex
+                <EpistoFlex2
                     id="content"
                     flex="5"
                     minWidth={400}//window.innerWidth > 500 ? 300 : "calc(100% - 200px)"}
@@ -166,16 +167,16 @@ export const SignupWrapper = (props: {
                     </Box>}
 
                     {/* content */}
-                    <Flex justify={hasImage ? 'flex-start' : 'center'}>
+                    <EpistoFlex2 justify={hasImage ? 'flex-start' : 'center'}>
                         {children}
-                    </Flex>
+                    </EpistoFlex2>
 
-                </Flex>
-            </Flex>
-        </Flex>
+                </EpistoFlex2>
+            </EpistoFlex2>
+        </EpistoFlex2>
 
         {/* progress bar */}
-        <Flex
+        <EpistoFlex2
             align="center"
             height="60px"
             width="100%"
@@ -229,7 +230,7 @@ export const SignupWrapper = (props: {
                 {nextButtonTitle}
             </EpistoButton>}
 
-        </Flex>
+        </EpistoFlex2>
 
         {/* magic powder top left */}
         <img
@@ -258,5 +259,5 @@ export const SignupWrapper = (props: {
             }}
             src={Environment.getAssetUrl('/images/bg-art-6.png')}
             alt="" />
-    </Flex>;
+    </EpistoFlex2>;
 };

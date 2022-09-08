@@ -1,5 +1,6 @@
-import { Flex, FlexProps } from '@chakra-ui/react';
+import { FlexProps } from '@chakra-ui/react';
 import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 
 export const NavbarButton = (props: {
     menuName?: string,
@@ -8,7 +9,7 @@ export const NavbarButton = (props: {
 
     const { onClick, menuName, children, ...css } = props;
 
-    return <Flex
+    return <EpistoFlex2
         margin="0 5px 0 5px"
         {...css}>
         
@@ -21,5 +22,5 @@ export const NavbarButton = (props: {
 
                 {menuName}
             </EpistoButton>}
-    </Flex>;
+    </EpistoFlex2>;
 };

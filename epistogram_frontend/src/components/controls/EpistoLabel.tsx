@@ -1,4 +1,5 @@
-import { Flex, FlexProps } from '@chakra-ui/react';
+import { FlexProps } from '@chakra-ui/react';
+import { EpistoFlex2 } from './EpistoFlex';
 import { EpistoFont } from './EpistoFont';
 
 export const EpistoLabel = (props: {
@@ -8,7 +9,7 @@ export const EpistoLabel = (props: {
 
     const { text, isOverline, ...css } = props;
 
-    return <Flex mt="10px"
+    return <EpistoFlex2 mt="10px"
 direction="column"
 {...css}>
         <EpistoFont
@@ -23,5 +24,5 @@ direction="column"
         </EpistoFont>
 
         {props.children}
-    </Flex>;
+    </EpistoFlex2>;
 };

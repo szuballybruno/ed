@@ -1,4 +1,4 @@
-import { Flex, Image } from '@chakra-ui/react';
+import { Image } from '@chakra-ui/react';
 import { Add } from '@mui/icons-material';
 import { LinearProgress } from '@mui/material';
 import { useState } from 'react';
@@ -13,6 +13,7 @@ import { Environment } from '../../../static/Environemnt';
 import { isCurrentAppRoute } from '../../../static/frontendHelpers';
 import { useRouteParams } from '../../../static/locationHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
+import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { EpistoGrid } from '../../controls/EpistoGrid';
 import { FlexFloat } from '../../controls/FlexFloat';
@@ -33,7 +34,7 @@ const UserStatisticsProgressWithLabel = (props: {
     value: number
 }) => {
 
-    return <Flex
+    return <EpistoFlex2
         w="100%"
         mt="10px"
         h="30px"
@@ -65,7 +66,7 @@ const UserStatisticsProgressWithLabel = (props: {
 
             {props.value}
         </EpistoFont>
-    </Flex>;
+    </EpistoFlex2>;
 };
 
 export const AdminUserStatisticsSubpage = (props: {
@@ -162,23 +163,23 @@ export const AdminUserStatisticsSubpage = (props: {
                     rightSideComponent={(
 
                         /* set date range */
-                        <Flex
+                        <EpistoFlex2
                             justify="center"
                             align="center"
                             my="10px">
-                        </Flex>
+                        </EpistoFlex2>
                     )}>
 
-                    <Flex
+                    <EpistoFlex2
                         mt='10px'>
 
-                        <Flex
+                        <EpistoFlex2
                             direction="column"
                             justify="flex-start"
                             flex="4"
                             p="0 5px 0 0">
 
-                            <Flex
+                            <EpistoFlex2
                                 background="var(--transparentWhite70)"
                                 className="roundBorders mildShadow"
                                 align="center"
@@ -192,7 +193,7 @@ export const AdminUserStatisticsSubpage = (props: {
                                     w={'120px'}
                                     src={Environment.getAssetUrl('/images/happyfacechart.png')} />
 
-                                <Flex
+                                <EpistoFlex2
                                     direction="column"
                                     p="10px">
 
@@ -219,10 +220,10 @@ export const AdminUserStatisticsSubpage = (props: {
 
                                         {texts.userPerformanceDescriptions.performedWell}
                                     </EpistoFont>
-                                </Flex>
-                            </Flex>
+                                </EpistoFlex2>
+                            </EpistoFlex2>
 
-                            <Flex
+                            <EpistoFlex2
                                 w="100%"
                                 mt="20px"
                                 direction="column">
@@ -242,14 +243,14 @@ export const AdminUserStatisticsSubpage = (props: {
                                 <UserStatisticsProgressWithLabel
                                     title={texts.progressLabels.reactionTime}
                                     value={reactionTimeScorePoints} />
-                            </Flex>
-                        </Flex>
-                        <Flex
+                            </EpistoFlex2>
+                        </EpistoFlex2>
+                        <EpistoFlex2
                             direction="column"
                             flex="5"
                             p="0 0 10px 20px">
 
-                            <Flex h="150px">
+                            <EpistoFlex2 h="150px">
 
                                 <StatisticsCard
                                     iconPath={Environment.getAssetUrl('images/learningreport01.png')}
@@ -265,14 +266,14 @@ export const AdminUserStatisticsSubpage = (props: {
                                     value={`${userLearningOverviewData?.watchedVideos || 0}`}
                                     suffix={translatableTexts.misc.suffixes.count}
                                     title={texts.statisticsCards.watchedVideosInMonth} />
-                            </Flex>
+                            </EpistoFlex2>
 
-                            <Flex p="20px 10px 10px 2px">
+                            <EpistoFlex2 p="20px 10px 10px 2px">
 
                                 {texts.statisticsCards.userEngagementDescription}
-                            </Flex>
-                        </Flex>
-                    </Flex>
+                            </EpistoFlex2>
+                        </EpistoFlex2>
+                    </EpistoFlex2>
                 </EditSection>
 
                 <EditSection
@@ -305,7 +306,7 @@ export const AdminUserStatisticsSubpage = (props: {
                 <EditSection
                     title={texts.sectionTitles.averageProgressWithCourses}>
 
-                    <Flex p="10px 0">
+                    <EpistoFlex2 p="10px 0">
                         <div
                             style={{
                                 width: '80%',
@@ -369,7 +370,7 @@ export const AdminUserStatisticsSubpage = (props: {
                             <NoProgressChartYet />
 
                         </FlexFloat>
-                    </Flex>
+                    </EpistoFlex2>
 
                 </EditSection>
 
