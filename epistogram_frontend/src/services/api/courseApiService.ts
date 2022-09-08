@@ -130,7 +130,7 @@ const useUploadCourseThumbnailAsync = () => {
     const qr = usePostMultipartDataUnsafe<{ courseId: Id<'Course'> }>(apiRoutes.course.saveCourseThumbnail);
 
     return {
-        saveCourseThumbnailAsync: (courseId: Id<'Course'>, file: File) => qr.postMultipartDataAsync({ courseId }, file),
+        saveCourseThumbnailAsync: (courseId: Id<'Course'>, file: File) => qr.postMultipartDataAsync({ courseId }, { file }),
         saveCourseThumbnailState: qr.state,
     };
 };

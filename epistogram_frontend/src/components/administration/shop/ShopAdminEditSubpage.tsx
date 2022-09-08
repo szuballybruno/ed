@@ -10,7 +10,7 @@ import { useNavigation } from '../../../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
 import { LoadingFrame } from '../../system/LoadingFrame';
 import { EpistoEntry } from '../../controls/EpistoEntry';
-import { SelectImage } from '../../universal/SelectImage';
+import { EpistoImageSelector } from '../../universal/EpistoImageSelector';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import LockIcon from '@mui/icons-material/Lock';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -220,7 +220,7 @@ export const ShopAdminEditSubpage = () => {
                 </EpistoLabel>
 
                 <EpistoLabel text={translatableTexts.administration.shopAdminEditSubpage.coverImage}>
-                    <SelectImage
+                    <EpistoImageSelector
                         isInteractionBlocked={isCourse}
                         width="300px"
                         height="200px"
@@ -230,7 +230,7 @@ export const ShopAdminEditSubpage = () => {
                             className="whall"
                             objectFit="cover"
                             src={coverFilePath} />
-                    </SelectImage>
+                    </EpistoImageSelector>
                 </EpistoLabel>
 
                 <EpistoEntry

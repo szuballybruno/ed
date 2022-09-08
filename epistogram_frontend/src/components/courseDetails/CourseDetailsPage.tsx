@@ -1,5 +1,4 @@
 import { Box, Container, Flex } from '@chakra-ui/react';
-import { Tab, Tabs } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { CourseApiService } from '../../services/api/courseApiService';
 import { useNavigation } from '../../services/core/navigatior';
@@ -14,6 +13,7 @@ import { AdminUserCourseContentDialog } from '../administration/users/adminCours
 import { ContentPane } from '../ContentPane';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFont } from '../controls/EpistoFont';
+import { EpistoTab, EpistoTabs } from '../controls/EpistoTabs';
 import { EpistoHeader } from '../EpistoHeader';
 import { PageRootContainer } from '../PageRootContainer';
 import { ProfileImage } from '../ProfileImage';
@@ -209,54 +209,53 @@ const CourseDetailsPage = () => {
 
                         {/* tab button headers */}
                         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                            <Tabs
-                                className="roundBorders"
-                                TabIndicatorProps={{
-                                    style: {
-                                        display: 'none',
-                                    },
-                                }}
-                                sx={{
-                                    '&.MuiTabs-root': {
-                                        //background: "var(--transparentIntenseBlue85)",
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        height: 45,
-                                        minHeight: 0
-                                    }
-                                }}
+                            <EpistoTabs
+                                // className="roundBorders"
+                                // TabIndicatorProps={{
+                                //     style: {
+                                //         display: 'none',
+                                //     },
+                                // }}
+                                // sx={{
+                                //     '&.MuiTabs-root': {
+                                //         //background: "var(--transparentIntenseBlue85)",
+                                //         display: 'flex',
+                                //         alignItems: 'center',
+                                //         justifyContent: 'center',
+                                //         height: 45,
+                                //         minHeight: 0
+                                //     }
+                                // }}
                                 value={currentTab}
-                                onChange={(_, y) => setCurrentTab(y as number)}>
+                                onChange={setCurrentTab}>
 
                                 {tabs
-                                    .map((x, index) => <Tab
+                                    .map((x, index) => <EpistoTab
                                         key={index}
-                                        sx={{
-                                            '&.MuiTab-root': {
-                                                color: '#444',
-                                                cursor: 'pointer',
-                                                backgroundColor: 'transparent',
-                                                padding: '6px 16px',
-                                                border: 'none',
-                                                borderRadius: '5px',
-                                                display: 'flex',
-                                                justifyContent: 'center',
-                                                height: '41px',
-                                                minHeight: '0px'
-                                            },
-                                            '&.MuiTouchRipple-root': {
-                                                lineHeight: '0px'
-                                            },
-                                            '&.Mui-selected': {
-                                                color: '#444',
-                                                fontWeight: 'bold',
-                                                background: 'var(--transparentIntenseTeal)'
-                                            }
-                                        }}
-                                        label={x.title}
-                                        id={`simple-tab-${index}`} />)}
-                            </Tabs>
+                                        // sx={{
+                                        //     '&.MuiTab-root': {
+                                        //         color: '#444',
+                                        //         cursor: 'pointer',
+                                        //         backgroundColor: 'transparent',
+                                        //         padding: '6px 16px',
+                                        //         border: 'none',
+                                        //         borderRadius: '5px',
+                                        //         display: 'flex',
+                                        //         justifyContent: 'center',
+                                        //         height: '41px',
+                                        //         minHeight: '0px'
+                                        //     },
+                                        //     '&.MuiTouchRipple-root': {
+                                        //         lineHeight: '0px'
+                                        //     },
+                                        //     '&.Mui-selected': {
+                                        //         color: '#444',
+                                        //         fontWeight: 'bold',
+                                        //         background: 'var(--transparentIntenseTeal)'
+                                        //     }
+                                        // }}
+                                        label={x.title} />)}
+                            </EpistoTabs>
                         </Box>
 
                         <Flex flex="1">

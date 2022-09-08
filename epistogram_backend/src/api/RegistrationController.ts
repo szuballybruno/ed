@@ -37,7 +37,7 @@ export class RegistrationController implements XController<RegistrationControlle
                 body.getValue(x => x.lastName, 'string'),
                 body.getValue(x => x.registrationToken, 'string'));
 
-        setAuthCookies(this._config, params.res, accessToken, refreshToken);
+        setAuthCookies(this._config, params.res, accessToken, refreshToken, this._config.cookieOptions);
 
     }
 
@@ -55,7 +55,7 @@ export class RegistrationController implements XController<RegistrationControlle
                         body.getValue(x => x.password, 'string'),
                         body.getValue(x => x.passwordCompare, 'string'));
 
-                setAuthCookies(this._config, params.res, accessToken, refreshToken);
+                setAuthCookies(this._config, params.res, accessToken, refreshToken, this._config.cookieOptions);
             },
             auth: async () => {
                 return AuthorizationResult.ok;
@@ -89,17 +89,17 @@ export class RegistrationController implements XController<RegistrationControlle
     @XControllerAction(apiRoutes.registration.inviteUser, { isPost: true })
     async inviteUserAction(params: ActionParams) {
 
-                const dto = params
-                    .getBody<CreateInvitedUserDTO>([
-                        'companyId',
-                        'email',
-                        'firstName',
-                        'lastName',
-                        'jobTitleId'
-                    ]).data;
+        const dto = params
+            .getBody<CreateInvitedUserDTO>([
+                'companyId',
+                'email',
+                'firstName',
+                'lastName',
+                'jobTitleId'
+            ]).data;
 
-                return await this._registrationService
-                    .inviteUserAsync(params.principalId, dto);
+        return await this._registrationService
+            .inviteUserAsync(params.principalId, dto);
 
     }
 }

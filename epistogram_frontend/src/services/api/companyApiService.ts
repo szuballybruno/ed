@@ -2,9 +2,11 @@ import { CompanyEditDataDTO } from '../../shared/dtos/company/CompanyEditDataDTO
 import { CompanyDTO } from '../../shared/dtos/company/CompanyDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
 import { QueryService } from '../../static/QueryService';
-import { usePostDataUnsafe } from '../core/httpClient';
+import { usePostDataUnsafe, usePostMultipartDataUnsafe } from '../core/httpClient';
 import { RoleAssignCompanyDTO } from '../../shared/dtos/company/RoleAssignCompanyDTO';
 import { Id } from '../../shared/types/versionId';
+import { useCallback } from 'react';
+import { CompanyPublicDTO } from '../../shared/dtos/company/CompanyPublicDTO';
 
 export const useCompaniesAdmin = () => {
 
@@ -52,11 +54,15 @@ export const useDeleteCompany = () => {
 
 export const useSaveCompany = () => {
 
-    const qr = usePostDataUnsafe<CompanyEditDataDTO, void>(apiRoutes.companies.saveCompany);
+    const { postMultipartDataAsync, state } = usePostMultipartDataUnsafe<CompanyEditDataDTO>(apiRoutes.companies.saveCompany);
+    const saveCompanyAsync = useCallback(({ logoFile, coverFile, ...dto }: CompanyEditDataDTO & { logoFile: File | null, coverFile: File | null }) => {
+
+        return postMultipartDataAsync(dto, { logoFile, coverFile });
+    }, [postMultipartDataAsync]);
 
     return {
-        saveCompanyAsync: qr.postDataAsync,
-        saveCompanyState: qr.state
+        saveCompanyAsync,
+        saveCompanyState: state
     };
 };
 
@@ -87,5 +93,15 @@ export const useAvailableCompaniesForRoleCreation = () => {
     return {
         companies: qr.data ?? [],
         companiesState: qr.state
+    };
+};
+
+export const useCompanyDetailsByDomain = (domain: string) => {
+
+    const { data, state, error } = QueryService.useXQuery<CompanyPublicDTO>(apiRoutes.companies.getCompanyDetailsByDomain, { domain });
+    return {
+        companyDetails: data,
+        companyDetailsError: error,
+        companyDetailsState: state
     };
 };

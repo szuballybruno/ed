@@ -37,6 +37,13 @@ export class TawkAPI {
 
         return new Promise((res, rej) => {
 
+            (window as any).Tawk_API = {
+                onLoad: () => {
+
+                    res(new TawkAPI((window as any).Tawk_API));
+                }
+            };
+
             createScriptNode(scriptElement => {
 
                 scriptElement.async = true;

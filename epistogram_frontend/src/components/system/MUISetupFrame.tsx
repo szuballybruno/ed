@@ -4,11 +4,6 @@ import { createTheme } from '@mui/material/styles';
 
 // mui theme
 const muiTheme = createTheme({
-    typography: {
-        // Use the system font instead of the default Roboto font.
-        fontFamily: ['Raleway', 'sans-serif'].join(','),
-    },
-
     palette: {
         mode: 'light',
         primary: {

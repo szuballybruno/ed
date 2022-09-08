@@ -34,7 +34,7 @@ export class AuthenticationController implements XController<AuthenticationContr
             ._authenticationService
             .logInUserAsync(email, password, params.companyId);
 
-        setAuthCookies(this._config, params.res, accessToken, refreshToken);
+        setAuthCookies(this._config, params.res, accessToken, refreshToken, this._config.cookieOptions);
     }
 
     @XControllerAction(apiRoutes.authentication.establishAuthHandshake, { isPublic: true })
@@ -46,7 +46,7 @@ export class AuthenticationController implements XController<AuthenticationContr
             ._authenticationService
             .establishAuthHandshakeAsync(refreshToken, params.companyId);
 
-        setAuthCookies(this._config, params.res, data.newAccessToken, data.newRefreshToken);
+        setAuthCookies(this._config, params.res, data.newAccessToken, data.newRefreshToken, this._config.cookieOptions);
 
         return data.authData;
     }
@@ -58,7 +58,7 @@ export class AuthenticationController implements XController<AuthenticationContr
             .logOutUserAsync(params.principalId);
 
         // remove browser cookies
-        params.res.clearCookie(this._config.misc.accessTokenCookieName);
-        params.res.clearCookie(this._config.misc.refreshTokenCookieName);
+        params.res.clearCookie(this._config.misc.accessTokenCookieName, this._config.cookieOptions);
+        params.res.clearCookie(this._config.misc.refreshTokenCookieName, this._config.cookieOptions);
     }
 }

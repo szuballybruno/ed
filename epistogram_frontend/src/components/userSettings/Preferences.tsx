@@ -13,7 +13,7 @@ import { ProfileImage } from '../ProfileImage';
 import { CurrentUserContext, RefetchUserAsyncContext } from '../system/AuthenticationFrame';
 import { LoadingFrame } from '../system/LoadingFrame';
 import { DashboardSection } from '../universal/DashboardSection';
-import { SelectImage } from '../universal/SelectImage';
+import { EpistoImageSelector } from '../universal/EpistoImageSelector';
 
 export const Preferences = () => {
 
@@ -134,7 +134,7 @@ export const Preferences = () => {
                     width="100%"
                     maxW="500px">
 
-                    <SelectImage
+                    <EpistoImageSelector
                         className='circle'
                         width="100px"
                         height="100px"
@@ -146,7 +146,7 @@ export const Preferences = () => {
                             url={avatarSrc ?? null}
                             ref={imageRef}
                             className="whall" />
-                    </SelectImage>
+                    </EpistoImageSelector>
                 </Flex>
 
                 {/* inputs container */}

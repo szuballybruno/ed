@@ -77,14 +77,14 @@ export const RoleAdminIndexPage = memo(() => {
                 headerName: 'Permissions',
                 field: 'perms',
                 width: 200,
-                renderCell: (x) => {
+                renderCell: (cellParams) => {
 
-                    const perms = x.value as string;
+                    const perms = cellParams.value as string;
 
                     return (
                         <EpistoFont
                             tooltip={perms}>
-                            {x.value}
+                            {perms}
                         </EpistoFont>
                     );
                 }

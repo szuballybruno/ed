@@ -16,7 +16,7 @@ import { EpistoEntry } from '../../controls/EpistoEntry';
 import { EpistoLabel } from '../../controls/EpistoLabel';
 import { EpistoSelect } from '../../controls/EpistoSelect';
 import { LoadingFrame } from '../../system/LoadingFrame';
-import { SelectImage } from '../../universal/SelectImage';
+import { EpistoImageSelector } from '../../universal/EpistoImageSelector';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { SimpleEditList } from '../SimpleEditList';
 import { CourseAdministartionFrame } from './CourseAdministartionFrame';
@@ -213,7 +213,7 @@ export const EditCourseDetailsSubpage = () => {
                             {/* Thumbnail image */}
                             <EpistoLabel isOverline
                                 text="Borítókép">
-                                <SelectImage
+                                <EpistoImageSelector
                                     width="192px"
                                     height="108px"
                                     setImageFile={setThumbnailImageFile}
@@ -221,7 +221,7 @@ export const EditCourseDetailsSubpage = () => {
                                     <Image className="whall"
                                         objectFit="cover"
                                         src={thumbnailSrc} />
-                                </SelectImage>
+                                </EpistoImageSelector>
                             </EpistoLabel>
 
                             {/* Title */}

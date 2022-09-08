@@ -1,4 +1,5 @@
 import dotenv from 'dotenv';
+import { ICookieOptions } from '../../utilities/XTurboExpress/XTurboExpressTypes';
 import { log } from './logger';
 
 type EnvironmentType = 'development' | 'production' | 'demo' | 'local';
@@ -49,6 +50,13 @@ export class GlobalConfiguration {
             "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
             "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/epistogram-service-account%40gifted-country-324010.iam.gserviceaccount.com"
         }`)
+    };
+
+    cookieOptions: ICookieOptions = {
+        sameSite: 'strict',
+        secure: GlobalConfiguration.getEnvConfigEntry('IS_LOCALHOST', 'bool') ? false : true,
+        httpOnly: true,
+        domain: '.epistogram.com'
     };
 
     misc = {

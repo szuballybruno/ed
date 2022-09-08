@@ -1,5 +1,5 @@
 import { Column, DeleteDateColumn, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { IsDeletedFlag, XOneToMany, XViewColumn } from '../../services/XORM/XORMDecorators';
+import { IsDeletedFlag, XJoinColumn, XManyToOne, XOneToMany, XViewColumn } from '../../services/XORM/XORMDecorators';
 import { Id } from '../../shared/types/versionId';
 import { ActivationCode } from './ActivationCode';
 import { CompanyOwnerBridge } from './authorization/CompanyOwnerBridge';
@@ -7,6 +7,7 @@ import { PermissionAssignmentBridge } from './authorization/PermissionAssignment
 import { Role } from './authorization/Role';
 import { RoleAssignmentBridge } from './authorization/RoleAssignmentBridge';
 import { CourseAccessBridge } from './CourseAccessBridge';
+import { StorageFile } from './StorageFile';
 import { User } from './User';
 
 @Entity()
@@ -28,6 +29,44 @@ export class Company {
     @Column()
     @XViewColumn()
     domain: string;
+
+    @Column({ type: 'varchar', nullable: true })
+    @XViewColumn()
+    legalName: string | null;
+
+    @Column({ type: 'varchar', nullable: true })
+    @XViewColumn()
+    primaryColor: string | null;
+
+    @Column({ type: 'varchar', nullable: true })
+    @XViewColumn()
+    secondaryColor: string | null;
+
+    @Column({ type: 'varchar', nullable: true })
+    @XViewColumn()
+    backdropColor: string | null;
+
+    @XViewColumn()
+    @Column()
+    isCustomDomainCompany: boolean;
+
+    // TO ONE
+
+    // logo file
+    @Column({ nullable: true, type: 'int' })
+    @XViewColumn()
+    logoFileId: Id<'StorageFile'> | null;
+    @XManyToOne<Company>()(() => StorageFile)
+    @XJoinColumn<Company>('logoFileId')
+    logoFile: StorageFile | null;
+
+    // cover file
+    @Column({ nullable: true, type: 'int' })
+    @XViewColumn()
+    coverFileId: Id<'StorageFile'> | null;
+    @XManyToOne<Company>()(() => StorageFile)
+    @XJoinColumn<Company>('coverFileId')
+    coverFile: StorageFile | null;
 
     // TO MANY
 

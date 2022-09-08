@@ -2,15 +2,23 @@ import { Box, BoxProps, Flex } from '@chakra-ui/layout';
 import { useRef, useState } from 'react';
 import { HiddenFileUploadInput } from './HiddenFileUploadInput';
 import { Edit } from '@mui/icons-material';
+import { Image } from '@chakra-ui/image';
 
-export const SelectImage = (props: {
+export const EpistoImageSelector = ({
+    children,
+    setImageFile,
+    setImageSource,
+    isInteractionBlocked,
+    src,
+    ...css
+}: {
     setImageSource: (src: string) => void,
     setImageFile: (file: File) => void,
+    src?: string,
     isInteractionBlocked?: boolean
 } & BoxProps) => {
 
     const [isHovered, setIsHovered] = useState(false);
-    const { children, setImageFile, setImageSource, isInteractionBlocked, ...css } = props;
     const fileBrowseInputRef = useRef<HTMLInputElement>(null);
 
     return <Box
@@ -32,7 +40,12 @@ export const SelectImage = (props: {
                 setImageFile(file);
             }} />
 
-        {children}
+        {(!children && src)
+            ? <Image
+                className="whall"
+                objectFit="cover"
+                src={src} />
+            : children}
 
         <Flex
             position="absolute"

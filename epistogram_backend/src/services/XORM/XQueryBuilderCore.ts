@@ -101,7 +101,7 @@ export class XQueryBuilderCore<TEntity, TParams> {
             .forEach(ent => delete (ent as any).id);
 
         // check if insert is defaultInsert
-        const isDefaultInsert = Object.keys(entities[0]).length === 0;
+        const isDefaultInsert = Object.keys(entities[0] as any).length === 0;
 
         const { insertFields, insertColumns } = this._getInsertColumns(entities, isDefaultInsert);
         const { valuesQuery, valuesLog, values } = this._getInsertValues(insertFields, entities, isDefaultInsert);
