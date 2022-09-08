@@ -1,20 +1,19 @@
-import { Flex} from '@chakra-ui/react';
-import {GridOn, List} from '@mui/icons-material';
-import {FormControl, FormGroup, Switch} from '@mui/material';
+import { GridOn, List } from '@mui/icons-material';
+import { FormControl, FormGroup, Switch } from '@mui/material';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
-import {ReactNode, useCallback} from 'react';
-import {NavLink, useParams} from 'react-router-dom';
-import {applicationRoutes} from '../../configuration/applicationRoutes';
-import {ApplicationRoute} from '../../models/types';
-import {CourseApiService} from '../../services/api/courseApiService';
-import {useShopItemBriefData} from '../../services/api/shopApiService';
-import {UserApiService} from '../../services/api/userApiService';
-import {getKeys} from '../../shared/logic/sharedLogic';
-import {Id} from '../../shared/types/versionId';
-import {ArrayBuilder, useIsMatchingCurrentRoute} from '../../static/frontendHelpers';
+import { ReactNode, useCallback } from 'react';
+import { NavLink, useParams } from 'react-router-dom';
+import { applicationRoutes } from '../../configuration/applicationRoutes';
+import { ApplicationRoute } from '../../models/types';
+import { CourseApiService } from '../../services/api/courseApiService';
+import { useShopItemBriefData } from '../../services/api/shopApiService';
+import { UserApiService } from '../../services/api/userApiService';
+import { getKeys } from '../../shared/logic/sharedLogic';
+import { Id } from '../../shared/types/versionId';
+import { ArrayBuilder, useIsMatchingCurrentRoute } from '../../static/frontendHelpers';
 import { EpistoDiv } from '../controls/EpistoDiv';
 import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
-import {EpistoFont} from '../controls/EpistoFont';
+import { EpistoFont } from '../controls/EpistoFont';
 
 const Content = (props: {
     isCurrent: boolean,
@@ -166,7 +165,7 @@ export const AdminBreadcrumbsHeader = (props: {
             </Breadcrumbs>
 
 
-            <Flex align='center'>
+            <EpistoFlex2 align='center'>
 
                 {headerComponent}
 
@@ -188,7 +187,7 @@ export const AdminBreadcrumbsHeader = (props: {
                         <GridOn />
                     </FormControl>
                 </FormGroup>}
-            </Flex>
+            </EpistoFlex2>
         </EpistoFlex2>
 
         {/* children  */}
