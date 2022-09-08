@@ -1,12 +1,11 @@
-import { FlexProps } from '@chakra-ui/layout';
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { useParams } from 'react-router-dom';
 import { ApplicationRoute, ButtonType } from '../../models/types';
 import { useNavigation } from '../../services/core/navigatior';
 import { useIsMatchingCurrentRoute } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
-import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 import { EpistoTab, EpistoTabs } from '../controls/EpistoTabs';
 
 export const AdminSubpageHeader = (props: {
@@ -17,7 +16,7 @@ export const AdminSubpageHeader = (props: {
     subRouteLabel?: string,
     navigationQueryParams?: any,
     isInverseBackground?: boolean
-} & FlexProps) => {
+} & EpistoFlex2Props) => {
 
     const {
         children,

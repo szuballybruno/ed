@@ -1,6 +1,5 @@
-import { FlexProps } from '@chakra-ui/react';
 import { ReactNode } from 'react';
-import { EpistoFlex2 } from '../../controls/EpistoFlex';
+import { EpistoFlex2, EpistoFlex2Props } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
 
 export const EditSection = (props: {
@@ -8,7 +7,7 @@ export const EditSection = (props: {
     children: ReactNode,
     isFirst?: boolean,
     rightSideComponent?: ReactNode
-} & FlexProps) => {
+} & EpistoFlex2Props) => {
 
     const { children, title, isFirst, rightSideComponent, ...css } = props;
 

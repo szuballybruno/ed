@@ -1,16 +1,15 @@
-import { FlexProps } from '@chakra-ui/layout';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { LinearProgress } from '@mui/material';
 import { useNavigation } from '../../services/core/navigatior';
 import { EpistoButton } from '../controls/EpistoButton';
-import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 
 export const CourseProgressDisplay = (props: {
     value: number,
     label: string,
     continueItemCode: string
-} & FlexProps) => {
+} & EpistoFlex2Props) => {
 
     const { value, label, continueItemCode, ...css } = props;
     const roundValue = Math.round(value);

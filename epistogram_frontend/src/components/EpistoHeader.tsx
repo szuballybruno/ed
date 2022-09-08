@@ -1,8 +1,7 @@
-import { FlexProps} from '@chakra-ui/layout';
-import {Divider} from '@mui/material';
-import {EpistoFont} from './controls/EpistoFont';
-import {ReactNode} from 'react';
-import { EpistoFlex2 } from './controls/EpistoFlex';
+import { Divider } from '@mui/material';
+import { ReactNode } from 'react';
+import { EpistoFlex2, EpistoFlex2Props } from './controls/EpistoFlex';
+import { EpistoFont } from './controls/EpistoFont';
 
 export const EpistoHeader = (props: {
     text: string,
@@ -10,7 +9,7 @@ export const EpistoHeader = (props: {
     type?: 'strong' | 'normal',
     showDivider?: boolean,
     children?: ReactNode
-} & FlexProps) => {
+} & EpistoFlex2Props) => {
 
     const {text, showDivider, type, variant, children, ...css} = props;
 

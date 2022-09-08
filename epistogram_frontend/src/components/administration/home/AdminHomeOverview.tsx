@@ -1,4 +1,3 @@
-import { FlexProps } from '@chakra-ui/react';
 import { ArrowBack, ArrowForward, ArrowRight, FiberManualRecord } from '@mui/icons-material';
 import { ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -7,7 +6,7 @@ import { useActiveCourses } from '../../../services/api/userProgressApiService';
 import { Environment } from '../../../static/Environemnt';
 import { usePaging } from '../../../static/frontendHelpers';
 import { EpistoButton } from '../../controls/EpistoButton';
-import { EpistoFlex2 } from '../../controls/EpistoFlex';
+import { EpistoFlex2, EpistoFlex2Props } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { EpistoGrid } from '../../controls/EpistoGrid';
 import StatisticsCard from '../../statisticsCard/StatisticsCard';
@@ -18,7 +17,7 @@ const AdminSectionWithButton = (props: {
     title: string,
     children?: ReactNode,
     headerContent?: ReactNode
-} & FlexProps) => {
+} & EpistoFlex2Props) => {
     const { title, children, headerContent, ...css } = props;
     return <EpistoFlex2
         direction="column"

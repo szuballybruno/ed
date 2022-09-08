@@ -1,10 +1,9 @@
 import React from 'react';
 import OverflowMenu from './OverflowMenu';
 import classes from './css/stylesheet.module.css';
-import { FlexProps } from '@chakra-ui/layout';
-import { EpistoFlex2 } from './controls/EpistoFlex';
+import { EpistoFlex2, EpistoFlex2Props } from './controls/EpistoFlex';
 
-export default function IntersectionObserverWrap(props: { children: JSX.Element[] } & FlexProps) {
+export default function IntersectionObserverWrap(props: { children: JSX.Element[] } & EpistoFlex2Props) {
 
   const navRef = React.useRef<HTMLDivElement>(null);
   const [visibilityMap, setVisibilityMap] = React.useState<any>({});

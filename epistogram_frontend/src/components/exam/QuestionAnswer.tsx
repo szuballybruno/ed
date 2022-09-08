@@ -1,5 +1,5 @@
-import { FlexProps } from '@chakra-ui/layout';
 import { Checkbox } from '@mui/material';
+import { EpistoFlex2Props } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { FlexFloat } from '../controls/FlexFloat';
 
@@ -9,7 +9,7 @@ export const QuestionAnswer = (props: {
     answerText: string,
     minWidth?: number,
     isCorrect?: boolean
-} & FlexProps) => {
+} & EpistoFlex2Props) => {
 
     const { onClick, isSelected, isCorrect, answerText, minWidth, ...css } = props;
 

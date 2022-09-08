@@ -1,9 +1,8 @@
-import { FlexProps } from '@chakra-ui/react';
 import { Add, Delete } from '@mui/icons-material';
 import { ReactNode } from 'react';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoEntry } from '../controls/EpistoEntry';
-import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 import { EpistoLabel } from '../controls/EpistoLabel';
 import { FlexList } from '../universal/FlexList';
 
@@ -13,7 +12,7 @@ export const SimpleEditList = <T,>(props: {
     initialValue: T,
     setItems: (items: T[]) => void,
     renderChild?: (item: T, onItemChanged: (modifiedItem: T) => void) => ReactNode
-} & FlexProps) => {
+} & EpistoFlex2Props) => {
 
     const { items, title, setItems, initialValue, renderChild, ...css } = props;
 

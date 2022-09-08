@@ -1,4 +1,4 @@
-import {Box, Flex, FlexProps} from '@chakra-ui/react';
+import {Box, Flex} from '@chakra-ui/react';
 import {GridOn, List} from '@mui/icons-material';
 import {FormControl, FormGroup, Switch} from '@mui/material';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
@@ -12,7 +12,7 @@ import {UserApiService} from '../../services/api/userApiService';
 import {getKeys} from '../../shared/logic/sharedLogic';
 import {Id} from '../../shared/types/versionId';
 import {ArrayBuilder, useIsMatchingCurrentRoute} from '../../static/frontendHelpers';
-import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 import {EpistoFont} from '../controls/EpistoFont';
 
 const Content = (props: {
@@ -92,7 +92,7 @@ export const AdminBreadcrumbsHeader = (props: {
     viewSwitchChecked?: boolean,
     viewSwitchFunction?: (checked: boolean) => void,
     headerComponent?: ReactNode
-} & FlexProps) => {
+} & EpistoFlex2Props) => {
 
     const { subRouteLabel, children, breadcrumbDatas: breadcrumbs, viewSwitchChecked, viewSwitchFunction, headerComponent, ...css } = props;
 

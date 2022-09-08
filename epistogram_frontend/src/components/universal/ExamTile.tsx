@@ -1,12 +1,12 @@
-import { Box, css, FlexProps, Text } from '@chakra-ui/react';
+import { Box, css, Text } from '@chakra-ui/react';
 import { Environment } from '../../static/Environemnt';
 import { EpistoButton } from '../controls/EpistoButton';
-import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 
 export const ExamTile = (props: {
     className?: string,
-} & FlexProps) => {
+} & EpistoFlex2Props) => {
 
     const ExamTileResultLabel = () => <EpistoFlex2
         position="absolute"

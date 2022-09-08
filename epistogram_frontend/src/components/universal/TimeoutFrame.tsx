@@ -1,8 +1,8 @@
-import { Box, FlexProps } from '@chakra-ui/layout';
+import { Box } from '@chakra-ui/layout';
 import { ReactTimerType } from '../../helpers/reactTimer';
-import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 
-export const TimeoutFrame = (props: { reactTimer: ReactTimerType } & FlexProps) => {
+export const TimeoutFrame = (props: { reactTimer: ReactTimerType } & EpistoFlex2Props) => {
 
     const { reactTimer, children, ...css } = props;
 

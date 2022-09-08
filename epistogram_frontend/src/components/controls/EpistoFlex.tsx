@@ -20,9 +20,9 @@ export const EpistoFlex: React.FC<CSSOptionsFlex & PropsWithChildren> = ({
     );
 };
 
-type EpistoFlex2Props = FlexProps;
+export type EpistoFlex2Props = FlexProps;
 
-export const EpistoFlex2 = React.forwardRef<HTMLDivElement, FlexProps>((props, ref) => {
+export const EpistoFlex2 = React.forwardRef<HTMLDivElement, EpistoFlex2Props>((props, ref) => {
 
     return (
         <Flex

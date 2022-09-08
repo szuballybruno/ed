@@ -1,11 +1,10 @@
-import { FlexProps } from '@chakra-ui/react';
-import { EpistoFlex2 } from './EpistoFlex';
+import { EpistoFlex2, EpistoFlex2Props } from './EpistoFlex';
 import { EpistoFont } from './EpistoFont';
 
 export const EpistoLabel = (props: {
     text: string
     isOverline?: boolean
-} & FlexProps) => {
+} & EpistoFlex2Props) => {
 
     const { text, isOverline, ...css } = props;
 

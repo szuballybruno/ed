@@ -1,12 +1,11 @@
-import { FlexProps } from '@chakra-ui/layout';
 import { useDailyTip } from '../../services/api/dailyTipApiService';
 import { useRecommendedItemQuota } from '../../services/api/userProgressApiService';
 import { UserActiveCourseDTO } from '../../shared/dtos/UserActiveCourseDTO';
 import { PagingType } from '../../static/frontendHelpers';
-import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 import { RecommendedItemQuota } from './RecommendedItemQuota';
 
-export const RecommendedQuota = (props: { activeCoursesPaging: PagingType<UserActiveCourseDTO> } & FlexProps) => {
+export const RecommendedQuota = (props: { activeCoursesPaging: PagingType<UserActiveCourseDTO> } & EpistoFlex2Props) => {
 
     const { activeCoursesPaging, ...css } = props;
     const { dailyTipData } = useDailyTip();

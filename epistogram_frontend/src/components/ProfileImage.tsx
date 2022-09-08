@@ -1,7 +1,6 @@
 import { Image } from '@chakra-ui/image';
-import { FlexProps } from '@chakra-ui/layout';
 import { forwardRef, useContext } from 'react';
-import { EpistoFlex2 } from './controls/EpistoFlex';
+import { EpistoFlex2, EpistoFlex2Props } from './controls/EpistoFlex';
 import { EpistoFont } from './controls/EpistoFont';
 import { CurrentUserContext } from './system/AuthenticationFrame';
 
@@ -10,7 +9,7 @@ type ProfileImageProps = {
     firstName?: string,
     lastName?: string,
     className?: string
-} & FlexProps;
+} & EpistoFlex2Props;
 
 const getSignature = (firstName: string, lastName: string) => {
 

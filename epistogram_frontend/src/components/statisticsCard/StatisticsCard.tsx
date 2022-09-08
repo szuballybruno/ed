@@ -1,8 +1,8 @@
-import { Box, FlexProps } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import { ArrowDropDown, ArrowDropUp, ArrowRight, FiberManualRecord, Fullscreen, FullscreenExit, Lock } from '@mui/icons-material';
 import React, { useState } from 'react';
 import { EpistoButton } from '../controls/EpistoButton';
-import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { FlexFloat } from '../controls/FlexFloat';
 
@@ -23,7 +23,7 @@ export type StatisticsCardProps = {
     }
 }
 
-const StatisticsCard = (props: StatisticsCardProps & FlexProps) => {
+const StatisticsCard = (props: StatisticsCardProps & EpistoFlex2Props) => {
 
     const {
         iconPath,

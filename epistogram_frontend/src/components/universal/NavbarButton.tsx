@@ -1,11 +1,10 @@
-import { FlexProps } from '@chakra-ui/react';
 import { EpistoButton } from '../controls/EpistoButton';
-import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 
 export const NavbarButton = (props: {
     menuName?: string,
     onClick: () => void
-} & FlexProps) => {
+} & EpistoFlex2Props) => {
 
     const { onClick, menuName, children, ...css } = props;
 

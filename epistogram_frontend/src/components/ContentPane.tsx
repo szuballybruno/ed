@@ -1,5 +1,4 @@
-import { FlexProps} from '@chakra-ui/react';
-import { EpistoFlex2 } from './controls/EpistoFlex';
+import { EpistoFlex2, EpistoFlex2Props } from './controls/EpistoFlex';
 import Navbar from './navbar/Navbar';
 
 export const ContentPane = (props: {
@@ -11,7 +10,7 @@ export const ContentPane = (props: {
     showLogo?: boolean,
     isMinimalMode?: boolean,
     noOverflow?: boolean
-} & FlexProps) => {
+} & EpistoFlex2Props) => {
 
     const { children, noPadding, showLogo, noMaxWidth, isNavbarLowHeight, navbarBg, isMinimalMode, hideNavbar, noOverflow, ...css } = props;
 

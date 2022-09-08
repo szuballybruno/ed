@@ -1,16 +1,16 @@
-import { Box, FlexProps, Text } from '@chakra-ui/react';
+import { Box, Text } from '@chakra-ui/react';
 import { AvailableCourseDTO } from '../../shared/dtos/AvailableCourseDTO';
 import { Environment } from '../../static/Environemnt';
 import { formatTimespan } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
-import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { FlexFloat } from '../controls/FlexFloat';
 import { SmallStat } from './SmallStat';
 
 const CourseTile = (props: {
     course: AvailableCourseDTO
-} & FlexProps) => {
+} & EpistoFlex2Props) => {
 
     const { course, children, ...css } = props;
     const courseTitle = course.title;

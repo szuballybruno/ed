@@ -1,11 +1,10 @@
-import { FlexProps} from '@chakra-ui/react';
 import React, {useEffect, useState} from 'react';
 import {showNotification} from '../services/core/notifications';
 import {CoinAcquireResultDTO} from '../shared/dtos/CoinAcquireResultDTO';
 import {QuestionDTO} from '../shared/dtos/QuestionDTO';
 import {Id} from '../shared/types/versionId';
 import {Environment} from '../static/Environemnt';
-import { EpistoFlex2 } from './controls/EpistoFlex';
+import { EpistoFlex2, EpistoFlex2Props } from './controls/EpistoFlex';
 import {EpistoFont} from './controls/EpistoFont';
 import {LoadingFramePropsType} from './system/LoadingFrame';
 import {QuestionnaierAnswer} from './universal/QuestionnaireAnswer';
@@ -20,7 +19,7 @@ export const QuesitionView = (props: {
     coinsAcquired: number | null,
     showCoinsAcquired?: boolean,
     bonusCoinsAcquired: CoinAcquireResultDTO | null
-} & FlexProps) => {
+} & EpistoFlex2Props) => {
 
     const {
         answerQuesitonAsync,

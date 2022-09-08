@@ -1,14 +1,13 @@
-import { FlexProps } from '@chakra-ui/react';
 import React, { ReactNode } from 'react';
 import { isString } from '../../static/frontendHelpers';
-import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 
 export const CourseDetailsBriefingInfoItem = (props: {
     icon?: string | ReactNode,
     title: string,
     subTitle?: string
-} & FlexProps) => {
+} & EpistoFlex2Props) => {
 
     const { title, icon, subTitle, ...css } = props;
 

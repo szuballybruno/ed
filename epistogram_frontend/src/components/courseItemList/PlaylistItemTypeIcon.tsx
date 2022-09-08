@@ -1,9 +1,8 @@
-import { FlexProps } from '@chakra-ui/react';
-import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 
 export const PlaylistItemTypeIcon = (props: {
     color: string
-} & FlexProps) => {
+} & EpistoFlex2Props) => {
 
     const { color, ...css } = props;
 

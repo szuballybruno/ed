@@ -1,4 +1,3 @@
-import { FlexProps } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useReactTimer } from '../../helpers/reactTimer';
 import { PlayerApiService } from '../../services/api/PPlayerApiService';
@@ -7,7 +6,7 @@ import { Id } from '../../shared/types/versionId';
 import { epochDates } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
-import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { QuesitionView } from '../QuestionView';
 import { TimeoutFrame } from './TimeoutFrame';
@@ -18,7 +17,7 @@ export const VideoQuestionnaire = (props: {
     isShowing: boolean,
     onAnswered: () => void,
     onClosed: () => void
-} & FlexProps) => {
+} & EpistoFlex2Props) => {
 
     const { question, isShowing, onAnswered, answerSessionId, onClosed, ...css } = props;
     const { answerQuestionAsync, answerResult, answerQuestionError, answerQuestionState } = PlayerApiService.useAnswerQuestion();

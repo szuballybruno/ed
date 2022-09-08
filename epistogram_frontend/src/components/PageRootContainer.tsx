@@ -1,7 +1,7 @@
-import { FlexProps, Image} from '@chakra-ui/react';
+import { Image} from '@chakra-ui/react';
 import React, {ReactNode, useEffect} from 'react';
 import {gradientBackgroundGenerator} from '../services/core/gradientBackgroundGenerator';
-import { EpistoFlex2 } from './controls/EpistoFlex';
+import { EpistoFlex2, EpistoFlex2Props } from './controls/EpistoFlex';
 import {EpistoGrid} from './controls/EpistoGrid';
 
 export const PageRootContainer = (props: {
@@ -9,7 +9,7 @@ export const PageRootContainer = (props: {
     backgoundImageSrc?: string,
     noBackground?: boolean,
     noMaxWidth?: boolean
-} & FlexProps) => {
+} & EpistoFlex2Props) => {
 
     const { children, noMaxWidth, noBackground, backgoundImageSrc, ...css } = props;
 

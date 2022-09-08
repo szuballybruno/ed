@@ -1,6 +1,5 @@
-import { FlexProps } from '@chakra-ui/react';
 import React, { ReactNode } from 'react';
-import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 import { EpistoText } from '../controls/EpistoText';
 import { LoadingFrame, LoadingFramePropsType } from '../system/LoadingFrame';
 
@@ -12,7 +11,7 @@ export const QuestionnaireLayout = (props: {
     onlyShowAnswers?: boolean,
     buttonWrapperStyles?: React.CSSProperties | undefined,
     answerAction?: () => void
-} & FlexProps) => {
+} & EpistoFlex2Props) => {
 
     const { title, answerAction, contentClickable, children, loadingProps, onlyShowAnswers, buttonWrapperStyles, ...css } = props;
 

@@ -1,9 +1,8 @@
-import { FlexProps } from '@chakra-ui/react';
 import { ArrowBack } from '@mui/icons-material';
 import { ReactNode } from 'react';
 import { isString } from '../../static/frontendHelpers';
 import { EpistoButton } from '../controls/EpistoButton';
-import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoStepper, StepperLogicType } from '../universal/EpistoStepper';
 
@@ -25,7 +24,7 @@ export const ExamLayout = (props: {
     footerButtons?: (ExamLayoutButtonProps)[],
     headerButtons?: (ExamLayoutButtonProps)[],
     isFirst?: boolean
-} & FlexProps) => {
+} & EpistoFlex2Props) => {
 
     const {
         headerButtons,

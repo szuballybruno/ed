@@ -1,4 +1,4 @@
-import { Box, FlexProps } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import { Done, LocalOffer } from '@mui/icons-material';
 import React from 'react';
 import { ShopItemDTO } from '../../shared/dtos/ShopItemDTO';
@@ -9,14 +9,14 @@ import { EpistoButton } from '../controls/EpistoButton';
 import { FlexFloat } from '../controls/FlexFloat';
 import { EpistoFont } from '../controls/EpistoFont';
 import { Environment } from '../../static/Environemnt';
-import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 
 export const ShopItem = (props: {
     shopItem: ShopItemDTO,
     isSufficientFundsAvailable: boolean,
     tempIsStartedSwitch?: boolean,
     handlePurchaseItem: (shopItem: ShopItemDTO) => void
-} & FlexProps) => {
+} & EpistoFlex2Props) => {
 
     const { shopItem, children, isSufficientFundsAvailable, handlePurchaseItem, ...css } = props;
     const { name, coinPrice, canPurchase, purchaseCount, coverFilePath, detailsUrl, courseId, currencyPrice, shopItemCategoryName } = shopItem;

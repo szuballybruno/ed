@@ -1,12 +1,11 @@
-import { FlexProps } from '@chakra-ui/react';
 import { ReactNode } from 'react';
-import { EpistoFlex2 } from '../../controls/EpistoFlex';
+import { EpistoFlex2, EpistoFlex2Props } from '../../controls/EpistoFlex';
 
 export const AbsoluteFlexOverlay = (props: {
     children: ReactNode,
     isVisible: boolean,
     hasPointerEvents?: boolean
-} & FlexProps) => {
+} & EpistoFlex2Props) => {
 
     const { children, isVisible, hasPointerEvents, ...css } = props;
 
