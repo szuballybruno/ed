@@ -1,10 +1,11 @@
-import {Flex, FlexProps} from '@chakra-ui/react';
-import {ArrowBack} from '@mui/icons-material';
-import {ReactNode} from 'react';
-import {isString} from '../../static/frontendHelpers';
-import {EpistoButton} from '../controls/EpistoButton';
-import {EpistoFont} from '../controls/EpistoFont';
-import {EpistoStepper, StepperLogicType} from '../universal/EpistoStepper';
+import { FlexProps } from '@chakra-ui/react';
+import { ArrowBack } from '@mui/icons-material';
+import { ReactNode } from 'react';
+import { isString } from '../../static/frontendHelpers';
+import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { EpistoFont } from '../controls/EpistoFont';
+import { EpistoStepper, StepperLogicType } from '../universal/EpistoStepper';
 
 type ExamLayoutButtonProps = {
     title: string,
@@ -85,7 +86,7 @@ export const ExamLayout = (props: {
         </EpistoFlex2>;
     };
 
-    return <Flex
+    return <EpistoFlex2
         id='ExamLayout-root'
         minH='calc(100vh - 200px)'
         maxH={isHeightMaximized ? '100vh - 120px' : 'unset'}
@@ -97,7 +98,7 @@ export const ExamLayout = (props: {
         {...css}>
 
         {/* header */}
-        <Flex
+        <EpistoFlex2
             id='ExamLayout-header'
             direction={'row'}
             alignItems={'center'}
@@ -148,7 +149,7 @@ export const ExamLayout = (props: {
         </EpistoFlex2>
 
         {/* content */}
-        <Flex
+        <EpistoFlex2
             id='ExamLayout-content'
             flex="1"
             my="20px"
@@ -163,7 +164,7 @@ export const ExamLayout = (props: {
         </EpistoFlex2>
 
         {/* footer */}
-        <Flex
+        <EpistoFlex2
             id='ExamLayout-footer'
             width="100%"
             className="roundBorders mildShadow"

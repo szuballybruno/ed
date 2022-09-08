@@ -1,9 +1,9 @@
 import { FlexProps } from '@chakra-ui/layout';
 import { Checkbox } from '@mui/material';
-import { ForwardedRef, forwardRef, ReactNode } from 'react';
+import { forwardRef, ReactNode } from 'react';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 
-export const FlexListItem = forwardRef((props: FlexProps & {
+type FlexListItemProps = FlexProps & {
     onClick?: () => void,
     isLocked?: boolean,
     thumbnailContent?: ReactNode,
@@ -11,7 +11,9 @@ export const FlexListItem = forwardRef((props: FlexProps & {
     midContent?: ReactNode,
     isChecked?: boolean,
     setIsChecked?: (isChecked: boolean) => void
-}, ref: ForwardedRef<HTMLDivElement>) => {
+};
+
+export const FlexListItem = forwardRef<HTMLDivElement, FlexListItemProps>((props, ref) => {
 
     const {
         onClick,

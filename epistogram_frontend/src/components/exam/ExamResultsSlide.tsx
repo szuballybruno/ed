@@ -1,19 +1,19 @@
-import {Flex} from '@chakra-ui/react';
-import {ExpandMore} from '@mui/icons-material';
-import {Accordion, AccordionDetails, AccordionSummary} from '@mui/material';
-import React, {useEffect} from 'react';
-import {applicationRoutes} from '../../configuration/applicationRoutes';
-import {useExamResults} from '../../services/api/examApiService';
-import {useNavigation} from '../../services/core/navigatior';
-import {ExamPlayerDataDTO} from '../../shared/dtos/ExamPlayerDataDTO';
-import {Id} from '../../shared/types/versionId';
-import {ArrayBuilder} from '../../static/frontendHelpers';
-import {translatableTexts} from '../../static/translatableTexts';
-import {ChipSmall} from '../administration/courses/ChipSmall';
-import {EpistoFont} from '../controls/EpistoFont';
-import {ExamLayout} from './ExamLayout';
-import {ExamResultStats} from './ExamResultStats';
-import {QuestionAnswer} from './QuestionAnswer';
+import { ExpandMore } from '@mui/icons-material';
+import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
+import { useEffect } from 'react';
+import { applicationRoutes } from '../../configuration/applicationRoutes';
+import { useExamResults } from '../../services/api/examApiService';
+import { useNavigation } from '../../services/core/navigatior';
+import { ExamPlayerDataDTO } from '../../shared/dtos/ExamPlayerDataDTO';
+import { Id } from '../../shared/types/versionId';
+import { ArrayBuilder } from '../../static/frontendHelpers';
+import { translatableTexts } from '../../static/translatableTexts';
+import { ChipSmall } from '../administration/courses/ChipSmall';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { EpistoFont } from '../controls/EpistoFont';
+import { ExamLayout } from './ExamLayout';
+import { ExamResultStats } from './ExamResultStats';
+import { QuestionAnswer } from './QuestionAnswer';
 
 export const ExamResultsSlide = (props: {
     exam: ExamPlayerDataDTO,

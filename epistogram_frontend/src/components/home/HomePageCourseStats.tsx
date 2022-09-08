@@ -1,13 +1,14 @@
-import {Flex, Grid} from '@chakra-ui/react';
-import {useEffect} from 'react';
-import {useRecommendedItemQuota, useUserCourseProgressChartData} from '../../services/api/userProgressApiService';
-import {UserActiveCourseDTO} from '../../shared/dtos/UserActiveCourseDTO';
-import {Environment} from '../../static/Environemnt';
-import {PagingType} from '../../static/frontendHelpers';
-import {FlexFloat} from '../controls/FlexFloat';
+import { Grid } from '@chakra-ui/react';
+import { useEffect } from 'react';
+import { useRecommendedItemQuota, useUserCourseProgressChartData } from '../../services/api/userProgressApiService';
+import { UserActiveCourseDTO } from '../../shared/dtos/UserActiveCourseDTO';
+import { Environment } from '../../static/Environemnt';
+import { PagingType } from '../../static/frontendHelpers';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { FlexFloat } from '../controls/FlexFloat';
 import StatisticsCard from '../statisticsCard/StatisticsCard';
-import {UserProgressChart} from '../universal/charts/UserProgressChart';
-import {NoProgressChartYet} from './NoProgressChartYet';
+import { UserProgressChart } from '../universal/charts/UserProgressChart';
+import { NoProgressChartYet } from './NoProgressChartYet';
 
 export const HomePageCourseStats = (props: {
     activeCoursesPaging: PagingType<UserActiveCourseDTO>
@@ -132,5 +133,5 @@ export const HomePageCourseStats = (props: {
         </EpistoFlex2>
 
 
-    </Flex >;
+    </EpistoFlex2 >;
 };

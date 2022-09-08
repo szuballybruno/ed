@@ -12,6 +12,7 @@ import {UserApiService} from '../../services/api/userApiService';
 import {getKeys} from '../../shared/logic/sharedLogic';
 import {Id} from '../../shared/types/versionId';
 import {ArrayBuilder, useIsMatchingCurrentRoute} from '../../static/frontendHelpers';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 import {EpistoFont} from '../controls/EpistoFont';
 
 const Content = (props: {
@@ -187,7 +188,7 @@ export const AdminBreadcrumbsHeader = (props: {
                     </FormControl>
                 </FormGroup>}
             </Flex>
-        </Flex>
+        </EpistoFlex2>
 
         {/* children  */}
         <EpistoFlex2
@@ -197,6 +198,6 @@ export const AdminBreadcrumbsHeader = (props: {
             {...css}>
 
             {children}
-        </Flex>
-    </Flex >;
+        </EpistoFlex2>
+    </EpistoFlex2 >;
 };

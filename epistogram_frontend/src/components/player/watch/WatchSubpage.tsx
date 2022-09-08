@@ -173,7 +173,7 @@ export const WatchSubpage = () => {
                     direction="column"
                     error={[playerDataError]}>
 
-                    <Flex
+                    <EpistoFlex2
                         //px="20px"
                         height='calc(100% - 70px)'>
 
