@@ -1,18 +1,18 @@
-import { Divider, Grid, Tooltip } from '@chakra-ui/react';
-import { FiberManualRecord } from '@mui/icons-material';
-import { Slider } from '@mui/material';
-import React, { ReactNode, useState } from 'react';
-import { defaultCharts } from '../../../../static/defaultChartOptions';
-import { iterate } from '../../../../static/frontendHelpers';
-import { EpistoFlex2 } from '../../../controls/EpistoFlex';
-import { EpistoFont } from '../../../controls/EpistoFont';
-import { EpistoReactPlayer } from '../../../controls/EpistoReactPlayer';
-import { EpistoSelect } from '../../../controls/EpistoSelect';
-import { StatisticsGroupType } from '../../../learningInsights/LearningStatistics';
+import {Divider, Grid, Tooltip} from '@chakra-ui/react';
+import {FiberManualRecord} from '@mui/icons-material';
+import {Slider} from '@mui/material';
+import React, {ReactNode, useState} from 'react';
+import {defaultCharts} from '../../../../static/defaultChartOptions';
+import {iterate} from '../../../../static/frontendHelpers';
+import {EpistoFlex2} from '../../../controls/EpistoFlex';
+import {EpistoFont} from '../../../controls/EpistoFont';
+import {EpistoReactPlayer} from '../../../controls/EpistoReactPlayer';
+import {EpistoSelect} from '../../../controls/EpistoSelect';
+import {StatisticsGroupType} from '../../../learningInsights/LearningStatistics';
 import StatisticsCard from '../../../statisticsCard/StatisticsCard';
-import { EpistoLineChart } from '../../../universal/charts/base_charts/EpistoLineChart';
-import { EpistoPieChart } from '../../../universal/charts/base_charts/EpistoPieChart';
-import { DashboardSection } from '../../../universal/DashboardSection';
+import {EpistoLineChart} from '../../../universal/charts/base_charts/EpistoLineChart';
+import {EpistoPieChart} from '../../../universal/charts/base_charts/EpistoPieChart';
+import {DashboardSection} from '../../../universal/DashboardSection';
 
 export const HotspotsSlider = (props: {
     valueLabelComponent: React.ElementType<any> | undefined
@@ -486,7 +486,7 @@ export const AdminExamStatisticsModalPage = () => {
             mt="30px"
             gridTemplateColumns="repeat(auto-fill, minmax(300px, 1fr))"
             gridAutoRows="160px"
-            gridGap={10}>
+            gridGap='10px'>
 
             {adminExamStatistics[1].items.map((item, index) => {
                 return <StatisticsCard

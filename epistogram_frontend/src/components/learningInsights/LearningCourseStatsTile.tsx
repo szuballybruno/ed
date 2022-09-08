@@ -1,15 +1,15 @@
-import { Text } from '@chakra-ui/react';
-import { LinearProgress } from '@mui/material';
+import {Text} from '@chakra-ui/react';
+import {LinearProgress} from '@mui/material';
 import React from 'react';
-import { CourseLearningDTO } from '../../shared/dtos/CourseLearningDTO';
-import { Environment } from '../../static/Environemnt';
-import { formatTimespan, roundNumber } from '../../static/frontendHelpers';
-import { EpistoButton, EpistoButtonPropsType } from '../controls/EpistoButton';
-import { EpistoDiv } from '../controls/EpistoDiv';
-import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
-import { EpistoFont } from '../controls/EpistoFont';
-import { FlexFloat } from '../controls/FlexFloat';
-import { SmallStat } from '../universal/SmallStat';
+import {CourseLearningDTO} from '../../shared/dtos/CourseLearningDTO';
+import {Environment} from '../../static/Environemnt';
+import {formatTimespan, roundNumber} from '../../static/frontendHelpers';
+import {EpistoButton, EpistoButtonPropsType} from '../controls/EpistoButton';
+import {EpistoDiv} from '../controls/EpistoDiv';
+import {EpistoFlex2, EpistoFlex2Props} from '../controls/EpistoFlex';
+import {EpistoFont} from '../controls/EpistoFont';
+import {FlexFloat} from '../controls/FlexFloat';
+import {SmallStat} from '../universal/SmallStat';
 
 export const LearningCourseStatsTile = (props: {
     course: CourseLearningDTO,
@@ -50,8 +50,8 @@ export const LearningCourseStatsTile = (props: {
         <EpistoDiv
             flex="1"
             position="relative"
-            minHeight={150}
-            maxHeight={150}>
+            minHeight='150px'
+            maxHeight='150px'>
 
             {/* cover image */}
             <img
@@ -76,7 +76,7 @@ export const LearningCourseStatsTile = (props: {
                     justifyContent="space-around"
                     alignItems="center"
                     padding="4px"
-                    width={130}
+                    width='130px'
                     bg="#97CC9B"
                     borderRadius="7px 0 0 7px">
 
@@ -146,7 +146,7 @@ export const LearningCourseStatsTile = (props: {
             <EpistoFlex2
                 direction={'row'}
                 alignItems={'center'}
-                mt={7}
+                mt='7px'
                 width="100%"
                 height="10px">
 

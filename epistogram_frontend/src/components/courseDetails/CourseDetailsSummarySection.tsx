@@ -1,13 +1,13 @@
-import { Grid } from '@chakra-ui/react';
+import {Grid} from '@chakra-ui/react';
 import DoneIcon from '@mui/icons-material/Done';
 import React from 'react';
-import { CourseDetailsDTO } from '../../shared/dtos/CourseDetailsDTO';
-import { defaultCharts } from '../../static/defaultChartOptions';
-import { translatableTexts } from '../../static/translatableTexts';
-import { EpistoFlex2 } from '../controls/EpistoFlex';
-import { EpistoFont } from '../controls/EpistoFont';
-import { EpistoHeader } from '../EpistoHeader';
-import { EpistoRadarChart } from '../universal/charts/base_charts/EpistoRadarChart';
+import {CourseDetailsDTO} from '../../shared/dtos/CourseDetailsDTO';
+import {defaultCharts} from '../../static/defaultChartOptions';
+import {translatableTexts} from '../../static/translatableTexts';
+import {EpistoFlex2} from '../controls/EpistoFlex';
+import {EpistoFont} from '../controls/EpistoFont';
+import {EpistoHeader} from '../EpistoHeader';
+import {EpistoRadarChart} from '../universal/charts/base_charts/EpistoRadarChart';
 
 export const CourseDetailsSummarySection = (props: {
     courseDetails: CourseDetailsDTO
@@ -16,7 +16,7 @@ export const CourseDetailsSummarySection = (props: {
     const { courseDetails } = props;
 
     return <EpistoFlex2
-        mt={10}
+        mt='10px'
         width="100%"
         direction={'column'}
         alignItems={'flex-start'}>
@@ -25,14 +25,14 @@ export const CourseDetailsSummarySection = (props: {
         <EpistoHeader
             type="strong"
             text={translatableTexts.courseDetails.summarySection.courseShortDescription}
-            my={10} />
+            my='10px' />
 
         {/* description */}
         <EpistoFont>
             {courseDetails.description}
         </EpistoFont>
 
-        {/* expand more description 
+        {/* expand more description
         <EpistoButton
             style={{
                 marginTop: 20
@@ -44,8 +44,8 @@ export const CourseDetailsSummarySection = (props: {
         <EpistoHeader
             type="strong"
             text={translatableTexts.courseDetails.summarySection.whatCanYouLearnFromCourse}
-            my={10}
-            mt={40} />
+            my='10px'
+            mt='40px' />
 
         {/* skill benefits */}
         <Grid templateColumns="50% 50%"
@@ -77,12 +77,12 @@ export const CourseDetailsSummarySection = (props: {
         <EpistoHeader
             type="strong"
             text={translatableTexts.courseDetails.summarySection.whatSkillsTheCourseImproving}
-            my={10}
-            mt={40} />
+            my='10px'
+            mt='40px' />
 
         {/* humam skill benefits */}
         <EpistoFlex2 width="100%"
-            mb={100}>
+            mb='100px'>
 
             {/* human skill benefits description */}
             <EpistoFlex2 direction={'column'}

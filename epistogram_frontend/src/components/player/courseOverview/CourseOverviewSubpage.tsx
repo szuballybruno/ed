@@ -1,10 +1,10 @@
-import { applicationRoutes } from '../../../configuration/applicationRoutes';
-import { useCourseOverviewData } from '../../../services/api/miscApiService';
-import { useNavigation } from '../../../services/core/navigatior';
-import { isNullOrUndefined } from '../../../static/frontendHelpers';
-import { EpistoFlex2 } from '../../controls/EpistoFlex';
-import { EpistoGrid } from '../../controls/EpistoGrid';
-import { ExamLayout } from '../../exam/ExamLayout';
+import {applicationRoutes} from '../../../configuration/applicationRoutes';
+import {useCourseOverviewData} from '../../../services/api/miscApiService';
+import {useNavigation} from '../../../services/core/navigatior';
+import {isNullOrUndefined} from '../../../static/frontendHelpers';
+import {EpistoFlex2} from '../../controls/EpistoFlex';
+import {EpistoGrid} from '../../controls/EpistoGrid';
+import {ExamLayout} from '../../exam/ExamLayout';
 import StatisticsCard from '../../statisticsCard/StatisticsCard';
 
 export const CourseOverviewSubpage = () => {
@@ -94,7 +94,7 @@ export const CourseOverviewSubpage = () => {
                                 suffix={item.suffix}
                                 title={item.title}
                                 value={isNullOrUndefined(item.value) ? undefined : item.value + ''}
-                                height={150}
+                                height='150px'
                                 p="10px 10px 10px 30px" />;
                         })}
                 </EpistoGrid>

@@ -1,13 +1,13 @@
-import { DataGrid, GridColDef, GridRowsProp } from '@mui/x-data-grid';
-import { applicationRoutes } from '../../../configuration/applicationRoutes';
-import { UserApiService } from '../../../services/api/userApiService';
-import { useNavigation } from '../../../services/core/navigatior';
-import { CourseAdminListItemDTO } from '../../../shared/dtos/admin/CourseAdminListItemDTO';
-import { Id } from '../../../shared/types/versionId';
-import { formatTimespan } from '../../../static/frontendHelpers';
-import { EpistoButton } from '../../controls/EpistoButton';
-import { ProfileImage } from '../../ProfileImage';
-import { AdminSubpageHeader } from '../AdminSubpageHeader';
+import {DataGrid, GridColDef, GridRowsProp} from '@mui/x-data-grid';
+import {applicationRoutes} from '../../../configuration/applicationRoutes';
+import {UserApiService} from '../../../services/api/userApiService';
+import {useNavigation} from '../../../services/core/navigatior';
+import {CourseAdminListItemDTO} from '../../../shared/dtos/admin/CourseAdminListItemDTO';
+import {Id} from '../../../shared/types/versionId';
+import {formatTimespan} from '../../../static/frontendHelpers';
+import {EpistoButton} from '../../controls/EpistoButton';
+import {ProfileImage} from '../../ProfileImage';
+import {AdminSubpageHeader} from '../AdminSubpageHeader';
 
 export const AdminCourseUsersGrid = () => {
 

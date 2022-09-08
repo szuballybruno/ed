@@ -1,10 +1,18 @@
-import { ArrowDropDown, ArrowDropUp, ArrowRight, FiberManualRecord, Fullscreen, FullscreenExit, Lock } from '@mui/icons-material';
-import React, { useState } from 'react';
-import { EpistoButton } from '../controls/EpistoButton';
-import { EpistoDiv } from '../controls/EpistoDiv';
-import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
-import { EpistoFont } from '../controls/EpistoFont';
-import { FlexFloat } from '../controls/FlexFloat';
+import {
+    ArrowDropDown,
+    ArrowDropUp,
+    ArrowRight,
+    FiberManualRecord,
+    Fullscreen,
+    FullscreenExit,
+    Lock
+} from '@mui/icons-material';
+import React, {useState} from 'react';
+import {EpistoButton} from '../controls/EpistoButton';
+import {EpistoDiv} from '../controls/EpistoDiv';
+import {EpistoFlex2, EpistoFlex2Props} from '../controls/EpistoFlex';
+import {EpistoFont} from '../controls/EpistoFont';
+import {FlexFloat} from '../controls/FlexFloat';
 
 export type StatisticsCardProps = {
     iconPath?: string
@@ -77,7 +85,7 @@ const StatisticsCard = (props: StatisticsCardProps & EpistoFlex2Props) => {
         gridRow={chartSize === 'large' ? 'span 2' : (isOpen ? 'span 2' : 'unset')} // do not remove!!
         //boxShadow="inset -1px -1px 5px rgba(0,0,0,0.15)"
         direction="column"
-        minWidth={250}
+        minWidth='250px'
         position="relative"
         {...css}>
 
@@ -91,7 +99,7 @@ const StatisticsCard = (props: StatisticsCardProps & EpistoFlex2Props) => {
             pos={'absolute'}
             width="100%"
             height="100%"
-            borderRadius={5}
+            borderRadius='5px'
             bgColor={'#33333317'}>
 
             <Lock style={{

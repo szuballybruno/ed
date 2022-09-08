@@ -1,32 +1,36 @@
-import { Container } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
-import { CourseApiService } from '../../services/api/courseApiService';
-import { useNavigation } from '../../services/core/navigatior';
-import { useShowErrorDialog } from '../../services/core/notifications';
-import { Id } from '../../shared/types/versionId';
-import { Environment } from '../../static/Environemnt';
-import { formatTimespan, useImageColor } from '../../static/frontendHelpers';
-import { useIntParam } from '../../static/locationHelpers';
-import { translatableTexts } from '../../static/translatableTexts';
-import { useAdminCourseContentDialogLogic } from '../administration/users/adminCourseContentDialog/AdminCourseContentDialogLogic';
-import { AdminUserCourseContentDialog } from '../administration/users/adminCourseContentDialog/AdminUserCourseContentDialog';
-import { ContentPane } from '../ContentPane';
-import { EpistoButton } from '../controls/EpistoButton';
-import { EpistoDiv } from '../controls/EpistoDiv';
-import { EpistoFlex2 } from '../controls/EpistoFlex';
-import { EpistoFont } from '../controls/EpistoFont';
-import { EpistoTab, EpistoTabs } from '../controls/EpistoTabs';
-import { EpistoHeader } from '../EpistoHeader';
-import { PageRootContainer } from '../PageRootContainer';
-import { ProfileImage } from '../ProfileImage';
-import { useCurrentUserId } from '../system/AuthenticationFrame';
-import { FlexListItem } from '../universal/FlexListItem';
-import { CourseDetailsBriefingInfoItem } from './CourseDetailsBriefingInfoItem';
-import { CourseDetailsContentSection } from './CourseDetailsContentSection';
-import { CourseDetailsRequirementsSection } from './CourseDetailsRequirementsSection';
-import { CourseDetailsSummarySection } from './CourseDetailsSummarySection';
-import { CourseDetailsTeacherSection } from './CourseDetailsTeacherSection';
-import { TabPanel } from './TabPanel';
+import {Container} from '@chakra-ui/react';
+import {useEffect, useState} from 'react';
+import {CourseApiService} from '../../services/api/courseApiService';
+import {useNavigation} from '../../services/core/navigatior';
+import {useShowErrorDialog} from '../../services/core/notifications';
+import {Id} from '../../shared/types/versionId';
+import {Environment} from '../../static/Environemnt';
+import {formatTimespan, useImageColor} from '../../static/frontendHelpers';
+import {useIntParam} from '../../static/locationHelpers';
+import {translatableTexts} from '../../static/translatableTexts';
+import {
+    useAdminCourseContentDialogLogic
+} from '../administration/users/adminCourseContentDialog/AdminCourseContentDialogLogic';
+import {
+    AdminUserCourseContentDialog
+} from '../administration/users/adminCourseContentDialog/AdminUserCourseContentDialog';
+import {ContentPane} from '../ContentPane';
+import {EpistoButton} from '../controls/EpistoButton';
+import {EpistoDiv} from '../controls/EpistoDiv';
+import {EpistoFlex2} from '../controls/EpistoFlex';
+import {EpistoFont} from '../controls/EpistoFont';
+import {EpistoTab, EpistoTabs} from '../controls/EpistoTabs';
+import {EpistoHeader} from '../EpistoHeader';
+import {PageRootContainer} from '../PageRootContainer';
+import {ProfileImage} from '../ProfileImage';
+import {useCurrentUserId} from '../system/AuthenticationFrame';
+import {FlexListItem} from '../universal/FlexListItem';
+import {CourseDetailsBriefingInfoItem} from './CourseDetailsBriefingInfoItem';
+import {CourseDetailsContentSection} from './CourseDetailsContentSection';
+import {CourseDetailsRequirementsSection} from './CourseDetailsRequirementsSection';
+import {CourseDetailsSummarySection} from './CourseDetailsSummarySection';
+import {CourseDetailsTeacherSection} from './CourseDetailsTeacherSection';
+import {TabPanel} from './TabPanel';
 
 const CourseDetailsPage = () => {
 
@@ -157,7 +161,7 @@ const CourseDetailsPage = () => {
                 {/* left pane */}
                 <EpistoFlex2 flex="1"
                     direction={'column'}
-                    mr={30}>
+                    mr='30px'>
 
                     {/* short description */}
                     <Container pr="20px">
@@ -201,8 +205,8 @@ const CourseDetailsPage = () => {
                         direction="column"
                         flex="1"
                         width="100%"
-                        mt={30}
-                        mb={50}
+                        mt='30px'
+                        mb='50px'
                         background="var(--transparentWhite70)"
                         className="roundBorders mildShadow"
                         p="20px"
@@ -284,17 +288,17 @@ const CourseDetailsPage = () => {
                     <EpistoFlex2
                         direction={'column'}
                         alignItems={'center'}
-                        margin={10}
+                        margin='10px'
                         boxSizing={'border-box'}
                         bg={'white'}
-                        height={580}
-                        borderWidth={1}
-                        borderRadius={10}
+                        height='580px'
+                        borderWidth='1px'
+                        borderRadius='10px'
                         shadow={'#00000024 0px 0px 5px 0px'}>
                         <EpistoFlex2 width="100%"
-                            height={230}
+                            height='230px'
                             justifyContent={'center'}
-                            p={10}>
+                            p='10px'>
                             <img
                                 src={courseDetails?.thumbnailURL}
                                 style={{
@@ -310,8 +314,8 @@ const CourseDetailsPage = () => {
                                 <FlexListItem
                                     key={index}
                                     width="100%"
-                                    px={15}
-                                    height={40}
+                                    px='15px'
+                                    height='40px'
                                     thumbnailContent={(
                                         <img
                                             src={sidebarInfo.icon}
@@ -324,7 +328,7 @@ const CourseDetailsPage = () => {
                                     )}
                                     midContent={(
                                         <EpistoFlex2 flex={1}
-                                            p={5}>
+                                            p='5px'>
                                             <EpistoFont>
                                                 {sidebarInfo.name}
                                             </EpistoFont>
@@ -333,7 +337,7 @@ const CourseDetailsPage = () => {
                                     endContent={(
                                         <EpistoFlex2
                                             direction={'row'}
-                                            mx={4}
+                                            mx='4px'
                                             justifyContent={'space-between'}
                                             alignItems={'center'}>
 

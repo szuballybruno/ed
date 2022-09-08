@@ -1,26 +1,26 @@
 import Edit from '@mui/icons-material/Edit';
-import { applicationRoutes } from '../../../configuration/applicationRoutes';
-import { PersonalityTraitCategoryShortDTO } from '../../../shared/dtos/PersonalityTraitCategoryShortDTO';
-import { usePersonalityTraitCategories } from '../../../services/api/personalityAssessmentApiService';
-import { useNavigation } from '../../../services/core/navigatior';
-import { EpistoButton } from '../../controls/EpistoButton';
-import { EpistoFont } from '../../controls/EpistoFont';
-import { LoadingFrame } from '../../system/LoadingFrame';
-import { FlexListItem } from '../../universal/FlexListItem';
-import { FlexListTitleSubtitle } from '../../universal/FlexListTitleSubtitle';
-import { AdminSubpageHeader } from '../AdminSubpageHeader';
-import { Id } from '../../../shared/types/versionId';
-import { EpistoFlex2 } from '../../controls/EpistoFlex';
+import {applicationRoutes} from '../../../configuration/applicationRoutes';
+import {PersonalityTraitCategoryShortDTO} from '../../../shared/dtos/PersonalityTraitCategoryShortDTO';
+import {usePersonalityTraitCategories} from '../../../services/api/personalityAssessmentApiService';
+import {useNavigation} from '../../../services/core/navigatior';
+import {EpistoButton} from '../../controls/EpistoButton';
+import {EpistoFont} from '../../controls/EpistoFont';
+import {LoadingFrame} from '../../system/LoadingFrame';
+import {FlexListItem} from '../../universal/FlexListItem';
+import {FlexListTitleSubtitle} from '../../universal/FlexListTitleSubtitle';
+import {AdminSubpageHeader} from '../AdminSubpageHeader';
+import {Id} from '../../../shared/types/versionId';
+import {EpistoFlex2} from '../../controls/EpistoFlex';
 
 export const PersonalityTraitCategoriesSubpage = () => {
 
-    // http 
+    // http
     const { personalityTraitCategories, personalityTraitCategoriesState, personalityTraitCategoriesError } = usePersonalityTraitCategories();
 
     //util
     const { navigate2 } = useNavigation();
 
-    // state 
+    // state
 
     // func
 
@@ -78,8 +78,8 @@ export const PersonalityTraitCategoriesSubpage = () => {
                                 align="center"
                                 justifyContent={'flex-end'}
                                 height="100%"
-                                width={165}
-                                px={10}>
+                                width='165px'
+                                px='10px'>
 
                                 <EpistoFont noLineBreak>
                                     Napi tippek:

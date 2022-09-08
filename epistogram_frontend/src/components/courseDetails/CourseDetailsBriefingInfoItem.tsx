@@ -1,7 +1,7 @@
-import React, { ReactNode } from 'react';
-import { isString } from '../../static/frontendHelpers';
-import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
-import { EpistoFont } from '../controls/EpistoFont';
+import React, {ReactNode} from 'react';
+import {isString} from '../../static/frontendHelpers';
+import {EpistoFlex2, EpistoFlex2Props} from '../controls/EpistoFlex';
+import {EpistoFont} from '../controls/EpistoFont';
 
 export const CourseDetailsBriefingInfoItem = (props: {
     icon?: string | ReactNode,
@@ -13,18 +13,18 @@ export const CourseDetailsBriefingInfoItem = (props: {
 
     return <EpistoFlex2
         direction={'row'}
-        minWidth={200}
+        minWidth='200px'
         flex='1'
-        height={60}
+        height='60px'
         background="var(--transparentWhite70)"
         backdropFilter="blur(7px)"
-        borderWidth={1}
-        borderRadius={5}
+        borderWidth='1px'
+        borderRadius='5px'
         shadow={'#00000024 0px 0px 3px 0px'}
         {...css}>
 
         <EpistoFlex2
-            width={60}
+            width='60px'
             align={'center'}
             justify={'center'}>
 
@@ -39,8 +39,8 @@ export const CourseDetailsBriefingInfoItem = (props: {
         </EpistoFlex2>
 
         <EpistoFlex2
-            ml={5}
-            width={135}
+            ml='5px'
+            width='135px'
             direction={'column'}
             justify={'center'}
             align={'flex-start'}>

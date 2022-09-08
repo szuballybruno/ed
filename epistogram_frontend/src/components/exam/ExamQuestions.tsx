@@ -1,21 +1,21 @@
-import { Grid } from '@chakra-ui/layout';
-import { useState } from 'react';
-import { useSaveExamAnswer } from '../../services/api/examApiService';
-import { useShowErrorDialog } from '../../services/core/notifications';
-import { ExamPlayerDataDTO } from '../../shared/dtos/ExamPlayerDataDTO';
-import { Id } from '../../shared/types/versionId';
-import { Environment } from '../../static/Environemnt';
-import { epochDates, usePaging } from '../../static/frontendHelpers';
-import { translatableTexts } from '../../static/translatableTexts';
-import { EpistoFont } from '../controls/EpistoFont';
-import { LoadingFrame } from '../system/LoadingFrame';
-import { useEpistoDialogLogic } from '../universal/epistoDialog/EpistoDialogLogic';
-import { ExamAbortDialog } from './ExamAbortDialog';
-import { ExamLayout } from './ExamLayout';
-import { ExamLayoutContent } from './ExamLayoutContent';
-import { QuestionAnswer } from './QuestionAnswer';
-import { Logger } from '../../static/Logger';
-import { EpistoFlex2 } from '../controls/EpistoFlex';
+import {Grid} from '@chakra-ui/layout';
+import {useState} from 'react';
+import {useSaveExamAnswer} from '../../services/api/examApiService';
+import {useShowErrorDialog} from '../../services/core/notifications';
+import {ExamPlayerDataDTO} from '../../shared/dtos/ExamPlayerDataDTO';
+import {Id} from '../../shared/types/versionId';
+import {Environment} from '../../static/Environemnt';
+import {epochDates, usePaging} from '../../static/frontendHelpers';
+import {translatableTexts} from '../../static/translatableTexts';
+import {EpistoFont} from '../controls/EpistoFont';
+import {LoadingFrame} from '../system/LoadingFrame';
+import {useEpistoDialogLogic} from '../universal/epistoDialog/EpistoDialogLogic';
+import {ExamAbortDialog} from './ExamAbortDialog';
+import {ExamLayout} from './ExamLayout';
+import {ExamLayoutContent} from './ExamLayoutContent';
+import {QuestionAnswer} from './QuestionAnswer';
+import {Logger} from '../../static/Logger';
+import {EpistoFlex2} from '../controls/EpistoFlex';
 
 export const ExamQuestions = (props: {
     exam: ExamPlayerDataDTO,
@@ -265,7 +265,7 @@ export const ExamQuestions = (props: {
                 <EpistoFlex2
                     direction={'row'}
                     justifyContent={'center'}
-                    pt={10}
+                    pt='10px'
                     width="100%">
 
                     <Grid

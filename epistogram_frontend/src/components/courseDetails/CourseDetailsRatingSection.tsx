@@ -1,18 +1,18 @@
-import { LinearProgress, Paper, Rating } from '@mui/material';
+import {LinearProgress, Paper, Rating} from '@mui/material';
 import React from 'react';
-import { EpistoFlex2 } from '../controls/EpistoFlex';
-import { EpistoFont } from '../controls/EpistoFont';
+import {EpistoFlex2} from '../controls/EpistoFlex';
+import {EpistoFont} from '../controls/EpistoFont';
 
 export const CourseDetailsRatingSection = () => {
     const mockRatingProgresses = [60, 20, 10, 0, 0];
 
     const CourseDetailsRatingItem = () => {
         return <EpistoFlex2 width="100%"
-            mt={20}>
+            mt='20px'>
             <EpistoFlex2 height="100%">
-                <EpistoFlex2 width={70}
-                    height={70}
-                    m={10}
+                <EpistoFlex2 width='70px'
+                    height='70px'
+                    m='10px'
                     className={'circle'}
                     border="2px solid var(--epistoTeal)"
                     bg="var(--deepBlue)"
@@ -26,7 +26,7 @@ export const CourseDetailsRatingSection = () => {
             </EpistoFlex2>
             <EpistoFlex2 flex={1}
                 flexDir={'column'}>
-                <EpistoFlex2 height={70}
+                <EpistoFlex2 height='70px'
                     alignItems={'center'}
                     justifyContent={'space-between'}>
                     <EpistoFlex2 flexDir={'column'}>
@@ -47,7 +47,7 @@ export const CourseDetailsRatingSection = () => {
                             style={{ color: 'var(--epistoTeal)' }} />
                     </EpistoFlex2>
                 </EpistoFlex2>
-                <EpistoFlex2 mt={20}>
+                <EpistoFlex2 mt='20px'>
                     <EpistoFont style={{
                         fontSize: '0.8em'
                     }}>
@@ -58,16 +58,16 @@ export const CourseDetailsRatingSection = () => {
         </EpistoFlex2>;
     };
 
-    return <EpistoFlex2 mt={10}
+    return <EpistoFlex2 mt='10px'
         width="100%"
-        height={500}
+        height='500px'
         direction={'column'}
         alignItems={'flex-start'}>
         <EpistoFlex2 width="100%"
-            height={170}>
+            height='170px'>
             <Paper>
-                <EpistoFlex2 width={170}
-                    height={170}
+                <EpistoFlex2 width='170px'
+                    height='170px'
                     flexDir={'column'}
                     alignItems={'center'}
                     justifyContent={'center'}>
@@ -89,9 +89,9 @@ export const CourseDetailsRatingSection = () => {
                     </EpistoFont>
                 </EpistoFlex2>
             </Paper>
-            <EpistoFlex2 height={170}
+            <EpistoFlex2 height='170px'
                 flex={1}
-                px={20}
+                px='20px'
                 flexDir={'column'}
                 justifyContent={'space-evenly'}>
                 {mockRatingProgresses
@@ -105,8 +105,8 @@ export const CourseDetailsRatingSection = () => {
                         value={x}
                         variant={'determinate'} />)}
             </EpistoFlex2>
-            <EpistoFlex2 width={170}
-                height={170}
+            <EpistoFlex2 width='170px'
+                height='170px'
                 flexDir={'column'}
                 alignItems={'center'}
                 justifyContent={'center'}>

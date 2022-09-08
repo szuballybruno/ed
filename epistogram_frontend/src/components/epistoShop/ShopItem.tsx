@@ -1,15 +1,15 @@
-import { Done, LocalOffer } from '@mui/icons-material';
+import {Done, LocalOffer} from '@mui/icons-material';
 import React from 'react';
-import { ShopItemDTO } from '../../shared/dtos/ShopItemDTO';
+import {ShopItemDTO} from '../../shared/dtos/ShopItemDTO';
 
-import { translatableTexts } from '../../static/translatableTexts';
-import { useNavigation } from '../../services/core/navigatior';
-import { EpistoButton } from '../controls/EpistoButton';
-import { FlexFloat } from '../controls/FlexFloat';
-import { EpistoFont } from '../controls/EpistoFont';
-import { Environment } from '../../static/Environemnt';
-import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
-import { EpistoDiv } from '../controls/EpistoDiv';
+import {translatableTexts} from '../../static/translatableTexts';
+import {useNavigation} from '../../services/core/navigatior';
+import {EpistoButton} from '../controls/EpistoButton';
+import {FlexFloat} from '../controls/FlexFloat';
+import {EpistoFont} from '../controls/EpistoFont';
+import {Environment} from '../../static/Environemnt';
+import {EpistoFlex2, EpistoFlex2Props} from '../controls/EpistoFlex';
+import {EpistoDiv} from '../controls/EpistoDiv';
 
 export const ShopItem = (props: {
     shopItem: ShopItemDTO,
@@ -49,8 +49,8 @@ export const ShopItem = (props: {
         {/* cover image box */}
         <EpistoDiv flex="7"
             position="relative"
-            minH={150}
-            maxH={150}>
+            minH='150px'
+            maxH='150px'>
 
             {/* cover image */}
             <img
@@ -93,7 +93,7 @@ export const ShopItem = (props: {
                 </EpistoFont>
             </EpistoFlex2>}
 
-            {/*  purchase overlay 
+            {/*  purchase overlay
             {isPurchased && <EpistoFlex2
                 className="whall"
                 position="absolute"

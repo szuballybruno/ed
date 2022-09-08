@@ -1,14 +1,14 @@
-import { useMediaQuery } from '@chakra-ui/react';
-import { ArrowBack } from '@mui/icons-material';
-import React, { ReactNode } from 'react';
-import { Environment } from '../../static/Environemnt';
-import { hasValue, isString, useIsDesktopView } from '../../static/frontendHelpers';
-import { EpistoButton } from '../controls/EpistoButton';
-import { EpistoDiv } from '../controls/EpistoDiv';
-import { EpistoFlex2 } from '../controls/EpistoFlex';
-import { EpistoFont } from '../controls/EpistoFont';
-import { EpistoImage } from '../controls/EpistoImage';
-import { EpistoHeader } from '../EpistoHeader';
+import {useMediaQuery} from '@chakra-ui/react';
+import {ArrowBack} from '@mui/icons-material';
+import React, {ReactNode} from 'react';
+import {Environment} from '../../static/Environemnt';
+import {hasValue, isString, useIsDesktopView} from '../../static/frontendHelpers';
+import {EpistoButton} from '../controls/EpistoButton';
+import {EpistoDiv} from '../controls/EpistoDiv';
+import {EpistoFlex2} from '../controls/EpistoFlex';
+import {EpistoFont} from '../controls/EpistoFont';
+import {EpistoImage} from '../controls/EpistoImage';
+import {EpistoHeader} from '../EpistoHeader';
 
 export const SignupWrapper = (props: {
     children?: ReactNode,
@@ -68,13 +68,13 @@ export const SignupWrapper = (props: {
 
             {/* logo */}
             <EpistoFlex2
-                height={50}
+                height='50px'
                 width="100%"
                 hidden={window.innerWidth > 1000}
                 justify={'center'}
                 align={'center'}>
 
-                <EpistoImage maxH={50}
+                <EpistoImage maxH='50px'
                     src={Environment.getAssetUrl('/images/logo.svg')} />
             </EpistoFlex2>
 
@@ -85,13 +85,13 @@ export const SignupWrapper = (props: {
                 justify="space-between">
 
                 <EpistoFlex2
-                    height={80}
+                    height='80px'
                     width="100%"
                     hidden={window.innerWidth < 1000}
                     justifyContent={'center'}
                     alignItems={'center'}>
 
-                    <EpistoImage maxH={80}
+                    <EpistoImage maxH='80px'
                         src={Environment.getAssetUrl('/images/logo.svg')} />
                 </EpistoFlex2>
 
@@ -123,11 +123,11 @@ export const SignupWrapper = (props: {
                     align="center"
                     flexShrink={1}
                     minWidth="300px"
-                    minH={400}
+                    minH='400px'
                     height="400"
                     justifyContent={isDesktop ? 'flex-end' : 'center'}>
 
-                    <EpistoImage maxW={350}
+                    <EpistoImage maxW='350px'
                         minWidth="300px"
                         maxH="300px"
                         height="100%"
@@ -142,7 +142,7 @@ export const SignupWrapper = (props: {
                 <EpistoFlex2
                     id="content"
                     flex="5"
-                    minWidth={400}//window.innerWidth > 500 ? 300 : "calc(100% - 200px)"}
+                    minWidth='400px'//window.innerWidth > 500 ? 300 : "calc(100% - 200px)"}
                     direction="column">
 
                     {/* title */}
@@ -152,7 +152,7 @@ export const SignupWrapper = (props: {
                         m="10px 10px 10px 0px"
                         alignSelf={hasImage ? 'flex-start' : 'center'}
                         text={title!}
-                        maxW={400}>
+                        maxW='400px'>
                     </EpistoHeader>}
 
                     {/* description */}
