@@ -1,4 +1,4 @@
-import {Box, GridItem, useMediaQuery} from '@chakra-ui/react';
+import { GridItem, useMediaQuery} from '@chakra-ui/react';
 import {Select, ToggleButton, ToggleButtonGroup} from '@mui/material';
 import React from 'react';
 import {CourseApiService} from '../services/api/courseApiService';
@@ -11,6 +11,7 @@ import {distinctByAllKeys} from '../static/frontendHelpers';
 import {translatableTexts} from '../static/translatableTexts';
 import {ContentPane} from './ContentPane';
 import {EpistoButton} from './controls/EpistoButton';
+import { EpistoDiv } from './controls/EpistoDiv';
 import {EpistoFlex, EpistoFlex2} from './controls/EpistoFlex';
 import {EpistoFont} from './controls/EpistoFont';
 import {EpistoGrid} from './controls/EpistoGrid';
@@ -225,7 +226,7 @@ const AvailableCoursesPage = () => {
                     </Select>
                 </EpistoFlex2>
 
-                <Box id="scrollContainer"
+                <EpistoDiv id="scrollContainer"
                     className="whall">
 
                     <EpistoGrid auto="fill"
@@ -266,7 +267,7 @@ const AvailableCoursesPage = () => {
                                 </GridItem>;
                             })}
                     </EpistoGrid>
-                </Box>
+                </EpistoDiv>
             </EpistoFlex2>
         </ContentPane>
     </PageRootContainer >;

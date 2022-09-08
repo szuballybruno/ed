@@ -1,7 +1,7 @@
-import { Box, FlexProps } from '@chakra-ui/react';
-import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { EpistoDiv } from '../controls/EpistoDiv';
+import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 
-export const EpistoPaging = (props: FlexProps & {
+export const EpistoPaging = (props: EpistoFlex2Props & {
     slides: ((isCurrent: boolean) => JSX.Element)[],
     index: number,
     alwaysRender?: boolean,
@@ -14,13 +14,13 @@ export const EpistoPaging = (props: FlexProps & {
 
             const isCurrent = xi === index;
 
-            return <Box
+            return <EpistoDiv
                 key={xi}
                 className="whall"
                 display={isCurrent ? undefined : 'none'}>
 
                 {x(isCurrent)}
-            </Box>;
+            </EpistoDiv>;
         });
 
     const renderCurrentSlide = slides.length > 0

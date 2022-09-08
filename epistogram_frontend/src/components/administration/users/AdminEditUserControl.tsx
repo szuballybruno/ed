@@ -1,4 +1,4 @@
-import { Box, Divider } from '@chakra-ui/react';
+import { Divider } from '@chakra-ui/react';
 import { Checkbox } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
@@ -16,6 +16,7 @@ import { Id } from '../../../shared/types/versionId';
 import { EventTriggerType, isCurrentAppRoute, parseIntOrNull } from '../../../static/frontendHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoButton } from '../../controls/EpistoButton';
+import { EpistoDiv } from '../../controls/EpistoDiv';
 import { EpistoEntry } from '../../controls/EpistoEntry';
 import { EpistoEntryNew, useEpistoEntryState } from '../../controls/EpistoEntryNew';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
@@ -270,7 +271,7 @@ export const AdminEditUserControl = ({
                 background="grey"
                 my="10px" />
 
-            <Box
+            <EpistoDiv
                 className='roundBorders'
                 flex="1"
                 p="0 10px 10px 10px"
@@ -360,7 +361,7 @@ export const AdminEditUserControl = ({
                         </EpistoFont>
                     </EpistoFlex2>
                 </EditSection>
-            </Box>
+            </EpistoDiv>
         </EpistoFlex2>
 
         {/* access management */}

@@ -1,6 +1,6 @@
-import { Box } from '@chakra-ui/react';
 import { ReactNode } from 'react';
 import { PropsWithChildren } from '../../static/frontendHelpers';
+import { EpistoDiv } from '../controls/EpistoDiv';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 
 export const FullscreenOverlay = ({
@@ -20,12 +20,12 @@ export const FullscreenOverlay = ({
 
             {children}
 
-            {visible && <Box
+            {visible && <EpistoDiv
                 className="whall"
                 pos="absolute"
                 zIndex={visible ? 1000 : undefined}>
 
-                <Box
+                <EpistoDiv
                     id="Background"
                     className="whall"
                     position="absolute"
@@ -33,7 +33,7 @@ export const FullscreenOverlay = ({
                     opacity="0.4" />
 
                 {overlayContent}
-            </Box>}
+            </EpistoDiv>}
         </EpistoFlex2>
     );
 };

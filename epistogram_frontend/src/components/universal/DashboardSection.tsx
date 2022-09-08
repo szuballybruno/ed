@@ -1,9 +1,9 @@
-import { FlexProps } from '@chakra-ui/react';
 import { EpistoHeader } from '../EpistoHeader';
 import { FlexFloat } from '../controls/FlexFloat';
 import {ReactNode} from 'react';
+import { EpistoFlex2Props } from '../controls/EpistoFlex';
 
-export const DashboardSection = (props: FlexProps & {
+export const DashboardSection = (props: EpistoFlex2Props & {
     title: string,
     variant?: 'noShadow' | 'normal',
     showDivider?: boolean,

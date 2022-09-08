@@ -1,4 +1,4 @@
-import {Box, Grid} from '@chakra-ui/react';
+import { Grid} from '@chakra-ui/react';
 import {Slider} from '@mui/material';
 import {useEffect, useState} from 'react';
 import {PrequizApiService} from '../../../services/api/prequizApiService';
@@ -16,6 +16,7 @@ import {QuestionAnswer} from '../../exam/QuestionAnswer';
 import {CourseApiService} from '../../../services/api/courseApiService';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
+import { EpistoDiv } from '../../controls/EpistoDiv';
 
 export const PrequizSubpage = () => {
 
@@ -135,7 +136,7 @@ export const PrequizSubpage = () => {
                                 {question.minLabel}
                             </EpistoFont>
 
-                            <Box width="80px" />
+                            <EpistoDiv width="80px" />
 
                             <EpistoFont>
                                 {question.maxLabel}

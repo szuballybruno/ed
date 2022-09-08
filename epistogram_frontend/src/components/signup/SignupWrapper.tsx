@@ -1,9 +1,10 @@
-import { Box, useMediaQuery } from '@chakra-ui/react';
+import { useMediaQuery } from '@chakra-ui/react';
 import { ArrowBack } from '@mui/icons-material';
 import React, { ReactNode } from 'react';
 import { Environment } from '../../static/Environemnt';
 import { hasValue, isString, useIsDesktopView } from '../../static/frontendHelpers';
 import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoDiv } from '../controls/EpistoDiv';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoImage } from '../controls/EpistoImage';
@@ -155,7 +156,7 @@ export const SignupWrapper = (props: {
                     </EpistoHeader>}
 
                     {/* description */}
-                    {hasDescription && <Box maxWidth="400px">
+                    {hasDescription && <EpistoDiv maxWidth="400px">
                         {
                             isString(description!)
                                 ? <EpistoFont
@@ -165,7 +166,7 @@ export const SignupWrapper = (props: {
                                 </EpistoFont>
                                 : description
                         }
-                    </Box>}
+                    </EpistoDiv>}
 
                     {/* content */}
                     <EpistoFlex2 justify={hasImage ? 'flex-start' : 'center'}>
@@ -206,11 +207,11 @@ export const SignupWrapper = (props: {
                 <ArrowBack />
             </EpistoButton>}
 
-            <Box id="footerBox"
+            <EpistoDiv id="footerBox"
                 flex="1"
                 mx="20">
                 {props.bottomComponent}
-            </Box>
+            </EpistoDiv>
 
             {/* next button */}
             {onNext && <EpistoButton

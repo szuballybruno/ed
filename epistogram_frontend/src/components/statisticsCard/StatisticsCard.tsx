@@ -1,7 +1,7 @@
-import { Box } from '@chakra-ui/react';
 import { ArrowDropDown, ArrowDropUp, ArrowRight, FiberManualRecord, Fullscreen, FullscreenExit, Lock } from '@mui/icons-material';
 import React, { useState } from 'react';
 import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoDiv } from '../controls/EpistoDiv';
 import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { FlexFloat } from '../controls/FlexFloat';
@@ -217,7 +217,7 @@ const StatisticsCard = (props: StatisticsCardProps & EpistoFlex2Props) => {
         </EpistoButton>}
 
         {/* open / close button */}
-        {children && <Box position="absolute">
+        {children && <EpistoDiv position="absolute">
             <EpistoButton
                 style={{
                     alignSelf: 'flex-start'
@@ -228,7 +228,7 @@ const StatisticsCard = (props: StatisticsCardProps & EpistoFlex2Props) => {
 
                 {isOpen ? <FullscreenExit /> : <Fullscreen />}
             </EpistoButton>
-        </Box>}
+        </EpistoDiv>}
     </FlexFloat>;
 };
 

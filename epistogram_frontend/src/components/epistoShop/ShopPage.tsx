@@ -1,4 +1,4 @@
-import { Box, GridItem, useMediaQuery } from '@chakra-ui/react';
+import { GridItem, useMediaQuery } from '@chakra-ui/react';
 import { Select, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { useState } from 'react';
 import { useCoinBalance } from '../../services/api/coinTransactionsApiService';
@@ -7,6 +7,7 @@ import { ShopItemDTO } from '../../shared/dtos/ShopItemDTO';
 import { Id } from '../../shared/types/versionId';
 import { translatableTexts } from '../../static/translatableTexts';
 import { ContentPane } from '../ContentPane';
+import { EpistoDiv } from '../controls/EpistoDiv';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoGrid } from '../controls/EpistoGrid';
@@ -186,7 +187,7 @@ export const ShopPage = () => {
                 </EpistoFlex2>
 
                 {/* shop items */}
-                {hasItems && <Box
+                {hasItems && <EpistoDiv
                     id="scrollContainer"
                     className="whall">
 
@@ -207,7 +208,7 @@ export const ShopPage = () => {
                                 </GridItem>;
                             })}
                     </EpistoGrid>
-                </Box>}
+                </EpistoDiv>}
 
                 {!hasItems && <EpistoFlex2 className="whall">
                     <EpistoFont>

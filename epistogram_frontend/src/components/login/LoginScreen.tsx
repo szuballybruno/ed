@@ -1,4 +1,3 @@
-import { Box } from '@chakra-ui/layout';
 import React, { useContext, useEffect, useState } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { AuthenticationStateType, useLogInUser } from '../../services/api/authenticationApiService';
@@ -10,6 +9,7 @@ import { useIsScreenWiderThan } from '../../static/frontendHelpers';
 import { useQueryVal } from '../../static/locationHelpers';
 import { Logger } from '../../static/Logger';
 import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoDiv } from '../controls/EpistoDiv';
 import { EpistoEntry } from '../controls/EpistoEntry';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
@@ -226,7 +226,7 @@ const LoginScreen = () => {
 
                         </EpistoFlex2>
 
-                        <Box width="100%">
+                        <EpistoDiv width="100%">
 
                             <EpistoEntry
                                 inputRef={emailRef}
@@ -267,7 +267,7 @@ const LoginScreen = () => {
                             <EpistoFont style={{ color: 'var(--mildRed)' }}>
                                 {errorMessage}
                             </EpistoFont>
-                        </Box>
+                        </EpistoDiv>
 
                         <EpistoButton
                             variant="colored"

@@ -1,4 +1,4 @@
-import { Box } from '@chakra-ui/react';
+import { EpistoDiv } from '../controls/EpistoDiv';
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -20,12 +20,12 @@ export function TabPanel(props: TabPanelProps) {
             style={style}
             {...other}>
             {value === index && (
-                <Box
+                <EpistoDiv
                     flex='1'
                     sx={{ p: 3, width: '100%', height: '100%' }}>
 
                     {children}
-                </Box>
+                </EpistoDiv>
             )}
         </div>
     );

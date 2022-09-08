@@ -1,7 +1,7 @@
-import { Box } from '@chakra-ui/layout';
 import { Player } from '@lottiefiles/react-lottie-player';
 import { Environment } from '../static/Environemnt';
 import { EpistoButton } from './controls/EpistoButton';
+import { EpistoDiv } from './controls/EpistoDiv';
 import { EpistoFlex2 } from './controls/EpistoFlex';
 import { EpistoFont } from './controls/EpistoFont';
 import { EpistoDialog } from './universal/epistoDialog/EpistoDialog';
@@ -29,7 +29,7 @@ export const CoinRewardDialog = (props: {
             pb="40px"
             px="80px">
 
-            <Box
+            <EpistoDiv
                 pos="relative"
                 width="300px"
                 height="300px">
@@ -39,7 +39,7 @@ export const CoinRewardDialog = (props: {
                     loop
                     src={Environment.getAssetUrl(lottiePath)}
                     style={{ position: 'absolute', width: '100%', height: '100%' }} />
-            </Box>
+            </EpistoDiv>
 
             <EpistoFont
                 color="fontDark">

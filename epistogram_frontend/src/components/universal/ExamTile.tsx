@@ -1,6 +1,7 @@
-import { Box, css, Text } from '@chakra-ui/react';
+import { css, Text } from '@chakra-ui/react';
 import { Environment } from '../../static/Environemnt';
 import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoDiv } from '../controls/EpistoDiv';
 import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 
@@ -69,18 +70,18 @@ export const ExamTile = (props: {
         {/* image  */}
         <EpistoFlex2 direction={'column'}>
 
-            <Box
+            <EpistoDiv
                 flex="1"
                 position="relative"
                 minH={200}
                 maxH={200}>
 
-                <Box
+                <EpistoDiv
                     position="relative"
                     className="whall"
                     minHeight="150px">
 
-                    <Box
+                    <EpistoDiv
                         position="absolute"
                         top="0"
                         height="100%"
@@ -103,12 +104,12 @@ export const ExamTile = (props: {
                             <ExamTileResultLabel />
                             <ExamTileTopPercentLabel />
                         </EpistoFlex2>
-                    </Box>
-                </Box>
-            </Box>
+                    </EpistoDiv>
+                </EpistoDiv>
+            </EpistoDiv>
 
             {/* title */}
-            <Box
+            <EpistoDiv
                 flexBasis="80px"
                 zIndex={1}>
 
@@ -227,7 +228,7 @@ export const ExamTile = (props: {
                         </EpistoFlex2>
                     </EpistoFlex2>
                 </EpistoFlex2>
-            </Box>
+            </EpistoDiv>
         </EpistoFlex2>
 
         <EpistoFlex2

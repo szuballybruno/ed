@@ -1,4 +1,3 @@
-import {Box} from '@chakra-ui/react';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
@@ -9,6 +8,7 @@ import {PlaylistItemDTO} from '../../shared/dtos/PlaylistItemDTO';
 import {PlaylistModuleDTO} from '../../shared/dtos/PlaylistModuleDTO';
 import {Id} from '../../shared/types/versionId';
 import {EpistoButton} from '../controls/EpistoButton';
+import { EpistoDiv } from '../controls/EpistoDiv';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import {EpistoFont} from '../controls/EpistoFont';
 import {CollapseItem} from '../universal/CollapseItem';
@@ -142,7 +142,7 @@ export const Playlist = (props: {
                             </EpistoFlex2>
 
                             {/* play */}
-                            <Box width="50px">
+                            <EpistoDiv width="50px">
 
                                 {isStartable && <EpistoButton
                                     padding="3px"
@@ -151,7 +151,7 @@ export const Playlist = (props: {
 
                                     <PlayArrowIcon style={{ color: 'var(--epistoTeal)' }} />
                                 </EpistoButton>}
-                            </Box>
+                            </EpistoDiv>
                         </EpistoFlex2>}>
 
                         <FlexList

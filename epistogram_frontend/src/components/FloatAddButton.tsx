@@ -1,8 +1,8 @@
-import { Box } from '@chakra-ui/layout';
 import { Add } from '@mui/icons-material';
 import { EpistoButton } from './controls/EpistoButton';
+import { EpistoDiv } from './controls/EpistoDiv';
 
-export const FloatAddButton = (props: { onClick: () => void }) => <Box position="absolute"
+export const FloatAddButton = (props: { onClick: () => void }) => <EpistoDiv position="absolute"
 bottom="45"
 right="45">
     <EpistoButton
@@ -13,4 +13,4 @@ right="45">
         onClick={props.onClick}>
         <Add />
     </EpistoButton>
-</Box>;
+</EpistoDiv>;

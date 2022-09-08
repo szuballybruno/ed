@@ -1,20 +1,19 @@
 import { LinearProgress, LinearProgressProps } from '@mui/material';
-import Box from '@mui/material/Box';
-import React from 'react';
+import { EpistoDiv } from '../controls/EpistoDiv';
 import { EpistoFont } from '../controls/EpistoFont';
 
 export const LinearProgressWithLabel = (props: LinearProgressProps & { value: number }) => {
-    return <Box >
-        <Box width="100%"
-mr={1} >
+    return <EpistoDiv >
+        <EpistoDiv width="100%"
+            mr={1} >
             <LinearProgress variant={'determinate'}
-{...props} />
-        </Box>
-        < Box minWidth={35}>
+                {...props} />
+        </EpistoDiv>
+        <EpistoDiv minWidth={35}>
 
             <EpistoFont fontSize={'fontNormal14'}>
                 {`${Math.round(props.value)}%`}
             </EpistoFont>
-        </Box>
-    </Box>;
+        </EpistoDiv>
+    </EpistoDiv>;
 };

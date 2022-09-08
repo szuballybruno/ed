@@ -1,6 +1,6 @@
-import { Box, BoxProps } from '@chakra-ui/layout';
 import { Edit } from '@mui/icons-material';
 import { useRef, useState } from 'react';
+import { EpistoDiv, EpistoDivProps } from '../controls/EpistoDiv';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoImage } from '../controls/EpistoImage';
 import { HiddenFileUploadInput } from './HiddenFileUploadInput';
@@ -17,12 +17,12 @@ export const EpistoImageSelector = ({
     setImageFile: (file: File) => void,
     src?: string,
     isInteractionBlocked?: boolean
-} & BoxProps) => {
+} & EpistoDivProps) => {
 
     const [isHovered, setIsHovered] = useState(false);
     const fileBrowseInputRef = useRef<HTMLInputElement>(null);
 
-    return <Box
+    return <EpistoDiv
         position="relative"
         overflow="hidden"
         cursor="pointer"
@@ -64,5 +64,5 @@ export const EpistoImageSelector = ({
 
             <Edit />
         </EpistoFlex2>
-    </Box>;
+    </EpistoDiv>;
 };

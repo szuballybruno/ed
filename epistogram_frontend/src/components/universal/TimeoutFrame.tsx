@@ -1,5 +1,5 @@
-import { Box } from '@chakra-ui/layout';
 import { ReactTimerType } from '../../helpers/reactTimer';
+import { EpistoDiv } from '../controls/EpistoDiv';
 import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 
 export const TimeoutFrame = (props: { reactTimer: ReactTimerType } & EpistoFlex2Props) => {
@@ -22,7 +22,7 @@ export const TimeoutFrame = (props: { reactTimer: ReactTimerType } & EpistoFlex2
         onMouseLeave={() => resumeTimeout()}
         {...css}>
 
-        <Box
+        <EpistoDiv
             position="absolute"
             top="0"
             className="whall pauseAnimation"
@@ -34,8 +34,8 @@ export const TimeoutFrame = (props: { reactTimer: ReactTimerType } & EpistoFlex2
                 animationPlayState: reactTimer.isRunning ? 'running' : 'paused'
             }} />
 
-        <Box position="relative">
+        <EpistoDiv position="relative">
             {children}
-        </Box>
+        </EpistoDiv>
     </EpistoFlex2>;
 };

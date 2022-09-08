@@ -1,7 +1,6 @@
-import { FlexProps } from '@chakra-ui/react';
-import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 
-export const FlexList = (props: FlexProps) => {
+export const FlexList = (props: EpistoFlex2Props) => {
 
     return <EpistoFlex2
         id="courseItemListContainer"

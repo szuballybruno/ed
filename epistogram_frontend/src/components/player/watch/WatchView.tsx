@@ -1,4 +1,3 @@
-import {Box} from '@chakra-ui/react';
 import {Divider} from '@mui/material';
 import {useCallback, useEffect, useState} from 'react';
 import {useReactTimer} from '../../../helpers/reactTimer';
@@ -35,6 +34,7 @@ import {PlaylistModuleDTO} from '../../../shared/dtos/PlaylistModuleDTO';
 import {Id} from '../../../shared/types/versionId';
 import {Logger} from '../../../static/Logger';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
+import { EpistoDiv } from '../../controls/EpistoDiv';
 
 const autoplayTimeoutInS = 3;
 
@@ -326,7 +326,7 @@ export const WatchView = (props: {
         </EpistoFlex2>
 
         {/* under video info */}
-        <Box
+        <EpistoDiv
             className="roundBorders largeSoftShadow"
             zIndex="10"
             mt="10px"
@@ -387,7 +387,7 @@ export const WatchView = (props: {
                 ]}>
 
             </EpistoPaging>
-        </Box>
+        </EpistoDiv>
     </>;
 };
 

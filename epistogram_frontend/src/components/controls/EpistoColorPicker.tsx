@@ -1,7 +1,8 @@
-import { Box, BoxProps } from '@chakra-ui/layout';
+import { BoxProps } from '@chakra-ui/layout';
 import { useRef, useState } from 'react';
 import { SketchPicker } from 'react-color';
 import { EpistoButton } from './EpistoButton';
+import { EpistoDiv } from './EpistoDiv';
 import { EpistoPopper } from './EpistoPopper';
 
 export const EpistoColorPicker = ({
@@ -20,7 +21,7 @@ export const EpistoColorPicker = ({
 
     return <>
 
-        <Box
+        <EpistoDiv
             ref={ref}
             my="5px"
             {...boxProps}>
@@ -34,7 +35,7 @@ export const EpistoColorPicker = ({
                 }}>
                 {text ?? 'Pick color'}
             </EpistoButton>
-        </Box>
+        </EpistoDiv>
 
         <EpistoPopper
             isOpen={popperOpen}

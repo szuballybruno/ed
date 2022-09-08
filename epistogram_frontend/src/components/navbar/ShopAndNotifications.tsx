@@ -1,4 +1,3 @@
-import { Box } from '@chakra-ui/react';
 import { useRef, useState } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { useNavigation } from '../../services/core/navigatior';
@@ -6,6 +5,7 @@ import { Environment } from '../../static/Environemnt';
 
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoDiv } from '../controls/EpistoDiv';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { ProfileImage } from '../ProfileImage';
@@ -85,11 +85,11 @@ export const ShopAndNotifications = (props: {
                 </EpistoButton>
 
                 {/* vertical divider */}
-                <Box
+                <EpistoDiv
                     width="1px"
                     height="40px"
                     margin="0 10px 0 10px"
-                    bg="var(--mildGrey)"></Box>
+                    bg="var(--mildGrey)"></EpistoDiv>
 
                 {/* profile pic */}
                 {isAuthenticated && (

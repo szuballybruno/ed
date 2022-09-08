@@ -1,4 +1,3 @@
-import {Box} from '@chakra-ui/react';
 import {useEffect, useMemo, useState} from 'react';
 import {PlayerApiService} from '../../../services/api/PPlayerApiService';
 import {useNavigation} from '../../../services/core/navigatior';
@@ -19,6 +18,7 @@ import {applicationRoutes} from '../../../configuration/applicationRoutes';
 import {Logger} from '../../../static/Logger';
 import {useScrollIntoView} from '../../system/AutoScrollContext';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
+import { EpistoDiv } from '../../controls/EpistoDiv';
 
 export const WatchSubpage = () => {
 
@@ -178,7 +178,7 @@ export const WatchSubpage = () => {
                         height='calc(100% - 70px)'>
 
                         {/* main column */}
-                        <Box
+                        <EpistoDiv
                             id="mainColumn"
                             overflowY={videoPlayerData ? 'scroll' : 'unset'}
                             className="whall" >
@@ -211,7 +211,7 @@ export const WatchSubpage = () => {
                                 startModule={handleContinueCourse} />}
 
                             <Copyright />
-                        </Box>
+                        </EpistoDiv>
 
                         {/* right sidebar */}
                         <EpistoFlex2

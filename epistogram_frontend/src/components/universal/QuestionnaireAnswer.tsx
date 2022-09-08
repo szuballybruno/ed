@@ -1,6 +1,6 @@
-import { Box, BoxProps } from '@chakra-ui/react';
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoDiv, EpistoDivProps } from '../controls/EpistoDiv';
 
 export const QuestionnaierAnswer = (props: {
     children: ReactNode,
@@ -8,7 +8,7 @@ export const QuestionnaierAnswer = (props: {
     isSelected: boolean,
     isIncorrect: boolean,
     isCorrect: boolean
-} & BoxProps) => {
+} & EpistoDivProps) => {
 
     const { children, onClick, isSelected, isIncorrect, isCorrect, ...css } = props;
 
@@ -29,7 +29,7 @@ export const QuestionnaierAnswer = (props: {
         return { bg: 'white', fg: 'black' };
     })();
 
-    return <Box {...css}>
+    return <EpistoDiv {...css}>
         <EpistoButton
             className="whall tinyShadow"
             variant="outlined"
@@ -41,5 +41,5 @@ export const QuestionnaierAnswer = (props: {
             }}>
             {children}
         </EpistoButton>
-    </Box>;
+    </EpistoDiv>;
 };

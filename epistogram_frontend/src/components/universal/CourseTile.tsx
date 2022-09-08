@@ -1,8 +1,9 @@
-import { Box, Text } from '@chakra-ui/react';
+import { Text } from '@chakra-ui/react';
 import { AvailableCourseDTO } from '../../shared/dtos/AvailableCourseDTO';
 import { Environment } from '../../static/Environemnt';
 import { formatTimespan } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
+import { EpistoDiv } from '../controls/EpistoDiv';
 import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { FlexFloat } from '../controls/FlexFloat';
@@ -31,7 +32,7 @@ const CourseTile = (props: {
         {...css}>
 
         {/* cover image box  */}
-        <Box flex="1"
+        <EpistoDiv flex="1"
             position="relative"
             minH={150}
             maxH={150}>
@@ -77,7 +78,7 @@ const CourseTile = (props: {
                     </Text>
                 </EpistoFlex2>
             </EpistoFlex2>}
-        </Box>
+        </EpistoDiv>
 
         {/* content  */}
         <EpistoFlex2 p="10px"

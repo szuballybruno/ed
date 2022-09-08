@@ -1,10 +1,11 @@
-import { Box, Text } from '@chakra-ui/react';
+import { Text } from '@chakra-ui/react';
 import { LinearProgress } from '@mui/material';
 import React from 'react';
 import { CourseLearningDTO } from '../../shared/dtos/CourseLearningDTO';
 import { Environment } from '../../static/Environemnt';
 import { formatTimespan, roundNumber } from '../../static/frontendHelpers';
 import { EpistoButton, EpistoButtonPropsType } from '../controls/EpistoButton';
+import { EpistoDiv } from '../controls/EpistoDiv';
 import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { FlexFloat } from '../controls/FlexFloat';
@@ -46,7 +47,7 @@ export const LearningCourseStatsTile = (props: {
         {...css}>
 
         {/* cover image box */}
-        <Box
+        <EpistoDiv
             flex="1"
             position="relative"
             minHeight={150}
@@ -96,7 +97,7 @@ export const LearningCourseStatsTile = (props: {
                     </Text>
                 </EpistoFlex2>
             </EpistoFlex2>}
-        </Box>
+        </EpistoDiv>
 
         {/* content */}
         <EpistoFlex2 p="10px"

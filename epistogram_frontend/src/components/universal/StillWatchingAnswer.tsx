@@ -1,19 +1,19 @@
-import { Box, BoxProps } from '@chakra-ui/react';
 import React, { ReactNode } from 'react';
+import { EpistoDiv, EpistoDivProps } from '../controls/EpistoDiv';
 
 export const StillWatchingAnswer = (props: {
     children: ReactNode,
     onClick: () => void,
     isIncorrect: boolean,
     isCorrect: boolean
-} & BoxProps) => {
+} & EpistoDivProps) => {
 
     const { children, onClick, isIncorrect, isCorrect, ...css } = props;
 
-    return <Box {...css}>
+    return <EpistoDiv {...css}>
         <div
             onClick={() => onClick()}>
             {children}
         </div>
-    </Box>;
+    </EpistoDiv>;
 };

@@ -1,4 +1,3 @@
-import { Box, BoxProps } from '@chakra-ui/react';
 import FastForwardIcon from '@mui/icons-material/FastForward';
 import FastRewindIcon from '@mui/icons-material/FastRewind';
 import PauseIcon from '@mui/icons-material/Pause';
@@ -8,6 +7,7 @@ import ReactPlayer from 'react-player';
 import screenfull from 'screenfull';
 import { readVolumeSettings, writeVolumeSettings } from '../../../services/core/storageService';
 import { VideoPlayerDataDTO } from '../../../shared/dtos/VideoDTO';
+import { EpistoDiv, EpistoDivProps } from '../../controls/EpistoDiv';
 import { EpistoReactPlayer } from '../../controls/EpistoReactPlayer';
 import { AbsoluteFlexOverlay } from './AbsoluteFlexOverlay';
 import { VideoControls } from './VideoControls';
@@ -212,7 +212,7 @@ export type VideoPlayerStateType = ReturnType<typeof useVideoPlayerState>;
 export const VideoPlayer = (props: {
     videoItem: VideoPlayerDataDTO,
     videoPlayerState: VideoPlayerStateType
-} & BoxProps) => {
+} & EpistoDivProps) => {
 
     const { videoPlayerState, children, videoItem, ...css } = props;
     const {
@@ -247,14 +247,14 @@ export const VideoPlayer = (props: {
     const marks = [maxWatchedSeconds];
 
     return (
-        <Box
+        <EpistoDiv
             id="fullScreenRoot"
             position="relative"
             ref={playerContainerRef}
             {...css}>
 
             {/* playback */}
-            <Box
+            <EpistoDiv
                 id="playbackWrapper"
                 filter={isShowingOverlay ? 'blur(4px)' : 'blur(0px)'}
                 transition="0.3s"
@@ -262,7 +262,7 @@ export const VideoPlayer = (props: {
                 className="whall">
 
                 {/* video wrapper */}
-                <Box
+                <EpistoDiv
                     id="videoWrapper"
                     className="whall"
                     // pt="56.25%" // to keep 16:9 ratio
@@ -308,7 +308,7 @@ export const VideoPlayer = (props: {
                         }}
                         loop={false}
                         onEnded={handleOnVideoEnded} />
-                </Box>
+                </EpistoDiv>
 
                 {/* video controls */}
                 <VideoControls
@@ -327,7 +327,7 @@ export const VideoPlayer = (props: {
                     toggleShouldBePlaying={toggleShouldBePlaying}
                     setVolume={setVolume} />
 
-            </Box>
+            </EpistoDiv>
 
             {/* visual overlay */}
             <AbsoluteFlexOverlay isVisible={isVisualOverlayVisible}>
@@ -338,6 +338,6 @@ export const VideoPlayer = (props: {
             </AbsoluteFlexOverlay>
 
             {children}
-        </Box>
+        </EpistoDiv>
     );
 };

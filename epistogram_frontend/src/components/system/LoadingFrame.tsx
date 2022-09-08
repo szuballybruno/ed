@@ -1,10 +1,10 @@
-import { FlexProps, Text} from '@chakra-ui/react';
+import { Text} from '@chakra-ui/react';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import {LinearProgress} from '@mui/material';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {LoadingStateType} from '../../models/types';
 import {isArray} from '../../static/frontendHelpers';
-import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 import {EpistoHeader} from '../EpistoHeader';
 
 type ErrorType = any | any[];
@@ -15,7 +15,7 @@ export type LoadingFramePropsType = {
     onlyRenderIfLoaded?: boolean
 };
 
-export const LoadingFrame = (props: FlexProps & LoadingFramePropsType) => {
+export const LoadingFrame = (props: EpistoFlex2Props & LoadingFramePropsType) => {
 
     const {
         loadingState,

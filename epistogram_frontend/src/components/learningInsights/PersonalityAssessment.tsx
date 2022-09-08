@@ -1,5 +1,4 @@
-import { FlexProps } from '@chakra-ui/layout';
-import { Accordion, AccordionButton, AccordionItem, AccordionPanel, AccordionIcon, Box } from '@chakra-ui/react';
+import { Accordion, AccordionButton, AccordionItem, AccordionPanel, AccordionIcon } from '@chakra-ui/react';
 import { InfoOutlined } from '@mui/icons-material';
 import React, { useRef, useState } from 'react';
 import { usePersonalityData } from '../../services/api/signupApiService';
@@ -9,9 +8,10 @@ import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoPopper } from '../controls/EpistoPopper';
 import { PersonalityChart } from '../universal/charts/PersonalityChart';
 import { EpistoFont } from '../controls/EpistoFont';
-import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
+import { EpistoDiv } from '../controls/EpistoDiv';
 
-export const PersonalityAssessment = (props: FlexProps) => {
+export const PersonalityAssessment = (props: EpistoFlex2Props) => {
 
     const { ...css } = props;
 
@@ -173,12 +173,12 @@ export const PersonalityAssessment = (props: FlexProps) => {
                                 {/* header */}
                                 <AccordionButton>
 
-                                    <Box flex='1'
+                                    <EpistoDiv flex='1'
                                         fontWeight="500"
                                         fontSize="15px"
                                         textAlign='left'>
                                         {item.title}
-                                    </Box>
+                                    </EpistoDiv>
 
                                     <AccordionIcon />
                                 </AccordionButton>

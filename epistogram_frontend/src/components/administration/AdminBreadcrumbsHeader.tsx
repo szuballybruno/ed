@@ -1,4 +1,4 @@
-import {Box, Flex} from '@chakra-ui/react';
+import { Flex} from '@chakra-ui/react';
 import {GridOn, List} from '@mui/icons-material';
 import {FormControl, FormGroup, Switch} from '@mui/material';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
@@ -12,6 +12,7 @@ import {UserApiService} from '../../services/api/userApiService';
 import {getKeys} from '../../shared/logic/sharedLogic';
 import {Id} from '../../shared/types/versionId';
 import {ArrayBuilder, useIsMatchingCurrentRoute} from '../../static/frontendHelpers';
+import { EpistoDiv } from '../controls/EpistoDiv';
 import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 import {EpistoFont} from '../controls/EpistoFont';
 
@@ -59,7 +60,7 @@ export const BreadcrumbLink = (props: {
     const { route, title, iconComponent, isCurrent } = props;
     const isLink = !isCurrent && route;
 
-    return <Box>
+    return <EpistoDiv>
 
         {isLink
             ? (
@@ -78,7 +79,7 @@ export const BreadcrumbLink = (props: {
                     isCurrent={isCurrent}
                     title={title} />
             )}
-    </Box>;
+    </EpistoDiv>;
 };
 
 export type BreadcrumbDataType = {

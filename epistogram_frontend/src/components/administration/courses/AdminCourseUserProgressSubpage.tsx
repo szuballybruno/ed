@@ -1,7 +1,8 @@
-import { Box, CircularProgress, CircularProgressProps } from '@mui/material';
+import { CircularProgress, CircularProgressProps } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { getRandomInteger } from '../../../static/frontendHelpers';
+import { EpistoDiv } from '../../controls/EpistoDiv';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { CourseAdministartionFrame } from './CourseAdministartionFrame';
@@ -11,10 +12,10 @@ export const CircularProgressWithLabel = (
     props: CircularProgressProps & { value: number },
 ) => {
     return (
-        <Box sx={{ position: 'relative', display: 'inline-flex' }}>
+        <EpistoDiv sx={{ position: 'relative', display: 'inline-flex' }}>
             <CircularProgress variant="determinate"
                 {...props} />
-            <Box
+            <EpistoDiv
                 sx={{
                     top: 0,
                     left: 0,
@@ -29,8 +30,8 @@ export const CircularProgressWithLabel = (
                 <EpistoFont>
                     {`${Math.round(props.value)}%`}
                 </EpistoFont>
-            </Box>
-        </Box>
+            </EpistoDiv>
+        </EpistoDiv>
     );
 };
 

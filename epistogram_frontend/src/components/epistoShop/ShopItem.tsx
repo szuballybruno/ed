@@ -1,4 +1,3 @@
-import { Box } from '@chakra-ui/react';
 import { Done, LocalOffer } from '@mui/icons-material';
 import React from 'react';
 import { ShopItemDTO } from '../../shared/dtos/ShopItemDTO';
@@ -10,6 +9,7 @@ import { FlexFloat } from '../controls/FlexFloat';
 import { EpistoFont } from '../controls/EpistoFont';
 import { Environment } from '../../static/Environemnt';
 import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
+import { EpistoDiv } from '../controls/EpistoDiv';
 
 export const ShopItem = (props: {
     shopItem: ShopItemDTO,
@@ -47,7 +47,7 @@ export const ShopItem = (props: {
         {...css}>
 
         {/* cover image box */}
-        <Box flex="7"
+        <EpistoDiv flex="7"
             position="relative"
             minH={150}
             maxH={150}>
@@ -119,10 +119,10 @@ export const ShopItem = (props: {
                 </EpistoFlex2>
 
             </EpistoFlex2>} */}
-        </Box>
+        </EpistoDiv>
 
         {/* title */}
-        <Box flex="3"
+        <EpistoDiv flex="3"
             flexBasis="80px"
             zIndex={1}>
 
@@ -147,7 +147,7 @@ export const ShopItem = (props: {
                     {name}
                 </EpistoFont>
             </EpistoFlex2>
-        </Box>
+        </EpistoDiv>
 
         {/* prices */}
         {!isPurchased &&

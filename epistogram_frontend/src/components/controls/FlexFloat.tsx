@@ -1,7 +1,6 @@
-import { FlexProps } from '@chakra-ui/react';
-import { EpistoFlex2 } from './EpistoFlex';
+import { EpistoFlex2, EpistoFlex2Props } from './EpistoFlex';
 
-export const FlexFloat = (props: FlexProps & { elevation?: number, variant?: 'normal' | 'rect' }) => {
+export const FlexFloat = (props: EpistoFlex2Props & { elevation?: number, variant?: 'normal' | 'rect' }) => {
 
     const { elevation, variant, ...flexProps } = props;
 

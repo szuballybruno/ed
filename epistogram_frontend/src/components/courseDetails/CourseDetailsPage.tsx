@@ -1,4 +1,4 @@
-import { Box, Container } from '@chakra-ui/react';
+import { Container } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { CourseApiService } from '../../services/api/courseApiService';
 import { useNavigation } from '../../services/core/navigatior';
@@ -12,6 +12,7 @@ import { useAdminCourseContentDialogLogic } from '../administration/users/adminC
 import { AdminUserCourseContentDialog } from '../administration/users/adminCourseContentDialog/AdminUserCourseContentDialog';
 import { ContentPane } from '../ContentPane';
 import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoDiv } from '../controls/EpistoDiv';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoTab, EpistoTabs } from '../controls/EpistoTabs';
@@ -209,7 +210,7 @@ const CourseDetailsPage = () => {
 
 
                         {/* tab button headers */}
-                        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                        <EpistoDiv sx={{ borderBottom: 1, borderColor: 'divider' }}>
                             <EpistoTabs
                                 // className="roundBorders"
                                 // TabIndicatorProps={{
@@ -257,7 +258,7 @@ const CourseDetailsPage = () => {
                                         // }}
                                         label={x.title} />)}
                             </EpistoTabs>
-                        </Box>
+                        </EpistoDiv>
 
                         <EpistoFlex2 flex="1">
                             { /* tab contents */}
