@@ -1,4 +1,4 @@
-import { Grid, Image } from '@chakra-ui/react';
+import { Grid } from '@chakra-ui/react';
 import { CourseApiService } from '../../../services/api/courseApiService';
 import { PretestApiService } from '../../../services/api/pretestApiService';
 import { useNavigation } from '../../../services/core/navigatior';
@@ -10,6 +10,7 @@ import { useIntParam } from '../../../static/locationHelpers';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
+import { EpistoImage } from '../../controls/EpistoImage';
 import StatisticsCard from '../../statisticsCard/StatisticsCard';
 import { LoadingFrame } from '../../system/LoadingFrame';
 
@@ -23,7 +24,7 @@ export const PretestDateInfo = (props: {
         mx='30px'
         my="10px">
 
-        <Image
+        <EpistoImage
             h="30px"
             w="30px"
             mr="10px"

@@ -1,9 +1,9 @@
-import { Image } from '@chakra-ui/image';
 import { memo } from 'react';
 import { CourseAdminListItemDTO } from '../../../shared/dtos/admin/CourseAdminListItemDTO';
 import { Id } from '../../../shared/types/versionId';
 import { useIntParam } from '../../../static/locationHelpers';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
+import { EpistoImage } from '../../controls/EpistoImage';
 import { EpistoSearch } from '../../controls/EpistoSearch';
 import { ForceNoOverflowY } from '../../controls/ForceNoOverflowY';
 import { FlexList } from '../../universal/FlexList';
@@ -50,7 +50,7 @@ export const AdminCourseList = memo((props: {
                 {courses
                     .map((course, index) => {
 
-                        return <Image
+                        return <EpistoImage
                             title={course.title}
                             key={index}
                             onClick={() => onCourseClick(course.courseId)}

@@ -1,4 +1,3 @@
-import { Image } from '@chakra-ui/react';
 import { Add } from '@mui/icons-material';
 import { LinearProgress } from '@mui/material';
 import { useState } from 'react';
@@ -16,6 +15,7 @@ import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { EpistoGrid } from '../../controls/EpistoGrid';
+import { EpistoImage } from '../../controls/EpistoImage';
 import { FlexFloat } from '../../controls/FlexFloat';
 import { NoProgressChartYet } from '../../home/NoProgressChartYet';
 import { LearningCourseStatsTile } from '../../learningInsights/LearningCourseStatsTile';
@@ -188,7 +188,7 @@ export const AdminUserStatisticsSubpage = (props: {
                                 flex="1"
                                 position="relative">
 
-                                <Image
+                                <EpistoImage
                                     h={'120px'}
                                     w={'120px'}
                                     src={Environment.getAssetUrl('/images/happyfacechart.png')} />

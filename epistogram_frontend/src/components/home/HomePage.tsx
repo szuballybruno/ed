@@ -1,4 +1,3 @@
-import { Flex } from '@chakra-ui/layout';
 import { useMediaQuery } from '@chakra-ui/react';
 import { ArrowBack, ArrowForward, FiberManualRecord } from '@mui/icons-material';
 import { useState } from 'react';
@@ -122,7 +121,7 @@ const HomePage = () => {
                         m="0 5px 10px 0"
                         flex="3 3 550px">
 
-                        <PractiseQuestions setCoinsAcquired={setCoinsAcquired}  />
+                        <PractiseQuestions setCoinsAcquired={setCoinsAcquired} />
                     </DashboardSection>
 
                     {/* tip of the day */}
@@ -150,31 +149,31 @@ const HomePage = () => {
                     flex='1'
                     justify='center'
                     headerContent={
-                        <Flex
-                        flex='1'
-                        h="30px"
-                        align="center"
-                        justify="flex-end">
+                        <EpistoFlex2
+                            flex='1'
+                            h="30px"
+                            align="center"
+                            justify="flex-end">
 
-                        <EpistoButton onClick={() => activeCoursesPaging.previous()}>
-                        <ArrowBack />
-                        </EpistoButton>
+                            <EpistoButton onClick={() => activeCoursesPaging.previous()}>
+                                <ArrowBack />
+                            </EpistoButton>
 
-                    {activeCoursesPaging
-                        .items
-                        .map((x, index) => <FiberManualRecord
-                        key={index}
-                        style={{
-                        width: '10px',
-                        height: '8px',
-                        color: index === activeCoursesPaging.currentIndex ? 'black' : 'gray'
-                    }} />)}
+                            {activeCoursesPaging
+                                .items
+                                .map((x, index) => <FiberManualRecord
+                                    key={index}
+                                    style={{
+                                        width: '10px',
+                                        height: '8px',
+                                        color: index === activeCoursesPaging.currentIndex ? 'black' : 'gray'
+                                    }} />)}
 
-                        <EpistoButton onClick={() => activeCoursesPaging.next()}>
-                        <ArrowForward />
-                        </EpistoButton>
+                            <EpistoButton onClick={() => activeCoursesPaging.next()}>
+                                <ArrowForward />
+                            </EpistoButton>
 
-                        </Flex>}
+                        </EpistoFlex2>}
                     title={'Kurzus során nyújtott teljesítményed: ' + activeCoursesPaging.currentItem?.title}>
 
                     <HomePageCourseStats

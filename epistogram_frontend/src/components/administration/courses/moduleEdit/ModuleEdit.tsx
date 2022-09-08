@@ -1,10 +1,10 @@
-import { Image } from '@chakra-ui/react';
 import { MutableRefObject } from 'react';
 import { ModuleApiService } from '../../../../services/api/MModuleApiService';
 import { ModuleEditDTO } from '../../../../shared/dtos/ModuleEditDTO';
 import { Id } from '../../../../shared/types/versionId';
 import { EpistoEntry } from '../../../controls/EpistoEntry';
 import { EpistoFlex2 } from '../../../controls/EpistoFlex';
+import { EpistoImage } from '../../../controls/EpistoImage';
 import { EpistoLabel } from '../../../controls/EpistoLabel';
 import { IXMutator } from '../../../lib/XMutator/XMutatorCore';
 import { EpistoImageSelector } from '../../../universal/EpistoImageSelector';
@@ -45,7 +45,7 @@ export const ModuleEdit = ({
                         })}
                     setImageFile={file => saveCoverFile({ moduleVersionId: dto.versionId }, { file })}>
 
-                    {dto.imageFilePath && <Image
+                    {dto.imageFilePath && <EpistoImage
                         className="whall"
                         objectFit="cover"
                         src={dto.imageFilePath ?? ''} />}

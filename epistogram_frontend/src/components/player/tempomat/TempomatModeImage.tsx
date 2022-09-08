@@ -1,8 +1,8 @@
 import { CSSProperties } from 'react';
-import { Image } from '@chakra-ui/react';
 import { ClassBuilder, ClassBuilderCustomizationFnType } from '../../../helpers/classBuilder';
 import { TempomatModeType } from '../../../shared/types/sharedTypes';
 import { Environment } from '../../../static/Environemnt';
+import { EpistoImage } from '../../controls/EpistoImage';
 
 export const TempomatModeImage = (props: {
     isSmall?: boolean,
@@ -30,13 +30,13 @@ export const TempomatModeImage = (props: {
     })();
 
     return isSmall
-        ? <Image
+        ? <EpistoImage
             src={url}
             style={style}
             className={new ClassBuilder()
                 .customize(customizeFn)
                 .build()} />
-        : <Image
+        : <EpistoImage
             background={isSelected ? '#97c9cc50' : '#efefef'}
             border="none"
             cursor="pointer"

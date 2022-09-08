@@ -1,4 +1,3 @@
-import { Image } from '@chakra-ui/react';
 import { Slider } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
@@ -14,6 +13,7 @@ import { iterate } from '../../../static/frontendHelpers';
 import { useIntParam } from '../../../static/locationHelpers';
 import { EpistoEntry } from '../../controls/EpistoEntry';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
+import { EpistoImage } from '../../controls/EpistoImage';
 import { EpistoLabel } from '../../controls/EpistoLabel';
 import { EpistoSelect } from '../../controls/EpistoSelect';
 import { LoadingFrame } from '../../system/LoadingFrame';
@@ -219,7 +219,7 @@ export const EditCourseDetailsSubpage = () => {
                                     height="108px"
                                     setImageFile={setThumbnailImageFile}
                                     setImageSource={setThumbnailSrc}>
-                                    <Image className="whall"
+                                    <EpistoImage className="whall"
                                         objectFit="cover"
                                         src={thumbnailSrc} />
                                 </EpistoImageSelector>

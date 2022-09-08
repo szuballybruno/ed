@@ -1,4 +1,3 @@
-import { Image } from '@chakra-ui/image';
 import { Checkbox, TextField } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
 import { applicationRoutes } from '../configuration/applicationRoutes';
@@ -12,6 +11,7 @@ import { translatableTexts } from '../static/translatableTexts';
 import { EpistoButton } from './controls/EpistoButton';
 import { EpistoFlex2 } from './controls/EpistoFlex';
 import { EpistoFont } from './controls/EpistoFont';
+import { EpistoImage } from './controls/EpistoImage';
 import { RefetchUserAsyncContext } from './system/AuthenticationFrame';
 import { LoadingFrame } from './system/LoadingFrame';
 
@@ -106,7 +106,7 @@ export const RegistrationPage = () => {
                 maxH={50}
                 my="25px"
                 justifyContent={'center'}>
-                <Image width="50%"
+                <EpistoImage width="50%"
                     src={Environment.getAssetUrl('/images/logo.svg')} />
             </EpistoFlex2>
 

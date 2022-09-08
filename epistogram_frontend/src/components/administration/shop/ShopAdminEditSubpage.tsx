@@ -1,4 +1,3 @@
-import { Image } from '@chakra-ui/react';
 import { Checkbox } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { CourseShopItemListDTO } from '../../../shared/dtos/CourseShopItemListDTO';
@@ -23,6 +22,7 @@ import { translatableTexts } from '../../../static/translatableTexts';
 import { useIntParam } from '../../../static/locationHelpers';
 import { Id } from '../../../shared/types/versionId';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
+import { EpistoImage } from '../../controls/EpistoImage';
 
 export const ShopAdminEditSubpage = () => {
 
@@ -227,7 +227,7 @@ export const ShopAdminEditSubpage = () => {
                         height="200px"
                         setImageFile={setCoverFileImage}
                         setImageSource={setCoverFilePath}>
-                        <Image
+                        <EpistoImage
                             className="whall"
                             objectFit="cover"
                             src={coverFilePath} />

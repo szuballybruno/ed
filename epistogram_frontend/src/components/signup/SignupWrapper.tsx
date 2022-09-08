@@ -1,4 +1,4 @@
-import { Box, Image, useMediaQuery } from '@chakra-ui/react';
+import { Box, useMediaQuery } from '@chakra-ui/react';
 import { ArrowBack } from '@mui/icons-material';
 import React, { ReactNode } from 'react';
 import { Environment } from '../../static/Environemnt';
@@ -6,6 +6,7 @@ import { hasValue, isString, useIsDesktopView } from '../../static/frontendHelpe
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
+import { EpistoImage } from '../controls/EpistoImage';
 import { EpistoHeader } from '../EpistoHeader';
 
 export const SignupWrapper = (props: {
@@ -72,7 +73,7 @@ export const SignupWrapper = (props: {
                 justify={'center'}
                 align={'center'}>
 
-                <Image maxH={50}
+                <EpistoImage maxH={50}
                     src={Environment.getAssetUrl('/images/logo.svg')} />
             </EpistoFlex2>
 
@@ -89,7 +90,7 @@ export const SignupWrapper = (props: {
                     justifyContent={'center'}
                     alignItems={'center'}>
 
-                    <Image maxH={80}
+                    <EpistoImage maxH={80}
                         src={Environment.getAssetUrl('/images/logo.svg')} />
                 </EpistoFlex2>
 
@@ -125,7 +126,7 @@ export const SignupWrapper = (props: {
                     height="400"
                     justifyContent={isDesktop ? 'flex-end' : 'center'}>
 
-                    <Image maxW={350}
+                    <EpistoImage maxW={350}
                         minWidth="300px"
                         maxH="300px"
                         height="100%"

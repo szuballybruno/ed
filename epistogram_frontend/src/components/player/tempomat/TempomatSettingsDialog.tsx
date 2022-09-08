@@ -1,4 +1,4 @@
-import { Divider, Image } from '@chakra-ui/react';
+import { Divider } from '@chakra-ui/react';
 import { useSetTempomatMode } from '../../../services/api/tempomatApiService';
 import { useShowErrorDialog } from '../../../services/core/notifications';
 import { TempomatModeType } from '../../../shared/types/sharedTypes';
@@ -7,6 +7,7 @@ import { Environment } from '../../../static/Environemnt';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
+import { EpistoImage } from '../../controls/EpistoImage';
 import { EpistoDialog, } from '../../universal/epistoDialog/EpistoDialog';
 import { EpistoDialogLogicType } from '../../universal/epistoDialog/EpistoDialogTypes';
 import { TempomatModeTile } from './TempomatModeTile';
@@ -126,7 +127,7 @@ export const TempomatSettingsDialog = (props: {
                         mx="10px"
                         align="center">
 
-                        <Image
+                        <EpistoImage
                             h="30px"
                             w="30px"
                             mr="5px"

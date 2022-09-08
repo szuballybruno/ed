@@ -1,9 +1,8 @@
-import { FlexProps } from '@chakra-ui/layout';
 import { Checkbox } from '@mui/material';
 import { forwardRef, ReactNode } from 'react';
-import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 
-type FlexListItemProps = FlexProps & {
+type FlexListItemProps = EpistoFlex2Props & {
     onClick?: () => void,
     isLocked?: boolean,
     thumbnailContent?: ReactNode,

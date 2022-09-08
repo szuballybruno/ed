@@ -1,7 +1,7 @@
-import { Image } from '@chakra-ui/image';
 import { forwardRef, useContext } from 'react';
 import { EpistoFlex2, EpistoFlex2Props } from './controls/EpistoFlex';
 import { EpistoFont } from './controls/EpistoFont';
+import { EpistoImage } from './controls/EpistoImage';
 import { CurrentUserContext } from './system/AuthenticationFrame';
 
 type ProfileImageProps = {
@@ -44,7 +44,7 @@ export const ProfileImage = forwardRef<HTMLDivElement, ProfileImageProps>((props
             justify="center"
             overflow="hidden">
 
-            <Image
+            <EpistoImage
                 border="none"
                 className="whall"
                 objectFit="cover"

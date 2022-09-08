@@ -1,8 +1,8 @@
-import { Image } from '@chakra-ui/image';
 import { Box, BoxProps } from '@chakra-ui/layout';
 import { Edit } from '@mui/icons-material';
 import { useRef, useState } from 'react';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { EpistoImage } from '../controls/EpistoImage';
 import { HiddenFileUploadInput } from './HiddenFileUploadInput';
 
 export const EpistoImageSelector = ({
@@ -42,7 +42,7 @@ export const EpistoImageSelector = ({
             }} />
 
         {(!children && src)
-            ? <Image
+            ? <EpistoImage
                 className="whall"
                 objectFit="cover"
                 src={src} />

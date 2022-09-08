@@ -1,8 +1,8 @@
-import { Image} from '@chakra-ui/react';
 import React, {ReactNode, useEffect} from 'react';
 import {gradientBackgroundGenerator} from '../services/core/gradientBackgroundGenerator';
 import { EpistoFlex2, EpistoFlex2Props } from './controls/EpistoFlex';
 import {EpistoGrid} from './controls/EpistoGrid';
+import { EpistoImage } from './controls/EpistoImage';
 
 export const PageRootContainer = (props: {
     children: ReactNode,
@@ -57,7 +57,7 @@ export const PageRootContainer = (props: {
                     })}
             </EpistoGrid>}
 
-        {(!noBackground && backgoundImageSrc) && <Image
+        {(!noBackground && backgoundImageSrc) && <EpistoImage
             position="absolute"
             top="0"
             objectFit="cover"

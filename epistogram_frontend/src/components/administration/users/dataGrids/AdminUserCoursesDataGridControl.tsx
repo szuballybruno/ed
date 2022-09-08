@@ -1,4 +1,3 @@
-import { Image } from '@chakra-ui/react';
 import { TextField } from '@mui/material';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { DateTime } from 'luxon';
@@ -14,6 +13,7 @@ import { EpistoButton } from '../../../controls/EpistoButton';
 import { EpistoDataGrid, GridColumnType } from '../../../controls/EpistoDataGrid';
 import { EpistoFlex2 } from '../../../controls/EpistoFlex';
 import { EpistoFont } from '../../../controls/EpistoFont';
+import { EpistoImage } from '../../../controls/EpistoImage';
 import { LoadingFrame } from '../../../system/LoadingFrame';
 import { CircularProgressWithLabel } from '../../courses/AdminCourseUserProgressSubpage';
 import { ChipSmall } from '../../courses/ChipSmall';
@@ -249,7 +249,7 @@ export const AdminUserCoursesDataGridControl = (props: {
             renderCell: (params) => params.value !== null
                 ? <EpistoFlex2 align="center">
 
-                    <Image
+                    <EpistoImage
                         h="30px"
                         w="30px"
                         src={Environment.getAssetUrl(`images/${params.value === 'auto'
