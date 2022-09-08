@@ -1,10 +1,10 @@
 import { Flex } from '@chakra-ui/react';
-import { Tab, Tabs } from '@mui/material';
 import { useState } from 'react';
 import { CourseApiService } from '../../../../services/api/courseApiService';
 import { UserApiService } from '../../../../services/api/userApiService';
 import { Id } from '../../../../shared/types/versionId';
 import { EpistoFont } from '../../../controls/EpistoFont';
+import { EpistoTab, EpistoTabs } from '../../../controls/EpistoTabs';
 import { TabPanel } from '../../../courseDetails/TabPanel';
 import { EpistoDialog } from '../../../universal/epistoDialog/EpistoDialog';
 import { EpistoDialogLogicType } from '../../../universal/epistoDialog/EpistoDialogTypes';
@@ -117,57 +117,58 @@ export const AdminUserCourseContentDialog = (props: {
                         </EpistoFont>
                     </Flex>
                 </Flex>
-                <Tabs
-                    value={currentTab}
-                    onChange={(_, y) => setCurrentTab(y as number)}
-                    className="roundBorders"
-                    TabIndicatorProps={{
-                        style: {
-                            display: 'none',
-                        },
-                    }}
-                    sx={{
-                        '&.MuiTabs-root': {
-                            //background: 'var(--transparentIntenseBlue85)',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            height: 45,
-                            minHeight: 0
-                        }
-                    }}>
+
+                <EpistoTabs>
+                    {/*                     
+                    // value={currentTab}
+                    // onChange={(_, y) => setCurrentTab(y as number)}
+                    // className="roundBorders"
+                    // TabIndicatorProps={{
+                    //     style: {
+                    //         display: 'none',
+                    //     },
+                    // }}
+                    // sx={{
+                    //     '&.MuiTabs-root': {
+                    //         //background: 'var(--transparentIntenseBlue85)',
+                    //         display: 'flex',
+                    //         alignItems: 'center',
+                    //         justifyContent: 'center',
+                    //         height: 45,
+                    //         minHeight: 0
+                    //     }
+                    // }}> */}
 
                     {moreInfoDialogTabs
                         .map((x, index) => {
 
-                            return <Tab
+                            return <EpistoTab
                                 key={index}
-                                sx={{
-                                    '&.MuiTab-root': {
-                                        color: '#444',
-                                        cursor: 'pointer',
-                                        backgroundColor: 'transparent',
-                                        padding: '6px 16px',
-                                        border: 'none',
-                                        borderRadius: '5px',
-                                        display: 'flex',
-                                        justifyContent: 'center',
-                                        height: '41px',
-                                        minHeight: '0px'
-                                    },
-                                    '&.MuiTouchRipple-root': {
-                                        lineHeight: '0px'
-                                    },
-                                    '&.Mui-selected': {
-                                        color: '#444',
-                                        fontWeight: 'bold',
-                                        background: 'var(--transparentIntenseTeal)'
-                                    }
-                                }}
-                                label={x.title}
-                                id={index + ''} />;
+                                // sx={{
+                                //     '&.MuiTab-root': {
+                                //         color: '#444',
+                                //         cursor: 'pointer',
+                                //         backgroundColor: 'transparent',
+                                //         padding: '6px 16px',
+                                //         border: 'none',
+                                //         borderRadius: '5px',
+                                //         display: 'flex',
+                                //         justifyContent: 'center',
+                                //         height: '41px',
+                                //         minHeight: '0px'
+                                //     },
+                                //     '&.MuiTouchRipple-root': {
+                                //         lineHeight: '0px'
+                                //     },
+                                //     '&.Mui-selected': {
+                                //         color: '#444',
+                                //         fontWeight: 'bold',
+                                //         background: 'var(--transparentIntenseTeal)'
+                                //     }
+                                // }}
+                                label={x.title} />;
                         })}
-                </Tabs>
+                </EpistoTabs>
             </Flex>
 
             { /* tab contents */}

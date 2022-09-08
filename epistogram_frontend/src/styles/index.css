@@ -48,8 +48,13 @@
 
 }
 
+/* base */
 html {
   font-size: 16px;
+}
+
+p {
+  font-family: 'Raleway';
 }
 
 /* borders */
@@ -113,16 +118,6 @@ html {
 
 .fontXXL {
   font-size: 30px !important;
-}
-
-/* margins */
-
-.margin-left {
-  margin-left: 5px !important;
-}
-
-.margin-right {
-  margin-right: 5px !important;
 }
 
 /* font colors */
@@ -323,7 +318,6 @@ html {
 
 body {
   margin: 0;
-  font-family: "Raleway", sans-serif;
   font-style: normal;
   font-weight: 400;
   overflow-x: hidden;

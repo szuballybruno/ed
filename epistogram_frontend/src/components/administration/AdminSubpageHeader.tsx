@@ -1,6 +1,5 @@
 import { FlexProps } from '@chakra-ui/layout';
 import { Flex } from '@chakra-ui/react';
-import { Tab, Tabs } from '@mui/material';
 import React, { ReactNode } from 'react';
 import { useParams } from 'react-router-dom';
 import { ApplicationRoute, ButtonType } from '../../models/types';
@@ -8,6 +7,7 @@ import { useNavigation } from '../../services/core/navigatior';
 import { useIsMatchingCurrentRoute } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoTab, EpistoTabs } from '../controls/EpistoTabs';
 
 export const AdminSubpageHeader = (props: {
     tabMenuItems?: ApplicationRoute<any>[],
@@ -93,56 +93,57 @@ export const AdminSubpageHeader = (props: {
                     p="10px"
                     flex="1">
 
-                    {(tabMenuItems && currentMatchingAbsUrl) && <Tabs
-                        className="roundBorders"
-                        TabIndicatorProps={{
-                            style: {
-                                display: 'none',
-                            },
-                        }}
-                        sx={{
-                            '&.MuiTabs-root': {
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                height: 45,
-                                minHeight: 0
-                            }
-                        }}
+                    {(tabMenuItems && currentMatchingAbsUrl) && <EpistoTabs
+                        // className="roundBorders"
+                        // TabIndicatorProps={{
+                        //     style: {
+                        //         display: 'none',
+                        //     },
+                        // }}
+                        // sx={{
+                        //     '&.MuiTabs-root': {
+                        //         display: 'flex',
+                        //         alignItems: 'center',
+                        //         justifyContent: 'center',
+                        //         height: 45,
+                        //         minHeight: 0
+                        //     }
+                        // }}
                         value={currentMatchingAbsUrl}
-                        onChange={(_, path: string) => handleNavigateToTab(path)}>
+                        onChange={handleNavigateToTab}>
 
                         {tabMenuItems
                             .map((tabRoute, index) => {
 
-                                return <Tab
+                                return <EpistoTab
                                     key={index}
-                                    sx={{
-                                        '&.MuiTab-root': {
-                                            color: '#444',
-                                            cursor: 'pointer',
-                                            backgroundColor: 'transparent',
-                                            padding: '6px 16px',
-                                            border: 'none',
-                                            borderRadius: '5px',
-                                            display: 'flex',
-                                            justifyContent: 'center',
-                                            height: '41px',
-                                            minHeight: '0px'
-                                        },
-                                        '&.MuiTouchRipple-root': {
-                                            lineHeight: '0px'
-                                        },
-                                        '&.Mui-selected': {
-                                            color: 'white',
-                                            fontWeight: 'bold',
-                                            background: 'var(--funkyHighlight)'
-                                        }
-                                    }}
+                                    // key={index}
+                                    // sx={{
+                                    //     '&.MuiTab-root': {
+                                    //         color: '#444',
+                                    //         cursor: 'pointer',
+                                    //         backgroundColor: 'transparent',
+                                    //         padding: '6px 16px',
+                                    //         border: 'none',
+                                    //         borderRadius: '5px',
+                                    //         display: 'flex',
+                                    //         justifyContent: 'center',
+                                    //         height: '41px',
+                                    //         minHeight: '0px'
+                                    //     },
+                                    //     '&.MuiTouchRipple-root': {
+                                    //         lineHeight: '0px'
+                                    //     },
+                                    //     '&.Mui-selected': {
+                                    //         color: 'white',
+                                    //         fontWeight: 'bold',
+                                    //         background: 'var(--funkyHighlight)'
+                                    //     }
+                                    // }}
                                     label={tabRoute.title}
                                     value={tabRoute.route.getAbsolutePath()} />;
                             })}
-                    </Tabs>}
+                    </EpistoTabs>}
                 </Flex>
 
                 {/* header buttons */}

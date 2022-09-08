@@ -1,5 +1,4 @@
 import { Flex } from '@chakra-ui/react';
-import { Tab, Tabs } from '@mui/material';
 import React, { useState } from 'react';
 import { translatableTexts } from '../static/translatableTexts';
 import { FlexFloat } from './controls/FlexFloat';
@@ -7,21 +6,22 @@ import { TabPanel } from './courseDetails/TabPanel';
 import { EpistoHeader } from './EpistoHeader';
 import { EpistoFont } from './controls/EpistoFont';
 import { Environment } from '../static/Environemnt';
+import { EpistoTab, EpistoTabs } from './controls/EpistoTabs';
 
 export const LearningCurves = () => {
 
     const [currentTab, setCurrentTab] = useState(0);
 
-    const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    const handleChange = (newValue: number) => {
         setCurrentTab(newValue);
     };
 
-    const a11yProps = (index: number) => {
-        return {
-            id: `simple-tab-${index}`,
-            'aria-controls': `simple-tabpanel-${index}`,
-        };
-    };
+    // const a11yProps = (index: number) => {
+    //     return {
+    //         id: `simple-tab-${index}`,
+    //         'aria-controls': `simple-tabpanel-${index}`,
+    //     };
+    // };
 
     return <Flex
         direction="row"
@@ -52,11 +52,11 @@ export const LearningCurves = () => {
 
             <Flex my="10px">
 
-                <Tabs
+                <EpistoTabs
                     value={currentTab}
                     onChange={handleChange}>
 
-                    <Tab
+                    <EpistoTab
                         label={translatableTexts.learningOverview.learningCurve}
                         icon={
                             <img
@@ -69,10 +69,9 @@ export const LearningCurves = () => {
                         }
                         style={{
                             flexDirection: 'row',
-                        }}
-                        {...a11yProps(0)} />
+                        }} />
 
-                    <Tab
+                    <EpistoTab
                         label={translatableTexts.learningOverview.forgettingCurve}
                         icon={
                             <img
@@ -85,9 +84,8 @@ export const LearningCurves = () => {
                         }
                         style={{
                             flexDirection: 'row',
-                        }}
-                        {...a11yProps(1)} />
-                </Tabs>
+                        }} />
+                </EpistoTabs>
             </Flex>
 
             <TabPanel
@@ -101,7 +99,7 @@ export const LearningCurves = () => {
             </TabPanel>
 
             <TabPanel value={currentTab}
-index={1}>
+                index={1}>
 
                 <EpistoFont fontSize="fontSmall">
 
