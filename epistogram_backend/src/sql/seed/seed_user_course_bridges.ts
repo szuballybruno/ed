@@ -1,29 +1,34 @@
-import { UserCourseBridge } from '../../models/entity/UserCourseBridge';
-import { getSeedList } from '../../services/sqlServices/SeedService';
-import { CourseSeedDataType } from './seed_courses';
-import { UserSeedDataType } from './seed_users';
-import { VideosSeedDataType } from './seed_videos';
+import {UserCourseBridge} from '../../models/entity/UserCourseBridge';
+import {getSeedList} from '../../services/sqlServices/SeedService';
+import {CourseSeedDataType} from './seed_courses';
+import {UserSeedDataType} from './seed_users';
+import {VideosSeedDataType} from './seed_videos';
+import {getItemCode} from '../../services/misc/encodeService';
+import {Video} from '../../models/entity/video/Video';
+import {CourseItemCompletionSeedDataType} from './seed_course_item_completion';
 
 export const getUserCourseBridgeSeedData = (
     users: UserSeedDataType,
     courses: CourseSeedDataType,
-    videos: VideosSeedDataType) => getSeedList<UserCourseBridge>()({
+    videos: VideosSeedDataType,
+    courseItemCompletion: CourseItemCompletionSeedDataType
+) => getSeedList<UserCourseBridge>()({
 
-        /*     //1: 'Endre, Excel, No deadline, started 2 days ago'
-            user_course_bridge_1: {
-                userId: users.god.id,
-                courseId: courses.course_excel.id,
-                creationDate: new Date(Date.now() - (8510 * 60 * 1000)), // current date - 5 days 21 hours 30 minutes
-                startDate: new Date(Date.now() - (8507 * 60 * 1000)), // current date - 5 days 21 hours 47 minutes
-                courseMode: 'advanced',
-                currentItemCode: getItemCode(videos.video_132 as Video, 'video'),
-                isCurrent: true,
-                previsionedCompletionDate: new Date(Date.now() + (18931 * 60 * 1000)), // current date + 13 days 3 hours 31 minutes
-                requiredCompletionDate: null,
-                stageName: 'watch',
-                tempomatMode: 'light'
-            },
-    
+    //1: 'Endre, Excel, No deadline, started 2 days ago'
+    user_course_bridge_excel_marosiEndre: {
+        userId: users.marosiEndre.id,
+        courseId: courses.course_excel.id,
+        creationDate: new Date(Date.now() - (8490 * 60 * 1000)), // current date - 5 days 21 hours 30 minutes
+        startDate: new Date(Date.now() - (8485 * 60 * 1000)), // current date - 5 days 21 hours 25 minutes
+        courseMode: 'advanced',
+        currentItemCode: getItemCode(videos.video_132 as Video, 'video') as string,
+        isCurrent: true,
+        previsionedCompletionDate: new Date(Date.now() + (18931 * 60 * 1000)), // current date + 13 days 3 hours 31 minutes
+        requiredCompletionDate: null,
+        stageName: 'watch',
+        tempomatMode: 'light'
+    },/*
+
             // 1: 'Endre, PowerPoint, 18 days deadline, started 2 days ago'
             user_course_bridge_2: {
                 userId: users.god.id,
@@ -40,6 +45,6 @@ export const getUserCourseBridgeSeedData = (
             }, */
 
 
-    });
+});
 
 export type UserCourseBridgeSeedDataType = ReturnType<typeof getUserCourseBridgeSeedData>;

@@ -1,15 +1,15 @@
-import { UserCourseBridge } from '../models/entity/UserCourseBridge';
-import { CourseStateView } from '../models/views/CourseStateView';
-import { CourseModeType, CourseStageNameType } from '../shared/types/sharedTypes';
-import { Id } from '../shared/types/versionId';
-import { throwNotImplemented } from '../utilities/helpers';
-import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
-import { AuthorizationService } from './AuthorizationService';
-import { LoggerService } from './LoggerService';
-import { MapperService } from './MapperService';
-import { QueryServiceBase } from './misc/ServiceBase';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
-import { PermissionService } from './PermissionService';
+import {UserCourseBridge} from '../models/entity/UserCourseBridge';
+import {CourseStateView} from '../models/views/CourseStateView';
+import {CourseModeType, CourseStageNameType} from '../shared/types/sharedTypes';
+import {Id} from '../shared/types/versionId';
+import {throwNotImplemented} from '../utilities/helpers';
+import {PrincipalId} from '../utilities/XTurboExpress/ActionParams';
+import {AuthorizationService} from './AuthorizationService';
+import {LoggerService} from './LoggerService';
+import {MapperService} from './MapperService';
+import {QueryServiceBase} from './misc/ServiceBase';
+import {ORMConnectionService} from './ORMConnectionService/ORMConnectionService';
+import {PermissionService} from './PermissionService';
 
 export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> {
 
@@ -78,16 +78,16 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
         }
 
         /* const currentCourseBridge = await this.getUserCourseBridgeAsync(userId, courseId);
- 
+
         // insert new bridge
         if (!currentCourseBridge) {
- 
+
             await this._createNewCourseBridge(courseId, userId, itemCode, stageName);
         }
- 
-        // update current video/exam id 
+
+        // update current video/exam id
         else {
- 
+
             await this._ormService
                 .save(UserCourseBridge, {
                     id: currentCourseBridge.id,
@@ -96,14 +96,14 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
                     isCurrent: true
                 } as UserCourseBridge);
         }
- 
-        // get all bridges for user 
+
+        // get all bridges for user
         const bridges = await this._ormService
             .query(UserCourseBridge, { userId })
             .where('userId', '=', 'userId')
             .getMany();
- 
-        // update current bridge 
+
+        // update current bridge
         await this._ormService
             .save(UserCourseBridge, bridges
                 .map((bridge: UserCourseBridge): SaveEntityType<UserCourseBridge> => ({
@@ -112,33 +112,10 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
                 }))); */
 
 
-
     }
 
     /**
-     * Creates a new course bridge 
-     */
-    private async _createNewCourseBridge(
-        courseId: Id<'Course'>,
-        userId: Id<'User'>,
-        currentItemCode: string | null,
-        stageName: CourseStageNameType,
-    ) {
-
-        await this._ormService
-            .createAsync(UserCourseBridge, {
-                courseId: courseId,
-                userId: userId,
-                courseMode: 'advanced',
-                currentItemCode,
-                stageName,
-                isCurrent: true,
-                tempomatMode: 'auto'
-            } as UserCourseBridge);
-    }
-
-    /**
-     * Deletes all course bridges associated with the specified course  
+     * Deletes all course bridges associated with the specified course
      */
     deleteAllBridgesAsync(
         principalId: PrincipalId,
@@ -162,51 +139,41 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
     /**
      * Sets the course mode (beginner / advanced).
      */
-    setCourseModeAsync(
+    async setCourseModeAsync(
         principalId: PrincipalId,
         courseId: Id<'Course'>,
         mode: CourseModeType
     ) {
 
-        return {
-            auth: async () => {
+        const userId = principalId.getId();
 
-                return this
-                    ._authorizationService
-                    .checkPermissionAsync(principalId, 'SET_COURSE_MODE', { courseId });
-            },
-            action: async () => {
+        const userCourseBridge = await this
+            .getUserCourseBridgeOrFailAsync(userId, courseId);
 
-                const userId = principalId.getId();
+        await this._ormService
+            .save(UserCourseBridge, {
+                courseId: courseId,
+                userId: userId,
+                id: userCourseBridge.id,
+                courseMode: mode
+            } as UserCourseBridge);
 
-                const userCourseBridge = await this
-                    .getUserCourseBridgeOrFailAsync(userId, courseId);
+        /**
+         * If advanced mode is set,
+         * take away SET_COURSE_MODE permission.
+         * Only gods will be able to change it from
+         * now on, since their permission can't be taken
+         * away. (it's from a view rather than from an assignment bridge)
+         */
+        if (mode === 'advanced') {
 
-                await this._ormService
-                    .save(UserCourseBridge, {
-                        courseId: courseId,
-                        userId: userId,
-                        id: userCourseBridge.id,
-                        courseMode: mode
-                    } as UserCourseBridge);
-
-                /**
-                 * If advanced mode is set, 
-                 * take away SET_COURSE_MODE permission.
-                 * Only gods will be able to change it from 
-                 * now on, since their permission can't be taken 
-                 * away. (it's from a view rather than from an assignment bridge)
-                 */
-                if (mode === 'advanced') {
-
-                    await this
-                        ._permissionService
-                        .removePersmission(userId, 'SET_COURSE_MODE', { courseId });
-                }
-            }
-        };
+            await this
+                ._permissionService
+                .removePersmission(userId, 'SET_COURSE_MODE', {courseId});
+        }
 
     }
+
     /**
      * Sets the course mode (beginner / advanced).
      */
@@ -289,12 +256,11 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
 
     }
 
-
     async getCurrentCourseId(
         userId: Id<'User'>
     ) {
         const view = await this._ormService
-            .query(CourseStateView, { userId })
+            .query(CourseStateView, {userId})
             .where('userId', '=', 'userId')
             .and('isCurrent', '=', 'true')
             .getOneOrNull();
@@ -306,7 +272,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
     }
 
     /**
-     * Returns the current course id 
+     * Returns the current course id
      */
     getCurrentCourseIdAsync(
         principalId: PrincipalId,
@@ -316,7 +282,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
         return {
             action: async () => {
                 const courseBridge = await this._ormService
-                    .query(UserCourseBridge, { userId })
+                    .query(UserCourseBridge, {userId})
                     .where('userId', '=', 'userId')
                     .and('isCurrent', '=', 'true')
                     .getOneOrNull();
@@ -330,9 +296,8 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
         };
     }
 
-
     /**
-     * Returns the current course id 
+     * Returns the current course id
      */
     async getCurrentCourseIdOrFail(
         userId: Id<'User'>
@@ -375,51 +340,6 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
             }
         };
 
-    }
-
-    /**
-     * Returns the current 
-     * course item code  
-     */
-    private async getCurrentItemCodeAsync(
-        userId: Id<'User'>
-    ) {
-        const stateView = await this
-            ._ormService
-            .query(CourseStateView, { userId })
-            .where('userId', '=', 'userId')
-            .and('isCurrent', '=', 'true')
-            .and('inProgress', '=', 'true')
-            .getOneOrNull();
-
-        if (!stateView)
-            return;
-
-        const ucb = await this
-            ._ormService
-            .query(UserCourseBridge, {
-                courseId: stateView.courseId,
-                userId
-            })
-            .where('courseId', '=', 'courseId')
-            .and('userId', '=', 'userId')
-            .getSingle();
-
-        return ucb.currentItemCode;
-    }
-
-    private async getUserCourseBridgeAsync(
-        userId: Id<'User'>,
-        courseId: Id<'Course'>
-    ) {
-
-        const userCourseBridge = await this._ormService
-            .query(UserCourseBridge, { userId, courseId })
-            .where('userId', '=', 'userId')
-            .and('courseId', '=', 'courseId')
-            .getSingle();
-
-        return userCourseBridge;
     }
 
     async getUserCourseBridgeOrFailAsync(
@@ -500,6 +420,73 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
         //         .where('courseId = :courseId', { courseId })
         //         .execute();
     };
+
+    /**
+     * Creates a new course bridge
+     */
+    private async _createNewCourseBridge(
+        courseId: Id<'Course'>,
+        userId: Id<'User'>,
+        currentItemCode: string | null,
+        stageName: CourseStageNameType,
+    ) {
+
+        await this._ormService
+            .createAsync(UserCourseBridge, {
+                courseId: courseId,
+                userId: userId,
+                courseMode: 'advanced',
+                currentItemCode,
+                stageName,
+                isCurrent: true,
+                tempomatMode: 'auto'
+            } as UserCourseBridge);
+    }
+
+    /**
+     * Returns the current
+     * course item code
+     */
+    private async getCurrentItemCodeAsync(
+        userId: Id<'User'>
+    ) {
+        const stateView = await this
+            ._ormService
+            .query(CourseStateView, {userId})
+            .where('userId', '=', 'userId')
+            .and('isCurrent', '=', 'true')
+            .and('inProgress', '=', 'true')
+            .getOneOrNull();
+
+        if (!stateView)
+            return;
+
+        const ucb = await this
+            ._ormService
+            .query(UserCourseBridge, {
+                courseId: stateView.courseId,
+                userId
+            })
+            .where('courseId', '=', 'courseId')
+            .and('userId', '=', 'userId')
+            .getSingle();
+
+        return ucb.currentItemCode;
+    }
+
+    private async getUserCourseBridgeAsync(
+        userId: Id<'User'>,
+        courseId: Id<'Course'>
+    ) {
+
+        const userCourseBridge = await this._ormService
+            .query(UserCourseBridge, {userId, courseId})
+            .where('userId', '=', 'userId')
+            .and('courseId', '=', 'courseId')
+            .getSingle();
+
+        return userCourseBridge;
+    }
 
     private updateCompletionDate = async (userCourseBridgeId: Id<'UserCourseBridge'>, requiredCompletionDate: Date) => {
         return this._ormService

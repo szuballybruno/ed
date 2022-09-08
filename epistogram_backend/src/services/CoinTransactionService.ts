@@ -1,15 +1,15 @@
-import { CoinTransaction } from '../models/entity/CoinTransaction';
-import { CoinTransactionDTO } from '../shared/dtos/CoinTransactionDTO';
-import { CoinBalanceView } from '../models/views/CoinBalanceView';
-import { CoinTransactionView } from '../models/views/CoinTransactionView';
-import { MapperService } from './MapperService';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
-import { InsertCoinFnParamsType, SQLFunctionsService } from './sqlServices/FunctionsService';
-import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
-import { GivenAnswer } from '../models/entity/GivenAnswer';
-import { Id } from '../shared/types/versionId';
-import { AuthorizationService } from './AuthorizationService';
-import { LoggerService } from './LoggerService';
+import {CoinTransaction} from '../models/entity/CoinTransaction';
+import {CoinTransactionDTO} from '../shared/dtos/CoinTransactionDTO';
+import {CoinBalanceView} from '../models/views/CoinBalanceView';
+import {CoinTransactionView} from '../models/views/CoinTransactionView';
+import {MapperService} from './MapperService';
+import {ORMConnectionService} from './ORMConnectionService/ORMConnectionService';
+import {InsertCoinFnParamsType, SQLFunctionsService} from './sqlServices/FunctionsService';
+import {PrincipalId} from '../utilities/XTurboExpress/ActionParams';
+import {GivenAnswer} from '../models/entity/GivenAnswer';
+import {Id} from '../shared/types/versionId';
+import {AuthorizationService} from './AuthorizationService';
+import {LoggerService} from './LoggerService';
 
 export class CoinTransactionService {
 
@@ -65,7 +65,7 @@ export class CoinTransactionService {
         return {
             action: async () => {
                 const coinBalance = await this._ormConnectionService
-                    .query(CoinBalanceView, { userId })
+                    .query(CoinBalanceView, {userId})
                     .where('userId', '=', 'userId')
                     .getSingle();
 
@@ -108,7 +108,7 @@ export class CoinTransactionService {
         return {
             action: async () => {
                 const coinTransactions = await this._ormConnectionService
-                    .query(CoinTransactionView, { userId: userId.toSQLValue() })
+                    .query(CoinTransactionView, {userId: userId.toSQLValue()})
                     .where('userId', '=', 'userId')
                     .getMany();
 
@@ -124,11 +124,20 @@ export class CoinTransactionService {
 
     async getCoinsForQuestionAsync(
         userId: Id<'User'>,
-        questionVersionId: Id<'QuestionVersion'>
+        givenAnswerId: Id<'GivenAnswer'>
     ) {
 
+        const givenAnswer = await this._ormConnectionService
+            .query(GivenAnswer, {givenAnswerId})
+            .where('id', '=', 'givenAnswerId')
+            .and('isCorrect', '=', 'true')
+            .getOneOrNull();
+
+        if (!givenAnswer)
+            return [];
+
         return await this._ormConnectionService
-            .query(CoinTransaction, { userId, questionVersionId })
+            .query(CoinTransaction, {userId, questionVersionId: givenAnswer.questionVersionId})
             .innerJoin(GivenAnswer, x => x
                 .on('id', '=', 'givenAnswerId', CoinTransaction)
                 .and('questionVersionId', '=', 'questionVersionId'))
@@ -141,7 +150,7 @@ export class CoinTransactionService {
         activitySessionId: Id<'ActivitySession'>
     ) {
         return await this._ormConnectionService
-            .query(CoinTransaction, { userId, activitySessionId })
+            .query(CoinTransaction, {userId, activitySessionId})
             .where('userId', '=', 'userId')
             .and('activitySessionId', '=', 'activitySessionId')
             .getOneOrNull();
@@ -152,7 +161,7 @@ export class CoinTransactionService {
         activityStreakId: Id<'ActivityStreak'>
     ) {
         return await this._ormConnectionService
-            .query(CoinTransaction, { userId, activityStreakId })
+            .query(CoinTransaction, {userId, activityStreakId})
             .where('userId', '=', 'userId')
             .and('activityStreakId', '=', 'activityStreakId')
             .getMany();
@@ -164,7 +173,7 @@ export class CoinTransactionService {
     ) {
 
         return await this._ormConnectionService
-            .query(CoinTransaction, { userId, answerStreakId })
+            .query(CoinTransaction, {userId, answerStreakId})
             .where('userId', '=', 'userId')
             .and('givenAnswerStreakId', '=', 'answerStreakId')
             .getMany();

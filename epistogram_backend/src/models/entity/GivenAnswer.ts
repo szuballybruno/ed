@@ -13,9 +13,9 @@ import {IsDeletedFlag, XJoinColumn, XManyToOne, XViewColumn} from '../../service
 import {Id} from '../../shared/types/versionId';
 import {AnswerGivenAnswerBridge} from './AnswerGivenAnswerBridge';
 import {AnswerSession} from './AnswerSession';
-import {CoinTransaction} from './CoinTransaction';
 import {GivenAnswerStreak} from './GivenAnswerStreak';
 import {QuestionVersion} from './question/QuestionVersion';
+import {CoinTransaction} from './CoinTransaction';
 
 @Entity()
 export class GivenAnswer {

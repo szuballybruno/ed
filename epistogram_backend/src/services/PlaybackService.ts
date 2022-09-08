@@ -1,26 +1,26 @@
-import { CourseItemCompletion } from '../models/entity/CourseItemCompletion';
-import { ModuleVersion } from '../models/entity/module/ModuleVersion';
-import { VideoPlaybackSample } from '../models/entity/playback/VideoPlaybackSample';
-import { VideoSeekEvent } from '../models/entity/playback/VideoSeekEvent';
-import { UserVideoProgressBridge } from '../models/entity/UserVideoProgressBridge';
-import { VideoData } from '../models/entity/video/VideoData';
-import { VideoFile } from '../models/entity/video/VideoFile';
-import { VideoVersion } from '../models/entity/video/VideoVersion';
-import { VideoCursorSecondsView } from '../models/views/VideoCursorSecondsView';
-import { VideoPlaybackSampleDTO } from '../shared/dtos/playback/VideoPlaybackSampleDTO';
-import { VideoSeekEventDTO } from '../shared/dtos/playback/VideoSeekEventDTO';
-import { VideoSamplingResultDTO } from '../shared/dtos/VideoSamplingResultDTO';
-import { Id } from '../shared/types/versionId';
-import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
-import { AuthorizationService } from './AuthorizationService';
-import { CoinAcquireService } from './CoinAcquireService';
-import { CourseCompletionService } from './CourseCompletionService';
-import { MapperService } from './MapperService';
-import { GlobalConfiguration } from './misc/GlobalConfiguration';
-import { ServiceBase } from './misc/ServiceBase';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
-import { SampleMergeService } from './SampleMergeService';
-import { UserSessionActivityService } from './UserSessionActivityService';
+import {CourseItemCompletion} from '../models/entity/CourseItemCompletion';
+import {ModuleVersion} from '../models/entity/module/ModuleVersion';
+import {VideoPlaybackSample} from '../models/entity/playback/VideoPlaybackSample';
+import {VideoSeekEvent} from '../models/entity/playback/VideoSeekEvent';
+import {UserVideoProgressBridge} from '../models/entity/UserVideoProgressBridge';
+import {VideoData} from '../models/entity/video/VideoData';
+import {VideoFile} from '../models/entity/video/VideoFile';
+import {VideoVersion} from '../models/entity/video/VideoVersion';
+import {VideoCursorSecondsView} from '../models/views/VideoCursorSecondsView';
+import {VideoPlaybackSampleDTO} from '../shared/dtos/playback/VideoPlaybackSampleDTO';
+import {VideoSeekEventDTO} from '../shared/dtos/playback/VideoSeekEventDTO';
+import {VideoSamplingResultDTO} from '../shared/dtos/VideoSamplingResultDTO';
+import {Id} from '../shared/types/versionId';
+import {PrincipalId} from '../utilities/XTurboExpress/ActionParams';
+import {AuthorizationService} from './AuthorizationService';
+import {CoinAcquireService} from './CoinAcquireService';
+import {CourseCompletionService} from './CourseCompletionService';
+import {MapperService} from './MapperService';
+import {GlobalConfiguration} from './misc/GlobalConfiguration';
+import {ServiceBase} from './misc/ServiceBase';
+import {ORMConnectionService} from './ORMConnectionService/ORMConnectionService';
+import {SampleMergeService} from './SampleMergeService';
+import {UserSessionActivityService} from './UserSessionActivityService';
 
 export class PlaybackService extends ServiceBase {
 
@@ -38,89 +38,51 @@ export class PlaybackService extends ServiceBase {
     }
 
     /**
-     * Reciveves an incoming video playback sample. 
+     * Reciveves an incoming video playback sample.
      * - Merges the new sample with the existing ones, and saves them to the DB.
      * - Calculates the video progress.
      * - Handles video completion related stuff.
      * - Saves user activity.
-     * Returns: the completion flag, and a value of maxWatchedSeconds 
+     * Returns: the completion flag, and a value of maxWatchedSeconds
      */
-    saveVideoPlaybackSample(principalId: PrincipalId, dto: VideoPlaybackSampleDTO) {
+    async saveVideoPlaybackSample(principalId: PrincipalId, dto: VideoPlaybackSampleDTO) {
+
+        const userId = principalId.getId();
+
+        const {
+            videoPlaybackSessionId,
+            videoVersionId,
+            fromSeconds,
+            toSeconds
+        } = dto;
+
+        // handle sample merge
+        const {mergedSamples} = await this
+            ._handleSampleMerge(userId, videoVersionId, videoPlaybackSessionId, fromSeconds, toSeconds);
+
+        // handle video progress
+        const {isFirstCompletion} = await this
+            ._handleVideoProgressAsync(userId, videoVersionId, toSeconds, mergedSamples);
+
+        // save user activity of video watching
+        await this._userSessionActivityService
+            .saveUserSessionActivityAsync(userId, 'video', videoVersionId);
+
+        // get max watched seconds
+        const maxWathcedSeconds = await this
+            .getMaxWatchedSeconds(userId, videoVersionId);
+
+        /**
+         * First time completion
+         */
+        if (isFirstCompletion)
+            await this._handleFirstTimeCompletionAsync(userId, videoVersionId);
 
         return {
-            action: async () => {
-                const userId = principalId.getId();
+            isWatchedStateChanged: isFirstCompletion,
+            maxWathcedSeconds
+        } as VideoSamplingResultDTO;
 
-                const {
-                    videoPlaybackSessionId,
-                    videoVersionId,
-                    fromSeconds,
-                    toSeconds
-                } = dto;
-
-                // handle sample merge
-                const { mergedSamples } = await this
-                    ._handleSampleMerge(userId, videoVersionId, videoPlaybackSessionId, fromSeconds, toSeconds);
-
-                // handle video progress
-                const { isFirstCompletion } = await this
-                    ._handleVideoProgressAsync(userId, videoVersionId, toSeconds, mergedSamples);
-
-                // save user activity of video watching
-                await this._userSessionActivityService
-                    .saveUserSessionActivityAsync(userId, 'video', videoVersionId);
-
-                // get max watched seconds
-                const maxWathcedSeconds = await this
-                    .getMaxWatchedSeconds(userId, videoVersionId);
-
-                /**
-                 * First time completion
-                 */
-                if (isFirstCompletion)
-                    await this._handleFirstTimeCompletionAsync(userId, videoVersionId);
-
-                return {
-                    isWatchedStateChanged: isFirstCompletion,
-                    maxWathcedSeconds
-                } as VideoSamplingResultDTO;
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
-            }
-        };
-    }
-
-    /**
-     * handleFirstTimeCompletion
-     */
-    private async _handleFirstTimeCompletionAsync(
-        userId: Id<'User'>,
-        videoVersionId: Id<'VideoVersion'>) {
-
-        /**
-         * Reward coins
-         */
-        const videoVersion = await this._ormService
-            .query(VideoVersion, { videoVersionId })
-            .where('id', '=', 'videoVersionId')
-            .getSingle();
-
-        await this._coinAcquireService
-            .acquireVideoWatchedCoinsAsync(userId, videoVersion.videoId);
-
-        /**
-         * Course completion
-         */
-        const moduleVersion = await this._ormService
-            .query(ModuleVersion, { id: videoVersion.moduleVersionId})
-            .where('id', '=', 'id')
-            .getSingle();
-
-        await this
-            ._courseCompletionService
-            .tryFinishCourseAsync(userId, moduleVersion.courseVersionId!);
     }
 
     /**
@@ -163,13 +125,44 @@ export class PlaybackService extends ServiceBase {
     getMaxWatchedSeconds = async (userId: Id<'User'>, videoVersionId: Id<'VideoVersion'>) => {
 
         const ads = await this._ormService
-            .query(VideoCursorSecondsView, { userId, videoVersionId })
+            .query(VideoCursorSecondsView, {userId, videoVersionId})
             .where('userId', '=', 'userId')
             .and('videoVersionId', '=', 'videoVersionId')
             .getSingle();
 
         return ads.toSeconds;
     };
+
+    /**
+     * handleFirstTimeCompletion
+     */
+    private async _handleFirstTimeCompletionAsync(
+        userId: Id<'User'>,
+        videoVersionId: Id<'VideoVersion'>) {
+
+        /**
+         * Reward coins
+         */
+        const videoVersion = await this._ormService
+            .query(VideoVersion, {videoVersionId})
+            .where('id', '=', 'videoVersionId')
+            .getSingle();
+
+        await this._coinAcquireService
+            .acquireVideoWatchedCoinsAsync(userId, videoVersion.videoId);
+
+        /**
+         * Course completion
+         */
+        const moduleVersion = await this._ormService
+            .query(ModuleVersion, {id: videoVersion.moduleVersionId})
+            .where('id', '=', 'id')
+            .getSingle();
+
+        await this
+            ._courseCompletionService
+            .tryFinishCourseAsync(userId, moduleVersion.courseVersionId!);
+    }
 
     //
     // PRIVATE
@@ -181,7 +174,7 @@ export class PlaybackService extends ServiceBase {
         const oldSamples = await this
             ._getVideoPlaybackSamples(userId, videoVersionId, videoPlaybackSessionId);
 
-        // merge samples 
+        // merge samples
         const currentSample = {
             fromSeconds,
             toSeconds
@@ -192,7 +185,7 @@ export class PlaybackService extends ServiceBase {
 
         await this._saveMergedSamples(mergedSamples, userId, videoVersionId, videoPlaybackSessionId);
 
-        return { mergedSamples };
+        return {mergedSamples};
     }
 
     private async _saveMergedSamples(
@@ -202,7 +195,7 @@ export class PlaybackService extends ServiceBase {
         videoPlaybackSessionId: Id<'VideoPlaybackSession'>) {
 
         const samplesToDelete = await this._ormService
-            .query(VideoPlaybackSample, { videoVersionId, userId })
+            .query(VideoPlaybackSample, {videoVersionId, userId})
             .where('videoVersionId', '=', 'videoVersionId')
             .and('userId', '=', 'userId')
             .getMany();
@@ -237,7 +230,7 @@ export class PlaybackService extends ServiceBase {
         await this
             ._saveUserVideoProgressBridgeAsync(userId, videoVersionId, watchedPercent, toSeconds, completionDate);
 
-        return { isFirstCompletion };
+        return {isFirstCompletion};
     }
 
     private async _getVideoWatchedPercentAsync(videoVersionId: Id<'VideoVersion'>, samples: VideoPlaybackSample[]) {
@@ -251,7 +244,7 @@ export class PlaybackService extends ServiceBase {
 
         const video = await this._ormService
             .withResType<VideoFile>()
-            .query(VideoVersion, { videoVersionId })
+            .query(VideoVersion, {videoVersionId})
             .selectFrom(x => x
                 .columns(VideoFile, {
                     lengthSeconds: 'lengthSeconds'
@@ -279,7 +272,7 @@ export class PlaybackService extends ServiceBase {
         videoPlaybackSessionId: Id<'VideoPlaybackSession'>) {
 
         return this._ormService
-            .query(VideoPlaybackSample, { userId, videoVersionId, videoPlaybackSessionId })
+            .query(VideoPlaybackSample, {userId, videoVersionId, videoPlaybackSessionId})
             .where('videoVersionId', '=', 'videoVersionId')
             .and('userId', '=', 'userId')
             .and('videoPlaybackSessionId', '=', 'videoPlaybackSessionId')
@@ -294,7 +287,7 @@ export class PlaybackService extends ServiceBase {
         newCompletionDate?: Date) {
 
         const pbd = await this._ormService
-            .query(UserVideoProgressBridge, { videoVersionId, userId })
+            .query(UserVideoProgressBridge, {videoVersionId, userId})
             .where('videoVersionId', '=', 'videoVersionId')
             .and('userId', '=', 'userId')
             .getOneOrNull();
@@ -327,7 +320,7 @@ export class PlaybackService extends ServiceBase {
         videoVersionId: Id<'VideoVersion'>) {
 
         const courseItemCompletion = await this._ormService
-            .query(CourseItemCompletion, { userId, videoVersionId })
+            .query(CourseItemCompletion, {userId, videoVersionId})
             .where('videoVersionId', '=', 'videoVersionId')
             .and('userId', '=', 'userId')
             .getOneOrNull();

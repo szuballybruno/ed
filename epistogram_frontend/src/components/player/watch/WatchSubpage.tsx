@@ -18,7 +18,6 @@ import {PlayerDataDTO} from '../../../shared/dtos/PlayerDataDTO';
 import {applicationRoutes} from '../../../configuration/applicationRoutes';
 import {Logger} from '../../../static/Logger';
 import {useScrollIntoView} from '../../system/AutoScrollContext';
-import {EpistoButton} from '../../controls/EpistoButton';
 
 export const WatchSubpage = () => {
 
@@ -172,20 +171,6 @@ export const WatchSubpage = () => {
                     height='100vh'
                     direction="column"
                     error={[playerDataError]}>
-
-
-                    <EpistoButton
-                        onClick={() => {
-                            scroll();
-                        }}
-                        style={{
-                            position: 'fixed',
-                            top: 20,
-                            left: '50%',
-                            zIndex: 100000000
-                        }}>
-                        Scroll
-                    </EpistoButton>
 
                     <Flex
                         //px="20px"

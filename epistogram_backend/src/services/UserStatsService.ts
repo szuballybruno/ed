@@ -28,6 +28,7 @@ import {TempomatService} from './TempomatService';
 import {UserProgressService} from './UserProgressService';
 import {User} from '../models/entity/User';
 import {TempomatCalculationDataView} from '../models/views/TempomatCalculationDataView';
+import {UserPerformanceComparisonStatsView} from '../models/views/UserPerformanceComparisonStatsView';
 
 export class UserStatsService {
 
@@ -380,29 +381,125 @@ export class UserStatsService {
                 .and('id', '=', 'userId', TempomatCalculationDataView))
             .getMany();
 
-        console.log('Tempomat calculation views ' + JSON.stringify(tempomatCalculationViews));
-
         const companyTempomatValues = tempomatCalculationViews
-            .map(x => {
-                return this._tempomatService
-                    .calculateTempomatValues(x);
-            });
-
-        console.log('CompanyTempomatValues ' + JSON.stringify(companyTempomatValues));
+            .map(x => ({
+                userId: x.userId,
+                ...this._tempomatService
+                    .calculateTempomatValues(x)
+            }));
 
         const lagBehindPercentages = companyTempomatValues
             .filter(x => (x !== null && x.lagBehindPercentage !== null))
             .map(x => x.lagBehindPercentage);
 
-        console.log('lagBehindPercentages ' + JSON.stringify(lagBehindPercentages));
-
         const companyAvgLagBehindPercentage = lagBehindPercentages
             .reduce((total, next) => total + next, 0) / lagBehindPercentages.length;
 
-        console.log('companyAvgLagBehindPercentage ' + JSON.stringify(companyAvgLagBehindPercentage));
-
-        return this
+        const companyProductivity = this
             .calculateProductivity(companyAvgPerformancePercentage, companyAvgLagBehindPercentage);
+
+        const statsViews = await this._ormService
+            .query(UserPerformanceComparisonStatsView, {companyId})
+            .where('companyId', '=', 'companyId')
+            .getMany();
+
+        const statsViewsExtended = statsViews.map(x => {
+
+            console.log('companyTempomatValues: ' + JSON.stringify(companyTempomatValues));
+
+            const userTempomatValues = companyTempomatValues
+                .filter(ctv => ctv.userId === x.userId);
+
+            if (!userTempomatValues)
+                return null;
+
+            if (userTempomatValues.length === 0)
+                return null;
+
+            const userTempomatValuesFiltered = userTempomatValues
+                .first();
+
+            return {
+                ...x,
+                productivity: this
+                    .calculateProductivity(x.userPerformanceAverage, userTempomatValuesFiltered.lagBehindPercentage),
+                startDate: userTempomatValuesFiltered.startDate,
+                requiredCompletionDate: userTempomatValuesFiltered.requiredCompletionDate
+            };
+
+        });
+
+
+        const statsViewsExtendedFiltered = statsViewsExtended
+            .flat(0);
+
+        // Count of users who have less performance than the company average
+        // minus 15 percent or don't have at least 50% with at least 10 videos watched
+        const flaggedUsersByPerformance = statsViewsExtendedFiltered
+            .map(x => x
+                ? x.userPerformanceAverage < companyAvgPerformancePercentage
+                - companyAvgPerformancePercentage * 0.15
+                && (x.userPerformanceAverage < 50 && x.watchedVideosCount > 10)
+                : null)
+            .filter(x => x)
+            .length;
+
+        // Count of users who have at least as much performance as the company average
+        // minus 15% and maximum as the company average plus 5%.
+        const usersWithAvgPerformance = statsViewsExtendedFiltered
+            .map(x => x
+                ? x.userPerformanceAverage > companyAvgPerformancePercentage
+                - companyAvgPerformancePercentage * 0.15
+                && x.userPerformanceAverage < companyAvgPerformancePercentage + companyAvgPerformancePercentage * 0.05
+                : null)
+            .filter(x => x)
+            .length;
+
+        // Count of users who have at least as much performance
+        // as the company average plus 5%.
+        const usersWithGreatPerformance = statsViewsExtendedFiltered
+            .map(x => x
+                ? x.userPerformanceAverage > companyAvgPerformancePercentage + companyAvgPerformancePercentage * 0.05
+                : null)
+            .filter(x => x)
+            .length;
+
+        const flaggedUsersByProductivity = statsViewsExtendedFiltered
+            .map(x => x
+                ? x.productivity < companyProductivity
+                - companyProductivity * 0.15
+                && (x.engagementPoints < 30 && (x.startDate || x.requiredCompletionDate))
+                : null)
+            .filter(x => x)
+            .length;
+
+        const usersWithAvgProductivity = statsViewsExtendedFiltered
+            .map(x => x
+                ? x.productivity < companyProductivity
+                - companyProductivity * 0.15
+                && x.productivity < companyProductivity + companyProductivity * 0.05
+                && (x.engagementPoints < 30 && (x.startDate || x.requiredCompletionDate))
+                : null)
+            .filter(x => x)
+            .length;
+
+        const usersWithGreatProductivity = statsViewsExtendedFiltered
+            .map(x => x
+                ? x.productivity < companyProductivity
+                - companyProductivity * 0.15
+                && x.productivity < companyProductivity + companyProductivity * 0.05
+                && (x.engagementPoints < 30 && (x.startDate || x.requiredCompletionDate))
+                : null)
+            .filter(x => x)
+            .length;
+
+        console.log('flaggedUsersByPerformance: ' + JSON.stringify(flaggedUsersByPerformance));
+        console.log('usersWithAvgPerformance: ' + usersWithAvgPerformance);
+        console.log('usersWithGreatPerformance: ' + usersWithGreatPerformance);
+        console.log('flaggedUsersByProductivity: ' + flaggedUsersByProductivity);
+        console.log('usersWithAvgProductivity: ' + usersWithAvgProductivity);
+        console.log('usersWithGreatProductivity: ' + usersWithGreatProductivity);
+
     }
 
     calculateProductivityAsync = async (userId: Id<'User'>) => {

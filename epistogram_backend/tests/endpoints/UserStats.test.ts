@@ -31,4 +31,5 @@ setupIntegrationTest('Testing userStats')
     })
     .noThrowError()
     .noLogResError()
+    .noPurgeDB()
     .build();

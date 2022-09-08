@@ -1,14 +1,21 @@
-import {ActivitySession} from '../../models/entity/ActivitySession';
 import {getSeedList} from '../../services/sqlServices/SeedService';
 import {UserSeedDataType} from './seed_users';
+import {UserSessionActivity} from '../../models/entity/UserSessionActivity';
+import {ActivitySessionSeedDataType} from './seed_activity_sessions';
+import {ExamVersionSeedDataType} from './seed_exam_versions';
 
-export const getActivitySessionSeedData = (users: UserSeedDataType) => getSeedList<ActivitySession>()({
+export const getUserSessionActivitySeedData = (
+    users: UserSeedDataType,
+    activitySessions: ActivitySessionSeedDataType,
+    examVersions: ExamVersionSeedDataType
+) => getSeedList<UserSessionActivity>()({
 
-    activity_session_1: {
-        activityStreakId: null,
-        startDate: new Date(Date.now() - (8490 * 60 * 1000)), // current date - 5 days 21 hours 30 minutes,
-        endDate: new Date(Date.now() - (8430 * 60 * 1000)), // current date - 5 days 20 hours 30 minutes,
-        isFinalized: true,
+    user_session_activity_endre: {
+        type: 'exam',
+        activitySessionId: activitySessions.activity_session_1.id,
+        examVersionId: examVersions.exam_version_pretest_excel.id,
+        videoVersionId: null,
+        creationDate: new Date(Date.now() - (8490 * 60 * 1000)), // current date - 5 days 21 hours 30 minutes
         userId: users.marosiEndre.id
     },/*
         activity_session_2: {
@@ -34,4 +41,4 @@ export const getActivitySessionSeedData = (users: UserSeedDataType) => getSeedLi
         } */
 });
 
-export type ActivitySessionSeedDataType = ReturnType<typeof getActivitySessionSeedData>;
+export type UserSessionActivitySeedDataType = ReturnType<typeof getUserSessionActivitySeedData>;
