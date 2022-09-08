@@ -45,12 +45,14 @@ const startServerAsync = async (initializator: ServiceProviderInitializator) => 
         initializator
     );
 
-    //
-    // INIT TURBO EXPRESS
+    /**
+     * INIT TURBO EXPRESS
+     */
     const turboExpress = initTurboExpress(initializator, listener);
 
-    //
-    // LISTEN (start server)
+    /**
+     * LISTEN (start server)
+     */
     turboExpress.listen();
 };
 
