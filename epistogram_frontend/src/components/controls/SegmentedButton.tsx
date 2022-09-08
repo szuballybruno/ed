@@ -1,5 +1,5 @@
-import { ToggleButtonGroup, ToggleButton } from '@mui/material';
-import { CSSProperties } from 'react';
+import { ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { CSSProperties, ReactNode } from 'react';
 import { PagingType } from '../../static/frontendHelpers';
 import { EpistoFont } from './EpistoFont';
 
@@ -69,7 +69,7 @@ export const SegmentedButton = <T,>(props: {
                             onClick={() => paging.setItem(index)}>
 
                             <EpistoFont fontSize="fontNormal14">
-                                {disp(item)}
+                                {disp(item) as ReactNode}
                             </EpistoFont>
                         </ToggleButton>
                     );

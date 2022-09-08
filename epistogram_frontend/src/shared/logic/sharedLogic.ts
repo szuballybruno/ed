@@ -62,7 +62,7 @@ export const getKeys = <T>(obj: T): (keyof T)[] => {
 export const getKeyValues = <T>(obj: T) => {
 
     return Object
-        .keys(obj)
+        .keys(obj as any)
         .map((key) => ({
             key: key as keyof T,
             value: (obj as any)[key]

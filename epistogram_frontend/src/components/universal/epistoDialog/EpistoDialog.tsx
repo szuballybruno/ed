@@ -1,6 +1,7 @@
 import { Flex } from '@chakra-ui/layout';
 import { Close } from '@mui/icons-material';
 import React, { ReactNode } from 'react';
+import { ButtonType } from '../../../models/types';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoHeader } from '../../EpistoHeader';
 import { XDialog } from '../../lib/XDialog/XDialog';
@@ -11,7 +12,7 @@ export const EpistoDialog = <TParams = any>(props: {
     logic: EpistoDialogLogicType<TParams>,
     fullScreenX?: boolean,
     fullScreenY?: boolean,
-    buttonComponents?: ReactNode,
+    buttonComponents?: ButtonType<any>[],
     children?: ReactNode,
     title?: string,
     description?: string
@@ -105,7 +106,6 @@ export const EpistoDialog = <TParams = any>(props: {
                             }}>
                             {x.title}
                         </EpistoButton>)}
-                    {buttonComponents}
                 </Flex>
             </>}
         </Flex>

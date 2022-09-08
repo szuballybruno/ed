@@ -4,7 +4,7 @@ import moment from 'moment';
 import { createContext, FC, useContext, useEffect, useState } from 'react';
 import { Environment } from '../../static/Environemnt';
 import { eventBus } from '../../static/EventBus';
-import { reloadPage } from '../../static/frontendHelpers';
+import { PropsWithChildren, reloadPage } from '../../static/frontendHelpers';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFont } from '../controls/EpistoFont';
 import { FullscreenOverlay } from '../universal/FullscreenOverlay';
@@ -60,7 +60,7 @@ export const SessionWatcherContext = createContext<SessionWatcher>(sessionWatche
 
 export const useSessionWatcherContext = () => useContext(SessionWatcherContext);
 
-export const SessionWatcherFrame: FC = ({ children }) => {
+export const SessionWatcherFrame: FC<PropsWithChildren> = ({ children }) => {
 
     const [showOverlay, setShowOverlay] = useState(false);
 
