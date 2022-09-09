@@ -1,15 +1,20 @@
-import { Divider, Grid, Tooltip } from '@chakra-ui/react';
-import React, { ReactNode, useState } from 'react';
-import { defaultCharts } from '../../../../static/defaultChartOptions';
-import { iterate } from '../../../../static/frontendHelpers';
-import { EpistoFlex2 } from '../../../controls/EpistoFlex';
-import { EpistoFont } from '../../../controls/EpistoFont';
-import { EpistoReactPlayer } from '../../../controls/EpistoReactPlayer';
-import { EpistoSelect } from '../../../controls/EpistoSelect';
+import {Divider, Grid, Tooltip} from '@chakra-ui/react';
+import React, {ReactNode, useState} from 'react';
+import {defaultCharts} from '../../../../static/defaultChartOptions';
+import {iterate} from '../../../../static/frontendHelpers';
+import {EpistoFlex2} from '../../../controls/EpistoFlex';
+import {EpistoFont} from '../../../controls/EpistoFont';
+import {EpistoReactPlayer} from '../../../controls/EpistoReactPlayer';
+import {EpistoSelect} from '../../../controls/EpistoSelect';
 import StatisticsCard from '../../../statisticsCard/StatisticsCard';
-import { EpistoLineChart } from '../../../universal/charts/base_charts/EpistoLineChart';
-import { DashboardSection } from '../../../universal/DashboardSection';
-import { adminExamStatistics, AdminExamStatisticsListItem, adminExamStatisticsListItems, HotspotsSlider } from './ExamStats';
+import {EpistoLineChart} from '../../../universal/charts/base_charts/EpistoLineChart';
+import {DashboardSection} from '../../../universal/DashboardSection';
+import {
+    adminExamStatistics,
+    AdminExamStatisticsListItem,
+    adminExamStatisticsListItems,
+    HotspotsSlider
+} from './ExamStats';
 
 export const AdminVideoStatisticsModalPage = () => {
 
@@ -259,7 +264,7 @@ export const AdminVideoStatisticsModalPage = () => {
             mt="30px"
             gridTemplateColumns="repeat(auto-fill, minmax(300px, 1fr))"
             gridAutoRows="160px"
-            gridGap={10}>
+            gridGap='10px'>
 
             {adminExamStatistics[1].items.map((item, index) => {
                 return <StatisticsCard

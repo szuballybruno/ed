@@ -1,9 +1,9 @@
-import { css, Text } from '@chakra-ui/react';
-import { Environment } from '../../static/Environemnt';
-import { EpistoButton } from '../controls/EpistoButton';
-import { EpistoDiv } from '../controls/EpistoDiv';
-import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
-import { EpistoFont } from '../controls/EpistoFont';
+import {css, Text} from '@chakra-ui/react';
+import {Environment} from '../../static/Environemnt';
+import {EpistoButton} from '../controls/EpistoButton';
+import {EpistoDiv} from '../controls/EpistoDiv';
+import {EpistoFlex2, EpistoFlex2Props} from '../controls/EpistoFlex';
+import {EpistoFont} from '../controls/EpistoFont';
 
 export const ExamTile = (props: {
     className?: string,
@@ -20,7 +20,7 @@ export const ExamTile = (props: {
             justifyContent="space-around"
             alignItems="center"
             padding="4px"
-            width={140}
+            width='140px'
             bg="white"
             borderRadius="0 7px 7px 0">
             <Text
@@ -43,7 +43,7 @@ export const ExamTile = (props: {
             justifyContent="space-around"
             alignItems="center"
             padding="4px"
-            width={160}
+            width='160px'
             bg="var(--epistoTeal)"
             borderRadius="7px 0 0 7px">
             <Text
@@ -73,8 +73,8 @@ export const ExamTile = (props: {
             <EpistoDiv
                 flex="1"
                 position="relative"
-                minH={200}
-                maxH={200}>
+                minH='250px'
+                maxH='250px'>
 
                 <EpistoDiv
                     position="relative"
@@ -139,7 +139,7 @@ export const ExamTile = (props: {
                         <EpistoFlex2
                             direction={'row'}
                             alignItems={'center'}
-                            mr={5}
+                            mr='5px'
                             flex="1">
 
                             <img
@@ -163,7 +163,7 @@ export const ExamTile = (props: {
                         <EpistoFlex2
                             direction={'row'}
                             alignItems={'center'}
-                            mr={5}
+                            mr='5px'
                             flex="1">
 
                             <img
@@ -185,12 +185,12 @@ export const ExamTile = (props: {
                     <EpistoFlex2
                         direction={'row'}
                         alignItems={'center'}
-                        mt={7}>
+                        mt='7px'>
 
                         <EpistoFlex2
                             direction={'row'}
                             alignItems={'center'}
-                            mr={5}
+                            mr='5px'
                             flex="1">
 
                             <img
@@ -210,7 +210,7 @@ export const ExamTile = (props: {
                         <EpistoFlex2
                             direction={'row'}
                             alignItems={'center'}
-                            mr={5}
+                            mr='5px'
                             flex="1">
 
                             <img

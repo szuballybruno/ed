@@ -1,9 +1,9 @@
-import { Divider } from '@chakra-ui/react';
-import { MutableRefObject } from 'react';
-import { mockNotifications } from '../../static/mockData';
-import { EpistoFlex2 } from '../controls/EpistoFlex';
-import { EpistoFont } from '../controls/EpistoFont';
-import { EpistoPopper } from '../controls/EpistoPopper';
+import {Divider} from '@chakra-ui/react';
+import {MutableRefObject} from 'react';
+import {mockNotifications} from '../../static/mockData';
+import {EpistoFlex2} from '../controls/EpistoFlex';
+import {EpistoFont} from '../controls/EpistoFont';
+import {EpistoPopper} from '../controls/EpistoPopper';
 
 export const NotificationsPopper = (props: {
     isOpen: boolean,
@@ -24,14 +24,14 @@ export const NotificationsPopper = (props: {
                 .map((x, index) => {
                     return (
                         <EpistoFlex2 key={index}
-                            width={200}
+                            width='200px'
                             flexDirection={'column'}>
 
                             <EpistoFlex2
-                                width={200}
+                                width='200px'
                                 alignItems={'center'}
                                 justifyContent={'center'}
-                                my={10}
+                                my='10px'
                             >
                                 <div
                                     style={{
@@ -55,7 +55,7 @@ export const NotificationsPopper = (props: {
 
                             {index + 1 < mockNotifications.length && (
                                 <Divider
-                                    height={1}
+                                    height='1px'
                                     width="100%"
                                     bgColor={'grey'}
                                 />

@@ -1,26 +1,26 @@
-import { Delete } from '@mui/icons-material';
+import {Delete} from '@mui/icons-material';
 import Edit from '@mui/icons-material/Edit';
-import { useState } from 'react';
-import { applicationRoutes } from '../../../configuration/applicationRoutes';
-import { ShopItemAdminShortDTO } from '../../../shared/dtos/ShopItemAdminShortDTO';
-import { useAdminShopItems, useCreateShopItem } from '../../../services/api/shopApiService';
-import { useNavigation } from '../../../services/core/navigatior';
-import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
-import { EpistoButton } from '../../controls/EpistoButton';
-import { LoadingFrame } from '../../system/LoadingFrame';
-import { FlexListItem } from '../../universal/FlexListItem';
-import { FlexListTitleSubtitle } from '../../universal/FlexListTitleSubtitle';
-import { AdminListEditHeader } from '../AdminListEditHeader';
-import { AdminSubpageHeader } from '../AdminSubpageHeader';
-import { EpistoRoutes } from '../../universal/EpistoRoutes';
-import { ShopAdminEditSubpage } from './ShopAdminEditSubpage';
-import { useRedirectOnExactMatch } from '../../../static/frontendHelpers';
-import { Id } from '../../../shared/types/versionId';
-import { EpistoFlex2 } from '../../controls/EpistoFlex';
+import {useState} from 'react';
+import {applicationRoutes} from '../../../configuration/applicationRoutes';
+import {ShopItemAdminShortDTO} from '../../../shared/dtos/ShopItemAdminShortDTO';
+import {useAdminShopItems, useCreateShopItem} from '../../../services/api/shopApiService';
+import {useNavigation} from '../../../services/core/navigatior';
+import {showNotification, useShowErrorDialog} from '../../../services/core/notifications';
+import {EpistoButton} from '../../controls/EpistoButton';
+import {LoadingFrame} from '../../system/LoadingFrame';
+import {FlexListItem} from '../../universal/FlexListItem';
+import {FlexListTitleSubtitle} from '../../universal/FlexListTitleSubtitle';
+import {AdminListEditHeader} from '../AdminListEditHeader';
+import {AdminSubpageHeader} from '../AdminSubpageHeader';
+import {EpistoRoutes} from '../../universal/EpistoRoutes';
+import {ShopAdminEditSubpage} from './ShopAdminEditSubpage';
+import {useRedirectOnExactMatch} from '../../../static/frontendHelpers';
+import {Id} from '../../../shared/types/versionId';
+import {EpistoFlex2} from '../../controls/EpistoFlex';
 
 export const ShopAdminSubpage = () => {
 
-    // http 
+    // http
     const { adminShopItems, adminShopItemsError, adminShopItemsState } = useAdminShopItems();
     const { createShopItemAsync, createShopItemState } = useCreateShopItem();
 
@@ -28,7 +28,7 @@ export const ShopAdminSubpage = () => {
     const { navigate2 } = useNavigation();
     const showError = useShowErrorDialog();
 
-    // state 
+    // state
     const [selectedIds, setSelectedIds] = useState<Id<'ShopItem'>[]>([]);
     const isAllSelected = !adminShopItems.some(si => !selectedIds.some(id => id === si.id));
 
@@ -163,8 +163,8 @@ export const ShopAdminSubpage = () => {
                                                 align="center"
                                                 justifyContent={'flex-end'}
                                                 height="100%"
-                                                width={165}
-                                                px={10}>
+                                                width='165px'
+                                                px='10px'>
 
                                                 {/* go to edit */}
                                                 {rowButtons

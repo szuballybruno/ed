@@ -1,11 +1,11 @@
 import React from 'react';
-import { CourseDetailsDTO } from '../../shared/dtos/CourseDetailsDTO';
-import { Environment } from '../../static/Environemnt';
-import { EpistoFlex2 } from '../controls/EpistoFlex';
+import {CourseDetailsDTO} from '../../shared/dtos/CourseDetailsDTO';
+import {Environment} from '../../static/Environemnt';
+import {EpistoFlex2} from '../controls/EpistoFlex';
 
-import { EpistoFont } from '../controls/EpistoFont';
-import { EpistoHeader } from '../EpistoHeader';
-import { ProfileImage } from '../ProfileImage';
+import {EpistoFont} from '../controls/EpistoFont';
+import {EpistoHeader} from '../EpistoHeader';
+import {ProfileImage} from '../ProfileImage';
 
 export const CourseDetailsTeacherSection = (props: {
     courseDetails: CourseDetailsDTO
@@ -37,7 +37,7 @@ export const CourseDetailsTeacherSection = (props: {
 
         <EpistoHeader
             text={'Az oktatóról'}
-            my={10} />
+            my='10px' />
 
         {/* header  */}
         <EpistoFlex2
@@ -116,14 +116,14 @@ export const CourseDetailsTeacherSection = (props: {
 
         {/* info cards */}
         <EpistoFlex2
-            height={70}
+            height='70px'
             justifyContent={'space-between'}>
 
             {infoCards
                 .map((infoCard, index) => <EpistoFlex2
                     key={index}
-                    width={160}
-                    mx={20}
+                    width='160px'
+                    mx='20px'
                     alignItems={'center'}>
 
                     {/* icon */}
@@ -150,7 +150,7 @@ export const CourseDetailsTeacherSection = (props: {
             {courseDetails.teacherData.teacherDescription}
         </EpistoFont>
 
-        {/* more courses 
+        {/* more courses
         <EpistoFlex2 height={70} width="100%" alignItems={"center"} justifyContent={"center"}>
             <EpistoButton variant={"outlined"}>
                 {courseDetails.teacherData.teacherFullName} további kurzusai

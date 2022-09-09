@@ -1,23 +1,23 @@
-import { Checkbox, Slider } from '@mui/material';
-import { useEffect, useState } from 'react';
-import { applicationRoutes } from '../../../configuration/applicationRoutes';
-import { useSaveTeacherInfoData, useTeacherInfoEditData } from '../../../services/api/teacherInfoApiService';
-import { UserApiService } from '../../../services/api/userApiService';
-import { useNavigation } from '../../../services/core/navigatior';
-import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
-import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
-import { TeacherBadgeNameType } from '../../../shared/types/sharedTypes';
-import { useRouteParams } from '../../../static/locationHelpers';
-import { translatableTexts } from '../../../static/translatableTexts';
-import { EpistoButton } from '../../controls/EpistoButton';
-import { EpistoEntry } from '../../controls/EpistoEntry';
-import { EpistoFlex2 } from '../../controls/EpistoFlex';
-import { EpistoFont } from '../../controls/EpistoFont';
-import { EpistoLabel } from '../../controls/EpistoLabel';
-import { AdminBreadcrumbsHeader } from '../AdminBreadcrumbsHeader';
-import { AdminSubpageHeader } from '../AdminSubpageHeader';
-import { EditSection } from '../courses/EditSection';
-import { AdminUserList } from './AdminUserList';
+import {Checkbox, Slider} from '@mui/material';
+import {useEffect, useState} from 'react';
+import {applicationRoutes} from '../../../configuration/applicationRoutes';
+import {useSaveTeacherInfoData, useTeacherInfoEditData} from '../../../services/api/teacherInfoApiService';
+import {UserApiService} from '../../../services/api/userApiService';
+import {useNavigation} from '../../../services/core/navigatior';
+import {showNotification, useShowErrorDialog} from '../../../services/core/notifications';
+import {AdminPageUserDTO} from '../../../shared/dtos/admin/AdminPageUserDTO';
+import {TeacherBadgeNameType} from '../../../shared/types/sharedTypes';
+import {useRouteParams} from '../../../static/locationHelpers';
+import {translatableTexts} from '../../../static/translatableTexts';
+import {EpistoButton} from '../../controls/EpistoButton';
+import {EpistoEntry} from '../../controls/EpistoEntry';
+import {EpistoFlex2} from '../../controls/EpistoFlex';
+import {EpistoFont} from '../../controls/EpistoFont';
+import {EpistoLabel} from '../../controls/EpistoLabel';
+import {AdminBreadcrumbsHeader} from '../AdminBreadcrumbsHeader';
+import {AdminSubpageHeader} from '../AdminSubpageHeader';
+import {EditSection} from '../courses/EditSection';
+import {AdminUserList} from './AdminUserList';
 
 export const AdminUserTeacherInfoSubpage = (props: {
     users: AdminPageUserDTO[]
@@ -190,10 +190,10 @@ export const AdminUserTeacherInfoSubpage = (props: {
                                         alignItems={'center'}
                                         flex={'0 0 calc(33.3333333% - 10px)'}
                                         bgColor={'#f2f2f2'}
-                                        borderRadius={7}
-                                        height={180}
+                                        borderRadius='7px'
+                                        height='180px'
                                         boxSizing={'border-box'}
-                                        m={5}>
+                                        m='5px'>
 
                                         <EpistoFlex2>
                                             <img src={badge.icon}

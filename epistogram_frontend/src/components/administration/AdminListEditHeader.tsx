@@ -1,12 +1,12 @@
-import { Close } from '@mui/icons-material';
-import { ButtonType } from '../../models/types';
-import { Id } from '../../shared/types/versionId';
-import { EpistoButton } from '../controls/EpistoButton';
-import { EpistoCheckbox } from '../controls/EpistoCheckbox';
-import { EpistoFlex2 } from '../controls/EpistoFlex';
-import { EpistoFont } from '../controls/EpistoFont';
-import { EpistoSearch } from '../controls/EpistoSearch';
-import { BulkEditButtons, BulkEditButtonType } from './BulkEditButtons';
+import {Close} from '@mui/icons-material';
+import {ButtonType} from '../../models/types';
+import {Id} from '../../shared/types/versionId';
+import {EpistoButton} from '../controls/EpistoButton';
+import {EpistoCheckbox} from '../controls/EpistoCheckbox';
+import {EpistoFlex2} from '../controls/EpistoFlex';
+import {EpistoFont} from '../controls/EpistoFont';
+import {EpistoSearch} from '../controls/EpistoSearch';
+import {BulkEditButtons, BulkEditButtonType} from './BulkEditButtons';
 
 export const AdminListEditHeader = (props: {
     isAllSelected?: boolean,
@@ -100,10 +100,10 @@ export const AdminListEditHeader = (props: {
             direction={'row'}
             justifyContent={'flex-start'}
             alignItems={'center'}
-            width={140}
-            mx={10}>
+            width='140px'
+            mx='10px'>
             <EpistoSearch
-                width={140}
+                width='140px'
                 onChange={(x) => {
 
                     if (onSearchChanged)
@@ -115,7 +115,7 @@ export const AdminListEditHeader = (props: {
         <EpistoFlex2
             className="align-center"
             height="100%"
-            mx={10}>
+            mx='10px'>
 
             {/* <EpistoSelect
                 items={[] as string[]}

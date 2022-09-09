@@ -1,11 +1,11 @@
-import { useContext } from 'react';
-import { useHomePageStats } from '../../services/api/userStatsApiService';
-import { Environment } from '../../static/Environemnt';
-import { translatableTexts } from '../../static/translatableTexts';
-import { EpistoGrid } from '../controls/EpistoGrid';
-import { getProgressFromLagBehind } from '../learningInsights/LearningStatistics';
+import {useContext} from 'react';
+import {useHomePageStats} from '../../services/api/userStatsApiService';
+import {Environment} from '../../static/Environemnt';
+import {translatableTexts} from '../../static/translatableTexts';
+import {EpistoGrid} from '../controls/EpistoGrid';
+import {getProgressFromLagBehind} from '../learningInsights/LearningStatistics';
 import StatisticsCard from '../statisticsCard/StatisticsCard';
-import { CurrentUserContext } from '../system/AuthenticationFrame';
+import {CurrentUserContext} from '../system/AuthenticationFrame';
 
 export const HomePageUserStats = () => {
 
@@ -15,7 +15,7 @@ export const HomePageUserStats = () => {
     return <EpistoGrid
         className='whall'
         auto='fill'
-        gap='10'
+        gap='10px'
         mt='5px'
         minW='500px'
         minColumnWidth='280px'>

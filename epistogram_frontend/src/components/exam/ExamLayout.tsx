@@ -1,10 +1,10 @@
-import { ArrowBack } from '@mui/icons-material';
-import { ReactNode } from 'react';
-import { isString } from '../../static/frontendHelpers';
-import { EpistoButton } from '../controls/EpistoButton';
-import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
-import { EpistoFont } from '../controls/EpistoFont';
-import { EpistoStepper, StepperLogicType } from '../universal/EpistoStepper';
+import {ArrowBack} from '@mui/icons-material';
+import {ReactNode} from 'react';
+import {isString} from '../../static/frontendHelpers';
+import {EpistoButton} from '../controls/EpistoButton';
+import {EpistoFlex2, EpistoFlex2Props} from '../controls/EpistoFlex';
+import {EpistoFont} from '../controls/EpistoFont';
+import {EpistoStepper, StepperLogicType} from '../universal/EpistoStepper';
 
 type ExamLayoutButtonProps = {
     title: string,
@@ -109,7 +109,7 @@ export const ExamLayout = (props: {
             zIndex='1000'
             height='60px'
             minH='60px'
-            pl={20}>
+            pl='20px'>
 
             <EpistoFlex2 minWidth="200">
 
@@ -171,7 +171,7 @@ export const ExamLayout = (props: {
             height="60px"
             align='center'
             mb='5px'
-            p={20}>
+            p='20px'>
 
             {/* back button */}
             {(handleBack && !isFirst) && ExamLayoutButton({
@@ -184,7 +184,7 @@ export const ExamLayout = (props: {
             {/* progress line */}
             <EpistoFlex2
                 flex={1}
-                px={10}
+                px='10px'
                 justify='center'
                 alignItems={'center'}>
 

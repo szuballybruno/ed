@@ -1,7 +1,7 @@
-import { CSSProperties, ReactNode } from 'react';
-import { Environment } from '../../static/Environemnt';
-import { EpistoFlex2 } from '../controls/EpistoFlex';
-import { EpistoFont } from '../controls/EpistoFont';
+import {CSSProperties, ReactNode} from 'react';
+import {Environment} from '../../static/Environemnt';
+import {EpistoFlex2} from '../controls/EpistoFlex';
+import {EpistoFont} from '../controls/EpistoFont';
 
 export const ExamLayoutContent = (props: {
     children: ReactNode,
@@ -57,7 +57,7 @@ export const ExamLayoutContent = (props: {
                     direction={'row'}
                     minW='500px'
                     justifyContent={'center'}
-                    pt={10}>
+                    pt='10px'>
 
                     {children}
                 </EpistoFlex2>

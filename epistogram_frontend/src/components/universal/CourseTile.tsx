@@ -1,13 +1,13 @@
-import { Text } from '@chakra-ui/react';
-import { AvailableCourseDTO } from '../../shared/dtos/AvailableCourseDTO';
-import { Environment } from '../../static/Environemnt';
-import { formatTimespan } from '../../static/frontendHelpers';
-import { translatableTexts } from '../../static/translatableTexts';
-import { EpistoDiv } from '../controls/EpistoDiv';
-import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
-import { EpistoFont } from '../controls/EpistoFont';
-import { FlexFloat } from '../controls/FlexFloat';
-import { SmallStat } from './SmallStat';
+import {Text} from '@chakra-ui/react';
+import {AvailableCourseDTO} from '../../shared/dtos/AvailableCourseDTO';
+import {Environment} from '../../static/Environemnt';
+import {formatTimespan} from '../../static/frontendHelpers';
+import {translatableTexts} from '../../static/translatableTexts';
+import {EpistoDiv} from '../controls/EpistoDiv';
+import {EpistoFlex2, EpistoFlex2Props} from '../controls/EpistoFlex';
+import {EpistoFont} from '../controls/EpistoFont';
+import {FlexFloat} from '../controls/FlexFloat';
+import {SmallStat} from './SmallStat';
 
 const CourseTile = (props: {
     course: AvailableCourseDTO
@@ -34,8 +34,8 @@ const CourseTile = (props: {
         {/* cover image box  */}
         <EpistoDiv flex="1"
             position="relative"
-            minH={150}
-            maxH={150}>
+            minH='150px'
+            maxH='150px'>
 
             {/* cover image */}
             <img
@@ -58,7 +58,7 @@ const CourseTile = (props: {
                     justifyContent="space-around"
                     alignItems="center"
                     padding="4px"
-                    width={130}
+                    width='130px'
                     bg="#97CC9B"
                     borderRadius="7px 0 0 7px">
 
@@ -105,7 +105,7 @@ const CourseTile = (props: {
             </EpistoFlex2>
 
             {/* small stats  */}
-            <EpistoFlex2 mt={7}
+            <EpistoFlex2 mt='7px'
                 mb="3px"
                 justify="space-between">
 
@@ -137,7 +137,7 @@ const CourseTile = (props: {
             {/* rating */}
             <EpistoFlex2
                 alignItems={'center'}
-                mt={7}>
+                mt='7px'>
 
                 {/* teacher name */}
                 <SmallStat

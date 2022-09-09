@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { translatableTexts } from '../static/translatableTexts';
-import { FlexFloat } from './controls/FlexFloat';
-import { TabPanel } from './courseDetails/TabPanel';
-import { EpistoHeader } from './EpistoHeader';
-import { EpistoFont } from './controls/EpistoFont';
-import { Environment } from '../static/Environemnt';
-import { EpistoTab, EpistoTabs } from './controls/EpistoTabs';
-import { EpistoFlex2 } from './controls/EpistoFlex';
+import React, {useState} from 'react';
+import {translatableTexts} from '../static/translatableTexts';
+import {FlexFloat} from './controls/FlexFloat';
+import {TabPanel} from './courseDetails/TabPanel';
+import {EpistoHeader} from './EpistoHeader';
+import {EpistoFont} from './controls/EpistoFont';
+import {Environment} from '../static/Environemnt';
+import {EpistoTab, EpistoTabs} from './controls/EpistoTabs';
+import {EpistoFlex2} from './controls/EpistoFlex';
 
 export const LearningCurves = () => {
 
@@ -116,7 +116,7 @@ export const LearningCurves = () => {
             justify="center"
             p="10px"
             flex="1"
-            minWidth={250}
+            minWidth='250px'
             style={{
                 gridColumn: 'auto / span 2',
                 gridRow: 'auto / span 2'

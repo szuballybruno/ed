@@ -1,17 +1,17 @@
-import { useState } from 'react';
-import { useRegisterUserViaActivationCode } from '../services/api/registrationApiService';
-import { useNavigation } from '../services/core/navigatior';
-import { showNotification, useShowErrorDialog } from '../services/core/notifications';
-import { ErrorCodeType } from '../shared/types/sharedTypes';
-import { Environment } from '../static/Environemnt';
-import { translatableTexts } from '../static/translatableTexts';
-import { EpistoButton } from './controls/EpistoButton';
-import { EpistoEntryNew, useEpistoEntryState } from './controls/EpistoEntryNew';
-import { EpistoFlex2 } from './controls/EpistoFlex';
-import { EpistoFont } from './controls/EpistoFont';
-import { validateAllEntries } from './controls/logic/controlsLogic';
-import { PageRootContainer } from './PageRootContainer';
-import { LoadingFrame } from './system/LoadingFrame';
+import {useState} from 'react';
+import {useRegisterUserViaActivationCode} from '../services/api/registrationApiService';
+import {useNavigation} from '../services/core/navigatior';
+import {showNotification, useShowErrorDialog} from '../services/core/notifications';
+import {ErrorCodeType} from '../shared/types/sharedTypes';
+import {Environment} from '../static/Environemnt';
+import {translatableTexts} from '../static/translatableTexts';
+import {EpistoButton} from './controls/EpistoButton';
+import {EpistoEntryNew, useEpistoEntryState} from './controls/EpistoEntryNew';
+import {EpistoFlex2} from './controls/EpistoFlex';
+import {EpistoFont} from './controls/EpistoFont';
+import {validateAllEntries} from './controls/logic/controlsLogic';
+import {PageRootContainer} from './PageRootContainer';
+import {LoadingFrame} from './system/LoadingFrame';
 
 export const RegisterViaActivationCodePage = () => {
 
@@ -23,7 +23,7 @@ export const RegisterViaActivationCodePage = () => {
     const showError = useShowErrorDialog();
     const { navigate2 } = useNavigation();
 
-    // state 
+    // state
     const [registrationSuccessful, setRegistrationSuccessful] = useState(false);
 
     const emailEntryState = useEpistoEntryState({ isMandatory: true });
@@ -203,7 +203,7 @@ export const RegisterViaActivationCodePage = () => {
                     <EpistoFlex2
                         align="center"
                         justify="center"
-                        minH={80}>
+                        minH='80px'>
 
                         <EpistoButton
                             style={{
@@ -221,7 +221,7 @@ export const RegisterViaActivationCodePage = () => {
                     <EpistoFlex2
                         justify="space-between"
                         align="center"
-                        height={80}>
+                        height='80px'>
 
                         <EpistoFont
                             color="fontGray">

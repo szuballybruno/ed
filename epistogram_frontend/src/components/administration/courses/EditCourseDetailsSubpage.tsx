@@ -1,27 +1,27 @@
-import { Slider } from '@mui/material';
-import { useEffect, useState } from 'react';
-import { applicationRoutes } from '../../../configuration/applicationRoutes';
-import { CourseApiService } from '../../../services/api/courseApiService';
-import { useNavigation } from '../../../services/core/navigatior';
-import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
-import { CourseCategoryDTO } from '../../../shared/dtos/CourseCategoryDTO';
-import { CourseDetailsEditDataDTO } from '../../../shared/dtos/CourseDetailsEditDataDTO';
-import { HumanSkillBenefitDTO } from '../../../shared/dtos/HumanSkillBenefitDTO';
-import { CourseVisibilityType } from '../../../shared/types/sharedTypes';
-import { Id } from '../../../shared/types/versionId';
-import { iterate } from '../../../static/frontendHelpers';
-import { useIntParam } from '../../../static/locationHelpers';
-import { EpistoEntry } from '../../controls/EpistoEntry';
-import { EpistoFlex2 } from '../../controls/EpistoFlex';
-import { EpistoImage } from '../../controls/EpistoImage';
-import { EpistoLabel } from '../../controls/EpistoLabel';
-import { EpistoSelect } from '../../controls/EpistoSelect';
-import { LoadingFrame } from '../../system/LoadingFrame';
-import { EpistoImageSelector } from '../../universal/EpistoImageSelector';
-import { AdminSubpageHeader } from '../AdminSubpageHeader';
-import { SimpleEditList } from '../SimpleEditList';
-import { CourseAdministartionFrame } from './CourseAdministartionFrame';
-import { EditSection } from './EditSection';
+import {Slider} from '@mui/material';
+import {useEffect, useState} from 'react';
+import {applicationRoutes} from '../../../configuration/applicationRoutes';
+import {CourseApiService} from '../../../services/api/courseApiService';
+import {useNavigation} from '../../../services/core/navigatior';
+import {showNotification, useShowErrorDialog} from '../../../services/core/notifications';
+import {CourseCategoryDTO} from '../../../shared/dtos/CourseCategoryDTO';
+import {CourseDetailsEditDataDTO} from '../../../shared/dtos/CourseDetailsEditDataDTO';
+import {HumanSkillBenefitDTO} from '../../../shared/dtos/HumanSkillBenefitDTO';
+import {CourseVisibilityType} from '../../../shared/types/sharedTypes';
+import {Id} from '../../../shared/types/versionId';
+import {iterate} from '../../../static/frontendHelpers';
+import {useIntParam} from '../../../static/locationHelpers';
+import {EpistoEntry} from '../../controls/EpistoEntry';
+import {EpistoFlex2} from '../../controls/EpistoFlex';
+import {EpistoImage} from '../../controls/EpistoImage';
+import {EpistoLabel} from '../../controls/EpistoLabel';
+import {EpistoSelect} from '../../controls/EpistoSelect';
+import {LoadingFrame} from '../../system/LoadingFrame';
+import {EpistoImageSelector} from '../../universal/EpistoImageSelector';
+import {AdminSubpageHeader} from '../AdminSubpageHeader';
+import {SimpleEditList} from '../SimpleEditList';
+import {CourseAdministartionFrame} from './CourseAdministartionFrame';
+import {EditSection} from './EditSection';
 
 export const EditCourseDetailsSubpage = () => {
 
@@ -38,11 +38,11 @@ export const EditCourseDetailsSubpage = () => {
     const { saveCourseThumbnailAsync, saveCourseThumbnailState } = CourseApiService.useUploadCourseThumbnailAsync();
     const { deleteCourseAsync, deleteCourseState } = CourseApiService.useDeleteCourse();
 
-    // calc 
+    // calc
     const categories = courseDetailsEditData?.categories ?? [];
     const teachers = courseDetailsEditData?.teachers ?? [];
 
-    // state 
+    // state
     const [title, setTitle] = useState('');
     const [thumbnailSrc, setThumbnailSrc] = useState('');
     const [thumbnailImageFile, setThumbnailImageFile] = useState<File | null>(null);
@@ -70,7 +70,7 @@ export const EditCourseDetailsSubpage = () => {
     })));
 
 
-    // func 
+    // func
     const handleSaveCourseAsync = async () => {
 
         if (!courseDetailsEditData)
@@ -131,7 +131,7 @@ export const EditCourseDetailsSubpage = () => {
         }
     };
 
-    // effects 
+    // effects
     useEffect(() => {
 
         if (!courseDetailsEditData)
@@ -422,7 +422,7 @@ export const EditCourseDetailsSubpage = () => {
                                     <EpistoFlex2
                                         flexDir={'row'}
                                         alignItems={'center'}
-                                        my={3}
+                                        my='3px'
                                         flex="1">
 
                                         <EpistoEntry

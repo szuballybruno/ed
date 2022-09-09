@@ -1,8 +1,8 @@
-import React, { useState, useMemo } from 'react';
-import { MoreVert } from '@mui/icons-material';
-import { IconButton, Menu, MenuItem } from '@mui/material';
+import React, {useMemo, useState} from 'react';
+import {MoreVert} from '@mui/icons-material';
+import {IconButton, Menu, MenuItem} from '@mui/material';
 import classes from './css/stylesheet.module.css';
-import { EpistoFlex2 } from './controls/EpistoFlex';
+import {EpistoFlex2} from './controls/EpistoFlex';
 
 export default function OverflowMenu(props: {
   children: any,
@@ -33,8 +33,8 @@ export default function OverflowMenu(props: {
     return null;
 
   return (
-    <EpistoFlex2 minWidth={40}
-      width={40}
+    <EpistoFlex2 minWidth='40px'
+      width='40px'
       alignItems={'center'}
       justifyContent={'center'}
       className={className}>

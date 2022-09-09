@@ -1,7 +1,7 @@
-import { Checkbox } from '@mui/material';
-import { EpistoFlex2Props } from '../controls/EpistoFlex';
-import { EpistoFont } from '../controls/EpistoFont';
-import { FlexFloat } from '../controls/FlexFloat';
+import {Checkbox} from '@mui/material';
+import {EpistoFlex2Props} from '../controls/EpistoFlex';
+import {EpistoFont} from '../controls/EpistoFont';
+import {FlexFloat} from '../controls/FlexFloat';
 
 export const QuestionAnswer = (props: {
     onClick?: (selected: boolean) => void,
@@ -29,7 +29,7 @@ export const QuestionAnswer = (props: {
 
     return <FlexFloat
         alignItems={'center'}
-        borderRadius={7}
+        borderRadius='7px'
         minWidth={minWidth || 150}
         cursor={onClick ? 'pointer' : undefined}
         onClick={onClick ? () => onClick(!isSelected) : undefined}
