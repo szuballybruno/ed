@@ -2,6 +2,7 @@ import moment from 'moment';
 import { User } from '../models/entity/User';
 import { ParsableValueType } from '../models/Types';
 import { ClassType } from '../services/misc/advancedTypes/ClassType';
+import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
 import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 import { Id } from '../shared/types/versionId';
 import { KeyofConstrained } from './misc';
@@ -288,11 +289,11 @@ export const sleepAsync = (seconds: number) => {
     });
 };
 
-export const getAuthCookies = (req: ITurboRequest) => {
+export const getAuthCookies = (req: ITurboRequest, config: GlobalConfiguration) => {
 
     return {
-        accessToken: req.getCookie('accessToken'),
-        refreshToken: req.getCookie('refreshToken')
+        accessToken: req.getCookie(config.misc.accessTokenCookieName),
+        refreshToken: req.getCookie(config.misc.refreshTokenCookieName)
     };
 };
 

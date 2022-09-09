@@ -52,20 +52,15 @@ export class GlobalConfiguration {
         }`)
     };
 
-    cookieOptions: ICookieOptions = {
-        sameSite: 'strict',
-        secure: GlobalConfiguration.getEnvConfigEntry('IS_LOCALHOST', 'bool') ? false : true,
-        httpOnly: true,
-        domain: '.epistogram.com'
-    };
+    cookieOptions: ICookieOptions;
 
     misc = {
         hostPort: GlobalConfiguration.getEnvConfigEntry('HOST_PORT'),
         environmentName: GlobalConfiguration.getEnvConfigEntry('ENVIRONMENT_NAME'),
         isLocalhost: GlobalConfiguration.getEnvConfigEntry('IS_LOCALHOST', 'bool'),
         domainTemplate: GlobalConfiguration.getEnvConfigEntry('DOMAIN_TEMPLATE'),
-        accessTokenCookieName: 'accessToken',
-        refreshTokenCookieName: 'refreshToken',
+        accessTokenCookieName: `epi_access_token_${GlobalConfiguration.getEnvConfigEntry('ENVIRONMENT_NAME')}`,
+        refreshTokenCookieName: `epi_refresh_token_${GlobalConfiguration.getEnvConfigEntry('ENVIRONMENT_NAME')}`,
         isUnderMaintanence: GlobalConfiguration.getEnvConfigEntry('IS_UNDER_MAINTENANCE', 'bool'),
         videoCompletedPercentage: GlobalConfiguration.getEnvConfigEntry('VIDEO_COMPLETED_PERCENTAGE', 'int')
     };
@@ -116,6 +111,13 @@ export class GlobalConfiguration {
     constructor(rootDirectory: string) {
 
         this.rootDirectory = rootDirectory;
+
+        this.cookieOptions = {
+            sameSite: 'strict',
+            secure: !this.misc.isLocalhost,
+            httpOnly: true,
+            domain: '.epistogram.com'
+        };
     }
 
     overrideLogScopes = (scopes: LogScopeType[]) => {

@@ -40,7 +40,7 @@ export class AuthenticationController implements XController<AuthenticationContr
     @XControllerAction(apiRoutes.authentication.establishAuthHandshake, { isPublic: true })
     async establishAuthHandshakeAction(params: ActionParams) {
 
-        const { refreshToken } = getAuthCookies(params.req);
+        const { refreshToken } = getAuthCookies(params.req, this._config);
 
         const data = await this
             ._authenticationService

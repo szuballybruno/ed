@@ -1,6 +1,7 @@
 import { AuthenticationService } from '../services/AuthenticationService';
 import { CompanyService } from '../services/CompanyService';
 import { LoggerService } from '../services/LoggerService';
+import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
 import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 import { ServiceProvider } from '../startup/servicesDI';
 import { getAuthCookies } from '../utilities/helpers';
@@ -12,19 +13,21 @@ export class AuthenticationMiddleware implements ITurboMiddlewareInstance<void, 
     private _authenticationService: AuthenticationService;
     private _loggerService: LoggerService;
     private _companyService: CompanyService;
+    private _config: GlobalConfiguration;
 
     constructor(serviceProvider: ServiceProvider) {
 
         this._authenticationService = serviceProvider.getService(AuthenticationService);
         this._companyService = serviceProvider.getService(CompanyService);
         this._loggerService = serviceProvider.getService(LoggerService);
+        this._config = serviceProvider.getService(GlobalConfiguration);
     }
 
     runMiddlewareAsync = async (params: MiddlewareParams<void, ITurboRequest, ITurboResponse>): Promise<ActionParams> => {
 
         const { req, res, options } = params;
 
-        const { accessToken } = getAuthCookies(req);
+        const { accessToken } = getAuthCookies(req, this._config);
         const requestPath = req.path;
 
         this._loggerService

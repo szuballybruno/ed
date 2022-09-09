@@ -9,26 +9,17 @@ export const setAuthCookies = (
     refreshToken: string,
     options: ICookieOptions) => {
 
-    const setAccessTokenCookie = (res: ITurboResponse, accessToken: string) => {
+    res.setCookie(config.misc.accessTokenCookieName, accessToken, {
+        ...options,
+        expires: dayjs()
+            .add(config.security.tokenLifespans.accessTokenLifespanInS, 'seconds')
+            .toDate(),
+    });
 
-        res.setCookie(config.misc.accessTokenCookieName, accessToken, {
-            ...options,
-            expires: dayjs()
-                .add(config.security.tokenLifespans.accessTokenLifespanInS, 'seconds')
-                .toDate(),
-        });
-    };
-
-    const setRefreshTokenCookie = (res: ITurboResponse, refreshToken: string) => {
-
-        res.setCookie(config.misc.refreshTokenCookieName, refreshToken, {
-            ...options,
-            expires: dayjs()
-                .add(config.security.tokenLifespans.refreshTokenLifespanInS, 'seconds')
-                .toDate()
-        });
-    };
-
-    setAccessTokenCookie(res, accessToken);
-    setRefreshTokenCookie(res, refreshToken);
+    res.setCookie(config.misc.refreshTokenCookieName, refreshToken, {
+        ...options,
+        expires: dayjs()
+            .add(config.security.tokenLifespans.refreshTokenLifespanInS, 'seconds')
+            .toDate()
+    });
 };
