@@ -1,12 +1,12 @@
-import React, {useState} from 'react';
-import {translatableTexts} from '../static/translatableTexts';
-import {FlexFloat} from './controls/FlexFloat';
-import {TabPanel} from './courseDetails/TabPanel';
-import {EpistoHeader} from './EpistoHeader';
-import {EpistoFont} from './controls/EpistoFont';
-import {Environment} from '../static/Environemnt';
-import {EpistoTab, EpistoTabs} from './controls/EpistoTabs';
-import {EpistoFlex2} from './controls/EpistoFlex';
+import { useState } from 'react';
+import { Environment } from '../static/Environemnt';
+import { translatableTexts } from '../static/translatableTexts';
+import { EpistoFlex2 } from './controls/EpistoFlex';
+import { EpistoFont } from './controls/EpistoFont';
+import { EpistoTabs } from './controls/EpistoTabs';
+import { FlexFloat } from './controls/FlexFloat';
+import { TabPanel } from './courseDetails/TabPanel';
+import { EpistoHeader } from './EpistoHeader';
 
 export const LearningCurves = () => {
 
@@ -53,39 +53,32 @@ export const LearningCurves = () => {
             <EpistoFlex2 my="10px">
 
                 <EpistoTabs
-                    value={currentTab}
-                    onChange={handleChange}>
-
-                    <EpistoTab
-                        label={translatableTexts.learningOverview.learningCurve}
-                        icon={
-                            <img
+                    tabItems={[
+                        {
+                            label: translatableTexts.learningOverview.learningCurve,
+                            icon: <img
                                 src={Environment.getAssetUrl('/icons/learningcurve.svg')}
                                 alt=""
                                 style={{
                                     width: 25,
                                     margin: '0 10px 0 0'
-                                }} />
-                        }
-                        style={{
-                            flexDirection: 'row',
-                        }} />
-
-                    <EpistoTab
-                        label={translatableTexts.learningOverview.forgettingCurve}
-                        icon={
-                            <img
+                                }} />,
+                            key: 0
+                        },
+                        {
+                            label: translatableTexts.learningOverview.forgettingCurve,
+                            icon: <img
                                 src={Environment.getAssetUrl('/icons/forgettingcurve.svg')}
                                 alt=""
                                 style={{
                                     width: 25,
                                     margin: '0 10px 0 0'
-                                }} />
+                                }} />,
+                            key: 1
                         }
-                        style={{
-                            flexDirection: 'row',
-                        }} />
-                </EpistoTabs>
+                    ]}
+                    selectedTabKey={currentTab}
+                    onChange={handleChange} />
             </EpistoFlex2>
 
             <TabPanel
@@ -139,5 +132,5 @@ export const LearningCurves = () => {
                 {translatableTexts.homePage.noStatsYet}
             </EpistoFont>
         </FlexFloat>
-    </EpistoFlex2>;
+    </EpistoFlex2 >;
 };

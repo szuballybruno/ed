@@ -4,7 +4,7 @@ import { UserApiService } from '../../../../services/api/userApiService';
 import { Id } from '../../../../shared/types/versionId';
 import { EpistoFlex2 } from '../../../controls/EpistoFlex';
 import { EpistoFont } from '../../../controls/EpistoFont';
-import { EpistoTab, EpistoTabs } from '../../../controls/EpistoTabs';
+import { EpistoTabs } from '../../../controls/EpistoTabs';
 import { TabPanel } from '../../../courseDetails/TabPanel';
 import { EpistoDialog } from '../../../universal/epistoDialog/EpistoDialog';
 import { EpistoDialogLogicType } from '../../../universal/epistoDialog/EpistoDialogTypes';
@@ -118,60 +118,16 @@ export const AdminUserCourseContentDialog = (props: {
                     </EpistoFlex2>
                 </EpistoFlex2>
 
-                <EpistoTabs>
-                    {/*                     
-                    // value={currentTab}
-                    // onChange={(_, y) => setCurrentTab(y as number)}
-                    // className="roundBorders"
-                    // TabIndicatorProps={{
-                    //     style: {
-                    //         display: 'none',
-                    //     },
-                    // }}
-                    // sx={{
-                    //     '&.MuiTabs-root': {
-                    //         //background: 'var(--transparentIntenseBlue85)',
-                    //         display: 'flex',
-                    //         alignItems: 'center',
-                    //         justifyContent: 'center',
-                    //         height: 45,
-                    //         minHeight: 0
-                    //     }
-                    // }}> */}
-
-                    {moreInfoDialogTabs
-                        .map((x, index) => {
-
-                            return <EpistoTab
-                                key={index}
-                                // sx={{
-                                //     '&.MuiTab-root': {
-                                //         color: '#444',
-                                //         cursor: 'pointer',
-                                //         backgroundColor: 'transparent',
-                                //         padding: '6px 16px',
-                                //         border: 'none',
-                                //         borderRadius: '5px',
-                                //         display: 'flex',
-                                //         justifyContent: 'center',
-                                //         height: '41px',
-                                //         minHeight: '0px'
-                                //     },
-                                //     '&.MuiTouchRipple-root': {
-                                //         lineHeight: '0px'
-                                //     },
-                                //     '&.Mui-selected': {
-                                //         color: '#444',
-                                //         fontWeight: 'bold',
-                                //         background: 'var(--transparentIntenseTeal)'
-                                //     }
-                                // }}
-                                label={x.title} />;
-                        })}
-                </EpistoTabs>
+                <EpistoTabs
+                    selectedTabKey={currentTab}
+                    onChange={key => setCurrentTab(key)}
+                    tabItems={moreInfoDialogTabs
+                        .map((x, index) => ({
+                            key: index,
+                            label: x.title
+                        }))} />
             </EpistoFlex2>
 
-            { /* tab contents */}
             <EpistoFlex2
                 flex='1'
                 className='whall'>

@@ -1,12 +1,12 @@
-import {ReactNode} from 'react';
-import {useParams} from 'react-router-dom';
-import {ApplicationRoute, ButtonType} from '../../models/types';
-import {useNavigation} from '../../services/core/navigatior';
-import {useIsMatchingCurrentRoute} from '../../static/frontendHelpers';
-import {translatableTexts} from '../../static/translatableTexts';
-import {EpistoButton} from '../controls/EpistoButton';
-import {EpistoFlex2, EpistoFlex2Props} from '../controls/EpistoFlex';
-import {EpistoTab, EpistoTabs} from '../controls/EpistoTabs';
+import { ReactNode } from 'react';
+import { useParams } from 'react-router-dom';
+import { ApplicationRoute, ButtonType } from '../../models/types';
+import { useNavigation } from '../../services/core/navigatior';
+import { useIsMatchingCurrentRoute } from '../../static/frontendHelpers';
+import { translatableTexts } from '../../static/translatableTexts';
+import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
+import { EpistoTabs } from '../controls/EpistoTabs';
 
 export const AdminSubpageHeader = (props: {
     tabMenuItems?: ApplicationRoute<any>[],
@@ -93,25 +93,30 @@ export const AdminSubpageHeader = (props: {
                     flex="1">
 
                     {(tabMenuItems && currentMatchingAbsUrl) && <EpistoTabs
-                        // className="roundBorders"
-                        // TabIndicatorProps={{
-                        //     style: {
-                        //         display: 'none',
-                        //     },
-                        // }}
-                        // sx={{
-                        //     '&.MuiTabs-root': {
-                        //         display: 'flex',
-                        //         alignItems: 'center',
-                        //         justifyContent: 'center',
-                        //         height: 45,
-                        //         minHeight: 0
-                        //     }
-                        // }}
-                        value={currentMatchingAbsUrl}
-                        onChange={handleNavigateToTab}>
+                        tabItems={tabMenuItems
+                            .map(x => ({
+                                key: x.route.getAbsolutePath(),
+                                label: x.title
+                            }))}
+                        selectedTabKey={currentMatchingAbsUrl}
+                        onChange={handleNavigateToTab} />}
 
-                        {tabMenuItems
+                    {/* // className="roundBorders"
+                            // TabIndicatorProps={{
+                            //     style: {
+                            //         display: 'none',
+                            //     },
+                            // }}
+                            // sx={{
+                            //     '&.MuiTabs-root': {
+                            //         display: 'flex',
+                            //         alignItems: 'center',
+                            //         justifyContent: 'center',
+                            //         height: 45,
+                            //         minHeight: 0
+                            //     }
+                            // }} */}
+                    {/* {tabMenuItems
                             .map((tabRoute, index) => {
 
                                 return <EpistoTab
@@ -141,8 +146,7 @@ export const AdminSubpageHeader = (props: {
                                     // }}
                                     label={tabRoute.title}
                                     value={tabRoute.route.getAbsolutePath()} />;
-                            })}
-                    </EpistoTabs>}
+                            })} */}
                 </EpistoFlex2>
 
                 {/* header buttons */}

@@ -1,36 +1,32 @@
-import {Container} from '@chakra-ui/react';
-import {useEffect, useState} from 'react';
-import {CourseApiService} from '../../services/api/courseApiService';
-import {useNavigation} from '../../services/core/navigatior';
-import {useShowErrorDialog} from '../../services/core/notifications';
-import {Id} from '../../shared/types/versionId';
-import {Environment} from '../../static/Environemnt';
-import {formatTimespan, useImageColor} from '../../static/frontendHelpers';
-import {useIntParam} from '../../static/locationHelpers';
-import {translatableTexts} from '../../static/translatableTexts';
-import {
-    useAdminCourseContentDialogLogic
-} from '../administration/users/adminCourseContentDialog/AdminCourseContentDialogLogic';
-import {
-    AdminUserCourseContentDialog
-} from '../administration/users/adminCourseContentDialog/AdminUserCourseContentDialog';
-import {ContentPane} from '../ContentPane';
-import {EpistoButton} from '../controls/EpistoButton';
-import {EpistoDiv} from '../controls/EpistoDiv';
-import {EpistoFlex2} from '../controls/EpistoFlex';
-import {EpistoFont} from '../controls/EpistoFont';
-import {EpistoTab, EpistoTabs} from '../controls/EpistoTabs';
-import {EpistoHeader} from '../EpistoHeader';
-import {PageRootContainer} from '../PageRootContainer';
-import {ProfileImage} from '../ProfileImage';
-import {useCurrentUserId} from '../system/AuthenticationFrame';
-import {FlexListItem} from '../universal/FlexListItem';
-import {CourseDetailsBriefingInfoItem} from './CourseDetailsBriefingInfoItem';
-import {CourseDetailsContentSection} from './CourseDetailsContentSection';
-import {CourseDetailsRequirementsSection} from './CourseDetailsRequirementsSection';
-import {CourseDetailsSummarySection} from './CourseDetailsSummarySection';
-import {CourseDetailsTeacherSection} from './CourseDetailsTeacherSection';
-import {TabPanel} from './TabPanel';
+import { Container } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
+import { CourseApiService } from '../../services/api/courseApiService';
+import { useNavigation } from '../../services/core/navigatior';
+import { useShowErrorDialog } from '../../services/core/notifications';
+import { Id } from '../../shared/types/versionId';
+import { Environment } from '../../static/Environemnt';
+import { formatTimespan, useImageColor } from '../../static/frontendHelpers';
+import { useIntParam } from '../../static/locationHelpers';
+import { translatableTexts } from '../../static/translatableTexts';
+import { useAdminCourseContentDialogLogic } from '../administration/users/adminCourseContentDialog/AdminCourseContentDialogLogic';
+import { AdminUserCourseContentDialog } from '../administration/users/adminCourseContentDialog/AdminUserCourseContentDialog';
+import { ContentPane } from '../ContentPane';
+import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoDiv } from '../controls/EpistoDiv';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { EpistoFont } from '../controls/EpistoFont';
+import { EpistoTabs } from '../controls/EpistoTabs';
+import { EpistoHeader } from '../EpistoHeader';
+import { PageRootContainer } from '../PageRootContainer';
+import { ProfileImage } from '../ProfileImage';
+import { useCurrentUserId } from '../system/AuthenticationFrame';
+import { FlexListItem } from '../universal/FlexListItem';
+import { CourseDetailsBriefingInfoItem } from './CourseDetailsBriefingInfoItem';
+import { CourseDetailsContentSection } from './CourseDetailsContentSection';
+import { CourseDetailsRequirementsSection } from './CourseDetailsRequirementsSection';
+import { CourseDetailsSummarySection } from './CourseDetailsSummarySection';
+import { CourseDetailsTeacherSection } from './CourseDetailsTeacherSection';
+import { TabPanel } from './TabPanel';
 
 const CourseDetailsPage = () => {
 
@@ -216,28 +212,30 @@ const CourseDetailsPage = () => {
                         {/* tab button headers */}
                         <EpistoDiv sx={{ borderBottom: 1, borderColor: 'divider' }}>
                             <EpistoTabs
-                                // className="roundBorders"
-                                // TabIndicatorProps={{
-                                //     style: {
-                                //         display: 'none',
-                                //     },
-                                // }}
-                                // sx={{
-                                //     '&.MuiTabs-root': {
-                                //         //background: "var(--transparentIntenseBlue85)",
-                                //         display: 'flex',
-                                //         alignItems: 'center',
-                                //         justifyContent: 'center',
-                                //         height: 45,
-                                //         minHeight: 0
-                                //     }
-                                // }}
-                                value={currentTab}
-                                onChange={setCurrentTab}>
-
-                                {tabs
-                                    .map((x, index) => <EpistoTab
-                                        key={index}
+                                tabItems={tabs
+                                    .map((x, index) => ({
+                                        key: index,
+                                        label: x.title
+                                    }))}
+                                selectedTabKey={currentTab}
+                                onChange={setCurrentTab} />
+                        </EpistoDiv>
+                        {/* // className="roundBorders"
+                                    // TabIndicatorProps={{
+                                    //     style: {
+                                    //         display: 'none',
+                                    //     },
+                                    // }}
+                                    // sx={{
+                                    //     '&.MuiTabs-root': {
+                                    //         //background: "var(--transparentIntenseBlue85)",
+                                    //         display: 'flex',
+                                    //         alignItems: 'center',
+                                    //         justifyContent: 'center',
+                                    //         height: 45,
+                                    //         minHeight: 0
+                                    //     }
+                                    // }}
                                         // sx={{
                                         //     '&.MuiTab-root': {
                                         //         color: '#444',
@@ -259,10 +257,7 @@ const CourseDetailsPage = () => {
                                         //         fontWeight: 'bold',
                                         //         background: 'var(--transparentIntenseTeal)'
                                         //     }
-                                        // }}
-                                        label={x.title} />)}
-                            </EpistoTabs>
-                        </EpistoDiv>
+                                        // }} */}
 
                         <EpistoFlex2 flex="1">
                             { /* tab contents */}
