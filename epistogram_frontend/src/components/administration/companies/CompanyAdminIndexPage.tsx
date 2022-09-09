@@ -1,8 +1,9 @@
-import { Add, Delete, Edit } from '@mui/icons-material';
+import { Add } from '@mui/icons-material';
 import { memo } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { useCompaniesAdmin, useCreateCompany, useDeleteCompany } from '../../../services/api/companyApiService';
 import { useNavigation } from '../../../services/core/navigatior';
+import { EpistoIcons } from '../../../static/EpistoIcons';
 import { usePostCallback } from '../../../static/frontendHelpers';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
@@ -13,7 +14,7 @@ import { AdminSubpageHeader } from '../AdminSubpageHeader';
 export const CompanyAdminIndexPage = memo(() => {
 
     const { navigate2 } = useNavigation();
-    const editRoute = applicationRoutes.administrationRoute.companiesRoute.editRoute;
+    const { indexRoute, editRoute, coursesRoute } = applicationRoutes.administrationRoute.companiesRoute;
 
     // http
     const { companies, companiesState, companiesError, refetchCompanies } = useCompaniesAdmin();
@@ -34,7 +35,7 @@ export const CompanyAdminIndexPage = memo(() => {
                 direction="column"
                 pb="20px"
                 tabMenuItems={[
-                    applicationRoutes.administrationRoute.companiesRoute.indexRoute
+                    indexRoute
                 ]}
                 headerButtons={[
                     {
@@ -56,12 +57,17 @@ export const CompanyAdminIndexPage = memo(() => {
 
                             <EpistoButton
                                 onClick={() => navigate2(editRoute, { companyId: company.id })}>
-                                <Edit></Edit>
+                                <EpistoIcons.Edit />
+                            </EpistoButton>
+
+                            <EpistoButton
+                                onClick={() => navigate2(coursesRoute, { companyId: company.id })}>
+                                <EpistoIcons.Courses />
                             </EpistoButton>
 
                             <EpistoButton
                                 onClick={handleDeleteCompany}>
-                                <Delete />
+                                <EpistoIcons.Delete />
                             </EpistoButton>
                         </EpistoFlex2>
                     ))}
