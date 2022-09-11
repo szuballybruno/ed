@@ -4,7 +4,7 @@ import {Environment} from '../static/Environemnt';
 import {PropsWithChildren} from '../static/frontendHelpers';
 import {translatableTexts} from '../static/translatableTexts';
 import {EpistoButton} from './controls/EpistoButton';
-import { EpistoFlex2 } from './controls/EpistoFlex';
+import {EpistoFlex2} from './controls/EpistoFlex';
 import {EpistoFont} from './controls/EpistoFont';
 import {FlexFloat} from './controls/FlexFloat';
 import {useAuthorizationContext} from './system/AuthorizationContext';
@@ -98,8 +98,8 @@ export const LeftPane = ({
             <EpistoFlex2
                 direction="column"
                 position="absolute"
-                bottom="160"
-                right="25"
+                bottom="160px"
+                right="25px"
                 width="170px">
 
                 <EpistoFont
@@ -116,8 +116,8 @@ export const LeftPane = ({
             <EpistoFlex2
                 direction="column"
                 position="absolute"
-                bottom="100"
-                right="20"
+                bottom="100px"
+                right="20px"
                 width="130px">
 
                 <EpistoButton

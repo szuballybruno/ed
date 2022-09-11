@@ -1,4 +1,4 @@
-import { GridItem, useMediaQuery} from '@chakra-ui/react';
+import {GridItem, useMediaQuery} from '@chakra-ui/react';
 import {Select, ToggleButton, ToggleButtonGroup} from '@mui/material';
 import React from 'react';
 import {CourseApiService} from '../services/api/courseApiService';
@@ -11,7 +11,7 @@ import {distinctByAllKeys} from '../static/frontendHelpers';
 import {translatableTexts} from '../static/translatableTexts';
 import {ContentPane} from './ContentPane';
 import {EpistoButton} from './controls/EpistoButton';
-import { EpistoDiv } from './controls/EpistoDiv';
+import {EpistoDiv} from './controls/EpistoDiv';
 import {EpistoFlex, EpistoFlex2} from './controls/EpistoFlex';
 import {EpistoFont} from './controls/EpistoFont';
 import {EpistoGrid} from './controls/EpistoGrid';
@@ -101,7 +101,7 @@ const AvailableCoursesPage = () => {
                                     textAlign: 'left',
                                     justifyContent: 'flex-start',
                                     alignItems: 'center',
-                                    height: 40,
+                                    height: 35,
                                     paddingLeft: '10px',
                                     border: 'none'
                                 }}
@@ -230,7 +230,7 @@ const AvailableCoursesPage = () => {
                     className="whall">
 
                     <EpistoGrid auto="fill"
-                        gap="15"
+                        gap='15px'
                         minColumnWidth="250px">
 
                         {courses

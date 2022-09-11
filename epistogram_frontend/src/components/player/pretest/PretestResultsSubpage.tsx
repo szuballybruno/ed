@@ -1,18 +1,18 @@
-import { Grid } from '@chakra-ui/react';
-import { CourseApiService } from '../../../services/api/courseApiService';
-import { PretestApiService } from '../../../services/api/pretestApiService';
-import { useNavigation } from '../../../services/core/navigatior';
-import { useShowErrorDialog } from '../../../services/core/notifications';
-import { CourseModeType } from '../../../shared/types/sharedTypes';
-import { Id } from '../../../shared/types/versionId';
-import { Environment } from '../../../static/Environemnt';
-import { useIntParam } from '../../../static/locationHelpers';
-import { EpistoButton } from '../../controls/EpistoButton';
-import { EpistoFlex2 } from '../../controls/EpistoFlex';
-import { EpistoFont } from '../../controls/EpistoFont';
-import { EpistoImage } from '../../controls/EpistoImage';
+import {Grid} from '@chakra-ui/react';
+import {CourseApiService} from '../../../services/api/courseApiService';
+import {PretestApiService} from '../../../services/api/pretestApiService';
+import {useNavigation} from '../../../services/core/navigatior';
+import {useShowErrorDialog} from '../../../services/core/notifications';
+import {CourseModeType} from '../../../shared/types/sharedTypes';
+import {Id} from '../../../shared/types/versionId';
+import {Environment} from '../../../static/Environemnt';
+import {useIntParam} from '../../../static/locationHelpers';
+import {EpistoButton} from '../../controls/EpistoButton';
+import {EpistoFlex2} from '../../controls/EpistoFlex';
+import {EpistoFont} from '../../controls/EpistoFont';
+import {EpistoImage} from '../../controls/EpistoImage';
 import StatisticsCard from '../../statisticsCard/StatisticsCard';
-import { LoadingFrame } from '../../system/LoadingFrame';
+import {LoadingFrame} from '../../system/LoadingFrame';
 
 export const PretestDateInfo = (props: {
     description: string,
@@ -120,7 +120,7 @@ export const PretestResultsSubpage = () => {
 
 
                 <Grid
-                    gap={'10'}
+                    gap={'10px'}
                     padding="10px"
                     marginTop='50px'
                     gridAutoRows="150px"

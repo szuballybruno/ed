@@ -1,7 +1,7 @@
-import {Button, ButtonProps} from '@mui/material';
-import {CSSProperties, forwardRef, ReactNode} from 'react';
-import {useCSSOptionClasses} from '../../static/frontendHelpers';
-import {CSSOptionsType} from '../../styles/globalCssTypes';
+import { Button, ButtonProps } from '@mui/material';
+import { CSSProperties, forwardRef, ReactNode } from 'react';
+import { useCSSOptionClasses } from '../../static/frontendHelpers';
+import { CSSOptionsType } from '../../styles/globalCssTypes';
 
 export type EpistoButtonPropsType = {
     children?: string | ReactNode,
@@ -12,6 +12,9 @@ export type EpistoButtonPropsType = {
     padding?: string,
     fontSize?: string,
     variant?: 'outlined' | 'plain' | 'colored' | 'light',
+    sx?: {
+        [key: string]: CSSProperties
+    },
 
     /**
      * @deprecated use globalCssTypes
@@ -41,6 +44,7 @@ export const EpistoButton = forwardRef<HTMLButtonElement, EpistoButtonPropsType>
         isDisabled,
         name,
         type,
+        sx,
         onClickNoPropagation,
         ...cssOptions
     } = props;
@@ -80,8 +84,9 @@ export const EpistoButton = forwardRef<HTMLButtonElement, EpistoButtonPropsType>
         color="primary"
         ref={ref}
         disabled={isDisabled}
-        className={`${className} fontNormal14 ${cssOptionClasses}`}
+        className={`${className} ${cssOptionClasses} ${variant === 'colored' && 'mildShadow'}`}
         type={type}
+        sx={sx}
         style={{
             overflow: 'hidden',
             whiteSpace: 'nowrap',
@@ -100,7 +105,7 @@ export const EpistoButton = forwardRef<HTMLButtonElement, EpistoButtonPropsType>
             filter: isDisabled ? 'contrast(0.01)' : undefined,
             height: size,
             padding: padding ? padding : undefined,
-            fontSize: fontSize ? fontSize : undefined,
+            fontSize: fontSize ? fontSize : '12px',
             borderColor: 'var(--mildGrey)',
             pointerEvents: isDisabled ? 'none' : undefined,
             ...style

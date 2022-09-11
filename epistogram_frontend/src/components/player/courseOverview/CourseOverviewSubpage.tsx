@@ -83,7 +83,7 @@ export const CourseOverviewSubpage = () => {
 
                 <EpistoGrid
                     minColumnWidth={'250px'}
-                    gap={'10'}
+                    gap={'10px'}
                     auto={'fill'}
                     w="100%">
 

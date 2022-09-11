@@ -1,6 +1,7 @@
-import { FC } from 'react';
-import { EpistoButton, EpistoButtonPropsType } from './EpistoButton';
-import { EpistoFlex2 } from './EpistoFlex';
+import {FC} from 'react';
+import {EpistoButton, EpistoButtonPropsType} from './EpistoButton';
+import {ToggleButton, ToggleButtonGroup} from '@mui/material';
+import {segmentedButtonStyles} from './segmentedButtonStyles';
 
 type EpistoTabProps = {
     isSelected: boolean,
@@ -28,13 +29,15 @@ export type TabItemType<TKey> = {
 export type EpistoTabsProps<TKey> = {
     selectedTabKey: TKey,
     tabItems: TabItemType<TKey>[],
-    onChange: (key: TKey) => void,
-    itemStyle?: (isSelected: boolean) => EpistoButtonPropsType
+    onChange: (key: TKey) => void
 };
 
-export const EpistoTabs = <TKey,>({ tabItems, selectedTabKey, itemStyle, onChange }: EpistoTabsProps<TKey>) => {
+export const EpistoTabs = <TKey,>({ tabItems, selectedTabKey, onChange }: EpistoTabsProps<TKey>) => {
 
-    return <EpistoFlex2>
+    return <ToggleButtonGroup
+        sx={segmentedButtonStyles.tab.toggleButtonGroupSx}
+        style={segmentedButtonStyles.tab.toggleButtonGroupStyle}>
+
         {tabItems
             .map((tabItem, index) => {
 
@@ -42,13 +45,19 @@ export const EpistoTabs = <TKey,>({ tabItems, selectedTabKey, itemStyle, onChang
                 const { key, ...tabItemProps } = tabItem;
 
                 return (
-                    <EpistoTab
+                    <ToggleButton
                         key={index}
-                        isSelected={isSelected}
+                        value={index}
+                        disableRipple={segmentedButtonStyles.tab.disableRipple}
+                        sx={segmentedButtonStyles.tab.toggleButtonSx}
+                        style={segmentedButtonStyles.tab.toggleButtonGroupStyle}
+                        selected={isSelected}
                         onClick={() => onChange(tabItem.key)}
-                        {...tabItemProps}
-                        {...(itemStyle ? itemStyle(isSelected) : {})} />
+                        {...tabItemProps}>
+
+                        {tabItem.label}
+                    </ToggleButton>
                 );
             })}
-    </EpistoFlex2>;
+    </ToggleButtonGroup>;
 };
