@@ -21,8 +21,6 @@ export const ExamGreetSlide = (props: {
     return <ExamLayout
         className='whall'
         justify='flex-start'
-        overflowY='scroll'
-        maxH='calc(100vh - 120px)'
         headerCenterText={exam.title}
         footerButtons={new ArrayBuilder()
             .addIf(exam.canTakeAgain, {
