@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { CompanyApiService } from '../../../services/api/companyApiService';
+import { showNotification } from '../../../services/core/notifications';
 import { CompanyAssociatedCourseDTO } from '../../../shared/dtos/company/CompanyAssociatedCourseDTO';
 import { Id } from '../../../shared/types/versionId';
 import { EpistoIcons } from '../../../static/EpistoIcons';
@@ -9,6 +10,7 @@ import { EpistoCheckbox } from '../../controls/EpistoCheckbox';
 import { EpistoDataGrid, EpistoDataGridColumnBuilder } from '../../controls/EpistoDataGrid';
 import { EpistoImage } from '../../controls/EpistoImage';
 import { useXMutatorNew } from '../../lib/XMutator/XMutatorReact';
+import { useSetBusy } from '../../system/LoadingFrame/BusyBarContext';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 
 type RowType = CompanyAssociatedCourseDTO;
@@ -20,11 +22,14 @@ export const CompanyAdminCoursesPage = () => {
     const companyId = useRouteParams(editRoute)
         .getValue(x => x.companyId, 'int');
 
-    const { courseAssociations } = CompanyApiService
+    const { courseAssociations, refetchCourseAssociations, courseAssociationsState, courseAssociationsError } = CompanyApiService
         .useCourseAssociations(companyId);
 
     const { saveCourseAssociationsAsync, saveCourseAssociationsState } = CompanyApiService
         .useSaveCourseAssociations();
+
+    useSetBusy(CompanyApiService.useCourseAssociations, courseAssociationsState, courseAssociationsError);
+    useSetBusy(CompanyApiService.useSaveCourseAssociations, saveCourseAssociationsState);
 
     const [{ mutatedItems, mutations }, mutatorFunctions] = useXMutatorNew(CompanyAssociatedCourseDTO, 'courseId', 'CompanyAssociatedCourses');
 
@@ -34,7 +39,14 @@ export const CompanyAdminCoursesPage = () => {
             .setOriginalItems(courseAssociations);
     }, [courseAssociations, mutatorFunctions]);
 
-    useEffect(() => console.log(mutations), [mutations]);
+    const save = async () => {
+
+        await saveCourseAssociationsAsync({ companyId, mutations });
+
+        showNotification('Saved');
+
+        await refetchCourseAssociations();
+    };
 
     const columns = new EpistoDataGridColumnBuilder<RowType, Id<'Course'>>()
         .add({
@@ -80,7 +92,7 @@ export const CompanyAdminCoursesPage = () => {
                 {
                     title: 'Save',
                     icon: <EpistoIcons.Save />,
-                    action: () => saveCourseAssociationsAsync({ companyId, mutations })
+                    action: save
                 }
             ]}>
             <EpistoDataGrid

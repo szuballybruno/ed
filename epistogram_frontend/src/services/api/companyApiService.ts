@@ -109,13 +109,14 @@ const useCompanyDetailsByDomain = (domain: string) => {
 
 const useCourseAssociations = (companyId: Id<'Company'>) => {
 
-    const { data, state, error } = QueryService
+    const { data, state, error, refetch } = QueryService
         .useXQueryArray<CompanyAssociatedCourseDTO>(apiRoutes.companies.getCompanyCourseAssociations, { companyId });
 
     return {
         courseAssociations: data,
         courseAssociationsError: error,
-        courseAssociationsState: state
+        courseAssociationsState: state,
+        refetchCourseAssociations: refetch
     };
 };
 
