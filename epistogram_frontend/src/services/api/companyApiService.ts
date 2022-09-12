@@ -121,7 +121,7 @@ const useCourseAssociations = (companyId: Id<'Company'>) => {
 
 const useSaveCourseAssociations = () => {
 
-    const qr = usePostDataUnsafe(apiRoutes.companies.getCompanyCourseAssociations);
+    const qr = usePostDataUnsafe(apiRoutes.companies.saveCompanyCourseAssociations);
 
     return {
         saveCourseAssociationsAsync: qr.postDataAsync,

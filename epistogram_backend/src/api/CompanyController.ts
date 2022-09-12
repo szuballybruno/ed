@@ -104,7 +104,7 @@ export class CompanyController implements XController<CompanyController> {
             .getCompanyDetailsByDomainAsync(data.query.getValue(x => x.domain, 'string'));
     }
 
-    @XControllerAction(apiRoutes.companies.getCompanyCourseAssociations, { isPublic: true })
+    @XControllerAction(apiRoutes.companies.getCompanyCourseAssociations)
     getCompanyCourseAssociationsAction(params: ActionParams) {
 
         const data = params
@@ -112,5 +112,17 @@ export class CompanyController implements XController<CompanyController> {
 
         return this._compService
             .getCompanyAssociatedCoursesAsync(data.query.getValue(x => x.companyId, 'int'));
+    }
+
+    @XControllerAction(apiRoutes.companies.saveCompanyCourseAssociations, { isPost: true })
+    saveCompanyCourseAssociationsAction(params: ActionParams) {
+
+        const data = params
+            .getFromParameterized(apiRoutes.companies.saveCompanyCourseAssociations);
+
+        const body = data.body;
+
+        return this._compService
+            .saveCompanyAssociatedCoursesAsync(body.getValue(x => x.companyId, 'int'), body.getValue(x => x.mutations));
     }
 }

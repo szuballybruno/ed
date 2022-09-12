@@ -55,15 +55,16 @@ export class XSafeObjectWrapper<TObject> {
     getValue(getter: (data: TObject) => boolean[], castTypeOrFn: 'boolean[]'): boolean[];
     getValue<TId extends String>(getter: (data: TObject) => Id<TId>, castTypeOrFn: 'int'): Id<TId>;
     getValue<TId extends String>(getter: (data: TObject) => Id<TId>[], castTypeOrFn: 'int[]'): Id<TId>[];
+    getValue<TValue>(getter: (data: TObject) => TValue): TValue;
     getValue<TValue>(getter: (data: TObject) => TValue[], castTypeOrFn: 'any[]'): TValue[];
     getValue<TValue>(getter: (data: TObject) => TValue, castType: 'custom', fn: SafeObjectValidatorFunctionType<TValue>): TValue;
-    getValue<TValue>(getter: (data: TObject) => TValue, castType: SafeObjCastType, fn?: SafeObjectValidatorFunctionType<TValue>): TValue {
+    getValue<TValue>(getter: (data: TObject) => TValue, castType?: SafeObjCastType, fn?: SafeObjectValidatorFunctionType<TValue>): TValue {
 
         const value = getter(this.data);
         if (value === null || value === undefined)
             throw new Error('Value null or undefined!');
 
-        return this.getValueCore(getter, castType, fn);
+        return this.getValueCore(getter, castType ?? 'any', fn);
     }
 
     private getValueCore<TValue>(getter: (data: TObject) => TValue, castType: SafeObjCastType, fn?: SafeObjectValidatorFunctionType<TValue>): any {

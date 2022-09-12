@@ -8,7 +8,7 @@ import { QuestionEditDataDTO } from '../shared/dtos/QuestionEditDataDTO';
 import { Id } from '../shared/types/versionId';
 import { VersionMigrationContainer } from '../utilities/misc';
 import { MapperService } from './MapperService';
-import { XMutatorHelpers } from './misc/XMutatorHelpers_a';
+import { XMutatorHelpers } from './misc/XMutatorHelpers';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { VersionSaveService } from './VersionSaveService';
 

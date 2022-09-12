@@ -17,7 +17,7 @@ import { AuthorizationService } from './AuthorizationService';
 import { CourseItemService } from './CourseItemService';
 import { FileService } from './FileService';
 import { MapperService } from './MapperService';
-import { XMutatorHelpers } from './misc/XMutatorHelpers_a';
+import { XMutatorHelpers } from './misc/XMutatorHelpers';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { VersionSaveService } from './VersionSaveService';
 

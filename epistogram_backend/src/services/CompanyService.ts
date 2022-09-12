@@ -1,5 +1,6 @@
 import { UploadedFile } from 'express-fileupload';
 import { Company } from '../models/entity/Company';
+import { CourseAccessBridge } from '../models/entity/CourseAccessBridge';
 import { StorageFile } from '../models/entity/StorageFile';
 import { User } from '../models/entity/User';
 import { CompanyAssociatedCoursesView } from '../models/views/CompanyAssociatedCoursesView';
@@ -11,13 +12,17 @@ import { CompanyDTO } from '../shared/dtos/company/CompanyDTO';
 import { CompanyEditDataDTO } from '../shared/dtos/company/CompanyEditDataDTO';
 import { CompanyPublicDTO } from '../shared/dtos/company/CompanyPublicDTO';
 import { RoleAssignCompanyDTO } from '../shared/dtos/company/RoleAssignCompanyDTO';
+import { Mutation } from '../shared/dtos/mutations/Mutation';
+import { instantiate } from '../shared/logic/sharedLogic';
 import { PermissionCodeType } from '../shared/types/sharedTypes';
 import { Id } from '../shared/types/versionId';
+import { InsertEntity } from '../utilities/misc';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { AuthorizationService } from './AuthorizationService';
 import { DomainProviderService } from './DomainProviderService';
 import { FileService } from './FileService';
 import { MapperService } from './MapperService';
+import { XMutatorHelpers } from './misc/XMutatorHelpers';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 
 export class CompanyService {
@@ -286,7 +291,7 @@ export class CompanyService {
     /**
      * Get company associated courses 
      */
-     async getCompanyAssociatedCoursesAsync(companyId: Id<'Company'>): Promise<CompanyAssociatedCourseDTO[]> {
+    async getCompanyAssociatedCoursesAsync(companyId: Id<'Company'>): Promise<CompanyAssociatedCourseDTO[]> {
 
         const views = await this
             ._ormService
@@ -297,5 +302,41 @@ export class CompanyService {
         return this
             ._mapperService
             .mapTo(CompanyAssociatedCourseDTO, [views]);
+    }
+
+    /**
+     * Get company associated courses 
+     */
+    async saveCompanyAssociatedCoursesAsync(companyId: Id<'Company'>, mutations: Mutation<CompanyAssociatedCourseDTO, 'courseId'>[]): Promise<void> {
+
+        // delete bridges 
+        const deassignedCourseIds = XMutatorHelpers
+            .filterByFieldMutaitonKeyValue(mutations, 'isAssociated', false)
+            .map(x => x.key);
+
+        const deletedBridges = await this
+            ._ormService
+            .query(CourseAccessBridge, { companyId, deassignedCourseIds })
+            .where('companyId', '=', 'companyId')
+            .and('courseId', '=', 'deassignedCourseIds')
+            .getMany();
+
+        await this
+            ._ormService
+            .hardDelete(CourseAccessBridge, deletedBridges.map(x => x.id));
+
+        // added bridges 
+        const assignedCourseIds = XMutatorHelpers
+            .filterByFieldMutaitonKeyValue(mutations, 'isAssociated', true)
+            .map(x => x.key);
+
+        await this
+            ._ormService
+            .createManyAsync(CourseAccessBridge, assignedCourseIds
+                .map(assignedCourseId => ({
+                    companyId,
+                    userId: null,
+                    courseId: assignedCourseId
+                })));
     }
 }

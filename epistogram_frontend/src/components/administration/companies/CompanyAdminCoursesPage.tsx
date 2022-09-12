@@ -23,6 +23,9 @@ export const CompanyAdminCoursesPage = () => {
     const { courseAssociations } = CompanyApiService
         .useCourseAssociations(companyId);
 
+    const { saveCourseAssociationsAsync, saveCourseAssociationsState } = CompanyApiService
+        .useSaveCourseAssociations();
+
     const [{ mutatedItems, mutations }, mutatorFunctions] = useXMutatorNew(CompanyAssociatedCourseDTO, 'courseId', 'CompanyAssociatedCourses');
 
     useEffect(() => {
@@ -77,7 +80,7 @@ export const CompanyAdminCoursesPage = () => {
                 {
                     title: 'Save',
                     icon: <EpistoIcons.Save />,
-                    action: () => 1
+                    action: () => saveCourseAssociationsAsync({ companyId, mutations })
                 }
             ]}>
             <EpistoDataGrid

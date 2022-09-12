@@ -10,7 +10,7 @@ import {Id} from '../shared/types/versionId';
 import {VersionMigrationContainer} from '../utilities/misc';
 import {CoinAcquireService} from './CoinAcquireService';
 import {LoggerService} from './LoggerService';
-import {XMutatorHelpers} from './misc/XMutatorHelpers_a';
+import {XMutatorHelpers} from './misc/XMutatorHelpers';
 import {ORMConnectionService} from './ORMConnectionService/ORMConnectionService';
 import {SQLFunctionsService} from './sqlServices/FunctionsService';
 import {VersionSaveService} from './VersionSaveService';

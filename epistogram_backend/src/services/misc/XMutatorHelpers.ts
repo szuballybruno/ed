@@ -78,11 +78,30 @@ const getFieldValueOrFail = <TMutatee, TKeyField extends keyof TMutatee>(mutatio
     };
 };
 
+const filterByFieldMutaitonKey = <TMutatee, TKeyField extends keyof TMutatee>(muts: Mutation<TMutatee, TKeyField>[], field: keyof TMutatee) => {
+
+    return muts
+        .filter(mut => mut
+            .fieldMutators
+            .some(fm => fm.field === field));
+};
+
+const filterByFieldMutaitonKeyValue = <TMutatee, TKeyField extends keyof TMutatee, TField extends keyof TMutatee>(
+    muts: Mutation<TMutatee, TKeyField>[], field: TField, value: TMutatee[TField]) => {
+
+    return muts
+        .filter(mut => mut
+            .fieldMutators
+            .some(fm => fm.field === field && fm.value === value));
+};
+
 export const XMutatorHelpers = {
     mapMutationToPartialObject,
     anyField,
     hasFieldMutation,
     getFieldValue,
     getFieldValueOrFail,
-    hasMutationForKey
+    hasMutationForKey,
+    filterByFieldMutaitonKey,
+    filterByFieldMutaitonKeyValue
 };
