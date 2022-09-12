@@ -26,5 +26,5 @@ export class CompanyAssociatedCoursesView {
 
     @ViewColumn()
     @XViewColumn()
-    courseTitle: string;
+    title: string;
 }

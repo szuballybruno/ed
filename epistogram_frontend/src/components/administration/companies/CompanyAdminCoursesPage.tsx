@@ -4,7 +4,9 @@ import { CompanyAssociatedCourseDTO } from '../../../shared/dtos/company/Company
 import { Id } from '../../../shared/types/versionId';
 import { EpistoIcons } from '../../../static/EpistoIcons';
 import { useRouteParams } from '../../../static/locationHelpers';
-import { EpistoDataGrid, GridColumnType } from '../../controls/EpistoDataGrid';
+import { EpistoCheckbox } from '../../controls/EpistoCheckbox';
+import { EpistoDataGrid, EpistoDataGridColumnBuilder } from '../../controls/EpistoDataGrid';
+import { EpistoImage } from '../../controls/EpistoImage';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 
 type RowType = CompanyAssociatedCourseDTO;
@@ -19,12 +21,27 @@ export const CompanyAdminCoursesPage = () => {
     const { courseAssociations, courseAssociationsError, courseAssociationsState } = CompanyApiService
         .useCourseAssociations(companyId);
 
-    const columns: GridColumnType<RowType, Id<'Course'>, any>[] = [
-        {
+    const columns = new EpistoDataGridColumnBuilder<RowType, Id<'Course'>>()
+        .add({
+            field: 'coverUrl',
+            headerName: 'Cover',
+            renderCell: ({ value }) => <EpistoImage
+                className="square70"
+                objectFit="contain"
+                src={value} />
+        })
+        .add({
             field: 'title',
-            headerName: 'Title'
-        }
-    ];
+            headerName: 'Title',
+            width: 250
+        })
+        .add({
+            field: 'isAssociated',
+            headerName: 'Associated?',
+            renderCell: ({ value }) => <EpistoCheckbox
+                value={value} />
+        })
+        .getColumns();
 
     return (
         <AdminSubpageHeader

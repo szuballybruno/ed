@@ -4,4 +4,5 @@ export class CompanyAssociatedCourseDTO {
     courseId: Id<'Course'>;
     coverUrl: string;
     title: string;
+    isAssociated: boolean;
 }

@@ -120,19 +120,17 @@ export class CourseService {
         courseId: Id<'Course'>
     ) {
 
-        return {
-            action: async () => {
-                const courseDetailsView = await this._ormService
-                    .query(CourseDetailsView, {principalId, courseId})
-                    .where('userId', '=', 'principalId')
-                    .and('courseId', '=', 'courseId')
-                    .getSingle();
+        const courseDetailsView = await this._ormService
+            .query(CourseDetailsView, { principalId, courseId })
+            .where('userId', '=', 'principalId')
+            .and('courseId', '=', 'courseId')
+            .getSingle();
 
-                const moduleViews = await this._ormService
-                    .query(PlaylistView, {principalId, courseId})
-                    .where('userId', '=', 'principalId')
-                    .and('courseId', '=', 'courseId')
-                    .getMany();
+        const moduleViews = await this._ormService
+            .query(PlaylistView, { principalId, courseId })
+            .where('userId', '=', 'principalId')
+            .and('courseId', '=', 'courseId')
+            .getMany();
 
         const playlistModuleDTOs = this._mapperService
             .mapTo(PlaylistModuleDTO, [moduleViews]);

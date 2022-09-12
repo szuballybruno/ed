@@ -1209,13 +1209,14 @@ const marray = [
         }),
 
     epistoMappingsBuilder
-        .addArrayMapping(CompanyAssociatedCourseDTO, () => (views: CompanyAssociatedCoursesView[]) => {
+        .addArrayMapping(CompanyAssociatedCourseDTO, ([urlService]) => (views: CompanyAssociatedCoursesView[]) => {
 
             return views
                 .map(view => instantiate<CompanyAssociatedCourseDTO>({
                     courseId: view.courseId,
-                    coverUrl: view.coverFilePath,
-                    title: view.courseTitle,
+                    coverUrl: urlService.getAssetUrl(view.coverFilePath),
+                    title: view.title,
+                    isAssociated: view.isAssigned
                 }));
         })
 
