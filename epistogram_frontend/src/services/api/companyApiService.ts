@@ -119,6 +119,16 @@ const useCourseAssociations = (companyId: Id<'Company'>) => {
     };
 };
 
+const useSaveCourseAssociations = () => {
+
+    const qr = usePostDataUnsafe(apiRoutes.companies.getCompanyCourseAssociations);
+
+    return {
+        saveCourseAssociationsAsync: qr.postDataAsync,
+        saveCourseAssociationsState: qr.state
+    };
+};
+
 export const CompanyApiService = {
 
     useCompaniesAdmin,
@@ -130,5 +140,6 @@ export const CompanyApiService = {
     useCompanyEditData,
     useAvailableCompaniesForRoleCreation,
     useCompanyDetailsByDomain,
-    useCourseAssociations
+    useCourseAssociations,
+    useSaveCourseAssociations
 };

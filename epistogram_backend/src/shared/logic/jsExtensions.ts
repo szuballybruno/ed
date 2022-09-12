@@ -20,6 +20,7 @@ declare global {
         firstOrNull(func?: (item: T) => boolean): T | null;
         count(func: (item: T) => boolean): number;
         insert(index: number, newItem: T): Array<T>;
+        each(func: (item: T) => void): Array<T>;
     }
 
     interface Date {
@@ -236,4 +237,16 @@ Array.prototype.count = function <T>(func: (item: T) => boolean): number {
     }
 
     return count;
+};
+
+// eslint-disable-next-line no-extend-native
+Array.prototype.each = function <T>(func: (item: T) => void): T[] {
+
+    for (let index = 0; index < this.length; index++) {
+
+        const element = this[index];
+        func(element);
+    }
+
+    return this;
 };
