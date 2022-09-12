@@ -281,7 +281,7 @@ export const AdminUserStatisticsSubpage = (props: {
 
                     <EpistoGrid
                         auto="fill"
-                        gap="15"
+                        gap="15px"
                         minColumnWidth="250px"
                         p="10px 0">
 

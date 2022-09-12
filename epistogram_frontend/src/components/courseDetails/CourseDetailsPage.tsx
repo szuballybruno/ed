@@ -1,4 +1,3 @@
-import { Container } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { CourseApiService } from '../../services/api/courseApiService';
 import { useNavigation } from '../../services/core/navigatior';
@@ -8,11 +7,14 @@ import { Environment } from '../../static/Environemnt';
 import { formatTimespan, useImageColor } from '../../static/frontendHelpers';
 import { useIntParam } from '../../static/locationHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
-import { useAdminCourseContentDialogLogic } from '../administration/users/adminCourseContentDialog/AdminCourseContentDialogLogic';
-import { AdminUserCourseContentDialog } from '../administration/users/adminCourseContentDialog/AdminUserCourseContentDialog';
+import {
+    useAdminCourseContentDialogLogic
+} from '../administration/users/adminCourseContentDialog/AdminCourseContentDialogLogic';
+import {
+    AdminUserCourseContentDialog
+} from '../administration/users/adminCourseContentDialog/AdminUserCourseContentDialog';
 import { ContentPane } from '../ContentPane';
 import { EpistoButton } from '../controls/EpistoButton';
-import { EpistoDiv } from '../controls/EpistoDiv';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoTabs } from '../controls/EpistoTabs';
@@ -155,14 +157,22 @@ const CourseDetailsPage = () => {
             <EpistoFlex2>
 
                 {/* left pane */}
-                <EpistoFlex2 flex="1"
+                <EpistoFlex2
+                    id='CourseDetails-LeftPane'
+                    flex="1"
                     direction={'column'}
                     mr='30px'>
 
                     {/* short description */}
-                    <Container pr="20px">
-                        {courseDetails?.shortDescription}
-                    </Container>
+                    <EpistoFlex2
+                        pr="20px"
+                        width='100%'>
+
+                        <EpistoFont>
+
+                            {courseDetails?.shortDescription}
+                        </EpistoFont>
+                    </EpistoFlex2>
 
                     {/* briefing info items */}
                     <EpistoFlex2 mt="20px"
@@ -210,7 +220,10 @@ const CourseDetailsPage = () => {
 
 
                         {/* tab button headers */}
-                        <EpistoDiv sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                        <EpistoFlex2
+                            justify={'flex-start'}
+                            sx={{ borderBottom: 1, borderColor: 'divider' }}>
+
                             <EpistoTabs
                                 tabItems={tabs
                                     .map((x, index) => ({
@@ -219,7 +232,7 @@ const CourseDetailsPage = () => {
                                     }))}
                                 selectedTabKey={currentTab}
                                 onChange={setCurrentTab} />
-                        </EpistoDiv>
+                        </EpistoFlex2>
                         {/* // className="roundBorders"
                                     // TabIndicatorProps={{
                                     //     style: {

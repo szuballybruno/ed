@@ -22,7 +22,7 @@ export function TabPanel(props: TabPanelProps) {
             {value === index && (
                 <EpistoDiv
                     flex='1'
-                    sx={{ p: 3, width: '100%', height: '100%' }}>
+                    sx={{ width: '100%', height: '100%' }}>
 
                     {children}
                 </EpistoDiv>

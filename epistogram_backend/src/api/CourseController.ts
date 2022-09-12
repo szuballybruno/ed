@@ -52,7 +52,7 @@ export class CourseController implements XController<CourseController> {
     };
 
     @XControllerAction(apiRoutes.course.getCourseDetailsEditData)
-    getCourseDetailsEditDataAction = (params: ActionParams) => {
+    async getCourseDetailsEditDataAction(params: ActionParams) {
 
         const courseId = params
             .getQuery()
@@ -60,7 +60,7 @@ export class CourseController implements XController<CourseController> {
 
         return this._courseService
             .getCourseDetailsEditDataAsync(params.principalId, courseId);
-    };
+    }
 
     @XControllerAction(apiRoutes.course.getCourseContentEditData)
     getCourseContentEditDataAction = (params: ActionParams) => {

@@ -11,19 +11,20 @@ import { translatableTexts } from '../../static/translatableTexts';
 import { ChipSmall } from '../administration/courses/ChipSmall';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
+import { WatchSubpageState } from '../player/watch/WatchSubpage';
 import { ExamLayout } from './ExamLayout';
 import { ExamResultStats } from './ExamResultStats';
 import { QuestionAnswer } from './QuestionAnswer';
 
 export const ExamResultsSlide = (props: {
     exam: ExamPlayerDataDTO,
-    setIsExamInProgress: (isExamInProgress: boolean) => void,
+    setWatchSubpageState: React.Dispatch<React.SetStateAction<WatchSubpageState>>
     continueCourse: () => void,
     answerSessionId: Id<'AnswerSession'>,
     goToCourseRating: () => void
 }) => {
 
-    const { answerSessionId, goToCourseRating, continueCourse, setIsExamInProgress, exam } = props;
+    const { answerSessionId, goToCourseRating, continueCourse, setWatchSubpageState, exam } = props;
     const { examResults } = useExamResults(answerSessionId);
     const questionsAnswers = examResults?.questions ?? [];
     const { navigate2 } = useNavigation();
@@ -34,14 +35,11 @@ export const ExamResultsSlide = (props: {
     useEffect(() => {
 
         if (exam.isFinalExam)
-            setIsExamInProgress(false);
+            setWatchSubpageState('watch');
     }, [exam]);
 
     return <ExamLayout
         justify='flex-start'
-        maxH='calc(100vh - 120px)'
-        overflowY='scroll'
-        isHeightMaximized={false}
         headerCenterText={exam.title}
         showFooterButtonsOnTop
         footerButtons={new ArrayBuilder()
@@ -120,6 +118,7 @@ export const ExamResultsSlide = (props: {
                     flex={1}
                     m='10px 5px 5px 5px'
                     pb='20px'
+                    h='100%'
                     boxSizing='border-box'
                     height='fit-content'>
 

@@ -1,31 +1,32 @@
 import React from 'react';
-import {useFinishExam, useStartExam} from '../../../services/api/examApiService';
-import {useNavigation} from '../../../services/core/navigatior';
-import {useShowErrorDialog} from '../../../services/core/notifications';
-import {ExamPlayerDataDTO} from '../../../shared/dtos/ExamPlayerDataDTO';
-import {Id} from '../../../shared/types/versionId';
-import {usePaging} from '../../../static/frontendHelpers';
-import {ExamGreetSlide} from '../../exam/ExamGreetSlide';
-import {ExamQuestions} from '../../exam/ExamQuestions';
-import {ExamResultsSlide} from '../../exam/ExamResultsSlide';
-import {EpistoPaging} from '../../universal/EpistoPaging';
+import { useFinishExam, useStartExam } from '../../../services/api/examApiService';
+import { useNavigation } from '../../../services/core/navigatior';
+import { useShowErrorDialog } from '../../../services/core/notifications';
+import { ExamPlayerDataDTO } from '../../../shared/dtos/ExamPlayerDataDTO';
+import { Id } from '../../../shared/types/versionId';
+import { usePaging } from '../../../static/frontendHelpers';
+import { ExamGreetSlide } from '../../exam/ExamGreetSlide';
+import { ExamQuestions } from '../../exam/ExamQuestions';
+import { ExamResultsSlide } from '../../exam/ExamResultsSlide';
+import { EpistoPaging } from '../../universal/EpistoPaging';
+import { WatchSubpageState } from './WatchSubpage';
 
 export const ExamPlayer = (props: {
     exam: ExamPlayerDataDTO,
     answerSessionId: Id<'AnswerSession'>,
     courseId: Id<'Course'>,
     continueCourse: () => void,
-    isExamInProgress: boolean,
-    setIsExamInProgress: (isExamStarted: boolean) => void
+    watchSubpageState: WatchSubpageState,
+    setWatchSubpageState: React.Dispatch<React.SetStateAction<WatchSubpageState>>
 }) => {
 
     const {
         exam,
-        setIsExamInProgress,
+        setWatchSubpageState,
         answerSessionId,
         continueCourse,
         courseId,
-        isExamInProgress
+        watchSubpageState
     } = props;
 
     const { startExamAsync, startExamState } = useStartExam();
@@ -40,7 +41,7 @@ export const ExamPlayer = (props: {
 
         try {
             await startExamAsync({ answerSessionId });
-            setIsExamInProgress(true);
+            setWatchSubpageState('examInProgress');
             examWorkflowSlides.next();
         }
         catch (e) {
@@ -52,13 +53,14 @@ export const ExamPlayer = (props: {
     const handleExamFinished = async () => {
 
         await finishExamAsync({ answerSessionId });
+        setWatchSubpageState('examResults');
         examWorkflowSlides.next();
     };
 
     const handleAbortExam = () => {
 
         examWorkflowSlides.setItem(0);
-        setIsExamInProgress(false);
+        setWatchSubpageState('examStart');
     };
 
     const goToCourseRating = () => {
@@ -68,7 +70,7 @@ export const ExamPlayer = (props: {
 
     const handleContinueCourse = () => {
 
-        setIsExamInProgress(false);
+        setWatchSubpageState('watch');
         continueCourse();
     };
 
@@ -82,11 +84,11 @@ export const ExamPlayer = (props: {
             answerSessionId={answerSessionId}
             onExamFinished={handleExamFinished}
             handleAbortExam={handleAbortExam}
-            isExamInProgress={isExamInProgress}/>,
+            isExamInProgress={watchSubpageState === 'examInProgress'} />,
 
         () => <ExamResultsSlide
             continueCourse={handleContinueCourse}
-            setIsExamInProgress={setIsExamInProgress}
+            setWatchSubpageState={setWatchSubpageState}
             exam={exam}
             answerSessionId={answerSessionId}
             goToCourseRating={goToCourseRating} />

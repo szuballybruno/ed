@@ -115,7 +115,7 @@ export class CourseService {
     /**
      * Returns course detals
      */
-    getCourseDetailsAsync(
+    async getCourseDetailsAsync(
         principalId: PrincipalId,
         courseId: Id<'Course'>
     ) {
@@ -123,32 +123,23 @@ export class CourseService {
         return {
             action: async () => {
                 const courseDetailsView = await this._ormService
-                    .query(CourseDetailsView, { principalId, courseId })
+                    .query(CourseDetailsView, {principalId, courseId})
                     .where('userId', '=', 'principalId')
                     .and('courseId', '=', 'courseId')
                     .getSingle();
 
                 const moduleViews = await this._ormService
-                    .query(PlaylistView, { principalId, courseId })
+                    .query(PlaylistView, {principalId, courseId})
                     .where('userId', '=', 'principalId')
                     .and('courseId', '=', 'courseId')
                     .getMany();
 
-                const playlistModuleDTOs = this._mapperService
-                    .mapTo(PlaylistModuleDTO, [moduleViews]);
+        const playlistModuleDTOs = this._mapperService
+            .mapTo(PlaylistModuleDTO, [moduleViews]);
 
-                return this._mapperService
-                    .mapTo(CourseDetailsDTO, [courseDetailsView, playlistModuleDTOs]);
-
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
-
-            }
-        };
+        return this._mapperService
+            .mapTo(CourseDetailsDTO, [courseDetailsView, playlistModuleDTOs]);
     }
-
 
     /**
      * Creates a new course
@@ -261,44 +252,30 @@ export class CourseService {
     /**
      * Gets the course details edit DTO.
      */
-    getCourseDetailsEditDataAsync(
+    async getCourseDetailsEditDataAsync(
         userId: PrincipalId,
         courseId: number
     ) {
 
-        return {
-            action: async () => {
 
-                // get course
-                const view = await this._ormService
-                    .query(CourseAdminDetailedView, { courseId })
-                    .where('courseId', '=', 'courseId')
-                    .getSingle();
+        // get course
+        const view = await this._ormService
+            .query(CourseAdminDetailedView, { courseId })
+            .where('courseId', '=', 'courseId')
+            .getSingle();
 
-                const categories = await this._ormService
-                    .query(CourseCategory)
-                    .getMany();
+        const categories = await this._ormService
+            .query(CourseCategory)
+            .getMany();
 
-                const teachers = await this._ormService
-                    .query(User)
-                    .innerJoin(TeacherInfo, x => x
-                        .on('userId', '=', 'id', User))
-                    .getMany();
+        const teachers = await this._ormService
+            .query(User)
+            .innerJoin(TeacherInfo, x => x
+                .on('userId', '=', 'id', User))
+            .getMany();
 
-                return this._mapperService
-                    .mapTo(CourseDetailsEditDataDTO, [view, categories, teachers]);
-            },
-            auth: async () => {
-
-                const { companyId } = await this._ormService
-                    .query(User, { userId })
-                    .where('id', '=', 'userId')
-                    .getSingle();
-
-                return this._authorizationService
-                    .checkPermissionAsync(userId, 'EDIT_COMPANY_COURSES', { companyId });
-            }
-        };
+        return this._mapperService
+            .mapTo(CourseDetailsEditDataDTO, [view, categories, teachers]);
 
     }
 
@@ -365,7 +342,6 @@ export class CourseService {
             }
         };
 
-
     }
 
     /**
@@ -408,7 +384,6 @@ export class CourseService {
                     .checkPermissionAsync(userId, 'ACCESS_ADMIN');
             }
         };
-
 
     }
 
@@ -462,7 +437,6 @@ export class CourseService {
                     .checkPermissionAsync(userId, 'ACCESS_ADMIN');
             }
         };
-
 
     }
 
@@ -519,8 +493,6 @@ export class CourseService {
                 console.log('CategoryId ' + filterCategoryId);
 
                 // TODO refactor
-                // IMPORTANT NOTE: DO NOT COMMENT OUT SOMETHING THAT IS WORKING, IF
-                // YOU DON'T REFACTOR IT RIGHT AT THE MOMENT. IF IT WORKS, DON'T FIX IT!
                 const filteredCoursesBySearchTerm =
                     filterByProperty(courses, 'title', searchTerm);
 

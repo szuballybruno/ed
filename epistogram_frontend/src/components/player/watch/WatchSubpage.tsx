@@ -1,33 +1,37 @@
-import {useEffect, useMemo, useState} from 'react';
-import {PlayerApiService} from '../../../services/api/PPlayerApiService';
-import {useNavigation} from '../../../services/core/navigatior';
-import {setPageTitle, useIsDesktopView} from '../../../static/frontendHelpers';
-import {useStringParam} from '../../../static/locationHelpers';
-import {translatableTexts} from '../../../static/translatableTexts';
-import {EpistoFont} from '../../controls/EpistoFont';
-import {EpistoDialog} from '../../universal/epistoDialog/EpistoDialog';
-import {LoadingFrame} from '../../system/LoadingFrame';
-import {Copyright} from '../../universal/Copyright';
-import {CourseItemSelector} from './CourseItemSelector';
-import {ExamPlayer} from './ExamPlayer';
-import {ModuleView} from './ModuleView';
-import {WatchView} from './WatchView';
-import {useEpistoDialogLogic} from '../../universal/epistoDialog/EpistoDialogLogic';
-import {PlayerDataDTO} from '../../../shared/dtos/PlayerDataDTO';
-import {applicationRoutes} from '../../../configuration/applicationRoutes';
-import {Logger} from '../../../static/Logger';
-import {useScrollIntoView} from '../../system/AutoScrollContext';
+import { useEffect, useMemo, useState } from 'react';
+import { PlayerApiService } from '../../../services/api/PPlayerApiService';
+import { useNavigation } from '../../../services/core/navigatior';
+import { setPageTitle, useIsDesktopView } from '../../../static/frontendHelpers';
+import { useStringParam } from '../../../static/locationHelpers';
+import { translatableTexts } from '../../../static/translatableTexts';
+import { EpistoFont } from '../../controls/EpistoFont';
+import { EpistoDialog } from '../../universal/epistoDialog/EpistoDialog';
+import { LoadingFrame } from '../../system/LoadingFrame';
+import { Copyright } from '../../universal/Copyright';
+import { CourseItemSelector } from './CourseItemSelector';
+import { ExamPlayer } from './ExamPlayer';
+import { ModuleView } from './ModuleView';
+import { WatchView } from './WatchView';
+import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogLogic';
+import { PlayerDataDTO } from '../../../shared/dtos/PlayerDataDTO';
+import { applicationRoutes } from '../../../configuration/applicationRoutes';
+import { Logger } from '../../../static/Logger';
+import { useScrollIntoView } from '../../system/AutoScrollContext';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoDiv } from '../../controls/EpistoDiv';
+
+export type WatchSubpageState = 'watch' | 'examStart' | 'examInProgress' | 'examResults'
 
 export const WatchSubpage = () => {
 
     const warningDialogLogic = useEpistoDialogLogic('warn3');
     const { navigate2, navigateToPlayer } = useNavigation();
     const urlPlaylistItemCode = useStringParam('descriptorCode')!;
-    const [isSidebarHidden, setIsSidebarHidden] = useState(false);
+    const [watchSubpageState, setWatchSubpageState] = useState<WatchSubpageState>('watch');
     const [isScrolledFromTop, setIsScrolledFromTop] = useState(false);
-    const {setParent, scroll, parentElement} = useScrollIntoView();
+    const { setParent, scroll, parentElement } = useScrollIntoView();
+    const isShowSidebar = (watchSubpageState === 'watch' || watchSubpageState === 'examStart');
+    const isContentScrollable = (watchSubpageState !== 'examInProgress');
 
     // get player page data
     const {
@@ -180,7 +184,9 @@ export const WatchSubpage = () => {
                         {/* main column */}
                         <EpistoDiv
                             id="mainColumn"
-                            overflowY={videoPlayerData ? 'scroll' : 'unset'}
+                            overflowY={isContentScrollable
+                                ? 'scroll'
+                                : 'unset'}
                             className="whall" >
 
                             {/* VIDEO  */}
@@ -201,9 +207,9 @@ export const WatchSubpage = () => {
                             {examPlayerData && <ExamPlayer
                                 continueCourse={handleContinueCourse}
                                 answerSessionId={answerSessionId!}
-                                setIsExamInProgress={isExamStarted => setIsSidebarHidden(isExamStarted)}
+                                setWatchSubpageState={setWatchSubpageState}
+                                watchSubpageState={watchSubpageState}
                                 courseId={courseId!}
-                                isExamInProgress={isSidebarHidden}
                                 exam={examPlayerData} />}
 
                             {/* MODULE */}
@@ -218,10 +224,10 @@ export const WatchSubpage = () => {
                             id="courseItemListSidebar"
                             justify="flex-start"
                             zIndex="4"
-                            ml={isSidebarHidden ? '0' : '10px'}
+                            ml={!isShowSidebar ? '0' : '10px'}
                             bg="var(--transparentWhite70)"
-                            maxWidth={isSidebarHidden ? '0px' : '420px'}
-                            opacity={isSidebarHidden ? 0 : 1}
+                            maxWidth={!isShowSidebar ? '0px' : '420px'}
+                            opacity={!isShowSidebar ? 0 : 1}
                             transition="0.5s">
 
                             {isDesktopView && <EpistoFlex2
@@ -241,7 +247,7 @@ export const WatchSubpage = () => {
                                     isScrolledFromTop={isScrolledFromTop}
                                     canChangeMode={playerDataWithDefaults.canChangeMode}
                                     isPlayerLoaded={isPlayerLoaded}
-                                    refetchPlayerData={refetchPlayerData}/>
+                                    refetchPlayerData={refetchPlayerData} />
                             </EpistoFlex2>}
                         </EpistoFlex2>
                     </EpistoFlex2>

@@ -1,17 +1,17 @@
-import { ArrowBack, ArrowForward, ArrowRight, FiberManualRecord } from '@mui/icons-material';
-import { ReactNode } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { applicationRoutes } from '../../../configuration/applicationRoutes';
-import { useActiveCourses } from '../../../services/api/userProgressApiService';
-import { Environment } from '../../../static/Environemnt';
-import { usePaging } from '../../../static/frontendHelpers';
-import { EpistoButton } from '../../controls/EpistoButton';
-import { EpistoFlex2, EpistoFlex2Props } from '../../controls/EpistoFlex';
-import { EpistoFont } from '../../controls/EpistoFont';
-import { EpistoGrid } from '../../controls/EpistoGrid';
+import {ArrowBack, ArrowForward, ArrowRight, FiberManualRecord} from '@mui/icons-material';
+import {ReactNode} from 'react';
+import {useNavigate} from 'react-router-dom';
+import {applicationRoutes} from '../../../configuration/applicationRoutes';
+import {useActiveCourses} from '../../../services/api/userProgressApiService';
+import {Environment} from '../../../static/Environemnt';
+import {usePaging} from '../../../static/frontendHelpers';
+import {EpistoButton} from '../../controls/EpistoButton';
+import {EpistoFlex2, EpistoFlex2Props} from '../../controls/EpistoFlex';
+import {EpistoFont} from '../../controls/EpistoFont';
+import {EpistoGrid} from '../../controls/EpistoGrid';
 import StatisticsCard from '../../statisticsCard/StatisticsCard';
-import { FlexListItem } from '../../universal/FlexListItem';
-import { AdminSubpageHeader } from '../AdminSubpageHeader';
+import {FlexListItem} from '../../universal/FlexListItem';
+import {AdminSubpageHeader} from '../AdminSubpageHeader';
 
 const AdminSectionWithButton = (props: {
     title: string,
@@ -74,7 +74,7 @@ export const AdminHomeOverview = () => {
                     mt="20px"
                     h="130px"
                     minColumnWidth="50px"
-                    gap="10"
+                    gap="10px"
                     gridTemplateColumns="repeat(3, minmax(0, 1fr))">
 
                     <StatisticsCard
@@ -318,7 +318,7 @@ export const AdminHomeOverview = () => {
                     auto="fill"
                     mt="20px"
                     minColumnWidth="50px"
-                    gap="10"
+                    gap="10px"
                     gridTemplateColumns="repeat(2, minmax(0, 1fr))">
 
                     <StatisticsCard

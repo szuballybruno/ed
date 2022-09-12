@@ -1,17 +1,17 @@
-import { useMediaQuery } from '@chakra-ui/react';
-import { ReactNode } from 'react';
-import { applicationRoutes } from '../../configuration/applicationRoutes';
-import { ApplicationRoute } from '../../models/types';
-import { useNavigation } from '../../services/core/navigatior';
-import { Environment } from '../../static/Environemnt';
-import { ArrayBuilder } from '../../static/frontendHelpers';
-import { Logger } from '../../static/Logger';
-import { EpistoButton } from '../controls/EpistoButton';
-import { EpistoFlex2 } from '../controls/EpistoFlex';
-import { useAuthorizationContext } from '../system/AuthorizationContext';
-import { NavbarButton } from '../universal/NavbarButton';
-import { ContinueCourseButton } from './ContinueCourseButton';
-import { ShopAndNotifications } from './ShopAndNotifications';
+import {useMediaQuery} from '@chakra-ui/react';
+import {ReactNode} from 'react';
+import {applicationRoutes} from '../../configuration/applicationRoutes';
+import {ApplicationRoute} from '../../models/types';
+import {useNavigation} from '../../services/core/navigatior';
+import {Environment} from '../../static/Environemnt';
+import {ArrayBuilder} from '../../static/frontendHelpers';
+import {Logger} from '../../static/Logger';
+import {EpistoButton} from '../controls/EpistoButton';
+import {EpistoFlex2} from '../controls/EpistoFlex';
+import {useAuthorizationContext} from '../system/AuthorizationContext';
+import {NavbarButton} from '../universal/NavbarButton';
+import {ContinueCourseButton} from './ContinueCourseButton';
+import {ShopAndNotifications} from './ShopAndNotifications';
 
 export const DesktopNavbar = ({
     backgroundContent,
@@ -62,11 +62,11 @@ export const DesktopNavbar = ({
     // context
     const { isAuthenticated } = useAuthorizationContext();
 
-    // media 
+    // media
     const [isSmallerThan1180] = useMediaQuery('(min-width: 1180px)');
     const [isSmallerThan1000] = useMediaQuery('(min-width: 1000px)');
 
-    // util 
+    // util
     const hideLinks = hideLinks1 || !isAuthenticated;
     const isMidMode = (isSmallerThan1180 && !showLogo) || (isSmallerThan1000 && showLogo);
 
@@ -95,7 +95,8 @@ export const DesktopNavbar = ({
     const MidRender = () => {
 
         return (
-            <EpistoFlex2 height="50px"
+            <EpistoFlex2
+                height="50px"
                 flex="1 0 600px">
 
                 {/* menu items */}

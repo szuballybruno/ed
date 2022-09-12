@@ -23,6 +23,7 @@ export const segmentedButtonStyles = {
                 backgroundColor: 'transparent',
                 padding: '6px 16px',
                 border: 'none',
+                fontSize: '12px',
                 borderRadius: '5px',
                 display: 'flex',
                 justifyContent: 'center',
@@ -31,10 +32,11 @@ export const segmentedButtonStyles = {
             },
 
             '&.MuiTouchRipple-root': {
-                lineHeight: '0px'
+                lineHeight: '0px',
+                background: 'green'
             },
 
-            '&.Mui-selected': {
+            '&.Mui-selected, &.Mui-selected:hover': {
                 color: '#444',
                 fontWeight: 'bold',
                 background: 'var(--transparentIntenseTeal)'
@@ -55,7 +57,7 @@ export const segmentedButtonStyles = {
         },
         toggleButtonStyle: {
             border: 'none',
-            padding: '15px 25px',
+            padding: '15px 25px'
         }
     } as SegmentedButtonStyleType,
 
@@ -80,16 +82,16 @@ export const segmentedButtonStyles = {
             },
 
             '&.Mui-selected': {
-                color: 'white',
+                color: '#444',
                 fontWeight: 'bold',
-                background: 'var(--funkyHighlight)'
+                background: 'var(--transparentIntenseTeal)'
 
             },
             '&.Mui-selected, &.Mui-selected:hover': {
-                background: 'var(--funkyHighlight)', // theme.palette.primary.main
-                color: 'white',
+                background: 'var(--transparentIntenseTeal)', // theme.palette.primary.main
+                color: '#444',
                 fontWeight: 'bold'
-            },
+            }
         },
         toggleButtonGroupSx: {
             '&.MuiToggleButtonGroup-root': {
@@ -107,7 +109,7 @@ export const segmentedButtonStyles = {
             border: 'none',
             borderRadius: 7,
             margin: '0 10px 0 5px',
-            padding: '15px 15px',
+            padding: '15px 15px'
         },
         disableRipple: true
     } as SegmentedButtonStyleType

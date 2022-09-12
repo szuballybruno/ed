@@ -1,15 +1,15 @@
-import { Accordion, AccordionButton, AccordionItem, AccordionPanel, AccordionIcon } from '@chakra-ui/react';
-import { InfoOutlined } from '@mui/icons-material';
-import React, { useRef, useState } from 'react';
-import { usePersonalityData } from '../../services/api/signupApiService';
-import { translatableTexts } from '../../static/translatableTexts';
-import { LoadingFrame } from '../system/LoadingFrame';
-import { EpistoButton } from '../controls/EpistoButton';
-import { EpistoPopper } from '../controls/EpistoPopper';
-import { PersonalityChart } from '../universal/charts/PersonalityChart';
-import { EpistoFont } from '../controls/EpistoFont';
-import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
-import { EpistoDiv } from '../controls/EpistoDiv';
+import {Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel} from '@chakra-ui/react';
+import {InfoOutlined} from '@mui/icons-material';
+import React, {useRef, useState} from 'react';
+import {usePersonalityData} from '../../services/api/signupApiService';
+import {translatableTexts} from '../../static/translatableTexts';
+import {LoadingFrame} from '../system/LoadingFrame';
+import {EpistoButton} from '../controls/EpistoButton';
+import {EpistoPopper} from '../controls/EpistoPopper';
+import {PersonalityChart} from '../universal/charts/PersonalityChart';
+import {EpistoFont} from '../controls/EpistoFont';
+import {EpistoFlex2, EpistoFlex2Props} from '../controls/EpistoFlex';
+import {EpistoDiv} from '../controls/EpistoDiv';
 
 export const PersonalityAssessment = (props: EpistoFlex2Props) => {
 
@@ -133,14 +133,14 @@ export const PersonalityAssessment = (props: EpistoFlex2Props) => {
                         }}
                         onClick={() => {
 
-                            // open all 
+                            // open all
                             if (allOrAllButOneAccordionsClosed) {
 
                                 setOpenAccordions(personalityDescriptionAccordions
                                     .map((_, index) => index));
                             }
 
-                            // close all 
+                            // close all
                             else {
 
                                 setOpenAccordions([0]);
@@ -163,8 +163,7 @@ export const PersonalityAssessment = (props: EpistoFlex2Props) => {
                             return <AccordionItem
                                 key={index}
                                 className="roundBorders mildShadow"
-                                p="10px 10px"
-                                mb="10px"
+                                p="5px 0"
                                 background="var(--transparentWhite70)"
                                 onClick={() => {
                                     setOpenAccordions([index]);
@@ -173,10 +172,12 @@ export const PersonalityAssessment = (props: EpistoFlex2Props) => {
                                 {/* header */}
                                 <AccordionButton>
 
-                                    <EpistoDiv flex='1'
+                                    <EpistoDiv
+                                        flex='1'
                                         fontWeight="500"
                                         fontSize="15px"
                                         textAlign='left'>
+
                                         {item.title}
                                     </EpistoDiv>
 
@@ -184,8 +185,9 @@ export const PersonalityAssessment = (props: EpistoFlex2Props) => {
                                 </AccordionButton>
 
                                 {/* content  */}
-                                <AccordionPanel pb={4}
-                                    mt="10px"
+                                <AccordionPanel
+                                   // pb={'4px'}
+                                    //mt="10px"
                                     fontSize="13px">
 
                                     {item.description}

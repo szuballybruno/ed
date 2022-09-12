@@ -1,24 +1,24 @@
-import { GridItem, useMediaQuery } from '@chakra-ui/react';
-import { Select, ToggleButton, ToggleButtonGroup } from '@mui/material';
-import { useState } from 'react';
-import { useCoinBalance } from '../../services/api/coinTransactionsApiService';
-import { useShopItemCategories, useShopItems } from '../../services/api/shopApiService';
-import { ShopItemDTO } from '../../shared/dtos/ShopItemDTO';
-import { Id } from '../../shared/types/versionId';
-import { translatableTexts } from '../../static/translatableTexts';
-import { ContentPane } from '../ContentPane';
-import { EpistoDiv } from '../controls/EpistoDiv';
-import { EpistoFlex2 } from '../controls/EpistoFlex';
-import { EpistoFont } from '../controls/EpistoFont';
-import { EpistoGrid } from '../controls/EpistoGrid';
-import { EpistoConinInfo } from '../EpistoCoinInfo';
-import { LeftPane } from '../LeftPane';
-import { PageRootContainer } from '../PageRootContainer';
-import { ProfileImage } from '../ProfileImage';
-import { useEpistoDialogLogic } from '../universal/epistoDialog/EpistoDialogLogic';
-import { EpistoSearch } from '../universal/EpistoSearch';
-import { ShopItem } from './ShopItem';
-import { ShopPurchaseConfirmationDialog } from './ShopPurchaseConfirmationDialog';
+import {GridItem, useMediaQuery} from '@chakra-ui/react';
+import {Select, ToggleButton, ToggleButtonGroup} from '@mui/material';
+import {useState} from 'react';
+import {useCoinBalance} from '../../services/api/coinTransactionsApiService';
+import {useShopItemCategories, useShopItems} from '../../services/api/shopApiService';
+import {ShopItemDTO} from '../../shared/dtos/ShopItemDTO';
+import {Id} from '../../shared/types/versionId';
+import {translatableTexts} from '../../static/translatableTexts';
+import {ContentPane} from '../ContentPane';
+import {EpistoDiv} from '../controls/EpistoDiv';
+import {EpistoFlex2} from '../controls/EpistoFlex';
+import {EpistoFont} from '../controls/EpistoFont';
+import {EpistoGrid} from '../controls/EpistoGrid';
+import {EpistoConinInfo} from '../EpistoCoinInfo';
+import {LeftPane} from '../LeftPane';
+import {PageRootContainer} from '../PageRootContainer';
+import {ProfileImage} from '../ProfileImage';
+import {useEpistoDialogLogic} from '../universal/epistoDialog/EpistoDialogLogic';
+import {EpistoSearch} from '../universal/EpistoSearch';
+import {ShopItem} from './ShopItem';
+import {ShopPurchaseConfirmationDialog} from './ShopPurchaseConfirmationDialog';
 
 export const ShopPage = () => {
 
@@ -193,7 +193,7 @@ export const ShopPage = () => {
 
                     <EpistoGrid
                         auto="fill"
-                        gap="10"
+                        gap="10px"
                         minColumnWidth="250px">
 
                         {filteredItems
