@@ -2,9 +2,11 @@ import { UploadedFile } from 'express-fileupload';
 import { Company } from '../models/entity/Company';
 import { StorageFile } from '../models/entity/StorageFile';
 import { User } from '../models/entity/User';
+import { CompanyAssociatedCoursesView } from '../models/views/CompanyAssociatedCoursesView';
 import { CompanyView } from '../models/views/CompanyView';
 import { UserPermissionView } from '../models/views/UserPermissionView';
 import { UserRoleAssignCompanyView } from '../models/views/UserRoleAssignCompanyView';
+import { CompanyAssociatedCourseDTO } from '../shared/dtos/company/CompanyAssociatedCourseDTO';
 import { CompanyDTO } from '../shared/dtos/company/CompanyDTO';
 import { CompanyEditDataDTO } from '../shared/dtos/company/CompanyEditDataDTO';
 import { CompanyPublicDTO } from '../shared/dtos/company/CompanyPublicDTO';
@@ -279,5 +281,21 @@ export class CompanyService {
         return this
             ._mapperService
             .mapTo(CompanyPublicDTO, [comp, logoFile?.filePath ?? null, coverFile?.filePath ?? null]);
+    }
+
+    /**
+     * Get company associated courses 
+     */
+     async getCompanyAssociatedCoursesAsync(companyId: Id<'Company'>): Promise<CompanyAssociatedCourseDTO[]> {
+
+        const views = await this
+            ._ormService
+            .query(CompanyAssociatedCoursesView, { companyId })
+            .where('companyId', '=', 'companyId')
+            .getMany();
+
+        return this
+            ._mapperService
+            .mapTo(CompanyAssociatedCourseDTO, [views]);
     }
 }

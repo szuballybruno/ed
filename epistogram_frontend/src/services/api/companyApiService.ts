@@ -7,101 +7,117 @@ import { RoleAssignCompanyDTO } from '../../shared/dtos/company/RoleAssignCompan
 import { Id } from '../../shared/types/versionId';
 import { useCallback } from 'react';
 import { CompanyPublicDTO } from '../../shared/dtos/company/CompanyPublicDTO';
+import { CompanyAssociatedCourseDTO } from '../../shared/dtos/company/CompanyAssociatedCourseDTO';
 
-export const useCompaniesAdmin = () => {
+export const CompanyApiService = {
 
-    const qr = QueryService.useXQuery<CompanyDTO[]>(apiRoutes.companies.getCompaniesAdmin);
+    useCompaniesAdmin: () => {
 
-    return {
-        companies: qr.data ?? [],
-        companiesState: qr.state,
-        companiesError: qr.error,
-        refetchCompanies: qr.refetch
-    };
-};
+        const qr = QueryService.useXQuery<CompanyDTO[]>(apiRoutes.companies.getCompaniesAdmin);
 
-export const useRoleAssignCompanies = () => {
+        return {
+            companies: qr.data ?? [],
+            companiesState: qr.state,
+            companiesError: qr.error,
+            refetchCompanies: qr.refetch
+        };
+    },
 
-    const qr = QueryService.useXQuery<RoleAssignCompanyDTO[]>(apiRoutes.companies.getRoleAssignCompanies);
+    useRoleAssignCompanies: () => {
 
-    return {
-        roleAssignCompanies: qr.data ?? [],
-        roleAssignCompaniesState: qr.state,
-        roleAssignCompaniesError: qr.error,
-        refetchRoleAssignCompanies: qr.refetch
-    };
-};
+        const qr = QueryService.useXQuery<RoleAssignCompanyDTO[]>(apiRoutes.companies.getRoleAssignCompanies);
 
-export const useCreateCompany = () => {
+        return {
+            roleAssignCompanies: qr.data ?? [],
+            roleAssignCompaniesState: qr.state,
+            roleAssignCompaniesError: qr.error,
+            refetchRoleAssignCompanies: qr.refetch
+        };
+    },
 
-    const qr = usePostDataUnsafe(apiRoutes.companies.createCompany);
+    useCreateCompany: () => {
 
-    return {
-        createCompanyAsync: qr.postDataAsync,
-        createCompanyState: qr.state
-    };
-};
+        const qr = usePostDataUnsafe(apiRoutes.companies.createCompany);
 
-export const useDeleteCompany = () => {
+        return {
+            createCompanyAsync: qr.postDataAsync,
+            createCompanyState: qr.state
+        };
+    },
 
-    const qr = usePostDataUnsafe<{ companyId: number }, void>(apiRoutes.companies.deleteCompany);
+    useDeleteCompany: () => {
 
-    return {
-        deleteCompanyAsync: qr.postDataAsync,
-        deleteCompanyState: qr.state
-    };
-};
+        const qr = usePostDataUnsafe<{ companyId: number }, void>(apiRoutes.companies.deleteCompany);
 
-export const useSaveCompany = () => {
+        return {
+            deleteCompanyAsync: qr.postDataAsync,
+            deleteCompanyState: qr.state
+        };
+    },
 
-    const { postMultipartDataAsync, state } = usePostMultipartDataUnsafe<CompanyEditDataDTO>(apiRoutes.companies.saveCompany);
-    const saveCompanyAsync = useCallback(({ logoFile, coverFile, ...dto }: CompanyEditDataDTO & { logoFile: File | null, coverFile: File | null }) => {
+    useSaveCompany: () => {
 
-        return postMultipartDataAsync(dto, { logoFile, coverFile });
-    }, [postMultipartDataAsync]);
+        const { postMultipartDataAsync, state } = usePostMultipartDataUnsafe<CompanyEditDataDTO>(apiRoutes.companies.saveCompany);
+        const saveCompanyAsync = useCallback(({ logoFile, coverFile, ...dto }: CompanyEditDataDTO & { logoFile: File | null, coverFile: File | null }) => {
 
-    return {
-        saveCompanyAsync,
-        saveCompanyState: state
-    };
-};
+            return postMultipartDataAsync(dto, { logoFile, coverFile });
+        }, [postMultipartDataAsync]);
 
-export const useCompanies = () => {
+        return {
+            saveCompanyAsync,
+            saveCompanyState: state
+        };
+    },
 
-    const qr = QueryService.useXQuery<CompanyDTO[]>(apiRoutes.companies.getCompanies);
+    useCompanies: () => {
 
-    return {
-        companies: qr.data ?? [],
-        companiesState: qr.state
-    };
-};
+        const qr = QueryService.useXQuery<CompanyDTO[]>(apiRoutes.companies.getCompanies);
 
-export const useCompanyEditData = (companyId: Id<'Company'>) => {
+        return {
+            companies: qr.data ?? [],
+            companiesState: qr.state
+        };
+    },
 
-    const qr = QueryService.useXQuery<CompanyEditDataDTO>(apiRoutes.companies.getCompanyEditData, { companyId });
+    useCompanyEditData: (companyId: Id<'Company'>) => {
 
-    return {
-        companyEditData: qr.data,
-        companyEditDataState: qr.state
-    };
-};
+        const qr = QueryService.useXQuery<CompanyEditDataDTO>(apiRoutes.companies.getCompanyEditData, { companyId });
 
-export const useAvailableCompaniesForRoleCreation = () => {
+        return {
+            companyEditData: qr.data,
+            companyEditDataState: qr.state
+        };
+    },
 
-    const qr = QueryService.useXQuery<CompanyDTO[]>(apiRoutes.companies.getAvailableCompaniesForRoleCreation);
+    useAvailableCompaniesForRoleCreation: () => {
 
-    return {
-        companies: qr.data ?? [],
-        companiesState: qr.state
-    };
-};
+        const qr = QueryService.useXQuery<CompanyDTO[]>(apiRoutes.companies.getAvailableCompaniesForRoleCreation);
 
-export const useCompanyDetailsByDomain = (domain: string) => {
+        return {
+            companies: qr.data ?? [],
+            companiesState: qr.state
+        };
+    },
 
-    const { data, state, error } = QueryService.useXQuery<CompanyPublicDTO>(apiRoutes.companies.getCompanyDetailsByDomain, { domain });
-    return {
-        companyDetails: data,
-        companyDetailsError: error,
-        companyDetailsState: state
-    };
+    useCompanyDetailsByDomain: (domain: string) => {
+
+        const { data, state, error } = QueryService.useXQuery<CompanyPublicDTO>(apiRoutes.companies.getCompanyDetailsByDomain, { domain });
+        return {
+            companyDetails: data,
+            companyDetailsError: error,
+            companyDetailsState: state
+        };
+    },
+
+    useCourseAssociations: (companyId: Id<'Company'>) => {
+
+        const { data, state, error } = QueryService
+            .useXQueryArray<CompanyAssociatedCourseDTO>(apiRoutes.companies.getCompanyCourseAssociations, { companyId });
+
+        return {
+            courseAssociations: data,
+            courseAssociationsError: error,
+            courseAssociationsState: state
+        };
+    }
 };

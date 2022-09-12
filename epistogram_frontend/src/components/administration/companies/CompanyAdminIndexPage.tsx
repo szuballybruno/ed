@@ -1,7 +1,7 @@
 import { Add } from '@mui/icons-material';
 import { memo } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
-import { useCompaniesAdmin, useCreateCompany, useDeleteCompany } from '../../../services/api/companyApiService';
+import {CompanyApiService } from '../../../services/api/companyApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { EpistoIcons } from '../../../static/EpistoIcons';
 import { usePostCallback } from '../../../static/frontendHelpers';
@@ -17,9 +17,9 @@ export const CompanyAdminIndexPage = memo(() => {
     const { indexRoute, editRoute, coursesRoute } = applicationRoutes.administrationRoute.companiesRoute;
 
     // http
-    const { companies, companiesState, companiesError, refetchCompanies } = useCompaniesAdmin();
-    const { createCompanyAsync, createCompanyState } = useCreateCompany();
-    const { deleteCompanyAsync, deleteCompanyState } = useDeleteCompany();
+    const { companies, companiesState, companiesError, refetchCompanies } = CompanyApiService.useCompaniesAdmin();
+    const { createCompanyAsync, createCompanyState } = CompanyApiService.useCreateCompany();
+    const { deleteCompanyAsync, deleteCompanyState } = CompanyApiService.useDeleteCompany();
 
     const handleCreateCompany = usePostCallback(createCompanyAsync, [refetchCompanies]);
     const handleDeleteCompany = usePostCallback(deleteCompanyAsync, [refetchCompanies]);

@@ -17,6 +17,7 @@ import { AdminUserListView } from '../../models/views/AdminUserListView';
 import { AvailableCourseView } from '../../models/views/AvailableCourseView';
 import { CoinTransactionView } from '../../models/views/CoinTransactionView';
 import { CommentListView } from '../../models/views/CommentListView';
+import { CompanyAssociatedCoursesView } from '../../models/views/CompanyAssociatedCoursesView';
 import { CompanyView } from '../../models/views/CompanyView';
 import { CourseAdminContentView } from '../../models/views/CourseAdminContentView';
 import { CourseAdminDetailedView } from '../../models/views/CourseAdminDetailedView';
@@ -63,6 +64,7 @@ import { AnswerEditDTO } from '../../shared/dtos/AnswerEditDTO';
 import { AvailableCourseDTO } from '../../shared/dtos/AvailableCourseDTO';
 import { CoinTransactionDTO } from '../../shared/dtos/CoinTransactionDTO';
 import { CommentListDTO } from '../../shared/dtos/CommentListDTO';
+import { CompanyAssociatedCourseDTO } from '../../shared/dtos/company/CompanyAssociatedCourseDTO';
 import { CompanyDTO } from '../../shared/dtos/company/CompanyDTO';
 import { CompanyEditDataDTO } from '../../shared/dtos/company/CompanyEditDataDTO';
 import { CompanyPublicDTO } from '../../shared/dtos/company/CompanyPublicDTO';
@@ -1204,6 +1206,17 @@ const marray = [
 
             return toQuestionDTO(questionData)
                 .single();
+        }),
+
+    epistoMappingsBuilder
+        .addArrayMapping(CompanyAssociatedCourseDTO, () => (views: CompanyAssociatedCoursesView[]) => {
+
+            return views
+                .map(view => instantiate<CompanyAssociatedCourseDTO>({
+                    courseId: view.courseId,
+                    coverUrl: view.coverFilePath,
+                    title: view.courseTitle,
+                }));
         })
 
 ] as const;

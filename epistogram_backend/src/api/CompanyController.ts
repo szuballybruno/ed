@@ -103,4 +103,14 @@ export class CompanyController implements XController<CompanyController> {
         return this._compService
             .getCompanyDetailsByDomainAsync(data.query.getValue(x => x.domain, 'string'));
     }
+
+    @XControllerAction(apiRoutes.companies.getCompanyCourseAssociations, { isPublic: true })
+    getCompanyCourseAssociationsAction(params: ActionParams) {
+
+        const data = params
+            .getFromParameterized(apiRoutes.companies.getCompanyCourseAssociations);
+
+        return this._compService
+            .getCompanyAssociatedCoursesAsync(data.query.getValue(x => x.companyId, 'int'));
+    }
 }

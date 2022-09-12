@@ -1,5 +1,5 @@
 import {useEffect, useMemo, useState} from 'react';
-import {useRoleAssignCompanies} from '../../../../services/api/companyApiService';
+import {CompanyApiService} from '../../../../services/api/companyApiService';
 import {CourseApiService} from '../../../../services/api/courseApiService';
 import {useAssignablePermissions} from '../../../../services/api/rolesApiService';
 import {AssignablePermissionDTO} from '../../../../shared/dtos/AssignablePermissionDTO';
@@ -30,7 +30,7 @@ export const AssignPermissionDialog = (props: {
     const paging = usePaging({ items: ['Company level permissions', 'Course level permissions'] });
 
     // http
-    const { roleAssignCompanies } = useRoleAssignCompanies();
+    const { roleAssignCompanies } = CompanyApiService.useRoleAssignCompanies();
     const { permissionAssignCourses } = CourseApiService.usePermissionAssignCourses(userId);
     const { assignablePermissionList } = useAssignablePermissions(
         userId,

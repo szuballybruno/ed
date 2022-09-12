@@ -46,6 +46,7 @@ export const apiRoutes = {
         getAvailableCompaniesForRoleCreation: '/companies/get-available-companies-for-role-creation',
         getRoleAssignCompanies: '/companies/get-role-assign-companies',
         getCompanyDetailsByDomain: '/companies/get-company-details-by-domain' as ParametrizedRouteType<{ query: { domain: string } }>,
+        getCompanyCourseAssociations: '/companies/get-company-course-associations' as ParametrizedRouteType<{ query: { companyId: Id<'Company'> } }>
     },
 
     teacherInfo: {

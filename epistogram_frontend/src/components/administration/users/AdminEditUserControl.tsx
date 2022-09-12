@@ -3,7 +3,7 @@ import { Checkbox } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { useCoinBalanceOfUser, useGiftCoinsToUser } from '../../../services/api/coinTransactionsApiService';
-import { useRoleAssignCompanies } from '../../../services/api/companyApiService';
+import { CompanyApiService } from '../../../services/api/companyApiService';
 import { useJobTitles } from '../../../services/api/miscApiService';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
 import { ChangeSet } from '../../../shared/dtos/changeSet/ChangeSet';
@@ -63,11 +63,11 @@ export const AdminEditUserControl = ({
 
     const { coinBalance, coinBalanceStatus, coinBalanceError, refetchCoinBalance } = useCoinBalanceOfUser(mode === 'EDIT' ? editedUserId : null);
     const { giftCoinsToUserAsync, giftCoinsToUserState } = useGiftCoinsToUser();
-    const { roleAssignCompanies, roleAssignCompaniesError, roleAssignCompaniesState } = useRoleAssignCompanies();
+    const { roleAssignCompanies, roleAssignCompaniesError, roleAssignCompaniesState } = CompanyApiService.useRoleAssignCompanies();
     const { jobTitles, jobTitlesError, jobTitlesStatus } = useJobTitles();
 
     useSetBusy(useCoinBalanceOfUser, coinBalanceStatus, coinBalanceError);
-    useSetBusy(useRoleAssignCompanies, roleAssignCompaniesState, roleAssignCompaniesError);
+    useSetBusy(CompanyApiService.useRoleAssignCompanies, roleAssignCompaniesState, roleAssignCompaniesError);
     useSetBusy(useJobTitles, jobTitlesStatus, jobTitlesError);
 
     useEffect(() => {

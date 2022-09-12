@@ -1,7 +1,7 @@
 import { Save } from '@mui/icons-material';
 import { memo, useCallback, useEffect } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
-import { useCompanyEditData, useSaveCompany } from '../../../services/api/companyApiService';
+import { CompanyApiService } from '../../../services/api/companyApiService';
 import { showNotification } from '../../../services/core/notifications';
 import { CompanyEditDataDTO } from '../../../shared/dtos/company/CompanyEditDataDTO';
 import { usePostCallback, useStateObject } from '../../../static/frontendHelpers';
@@ -50,10 +50,10 @@ export const CompanyAdminEditPage = memo(({ onNameLoaded }: CompanyAdminEditPage
     });
 
     // http
-    const { companyEditData, companyEditDataState } = useCompanyEditData(companyId);
-    const { saveCompanyAsync, saveCompanyState } = useSaveCompany();
+    const { companyEditData, companyEditDataState } = CompanyApiService.useCompanyEditData(companyId);
+    const { saveCompanyAsync, saveCompanyState } = CompanyApiService.useSaveCompany();
 
-    useSetBusy(useCompanyEditData, companyEditDataState);
+    useSetBusy(CompanyApiService.useCompanyEditData, companyEditDataState);
 
     const saveCompanyAsyncWithData = useCallback(() => saveCompanyAsync({
         id: companyId,
