@@ -35,7 +35,7 @@ company_inherited_permissions AS
 	SELECT 
 		u.id assignee_user_id, 
 		cpv.context_company_id, 
-		NULL::int context_course_id, 
+		cpv.context_course_id, 
 		cpv.role_id,
 		cpv.permission_id,
 		NULL::int assignment_bridge_id
