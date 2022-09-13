@@ -1,15 +1,15 @@
-import {UserCourseBridge} from '../models/entity/UserCourseBridge';
-import {TempomatCalculationDataView} from '../models/views/TempomatCalculationDataView';
-import {UserCourseProgressView} from '../models/views/UserCourseProgressView';
-import {TempomatModeType} from '../shared/types/sharedTypes';
-import {Id} from '../shared/types/versionId';
-import {addDays, dateDiffInDays, relativeDiffInPercentage} from '../utilities/helpers';
-import {PrincipalId} from '../utilities/XTurboExpress/ActionParams';
-import {AuthorizationService} from './AuthorizationService';
-import {EventService} from './EventService';
-import {LoggerService} from './LoggerService';
-import {ORMConnectionService} from './ORMConnectionService/ORMConnectionService';
-import {instantiate} from '../shared/logic/sharedLogic';
+import { UserCourseBridge } from '../models/entity/UserCourseBridge';
+import { TempomatCalculationDataView } from '../models/views/TempomatCalculationDataView';
+import { UserCourseProgressView } from '../models/views/UserCourseProgressView';
+import { TempomatModeType } from '../shared/types/sharedTypes';
+import { Id } from '../shared/types/versionId';
+import { addDays, dateDiffInDays, relativeDiffInPercentage } from '../utilities/helpers';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
+import { AuthorizationService } from './AuthorizationService';
+import { EventService } from './EventService';
+import { LoggerService } from './LoggerService';
+import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { instantiate } from '../shared/logic/sharedLogic';
 
 type CalculateTempomatValuesArgs = {
     tempomatMode: TempomatModeType,
@@ -54,7 +54,7 @@ export class TempomatService {
                 const userId = principalId.toSQLValue();
 
                 const bridge = await this._ormService
-                    .query(UserCourseBridge, {courseId, userId})
+                    .query(UserCourseBridge, { courseId, userId })
                     .where('courseId', '=', 'courseId')
                     .and('userId', '=', 'userId')
                     .getSingle();
@@ -77,7 +77,7 @@ export class TempomatService {
      */
     async handleLagBehindAsync(userCourseProgressView: UserCourseProgressView) {
 
-        const {courseId, userId, lagBehindPercentage} = userCourseProgressView;
+        const { courseId, userId, lagBehindPercentage } = userCourseProgressView;
 
         if (lagBehindPercentage < 35)
             return;
@@ -101,7 +101,7 @@ export class TempomatService {
                 const userId = principalId.toSQLValue();
 
                 const bridge = await this._ormService
-                    .query(UserCourseBridge, {courseId, userId})
+                    .query(UserCourseBridge, { courseId, userId })
                     .where('courseId', '=', 'courseId')
                     .and('userId', '=', 'userId')
                     .getSingle();
@@ -124,7 +124,7 @@ export class TempomatService {
 
         return await this
             ._ormService
-            .query(TempomatCalculationDataView, {courseId, userId})
+            .query(TempomatCalculationDataView, { courseId, userId })
             .where('courseId', '=', 'courseId')
             .and('userId', '=', 'userId')
             .getSingle();
@@ -137,7 +137,7 @@ export class TempomatService {
 
         return await this
             ._ormService
-            .query(TempomatCalculationDataView, {userId})
+            .query(TempomatCalculationDataView, { userId })
             .where('userId', '=', 'userId')
             .getMany();
     }
@@ -145,7 +145,7 @@ export class TempomatService {
     /**
      * getAvgLagBehindPercentage
      */
-    async getAvgLagBehindPercentage(userId: Id<'User'>) {
+    async getAvgLagBehindPercentageAsync(userId: Id<'User'>) {
 
         const tempomatCalculationDatas = await this
             .getTempomatCalculationDatasAsync(userId);
@@ -172,13 +172,47 @@ export class TempomatService {
         return avgLagBehindPercentage;
     }
 
+    getAvgLagBehindPercentage(tempomatCalculationDatas: TempomatCalculationDataView[]) {
+
+        const allLagBehindPercentages = tempomatCalculationDatas
+            .map(x => {
+
+                const newPrevisionedCompletionDate = this
+                    ._calculatePrevisionedDate(
+                        x.originalPrevisionedCompletionDate,
+                        x.totalItemCount,
+                        x.totalCompletedItemCount,
+                        x.startDate,
+                        x.tempomatMode,
+                        x.tempomatAdjustmentValue
+                    );
+
+                const lagBehindPercentage = this
+                    ._calculateLagBehindPercentage(
+                        x.startDate,
+                        x.requiredCompletionDate
+                            ? x.requiredCompletionDate
+                            : x.originalPrevisionedCompletionDate,
+                        newPrevisionedCompletionDate
+                    );
+
+                return lagBehindPercentage;
+            });
+
+        // calculates the average lag beghind from all started course
+        const avgLagBehindPercentage = allLagBehindPercentages
+            .reduce((a, b) => a + b, 0) / allLagBehindPercentages.length;
+
+        return avgLagBehindPercentage;
+    }
+
     /**
-     * Calc tempomat values
+     * Calc tempomat values for one users one course
      */
     async calculateTempomatValuesAsync(userId: Id<'User'>, courseId: Id<'Course'>) {
 
         const tempomatCalculationData = await this._ormService
-            .query(TempomatCalculationDataView, {userId, courseId})
+            .query(TempomatCalculationDataView, { userId, courseId })
             .where('userId', '=', 'userId')
             .and('courseId', '=', 'courseId')
             .getSingle();
@@ -187,7 +221,7 @@ export class TempomatService {
     }
 
     /**
-     * Calc tempomat values
+     * Calc tempomat values for one users one course
      */
     calculateTempomatValues(opts: CalculateTempomatValuesArgs): CalculatedTempomatValueType {
 
@@ -211,7 +245,7 @@ export class TempomatService {
                 tempomatAdjustmentValue
             );
 
-        const {recommendedItemsPerDay, recommendedItemsPerWeek} = this
+        const { recommendedItemsPerDay, recommendedItemsPerWeek } = this
             ._calculateRecommendedItemsPerDay(
                 startDate,
                 previsionedCompletionDate,
@@ -359,7 +393,7 @@ export class TempomatService {
 
         const recommendedItemsPerWeek = recommendedItemsPerDay * 7;
 
-        return {recommendedItemsPerDay, recommendedItemsPerWeek};
+        return { recommendedItemsPerDay, recommendedItemsPerWeek };
     }
 
     private _calculateOriginalPrevisionedLength(originalPrevisionedCompletionDate: Date, startDate: Date) {

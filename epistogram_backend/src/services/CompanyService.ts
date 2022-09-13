@@ -9,6 +9,7 @@ import { CompanyDTO } from '../shared/dtos/company/CompanyDTO';
 import { CompanyEditDataDTO } from '../shared/dtos/company/CompanyEditDataDTO';
 import { CompanyPublicDTO } from '../shared/dtos/company/CompanyPublicDTO';
 import { RoleAssignCompanyDTO } from '../shared/dtos/company/RoleAssignCompanyDTO';
+import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 import { PermissionCodeType } from '../shared/types/sharedTypes';
 import { Id } from '../shared/types/versionId';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
@@ -41,6 +42,19 @@ export class CompanyService {
 
         return this._mapperService
             .mapTo(CompanyDTO, [companies]);
+    }
+
+    async getPrincipalCompanyId(principalId: PrincipalId): Promise<Id<'Company'>> {
+
+        const user = await this._ormService
+            .query(User, { principalId })
+            .where('id', '=', 'principalId')
+            .getOneOrNull();
+
+        if (!user)
+            throw new ErrorWithCode('internal server error');
+
+        return user.companyId;
     }
 
     /**

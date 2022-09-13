@@ -6,7 +6,7 @@ import { Id } from '../../shared/types/versionId';
     synchronize: false,
     expression: ''
 })
-export class UserPerformanceAnswerGroupView {
+export class UserOverviewView {
 
     @XViewColumn()
     @ViewColumn()
@@ -14,37 +14,37 @@ export class UserPerformanceAnswerGroupView {
 
     @XViewColumn()
     @ViewColumn()
-    courseId: Id<'Course'>;
+    companyId: Id<'Company'>;
 
     @XViewColumn()
     @ViewColumn()
-    totalAnswerCount: number;
+    userEmail: string;
 
     @XViewColumn()
     @ViewColumn()
-    averageReactionTime: number;
+    firstName: string;
 
     @XViewColumn()
     @ViewColumn()
-    videoAnswerCount: number;
+    lastName: string;
 
     @XViewColumn()
     @ViewColumn()
-    practiseAnswerCount: number;
+    avatarFilePath: string;
 
     @XViewColumn()
     @ViewColumn()
-    examAnswerCount: number;
+    averagePerformancePercentage: number;
 
     @XViewColumn()
     @ViewColumn()
-    correctVideoAnswerCount: number;
+    totalSessionLengthSeconds: number;
 
     @XViewColumn()
     @ViewColumn()
-    correctPractiseAnswerCount: number;
+    engagementPoints: number;
 
     @XViewColumn()
     @ViewColumn()
-    correctExamAnswerCount: number;
+    completedCourseItemCount: number;
 }

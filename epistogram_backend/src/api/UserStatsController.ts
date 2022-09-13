@@ -1,10 +1,10 @@
-import {UserStatsService} from '../services/UserStatsService';
-import {apiRoutes} from '../shared/types/apiRoutes';
-import {Id} from '../shared/types/versionId';
-import {ServiceProvider} from '../startup/servicesDI';
-import {ActionParams} from '../utilities/XTurboExpress/ActionParams';
-import {XControllerAction} from '../utilities/XTurboExpress/XTurboExpressDecorators';
-import {XController} from '../utilities/XTurboExpress/XTurboExpressTypes';
+import { UserStatsService } from '../services/UserStatsService';
+import { apiRoutes } from '../shared/types/apiRoutes';
+import { Id } from '../shared/types/versionId';
+import { ServiceProvider } from '../startup/servicesDI';
+import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
+import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
+import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
 export class UserStatsController implements XController<UserStatsController> {
 
@@ -34,6 +34,13 @@ export class UserStatsController implements XController<UserStatsController> {
 
         return this._userStatsService
             .getImproveYourselfPageStatsAsync(params.principalId);
+    }
+
+    @XControllerAction(apiRoutes.userStats.getUserOverviewStats)
+    getUserOverviewStatsAction(params: ActionParams) {
+
+        return this._userStatsService
+            .getUserOverviewStatsAsync(params.principalId);
     }
 
     @XControllerAction(apiRoutes.userStats.getUserCourseStats)
