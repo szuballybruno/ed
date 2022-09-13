@@ -1,4 +1,4 @@
-import {AnswerSession} from '../../models/entity/AnswerSession';
+import {AnswerSession} from '../../models/entity/misc/AnswerSession';
 import {getSeedList} from '../../services/sqlServices/SeedService';
 import {UserSeedDataType} from './seed_users';
 import {ExamVersionSeedDataType} from './seed_exam_versions';

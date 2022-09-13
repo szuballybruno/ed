@@ -1,5 +1,5 @@
-import { TeacherInfo } from '../models/entity/TeacherInfo';
-import { User } from '../models/entity/User';
+import { TeacherInfo } from '../models/entity/misc/TeacherInfo';
+import { User } from '../models/entity/misc/User';
 import { TeacherInfoEditDTO } from '../shared/dtos/TeacherInfoEditDTO';
 import { Id } from '../shared/types/versionId';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';

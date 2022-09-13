@@ -1,7 +1,7 @@
 import {Answer} from '../models/entity/answer/Answer';
 import {AnswerData} from '../models/entity/answer/AnswerData';
 import {AnswerVersion} from '../models/entity/answer/AnswerVersion';
-import {AnswerSession} from '../models/entity/AnswerSession';
+import {AnswerSession} from '../models/entity/misc/AnswerSession';
 import {AnswerEditDTO} from '../shared/dtos/AnswerEditDTO';
 import {AnswerResultDTO} from '../shared/dtos/AnswerResultDTO';
 import {Mutation} from '../shared/dtos/mutations/Mutation';
@@ -14,9 +14,9 @@ import {XMutatorHelpers} from './misc/XMutatorHelpers';
 import {ORMConnectionService} from './ORMConnectionService/ORMConnectionService';
 import {SQLFunctionsService} from './sqlServices/FunctionsService';
 import {VersionSaveService} from './VersionSaveService';
-import {GivenAnswerStreak} from '../models/entity/GivenAnswerStreak';
-import {GivenAnswer} from '../models/entity/GivenAnswer';
-import {AnswerGivenAnswerBridge} from '../models/entity/AnswerGivenAnswerBridge';
+import {GivenAnswerStreak} from '../models/entity/misc/GivenAnswerStreak';
+import {GivenAnswer} from '../models/entity/misc/GivenAnswer';
+import {AnswerGivenAnswerBridge} from '../models/entity/misc/AnswerGivenAnswerBridge';
 import {QuestionVersion} from '../models/entity/question/QuestionVersion';
 
 export type AnswerMutationsType = Mutation<AnswerEditDTO, 'answerVersionId'>[];

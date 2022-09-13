@@ -1,6 +1,6 @@
 import { UploadedFile } from 'express-fileupload';
-import { StorageFile } from '../models/entity/StorageFile';
-import { User } from '../models/entity/User';
+import { StorageFile } from '../models/entity/misc/StorageFile';
+import { User } from '../models/entity/misc/User';
 import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 import { Id } from '../shared/types/versionId';
 import { fileCodes, FileCodesType } from '../static/FileCodes';

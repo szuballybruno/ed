@@ -1,4 +1,4 @@
-import {UserCourseBridge} from '../models/entity/UserCourseBridge';
+import {UserCourseBridge} from '../models/entity/misc/UserCourseBridge';
 import {TempomatCalculationDataView} from '../models/views/TempomatCalculationDataView';
 import {UserCourseProgressView} from '../models/views/UserCourseProgressView';
 import {TempomatModeType} from '../shared/types/sharedTypes';

@@ -26,7 +26,7 @@ import {MapperService} from './MapperService';
 import {ORMConnectionService} from './ORMConnectionService/ORMConnectionService';
 import {TempomatService} from './TempomatService';
 import {UserProgressService} from './UserProgressService';
-import {User} from '../models/entity/User';
+import {User} from '../models/entity/misc/User';
 import {TempomatCalculationDataView} from '../models/views/TempomatCalculationDataView';
 import {UserPerformanceComparisonStatsView} from '../models/views/UserPerformanceComparisonStatsView';
 

@@ -1,8 +1,8 @@
 import { UploadedFile } from 'express-fileupload';
-import { Company } from '../models/entity/Company';
-import { CourseAccessBridge } from '../models/entity/CourseAccessBridge';
-import { StorageFile } from '../models/entity/StorageFile';
-import { User } from '../models/entity/User';
+import { Company } from '../models/entity/misc/Company';
+import { CourseAccessBridge } from '../models/entity/misc/CourseAccessBridge';
+import { StorageFile } from '../models/entity/misc/StorageFile';
+import { User } from '../models/entity/misc/User';
 import { CompanyAssociatedCoursesView } from '../models/views/CompanyAssociatedCoursesView';
 import { CompanyView } from '../models/views/CompanyView';
 import { UserPermissionView } from '../models/views/UserPermissionView';

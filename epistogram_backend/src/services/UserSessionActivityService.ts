@@ -1,7 +1,7 @@
 import moment from 'moment';
-import { ActivitySession } from '../models/entity/ActivitySession';
-import { ActivityStreak } from '../models/entity/ActivityStreak';
-import { UserSessionActivity } from '../models/entity/UserSessionActivity';
+import { ActivitySession } from '../models/entity/misc/ActivitySession';
+import { ActivityStreak } from '../models/entity/misc/ActivityStreak';
+import { UserSessionActivity } from '../models/entity/misc/UserSessionActivity';
 import { SessionActivityType } from '../shared/types/sharedTypes';
 import { Id } from '../shared/types/versionId';
 import { InsertEntity } from '../utilities/misc';

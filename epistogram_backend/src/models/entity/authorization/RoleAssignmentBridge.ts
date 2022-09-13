@@ -1,9 +1,9 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from '../../MyORM';
 import { XViewColumn } from '../../../services/XORM/XORMDecorators';
 import { Id } from '../../../shared/types/versionId';
 import { getJoinColumnName } from '../../../utilities/helpers';
-import { Company } from '../Company';
-import { User } from '../User';
+import { Company } from '../misc/Company';
+import { User } from '../misc/User';
 import { Role } from './Role';
 
 @Entity()

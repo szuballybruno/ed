@@ -1,10 +1,10 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation, UpdateDateColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation, UpdateDateColumn } from '../../MyORM';
 import { XOneToMany, XViewColumn } from '../../../services/XORM/XORMDecorators';
 import { CourseVisibilityType } from '../../../shared/types/sharedTypes';
 import { Id } from '../../../shared/types/versionId';
-import { CourseCategory } from '../CourseCategory';
-import { StorageFile } from '../StorageFile';
-import { User } from '../User';
+import { CourseCategory } from '../misc/CourseCategory';
+import { StorageFile } from '../misc/StorageFile';
+import { User } from '../misc/User';
 import { CourseVersion } from './CourseVersion';
 
 @Entity()

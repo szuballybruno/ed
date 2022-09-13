@@ -1,10 +1,10 @@
 import { UploadedFile } from 'express-fileupload';
 import { CourseData } from '../models/entity/course/CourseData';
 import { CourseVersion } from '../models/entity/course/CourseVersion';
-import { CourseAccessBridge } from '../models/entity/CourseAccessBridge';
-import { CourseCategory } from '../models/entity/CourseCategory';
-import { TeacherInfo } from '../models/entity/TeacherInfo';
-import { User } from '../models/entity/User';
+import { CourseAccessBridge } from '../models/entity/misc/CourseAccessBridge';
+import { CourseCategory } from '../models/entity/misc/CourseCategory';
+import { TeacherInfo } from '../models/entity/misc/TeacherInfo';
+import { User } from '../models/entity/misc/User';
 import { AvailableCourseView } from '../models/views/AvailableCourseView';
 import { CourseAdminContentView } from '../models/views/CourseAdminContentView';
 import { CourseAdminDetailedView } from '../models/views/CourseAdminDetailedView';

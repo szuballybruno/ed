@@ -1,5 +1,5 @@
-import { Company } from '../models/entity/Company';
-import { User } from '../models/entity/User';
+import { Company } from '../models/entity/misc/Company';
+import { User } from '../models/entity/misc/User';
 import { Id } from '../shared/types/versionId';
 import { GlobalConfiguration } from './misc/GlobalConfiguration';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';

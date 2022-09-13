@@ -1,5 +1,5 @@
-import { Comment } from '../models/entity/Comment';
-import { Like } from '../models/entity/Like';
+import { Comment } from '../models/entity/misc/Comment';
+import { Like } from '../models/entity/misc/Like';
 import { Id } from '../shared/types/versionId';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { AuthorizationService } from './AuthorizationService';

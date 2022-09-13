@@ -1,7 +1,7 @@
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, Relation } from '../../MyORM';
 import { XOneToMany, XViewColumn } from '../../../services/XORM/XORMDecorators';
 import { Id } from '../../../shared/types/versionId';
-import { StorageFile } from '../StorageFile';
+import { StorageFile } from '../misc/StorageFile';
 import { ModuleVersion } from './ModuleVersion';
 
 @Entity()

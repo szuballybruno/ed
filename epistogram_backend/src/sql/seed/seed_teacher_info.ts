@@ -1,4 +1,4 @@
-import { TeacherInfo } from '../../models/entity/TeacherInfo';
+import { TeacherInfo } from '../../models/entity/misc/TeacherInfo';
 import { getSeedList } from '../../services/sqlServices/SeedService';
 import { UserSeedDataType } from './seed_users';
 

@@ -1,4 +1,4 @@
-import {UserCourseBridge} from '../../models/entity/UserCourseBridge';
+import {UserCourseBridge} from '../../models/entity/misc/UserCourseBridge';
 import {getSeedList} from '../../services/sqlServices/SeedService';
 import {CourseSeedDataType} from './seed_courses';
 import {UserSeedDataType} from './seed_users';

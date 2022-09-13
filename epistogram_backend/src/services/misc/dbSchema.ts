@@ -1,47 +1,58 @@
-import { ActivationCode } from '../../models/entity/ActivationCode';
-import { ActivitySession } from '../../models/entity/ActivitySession';
-import { ActivityStreak } from '../../models/entity/ActivityStreak';
 import { Answer } from '../../models/entity/answer/Answer';
 import { AnswerData } from '../../models/entity/answer/AnswerData';
 import { AnswerVersion } from '../../models/entity/answer/AnswerVersion';
-import { AnswerGivenAnswerBridge } from '../../models/entity/AnswerGivenAnswerBridge';
-import { AnswerSession } from '../../models/entity/AnswerSession';
 import { CompanyOwnerBridge } from '../../models/entity/authorization/CompanyOwnerBridge';
 import { Permission } from '../../models/entity/authorization/Permission';
 import { PermissionAssignmentBridge } from '../../models/entity/authorization/PermissionAssignmentBridge';
 import { Role } from '../../models/entity/authorization/Role';
 import { RoleAssignmentBridge } from '../../models/entity/authorization/RoleAssignmentBridge';
 import { RolePermissionBridge } from '../../models/entity/authorization/RolePermissionBridge';
-import { CoinTransaction } from '../../models/entity/CoinTransaction';
-import { Comment } from '../../models/entity/Comment';
-import { Company } from '../../models/entity/Company';
-import { ConstantValue } from '../../models/entity/ConstantValue';
 import { Course } from '../../models/entity/course/Course';
 import { CourseData } from '../../models/entity/course/CourseData';
 import { CourseVersion } from '../../models/entity/course/CourseVersion';
-import { CourseAccessBridge } from '../../models/entity/CourseAccessBridge';
-import { CourseCategory } from '../../models/entity/CourseCategory';
-import { CourseCompletion } from '../../models/entity/CourseCompletion';
-import { CourseItemCompletion } from '../../models/entity/CourseItemCompletion';
 import { CourseRatingGroup } from '../../models/entity/courseRating/CourseRatingGroup';
 import { CourseRatingQuestion } from '../../models/entity/courseRating/CourseRatingQuestion';
 import { CourseRatingQuestionUserAnswer } from '../../models/entity/courseRating/CourseRatingQuestionUserAnswer';
-import { DailyTip } from '../../models/entity/DailyTip';
-import { DailyTipOccurrence } from '../../models/entity/DailyTipOccurrence';
-import { DiscountCode } from '../../models/entity/DiscountCode';
-import { Event } from '../../models/entity/Event';
 import { Exam } from '../../models/entity/exam/Exam';
 import { ExamData } from '../../models/entity/exam/ExamData';
 import { ExamVersion } from '../../models/entity/exam/ExamVersion';
-import { GivenAnswer } from '../../models/entity/GivenAnswer';
-import { GivenAnswerStreak } from '../../models/entity/GivenAnswerStreak';
-import { Group } from '../../models/entity/Group';
-import { JobTitle } from '../../models/entity/JobTitle';
-import { Like } from '../../models/entity/Like';
+import { ActivationCode } from '../../models/entity/misc/ActivationCode';
+import { ActivitySession } from '../../models/entity/misc/ActivitySession';
+import { ActivityStreak } from '../../models/entity/misc/ActivityStreak';
+import { AnswerGivenAnswerBridge } from '../../models/entity/misc/AnswerGivenAnswerBridge';
+import { AnswerSession } from '../../models/entity/misc/AnswerSession';
+import { CoinTransaction } from '../../models/entity/misc/CoinTransaction';
+import { Comment } from '../../models/entity/misc/Comment';
+import { Company } from '../../models/entity/misc/Company';
+import { CourseAccessBridge } from '../../models/entity/misc/CourseAccessBridge';
+import { CourseCategory } from '../../models/entity/misc/CourseCategory';
+import { CourseCompletion } from '../../models/entity/misc/CourseCompletion';
+import { CourseItemCompletion } from '../../models/entity/misc/CourseItemCompletion';
+import { DailyTip } from '../../models/entity/misc/DailyTip';
+import { DailyTipOccurrence } from '../../models/entity/misc/DailyTipOccurrence';
+import { DiscountCode } from '../../models/entity/misc/DiscountCode';
+import { Event } from '../../models/entity/misc/Event';
+import { GivenAnswer } from '../../models/entity/misc/GivenAnswer';
+import { GivenAnswerStreak } from '../../models/entity/misc/GivenAnswerStreak';
+import { Group } from '../../models/entity/misc/Group';
+import { JobTitle } from '../../models/entity/misc/JobTitle';
+import { Like } from '../../models/entity/misc/Like';
+import { PersonalityTraitCategory } from '../../models/entity/misc/PersonalityTraitCategory';
+import { QuestionType } from '../../models/entity/misc/QuestionType';
+import { ShopItem } from '../../models/entity/misc/ShopItem';
+import { ShopItemCategory } from '../../models/entity/misc/ShopItemCategory';
+import { StorageFile } from '../../models/entity/misc/StorageFile';
+import { Task } from '../../models/entity/misc/Task';
+import { TeacherInfo } from '../../models/entity/misc/TeacherInfo';
+import { TempomatAdjustmentValue } from '../../models/entity/misc/TempomatAdjustmentValue';
+import { User } from '../../models/entity/misc/User';
+import { UserCourseBridge } from '../../models/entity/misc/UserCourseBridge';
+import { UserSessionActivity } from '../../models/entity/misc/UserSessionActivity';
+import { UserVideoProgressBridge } from '../../models/entity/misc/UserVideoProgressBridge';
+import { VideoRating } from '../../models/entity/misc/VideoRating';
 import { Module } from '../../models/entity/module/Module';
 import { ModuleData } from '../../models/entity/module/ModuleData';
 import { ModuleVersion } from '../../models/entity/module/ModuleVersion';
-import { PersonalityTraitCategory } from '../../models/entity/PersonalityTraitCategory';
 import { VideoPlaybackSample } from '../../models/entity/playback/VideoPlaybackSample';
 import { VideoPlaybackSession } from '../../models/entity/playback/VideoPlaybackSession';
 import { VideoSeekEvent } from '../../models/entity/playback/VideoSeekEvent';
@@ -52,22 +63,10 @@ import { PrequizUserAnswer } from '../../models/entity/prequiz/PrequizUserAnswer
 import { Question } from '../../models/entity/question/Question';
 import { QuestionData } from '../../models/entity/question/QuestionData';
 import { QuestionVersion } from '../../models/entity/question/QuestionVersion';
-import { QuestionType } from '../../models/entity/QuestionType';
-import { ShopItem } from '../../models/entity/ShopItem';
-import { ShopItemCategory } from '../../models/entity/ShopItemCategory';
-import { StorageFile } from '../../models/entity/StorageFile';
-import { Task } from '../../models/entity/Task';
-import { TeacherInfo } from '../../models/entity/TeacherInfo';
-import { TempomatAdjustmentValue } from '../../models/entity/TempomatAdjustmentValue';
-import { User } from '../../models/entity/User';
-import { UserCourseBridge } from '../../models/entity/UserCourseBridge';
-import { UserSessionActivity } from '../../models/entity/UserSessionActivity';
-import { UserVideoProgressBridge } from '../../models/entity/UserVideoProgressBridge';
 import { Video } from '../../models/entity/video/Video';
 import { VideoData } from '../../models/entity/video/VideoData';
 import { VideoFile } from '../../models/entity/video/VideoFile';
 import { VideoVersion } from '../../models/entity/video/VideoVersion';
-import { VideoRating } from '../../models/entity/VideoRating';
 import { ActivityStreakView } from '../../models/views/ActivityStreakView';
 import { AdminUserListView } from '../../models/views/AdminUserListView';
 import { AnswerSessionGroupView } from '../../models/views/AnswerSessionGroupView';
@@ -83,7 +82,6 @@ import { CourseAdminShortView } from '../../models/views/CourseAdminShortView';
 import { CourseAllItemsCompletedView } from '../../models/views/CourseAllItemsCompletedView';
 import { CourseDetailsView } from '../../models/views/CourseDetailsView';
 import { CourseItemEditView } from '../../models/views/CourseItemEditView';
-import { PlaylistView } from '../../models/views/PlaylistView';
 import { CourseLearningStatsView } from '../../models/views/CourseLearningStatsView';
 import { CourseModuleOverviewView } from '../../models/views/CourseModuleOverviewView';
 import { CourseOverviewView } from '../../models/views/CourseOverviewView';
@@ -109,6 +107,7 @@ import { ModulePlayerView } from '../../models/views/ModulePlayerView';
 import { MostProductiveTimeRangeView } from '../../models/views/MostProductiveTimeRangeView';
 import { PersonalityTraitCategoryView } from '../../models/views/PersonalityTraitCategoryView';
 import { PersonalityTraitView } from '../../models/views/PersonalityTraitView';
+import { PlaylistView } from '../../models/views/PlaylistView';
 import { PractiseQuestionView } from '../../models/views/PractiseQuestionView';
 import { PrequizQuestionView } from '../../models/views/PrequizQuestionView';
 import { PretestResultView } from '../../models/views/PretestResultView';
@@ -122,9 +121,7 @@ import { UserActiveCourseView } from '../../models/views/UserActiveCourseView';
 import { UserAnswerView } from '../../models/views/UserAnswerView';
 import { UserCourseBridgeView } from '../../models/views/UserCourseBridgeView';
 import { UserCourseCompletionCurrentView } from '../../models/views/UserCourseCompletionCurrentView';
-import {
-    UserCourseCompletionOriginalEstimationView
-} from '../../models/views/UserCourseCompletionOriginalEstimationView';
+import { UserCourseCompletionOriginalEstimationView } from '../../models/views/UserCourseCompletionOriginalEstimationView';
 import { UserCourseProgressView } from '../../models/views/UserCourseProgressView';
 import { UserCourseStatsView } from '../../models/views/UserCourseStatsView';
 import { UserDailyActivityChartView } from '../../models/views/UserDailyActivityChartView';
@@ -136,6 +133,7 @@ import { UserInactiveCourseView } from '../../models/views/UserInactiveCourseVie
 import { UserLearningOverviewStatsView } from '../../models/views/UserLearningOverviewStatsView';
 import { UserLearningPageStatsView } from '../../models/views/UserLearningPageStatsView';
 import { UserPerformanceAnswerGroupView } from '../../models/views/UserPerformanceAnswerGroupView';
+import { UserPerformanceComparisonStatsView } from '../../models/views/UserPerformanceComparisonStatsView';
 import { UserPerformanceView } from '../../models/views/UserPerformanceView';
 import { UserPractiseRecommendationView } from '../../models/views/UserPractiseRecommendationView';
 import { UserReactionTimeView } from '../../models/views/UserReactionTimeView';
@@ -151,18 +149,20 @@ import { VideoCursorSecondsView } from '../../models/views/VideoCursorSecondsVie
 import { VideoPlayerDataView } from '../../models/views/VideoPlayerDataView';
 import { VideoVersionView } from '../../models/views/VideoVersionView';
 import { getActivationCodeSeedData } from '../../sql/seed/seed_activation_codes';
+import { getActivitySessionSeedData } from '../../sql/seed/seed_activity_sessions';
 import { getAnswersSeedData } from '../../sql/seed/seed_answers';
 import { getAnswerDatasSeedData } from '../../sql/seed/seed_answer_datas';
+import { getAnswerGivenAnswerBridgeSeedData } from '../../sql/seed/seed_answer_given_answer_bridges';
 import { getAnswerSessionSeedData } from '../../sql/seed/seed_answer_sessions';
 import { getAnswerVersionsSeedData } from '../../sql/seed/seed_answer_versions';
 import { getCommentsSeedData } from '../../sql/seed/seed_comments';
 import { getCompaniesSeedData } from '../../sql/seed/seed_companies';
 import { getCompanyOwnerBridgeSeedData } from '../../sql/seed/seed_company_owner_bridges';
-import { getConstantValuesSeedData } from '../../sql/seed/seed_constant_values';
 import { getCourseSeedData } from '../../sql/seed/seed_courses';
 import { getCourseAccessBridgeSeedData } from '../../sql/seed/seed_course_access_bridge';
 import { getCourseCategoriesSeedData } from '../../sql/seed/seed_course_categories';
 import { getCourseDatasSeedData } from '../../sql/seed/seed_course_datas';
+import { getCourseItemCompletionSeedData } from '../../sql/seed/seed_course_item_completion';
 import { getCourseRatingGroupSeedData } from '../../sql/seed/seed_course_rating_groups';
 import { getCourseRatingQuestionSeedData } from '../../sql/seed/seed_course_rating_question';
 import { getCourseVersionsSeedData } from '../../sql/seed/seed_course_versions';
@@ -171,6 +171,8 @@ import { getDiscountCodesSeedData } from '../../sql/seed/seed_discount_codes';
 import { getExamSeedData } from '../../sql/seed/seed_exams';
 import { getExamDatasSeedData } from '../../sql/seed/seed_exam_datas';
 import { getExamVersionsSeedData } from '../../sql/seed/seed_exam_versions';
+import { getGivenAnswerSeedData } from '../../sql/seed/seed_given_answers';
+import { getGivenAnswerStreakSeedData } from '../../sql/seed/seed_given_answer_streak';
 import { getJobTitlesSeedData } from '../../sql/seed/seed_job_titles';
 import { getModulesSeedData } from '../../sql/seed/seed_modules';
 import { getModuleDatasSeedData } from '../../sql/seed/seed_module_datas';
@@ -181,6 +183,7 @@ import { getPersonalityTraitCategoriesSeed } from '../../sql/seed/seed_personali
 import { getPrequizAnswersSeedData } from '../../sql/seed/seed_prequiz_answers';
 import { getPrequizQuestionsSeedData } from '../../sql/seed/seed_prequiz_questions';
 import { getPrequizUserAnswerSeedData } from '../../sql/seed/seed_prequiz_user_answer';
+import { getPrequizCompletionSeedData } from '../../sql/seed/seed_pretest_completion';
 import { getQuestionSeedData } from '../../sql/seed/seed_questions';
 import { getQuestionDatasSeedData } from '../../sql/seed/seed_question_datas';
 import { getQuestionTypeSeedData } from '../../sql/seed/seed_question_types';
@@ -203,19 +206,11 @@ import { getVideoVersionSeedData } from '../../sql/seed/seed_video_versions';
 import { XDependency } from '../../utilities/XDInjection/XDInjector';
 import { XDBMSchemaType } from '../XDBManager/XDBManagerTypes';
 import { ParametrizedFunction } from './advancedTypes/ParametrizedFunction';
-import { getActivitySessionSeedData } from '../../sql/seed/seed_activity_sessions';
-import { getPrequizCompletionSeedData } from '../../sql/seed/seed_pretest_completion';
-import { getGivenAnswerSeedData } from '../../sql/seed/seed_given_answers';
-import { getAnswerGivenAnswerBridgeSeedData } from '../../sql/seed/seed_answer_given_answer_bridges';
-import { getCourseItemCompletionSeedData } from '../../sql/seed/seed_course_item_completion';
-import { getGivenAnswerStreakSeedData } from '../../sql/seed/seed_given_answer_streak';
-import { UserPerformanceComparisonStatsView } from '../../models/views/UserPerformanceComparisonStatsView';
 
 export const createDBSchema = (): XDBMSchemaType => {
 
     const hierarchy = XDependency
         .getFunctionBuilder()
-        .addFunction(getConstantValuesSeedData, [], ConstantValue)
         .addFunction(() => 1, [], CourseItemCompletion)
         .addFunction(getQuestionTypeSeedData, [], QuestionType)
         .addFunction(getPermissionsSeedData, [], Permission)
@@ -498,7 +493,6 @@ export const createDBSchema = (): XDBMSchemaType => {
             UserVideoProgressBridge,
             TempomatAdjustmentValue,
             CourseItemCompletion,
-            ConstantValue,
             CourseCompletion
         ]
     };

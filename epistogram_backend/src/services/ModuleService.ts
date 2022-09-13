@@ -1,7 +1,7 @@
 import { Module } from '../models/entity/module/Module';
 import { ModuleData } from '../models/entity/module/ModuleData';
 import { ModuleVersion } from '../models/entity/module/ModuleVersion';
-import { User } from '../models/entity/User';
+import { User } from '../models/entity/misc/User';
 import { ModuleEditView } from '../models/views/ModuleEditView';
 import { ModulePlayerView } from '../models/views/ModulePlayerView';
 import { CourseContentItemAdminDTO } from '../shared/dtos/admin/CourseContentItemAdminDTO';

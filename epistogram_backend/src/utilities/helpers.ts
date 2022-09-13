@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { User } from '../models/entity/User';
+import { User } from '../models/entity/misc/User';
 import { ParsableValueType } from '../models/Types';
 import { ClassType } from '../services/misc/advancedTypes/ClassType';
 import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';

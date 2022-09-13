@@ -1,7 +1,7 @@
-import { Column, Entity, PrimaryGeneratedColumn, Relation } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, Relation } from '../../MyORM';
 import { XJoinColumn, XManyToOne, XOneToMany, XViewColumn } from '../../../services/XORM/XORMDecorators';
 import { Id } from '../../../shared/types/versionId';
-import { AnswerGivenAnswerBridge } from '../AnswerGivenAnswerBridge';
+import { AnswerGivenAnswerBridge } from '../misc/AnswerGivenAnswerBridge';
 import { QuestionVersion } from '../question/QuestionVersion';
 import { Answer } from './Answer';
 import { AnswerData } from './AnswerData';

@@ -1,4 +1,4 @@
-import {AnswerSession} from '../models/entity/AnswerSession';
+import {AnswerSession} from '../models/entity/misc/AnswerSession';
 import {PractiseQuestionInfoView} from '../models/views/PractiseQuestionInfoView';
 import {AnswerQuestionDTO} from '../shared/dtos/AnswerQuestionDTO';
 import {Id} from '../shared/types/versionId';

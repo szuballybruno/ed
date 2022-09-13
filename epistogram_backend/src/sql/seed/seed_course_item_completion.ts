@@ -1,5 +1,5 @@
 import {getSeedList} from '../../services/sqlServices/SeedService';
-import {CourseItemCompletion} from '../../models/entity/CourseItemCompletion';
+import {CourseItemCompletion} from '../../models/entity/misc/CourseItemCompletion';
 import {UserSeedDataType} from './seed_users';
 import {SeedQuestionVersionType} from './seed_question_versions';
 import {AnswerSessionSeedDataType} from './seed_answer_sessions';

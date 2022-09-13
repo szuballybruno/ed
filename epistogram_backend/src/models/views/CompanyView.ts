@@ -1,4 +1,4 @@
-import { DeleteDateColumn, ViewColumn, ViewEntity } from 'typeorm';
+import { DeleteDateColumn, ViewColumn, ViewEntity } from '../MyORM';
 import { IsDeletedFlag, XViewColumn } from '../../services/XORM/XORMDecorators';
 import { Id } from '../../shared/types/versionId';
 

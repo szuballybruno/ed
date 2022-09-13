@@ -1,4 +1,4 @@
-import { ShopItemCategory } from '../../models/entity/ShopItemCategory';
+import { ShopItemCategory } from '../../models/entity/misc/ShopItemCategory';
 import { getSeedList } from '../../services/sqlServices/SeedService';
 
 export const getShopItemCategoriesSeedData = () => getSeedList<ShopItemCategory>()({

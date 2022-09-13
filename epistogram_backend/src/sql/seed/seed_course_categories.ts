@@ -1,4 +1,4 @@
-import {CourseCategory} from '../../models/entity/CourseCategory';
+import {CourseCategory} from '../../models/entity/misc/CourseCategory';
 import {getSeedList} from '../../services/sqlServices/SeedService';
 import {Id} from '../../shared/types/versionId';
 

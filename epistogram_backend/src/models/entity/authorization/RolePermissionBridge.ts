@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from '../../MyORM';
 import { XViewColumn } from '../../../services/XORM/XORMDecorators';
 import { Id } from '../../../shared/types/versionId';
 import { Permission } from './Permission';
@@ -25,7 +25,7 @@ export class RolePermissionBridge {
     @Column()
     @XViewColumn()
     permissionId: Id<'Permission'>;
-    @ManyToOne(_ => Permission, x => x.rolePermissionBridges)
+    @ManyToOne(_ => Permission)
     @JoinColumn({ name: 'permission_id' })
     permission: Relation<Permission>;
 }

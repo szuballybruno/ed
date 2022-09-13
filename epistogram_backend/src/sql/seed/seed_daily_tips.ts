@@ -1,4 +1,4 @@
-import { DailyTip } from '../../models/entity/DailyTip';
+import { DailyTip } from '../../models/entity/misc/DailyTip';
 import { getSeedList } from '../../services/sqlServices/SeedService';
 import { PersonalityTraitCategoriesSeedType } from './seed_personality_trait_categories';
 import { StorageFileSeedDataType } from './seed_storage_file';

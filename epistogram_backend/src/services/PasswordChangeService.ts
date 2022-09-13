@@ -1,4 +1,4 @@
-import { User } from '../models/entity/User';
+import { User } from '../models/entity/misc/User';
 import { validatePassowrd } from '../shared/logic/sharedLogic';
 import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 import { Id } from '../shared/types/versionId';

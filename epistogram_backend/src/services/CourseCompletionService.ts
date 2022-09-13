@@ -1,4 +1,4 @@
-import { CourseCompletion } from '../models/entity/CourseCompletion';
+import { CourseCompletion } from '../models/entity/misc/CourseCompletion';
 import { CourseAllItemsCompletedView } from '../models/views/CourseAllItemsCompletedView';
 import { Id } from '../shared/types/versionId';
 import { MapperService } from './MapperService';

@@ -25,7 +25,7 @@ import { MapperService } from './MapperService';
 import { QueryServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { AuthorizationService } from './AuthorizationService';
-import { User } from '../models/entity/User';
+import { User } from '../models/entity/misc/User';
 
 export class RoleService extends QueryServiceBase<Role> {
 

@@ -1,4 +1,4 @@
-import { CourseAccessBridge } from '../../models/entity/CourseAccessBridge';
+import { CourseAccessBridge } from '../../models/entity/misc/CourseAccessBridge';
 import { getSeedList } from '../../services/sqlServices/SeedService';
 import { CompaniesSeedDataType } from './seed_companies';
 import { CourseSeedDataType } from './seed_courses';

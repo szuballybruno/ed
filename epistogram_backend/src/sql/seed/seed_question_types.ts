@@ -1,5 +1,5 @@
 
-import { QuestionType } from '../../models/entity/QuestionType';
+import { QuestionType } from '../../models/entity/misc/QuestionType';
 import { getSeedList } from '../../services/sqlServices/SeedService';
 
 export const getQuestionTypeSeedData = () => getSeedList<QuestionType>()({

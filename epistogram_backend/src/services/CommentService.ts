@@ -1,4 +1,4 @@
-import { Comment } from '../models/entity/Comment';
+import { Comment } from '../models/entity/misc/Comment';
 import { CommentListView } from '../models/views/CommentListView';
 import { LatestVideoView } from '../models/views/LatestVideoView';
 import { CommentCreateDTO } from '../shared/dtos/CommentCreateDTO';

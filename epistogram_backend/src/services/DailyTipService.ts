@@ -1,5 +1,5 @@
-import { DailyTip } from '../models/entity/DailyTip';
-import { DailyTipOccurrence } from '../models/entity/DailyTipOccurrence';
+import { DailyTip } from '../models/entity/misc/DailyTip';
+import { DailyTipOccurrence } from '../models/entity/misc/DailyTipOccurrence';
 import { DailyTipDTO } from '../shared/dtos/DailyTipDTO';
 import { DailyTipEditDataDTO } from '../shared/dtos/DailyTipEditDataDTO';
 import { DailyTipView } from '../models/views/DailyTipView';

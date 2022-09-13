@@ -1,6 +1,6 @@
 import JsonWebToken from 'jsonwebtoken';
 import { AccessTokenPayload } from '../models/DTOs/AccessTokenPayload';
-import { User } from '../models/entity/User';
+import { User } from '../models/entity/misc/User';
 import { InvitationTokenPayload } from '../shared/types/sharedTypes';
 import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 import { Id } from '../shared/types/versionId';

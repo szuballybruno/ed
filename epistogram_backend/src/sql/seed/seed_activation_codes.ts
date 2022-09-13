@@ -1,4 +1,4 @@
-import { ActivationCode } from '../../models/entity/ActivationCode';
+import { ActivationCode } from '../../models/entity/misc/ActivationCode';
 import { getSeedList } from '../../services/sqlServices/SeedService';
 import { CompaniesSeedDataType } from './seed_companies';
 

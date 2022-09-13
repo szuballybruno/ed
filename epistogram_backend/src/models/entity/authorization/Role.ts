@@ -1,8 +1,8 @@
-import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Relation } from 'typeorm';
+import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Relation } from '../../MyORM';
 import { IsDeletedFlag, XViewColumn } from '../../../services/XORM/XORMDecorators';
 import { Id } from '../../../shared/types/versionId';
 import { getJoinColumnName } from '../../../utilities/helpers';
-import { Company } from '../Company';
+import { Company } from '../misc/Company';
 import { RoleAssignmentBridge } from './RoleAssignmentBridge';
 import { RolePermissionBridge } from './RolePermissionBridge';
 
