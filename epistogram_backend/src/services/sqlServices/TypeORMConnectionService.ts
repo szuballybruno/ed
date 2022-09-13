@@ -1,13 +1,13 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { GlobalConfiguration } from '../misc/GlobalConfiguration';
-import { XDBMSchemaType } from '../XDBManager/XDBManagerTypes';
+import { XDBMSchemaService } from '../XDBManager/XDBManagerTypes';
 
 export class TypeORMConnectionService {
 
     constructor(
         private _config: GlobalConfiguration,
-        private _schema: XDBMSchemaType) {
+        private _schema: XDBMSchemaService) {
     }
 
     connectTypeORMAsync = async () => {

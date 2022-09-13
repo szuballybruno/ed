@@ -5,50 +5,21 @@ import { showNotification } from '../../../services/core/notifications';
 import { CompanyAssociatedCourseDTO } from '../../../shared/dtos/company/CompanyAssociatedCourseDTO';
 import { Id } from '../../../shared/types/versionId';
 import { EpistoIcons } from '../../../static/EpistoIcons';
+import { valueCompareTest } from '../../../static/frontendHelpers';
 import { useRouteParams } from '../../../static/locationHelpers';
 import { EpistoCheckbox } from '../../controls/EpistoCheckbox';
 import { EpistoDataGrid, EpistoDataGridColumnBuilder } from '../../controls/EpistoDataGrid';
 import { EpistoImage } from '../../controls/EpistoImage';
+import { IXMutatorFunctions } from '../../lib/XMutator/XMutatorCore';
 import { useXMutatorNew } from '../../lib/XMutator/XMutatorReact';
 import { useSetBusy } from '../../system/LoadingFrame/BusyBarContext';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 
 type RowType = CompanyAssociatedCourseDTO;
 
-export const CompanyAdminCoursesPage = () => {
+const useColumns = (mutatorFunctions: IXMutatorFunctions<CompanyAssociatedCourseDTO, 'courseId', Id<'Course'>>) => {
 
-    const { indexRoute, editRoute, coursesRoute } = applicationRoutes.administrationRoute.companiesRoute;
-
-    const companyId = useRouteParams(editRoute)
-        .getValue(x => x.companyId, 'int');
-
-    const { courseAssociations, refetchCourseAssociations, courseAssociationsState, courseAssociationsError } = CompanyApiService
-        .useCourseAssociations(companyId);
-
-    const { saveCourseAssociationsAsync, saveCourseAssociationsState } = CompanyApiService
-        .useSaveCourseAssociations();
-
-    useSetBusy(CompanyApiService.useCourseAssociations, courseAssociationsState, courseAssociationsError);
-    useSetBusy(CompanyApiService.useSaveCourseAssociations, saveCourseAssociationsState);
-
-    const [{ mutatedItems, mutations }, mutatorFunctions] = useXMutatorNew(CompanyAssociatedCourseDTO, 'courseId', 'CompanyAssociatedCourses');
-
-    useEffect(() => {
-
-        mutatorFunctions
-            .setOriginalItems(courseAssociations);
-    }, [courseAssociations, mutatorFunctions]);
-
-    const save = async () => {
-
-        await saveCourseAssociationsAsync({ companyId, mutations });
-
-        showNotification('Saved');
-
-        await refetchCourseAssociations();
-    };
-
-    const columns = new EpistoDataGridColumnBuilder<RowType, Id<'Course'>>()
+    return new EpistoDataGridColumnBuilder<RowType, Id<'Course'>>()
         .add({
             field: 'coverUrl',
             headerName: 'Cover',
@@ -74,7 +45,63 @@ export const CompanyAdminCoursesPage = () => {
                     })}
                 value={value} />,
         })
+        .add({
+            field: 'isDefault',
+            headerName: 'Default?',
+            renderCell: ({ value, key }) => <EpistoCheckbox
+                setValue={value => mutatorFunctions
+                    .mutate({
+                        key,
+                        field: 'isDefault',
+                        newValue: value
+                    })}
+                value={value} />,
+        })
         .getColumns();
+};
+
+export const CompanyAdminCoursesPage = () => {
+
+    const { indexRoute, editRoute, coursesRoute } = applicationRoutes.administrationRoute.companiesRoute;
+
+    const companyId = useRouteParams(editRoute)
+        .getValue(x => x.companyId, 'int');
+
+    const { courseAssociations, refetchCourseAssociations, courseAssociationsState, courseAssociationsError } = CompanyApiService
+        .useCourseAssociations(companyId);
+
+    const { saveCourseAssociationsAsync, saveCourseAssociationsState } = CompanyApiService
+        .useSaveCourseAssociations();
+
+    useSetBusy(CompanyApiService.useCourseAssociations, courseAssociationsState, courseAssociationsError);
+    useSetBusy(CompanyApiService.useSaveCourseAssociations, saveCourseAssociationsState);
+
+    const [mutatorState, mutatorFunctions] = useXMutatorNew(CompanyAssociatedCourseDTO, 'courseId', 'CompanyAssociatedCourses');
+
+valueCompareTest(courseAssociations, 'courseAssociations');
+
+    useEffect(() => {
+
+        console.log('setting original items!');
+
+        mutatorFunctions
+            .setOriginalItems(courseAssociations);
+
+    }, [courseAssociations, mutatorFunctions]);
+
+    console.log(mutatorState.mutatedItems);
+    console.log(mutatorState.mutations);
+    
+    const save = async () => {
+
+        await saveCourseAssociationsAsync({ companyId, mutations: mutatorState.mutations });
+
+        showNotification('Saved');
+
+        await refetchCourseAssociations();
+    };
+
+    const columns = useColumns(mutatorFunctions);
 
     return (
         <AdminSubpageHeader
@@ -97,7 +124,7 @@ export const CompanyAdminCoursesPage = () => {
             ]}>
             <EpistoDataGrid
                 columns={columns}
-                rows={mutatedItems}
+                rows={mutatorState.mutatedItems}
                 getKey={x => x.courseId} />
         </AdminSubpageHeader>
     );

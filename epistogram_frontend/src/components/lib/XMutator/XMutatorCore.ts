@@ -47,7 +47,6 @@ export interface IXMutatorFunctions<TMutatee extends Object, TKeyField extends S
 
 export interface IXMutator<TMutatee extends Object, TKeyField extends StringKeyof<TMutatee>, TKey extends TMutatee[TKeyField]>
     extends IXMutatorFunctions<TMutatee, TKeyField, TKey>, IXMutatorState<TMutatee, TKeyField, TKey> {
-
 }
 
 export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof<TMutatee>, TKey extends TMutatee[TKeyField]>
@@ -145,7 +144,7 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
     setMutations(muts: Mutation<TMutatee, TKeyField>[], changedKey?: TKey, onMutationChanged?: 'NO CALLBACK') {
 
         // set mutations 
-        this.mutations = muts ?? [];
+        this.mutations = muts;
 
         // exit if post mutation changed scope
         // below calls will be handled dieeferntly

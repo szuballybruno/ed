@@ -22,6 +22,10 @@ export class CompanyAssociatedCoursesView {
 
     @ViewColumn()
     @XViewColumn()
+    isDefault: boolean;
+
+    @ViewColumn()
+    @XViewColumn()
     coverFilePath: string;
 
     @ViewColumn()

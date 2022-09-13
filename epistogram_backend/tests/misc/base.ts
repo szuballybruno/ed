@@ -1,7 +1,7 @@
 import { AuthenticationController } from '../../src/api/AuthenticationController';
 import { GlobalConfiguration } from '../../src/services/misc/GlobalConfiguration';
 import { SQLConnectionService } from '../../src/services/sqlServices/SQLConnectionService';
-import { XDBMSchemaType } from '../../src/services/XDBManager/XDBManagerTypes';
+import { XDBMSchemaService } from '../../src/services/XDBManager/XDBManagerTypes';
 import { initJsExtensions } from '../../src/shared/logic/jsExtensions';
 import { ServiceProviderInitializator } from '../../src/startup/initApp';
 import { initTurboExpress } from '../../src/startup/instatiateTurboExpress';
@@ -23,7 +23,7 @@ export type TestParams = {
     api: ApiType,
     accessToken: string,
     cookies: TestCookie[],
-    getSeedData: XDBMSchemaType['seed']['getSeedData']
+    getSeedData: XDBMSchemaService['seed']['getSeedData']
 }
 
 type TestFunctionsType = (getTestParams: () => TestParams) => Promise<void>;
@@ -117,7 +117,7 @@ const _setupTest = (opts: {
             serviceProvider: mainServiceProvider,
             api,
             accessToken,
-            getSeedData: mainServiceProvider.getService(XDBMSchemaType).seed.getSeedData,
+            getSeedData: mainServiceProvider.getService(XDBMSchemaService).seed.getSeedData,
             cookies: [
                 {
                     key: 'accessToken',

@@ -22,14 +22,15 @@ export type QueryEventData = {
 
 const useXQuery = <T extends Object>(url: string, queryParams?: any, isEnabled?: boolean): QueryResult<T | null> => {
 
-    const queryValues1 = (queryParams
-        ? Object.values(queryParams)
-        : [])
-        .filter(x => !!x);
+    const queryValues = (() => {
 
-    const queryValues = queryValues1.length > 0
-        ? queryValues1
-        : EMPTY_ARRAY;
+        if (!queryParams)
+            return EMPTY_ARRAY;
+
+        return Object
+            .values(queryParams)
+            .filter(queryParam => !!queryParam);
+    })();
 
     const getFunction = useCallback(() => {
 
@@ -38,15 +39,24 @@ const useXQuery = <T extends Object>(url: string, queryParams?: any, isEnabled?:
 
     const queryingEnabled = isEnabled === false ? false : true;
 
-    const queryResult = useQuery(
-        [url, ...queryValues],
-        getFunction,
-        {
-            retry: false,
-            refetchOnWindowFocus: false,
-            keepPreviousData: true,
-            enabled: queryingEnabled
-        });
+    const options = useMemo(() => ({
+        retry: false,
+        refetchOnWindowFocus: false,
+        keepPreviousData: true,
+        enabled: queryingEnabled
+    }), [queryingEnabled]);
+
+    const paramsArray = useMemo(() => ([url, ...queryValues]), [url, queryValues]);
+
+    // useEffect(() => {
+
+
+    // }, paramsArray);
+
+    /**
+     * Call react query 
+     */
+    const queryResult = useQuery(paramsArray, getFunction, options);
 
     const state = useMemo((): LoadingStateType => {
 
@@ -68,7 +78,7 @@ const useXQuery = <T extends Object>(url: string, queryParams?: any, isEnabled?:
             return;
 
         await queryResult.refetch();
-    }, [queryingEnabled, queryResult.refetch]);
+    }, [queryingEnabled, queryResult]);
 
     const data = useMemo((): T => {
 
@@ -98,6 +108,8 @@ const useXQuery = <T extends Object>(url: string, queryParams?: any, isEnabled?:
         eventBus
             .fireEvent('onquery', data);
     }, [url, qr]);
+
+    console.log(qr);
 
     return qr;
 };

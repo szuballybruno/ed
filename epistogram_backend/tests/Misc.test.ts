@@ -1,6 +1,6 @@
 import { QuestionController } from '../src/api/QuestionController';
 import { GlobalConfiguration } from '../src/services/misc/GlobalConfiguration';
-import { XDBMSchemaType } from '../src/services/XDBManager/XDBManagerTypes';
+import { XDBMSchemaService } from '../src/services/XDBManager/XDBManagerTypes';
 import { QuestionDTO } from '../src/shared/dtos/QuestionDTO';
 import { initJsExtensions } from '../src/shared/logic/jsExtensions';
 import { getQuestionVersionsSeedData } from '../src/sql/seed/seed_question_versions';
@@ -52,7 +52,7 @@ setupIntegrationTest('Practise questions')
 
         const questions = testParams
             .serviceProvider
-            .getService(XDBMSchemaType)
+            .getService(XDBMSchemaService)
             .seed
             .getSeedData(getQuestionVersionsSeedData);
 

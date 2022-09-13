@@ -1216,7 +1216,8 @@ const marray = [
                     courseId: view.courseId,
                     coverUrl: urlService.getAssetUrl(view.coverFilePath),
                     title: view.title,
-                    isAssociated: view.isAssigned
+                    isAssociated: view.isAssigned,
+                    isDefault: view.isDefault
                 }));
         })
 

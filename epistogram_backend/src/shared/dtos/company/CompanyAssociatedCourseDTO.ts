@@ -5,4 +5,5 @@ export class CompanyAssociatedCourseDTO {
     coverUrl: string;
     title: string;
     isAssociated: boolean;
+    isDefault: boolean;
 }

@@ -204,10 +204,10 @@ import { getVideoDataSeedData } from '../../sql/seed/seed_video_datas';
 import { getVideoFilesSeedData } from '../../sql/seed/seed_video_files';
 import { getVideoVersionSeedData } from '../../sql/seed/seed_video_versions';
 import { XDependency } from '../../utilities/XDInjection/XDInjector';
-import { XDBMSchemaType } from '../XDBManager/XDBManagerTypes';
+import { XDBMSchemaService } from '../XDBManager/XDBManagerTypes';
 import { ParametrizedFunction } from './advancedTypes/ParametrizedFunction';
 
-export const createDBSchema = (): XDBMSchemaType => {
+export const createDBSchema = (): XDBMSchemaService => {
 
     const hierarchy = XDependency
         .getFunctionBuilder()
@@ -285,7 +285,7 @@ export const createDBSchema = (): XDBMSchemaType => {
             return [item.params, instance];
         });
 
-    const schema: XDBMSchemaType = {
+    const schema: XDBMSchemaService = {
         seed: {
             data: seedScripts,
             getSeedData
@@ -497,5 +497,5 @@ export const createDBSchema = (): XDBMSchemaType => {
         ]
     };
 
-    return new XDBMSchemaType(schema);
+    return new XDBMSchemaService(schema);
 };

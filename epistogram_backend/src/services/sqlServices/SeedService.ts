@@ -3,7 +3,7 @@ import { toSQLSnakeCasing } from '../../utilities/helpers';
 import { constraintFn, NoComplexTypes, NoIdType, PropConstraintType } from '../../utilities/misc';
 import { LoggerService } from '../LoggerService';
 import { GlobalConfiguration } from '../misc/GlobalConfiguration';
-import { XDBMSchemaType } from '../XDBManager/XDBManagerTypes';
+import { XDBMSchemaService } from '../XDBManager/XDBManagerTypes';
 import { SQLConnectionService } from './SQLConnectionService';
 
 type NewSeedType = [{ new(): any }, Object];
@@ -28,7 +28,7 @@ export const getSeedList = <TEntity, TConstraint extends PropConstraintType<TCon
 export class SeedService {
 
     constructor(
-        private _dbSchema: XDBMSchemaType,
+        private _dbSchema: XDBMSchemaService,
         private _config: GlobalConfiguration,
         private _sqlConnectionService: SQLConnectionService,
         private _loggerService: LoggerService) {

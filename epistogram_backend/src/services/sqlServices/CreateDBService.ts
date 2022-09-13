@@ -4,7 +4,7 @@ import { regexMatchAll } from '../../utilities/helpers';
 import { DepHierarchyItem, XDependency } from '../../utilities/XDInjection/XDInjector';
 import { LoggerService } from '../LoggerService';
 import { GlobalConfiguration } from '../misc/GlobalConfiguration';
-import { XDBMConstraintType, XDBMSchemaType, XDMBIndexType } from '../XDBManager/XDBManagerTypes';
+import { XDBMConstraintType, XDBMSchemaService, XDMBIndexType } from '../XDBManager/XDBManagerTypes';
 import { SQLConnectionService } from './SQLConnectionService';
 import { TypeORMConnectionService } from './TypeORMConnectionService';
 
@@ -17,7 +17,7 @@ export class CreateDBService {
 
     constructor(
         private _sqlConnectionService: SQLConnectionService,
-        private _dbSchema: XDBMSchemaType,
+        private _dbSchema: XDBMSchemaService,
         private _config: GlobalConfiguration,
         private _typeOrmConnectionService: TypeORMConnectionService,
         private _loggerService: LoggerService) {
