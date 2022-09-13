@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn, Relation } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, Relation } from '../../MyORM';
 import { XJoinColumn, XManyToOne, XOneToMany, XViewColumn } from '../../../services/XORM/XORMDecorators';
 import { Id } from '../../../shared/types/versionId';
 import { ModuleVersion } from '../module/ModuleVersion';

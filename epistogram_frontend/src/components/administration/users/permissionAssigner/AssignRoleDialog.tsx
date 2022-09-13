@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useRoleAssignCompanies } from '../../../../services/api/companyApiService';
+import { CompanyApiService } from '../../../../services/api/companyApiService';
 import { useAssignableRoles } from '../../../../services/api/rolesApiService';
 import { AssignableRoleDTO } from '../../../../shared/dtos/AssignableRoleDTO';
 import { RoleAssignCompanyDTO } from '../../../../shared/dtos/company/RoleAssignCompanyDTO';
@@ -22,7 +22,7 @@ export const AssignRoleDialog = (props: {
     const [selectedRole, setSelectedRole] = useState<AssignableRoleDTO | null>(null);
 
     // http
-    const { roleAssignCompanies } = useRoleAssignCompanies();
+    const { roleAssignCompanies } = CompanyApiService.useRoleAssignCompanies();
     const { assignableRolesList } = useAssignableRoles(userId, selectedCompany?.id ?? null);
 
     useEffect(() => {

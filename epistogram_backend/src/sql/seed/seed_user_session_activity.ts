@@ -1,6 +1,6 @@
 import {getSeedList} from '../../services/sqlServices/SeedService';
 import {UserSeedDataType} from './seed_users';
-import {UserSessionActivity} from '../../models/entity/UserSessionActivity';
+import {UserSessionActivity} from '../../models/entity/misc/UserSessionActivity';
 import {ActivitySessionSeedDataType} from './seed_activity_sessions';
 import {ExamVersionSeedDataType} from './seed_exam_versions';
 

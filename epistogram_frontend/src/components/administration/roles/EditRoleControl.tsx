@@ -2,7 +2,7 @@ import { House } from '@mui/icons-material';
 import { Chip } from '@mui/material';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ButtonType, LoadingStateType } from '../../../models/types';
-import { useAvailableCompaniesForRoleCreation } from '../../../services/api/companyApiService';
+import { CompanyApiService } from '../../../services/api/companyApiService';
 import { usePermissionsList } from '../../../services/api/permissionsApiService';
 import { CompanyDTO } from '../../../shared/dtos/company/CompanyDTO';
 import { PermissionListDTO } from '../../../shared/dtos/role/PermissionListDTO';
@@ -36,7 +36,7 @@ export const EditRoleControl = (props: {
     const { logic, onSave, roleEditData, saveButton, error } = props;
 
     const { permissionsList, permissionsListError, permissionsListState, refetchPermissionsList } = usePermissionsList();
-    const { companies, companiesState } = useAvailableCompaniesForRoleCreation();
+    const { companies, companiesState } = CompanyApiService.useAvailableCompaniesForRoleCreation();
 
     const [name, setName] = useState('');
     const [selectedPermissions, setSelectedPermissions] = useState<PermissionListDTO[]>([]);

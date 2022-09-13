@@ -1,4 +1,4 @@
-import { JobTitle } from '../../models/entity/JobTitle';
+import { JobTitle } from '../../models/entity/misc/JobTitle';
 import { getSeedList } from '../../services/sqlServices/SeedService';
 
 export const getJobTitlesSeedData = () => getSeedList<JobTitle>()({

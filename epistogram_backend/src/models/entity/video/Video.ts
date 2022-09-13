@@ -1,7 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Relation } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Relation } from '../../MyORM';
 import { XOneToMany, XViewColumn } from '../../../services/XORM/XORMDecorators';
 import { Id } from '../../../shared/types/versionId';
-import { CoinTransaction } from '../CoinTransaction';
+import { CoinTransaction } from '../misc/CoinTransaction';
 import { VideoVersion } from './VideoVersion';
 
 @Entity()

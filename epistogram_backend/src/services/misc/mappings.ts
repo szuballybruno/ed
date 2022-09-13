@@ -1,22 +1,23 @@
 import { Permission } from '../../models/entity/authorization/Permission';
 import { Role } from '../../models/entity/authorization/Role';
-import { Company } from '../../models/entity/Company';
+import { Company } from '../../models/entity/misc/Company';
 import { CourseData } from '../../models/entity/course/CourseData';
-import { CourseCategory } from '../../models/entity/CourseCategory';
-import { DailyTip } from '../../models/entity/DailyTip';
-import { DiscountCode } from '../../models/entity/DiscountCode';
-import { Event } from '../../models/entity/Event';
-import { JobTitle } from '../../models/entity/JobTitle';
-import { PersonalityTraitCategory } from '../../models/entity/PersonalityTraitCategory';
-import { ShopItem } from '../../models/entity/ShopItem';
-import { ShopItemCategory } from '../../models/entity/ShopItemCategory';
-import { Task } from '../../models/entity/Task';
-import { TeacherInfo } from '../../models/entity/TeacherInfo';
-import { User } from '../../models/entity/User';
+import { CourseCategory } from '../../models/entity/misc/CourseCategory';
+import { DailyTip } from '../../models/entity/misc/DailyTip';
+import { DiscountCode } from '../../models/entity/misc/DiscountCode';
+import { Event } from '../../models/entity/misc/Event';
+import { JobTitle } from '../../models/entity/misc/JobTitle';
+import { PersonalityTraitCategory } from '../../models/entity/misc/PersonalityTraitCategory';
+import { ShopItem } from '../../models/entity/misc/ShopItem';
+import { ShopItemCategory } from '../../models/entity/misc/ShopItemCategory';
+import { Task } from '../../models/entity/misc/Task';
+import { TeacherInfo } from '../../models/entity/misc/TeacherInfo';
+import { User } from '../../models/entity/misc/User';
 import { AdminUserListView } from '../../models/views/AdminUserListView';
 import { AvailableCourseView } from '../../models/views/AvailableCourseView';
 import { CoinTransactionView } from '../../models/views/CoinTransactionView';
 import { CommentListView } from '../../models/views/CommentListView';
+import { CompanyAssociatedCoursesView } from '../../models/views/CompanyAssociatedCoursesView';
 import { CompanyView } from '../../models/views/CompanyView';
 import { CourseAdminContentView } from '../../models/views/CourseAdminContentView';
 import { CourseAdminDetailedView } from '../../models/views/CourseAdminDetailedView';
@@ -64,6 +65,7 @@ import { AnswerEditDTO } from '../../shared/dtos/AnswerEditDTO';
 import { AvailableCourseDTO } from '../../shared/dtos/AvailableCourseDTO';
 import { CoinTransactionDTO } from '../../shared/dtos/CoinTransactionDTO';
 import { CommentListDTO } from '../../shared/dtos/CommentListDTO';
+import { CompanyAssociatedCourseDTO } from '../../shared/dtos/company/CompanyAssociatedCourseDTO';
 import { CompanyDTO } from '../../shared/dtos/company/CompanyDTO';
 import { CompanyEditDataDTO } from '../../shared/dtos/company/CompanyEditDataDTO';
 import { CompanyPublicDTO } from '../../shared/dtos/company/CompanyPublicDTO';
@@ -1218,6 +1220,19 @@ const marray = [
 
             return toQuestionDTO(questionData)
                 .single();
+        }),
+
+    epistoMappingsBuilder
+        .addArrayMapping(CompanyAssociatedCourseDTO, ([urlService]) => (views: CompanyAssociatedCoursesView[]) => {
+
+            return views
+                .map(view => instantiate<CompanyAssociatedCourseDTO>({
+                    courseId: view.courseId,
+                    coverUrl: urlService.getAssetUrl(view.coverFilePath),
+                    title: view.title,
+                    isAssociated: view.isAssigned,
+                    isDefault: view.isDefault
+                }));
         })
 
 ] as const;

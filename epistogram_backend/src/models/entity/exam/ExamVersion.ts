@@ -1,10 +1,10 @@
-import { Column, Entity, PrimaryGeneratedColumn, Relation } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, Relation } from '../../MyORM';
 import { XJoinColumn, XManyToOne, XOneToMany, XViewColumn } from '../../../services/XORM/XORMDecorators';
 import { Id } from '../../../shared/types/versionId';
-import { AnswerSession } from '../AnswerSession';
+import { AnswerSession } from '../misc/AnswerSession';
 import { ModuleVersion } from '../module/ModuleVersion';
 import { QuestionVersion } from '../question/QuestionVersion';
-import { UserSessionActivity } from '../UserSessionActivity';
+import { UserSessionActivity } from '../misc/UserSessionActivity';
 import { Exam } from './Exam';
 import { ExamData } from './ExamData';
 

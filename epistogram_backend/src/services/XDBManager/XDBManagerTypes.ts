@@ -11,7 +11,7 @@ export type XDMBIndexType = {
     tableName: string;
 }
 
-export class XDBMSchemaType {
+export class XDBMSchemaService {
     seed: {
         data: [Function, PropConstraintType<any, any>][],
         getSeedData: <T extends ParametrizedFunction>(fn: T) => ReturnType<T>
@@ -23,7 +23,7 @@ export class XDBMSchemaType {
     indices: XDMBIndexType[];
     triggers: string[];
 
-    constructor(opts: XDBMSchemaType) {
+    constructor(opts: XDBMSchemaService) {
 
         this.seed = opts.seed;
         this.functionScripts = opts.functionScripts;

@@ -11,7 +11,7 @@ import { RecreateDBService } from '../services/sqlServices/RecreateDBService';
 import { SQLPoolService } from '../services/sqlServices/SQLPoolService';
 import { TypeORMConnectionService } from '../services/sqlServices/TypeORMConnectionService';
 import { VersionSaveService } from '../services/VersionSaveService';
-import { XDBMSchemaType } from '../services/XDBManager/XDBManagerTypes';
+import { XDBMSchemaService } from '../services/XDBManager/XDBManagerTypes';
 import { DependencyContainer, DepHierarchyFunction, XDependency } from '../utilities/XDInjection/XDInjector';
 import { ActivationCodeService } from './../services/ActivationCodeService';
 import { AuthenticationService } from './../services/AuthenticationService';
@@ -103,7 +103,7 @@ export const instansiateSingletonServices = (rootDir: string) => {
 
     const container = XDependency
         .getClassBuilder()
-        .addClassInstance(XDBMSchemaType, dbSchema)
+        .addClassInstance(XDBMSchemaService, dbSchema)
         .addClassInstance(GlobalConfiguration, globalConfiguration)
         .addClass(LoggerService, [GlobalConfiguration])
         .addClass(SQLPoolService, [GlobalConfiguration])
@@ -123,7 +123,7 @@ export const getTransientServiceContainer = (singletonProvider: ServiceProvider)
 
         // add singleton instances
         .addClassInstance(GlobalConfiguration, singletonProvider.getService(GlobalConfiguration))
-        .addClassInstance(XDBMSchemaType, singletonProvider.getService(XDBMSchemaType))
+        .addClassInstance(XDBMSchemaService, singletonProvider.getService(XDBMSchemaService))
         .addClassInstance(LoggerService, singletonProvider.getService(LoggerService))
         .addClassInstance(SQLPoolService, singletonProvider.getService(SQLPoolService))
 
@@ -132,8 +132,8 @@ export const getTransientServiceContainer = (singletonProvider: ServiceProvider)
         .addClass(MapperService, [UrlService])
         .addClass(HashService, [GlobalConfiguration])
         .addClass(SQLConnectionService, [SQLPoolService, LoggerService])
-        .addClass(TypeORMConnectionService, [GlobalConfiguration, XDBMSchemaType])
-        .addClass(CreateDBService, [SQLConnectionService, XDBMSchemaType, GlobalConfiguration, TypeORMConnectionService, LoggerService])
+        .addClass(TypeORMConnectionService, [GlobalConfiguration, XDBMSchemaService])
+        .addClass(CreateDBService, [SQLConnectionService, XDBMSchemaService, GlobalConfiguration, TypeORMConnectionService, LoggerService])
         .addClass(ORMConnectionService, [GlobalConfiguration, SQLConnectionService])
         .addClass(PermissionService, [ORMConnectionService, MapperService])
         .addClass(AuthorizationService, [PermissionService, ORMConnectionService])
@@ -154,8 +154,8 @@ export const getTransientServiceContainer = (singletonProvider: ServiceProvider)
         .addClass(TokenService, [GlobalConfiguration])
         .addClass(AuthenticationService, [ORMConnectionService, UserService, TokenService, UserSessionActivityService, HashService, PermissionService, GlobalConfiguration, LoggerService])
         .addClass(PasswordChangeService, [UserService, TokenService, EmailService, UrlService, ORMConnectionService, GlobalConfiguration, HashService, AuthorizationService, DomainProviderService])
-        .addClass(SeedService, [XDBMSchemaType, GlobalConfiguration, SQLConnectionService, LoggerService])
-        .addClass(RecreateDBService, [CreateDBService, SeedService, XDBMSchemaType, SQLConnectionService, LoggerService])
+        .addClass(SeedService, [XDBMSchemaService, GlobalConfiguration, SQLConnectionService, LoggerService])
+        .addClass(RecreateDBService, [CreateDBService, SeedService, XDBMSchemaService, SQLConnectionService, LoggerService])
         .addClass(QuestionService, [ORMConnectionService, VersionSaveService, MapperService])
         .addClass(CourseItemService, [ORMConnectionService, MapperService, QuestionService, VersionSaveService, QuestionAnswerService, AuthorizationService])
         .addClass(UserCourseBridgeService, [ORMConnectionService, MapperService, AuthorizationService, LoggerService, PermissionService])
@@ -187,7 +187,7 @@ export const getTransientServiceContainer = (singletonProvider: ServiceProvider)
         .addClass(UserProgressService, [MapperService, ORMConnectionService, TempomatService, AuthorizationService])
         .addClass(CommentService, [ORMConnectionService, MapperService, AuthorizationService])
         .addClass(LikeService, [ORMConnectionService, MapperService, AuthorizationService])
-        .addClass(CompanyService, [ORMConnectionService, MapperService, AuthorizationService, DomainProviderService, FileService])
+        .addClass(CompanyService, [ORMConnectionService, MapperService, AuthorizationService, DomainProviderService, FileService, XDBMSchemaService])
         .getContainer();
 
     return XDependency

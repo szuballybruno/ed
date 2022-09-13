@@ -50,6 +50,22 @@ export type InitialStateType<TSchema> = {
     }
 }
 
+export class EpistoDataGridColumnBuilder<TRow, TKey> {
+
+    private _columns: GridColumnType<TRow, TKey, any>[] = [];
+
+    add<TField extends keyof TRow>(column: GridColumnType<TRow, TKey, TField>) {
+
+        this._columns.push(column);
+        return this;
+    }
+
+    getColumns() {
+
+        return this._columns;
+    }
+}
+
 const mapColumn = <TSchema, TKey>(column: GridColumnType<TSchema, TKey, keyof TSchema>, getKey: (row: TSchema) => TKey) => {
 
     const { renderCell, type, editHandler, renderEditCell, field, ...others } = column;

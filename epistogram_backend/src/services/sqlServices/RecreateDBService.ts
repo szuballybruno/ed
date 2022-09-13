@@ -1,6 +1,6 @@
 import { toSQLSnakeCasing } from '../../utilities/helpers';
 import { LoggerService } from '../LoggerService';
-import { XDBMSchemaType } from '../XDBManager/XDBManagerTypes';
+import { XDBMSchemaService } from '../XDBManager/XDBManagerTypes';
 import { CreateDBService } from './CreateDBService';
 import { SeedService } from './SeedService';
 import { ExecSQLFunctionType, SQLConnectionService } from './SQLConnectionService';
@@ -15,7 +15,7 @@ export class RecreateDBService {
     constructor(
         private _createDBService: CreateDBService,
         private _seedService: SeedService,
-        private _dbSchema: XDBMSchemaType,
+        private _dbSchema: XDBMSchemaService,
         private _sqlConnectionService: SQLConnectionService,
         private _logger: LoggerService) {
     }

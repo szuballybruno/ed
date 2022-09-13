@@ -1,4 +1,4 @@
-import { User } from '../../models/entity/User';
+import { User } from '../../models/entity/misc/User';
 import { getSeedList } from '../../services/sqlServices/SeedService';
 import { CompaniesSeedDataType } from './seed_companies';
 import { JobTitlesSeedDataType } from './seed_job_titles';

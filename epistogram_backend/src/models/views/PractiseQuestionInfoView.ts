@@ -1,4 +1,4 @@
-import { ViewEntity } from 'typeorm';
+import { ViewEntity } from '../MyORM';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
 import { Id } from '../../shared/types/versionId';
 

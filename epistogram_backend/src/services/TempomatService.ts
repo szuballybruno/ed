@@ -1,6 +1,7 @@
-import { UserCourseBridge } from '../models/entity/UserCourseBridge';
+import { UserCourseBridge } from '../models/entity/misc/UserCourseBridge';
 import { TempomatCalculationDataView } from '../models/views/TempomatCalculationDataView';
 import { UserCourseProgressView } from '../models/views/UserCourseProgressView';
+import { instantiate } from '../shared/logic/sharedLogic';
 import { TempomatModeType } from '../shared/types/sharedTypes';
 import { Id } from '../shared/types/versionId';
 import { addDays, dateDiffInDays, relativeDiffInPercentage } from '../utilities/helpers';
@@ -9,7 +10,6 @@ import { AuthorizationService } from './AuthorizationService';
 import { EventService } from './EventService';
 import { LoggerService } from './LoggerService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
-import { instantiate } from '../shared/logic/sharedLogic';
 
 type CalculateTempomatValuesArgs = {
     tempomatMode: TempomatModeType,

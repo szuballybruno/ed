@@ -1,4 +1,4 @@
-import { CourseAccessBridge } from '../../models/entity/CourseAccessBridge';
+import { CourseAccessBridge } from '../../models/entity/misc/CourseAccessBridge';
 import { getSeedList } from '../../services/sqlServices/SeedService';
 import { CompaniesSeedDataType } from './seed_companies';
 import { CourseSeedDataType } from './seed_courses';
@@ -14,29 +14,29 @@ export const getCourseAccessBridgeSeedData = (
             userId: null
         },
         henkel_course_pp: {
-            companyId: companies.EpistoGram.id,
+            companyId: companies.Henkel.id,
             courseId: courses.course_powerPoint.id,
             userId: null
         },
         henkel_course_word: {
-            companyId: companies.EpistoGram.id,
+            companyId: companies.Henkel.id,
             courseId: courses.course_word.id,
             userId: null
         },
 
         // episto
         episto_course_obs: {
-            companyId: companies.Henkel.id,
+            companyId: companies.EpistoGram.id,
             courseId: courses.course_obs.id,
             userId: null
         },
         episto_course_linkedin: {
-            companyId: companies.Henkel.id,
+            companyId: companies.EpistoGram.id,
             courseId: courses.course_linked_in.id,
             userId: null
         },
         episto_course_ads: {
-            companyId: companies.Henkel.id,
+            companyId: companies.EpistoGram.id,
             courseId: courses.course_google_ads.id,
             userId: null
         },

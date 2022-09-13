@@ -1,6 +1,6 @@
 import {getSeedList} from '../../services/sqlServices/SeedService';
 import {UserSeedDataType} from './seed_users';
-import {GivenAnswerStreak} from '../../models/entity/GivenAnswerStreak';
+import {GivenAnswerStreak} from '../../models/entity/misc/GivenAnswerStreak';
 
 export const getGivenAnswerStreakSeedData = (
     users: UserSeedDataType,

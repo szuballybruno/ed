@@ -10,7 +10,7 @@ import {MapperService} from './MapperService';
 import {ORMConnectionService} from './ORMConnectionService/ORMConnectionService';
 import {SQLFunctionsService} from './sqlServices/FunctionsService';
 import {Id} from '../shared/types/versionId';
-import {AnswerSession} from '../models/entity/AnswerSession';
+import {AnswerSession} from '../models/entity/misc/AnswerSession';
 import {QuestionAnswerService} from './QuestionAnswerService';
 import {AnswerVersion} from '../models/entity/answer/AnswerVersion';
 import {AnswerData} from '../models/entity/answer/AnswerData';

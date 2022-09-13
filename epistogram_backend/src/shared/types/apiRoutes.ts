@@ -1,3 +1,5 @@
+import { CompanyAssociatedCourseDTO } from '../dtos/company/CompanyAssociatedCourseDTO';
+import { Mutation } from '../dtos/mutations/Mutation';
 import { Id } from './versionId';
 
 export type RouteParameterType<TBody = any, TQuery = any> = { body?: TBody, query?: TQuery };
@@ -46,6 +48,8 @@ export const apiRoutes = {
         getAvailableCompaniesForRoleCreation: '/companies/get-available-companies-for-role-creation',
         getRoleAssignCompanies: '/companies/get-role-assign-companies',
         getCompanyDetailsByDomain: '/companies/get-company-details-by-domain' as ParametrizedRouteType<{ query: { domain: string } }>,
+        getCompanyCourseAssociations: '/companies/get-company-course-associations' as ParametrizedRouteType<{ query: { companyId: Id<'Company'> } }>,
+        saveCompanyCourseAssociations: '/companies/save-company-course-associations' as ParametrizedRouteType<{ body: { companyId: Id<'Company'>, mutations: Mutation<CompanyAssociatedCourseDTO, 'courseId'>[] } }>
     },
 
     teacherInfo: {

@@ -1,10 +1,10 @@
-import { Column, Entity, PrimaryGeneratedColumn, Relation } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, Relation } from '../../MyORM';
 import { XJoinColumn, XManyToOne, XOneToMany, XViewColumn } from '../../../services/XORM/XORMDecorators';
 import { Id } from '../../../shared/types/versionId';
 import { AnswerVersion } from '../answer/AnswerVersion';
 import { ExamVersion } from '../exam/ExamVersion';
-import { GivenAnswer } from '../GivenAnswer';
-import { PersonalityTraitCategory } from '../PersonalityTraitCategory';
+import { GivenAnswer } from '../misc/GivenAnswer';
+import { PersonalityTraitCategory } from '../misc/PersonalityTraitCategory';
 import { VideoVersion } from '../video/VideoVersion';
 import { Question } from './Question';
 import { QuestionData } from './QuestionData';

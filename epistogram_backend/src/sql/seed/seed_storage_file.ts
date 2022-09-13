@@ -1,4 +1,4 @@
-import { StorageFile } from '../../models/entity/StorageFile';
+import { StorageFile } from '../../models/entity/misc/StorageFile';
 import { getSeedList } from '../../services/sqlServices/SeedService';
 
 export const getStorageFileSeedData = () => getSeedList<StorageFile>()({

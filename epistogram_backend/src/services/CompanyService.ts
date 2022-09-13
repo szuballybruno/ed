@@ -1,23 +1,32 @@
 import { UploadedFile } from 'express-fileupload';
-import { Company } from '../models/entity/Company';
-import { StorageFile } from '../models/entity/StorageFile';
-import { User } from '../models/entity/User';
+import { PermissionAssignmentBridge } from '../models/entity/authorization/PermissionAssignmentBridge';
+import { Company } from '../models/entity/misc/Company';
+import { CourseAccessBridge } from '../models/entity/misc/CourseAccessBridge';
+import { StorageFile } from '../models/entity/misc/StorageFile';
+import { User } from '../models/entity/misc/User';
+import { CompanyAssociatedCoursesView } from '../models/views/CompanyAssociatedCoursesView';
 import { CompanyView } from '../models/views/CompanyView';
 import { UserPermissionView } from '../models/views/UserPermissionView';
 import { UserRoleAssignCompanyView } from '../models/views/UserRoleAssignCompanyView';
+import { CompanyAssociatedCourseDTO } from '../shared/dtos/company/CompanyAssociatedCourseDTO';
 import { CompanyDTO } from '../shared/dtos/company/CompanyDTO';
 import { CompanyEditDataDTO } from '../shared/dtos/company/CompanyEditDataDTO';
 import { CompanyPublicDTO } from '../shared/dtos/company/CompanyPublicDTO';
 import { RoleAssignCompanyDTO } from '../shared/dtos/company/RoleAssignCompanyDTO';
+import { Mutation } from '../shared/dtos/mutations/Mutation';
 import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 import { PermissionCodeType } from '../shared/types/sharedTypes';
 import { Id } from '../shared/types/versionId';
+import { getPermissionsSeedData } from '../sql/seed/seed_permissions';
+import { InsertEntity } from '../utilities/misc';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { AuthorizationService } from './AuthorizationService';
 import { DomainProviderService } from './DomainProviderService';
 import { FileService } from './FileService';
 import { MapperService } from './MapperService';
+import { ClassType } from './misc/advancedTypes/ClassType';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { XDBMSchemaService } from './XDBManager/XDBManagerTypes';
 
 export class CompanyService {
 
@@ -26,7 +35,8 @@ export class CompanyService {
         private _mapperService: MapperService,
         private _authorizationService: AuthorizationService,
         private _domainProviderService: DomainProviderService,
-        private _fileService: FileService) {
+        private _fileService: FileService,
+        private _schema: XDBMSchemaService) {
     }
 
     /**
@@ -293,5 +303,144 @@ export class CompanyService {
         return this
             ._mapperService
             .mapTo(CompanyPublicDTO, [comp, logoFile?.filePath ?? null, coverFile?.filePath ?? null]);
+    }
+
+    /**
+     * Get company associated courses 
+     */
+    async getCompanyAssociatedCoursesAsync(companyId: Id<'Company'>): Promise<CompanyAssociatedCourseDTO[]> {
+
+        const views = await this
+            ._ormService
+            .query(CompanyAssociatedCoursesView, { companyId })
+            .where('companyId', '=', 'companyId')
+            .getMany();
+
+        return this
+            ._mapperService
+            .mapTo(CompanyAssociatedCourseDTO, [views]);
+    }
+
+    /**
+     * Get company associated courses 
+     */
+    async saveCompanyAssociatedCoursesAsync(companyId: Id<'Company'>, mutations: Mutation<CompanyAssociatedCourseDTO, 'courseId'>[]): Promise<void> {
+
+        type ActionType = { id: Id<'Course'>, action: 'DETACH' | 'ATTACH' };
+
+        const handleRelationChangeAsync = async <TBridge extends { id: Id<string> }>({
+            bridge,
+            createBridge,
+            getCourseIdActions,
+            getDeletedBridgesAsync
+        }: {
+            bridge: ClassType<TBridge>,
+            getCourseIdActions: () => ActionType[],
+            getDeletedBridgesAsync: (courseIds: Id<'Course'>[]) => Promise<TBridge[]>,
+            createBridge: (courseId: Id<'Course'>) => InsertEntity<TBridge>
+        }) => {
+
+            const actions = getCourseIdActions();
+
+            // delete bridges 
+            const deletedBridges = await getDeletedBridgesAsync(actions
+                .filter(x => x.action === 'DETACH')
+                .map(x => x.id));
+
+            await this
+                ._ormService
+                .hardDelete(bridge, deletedBridges.map(x => x.id));
+
+            // added bridges 
+            const assignedCourseIds = actions
+                .filter(x => x.action === 'ATTACH')
+                .map(x => x.id);
+
+            await this
+                ._ormService
+                .createManyAsync(bridge, assignedCourseIds
+                    .map(createBridge));
+        };
+
+        const assignActions: ActionType[] = mutations
+            .filter(mut => mut
+                .fieldMutators
+                .some(x => x.field === 'isAssociated'))
+            .map(mut => ({
+                id: mut.key,
+                action: mut
+                    .fieldMutators
+                    .single(x => x.field === 'isAssociated').value ? 'ATTACH' : 'DETACH'
+            }));
+
+        /**
+         * Save course access bridges according to mutations 
+         */
+        await handleRelationChangeAsync({
+            bridge: CourseAccessBridge,
+            getCourseIdActions: () => assignActions,
+            getDeletedBridgesAsync: async (courseIds) => await this
+                ._ormService
+                .query(CourseAccessBridge, { companyId, courseIds })
+                .where('companyId', '=', 'companyId')
+                .and('courseId', '=', 'courseIds')
+                .getMany(),
+            createBridge: courseId => ({
+                companyId,
+                userId: null,
+                courseId: courseId
+            })
+        });
+
+        /**
+         * Save permission assignment bridges according to mutations 
+         */
+        const watchCoursePermissionId = this
+            ._schema
+            .seed
+            .getSeedData(getPermissionsSeedData)
+            .WATCH_COURSE
+            .id;
+
+        const courseAccessBridges = await this._ormService
+            .query(CourseAccessBridge, { companyId })
+            .where('companyId', '=', 'companyId')
+            .getMany();
+
+        const assignedCourseIds = courseAccessBridges
+            .map(x => x.courseId);
+
+        const defaultActions: ActionType[] = mutations
+            .filter(mut => mut
+                .fieldMutators
+                .some(x => x.field === 'isDefault'))
+            .map(mut => ({
+                id: mut.key,
+                action: mut
+                    .fieldMutators
+                    .single(x => x.field === 'isDefault').value && assignedCourseIds.includes(mut.key) ? 'ATTACH' : 'DETACH'
+            }));
+
+        await handleRelationChangeAsync({
+            bridge: PermissionAssignmentBridge,
+            getCourseIdActions: () => assignActions
+                .filter(x => x.action === 'DETACH')
+                .concat(defaultActions),
+            getDeletedBridgesAsync: async (courseIds) => await this
+                ._ormService
+                .query(PermissionAssignmentBridge, { companyId, courseIds, watchCoursePermissionId })
+                .where('assigneeCompanyId', '=', 'companyId')
+                .and('contextCourseId', '=', 'courseIds')
+                .and('permissionId', '=', 'watchCoursePermissionId')
+                .getMany(),
+            createBridge: courseId => ({
+                assigneeCompanyId: companyId,
+                assigneeGroupId: null,
+                assigneeUserId: null,
+                contextCompanyId: companyId,
+                contextCourseId: courseId,
+                permissionId: watchCoursePermissionId
+            })
+        });
     }
 }

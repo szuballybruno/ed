@@ -1,4 +1,4 @@
-import { PersonalityTraitCategory } from '../../models/entity/PersonalityTraitCategory';
+import { PersonalityTraitCategory } from '../../models/entity/misc/PersonalityTraitCategory';
 import { getSeedList } from '../../services/sqlServices/SeedService';
 
 export const getPersonalityTraitCategoriesSeed = () => getSeedList<PersonalityTraitCategory>()({

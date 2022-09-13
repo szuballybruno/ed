@@ -1,8 +1,8 @@
-import {Column, Entity, PrimaryGeneratedColumn} from 'typeorm';
+import {Column, Entity, PrimaryGeneratedColumn} from '../../MyORM';
 import {XJoinColumn, XManyToOne, XViewColumn} from '../../../services/XORM/XORMDecorators';
 import {Id} from '../../../shared/types/versionId';
 import {Course} from '../course/Course';
-import {User} from '../User';
+import {User} from '../misc/User';
 
 @Entity()
 export class PrequizCompletion {

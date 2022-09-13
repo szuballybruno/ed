@@ -1,5 +1,5 @@
-import {AnswerSession} from '../models/entity/AnswerSession';
-import {CourseItemCompletion} from '../models/entity/CourseItemCompletion';
+import {AnswerSession} from '../models/entity/misc/AnswerSession';
+import {CourseItemCompletion} from '../models/entity/misc/CourseItemCompletion';
 import {ExamData} from '../models/entity/exam/ExamData';
 import {ExamVersion} from '../models/entity/exam/ExamVersion';
 import {ModuleVersion} from '../models/entity/module/ModuleVersion';

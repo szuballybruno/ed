@@ -6,6 +6,6 @@ import { NoComplexTypes, NoIdType } from '../../utilities/misc';
 
 type Constraint = { [K in PermissionCodeType]: NoIdType<NoComplexTypes<Permission>> };
 
-export const getPermissionsSeedData = () => getSeedList<Permission, Constraint>()(permissionCodes as any);
+export const getPermissionsSeedData = () => getSeedList<Permission, Constraint>()(permissionCodes);
 
 export type PermissionsSeedDataType = ReturnType<typeof getPermissionsSeedData>;

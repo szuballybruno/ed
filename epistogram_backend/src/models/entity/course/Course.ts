@@ -1,12 +1,12 @@
-import { DeleteDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { DeleteDateColumn, Entity, PrimaryGeneratedColumn } from '../../MyORM';
 import { IsDeletedFlag, XOneToMany, XViewColumn } from '../../../services/XORM/XORMDecorators';
 import { Id } from '../../../shared/types/versionId';
 import { PermissionAssignmentBridge } from '../authorization/PermissionAssignmentBridge';
-import { CourseAccessBridge } from '../CourseAccessBridge';
+import { CourseAccessBridge } from '../misc/CourseAccessBridge';
 import { CourseRatingQuestionUserAnswer } from '../courseRating/CourseRatingQuestionUserAnswer';
 import { PrequizUserAnswer } from '../prequiz/PrequizUserAnswer';
-import { ShopItem } from '../ShopItem';
-import { UserCourseBridge } from '../UserCourseBridge';
+import { ShopItem } from '../misc/ShopItem';
+import { UserCourseBridge } from '../misc/UserCourseBridge';
 import { CourseVersion } from './CourseVersion';
 
 @Entity()

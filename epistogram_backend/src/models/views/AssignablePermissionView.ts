@@ -1,4 +1,4 @@
-import { ViewColumn, ViewEntity } from 'typeorm';
+import { ViewColumn, ViewEntity } from '../MyORM';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
 import { PermissionCodeType, PermissionScopeType } from '../../shared/types/sharedTypes';
 import { Id } from '../../shared/types/versionId';

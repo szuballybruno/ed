@@ -1,4 +1,4 @@
-import { UserVideoProgressBridge } from '../../models/entity/UserVideoProgressBridge';
+import { UserVideoProgressBridge } from '../../models/entity/misc/UserVideoProgressBridge';
 import { getSeedList } from '../../services/sqlServices/SeedService';
 import { UserSeedDataType } from './seed_users';
 import { VideoFilesSeedDataType } from './seed_video_files';

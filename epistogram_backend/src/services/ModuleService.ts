@@ -1,7 +1,7 @@
 import { Module } from '../models/entity/module/Module';
 import { ModuleData } from '../models/entity/module/ModuleData';
 import { ModuleVersion } from '../models/entity/module/ModuleVersion';
-import { User } from '../models/entity/User';
+import { User } from '../models/entity/misc/User';
 import { ModuleEditView } from '../models/views/ModuleEditView';
 import { ModulePlayerView } from '../models/views/ModulePlayerView';
 import { CourseContentItemAdminDTO } from '../shared/dtos/admin/CourseContentItemAdminDTO';
@@ -17,7 +17,7 @@ import { AuthorizationService } from './AuthorizationService';
 import { CourseItemService } from './CourseItemService';
 import { FileService } from './FileService';
 import { MapperService } from './MapperService';
-import { XMutatorHelpers } from './misc/XMutatorHelpers_a';
+import { XMutatorHelpers } from './misc/XMutatorHelpers';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { VersionSaveService } from './VersionSaveService';
 

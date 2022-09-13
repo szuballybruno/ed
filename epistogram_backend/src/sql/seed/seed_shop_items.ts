@@ -1,4 +1,4 @@
-import { ShopItem } from '../../models/entity/ShopItem';
+import { ShopItem } from '../../models/entity/misc/ShopItem';
 import { getSeedList } from '../../services/sqlServices/SeedService';
 import { ShopItemCategoriesSeedDataType } from './seed_shop_item_categories';
 import { StorageFileSeedDataType } from './seed_storage_file';

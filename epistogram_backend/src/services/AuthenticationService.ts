@@ -1,4 +1,4 @@
-import { User } from '../models/entity/User';
+import { User } from '../models/entity/misc/User';
 import { AuthDataDTO } from '../shared/dtos/AuthDataDTO';
 import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 import { Id } from '../shared/types/versionId';

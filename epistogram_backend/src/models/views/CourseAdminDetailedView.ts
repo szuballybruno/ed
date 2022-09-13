@@ -1,4 +1,4 @@
-import { ViewColumn, ViewEntity } from 'typeorm';
+import { ViewColumn, ViewEntity } from '../MyORM';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
 import { CourseVisibilityType } from '../../shared/types/sharedTypes';
 import { Id } from '../../shared/types/versionId';

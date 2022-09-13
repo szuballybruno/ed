@@ -1,4 +1,4 @@
-import { User } from '../models/entity/User';
+import { User } from '../models/entity/misc/User';
 import { CourseLearningStatsView } from '../models/views/CourseLearningStatsView';
 import { HomePageStatsView } from '../models/views/HomePageStatsView';
 import { ImproveYourselfPageStatsView } from '../models/views/ImproveYourselfPageStatsView';

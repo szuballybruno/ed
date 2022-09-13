@@ -1,5 +1,4 @@
-import { useCallback, useEffect, useMemo } from 'react';
-import { useQuery } from 'react-query';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { EMPTY_ARRAY } from '../helpers/emptyArray';
 import { LoadingStateType } from '../models/types';
 import { httpGetAsync } from '../services/core/httpClient';
@@ -20,77 +19,79 @@ export type QueryEventData = {
     route: string;
 } & QueryResultState<any>;
 
-const useXQuery = <T extends Object>(url: string, queryParams?: any, isEnabled?: boolean): QueryResult<T | null> => {
+const useXQuery = <TData extends Object>(url: string, queryParams?: any, isEnabled?: boolean): QueryResult<TData | null> => {
 
-    const queryValues1 = (queryParams
-        ? Object.values(queryParams)
-        : [])
-        .filter(x => !!x);
+    const queryValues = (() => {
 
-    const queryValues = queryValues1.length > 0
-        ? queryValues1
-        : EMPTY_ARRAY;
+        if (!queryParams)
+            return EMPTY_ARRAY;
 
-    const getFunction = useCallback(() => {
-
-        return httpGetAsync(url, queryParams);
-    }, [url, queryParams]);
+        return Object
+            .values(queryParams)
+            .filter(queryParam => !!queryParam);
+    })();
 
     const queryingEnabled = isEnabled === false ? false : true;
 
-    const queryResult = useQuery(
-        [url, ...queryValues],
-        getFunction,
-        {
-            retry: false,
-            refetchOnWindowFocus: false,
-            keepPreviousData: true,
-            enabled: queryingEnabled
-        });
+    /**
+     * State 
+     */
+    const [fetchState, setFetchState] = useState<LoadingStateType>('idle');
+    const [error, setError] = useState<ErrorWithCode | null>(null);
+    const [data, setData] = useState<TData | null>(null);
 
-    const state = useMemo((): LoadingStateType => {
-
-        if (queryResult.isIdle)
-            return 'idle';
-
-        if (queryResult.isFetching)
-            return 'loading';
-
-        if (queryResult.isError)
-            return 'error';
-
-        return 'success';
-    }, [queryResult.isIdle, queryResult.isFetching, queryResult.isError]);
-
-    const refetch = useCallback(async () => {
+    /**
+     * Fetch funciton 
+     */
+    const fetchDataAsync = useCallback(async () => {
 
         if (!queryingEnabled)
             return;
 
-        await queryResult.refetch();
-    }, [queryingEnabled, queryResult.refetch]);
+        setFetchState('loading');
 
-    const data = useMemo((): T => {
+        try {
 
-        return queryResult.data
-            ? queryResult.data
-            : null;
-    }, [queryResult.data]);
+            const data = await httpGetAsync(url, queryParams);
+            setFetchState('success');
+            setData(data);
+        }
+        catch (e: any) {
 
-    const error = queryResult.error as ErrorWithCode | null;
+            setFetchState('error');
+            setError(e);
+            setData(null);
+        }
+    }, [url, queryParams, queryingEnabled]);
 
+    /**
+     * Auto fetch by watching for param changes 
+     */
+    const paramsArray = useMemo(() => ([url, ...queryValues]), [url, queryValues]);
+
+    useEffect(() => {
+
+        fetchDataAsync();
+    }, paramsArray);
+
+    /**
+     * Result object 
+     */
     const qr = useMemo(() => ({
-        refetch,
-        state,
+        refetch: fetchDataAsync,
+        state: fetchState,
         data,
         error
     }), [
-        refetch,
-        state,
+        fetchDataAsync,
+        fetchState,
         data,
         error
     ]);
 
+    /**
+     * Event handlers 
+     */
     useEffect(() => {
 
         const data: QueryEventData = { ...qr, route: url };

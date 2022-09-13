@@ -7,8 +7,9 @@ import { RoleAssignCompanyDTO } from '../../shared/dtos/company/RoleAssignCompan
 import { Id } from '../../shared/types/versionId';
 import { useCallback } from 'react';
 import { CompanyPublicDTO } from '../../shared/dtos/company/CompanyPublicDTO';
+import { CompanyAssociatedCourseDTO } from '../../shared/dtos/company/CompanyAssociatedCourseDTO';
 
-export const useCompaniesAdmin = () => {
+const useCompaniesAdmin = () => {
 
     const qr = QueryService.useXQuery<CompanyDTO[]>(apiRoutes.companies.getCompaniesAdmin);
 
@@ -20,7 +21,7 @@ export const useCompaniesAdmin = () => {
     };
 };
 
-export const useRoleAssignCompanies = () => {
+const useRoleAssignCompanies = () => {
 
     const qr = QueryService.useXQuery<RoleAssignCompanyDTO[]>(apiRoutes.companies.getRoleAssignCompanies);
 
@@ -32,7 +33,7 @@ export const useRoleAssignCompanies = () => {
     };
 };
 
-export const useCreateCompany = () => {
+const useCreateCompany = () => {
 
     const qr = usePostDataUnsafe(apiRoutes.companies.createCompany);
 
@@ -42,7 +43,7 @@ export const useCreateCompany = () => {
     };
 };
 
-export const useDeleteCompany = () => {
+const useDeleteCompany = () => {
 
     const qr = usePostDataUnsafe<{ companyId: number }, void>(apiRoutes.companies.deleteCompany);
 
@@ -52,7 +53,7 @@ export const useDeleteCompany = () => {
     };
 };
 
-export const useSaveCompany = () => {
+const useSaveCompany = () => {
 
     const { postMultipartDataAsync, state } = usePostMultipartDataUnsafe<CompanyEditDataDTO>(apiRoutes.companies.saveCompany);
     const saveCompanyAsync = useCallback(({ logoFile, coverFile, ...dto }: CompanyEditDataDTO & { logoFile: File | null, coverFile: File | null }) => {
@@ -66,7 +67,7 @@ export const useSaveCompany = () => {
     };
 };
 
-export const useCompanies = () => {
+const useCompanies = () => {
 
     const qr = QueryService.useXQuery<CompanyDTO[]>(apiRoutes.companies.getCompanies);
 
@@ -76,7 +77,7 @@ export const useCompanies = () => {
     };
 };
 
-export const useCompanyEditData = (companyId: Id<'Company'>) => {
+const useCompanyEditData = (companyId: Id<'Company'>) => {
 
     const qr = QueryService.useXQuery<CompanyEditDataDTO>(apiRoutes.companies.getCompanyEditData, { companyId });
 
@@ -86,7 +87,7 @@ export const useCompanyEditData = (companyId: Id<'Company'>) => {
     };
 };
 
-export const useAvailableCompaniesForRoleCreation = () => {
+const useAvailableCompaniesForRoleCreation = () => {
 
     const qr = QueryService.useXQuery<CompanyDTO[]>(apiRoutes.companies.getAvailableCompaniesForRoleCreation);
 
@@ -96,7 +97,7 @@ export const useAvailableCompaniesForRoleCreation = () => {
     };
 };
 
-export const useCompanyDetailsByDomain = (domain: string) => {
+const useCompanyDetailsByDomain = (domain: string) => {
 
     const { data, state, error } = QueryService.useXQuery<CompanyPublicDTO>(apiRoutes.companies.getCompanyDetailsByDomain, { domain });
     return {
@@ -104,4 +105,42 @@ export const useCompanyDetailsByDomain = (domain: string) => {
         companyDetailsError: error,
         companyDetailsState: state
     };
+};
+
+const useCourseAssociations = (companyId: Id<'Company'>) => {
+
+    const { data, state, error, refetch } = QueryService
+        .useXQueryArray<CompanyAssociatedCourseDTO>(apiRoutes.companies.getCompanyCourseAssociations, { companyId });
+
+    return {
+        courseAssociations: data,
+        courseAssociationsError: error,
+        courseAssociationsState: state,
+        refetchCourseAssociations: refetch
+    };
+};
+
+const useSaveCourseAssociations = () => {
+
+    const qr = usePostDataUnsafe(apiRoutes.companies.saveCompanyCourseAssociations);
+
+    return {
+        saveCourseAssociationsAsync: qr.postDataAsync,
+        saveCourseAssociationsState: qr.state
+    };
+};
+
+export const CompanyApiService = {
+
+    useCompaniesAdmin,
+    useRoleAssignCompanies,
+    useCreateCompany,
+    useDeleteCompany,
+    useSaveCompany,
+    useCompanies,
+    useCompanyEditData,
+    useAvailableCompaniesForRoleCreation,
+    useCompanyDetailsByDomain,
+    useCourseAssociations,
+    useSaveCourseAssociations
 };

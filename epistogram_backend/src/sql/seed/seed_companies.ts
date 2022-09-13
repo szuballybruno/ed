@@ -1,4 +1,4 @@
-import { Company } from '../../models/entity/Company';
+import { Company } from '../../models/entity/misc/Company';
 import { getSeedList } from '../../services/sqlServices/SeedService';
 
 export const getCompaniesSeedData = () => getSeedList<Company>()({

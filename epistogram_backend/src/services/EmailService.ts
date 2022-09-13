@@ -1,6 +1,6 @@
 import { readFileSync } from 'fs';
 import { createTransport } from 'nodemailer';
-import { User } from '../models/entity/User';
+import { User } from '../models/entity/misc/User';
 import { EpistoEmail } from '../models/EpistoEmail';
 import { Id } from '../shared/types/versionId';
 import { replaceAll } from '../utilities/helpers';

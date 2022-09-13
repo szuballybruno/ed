@@ -1,4 +1,4 @@
-import { TempomatAdjustmentValue } from '../../models/entity/TempomatAdjustmentValue';
+import { TempomatAdjustmentValue } from '../../models/entity/misc/TempomatAdjustmentValue';
 import { getSeedList } from '../../services/sqlServices/SeedService';
 
 export const getTempomatAdjustmentValueSeedData = (seed_prequiz_answers: any) => getSeedList<TempomatAdjustmentValue>()({

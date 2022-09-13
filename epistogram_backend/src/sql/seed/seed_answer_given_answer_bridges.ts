@@ -1,5 +1,5 @@
 import {getSeedList} from '../../services/sqlServices/SeedService';
-import {AnswerGivenAnswerBridge} from '../../models/entity/AnswerGivenAnswerBridge';
+import {AnswerGivenAnswerBridge} from '../../models/entity/misc/AnswerGivenAnswerBridge';
 import {AnswerVersionsSeedDataType} from './seed_answer_versions';
 import {GivenAnswerSeedDataType} from './seed_given_answers';
 

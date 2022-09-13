@@ -1,5 +1,5 @@
-import { DailyTip } from '../models/entity/DailyTip';
-import { PersonalityTraitCategory } from '../models/entity/PersonalityTraitCategory';
+import { DailyTip } from '../models/entity/misc/DailyTip';
+import { PersonalityTraitCategory } from '../models/entity/misc/PersonalityTraitCategory';
 import { PersonalityAssessmentDTO } from '../shared/dtos/PersonalityAssessmentDTO';
 import { PersonalityCategoryTraitDTO } from '../shared/dtos/PersonalityCategoryTraitDTO';
 import { PersonalityChartDataDTO } from '../shared/dtos/PersonalityChartDataDTO';

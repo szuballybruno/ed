@@ -1,9 +1,9 @@
-import { AnswerSession } from '../models/entity/AnswerSession';
+import { AnswerSession } from '../models/entity/misc/AnswerSession';
 import { CourseData } from '../models/entity/course/CourseData';
-import { JobTitle } from '../models/entity/JobTitle';
-import { StorageFile } from '../models/entity/StorageFile';
-import { TeacherInfo } from '../models/entity/TeacherInfo';
-import { User } from '../models/entity/User';
+import { JobTitle } from '../models/entity/misc/JobTitle';
+import { StorageFile } from '../models/entity/misc/StorageFile';
+import { TeacherInfo } from '../models/entity/misc/TeacherInfo';
+import { User } from '../models/entity/misc/User';
 import { AdminUserListView } from '../models/views/AdminUserListView';
 import { AdminPageUserDTO } from '../shared/dtos/admin/AdminPageUserDTO';
 import { BriefUserDataDTO } from '../shared/dtos/BriefUserDataDTO';

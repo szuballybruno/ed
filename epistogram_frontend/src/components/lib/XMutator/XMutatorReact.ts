@@ -45,15 +45,9 @@ export const useXMutatorNew = <
      */
     const createNewMutatorInstance = useCallback(() => {
 
-        const stateInstance: IXMutatorState<TMutatee, TKeyField, TMutatee[TKeyField]> = {
-            mutatedItems: mutatorCore.mutatedItems,
-            mutations: mutatorCore.mutations,
-            isAnyItemsMutated: mutatorCore.isAnyItemsMutated
-        };
-
+        const stateInstance = Object.assign({}, mutatorCore);
         setState(stateInstance);
     }, [setState, mutatorCore]);
-
 
     /**
      * Attach change listener

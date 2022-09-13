@@ -4,7 +4,7 @@ import { InsertEntity, VersionMigrationContainer } from '../utilities/misc';
 import { LoggerService } from './LoggerService';
 import { ClassType } from './misc/advancedTypes/ClassType';
 import { OldData } from './misc/types';
-import { XMutatorHelpers } from './misc/XMutatorHelpers_a';
+import { XMutatorHelpers } from './misc/XMutatorHelpers';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { EntityType, GetIdType } from './XORM/XORMTypes';
 

@@ -1,4 +1,4 @@
-import {ActivitySession} from '../../models/entity/ActivitySession';
+import {ActivitySession} from '../../models/entity/misc/ActivitySession';
 import {getSeedList} from '../../services/sqlServices/SeedService';
 import {UserSeedDataType} from './seed_users';
 

@@ -7,7 +7,7 @@ import {ORMConnectionService} from './ORMConnectionService/ORMConnectionService'
 import {Id} from '../shared/types/versionId';
 import {GlobalConfiguration} from './misc/GlobalConfiguration';
 import {LoggerService} from './LoggerService';
-import {CoinTransaction} from '../models/entity/CoinTransaction';
+import {CoinTransaction} from '../models/entity/misc/CoinTransaction';
 
 export class CoinAcquireService {
 

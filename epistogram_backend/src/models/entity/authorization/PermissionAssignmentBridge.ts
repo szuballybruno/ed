@@ -1,12 +1,11 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from '../../MyORM';
 import { XViewColumn } from '../../../services/XORM/XORMDecorators';
 import { Id } from '../../../shared/types/versionId';
 import { getJoinColumnName } from '../../../utilities/helpers';
-import { Company } from '../Company';
+import { Company } from '../misc/Company';
 import { Course } from '../course/Course';
-import { Group } from '../Group';
-import { User } from '../User';
-import { Permission } from './Permission';
+import { Group } from '../misc/Group';
+import { User } from '../misc/User';
 
 @Entity()
 export class PermissionAssignmentBridge {
@@ -15,18 +14,12 @@ export class PermissionAssignmentBridge {
     @XViewColumn()
     id: Id<'PermissionAssignmentBridge'>;
 
+    // TO ONE
+
     // permission
     @Column()
     @XViewColumn()
     permissionId: Id<'Permission'>;
-
-    // TO MANY
-
-    @ManyToOne(_ => Permission, x => x.permissionAssignmentBridges)
-    @JoinColumn(getJoinColumnName(PermissionAssignmentBridge, 'permissionId'))
-    permissions: Relation<Permission>[];
-
-    // TO ONE
 
     // user 
     @Column({ type: 'int', nullable: true })

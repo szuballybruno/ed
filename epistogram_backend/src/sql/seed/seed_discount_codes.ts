@@ -1,4 +1,4 @@
-import { DiscountCode } from '../../models/entity/DiscountCode';
+import { DiscountCode } from '../../models/entity/misc/DiscountCode';
 import { getSeedList } from '../../services/sqlServices/SeedService';
 import { ShopItemSeedDataType } from './seed_shop_items';
 

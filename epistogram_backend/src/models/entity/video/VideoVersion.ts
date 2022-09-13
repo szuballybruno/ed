@@ -1,17 +1,17 @@
-import { Column, Entity, PrimaryGeneratedColumn, Relation } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, Relation } from '../../MyORM';
 import { XJoinColumn, XManyToOne, XOneToMany, XViewColumn } from '../../../services/XORM/XORMDecorators';
 import { EntityType } from '../../../services/XORM/XORMTypes';
 import { Id } from '../../../shared/types/versionId';
-import { AnswerSession } from '../AnswerSession';
-import { Comment } from '../Comment';
+import { AnswerSession } from '../misc/AnswerSession';
+import { Comment } from '../misc/Comment';
 import { ModuleVersion } from '../module/ModuleVersion';
 import { VideoPlaybackSample } from '../playback/VideoPlaybackSample';
 import { VideoPlaybackSession } from '../playback/VideoPlaybackSession';
 import { VideoSeekEvent } from '../playback/VideoSeekEvent';
 import { QuestionVersion } from '../question/QuestionVersion';
-import { UserSessionActivity } from '../UserSessionActivity';
-import { UserVideoProgressBridge } from '../UserVideoProgressBridge';
-import { VideoRating } from '../VideoRating';
+import { UserSessionActivity } from '../misc/UserSessionActivity';
+import { UserVideoProgressBridge } from '../misc/UserVideoProgressBridge';
+import { VideoRating } from '../misc/VideoRating';
 import { Video } from './Video';
 import { VideoData } from './VideoData';
 

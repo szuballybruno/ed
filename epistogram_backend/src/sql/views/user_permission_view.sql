@@ -35,7 +35,7 @@ company_inherited_permissions AS
 	SELECT 
 		u.id assignee_user_id, 
 		cpv.context_company_id, 
-		NULL::int context_course_id, 
+		cpv.context_course_id, 
 		cpv.role_id,
 		cpv.permission_id,
 		NULL::int assignment_bridge_id
@@ -62,27 +62,27 @@ inherited_or_assigned_permissions AS
 	SELECT cip.* 
 	FROM company_inherited_permissions cip
 ),
-watch_course_permissions AS 
-(
-	SELECT 
-		u.id assignee_user_id,
-		cab.course_id context_course_id,
-		pe2.id permission_id
-	FROM public.user u
+-- watch_course_permissions AS 
+-- (
+-- 	SELECT 
+-- 		u.id assignee_user_id,
+-- 		cab.course_id context_course_id,
+-- 		pe2.id permission_id
+-- 	FROM public.user u
 	
-	INNER JOIN inherited_or_assigned_permissions ioap
-	ON ioap.assignee_user_id = u.id 
+-- 	INNER JOIN inherited_or_assigned_permissions ioap
+-- 	ON ioap.assignee_user_id = u.id 
 	
-	INNER JOIN public.permission pe 
-	ON ioap.permission_id = pe.id
-		AND pe.code = 'WATCH_COMPANY_COURSES'
+-- 	INNER JOIN public.permission pe 
+-- 	ON ioap.permission_id = pe.id
+-- 		AND pe.code = 'WATCH_COMPANY_COURSES'
 	
-	INNER JOIN public.course_access_bridge cab
-	ON cab.company_id = ioap.context_company_id
+-- 	INNER JOIN public.course_access_bridge cab
+-- 	ON cab.company_id = ioap.context_company_id
 	
-	LEFT JOIN public.permission pe2 
-	ON pe2.code = 'WATCH_COURSE'
-),
+-- 	LEFT JOIN public.permission pe2 
+-- 	ON pe2.code = 'WATCH_COURSE'
+-- ),
 user_god_permissions AS (
 	SELECT 
 		u.id assignee_user_id,
@@ -160,18 +160,18 @@ all_permissions AS
 		NULL::int assignment_bridge_id
 	FROM user_god_permissions ugp
 
-	UNION
+	-- UNION
 
 	-- watch course permissions 
-	SELECT 
-		wcp.assignee_user_id,
-		NULL::int context_company_id,
-		wcp.context_course_id,
-		NULL::int context_comment_id,
-		NULL::int role_id,
-		wcp.permission_id,
-		NULL::int assignment_bridge_id
-	FROM watch_course_permissions wcp
+	-- SELECT 
+	-- 	wcp.assignee_user_id,
+	-- 	NULL::int context_company_id,
+	-- 	wcp.context_course_id,
+	-- 	NULL::int context_comment_id,
+	-- 	NULL::int role_id,
+	-- 	wcp.permission_id,
+	-- 	NULL::int assignment_bridge_id
+	-- FROM watch_course_permissions wcp
 ),
 v AS 
 (

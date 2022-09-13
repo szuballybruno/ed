@@ -1,4 +1,4 @@
-import { JobTitle } from '../models/entity/JobTitle';
+import { JobTitle } from '../models/entity/misc/JobTitle';
 import { AuthorizationService } from '../services/AuthorizationService';
 import { DomainProviderService } from '../services/DomainProviderService';
 import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';

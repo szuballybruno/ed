@@ -1,4 +1,4 @@
-import { Comment } from '../../models/entity/Comment';
+import { Comment } from '../../models/entity/misc/Comment';
 import { getSeedList } from '../../services/sqlServices/SeedService';
 import { Id } from '../../shared/types/versionId';
 import { UserSeedDataType } from './seed_users';

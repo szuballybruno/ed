@@ -1,7 +1,7 @@
-import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from '../../MyORM';
 import { IsDeletedFlag, XOneToMany, XViewColumn } from '../../../services/XORM/XORMDecorators';
 import { Id } from '../../../shared/types/versionId';
-import { QuestionType } from '../QuestionType';
+import { QuestionType } from '../misc/QuestionType';
 import { QuestionVersion } from './QuestionVersion';
 
 @Entity()

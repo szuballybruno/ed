@@ -1,4 +1,4 @@
-import {UserCourseBridge} from '../models/entity/UserCourseBridge';
+import {UserCourseBridge} from '../models/entity/misc/UserCourseBridge';
 import {CourseStateView} from '../models/views/CourseStateView';
 import {CourseModeType, CourseStageNameType} from '../shared/types/sharedTypes';
 import {Id} from '../shared/types/versionId';
