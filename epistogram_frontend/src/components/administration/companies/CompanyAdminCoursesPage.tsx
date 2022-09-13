@@ -5,7 +5,6 @@ import { showNotification } from '../../../services/core/notifications';
 import { CompanyAssociatedCourseDTO } from '../../../shared/dtos/company/CompanyAssociatedCourseDTO';
 import { Id } from '../../../shared/types/versionId';
 import { EpistoIcons } from '../../../static/EpistoIcons';
-import { valueCompareTest } from '../../../static/frontendHelpers';
 import { useRouteParams } from '../../../static/locationHelpers';
 import { EpistoCheckbox } from '../../controls/EpistoCheckbox';
 import { EpistoDataGrid, EpistoDataGridColumnBuilder } from '../../controls/EpistoDataGrid';
@@ -78,20 +77,13 @@ export const CompanyAdminCoursesPage = () => {
 
     const [mutatorState, mutatorFunctions] = useXMutatorNew(CompanyAssociatedCourseDTO, 'courseId', 'CompanyAssociatedCourses');
 
-valueCompareTest(courseAssociations, 'courseAssociations');
-
     useEffect(() => {
-
-        console.log('setting original items!');
 
         mutatorFunctions
             .setOriginalItems(courseAssociations);
 
     }, [courseAssociations, mutatorFunctions]);
 
-    console.log(mutatorState.mutatedItems);
-    console.log(mutatorState.mutations);
-    
     const save = async () => {
 
         await saveCourseAssociationsAsync({ companyId, mutations: mutatorState.mutations });
