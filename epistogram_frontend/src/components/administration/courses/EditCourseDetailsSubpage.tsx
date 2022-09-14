@@ -1,27 +1,27 @@
-import {Slider} from '@mui/material';
-import {useEffect, useState} from 'react';
-import {applicationRoutes} from '../../../configuration/applicationRoutes';
-import {CourseApiService} from '../../../services/api/courseApiService';
-import {useNavigation} from '../../../services/core/navigatior';
-import {showNotification, useShowErrorDialog} from '../../../services/core/notifications';
-import {CourseCategoryDTO} from '../../../shared/dtos/CourseCategoryDTO';
-import {CourseDetailsEditDataDTO} from '../../../shared/dtos/CourseDetailsEditDataDTO';
-import {HumanSkillBenefitDTO} from '../../../shared/dtos/HumanSkillBenefitDTO';
-import {CourseVisibilityType} from '../../../shared/types/sharedTypes';
-import {Id} from '../../../shared/types/versionId';
-import {iterate} from '../../../static/frontendHelpers';
-import {useIntParam} from '../../../static/locationHelpers';
-import {EpistoEntry} from '../../controls/EpistoEntry';
-import {EpistoFlex2} from '../../controls/EpistoFlex';
-import {EpistoImage} from '../../controls/EpistoImage';
-import {EpistoLabel} from '../../controls/EpistoLabel';
-import {EpistoSelect} from '../../controls/EpistoSelect';
-import {LoadingFrame} from '../../system/LoadingFrame';
-import {EpistoImageSelector} from '../../universal/EpistoImageSelector';
-import {AdminSubpageHeader} from '../AdminSubpageHeader';
-import {SimpleEditList} from '../SimpleEditList';
-import {CourseAdministartionFrame} from './CourseAdministartionFrame';
-import {EditSection} from './EditSection';
+import { Slider } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { applicationRoutes } from '../../../configuration/applicationRoutes';
+import { CourseApiService } from '../../../services/api/courseApiService';
+import { useNavigation } from '../../../services/core/navigatior';
+import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
+import { CourseCategoryDTO } from '../../../shared/dtos/CourseCategoryDTO';
+import { CourseDetailsEditDataDTO } from '../../../shared/dtos/CourseDetailsEditDataDTO';
+import { HumanSkillBenefitDTO } from '../../../shared/dtos/HumanSkillBenefitDTO';
+import { CourseVisibilityType } from '../../../shared/types/sharedTypes';
+import { Id } from '../../../shared/types/versionId';
+import { iterate } from '../../../static/frontendHelpers';
+import { useIntParam } from '../../../static/locationHelpers';
+import { EpistoEntry } from '../../controls/EpistoEntry';
+import { EpistoFlex2 } from '../../controls/EpistoFlex';
+import { EpistoImage } from '../../controls/EpistoImage';
+import { EpistoLabel } from '../../controls/EpistoLabel';
+import { EpistoSelect } from '../../controls/EpistoSelect';
+import { LoadingFrame } from '../../system/LoadingFrame';
+import { EpistoImageSelector } from '../../universal/EpistoImageSelector';
+import { AdminSubpageHeader } from '../AdminSubpageHeader';
+import { SimpleEditList } from '../SimpleEditList';
+import { CourseAdministartionFrame } from './CourseAdministartionFrame';
+import { EditSection } from './EditSection';
 
 export const EditCourseDetailsSubpage = () => {
 
@@ -208,7 +208,6 @@ export const EditCourseDetailsSubpage = () => {
 
                         {/* Basic info section */}
                         <EditSection
-                            isFirst
                             title="Alapadatok">
 
                             {/* Thumbnail image */}
@@ -367,7 +366,6 @@ export const EditCourseDetailsSubpage = () => {
                         ml="5px">
 
                         <EditSection
-                            isFirst
                             className="roundBorders"
                             title="Követelmények és ajánlás"
                             style={{

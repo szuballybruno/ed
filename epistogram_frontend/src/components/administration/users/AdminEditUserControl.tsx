@@ -1,7 +1,5 @@
-import { Divider } from '@chakra-ui/react';
 import { Checkbox } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
-import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { useCoinBalanceOfUser, useGiftCoinsToUser } from '../../../services/api/coinTransactionsApiService';
 import { CompanyApiService } from '../../../services/api/companyApiService';
 import { useJobTitles } from '../../../services/api/miscApiService';
@@ -13,10 +11,9 @@ import { UserPermissionDTO } from '../../../shared/dtos/role/UserPermissionDTO';
 import { UserRoleDTO } from '../../../shared/dtos/role/UserRoleDTO';
 import { UserEditDTO } from '../../../shared/dtos/UserEditDTO';
 import { Id } from '../../../shared/types/versionId';
-import { EventTriggerType, isCurrentAppRoute, parseIntOrNull } from '../../../static/frontendHelpers';
+import { EventTriggerType, parseIntOrNull } from '../../../static/frontendHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoButton } from '../../controls/EpistoButton';
-import { EpistoDiv } from '../../controls/EpistoDiv';
 import { EpistoEntry } from '../../controls/EpistoEntry';
 import { EpistoEntryNew, useEpistoEntryState } from '../../controls/EpistoEntryNew';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
@@ -163,205 +160,104 @@ export const AdminEditUserControl = ({
     return <EpistoFlex2 direction="column"
         flex="1">
 
-        <EpistoFlex2 flex="1">
+        {/* left column */}
+        <EpistoFlex2 direction="column"
+            flex="1">
 
-            {/* left column */}
-            <EpistoFlex2 direction="column"
-                flex="1">
+            {/* basic info section */}
+            <EditSection
+                title="Alapadatok">
 
-                {/* basic info section */}
-                <EditSection isFirst
-                    title="Alapadatok">
+                {/* first & last name */}
+                <EpistoFlex2 flex="1"
+                    justify="space-between">
 
-                    {/* first & last name */}
-                    <EpistoFlex2 flex="1"
-                        justify="space-between">
-
-                        <EpistoEntry
-                            style={{
-                                flex: 1,
-                                marginRight: 5
-                            }}
-                            name="lname"
-                            value={lastName}
-                            setValue={setLastName}
-                            labelVariant={'top'}
-                            label={translatableTexts.misc.lastName} />
-
-                        <EpistoEntry
-                            style={{
-                                flex: 1
-                            }}
-                            value={firstName}
-                            name="fname"
-                            setValue={setFirstName}
-                            labelVariant={'top'}
-                            label={translatableTexts.misc.firstName} />
-                    </EpistoFlex2>
-
-                    {/* email */}
                     <EpistoEntry
-                        name="email"
-                        value={email}
-                        setValue={setEmail}
+                        style={{
+                            flex: 1,
+                            marginRight: 5
+                        }}
+                        name="lname"
+                        value={lastName}
+                        setValue={setLastName}
                         labelVariant={'top'}
-                        label="Email" />
-                </EditSection>
+                        label={translatableTexts.misc.lastName} />
 
-                {/* company section */}
-                <EditSection title="Cég és beosztás">
+                    <EpistoEntry
+                        style={{
+                            flex: 1
+                        }}
+                        value={firstName}
+                        name="fname"
+                        setValue={setFirstName}
+                        labelVariant={'top'}
+                        label={translatableTexts.misc.firstName} />
+                </EpistoFlex2>
 
-                    {/* company */}
-                    {canSetInvitedUserCompany && <EpistoFlex2
-                        direction="column"
-                        align="stretch"
-                        mt="5px"
-                        width="100%">
+                {/* email */}
+                <EpistoEntry
+                    name="email"
+                    value={email}
+                    setValue={setEmail}
+                    labelVariant={'top'}
+                    label="Email" />
+            </EditSection>
 
-                        <EpistoFont
-                            isUppercase
-                            fontSize="fontExtraSmall"
-                            style={{
-                                marginTop: '10px',
-                                letterSpacing: '1.2px'
-                            }}>
+            {/* company section */}
+            <EditSection title="Cég és beosztás">
 
-                            {translatableTexts.misc.company}
-                        </EpistoFont>
+                {/* company */}
+                {canSetInvitedUserCompany && <EpistoFlex2
+                    direction="column"
+                    align="stretch"
+                    mt="5px"
+                    width="100%">
 
-                        <EpistoSelect
-                            items={roleAssignCompanies}
-                            selectedValue={selectedCompany}
-                            onSelected={setSelectedCompany}
-                            getDisplayValue={x => '' + x?.name}
-                            getCompareKey={company => '' + company?.id} />
-                    </EpistoFlex2>}
-
-                    {/* job title */}
-                    {canSetInvitedUserCompany && <EpistoFlex2
-                        direction="column"
-                        align="stretch"
-                        mt="5px"
-                        width="100%">
-
-                        <EpistoFont
-                            isUppercase
-                            fontSize="fontExtraSmall"
-                            style={{
-                                marginTop: '10px',
-                                letterSpacing: '1.2px'
-                            }}>
-
-                            {translatableTexts.misc.jobTitle}
-                        </EpistoFont>
-
-                        <EpistoSelect
-                            items={jobTitles}
-                            selectedValue={selectedJobTitle}
-                            onSelected={setSelectedJobTitle}
-                            getDisplayValue={jt => '' + jt?.name}
-                            getCompareKey={jt => '' + jt?.id} />
-                    </EpistoFlex2>}
-                </EditSection>
-            </EpistoFlex2>
-
-            <Divider orientation='vertical'
-                h="calc(100% - 20px)"
-                w="1px"
-                background="grey"
-                my="10px" />
-
-            <EpistoDiv
-                className='roundBorders'
-                flex="1"
-                p="0 10px 10px 10px"
-                minWidth="300px">
-
-                {!isCurrentAppRoute(applicationRoutes.administrationRoute.usersRoute.addRoute) && (
-
-                    <>
-                        <EditSection isFirst
-                            title="EpistoCoin">
-                            <EpistoLabel
-                                isOverline
-                                text="Egyenleg">
-
-                                <EpistoFont
-                                    fontSize="fontLargePlus"
-                                    style={{
-                                        display: 'flex',
-                                        flexDirection: 'row',
-                                        alignItems: 'center',
-                                        marginLeft: 5,
-                                        fontWeight: 600
-                                    }}>
-
-                                    {coinBalance}
-                                    <EpistoConinImage style={{
-                                        width: 20,
-                                        height: 20,
-                                        marginLeft: 5
-                                    }} />
-                                </EpistoFont>
-                            </EpistoLabel>
-
-                            <EpistoLabel width="100%"
-                                isOverline
-                                text="EpistoCoin hozzáadása">
-
-                                <EpistoFlex2 align="center"
-                                    flex="1"
-                                    mt="10px">
-                                    <EpistoEntryNew
-                                        flex="1"
-                                        style={{
-                                            margin: '0 5px 0 0'
-                                        }}
-                                        type="number"
-                                        placeholder='Összeg amelyet hozzá szeretnél adni'
-                                        state={coinAmountEntryState} />
-
-                                    <EpistoButton
-                                        isDisabled={!!coinAmountEntryState.error}
-                                        onClick={handleAddCoinsAsync}
-                                        variant="colored">
-
-                                        Hozzáadás
-                                    </EpistoButton>
-                                </EpistoFlex2>
-
-                            </EpistoLabel>
-                        </EditSection>
-                    </>
-                )}
-
-                <EditSection
-                    isFirst={isCurrentAppRoute(applicationRoutes.administrationRoute.usersRoute.addRoute)}
-                    title="Alkalmazás adatai">
-
-                    {/* is teacher */}
-                    <EpistoFont isUppercase
+                    <EpistoFont
+                        isUppercase
                         fontSize="fontExtraSmall"
                         style={{
-                            marginTop: 10,
+                            marginTop: '10px',
                             letterSpacing: '1.2px'
                         }}>
-                        {translatableTexts.administration.editUserControl.selectAsTeacher}
+
+                        {translatableTexts.misc.company}
                     </EpistoFont>
 
-                    <EpistoFlex2 align="center">
-                        <Checkbox
-                            checked={isTeacher}
-                            onChange={(_, x) => setIsTeacher(x)} />
+                    <EpistoSelect
+                        items={roleAssignCompanies}
+                        selectedValue={selectedCompany}
+                        onSelected={setSelectedCompany}
+                        getDisplayValue={x => '' + x?.name}
+                        getCompareKey={company => '' + company?.id} />
+                </EpistoFlex2>}
 
-                        <EpistoFont
-                            style={{ flex: '1' }}>
+                {/* job title */}
+                {canSetInvitedUserCompany && <EpistoFlex2
+                    direction="column"
+                    align="stretch"
+                    mt="5px"
+                    width="100%">
 
-                            {translatableTexts.administration.editUserControl.selectUserAsTeacher}
-                        </EpistoFont>
-                    </EpistoFlex2>
-                </EditSection>
-            </EpistoDiv>
+                    <EpistoFont
+                        isUppercase
+                        fontSize="fontExtraSmall"
+                        style={{
+                            marginTop: '10px',
+                            letterSpacing: '1.2px'
+                        }}>
+
+                        {translatableTexts.misc.jobTitle}
+                    </EpistoFont>
+
+                    <EpistoSelect
+                        items={jobTitles}
+                        selectedValue={selectedJobTitle}
+                        onSelected={setSelectedJobTitle}
+                        getDisplayValue={jt => '' + jt?.name}
+                        getCompareKey={jt => '' + jt?.id} />
+                </EpistoFlex2>}
+            </EditSection>
         </EpistoFlex2>
 
         {/* access management */}
@@ -374,6 +270,89 @@ export const AdminEditUserControl = ({
                 refetchTrigger={refetchTrigger} />}
         </EditSection>
 
+        {/* coin stuff */}
+        <EditSection
+            title="EpistoCoin">
+
+            <EpistoLabel
+                isOverline
+                text="Egyenleg">
+
+                <EpistoFont
+                    fontSize="fontLargePlus"
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        marginLeft: 5,
+                        fontWeight: 600
+                    }}>
+
+                    {coinBalance}
+                    <EpistoConinImage style={{
+                        width: 20,
+                        height: 20,
+                        marginLeft: 5
+                    }} />
+                </EpistoFont>
+            </EpistoLabel>
+
+            <EpistoLabel width="100%"
+                isOverline
+                text="EpistoCoin hozzáadása">
+
+                <EpistoFlex2 align="center"
+                    flex="1"
+                    mt="10px">
+                    <EpistoEntryNew
+                        flex="1"
+                        style={{
+                            margin: '0 5px 0 0'
+                        }}
+                        type="number"
+                        placeholder='Összeg amelyet hozzá szeretnél adni'
+                        state={coinAmountEntryState} />
+
+                    <EpistoButton
+                        isDisabled={!!coinAmountEntryState.error}
+                        onClick={handleAddCoinsAsync}
+                        variant="colored">
+
+                        Hozzáadás
+                    </EpistoButton>
+                </EpistoFlex2>
+
+            </EpistoLabel>
+        </EditSection>
+
+        {/* teacher stuff */}
+        <EditSection
+            title="Alkalmazás adatai">
+
+            {/* is teacher */}
+            <EpistoFont isUppercase
+                fontSize="fontExtraSmall"
+                style={{
+                    marginTop: 10,
+                    letterSpacing: '1.2px'
+                }}>
+                {translatableTexts.administration.editUserControl.selectAsTeacher}
+            </EpistoFont>
+
+            <EpistoFlex2 align="center">
+                <Checkbox
+                    checked={isTeacher}
+                    onChange={(_, x) => setIsTeacher(x)} />
+
+                <EpistoFont
+                    style={{ flex: '1' }}>
+
+                    {translatableTexts.administration.editUserControl.selectUserAsTeacher}
+                </EpistoFont>
+            </EpistoFlex2>
+        </EditSection>
+
+        {/* buttons */}
         <TailingAdminButtons
             onDeleteCallback={() => {
 
@@ -386,6 +365,6 @@ export const AdminEditUserControl = ({
                     // history.goBack();
                 }
             }}
-            onSaveCallback={handleSaveUserAsync} />
-    </EpistoFlex2>;
+            onSaveCallback={handleSaveUserAsync } />
+    </EpistoFlex2 >;
 };

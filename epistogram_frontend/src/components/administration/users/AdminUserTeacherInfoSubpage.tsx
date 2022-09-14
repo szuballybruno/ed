@@ -122,7 +122,6 @@ export const AdminUserTeacherInfoSubpage = (props: {
                 className="roundBorders">
 
                 <EditSection
-                    isFirst
                     title="Oktató jellemzése">
 
                     {/* Teacher skills */}

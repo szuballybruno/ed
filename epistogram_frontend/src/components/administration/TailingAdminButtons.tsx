@@ -10,27 +10,33 @@ export const TailingAdminButtons = (props: {
     const { onDeleteCallback, onSaveCallback } = props;
 
     return (
-        <EpistoFlex2 direction='column'>
-
-            {/* save button */}
-            <EpistoButton
-                variant='colored'
-                onClick={onSaveCallback}
-                style={{ margin: '20px 20px 0 20px' }}>
-
-                {translatableTexts.misc.save}
-            </EpistoButton>
+        <EpistoFlex2
+            id={TailingAdminButtons.name}
+            justify="right"
+            width="100%"
+            direction='row'
+            p="10px">
 
             {/* delete button */}
             <EpistoButton
                 variant='outlined'
                 onClick={onDeleteCallback}
                 style={{
-                    margin: '20px 20px 0 20px',
                     color: 'var(--deepRed)'
                 }}>
 
                 {translatableTexts.misc.remove}
+            </EpistoButton>
+
+            {/* save button */}
+            <EpistoButton
+                variant='colored'
+                margin={{
+                    left: 'px5'
+                }}
+                onClick={onSaveCallback}>
+
+                {translatableTexts.misc.save}
             </EpistoButton>
         </EpistoFlex2>
     );

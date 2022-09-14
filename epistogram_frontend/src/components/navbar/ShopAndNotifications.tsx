@@ -58,13 +58,12 @@ export const ShopAndNotifications = (props: {
                 <EpistoButton
                     style={{
                         height: 40,
-                        fontStyle: 'normal',
+                        fontStyle: 'normal',    
                     }}
                     onClick={() => navigate2(applicationRoutes.shopRoute)}
                     variant={'plain'}>
 
                     <EpistoFont
-                        fontSize={'fontNormal14'}
                         isUppercase
                         style={{
                             margin: '0 7px',

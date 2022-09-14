@@ -1,7 +1,7 @@
-import {FC} from 'react';
-import {EpistoButton, EpistoButtonPropsType} from './EpistoButton';
-import {ToggleButton, ToggleButtonGroup} from '@mui/material';
-import {segmentedButtonStyles} from './segmentedButtonStyles';
+import { FC } from 'react';
+import { EpistoButton, EpistoButtonPropsType } from './EpistoButton';
+import { ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { segmentedButtonStyles } from './segmentedButtonStyles';
 
 type EpistoTabProps = {
     isSelected: boolean,
@@ -50,7 +50,7 @@ export const EpistoTabs = <TKey,>({ tabItems, selectedTabKey, onChange }: Episto
                         value={index}
                         disableRipple={segmentedButtonStyles.tab.disableRipple}
                         sx={segmentedButtonStyles.tab.toggleButtonSx}
-                        style={segmentedButtonStyles.tab.toggleButtonGroupStyle}
+                        style={{ ...segmentedButtonStyles.tab.toggleButtonGroupStyle, color: isSelected ? 'white' : undefined }}
                         selected={isSelected}
                         onClick={() => onChange(tabItem.key)}
                         {...tabItemProps}>

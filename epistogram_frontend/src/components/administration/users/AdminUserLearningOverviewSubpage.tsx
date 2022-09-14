@@ -158,7 +158,6 @@ export const AdminUserStatisticsSubpage = (props: {
 
                 {/* learning insights header */}
                 <EditSection
-                    isFirst
                     title={texts.sectionTitles.learningOverviewReport}
                     rightSideComponent={(
 

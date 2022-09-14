@@ -7,12 +7,12 @@ import {
     FullscreenExit,
     Lock
 } from '@mui/icons-material';
-import React, {useState} from 'react';
-import {EpistoButton} from '../controls/EpistoButton';
-import {EpistoDiv} from '../controls/EpistoDiv';
-import {EpistoFlex2, EpistoFlex2Props} from '../controls/EpistoFlex';
-import {EpistoFont} from '../controls/EpistoFont';
-import {FlexFloat} from '../controls/FlexFloat';
+import React, { useState } from 'react';
+import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoDiv } from '../controls/EpistoDiv';
+import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
+import { EpistoFont } from '../controls/EpistoFont';
+import { FlexFloat } from '../controls/FlexFloat';
 
 export type StatisticsCardProps = {
     iconPath?: string
@@ -79,11 +79,20 @@ const StatisticsCard = (props: StatisticsCardProps & EpistoFlex2Props) => {
                     }} />;
     };
 
+    const fontSize = (() => {
+
+        const isLongValue = typeof value === 'string' && value.length < 8;
+
+        return isLongValue
+            ? '2rem'
+            : '3.5rem';
+    })();
+
     return <FlexFloat
+        id={StatisticsCard.name}
         background="var(--transparentWhite70)"
         gridColumn={chartSize === 'large' ? '1 / -1' : (isOpen ? 'span 2' : 'unset')} // do not remove!!
         gridRow={chartSize === 'large' ? 'span 2' : (isOpen ? 'span 2' : 'unset')} // do not remove!!
-        //boxShadow="inset -1px -1px 5px rgba(0,0,0,0.15)"
         direction="column"
         minWidth='250px'
         position="relative"
@@ -120,7 +129,6 @@ const StatisticsCard = (props: StatisticsCardProps & EpistoFlex2Props) => {
             {getIconFromChange(additionalInfo.change)}
 
             <EpistoFont
-                fontSize="fontNormal14"
                 style={{
                     fontWeight: 500
                 }}>
@@ -181,10 +189,8 @@ const StatisticsCard = (props: StatisticsCardProps & EpistoFlex2Props) => {
                     {/* value */}
                     <EpistoFont
                         allowedLines={1}
-                        fontSize={typeof value === 'string'
-                            ? (value?.length < 8 ? 40 : 25)
-                            : 40}
                         style={{
+                            fontSize: fontSize,
                             lineHeight: 1,
                             maxWidth: 'calc(100% - 10px)'
                         }}>
@@ -196,9 +202,7 @@ const StatisticsCard = (props: StatisticsCardProps & EpistoFlex2Props) => {
 
                     {/* suffix */}
                     <EpistoFont
-                        fontSize="fontLargePlus"
                         style={{
-                            fontSize: '20px',
                             marginLeft: '5px'
                         }}>
 
@@ -207,7 +211,10 @@ const StatisticsCard = (props: StatisticsCardProps & EpistoFlex2Props) => {
                 </EpistoFlex2>
 
                 {/* title */}
-                <EpistoFont fontSize="fontSmall" >
+                <EpistoFont
+                    style={{
+                        fontSize: '0.85rem'
+                    }}>
                     {title}
                 </EpistoFont>
             </EpistoFlex2>

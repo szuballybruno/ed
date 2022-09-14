@@ -105,7 +105,7 @@ export const EpistoButton = forwardRef<HTMLButtonElement, EpistoButtonPropsType>
             filter: isDisabled ? 'contrast(0.01)' : undefined,
             height: size,
             padding: padding ? padding : undefined,
-            fontSize: fontSize ? fontSize : '12px',
+            fontSize: fontSize ? fontSize : undefined,
             borderColor: 'var(--mildGrey)',
             pointerEvents: isDisabled ? 'none' : undefined,
             ...style
