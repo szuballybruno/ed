@@ -1,8 +1,8 @@
-import React, {ReactNode, useEffect} from 'react';
-import {gradientBackgroundGenerator} from '../services/core/gradientBackgroundGenerator';
-import {EpistoFlex2, EpistoFlex2Props} from './controls/EpistoFlex';
-import {EpistoGrid} from './controls/EpistoGrid';
-import {EpistoImage} from './controls/EpistoImage';
+import { ReactNode, useEffect } from 'react';
+import { gradientBackgroundGenerator } from '../services/core/gradientBackgroundGenerator';
+import { EpistoFlex2, EpistoFlex2Props } from './controls/EpistoFlex';
+import { EpistoGrid } from './controls/EpistoGrid';
+import { EpistoImage } from './controls/EpistoImage';
 
 export const PageRootContainer = (props: {
     children: ReactNode,

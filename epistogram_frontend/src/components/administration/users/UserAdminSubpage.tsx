@@ -35,8 +35,7 @@ export const UserAdminSubpage = () => {
             renderRoutes={[
                 {
                     route: userAdminRoute.indexRoute,
-                    element: <AdminUserDataGridSubpage
-                        users={users} />
+                    element: <AdminUserDataGridSubpage />
                 },
                 {
                     route: userAdminRoute.addRoute,

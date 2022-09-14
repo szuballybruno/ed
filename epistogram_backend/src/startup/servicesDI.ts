@@ -74,7 +74,7 @@ export class ServiceProvider {
 
     constructor(services: any) {
 
-        this._services = {...this._services, ...services};
+        this._services = { ...this._services, ...services };
     }
 
     getService<T>(ct: CTAnyArgs<T>) {
@@ -109,7 +109,7 @@ export const instansiateSingletonServices = (rootDir: string) => {
         .addClass(SQLPoolService, [GlobalConfiguration])
         .getContainer();
 
-    const {instances} = XDependency
+    const { instances } = XDependency
         .instantiate(container);
 
     return new ServiceProvider(instances);
@@ -180,7 +180,7 @@ export const getTransientServiceContainer = (singletonProvider: ServiceProvider)
         .addClass(ShopService, [ORMConnectionService, MapperService, CoinTransactionService, CourseService, EmailService, FileService, UrlService, AuthorizationService])
         .addClass(PlayerService, [ORMConnectionService, CourseService, PlaylistService, ExamService, ModuleService, VideoService, QuestionAnswerService, PlaybackService, UserCourseBridgeService, MapperService, AuthorizationService, PermissionService])
         .addClass(PractiseQuestionService, [ORMConnectionService, QuestionAnswerService, MapperService, AuthorizationService, GlobalConfiguration, QuestionService])
-        .addClass(UserStatsService, [ORMConnectionService, MapperService, TempomatService, AuthorizationService, UserProgressService])
+        .addClass(UserStatsService, [ORMConnectionService, MapperService, TempomatService, AuthorizationService, UserProgressService, CompanyService])
         .addClass(PrequizService, [ORMConnectionService, MapperService, UserCourseBridgeService, AuthorizationService])
         .addClass(RegistrationService, [ActivationCodeService, EmailService, UserService, AuthenticationService, AuthorizationService, TokenService, ORMConnectionService, RoleService, MapperService, LoggerService])
         .addClass(CourseRatingService, [MapperService, ORMConnectionService, AuthorizationService])
@@ -196,7 +196,7 @@ export const getTransientServiceContainer = (singletonProvider: ServiceProvider)
 
 export const instatiateServices = (container: DependencyContainer<DepHierarchyFunction>): ServiceProvider => {
 
-    const {instances} = XDependency
+    const { instances } = XDependency
         .instatiateOnly(container);
 
     return new ServiceProvider(instances);

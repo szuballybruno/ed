@@ -4,6 +4,7 @@ import { UserCourseStatsDTO } from '../../shared/dtos/UserCourseStatsDTO';
 import { UserCourseStatsOverviewDTO } from '../../shared/dtos/UserCourseStatsOverviewDTO';
 import { UserExamStatsDTO } from '../../shared/dtos/UserExamStatsDTO';
 import { UserLearningPageStatsDTO } from '../../shared/dtos/UserLearningPageStatsDTO';
+import { UserOverviewDTO } from '../../shared/dtos/UserOverviewDTO';
 import { UserVideoStatsDTO } from '../../shared/dtos/UserVideoStatsDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
 import { Id } from '../../shared/types/versionId';
@@ -62,6 +63,17 @@ export const useUserCourseStats = (userId: Id<'User'>) => {
         userCourseStatsStatus: queryRes.state,
         userCourseStatsError: queryRes.error,
         refetchUserCourseStats: queryRes.refetch
+    };
+};
+
+export const useUserOverviewStats = () => {
+
+    const queryRes = QueryService.useXQuery<UserOverviewDTO[]>(apiRoutes.userStats.getUserOverviewStats);
+
+    return {
+        userOverviewStats: queryRes.data,
+        userOverviewStatsStatus: queryRes.state,
+        userOverviewStatsError: queryRes.error
     };
 };
 

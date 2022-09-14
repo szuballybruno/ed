@@ -1,31 +1,49 @@
-import {DataGrid, GridColDef} from '@mui/x-data-grid';
-import React, {useState} from 'react';
-import {applicationRoutes} from '../../../../configuration/applicationRoutes';
-import {useNavigation} from '../../../../services/core/navigatior';
-import {AdminPageUserDTO} from '../../../../shared/dtos/admin/AdminPageUserDTO';
-import {Id} from '../../../../shared/types/versionId';
-import {formatTimespan, isCurrentAppRoute, usePaging} from '../../../../static/frontendHelpers';
-import {EpistoButton} from '../../../controls/EpistoButton';
-import {ProfileImage} from '../../../ProfileImage';
-import {AdminBreadcrumbsHeader} from '../../AdminBreadcrumbsHeader';
-import {AdminSubpageHeader} from '../../AdminSubpageHeader';
-import {Flex} from '@chakra-ui/react';
-import {SegmentedButton} from '../../../controls/SegmentedButton';
-import {segmentedButtonStyles} from '../../../controls/segmentedButtonStyles';
-import {EpistoSearch} from '../../../controls/EpistoSearch';
-import {translatableTexts} from '../../../../static/translatableTexts';
-import {Select} from '@mui/material';
-import {OrderType} from '../../../../shared/types/sharedTypes';
-import {Add} from '@mui/icons-material';
+import { Flex } from '@chakra-ui/react';
+import { Add } from '@mui/icons-material';
+import { Select } from '@mui/material';
+import { useState } from 'react';
+import { applicationRoutes } from '../../../../configuration/applicationRoutes';
+import { useUserOverviewStats } from '../../../../services/api/userStatsApiService';
+import { useNavigation } from '../../../../services/core/navigatior';
+import { OrderType } from '../../../../shared/types/sharedTypes';
+import { Id } from '../../../../shared/types/versionId';
+import { isCurrentAppRoute, usePaging } from '../../../../static/frontendHelpers';
+import { translatableTexts } from '../../../../static/translatableTexts';
+import { EpistoButton } from '../../../controls/EpistoButton';
+import { EpistoDataGrid, EpistoDataGridColumnBuilder } from '../../../controls/EpistoDataGrid';
+import { EpistoSearch } from '../../../controls/EpistoSearch';
+import { SegmentedButton } from '../../../controls/SegmentedButton';
+import { segmentedButtonStyles } from '../../../controls/segmentedButtonStyles';
+import { ProfileImage } from '../../../ProfileImage';
+import { AdminBreadcrumbsHeader } from '../../AdminBreadcrumbsHeader';
+import { AdminSubpageHeader } from '../../AdminSubpageHeader';
 
-export const AdminUserDataGridSubpage = (props: {
-    users: AdminPageUserDTO[]
-}) => {
+class RowType {
+    userId: Id<'User'>;
+    avatar: {
+        avatarUrl: string,
+        firstName: string,
+        lastName: string
+    };
+    name: string;
+    email: string;
+    averagePerformancePercentage: number;
+    invertedLagBehind: number;
+    totalSessionLengthSeconds: number;
+    completedCourseItemCount: number;
+    engagementPoints: number;
+    productivityPercentage: number;
+    editUserButton: Id<'User'>;
+};
 
-    const { users } = props;
+export const AdminUserDataGridSubpage = () => {
+
     const { navigate2 } = useNavigation();
     const [currentUserId, setCurrentUserId] = useState<Id<'User'> | null>(null);
     const [orderBy, setOrderBy] = useState<OrderType | null>(null);
+
+    const { userOverviewStats } = useUserOverviewStats();
+
     const paging = usePaging({
         items: [
             'Alapértelmezett nézet',
@@ -35,114 +53,132 @@ export const AdminUserDataGridSubpage = (props: {
     });
 
     const AdminUsersSearchBar = () => {
-       return  <Flex flex='1'>
+        return <Flex flex='1'>
 
-                <EpistoSearch />
+            <EpistoSearch />
 
-                <Select
-                    native
-                    onChange={(e) => {
-                        setOrderBy(e.target.value as OrderType | null);
-                    }}
-                    className="roundBorders fontSmall mildShadow"
-                    inputProps={{
-                        name: 'A-Z',
-                        id: 'outlined-age-native-simple',
-                    }}
-                    sx={{
-                        '& .MuiOutlinedInput-notchedOutline': {
-                            border: 'none'
-                        }
-                    }}
-                    style={{
-                        background: 'var(--transparentWhite70)',
-                        border: 'none',
-                        height: 50,
-                        color: '3F3F3F',
-                        minWidth: '100px',
-                        margin: '0 10px',
-                        flex: 1
-                    }}>
-                        <option value={'nameASC'}>{translatableTexts.availableCourses.sortOptions.aToZ}</option>
-                        <option value={'nameDESC'}>{translatableTexts.availableCourses.sortOptions.zToA}</option>
-                    </Select>
-            </Flex>;
+            <Select
+                native
+                onChange={(e) => {
+                    setOrderBy(e.target.value as OrderType | null);
+                }}
+                className="roundBorders fontSmall mildShadow"
+                inputProps={{
+                    name: 'A-Z',
+                    id: 'outlined-age-native-simple',
+                }}
+                sx={{
+                    '& .MuiOutlinedInput-notchedOutline': {
+                        border: 'none'
+                    }
+                }}
+                style={{
+                    background: 'var(--transparentWhite70)',
+                    border: 'none',
+                    height: 50,
+                    color: '3F3F3F',
+                    minWidth: '100px',
+                    margin: '0 10px',
+                    flex: 1
+                }}>
+                <option value={'nameASC'}>{translatableTexts.availableCourses.sortOptions.aToZ}</option>
+                <option value={'nameDESC'}>{translatableTexts.availableCourses.sortOptions.zToA}</option>
+            </Select>
+        </Flex>;
     };
 
 
-    const userRows = users
-        .map((user) => {
-            return {
-                id: user.id,
-                avatar: {
-                    avatarUrl: user.avatarUrl,
-                    firstName: user.firstName,
-                    lastName: user.lastName
-                },
-                name: `${user.lastName} ${user.firstName}`,
-                email: user.email,
-                coinBalance: `${user.coinBalance} EC`,
-                totalSpentTimeSeconds: formatTimespan(user.totalSpentTimeSeconds)
-            };
-        });
+    const userRows = userOverviewStats
+        ? userOverviewStats
+            .map((user) => {
+                return {
+                    userId: user.userId,
+                    avatar: {
+                        avatarUrl: user.avatarFilePath,
+                        firstName: user.firstName,
+                        lastName: user.lastName
+                    },
+                    name: user.firstName ? `${user.lastName} ${user.firstName}` : '',
+                    email: user.userEmail,
+                    averagePerformancePercentage: user.averagePerformancePercentage,
+                    invertedLagBehind: user.invertedLagBehind,
+                    totalSessionLengthSeconds: user.totalSessionLengthSeconds,
+                    completedCourseItemCount: user.completedCourseItemCount,
+                    engagementPoints: user.engagementPoints,
+                    productivityPercentage: user.productivityPercentage,
+                    editUserButton: user.userId
+                };
+            })
+        : [];
 
-    const userColumns: GridColDef[] = [
-        {
-            field: 'avatar',
-            headerName: 'Profilkép',
-            width: 90,
-            renderCell: (params) =>
 
-                <ProfileImage
-                    style={{
-                        width: 50,
-                        height: 50
-                    }}
-                    url={params.value.avatarUrl}
-                    firstName={params.value.firstName}
-                    lastName={params.value.lastName} />
-        },
-        {
-            field: 'name',
-            headerName: 'Név',
-            width: 250,
-            editable: true
-        },
-        {
-            field: 'email',
-            headerName: 'E-mail',
-            width: 200,
-            editable: true
-        },
-        {
-            field: 'coinBalance',
-            headerName: 'Egyenleg',
-            width: 100,
-            editable: true
-        },
-        {
-            field: 'totalSpentTimeSeconds',
-            headerName: 'Teljes platformon eltöltött idő',
-            width: 200,
-            editable: true
-        },
-        {
-            field: 'id',
-            headerName: 'Tanulási jelentés',
-            width: 180,
-            renderCell: (params) =>
 
-                <EpistoButton
-                    variant="outlined"
-                    onClick={() => {
-                        setCurrentUserId(params.value);
-                        return navigate2(applicationRoutes.administrationRoute.usersRoute.statsRoute, { userId: params.value });
-                    }}>
+    const useColumns = () => {
 
-                    Tanulási jelentés
-                </EpistoButton>
-        }
-    ];
+        return new EpistoDataGridColumnBuilder<RowType, Id<'User'>>()
+            .add({
+                field: 'avatar',
+                headerName: 'Avatar',
+                renderCell: ({ value }) => <ProfileImage
+                    className="square50"
+                    objectFit="contain"
+                    url={value.avatarUrl}
+                    firstName={value.firstName}
+                    lastName={value.lastName} />
+            })
+            .add({
+                field: 'name',
+                headerName: 'Név',
+                width: 250
+            })
+            .add({
+                field: 'email',
+                headerName: 'E-mail',
+            })
+            .add({
+                field: 'averagePerformancePercentage',
+                headerName: 'Átlagos teljesítmény',
+            })
+            .add({
+                field: 'invertedLagBehind',
+                headerName: 'Haladás',
+            })
+            .add({
+                field: 'totalSessionLengthSeconds',
+                headerName: 'Platformon eltöltött idő',
+            })
+            .add({
+                field: 'completedCourseItemCount',
+                headerName: 'Megtekintett videók száma',
+            })
+            .add({
+                field: 'productivityPercentage',
+                headerName: 'Produktivitás',
+            })
+            .add({
+                field: 'engagementPoints',
+                headerName: 'Elköteleződés',
+            })
+            .add({
+                field: 'editUserButton',
+                headerName: '',
+                renderCell: ({ value }) =>
+
+                    <EpistoButton
+                        variant="outlined"
+                        onClick={() => {
+                            setCurrentUserId(value);
+                            return navigate2(applicationRoutes.administrationRoute.usersRoute.statsRoute, { userId: value });
+                        }}>
+
+                        Tanulási jelentés
+                    </EpistoButton>
+            })
+            .getColumns();
+    };
+
+    const columns = useColumns();
+
 
     return <AdminBreadcrumbsHeader
         headerComponent={<AdminUsersSearchBar />}
@@ -171,21 +207,19 @@ export const AdminUserDataGridSubpage = (props: {
                         style={{
                             alignItems: 'center'
                         }}>
-<Add style={{
-    height: 30
-}} />
+                        <Add style={{
+                            height: 30
+                        }} />
                         Hozzáadás
                     </EpistoButton>
                 </Flex>
             </Flex>
 
-            <DataGrid
-                columns={userColumns}
+            <EpistoDataGrid
+                columns={columns}
                 rows={userRows}
-                rowHeight={80}
-                style={{
-                    background: 'var(--transparentWhite70)'
-                }} />
+                getKey={x => x.userId}
+            />
         </Flex>
     </AdminBreadcrumbsHeader >;
 };

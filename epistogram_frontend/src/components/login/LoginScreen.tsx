@@ -2,9 +2,9 @@ import React, { useContext, useEffect, useState } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { AuthenticationStateType, useLogInUser } from '../../services/api/authenticationApiService';
 import { CompanyApiService } from '../../services/api/companyApiService';
+import { gradientBackgroundGenerator } from '../../services/core/gradientBackgroundGenerator';
 import { useNavigation } from '../../services/core/navigatior';
 import { useShowErrorDialog } from '../../services/core/notifications';
-import { Environment } from '../../static/Environemnt';
 import { useIsScreenWiderThan } from '../../static/frontendHelpers';
 import { useQueryVal } from '../../static/locationHelpers';
 import { Logger } from '../../static/Logger';
@@ -13,6 +13,7 @@ import { EpistoDiv } from '../controls/EpistoDiv';
 import { EpistoEntry } from '../controls/EpistoEntry';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
+import { EpistoGrid } from '../controls/EpistoGrid';
 import { PageRootContainer } from '../PageRootContainer';
 import { AuthenticationStateContext, RefetchUserAsyncContext } from '../system/AuthenticationFrame';
 import { useAuthorizationContext } from '../system/AuthorizationContext';
@@ -46,7 +47,7 @@ const LoginScreen = () => {
     const { loginUserAsync, loginUserState } = useLogInUser();
     const { companyDetails } = CompanyApiService.useCompanyDetailsByDomain(window.location.origin);
 
-    console.log(companyDetails);
+    const gradients = gradientBackgroundGenerator(companyDetails?.backdropColor!);
 
     // func
     const handleLoginUserAsync = async () => {
@@ -142,15 +143,12 @@ const LoginScreen = () => {
         };
     }, []);
 
-    return <PageRootContainer>
+    return <PageRootContainer noBackground>
 
         <EpistoFlex2
             justify={'center'}
-            background="gradientBlueBackground"
-            py="60px"
-            overflowY={'scroll'}
-            height="100%"
-            width="100%">
+            height="100vh"
+            width="100vw">
 
             {/* pw reset dialog */}
             <LoginPasswordResetDialog
@@ -158,31 +156,54 @@ const LoginScreen = () => {
 
             {/* content pane */}
             <LoadingFrame
-                className="roundBorders mildShadow"
                 loadingState={loginUserState}
-                background="var(--transparentWhite70)"
                 zIndex="6"
-                mx="100px"
-                p="50px 150px"
+                flex='1'
                 overflow="hidden"
                 position={'relative'}>
 
                 <EpistoFlex2
-                    wrap={'wrap'}
+                    flex='1'
+                    direction='column'
+                    align='center'
+                    position='relative'
+                    justify='center'>
+
+                    {/* Company background */}
+                    <img
+                        src={companyDetails?.coverUrl!}
+                        style={{
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'cover',
+                            position: 'absolute',
+                            top: '0',
+                            zIndex: -1
+                        }}
+                        alt="" />
+                </EpistoFlex2>
+
+                <EpistoFlex2
+                    flex='1'
                     className="whall"
-                    maxW="700px">
+                    justify='center'
+                    align='center'>
 
                     <EpistoFlex2
+                        className='roundBorders mildShadow'
+                        id="form"
                         direction="column"
-                        align="center"
+                        align='center'
                         justify="center"
-                        //bgColor="green"
-                        zIndex="7"
-                        flex="1">
+                        p='130px 100px'
+                        maxH='calc(100% - 100px)'
+                        background="var(--transparentWhite70)"
+                        zIndex="7">
+
 
                         {/* epi logo */}
                         <img
-                            src={Environment.getAssetUrl('/images/logo.png')}
+                            src={companyDetails?.logoUrl!}
                             style={{
                                 width: '250px',
                                 maxHeight: '100px',
@@ -191,27 +212,6 @@ const LoginScreen = () => {
                                 cursor: 'pointer',
                             }}
                             alt="" />
-
-                        {/* 3d redeem image */}
-                        <img
-                            src={Environment.getAssetUrl('/images/redeem3D.png')}
-                            style={{
-                                width: '100%',
-                                maxHeight: '350px',
-                                objectFit: 'contain',
-                                marginLeft: '15px',
-                                cursor: 'pointer',
-                            }}
-                            alt="" />
-
-                    </EpistoFlex2>
-
-                    <EpistoFlex2
-                        id="form"
-                        direction="column"
-                        justify="center"
-                        zIndex="7"
-                        flex="1">
 
 
                         <EpistoFlex2
@@ -277,7 +277,7 @@ const LoginScreen = () => {
                                 marginTop: 15,
                                 marginBottom: 15,
                                 width: '100%',
-                                backgroundColor: 'var(--deepBlue)'
+                                backgroundColor: companyDetails?.primaryColor!
                             }}
                             onClick={handleLoginUserAsync}>
 
@@ -297,17 +297,18 @@ const LoginScreen = () => {
                                 onClick={() => navigate2(applicationRoutes.registerViaActivationCodeRoute)}
                                 fontSize="fontSmall"
                                 style={{
-                                    color: '--deepBlue',
+                                    color: companyDetails?.secondaryColor!,
+                                    fontWeight: 600,
                                     textAlign: 'right'
                                 }}>
 
-                                Aktiváld a PCWorld Ultimate kódodat az alábbi oldalon
+                                Igényeld a HR-nél
                             </EpistoFont>
                         </EpistoFlex2>
                     </EpistoFlex2>
                 </EpistoFlex2>
 
-                {/* Magic powder top-left */}
+                {/* Magic powder top-left 
                 <img
                     style={{
                         position: 'absolute',
@@ -321,7 +322,7 @@ const LoginScreen = () => {
                     src={Environment.getAssetUrl('/images/bg-art-2.png')}
                     alt="" />
 
-                {/* Magic powder bottom-left */}
+                {/* Magic powder bottom-left 
                 <img
                     style={{
                         position: 'absolute',
@@ -333,7 +334,7 @@ const LoginScreen = () => {
                     src={Environment.getAssetUrl('/images/bg-art-5.png')}
                     alt="" />
 
-                {/* Magic powder top-left */}
+                {/* Magic powder top-left 
                 <img
                     style={{
                         position: 'absolute',
@@ -343,9 +344,35 @@ const LoginScreen = () => {
                         zIndex: 0,
                     }}
                     src={Environment.getAssetUrl('/images/bg-art-6.png')}
-                    alt="" />
+                alt="" />*/}
             </LoadingFrame>
         </EpistoFlex2>
+
+        <EpistoGrid
+            bgColor={'white'}
+            position="fixed"
+            top={'0'}
+            left={'0'}
+            w="100vw"
+            h="100vh"
+            zIndex="-1"
+            filter="blur(50px)"
+            minColumnWidth={'33%'}
+            gap='0px'
+            gridTemplateColumns="repeat(3, 1fr)"
+            auto={'fill'}>
+
+            {gradients
+                .map((gradient, index) => {
+                    return <EpistoFlex2
+                        key={index}
+                        padding="20px"
+                        filter="blur(8px)"
+                        background={gradient}>
+
+                    </EpistoFlex2>;
+                })}
+        </EpistoGrid>
     </PageRootContainer>;
 };
 

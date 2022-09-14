@@ -44,7 +44,9 @@ export const EpistoColorPicker = ({
 
             <SketchPicker
                 color={color ?? undefined}
-                onChange={x => setColor(x.hex)} />
+                onChange={x => {
+                    setColor(`rgba(${x.rgb.r},${x.rgb.g},${x.rgb.b},${x.rgb.a})`);
+                }} />
         </EpistoPopper>
     </>;
 };

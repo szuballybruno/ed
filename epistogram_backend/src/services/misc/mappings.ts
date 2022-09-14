@@ -52,6 +52,7 @@ import { UserCourseStatsView, UserCourseStatsViewWithTempomatData } from '../../
 import { UserDailyActivityChartView } from '../../models/views/UserDailyActivityChartView';
 import { UserExamStatsView } from '../../models/views/UserExamStatsView';
 import { UserLearningPageStatsView } from '../../models/views/UserLearningPageStatsView';
+import { UserOverviewView } from '../../models/views/UserOverviewView';
 import { UserSpentTimeRatioView } from '../../models/views/UserSpentTimeRatioView';
 import { UserVideoStatsView } from '../../models/views/UserVideoStatsView';
 import { VideoPlayerDataView } from '../../models/views/VideoPlayerDataView';
@@ -122,6 +123,7 @@ import { UserCourseStatsOverviewDTO } from '../../shared/dtos/UserCourseStatsOve
 import { UserDTO } from '../../shared/dtos/UserDTO';
 import { UserExamStatsDTO } from '../../shared/dtos/UserExamStatsDTO';
 import { UserLearningPageStatsDTO } from '../../shared/dtos/UserLearningPageStatsDTO';
+import { UserOverviewDTO } from '../../shared/dtos/UserOverviewDTO';
 import { UserVideoStatsDTO } from '../../shared/dtos/UserVideoStatsDTO';
 import { VideoPlayerDataDTO } from '../../shared/dtos/VideoDTO';
 import { instantiate } from '../../shared/logic/sharedLogic';
@@ -136,6 +138,18 @@ import { Mutable } from './XMapperService/XMapperTypes';
 export const epistoMappingsBuilder = new XMappingsBuilder<[UrlService]>();
 
 const marray = [
+
+    epistoMappingsBuilder
+        .addArrayMapping(UserOverviewDTO, () => (
+            userOverviewViews: (UserOverviewView & {
+                productivityPercentage: number,
+                invertedLagBehind: number | null
+            })[]) => {
+
+            return userOverviewViews.map(x => instantiate<UserOverviewDTO>({
+                ...x as UserOverviewDTO
+            }));
+        }),
 
     epistoMappingsBuilder
         .addMapping(UserCourseStatsOverviewDTO, () => (

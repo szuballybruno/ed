@@ -136,6 +136,7 @@ export const apiRoutes = {
         getHomePageStats: '/userstats/get-home-page-stats',
         getUserLearningPageStats: '/userstats/get-user-learning-page-stats',
         getImproveYourselfPageStats: '/userstats/get-improve-yourself-page-stats',
+        getUserOverviewStats: '/userstats/get-user-overview-stats',
         getUserCourseStats: '/userstats/get-user-course-stats',
         getUserVideoStats: '/userstats/get-user-video-stats',
         getUserExamStats: '/userstats/get-user-exam-stats',
