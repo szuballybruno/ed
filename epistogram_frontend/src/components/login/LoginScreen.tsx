@@ -195,13 +195,13 @@ const LoginScreen = () => {
                         direction="column"
                         align='center'
                         justify="center"
-                        p='130px 100px'
+                        p='80px 100px'
                         maxH='calc(100% - 100px)'
                         background="var(--transparentWhite70)"
                         zIndex="7">
 
 
-                        {/* epi logo */}
+                        {/* company logo */}
                         <img
                             src={companyDetails?.logoUrl!}
                             style={{
@@ -209,6 +209,7 @@ const LoginScreen = () => {
                                 maxHeight: '100px',
                                 objectFit: 'contain',
                                 marginLeft: '15px',
+                                marginBottom: '20px',
                                 cursor: 'pointer',
                             }}
                             alt="" />
