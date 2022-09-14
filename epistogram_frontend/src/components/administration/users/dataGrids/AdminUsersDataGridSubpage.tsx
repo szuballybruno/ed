@@ -11,10 +11,10 @@ import { isCurrentAppRoute, usePaging } from '../../../../static/frontendHelpers
 import { translatableTexts } from '../../../../static/translatableTexts';
 import { EpistoButton } from '../../../controls/EpistoButton';
 import { EpistoDataGrid, EpistoDataGridColumnBuilder } from '../../../controls/EpistoDataGrid';
-import { EpistoImage } from '../../../controls/EpistoImage';
 import { EpistoSearch } from '../../../controls/EpistoSearch';
 import { SegmentedButton } from '../../../controls/SegmentedButton';
 import { segmentedButtonStyles } from '../../../controls/segmentedButtonStyles';
+import { ProfileImage } from '../../../ProfileImage';
 import { AdminBreadcrumbsHeader } from '../../AdminBreadcrumbsHeader';
 import { AdminSubpageHeader } from '../../AdminSubpageHeader';
 
@@ -119,10 +119,12 @@ export const AdminUserDataGridSubpage = () => {
             .add({
                 field: 'avatar',
                 headerName: 'Avatar',
-                renderCell: ({ value }) => <EpistoImage
-                    className="square70"
+                renderCell: ({ value }) => <ProfileImage
+                    className="square50"
                     objectFit="contain"
-                    src={value.avatarUrl} />
+                    url={value.avatarUrl}
+                    firstName={value.firstName}
+                    lastName={value.lastName} />
             })
             .add({
                 field: 'name',

@@ -21,7 +21,7 @@ export const getCompaniesSeedData = (storageFile: StorageFileSeedDataType) => ge
         legalName: 'EpistoGram Kft.',
         primaryColor: 'rgb(151, 201, 204)',
         secondaryColor: 'rgb(77,105,127)',
-        backdropColor: 'rgb(151, 201, 204)',
+        backdropColor: 'rgb(151, 201, 204, 0.1)',
         coverFileId: storageFile.storage_file_company_cover_epistogram.id,
         logoFileId: storageFile.storage_file_company_logo_epistogram.id,
         isCustomDomainCompany: true,
