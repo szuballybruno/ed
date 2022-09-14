@@ -17,7 +17,7 @@ export class PermissionAssignmentBridge {
     // TO ONE
 
     // permission
-    @Column()
+    @Column({ type: 'int' })
     @XViewColumn()
     permissionId: Id<'Permission'>;
 

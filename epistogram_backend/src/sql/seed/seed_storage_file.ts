@@ -1426,6 +1426,12 @@ export const getStorageFileSeedData = () => getSeedList<StorageFile>()({
     },
     storage_file_course_cover_word: {
         filePath: 'course_cover_container/course_cover_word.jpg'
+    },
+    storage_file_company_cover_epistogram: {
+        filePath: '/loginScreen/loginbackground.png'
+    },
+    storage_file_company_logo_epistogram: {
+        filePath: '/images/logo.png'
     }
 });
 
