@@ -81,11 +81,10 @@ const StatisticsCard = (props: StatisticsCardProps & EpistoFlex2Props) => {
 
     const fontSize = (() => {
 
-        const isLongValue = typeof value === 'string' && value.length < 8;
+        // const isLongValue = typeof value === 'string' && value.length < 8;
+        const length = Math.max(1, ((value ?? '') + '').length);
 
-        return isLongValue
-            ? '2rem'
-            : '3.5rem';
+        return `${2.0 / Math.max(1, length * 0.15)}rem`;
     })();
 
     return <FlexFloat
