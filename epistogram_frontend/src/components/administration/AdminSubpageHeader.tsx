@@ -8,26 +8,26 @@ import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 import { EpistoTabs } from '../controls/EpistoTabs';
 
-export const AdminSubpageHeader = (props: {
+export const AdminSubpageHeader = ({
+    children,
+    subRouteLabel,
+    headerButtons,
+    navigationQueryParams,
+    tabMenuItems,
+    headerContent,
+    onSave,
+    isInverseBackground,
+    ...css
+}: {
     tabMenuItems?: ApplicationRoute<any>[],
     children?: ReactNode,
     onSave?: () => void,
     headerButtons?: ButtonType[],
+    headerContent?: ReactNode,
     subRouteLabel?: string,
     navigationQueryParams?: any,
-    isInverseBackground?: boolean
+    isInverseBackground?: boolean,
 } & EpistoFlex2Props) => {
-
-    const {
-        children,
-        subRouteLabel,
-        headerButtons,
-        navigationQueryParams,
-        tabMenuItems,
-        onSave,
-        isInverseBackground,
-        ...css
-    } = props;
 
     const tabMenuItemsList = (tabMenuItems ?? []);
     const isMatchingCurrentRoute = useIsMatchingCurrentRoute();
@@ -100,53 +100,6 @@ export const AdminSubpageHeader = (props: {
                             }))}
                         selectedTabKey={currentMatchingAbsUrl}
                         onChange={handleNavigateToTab} />}
-
-                    {/* // className="roundBorders"
-                            // TabIndicatorProps={{
-                            //     style: {
-                            //         display: 'none',
-                            //     },
-                            // }}
-                            // sx={{
-                            //     '&.MuiTabs-root': {
-                            //         display: 'flex',
-                            //         alignItems: 'center',
-                            //         justifyContent: 'center',
-                            //         height: 45,
-                            //         minHeight: 0
-                            //     }
-                            // }} */}
-                    {/* {tabMenuItems
-                            .map((tabRoute, index) => {
-
-                                return <EpistoTab
-                                    key={index}
-                                    // key={index}
-                                    // sx={{
-                                    //     '&.MuiTab-root': {
-                                    //         color: '#444',
-                                    //         cursor: 'pointer',
-                                    //         backgroundColor: 'transparent',
-                                    //         padding: '6px 16px',
-                                    //         border: 'none',
-                                    //         borderRadius: '5px',
-                                    //         display: 'flex',
-                                    //         justifyContent: 'center',
-                                    //         height: '41px',
-                                    //         minHeight: '0px'
-                                    //     },
-                                    //     '&.MuiTouchRipple-root': {
-                                    //         lineHeight: '0px'
-                                    //     },
-                                    //     '&.Mui-selected': {
-                                    //         color: 'white',
-                                    //         fontWeight: 'bold',
-                                    //         background: 'var(--funkyHighlight)'
-                                    //     }
-                                    // }}
-                                    label={tabRoute.title}
-                                    value={tabRoute.route.getAbsolutePath()} />;
-                            })} */}
                 </EpistoFlex2>
 
                 {/* header buttons */}
@@ -168,6 +121,9 @@ export const AdminSubpageHeader = (props: {
                             {button.icon}
                             {button.title}
                         </EpistoButton>)}
+
+                    {/* header content */}
+                    {headerContent}
 
                     {/* save button */}
                     {onSave && <EpistoButton

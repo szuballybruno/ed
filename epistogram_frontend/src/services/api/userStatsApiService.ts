@@ -54,15 +54,16 @@ export const useImproveYourselfPageStats = () => {
     };
 };
 
-export const useUserCourseStats = (userId: Id<'User'>) => {
+export const useUserAssignedCourses = (userId: Id<'User'>, loadAvailable: boolean) => {
 
-    const queryRes = QueryService.useXQuery<UserCourseStatsDTO[]>(apiRoutes.userStats.getUserCourseStats, { userId });
+    const queryRes = QueryService
+        .useXQueryArrayParametrized(UserCourseStatsDTO, apiRoutes.userStats.getAdminUserCourses, { userId, loadAvailable });
 
     return {
-        userCourseStats: queryRes.data,
-        userCourseStatsStatus: queryRes.state,
-        userCourseStatsError: queryRes.error,
-        refetchUserCourseStats: queryRes.refetch
+        userAssignedCourses: queryRes.data,
+        userAssignedCoursesState: queryRes.state,
+        userAssignedCoursesError: queryRes.error,
+        refetchUserAssignedCourses: queryRes.refetch
     };
 };
 

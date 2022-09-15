@@ -1,7 +1,7 @@
 import { Permission } from '../../models/entity/authorization/Permission';
 import { Role } from '../../models/entity/authorization/Role';
-import { Company } from '../../models/entity/misc/Company';
 import { CourseData } from '../../models/entity/course/CourseData';
+import { Company } from '../../models/entity/misc/Company';
 import { CourseCategory } from '../../models/entity/misc/CourseCategory';
 import { DailyTip } from '../../models/entity/misc/DailyTip';
 import { DiscountCode } from '../../models/entity/misc/DiscountCode';
@@ -48,7 +48,7 @@ import { ShopItemStatefulView } from '../../models/views/ShopItemStatefulView';
 import { ShopItemView } from '../../models/views/ShopItemView';
 import { SignupQuestionView } from '../../models/views/SignupQuestionView';
 import { UserActiveCourseView } from '../../models/views/UserActiveCourseView';
-import { UserCourseStatsView, UserCourseStatsViewWithTempomatData } from '../../models/views/UserCourseStatsView';
+import { AdminUserCoursesView } from '../../models/views/UserCourseStatsView';
 import { UserDailyActivityChartView } from '../../models/views/UserDailyActivityChartView';
 import { UserExamStatsView } from '../../models/views/UserExamStatsView';
 import { UserLearningPageStatsView } from '../../models/views/UserLearningPageStatsView';
@@ -131,6 +131,7 @@ import { UserActivityDistributionChartData } from '../../shared/types/epistoChar
 import { TeacherBadgeNameType } from '../../shared/types/sharedTypes';
 import { Id } from '../../shared/types/versionId';
 import { toFullName } from '../../utilities/helpers';
+import { CalculatedTempomatValueType } from '../TempomatService';
 import { UrlService } from '../UrlService';
 import { XMappingsBuilder } from './XMapperService/XMapperService';
 import { Mutable } from './XMapperService/XMapperTypes';
@@ -153,7 +154,7 @@ const marray = [
 
     epistoMappingsBuilder
         .addMapping(UserCourseStatsOverviewDTO, () => (
-            view: UserCourseStatsView,
+            view: AdminUserCoursesView,
             userSpentTimeRatio: UserSpentTimeRatioView,
             progressChartData: UserCourseProgressChartDTO
         ) => instantiate<UserCourseStatsOverviewDTO>({
@@ -227,32 +228,39 @@ const marray = [
         }),
 
     epistoMappingsBuilder
-        .addArrayMapping(UserCourseStatsDTO, ([assetUrlService]) => (stats: UserCourseStatsViewWithTempomatData[]) => {
-            return stats.map(x => {
-                return {
-                    userId: x.userId,
-                    courseId: x.courseId,
-                    courseName: x.title,
-                    thumbnailImageUrl: assetUrlService.getAssetUrl(x.coverFilePath),
-                    startDate: x.startDate,
-                    differenceFromAveragePerformancePercentage: x.differenceFromAveragePerformancePercentage,
-                    courseProgressPercentage: x.courseProgressPercentage,
-                    performancePercentage: x.performancePercentage,
-                    completedVideoCount: x.completedVideoCount,
-                    completedExamCount: x.completedExamCount,
-                    totalSpentSeconds: x.totalSpentSeconds,
-                    averagePerformanceOnCourse: x.averagePerformanceOnCourse,
-                    answeredVideoQuestionCount: x.answeredVideoQuestionCount,
-                    answeredPractiseQuestionCount: x.answeredPractiseQuestionCount,
-                    isFinalExamCompleted: x.isFinalExamCompleted,
-                    recommendedItemsPerWeek: x.recommendedItemsPerWeek,
-                    lagBehindPercentage: x.lagBehindPercentage,
-                    previsionedCompletionDate: x.previsionedCompletionDate,
-                    requiredCompletionDate: x.requiredCompletionDate,
-                    tempomatMode: x.tempomatMode,
-                };
-            });
-        }),
+        .addArrayMapping(UserCourseStatsDTO, ([assetUrlService]) => (
+            adminUserCourseViews: AdminUserCoursesView[],
+            tempomatValues: Partial<CalculatedTempomatValueType>[]) => adminUserCourseViews
+                .map((view, index) => {
+
+                    const { recommendedItemsPerWeek, lagBehindPercentage, previsionedCompletionDate } = tempomatValues
+                        .byIndex(index);
+
+                    return instantiate<UserCourseStatsDTO>({
+                        userId: view.userId,
+                        courseId: view.courseId,
+                        courseName: view.title,
+                        isAssigned: view.isAssigned,
+                        thumbnailImageUrl: assetUrlService.getAssetUrl(view.coverFilePath),
+                        startDate: view.startDate,
+                        differenceFromAveragePerformancePercentage: view.differenceFromAveragePerformancePercentage,
+                        courseProgressPercentage: view.courseProgressPercentage,
+                        performancePercentage: view.performancePercentage,
+                        completedVideoCount: view.completedVideoCount,
+                        completedExamCount: view.completedExamCount,
+                        totalSpentSeconds: view.totalSpentSeconds,
+                        averagePerformanceOnCourse: view.avgPerformance,
+                        answeredVideoQuestionCount: view.answeredVideoQuestionCount,
+                        answeredPractiseQuestionCount: view.answeredPractiseQuestionCount,
+                        isFinalExamCompleted: view.isFinalExamCompleted,
+                        requiredCompletionDate: view.requiredCompletionDate,
+                        tempomatMode: view.tempomatMode,
+                        recommendedItemsPerWeek: recommendedItemsPerWeek ?? null,
+                        lagBehindPercentage: lagBehindPercentage ?? null,
+                        previsionedCompletionDate: previsionedCompletionDate ?? null,
+                    });
+                })
+        ),
 
     epistoMappingsBuilder
         .addArrayMapping(RoleAdminListDTO, () => (roles: RoleListView[]) => {

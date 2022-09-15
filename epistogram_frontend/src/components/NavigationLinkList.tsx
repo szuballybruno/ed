@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import { ApplicationRoute } from '../models/types';
-import { isCurrentRoute } from '../static/frontendHelpers';
+import { useIsMatchingCurrentRoute } from '../static/frontendHelpers';
 import { EpistoFlex2 } from './controls/EpistoFlex';
 import { EpistoFont } from './controls/EpistoFont';
 
@@ -10,19 +10,25 @@ export const NavigationLinkList = (props: {
 }) => {
 
     const { routes } = props;
+    const isMatchingCurrent = useIsMatchingCurrentRoute();
 
     return <EpistoFlex2 direction="column">
         {routes
             .map((route, index) => {
 
-                const isCurrent = isCurrentRoute(route.route.getAbsolutePath());
+                const { isMatchingRoute: isCurrent } = isMatchingCurrent(route);
 
                 return <NavLink
                     to={route.route.getAbsolutePath()}
                     key={index}>
+
                     <EpistoFlex2
                         p="5px 15px"
-                        align="center">
+                        bg={isCurrent ? 'white' : undefined}
+                        align="center"
+                        borderLeft={isCurrent ? 'solid 4px var(--mildDeepBlue)' : undefined}
+                        className={`${isCurrent ? 'mildShadow' : ''}`}
+                        borderRadius="0px 5px 5px 0px">
 
                         {/* icon */}
                         {route.icon}
@@ -33,8 +39,8 @@ export const NavigationLinkList = (props: {
                             isUppercase
                             style={{
                                 marginLeft: '10px',
-                                color: 'var(--mildDeepBlue)',
-                                fontWeight: isCurrent ? 'bold' : 500
+                                color: isCurrent ? 'white' : 'var(--mildDeepBlue)',
+                                fontWeight: isCurrent ? 'bold' : 500,
                             }}>
                             {route.title}
                         </EpistoFont>}

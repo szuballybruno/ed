@@ -9,12 +9,12 @@ import { FlexListTitleSubtitle } from '../../universal/FlexListTitleSubtitle';
 
 export const AdminUserList = ({
     currentUserId,
-    navigationFunction,
+    onUserSelected,
     users
 }: {
     currentUserId: Id<'User'> | null,
     users: AdminPageUserDTO[],
-    navigationFunction: (userId: Id<'User'>) => void
+    onUserSelected: (userId: Id<'User'>) => void
 }) => {
 
     return <EpistoFlex2
@@ -45,7 +45,7 @@ export const AdminUserList = ({
                 .map((user, index) => {
 
                     return <FlexListItem
-                        onClick={() => navigationFunction(user.id)}
+                        onClick={() => onUserSelected(user.id)}
                         key={index}
                         thumbnailContent={<ProfileImage
                             mx="5px"

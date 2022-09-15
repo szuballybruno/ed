@@ -2,6 +2,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { EMPTY_ARRAY } from '../helpers/emptyArray';
 import { LoadingStateType } from '../models/types';
 import { httpGetAsync } from '../services/core/httpClient';
+import { GetParametrizedRouteType, ParametrizedRouteType } from '../shared/types/apiRoutes';
 import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 import { eventBus } from './EventBus';
 
@@ -221,9 +222,19 @@ const useXQuery = <TData extends Object>(url: string, query?: any, isEnabled?: b
     return { ...queryState, refetch };
 };
 
-const useXQueryArray = <T>(url: string, queryParams?: any, isEnabled?: boolean): QueryResult<T[]> => {
+const useXQueryParametrized = <
+    TData extends Object,
+    TRoute extends ParametrizedRouteType<any>>(
+        route: TRoute,
+        query?: GetParametrizedRouteType<TRoute>['query'],
+        isEnabled?: boolean): QueryResult<TData | null> => {
 
-    const { data, ...qr } = useXQuery<T[]>(url, queryParams, isEnabled);
+    return useXQuery(route as string, query, isEnabled);
+};
+
+const useXQueryArray = <TData>(url: string, queryParams?: any, isEnabled?: boolean): QueryResult<TData[]> => {
+
+    const { data, ...qr } = useXQuery<TData[]>(url, queryParams, isEnabled);
 
     return {
         ...qr,
@@ -231,7 +242,20 @@ const useXQueryArray = <T>(url: string, queryParams?: any, isEnabled?: boolean):
     };
 };
 
+const useXQueryArrayParametrized = <
+    TData extends Object,
+    TRoute extends ParametrizedRouteType<any>>(
+        data: { new(): TData },
+        route: TRoute,
+        query?: GetParametrizedRouteType<TRoute>['query'],
+        isEnabled?: boolean): QueryResult<TData[]> => {
+
+    return useXQueryArray(route as string, query, isEnabled);
+};
+
 export const QueryService = {
     useXQuery,
-    useXQueryArray
+    useXQueryParametrized,
+    useXQueryArray,
+    useXQueryArrayParametrized
 };

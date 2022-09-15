@@ -40,7 +40,7 @@ const AdminAddUserSubpage = (props: {
         <AdminUserList
             currentUserId={null}
             users={users}
-            navigationFunction={(userId) => {
+            onUserSelected={(userId) => {
                 navigate2(applicationRoutes.administrationRoute.usersRoute.editRoute, { userId: userId });
             }} />
 

@@ -119,14 +119,17 @@ export const fakeUtcShiftDate = (date: Date) => {
 
 /**
  * Gets the difference between two dates in days
- * @param date1 First date
- * @param date2 Second date
+ * @param dateA First date
+ * @param dateB Second date
  */
-export const dateDiffInDays = (date1: Date, date2: Date) => {
+export const dateDiffInDays = (dateA: Date, dateB: Date) => {
+
+    if (!dateA || !dateB)
+        throw new Error('Date A or Date B is null or undefined!');
 
     // Discard the time and time-zone information.
-    const utc1 = Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate());
-    const utc2 = Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate());
+    const utc1 = Date.UTC(dateA.getFullYear(), dateA.getMonth(), dateA.getDate());
+    const utc2 = Date.UTC(dateB.getFullYear(), dateB.getMonth(), dateB.getDate());
 
     const timeDiff = Math.floor(utc2 - utc1);
     const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));

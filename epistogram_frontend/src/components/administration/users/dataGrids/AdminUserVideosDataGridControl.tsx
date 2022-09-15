@@ -10,8 +10,8 @@ import { EpistoDataGrid, GridColumnType } from '../../../controls/EpistoDataGrid
 import { EpistoFlex2 } from '../../../controls/EpistoFlex';
 import { EpistoFont } from '../../../controls/EpistoFont';
 import { LoadingFrame } from '../../../system/LoadingFrame';
+import { EmptyCell } from '../../../universal/EmptyCell';
 import { ChipSmall } from '../../courses/ChipSmall';
-import { EmptyCell } from './AdminUserCoursesDataGridControl';
 
 export const AdminUserVideosDataGridControl = (props: {
     courseId: Id<'Course'> | null

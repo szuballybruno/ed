@@ -121,7 +121,7 @@ export const AdminEditUserSubpage = (props: {
         <AdminUserList
             currentUserId={editedUserId}
             users={users}
-            navigationFunction={(userId) => {
+            onUserSelected={(userId) => {
                 navigate2(applicationRoutes.administrationRoute.usersRoute.editRoute, { userId: userId });
             }} />
 

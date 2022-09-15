@@ -7,6 +7,7 @@ export class UserCourseStatsDTO {
     thumbnailImageUrl: string;
     courseName: string;
     startDate: Date;
+    isAssigned: boolean;
     differenceFromAveragePerformancePercentage: number;
     courseProgressPercentage: number;
     performancePercentage: number;
@@ -17,9 +18,9 @@ export class UserCourseStatsDTO {
     answeredVideoQuestionCount: number;
     answeredPractiseQuestionCount: number;
     isFinalExamCompleted: boolean;
-    recommendedItemsPerWeek: number;
-    lagBehindPercentage: number;
-    previsionedCompletionDate: Date;
     requiredCompletionDate: Date;
     tempomatMode: TempomatModeType;
+    recommendedItemsPerWeek: number | null;
+    lagBehindPercentage: number | null;
+    previsionedCompletionDate: Date | null;
 }

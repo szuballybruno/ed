@@ -4,7 +4,7 @@ import { UserApiService } from '../../../services/api/userApiService';
 import { EpistoRoutes } from '../../universal/EpistoRoutes';
 import AdminAddUserSubpage from './AdminAddUserSubpage';
 import AdminEditUserSubpage from './AdminEditUserSubpage';
-import { AdminUserCourseContentSubpage } from './AdminUserCourseContentSubpage';
+import { AdminUserCoursesSubpage } from './adminUserCoursesSubpage/AdminUserCoursesSubpage';
 import { AdminUserStatisticsSubpage } from './AdminUserLearningOverviewSubpage';
 import { AdminUserTeacherInfoSubpage } from './AdminUserTeacherInfoSubpage';
 import { AdminUserDataGridSubpage } from './dataGrids/AdminUsersDataGridSubpage';
@@ -61,7 +61,7 @@ export const UserAdminSubpage = () => {
                 },
                 {
                     route: userAdminRoute.courseContentRoute,
-                    element: <AdminUserCourseContentSubpage
+                    element: <AdminUserCoursesSubpage
                         users={users}
                         refetchUsersFunction={refetchUsers} />
                 }

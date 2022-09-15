@@ -7,7 +7,7 @@ import { Id } from '../../shared/types/versionId';
     synchronize: false,
     expression: ''
 })
-export class UserCourseStatsView {
+export class AdminUserCoursesView {
 
     @ViewColumn()
     @XViewColumn()
@@ -16,6 +16,9 @@ export class UserCourseStatsView {
     @ViewColumn()
     @XViewColumn()
     courseId: Id<'Course'>;
+
+    @XViewColumn()
+    isAssigned: boolean;
 
     @ViewColumn()
     @XViewColumn()
@@ -59,7 +62,7 @@ export class UserCourseStatsView {
 
     @ViewColumn()
     @XViewColumn()
-    averagePerformanceOnCourse: number;
+    avgPerformance: number;
 
     @ViewColumn()
     @XViewColumn()
@@ -98,7 +101,7 @@ export class UserCourseStatsView {
     tempomatAdjustmentValue: number;
 }
 
-export class UserCourseStatsViewWithTempomatData extends UserCourseStatsView {
+export class UserCourseStatsViewWithTempomatData extends AdminUserCoursesView {
     previsionedCompletionDate: Date;
     lagBehindPercentage: number;
     recommendedItemsPerWeek: number;

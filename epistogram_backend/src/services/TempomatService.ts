@@ -223,17 +223,15 @@ export class TempomatService {
     /**
      * Calc tempomat values for one users one course
      */
-    calculateTempomatValues(opts: CalculateTempomatValuesArgs): CalculatedTempomatValueType {
-
-        const {
-            originalPrevisionedCompletionDate,
-            totalItemCount,
-            totalCompletedItemCount,
-            startDate,
-            tempomatMode,
-            tempomatAdjustmentValue,
-            requiredCompletionDate
-        } = opts;
+    calculateTempomatValues({
+        originalPrevisionedCompletionDate,
+        totalItemCount,
+        totalCompletedItemCount,
+        startDate,
+        tempomatMode,
+        tempomatAdjustmentValue,
+        requiredCompletionDate
+    }: CalculateTempomatValuesArgs): CalculatedTempomatValueType {
 
         const previsionedCompletionDate = this
             ._calculatePrevisionedDate(
