@@ -4,6 +4,7 @@ import { Id } from './versionId';
 
 export type RouteParameterType<TBody = any, TQuery = any> = { body?: TBody, query?: TQuery };
 export type ParametrizedRouteType<T extends RouteParameterType> = string & T;
+export type GetParametrizedRouteType<T> = T extends ParametrizedRouteType<infer A> ? A : never;
 
 export const apiRoutes = {
 
@@ -137,7 +138,7 @@ export const apiRoutes = {
         getUserLearningPageStats: '/userstats/get-user-learning-page-stats',
         getImproveYourselfPageStats: '/userstats/get-improve-yourself-page-stats',
         getUserOverviewStats: '/userstats/get-user-overview-stats',
-        getUserCourseStats: '/userstats/get-user-course-stats',
+        getAdminUserCourses: '/userstats/get-user-courses' as ParametrizedRouteType<{ query: { userId: Id<'User'>, loadAvailable: boolean } }>,
         getUserVideoStats: '/userstats/get-user-video-stats',
         getUserExamStats: '/userstats/get-user-exam-stats',
         getUserLearningOverviewData: '/userstats/get-user-learning-overview-data',
@@ -205,7 +206,6 @@ export const apiRoutes = {
         getCourseDetails: '/course/get-course-details',
         getAdminCourseList: '/course/get-admin-course-list',
         setCourseMode: '/course/set-course-mode',
-        setRequiredCompletionDate: '/course/set-required-completion-date',
     },
 
     courseProgress: {

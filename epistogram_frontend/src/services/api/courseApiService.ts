@@ -47,16 +47,6 @@ const useSetCourseMode = () => {
     };
 };
 
-const useSetRequiredCompletionDate = () => {
-
-    const qr = usePostDataUnsafe<{ courseId: Id<'Course'>, requiredCourseCompletionDate: string }, void>(apiRoutes.course.setRequiredCompletionDate);
-
-    return {
-        setRequiredCourseCompletionDateAsync: qr.postDataAsync,
-        setRequiredCourseCompletionDateState: qr.state
-    };
-};
-
 const useCourseDetailsEditData = (courseId: Id<'Course'>) => {
 
     const qr = QueryService.useXQuery<CourseDetailsEditDataDTO>(apiRoutes.course.getCourseDetailsEditData, { courseId });
@@ -182,7 +172,6 @@ export const CourseApiService = {
     usePermissionAssignCourses,
     useAdminCourseList,
     useSetCourseMode,
-    useSetRequiredCompletionDate,
     useCourseDetailsEditData,
     useCourseContentAdminData,
     useCreateCourse,

@@ -123,7 +123,7 @@ import { UserCourseBridgeView } from '../../models/views/UserCourseBridgeView';
 import { UserCourseCompletionCurrentView } from '../../models/views/UserCourseCompletionCurrentView';
 import { UserCourseCompletionOriginalEstimationView } from '../../models/views/UserCourseCompletionOriginalEstimationView';
 import { UserCourseProgressView } from '../../models/views/UserCourseProgressView';
-import { UserCourseStatsView } from '../../models/views/UserCourseStatsView';
+import { AdminUserCoursesView } from '../../models/views/UserCourseStatsView';
 import { UserDailyActivityChartView } from '../../models/views/UserDailyActivityChartView';
 import { UserDailyCourseItemProgressView } from '../../models/views/UserDailyCourseItemProgressView';
 import { UserDailyProgressView } from '../../models/views/UserDailyProgressView';
@@ -366,7 +366,7 @@ export const createDBSchema = (): XDBMSchemaService => {
             UserEngagementView,
             UserPerformanceComparisonStatsView,
             UserLearningOverviewStatsView,
-            UserCourseStatsView,
+            AdminUserCoursesView,
             UserVideoStatsView,
             UserExamStatsView,
             UserSpentTimeRatioView,

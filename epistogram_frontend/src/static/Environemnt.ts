@@ -13,7 +13,8 @@ export type LoggingKeysType =
     'BUSY' |
     'AUTO NAV' |
     'EXAM' |
-    'EVENT BUS';
+    'EVENT BUS' |
+    'QUERY';
 
 export const Environment = (() => {
 

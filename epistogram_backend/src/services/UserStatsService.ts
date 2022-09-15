@@ -4,7 +4,7 @@ import { HomePageStatsView } from '../models/views/HomePageStatsView';
 import { ImproveYourselfPageStatsView } from '../models/views/ImproveYourselfPageStatsView';
 import { MostProductiveTimeRangeView } from '../models/views/MostProductiveTimeRangeView';
 import { TempomatCalculationDataView } from '../models/views/TempomatCalculationDataView';
-import { UserCourseStatsView, UserCourseStatsViewWithTempomatData } from '../models/views/UserCourseStatsView';
+import { AdminUserCoursesView } from '../models/views/UserCourseStatsView';
 import { UserDailyActivityChartView } from '../models/views/UserDailyActivityChartView';
 import { UserExamStatsView } from '../models/views/UserExamStatsView';
 import { UserLearningOverviewStatsView } from '../models/views/UserLearningOverviewStatsView';
@@ -32,7 +32,7 @@ import { AuthorizationService } from './AuthorizationService';
 import { CompanyService } from './CompanyService';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
-import { CalculatedTempomatValueTypeWithUserId, TempomatService } from './TempomatService';
+import { CalculatedTempomatValueTypeWithUserId, CalculatedTempomatValueType, TempomatService } from './TempomatService';
 import { UserProgressService } from './UserProgressService';
 
 interface UserFlagCalculationType extends UserPerformanceComparisonStatsView {
@@ -159,46 +159,28 @@ export class UserStatsService {
      *       started a course yet, return all the courses with empty
      *       data, instead of []
      */
-    getUserCourseStatsAsync(principalId: PrincipalId, userId: Id<'User'>) {
+    async getUserCourseStatsAsync(principalId: PrincipalId, userId: Id<'User'>, loadAvailable: boolean) {
 
-        return {
-            action: async () => {
+        const query = this._ormService
+            .query(AdminUserCoursesView, { userId })
+            .where('userId', '=', 'userId');
 
-                const stats = await this._ormService
-                    .query(UserCourseStatsView, { userId })
-                    .where('userId', '=', 'userId')
-                    .getMany();
+        const views = await (loadAvailable ? query : query.and('isAssigned', '=', 'true'))
+            .getMany();
 
-                const statsWithTempomatData = stats
-                    .map((x): UserCourseStatsViewWithTempomatData => {
+        const tempomatValues = views
+            .map((userCourseData): CalculatedTempomatValueType => {
 
-                        const tempomatValues = this
-                            ._tempomatService
-                            .calculateTempomatValues(x);
+                if (!userCourseData.isAssigned)
+                    return {} as any;
 
-                        const previsionedCompletionDate = tempomatValues?.previsionedCompletionDate ?? null;
-                        const lagBehindPercentage = tempomatValues?.lagBehindPercentage ?? null;
-                        const recommendedItemsPerWeek = tempomatValues?.recommendedItemsPerWeek ?? null;
+                return this
+                    ._tempomatService
+                    .calculateTempomatValues(userCourseData);
+            });
 
-                        // TODO nullable
-
-                        return {
-                            ...x,
-                            previsionedCompletionDate: previsionedCompletionDate!,
-                            lagBehindPercentage: lagBehindPercentage!,
-                            recommendedItemsPerWeek: recommendedItemsPerWeek!
-                        };
-                    });
-
-                return this._mapperService
-                    .mapTo(UserCourseStatsDTO, [statsWithTempomatData]);
-            },
-            auth: async () => {
-
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ACCESS_ADMIN');
-            }
-        };
+        return this._mapperService
+            .mapTo(UserCourseStatsDTO, [views, tempomatValues]);
     }
 
     /**
@@ -342,7 +324,7 @@ export class UserStatsService {
                     : principalId.getId();
 
                 const courseStats = await this._ormService
-                    .query(UserCourseStatsView, { userId: currentUserId, courseId })
+                    .query(AdminUserCoursesView, { userId: currentUserId, courseId })
                     .where('userId', '=', 'userId')
                     .and('courseId', '=', 'courseId')
                     .getSingle();

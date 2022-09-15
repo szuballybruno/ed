@@ -104,7 +104,7 @@ export const AdminUserTeacherInfoSubpage = (props: {
         <AdminUserList
             currentUserId={editedUserId}
             users={users}
-            navigationFunction={(userId) => navigate2(applicationRoutes.administrationRoute.usersRoute.teacherInfoRoute, { userId: userId })} />
+            onUserSelected={(userId) => navigate2(applicationRoutes.administrationRoute.usersRoute.teacherInfoRoute, { userId: userId })} />
 
         {/* admin header */}
         <AdminSubpageHeader

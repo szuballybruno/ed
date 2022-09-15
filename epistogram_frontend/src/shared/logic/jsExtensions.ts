@@ -15,6 +15,7 @@ declare global {
         all(func: (item: T) => boolean): boolean;
         findLastIndex(func: (item: T) => boolean): number | null;
         single(func?: (item: T) => boolean): T;
+        byIndex(index: number): T;
         first(func?: (item: T) => boolean): T;
         last(func?: (item: T) => boolean): T;
         firstOrNull(func?: (item: T) => boolean): T | null;
@@ -159,6 +160,20 @@ Array.prototype.single = function <T>(func?: (item: T) => T) {
         throw new Error('Single operation found more than one matching element!');
 
     return filtered[0];
+};
+
+
+// eslint-disable-next-line no-extend-native
+Array.prototype.byIndex = function <T>(index: number) {
+
+    if (index >= this.length || index < 0)
+        throw new Error(`Index (${index}) is out of array bounds (0 - ${this.length})!`);
+
+    const item = this[index];
+    if (item === undefined)
+        throw new Error('Item is undefined!');
+
+    return item;
 };
 
 // eslint-disable-next-line no-extend-native

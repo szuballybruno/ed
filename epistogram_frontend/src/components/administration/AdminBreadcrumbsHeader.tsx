@@ -1,19 +1,19 @@
-import {GridOn, List} from '@mui/icons-material';
-import {FormControl, FormGroup, Switch} from '@mui/material';
+import { GridOn, List } from '@mui/icons-material';
+import { FormControl, FormGroup, Switch } from '@mui/material';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
-import {ReactNode, useCallback} from 'react';
-import {NavLink, useParams} from 'react-router-dom';
-import {applicationRoutes} from '../../configuration/applicationRoutes';
-import {ApplicationRoute} from '../../models/types';
-import {CourseApiService} from '../../services/api/courseApiService';
-import {useShopItemBriefData} from '../../services/api/shopApiService';
-import {UserApiService} from '../../services/api/userApiService';
-import {getKeys} from '../../shared/logic/sharedLogic';
-import {Id} from '../../shared/types/versionId';
-import {ArrayBuilder, useIsMatchingCurrentRoute} from '../../static/frontendHelpers';
-import {EpistoDiv} from '../controls/EpistoDiv';
-import {EpistoFlex2, EpistoFlex2Props} from '../controls/EpistoFlex';
-import {EpistoFont} from '../controls/EpistoFont';
+import { ReactNode, useCallback } from 'react';
+import { NavLink, useParams } from 'react-router-dom';
+import { applicationRoutes } from '../../configuration/applicationRoutes';
+import { ApplicationRoute } from '../../models/types';
+import { CourseApiService } from '../../services/api/courseApiService';
+import { useShopItemBriefData } from '../../services/api/shopApiService';
+import { UserApiService } from '../../services/api/userApiService';
+import { getKeys } from '../../shared/logic/sharedLogic';
+import { Id } from '../../shared/types/versionId';
+import { ArrayBuilder, useIsMatchingCurrentRoute } from '../../static/frontendHelpers';
+import { EpistoDiv } from '../controls/EpistoDiv';
+import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
+import { EpistoFont } from '../controls/EpistoFont';
 
 const Content = (props: {
     isCurrent: boolean,
@@ -85,7 +85,19 @@ export type BreadcrumbDataType = {
 
 }
 
-export const AdminBreadcrumbsHeader = (props: {
+export const AdminBreadcrumbsHeader = ({
+    subRouteLabel,
+    children,
+    breadcrumbDatas: breadcrumbs,
+
+    // @deprecated TODO: BIG NONO
+    viewSwitchChecked,
+
+    // @deprecated TODO: BIG NONO
+    viewSwitchFunction,
+    headerComponent,
+    ...css
+}: {
     children?: ReactNode,
     breadcrumbDatas?: BreadcrumbDataType[],
     subRouteLabel?: string,
@@ -94,16 +106,24 @@ export const AdminBreadcrumbsHeader = (props: {
     headerComponent?: ReactNode
 } & EpistoFlex2Props) => {
 
-    const { subRouteLabel, children, breadcrumbDatas: breadcrumbs, viewSwitchChecked, viewSwitchFunction, headerComponent, ...css } = props;
-
     // params
-    const urlParams = useParams<{ userId: string, courseId: string, videoId: string, examId: string, shopItemId: string }>();
+    // TODO move this to the callsite 
+    const urlParams = useParams<{
+        userId: string,
+        courseId: string,
+        videoId: string,
+        examId: string,
+        shopItemId: string
+    }>();
+
     const userId = urlParams.userId
         ? Id.create<'User'>(parseInt(urlParams.userId))
         : null;
+
     const courseId = urlParams.courseId
         ? Id.create<'Course'>(parseInt(urlParams.courseId))
         : null;
+
     const shopItemId = urlParams.shopItemId
         ? Id.create<'ShopItem'>(parseInt(urlParams.shopItemId))
         : null;
@@ -117,7 +137,6 @@ export const AdminBreadcrumbsHeader = (props: {
     const { shopItemBriefData } = useShopItemBriefData(shopItemId);
 
     // calc
-
     const getCurrentRoute = useCallback(() => {
 
         const isApplicationRoute = (obj: any) => !!obj.route;
@@ -163,7 +182,6 @@ export const AdminBreadcrumbsHeader = (props: {
                         title={subRoute?.title ?? ''} />)
                     .getArray()}
             </Breadcrumbs>
-
 
             <EpistoFlex2 align='center'>
 

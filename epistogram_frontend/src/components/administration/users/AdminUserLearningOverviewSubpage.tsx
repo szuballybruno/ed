@@ -135,7 +135,7 @@ export const AdminUserStatisticsSubpage = (props: {
             <AdminUserList
                 currentUserId={userId}
                 users={users}
-                navigationFunction={(userId) => navigate2(usersRoute.statsRoute, { userId: userId })} />
+                onUserSelected={(userId) => navigate2(usersRoute.statsRoute, { userId: userId })} />
 
             {/* admin header */}
             <AdminSubpageHeader
