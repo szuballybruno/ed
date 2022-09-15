@@ -147,6 +147,18 @@ export const addDays = (date: Date, number: number) => {
 };
 
 /**
+ * Adjusts the base with the amount specified in percentage
+ * e.g.: 10 + 50% = 15
+ * @param base 
+ * @param percentage 
+ * @returns 
+ */
+export const adjustByPercentage = (base: number, percentage: number) => {
+
+    return base + base * percentage / 100;
+};
+
+/**
  * Calculates the difference in percentage between
  * two numbers
  * @param a
@@ -272,6 +284,34 @@ export const orderByProperty = <T extends Object, TKeyField extends keyof T>(
     };
 
     return arr.sort(sortByProperty(key, direction));
+};
+
+export const mergeArraysByKey = <TBase, TOther>(
+    arr1: TBase[],
+    arr2: TOther[],
+    key: keyof TBase & keyof TOther
+): (TBase & TOther)[] => {
+
+    const map = new Map();
+
+    arr1
+        .forEach(item => map
+            .set(item[key], item));
+
+    arr2
+        .forEach(item => map
+            .set(item[key], {
+                ...map.get(item[key]),
+                ...item
+            })
+        );
+
+    return Array.from(map.values());
+};
+
+export const getArrayAverage = (arr: number[]) => {
+
+    return arr.reduce((a, b) => a + b, 0) / arr.length;
 };
 
 export const sleepAsync = (seconds: number) => {

@@ -6,13 +6,14 @@ import { JobTitlesSeedDataType } from './seed_job_titles';
 const ADMIN_PASSWORD_HASHED = '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C';
 
 export const getUserSeedData = (companies: CompaniesSeedDataType, jobTitles: JobTitlesSeedDataType) => getSeedList<User>()({
-    
+
     /**
      * GOD (has ALL permissions and ALL roles)
      * also, owner of EpistoGram
      */
     marosiEndre: {
         deletionDate: null,
+        creationDate: new Date(Date.now()),
         phoneNumber: null,
         linkedInUrl: null,
         userDescription: null,
@@ -38,6 +39,7 @@ export const getUserSeedData = (companies: CompaniesSeedDataType, jobTitles: Job
      */
     billMurry: {
         deletionDate: null,
+        creationDate: new Date(Date.now()),
         phoneNumber: null,
         linkedInUrl: null,
         userDescription: null,
@@ -63,6 +65,7 @@ export const getUserSeedData = (companies: CompaniesSeedDataType, jobTitles: Job
      */
     tomStrand: {
         deletionDate: null,
+        creationDate: new Date(Date.now()),
         phoneNumber: null,
         linkedInUrl: null,
         userDescription: null,
@@ -88,6 +91,7 @@ export const getUserSeedData = (companies: CompaniesSeedDataType, jobTitles: Job
      */
     lizBlue: {
         deletionDate: null,
+        creationDate: new Date(Date.now()),
         phoneNumber: null,
         linkedInUrl: null,
         userDescription: null,

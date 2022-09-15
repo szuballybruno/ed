@@ -24,14 +24,22 @@ import { UserLearningOverviewDataDTO } from '../shared/dtos/UserLearningOverview
 import { UserLearningPageStatsDTO } from '../shared/dtos/UserLearningPageStatsDTO';
 import { UserOverviewDTO } from '../shared/dtos/UserOverviewDTO';
 import { UserVideoStatsDTO } from '../shared/dtos/UserVideoStatsDTO';
+import { instantiate } from '../shared/logic/sharedLogic';
 import { Id } from '../shared/types/versionId';
+import { adjustByPercentage, dateDiffInDays, getArrayAverage, mergeArraysByKey } from '../utilities/helpers';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { AuthorizationService } from './AuthorizationService';
 import { CompanyService } from './CompanyService';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
-import { TempomatService } from './TempomatService';
+import { CalculatedTempomatValueTypeWithUserId, TempomatService } from './TempomatService';
 import { UserProgressService } from './UserProgressService';
+
+interface UserFlagCalculationType extends UserPerformanceComparisonStatsView {
+    userProductivity: number
+}
+
+type UserFlagType = 'low' | 'avg' | 'high'
 
 export class UserStatsService {
 
@@ -277,7 +285,7 @@ export class UserStatsService {
                     .getSingle();
 
                 const productivityPercentage = await this
-                    .calculateProductivityAsync(userId);
+                    .calculateUserProductivityAsync(userId);
 
                 return {
                     overallPerformancePercentage: stats.overallPerformancePercentage,
@@ -361,7 +369,7 @@ export class UserStatsService {
 
     };
 
-    async getUserOverviewStatsAsync(principalId: PrincipalId) {
+    async getUserOverviewStatsAsync(principalId: PrincipalId, isToBeReviewed: boolean) {
 
         const principalCompanyId = await this._companyService
             .getPrincipalCompanyId(principalId);
@@ -392,74 +400,62 @@ export class UserStatsService {
                 };
             });
 
-        const map = new Map();
+        const userOverviewViewsWithLagBehind = mergeArraysByKey(userOverviewViews, userIdsWithLagBehindAvgs, 'userId');
 
-        userOverviewViews
-            .forEach(item => map
-                .set(item.userId, item));
-
-        userIdsWithLagBehindAvgs
-            .forEach(item => map
-                .set(item.userId, {
-                    ...map
-                        .get(item.userId), ...item
-                })
-            );
-
-        const mergedArr: (
-            UserOverviewView & {
-                lagBehindAvg: number
-            })[] = Array
-                .from(map
-                    .values());
-
-        const combined = mergedArr
+        const userOverviewWithProductivity = userOverviewViewsWithLagBehind
             .groupBy(x => x.userId)
             .map(x => {
 
-                const {
-                    userId,
-                    firstName,
-                    lastName,
-                    companyId,
-                    avatarFilePath,
-                    userEmail,
-                    averagePerformancePercentage,
-                    totalSessionLengthSeconds,
-                    completedCourseItemCount,
-                    lagBehindAvg,
-                    engagementPoints
-                } = x.first;
+                const first = x.first;
 
                 const productivityPercentage = this
-                    .calculateProductivity(averagePerformancePercentage, lagBehindAvg);
+                    .calculateProductivity(first.averagePerformancePercentage, first.lagBehindAvg);
 
                 return {
-                    userId,
-                    firstName,
-                    lastName,
-                    companyId,
-                    avatarFilePath,
-                    userEmail,
-                    averagePerformancePercentage,
-                    totalSessionLengthSeconds,
-                    completedCourseItemCount,
-                    engagementPoints,
+                    ...first,
                     productivityPercentage,
-                    invertedLagBehind: lagBehindAvg
-                        ? 100 - lagBehindAvg
+                    invertedLagBehind: first.lagBehindAvg
+                        ? 100 - first.lagBehindAvg
                         : null
                 };
             });
 
+        const allFlaggedUsers = await this
+            ._flagUsersAsync(principalCompanyId);
+
+        if (!allFlaggedUsers)
+            return;
+
+        const flaggedUsersOnly = userOverviewWithProductivity
+            .filter(x => allFlaggedUsers
+                .filter(x => x?.flag === 'low')
+                .some(y => y?.userId === x.userId));
+
 
         return this._mapperService
-            .mapTo(UserOverviewDTO, [combined]);
+            .mapTo(UserOverviewDTO, [isToBeReviewed ? flaggedUsersOnly : userOverviewWithProductivity]);
 
     }
 
-    // TODO: REFACTOR!
-    async calculateCompanyProductivityAsync(companyId: Id<'Company'>) {
+    async getAdminHomeOverviewStatsAsync(companyId: Id<'Company'>) {
+
+        const allFlaggedUsers = await this
+            ._flagUsersAsync(companyId);
+
+        if (!allFlaggedUsers)
+            return;
+
+        const flaggedUsers = allFlaggedUsers
+            .filter(x => x?.flag === 'low');
+
+        const avgUsers = allFlaggedUsers
+            .filter(x => x?.flag === 'avg');
+
+        const outstandingUsers = allFlaggedUsers
+            .filter(x => x?.flag === 'high');
+    }
+
+    private async _flagUsersAsync(companyId: Id<'Company'>) {
 
         const userPerformanceViews = await this._ormService
             .query(UserPerformanceView, { companyId })
@@ -467,9 +463,6 @@ export class UserStatsService {
                 .on('companyId', '=', 'companyId')
                 .and('id', '=', 'userId', UserPerformanceView))
             .getMany();
-
-        const companyAvgPerformancePercentage = userPerformanceViews
-            .reduce((total, next) => total + next.performancePercentage, 0) / userPerformanceViews.length;
 
         if (!userPerformanceViews) {
             return;
@@ -482,127 +475,34 @@ export class UserStatsService {
                 .and('id', '=', 'userId', TempomatCalculationDataView))
             .getMany();
 
-        const companyTempomatValues = tempomatCalculationViews
-            .map(x => ({
-                userId: x.userId,
-                ...this._tempomatService
-                    .calculateTempomatValues(x)
-            }));
-
-        const lagBehindPercentages = companyTempomatValues
-            .filter(x => (x !== null && x.lagBehindPercentage !== null))
-            .map(x => x.lagBehindPercentage);
-
-        const companyAvgLagBehindPercentage = lagBehindPercentages
-            .reduce((total, next) => total + next, 0) / lagBehindPercentages.length;
-
-        const companyProductivity = this
-            .calculateProductivity(companyAvgPerformancePercentage, companyAvgLagBehindPercentage);
-
         const statsViews = await this._ormService
             .query(UserPerformanceComparisonStatsView, { companyId })
             .where('companyId', '=', 'companyId')
             .getMany();
 
-        const statsViewsExtended = statsViews.map(x => {
+        const companyAvgPerformancePercentage = this
+            ._calculateCompanyAvgPerformance(userPerformanceViews);
 
-            console.log('companyTempomatValues: ' + JSON.stringify(companyTempomatValues));
+        const companyTempomatValues = this._tempomatService
+            .calculateCompanyTempomatValues(tempomatCalculationViews);
 
-            const userTempomatValues = companyTempomatValues
-                .filter(ctv => ctv.userId === x.userId);
+        const companyLagBehindPercentages = this._tempomatService
+            .calculateCompanyLagBehinds(companyTempomatValues);
 
-            if (!userTempomatValues)
-                return null;
+        const companyAvgLagBehindPercentage =
+            getArrayAverage(companyLagBehindPercentages);
 
-            if (userTempomatValues.length === 0)
-                return null;
+        const companyProductivity = this
+            ._calculateCompanyProductivity(companyAvgPerformancePercentage, companyAvgLagBehindPercentage);
 
-            const userTempomatValuesFiltered = userTempomatValues
-                .first();
+        const userFlagCalculationData = this
+            ._createUserFlagCalculationData(statsViews, companyTempomatValues);
 
-            return {
-                ...x,
-                productivity: this
-                    .calculateProductivity(x.userPerformanceAverage, userTempomatValuesFiltered.lagBehindPercentage),
-                startDate: userTempomatValuesFiltered.startDate,
-                requiredCompletionDate: userTempomatValuesFiltered.requiredCompletionDate
-            };
-
-        });
-
-        const statsViewsExtendedFiltered = statsViewsExtended
-            .flat(0);
-
-        // Count of users who have less performance than the company average
-        // minus 15 percent or don't have at least 50% with at least 10 videos watched
-        const flaggedUsersByPerformance = statsViewsExtendedFiltered
-            .map(x => x
-                ? x.userPerformanceAverage < companyAvgPerformancePercentage
-                - companyAvgPerformancePercentage * 0.15
-                && (x.userPerformanceAverage < 50 && x.watchedVideosCount > 10)
-                : null)
-            .filter(x => x)
-            .length;
-
-        // Count of users who have at least as much performance as the company average
-        // minus 15% and maximum as the company average plus 5%.
-        const usersWithAvgPerformance = statsViewsExtendedFiltered
-            .map(x => x
-                ? x.userPerformanceAverage > companyAvgPerformancePercentage
-                - companyAvgPerformancePercentage * 0.15
-                && x.userPerformanceAverage < companyAvgPerformancePercentage + companyAvgPerformancePercentage * 0.05
-                : null)
-            .filter(x => x)
-            .length;
-
-        // Count of users who have at least as much performance
-        // as the company average plus 5%.
-        const usersWithGreatPerformance = statsViewsExtendedFiltered
-            .map(x => x
-                ? x.userPerformanceAverage > companyAvgPerformancePercentage + companyAvgPerformancePercentage * 0.05
-                : null)
-            .filter(x => x)
-            .length;
-
-        const flaggedUsersByProductivity = statsViewsExtendedFiltered
-            .map(x => x
-                ? x.productivity < companyProductivity
-                - companyProductivity * 0.15
-                && (x.engagementPoints < 30 && (x.startDate || x.requiredCompletionDate))
-                : null)
-            .filter(x => x)
-            .length;
-
-        const usersWithAvgProductivity = statsViewsExtendedFiltered
-            .map(x => x
-                ? x.productivity < companyProductivity
-                - companyProductivity * 0.15
-                && x.productivity < companyProductivity + companyProductivity * 0.05
-                && (x.engagementPoints < 30 && (x.startDate || x.requiredCompletionDate))
-                : null)
-            .filter(x => x)
-            .length;
-
-        const usersWithGreatProductivity = statsViewsExtendedFiltered
-            .map(x => x
-                ? x.productivity < companyProductivity
-                - companyProductivity * 0.15
-                && x.productivity < companyProductivity + companyProductivity * 0.05
-                && (x.engagementPoints < 30 && (x.startDate || x.requiredCompletionDate))
-                : null)
-            .filter(x => x)
-            .length;
-
-        console.log('flaggedUsersByPerformance: ' + JSON.stringify(flaggedUsersByPerformance));
-        console.log('usersWithAvgPerformance: ' + usersWithAvgPerformance);
-        console.log('usersWithGreatPerformance: ' + usersWithGreatPerformance);
-        console.log('flaggedUsersByProductivity: ' + flaggedUsersByProductivity);
-        console.log('usersWithAvgProductivity: ' + usersWithAvgProductivity);
-        console.log('usersWithGreatProductivity: ' + usersWithGreatProductivity);
-
+        return this
+            ._flagUsers(userFlagCalculationData, companyAvgPerformancePercentage, companyProductivity);
     }
 
-    calculateProductivityAsync = async (userId: Id<'User'>) => {
+    calculateUserProductivityAsync = async (userId: Id<'User'>) => {
 
         const userPerformanceView = await this._ormService
             .query(UserPerformanceView, { userId })
@@ -631,6 +531,154 @@ export class UserStatsService {
             .calculateProductivity(avgPerformancePercentage, avgLagBehindPercentage);
     };
 
+    /**
+     * Returns users with different flags based on
+     * performance or productivity
+     * @param calculationData 
+     * @param companyAvgPerformancePercentage 
+     * @param companyAvgProductivityPercentage 
+     * @returns 
+     */
+    private _flagUsers(
+        calculationData: (UserFlagCalculationType | null)[],
+        companyAvgPerformancePercentage: number,
+        companyAvgProductivityPercentage: number
+    ): ({ userId: Id<'User'>, flag: UserFlagType } | null)[] {
+
+        return calculationData
+            .map(x => {
+
+                if (!x)
+                    return null;
+
+                // number of days from signup
+                const daysFromSignup = dateDiffInDays(x.creationDate, new Date(Date.now()));
+
+                // defining company avg performance min and max values
+                const companyPerformanceAverageMinValue = adjustByPercentage(companyAvgPerformancePercentage, -15);
+                const companyPerformanceAverageMaxValue = adjustByPercentage(companyAvgPerformancePercentage, 5);
+
+                // defining company avg productivity min and max values
+                const companyProductivityAverageMinValue = adjustByPercentage(companyAvgProductivityPercentage, -15);
+                const companyProductivityAverageMaxValue = adjustByPercentage(companyAvgProductivityPercentage, 5);
+
+                // compare user performance to company making 3 groups
+                const isUserPerformanceLow = x.userPerformanceAverage < companyPerformanceAverageMinValue;
+                const isUserPerformanceAvg = x.userPerformanceAverage > companyPerformanceAverageMinValue && x.userPerformanceAverage < companyPerformanceAverageMaxValue;
+                const isUserPerformanceHigh = x.userPerformanceAverage > companyPerformanceAverageMaxValue;
+
+                // compare user productivity to company making 3 groups
+                const isUserProductivityLow = x.userProductivity < companyProductivityAverageMinValue;
+                const isUserProductivityAvg = x.userProductivity > companyProductivityAverageMinValue && x.userProductivity < companyProductivityAverageMaxValue;
+                const isUserProductivityHigh = x.userProductivity > companyProductivityAverageMaxValue;
+
+                // extra conditions
+                const isUserHaveMinimumPerformance = x.userPerformanceAverage < 50;
+                const isAtLeastTenVideosWatched = x.watchedVideosCount > 10;
+                const isUserHaveLowEngagement = x.engagementPoints < 30;
+                const isUserRequiredToOrStartedCourse = x.isAnyCourseRequiredOrStarted;
+
+                // From days 7 to 21, flagging by performance
+                if (daysFromSignup > 7 && daysFromSignup <= 21) {
+
+                    //  Return low performance users
+                    if (isUserPerformanceLow || (isUserHaveMinimumPerformance && isAtLeastTenVideosWatched)) {
+
+                        return {
+                            userId: x.userId,
+                            flag: 'low'
+                        };
+                    }
+
+                    // Return avg performance users
+                    if (isUserPerformanceAvg) {
+
+                        return {
+                            userId: x.userId,
+                            flag: 'avg'
+                        };
+                    }
+
+                    // Return high performance users
+                    if (isUserPerformanceHigh) {
+
+                        return {
+                            userId: x.userId,
+                            flag: 'high'
+                        };
+                    }
+                }
+
+                // From days 21, flagging by productivity
+                if (daysFromSignup > 21) {
+
+                    //  Return low productivity OR low engagement AND inactive users 
+                    if (isUserProductivityLow || (isUserHaveLowEngagement && isUserRequiredToOrStartedCourse)) {
+
+                        return {
+                            userId: x.userId,
+                            flag: 'low'
+                        };
+                    }
+
+                    // Return avg productivity users
+                    if (isUserProductivityAvg) {
+
+                        return {
+                            userId: x.userId,
+                            flag: 'avg'
+                        };
+                    }
+
+                    // Return high productivity users
+                    if (isUserProductivityHigh) {
+
+                        return {
+                            userId: x.userId,
+                            flag: 'high'
+                        };
+                    }
+
+                }
+
+                return null;
+            });
+
+    }
+
+    /**
+     * Extends UserPerformanceComparisonStatsView with productivity,
+     * startDate and requiredCompletionDate
+     */
+    private _createUserFlagCalculationData(
+        statsViews: UserPerformanceComparisonStatsView[],
+        companyTempomatValues: CalculatedTempomatValueTypeWithUserId[]
+    ) {
+        return statsViews
+            .map(x => {
+
+                const userTempomatValuesFiltered = companyTempomatValues
+                    .filter(ctv => ctv.userId === x.userId);
+
+                if (!userTempomatValuesFiltered)
+                    return null;
+
+                if (userTempomatValuesFiltered.length === 0)
+                    return null;
+
+                const userTempomatValuesFirst = userTempomatValuesFiltered
+                    .first();
+
+                const userProductivity = this
+                    .calculateProductivity(x.userPerformanceAverage, userTempomatValuesFirst.lagBehindPercentage);
+
+                return instantiate<UserFlagCalculationType>({
+                    ...x,
+                    userProductivity: userProductivity
+                });
+            });
+    }
+
     private calculateProductivity(avgPerformancePercentage: number, avgLagBehindPercentage: number) {
 
         const lagBehindPoints = 100 - avgLagBehindPercentage;
@@ -645,4 +693,17 @@ export class UserStatsService {
 
         return compensatedProductivityPerformance;
     }
+
+    private _calculateCompanyAvgPerformance(userPerformanceViews: UserPerformanceView[]) {
+        return getArrayAverage(
+            userPerformanceViews
+                .map(x => x.performancePercentage));
+    }
+
+    private _calculateCompanyProductivity(companyAvgPerformancePercentage: number, companyAvgLagBehindPercentage: number) {
+
+        return this
+            .calculateProductivity(companyAvgPerformancePercentage, companyAvgLagBehindPercentage);
+    }
+
 }

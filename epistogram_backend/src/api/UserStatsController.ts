@@ -39,8 +39,12 @@ export class UserStatsController implements XController<UserStatsController> {
     @XControllerAction(apiRoutes.userStats.getUserOverviewStats)
     getUserOverviewStatsAction(params: ActionParams) {
 
+        const isToBeReviewed = params
+            .getQuery<{ isToBeReviewed: boolean }>()
+            .getValue(x => x.isToBeReviewed, 'boolean');
+
         return this._userStatsService
-            .getUserOverviewStatsAsync(params.principalId);
+            .getUserOverviewStatsAsync(params.principalId, isToBeReviewed);
     }
 
     @XControllerAction(apiRoutes.userStats.getUserCourseStats)
@@ -103,8 +107,8 @@ export class UserStatsController implements XController<UserStatsController> {
             .getUserLearningOverviewDataAsync(params.principalId, userId);
     }
 
-    @XControllerAction(apiRoutes.userStats.getCompanyUsersPerformanceSummary)
-    getCompanyUsersPerformanceSummaryAction(params: ActionParams) {
+    @XControllerAction(apiRoutes.userStats.getAdminHomeOverviewStats)
+    getAdminHomeOverviewStatsAction(params: ActionParams) {
 
         const query = params
             .getQuery<any>();
@@ -114,7 +118,7 @@ export class UserStatsController implements XController<UserStatsController> {
                 .getValue(x => x.companyId, 'int'));
 
         return this._userStatsService
-            .calculateCompanyProductivityAsync(companyId);
+            .getAdminHomeOverviewStatsAsync(companyId);
     }
 
     @XControllerAction(apiRoutes.userStats.getUserCourseStatsOverviewData)

@@ -1,4 +1,4 @@
-import { DataGridPro, GridCellParams, GridColDef, GridRenderCellParams, useGridApiContext, useGridApiRef } from '@mui/x-data-grid-pro';
+import { DataGridPro, GridCellParams, GridColDef, GridColumnVisibilityModel, GridRenderCellParams, useGridApiContext, useGridApiRef } from '@mui/x-data-grid-pro';
 import { ReactNode, useCallback, useEffect } from 'react';
 import { areArraysEqual, typedMemo } from '../../static/frontendHelpers';
 import { Logger } from '../../static/Logger';
@@ -66,6 +66,10 @@ export class EpistoDataGridColumnBuilder<TRow, TKey> {
     }
 }
 
+export type EpistoDataGridColumnVisibilityModel<TRow> = {
+    [key in keyof TRow]?: boolean
+}
+
 const mapColumn = <TSchema, TKey>(column: GridColumnType<TSchema, TKey, keyof TSchema>, getKey: (row: TSchema) => TKey) => {
 
     const { renderCell, type, editHandler, renderEditCell, field, ...others } = column;
@@ -128,10 +132,11 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>(props: {
     density?: 'dense' | 'spaced',
     hideFooter?: boolean,
     id?: string,
-    onFocusChanged?: (hasFocus: boolean) => void
+    onFocusChanged?: (hasFocus: boolean) => void,
+    columnVisibilityModel?: EpistoDataGridColumnVisibilityModel<TSchema>
 }) => {
 
-    const { columns, id, rows, initialState, density, hideFooter, getKey, onFocusChanged } = props;
+    const { columns, id, rows, initialState, density, hideFooter, getKey, onFocusChanged, columnVisibilityModel } = props;
 
     Logger.logScoped('GRID', `${id ? `[id: ${id}] ` : ''}Rendering EpistoDataGrid...`);
 
@@ -179,6 +184,7 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>(props: {
             apiRef={apiRef}
             onCellClick={handleCellClick}
             initialState={initialState as any}
+            columnVisibilityModel={columnVisibilityModel as GridColumnVisibilityModel}
             density={density === 'dense'
                 ? 'compact'
                 : 'standard'}

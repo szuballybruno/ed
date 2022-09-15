@@ -206,7 +206,7 @@ const LoginScreen = () => {
                             src={companyDetails?.logoUrl!}
                             style={{
                                 width: '250px',
-                                maxHeight: '100px',
+                                maxHeight: '115px',
                                 objectFit: 'contain',
                                 marginLeft: '15px',
                                 marginBottom: '20px',

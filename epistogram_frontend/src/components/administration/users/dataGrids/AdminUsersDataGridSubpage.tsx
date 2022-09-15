@@ -10,7 +10,7 @@ import { Id } from '../../../../shared/types/versionId';
 import { isCurrentAppRoute, usePaging } from '../../../../static/frontendHelpers';
 import { translatableTexts } from '../../../../static/translatableTexts';
 import { EpistoButton } from '../../../controls/EpistoButton';
-import { EpistoDataGrid, EpistoDataGridColumnBuilder } from '../../../controls/EpistoDataGrid';
+import { EpistoDataGrid, EpistoDataGridColumnBuilder, EpistoDataGridColumnVisibilityModel } from '../../../controls/EpistoDataGrid';
 import { EpistoSearch } from '../../../controls/EpistoSearch';
 import { SegmentedButton } from '../../../controls/SegmentedButton';
 import { segmentedButtonStyles } from '../../../controls/segmentedButtonStyles';
@@ -36,21 +36,34 @@ class RowType {
     editUserButton: Id<'User'>;
 };
 
+const defaultPreset: EpistoDataGridColumnVisibilityModel<RowType> = {
+    engagementPoints: false,
+    productivityPercentage: false
+};
+
+const reviewRequiredPreset: EpistoDataGridColumnVisibilityModel<RowType> = {
+    invertedLagBehind: false,
+    totalSessionLengthSeconds: false,
+    completedCourseItemCount: false
+};
+
 export const AdminUserDataGridSubpage = () => {
 
     const { navigate2 } = useNavigation();
     const [currentUserId, setCurrentUserId] = useState<Id<'User'> | null>(null);
     const [orderBy, setOrderBy] = useState<OrderType | null>(null);
 
-    const { userOverviewStats } = useUserOverviewStats();
 
     const paging = usePaging({
-        items: [
-            'Alapértelmezett nézet',
-            'Áttekintésre javasolt',
-            'Hozzáértő nézet'
-        ]
+        items: [{
+            title: 'Alapértelmezett nézet',
+            preset: defaultPreset
+        }, {
+            title: 'Áttekintésre javasolt',
+            preset: reviewRequiredPreset
+        }]
     });
+    const { userOverviewStats } = useUserOverviewStats(paging.currentItem?.preset === reviewRequiredPreset);
 
     const AdminUsersSearchBar = () => {
         return <Flex flex='1'>
@@ -200,6 +213,7 @@ export const AdminUserDataGridSubpage = () => {
 
                 <SegmentedButton
                     paging={paging}
+                    getDisplayValue={x => x.title}
                     stylePreset={segmentedButtonStyles.tab} />
 
                 <Flex>
@@ -218,6 +232,7 @@ export const AdminUserDataGridSubpage = () => {
             <EpistoDataGrid
                 columns={columns}
                 rows={userRows}
+                columnVisibilityModel={paging.currentItem?.preset}
                 getKey={x => x.userId}
             />
         </Flex>

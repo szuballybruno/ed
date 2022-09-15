@@ -1,4 +1,4 @@
-import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, Relation } from '../../MyORM';
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, Relation } from '../../MyORM';
 import { IsDeletedFlag, XOneToMany, XViewColumn } from '../../../services/XORM/XORMDecorators';
 import { Id } from '../../../shared/types/versionId';
 import { RegistrationType } from '../../Types';
@@ -39,6 +39,9 @@ export class User {
     @DeleteDateColumn()
     @XViewColumn()
     deletionDate: Date | null;
+
+    @CreateDateColumn({ default: () => 'now()', type: 'timestamptz' })
+    creationDate: Date;
 
     @Column({ default: false })
     @XViewColumn()

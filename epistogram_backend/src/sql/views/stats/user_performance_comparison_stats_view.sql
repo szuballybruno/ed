@@ -21,11 +21,24 @@ WITH user_performances AS (
          uev.user_id,
          uev.engagement_points
      FROM public.user_engagement_view uev
+ ),
+ required_or_started_courses AS (
+    SELECT
+        ucb.user_id,
+        COUNT(*)::int::boolean is_any_course_required_or_started
+    FROM user_course_bridge ucb
+
+    WHERE ucb.start_date IS NOT NULL
+    OR ucb.required_completion_date IS NOT NULL
+
+    GROUP BY ucb.user_id
  )
 
 SELECT
     up.user_id,
     u.company_id,
+    u.creation_date,
+    rosc.is_any_course_required_or_started,
     up.user_performance_average,
     COALESCE(ep.engagement_points, 0) engagement_points,
     COALESCE(wv.watched_videos_count, 0) watched_videos_count
@@ -40,4 +53,5 @@ ON ep.user_id = up.user_id
 LEFT JOIN public.user u
 ON u.id = up.user_id
 
-WHERE u.company_id = 2
+LEFT JOIN required_or_started_courses rosc
+ON rosc.user_id = up.user_id

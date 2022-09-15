@@ -218,6 +218,7 @@ export class RegistrationService {
                 email,
                 firstName,
                 lastName,
+                creationDate: new Date(Date.now()),
                 companyId,
                 jobTitleId,
                 registrationType: 'Invitation',

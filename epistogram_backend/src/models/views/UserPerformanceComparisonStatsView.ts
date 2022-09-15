@@ -1,6 +1,6 @@
-import {ViewColumn, ViewEntity} from '../MyORM';
-import {Id} from '../../shared/types/versionId';
-import {XViewColumn} from '../../services/XORM/XORMDecorators';
+import { ViewColumn, ViewEntity } from '../MyORM';
+import { Id } from '../../shared/types/versionId';
+import { XViewColumn } from '../../services/XORM/XORMDecorators';
 
 @ViewEntity({
     synchronize: false,
@@ -27,4 +27,12 @@ export class UserPerformanceComparisonStatsView {
     @XViewColumn()
     @ViewColumn()
     watchedVideosCount: number;
+
+    @XViewColumn()
+    @ViewColumn()
+    creationDate: Date;
+
+    @XViewColumn()
+    @ViewColumn()
+    isAnyCourseRequiredOrStarted: number;
 }

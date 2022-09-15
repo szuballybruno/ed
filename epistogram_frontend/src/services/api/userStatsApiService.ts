@@ -66,9 +66,9 @@ export const useUserCourseStats = (userId: Id<'User'>) => {
     };
 };
 
-export const useUserOverviewStats = () => {
+export const useUserOverviewStats = (isToBeReviewed: boolean) => {
 
-    const queryRes = QueryService.useXQuery<UserOverviewDTO[]>(apiRoutes.userStats.getUserOverviewStats);
+    const queryRes = QueryService.useXQuery<UserOverviewDTO[]>(apiRoutes.userStats.getUserOverviewStats, { isToBeReviewed });
 
     return {
         userOverviewStats: queryRes.data,

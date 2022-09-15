@@ -4,7 +4,7 @@ import { UserCourseProgressView } from '../models/views/UserCourseProgressView';
 import { instantiate } from '../shared/logic/sharedLogic';
 import { TempomatModeType } from '../shared/types/sharedTypes';
 import { Id } from '../shared/types/versionId';
-import { addDays, dateDiffInDays, relativeDiffInPercentage } from '../utilities/helpers';
+import { addDays, dateDiffInDays, getArrayAverage, relativeDiffInPercentage } from '../utilities/helpers';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { AuthorizationService } from './AuthorizationService';
 import { EventService } from './EventService';
@@ -21,6 +21,7 @@ type CalculateTempomatValuesArgs = {
     tempomatAdjustmentValue: number,
 }
 
+
 export type CalculatedTempomatValueType = {
     previsionedCompletionDate: Date,
     recommendedItemsPerDay: number,
@@ -30,6 +31,11 @@ export type CalculatedTempomatValueType = {
     startDate: Date,
     lagBehindPercentage: number
 }
+
+export interface CalculatedTempomatValueTypeWithUserId extends CalculatedTempomatValueType {
+    userId: Id<'User'>
+}
+
 
 export class TempomatService {
 
@@ -172,9 +178,9 @@ export class TempomatService {
         return avgLagBehindPercentage;
     }
 
-    getAvgLagBehindPercentage(tempomatCalculationDatas: TempomatCalculationDataView[]) {
+    getLagBehindPercentageFromTempomatCalculationData(tempomatCalculationDataViews: TempomatCalculationDataView[]) {
 
-        const allLagBehindPercentages = tempomatCalculationDatas
+        return tempomatCalculationDataViews
             .map(x => {
 
                 const newPrevisionedCompletionDate = this
@@ -198,10 +204,16 @@ export class TempomatService {
 
                 return lagBehindPercentage;
             });
+    }
 
-        // calculates the average lag beghind from all started course
-        const avgLagBehindPercentage = allLagBehindPercentages
-            .reduce((a, b) => a + b, 0) / allLagBehindPercentages.length;
+    /*
+    * Calc the average lag beghind from all started course
+    */
+    getAvgLagBehindPercentage(tempomatCalculationDatas: TempomatCalculationDataView[]) {
+
+        const lagBehindPercentages = this.getLagBehindPercentageFromTempomatCalculationData(tempomatCalculationDatas);
+
+        const avgLagBehindPercentage = getArrayAverage(lagBehindPercentages);
 
         return avgLagBehindPercentage;
     }
@@ -218,6 +230,23 @@ export class TempomatService {
             .getSingle();
 
         return this.calculateTempomatValues(tempomatCalculationData);
+    }
+
+    calculateCompanyTempomatValues(tempomatCalculationDataViews: TempomatCalculationDataView[]): CalculatedTempomatValueTypeWithUserId[] {
+        return tempomatCalculationDataViews
+            .map(x => ({
+                userId: x.userId,
+                ...this
+                    .calculateTempomatValues(x)
+            }));
+    }
+
+
+
+    calculateCompanyLagBehinds(companyTempomatValues: CalculatedTempomatValueTypeWithUserId[]) {
+        return companyTempomatValues
+            .filter(x => (x !== null && x.lagBehindPercentage !== null))
+            .map(x => x.lagBehindPercentage);
     }
 
     /**
