@@ -1,18 +1,19 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { applicationRoutes } from '../../../../configuration/applicationRoutes';
-import { CourseApiService } from '../../../../services/api/courseApiService';
 import { UserApiService } from '../../../../services/api/userApiService';
 import { useUserAssignedCourses } from '../../../../services/api/userStatsApiService';
 import { useNavigation } from '../../../../services/core/navigatior';
 import { useShowErrorDialog } from '../../../../services/core/notifications';
+import { LocalStorageService } from '../../../../services/core/storageService';
 import { AdminPageUserDTO } from '../../../../shared/dtos/admin/AdminPageUserDTO';
-import { Id } from '../../../../shared/types/versionId';
+import { UserCourseStatsDTO } from '../../../../shared/dtos/UserCourseStatsDTO';
 import { ArrayBuilder } from '../../../../static/frontendHelpers';
 import { useRouteParams } from '../../../../static/locationHelpers';
 import { EpistoDataGrid } from '../../../controls/EpistoDataGrid';
 import { EpistoFlex2 } from '../../../controls/EpistoFlex';
 import { EpistoSwitch } from '../../../controls/EpistoSwitch';
-import { } from '../../../universal/epistoDialog/EpistoDialog';
+import { useXMutatorNew } from '../../../lib/XMutator/XMutatorReact';
+import { useSetBusy } from '../../../system/LoadingFrame/BusyBarContext';
 import { AdminBreadcrumbsHeader } from '../../AdminBreadcrumbsHeader';
 import { AdminSubpageHeader } from '../../AdminSubpageHeader';
 import { useAdminCourseContentDialogLogic } from '../adminCourseContentDialog/AdminCourseContentDialogLogic';
@@ -32,22 +33,41 @@ export const AdminUserCoursesSubpage = ({
     const userId = useRouteParams(usersRoute.courseContentRoute)
         .getValue(x => x.userId, 'int');
 
-    const [editModeEnabled, setEditModeEnabled] = useState(false);
+    const [editModeEnabled, setEditModeEnabled] = useState(LocalStorageService
+        .readStorage('editModeEnabled') === 'true');
 
     const { userEditData } = UserApiService
         .useEditUserData(userId);
 
-    const { setRequiredCourseCompletionDateAsync, setRequiredCourseCompletionDateState } = CourseApiService
-        .useSetRequiredCompletionDate();
-
     const {
         userAssignedCourses,
         userAssignedCoursesState,
-        userAssignedCoursesError,
-        refetchUserAssignedCourses
+        userAssignedCoursesError
     } = useUserAssignedCourses(userId, editModeEnabled);
 
-    const rows = userAssignedCourses
+    useSetBusy(useUserAssignedCourses, userAssignedCoursesState, userAssignedCoursesError);
+
+    const [{ mutatedItems, mutations }, mutatorFunctions] = useXMutatorNew(UserCourseStatsDTO, 'courseId', UserCourseStatsDTO.name);
+
+    /**
+     * Initialize mutator 
+     */
+    useEffect(() => {
+
+        mutatorFunctions
+            .setOriginalItems(userAssignedCourses);
+    }, [userAssignedCourses, mutatorFunctions]);
+
+    /**
+     * Write edit settings to local storage
+     */
+    useEffect(() => {
+
+        LocalStorageService
+            .writeStorage('editModeEnabled', editModeEnabled);
+    }, [editModeEnabled]);
+
+    const rows = mutatedItems
         .map((dto, index): UserCoursesRowType => ({
             ...dto,
             moreDetails: index
@@ -55,24 +75,14 @@ export const AdminUserCoursesSubpage = ({
     const getRowKey = useCallback((row: UserCoursesRowType) => row.courseId, []);
     const columns = useUserCoursesColumns({
         handleOpenUserCourseDetailsDialog: (x) => console.log(x),
-        hideStats: editModeEnabled
+        hideStats: editModeEnabled,
+        mutatorFunctions
     });
 
     const { adminCourseContentDialogLogic } = useAdminCourseContentDialogLogic();
 
     const { navigate2 } = useNavigation();
     const showError = useShowErrorDialog();
-
-    const handleSaveRequiredCompletionDate = (courseId: Id<'Course'>, requiredCompletionDate: Date | null) => {
-
-        if (!courseId || !requiredCompletionDate)
-            showError('Hiba történt');
-
-        setRequiredCourseCompletionDateAsync({
-            courseId: courseId,
-            requiredCourseCompletionDate: requiredCompletionDate!.toISOString()
-        });
-    };
 
     return <AdminBreadcrumbsHeader>
 

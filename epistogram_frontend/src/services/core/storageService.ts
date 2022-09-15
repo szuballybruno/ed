@@ -30,3 +30,8 @@ const readStorage = <TData>(key: string) => {
 
     return window.localStorage.getItem(key) as any as TData | null;
 };
+
+export const LocalStorageService = {
+    writeStorage,
+    readStorage
+};

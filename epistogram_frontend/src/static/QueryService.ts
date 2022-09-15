@@ -5,6 +5,7 @@ import { httpGetAsync } from '../services/core/httpClient';
 import { GetParametrizedRouteType, ParametrizedRouteType } from '../shared/types/apiRoutes';
 import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 import { eventBus } from './EventBus';
+import { Logger } from './Logger';
 
 export type QueryState<T> = {
     state: LoadingStateType;
@@ -43,7 +44,7 @@ class XQueryGlobalState {
 
     static setState(url: string, state: QueryStateType) {
 
-        console.log(`-- Setting cache item ${url}...`);
+        Logger.logScoped('QUERY', `-- Setting cache item ${url}...`);
         this.globalState[url] = state;
     };
 }
@@ -58,13 +59,13 @@ class XQueryCore<T> {
     async tryQueryAsync(query: any, isEnabled?: boolean) {
 
         const url = this._url;
-        console.log(`Querying: ${url}`);
+        Logger.logScoped('QUERY', `Querying: ${url}`);
 
         // check if querying is enabled 
         const queryingEnabled = isEnabled === false ? false : true;
         if (!queryingEnabled) {
 
-            console.log(`-- [CANCEL] Query is not enabled. ${url}`);
+            Logger.logScoped('QUERY', `-- [CANCEL] Query is not enabled. ${url}`);
             return;
         }
 
@@ -79,7 +80,7 @@ class XQueryCore<T> {
         // check if is loading currently 
         if (state?.qr?.state === 'loading') {
 
-            console.log(`-- [CANCEL] Query is already in loading state. ${url}`);
+            Logger.logScoped('QUERY', `-- [CANCEL] Query is already in loading state. ${url}`);
             return;
         }
 
@@ -89,7 +90,7 @@ class XQueryCore<T> {
 
         if (isOldDataStillValid) {
 
-            console.log(`-- [CANCEL] Old data is still valid. ${url}`);
+            Logger.logScoped('QUERY', `-- [CANCEL] Old data is still valid. ${url}`);
             return;
         }
 
@@ -105,18 +106,22 @@ class XQueryCore<T> {
         const queryingEnabled = isEnabled === false ? false : true;
         if (!queryingEnabled) {
 
-            console.log(`-- [CANCEL] Query is not enabled. ${url}`);
+            Logger.logScoped('QUERY', `-- [CANCEL] Query is not enabled. ${url}`);
             return;
         }
 
-        console.log(`-- Fetching: ${url}`);
+        // get state from global store 
+        const state = XQueryGlobalState
+            .getState(url);
+
+        Logger.logScoped('QUERY', `-- Fetching: ${url}`);
 
         this._setState(url, {
             params: queryObject,
             qr: {
                 state: 'loading',
                 error: null,
-                data: null
+                data: state?.qr?.data ?? null
             }
         });
 
@@ -163,7 +168,7 @@ class XQueryCore<T> {
 
         if (unequalKeys.length > 0) {
 
-            console.log('--' + unequalKeys
+            Logger.logScoped('QUERY', '--' + unequalKeys
                 .map(key => `Cache key (${key}) value mismatch: ${JSON.stringify(oldParams[key])} <> ${JSON.stringify(newParams[key])}`)
                 .join('\n'));
 

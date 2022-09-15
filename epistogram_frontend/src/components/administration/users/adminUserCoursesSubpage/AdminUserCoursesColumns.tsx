@@ -2,6 +2,7 @@ import { UserCourseStatsDTO } from '../../../../shared/dtos/UserCourseStatsDTO';
 import { TempomatModeType } from '../../../../shared/types/sharedTypes';
 import { Id } from '../../../../shared/types/versionId';
 import { Environment } from '../../../../static/Environemnt';
+import { EpistoIcons } from '../../../../static/EpistoIcons';
 import { secondsToTime } from '../../../../static/frontendHelpers';
 import { EpistoButton } from '../../../controls/EpistoButton';
 import { EpistoCheckbox } from '../../../controls/EpistoCheckbox';
@@ -10,6 +11,7 @@ import { EpistoDatePicker } from '../../../controls/EpistoDatePicker';
 import { EpistoFlex2 } from '../../../controls/EpistoFlex';
 import { EpistoFont } from '../../../controls/EpistoFont';
 import { EpistoImage } from '../../../controls/EpistoImage';
+import { IXMutatorFunctions } from '../../../lib/XMutator/XMutatorCore';
 import { EmptyCell } from '../../../universal/EmptyCell';
 import { CircularProgressWithLabel } from '../../courses/AdminCourseUserProgressSubpage';
 import { ChipSmall } from '../../courses/ChipSmall';
@@ -18,10 +20,12 @@ export type UserCoursesRowType = UserCourseStatsDTO & { moreDetails: number };
 
 export const useUserCoursesColumns = ({
     handleOpenUserCourseDetailsDialog,
-    hideStats
+    hideStats,
+    mutatorFunctions
 }: {
     handleOpenUserCourseDetailsDialog: (courseId: Id<'Course'>) => void,
-    hideStats: boolean
+    hideStats: boolean,
+    mutatorFunctions: IXMutatorFunctions<UserCourseStatsDTO, 'courseId', Id<'Course'>>
 }) => {
 
     const getTempomatDisplayData = (mode: TempomatModeType): [string, string] => {
@@ -51,6 +55,27 @@ export const useUserCoursesColumns = ({
         return ['Átlagos', ''];
     };
 
+    const commonColumns = new EpistoDataGridColumnBuilder<UserCoursesRowType, Id<'Course'>>()
+        .add({
+            field: 'requiredCompletionDate',
+            headerName: 'Határidő',
+            width: 320,
+            renderCell: ({ value, field, key }) => <EpistoFlex2>
+                <EpistoDatePicker
+                    value={value}
+                    setValue={newValue => mutatorFunctions
+                        .mutate({
+                            key,
+                            field,
+                            newValue
+                        })} />
+                {value && <EpistoButton>
+                    <EpistoIcons.Delete />
+                </EpistoButton>}
+            </EpistoFlex2>
+        })
+        .getColumns();
+
     const builder = new EpistoDataGridColumnBuilder<UserCoursesRowType, Id<'Course'>>()
         .add({
             field: 'thumbnailImageUrl',
@@ -71,10 +96,17 @@ export const useUserCoursesColumns = ({
     // return simplified columns
     if (hideStats)
         return builder
+            .add(commonColumns[0])
             .add({
                 field: 'isAssigned',
                 headerName: 'Assigned',
-                renderCell: ({ value }) => <EpistoCheckbox
+                renderCell: ({ value, key, field }) => <EpistoCheckbox
+                    setValue={newValue => mutatorFunctions
+                        .mutate({
+                            key,
+                            field,
+                            newValue
+                        })}
                     value={value} />
             })
             .getColumns();
@@ -226,14 +258,7 @@ export const useUserCoursesColumns = ({
                 </EpistoFlex2>;
             }
         })
-        .add({
-            field: 'requiredCompletionDate',
-            headerName: 'Határidő',
-            width: 320,
-            renderCell: ({ value }) => <EpistoDatePicker
-                value={value}
-                setValue={x => console.log(x)} />
-        })
+        .add(commonColumns[0])
         .add({
             field: 'moreDetails',
             headerName: 'Részletek',

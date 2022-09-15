@@ -206,7 +206,6 @@ export const apiRoutes = {
         getCourseDetails: '/course/get-course-details',
         getAdminCourseList: '/course/get-admin-course-list',
         setCourseMode: '/course/set-course-mode',
-        setRequiredCompletionDate: '/course/set-required-completion-date',
     },
 
     courseProgress: {
