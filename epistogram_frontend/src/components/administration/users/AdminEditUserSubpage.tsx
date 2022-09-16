@@ -1,21 +1,21 @@
-import {Add} from '@mui/icons-material';
-import {useEffect} from 'react';
-import {useLocation} from 'react-router-dom';
-import {applicationRoutes} from '../../../configuration/applicationRoutes';
-import {ButtonType} from '../../../models/types';
-import {UserApiService} from '../../../services/api/userApiService';
-import {useNavigation} from '../../../services/core/navigatior';
-import {showNotification, useShowErrorDialog} from '../../../services/core/notifications';
-import {AdminPageUserDTO} from '../../../shared/dtos/admin/AdminPageUserDTO';
-import {UserEditDTO} from '../../../shared/dtos/UserEditDTO';
-import {isCurrentAppRoute, useEventTrigger, useSubscribeEventTrigger} from '../../../static/frontendHelpers';
-import {useRouteParams} from '../../../static/locationHelpers';
-import {EpistoDialog} from '../../universal/epistoDialog/EpistoDialog';
-import {useEpistoDialogLogic} from '../../universal/epistoDialog/EpistoDialogLogic';
-import {AdminBreadcrumbsHeader} from '../AdminBreadcrumbsHeader';
-import {AdminSubpageHeader} from '../AdminSubpageHeader';
-import {AdminEditUserControl} from './AdminEditUserControl';
-import {AdminUserList} from './AdminUserList';
+import { Add } from '@mui/icons-material';
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import { applicationRoutes } from '../../../configuration/applicationRoutes';
+import { ButtonType } from '../../../models/types';
+import { UserApiService } from '../../../services/api/userApiService';
+import { useNavigation } from '../../../services/core/navigatior';
+import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
+import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
+import { UserEditDTO } from '../../../shared/dtos/UserEditDTO';
+import { useEventTrigger, useSubscribeEventTrigger } from '../../../static/frontendHelpers';
+import { useRouteParams } from '../../../static/locationHelpers';
+import { EpistoDialog } from '../../universal/epistoDialog/EpistoDialog';
+import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogLogic';
+import { AdminBreadcrumbsHeader } from '../AdminBreadcrumbsHeader';
+import { AdminSubpageHeader } from '../AdminSubpageHeader';
+import { AdminEditUserControl } from './AdminEditUserControl';
+import { AdminUserList } from './AdminUserList';
 
 export const AdminEditUserSubpage = (props: {
     users: AdminPageUserDTO[],
@@ -115,8 +115,8 @@ export const AdminEditUserSubpage = (props: {
 
 
     return <AdminBreadcrumbsHeader
-        viewSwitchChecked={isCurrentAppRoute(applicationRoutes.administrationRoute.usersRoute)}
-        viewSwitchFunction={() => navigate2(applicationRoutes.administrationRoute.usersRoute)}>
+        viewSwitchChecked={false}
+        viewSwitchFunction={() => navigate2(applicationRoutes.administrationRoute.usersRoute, { preset: 'all' })}>
 
         <AdminUserList
             currentUserId={editedUserId}

@@ -1,34 +1,32 @@
-import {Add} from '@mui/icons-material';
-import {LinearProgress} from '@mui/material';
-import {useState} from 'react';
+import { Add } from '@mui/icons-material';
+import { LinearProgress } from '@mui/material';
+import { useState } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
-import {applicationRoutes} from '../../../configuration/applicationRoutes';
-import {ButtonType} from '../../../models/types';
-import {UserApiService} from '../../../services/api/userApiService';
-import {useNavigation} from '../../../services/core/navigatior';
-import {AdminPageUserDTO} from '../../../shared/dtos/admin/AdminPageUserDTO';
-import {defaultCharts} from '../../../static/defaultChartOptions';
-import {Environment} from '../../../static/Environemnt';
-import {isCurrentAppRoute} from '../../../static/frontendHelpers';
-import {useRouteParams} from '../../../static/locationHelpers';
-import {translatableTexts} from '../../../static/translatableTexts';
-import {EpistoFlex2} from '../../controls/EpistoFlex';
-import {EpistoFont} from '../../controls/EpistoFont';
-import {EpistoGrid} from '../../controls/EpistoGrid';
-import {EpistoImage} from '../../controls/EpistoImage';
-import {FlexFloat} from '../../controls/FlexFloat';
-import {NoProgressChartYet} from '../../home/NoProgressChartYet';
-import {LearningCourseStatsTile} from '../../learningInsights/LearningCourseStatsTile';
+import { applicationRoutes } from '../../../configuration/applicationRoutes';
+import { ButtonType } from '../../../models/types';
+import { UserApiService } from '../../../services/api/userApiService';
+import { useNavigation } from '../../../services/core/navigatior';
+import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
+import { defaultCharts } from '../../../static/defaultChartOptions';
+import { Environment } from '../../../static/Environemnt';
+import { useRouteParams } from '../../../static/locationHelpers';
+import { translatableTexts } from '../../../static/translatableTexts';
+import { EpistoFlex2 } from '../../controls/EpistoFlex';
+import { EpistoFont } from '../../controls/EpistoFont';
+import { EpistoGrid } from '../../controls/EpistoGrid';
+import { EpistoImage } from '../../controls/EpistoImage';
+import { FlexFloat } from '../../controls/FlexFloat';
+import { NoProgressChartYet } from '../../home/NoProgressChartYet';
+import { LearningCourseStatsTile } from '../../learningInsights/LearningCourseStatsTile';
 import StatisticsCard from '../../statisticsCard/StatisticsCard';
-import {LoadingFrame} from '../../system/LoadingFrame';
-import {EpistoPieChart} from '../../universal/charts/base_charts/EpistoPieChart';
-import {AdminBreadcrumbsHeader} from '../AdminBreadcrumbsHeader';
-import {AdminSubpageHeader} from '../AdminSubpageHeader';
-import {EditSection} from '../courses/EditSection';
-import {useAdminCourseContentDialogLogic} from './adminCourseContentDialog/AdminCourseContentDialogLogic';
-import {AdminUserCourseContentDialog} from './adminCourseContentDialog/AdminUserCourseContentDialog';
-import {AdminUserList} from './AdminUserList';
-
+import { LoadingFrame } from '../../system/LoadingFrame';
+import { EpistoPieChart } from '../../universal/charts/base_charts/EpistoPieChart';
+import { AdminBreadcrumbsHeader } from '../AdminBreadcrumbsHeader';
+import { AdminSubpageHeader } from '../AdminSubpageHeader';
+import { EditSection } from '../courses/EditSection';
+import { useAdminCourseContentDialogLogic } from './adminCourseContentDialog/AdminCourseContentDialogLogic';
+import { AdminUserCourseContentDialog } from './adminCourseContentDialog/AdminUserCourseContentDialog';
+import { AdminUserList } from './AdminUserList';
 const UserStatisticsProgressWithLabel = (props: {
     title: string,
     value: number
@@ -128,8 +126,8 @@ export const AdminUserStatisticsSubpage = (props: {
         error={userLearningOverviewDataError}>
 
         <AdminBreadcrumbsHeader
-            viewSwitchChecked={isCurrentAppRoute(usersRoute)}
-            viewSwitchFunction={() => navigate2(usersRoute)}
+            viewSwitchChecked={false}
+            viewSwitchFunction={() => navigate2(usersRoute, { preset: 'all' })}
             subRouteLabel={`${userEditData?.lastName} ${userEditData?.firstName}`}>
 
             <AdminUserList

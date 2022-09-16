@@ -1,14 +1,14 @@
-import {useMediaQuery} from '@chakra-ui/react';
-import {ArrowBack} from '@mui/icons-material';
-import React, {ReactNode} from 'react';
-import {Environment} from '../../static/Environemnt';
-import {hasValue, isString, useIsDesktopView} from '../../static/frontendHelpers';
-import {EpistoButton} from '../controls/EpistoButton';
-import {EpistoDiv} from '../controls/EpistoDiv';
-import {EpistoFlex2} from '../controls/EpistoFlex';
-import {EpistoFont} from '../controls/EpistoFont';
-import {EpistoImage} from '../controls/EpistoImage';
-import {EpistoHeader} from '../EpistoHeader';
+import { useMediaQuery } from '@chakra-ui/react';
+import { ArrowBack } from '@mui/icons-material';
+import React, { ReactNode } from 'react';
+import { Environment } from '../../static/Environemnt';
+import { hasValue, isString, useIsDesktopView } from '../../static/frontendHelpers';
+import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoDiv } from '../controls/EpistoDiv';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { EpistoFont } from '../controls/EpistoFont';
+import { EpistoImage } from '../controls/EpistoImage';
+import { EpistoHeader } from '../EpistoHeader';
 
 export const SignupWrapper = (props: {
     children?: ReactNode,
@@ -149,7 +149,7 @@ export const SignupWrapper = (props: {
                     {hasTitle && <EpistoHeader
                         variant="strongSub"
                         type="strong"
-                        m="10px 10px 10px 0px"
+                        m="10px 10px 30px 0px"
                         alignSelf={hasImage ? 'flex-start' : 'center'}
                         text={title!}
                         maxW='400px'>
@@ -179,6 +179,7 @@ export const SignupWrapper = (props: {
 
         {/* progress bar */}
         <EpistoFlex2
+            wrap='nowrap'
             align="center"
             height="60px"
             width="100%"
@@ -207,7 +208,8 @@ export const SignupWrapper = (props: {
                 <ArrowBack />
             </EpistoButton>}
 
-            <EpistoDiv id="footerBox"
+            <EpistoDiv
+                id="footerBox"
                 flex="1"
                 mx="20">
                 {props.bottomComponent}
@@ -225,6 +227,7 @@ export const SignupWrapper = (props: {
                         : 'flex-end',
                     color: 'white',
                     backgroundColor: '#97C9CC',
+                    height: '40px',
                     border: 'none',
                     boxShadow: '1px 1px 5px 1px rgba(0,0,0,0.2)'
                 }}>

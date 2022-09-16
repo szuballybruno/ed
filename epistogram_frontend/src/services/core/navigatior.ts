@@ -22,6 +22,10 @@ export const useNavigation = () => {
             : [TParams, TQuery]) => {
 
         const [params] = args;
+
+        if (!route.route)
+            return;
+
         const replacedPath = getUrl(route.route.getAbsolutePath(), params);
 
         Logger.logScoped('ROUTING', 'Navigating to: ' + replacedPath);

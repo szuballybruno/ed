@@ -30,6 +30,10 @@ export class UserOverviewView {
 
     @XViewColumn()
     @ViewColumn()
+    signupDate: Date;
+
+    @XViewColumn()
+    @ViewColumn()
     avatarFilePath: string;
 
     @XViewColumn()

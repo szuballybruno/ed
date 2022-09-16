@@ -1,4 +1,4 @@
-import { GridOn, List } from '@mui/icons-material';
+import { ArrowBack, GridOn, List } from '@mui/icons-material';
 import { FormControl, FormGroup, Switch } from '@mui/material';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import { ReactNode, useCallback } from 'react';
@@ -11,6 +11,7 @@ import { UserApiService } from '../../services/api/userApiService';
 import { getKeys } from '../../shared/logic/sharedLogic';
 import { Id } from '../../shared/types/versionId';
 import { ArrayBuilder, useIsMatchingCurrentRoute } from '../../static/frontendHelpers';
+import { EpistoButton, EpistoButtonPropsType } from '../controls/EpistoButton';
 import { EpistoDiv } from '../controls/EpistoDiv';
 import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
@@ -81,14 +82,10 @@ export const BreadcrumbLink = (props: {
     </EpistoDiv>;
 };
 
-export type BreadcrumbDataType = {
-
-}
-
 export const AdminBreadcrumbsHeader = ({
     subRouteLabel,
     children,
-    breadcrumbDatas: breadcrumbs,
+    backButtonProps,
 
     // @deprecated TODO: BIG NONO
     viewSwitchChecked,
@@ -99,8 +96,8 @@ export const AdminBreadcrumbsHeader = ({
     ...css
 }: {
     children?: ReactNode,
-    breadcrumbDatas?: BreadcrumbDataType[],
     subRouteLabel?: string,
+    backButtonProps?: EpistoButtonPropsType,
     viewSwitchChecked?: boolean,
     viewSwitchFunction?: (checked: boolean) => void,
     headerComponent?: ReactNode
@@ -167,21 +164,52 @@ export const AdminBreadcrumbsHeader = ({
             align='center'
             minH="38px">
 
-            {/* breadcrumbs */}
-            <Breadcrumbs>
-                {!breadcrumbs && new ArrayBuilder()
-                    .addIf(!!currentRoute, <BreadcrumbLink
-                        key={1}
-                        isCurrent={!subRoute}
-                        route={currentRoute}
-                        title={currentRoute.title}
-                        iconComponent={currentRoute.icon} />)
-                    .addIf(!!subRoute, <BreadcrumbLink
-                        key={2}
-                        isCurrent
-                        title={subRoute?.title ?? ''} />)
-                    .getArray()}
-            </Breadcrumbs>
+            <EpistoFlex2
+                align='center'>
+
+                {backButtonProps &&
+                    <EpistoButton
+                        style={{
+                            color: 'var(--mildDeepBlue)',
+                            cursor: 'pointer',
+                            padding: '6px 16px',
+                            borderRadius: '5px',
+                            fontWeight: 'bold',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            margin: '0 20px 0 0',
+                            height: '41px',
+                            minHeight: '0px'
+                        }}
+                        variant='plain'
+                        {...backButtonProps} >
+
+                        <ArrowBack
+                            style={{
+                                margin: '0 5px 2px 0'
+                            }} />
+
+                        {backButtonProps.children}
+                    </EpistoButton>}
+
+                {/* breadcrumbs */}
+                <Breadcrumbs>
+
+                    {new ArrayBuilder()
+                        .addIf(!!currentRoute, <BreadcrumbLink
+                            key={1}
+                            isCurrent={!subRoute}
+                            route={currentRoute}
+                            title={currentRoute.title}
+                            iconComponent={currentRoute.icon} />)
+                        .addIf(!!subRoute, <BreadcrumbLink
+                            key={2}
+                            isCurrent
+                            title={subRoute?.title ?? ''} />)
+                        .getArray()}
+                </Breadcrumbs>
+            </EpistoFlex2>
+
 
             <EpistoFlex2 align='center'>
 

@@ -1,18 +1,17 @@
-import {ArrowBack, ArrowForward, ArrowRight, FiberManualRecord} from '@mui/icons-material';
-import {ReactNode} from 'react';
-import {useNavigate} from 'react-router-dom';
-import {applicationRoutes} from '../../../configuration/applicationRoutes';
-import {useActiveCourses} from '../../../services/api/userProgressApiService';
-import {Environment} from '../../../static/Environemnt';
-import {usePaging} from '../../../static/frontendHelpers';
-import {EpistoButton} from '../../controls/EpistoButton';
-import {EpistoFlex2, EpistoFlex2Props} from '../../controls/EpistoFlex';
-import {EpistoFont} from '../../controls/EpistoFont';
-import {EpistoGrid} from '../../controls/EpistoGrid';
+import { ArrowBack, ArrowForward, ArrowRight, FiberManualRecord } from '@mui/icons-material';
+import { ReactNode } from 'react';
+import { applicationRoutes } from '../../../configuration/applicationRoutes';
+import { useActiveCourses } from '../../../services/api/userProgressApiService';
+import { useNavigation } from '../../../services/core/navigatior';
+import { Environment } from '../../../static/Environemnt';
+import { usePaging } from '../../../static/frontendHelpers';
+import { EpistoButton } from '../../controls/EpistoButton';
+import { EpistoFlex2, EpistoFlex2Props } from '../../controls/EpistoFlex';
+import { EpistoFont } from '../../controls/EpistoFont';
+import { EpistoGrid } from '../../controls/EpistoGrid';
 import StatisticsCard from '../../statisticsCard/StatisticsCard';
-import {FlexListItem} from '../../universal/FlexListItem';
-import {AdminSubpageHeader} from '../AdminSubpageHeader';
-
+import { FlexListItem } from '../../universal/FlexListItem';
+import { AdminSubpageHeader } from '../AdminSubpageHeader';
 const AdminSectionWithButton = (props: {
     title: string,
     children?: ReactNode,
@@ -49,13 +48,20 @@ export const AdminHomeOverview = () => {
     const activeCoursesPaging = usePaging({ items: activeCourses });
     const currentCourse = activeCoursesPaging.currentItem;
 
-    const nav = useNavigate();
+    const { navigateToHref } = useNavigation();
 
     return <AdminSubpageHeader
         isInverseBackground
         tabMenuItems={[
             applicationRoutes.administrationRoute.homeRoute.overviewRoute,
-            applicationRoutes.administrationRoute.homeRoute.detailsRoute
+            applicationRoutes.administrationRoute.homeRoute.detailsRoute, {
+                title: 'Felhasználók áttekintése',
+                route: applicationRoutes.administrationRoute.usersRoute.route,
+                navAction: () => {
+
+                    navigateToHref(applicationRoutes.administrationRoute.usersRoute.route.getAbsolutePath() + '?preset=reviewRequired');
+                }
+            }
         ]}>
         <EpistoFlex2 flex="3"
             direction="column">

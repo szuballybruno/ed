@@ -1,19 +1,31 @@
-import {LinearProgress, LinearProgressProps} from '@mui/material';
-import {EpistoDiv} from '../controls/EpistoDiv';
-import {EpistoFont} from '../controls/EpistoFont';
+import { LinearProgress, LinearProgressProps } from '@mui/material';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { EpistoFont } from '../controls/EpistoFont';
 
 export const LinearProgressWithLabel = (props: LinearProgressProps & { value: number }) => {
-    return <EpistoDiv >
-        <EpistoDiv width="100%"
-            mr='1px' >
-            <LinearProgress variant={'determinate'}
+    return <EpistoFlex2
+        align='center'
+        flex='1'>
+
+        <EpistoFlex2
+            flex='1'
+            align='center'
+            minWidth="100%"
+            h='10px'
+            mr='5px'>
+
+            <LinearProgress
+                style={{
+                    width: '100%'
+                }}
+                variant={'determinate'}
                 {...props} />
-        </EpistoDiv>
-        <EpistoDiv minWidth='35px'>
+        </EpistoFlex2>
+        <EpistoFlex2 minWidth='35px'>
 
             <EpistoFont fontSize={'fontNormal14'}>
                 {`${Math.round(props.value)}%`}
             </EpistoFont>
-        </EpistoDiv>
-    </EpistoDiv>;
+        </EpistoFlex2>
+    </EpistoFlex2 >;
 };

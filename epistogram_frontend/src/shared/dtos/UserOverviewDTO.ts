@@ -4,6 +4,7 @@ export class UserOverviewDTO {
     userId: Id<'User'>;
     companyId: Id<'Company'>;
     userEmail: string;
+    signupDate: Date;
     firstName: string;
     lastName: string;
     avatarFilePath: string;
