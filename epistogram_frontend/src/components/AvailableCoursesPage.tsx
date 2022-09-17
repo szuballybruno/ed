@@ -1,25 +1,24 @@
-import {GridItem, useMediaQuery} from '@chakra-ui/react';
-import {Select, ToggleButton, ToggleButtonGroup} from '@mui/material';
+import { GridItem, useMediaQuery } from '@chakra-ui/react';
+import { Select, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import React from 'react';
-import {CourseApiService} from '../services/api/courseApiService';
-import {useNavigation} from '../services/core/navigatior';
-import {useShowErrorDialog} from '../services/core/notifications';
-import {AvailableCourseDTO} from '../shared/dtos/AvailableCourseDTO';
-import {OrderType} from '../shared/types/sharedTypes';
-import {Id} from '../shared/types/versionId';
-import {distinctByAllKeys} from '../static/frontendHelpers';
-import {translatableTexts} from '../static/translatableTexts';
-import {ContentPane} from './ContentPane';
-import {EpistoButton} from './controls/EpistoButton';
-import {EpistoDiv} from './controls/EpistoDiv';
-import {EpistoFlex, EpistoFlex2} from './controls/EpistoFlex';
-import {EpistoFont} from './controls/EpistoFont';
-import {EpistoGrid} from './controls/EpistoGrid';
-import {LeftPane} from './LeftPane';
-import {PageRootContainer} from './PageRootContainer';
-import {useSetBusy} from './system/LoadingFrame/BusyBarContext';
+import { CourseApiService } from '../services/api/courseApiService';
+import { useNavigation } from '../services/core/navigatior';
+import { useShowErrorDialog } from '../services/core/notifications';
+import { AvailableCourseDTO } from '../shared/dtos/AvailableCourseDTO';
+import { OrderType } from '../shared/types/sharedTypes';
+import { Id } from '../shared/types/versionId';
+import { translatableTexts } from '../static/translatableTexts';
+import { ContentPane } from './ContentPane';
+import { EpistoButton } from './controls/EpistoButton';
+import { EpistoDiv } from './controls/EpistoDiv';
+import { EpistoFlex, EpistoFlex2 } from './controls/EpistoFlex';
+import { EpistoFont } from './controls/EpistoFont';
+import { EpistoGrid } from './controls/EpistoGrid';
+import { LeftPane } from './LeftPane';
+import { PageRootContainer } from './PageRootContainer';
+import { useSetBusy } from './system/LoadingFrame/BusyBarContext';
 import CourseTile from './universal/CourseTile';
-import {EpistoSearch} from './universal/EpistoSearch';
+import { EpistoSearch } from './universal/EpistoSearch';
 
 const AvailableCoursesPage = () => {
 
@@ -29,7 +28,11 @@ const AvailableCoursesPage = () => {
     const [isRecommended, setIsRecommended] = React.useState(false);
     const [orderBy, setOrderBy] = React.useState<OrderType | null>(null);
 
-    const { courses, coursesState, coursesError } = CourseApiService.useUserCourses(searchText, filterCategoryId, isFeatured, isRecommended, orderBy);
+    const { courses, coursesState, coursesError } = CourseApiService
+        .useUserCourses(searchText, filterCategoryId, isFeatured, isRecommended, orderBy);
+
+    const { courseCategories, courseCategoriesState, courseCategoriesError } = CourseApiService
+        .useAvailableCourseCategories();
 
     const { playCourse, navigateToCourseDetails } = useNavigation();
     const showError = useShowErrorDialog();
@@ -45,14 +48,6 @@ const AvailableCoursesPage = () => {
         setIsRecommended(false);
         setOrderBy(null);
     };
-
-    const categoryOptions = distinctByAllKeys(courses
-        .map((course, index) => ({
-            categoryId: course.categoryId,
-            categoryName: course.categoryName
-        })),
-        ['categoryId']
-    );
 
     const navigateToDetailsPage = (course: AvailableCourseDTO) => {
 
@@ -88,10 +83,10 @@ const AvailableCoursesPage = () => {
                     }}
                     orientation={'vertical'}>
 
-                    {categoryOptions
-                        .sort((a, b) => a.categoryName > b.categoryName
+                    {courseCategories
+                        .sort((a, b) => a.name > b.name
                             ? 1
-                            : a.categoryName < b.categoryName
+                            : a.name < b.name
                                 ? -1
                                 : 0)
                         .map((categoryOption, index) => {
@@ -106,7 +101,7 @@ const AvailableCoursesPage = () => {
                                     border: 'none'
                                 }}
                                 onClick={() => {
-                                    setFilterCategoryId(categoryOption.categoryId);
+                                    setFilterCategoryId(categoryOption.id);
                                 }}
                                 key={index}>
                                 <EpistoFlex2
@@ -115,11 +110,11 @@ const AvailableCoursesPage = () => {
                                     p="3px"
                                     height="30px"
                                     m="2px 10px 2px 0px"
-                                    bgColor={filterCategoryId === categoryOption.categoryId
+                                    bgColor={filterCategoryId === categoryOption.id
                                         ? 'var(--deepBlue)'
                                         : 'var(--epistoTeal)'} />
 
-                                {categoryOption.categoryName}
+                                {categoryOption.name}
                             </ToggleButton>;
                         })}
                 </ToggleButtonGroup>

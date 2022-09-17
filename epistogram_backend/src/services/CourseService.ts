@@ -17,6 +17,7 @@ import { CourseContentAdminDTO } from '../shared/dtos/admin/CourseContentAdminDT
 import { CourseContentItemAdminDTO } from '../shared/dtos/admin/CourseContentItemAdminDTO';
 import { AvailableCourseDTO } from '../shared/dtos/AvailableCourseDTO';
 import { CourseBriefData } from '../shared/dtos/CourseBriefData';
+import { CourseCategoryDTO } from '../shared/dtos/CourseCategoryDTO';
 import { CourseDetailsDTO } from '../shared/dtos/CourseDetailsDTO';
 import { CourseDetailsEditDataDTO } from '../shared/dtos/CourseDetailsEditDataDTO';
 import { CreateCourseDTO } from '../shared/dtos/CreateCourseDTO';
@@ -536,6 +537,16 @@ export class CourseService {
                 courseId,
                 userId
             } as CourseAccessBridge);
+    }
+
+    async getAvailableCourseCategoriesAsync(principalId: PrincipalId) {
+
+        const courseCategories = await this._ormService
+            .query(CourseCategory)
+            .getMany();
+
+        return this._mapperService
+            .mapTo(CourseCategoryDTO, [courseCategories]);
     }
 
     /**

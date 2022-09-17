@@ -458,28 +458,13 @@ const marray = [
         }),
 
     epistoMappingsBuilder
+        .addArrayMapping(CourseCategoryDTO, () => (entities: CourseCategory[]) => {
+
+            return toCourseCategoryDTO(entities);
+        }),
+
+    epistoMappingsBuilder
         .addMapping(CourseDetailsEditDataDTO, ([urlService]) => (view: CourseAdminDetailedView, categories: CourseCategory[], teachers: User[]) => {
-
-            const toCourseCategoryDTO = (cc: CourseCategory[]): CourseCategoryDTO[] => {
-
-                return cc
-                    .filter(x => !x.parentCategoryId)
-                    .map(parent => {
-
-                        const children = cc
-                            .filter(cat => cat.parentCategoryId === parent.id);
-
-                        return {
-                            id: parent.id,
-                            name: parent.name,
-                            childCategories: children
-                                .map(child => ({
-                                    id: child.id,
-                                    name: child.name
-                                }))
-                        } as CourseCategoryDTO;
-                    });
-            };
 
             const courseCategoryDTOs = toCourseCategoryDTO(categories);
 
@@ -1303,6 +1288,27 @@ export const toRoleDTO = (role: Role) => {
         name: role.name
     } as RoleDTO;
 };
+
+export const toCourseCategoryDTO = (cc: CourseCategory[]): CourseCategoryDTO[] => {
+
+    return cc
+        .filter(x => !x.parentCategoryId)
+        .map(parent => {
+
+            const children = cc
+                .filter(cat => cat.parentCategoryId === parent.id);
+
+            return {
+                id: parent.id,
+                name: parent.name,
+                childCategories: children
+                    .map(child => ({
+                        id: child.id,
+                        name: child.name
+                    }))
+            } as CourseCategoryDTO;
+        });
+}
 
 export const toJobTitleDTO = (jobTitle: JobTitle) => {
 

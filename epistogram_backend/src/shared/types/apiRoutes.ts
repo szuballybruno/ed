@@ -208,6 +208,7 @@ export const apiRoutes = {
         getCourseDetails: '/course/get-course-details',
         getAdminCourseList: '/course/get-admin-course-list',
         setCourseMode: '/course/set-course-mode',
+        getAvailableCourseCategories: '/course/get-available-course-categories'
     },
 
     courseProgress: {

@@ -3,6 +3,7 @@ import { CourseContentAdminDTO } from '../../shared/dtos/admin/CourseContentAdmi
 import { CourseContentItemAdminDTO } from '../../shared/dtos/admin/CourseContentItemAdminDTO';
 import { AvailableCourseDTO } from '../../shared/dtos/AvailableCourseDTO';
 import { CourseBriefData } from '../../shared/dtos/CourseBriefData';
+import { CourseCategoryDTO } from '../../shared/dtos/CourseCategoryDTO';
 import { CourseDetailsDTO } from '../../shared/dtos/CourseDetailsDTO';
 import { CourseDetailsEditDataDTO } from '../../shared/dtos/CourseDetailsEditDataDTO';
 import { CoursePermissionAssignDTO } from '../../shared/dtos/CoursePermissionAssignDTO';
@@ -168,6 +169,17 @@ const useUserCourses = (
     };
 };
 
+const useAvailableCourseCategories = () => {
+
+    const qr = QueryService.useXQueryArray<CourseCategoryDTO>(apiRoutes.course.getAvailableCourseCategories);
+
+    return {
+        courseCategories: qr.data,
+        courseCategoriesError: qr.error,
+        courseCategoriesState: qr.state
+    };
+};
+
 export const CourseApiService = {
     usePermissionAssignCourses,
     useAdminCourseList,
@@ -181,5 +193,6 @@ export const CourseApiService = {
     useUploadCourseThumbnailAsync,
     useCourseBriefData,
     useCourseDetails,
-    useUserCourses
+    useUserCourses,
+    useAvailableCourseCategories
 };

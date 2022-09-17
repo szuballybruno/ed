@@ -166,8 +166,8 @@ export const apiRoutes = {
         saveUser: '/users/save-user',
         saveUserSimple: '/users/save-user-simple',
         getBriefUserData: '/users/get-brief-user-data',
-        getUserListForAdministration: '/users/get-user-administartion-user-list',
         saveUserCourses: '/users/save-user-courses' as ParametrizedRouteType<{ body: { mutations: Mutation<UserCourseStatsDTO, 'courseId'>[], userId: Id<'User'> } }>,
+        getUserListForAdministration: '/users/get-user-administartion-user-list'
     },
 
     file: {
@@ -208,6 +208,7 @@ export const apiRoutes = {
         getCourseDetails: '/course/get-course-details',
         getAdminCourseList: '/course/get-admin-course-list',
         setCourseMode: '/course/set-course-mode',
+        getAvailableCourseCategories: '/course/get-available-course-categories'
     },
 
     courseProgress: {
