@@ -1,5 +1,6 @@
 import { Grid } from '@chakra-ui/react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
+import { useNavigation } from '../../../services/core/navigatior';
 import { defaultCharts } from '../../../static/defaultChartOptions';
 import { Environment } from '../../../static/Environemnt';
 import { translatableTexts } from '../../../static/translatableTexts';
@@ -9,10 +10,11 @@ import StatisticsCard from '../../statisticsCard/StatisticsCard';
 import { EpistoBarChart } from '../../universal/charts/base_charts/EpistoBarChart';
 import { EpistoPieChart } from '../../universal/charts/base_charts/EpistoPieChart';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
-
 const weekdayLabels = Object.values(translatableTexts.misc.daysOfWeekFromMonday);
 
 export const AdminHomeDetails = () => {
+
+    const { navigateToHref } = useNavigation();
 
     const adminHomeDetailsStatistics = [
         {
@@ -196,7 +198,14 @@ export const AdminHomeDetails = () => {
             title: applicationRoutes.administrationRoute.homeRoute.overviewRoute.title
         }, {
             route: applicationRoutes.administrationRoute.homeRoute.detailsRoute.route,
-            title: applicationRoutes.administrationRoute.homeRoute.detailsRoute.title
+            title: applicationRoutes.administrationRoute.homeRoute.detailsRoute.title,
+        }, {
+            title: 'Felhasználók áttekintése',
+            route: applicationRoutes.administrationRoute.usersRoute.route,
+            navAction: () => {
+
+                navigateToHref(applicationRoutes.administrationRoute.usersRoute.route.getAbsolutePath() + '?preset=reviewRequired');
+            }
         }]}>
 
         {adminHomeDetailsStatistics

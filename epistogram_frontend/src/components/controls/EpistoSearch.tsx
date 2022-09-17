@@ -15,15 +15,17 @@ export const EpistoSearch = (props: {} & InputProps) => {
                 width: 41,
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'flex-end'
+                justifyContent: 'center'
             }}>
+
             <Search />
         </InputLeftElement>
-        
+
         <Input
             className="largeSoftShadow"
             outline="none"
-            padding="10px 10px 10px 45px"
+            height='100%'
+            padding="10px 10px 10px 35px"
             placeholder="Keresés..."
             borderRadius="5px"
             background="var(--transparentWhite70)"

@@ -36,6 +36,7 @@ SELECT
 	u.last_name,
 	u.company_id,
 	u.email user_email,
+	u.creation_date signup_date,
 	sf.file_path avatar_file_path,
 	upa.average_performance_percentage,
 	tus.total_session_length_seconds,

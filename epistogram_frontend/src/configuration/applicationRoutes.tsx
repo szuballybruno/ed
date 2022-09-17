@@ -5,6 +5,7 @@ import LocalPoliceIcon from '@mui/icons-material/LocalPolice';
 import LocationCityIcon from '@mui/icons-material/LocationCity';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
+import { UserDataGridPresetType } from '../components/administration/users/dataGrids/AdminUsersDataGridSubpage';
 import { ApplicationRoute, EpistoRoute } from '../models/types';
 import { Id } from '../shared/types/versionId';
 import { Environment } from '../static/Environemnt';
@@ -44,7 +45,7 @@ export type ApplicationRoutesType = {
             overviewRoute: ApplicationRoute;
             detailsRoute: ApplicationRoute;
         };
-        usersRoute: ApplicationRoute & {
+        usersRoute: ApplicationRoute<void, { preset: UserDataGridPresetType }> & {
             indexRoute: ApplicationRoute;
             addRoute: ApplicationRoute;
             editRoute: ApplicationRoute<{ userId: Id<'User'> }>;

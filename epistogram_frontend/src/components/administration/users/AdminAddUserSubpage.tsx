@@ -34,8 +34,7 @@ const AdminAddUserSubpage = (props: {
 
     const handleCreateInvitedUser = usePostCallback(createInvitedUser, [postCreateInvitedUser]);
 
-    return <AdminBreadcrumbsHeader
-        breadcrumbDatas={[]}>
+    return <AdminBreadcrumbsHeader>
 
         <AdminUserList
             currentUserId={null}

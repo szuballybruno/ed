@@ -1,13 +1,14 @@
 import { Flex } from '@chakra-ui/react';
 import { Add } from '@mui/icons-material';
 import { Select } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { applicationRoutes } from '../../../../configuration/applicationRoutes';
 import { useUserOverviewStats } from '../../../../services/api/userStatsApiService';
 import { useNavigation } from '../../../../services/core/navigatior';
 import { OrderType } from '../../../../shared/types/sharedTypes';
 import { Id } from '../../../../shared/types/versionId';
-import { isCurrentAppRoute, usePaging } from '../../../../static/frontendHelpers';
+import { usePaging } from '../../../../static/frontendHelpers';
+import { useRouteQuery } from '../../../../static/locationHelpers';
 import { translatableTexts } from '../../../../static/translatableTexts';
 import { EpistoButton } from '../../../controls/EpistoButton';
 import { EpistoDataGrid, EpistoDataGridColumnBuilder, EpistoDataGridColumnVisibilityModel } from '../../../controls/EpistoDataGrid';
@@ -27,6 +28,7 @@ class RowType {
     };
     name: string;
     email: string;
+    signupDate: string;
     averagePerformancePercentage: number;
     invertedLagBehind: number;
     totalSessionLengthSeconds: number;
@@ -36,6 +38,8 @@ class RowType {
     editUserButton: Id<'User'>;
 };
 
+export type UserDataGridPresetType = 'reviewRequired' | 'all'
+
 const defaultPreset: EpistoDataGridColumnVisibilityModel<RowType> = {
     engagementPoints: false,
     productivityPercentage: false
@@ -44,7 +48,8 @@ const defaultPreset: EpistoDataGridColumnVisibilityModel<RowType> = {
 const reviewRequiredPreset: EpistoDataGridColumnVisibilityModel<RowType> = {
     invertedLagBehind: false,
     totalSessionLengthSeconds: false,
-    completedCourseItemCount: false
+    completedCourseItemCount: false,
+    signupDate: false
 };
 
 export const AdminUserDataGridSubpage = () => {
@@ -53,6 +58,8 @@ export const AdminUserDataGridSubpage = () => {
     const [currentUserId, setCurrentUserId] = useState<Id<'User'> | null>(null);
     const [orderBy, setOrderBy] = useState<OrderType | null>(null);
 
+    const selectedPreset = useRouteQuery(applicationRoutes.administrationRoute.usersRoute)
+        .getValueOrNull(x => x.preset, 'string');
 
     const paging = usePaging({
         items: [{
@@ -63,6 +70,13 @@ export const AdminUserDataGridSubpage = () => {
             preset: reviewRequiredPreset
         }]
     });
+
+    useEffect(() => {
+
+        if (selectedPreset === 'reviewRequired')
+            return paging.setItem(1);
+    }, []);
+
     const { userOverviewStats } = useUserOverviewStats(paging.currentItem?.preset === reviewRequiredPreset);
 
     const AdminUsersSearchBar = () => {
@@ -104,6 +118,7 @@ export const AdminUserDataGridSubpage = () => {
     const userRows = userOverviewStats
         ? userOverviewStats
             .map((user) => {
+
                 return {
                     userId: user.userId,
                     avatar: {
@@ -113,6 +128,12 @@ export const AdminUserDataGridSubpage = () => {
                     },
                     name: user.firstName ? `${user.lastName} ${user.firstName}` : '',
                     email: user.userEmail,
+                    signupDate: new Date(user.signupDate)
+                        .toLocaleDateString('hu-hu', {
+                            year: 'numeric',
+                            month: '2-digit',
+                            day: '2-digit'
+                        }) + '',
                     averagePerformancePercentage: user.averagePerformancePercentage,
                     invertedLagBehind: user.invertedLagBehind,
                     totalSessionLengthSeconds: user.totalSessionLengthSeconds,
@@ -147,6 +168,10 @@ export const AdminUserDataGridSubpage = () => {
             .add({
                 field: 'email',
                 headerName: 'E-mail',
+            })
+            .add({
+                field: 'signupDate',
+                headerName: 'Regisztráció ideje',
             })
             .add({
                 field: 'averagePerformancePercentage',
@@ -195,7 +220,16 @@ export const AdminUserDataGridSubpage = () => {
 
     return <AdminBreadcrumbsHeader
         headerComponent={<AdminUsersSearchBar />}
-        viewSwitchChecked={isCurrentAppRoute(applicationRoutes.administrationRoute.usersRoute)}
+        backButtonProps={selectedPreset === 'reviewRequired'
+            ? {
+                children: 'Vissza az összesítő nézetbe',
+                onClick: () => {
+
+                    window.history.back();
+                }
+            }
+            : undefined}
+        viewSwitchChecked={false}
         viewSwitchFunction={() => navigate2(applicationRoutes.administrationRoute.usersRoute.editRoute, { userId: currentUserId })}>
 
         <Flex
