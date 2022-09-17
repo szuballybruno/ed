@@ -22,6 +22,12 @@ import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { RoleService } from './RoleService';
 import { TeacherInfoService } from './TeacherInfoService';
+import { Mutation } from '../shared/dtos/mutations/Mutation';
+import { UserCourseStatsDTO } from '../shared/dtos/UserCourseStatsDTO';
+import { CourseAccessBridge } from '../models/entity/misc/CourseAccessBridge';
+import { instantiate } from '../shared/logic/sharedLogic';
+import { UserCourseBridgeService } from './UserCourseBridgeService';
+import { UserCourseBridge } from '../models/entity/misc/UserCourseBridge';
 
 export class UserService {
 
@@ -38,7 +44,8 @@ export class UserService {
         teacherInfoService: TeacherInfoService,
         hashService: HashService,
         roleService: RoleService,
-        authorizationService: AuthorizationService) {
+        authorizationService: AuthorizationService,
+        private _userCourseBridgeService: UserCourseBridgeService) {
 
         this._ormService = ormService;
         this._mapperService = mapperService;
@@ -514,7 +521,6 @@ export class UserService {
             });
     };
 
-
     /**
      * Get a list of the users marked as teacher.
      */
@@ -535,4 +541,143 @@ export class UserService {
 
         // return teachers;
     };
+
+    /**
+     * Saves user's courses
+     */
+    async saveUserCoursesAsync(userId: Id<'User'>, muts: Mutation<UserCourseStatsDTO, 'courseId'>[]) {
+
+        await this._saveUserCourseAccessBridgesAsync(userId, muts);
+        await this._saveUserCourseBridgesAsync(userId, muts);
+        await this._saveUserCourseRequiredCompletionDates(userId, muts);
+    }
+
+    private async _saveUserCourseAccessBridgesAsync(userId: Id<'User'>, muts: Mutation<UserCourseStatsDTO, 'courseId'>[]) {
+
+        /**
+         * Save access bridges
+         */
+        const existingBridges = await this
+            ._ormService
+            .query(CourseAccessBridge, { userId })
+            .where('userId', '=', 'userId')
+            .getMany();
+
+        const accessMutations = muts
+            .filter(x => x.fieldMutators
+                .some(x => x.field === 'isAccessible'))
+            .map(x => ({
+                key: x.key,
+                isAccessable: x.fieldMutators
+                    .single(x => x.field === 'isAccessible')
+                    .value
+            }));
+
+        // new bridges
+        const newBridges = accessMutations
+            .filter(x => x.isAccessable)
+            .filter(x => !existingBridges
+                .some(b => b.courseId === x.key))
+            .map(x => instantiate<InsertEntity<CourseAccessBridge>>({
+                companyId: null,
+                courseId: x.key,
+                userId
+            }));
+
+        // insert new course acccess bridges
+        await this
+            ._ormService
+            .createManyAsync(CourseAccessBridge, newBridges);
+
+        // deleted bridges
+        const deletedBridgeIds = existingBridges
+            .filter(x => accessMutations
+                .some(acmut => x.courseId === acmut.key && acmut.isAccessable === false))
+            .map(x => x.id);
+
+        await this
+            ._ormService
+            .hardDelete(CourseAccessBridge, deletedBridgeIds);
+    }
+
+    private async _saveUserCourseBridgesAsync(userId: Id<'User'>, muts: Mutation<UserCourseStatsDTO, 'courseId'>[]) {
+
+        /**
+         * Save access bridges
+         */
+        const existingBridges = await this
+            ._ormService
+            .query(UserCourseBridge, { userId })
+            .where('userId', '=', 'userId')
+            .getMany();
+
+        const assignMutations = muts
+            .filter(x => x.fieldMutators
+                .some(x => x.field === 'isAssigned'))
+            .map(x => ({
+                key: x.key,
+                isAssigned: x.fieldMutators
+                    .single(x => x.field === 'isAssigned')
+                    .value
+            }));
+
+        // new bridges
+        const newBridges = assignMutations
+            .filter(x => x.isAssigned)
+            .filter(x => !existingBridges
+                .some(b => b.courseId === x.key))
+            .map(x => instantiate<InsertEntity<UserCourseBridge>>({
+                courseId: x.key,
+                userId,
+                courseMode: 'beginner',
+                creationDate: new Date(),
+                currentItemCode: null,
+                isCurrent: false,
+                previsionedCompletionDate: null,
+                requiredCompletionDate: null,
+                stageName: 'assigned',
+                startDate: null,
+                tempomatMode: 'balanced'
+            }));
+
+        // insert new course acccess bridges
+        await this
+            ._ormService
+            .createManyAsync(UserCourseBridge, newBridges);
+    }
+
+    private async _saveUserCourseRequiredCompletionDates(userId: Id<'User'>, muts: Mutation<UserCourseStatsDTO, 'courseId'>[]) {
+
+        /**
+         * Required completion dates
+         */
+        const completionDates = muts
+            .filter(x => x.fieldMutators
+                .some(x => x.field === 'requiredCompletionDate'))
+            .map(x => ({
+                courseId: x.key,
+                requiredCompletionDate: x.fieldMutators
+                    .single(x => x.field === 'requiredCompletionDate')
+                    .value
+            }));
+
+        const userCourseBridges = await this
+            ._ormService
+            .query(UserCourseBridge, { userId, courseIds: completionDates.map(x => x.courseId) })
+            .where('courseId', '=', 'courseIds')
+            .and('userId', '=', 'userId')
+            .getMany();
+
+        const updatedUserCourseBridges = userCourseBridges
+            .map(x => ({
+                ...x,
+                requiredCompletionDate: completionDates
+                    .single(x => x.courseId === x.courseId)
+                    .requiredCompletionDate
+            } as UserCourseBridge));
+
+        await this
+            ._userCourseBridgeService
+            .setRequiredCompletionDatesAsync(updatedUserCourseBridges);
+    }
 }

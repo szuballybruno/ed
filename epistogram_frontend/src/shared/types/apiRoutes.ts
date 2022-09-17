@@ -1,5 +1,6 @@
 import { CompanyAssociatedCourseDTO } from '../dtos/company/CompanyAssociatedCourseDTO';
 import { Mutation } from '../dtos/mutations/Mutation';
+import { UserCourseStatsDTO } from '../dtos/UserCourseStatsDTO';
 import { Id } from './versionId';
 
 export type RouteParameterType<TBody = any, TQuery = any> = { body?: TBody, query?: TQuery };
@@ -165,7 +166,8 @@ export const apiRoutes = {
         saveUser: '/users/save-user',
         saveUserSimple: '/users/save-user-simple',
         getBriefUserData: '/users/get-brief-user-data',
-        getUserListForAdministration: '/users/get-user-administartion-user-list'
+        getUserListForAdministration: '/users/get-user-administartion-user-list',
+        saveUserCourses: '/users/save-user-courses' as ParametrizedRouteType<{ body: { mutations: Mutation<UserCourseStatsDTO, 'courseId'>[], userId: Id<'User'> } }>,
     },
 
     file: {

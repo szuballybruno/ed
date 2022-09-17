@@ -241,8 +241,6 @@ export class TempomatService {
             }));
     }
 
-
-
     calculateCompanyLagBehinds(companyTempomatValues: CalculatedTempomatValueTypeWithUserId[]) {
         return companyTempomatValues
             .filter(x => (x !== null && x.lagBehindPercentage !== null))

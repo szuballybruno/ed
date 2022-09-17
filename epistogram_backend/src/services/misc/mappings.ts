@@ -240,6 +240,7 @@ const marray = [
                         userId: view.userId,
                         courseId: view.courseId,
                         courseName: view.title,
+                        isAccessible: view.isAccessible,
                         isAssigned: view.isAssigned,
                         thumbnailImageUrl: assetUrlService.getAssetUrl(view.coverFilePath),
                         startDate: view.startDate,

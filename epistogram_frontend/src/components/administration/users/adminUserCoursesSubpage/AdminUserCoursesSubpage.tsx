@@ -3,7 +3,7 @@ import { applicationRoutes } from '../../../../configuration/applicationRoutes';
 import { UserApiService } from '../../../../services/api/userApiService';
 import { useUserAssignedCourses } from '../../../../services/api/userStatsApiService';
 import { useNavigation } from '../../../../services/core/navigatior';
-import { useShowErrorDialog } from '../../../../services/core/notifications';
+import { showNotification, useShowErrorDialog } from '../../../../services/core/notifications';
 import { LocalStorageService } from '../../../../services/core/storageService';
 import { AdminPageUserDTO } from '../../../../shared/dtos/admin/AdminPageUserDTO';
 import { UserCourseStatsDTO } from '../../../../shared/dtos/UserCourseStatsDTO';
@@ -42,12 +42,26 @@ export const AdminUserCoursesSubpage = ({
     const {
         userAssignedCourses,
         userAssignedCoursesState,
-        userAssignedCoursesError
+        userAssignedCoursesError,
+        refetchUserAssignedCourses
     } = useUserAssignedCourses(userId, editModeEnabled);
+
+    const { saveUserCourses, saveUserCoursesState } = UserApiService
+        .useSaveUserAssignedCourses();
 
     useSetBusy(useUserAssignedCourses, userAssignedCoursesState, userAssignedCoursesError);
 
     const [{ mutatedItems, mutations }, mutatorFunctions] = useXMutatorNew(UserCourseStatsDTO, 'courseId', UserCourseStatsDTO.name);
+
+    /**
+     * Handle save user courses 
+     */
+    const handleSaveUserCourses = useCallback(async () => {
+
+        await saveUserCourses({ mutations, userId });
+        showNotification('Saved');
+        await refetchUserAssignedCourses();
+    }, [saveUserCourses, mutations, userId, refetchUserAssignedCourses]);
 
     /**
      * Initialize mutator 
@@ -107,7 +121,13 @@ export const AdminUserCoursesSubpage = ({
                     checked={editModeEnabled}
                     setChecked={setEditModeEnabled}
                     label={editModeEnabled ? 'Disable editing' : 'Enable editing'} />
-            </>}>
+            </>}
+            headerButtons={editModeEnabled
+                ? [{
+                    title: 'Save',
+                    action: handleSaveUserCourses,
+                }]
+                : []}>
 
             <AdminUserCourseContentDialog
                 dialogLogic={adminCourseContentDialogLogic} />

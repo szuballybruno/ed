@@ -8,8 +8,19 @@ import { Id } from '../../shared/types/versionId';
 import { QueryService } from '../../static/QueryService';
 import { httpPostAsync, usePostDataUnsafe } from '../core/httpClient';
 
+const useSaveUserAssignedCourses = () => {
+
+    const qr = usePostDataUnsafe(apiRoutes.user.saveUserCourses);
+
+    return {
+        saveUserCourses: qr.postDataAsync,
+        saveUserCoursesState: qr.state
+    };
+};
+
 export const UserApiService = {
 
+    useSaveUserAssignedCourses,
     useUserListQuery: (searchText: string | null) => {
 
         const queryResult = QueryService.useXQuery<AdminPageUserDTO[]>(apiRoutes.user.getUserListForAdministration, { searchText });

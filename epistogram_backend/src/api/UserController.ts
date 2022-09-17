@@ -98,4 +98,14 @@ export class UserController implements XController<UserController> {
             .getBriefUserDataAsync(params.principalId, userId);
     }
 
+    @XControllerAction(apiRoutes.user.saveUserCourses, { isPost: true })
+    async saveUserCoursesAsync(params: ActionParams) {
+
+        const data = params
+            .getFromParameterized(apiRoutes.user.saveUserCourses);
+
+        await this
+            ._userService
+            .saveUserCoursesAsync(data.body.getValue(x => x.userId, 'int'), data.body.getValue(x => x.mutations, 'any[]'));
+    }
 }

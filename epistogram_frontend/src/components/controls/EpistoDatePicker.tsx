@@ -4,10 +4,12 @@ import { DateTime } from 'luxon';
 
 export const EpistoDatePicker = ({
     value,
-    setValue
+    setValue,
+    disabled
 }: {
-    value: Date,
-    setValue: (value: Date) => void
+    value: Date | null,
+    setValue: (value: Date) => void,
+    disabled?: boolean
 }) => {
 
     return (
@@ -17,6 +19,7 @@ export const EpistoDatePicker = ({
             inputFormat='yyyy-MM-DD'
             disableMaskedInput
             value={value}
+            disabled={disabled}
             onChange={(value: DateTime | null) => {
 
                 if (!value)

@@ -171,7 +171,7 @@ export class UserStatsService {
         const tempomatValues = views
             .map((userCourseData): CalculatedTempomatValueType => {
 
-                if (!userCourseData.isAssigned)
+                if (!userCourseData.isTempomatReady)
                     return {} as any;
 
                 return this

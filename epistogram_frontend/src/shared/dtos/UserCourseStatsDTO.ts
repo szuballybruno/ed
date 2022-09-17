@@ -7,6 +7,7 @@ export class UserCourseStatsDTO {
     thumbnailImageUrl: string;
     courseName: string;
     startDate: Date;
+    isAccessible: boolean;
     isAssigned: boolean;
     differenceFromAveragePerformancePercentage: number;
     courseProgressPercentage: number;

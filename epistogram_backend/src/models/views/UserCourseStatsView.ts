@@ -20,6 +20,12 @@ export class AdminUserCoursesView {
     @XViewColumn()
     isAssigned: boolean;
 
+    @XViewColumn()
+    isTempomatReady: boolean;
+
+    @XViewColumn()
+    isAccessible: boolean;
+
     @ViewColumn()
     @XViewColumn()
     title: string;

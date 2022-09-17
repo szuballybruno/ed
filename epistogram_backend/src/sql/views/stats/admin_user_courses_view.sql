@@ -143,6 +143,7 @@ recommended_videos_for_practise_cte AS
 SELECT
     u.id user_id,
     co.id course_id,
+    upev.assignee_user_id IS NOT NULL is_accessible,
     ucb.id IS NOT NULL is_assigned,
     cv.id course_version_id,
     cd.title,
@@ -165,20 +166,26 @@ SELECT
     ifecc.is_final_exam_completed,
     carc.correct_answer_rate,
     cecc.completed_exam_count,
-    rvfpc.recommended_videos_for_practise_count
+    rvfpc.recommended_videos_for_practise_count,
+    ucb.stage_name != 'assigned' AND ucb.stage_name IS NOT null is_tempomat_ready
 FROM public.user u
 
 -- join all companies available 
--- for user's company  
+-- for user's company
 INNER JOIN public.course_access_bridge cab
 ON cab.company_id = u.company_id
 
 LEFT JOIN public.course co
 ON co.id = cab.course_id
 
+LEFT JOIN public.user_permission_view upev
+ON upev.assignee_user_id = u.id
+AND upev.context_course_id = co.id
+AND upev.permission_code = 'WATCH_COURSE'
+
 LEFT JOIN public.user_course_bridge ucb
 ON ucb.course_id = co.id
-AND (ucb.stage_name = 'watch' OR ucb.stage_name = 'finished')
+AND ucb.user_id = u.id
 
 LEFT JOIN public.latest_course_version_view lcvv
 ON lcvv.course_id = co.id

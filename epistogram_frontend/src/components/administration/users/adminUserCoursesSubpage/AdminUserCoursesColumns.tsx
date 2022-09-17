@@ -55,27 +55,6 @@ export const useUserCoursesColumns = ({
         return ['Átlagos', ''];
     };
 
-    const commonColumns = new EpistoDataGridColumnBuilder<UserCoursesRowType, Id<'Course'>>()
-        .add({
-            field: 'requiredCompletionDate',
-            headerName: 'Határidő',
-            width: 320,
-            renderCell: ({ value, field, key }) => <EpistoFlex2>
-                <EpistoDatePicker
-                    value={value}
-                    setValue={newValue => mutatorFunctions
-                        .mutate({
-                            key,
-                            field,
-                            newValue
-                        })} />
-                {value && <EpistoButton>
-                    <EpistoIcons.Delete />
-                </EpistoButton>}
-            </EpistoFlex2>
-        })
-        .getColumns();
-
     const builder = new EpistoDataGridColumnBuilder<UserCoursesRowType, Id<'Course'>>()
         .add({
             field: 'thumbnailImageUrl',
@@ -96,10 +75,9 @@ export const useUserCoursesColumns = ({
     // return simplified columns
     if (hideStats)
         return builder
-            .add(commonColumns[0])
             .add({
-                field: 'isAssigned',
-                headerName: 'Assigned',
+                field: 'isAccessible',
+                headerName: 'Accessible',
                 renderCell: ({ value, key, field }) => <EpistoCheckbox
                     setValue={newValue => mutatorFunctions
                         .mutate({
@@ -108,6 +86,44 @@ export const useUserCoursesColumns = ({
                             newValue
                         })}
                     value={value} />
+            })
+            .add({
+                field: 'isAssigned',
+                headerName: 'Assigned',
+                renderCell: ({ value, key, field, row }) => <EpistoCheckbox
+                    setValue={newValue => mutatorFunctions
+                        .mutate({
+                            key,
+                            field,
+                            newValue
+                        })}
+                    value={value && row.isAccessible}
+                    disabled={!row.isAccessible} />
+            })
+            .add({
+                field: 'requiredCompletionDate',
+                headerName: 'Határidő',
+                width: 320,
+                renderCell: ({ value, field, key, row }) => <EpistoFlex2>
+                    <EpistoDatePicker
+                        disabled={!row.isAssigned}
+                        value={row.isAssigned ? value : null}
+                        setValue={newValue => mutatorFunctions
+                            .mutate({
+                                key,
+                                field,
+                                newValue
+                            })} />
+                    {value && <EpistoButton
+                        onClick={() => mutatorFunctions
+                            .mutate({
+                                key,
+                                field,
+                                newValue: null as any
+                            })}>
+                        <EpistoIcons.Delete />
+                    </EpistoButton>}
+                </EpistoFlex2>
             })
             .getColumns();
 
@@ -258,7 +274,10 @@ export const useUserCoursesColumns = ({
                 </EpistoFlex2>;
             }
         })
-        .add(commonColumns[0])
+        .add({
+            field: 'requiredCompletionDate',
+            headerName: 'Határidő',
+        })
         .add({
             field: 'moreDetails',
             headerName: 'Részletek',
