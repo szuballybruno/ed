@@ -17,7 +17,17 @@ export type EditDialogSubpage = {
     content: (isCurrent: boolean) => JSX.Element
 };
 
-export const EditDialogBase = <TParams,>(props: {
+export const EditDialogBase = <TParams,>({
+    title,
+    subTitle,
+    chipText,
+    chipColor,
+    logic: dialogLogic,
+    headerButtons,
+    hideTabs,
+    paging,
+    footer
+}: {
     title?: string,
     subTitle?: string,
     chipText?: string,
@@ -28,18 +38,6 @@ export const EditDialogBase = <TParams,>(props: {
     paging: PagingType<EditDialogSubpage>,
     footer?: ReactNode
 }) => {
-
-    const {
-        title,
-        subTitle,
-        chipText,
-        chipColor,
-        logic: dialogLogic,
-        headerButtons,
-        hideTabs,
-        paging,
-        footer
-    } = props;
 
     const focusedTab = !!paging.currentItem?.isFocused;
     const subpages = paging.items;

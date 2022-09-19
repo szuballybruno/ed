@@ -1,97 +1,85 @@
-import { Add } from '@mui/icons-material';
-import { useEffect, useMemo } from 'react';
-import { usePaging } from '../../../../static/frontendHelpers';
 import { translatableTexts } from '../../../../static/translatableTexts';
 import { EpistoButton } from '../../../controls/EpistoButton';
-import { EpistoFlex } from '../../../controls/EpistoFlex';
-import { EditDialogBase, EditDialogSubpage } from '../EditDialogBase';
+import { EpistoDataGrid } from '../../../controls/EpistoDataGrid';
+import { EpistoFlex2 } from '../../../controls/EpistoFlex';
+import { EpistoFont } from '../../../controls/EpistoFont';
+import { EpistoDialog } from '../../../universal/epistoDialog/EpistoDialog';
+import { useModuleEditColumns } from './ModuleEditColumns';
 import { ModuleEditDialogLogicType } from './ModuleEditDialogLogic';
-import { ModuleEdit } from './ModuleEdit';
-import { ModuleList } from './ModuleList';
 
 export const ModuleEditDialog = ({
     logic,
-    courseName
 }: {
-    courseName: string,
-    logic: ModuleEditDialogLogicType
+    logic: ModuleEditDialogLogicType,
 }) => {
 
     const {
-        createModule,
-        currentModule,
-        handleEditModule,
+        canDelete,
+        handleCreateModule,
         handleOk,
-        mutatorRef,
+        mutatorFunctions,
         dialogLogic,
-        handleBackToList,
-        canDelete
+        mutatedItems,
+        mutations,
+        isAnyItemsMutated
     } = logic;
 
-    const pages = useMemo(() => [
-        {
-            content: () => (
-                <ModuleList
-                    editModule={handleEditModule}
-                    canDelete={canDelete}
-                    mutator={mutatorRef} />
-            ),
-            title: 'Modulok szerkesztése'
+    const rows = mutatedItems
+        .filter(x => !x.isPretestModule);
 
-        },
-        {
-            content: () => (
-                <>
-                    {currentModule && <ModuleEdit
-                        dto={currentModule}
-                        mutator={mutatorRef} />}
-                </>
-            ),
-            title: currentModule?.name ?? '',
-            isFocused: true
-        }
-    ], [currentModule, handleEditModule, canDelete]);
-
-    const paging = usePaging<EditDialogSubpage>({
-        items: pages,
-        onPrevious: handleBackToList
-    });
-
-    useEffect(() => {
-
-        if (currentModule)
-            paging.next();
-    }, [currentModule]);
+    const columns = useModuleEditColumns({ mutatorFunctions });
 
     return (
-        <EditDialogBase
-            hideTabs
-            paging={paging}
-            logic={dialogLogic}
-            headerButtons={<>
-                <EpistoButton
-                    onClick={createModule}
-                    icon={<Add />}>
+        <EpistoDialog
+            logic={dialogLogic}>
 
-                    Hozzáadás
-                </EpistoButton>
-            </>}
-            chipText='Module'
-            chipColor='var(--deepBlue)'
-            title={'Edit modules'}
-            subTitle={courseName}
-            footer={(
-                <EpistoFlex
-                    justify="flex-end"
+            <EpistoFlex2
+                bg="white"
+                p="15px"
+                direction="column"
+                width="90vw"
+                height="90vh">
+
+                {/* header */}
+                <EpistoFlex2
+                    mb="15px"
+                    align="center"
+                    justify="space-between"
                     margin={{ all: 'px5' }}>
 
+                    <EpistoFont
+                        fontSize2="large">
+                        Module edit
+                    </EpistoFont>
+
+                    <EpistoButton
+                        variant='colored'
+                        onClick={handleCreateModule}>
+
+                        {translatableTexts.misc.add}
+                    </EpistoButton>
+                </EpistoFlex2>
+
+                {/* grid */}
+                <EpistoDataGrid
+                    hideFooter
+                    columns={columns}
+                    rows={rows}
+                    getKey={x => x.moduleVersionId} />
+
+                {/* footer */}
+                <EpistoFlex2
+                    justify="flex-end"
+                    mt="5px"
+                    margin={{ all: 'px5' }}>
                     <EpistoButton
                         variant='colored'
                         onClick={handleOk}>
 
                         {translatableTexts.misc.ok}
                     </EpistoButton>
-                </EpistoFlex>
-            )} />
+                </EpistoFlex2>
+            </EpistoFlex2>
+        </EpistoDialog>
     );
 };

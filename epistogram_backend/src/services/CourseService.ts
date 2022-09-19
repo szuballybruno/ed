@@ -454,7 +454,7 @@ export class CourseService {
         userId: PrincipalId,
         courseId: Id<'Course'>,
         itemMutations: Mutation<CourseContentItemAdminDTO, 'versionCode'>[],
-        moduleMutations: Mutation<ModuleEditDTO, 'versionId'>[]
+        moduleMutations: Mutation<ModuleEditDTO, 'moduleVersionId'>[]
     ) {
 
         if (itemMutations.length === 0 && moduleMutations.length === 0)

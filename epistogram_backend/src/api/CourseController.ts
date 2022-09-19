@@ -131,7 +131,7 @@ export class CourseController implements XController<CourseController> {
             .getValue<Mutation<CourseContentItemAdminDTO, 'versionCode'>>(x => x.itemMutations, 'any[]');
 
         const moduleMutations = bod
-            .getValue<Mutation<ModuleEditDTO, 'versionId'>>(x => x.moduleMutations, 'any[]');
+            .getValue<Mutation<ModuleEditDTO, 'moduleVersionId'>>(x => x.moduleMutations, 'any[]');
 
         const courseId = Id.create<'Course'>(bod
             .getValue(x => x.courseId, 'int'));

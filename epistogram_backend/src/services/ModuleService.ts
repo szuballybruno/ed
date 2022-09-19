@@ -123,7 +123,7 @@ export class ModuleService {
     }: {
         courseVersionMigrations: VersionMigrationContainer<'CourseVersion'>,
         itemMutations: Mutation<CourseContentItemAdminDTO, 'versionCode'>[],
-        moduleMutations: Mutation<ModuleEditDTO, 'versionId'>[]
+        moduleMutations: Mutation<ModuleEditDTO, 'moduleVersionId'>[]
     }) {
 
         // get old course version id

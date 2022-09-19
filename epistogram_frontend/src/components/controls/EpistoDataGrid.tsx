@@ -38,9 +38,10 @@ export type GridColumnType<TRow, TKey, TField extends keyof TRow> = {
     renderCell?: (params: RenderCellParamsType<TKey, TRow, TField>) => ReactNode | string;
     renderEditCell?: (params: RenderEditCellParamsType<TKey, TRow, TField>) => ReactNode | string;
     width?: number;
-    editHandler?: (params: { rowKey: TKey, value: TRow[TField], row: TRow }) => void;
+    editHandler?: (params: { rowKey: TKey, value: TRow[TField], row: TRow, field: TField }) => void;
     resizable?: boolean;
-    type?: 'int'
+    type?: 'int',
+    enabled?: (row: TRow, field: TField) => boolean
 };
 
 export type InitialStateType<TSchema> = {
@@ -70,14 +71,16 @@ export type EpistoDataGridColumnVisibilityModel<TRow> = {
     [key in keyof TRow]?: boolean
 }
 
-const mapColumn = <TSchema, TKey>(column: GridColumnType<TSchema, TKey, keyof TSchema>, getKey: (row: TSchema) => TKey) => {
+const mapToMUIDataGridColumn = <TSchema, TKey>(column: GridColumnType<TSchema, TKey, keyof TSchema>, getKey: (row: TSchema) => TKey) => {
 
     const { renderCell, type, editHandler, renderEditCell, field, ...others } = column;
+
+    const hasEditHandler = !!editHandler;
 
     const def: GridColDef = {
         ...others,
         field: field as any,
-        editable: !!editHandler
+        editable: hasEditHandler
     };
 
     if (renderCell)
@@ -142,8 +145,8 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>(props: {
 
     removeOverlay();
 
-    const columnsProcessed = columns
-        .map(column => mapColumn(column, getKey));
+    const muiDataGridColumnDefs = columns
+        .map(column => mapToMUIDataGridColumn(column, getKey));
 
     const apiRef = useGridApiRef();
 
@@ -179,6 +182,17 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>(props: {
 
     return (
         <DataGridPro
+            isCellEditable={event => {
+
+                const field = event.field as keyof TSchema;
+                const row = event.row as TSchema;
+                const column = columns
+                    .single(column => field === column.field);
+
+                return column.enabled
+                    ? column.enabled(row, field)
+                    : true;
+            }}
             getRowId={x => getKey(x as TSchema) as any}
             rows={rows}
             apiRef={apiRef}
@@ -208,10 +222,10 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>(props: {
                 if (!column.editHandler)
                     throw new Error('Trying to edit a cell but it has no edit handler!');
 
-                column.editHandler({ rowKey, value: val, row });
+                column.editHandler({ rowKey, value: val, row, field });
             }}
             isRowSelectable={x => false}
-            columns={columnsProcessed}
+            columns={muiDataGridColumnDefs}
             style={{
                 height: '100%',
                 background: 'var(--transparentWhite70)'

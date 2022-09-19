@@ -107,7 +107,7 @@ const useSaveCourseContentData = () => {
     const qr = usePostDataUnsafe<{
         courseId: Id<'Course'>,
         itemMutations: Mutation<CourseContentItemAdminDTO, 'versionCode'>[],
-        moduleMutations: Mutation<ModuleEditDTO, 'versionId'>[]
+        moduleMutations: Mutation<ModuleEditDTO, 'moduleVersionId'>[]
     }, void>(apiRoutes.course.saveCourseContent);
 
     return {

@@ -564,10 +564,11 @@ const marray = [
             return views
                 .map(x => instantiate<ModuleEditDTO>({
                     description: x.description,
-                    versionId: x.moduleVersionId,
+                    moduleVersionId: x.moduleVersionId,
+                    isPretestModule: x.isPretestModule,
                     name: x.name,
                     orderIndex: x.orderIndex,
-                    imageFilePath: url.getAssetUrlNullable('x.coverFilePath'),
+                    imageFilePath: url.getAssetUrlNullable(x.coverFilePath),
                 }));
         }),
     epistoMappingsBuilder.addArrayMapping(UserVideoStatsDTO, () => (stats: UserVideoStatsView[]) => {
@@ -1308,7 +1309,7 @@ export const toCourseCategoryDTO = (cc: CourseCategory[]): CourseCategoryDTO[] =
                     }))
             } as CourseCategoryDTO;
         });
-}
+};
 
 export const toJobTitleDTO = (jobTitle: JobTitle) => {
 

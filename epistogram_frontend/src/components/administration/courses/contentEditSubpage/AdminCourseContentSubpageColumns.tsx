@@ -4,11 +4,10 @@ import { useGridApiContext } from '@mui/x-data-grid';
 import { ReactNode, useState } from 'react';
 import { CourseContentItemAdminDTO } from '../../../../shared/dtos/admin/CourseContentItemAdminDTO';
 import { ModuleEditDTO } from '../../../../shared/dtos/ModuleEditDTO';
-import { OmitProperty } from '../../../../shared/types/advancedTypes';
 import { VersionCode } from '../../../../shared/types/VersionCode1';
 import { Id } from '../../../../shared/types/versionId';
 import { EpistoButton } from '../../../controls/EpistoButton';
-import { GridColumnType } from '../../../controls/EpistoDataGrid';
+import { EpistoDataGridColumnBuilder } from '../../../controls/EpistoDataGrid';
 import { EpistoSelect } from '../../../controls/EpistoSelect';
 import { IXMutatorFunctions } from '../../../lib/XMutator/XMutatorCore';
 import { ChipSmall } from '../ChipSmall';
@@ -38,7 +37,7 @@ const useSetAndCommitCellValue = <TRow, TKey, TField extends keyof TRow,>() => {
     };
 };
 
-export const useGridColumnDefinitions = (
+export const useGridColumns = (
     modules: ModuleEditDTO[],
     openDialog: (type: 'video' | 'exam', data?: RowSchema) => void,
     itemsMutatorFunctions: IXMutatorFunctions<CourseContentItemAdminDTO, 'versionCode', VersionCode>,
@@ -73,11 +72,11 @@ export const useGridColumnDefinitions = (
         const [id, setId] = useState<string>(row.module!.versionId + '');
 
         return <EpistoSelect
-            items={modules}
+            items={modules.filter(x => !x.isPretestModule)}
             currentKey={id}
             onSelected={(value) => {
 
-                const versionId = value.versionId;
+                const versionId = value.moduleVersionId;
 
                 setId(versionId + '');
 
@@ -89,25 +88,14 @@ export const useGridColumnDefinitions = (
                 });
             }}
             getDisplayValue={x => '' + x?.name}
-            getCompareKey={module => '' + module?.versionId} />;
+            getCompareKey={module => '' + module?.moduleVersionId} />;
     };
 
-    const columnDefGen = <TField extends keyof RowSchema,>(
-        field: TField,
-        columnOptions: OmitProperty<GridColumnType<RowSchema, VersionCode, TField>, 'field'>) => {
+    const getIsEditEnabled = (row: RowSchema) => row.itemType.type !== 'pretest';
 
-        return {
-            field,
-            ...columnOptions
-        };
-    };
-
-    const gridColumns: GridColumnType<RowSchema, VersionCode, any>[] = [
-        columnDefGen('rowNumber', {
-            headerName: 'Sorszam',
-            width: 80
-        }),
-        columnDefGen('itemOrderIndex', {
+    const gridColumns = new EpistoDataGridColumnBuilder<RowSchema, VersionCode>()
+        .add({
+            field: 'itemOrderIndex',
             headerName: 'Elhelyezkedés',
             width: 80,
             editHandler: ({ rowKey, value }) => itemsMutatorFunctions
@@ -124,9 +112,11 @@ export const useGridColumnDefinitions = (
 
                     {value}
                 </TextCellRenderer>;
-            }
-        }),
-        columnDefGen('itemTitle', {
+            },
+            enabled: getIsEditEnabled
+        })
+        .add({
+            field: 'itemTitle',
             headerName: 'Cím',
             width: 220,
             resizable: true,
@@ -144,8 +134,9 @@ export const useGridColumnDefinitions = (
                     {value}
                 </TextCellRenderer>;
             }
-        }),
-        columnDefGen('itemSubtitle', {
+        })
+        .add({
+            field: 'itemSubtitle',
             headerName: 'Alcím',
             width: 220,
             resizable: true,
@@ -163,8 +154,9 @@ export const useGridColumnDefinitions = (
                     {value}
                 </TextCellRenderer>;
             }
-        }),
-        columnDefGen('module', {
+        })
+        .add({
+            field: 'module',
             headerName: 'Modul',
             width: 250,
             editHandler: ({ rowKey, value }) => {
@@ -192,8 +184,9 @@ export const useGridColumnDefinitions = (
                 field={props.field}
                 rowKey={props.key}
                 row={props.row} />
-        }),
-        columnDefGen('itemType', {
+        })
+        .add({
+            field: 'itemType',
             headerName: 'Típus',
             width: 120,
             renderCell: ({ value }) => {
@@ -205,8 +198,9 @@ export const useGridColumnDefinitions = (
                     text={value.label}
                     color={value.color} />;
             }
-        }),
-        columnDefGen('videoLength', {
+        })
+        .add({
+            field: 'videoLength',
             headerName: 'Videó hossza',
             width: 80,
             renderCell: ({ value, row }) => {
@@ -218,8 +212,9 @@ export const useGridColumnDefinitions = (
                     text={value.text}
                     color={value.color} />;
             }
-        }),
-        columnDefGen('errors', {
+        })
+        .add({
+            field: 'errors',
             headerName: 'Hibak',
             width: 100,
             renderCell: ({ value }) => {
@@ -232,8 +227,9 @@ export const useGridColumnDefinitions = (
                     tooltip={value.tooltip}
                     color={value.color} />;
             }
-        }),
-        columnDefGen('videoFile', {
+        })
+        .add({
+            field: 'videoFile',
             headerName: 'Videó fájl',
             width: 180,
             renderCell: ({ row }) => {
@@ -245,8 +241,9 @@ export const useGridColumnDefinitions = (
                     Fájl kiválasztása
                 </EpistoButton >;
             }
-        }),
-        columnDefGen('quickMenu', {
+        })
+        .add({
+            field: 'quickMenu',
             headerName: 'Gyorshivatkozások',
             width: 150,
             renderCell: ({ key, row }) => {
@@ -275,7 +272,7 @@ export const useGridColumnDefinitions = (
                 );
             }
         })
-    ];
+        .getColumns();
 
     return gridColumns;
 };

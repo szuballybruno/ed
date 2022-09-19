@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import { getVirtualId } from '../../../../services/core/idService';
 import { ModuleEditDTO } from '../../../../shared/dtos/ModuleEditDTO';
 import { Id } from '../../../../shared/types/versionId';
-import { useXMutator } from '../../../lib/XMutator/XMutatorReact';
+import { useXMutatorNew } from '../../../lib/XMutator/XMutatorReact';
 import { useEpistoDialogLogic } from '../../../universal/epistoDialog/EpistoDialogLogic';
 
 export const useModuleEditDialogLogic = ({
@@ -13,79 +13,59 @@ export const useModuleEditDialogLogic = ({
     canDelete: (moduleVersionId: Id<'ModuleVersion'>) => boolean,
 }) => {
 
-    const dialogLogic = useEpistoDialogLogic('module_edit_dialog');
-
-    // state
-    const [editedModuleId, setEditedModuleId] = useState<Id<'ModuleVersion'> | null>(null);
+    const dialogLogic = useEpistoDialogLogic(useModuleEditDialogLogic.name);
 
     // mut
-    const mutatorRef = useXMutator(ModuleEditDTO, 'versionId');
+    const [{ mutatedItems, mutations, isAnyItemsMutated }, mutatorFunctions] = useXMutatorNew(ModuleEditDTO, 'moduleVersionId', useModuleEditDialogLogic.name);
 
-    // calc 
-    const currentModule = mutatorRef
-        .current
-        .mutatedItems
-        .firstOrNull(x => x.versionId === editedModuleId);
-
-    // set default items
+    /**
+     * Set default items on modules change
+     */
     useEffect(() => {
 
         if (!modules)
             return;
 
-        mutatorRef
-            .current
+        mutatorFunctions
             .setOriginalItems(modules);
-    }, [modules]);
+    }, [modules, mutatorFunctions]);
 
-    // Go to edit page
-    const handleEditModule = useCallback((moduleId: Id<'ModuleVersion'>) => {
-
-        setEditedModuleId(moduleId);
-    }, []);
-
-    // back to list
-    const handleBackToList = useCallback(() => {
-
-        setEditedModuleId(null);
-    }, []);
-
-    // Create new module
-    const createModule = useCallback(() => {
+    /**
+     * Handle create new module 
+     */
+    const handleCreateModule = useCallback(() => {
 
         const moduleVersionId = Id
             .create<'ModuleVersion'>(getVirtualId());
 
-        mutatorRef
-            .current
+        mutatorFunctions
             .create(moduleVersionId, {
                 name: '',
                 description: '',
                 imageFilePath: '',
-                versionId: moduleVersionId,
-                orderIndex: mutatorRef
-                    .current
-                    .mutatedItems
+                moduleVersionId,
+                isPretestModule: false,
+                orderIndex: mutatorFunctions
+                    .getMutatedItems()
                     .length
             });
-    }, []);
+    }, [mutatorFunctions]);
 
-    // handle save
+    // handle ok
     const handleOk = useCallback(() => {
 
         dialogLogic.closeDialog();
-        // onModulesChanged(mutatorRef.current.mutatedItems, mutatorRef.current.mutations);
-    }, [dialogLogic.closeDialog]);
+    }, [dialogLogic]);
 
     return {
-        mutatorRef,
         handleOk,
-        handleEditModule,
-        handleBackToList,
-        createModule,
-        currentModule,
+        handleCreateModule,
+        canDelete,
+        mutatorFunctions,
         dialogLogic,
-        canDelete
+        mutatedItems,
+        mutations,
+        isAnyItemsMutated
     };
 };
 

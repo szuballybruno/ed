@@ -27,7 +27,7 @@ import { ItemEditDialogParams } from '../itemEditDialog/ItemEditDialogTypes';
 import { ModuleEditDialog } from '../moduleEdit/ModuleEditDialog';
 import { useModuleEditDialogLogic } from '../moduleEdit/ModuleEditDialogLogic';
 import { AddNewItemPopper } from './AddNewItemPopper';
-import { useGridColumnDefinitions } from './AdminCourseContentSubpageColumns';
+import { useGridColumns } from './AdminCourseContentSubpageColumns';
 import { mapToRowSchema, RowSchema } from './AdminCourseContentSubpageLogic';
 
 export const AdminCourseContentSubpage = () => {
@@ -80,11 +80,9 @@ export const AdminCourseContentSubpage = () => {
     });
 
     const isSaveEnabled = itemsMutatorState.isAnyItemsMutated
-        || moduleEditDialogLogic.mutatorRef.current.isAnyItemsMutated;
+        || moduleEditDialogLogic.isAnyItemsMutated;
 
     const modules = moduleEditDialogLogic
-        .mutatorRef
-        .current
         .mutatedItems;
 
     // preprocess items 
@@ -204,7 +202,9 @@ export const AdminCourseContentSubpage = () => {
      */
     const handleAddRow = (type: 'video' | 'exam') => {
 
-        const moduleVersionId = modules[0].versionId;
+        const moduleVersionId = modules
+            .first(x => !x.isPretestModule)
+            .moduleVersionId;
 
         const foundModule = itemsMutatorState
             .mutatedItems
@@ -274,8 +274,6 @@ export const AdminCourseContentSubpage = () => {
                 itemMutations: itemsMutatorState
                     .mutations,
                 moduleMutations: moduleEditDialogLogic
-                    .mutatorRef
-                    .current
                     .mutations
             });
 
@@ -292,7 +290,7 @@ export const AdminCourseContentSubpage = () => {
         }
     }, [courseId, itemsMutatorFunctions, itemsMutatorState, moduleEditDialogLogic, refetchCourseContentAdminData, saveCourseDataAsync, showError]);
 
-    const gridColumns = useGridColumnDefinitions(modules, openItemEditDialog, itemsMutatorFunctions, handleSelectVideoFile);
+    const gridColumns = useGridColumns(modules, openItemEditDialog, itemsMutatorFunctions, handleSelectVideoFile);
 
     return (
         <CourseAdministartionFrame
@@ -353,8 +351,7 @@ export const AdminCourseContentSubpage = () => {
                     dialogLogic={itemEditDialogLogic} />
 
                 <ModuleEditDialog
-                    logic={moduleEditDialogLogic}
-                    courseName={'Course name'} />
+                    logic={moduleEditDialogLogic} />
 
                 {/* add buttons popper */}
                 <AddNewItemPopper

@@ -87,15 +87,15 @@
 /* font size */
 
 .fontSize2-small {
-    font-size: 12px !important;
+    font-size: 0.9rem !important;
 }
 
 .fontSize2-normal {
-    font-size: 14px !important;
+    font-size: 1rem !important;
 }
 
 .fontSize2-large {
-    font-size: 16px !important;
+    font-size: 1.1rem !important;
 }
 
 /* color */

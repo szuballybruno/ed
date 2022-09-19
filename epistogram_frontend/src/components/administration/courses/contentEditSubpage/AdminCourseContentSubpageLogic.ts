@@ -116,7 +116,7 @@ export const mapToRowSchema = (
     const getItemModule = () => {
 
         const module = modules
-            .firstOrNull(x => x.versionId === item.moduleVersionId);
+            .firstOrNull(x => x.moduleVersionId === item.moduleVersionId);
 
         if (!module)
             throw new Error(`Module for item (verisonCode: ${item.versionCode}) not found by moduleVersionId: ${item.moduleVersionId}`);
@@ -127,11 +127,12 @@ export const mapToRowSchema = (
     // 
     const module = isPretest
         ? instantiate<ModuleEditDTO>({
-            versionId: Id.create<'ModuleVersion'>(-1),
+            moduleVersionId: Id.create<'ModuleVersion'>(-1),
             name: 'none',
             orderIndex: -1,
             description: '',
-            imageFilePath: ''
+            imageFilePath: '',
+            isPretestModule: true
         })
         : getItemModule();
 
@@ -143,7 +144,7 @@ export const mapToRowSchema = (
         itemSubtitle: item.itemSubtitle,
         module: instantiate<RowSchemaModule>({
             isPretestModule: isPretest,
-            versionId: module.versionId,
+            versionId: module.moduleVersionId,
             name: module.name,
             orderIndex: module.orderIndex,
         }),
