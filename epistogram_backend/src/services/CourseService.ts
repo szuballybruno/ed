@@ -1,10 +1,17 @@
 import { UploadedFile } from 'express-fileupload';
+import { Course } from '../models/entity/course/Course';
 import { CourseData } from '../models/entity/course/CourseData';
 import { CourseVersion } from '../models/entity/course/CourseVersion';
+import { Exam } from '../models/entity/exam/Exam';
+import { ExamData } from '../models/entity/exam/ExamData';
+import { ExamVersion } from '../models/entity/exam/ExamVersion';
 import { CourseAccessBridge } from '../models/entity/misc/CourseAccessBridge';
 import { CourseCategory } from '../models/entity/misc/CourseCategory';
 import { TeacherInfo } from '../models/entity/misc/TeacherInfo';
 import { User } from '../models/entity/misc/User';
+import { Module } from '../models/entity/module/Module';
+import { ModuleData } from '../models/entity/module/ModuleData';
+import { ModuleVersion } from '../models/entity/module/ModuleVersion';
 import { AvailableCourseView } from '../models/views/AvailableCourseView';
 import { CourseAdminContentView } from '../models/views/CourseAdminContentView';
 import { CourseAdminDetailedView } from '../models/views/CourseAdminDetailedView';
@@ -23,7 +30,7 @@ import { CreateCourseDTO } from '../shared/dtos/CreateCourseDTO';
 import { ModuleEditDTO } from '../shared/dtos/ModuleEditDTO';
 import { Mutation } from '../shared/dtos/mutations/Mutation';
 import { PlaylistModuleDTO } from '../shared/dtos/PlaylistModuleDTO';
-import { OrderType } from '../shared/types/sharedTypes';
+import { CourseVisibilityType, OrderType } from '../shared/types/sharedTypes';
 import { Id } from '../shared/types/versionId';
 import { filterByProperty, orderByProperty, throwNotImplemented } from '../utilities/helpers';
 import { VersionMigrationContainer } from '../utilities/misc';
@@ -36,6 +43,7 @@ import { createCharSeparatedList } from './misc/mappings';
 import { ModuleService } from './ModuleService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { PretestService } from './PretestService';
+import { VersionCreateService } from './VersionCreateService';
 
 export class CourseService {
 
@@ -45,7 +53,8 @@ export class CourseService {
         private _mapperService: MapperService,
         private _fileService: FileService,
         private _pretestService: PretestService,
-        private _authorizationService: AuthorizationService) {
+        private _authorizationService: AuthorizationService,
+        private _verisonCreateService: VersionCreateService) {
     }
 
     /**
@@ -142,16 +151,27 @@ export class CourseService {
     /**
      * Creates a new course
      */
-    createCourseAsync(
-        userId: PrincipalId,
-        dto: CreateCourseDTO
-    ) {
+    async createCourseAsync(userId: PrincipalId, dto: CreateCourseDTO) {
 
-        return {
-            action: async () => {
-                throwNotImplemented();
+        const { companyId } = await this._ormService
+            .query(User, { userId })
+            .where('id', '=', 'userId')
+            .getSingle();
 
-                const newCourse = {
+        await this._authorizationService
+            .checkPermissionAsync(userId, 'EDIT_COMPANY_COURSES', { companyId });
+
+        // create course 
+        const { versionId: courseVersionId } = await this
+            ._verisonCreateService
+            .createVersionAsync({
+                entity: Course,
+                data: CourseData,
+                version: CourseVersion,
+                createEntity: () => ({
+                    deletionDate: null
+                }),
+                createData: () => ({
                     title: dto.title,
                     teacherId: Id.create<'User'>(1),
                     categoryId: Id.create<'CourseCategory'>(1),
@@ -162,31 +182,72 @@ export class CourseService {
                     shortDescription: '',
                     language: 'magyar',
                     previouslyCompletedCount: 0,
-                    visibility: 'private',
+                    visibility: 'private' as CourseVisibilityType,
                     technicalRequirements: '',
                     humanSkillBenefits: '',
                     humanSkillBenefitsDescription: '',
                     requirementsDescription: '',
-                    skillBenefits: ''
-                } as CourseData;
+                    skillBenefits: '',
+                    coverFileId: null,
+                    isFeatured: false,
+                    modificationDate: new Date()
+                }),
+                createVersion: ({ entityId, dataId }) => ({
+                    courseDataId: dataId,
+                    courseId: entityId
+                })
+            });
 
-                await this._ormService
-                    .createAsync(CourseData, newCourse);
+        // create pretest module 
+        const { versionId: moduleVersionId } = await this
+            ._verisonCreateService
+            .createVersionAsync({
+                entity: Module,
+                data: ModuleData,
+                version: ModuleVersion,
+                createEntity: () => ({
+                    isPretestModule: true
+                }),
+                createData: () => ({
+                    description: '',
+                    imageFileId: null,
+                    name: 'New pretest module',
+                    orderIndex: 0
+                }),
+                createVersion: ({ entityId, dataId }) => ({
+                    courseVersionId,
+                    moduleDataId: dataId,
+                    moduleId: entityId
+                })
+            });
 
-                /*  await this._pretestService
-                     .createPretestExamAsync(newCourse.id); */
-            },
-            auth: async () => {
-
-                const { companyId } = await this._ormService
-                    .query(User, { userId })
-                    .where('id', '=', 'userId')
-                    .getSingle();
-
-                return this._authorizationService
-                    .checkPermissionAsync(userId, 'EDIT_COMPANY_COURSES', { companyId });
-            }
-        };
+        // create pretest exam 
+        await this
+            ._verisonCreateService
+            .createVersionAsync({
+                entity: Exam,
+                data: ExamData,
+                version: ExamVersion,
+                createEntity: () => ({
+                    isPretest: true,
+                    isSignup: false
+                }),
+                createData: () => ({
+                    acceptanceThreshold: null,
+                    description: '',
+                    isFinal: false,
+                    orderIndex: 0,
+                    retakeLimit: 0,
+                    subtitle: '',
+                    thumbnailUrl: null,
+                    title: ''
+                }),
+                createVersion: ({ entityId, dataId }) => ({
+                    examDataId: dataId,
+                    examId: entityId,
+                    moduleVersionId
+                })
+            });
     }
 
     /**

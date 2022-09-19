@@ -3,9 +3,11 @@ import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { ApplicationRoute } from '../../../models/types';
 import { CourseApiService } from '../../../services/api/courseApiService';
 import { useNavigation } from '../../../services/core/navigatior';
+import { showNotification } from '../../../services/core/notifications';
 import { Id } from '../../../shared/types/versionId';
 import { setPageTitle, useIsMatchingCurrentRoute } from '../../../static/frontendHelpers';
 import { useIntParam } from '../../../static/locationHelpers';
+import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { AdminBreadcrumbsHeader } from '../AdminBreadcrumbsHeader';
@@ -54,6 +56,18 @@ export const CourseAdministartionFrame = (params: {
         navigate2(route as ApplicationRoute<any, any>, { courseId });
     }, [courseId, navigate2, isMatchingCurrentUrl, applicationRoutes]);
 
+    const { createCourseAsync, createCourseState } = CourseApiService
+        .useCreateCourse();
+
+    const handleCreateCourse = useCallback(async () => {
+
+        await createCourseAsync({
+            title: 'New course'
+        });
+        showNotification('Created successfully');
+        await refetchCoursesAsync();
+    }, [createCourseAsync, refetchCoursesAsync]);
+
     return (
         <EpistoFlex2
             id={CourseAdministartionFrame.name}
@@ -61,7 +75,11 @@ export const CourseAdministartionFrame = (params: {
             overflowY="scroll">
 
             {/* header */}
-            <AdminBreadcrumbsHeader>
+            <AdminBreadcrumbsHeader
+                headerComponent={<EpistoButton
+                    onClick={handleCreateCourse}>
+                    Add course
+                </EpistoButton>}>
 
                 {/* course list */}
                 <AdminCourseList

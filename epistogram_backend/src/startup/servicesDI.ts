@@ -10,6 +10,7 @@ import { CreateDBService } from '../services/sqlServices/CreateDBService';
 import { RecreateDBService } from '../services/sqlServices/RecreateDBService';
 import { SQLPoolService } from '../services/sqlServices/SQLPoolService';
 import { TypeORMConnectionService } from '../services/sqlServices/TypeORMConnectionService';
+import { VersionCreateService } from '../services/VersionCreateService';
 import { VersionSaveService } from '../services/VersionSaveService';
 import { XDBMSchemaService } from '../services/XDBManager/XDBManagerTypes';
 import { DependencyContainer, DepHierarchyFunction, XDependency } from '../utilities/XDInjection/XDInjector';
@@ -176,7 +177,8 @@ export const getTransientServiceContainer = (singletonProvider: ServiceProvider)
         .addClass(DailyTipService, [ORMConnectionService, MapperService, AuthorizationService])
         .addClass(TempomatService, [ORMConnectionService, LoggerService, EventService, AuthorizationService])
         .addClass(PretestService, [ORMConnectionService, MapperService, ExamService, UserCourseBridgeService, QuestionAnswerService, AuthorizationService, TempomatService, PermissionService])
-        .addClass(CourseService, [ModuleService, ORMConnectionService, MapperService, FileService, PretestService, AuthorizationService])
+        .addClass(VersionCreateService, [ORMConnectionService])
+        .addClass(CourseService, [ModuleService, ORMConnectionService, MapperService, FileService, PretestService, AuthorizationService, VersionCreateService])
         .addClass(ShopService, [ORMConnectionService, MapperService, CoinTransactionService, CourseService, EmailService, FileService, UrlService, AuthorizationService])
         .addClass(PlayerService, [ORMConnectionService, CourseService, PlaylistService, ExamService, ModuleService, VideoService, QuestionAnswerService, PlaybackService, UserCourseBridgeService, MapperService, AuthorizationService, PermissionService])
         .addClass(PractiseQuestionService, [ORMConnectionService, QuestionAnswerService, MapperService, AuthorizationService, GlobalConfiguration, QuestionService])
