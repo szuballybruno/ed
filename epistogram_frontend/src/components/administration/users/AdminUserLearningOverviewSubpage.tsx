@@ -9,6 +9,7 @@ import { useNavigation } from '../../../services/core/navigatior';
 import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
 import { defaultCharts } from '../../../static/defaultChartOptions';
 import { Environment } from '../../../static/Environemnt';
+import { usePaging } from '../../../static/frontendHelpers';
 import { useRouteParams } from '../../../static/locationHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
@@ -29,15 +30,22 @@ import { AdminUserCourseContentDialog } from './adminCourseContentDialog/AdminUs
 import { AdminUserList } from './AdminUserList';
 const UserStatisticsProgressWithLabel = (props: {
     title: string,
-    value: number
+    value: number,
+    isSelected: boolean,
+    onClick: () => void
 }) => {
 
     return <EpistoFlex2
+        className='roundBorders'
+        fontWeight='bold'
+        color={props.isSelected ? 'white' : undefined}
+        onClick={props.onClick}
+        background={props.isSelected ? 'var(--epistoTeal)' : undefined}
         w="100%"
         mt="10px"
-        h="30px"
+        h="40px"
         align="center"
-        p="5px">
+        p="5px 15px">
 
         <EpistoFont style={{
             minWidth: 100
@@ -49,9 +57,10 @@ const UserStatisticsProgressWithLabel = (props: {
         <LinearProgress
             value={props.value}
             variant="determinate"
+            color='secondary'
             style={{
+                background: props.isSelected ? 'white' : undefined,
                 width: '80%',
-                color: 'red',
                 margin: '0 10px',
                 height: '5px'
             }} />
@@ -66,6 +75,13 @@ const UserStatisticsProgressWithLabel = (props: {
         </EpistoFont>
     </EpistoFlex2>;
 };
+
+const measurementDescriptions = [
+    'engagementDesc',
+    'performanceDesc',
+    'productivityDesc',
+    'reactionTimeDesc'
+];
 
 export const AdminUserStatisticsSubpage = (props: {
     users: AdminPageUserDTO[]
@@ -82,6 +98,7 @@ export const AdminUserStatisticsSubpage = (props: {
     const navigateToAddUser = () => navigate2(usersRoute.addRoute);
 
     const { adminCourseContentDialogLogic } = useAdminCourseContentDialogLogic();
+    const paging = usePaging({ items: ['a', 'b', 'c', 'd'] });
 
     const { userEditData } = UserApiService
         .useEditUserData(userId);
@@ -120,6 +137,11 @@ export const AdminUserStatisticsSubpage = (props: {
             action: () => navigateToAddUser()
         }
     ] as ButtonType[];
+
+    const handleSelectMeasurementDescription = (index: number) => {
+
+        return paging.setItem(index);
+    };
 
     return <LoadingFrame
         loadingState={userLearningOverviewDataStatus}
@@ -227,18 +249,26 @@ export const AdminUserStatisticsSubpage = (props: {
 
                                 <UserStatisticsProgressWithLabel
                                     title={texts.progressLabels.engagement}
+                                    onClick={() => handleSelectMeasurementDescription(0)}
+                                    isSelected={paging.currentIndex === 0}
                                     value={engagementPoints} />
 
                                 <UserStatisticsProgressWithLabel
                                     title={texts.progressLabels.performance}
+                                    onClick={() => handleSelectMeasurementDescription(1)}
+                                    isSelected={paging.currentIndex === 1}
                                     value={performancePoints} />
 
                                 <UserStatisticsProgressWithLabel
                                     title={texts.progressLabels.productivity}
+                                    onClick={() => handleSelectMeasurementDescription(2)}
+                                    isSelected={paging.currentIndex === 2}
                                     value={productivityPoints} />
 
                                 <UserStatisticsProgressWithLabel
                                     title={texts.progressLabels.reactionTime}
+                                    onClick={() => handleSelectMeasurementDescription(3)}
+                                    isSelected={paging.currentIndex === 3}
                                     value={reactionTimeScorePoints} />
                             </EpistoFlex2>
                         </EpistoFlex2>
@@ -267,7 +297,7 @@ export const AdminUserStatisticsSubpage = (props: {
 
                             <EpistoFlex2 p="20px 10px 10px 2px">
 
-                                {texts.statisticsCards.userEngagementDescription}
+                                {measurementDescriptions[paging.currentIndex]}
                             </EpistoFlex2>
                         </EpistoFlex2>
                     </EpistoFlex2>

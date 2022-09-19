@@ -1,19 +1,19 @@
-import {Checkbox, TextField} from '@mui/material';
-import {useContext, useEffect, useState} from 'react';
-import {applicationRoutes} from '../configuration/applicationRoutes';
-import {useRegisterInvitedUser, useRegisterUser} from '../services/api/registrationApiService';
-import {useNavigation} from '../services/core/navigatior';
-import {showNotification, useShowErrorDialog} from '../services/core/notifications';
-import {Environment} from '../static/Environemnt';
-import {usePasswordEntryState} from '../static/frontendHelpers';
-import {useQueryVal} from '../static/locationHelpers';
-import {translatableTexts} from '../static/translatableTexts';
-import {EpistoButton} from './controls/EpistoButton';
-import {EpistoFlex2} from './controls/EpistoFlex';
-import {EpistoFont} from './controls/EpistoFont';
-import {EpistoImage} from './controls/EpistoImage';
-import {RefetchUserAsyncContext} from './system/AuthenticationFrame';
-import {LoadingFrame} from './system/LoadingFrame';
+import { Checkbox, TextField } from '@mui/material';
+import { useContext, useEffect, useState } from 'react';
+import { applicationRoutes } from '../configuration/applicationRoutes';
+import { useRegisterInvitedUser, useRegisterUser } from '../services/api/registrationApiService';
+import { useNavigation } from '../services/core/navigatior';
+import { showNotification, useShowErrorDialog } from '../services/core/notifications';
+import { Environment } from '../static/Environemnt';
+import { usePasswordEntryState } from '../static/frontendHelpers';
+import { useQueryVal } from '../static/locationHelpers';
+import { translatableTexts } from '../static/translatableTexts';
+import { EpistoButton } from './controls/EpistoButton';
+import { EpistoFlex2 } from './controls/EpistoFlex';
+import { EpistoFont } from './controls/EpistoFont';
+import { EpistoImage } from './controls/EpistoImage';
+import { RefetchUserAsyncContext } from './system/AuthenticationFrame';
+import { LoadingFrame } from './system/LoadingFrame';
 
 export const RegistrationPage = () => {
 
@@ -83,6 +83,7 @@ export const RegistrationPage = () => {
     return <EpistoFlex2
         background="var(--gradientBlueBackground)"
         height="100vh"
+        width='100vw'
         direction="column"
         align="center"
         justify="center"
