@@ -43,7 +43,7 @@ export const SignupWrapper = (props: {
     const children = props.children;
     const onNext = props.onNext;
 
-    const isDesktop = useIsMobileView();
+    const isMobile = useIsMobileView();
     const [isSmallerThan1400] = useMediaQuery('(min-width: 1350px)');
 
     return <EpistoFlex2
@@ -125,7 +125,7 @@ export const SignupWrapper = (props: {
                     minWidth="300px"
                     minH='400px'
                     height="400"
-                    justifyContent={isDesktop ? 'flex-end' : 'center'}>
+                    justifyContent={!isMobile ? 'flex-end' : 'center'}>
 
                     <EpistoImage maxW='350px'
                         minWidth="300px"
@@ -220,7 +220,7 @@ export const SignupWrapper = (props: {
                 variant={'outlined'}
                 onClick={() => onNext!()}
                 style={{
-                    alignSelf: isDesktop
+                    alignSelf: !isMobile
                         ? hasImage
                             ? 'center'
                             : 'center'
