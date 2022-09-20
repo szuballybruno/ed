@@ -1,17 +1,17 @@
-import React, {useContext} from 'react';
-import {applicationRoutes} from '../../configuration/applicationRoutes';
-import {useNavigation} from '../../services/core/navigatior';
-import {startUserGuide} from '../../services/core/userGuidingService';
-import {Environment} from '../../static/Environemnt';
-import {usePaging} from '../../static/frontendHelpers';
-import {translatableTexts} from '../../static/translatableTexts';
-import {ContentPane} from '../ContentPane';
-import {EpistoFont} from '../controls/EpistoFont';
-import {PageRootContainer} from '../PageRootContainer';
-import {SignupQuestions} from '../SignupQuestions';
-import {RefetchUserAsyncContext} from '../system/AuthenticationFrame';
-import {EpistoPaging} from '../universal/EpistoPaging';
-import {SignupWrapper} from './SignupWrapper';
+import React, { useContext } from 'react';
+import { applicationRoutes } from '../../configuration/applicationRoutes';
+import { useNavigation } from '../../services/core/navigatior';
+import { startUserGuide } from '../../services/core/userGuidingService';
+import { Environment } from '../../static/Environemnt';
+import { usePaging } from '../../static/frontendHelpers';
+import { translatableTexts } from '../../static/translatableTexts';
+import { ContentPane } from '../ContentPane';
+import { EpistoFont } from '../controls/EpistoFont';
+import { PageRootContainer } from '../PageRootContainer';
+import { SignupQuestions } from '../SignupQuestions';
+import { RefetchUserAsyncContext } from '../system/AuthenticationFrame';
+import { EpistoPaging } from '../universal/EpistoPaging';
+import { SignupWrapper } from './SignupWrapper';
 
 export const SignupPage = () => {
 
@@ -81,13 +81,13 @@ export const SignupPage = () => {
     ];
 
     return (
-        <PageRootContainer noBackground
+        <PageRootContainer
             noMaxWidth>
 
             <ContentPane
                 align="center"
                 justify="center"
-                background="radial-gradient(farthest-corner at 300px 100px, rgba(177,208,242,0.7) 33%, rgba(255,255,255,1) 100%)"
+                //background="radial-gradient(farthest-corner at 300px 100px, rgba(177,208,242,0.7) 33%, rgba(255,255,255,1) 100%)"
                 hideNavbar
                 noMaxWidth
                 padding='20px'>
