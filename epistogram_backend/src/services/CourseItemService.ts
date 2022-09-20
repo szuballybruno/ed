@@ -12,11 +12,11 @@ import { VersionCode } from '../shared/types/VersionCode1';
 import { Id } from '../shared/types/versionId';
 import { VersionMigrationContainer } from '../utilities/misc';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
+import { AnswerService } from './AnswerService';
 import { AuthorizationService } from './AuthorizationService';
 import { MapperService } from './MapperService';
 import { XMutatorHelpers } from './misc/XMutatorHelpers';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
-import { QuestionAnswerService } from './QuestionAnswerService';
 import { QuestionService } from './QuestionService';
 import { VersionSaveService } from './VersionSaveService';
 
@@ -31,7 +31,7 @@ export class CourseItemService {
         private _mapperService: MapperService,
         private _questionsService: QuestionService,
         private _versionSaveService: VersionSaveService,
-        private _answerService: QuestionAnswerService,
+        private _answerService: AnswerService,
         private authorizationService: AuthorizationService) {
 
         this._authorizationService = authorizationService;

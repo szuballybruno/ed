@@ -1,3 +1,4 @@
+import { AnswerService } from '../services/AnswerService';
 import { CourseCompletionService } from '../services/CourseCompletionService';
 import { CourseProgressService } from '../services/CourseProgressService';
 import { DomainProviderService } from '../services/DomainProviderService';
@@ -158,7 +159,8 @@ export const getTransientServiceContainer = (singletonProvider: ServiceProvider)
         .addClass(SeedService, [XDBMSchemaService, GlobalConfiguration, SQLConnectionService, LoggerService])
         .addClass(RecreateDBService, [CreateDBService, SeedService, XDBMSchemaService, SQLConnectionService, LoggerService])
         .addClass(QuestionService, [ORMConnectionService, VersionSaveService, MapperService])
-        .addClass(CourseItemService, [ORMConnectionService, MapperService, QuestionService, VersionSaveService, QuestionAnswerService, AuthorizationService])
+        .addClass(AnswerService, [VersionSaveService, LoggerService])
+        .addClass(CourseItemService, [ORMConnectionService, MapperService, QuestionService, VersionSaveService, AnswerService, AuthorizationService])
         .addClass(UserCourseBridgeService, [ORMConnectionService, MapperService, AuthorizationService, LoggerService, PermissionService])
         .addClass(CourseCompletionService, [MapperService, ORMConnectionService])
         .addClass(ExamService, [UserCourseBridgeService, ORMConnectionService, UserSessionActivityService, QuestionAnswerService, QuestionService, MapperService, AuthorizationService, LoggerService, CourseCompletionService])

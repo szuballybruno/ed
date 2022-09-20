@@ -1,14 +1,19 @@
 import { EpistoButton } from '../../../controls/EpistoButton';
 import { EpistoPopper } from '../../../controls/EpistoPopper';
 
-export const AddNewItemPopper = (props: {
+export const AddNewItemPopper = ({
+    isOpen,
+    targetElement,
+    hasModules,
+    onClose,
+    onAddItem
+}: {
     isOpen: boolean,
     targetElement: any,
+    hasModules: boolean,
     onClose: () => void,
     onAddItem: (type: 'video' | 'exam') => void
 }) => {
-
-    const { isOpen, targetElement, onClose, onAddItem } = props;
 
     return (
         <EpistoPopper
@@ -21,11 +26,17 @@ export const AddNewItemPopper = (props: {
             }}
             handleClose={onClose}>
 
-            <EpistoButton onClick={() => onAddItem('video')}>
+            <EpistoButton
+                tooltip={hasModules ? 'Add video' : 'No modules to add to, add a module first!'}
+                isDisabled={!hasModules}
+                onClick={() => onAddItem('video')}>
                 Videó
             </EpistoButton>
 
-            <EpistoButton onClick={() => onAddItem('exam')}>
+            <EpistoButton
+                tooltip={hasModules ? 'Add exam' : 'No modules to add to, add a module first!'}
+                isDisabled={!hasModules}
+                onClick={() => onAddItem('exam')}>
                 Vizsga
             </EpistoButton>
 

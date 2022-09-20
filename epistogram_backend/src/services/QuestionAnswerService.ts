@@ -1,26 +1,32 @@
-import {Answer} from '../models/entity/answer/Answer';
-import {AnswerData} from '../models/entity/answer/AnswerData';
-import {AnswerVersion} from '../models/entity/answer/AnswerVersion';
-import {AnswerSession} from '../models/entity/misc/AnswerSession';
-import {AnswerEditDTO} from '../shared/dtos/AnswerEditDTO';
-import {AnswerResultDTO} from '../shared/dtos/AnswerResultDTO';
-import {Mutation} from '../shared/dtos/mutations/Mutation';
-import {instantiate} from '../shared/logic/sharedLogic';
-import {Id} from '../shared/types/versionId';
-import {VersionMigrationContainer} from '../utilities/misc';
-import {CoinAcquireService} from './CoinAcquireService';
-import {LoggerService} from './LoggerService';
-import {XMutatorHelpers} from './misc/XMutatorHelpers';
-import {ORMConnectionService} from './ORMConnectionService/ORMConnectionService';
-import {SQLFunctionsService} from './sqlServices/FunctionsService';
-import {VersionSaveService} from './VersionSaveService';
-import {GivenAnswerStreak} from '../models/entity/misc/GivenAnswerStreak';
-import {GivenAnswer} from '../models/entity/misc/GivenAnswer';
-import {AnswerGivenAnswerBridge} from '../models/entity/misc/AnswerGivenAnswerBridge';
-import {QuestionVersion} from '../models/entity/question/QuestionVersion';
+import { Answer } from '../models/entity/answer/Answer';
+import { AnswerData } from '../models/entity/answer/AnswerData';
+import { AnswerVersion } from '../models/entity/answer/AnswerVersion';
+import { AnswerSession } from '../models/entity/misc/AnswerSession';
+import { AnswerEditDTO } from '../shared/dtos/AnswerEditDTO';
+import { AnswerResultDTO } from '../shared/dtos/AnswerResultDTO';
+import { Mutation } from '../shared/dtos/mutations/Mutation';
+import { instantiate } from '../shared/logic/sharedLogic';
+import { Id } from '../shared/types/versionId';
+import { VersionMigrationContainer } from '../utilities/misc';
+import { CoinAcquireService } from './CoinAcquireService';
+import { LoggerService } from './LoggerService';
+import { XMutatorHelpers } from './misc/XMutatorHelpers';
+import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { SQLFunctionsService } from './sqlServices/FunctionsService';
+import { VersionSaveService } from './VersionSaveService';
+import { GivenAnswerStreak } from '../models/entity/misc/GivenAnswerStreak';
+import { GivenAnswer } from '../models/entity/misc/GivenAnswer';
+import { AnswerGivenAnswerBridge } from '../models/entity/misc/AnswerGivenAnswerBridge';
+import { QuestionVersion } from '../models/entity/question/QuestionVersion';
 
 export type AnswerMutationsType = Mutation<AnswerEditDTO, 'answerVersionId'>[];
 export type AnswerVersionWithAnswerDataType = AnswerVersion & AnswerData;
+
+type GivenAnswerDTO = {
+    questionVersionId: Id<'QuestionVersion'>,
+    answerVersionIds: Id<'AnswerVersion'>[],
+    elapsedSeconds: number,
+};
 
 export class QuestionAnswerService {
 
@@ -55,65 +61,34 @@ export class QuestionAnswerService {
     /**
      * Answer question
      */
-
     async saveGivenAnswersAsync(
         {
-            answerVersionIds,
             answerSessionId,
-            elapsedSeconds,
-            isExamQuestion,
+            isPractiseAnswers,
             userId,
-            questionVersionId,
-            isPractiseAnswer
+            givenAnswers
         }: {
             userId: Id<'User'>,
             answerSessionId: Id<'AnswerSession'>,
-            questionVersionId: Id<'QuestionVersion'>,
-            answerVersionIds: Id<'AnswerVersion'>[],
-            isExamQuestion: boolean,
-            elapsedSeconds: number,
-            isPractiseAnswer?: boolean
+            isPractiseAnswers: boolean,
+            givenAnswers: GivenAnswerDTO[]
         }) {
 
-        // one questions correct answers
-        const isAnsweredInTheCurrentAnswerSession = await this
-            .getIsAnsweredBeforeInTheAnswerSession(questionVersionId, answerSessionId, userId);
+        const givenAnswerStreakId = await this
+            .handleAnswerStreakAsync(userId, isGivenAnswersFullyCorrect, isAnsweredCorrectlyBefore);
 
-        if (isAnsweredInTheCurrentAnswerSession) {
+        const streakLength = await this
+            .getStreakLengthAsync(givenAnswerStreakId);
 
-            await this.deleteGivenAnswersFromAnswerSessionAsync(answerSessionId, questionVersionId);
-        }
-
-        const answerVersionsWithAnswerData = await this
-            .getAnswerVersionsWithAnswerDataAsync(answerVersionIds);
-
-        const correctAnswerVersions = await this
-            .getCorrectAnswerVersionsAsync(questionVersionId);
-
-        const isGivenAnswersFullyCorrect = this
-            .checkIfGivenAnswersCorrect(correctAnswerVersions
-                .map(x => x.id), answerVersionIds);
-
-        const isAnsweredCorrectlyBefore = await this
-            .getIsCorrectlyAnsweredBeforeAsync(questionVersionId, userId);
-
-        const givenAnswerStreakId = await this.updateStreaksAsync(userId, isGivenAnswersFullyCorrect, isAnsweredCorrectlyBefore);
-
-        const streakLength = await this.getStreakLengthAsync(givenAnswerStreakId);
-
-        const savedGivenAnswers = await Promise
-            .all(answerVersionsWithAnswerData
-                .map(x => {
-
-                    return this.saveGivenAnswerAsync(
-                        !!isPractiseAnswer,
-                        questionVersionId,
-                        answerSessionId,
-                        !!x.isCorrect,
-                        givenAnswerStreakId,
-                        elapsedSeconds,
-                        x.id);
-                }));
+        return this
+            .saveGivenAnswerAsync(
+                isPractiseAnswer,
+                questionVersionId,
+                answerSessionId,
+                !!x.isCorrect,
+                givenAnswerStreakId,
+                elapsedSeconds,
+                x.id);
 
         const canAcquireCoin = isGivenAnswersFullyCorrect && !isExamQuestion;
 
@@ -193,14 +168,14 @@ export class QuestionAnswerService {
                     text: ''
                 }),
                 getNewEntity: () => ({}),
-                getNewVersion: ({entityId, newDataId, newParentVersionId}) => ({
+                getNewVersion: ({ entityId, newDataId, newParentVersionId }) => ({
                     answerDataId: newDataId,
                     answerId: entityId,
                     questionVersionId: newParentVersionId
                 }),
                 overrideDataProps: (data, mutation) => {
 
-                    const {isCorrect, text} = XMutatorHelpers
+                    const { isCorrect, text } = XMutatorHelpers
                         .mapMutationToPartialObject(mutation);
 
                     if (isCorrect === false || isCorrect === true)
@@ -274,7 +249,7 @@ export class QuestionAnswerService {
             .map(answerVersionId => {
                 return this._ormService
                     .withResType<AnswerVersionWithAnswerDataType>()
-                    .query(AnswerVersion, {answerVersionId})
+                    .query(AnswerVersion, { answerVersionId })
                     .selectFrom(x => x
                         .columns(AnswerVersion, '*')
                         .columns(AnswerData, {
@@ -300,7 +275,7 @@ export class QuestionAnswerService {
                 givenAnswerId: Id<'GivenAnswer'>,
                 answerGivenAnswerBridgeId: Id<'AnswerGivenAnswerId'>
             }>()
-            .query(GivenAnswer, {questionVersionId, answerSessionId})
+            .query(GivenAnswer, { questionVersionId, answerSessionId })
             .selectFrom(x => x
                 .columns(GivenAnswer, {
                     givenAnswerId: 'id'
@@ -341,7 +316,7 @@ export class QuestionAnswerService {
      * * If there is no previous streak AND the current answer is fully correct,
      *   create a new streak.
      */
-    private async updateStreaksAsync(
+    private async handleAnswerStreakAsync(
         userId: Id<'User'>,
         currentAnswerIsFullyCorrect: boolean,
         currentQuestionIsAnsweredCorrectlyBefore: boolean
@@ -352,7 +327,7 @@ export class QuestionAnswerService {
         }
 
         const previousStreak = await this._ormService
-            .query(GivenAnswerStreak, {userId, isFinalized: false})
+            .query(GivenAnswerStreak, { userId, isFinalized: false })
             .where('userId', '=', 'userId')
             .and('isFinalized', '=', 'isFinalized')
             .getOneOrNull();
@@ -393,7 +368,7 @@ export class QuestionAnswerService {
     private async getCorrectAnswerVersionsAsync(questionVersionId: Id<'QuestionVersion'>) {
 
         const correctAnswerVersions = await this._ormService
-            .query(AnswerVersion, {questionVersionId, isCorrect: true})
+            .query(AnswerVersion, { questionVersionId, isCorrect: true })
             .innerJoin(AnswerData, x => x
                 .on('id', '=', 'answerDataId', AnswerVersion)
                 .and('isCorrect', '=', 'isCorrect'))
@@ -433,7 +408,7 @@ export class QuestionAnswerService {
         // TODO: THIS COULD BE WRONG BECAUSE THE IS CORRECT FLAG IN GIVEN ANSWER
         //       IS NOT ALWAYS WORKS LIKE IT SHOULD
         const correctAnswersOnQuestion = await this._ormService
-            .query(GivenAnswer, {questionVersionId, userId, isCorrect: true})
+            .query(GivenAnswer, { questionVersionId, userId, isCorrect: true })
             .innerJoin(AnswerSession, x => x
                 .on('userId', '=', 'userId'))
             .where('isCorrect', '=', 'isCorrect')
@@ -456,7 +431,7 @@ export class QuestionAnswerService {
         // TODO: THIS COULD BE WRONG BECAUSE THE IS CORRECT FLAG IN GIVEN ANSWER
         //       IS NOT ALWAYS WORKS LIKE IT SHOULD
         const givenAnswers = await this._ormService
-            .query(GivenAnswer, {questionVersionId, userId, answerSessionId})
+            .query(GivenAnswer, { questionVersionId, userId, answerSessionId })
             .innerJoin(AnswerSession, x => x
                 .on('userId', '=', 'userId')
                 .and('id', '=', 'answerSessionId')
@@ -475,7 +450,7 @@ export class QuestionAnswerService {
     private async getStreakLengthAsync(givenAnswerStreakId: Id<'GivenAnswerStreak'> | null) {
 
         const streaks = await this._ormService
-            .query(GivenAnswer, {givenAnswerStreakId})
+            .query(GivenAnswer, { givenAnswerStreakId })
             .leftJoin(GivenAnswerStreak, x => x
                 .on('id', '=', 'givenAnswerStreakId', GivenAnswer))
             .where('id', '=', 'givenAnswerStreakId')

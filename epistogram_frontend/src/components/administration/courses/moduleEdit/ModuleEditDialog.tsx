@@ -62,6 +62,16 @@ export const ModuleEditDialog = ({
 
                 {/* grid */}
                 <EpistoDataGrid
+                    onRowOrderChange={(opts) => {
+                        
+                        console.log(opts);
+                        // mutatorFunctions
+                        //     .mutate({
+                        //         key,
+                        //         field: 'orderIndex',
+                        //         newValue: 
+                        //     });
+                    }}
                     hideFooter
                     columns={columns}
                     rows={rows}

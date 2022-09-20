@@ -136,7 +136,8 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>({
     getKey,
     onFocusChanged,
     columnVisibilityModel,
-    isRowEditable
+    isRowEditable,
+    onRowOrderChange
 }: {
     rows: TSchema[],
     columns: GridColumnType<TSchema, TKey, keyof TSchema>[],
@@ -148,7 +149,15 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>({
     id?: string,
     onFocusChanged?: (hasFocus: boolean) => void,
     columnVisibilityModel?: EpistoDataGridColumnVisibilityModel<TSchema>,
-    isRowEditable?: (row: TSchema) => boolean
+    isRowEditable?: (row: TSchema) => boolean,
+    onRowOrderChange?: (opts: {
+        sourceKey: TKey,
+        targetKey: TKey,
+        sourceIndex: number,
+        targetIndex: number,
+        sourceRow: TSchema,
+        targetRow: TSchema
+    }) => void
 }) => {
 
     Logger.logScoped('GRID', `${id ? `[id: ${id}] ` : ''}Rendering EpistoDataGrid...`);
@@ -213,26 +222,22 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>({
             rows={rows}
             apiRef={apiRef}
             rowReordering
-            // onRowOrderChange={({ row, oldIndex, targetIndex }) => {
+            onRowOrderChange={onRowOrderChange
+                ? ({ oldIndex, targetIndex }) => {
 
-            //     const rowKey = row.rowKey as any as TKey;
+                    const sourceRow = rows[oldIndex];
+                    const targetRow = rows[targetIndex];
 
-            //     const column = columns
-            //         .single(x => x.field === 'itemOrderIndex');
-
-            //     if (!column.editHandler)
-            //         throw new Error('Trying to edit a cell but it has no edit handler!');
-
-            //     const currentRow = rows
-            //         .single(x => getKey(x) === row.rowKey);
-
-            //     column.editHandler({
-            //         rowKey,
-            //         value: row.data.itemOrderIndex += (targetIndex - oldIndex),
-            //         row: currentRow,
-            //         field
-            //     });
-            // }}
+                    onRowOrderChange({
+                        sourceKey: getKey(sourceRow),
+                        targetKey: getKey(targetRow),
+                        sourceRow,
+                        targetRow,
+                        sourceIndex: oldIndex,
+                        targetIndex
+                    });
+                }
+                : undefined}
             onCellClick={handleCellClick}
             initialState={initialState as any}
             columnVisibilityModel={columnVisibilityModel as GridColumnVisibilityModel}
