@@ -18,7 +18,7 @@ export const PageRootContainer = (props: {
         document.title = 'EpistoGram';
     }, []);
 
-    const gradients = gradientBackgroundGenerator();
+    const gradients = gradientBackgroundGenerator('rgba(0, 100, 255, 0.1)');
 
     return <EpistoFlex2
         id="pageRootContainer"
