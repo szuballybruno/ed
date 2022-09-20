@@ -186,20 +186,23 @@ const HomePage = () => {
                         : <Greetings />}
                 </DashboardSection>
 
-                    {/* tip of the day */}
-                    <DashboardSection
-                        title={translatableTexts.homePage.mostRelevantStatistics}
-                        background="var(--transparentWhite70)"
-                        borderRadius="6px"
-                        showDivider
-                        className="largeSoftShadow"
-                        minHeight="30px"
-                        marginBottom="10px"
-                        flex="2 2 350px">
+                {/* tip of the day */}
+                <DashboardSection
+                    isMobile={isMobile}
+                    title={translatableTexts.homePage.mostRelevantStatistics}
+                    background={isMobile ? 'transparent' : 'var(--transparentWhite70)'}
+                    borderRadius="6px"
+                    showDivider
+                    boxShadow={isMobile ? 'none' : undefined}
+                    className={'largeSoftShadow'}
+                    minHeight="30px"
+                    marginBottom="10px"
+                    p={isMobile ? '0' : ''}
+                    flex={isMobile ? '1' : '2 2 350px'}>
 
-                        <HomePageUserStats />
-                    </DashboardSection>
-                </EpistoFlex2>
+                    <HomePageUserStats />
+                </DashboardSection>
+            </EpistoFlex2>
 
             {/* stats */}
             {!isMobile && <DashboardSection

@@ -20,6 +20,30 @@ import { useSetBusy } from './system/LoadingFrame/BusyBarContext';
 import CourseTile from './universal/CourseTile';
 import { EpistoSearch } from './universal/EpistoSearch';
 
+const MobileCourseTile = () => {
+
+    return <EpistoFlex>
+
+    </EpistoFlex>;
+};
+
+const MobileAvailableCoursesPage = (courses: AvailableCourseDTO[]) => {
+
+    return <PageRootContainer>
+
+        <ContentPane>
+
+            {courses
+                .map(course => {
+
+                    return <MobileCourseTile
+                        key={Id.read(course.courseId)} />;
+                })}
+        </ContentPane>
+    </PageRootContainer>;
+};
+
+
 const AvailableCoursesPage = () => {
 
     const [searchText, setSearchText] = React.useState<string | null>(null);
