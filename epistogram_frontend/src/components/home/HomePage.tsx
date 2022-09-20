@@ -142,12 +142,14 @@ const HomePage = () => {
                     <DashboardSection
                         isMobile={isMobile}
                         title={translatableTexts.homePage.mostRelevantStatistics}
-                        background="var(--transparentWhite70)"
+                        background={isMobile ? 'transparent' : 'var(--transparentWhite70)'}
                         borderRadius="6px"
                         showDivider
-                        className="largeSoftShadow"
+                        boxShadow={isMobile ? 'none' : undefined}
+                        className={'largeSoftShadow'}
                         minHeight="30px"
                         marginBottom="10px"
+                        p={isMobile ? '0' : ''}
                         flex={isMobile ? '1' : '2 2 350px'}>
 
                         <HomePageUserStats />
