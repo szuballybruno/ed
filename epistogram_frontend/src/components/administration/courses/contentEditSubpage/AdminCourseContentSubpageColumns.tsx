@@ -98,12 +98,17 @@ export const useGridColumns = (
             field: 'itemOrderIndex',
             headerName: 'Elhelyezkedés',
             width: 80,
-            editHandler: ({ rowKey, value }) => itemsMutatorFunctions
-                .mutate({
-                    field: 'itemOrderIndex',
-                    key: rowKey,
-                    newValue: value as any
-                }),
+            editHandler: ({ rowKey, value }) => {
+                console.log('Edithandler runs...');
+                console.log('rowKey: ' + rowKey);
+                console.log('value: ' + value);
+                itemsMutatorFunctions
+                    .mutate({
+                        field: 'itemOrderIndex',
+                        key: rowKey,
+                        newValue: value as any
+                    });
+            },
             type: 'int',
             renderCell: ({ value, row }) => {
 

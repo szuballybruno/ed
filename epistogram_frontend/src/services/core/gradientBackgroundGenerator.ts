@@ -59,8 +59,8 @@ export const gradientBackgroundGenerator = (color?: string, options?: GridGradie
     const regex = /\(([^()]*)(,[^()]*)\)/gm;
     const plainColorValue = color ? regex.exec(color) : undefined;
 
-    const defaultCenterColor = plainColorValue ? plainColorValue[1] : '0,100,255';
-    const defaultBackgroundColor = plainColorValue ? `rgba(${plainColorValue[1]}, 0.1)` : 'rgba(0, 100, 255, 0.1)';
+    const defaultCenterColor = color && plainColorValue ? plainColorValue[1] : '0,100,255';
+    const defaultBackgroundColor = color && plainColorValue ? `rgba(${plainColorValue[1]}, 0.1)` : 'rgba(0, 100, 255, 0.1)';
 
     // console.log('DefaultCenterColor: ' + defaultCenterColor);
     // console.log('DefaultBackgroundColor: ' + defaultBackgroundColor);

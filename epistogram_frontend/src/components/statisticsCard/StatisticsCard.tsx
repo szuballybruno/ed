@@ -23,6 +23,7 @@ export type StatisticsCardProps = {
     children?: React.ReactNode
     chartSize?: 'normal' | 'large',
     isComingSoon?: boolean,
+    isMobile?: boolean,
     additionalFunction?: () => void,
     additionalInfo?: {
         value: string,
@@ -36,6 +37,7 @@ const StatisticsCard = (props: StatisticsCardProps & EpistoFlex2Props) => {
     const {
         iconPath,
         isComingSoon,
+        isMobile,
         children,
         additionalFunction,
         additionalInfo,
@@ -157,16 +159,18 @@ const StatisticsCard = (props: StatisticsCardProps & EpistoFlex2Props) => {
         </EpistoFlex2>}
 
         {/* closed state */}
-        {!isOpen && <EpistoFlex2 flex="1"
+        {!isOpen && <EpistoFlex2
+            p={isMobile ? '10px 2px 10px 0' : undefined}
+            flex="1"
             align="center">
 
             {/* image */}
             {iconPath
                 ? <img
                     style={{
-                        margin: '5px 10px 5px 20px',
-                        width: 70,
-                        height: 70,
+                        margin: isMobile ? '5px' : '5px 10px 5px 20px',
+                        width: isMobile ? 40 : 70,
+                        height: isMobile ? 40 : 70,
                         objectFit: 'contain'
                     }}
                     alt=""
@@ -175,13 +179,13 @@ const StatisticsCard = (props: StatisticsCardProps & EpistoFlex2Props) => {
 
             {/* texts */}
             <EpistoFlex2
-                maxWidth='calc(100% - 80px)'
-                width='calc(100% - 80px)'
+                maxWidth={isMobile ? '100%' : 'calc(100% - 80px)'}
+                width={isMobile ? '100%' : 'calc(100% - 80px)'}
                 direction="column"
-                pr="10px">
+                pr={isMobile ? undefined : '10px'} >
 
                 {/* value and suffix */}
-                <EpistoFlex2
+                < EpistoFlex2
                     width='100%'
                     align="flex-end">
 
@@ -212,38 +216,43 @@ const StatisticsCard = (props: StatisticsCardProps & EpistoFlex2Props) => {
                 {/* title */}
                 <EpistoFont
                     style={{
-                        fontSize: '0.85rem'
+                        fontSize: isMobile ? '0.8rem' : '0.85rem'
                     }}>
                     {title}
                 </EpistoFont>
             </EpistoFlex2>
-        </EpistoFlex2>}
+        </EpistoFlex2>
+        }
 
-        {additionalFunction && <EpistoButton
-            onClick={() => additionalFunction()}
-            style={{
-                position: 'absolute',
-                right: 0,
-                bottom: 0
-            }}>
-
-            <ArrowRight />
-        </EpistoButton>}
-
-        {/* open / close button */}
-        {children && <EpistoDiv position="absolute">
-            <EpistoButton
+        {
+            additionalFunction && <EpistoButton
+                onClick={() => additionalFunction()}
                 style={{
-                    alignSelf: 'flex-start'
-                }}
-                onClick={() => {
-                    setIsOpen(p => !p);
+                    position: 'absolute',
+                    right: 0,
+                    bottom: 0
                 }}>
 
-                {isOpen ? <FullscreenExit /> : <Fullscreen />}
+                <ArrowRight />
             </EpistoButton>
-        </EpistoDiv>}
-    </FlexFloat>;
+        }
+
+        {/* open / close button */}
+        {
+            children && <EpistoDiv position="absolute">
+                <EpistoButton
+                    style={{
+                        alignSelf: 'flex-start'
+                    }}
+                    onClick={() => {
+                        setIsOpen(p => !p);
+                    }}>
+
+                    {isOpen ? <FullscreenExit /> : <Fullscreen />}
+                </EpistoButton>
+            </EpistoDiv>
+        }
+    </FlexFloat >;
 };
 
 export default StatisticsCard;

@@ -11,6 +11,61 @@ export const getCourseCategoriesSeedData = () => getSeedList<CourseCategory>()({
         parentCategoryId: null
     },
 
+    // MAIN CATEGORY: businesses
+    course_category_2: {
+        name: 'Üzlet és vállalkozás',
+        parentCategoryId: null
+    },
+
+    // MAIN CATEGORY: financials
+    course_category_financials: {
+        name: 'Pénzügyek',
+        parentCategoryId: null
+    },
+
+    // MAIN CATEGORY: IT and software
+    course_category_it_and_software: {
+        name: 'IT és szoftverek',
+        parentCategoryId: null
+    },
+
+    // MAIN CATEGORY: Office applications
+    course_category_office_applications: {
+        name: 'Irodai alkalmazások',
+        parentCategoryId: null
+    },
+
+    // MAIN CATEGORY: Self development, soft skills
+    course_category_self_development_soft_skills: {
+        name: 'Önfejlesztés, softskillek',
+        parentCategoryId: null
+    },
+
+    // MAIN CATEGORY: Design and multimedia
+    course_category_design_and_multimedia: {
+        name: 'Design és multimédia',
+        parentCategoryId: null
+    },
+
+    // MAIN CATEGORY: Marketing
+    course_category_marketing: {
+        name: 'Marketing',
+        parentCategoryId: null
+    },
+
+    // MAIN CATEGORY: Lifestyle
+    course_category_lifestyle: {
+        name: 'Életmód',
+        parentCategoryId: null
+    },
+
+    // MAIN CATEGORY: Language learning
+    course_category_language_learning: {
+        name: 'Nyelvtanulás',
+        parentCategoryId: null
+    },
+
+
     // SUBCATEGORIES for software development
     course_category_software_development_sub_web_development: {
         name: 'Webfejlesztés',
@@ -37,11 +92,6 @@ export const getCourseCategoriesSeedData = () => getSeedList<CourseCategory>()({
         parentCategoryId: Id.create<'CourseCategory'>(1)
     },
 
-    // MAIN CATEGORY: businesses
-    course_category_2: {
-        name: 'Üzlet és vállalkozás',
-        parentCategoryId: null
-    },
 
     // SUBCATEGORIES for businesses
     course_category_businesses_sub_business: {
@@ -89,11 +139,6 @@ export const getCourseCategoriesSeedData = () => getSeedList<CourseCategory>()({
         parentCategoryId: Id.create<'CourseCategory'>(2)
     },
 
-    // MAIN CATEGORY: financials
-    course_category_financials: {
-        name: 'Pénzügyek',
-        parentCategoryId: null
-    },
 
     // SUBCATEGORIES for businesses
     course_category_financials_sub_bookkeeping_and_accounting: {
@@ -132,12 +177,6 @@ export const getCourseCategoriesSeedData = () => getSeedList<CourseCategory>()({
     },
 
 
-    // MAIN CATEGORY: IT and software
-    course_category_it_and_software: {
-        name: 'IT és szoftverek',
-        parentCategoryId: null
-    },
-
     // SUBCATEGORIES for IT and software
     course_category_it_and_software_sub_certificates: {
         name: 'Certifikációk',
@@ -164,11 +203,6 @@ export const getCourseCategoriesSeedData = () => getSeedList<CourseCategory>()({
         parentCategoryId: Id.create<'CourseCategory'>(4)
     },
 
-    // MAIN CATEGORY: Office applications
-    course_category_office_applications: {
-        name: 'Irodai alkalmazások',
-        parentCategoryId: null
-    },
 
     // SUBCATEGORIES for Office applications
     course_category_office_applications_sub_microsoft: {
@@ -196,18 +230,6 @@ export const getCourseCategoriesSeedData = () => getSeedList<CourseCategory>()({
         parentCategoryId: Id.create<'CourseCategory'>(5)
     },
 
-
-    // MAIN CATEGORY: Self development, soft skills
-    course_category_self_development_soft_skills: {
-        name: 'Önfejlesztés, softskillek',
-        parentCategoryId: null
-    },
-
-    // MAIN CATEGORY: Design and multimedia
-    course_category_design_and_multimedia: {
-        name: 'Design és multimédia',
-        parentCategoryId: null
-    },
 
     // SUBCATEGORIES for Design and multimedia
     course_category_design_and_multimedia_sub_webdesign: {
@@ -240,11 +262,6 @@ export const getCourseCategoriesSeedData = () => getSeedList<CourseCategory>()({
         parentCategoryId: Id.create<'CourseCategory'>(7)
     },
 
-    // MAIN CATEGORY: Marketing
-    course_category_marketing: {
-        name: 'Marketing',
-        parentCategoryId: null
-    },
 
     // SUBCATEGORIES for Marketing
     course_category_marketing_sub_digital_marketing: {
@@ -287,11 +304,6 @@ export const getCourseCategoriesSeedData = () => getSeedList<CourseCategory>()({
         parentCategoryId: Id.create<'CourseCategory'>(8)
     },
 
-    // MAIN CATEGORY: Lifestyle
-    course_category_lifestyle: {
-        name: 'Életmód',
-        parentCategoryId: null
-    },
 
     // SUBCATEGORIES for Lifestyle
     course_category_lifestyle_sub_health_and_fitness: {
@@ -314,12 +326,6 @@ export const getCourseCategoriesSeedData = () => getSeedList<CourseCategory>()({
         parentCategoryId: Id.create<'CourseCategory'>(9)
     },
 
-
-    // MAIN CATEGORY: Language learning
-    course_category_language_learning: {
-        name: 'Nyelvtanulás',
-        parentCategoryId: null
-    },
 
     // SUBCATEGORIES for Language learning
     course_category_language_learning_sub_business_language_course: {

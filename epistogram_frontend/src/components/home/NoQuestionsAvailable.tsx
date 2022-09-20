@@ -2,12 +2,15 @@ import { useNavigation } from '../../services/core/navigatior';
 import { Environment } from '../../static/Environemnt';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoFont } from '../controls/EpistoFont';
-import {applicationRoutes} from '../../configuration/applicationRoutes';
+import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { useIsMobileView } from '../../static/frontendHelpers';
 
 export const NoQuestionsAvailable = () => {
 
     const { navigate2 } = useNavigation();
+    const isMobile = useIsMobileView();
+
     return <EpistoFlex2 pr="20px">
 
         <EpistoFlex2 direction={'column'}>
@@ -43,13 +46,13 @@ export const NoQuestionsAvailable = () => {
             </EpistoFont>
         </EpistoFlex2>
 
-        <EpistoFlex2>
+        {!isMobile && <EpistoFlex2>
             <img
                 src={Environment.getAssetUrl('/images/welcome3D.png')}
                 alt=""
                 style={{
                     objectFit: 'contain',
                 }} />
-        </EpistoFlex2>
+        </EpistoFlex2>}
     </EpistoFlex2>;
 };
