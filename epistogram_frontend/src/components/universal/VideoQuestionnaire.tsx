@@ -28,7 +28,16 @@ export const VideoQuestionnaire = (props: {
     const handleAnswerQuestionAsync = async (answerVersionIds: Id<'AnswerVersion'>[]) => {
 
         const timeElapsed = epochDates(new Date(), showUpTime);
-        await answerQuestionAsync(answerSessionId, answerVersionIds, question.questionVersionId, timeElapsed);
+        await answerQuestionAsync({
+            answerSessionId,
+            givenAnswers: [
+                {
+                    answerVersionIds,
+                    questionVersionId: question.questionVersionId,
+                    elapsedSeconds: timeElapsed
+                }
+            ]
+        });
         onAnswered();
     };
 

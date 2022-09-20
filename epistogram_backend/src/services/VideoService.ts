@@ -1,21 +1,21 @@
-import {UploadedFile} from 'express-fileupload';
-import {getVideoDurationInSeconds} from 'get-video-duration';
-import {VideoData} from '../models/entity/video/VideoData';
-import {VideoFile} from '../models/entity/video/VideoFile';
-import {VideoVersion} from '../models/entity/video/VideoVersion';
-import {LatestVideoView} from '../models/views/LatestVideoView';
-import {QuestionDataView} from '../models/views/QuestionDataView';
-import {VideoPlayerDataView} from '../models/views/VideoPlayerDataView';
-import {Id} from '../shared/types/versionId';
-import {PrincipalId} from '../utilities/XTurboExpress/ActionParams';
-import {AuthorizationService} from './AuthorizationService';
-import {FileService} from './FileService';
-import {FileSystemService} from './FileSystemService';
-import {LoggerService} from './LoggerService';
-import {GlobalConfiguration} from './misc/GlobalConfiguration';
-import {ORMConnectionService} from './ORMConnectionService/ORMConnectionService';
-import {QuestionAnswerService} from './QuestionAnswerService';
-import {UrlService} from './UrlService';
+import { UploadedFile } from 'express-fileupload';
+import { getVideoDurationInSeconds } from 'get-video-duration';
+import { VideoData } from '../models/entity/video/VideoData';
+import { VideoFile } from '../models/entity/video/VideoFile';
+import { VideoVersion } from '../models/entity/video/VideoVersion';
+import { LatestVideoView } from '../models/views/LatestVideoView';
+import { QuestionDataView } from '../models/views/QuestionDataView';
+import { VideoPlayerDataView } from '../models/views/VideoPlayerDataView';
+import { Id } from '../shared/types/versionId';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
+import { AuthorizationService } from './AuthorizationService';
+import { FileService } from './FileService';
+import { FileSystemService } from './FileSystemService';
+import { LoggerService } from './LoggerService';
+import { GlobalConfiguration } from './misc/GlobalConfiguration';
+import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { QuestionAnswerService } from './QuestionAnswerService';
+import { UrlService } from './UrlService';
 
 export class VideoService {
 
@@ -30,6 +30,9 @@ export class VideoService {
         private _fileSystemService: FileSystemService) {
     }
 
+    /**
+     * Answer video question async  
+     */
     async answerVideoQuestionAsync(
         principalId: PrincipalId,
         answerSessionId: Id<'AnswerSession'>,
@@ -37,24 +40,26 @@ export class VideoService {
         answerVersionIds: Id<'AnswerVersion'>[],
         elapsedSeconds: number) {
 
-        // validation comes here
-
-        return this._questionAnswerService
+        return this
+            ._questionAnswerService
             .saveGivenAnswersAsync({
                 userId: principalId.getId(),
                 answerSessionId,
-                questionVersionId,
-                answerVersionIds,
-                isExamQuestion: false,
-                elapsedSeconds
+                isPractiseAnswers: false,
+                givenAnswers: [
+                    {
+                        questionVersionId,
+                        answerVersionIds,
+                        elapsedSeconds
+                    }
+                ]
             });
-
     }
 
     setVideoFileIdAsync = async (videoVersionId: Id<'VideoVersion'>, storageFileId: Id<'StorageFile'>) => {
 
         const videoVersion = await this._ormService
-            .query(VideoVersion, {videoVersionId})
+            .query(VideoVersion, { videoVersionId })
             .leftJoin(VideoData, x => x
                 .on('id', '=', 'videoDataId', VideoVersion))
             .leftJoin(VideoFile, x => x
@@ -73,7 +78,7 @@ export class VideoService {
 
         const videoData = await this._ormService
             .withResType<VideoData>()
-            .query(LatestVideoView, {videoId})
+            .query(LatestVideoView, { videoId })
             .select(VideoData)
             .leftJoin(VideoVersion, (x => x
                 .on('id', '=', 'videoVersionId', LatestVideoView)))
@@ -97,7 +102,7 @@ export class VideoService {
     async _getQuestionDataByVideoVersionId(videoVersionId: Id<'VideoVersion'>) {
 
         const questionData = await this._ormService
-            .query(QuestionDataView, {videoVersionId})
+            .query(QuestionDataView, { videoVersionId })
             .where('videoVersionId', '=', 'videoVersionId')
             .getMany();
 
@@ -107,7 +112,7 @@ export class VideoService {
     getVideoByVersionIdAsync = async (videoVersionId: Id<'VideoVersion'>) => {
 
         const video = await this._ormService
-            .query(VideoPlayerDataView, {videoVersionId})
+            .query(VideoPlayerDataView, { videoVersionId })
             .where('videoVersionId', '=', 'videoVersionId')
             .getSingle();
 
@@ -117,7 +122,7 @@ export class VideoService {
     getVideoPlayerDataAsync = async (videoVersionId: Id<'VideoVersion'>) => {
 
         const videoPlayerData = await this._ormService
-            .query(VideoPlayerDataView, {videoVersionId})
+            .query(VideoPlayerDataView, { videoVersionId })
             .where('videoVersionId', '=', 'videoVersionId')
             .getSingle();
 
@@ -128,12 +133,12 @@ export class VideoService {
      * Upload video file chunk
      */
     async uploadVideoFileChunksAsync({
-                                         chunkIndex,
-                                         chunksCount,
-                                         getFile,
-                                         principalId,
-                                         videoVersionId
-                                     }: {
+        chunkIndex,
+        chunksCount,
+        getFile,
+        principalId,
+        videoVersionId
+    }: {
         principalId: PrincipalId,
         videoVersionId: Id<'VideoVersion'>,
         chunkIndex: number,
@@ -141,7 +146,7 @@ export class VideoService {
         getFile: () => UploadedFile | undefined
     }) {
 
-        const {tempFilePath, uploadsTempFolder} = this
+        const { tempFilePath, uploadsTempFolder } = this
             ._getVideoFilePath(videoVersionId);
 
         try {
@@ -228,7 +233,7 @@ export class VideoService {
         const videoData = await this
             ._ormService
             .withResType<VideoData>()
-            .query(VideoVersion, {videoVersionId})
+            .query(VideoVersion, { videoVersionId })
             .select(VideoData)
             .leftJoin(VideoData, x => x
                 .on('id', '=', 'videoDataId', VideoVersion))
@@ -237,7 +242,7 @@ export class VideoService {
 
         const videoFileId = videoData.videoFileId!;
 
-        const {newCDNFilePath} = await this
+        const { newCDNFilePath } = await this
             ._fileService
             .uploadAssigendFileAsync({
                 entitySignature: VideoFile,

@@ -1,40 +1,32 @@
-import { Answer } from '../models/entity/answer/Answer';
 import { AnswerData } from '../models/entity/answer/AnswerData';
 import { AnswerVersion } from '../models/entity/answer/AnswerVersion';
+import { AnswerGivenAnswerBridge } from '../models/entity/misc/AnswerGivenAnswerBridge';
 import { AnswerSession } from '../models/entity/misc/AnswerSession';
+import { GivenAnswer } from '../models/entity/misc/GivenAnswer';
+import { GivenAnswerStreak } from '../models/entity/misc/GivenAnswerStreak';
 import { AnswerEditDTO } from '../shared/dtos/AnswerEditDTO';
-import { AnswerResultDTO } from '../shared/dtos/AnswerResultDTO';
 import { Mutation } from '../shared/dtos/mutations/Mutation';
+import { GivenAnswerDTO } from '../shared/dtos/questionAnswer/GivenAnswerDTO';
 import { instantiate } from '../shared/logic/sharedLogic';
 import { Id } from '../shared/types/versionId';
-import { VersionMigrationContainer } from '../utilities/misc';
+import { InsertEntity } from '../utilities/misc';
 import { CoinAcquireService } from './CoinAcquireService';
 import { LoggerService } from './LoggerService';
-import { XMutatorHelpers } from './misc/XMutatorHelpers';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
-import { SQLFunctionsService } from './sqlServices/FunctionsService';
-import { VersionSaveService } from './VersionSaveService';
-import { GivenAnswerStreak } from '../models/entity/misc/GivenAnswerStreak';
-import { GivenAnswer } from '../models/entity/misc/GivenAnswer';
-import { AnswerGivenAnswerBridge } from '../models/entity/misc/AnswerGivenAnswerBridge';
-import { QuestionVersion } from '../models/entity/question/QuestionVersion';
 
 export type AnswerMutationsType = Mutation<AnswerEditDTO, 'answerVersionId'>[];
 export type AnswerVersionWithAnswerDataType = AnswerVersion & AnswerData;
 
-type GivenAnswerDTO = {
-    questionVersionId: Id<'QuestionVersion'>,
-    answerVersionIds: Id<'AnswerVersion'>[],
-    elapsedSeconds: number,
+type CorrectAnswerData = {
+    givenAnswerId: Id<'GivenAnswer'>,
+    isCorrect: boolean
 };
 
 export class QuestionAnswerService {
 
     constructor(
         private _ormService: ORMConnectionService,
-        private _sqlFunctionsService: SQLFunctionsService,
         private _coinAcquireService: CoinAcquireService,
-        private _versionSaveService: VersionSaveService,
         private _loggerService: LoggerService) {
     }
 
@@ -74,388 +66,200 @@ export class QuestionAnswerService {
             givenAnswers: GivenAnswerDTO[]
         }) {
 
-        const givenAnswerStreakId = await this
-            .handleAnswerStreakAsync(userId, isGivenAnswersFullyCorrect, isAnsweredCorrectlyBefore);
-
-        const streakLength = await this
-            .getStreakLengthAsync(givenAnswerStreakId);
-
-        return this
-            .saveGivenAnswerAsync(
-                isPractiseAnswer,
-                questionVersionId,
-                answerSessionId,
-                !!x.isCorrect,
-                givenAnswerStreakId,
-                elapsedSeconds,
-                x.id);
-
-        const canAcquireCoin = isGivenAnswersFullyCorrect && !isExamQuestion;
-
-        const coinAcquires = {
-            normal: canAcquireCoin
-                ? await this
-                    ._coinAcquireService
-                    .acquireQuestionAnswerCoinsAsync(userId, savedGivenAnswers
-                        .first().givenAnswerId)
-                : null,
-            bonus: canAcquireCoin
-                ? await this
-                    ._coinAcquireService
-                    .handleGivenAnswerStreakCoinsAsync(userId, givenAnswerStreakId!, streakLength)
-                : null
-        };
-
-        await Promise
-            .all(savedGivenAnswers
-                .map(async x => {
-                    this._loggerService.logScoped('GIVEN ANSWER', 'userId: ' + userId);
-                    this._loggerService.logScoped('GIVEN ANSWER', 'answerSessionId: ' + answerSessionId);
-                    this._loggerService.logScoped('GIVEN ANSWER', 'questionVersionId: ' + questionVersionId);
-                    this._loggerService.logScoped('GIVEN ANSWER', 'answerVersionIds: ' + x.answerVersionId);
-                    this._loggerService.logScoped('GIVEN ANSWER', 'isExamQuestion: ' + isExamQuestion);
-                    this._loggerService.logScoped('GIVEN ANSWER', 'elapsedSeconds: ' + elapsedSeconds);
-                    this._loggerService.logScoped('GIVEN ANSWER', 'isPractiseAnswer: ' + isPractiseAnswer);
-
-                    const canAcquireCoin = x.isCorrect && !isExamQuestion;
-
-                    const coinAcquires = {
-                        normal: canAcquireCoin
-                            ? await this
-                                ._coinAcquireService
-                                .acquireQuestionAnswerCoinsAsync(userId, x.givenAnswerId)
-                            : null,
-                        bonus: canAcquireCoin
-                            ? await this
-                                ._coinAcquireService
-                                .handleGivenAnswerStreakCoinsAsync(userId, givenAnswerStreakId!, streakLength)
-                            : null
-                    };
-                }));
-
-        const correctAnswerVersionIds = savedGivenAnswers
-            .filter(x => x.isCorrect)
-            .map(x => x.answerVersionId);
-
-        return instantiate<AnswerResultDTO>({
-            correctAnswerVersionIds,
-            givenAnswerVersionIds: answerVersionIds,
-            isCorrect: isGivenAnswersFullyCorrect,
-            coinAcquires
-        });
-    }
-
-    /**
-     * Saves quesiton answers
-     */
-    async saveAnswersAsync(
-        mutations: AnswerMutationsType,
-        questionVersionIdMigrations: VersionMigrationContainer<'QuestionVersion'>) {
-
-        return await this._versionSaveService
-            .saveAsync({
-                dtoSignature: AnswerEditDTO,
-                versionSignature: AnswerVersion,
-                dataSignature: AnswerData,
-                entitySignature: Answer,
-                parentVersionIdField: 'questionVersionId',
-                getParentOldVersionId: x => x.questionVersionId,
-                getDataId: x => x.answerDataId,
-                getEntityId: x => x.answerId,
-                getVersionId: x => x.key,
-                getDefaultData: (mut) => ({
-                    isCorrect: false,
-                    text: ''
-                }),
-                getNewEntity: () => ({}),
-                getNewVersion: ({ entityId, newDataId, newParentVersionId }) => ({
-                    answerDataId: newDataId,
-                    answerId: entityId,
-                    questionVersionId: newParentVersionId
-                }),
-                overrideDataProps: (data, mutation) => {
-
-                    const { isCorrect, text } = XMutatorHelpers
-                        .mapMutationToPartialObject(mutation);
-
-                    if (isCorrect === false || isCorrect === true)
-                        data.isCorrect = isCorrect;
-
-                    if (text)
-                        data.text = text;
-
-                    return data;
-                },
-                muts: mutations,
-                parentVersionIdMigrations: questionVersionIdMigrations,
-                getDataDisplayNameArg: x => x.text
-            });
-    }
-
-    /**
-     * It saves one given answer, for one question, in one answer session
-     */
-    async saveGivenAnswerAsync(
-        isPractiseAnswer: boolean,
-        questionVersionId: Id<'QuestionVersion'>,
-        answerSessionId: Id<'AnswerSession'>,
-        isCorrect: boolean,
-        givenAnswerStreakId: Id<'GivenAnswerStreak'> | null,
-        elapsedSeconds: number,
-        answerVersionId: Id<'AnswerVersion'>
-    ) {
-
-        // Creates new GivenAnswer
-        const createdGivenAnswer = await this._ormService
-            .createAsync(GivenAnswer, {
-                creationDate: new Date(Date.now()),
-                deletionDate: null,
-                isPractiseAnswer: isPractiseAnswer,
-                questionVersionId: questionVersionId,
+        /**
+         * Insert given answers 
+         */
+        const newGivenAnswers = givenAnswers
+            .map(x => instantiate<InsertEntity<GivenAnswer>>({
+                isPractiseAnswer: isPractiseAnswers,
                 answerSessionId: answerSessionId,
-                isCorrect: isCorrect,
-                givenAnswerStreakId: givenAnswerStreakId,
-                elapsedSeconds: elapsedSeconds
+                creationDate: new Date(),
+                deletionDate: null,
+                questionVersionId: x.questionVersionId,
+                isCorrect: true,
+                elapsedSeconds: x.elapsedSeconds,
+                givenAnswerStreakId: null
+            }));
+
+        const givenAnswerIds = await this._ormService
+            .createManyAsync(GivenAnswer, newGivenAnswers);
+
+        /**
+         * Insert given answr - answer bridges
+         */
+        const givenAnswerAnswerBridges = givenAnswerIds
+            .flatMap((givenAnswerId, index) => {
+
+                const givenAnswer = givenAnswers[index];
+
+                return givenAnswer
+                    .answerVersionIds
+                    .map((answerVersionId): InsertEntity<AnswerGivenAnswerBridge> => ({
+                        givenAnswerId,
+                        answerVersionId: answerVersionId,
+                        deletionDate: null,
+                    }));
             });
 
-        // Creates new AnswerGivenAnswerBridge3
         await this._ormService
-            .createAsync(AnswerGivenAnswerBridge, {
-                givenAnswerId: createdGivenAnswer,
-                answerVersionId: answerVersionId,
-                deletionDate: null
-            });
+            .createManyAsync(AnswerGivenAnswerBridge, givenAnswerAnswerBridges);
 
-        return {
-            isPractiseAnswer,
-            questionVersionId,
-            answerSessionId,
-            isCorrect,
-            givenAnswerStreakId,
-            elapsedSeconds,
-            answerVersionId,
-            givenAnswerId: createdGivenAnswer
-        };
+        /**
+         * Get correct answer data
+         */
+        const correctAnswerData = await this
+            ._getCorrectAnswerData(givenAnswerIds);
+
+        /**
+         * Handle given answer steak 
+         */
+        const streakId = await this
+            ._handleAnswerStreakAsync(userId, correctAnswerData);
+
+        /**
+         * Handle coins
+         */
+        await this
+            ._handleCoinsAsync(userId, streakId, correctAnswerData);
     }
 
     /**
-     * Gets isCorrect flag for all answerVersions
-     * @param answerVersionIds
-     * @private
+     * Update streaks
+     * - If all correct create or append to streak
+     * - If any incorrect finalize streak, or do nothing  
      */
-    private async getAnswerVersionsWithAnswerDataAsync(answerVersionIds: Id<'AnswerVersion'>[]) {
+    private async _handleAnswerStreakAsync(
+        userId: Id<'User'>,
+        correctAnswerData: CorrectAnswerData[]) {
 
-        return Promise.all(answerVersionIds
-            .map(answerVersionId => {
-                return this._ormService
-                    .withResType<AnswerVersionWithAnswerDataType>()
-                    .query(AnswerVersion, { answerVersionId })
-                    .selectFrom(x => x
-                        .columns(AnswerVersion, '*')
-                        .columns(AnswerData, {
-                            isCorrect: 'isCorrect'
-                        }))
-                    .leftJoin(AnswerData, x => x
-                        .on('id', '=', 'answerDataId', AnswerVersion))
-                    .where('id', '=', 'answerVersionId')
-                    .getSingle();
+        const currentGivenAnswerStreak = await this
+            ._ormService
+            .query(GivenAnswerStreak, { userId })
+            .where('userId', '=', 'userId')
+            .and('isFinalized', '=', 'false')
+            .getOneOrNull();
+
+        const isAllCorrect = correctAnswerData
+            .all(x => x.isCorrect);
+
+        const assignAllToAnswerStreakAsync = async (givenAnswerStreakId: Id<'GivenAnswerStreak'>) => {
+
+            await this
+                ._ormService
+                .save(GivenAnswer, correctAnswerData
+                    .map(x => x.givenAnswerId)
+                    .map(givenAnswerId => ({
+                        id: givenAnswerId,
+                        givenAnswerStreakId
+                    })));
+        };
+
+        /**
+         * New streak
+         */
+        if (isAllCorrect && !currentGivenAnswerStreak) {
+
+            const newGivenAnswerStreakId = await this
+                ._ormService
+                .createAsync(GivenAnswerStreak, {
+                    isFinalized: false,
+                    userId
+                });
+
+            await assignAllToAnswerStreakAsync(newGivenAnswerStreakId);
+
+            // streak started event 
+
+            return newGivenAnswerStreakId;
+        }
+
+        /**
+         * Lost streak
+         */
+        if (!isAllCorrect && currentGivenAnswerStreak) {
+
+            await this
+                ._ormService
+                .save(GivenAnswerStreak, {
+                    id: currentGivenAnswerStreak.id,
+                    isFinalized: true
+                });
+
+            // streak lost event 
+
+            return null;
+        }
+
+        /**
+         * Grew streak
+         */
+        if (isAllCorrect && currentGivenAnswerStreak) {
+
+            await assignAllToAnswerStreakAsync(currentGivenAnswerStreak.id);
+
+            // streak grew event
+
+            return currentGivenAnswerStreak.id;
+        }
+
+        /**
+         * No correct event, 
+         * and no existing streak,
+         * basically do nothing at all... 
+         */
+        return null;
+    }
+
+    /**
+     * getCorrectAnswerData 
+     */
+    private _getCorrectAnswerData(givenAnswerIds: Id<'GivenAnswer'>[]): CorrectAnswerData[] {
+
+        return givenAnswerIds
+            .map(givenAnswerId => ({
+                givenAnswerId,
+                isCorrect: true
             }));
     }
 
     /**
-     * It removes one given answer, for one question, in one answer session
+     * Handle coins
      */
-    private async deleteGivenAnswersFromAnswerSessionAsync(
-        answerSessionId: Id<'AnswerSession'>,
-        questionVersionId: Id<'QuestionVersion'>
-    ) {
-
-        const givenAnswers = await this._ormService
-            .withResType<{
-                givenAnswerId: Id<'GivenAnswer'>,
-                answerGivenAnswerBridgeId: Id<'AnswerGivenAnswerId'>
-            }>()
-            .query(GivenAnswer, { questionVersionId, answerSessionId })
-            .selectFrom(x => x
-                .columns(GivenAnswer, {
-                    givenAnswerId: 'id'
-                })
-                .columns(AnswerGivenAnswerBridge, {
-                    answerGivenAnswerBridgeId: 'id'
-                }))
-            .leftJoin(AnswerGivenAnswerBridge, x => x
-                .on('givenAnswerId', '=', 'id', GivenAnswer))
-            .leftJoin(AnswerVersion, x => x
-                .on('id', '=', 'answerVersionId', AnswerGivenAnswerBridge))
-            .innerJoin(QuestionVersion, x => x
-                .on('id', '=', 'questionVersionId')
-                .and('id', '=', 'questionVersionId', AnswerVersion))
-            .innerJoin(AnswerSession, x => x
-                .on('id', '=', 'answerSessionId')
-                .and('id', '=', 'answerSessionId', GivenAnswer))
-            .getMany();
-
-        this._loggerService.logScoped('GENERIC', 'Removing given answer: ' + givenAnswers);
-
-        // Removes the AnswerGivenAnswerBridge
-        await this._ormService
-            .hardDelete(AnswerGivenAnswerBridge, givenAnswers.map(x => x.answerGivenAnswerBridgeId));
-
-        // Removes the GivenAnswer
-        return this._ormService
-            .hardDelete(GivenAnswer, givenAnswers.map(x => x.givenAnswerId));
-
-    }
-
-    /**
-     * Update streaks by multiple conditions
-     *
-     * * If current answer is not correct OR answered correctly before, do nothing.
-     * * If there is a non finalized previous streak AND the current answer is not
-     *   fully correct, finalize it.
-     * * If there is no previous streak AND the current answer is fully correct,
-     *   create a new streak.
-     */
-    private async handleAnswerStreakAsync(
+    private async _handleCoinsAsync(
         userId: Id<'User'>,
-        currentAnswerIsFullyCorrect: boolean,
-        currentQuestionIsAnsweredCorrectlyBefore: boolean
-    ) {
+        streakId: Id<'GivenAnswerStreak'> | null,
+        correctAnswerData: CorrectAnswerData[]) {
 
-        if (!currentAnswerIsFullyCorrect || currentQuestionIsAnsweredCorrectlyBefore) {
-            return null;
+        /**
+         * Reward streak based on length
+         */
+        if (streakId) {
+
+            const streakLength = await this
+                ._getStreakLengthAsync(streakId);
         }
 
-        const previousStreak = await this._ormService
-            .query(GivenAnswerStreak, { userId, isFinalized: false })
-            .where('userId', '=', 'userId')
-            .and('isFinalized', '=', 'isFinalized')
-            .getOneOrNull();
+        /**
+         * Reward answers 
+         */
+        const isAllCorrect = correctAnswerData
+            .all(x => x.isCorrect);
 
-        if (!previousStreak && currentAnswerIsFullyCorrect) {
-
-            const newStreak = await this._ormService
-                .createAsync(
-                    GivenAnswerStreak,
-                    {
-                        userId: userId,
-                        isFinalized: false
-                    });
-
-            return newStreak;
-        }
-
-        if (previousStreak && !currentAnswerIsFullyCorrect) {
-
-            await this._ormService
-                .save(GivenAnswerStreak, {
-                    id: previousStreak.id,
-                    isFinalized: true
-                });
-
-            return previousStreak.id;
-        }
-
-        return null;
-
+        // TODO coins
     }
 
     /**
-     * Gets all the correct answerVersionIds-s of a question
-     * @param questionVersionId
-     * @private
+     * Get GivenAnswerStreak length 
      */
-    private async getCorrectAnswerVersionsAsync(questionVersionId: Id<'QuestionVersion'>) {
+    private async _getStreakLengthAsync(givenAnswerStreakId: Id<'GivenAnswerStreak'> | null) {
 
-        const correctAnswerVersions = await this._ormService
-            .query(AnswerVersion, { questionVersionId, isCorrect: true })
-            .innerJoin(AnswerData, x => x
-                .on('id', '=', 'answerDataId', AnswerVersion)
-                .and('isCorrect', '=', 'isCorrect'))
-            .where('questionVersionId', '=', 'questionVersionId')
-            .getMany();
-
-        return correctAnswerVersions;
-    }
-
-    /**
-     * Just a simple function to compare givenAnswers with
-     * correct answers.
-     * @param correctAnswerVersionIds
-     * @param givenAnswerVersionIds
-     * @private
-     */
-    private checkIfGivenAnswersCorrect(
-        correctAnswerVersionIds: Id<'AnswerVersion'>[],
-        givenAnswerVersionIds: Id<'AnswerVersion'>[]
-    ) {
-
-        return correctAnswerVersionIds.length === givenAnswerVersionIds.length
-            && correctAnswerVersionIds
-                .every((ans) => correctAnswerVersionIds
-                    .includes(ans));
-    }
-
-    /**
-     * Checks by questionVersionId if the user has answered
-     * the question corretly in the past.
-     */
-    private async getIsCorrectlyAnsweredBeforeAsync(
-        questionVersionId: Id<'QuestionVersion'>,
-        userId: Id<'User'>
-    ) {
-
-        // TODO: THIS COULD BE WRONG BECAUSE THE IS CORRECT FLAG IN GIVEN ANSWER
-        //       IS NOT ALWAYS WORKS LIKE IT SHOULD
-        const correctAnswersOnQuestion = await this._ormService
-            .query(GivenAnswer, { questionVersionId, userId, isCorrect: true })
-            .innerJoin(AnswerSession, x => x
-                .on('userId', '=', 'userId'))
-            .where('isCorrect', '=', 'isCorrect')
-            .and('id', '=', 'questionVersionId')
-            .getMany();
-
-        return correctAnswersOnQuestion.length > 0;
-    }
-
-    /**
-     * Checks by questionVersionId if the user has answered
-     * the question in the past IN THE SAME ANSWER SESSION.
-     */
-    private async getIsAnsweredBeforeInTheAnswerSession(
-        questionVersionId: Id<'QuestionVersion'>,
-        answerSessionId: Id<'AnswerSession'>,
-        userId: Id<'User'>
-    ) {
-
-        // TODO: THIS COULD BE WRONG BECAUSE THE IS CORRECT FLAG IN GIVEN ANSWER
-        //       IS NOT ALWAYS WORKS LIKE IT SHOULD
-        const givenAnswers = await this._ormService
-            .query(GivenAnswer, { questionVersionId, userId, answerSessionId })
-            .innerJoin(AnswerSession, x => x
-                .on('userId', '=', 'userId')
-                .and('id', '=', 'answerSessionId')
-                .and('id', '=', 'answerSessionId', GivenAnswer))
-            .where('questionVersionId', '=', 'questionVersionId')
-            .getMany();
-
-        return givenAnswers.length > 0;
-    }
-
-    /**
-     * Gets the length of a givenAnswerStreak
-     * @param givenAnswerStreakId
-     * @private
-     */
-    private async getStreakLengthAsync(givenAnswerStreakId: Id<'GivenAnswerStreak'> | null) {
-
-        const streaks = await this._ormService
-            .query(GivenAnswer, { givenAnswerStreakId })
-            .leftJoin(GivenAnswerStreak, x => x
-                .on('id', '=', 'givenAnswerStreakId', GivenAnswer))
+        const rows = await this._ormService
+            .query(GivenAnswerStreak, { givenAnswerStreakId })
+            .leftJoin(GivenAnswer, x => x
+                .on('givenAnswerStreakId', '=', 'id', GivenAnswerStreak))
             .where('id', '=', 'givenAnswerStreakId')
             .getMany();
 
-        return streaks.length;
+        return rows.length;
     }
 }

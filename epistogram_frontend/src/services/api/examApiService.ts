@@ -1,4 +1,4 @@
-import { AnswerQuestionDTO } from '../../shared/dtos/AnswerQuestionDTO';
+import { AnswerQuestionsDTO } from '../../shared/dtos/AnswerQuestionDTO';
 import { AnswerResultDTO } from '../../shared/dtos/AnswerResultDTO';
 import { ExamResultsDTO } from '../../shared/dtos/ExamResultsDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
@@ -26,15 +26,13 @@ export const useFinishExam = () => {
     };
 };
 
-export const useSaveExamAnswer = () => {
+export const useSaveExamAnswers = () => {
 
-    const qr = usePostDataUnsafe<AnswerQuestionDTO, AnswerResultDTO>(apiRoutes.exam.answerExamQuestion);
+    const qr = usePostDataUnsafe<AnswerQuestionsDTO, AnswerResultDTO>(apiRoutes.exam.answerExamQuestion);
 
     return {
-        saveExamAnswer: qr.postDataAsync,
-        saveExamAnswerState: qr.state,
-        answerResult: qr.result ?? null,
-        clearExamAnswerCache: qr.clearCache
+        saveExamAnswers: qr.postDataAsync,
+        saveExamAnswersState: qr.state
     };
 };
 
@@ -47,4 +45,8 @@ export const useExamResults = (answerSessionId: Id<'AnswerSession'>) => {
         examResultsError: qr.error,
         examResultsState: qr.state
     };
+};
+
+export const ExamApiService = {
+    useSaveExamAnswers,
 };

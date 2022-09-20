@@ -32,7 +32,17 @@ export const PractiseQuestions = (props: {
 
     const handleAnswerQuestionAsync = async (answerVersionId: Id<'AnswerVersion'>[]) => {
 
-        await answerQuestionAsync(answerVersionId, practiseQuestion!.questionVersionId);
+        if (!practiseQuestion)
+            return;
+
+        await answerQuestionAsync({
+            answerSessionId: -1 as any, // ignore, not used,
+            givenAnswers: [{
+                answerVersionIds: answerVersionId,
+                elapsedSeconds: 0,
+                questionVersionId: practiseQuestion.questionVersionId
+            }]
+        });
     };
 
     useEffect(() => {
