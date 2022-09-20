@@ -1,11 +1,11 @@
 import { useMediaQuery } from '@chakra-ui/react';
-import { ArrowBack, ArrowForward, FiberManualRecord } from '@mui/icons-material';
 import { useState } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
-import { useOverviewPageDTO } from '../../services/api/miscApiService';
+import { useCurrentCourseItemCode, useOverviewPageDTO } from '../../services/api/miscApiService';
 import { useActiveCourses } from '../../services/api/userProgressApiService';
 import { useNavigation } from '../../services/core/navigatior';
 import { Environment } from '../../static/Environemnt';
+import { EpistoIcons } from '../../static/EpistoIcons';
 import { usePaging } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { ContentPane } from '../ContentPane';
@@ -20,9 +20,65 @@ import { DashboardSection } from '../universal/DashboardSection';
 import { FlexListItem } from '../universal/FlexListItem';
 import { FlexListTitleSubtitle } from '../universal/FlexListTitleSubtitle';
 import { CourseProgressDisplay } from './CourseProgressDisplay';
+import { Greetings } from './Greetings';
 import { HomePageCourseStats } from './HomePageCourseStats';
 import { HomePageUserStats } from './HomePageUserStats';
 import { PractiseQuestions } from './PractiseQuestions';
+
+const ActiveCourseSelectorHeader = ({ activeCoursesPaging }: { activeCoursesPaging: any }) => {
+
+    return (
+        <EpistoFlex2
+            flex='1'
+            h="30px"
+            align="center"
+            justify="flex-end">
+
+            <EpistoButton onClick={() => activeCoursesPaging.previous()}>
+                <EpistoIcons.ArrowBack />
+            </EpistoButton>
+
+            {activeCoursesPaging
+                .items
+                .map((x, index) => <EpistoIcons.Dot
+                    key={index}
+                    style={{
+                        width: '10px',
+                        height: '8px',
+                        color: index === activeCoursesPaging.currentIndex ? 'black' : 'gray'
+                    }} />)}
+
+            <EpistoButton onClick={() => activeCoursesPaging.next()}>
+                <EpistoIcons.ArrowForward />
+            </EpistoButton>
+
+        </EpistoFlex2>
+    );
+};
+
+const CoinsAcquiredHeaderContent = ({ coinsAcquired }: { coinsAcquired }) => {
+
+    if (!coinsAcquired)
+        return null;
+
+    return (
+        <EpistoFlex2
+            borderRadius="5px"
+            p="7px"
+            align="center">
+
+            <EpistoFont>
+                +1 EpistoCoinnal gazdagodtál!
+            </EpistoFont>
+
+            <img
+                src={Environment.getAssetUrl('images/epistoCoin.png')}
+                className="square25"
+                style={{ margin: '0px 0px 4px 4px' }} />
+
+        </EpistoFlex2>
+    );
+};
 
 const HomePage = () => {
 
@@ -36,9 +92,12 @@ const HomePage = () => {
 
     const { activeCourses } = useActiveCourses();
     const activeCoursesPaging = usePaging({ items: activeCourses });
+    const { currentCourseItemCode } = useCurrentCourseItemCode();
+    const isAnyCourseInProgess = !!currentCourseItemCode;
 
     return <PageRootContainer>
 
+        {/* sidebar / left pane */}
         <LeftPane>
 
             {/* current course items and progress */}
@@ -86,102 +145,63 @@ const HomePage = () => {
                 </EpistoFlex2>} />}
         </LeftPane>
 
+        {/* content */}
         <ContentPane
+            direction="column"
+            minWidth={isSmallerThan1400 ? '1060px' : undefined}
             noMaxWidth>
 
+            {/* main content */}
             <EpistoFlex2
-                direction="column"
-                minWidth={isSmallerThan1400 ? '1060px' : undefined}>
+                id="mainContentFlex"
+                wrap="wrap">
 
-                <EpistoFlex2 wrap="wrap">
-
-                    {/* test your knowledge */}
-                    <DashboardSection
-                        title={translatableTexts.homePage.practiseTitle}
-                        headerContent={coinsAcquired && <EpistoFlex2
-                            borderRadius="5px"
-                            p="7px"
-                            align="center">
-
-                            <EpistoFont>
-                                +1 EpistoCoinnal gazdagodtál!
-                            </EpistoFont>
-
-                            <img
-                                src={Environment.getAssetUrl('images/epistoCoin.png')}
-                                className="square25"
-                                style={{ margin: '0px 0px 4px 4px' }} />
-
-                        </EpistoFlex2>}
-                        background="var(--transparentIntenseBlue85)"
-                        className="largeSoftShadow roundBorders"
-                        color="white"
-                        showDivider
-                        minHeight="200px"
-                        m="0 5px 10px 0"
-                        flex="3 3 550px">
-
-                        <PractiseQuestions setCoinsAcquired={setCoinsAcquired} />
-                    </DashboardSection>
-
-                    {/* tip of the day */}
-                    <DashboardSection
-                        title={translatableTexts.homePage.mostRelevantStatistics}
-                        background="var(--transparentWhite70)"
-                        borderRadius="6px"
-                        showDivider
-                        className="largeSoftShadow"
-                        minHeight="30px"
-                        marginBottom="10px"
-                        flex="2 2 350px">
-
-                        <HomePageUserStats />
-                    </DashboardSection>
-                </EpistoFlex2>
-
-                {/* stats */}
+                {/* practise questions */}
                 <DashboardSection
-                    background="var(--transparentWhite70)"
+                    title={translatableTexts.homePage.practiseTitle}
+                    headerContent={<CoinsAcquiredHeaderContent
+                        coinsAcquired={coinsAcquired} />}
+                    background="var(--transparentIntenseBlue85)"
                     className="largeSoftShadow roundBorders"
+                    color="white"
                     showDivider
                     minHeight="200px"
-                    m="0 0 10px 0"
-                    flex='1'
-                    justify='center'
-                    headerContent={
-                        <EpistoFlex2
-                            flex='1'
-                            h="30px"
-                            align="center"
-                            justify="flex-end">
+                    m="0 5px 10px 0"
+                    flex="3 3 550px">
 
-                            <EpistoButton onClick={() => activeCoursesPaging.previous()}>
-                                <ArrowBack />
-                            </EpistoButton>
+                    {isAnyCourseInProgess
+                        ? <PractiseQuestions setCoinsAcquired={setCoinsAcquired} />
+                        : <Greetings />}
+                </DashboardSection>
 
-                            {activeCoursesPaging
-                                .items
-                                .map((x, index) => <FiberManualRecord
-                                    key={index}
-                                    style={{
-                                        width: '10px',
-                                        height: '8px',
-                                        color: index === activeCoursesPaging.currentIndex ? 'black' : 'gray'
-                                    }} />)}
+                {/* most relevant stats */}
+                <DashboardSection
+                    title={translatableTexts.homePage.mostRelevantStatistics}
+                    background="var(--transparentWhite70)"
+                    borderRadius="6px"
+                    showDivider
+                    className="largeSoftShadow"
+                    minHeight="30px"
+                    marginBottom="10px"
+                    flex="2 2 350px">
 
-                            <EpistoButton onClick={() => activeCoursesPaging.next()}>
-                                <ArrowForward />
-                            </EpistoButton>
-
-                        </EpistoFlex2>}
-                    title={'Kurzus során nyújtott teljesítményed: ' + activeCoursesPaging.currentItem?.title}>
-
-                    <HomePageCourseStats
-                        activeCoursesPaging={activeCoursesPaging} />
+                    <HomePageUserStats />
                 </DashboardSection>
             </EpistoFlex2>
+
+            {/* stats */}
+            <DashboardSection
+                title={`Kurzus során nyújtott teljesítményed: ${activeCoursesPaging.currentItem?.title}`}
+                bg="red"
+                headerContent={<ActiveCourseSelectorHeader
+                    activeCoursesPaging={activeCoursesPaging} />}
+                background="var(--transparentWhite70)">
+
+                <HomePageCourseStats
+                    activeCoursesPaging={activeCoursesPaging} />
+            </DashboardSection>
         </ContentPane>
-    </PageRootContainer>;
+    </PageRootContainer >;
 };
 
 export default HomePage;

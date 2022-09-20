@@ -1,4 +1,4 @@
-import { Add, Delete, Edit, Subscriptions, Timer, Save } from '@mui/icons-material';
+import { Add, Delete, Edit, Subscriptions, Timer, Save, ArrowBack, ArrowForward, FiberManualRecord } from '@mui/icons-material';
 import FiberNewIcon from '@mui/icons-material/FiberNew';
 import RemoveIcon from '@mui/icons-material/Remove';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
@@ -16,5 +16,8 @@ export const EpistoIcons = {
     Edit: Edit,
     Company: LocationCityIcon,
     Courses: Subscriptions,
-    Save: Save
+    Save: Save,
+    ArrowBack: ArrowBack,
+    ArrowForward: ArrowForward,
+    Dot: FiberManualRecord
 };
