@@ -636,10 +636,10 @@ export type PagingType<T> = {
     progressPercentage: number;
 };
 
-export const useIsDesktopView = () => {
+export const useIsMobileView = () => {
 
-    const [isDesktopView] = useMediaQuery('(min-width: 980px)');
-    return isDesktopView;
+    const [isMobileView] = useMediaQuery('(max-width: 980px)');
+    return isMobileView;
 };
 
 export const useIsScreenWiderThan = (minimumPixels: number) => {

@@ -2,7 +2,7 @@ import { useMediaQuery } from '@chakra-ui/react';
 import { ArrowBack } from '@mui/icons-material';
 import React, { ReactNode } from 'react';
 import { Environment } from '../../static/Environemnt';
-import { hasValue, isString, useIsDesktopView } from '../../static/frontendHelpers';
+import { hasValue, isString, useIsMobileView } from '../../static/frontendHelpers';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoDiv } from '../controls/EpistoDiv';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
@@ -43,7 +43,7 @@ export const SignupWrapper = (props: {
     const children = props.children;
     const onNext = props.onNext;
 
-    const isDesktop = useIsDesktopView();
+    const isDesktop = useIsMobileView();
     const [isSmallerThan1400] = useMediaQuery('(min-width: 1350px)');
 
     return <EpistoFlex2

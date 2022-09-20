@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { PlayerApiService } from '../../../services/api/PPlayerApiService';
 import { useNavigation } from '../../../services/core/navigatior';
-import { setPageTitle, useIsDesktopView } from '../../../static/frontendHelpers';
+import { setPageTitle, useIsMobileView } from '../../../static/frontendHelpers';
 import { useStringParam } from '../../../static/locationHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoFont } from '../../controls/EpistoFont';
@@ -137,7 +137,7 @@ export const WatchSubpage = () => {
             });
     };
 
-    const isDesktopView = useIsDesktopView();
+    const isDesktopView = useIsMobileView();
 
     const handleContinueCourse = () => {
 

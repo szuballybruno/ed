@@ -123,9 +123,6 @@ export const AdminHomeOverview = () => {
                         Összes kérdés
                     </EpistoButton>}>
 
-
-
-
                 <FlexListItem
                     thumbnailContent={
                         <EpistoFlex2

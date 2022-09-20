@@ -1,23 +1,23 @@
-import {useCurrentCourseItemCode} from '../../services/api/miscApiService';
-import {useAnswerPractiseQuestion, usePractiseQuestion} from '../../services/api/questionApiService';
-import {Id} from '../../shared/types/versionId';
-import {Environment} from '../../static/Environemnt';
-import {getRandomInteger} from '../../static/frontendHelpers';
-import {translatableTexts} from '../../static/translatableTexts';
-import {EpistoButton} from '../controls/EpistoButton';
-import {EpistoFont} from '../controls/EpistoFont';
-import {QuesitionView} from '../QuestionView';
-import {EpistoConinImage} from '../universal/EpistoCoinImage';
-import {Greetings} from './Greetings';
-import {NoQuestionsAvailable} from './NoQuestionsAvailable';
-import React, {Dispatch, SetStateAction, useEffect} from 'react';
+import { Dispatch, SetStateAction, useEffect } from 'react';
+import { useCurrentCourseItemCode } from '../../services/api/miscApiService';
+import { useAnswerPractiseQuestion, usePractiseQuestion } from '../../services/api/questionApiService';
+import { Id } from '../../shared/types/versionId';
+import { Environment } from '../../static/Environemnt';
+import { getRandomInteger } from '../../static/frontendHelpers';
+import { translatableTexts } from '../../static/translatableTexts';
+import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { EpistoFont } from '../controls/EpistoFont';
+import { QuesitionView } from '../QuestionView';
+import { EpistoConinImage } from '../universal/EpistoCoinImage';
+import { Greetings } from './Greetings';
+import { NoQuestionsAvailable } from './NoQuestionsAvailable';
 
 export const PractiseQuestions = (props: {
     setCoinsAcquired: Dispatch<SetStateAction<boolean>>
 }) => {
 
-    const {setCoinsAcquired} = props;
+    const { setCoinsAcquired } = props;
 
     const {
         practiseQuestion,
@@ -34,6 +34,7 @@ export const PractiseQuestions = (props: {
         clearAnswerResults
     } = useAnswerPractiseQuestion();
 
+    //const isMobile = useIsMobileView();
     const currentCourseItemCodeWrapper = useCurrentCourseItemCode();
     const currentCourseItemCode = currentCourseItemCodeWrapper?.currentCourseItemCode;
 
@@ -78,7 +79,7 @@ export const PractiseQuestions = (props: {
                             {translatableTexts.practiseQuestions.epistoCoinAquired_BeforeCoinIcon}
                         </EpistoFont>
 
-                        <EpistoConinImage/>
+                        <EpistoConinImage />
 
                         <EpistoFont>
                             {translatableTexts.practiseQuestions.epistoCoinAquired_AfterCoinIcon}
@@ -108,11 +109,11 @@ export const PractiseQuestions = (props: {
                         <QuesitionView
                             answerQuesitonAsync={handleAnswerQuestionAsync}
                             correctAnswerVersionIds={answerResults?.correctAnswerVersionIds ?? []}
-                            loadingProps={{loadingState: answerQuestionState, error: answerQuestionError}}
+                            loadingProps={{ loadingState: answerQuestionState, error: answerQuestionError }}
                             question={practiseQuestion}
                             onlyShowAnswers={isAnswered}
                             coinsAcquired={answerResults?.coinAcquires?.normal?.amount ?? null}
-                            bonusCoinsAcquired={answerResults?.coinAcquires?.bonus ?? null}/>
+                            bonusCoinsAcquired={answerResults?.coinAcquires?.bonus ?? null} />
 
                         <EpistoFlex2
                             justifyContent="center"
@@ -145,7 +146,7 @@ export const PractiseQuestions = (props: {
                 </EpistoFlex2>
             )
             : currentCourseItemCode
-                ? <NoQuestionsAvailable/>
-                : <Greetings/>}
+                ? <NoQuestionsAvailable />
+                : <Greetings />}
     </>;
 };

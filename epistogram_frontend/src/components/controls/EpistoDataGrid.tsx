@@ -182,6 +182,26 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>(props: {
             getRowId={x => getKey(x as TSchema) as any}
             rows={rows}
             apiRef={apiRef}
+            rowReordering
+            onRowOrderChange={({ row, oldIndex, targetIndex }) => {
+
+                const rowKey = row.rowKey as any as TKey;
+
+                const column = columns
+                    .single(x => x.field === 'itemOrderIndex');
+
+                if (!column.editHandler)
+                    throw new Error('Trying to edit a cell but it has no edit handler!');
+
+                const currentRow = rows
+                    .single(x => getKey(x) === row.rowKey);
+
+                column.editHandler({
+                    rowKey,
+                    value: row.data.itemOrderIndex += (targetIndex - oldIndex),
+                    row: currentRow
+                });
+            }}
             onCellClick={handleCellClick}
             initialState={initialState as any}
             columnVisibilityModel={columnVisibilityModel as GridColumnVisibilityModel}

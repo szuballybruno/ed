@@ -1,12 +1,12 @@
 import { useMediaQuery } from '@chakra-ui/react';
 import { ArrowBack, ArrowForward, FiberManualRecord } from '@mui/icons-material';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { useOverviewPageDTO } from '../../services/api/miscApiService';
 import { useActiveCourses } from '../../services/api/userProgressApiService';
 import { useNavigation } from '../../services/core/navigatior';
 import { Environment } from '../../static/Environemnt';
-import { usePaging } from '../../static/frontendHelpers';
+import { useIsMobileView, usePaging } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { ContentPane } from '../ContentPane';
 import { EpistoButton } from '../controls/EpistoButton';
@@ -15,6 +15,7 @@ import { EpistoFont } from '../controls/EpistoFont';
 import { PlaylistItem } from '../courseItemList/PlaylistItem';
 import { LeftPane } from '../LeftPane';
 import { PageRootContainer } from '../PageRootContainer';
+import { CurrentUserContext } from '../system/AuthenticationFrame';
 import { useSetBusy } from '../system/LoadingFrame/BusyBarContext';
 import { DashboardSection } from '../universal/DashboardSection';
 import { FlexListItem } from '../universal/FlexListItem';
@@ -22,6 +23,8 @@ import { FlexListTitleSubtitle } from '../universal/FlexListTitleSubtitle';
 import { CourseProgressDisplay } from './CourseProgressDisplay';
 import { HomePageCourseStats } from './HomePageCourseStats';
 import { HomePageUserStats } from './HomePageUserStats';
+import { MobileRecommendedItemQuota } from './MobileRecommendedItemQuota';
+import { MobileWelcomeHeader } from './MobileWelcomeHeader';
 import { PractiseQuestions } from './PractiseQuestions';
 
 const HomePage = () => {
@@ -31,7 +34,10 @@ const HomePage = () => {
 
     useSetBusy(useOverviewPageDTO, status, error);
 
+    const user = useContext(CurrentUserContext);
+
     const [isSmallerThan1400] = useMediaQuery('(min-width: 1400px)');
+    const isMobile = useIsMobileView();
     const [coinsAcquired, setCoinsAcquired] = useState(false);
 
     const { activeCourses } = useActiveCourses();
@@ -39,7 +45,7 @@ const HomePage = () => {
 
     return <PageRootContainer>
 
-        <LeftPane>
+        {!isMobile && <LeftPane>
 
             {/* current course items and progress */}
             {pageDTO?.currentCourseProgress && <EpistoFlex2
@@ -84,10 +90,16 @@ const HomePage = () => {
                         title={translatableTexts.homePage.availableCoursesLinkTitle}
                         subTitle={translatableTexts.homePage.availableCoursesText} />
                 </EpistoFlex2>} />}
-        </LeftPane>
+        </LeftPane>}
 
         <ContentPane
+            px='10px'
+            pb={isMobile ? '80px' : undefined}
             noMaxWidth>
+
+            {isMobile && <MobileWelcomeHeader user={user} />}
+
+            {isMobile && <MobileRecommendedItemQuota activeCoursesPaging={activeCoursesPaging} />}
 
             <EpistoFlex2
                 direction="column"
@@ -97,6 +109,7 @@ const HomePage = () => {
 
                     {/* test your knowledge */}
                     <DashboardSection
+                        isMobile={isMobile}
                         title={translatableTexts.homePage.practiseTitle}
                         headerContent={coinsAcquired && <EpistoFlex2
                             borderRadius="5px"
@@ -118,14 +131,16 @@ const HomePage = () => {
                         color="white"
                         showDivider
                         minHeight="200px"
-                        m="0 5px 10px 0"
-                        flex="3 3 550px">
+                        m={isMobile ? '10px 0' : '0 5px 10px 0'}
+                        flex={isMobile ? '1' : '3 3 550px'}>
 
-                        <PractiseQuestions setCoinsAcquired={setCoinsAcquired} />
+                        <PractiseQuestions
+                            setCoinsAcquired={setCoinsAcquired} />
                     </DashboardSection>
 
                     {/* tip of the day */}
                     <DashboardSection
+                        isMobile={isMobile}
                         title={translatableTexts.homePage.mostRelevantStatistics}
                         background="var(--transparentWhite70)"
                         borderRadius="6px"
@@ -133,14 +148,14 @@ const HomePage = () => {
                         className="largeSoftShadow"
                         minHeight="30px"
                         marginBottom="10px"
-                        flex="2 2 350px">
+                        flex={isMobile ? '1' : '2 2 350px'}>
 
                         <HomePageUserStats />
                     </DashboardSection>
                 </EpistoFlex2>
 
                 {/* stats */}
-                <DashboardSection
+                {!isMobile && <DashboardSection
                     background="var(--transparentWhite70)"
                     className="largeSoftShadow roundBorders"
                     showDivider
@@ -178,7 +193,7 @@ const HomePage = () => {
 
                     <HomePageCourseStats
                         activeCoursesPaging={activeCoursesPaging} />
-                </DashboardSection>
+                </DashboardSection>}
             </EpistoFlex2>
         </ContentPane>
     </PageRootContainer>;

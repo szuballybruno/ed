@@ -3,6 +3,7 @@ import { useContext } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { useNavigation } from '../../services/core/navigatior';
 import { Environment } from '../../static/Environemnt';
+import { useIsMobileView } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
@@ -13,10 +14,12 @@ export const Greetings = () => {
 
     const { navigate2 } = useNavigation();
     const { firstName } = useContext(CurrentUserContext);
+    const isMobile = useIsMobileView();
 
     return <EpistoFlex2
         direction="row"
-        alignItems="center">
+        alignItems="center"
+        padding={isMobile ? '0 0 20px 0' : undefined}>
 
         <EpistoFlex2
             direction="column"
@@ -67,13 +70,13 @@ export const Greetings = () => {
             </EpistoFlex2>
         </EpistoFlex2>
 
-        <EpistoFlex2>
+        {!isMobile && <EpistoFlex2>
             <Player
                 autoplay
                 loop
                 src={Environment.getAssetUrl('lottie_json/initial_greetings.json')}
                 style={{ height: '300px', width: '300px' }}
             />
-        </EpistoFlex2>
+        </EpistoFlex2>}
     </EpistoFlex2>;
 };
