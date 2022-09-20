@@ -1,5 +1,6 @@
 import { ReactNode, useEffect } from 'react';
 import { gradientBackgroundGenerator } from '../services/core/gradientBackgroundGenerator';
+import { useIsMobileView } from '../static/frontendHelpers';
 import { EpistoFlex2, EpistoFlex2Props } from './controls/EpistoFlex';
 import { EpistoGrid } from './controls/EpistoGrid';
 import { EpistoImage } from './controls/EpistoImage';
@@ -17,8 +18,9 @@ export const PageRootContainer = (props: {
 
         document.title = 'EpistoGram';
     }, []);
+    const isMobile = useIsMobileView();
 
-    const gradients = gradientBackgroundGenerator('rgba(0, 100, 255, 0.1)');
+    const gradients = gradientBackgroundGenerator(isMobile ? 'rgba(160, 200, 255, 0.1)' : 'rgba(0, 100, 255, 0.1)');
 
     return <EpistoFlex2
         id="pageRootContainer"

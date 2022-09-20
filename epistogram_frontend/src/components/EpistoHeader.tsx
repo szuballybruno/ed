@@ -11,7 +11,7 @@ export const EpistoHeader = (props: {
     children?: ReactNode
 } & EpistoFlex2Props) => {
 
-    const {text, showDivider, type, variant, children, ...css} = props;
+    const { text, showDivider, type, variant, children, ...css } = props;
 
     const h = (() => {
 
@@ -41,7 +41,7 @@ export const EpistoHeader = (props: {
                         ? 'fontXXL'
                         : 'fontLarge'}
                 style={{
-                    fontWeight: type === 'strong' ? 500 : 'normal',
+                    fontWeight: type === 'strong' ? 600 : 'normal',
                     color: variant === 'sub' ? 'black' : undefined
                 }}>
 
@@ -51,6 +51,6 @@ export const EpistoHeader = (props: {
             {children}
         </EpistoFlex2>
 
-        {!!showDivider && <Divider style={{background: 'var(--transparentWhite70)', marginTop: '10px'}}/>}
+        {!!showDivider && <Divider style={{ background: 'var(--transparentWhite70)', marginTop: '10px' }} />}
     </EpistoFlex2>;
 };

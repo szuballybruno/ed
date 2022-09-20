@@ -22,7 +22,7 @@ export const MobileRecommendedItemQuota = (props: {
             maxBlockSize='120px'
             isMobile
             marginRight='2.5px'
-            title={'Teljesítve az ajánlott napi videókból'}
+            title={'Napi videó teljesítve'}
             value={`${recommendedItemQuota?.completedToday}/${recommendedItemQuota?.recommendedItemsPerDay}` ?? '0'}
             suffix={''}
             iconPath={Environment.getAssetUrl('/images/dailyquota.png')}
@@ -33,7 +33,7 @@ export const MobileRecommendedItemQuota = (props: {
             maxBlockSize='120px'
             isMobile
             marginLeft='2.5px'
-            title={'Teljesítve az ajánlott heti videókból'}
+            title={'Heti videó teljesítve'}
             value={`${recommendedItemQuota?.completedThisWeek}/${recommendedItemQuota?.recommendedItemsPerWeek}` ?? '0'}
             suffix={''}
             iconPath={Environment.getAssetUrl('/images/weeklyquota.png')}

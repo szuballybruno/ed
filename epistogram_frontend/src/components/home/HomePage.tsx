@@ -173,10 +173,11 @@ const HomePage = () => {
                     title={translatableTexts.homePage.practiseTitle}
                     headerContent={<CoinsAcquiredHeaderContent
                         coinsAcquired={coinsAcquired} />}
-                    background="var(--transparentIntenseBlue85)"
+                    background={isMobile ? 'var(--epistoTeal)' : 'var(--transparentIntenseBlue85)'}
                     className="largeSoftShadow roundBorders"
                     color="white"
                     showDivider
+                    isMobile={isMobile}
                     minHeight="200px"
                     m={isMobile ? '10px 0' : '0 5px 10px 0'}
                     flex={isMobile ? '1' : '3 3 550px'}>

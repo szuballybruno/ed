@@ -32,9 +32,10 @@ export const DashboardSection = ({
 
                 <EpistoHeader
                     text={title}
-                    showDivider={showDivider}
+                    showDivider={isMobile ? false : showDivider}
                     variant="strongSub"
                     fontWeight='600'
+                    type='strong'
                     m="5px 10px 0 10px">
 
                     {headerContent}
