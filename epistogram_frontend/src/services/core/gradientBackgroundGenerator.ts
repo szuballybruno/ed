@@ -62,8 +62,32 @@ export const gradientBackgroundGenerator = (color?: string, options?: GridGradie
     const defaultCenterColor = color && plainColorValue ? plainColorValue[1] : '0,100,255';
     const defaultBackgroundColor = color && plainColorValue ? `rgba(${plainColorValue[1]}, 0.1)` : 'rgba(0, 100, 255, 0.1)';
 
-    console.log('DefaultCenterColor: ' + defaultCenterColor);
-    console.log('DefaultBackgroundColor: ' + defaultBackgroundColor);
+    const rgbaToHex = (color: string): string => {
+
+        if (/^rgb/.test(color)) {
+            const rgba = color.replace(/^rgba?\(|\s+|\)$/g, '')
+                .split(',');
+
+            // rgb to hex
+            // eslint-disable-next-line no-bitwise
+            let hex = `#${((1 << 24) + (parseInt(rgba[0], 10) << 16) + (parseInt(rgba[1], 10) << 8) + parseInt(rgba[2], 10))
+                .toString(16)
+                .slice(1)}`;
+
+            // added alpha param if exists
+            if (rgba[3]) {
+                const alpha = Math.round(parseFloat(rgba[3]) * 255);
+                const hexAlpha = (alpha + 0x10000).toString(16)
+                    .substr(-2)
+                    .toUpperCase();
+                hex += hexAlpha;
+            }
+
+            return hex;
+        }
+
+        return color;
+    };
 
 
     const getGradientOptionsOrDefault = (
@@ -108,7 +132,9 @@ export const gradientBackgroundGenerator = (color?: string, options?: GridGradie
             backgroundColor
         } = gradient;
 
-        return `radial-gradient(${radius}px circle at ${offsetX || 'center'} ${offsetY || ''}, rgba(${centerColor},${getRandomInteger(minOpacity || 0.3, maxOpacity || 0.3)}), ${backgroundColor})`;
+        console.log('Finally generated gradient: ' + `radial-gradient(${radius}px circle at ${offsetX || 'center'} ${offsetY || ''}, ${rgbaToHex(`rgba(${centerColor},${getRandomInteger(minOpacity || 0.3, maxOpacity || 0.3)})`)}, ${rgbaToHex(backgroundColor + '')})`);
+
+        return `radial-gradient(${radius}px circle at ${offsetX || 'center'} ${offsetY || ''}, ${rgbaToHex(`rgba(${centerColor},${getRandomInteger(minOpacity || 0.3, maxOpacity || 0.3)})`)}, ${rgbaToHex(backgroundColor + '')})`;
     };
 
     return gradientOptions.map(option => createRadialGradient(option));

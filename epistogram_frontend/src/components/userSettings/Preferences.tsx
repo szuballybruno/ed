@@ -1,5 +1,4 @@
 import { useContext, useEffect, useRef, useState } from 'react';
-import { useLogout } from '../../services/api/authenticationApiService';
 import { useUploadAvatarFile } from '../../services/api/fileApiService';
 import { useRequestPasswordChangeAuthenticated } from '../../services/api/passwordChangeApiService';
 import { UserApiService } from '../../services/api/userApiService';
@@ -19,22 +18,7 @@ import { EpistoImageSelector } from '../universal/EpistoImageSelector';
 export const Preferences = () => {
 
     const user = useContext(CurrentUserContext);
-    const fetchUserAsync = useContext(RefetchUserAsyncContext);
 
-    // util 
-    const { logoutUserAsync } = useLogout();
-    const showError = useShowErrorDialog();
-
-    const handleLogout = async () => {
-        try {
-
-            await logoutUserAsync();
-            await fetchUserAsync();
-        } catch (e) {
-
-            showError(e);
-        }
-    };
     const [firstName, setFirstName] = useState(user.firstName);
     const [lastName, setLastName] = useState(user.lastName);
     const [phoneNumber, setPhoneNumber] = useState(user.phoneNumber);
@@ -264,18 +248,6 @@ export const Preferences = () => {
                             </EpistoFlex2>
                         </EpistoFlex2>}
                     </EpistoFlex2>
-
-
-                    <EpistoButton
-                        variant='colored'
-                        onClick={handleLogout}
-                        style={{
-                            background: 'var(--mildRed)',
-                            margin: '20px 0 0 0'
-                        }}>
-
-                        Kijelentkezés
-                    </EpistoButton>
 
                 </EpistoFlex2>
 
