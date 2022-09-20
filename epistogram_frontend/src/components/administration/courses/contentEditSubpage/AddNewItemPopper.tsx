@@ -21,10 +21,6 @@ export const AddNewItemPopper = (props: {
             }}
             handleClose={onClose}>
 
-            <EpistoButton>
-                Modul
-            </EpistoButton>
-
             <EpistoButton onClick={() => onAddItem('video')}>
                 Videó
             </EpistoButton>

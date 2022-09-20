@@ -370,6 +370,7 @@ export const AdminCourseContentSubpage = () => {
                         rows={gridRowItems}
                         getKey={getRowKey}
                         hideFooter
+                        isRowEditable={x => x.itemType.type !== 'pretest'}
                         initialState={{
                             pinnedColumns: {
                                 left: ['rowNumber', 'itemTitle'],

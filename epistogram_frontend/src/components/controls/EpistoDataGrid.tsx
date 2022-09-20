@@ -126,7 +126,18 @@ const mapToMUIDataGridColumn = <TSchema, TKey>(column: GridColumnType<TSchema, T
     return def;
 };
 
-export const EpistoDataGrid = typedMemo(<TSchema, TKey>(props: {
+export const EpistoDataGrid = typedMemo(<TSchema, TKey>({
+    columns,
+    id,
+    rows,
+    initialState,
+    density,
+    hideFooter,
+    getKey,
+    onFocusChanged,
+    columnVisibilityModel,
+    isRowEditable
+}: {
     rows: TSchema[],
     columns: GridColumnType<TSchema, TKey, keyof TSchema>[],
     getKey: (row: TSchema) => TKey,
@@ -136,10 +147,9 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>(props: {
     hideFooter?: boolean,
     id?: string,
     onFocusChanged?: (hasFocus: boolean) => void,
-    columnVisibilityModel?: EpistoDataGridColumnVisibilityModel<TSchema>
+    columnVisibilityModel?: EpistoDataGridColumnVisibilityModel<TSchema>,
+    isRowEditable?: (row: TSchema) => boolean
 }) => {
-
-    const { columns, id, rows, initialState, density, hideFooter, getKey, onFocusChanged, columnVisibilityModel } = props;
 
     Logger.logScoped('GRID', `${id ? `[id: ${id}] ` : ''}Rendering EpistoDataGrid...`);
 
@@ -154,6 +164,10 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>(props: {
 
         const isEditable = params.colDef.editable;
         if (!isEditable)
+            return;
+
+        const row = params.row as TSchema;
+        if (isRowEditable ? !isRowEditable(row) : false)
             return;
 
         apiRef
@@ -184,14 +198,16 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>(props: {
         <DataGridPro
             isCellEditable={event => {
 
-                const field = event.field as keyof TSchema;
                 const row = event.row as TSchema;
-                const column = columns
-                    .single(column => field === column.field);
 
-                return column.enabled
-                    ? column.enabled(row, field)
-                    : true;
+                return isRowEditable ? isRowEditable(row) : true;
+                // const field = event.field as keyof TSchema;
+                // const column = columns
+                //     .single(column => field === column.field);
+
+                // return column.enabled
+                //     ? column.enabled(row, field)
+                //     : true;
             }}
             getRowId={x => getKey(x as TSchema) as any}
             rows={rows}
