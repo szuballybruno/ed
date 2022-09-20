@@ -137,7 +137,7 @@ export const WatchSubpage = () => {
             });
     };
 
-    const isDesktopView = useIsMobileView();
+    const isMobile = useIsMobileView();
 
     const handleContinueCourse = () => {
 
@@ -230,7 +230,7 @@ export const WatchSubpage = () => {
                             opacity={!isShowSidebar ? 0 : 1}
                             transition="0.5s">
 
-                            {isDesktopView && <EpistoFlex2
+                            {!isMobile && <EpistoFlex2
                                 ref={setParent}
                                 direction="column"
                                 id="courseItemSelectorRoot"

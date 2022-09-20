@@ -66,7 +66,7 @@ export const WatchView = (props: {
     } = props;
 
     const { questions } = videoPlayerData;
-    const isDesktopView = useIsMobileView();
+    const isMobile = useIsMobileView();
     const descCommentPaging = usePaging<string>({ items: ['Leírás', 'Hozzászólások'] });
     const [isShowNewDialogsEnabled, setShowNewDialogsEnabled] = useState(true);
     const dialogThresholdSecs = 1;
@@ -334,7 +334,7 @@ export const WatchView = (props: {
             pb="200px"
             background="var(--transparentWhite70)">
 
-            {!isDesktopView && <CourseItemSelector
+            {isMobile && <CourseItemSelector
                 isPlayerLoaded={isPlayerLoaded}
                 currentItemCode={currentItemCode}
                 nextItemState={nextItemState}
