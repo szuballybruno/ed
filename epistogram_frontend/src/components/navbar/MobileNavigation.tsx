@@ -22,6 +22,7 @@ const MobileNavigationButton = (props: {
     return <EpistoButton
         style={{
             flexDirection: 'column',
+            fontSize: '11px',
             color: isSelected
                 ? 'var(--epistoTeal)'
                 : 'black'
@@ -59,26 +60,26 @@ export const MobileNavigation = () => {
         left='0'
         zIndex={7}
         width='100%'
-        height='80px'
+        height='60px'
         justify='space-evenly'
         background='white'>
 
         <MobileNavigationButton
             title='Kezdőlap'
-            icon={<Home className='square40' />}
+            icon={<Home className='square30' />}
             to={applicationRoutes.homeRoute} />
 
         <MobileNavigationButton
             title='Tanfolyamaim'
-            icon={<Search className='square40' />}
+            icon={<Search className='square30' />}
             to={applicationRoutes.availableCoursesRoute} />
 
         <MobileNavigationButton
             title='Profilom'
-            icon={<Person className='square40' />}
+            icon={<Person className='square30' />}
             to={applicationRoutes.settingsRoute} />
 
-        <EpistoButton
+        {/*      <EpistoButton
             variant='colored'
             onClick={handleLogout}
             style={{
@@ -87,7 +88,7 @@ export const MobileNavigation = () => {
             }}>
 
             Kijelentkezés
-        </EpistoButton>
+        </EpistoButton> */}
 
     </EpistoFlex2>;
 };

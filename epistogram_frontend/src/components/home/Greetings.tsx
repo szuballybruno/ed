@@ -57,6 +57,7 @@ export const Greetings = () => {
                 direction="column"
                 width="100%"
                 alignItems="center"
+                color='black'
                 mt="10px">
 
                 <EpistoButton

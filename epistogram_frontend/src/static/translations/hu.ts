@@ -1,4 +1,4 @@
-import {TranslationType} from '../types/TranslationType';
+import { TranslationType } from '../types/TranslationType';
 
 export const huTranslation: TranslationType = {
     languageCode: 'hu',
@@ -158,7 +158,7 @@ export const huTranslation: TranslationType = {
             practiseTitle: 'Gyakorolj, hogy a legjobb lehess!',
             noTipOfTheDayYet: 'Személyes tanulási tipped 48 óra múlva válik elérhetővé',
             tipOfTheDay: 'Személyre szabott tipped',
-            mostRelevantStatistics: 'Legfontosabb statisztikáim',
+            mostRelevantStatistics: 'Havi statisztikáim',
             tasks: 'Feladatok',
             stats: 'Legfontosabb statisztikáid',
             noStatsYet: 'A haladási becslésed megtekintéséhez minimum 5 nap szükséges',
@@ -166,11 +166,11 @@ export const huTranslation: TranslationType = {
             statsSummary: {
                 mostImportantStatistics: 'Legfontosabb statisztikáid',
                 videosToBeRepeatedCount: {
-                    title: 'Ismétlésre ajánlott videók',
+                    title: 'Ismétlendő videó',
                     suffix: 'db'
                 },
                 completedVideosLastMonth: {
-                    title: 'Megtekintett videók a hónapban',
+                    title: 'Megtekintett videó',
                     suffix: 'db'
                 },
                 lagBehindPercentage: {
@@ -178,7 +178,7 @@ export const huTranslation: TranslationType = {
                     suffix: ''
                 },
                 performanceLastMonth: {
-                    title: 'Teljesítmény a hónapban',
+                    title: 'Teljesítmény',
                     suffix: '%'
                 }
             },
@@ -280,9 +280,9 @@ export const huTranslation: TranslationType = {
             answerIsCorrect: 'Helyesen válaszoltál!',
             answerIsIncorrect: 'Helytelen válasz!',
             nextQuestion: 'Következő kérdés',
-            noMoreQuestionsGoWatchVideosOne: 'Jelenleg nincs több megválaszolatlan kérdésed. Új kérdésekre akkor tehetsz szert, ha videókat tekintesz meg, így minél aktívabb vagy, annál több EpistoCoint zsebelhetsz be!',
-            noMoreQuestionsGoWatchVideosTwo: 'Folytasd legutoljára megkezdett kurzusodat a bal oldali sávból indítva, vagy böngészd át kínálatunkat a ',
-            noMoreQuestionsGoWatchVideosButton: 'Tanfolyamkeresőben!',
+            noMoreQuestionsGoWatchVideosOne: 'Jelenleg nincs több elérhető kérdés számodra. Tekints meg videókat új kérdésekért, így pedig EpistoCoinjaidat is gyarapíthatod!',
+            noMoreQuestionsGoWatchVideosTwo: 'Folytass egy elkezdett, vagy indíts el egy új tanfolyamot',
+            noMoreQuestionsGoWatchVideosButton: 'A Tanfolyamkeresőben!',
             initialGreetingsFirst: 'Kedves',
             initialGreetingsSecond: 'Nagy örömünkre szolgál, hogy platformunkon köszönthetünk! Reméljük, hogy tanfolyamaink segítségével mind a munkádban, mind pedig a hétköznapokban is fejlődést érhetsz el.',
             initialGreetingsThird: 'Készen állsz, hogy belekezdj első tanfolyamodba?',

@@ -153,7 +153,7 @@ const HomePage = () => {
 
         {/* content */}
         <ContentPane
-            px='10px'
+            px='20px'
             pb={isMobile ? '80px' : undefined}
             direction="column"
             minWidth={isSmallerThan1400 ? '1060px' : undefined}
@@ -173,7 +173,7 @@ const HomePage = () => {
                     title={translatableTexts.homePage.practiseTitle}
                     headerContent={<CoinsAcquiredHeaderContent
                         coinsAcquired={coinsAcquired} />}
-                    background={isMobile ? 'var(--epistoTeal)' : 'var(--transparentIntenseBlue85)'}
+                    background={isMobile ? '#7CC0C2' : 'var(--transparentIntenseBlue85)'}
                     className="largeSoftShadow roundBorders"
                     color="white"
                     showDivider

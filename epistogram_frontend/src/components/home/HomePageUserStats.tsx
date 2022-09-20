@@ -3,7 +3,6 @@ import { useHomePageStats } from '../../services/api/userStatsApiService';
 import { Environment } from '../../static/Environemnt';
 import { useIsMobileView } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
-import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoGrid } from '../controls/EpistoGrid';
 import { getProgressFromLagBehind } from '../learningInsights/LearningStatistics';
 import StatisticsCard from '../statisticsCard/StatisticsCard';
@@ -17,12 +16,15 @@ const HomePageUserStatsWrapper = (props: {
     const { isMobile, children } = props;
 
     return isMobile
-        ? <EpistoFlex2
+        ? <EpistoGrid
             width='100%'
-            direction='column'>
+            auto='fill'
+            gap='10px'
+            mt='5px'
+            minColumnWidth='150px'>
 
             {children}
-        </EpistoFlex2>
+        </EpistoGrid>
         : <EpistoGrid
             className='whall'
             auto='fill'
@@ -46,6 +48,7 @@ export const HomePageUserStats = () => {
 
         {/* videos to be repeated count */}
         <StatisticsCard
+            isMobile={isMobile}
             marginTop={isMobile ? '5px' : undefined}
             title={translatableTexts.homePage.statsSummary.videosToBeRepeatedCount.title}
             value={homePageStats?.videosToBeRepeatedCount}
@@ -55,6 +58,7 @@ export const HomePageUserStats = () => {
 
         {/* completed videos last month */}
         <StatisticsCard
+            isMobile={isMobile}
             marginTop={isMobile ? '5px' : undefined}
             title={translatableTexts.homePage.statsSummary.completedVideosLastMonth.title}
             value={homePageStats?.completedVideosLastMonth}
@@ -64,6 +68,7 @@ export const HomePageUserStats = () => {
 
         {/* progress  */}
         <StatisticsCard
+            isMobile={isMobile}
             marginTop={isMobile ? '5px' : undefined}
             title={translatableTexts.homePage.statsSummary.lagBehindPercentage.title}
             value={getProgressFromLagBehind(homePageStats?.lagBehindPercentage)}
@@ -73,6 +78,7 @@ export const HomePageUserStats = () => {
 
         {/* performance last month  */}
         <StatisticsCard
+            isMobile={isMobile}
             marginTop={isMobile ? '5px' : undefined}
             title={translatableTexts.homePage.statsSummary.performanceLastMonth.title}
             value={homePageStats?.performanceLastMonth}

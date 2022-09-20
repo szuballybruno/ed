@@ -95,7 +95,7 @@ const StatisticsCard = (props: StatisticsCardProps & EpistoFlex2Props) => {
         gridColumn={chartSize === 'large' ? '1 / -1' : (isOpen ? 'span 2' : 'unset')} // do not remove!!
         gridRow={chartSize === 'large' ? 'span 2' : (isOpen ? 'span 2' : 'unset')} // do not remove!!
         direction="column"
-        minWidth='250px'
+        minWidth={isMobile ? '150px' : '250px'}
         position="relative"
         {...css}>
 

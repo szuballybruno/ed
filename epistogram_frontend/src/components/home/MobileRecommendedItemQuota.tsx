@@ -2,9 +2,8 @@ import { useRecommendedItemQuota } from '../../services/api/userProgressApiServi
 import { UserActiveCourseDTO } from '../../shared/dtos/UserActiveCourseDTO';
 import { Environment } from '../../static/Environemnt';
 import { PagingType } from '../../static/frontendHelpers';
-import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { EpistoGrid } from '../controls/EpistoGrid';
 import StatisticsCard from '../statisticsCard/StatisticsCard';
-
 export const MobileRecommendedItemQuota = (props: {
     activeCoursesPaging: PagingType<UserActiveCourseDTO>;
 }) => {
@@ -14,14 +13,15 @@ export const MobileRecommendedItemQuota = (props: {
 
     const { recommendedItemQuota } = useRecommendedItemQuota(courseId);
 
-    return <EpistoFlex2
-        maxWidth='100%'>
+    return <EpistoGrid
+        width='100%'
+        auto='fill'
+        gap='10px'
+        mt='5px'
+        minColumnWidth='150px'>
 
         <StatisticsCard
-            minWidth={undefined}
-            maxBlockSize='120px'
             isMobile
-            marginRight='2.5px'
             title={'Napi videó teljesítve'}
             value={`${recommendedItemQuota?.completedToday}/${recommendedItemQuota?.recommendedItemsPerDay}` ?? '0'}
             suffix={''}
@@ -29,14 +29,11 @@ export const MobileRecommendedItemQuota = (props: {
             isOpenByDefault={false} />
 
         <StatisticsCard
-            minWidth={undefined}
-            maxBlockSize='120px'
             isMobile
-            marginLeft='2.5px'
             title={'Heti videó teljesítve'}
             value={`${recommendedItemQuota?.completedThisWeek}/${recommendedItemQuota?.recommendedItemsPerWeek}` ?? '0'}
             suffix={''}
             iconPath={Environment.getAssetUrl('/images/weeklyquota.png')}
             isOpenByDefault={false} />
-    </EpistoFlex2>;
+    </EpistoGrid>;
 };
