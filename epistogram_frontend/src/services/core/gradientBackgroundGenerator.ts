@@ -134,7 +134,7 @@ export const gradientBackgroundGenerator = (color?: string, options?: GridGradie
 
         console.log('Finally generated gradient: ' + `radial-gradient(${radius}px, ${rgbaToHex(`rgba(${centerColor},${getRandomInteger(minOpacity || 0.3, maxOpacity || 0.3)})`)}, ${rgbaToHex(backgroundColor + '')})`);
 
-        return `radial-gradient(${radius}px circle at ${offsetX || 'center'} ${offsetY || ''}, ${rgbaToHex(`rgba(${centerColor},${getRandomInteger(minOpacity || 0.3, maxOpacity || 0.3)})`)}, ${rgbaToHex(backgroundColor + '')})`;
+        return `radial-gradient(${radius}px, ${rgbaToHex(`rgba(${centerColor},${getRandomInteger(minOpacity || 0.3, maxOpacity || 0.3)})`)}, ${rgbaToHex(backgroundColor + '')})`;
     };
 
     return gradientOptions.map(option => createRadialGradient(option));
