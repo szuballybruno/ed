@@ -16,6 +16,7 @@ import { BusyBarFrame } from './components/system/LoadingFrame/BusyBarFrame';
 import { MUISetupFrame } from './components/system/MUISetupFrame';
 import { NotificationsFrame } from './components/system/NotificationsFrame';
 import { PreventMobileFrame } from './components/system/PreventMobileFrame';
+import { ProgressierFrame } from './components/system/ProgressierFrame';
 import { QuerySubscriptionFrame } from './components/system/QuerySubscriptionFrame';
 import { SessionWatcherFrame } from './components/system/SessionWatcher';
 import { TawkToFrame } from './components/system/TawkToFrame';
@@ -84,7 +85,8 @@ const frames: FrameType[] = [
     NotificationsFrame,
     BusyBarFrame,
     AutoScrollFrame,
-    EventListener
+    EventListener,
+    ProgressierFrame
 ];
 
 const RenderFrames = ({ frames, children }: { frames: FrameType[] } & PropsWithChildren) => {

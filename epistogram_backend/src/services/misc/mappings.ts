@@ -817,7 +817,7 @@ const marray = [
 
         }),
     epistoMappingsBuilder
-        .addMapping(UserDTO, ([urlService]) => (user: User) => {
+        .addMapping(UserDTO, ([urlService]) => (user: User & { filePath: string }) => {
 
             return instantiate<UserDTO>({
                 id: user.id,
@@ -834,8 +834,8 @@ const marray = [
                     ? toJobTitleDTO(user.jobTitle)
                     : null,
 
-                avatarUrl: user.avatarFile
-                    ? urlService.getAssetUrl(user.avatarFile.filePath)
+                avatarUrl: user.filePath
+                    ? urlService.getAssetUrl(user.filePath)
                     : null
             });
         }),

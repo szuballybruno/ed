@@ -370,13 +370,21 @@ export class UserService {
     getUserById = async (userId: Id<'User'>) => {
 
         const user = await this._ormService
+            .withResType<User & { filePath: string }>()
             .query(User, { userId })
+            .selectFrom(x => x
+                .columns(User, '*')
+                .columns(StorageFile, {
+                    filePath: 'filePath'
+                }))
             .leftJoin(StorageFile, x => x
                 .on('id', '=', 'avatarFileId', User))
             .leftJoin(JobTitle, x => x
                 .on('id', '=', 'jobTitleId', User))
             .where('id', '=', 'userId')
             .getSingle();
+
+        console.log(user.filePath);
 
         return user;
     };

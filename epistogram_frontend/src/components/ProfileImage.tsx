@@ -24,6 +24,8 @@ export const ProfileImage = forwardRef<HTMLDivElement, ProfileImageProps>((props
     const lastName = props.lastName ?? user.lastName;
     const url = props.url ?? user.avatarUrl;
 
+    console.log(url);
+
     const signature = getSignature(firstName, lastName);
     const showSingature = !url;
     const showImage = !!url;
