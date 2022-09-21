@@ -42,17 +42,15 @@ export class VideoService {
 
         return this
             ._questionAnswerService
-            .saveGivenAnswersAsync({
+            .saveGivenAnswerAsync({
                 userId: principalId.getId(),
                 answerSessionId,
                 isPractiseAnswers: false,
-                givenAnswers: [
-                    {
-                        questionVersionId,
-                        answerVersionIds,
-                        elapsedSeconds
-                    }
-                ]
+                givenAnswer: {
+                    questionVersionId,
+                    answerVersionIds,
+                    elapsedSeconds
+                }
             });
     }
 

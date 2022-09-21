@@ -184,7 +184,7 @@ export class ExamService {
          */
         const result = await this
             ._quesitonAnswerService
-            .saveGivenAnswersAsync({
+            .saveMultipleGivenAnswersAsync({
                 userId,
                 answerSessionId,
                 isPractiseAnswers: false,

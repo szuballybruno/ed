@@ -97,6 +97,7 @@ import { ExamResultView } from '../../models/views/ExamResultView';
 import { ExamScoreView } from '../../models/views/ExamScoreView';
 import { ExamVersionView } from '../../models/views/ExamVersionView';
 import { GivenAnswerScoreView } from '../../models/views/GivenAnswerScoreView';
+import { GivenAnswerView } from '../../models/views/GivenAnswerView';
 import { HomePageStatsView } from '../../models/views/HomePageStatsView';
 import { ImproveYourselfPageStatsView } from '../../models/views/ImproveYourselfPageStatsView';
 import { LatestCourseVersionView } from '../../models/views/LatestCourseVersionView';
@@ -372,7 +373,8 @@ export const createDBSchema = (): XDBMSchemaService => {
             UserSpentTimeRatioView,
             UserLearningPageStatsView,
             ImproveYourselfPageStatsView,
-            AdminUserListView
+            AdminUserListView,
+            GivenAnswerView
         ],
 
         functionScripts: [

@@ -1,6 +1,9 @@
 import { AnswerSession } from '../models/entity/misc/AnswerSession';
+import { GivenAnswerView } from '../models/views/GivenAnswerView';
 import { PractiseQuestionInfoView } from '../models/views/PractiseQuestionInfoView';
 import { AnswerQuestionsDTO } from '../shared/dtos/AnswerQuestionDTO';
+import { AnswerResultDTO } from '../shared/dtos/AnswerResultDTO';
+import { instantiate } from '../shared/logic/sharedLogic';
 import { Id } from '../shared/types/versionId';
 import { isXMinutesAgo } from '../utilities/helpers';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
@@ -73,20 +76,41 @@ export class PractiseQuestionService extends ServiceBase {
             .givenAnswers
             .single();
 
-        return await this
+        const { answerGivenAnswerBridges, givenAnswer } = await this
             ._questionAnswerService
-            .saveGivenAnswersAsync({
+            .saveGivenAnswerAsync({
                 userId,
                 answerSessionId: practiseAnswerSession.id,
                 isPractiseAnswers: true,
-                givenAnswers: [
-                    {
-                        answerVersionIds: practiseGivenAnswer.answerVersionIds,
-                        questionVersionId: practiseGivenAnswer.questionVersionId,
-                        elapsedSeconds: 0,
-                    }
-                ]
+                givenAnswer: {
+                    answerVersionIds: practiseGivenAnswer.answerVersionIds,
+                    questionVersionId: practiseGivenAnswer.questionVersionId,
+                    elapsedSeconds: 0,
+                }
             });
+
+        const views = await this
+            ._ormService
+            .query(GivenAnswerView, { questionVersionId: givenAnswer.questionVersionId })
+            .where('questionVersionId', '=', 'questionVersionId')
+            .getMany();
+
+        const givenAnswerVersionIds = answerGivenAnswerBridges
+            .map(x => x.answerVersionId);
+
+        const correctAnswerVersionIds = views
+            .filter(x => x.isCorrect)
+            .map(x => x.answerVersionId);
+
+        return instantiate<AnswerResultDTO>({
+            correctAnswerVersionIds,
+            givenAnswerVersionIds,
+            coinAcquires: {
+                bonus: null,
+                normal: null
+            },
+            isCorrect: false
+        });
     }
 
     // ------------- PRIVATE

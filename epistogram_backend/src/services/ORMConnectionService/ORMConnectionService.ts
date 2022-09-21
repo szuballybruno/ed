@@ -96,14 +96,18 @@ export class ORMConnectionService {
     /**
      * Create many entites
      */
-    async createManyAsync<TEntity extends EntityType>(signature: ClassType<TEntity>, ent: InsertEntity<TEntity>[]) {
+    async createManyAsync<TEntity extends EntityType>(signature: ClassType<TEntity>, entities: InsertEntity<TEntity>[]): Promise<TEntity[]> {
 
         const core = new XQueryBuilderCore(this._sqlConnectionService, this._loggingEnabled);
 
         const ids = await core
-            .insertManyAsync(signature, ent);
+            .insertManyAsync(signature, entities);
 
-        return ids as any as (TEntity['id'])[];
+        return entities
+            .map((x, index) => ({
+                ...(x as TEntity),
+                id: ids[index]
+            }));
     }
 
     /**

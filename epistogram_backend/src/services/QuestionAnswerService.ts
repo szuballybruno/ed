@@ -51,9 +51,31 @@ export class QuestionAnswerService {
     }
 
     /**
+     * Save a singular given answer 
+     */
+    async saveGivenAnswerAsync({ givenAnswer, ...opts }: {
+        userId: Id<'User'>,
+        answerSessionId: Id<'AnswerSession'>,
+        isPractiseAnswers: boolean,
+        givenAnswer: GivenAnswerDTO
+    }) {
+
+        const {
+            insertedAnswerGivenAnswerBridges,
+            insertedGivenAnswers
+        } = await this
+            .saveMultipleGivenAnswersAsync({ ...opts, givenAnswers: [givenAnswer] });
+
+        return {
+            givenAnswer: insertedGivenAnswers.single(),
+            answerGivenAnswerBridges: insertedAnswerGivenAnswerBridges
+        };
+    }
+
+    /**
      * Answer question
      */
-    async saveGivenAnswersAsync(
+    async saveMultipleGivenAnswersAsync(
         {
             answerSessionId,
             isPractiseAnswers,
@@ -81,34 +103,34 @@ export class QuestionAnswerService {
                 givenAnswerStreakId: null
             }));
 
-        const givenAnswerIds = await this._ormService
+        const insertedGivenAnswers = await this._ormService
             .createManyAsync(GivenAnswer, newGivenAnswers);
 
         /**
          * Insert given answr - answer bridges
          */
-        const givenAnswerAnswerBridges = givenAnswerIds
-            .flatMap((givenAnswerId, index) => {
+        const givenAnswerAnswerBridges = insertedGivenAnswers
+            .flatMap((givenAnswer, index) => {
 
-                const givenAnswer = givenAnswers[index];
+                const givenAnswerDTO = givenAnswers[index];
 
-                return givenAnswer
+                return givenAnswerDTO
                     .answerVersionIds
                     .map((answerVersionId): InsertEntity<AnswerGivenAnswerBridge> => ({
-                        givenAnswerId,
+                        givenAnswerId: givenAnswer.id,
                         answerVersionId: answerVersionId,
                         deletionDate: null,
                     }));
             });
 
-        await this._ormService
+        const insertedAnswerGivenAnswerBridges = await this._ormService
             .createManyAsync(AnswerGivenAnswerBridge, givenAnswerAnswerBridges);
 
         /**
          * Get correct answer data
          */
         const correctAnswerData = await this
-            ._getCorrectAnswerData(givenAnswerIds);
+            ._getCorrectAnswerData(insertedGivenAnswers.map(x => x.id));
 
         /**
          * Handle given answer steak 
@@ -121,7 +143,27 @@ export class QuestionAnswerService {
          */
         await this
             ._handleCoinsAsync(userId, streakId, correctAnswerData);
+
+        return {
+            insertedGivenAnswers,
+            insertedAnswerGivenAnswerBridges
+        };
     }
+
+    // /**
+    //  * 
+    //  */
+    // private async _getResultsAsync(answerSessionId: Id<'AnswerSession'>) {
+
+    //     const questions = await this
+    //         ._ormService
+    //         .query(AnswerSession, { answerSessionId })
+    //         .leftJoin(QuestionVersion, x => x
+    //             .on('examVersionId', '=', 'examVersionId', AnswerSession)
+    //             .or('videoVersionId', '=', 'videoVersionId', AnswerSession))
+    //         .where('id', '=', 'answerSessionId')
+    //         .getMany();
+    // }
 
     /**
      * Update streaks
