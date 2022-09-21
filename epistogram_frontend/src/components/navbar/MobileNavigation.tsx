@@ -60,8 +60,8 @@ export const MobileNavigation = () => {
         left='0'
         zIndex={7}
         width='100%'
-        height='60px'
-        pb='10px'
+        height='80px'
+        pb='20px'
         justify='space-evenly'
         background='white'>
 
