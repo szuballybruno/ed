@@ -10,7 +10,7 @@ export const LinearProgressWithLabel = (props: LinearProgressProps & { value: nu
         <EpistoFlex2
             flex='1'
             align='center'
-            minWidth="100%"
+            minWidth="calc(100% - 35px)"
             h='10px'
             mr='5px'>
 

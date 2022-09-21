@@ -1,87 +1,46 @@
-import { GridItem, useMediaQuery } from '@chakra-ui/react';
+import { GridItem } from '@chakra-ui/layout';
+import { useMediaQuery } from '@chakra-ui/react';
 import { Select, ToggleButton, ToggleButtonGroup } from '@mui/material';
-import React from 'react';
-import { CourseApiService } from '../services/api/courseApiService';
-import { useNavigation } from '../services/core/navigatior';
-import { useShowErrorDialog } from '../services/core/notifications';
-import { AvailableCourseDTO } from '../shared/dtos/AvailableCourseDTO';
-import { OrderType } from '../shared/types/sharedTypes';
-import { Id } from '../shared/types/versionId';
-import { translatableTexts } from '../static/translatableTexts';
-import { ContentPane } from './ContentPane';
-import { EpistoButton } from './controls/EpistoButton';
-import { EpistoDiv } from './controls/EpistoDiv';
-import { EpistoFlex, EpistoFlex2 } from './controls/EpistoFlex';
-import { EpistoFont } from './controls/EpistoFont';
-import { EpistoGrid } from './controls/EpistoGrid';
-import { LeftPane } from './LeftPane';
-import { PageRootContainer } from './PageRootContainer';
-import { useSetBusy } from './system/LoadingFrame/BusyBarContext';
-import CourseTile from './universal/CourseTile';
-import { EpistoSearch } from './universal/EpistoSearch';
+import { AvailableCourseDTO } from '../../shared/dtos/AvailableCourseDTO';
+import { CourseCategoryDTO } from '../../shared/dtos/CourseCategoryDTO';
+import { OrderType } from '../../shared/types/sharedTypes';
+import { translatableTexts } from '../../static/translatableTexts';
+import { ContentPane } from '../ContentPane';
+import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoDiv } from '../controls/EpistoDiv';
+import { EpistoFlex, EpistoFlex2 } from '../controls/EpistoFlex';
+import { EpistoFont } from '../controls/EpistoFont';
+import { EpistoGrid } from '../controls/EpistoGrid';
+import { EpistoSearch } from '../controls/EpistoSearch';
+import { LeftPane } from '../LeftPane';
+import { PageRootContainer } from '../PageRootContainer';
+import CourseTile from '../universal/CourseTile';
+import { AvailableCoursesPageFilterType } from './AvailableCoursesPage';
 
-const MobileCourseTile = () => {
+export const DesktopAvailableCoursesPage = (props: {
+    courseCategories: CourseCategoryDTO[],
+    courses: AvailableCourseDTO[],
+    filterProps: AvailableCoursesPageFilterType,
+    handleSetFilterProp: <TKey extends keyof AvailableCoursesPageFilterType, TValue extends AvailableCoursesPageFilterType[TKey]>(
+        key: TKey,
+        value: TValue
+    ) => void,
+    clearFilters: () => void,
+    navigateToDetailsPage: (course: AvailableCourseDTO) => void,
+    handlePlayCourse: (course: AvailableCourseDTO) => void
+}) => {
 
-    return <EpistoFlex>
-
-    </EpistoFlex>;
-};
-
-const MobileAvailableCoursesPage = (courses: AvailableCourseDTO[]) => {
-
-    return <PageRootContainer>
-
-        <ContentPane>
-
-            {courses
-                .map(course => {
-
-                    return <MobileCourseTile
-                        key={Id.read(course.courseId)} />;
-                })}
-        </ContentPane>
-    </PageRootContainer>;
-};
-
-
-const AvailableCoursesPage = () => {
-
-    const [searchText, setSearchText] = React.useState<string | null>(null);
-    const [filterCategoryId, setFilterCategoryId] = React.useState<Id<'CourseCategory'> | null>(null);
-    const [isFeatured, setIsFeatured] = React.useState(false);
-    const [isRecommended, setIsRecommended] = React.useState(false);
-    const [orderBy, setOrderBy] = React.useState<OrderType | null>(null);
-
-    const { courses, coursesState, coursesError } = CourseApiService
-        .useUserCourses(searchText, filterCategoryId, isFeatured, isRecommended, orderBy);
-
-    const { courseCategories, courseCategoriesState, courseCategoriesError } = CourseApiService
-        .useAvailableCourseCategories();
-
-    const { playCourse, navigateToCourseDetails } = useNavigation();
-    const showError = useShowErrorDialog();
+    const {
+        courseCategories,
+        courses,
+        filterProps,
+        handleSetFilterProp,
+        clearFilters,
+        navigateToDetailsPage,
+        handlePlayCourse
+    } = props;
 
     const [isSmallerThan1400] = useMediaQuery('(min-width: 1400px)');
-
-    useSetBusy(CourseApiService.useUserCourses, coursesState, coursesError);
-
-    const clearFilters = () => {
-        setFilterCategoryId(null);
-        setSearchText(null);
-        setIsFeatured(false);
-        setIsRecommended(false);
-        setOrderBy(null);
-    };
-
-    const navigateToDetailsPage = (course: AvailableCourseDTO) => {
-
-        navigateToCourseDetails(course.courseId, course.currentItemCode ?? undefined);
-    };
-
-    const handlePlayCourse = async (course: AvailableCourseDTO) => {
-
-        playCourse(course.courseId, course.stageName, course.currentItemCode);
-    };
 
     return <PageRootContainer>
 
@@ -125,7 +84,7 @@ const AvailableCoursesPage = () => {
                                     border: 'none'
                                 }}
                                 onClick={() => {
-                                    setFilterCategoryId(categoryOption.id);
+                                    handleSetFilterProp('filterCategoryId', categoryOption.id);
                                 }}
                                 key={index}>
                                 <EpistoFlex2
@@ -134,7 +93,7 @@ const AvailableCoursesPage = () => {
                                     p="3px"
                                     height="30px"
                                     m="2px 10px 2px 0px"
-                                    bgColor={filterCategoryId === categoryOption.id
+                                    bgColor={filterProps.filterCategoryId === categoryOption.id
                                         ? 'var(--deepBlue)'
                                         : 'var(--epistoTeal)'} />
 
@@ -181,8 +140,8 @@ const AvailableCoursesPage = () => {
 
                         {/* recommended */}
                         <ToggleButton
-                            onClick={() => setIsRecommended(!isRecommended)}
-                            selected={isRecommended}
+                            onClick={() => handleSetFilterProp('isRecommended', !filterProps.isRecommended)}
+                            selected={filterProps.isRecommended}
                             value="recommended"
                             style={{ width: '100%', whiteSpace: 'nowrap', padding: '15px' }}>
 
@@ -191,8 +150,8 @@ const AvailableCoursesPage = () => {
 
                         {/* featured */}
                         <ToggleButton
-                            onClick={() => setIsFeatured(!isFeatured)}
-                            selected={isFeatured}
+                            onClick={() => handleSetFilterProp('isFeatured', !filterProps.isFeatured)}
+                            selected={filterProps.isFeatured}
                             value="featured"
                             style={{ width: '100%', whiteSpace: 'nowrap', padding: '15px' }}>
 
@@ -211,9 +170,9 @@ const AvailableCoursesPage = () => {
 
                     <EpistoSearch
                         onChange={(e) => {
-                            setSearchText(e.currentTarget.value);
+                            handleSetFilterProp('searchText', e.currentTarget.value);
                         }}
-                        value={searchText || ''}
+                        value={filterProps.searchText || ''}
                         flex="5"
                         height="40px"
                         mx="10px" />
@@ -221,7 +180,7 @@ const AvailableCoursesPage = () => {
                     <Select
                         native
                         onChange={(e) => {
-                            setOrderBy(e.target.value as OrderType | null);
+                            handleSetFilterProp('orderBy', e.target.value as OrderType);
                         }}
                         className="roundBorders fontSmall mildShadow"
                         inputProps={{
@@ -237,6 +196,7 @@ const AvailableCoursesPage = () => {
                             background: 'var(--transparentWhite70)',
                             border: 'none',
                             height: '40px',
+                            minWidth: 200,
                             color: '3F3F3F',
                             flex: 1
                         }}>
@@ -291,5 +251,3 @@ const AvailableCoursesPage = () => {
         </ContentPane>
     </PageRootContainer >;
 };
-
-export default AvailableCoursesPage;

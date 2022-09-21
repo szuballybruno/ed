@@ -1,6 +1,6 @@
 import React from 'react';
 import { AdminPage } from './components/administration/AdminPage';
-import AvailableCoursesPage from './components/AvailableCoursesPage';
+import AvailableCoursesPage from './components/availableCourses/AvailableCoursesPage';
 import CourseDetailsPage from './components/courseDetails/CourseDetailsPage';
 import { ShopPage } from './components/epistoShop/ShopPage';
 import HomePage from './components/home/HomePage';

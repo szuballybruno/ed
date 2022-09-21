@@ -156,7 +156,7 @@ const HomePage = () => {
             px='20px'
             pb={isMobile ? '80px' : undefined}
             direction="column"
-            minWidth={isSmallerThan1400 ? '1060px' : undefined}
+            minWidth={isSmallerThan1400 && !isMobile ? '1060px' : undefined}
             noMaxWidth>
 
             {isMobile && <MobileWelcomeHeader user={user} />}
