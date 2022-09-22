@@ -1,6 +1,8 @@
 import { AuthorizationService } from '../services/AuthorizationService';
 import { PractiseQuestionService } from '../services/PractiseQuestionService';
-import { AnswerQuestionsDTO } from '../shared/dtos/AnswerQuestionDTO';
+import { AnswerQuestionDTO } from '../shared/dtos/AnswerQuestionDTO';
+import { AnswerQuestionsDTO } from '../shared/dtos/AnswerQuestionsDTO';
+import { AnswerResultDTO } from '../shared/dtos/AnswerResultDTO';
 import { apiRoutes } from '../shared/types/apiRoutes';
 import { ServiceProvider } from '../startup/servicesDI';
 import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
@@ -19,10 +21,10 @@ export class QuestionController {
     }
 
     @XControllerAction(apiRoutes.questions.answerPractiseQuestion, { isPost: true })
-    answerPractiseQuestionAction = async (params: ActionParams) => {
+    answerPractiseQuestionAction = async (params: ActionParams): Promise<AnswerResultDTO> => {
 
         const dto = params
-            .getBody<AnswerQuestionsDTO>(['answerSessionId', 'givenAnswers'])
+            .getBody<AnswerQuestionDTO>(['answerSessionId', 'givenAnswer'])
             .data;
 
         return this._practiseQuestionService

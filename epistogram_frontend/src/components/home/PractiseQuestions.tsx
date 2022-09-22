@@ -28,8 +28,6 @@ export const PractiseQuestions = (props: {
         clearAnswerResults
     } = useAnswerPractiseQuestion();
 
-    console.log(answerResults);
-
     const handleAnswerQuestionAsync = async (answerVersionId: Id<'AnswerVersion'>[]) => {
 
         if (!practiseQuestion)
@@ -37,11 +35,11 @@ export const PractiseQuestions = (props: {
 
         await answerQuestionAsync({
             answerSessionId: -1 as any, // ignore, not used,
-            givenAnswers: [{
+            givenAnswer: {
                 answerVersionIds: answerVersionId,
                 elapsedSeconds: 0,
                 questionVersionId: practiseQuestion.questionVersionId
-            }]
+            }
         });
     };
 
@@ -119,12 +117,10 @@ export const PractiseQuestions = (props: {
 
                 <QuesitionView
                     answerQuesitonAsync={handleAnswerQuestionAsync}
-                    correctAnswerVersionIds={answerResults?.correctAnswerVersionIds ?? []}
                     loadingProps={{ loadingState: answerQuestionState }}
                     question={practiseQuestion}
                     onlyShowAnswers={isAnswered}
-                    coinsAcquired={answerResults?.coinAcquires?.normal?.amount ?? null}
-                    bonusCoinsAcquired={answerResults?.coinAcquires?.bonus ?? null} />
+                    answerResult={answerResults} />
 
                 <EpistoFlex2
                     justifyContent="center"

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useReactTimer } from '../../helpers/reactTimer';
-import { PlayerApiService } from '../../services/api/PPlayerApiService';
+import { PlayerApiService } from '../../services/api/PlayerApiService';
 import { QuestionDTO } from '../../shared/dtos/QuestionDTO';
 import { Id } from '../../shared/types/versionId';
 import { epochDates } from '../../static/frontendHelpers';
@@ -30,13 +30,11 @@ export const VideoQuestionnaire = (props: {
         const timeElapsed = epochDates(new Date(), showUpTime);
         await answerQuestionAsync({
             answerSessionId,
-            givenAnswers: [
-                {
-                    answerVersionIds,
-                    questionVersionId: question.questionVersionId,
-                    elapsedSeconds: timeElapsed
-                }
-            ]
+            givenAnswer: {
+                answerVersionIds,
+                questionVersionId: question.questionVersionId,
+                elapsedSeconds: timeElapsed
+            }
         });
         onAnswered();
     };
@@ -48,13 +46,13 @@ export const VideoQuestionnaire = (props: {
 
     const reactTimer = useReactTimer(handleCloseDialog, autoCloseSecs * 1000);
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        if (!isAnswered)
-            return;
+    //     if (!isAnswered)
+    //         return;
 
-        reactTimer.start();
-    }, [isAnswered]);
+    //     reactTimer.start();
+    // }, [isAnswered]);
 
     useEffect(() => {
 
@@ -70,15 +68,13 @@ export const VideoQuestionnaire = (props: {
 
         <QuesitionView
             answerQuesitonAsync={handleAnswerQuestionAsync}
-            correctAnswerVersionIds={answerResult?.correctAnswerVersionIds ?? []}
             loadingProps={{ loadingState: answerQuestionState }}
             question={question}
-            coinsAcquired={answerResult?.coinAcquires?.normal?.amount ?? null}
-            showCoinsAcquired={true}
-            bonusCoinsAcquired={answerResult?.coinAcquires?.bonus ?? null}
+            answerResult={answerResult}
             {...css} />
 
-        <EpistoFlex2 display={isAnswered ? undefined : 'none'}
+        <EpistoFlex2
+            display={isAnswered ? undefined : 'none'}
             justify="flex-end">
 
             <EpistoButton

@@ -1,4 +1,4 @@
-import { AnswerQuestionsDTO } from '../../shared/dtos/AnswerQuestionDTO';
+import { AnswerQuestionsDTO } from '../../shared/dtos/AnswerQuestionsDTO';
 import { AnswerResultDTO } from '../../shared/dtos/AnswerResultDTO';
 import { ExamResultsDTO } from '../../shared/dtos/ExamResultsDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';

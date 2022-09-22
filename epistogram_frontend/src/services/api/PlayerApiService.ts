@@ -1,4 +1,4 @@
-import { AnswerQuestionsDTO } from '../../shared/dtos/AnswerQuestionDTO';
+import { AnswerQuestionDTO } from '../../shared/dtos/AnswerQuestionDTO';
 import { AnswerResultDTO } from '../../shared/dtos/AnswerResultDTO';
 import { PlayerDataDTO } from '../../shared/dtos/PlayerDataDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
@@ -21,7 +21,7 @@ export const PlayerApiService = {
 
     useAnswerQuestion: () => {
 
-        const queryRes = usePostDataUnsafe<AnswerQuestionsDTO, AnswerResultDTO>(apiRoutes.player.answerVideoQuestion);
+        const queryRes = usePostDataUnsafe<AnswerQuestionDTO, AnswerResultDTO>(apiRoutes.player.answerVideoQuestion);
 
         return {
             answerResult: queryRes.result,

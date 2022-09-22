@@ -6,6 +6,7 @@ import { GivenAnswer } from '../models/entity/misc/GivenAnswer';
 import { GivenAnswerStreak } from '../models/entity/misc/GivenAnswerStreak';
 import { GivenAnswerView } from '../models/views/GivenAnswerView';
 import { AnswerEditDTO } from '../shared/dtos/AnswerEditDTO';
+import { AnswerResultDTO } from '../shared/dtos/AnswerResultDTO';
 import { Mutation } from '../shared/dtos/mutations/Mutation';
 import { GivenAnswerDTO } from '../shared/dtos/questionAnswer/GivenAnswerDTO';
 import { instantiate } from '../shared/logic/sharedLogic';
@@ -68,10 +69,8 @@ export class QuestionAnswerService {
         } = await this
             .saveMultipleGivenAnswersAsync({ ...opts, givenAnswers: [givenAnswer] });
 
-        return {
-            givenAnswer: insertedGivenAnswers.single(),
-            answerGivenAnswerBridges: insertedAnswerGivenAnswerBridges
-        };
+        return this
+            ._getAnswerResultAsync(insertedGivenAnswers.single(), insertedAnswerGivenAnswerBridges);
     }
 
     /**
@@ -124,6 +123,35 @@ export class QuestionAnswerService {
             insertedGivenAnswers,
             insertedAnswerGivenAnswerBridges
         };
+    }
+
+    /**
+     * Get answer result async 
+     */
+    private async _getAnswerResultAsync(givenAnswer: GivenAnswer, answerGivenAnswerBridges: AnswerGivenAnswerBridge[]) {
+
+        const views = await this
+            ._ormService
+            .query(GivenAnswerView, { questionVersionId: givenAnswer.questionVersionId })
+            .where('questionVersionId', '=', 'questionVersionId')
+            .getMany();
+
+        const givenAnswerVersionIds = answerGivenAnswerBridges
+            .map(x => x.answerVersionId);
+
+        const correctAnswerVersionIds = views
+            .filter(x => x.isCorrect)
+            .map(x => x.answerVersionId);
+
+        return instantiate<AnswerResultDTO>({
+            correctAnswerVersionIds,
+            givenAnswerVersionIds,
+            coinAcquires: {
+                bonus: null,
+                normal: null
+            },
+            isCorrect: false
+        });
     }
 
     /**

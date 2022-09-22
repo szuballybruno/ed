@@ -9,7 +9,7 @@ import { ExamResultView } from '../models/views/ExamResultView';
 import { ExamVersionView } from '../models/views/ExamVersionView';
 import { LatestExamView } from '../models/views/LatestExamView';
 import { QuestionDataView } from '../models/views/QuestionDataView';
-import { AnswerQuestionsDTO } from '../shared/dtos/AnswerQuestionDTO';
+import { AnswerQuestionsDTO } from '../shared/dtos/AnswerQuestionsDTO';
 import { ExamPlayerDataDTO } from '../shared/dtos/ExamPlayerDataDTO';
 import { ExamResultsDTO } from '../shared/dtos/ExamResultsDTO';
 import { Id } from '../shared/types/versionId';

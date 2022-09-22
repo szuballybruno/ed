@@ -1,5 +1,5 @@
 import { ExamService } from '../services/ExamService';
-import { AnswerQuestionsDTO } from '../shared/dtos/AnswerQuestionDTO';
+import { AnswerQuestionsDTO } from '../shared/dtos/AnswerQuestionsDTO';
 import { apiRoutes } from '../shared/types/apiRoutes';
 import { Id } from '../shared/types/versionId';
 import { ServiceProvider } from '../startup/servicesDI';

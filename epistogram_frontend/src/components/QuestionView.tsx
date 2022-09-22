@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { showNotification } from '../services/core/notifications';
-import { CoinAcquireResultDTO } from '../shared/dtos/CoinAcquireResultDTO';
+import { AnswerResultDTO } from '../shared/dtos/AnswerResultDTO';
 import { QuestionDTO } from '../shared/dtos/QuestionDTO';
 import { Id } from '../shared/types/versionId';
 import { Environment } from '../static/Environemnt';
@@ -12,26 +12,24 @@ import { QuestionnaireLayout } from './universal/QuestionnaireLayout';
 
 export const QuesitionView = ({
     answerQuesitonAsync,
-    correctAnswerVersionIds,
     question,
     loadingProps,
     onlyShowAnswers,
-    coinsAcquired,
-    showCoinsAcquired,
-    bonusCoinsAcquired,
+    answerResult,
     ...css
 }: {
     answerQuesitonAsync: (answerVersionId: Id<'AnswerVersion'>[]) => Promise<void>,
-    correctAnswerVersionIds: Id<'AnswerVersion'>[],
     question: QuestionDTO,
     loadingProps: LoadingFramePropsType,
     onlyShowAnswers?: boolean,
-    coinsAcquired: number | null,
-    showCoinsAcquired?: boolean,
-    bonusCoinsAcquired: CoinAcquireResultDTO | null
+    answerResult: AnswerResultDTO | null
 } & EpistoFlex2Props) => {
 
-    const isAnswered = correctAnswerVersionIds.length > 0;
+    const isAnswered = !!answerResult;
+    const bonusCoinsAcquireData = answerResult?.coinAcquires?.bonus ?? null;
+    const correctAnswerVersionIds = answerResult?.correctAnswerVersionIds ?? [];
+    const coinsAcquired = answerResult?.coinAcquires?.normal ?? null;
+    const showCoinsAcquired = true;
 
     const [selectedAnswerVersionId, setSelectedAnswerVersionId] = useState<Id<'AnswerVersion'> | null>(null);
 
@@ -50,13 +48,13 @@ export const QuesitionView = ({
     // bonus coin
     useEffect(() => {
 
-        if (!bonusCoinsAcquired)
+        if (!bonusCoinsAcquireData)
             return;
 
-        const streakLength = bonusCoinsAcquired.reason === 'answer_streak_5' ? 5 : 10;
+        const streakLength = bonusCoinsAcquireData.reason === 'answer_streak_5' ? 5 : 10;
 
         showNotification(
-            `Sikeresen megszereztél ${bonusCoinsAcquired.amount} bónusz EpistoCoin-t ${streakLength} egymást követő helyes válaszért!`,
+            `Sikeresen megszereztél ${bonusCoinsAcquireData.amount} bónusz EpistoCoin-t ${streakLength} egymást követő helyes válaszért!`,
             {
                 type: 'warning',
                 options: {
@@ -67,7 +65,9 @@ export const QuesitionView = ({
                         src={Environment.getAssetUrl('images/epistoCoin.png')} />
                 }
             });
-    }, [bonusCoinsAcquired]);
+    }, [bonusCoinsAcquireData]);
+
+    console.log(correctAnswerVersionIds);
 
     return <QuestionnaireLayout
         contentClickable={!isAnswered}
@@ -87,6 +87,7 @@ export const QuesitionView = ({
 
                 return <QuestionnaierAnswer
                     key={index}
+                    disabled={isAnswered}
                     isCorrect={isCorrect}
                     isIncorrect={isIncorrect}
                     isSelected={isSelected}

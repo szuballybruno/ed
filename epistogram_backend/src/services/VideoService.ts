@@ -6,6 +6,7 @@ import { VideoVersion } from '../models/entity/video/VideoVersion';
 import { LatestVideoView } from '../models/views/LatestVideoView';
 import { QuestionDataView } from '../models/views/QuestionDataView';
 import { VideoPlayerDataView } from '../models/views/VideoPlayerDataView';
+import { AnswerQuestionDTO } from '../shared/dtos/AnswerQuestionDTO';
 import { Id } from '../shared/types/versionId';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { AuthorizationService } from './AuthorizationService';
@@ -35,22 +36,17 @@ export class VideoService {
      */
     async answerVideoQuestionAsync(
         principalId: PrincipalId,
-        answerSessionId: Id<'AnswerSession'>,
-        questionVersionId: Id<'QuestionVersion'>,
-        answerVersionIds: Id<'AnswerVersion'>[],
-        elapsedSeconds: number) {
+        dto: AnswerQuestionDTO) {
 
-        return this
+        const { answerSessionId, givenAnswer } = dto;
+
+        return await this
             ._questionAnswerService
             .saveGivenAnswerAsync({
                 userId: principalId.getId(),
                 answerSessionId,
                 isPractiseAnswers: false,
-                givenAnswer: {
-                    questionVersionId,
-                    answerVersionIds,
-                    elapsedSeconds
-                }
+                givenAnswer
             });
     }
 

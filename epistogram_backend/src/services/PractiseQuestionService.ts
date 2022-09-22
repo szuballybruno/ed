@@ -1,9 +1,6 @@
 import { AnswerSession } from '../models/entity/misc/AnswerSession';
-import { GivenAnswerView } from '../models/views/GivenAnswerView';
 import { PractiseQuestionInfoView } from '../models/views/PractiseQuestionInfoView';
-import { AnswerQuestionsDTO } from '../shared/dtos/AnswerQuestionDTO';
-import { AnswerResultDTO } from '../shared/dtos/AnswerResultDTO';
-import { instantiate } from '../shared/logic/sharedLogic';
+import { AnswerQuestionDTO } from '../shared/dtos/AnswerQuestionDTO';
 import { Id } from '../shared/types/versionId';
 import { isXMinutesAgo } from '../utilities/helpers';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
@@ -65,52 +62,23 @@ export class PractiseQuestionService extends ServiceBase {
      * by the Principal account
      * returns AnswerResultDTO, with coin acquire data, and correct answers
      */
-    async answerPractiseQuestionAsync(principalId: PrincipalId, answerQuestionsDto: AnswerQuestionsDTO) {
+    async answerPractiseQuestionAsync(principalId: PrincipalId, answerQuestionDto: AnswerQuestionDTO) {
 
         const userId = principalId.getId();
 
         const practiseAnswerSession = await this
             ._getUserPractiseAnswerSession(userId);
 
-        const practiseGivenAnswer = answerQuestionsDto
-            .givenAnswers
-            .single();
+        const { givenAnswer: givenAnswerDTO } = answerQuestionDto;
 
-        const { answerGivenAnswerBridges, givenAnswer } = await this
+        return await this
             ._questionAnswerService
             .saveGivenAnswerAsync({
                 userId,
                 answerSessionId: practiseAnswerSession.id,
                 isPractiseAnswers: true,
-                givenAnswer: {
-                    answerVersionIds: practiseGivenAnswer.answerVersionIds,
-                    questionVersionId: practiseGivenAnswer.questionVersionId,
-                    elapsedSeconds: 0,
-                }
+                givenAnswer: givenAnswerDTO
             });
-
-        const views = await this
-            ._ormService
-            .query(GivenAnswerView, { questionVersionId: givenAnswer.questionVersionId })
-            .where('questionVersionId', '=', 'questionVersionId')
-            .getMany();
-
-        const givenAnswerVersionIds = answerGivenAnswerBridges
-            .map(x => x.answerVersionId);
-
-        const correctAnswerVersionIds = views
-            .filter(x => x.isCorrect)
-            .map(x => x.answerVersionId);
-
-        return instantiate<AnswerResultDTO>({
-            correctAnswerVersionIds,
-            givenAnswerVersionIds,
-            coinAcquires: {
-                bonus: null,
-                normal: null
-            },
-            isCorrect: false
-        });
     }
 
     // ------------- PRIVATE

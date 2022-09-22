@@ -1,4 +1,4 @@
-import { AnswerQuestionsDTO } from '../../shared/dtos/AnswerQuestionDTO';
+import { AnswerQuestionDTO } from '../../shared/dtos/AnswerQuestionDTO';
 import { AnswerResultDTO } from '../../shared/dtos/AnswerResultDTO';
 import { QuestionDTO } from '../../shared/dtos/QuestionDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
@@ -7,7 +7,7 @@ import { usePostDataUnsafe } from '../core/httpClient';
 
 export const useAnswerPractiseQuestion = () => {
 
-    const postDataQuery = usePostDataUnsafe<AnswerQuestionsDTO, AnswerResultDTO>(apiRoutes.questions.answerPractiseQuestion);
+    const postDataQuery = usePostDataUnsafe<AnswerQuestionDTO, AnswerResultDTO>(apiRoutes.questions.answerPractiseQuestion);
 
     return {
         answerResults: postDataQuery.result,

@@ -4,7 +4,7 @@ import { PrequizController } from '../../src/api/PrequizController';
 import { PretestController } from '../../src/api/PretestController';
 import { Video } from '../../src/models/entity/video/Video';
 import { getItemCode } from '../../src/services/misc/encodeService';
-import { AnswerQuestionsDTO } from '../../src/shared/dtos/AnswerQuestionDTO';
+import { AnswerQuestionsDTO } from '../../src/shared/dtos/AnswerQuestionsDTO';
 import { PlayerDataDTO } from '../../src/shared/dtos/PlayerDataDTO';
 import { instantiate } from '../../src/shared/logic/sharedLogic';
 import { PlaylistItemCode } from '../../src/shared/types/PlaylistItemCode';
