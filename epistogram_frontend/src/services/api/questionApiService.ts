@@ -3,15 +3,14 @@ import { AnswerResultDTO } from '../../shared/dtos/AnswerResultDTO';
 import { QuestionDTO } from '../../shared/dtos/QuestionDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
 import { QueryService } from '../../static/QueryService';
-import { usePostData } from '../core/httpClient';
+import { usePostDataUnsafe } from '../core/httpClient';
 
 export const useAnswerPractiseQuestion = () => {
 
-    const postDataQuery = usePostData<AnswerQuestionsDTO, AnswerResultDTO>(apiRoutes.questions.answerPractiseQuestion);
+    const postDataQuery = usePostDataUnsafe<AnswerQuestionsDTO, AnswerResultDTO>(apiRoutes.questions.answerPractiseQuestion);
 
     return {
         answerResults: postDataQuery.result,
-        answerQuestionError: postDataQuery.error,
         answerQuestionState: postDataQuery.state,
         answerQuestionAsync: postDataQuery.postDataAsync,
         clearAnswerResults: postDataQuery.clearCache

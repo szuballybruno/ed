@@ -17,7 +17,6 @@ export const PractiseQuestions = (props: {
 
     const {
         practiseQuestion,
-        practiseQuestionError,
         practiseQuestionState,
         refetchPractiseQuestion
     } = usePractiseQuestion();
@@ -25,10 +24,11 @@ export const PractiseQuestions = (props: {
     const {
         answerQuestionAsync,
         answerResults,
-        answerQuestionError,
         answerQuestionState,
         clearAnswerResults
     } = useAnswerPractiseQuestion();
+
+    console.log(answerResults);
 
     const handleAnswerQuestionAsync = async (answerVersionId: Id<'AnswerVersion'>[]) => {
 
@@ -49,6 +49,9 @@ export const PractiseQuestions = (props: {
         setCoinsAcquired(!!answerResults?.coinAcquires?.normal?.amount);
     }, [answerResults?.coinAcquires]);
 
+    /**
+     * Go to next question
+     */
     const handleNextQuestion = () => {
 
         clearAnswerResults();
@@ -117,7 +120,7 @@ export const PractiseQuestions = (props: {
                 <QuesitionView
                     answerQuesitonAsync={handleAnswerQuestionAsync}
                     correctAnswerVersionIds={answerResults?.correctAnswerVersionIds ?? []}
-                    loadingProps={{ loadingState: answerQuestionState, error: answerQuestionError }}
+                    loadingProps={{ loadingState: answerQuestionState }}
                     question={practiseQuestion}
                     onlyShowAnswers={isAnswered}
                     coinsAcquired={answerResults?.coinAcquires?.normal?.amount ?? null}

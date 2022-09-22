@@ -1,16 +1,26 @@
-import React, {useEffect, useState} from 'react';
-import {showNotification} from '../services/core/notifications';
-import {CoinAcquireResultDTO} from '../shared/dtos/CoinAcquireResultDTO';
-import {QuestionDTO} from '../shared/dtos/QuestionDTO';
-import {Id} from '../shared/types/versionId';
-import {Environment} from '../static/Environemnt';
+import React, { useEffect, useState } from 'react';
+import { showNotification } from '../services/core/notifications';
+import { CoinAcquireResultDTO } from '../shared/dtos/CoinAcquireResultDTO';
+import { QuestionDTO } from '../shared/dtos/QuestionDTO';
+import { Id } from '../shared/types/versionId';
+import { Environment } from '../static/Environemnt';
 import { EpistoFlex2, EpistoFlex2Props } from './controls/EpistoFlex';
-import {EpistoFont} from './controls/EpistoFont';
-import {LoadingFramePropsType} from './system/LoadingFrame';
-import {QuestionnaierAnswer} from './universal/QuestionnaireAnswer';
-import {QuestionnaireLayout} from './universal/QuestionnaireLayout';
+import { EpistoFont } from './controls/EpistoFont';
+import { LoadingFramePropsType } from './system/LoadingFrame';
+import { QuestionnaierAnswer } from './universal/QuestionnaireAnswer';
+import { QuestionnaireLayout } from './universal/QuestionnaireLayout';
 
-export const QuesitionView = (props: {
+export const QuesitionView = ({
+    answerQuesitonAsync,
+    correctAnswerVersionIds,
+    question,
+    loadingProps,
+    onlyShowAnswers,
+    coinsAcquired,
+    showCoinsAcquired,
+    bonusCoinsAcquired,
+    ...css
+}: {
     answerQuesitonAsync: (answerVersionId: Id<'AnswerVersion'>[]) => Promise<void>,
     correctAnswerVersionIds: Id<'AnswerVersion'>[],
     question: QuestionDTO,
@@ -20,18 +30,6 @@ export const QuesitionView = (props: {
     showCoinsAcquired?: boolean,
     bonusCoinsAcquired: CoinAcquireResultDTO | null
 } & EpistoFlex2Props) => {
-
-    const {
-        answerQuesitonAsync,
-        correctAnswerVersionIds,
-        question,
-        loadingProps,
-        onlyShowAnswers,
-        coinsAcquired,
-        showCoinsAcquired,
-        bonusCoinsAcquired,
-        ...css
-    } = props;
 
     const isAnswered = correctAnswerVersionIds.length > 0;
 
@@ -47,7 +45,7 @@ export const QuesitionView = (props: {
     useEffect(() => {
 
         setSelectedAnswerVersionId(null);
-    }, [question.questionVersionId]);
+    }, [question]);
 
     // bonus coin
     useEffect(() => {

@@ -1,8 +1,8 @@
-import {Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation} from '../../MyORM';
-import {IsDeletedFlag, XJoinColumn, XViewColumn} from '../../../services/XORM/XORMDecorators';
-import {AnswerVersion} from '../answer/AnswerVersion';
-import {GivenAnswer} from './GivenAnswer';
-import {Id} from '../../../shared/types/versionId';
+import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from '../../MyORM';
+import { IsDeletedFlag, XJoinColumn, XViewColumn } from '../../../services/XORM/XORMDecorators';
+import { AnswerVersion } from '../answer/AnswerVersion';
+import { GivenAnswer } from './GivenAnswer';
+import { Id } from '../../../shared/types/versionId';
 
 @Entity()
 export class AnswerGivenAnswerBridge {
@@ -16,12 +16,16 @@ export class AnswerGivenAnswerBridge {
     @XViewColumn()
     deletionDate: Date | null;
 
+    @Column()
+    @XViewColumn()
+    score: number;
+
     // given answer
     @Column()
     @XViewColumn()
     givenAnswerId: Id<'GivenAnswer'>;
     @ManyToOne(_ => GivenAnswer, x => x.answerBridges)
-    @JoinColumn({name: 'given_answer_id'})
+    @JoinColumn({ name: 'given_answer_id' })
     givenAnswer: Relation<GivenAnswer>;
 
     // answer

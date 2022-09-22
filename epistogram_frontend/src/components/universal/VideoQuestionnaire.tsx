@@ -20,7 +20,7 @@ export const VideoQuestionnaire = (props: {
 } & EpistoFlex2Props) => {
 
     const { question, isShowing, onAnswered, answerSessionId, onClosed, ...css } = props;
-    const { answerQuestionAsync, answerResult, answerQuestionError, answerQuestionState } = PlayerApiService.useAnswerQuestion();
+    const { answerQuestionAsync, answerResult, answerQuestionState } = PlayerApiService.useAnswerQuestion();
     const isAnswered = !!answerResult;
     const autoCloseSecs = 8;
     const [showUpTime, setShowUpTime] = useState<Date>(new Date());
@@ -71,7 +71,7 @@ export const VideoQuestionnaire = (props: {
         <QuesitionView
             answerQuesitonAsync={handleAnswerQuestionAsync}
             correctAnswerVersionIds={answerResult?.correctAnswerVersionIds ?? []}
-            loadingProps={{ loadingState: answerQuestionState, error: answerQuestionError }}
+            loadingProps={{ loadingState: answerQuestionState }}
             question={question}
             coinsAcquired={answerResult?.coinAcquires?.normal?.amount ?? null}
             showCoinsAcquired={true}

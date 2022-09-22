@@ -3,7 +3,7 @@ import { AnswerResultDTO } from '../../shared/dtos/AnswerResultDTO';
 import { PlayerDataDTO } from '../../shared/dtos/PlayerDataDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
 import { QueryService } from '../../static/QueryService';
-import { usePostData } from '../core/httpClient';
+import { usePostDataUnsafe } from '../core/httpClient';
 
 export const PlayerApiService = {
 
@@ -21,11 +21,10 @@ export const PlayerApiService = {
 
     useAnswerQuestion: () => {
 
-        const queryRes = usePostData<AnswerQuestionsDTO, AnswerResultDTO>(apiRoutes.player.answerVideoQuestion);
+        const queryRes = usePostDataUnsafe<AnswerQuestionsDTO, AnswerResultDTO>(apiRoutes.player.answerVideoQuestion);
 
         return {
             answerResult: queryRes.result,
-            answerQuestionError: queryRes.error,
             answerQuestionState: queryRes.state,
             answerQuestionAsync: queryRes.postDataAsync
         };

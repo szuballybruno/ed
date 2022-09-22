@@ -169,54 +169,6 @@ export const usePostMultipartDataUnsafe = <TData>(url: string | ParametrizedRout
     };
 };
 
-/**
- * Post a json payload, and implicitly handle errors, 
- * which will be set to the error output const. 
- * State is set accordingly. 
- */
-export const usePostData = <TData, TResult>(url: string) => {
-
-    const [state, setState] = useState<LoadingStateType>('success');
-    const [error, setError] = useState<ErrorWithCode | null>(null);
-    const [result, setResult] = useState<TResult | null>(null);
-
-    const postDataAsync = async (data: TData) => {
-
-        try {
-
-            setState('loading');
-
-            const postResult = await httpPostAsync(url, data);
-
-            setState('success');
-            setResult(postResult as TResult);
-        }
-        catch (e) {
-
-            setState('error');
-            setError(e as ErrorWithCode);
-        }
-    };
-
-    const clearCache = () => {
-
-        setResult(null);
-    };
-
-    return {
-        postDataAsync,
-        state,
-        error,
-        result,
-        clearCache
-    };
-};
-
-type FileData = {
-    code: string,
-    file: File
-}
-
 type FilesObject = {
     [K: string]: File | null;
 }

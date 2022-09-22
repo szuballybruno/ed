@@ -125,7 +125,8 @@ export class SignupService {
             .createAsync(AnswerGivenAnswerBridge, {
                 answerVersionId,
                 givenAnswerId,
-                deletionDate: null
+                deletionDate: null,
+                score: 0
             });
     }
 }
