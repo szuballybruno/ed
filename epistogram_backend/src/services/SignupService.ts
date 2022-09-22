@@ -117,7 +117,9 @@ export class SignupService {
                 givenAnswerStreakId: null,
                 isCorrect,
                 isPractiseAnswer: false,
-                questionVersionId
+                questionVersionId,
+                maxScore: 0,
+                score: 0
             });
 
         await this

@@ -188,7 +188,7 @@ export class ExamService {
                 userId,
                 answerSessionId,
                 isPractiseAnswers: false,
-                givenAnswers
+                givenAnswerDTOs: givenAnswers
             });
 
         /**

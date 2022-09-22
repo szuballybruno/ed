@@ -33,10 +33,6 @@ export class GivenAnswer {
     @XViewColumn()
     creationDate: Date;
 
-    @Column()
-    @XViewColumn()
-    isCorrect: boolean;
-
     @Column({type: 'double precision'})
     @XViewColumn()
     elapsedSeconds: number;
@@ -44,6 +40,18 @@ export class GivenAnswer {
     @Column({default: false})
     @XViewColumn()
     isPractiseAnswer: boolean;
+
+    @Column()
+    @XViewColumn()
+    isCorrect: boolean;
+
+    @Column()
+    @XViewColumn()
+    score: number;
+
+    @Column()
+    @XViewColumn()
+    maxScore: number;
 
     //
     // TO ONE

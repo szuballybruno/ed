@@ -1,7 +1,6 @@
 import { AuthorizationService } from '../services/AuthorizationService';
 import { PractiseQuestionService } from '../services/PractiseQuestionService';
 import { AnswerQuestionDTO } from '../shared/dtos/AnswerQuestionDTO';
-import { AnswerQuestionsDTO } from '../shared/dtos/AnswerQuestionsDTO';
 import { AnswerResultDTO } from '../shared/dtos/AnswerResultDTO';
 import { apiRoutes } from '../shared/types/apiRoutes';
 import { ServiceProvider } from '../startup/servicesDI';

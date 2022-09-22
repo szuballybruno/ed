@@ -14,6 +14,7 @@ import { Id } from '../shared/types/versionId';
 import { InsertEntity } from '../utilities/misc';
 import { CoinAcquireService } from './CoinAcquireService';
 import { LoggerService } from './LoggerService';
+import { GlobalConfiguration } from './misc/GlobalConfiguration';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 
 export type AnswerMutationsType = Mutation<AnswerEditDTO, 'answerVersionId'>[];
@@ -25,12 +26,18 @@ type QuestionCorrectData = {
     isCorrect: boolean;
 };
 
+type AnswerScoreDTO = {
+    score: number,
+    answerVersionId: Id<'AnswerVersion'>
+}
+
 export class QuestionAnswerService {
 
     constructor(
         private _ormService: ORMConnectionService,
         private _coinAcquireService: CoinAcquireService,
-        private _loggerService: LoggerService) {
+        private _loggerService: LoggerService,
+        private _config: GlobalConfiguration) {
     }
 
     /**
@@ -67,7 +74,7 @@ export class QuestionAnswerService {
             insertedAnswerGivenAnswerBridges,
             insertedGivenAnswers
         } = await this
-            .saveMultipleGivenAnswersAsync({ ...opts, givenAnswers: [givenAnswer] });
+            .saveMultipleGivenAnswersAsync({ ...opts, givenAnswerDTOs: [givenAnswer] });
 
         return this
             ._getAnswerResultAsync(insertedGivenAnswers.single(), insertedAnswerGivenAnswerBridges);
@@ -81,43 +88,55 @@ export class QuestionAnswerService {
             answerSessionId,
             isPractiseAnswers,
             userId,
-            givenAnswers
+            givenAnswerDTOs
         }: {
             userId: Id<'User'>,
             answerSessionId: Id<'AnswerSession'>,
             isPractiseAnswers: boolean,
-            givenAnswers: GivenAnswerDTO[]
+            givenAnswerDTOs: GivenAnswerDTO[]
         }) {
+
+        /**
+         * Get answer scores 
+         */
+        const answerVersionIds = givenAnswerDTOs
+            .flatMap(x => x.answerVersionIds);
+
+        const questionVersionIds = givenAnswerDTOs
+            .map(x => x.questionVersionId);
+
+        const answerScores = await this
+            ._getAnswerScoresAsync(questionVersionIds, answerVersionIds);
 
         /**
          * Insert given answers 
          */
         const insertedGivenAnswers = await this
-            ._insertGivenAnswersAsync(givenAnswers, isPractiseAnswers, answerSessionId);
+            ._insertGivenAnswersAsync(givenAnswerDTOs, isPractiseAnswers, answerSessionId, answerScores);
 
         /**
          * Insert given answr - answer bridges
          */
         const insertedAnswerGivenAnswerBridges = await this
-            ._insertAnswerGivenAnswerBridgesAsync(insertedGivenAnswers, givenAnswers);
+            ._insertAnswerGivenAnswerBridgesAsync(answerScores, insertedGivenAnswers, givenAnswerDTOs);
 
         /**
          * Get all questions 
          */
-        const correctAnswerData = await this
-            ._getQuestionCorrectDataAsync(insertedGivenAnswers, insertedAnswerGivenAnswerBridges, answerSessionId);
+        const questionData = await this
+            ._getQuestionCorrectDataAsync(insertedGivenAnswers, answerSessionId);
 
         /**
          * Handle given answer steak 
          */
         const streakId = await this
-            ._handleAnswerStreakAsync(userId, correctAnswerData);
+            ._handleAnswerStreakAsync(userId, questionData);
 
         /**
          * Handle coins
          */
         await this
-            ._handleCoinsAsync(userId, streakId, correctAnswerData);
+            ._handleCoinsAsync(userId, streakId, questionData);
 
         return {
             insertedGivenAnswers,
@@ -159,7 +178,6 @@ export class QuestionAnswerService {
      */
     private async _getQuestionCorrectDataAsync(
         givenAnswers: GivenAnswer[],
-        answerGivenAnswerBridges: AnswerGivenAnswerBridge[],
         answerSessionId: Id<'AnswerSession'>) {
 
         const questionVersions = await this
@@ -170,16 +188,17 @@ export class QuestionAnswerService {
 
         const correctAnswerData = questionVersions
             .groupBy(x => x.questionVersionId)
-            .map((group): QuestionCorrectData => ({
-                givenAnswerId: givenAnswers
-                    .firstOrNull(givenAnswer => givenAnswer.questionVersionId === group.key)?.id ?? null,
-                isCorrect: group
-                    .items
-                    .filter(answerView => answerView.isCorrect)
-                    .all(answerView => answerGivenAnswerBridges
-                        .some(bridge => bridge.answerVersionId === answerView.answerVersionId)),
-                questionVersionId: group.key
-            }));
+            .map((group): QuestionCorrectData => {
+
+                const givenAnswer = givenAnswers
+                    .firstOrNull(givenAnswer => givenAnswer.questionVersionId === group.key);
+
+                return ({
+                    givenAnswerId: givenAnswer?.id ?? null,
+                    isCorrect: givenAnswer?.isCorrect ?? false,
+                    questionVersionId: group.key
+                });
+            });
 
         return correctAnswerData;
     }
@@ -190,19 +209,34 @@ export class QuestionAnswerService {
     private async _insertGivenAnswersAsync(
         givenAnswers: GivenAnswerDTO[],
         isPractiseAnswers: boolean,
-        answerSessionId: Id<'AnswerSession'>) {
+        answerSessionId: Id<'AnswerSession'>,
+        answerScores: AnswerScoreDTO[]) {
+
+        const { maxQuestionScore } = this._config.questionAnswer;
 
         const newGivenAnswers = givenAnswers
-            .map(x => instantiate<InsertEntity<GivenAnswer>>({
-                isPractiseAnswer: isPractiseAnswers,
-                answerSessionId: answerSessionId,
-                creationDate: new Date(),
-                deletionDate: null,
-                questionVersionId: x.questionVersionId,
-                isCorrect: true,
-                elapsedSeconds: x.elapsedSeconds,
-                givenAnswerStreakId: null
-            }));
+            .map(givenAnswerDTO => {
+
+                const score = answerScores
+                    .filter(x => givenAnswerDTO
+                        .answerVersionIds
+                        .some(id => id === x.answerVersionId))
+                    .map(x => x.score)
+                    .reduce((p, c) => p + c);
+
+                return instantiate<InsertEntity<GivenAnswer>>({
+                    isPractiseAnswer: isPractiseAnswers,
+                    answerSessionId: answerSessionId,
+                    creationDate: new Date(),
+                    deletionDate: null,
+                    questionVersionId: givenAnswerDTO.questionVersionId,
+                    elapsedSeconds: givenAnswerDTO.elapsedSeconds,
+                    givenAnswerStreakId: null,
+                    score: score,
+                    maxScore: maxQuestionScore,
+                    isCorrect: maxQuestionScore === score
+                });
+            });
 
         const insertedGivenAnswers = await this._ormService
             .createManyAsync(GivenAnswer, newGivenAnswers);
@@ -213,13 +247,10 @@ export class QuestionAnswerService {
     /**
      * Insert given answer bridges 
      */
-    private async _insertAnswerGivenAnswerBridgesAsync(givenAnswers: GivenAnswer[], givenAnswerDTOs: GivenAnswerDTO[]) {
-
-        const answerVersionIds = givenAnswerDTOs
-            .flatMap(x => x.answerVersionIds);
-
-        const answerScores = await this
-            ._getAnswerScoresAsync(givenAnswers, answerVersionIds);
+    private async _insertAnswerGivenAnswerBridgesAsync(
+        answerScores: AnswerScoreDTO[],
+        givenAnswers: GivenAnswer[],
+        givenAnswerDTOs: GivenAnswerDTO[]) {
 
         const givenAnswerAnswerBridges = givenAnswers
             .flatMap((givenAnswer, index) => {
@@ -335,13 +366,12 @@ export class QuestionAnswerService {
     /**
      * getCorrectAnswerData 
      */
-    private async _getAnswerScoresAsync(givenAnswers: GivenAnswer[], answerVersionIds: Id<'AnswerVersion'>[]) {
+    private async _getAnswerScoresAsync(
+        questionVersionIds: Id<'QuestionVersion'>[],
+        answerVersionIds: Id<'AnswerVersion'>[]): Promise<AnswerScoreDTO[]> {
 
         // constnts 
         const incorrectAnswerValueMultiplier = 0;
-
-        const questionVersionIds = givenAnswers
-            .map(x => x.questionVersionId);
 
         const allGaViews = await this
             ._ormService
@@ -362,7 +392,7 @@ export class QuestionAnswerService {
                 return {
                     answerVersionId,
                     score
-                };
+                } as AnswerScoreDTO;
             });
     }
 
