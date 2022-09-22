@@ -285,6 +285,7 @@ export const VideoPlayer = (props: {
                         }}
                         width="100%"
                         height="100%"
+                        playsinline
                         volume={volume}
                         muted={isMuted}
                         controls={false}

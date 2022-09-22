@@ -1,5 +1,5 @@
-import {CourseStageNameType} from '../types/sharedTypes';
-import {Id} from '../types/versionId';
+import { CourseStageNameType } from '../types/sharedTypes';
+import { Id } from '../types/versionId';
 
 export class AvailableCourseDTO {
     courseId: Id<'Course'>;
@@ -18,4 +18,8 @@ export class AvailableCourseDTO {
     totalVideoCount: number;
     difficulty: number;
     benchmark: number;
+    isStarted: boolean;
+    completedVideoCount: number;
+    requiredCompletionDate: Date;
+    finalExamScorePercentage: number;
 }

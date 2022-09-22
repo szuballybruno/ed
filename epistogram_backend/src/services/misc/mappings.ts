@@ -947,7 +947,11 @@ const marray = [
                         benchmark: view.benchmark,
                         difficulty: view.difficulty,
                         totalVideoCount: view.totalVideoCount,
-                        totalVideoSumLengthSeconds: view.totalVideoSumLengthSeconds
+                        totalVideoSumLengthSeconds: view.totalVideoSumLengthSeconds,
+                        isStarted: view.isStarted,
+                        completedVideoCount: view.completedVideoCount,
+                        requiredCompletionDate: view.requiredCompletionDate,
+                        finalExamScorePercentage: view.finalExamScorePercentage
                     });
                 });
         }),

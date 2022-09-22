@@ -88,7 +88,8 @@ const AvailableCoursesPage = () => {
 
         ? <MobileAvailableCoursesPage
             courses={courses}
-            handlePlayCourse={handlePlayCourse} />
+            handlePlayCourse={handlePlayCourse}
+            navigateToDetailsPage={navigateToDetailsPage} />
 
         : <DesktopAvailableCoursesPage
             courseCategories={courseCategories}

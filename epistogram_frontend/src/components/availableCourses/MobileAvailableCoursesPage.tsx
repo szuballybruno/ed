@@ -8,10 +8,11 @@ import { MobileCourseTile } from './MobileCourseTile';
 
 export const MobileAvailableCoursesPage = (props: {
     courses: AvailableCourseDTO[],
-    handlePlayCourse: (course: AvailableCourseDTO) => void
+    handlePlayCourse: (course: AvailableCourseDTO) => void,
+    navigateToDetailsPage: (course: AvailableCourseDTO) => void
 }) => {
 
-    const { courses, handlePlayCourse } = props;
+    const { courses, handlePlayCourse, navigateToDetailsPage } = props;
 
     return <PageRootContainer>
 
@@ -29,7 +30,8 @@ export const MobileAvailableCoursesPage = (props: {
                     return <MobileCourseTile
                         key={Id.read(course.courseId)}
                         course={course}
-                        handlePlayCourse={handlePlayCourse} />;
+                        handlePlayCourse={handlePlayCourse}
+                        navigateToDetailsPage={navigateToDetailsPage} />;
                 })}
         </ContentPane>
     </PageRootContainer>;

@@ -1,7 +1,7 @@
-import {ViewColumn, ViewEntity} from '../MyORM';
-import {XViewColumn} from '../../services/XORM/XORMDecorators';
-import {CourseStageNameType} from '../../shared/types/sharedTypes';
-import {Id} from '../../shared/types/versionId';
+import { ViewColumn, ViewEntity } from '../MyORM';
+import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { CourseStageNameType } from '../../shared/types/sharedTypes';
+import { Id } from '../../shared/types/versionId';
 
 @ViewEntity({
     synchronize: false,
@@ -96,4 +96,13 @@ export class AvailableCourseView {
 
     @XViewColumn()
     benchmark: number;
+
+    @XViewColumn()
+    completedVideoCount: number;
+
+    @XViewColumn()
+    requiredCompletionDate: Date;
+
+    @XViewColumn()
+    finalExamScorePercentage: number;
 }
