@@ -307,7 +307,7 @@ export const VideoPlayer = (props: {
                     id="videoWrapper"
                     //className="whall"
                     // pt="56.25%" // to keep 16:9 ratio
-                    background='green'
+                    background='black'
                     style={
                         isFullscreen
                             ? { ...fullScreenStyleWrapperProps }
