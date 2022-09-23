@@ -48,6 +48,7 @@ export const useVideoPlayerState = (
             document.body.style.overflow === 'hidden'
                 ? document.body.style.overflow = ''
                 : document.body.style.overflow = 'hidden';
+
             setIsFullscreen(x => !x);
         } else {
 
@@ -264,7 +265,8 @@ export const VideoPlayer = (props: {
         position: 'fixed',
         right: 0,
         top: 0,
-        zIndex: 10000000
+        zIndex: 10000000,
+        transform: 'rotate(90deg)'
     } as CSSProperties;
 
     const marks = [maxWatchedSeconds];
