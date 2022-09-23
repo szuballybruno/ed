@@ -4,7 +4,6 @@ import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import React, { CSSProperties, useEffect, useRef, useState } from 'react';
 import ReactPlayer from 'react-player';
-import screenfull from 'screenfull';
 import browser from '../../../services/core/browserSniffingService';
 import { readVolumeSettings, writeVolumeSettings } from '../../../services/core/storageService';
 import { VideoPlayerDataDTO } from '../../../shared/dtos/VideoDTO';
@@ -12,7 +11,6 @@ import { EpistoDiv, EpistoDivProps } from '../../controls/EpistoDiv';
 import { EpistoReactPlayer } from '../../controls/EpistoReactPlayer';
 import { AbsoluteFlexOverlay } from './AbsoluteFlexOverlay';
 import { VideoControls } from './VideoControls';
-
 type VisualOverlayType = 'counter' | 'pause' | 'start' | 'seekRight' | 'seekLeft';
 
 export const useVideoPlayerState = (
@@ -52,7 +50,7 @@ export const useVideoPlayerState = (
             setIsFullscreen(x => !x);
         } else {
 
-            // @ts-ignore
+            //@ts-ignore
             screenfull.toggle(playerContainerRef.current);
         }
 
@@ -258,7 +256,8 @@ export const VideoPlayer = (props: {
     } = videoPlayerState;
 
     const iconStyle = { width: '70px', height: '70px', color: 'white' } as CSSProperties;
-    const fullScreenStyleProps = {
+
+    const fullScreenStyleRootProps = {
         bottom: 0,
         display: 'block',
         left: 0,
@@ -267,6 +266,17 @@ export const VideoPlayer = (props: {
         right: 0,
         top: 0,
         zIndex: 10000000
+    } as CSSProperties;
+
+    const fullScreenStyleWrapperProps = {
+        top: '0',
+        left: '0',
+        marginTop: '-100vw',
+        position: 'absolute',
+        transform: 'rotate(90deg)',
+        transformOrigin: 'bottom left',
+        width: '100vh',
+        height: '100vw'
     } as CSSProperties;
 
     const marks = [maxWatchedSeconds];
@@ -278,7 +288,7 @@ export const VideoPlayer = (props: {
             ref={playerContainerRef}
             style={
                 isFullscreen
-                    ? { ...fullScreenStyleProps }
+                    ? { ...fullScreenStyleRootProps }
                     : undefined
             }
             {...css}>
@@ -297,16 +307,11 @@ export const VideoPlayer = (props: {
                     //className="whall"
                     // pt="56.25%" // to keep 16:9 ratio
                     background='green'
-                    style={{
-                        top: '0',
-                        left: '0',
-                        marginTop: '-100vw',
-                        position: 'absolute',
-                        transform: 'rotate(90deg)',
-                        transformOrigin: 'bottom left',
-                        width: '100vh',
-                        height: '100vw'
-                    }}
+                    style={
+                        isFullscreen
+                            ? { ...fullScreenStyleWrapperProps }
+                            : undefined
+                    }
                     onClick={toggleShouldBePlaying}
                     onMouseMove={() => {
 
@@ -354,6 +359,7 @@ export const VideoPlayer = (props: {
 
                 {/* video controls */}
                 <VideoControls
+                    isFullscreen={isFullscreen}
                     controlsVisible={controlsVisible}
                     isPlaying={isPlaying}
                     markSeconds={marks}
