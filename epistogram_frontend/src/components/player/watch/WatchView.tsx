@@ -232,6 +232,10 @@ export const WatchView = (props: {
         setStillWatchingDilalogMarkers(dialogShowUpSeconds);
     }, [videoLength]);
 
+    console.log('isIos: ' + browser.isIos);
+    console.log('isIPhone: ' + browser.isIPhone);
+    console.log('isWebkit: ' + browser.isWebkit);
+
     // playback watcher
     usePlaybackWatcher(
         playedSeconds,
@@ -360,8 +364,7 @@ export const WatchView = (props: {
                             fontWeight: 500
                         }}>
 
-                        {'isIos: ' + browser.isIos + '\n' + 'isIPhone: ' + browser.isIPhone + '\n' + 'isWebKit: ' + browser.isWebkit}
-                        {/* {videoPlayerData!.title} */}
+                        {videoPlayerData!.title}
                     </EpistoFont>
 
                     <EpistoHeader variant="sub"
