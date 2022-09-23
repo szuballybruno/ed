@@ -263,10 +263,10 @@ export const VideoPlayer = (props: {
         display: 'block',
         left: 0,
         position: 'fixed',
+        background: 'black',
         right: 0,
         top: 0,
-        zIndex: 10000000,
-        transform: 'rotate(90deg)'
+        zIndex: 10000000
     } as CSSProperties;
 
     const marks = [maxWatchedSeconds];
@@ -294,8 +294,19 @@ export const VideoPlayer = (props: {
                 {/* video wrapper */}
                 <EpistoDiv
                     id="videoWrapper"
-                    className="whall"
+                    //className="whall"
                     // pt="56.25%" // to keep 16:9 ratio
+                    background='green'
+                    style={{
+                        top: '0',
+                        left: '0',
+                        marginTop: '-100vw',
+                        position: 'absolute',
+                        transform: 'rotate(90deg)',
+                        transformOrigin: 'bottom left',
+                        width: '100vh',
+                        height: '100vw'
+                    }}
                     onClick={toggleShouldBePlaying}
                     onMouseMove={() => {
 
