@@ -4,6 +4,7 @@ import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import React, { CSSProperties, useEffect, useRef, useState } from 'react';
 import ReactPlayer from 'react-player';
+import screenfull from 'screenfull';
 import browser from '../../../services/core/browserSniffingService';
 import { readVolumeSettings, writeVolumeSettings } from '../../../services/core/storageService';
 import { VideoPlayerDataDTO } from '../../../shared/dtos/VideoDTO';
