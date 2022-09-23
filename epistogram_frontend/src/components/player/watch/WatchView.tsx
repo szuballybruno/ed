@@ -35,6 +35,7 @@ import { Id } from '../../../shared/types/versionId';
 import { Logger } from '../../../static/Logger';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoDiv } from '../../controls/EpistoDiv';
+import browser from '../../../services/core/browserSniffingService';
 
 const autoplayTimeoutInS = 3;
 
@@ -359,7 +360,8 @@ export const WatchView = (props: {
                             fontWeight: 500
                         }}>
 
-                        {videoPlayerData!.title}
+                        {'isIos: ' + browser.isIos + '\n' + 'isIPhone: ' + browser.isIPhone + '\n' + 'isWebKit: ' + browser.isWebkit}
+                        {/* {videoPlayerData!.title} */}
                     </EpistoFont>
 
                     <EpistoHeader variant="sub"

@@ -34,6 +34,7 @@ export const useVideoPlayerState = (
     const [isSeeking, setIsSeeking] = useState(false);
     const [volume, setVolume] = useState(1);
     const [isMuted, setIsMuted] = useState(false);
+    const [isFullscreen, setIsFullscreen] = useState(false);
     const controlsVisible = showControls || !shouldBePlaying || isSeeking;
 
     const isVideoEnded = (videoLength > 0) && (playedSeconds > (videoLength - 0.1));
@@ -43,6 +44,7 @@ export const useVideoPlayerState = (
 
         // @ts-ignore
         screenfull.toggle(playerContainerRef.current);
+        setIsFullscreen(x => !x);
     };
 
     const seekToSeconds = (seconds: number) => {
@@ -194,6 +196,7 @@ export const useVideoPlayerState = (
         isVideoEnded,
         volume,
         isMuted,
+        isFullscreen,
         toggleShouldBePlaying,
         showControlOverlay,
         setPlayedSeconds,
@@ -230,6 +233,7 @@ export const VideoPlayer = (props: {
         maxWatchedSeconds,
         volume,
         isMuted,
+        isFullscreen,
         toggleShouldBePlaying,
         showControlOverlay,
         setPlayedSeconds,
@@ -243,6 +247,15 @@ export const VideoPlayer = (props: {
     } = videoPlayerState;
 
     const iconStyle = { width: '70px', height: '70px', color: 'white' } as CSSProperties;
+    const fullScreenStyleProps = {
+        bottom: 0,
+        display: 'block',
+        left: 0,
+        position: 'fixed',
+        right: 0,
+        top: 0,
+        zIndex: 10000000
+    } as CSSProperties;
 
     const marks = [maxWatchedSeconds];
 
@@ -251,6 +264,11 @@ export const VideoPlayer = (props: {
             id="fullScreenRoot"
             position="relative"
             ref={playerContainerRef}
+            style={
+                isFullscreen
+                    ? { ...fullScreenStyleProps }
+                    : undefined
+            }
             {...css}>
 
             {/* playback */}
