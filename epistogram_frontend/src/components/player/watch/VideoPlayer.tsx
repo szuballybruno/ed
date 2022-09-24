@@ -277,10 +277,10 @@ export const VideoPlayer = (props: {
             return;
 
         if (screenOrientation === 90)
-            return setShouldBePlaying(true);
+            return toggleShouldBePlaying();
 
         if (screenOrientation !== 90)
-            return setShouldBePlaying(false);
+            return toggleShouldBePlaying();
 
 
     }, [screenOrientation]);
