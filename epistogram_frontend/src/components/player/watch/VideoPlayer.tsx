@@ -11,6 +11,7 @@ import { VideoPlayerDataDTO } from '../../../shared/dtos/VideoDTO';
 import { EpistoDiv, EpistoDivProps } from '../../controls/EpistoDiv';
 import { EpistoReactPlayer } from '../../controls/EpistoReactPlayer';
 import { AbsoluteFlexOverlay } from './AbsoluteFlexOverlay';
+import { ShouldRotatePhoneOverlay } from './ShouldRotatePhoneOverlay';
 import { VideoControls } from './VideoControls';
 type VisualOverlayType = 'counter' | 'pause' | 'start' | 'seekRight' | 'seekLeft';
 
@@ -216,7 +217,8 @@ export const useVideoPlayerState = (
         setIsSeeking,
         handleOnVideoEnded,
         setVolume,
-        setIsMuted
+        setIsMuted,
+        setIsFullscreen
     };
 };
 
@@ -253,7 +255,8 @@ export const VideoPlayer = (props: {
         setIsSeeking,
         handleOnVideoEnded,
         setVolume,
-        setIsMuted
+        setIsMuted,
+        setIsFullscreen
     } = videoPlayerState;
 
     const iconStyle = { width: '70px', height: '70px', color: 'white' } as CSSProperties;
@@ -266,18 +269,15 @@ export const VideoPlayer = (props: {
         background: 'black',
         right: 0,
         top: 0,
-        zIndex: 10000000
+        zIndex: 100
     } as CSSProperties;
 
     const fullScreenStyleWrapperProps = {
         top: '0',
         left: '0',
-        marginTop: '-100vw',
         position: 'absolute',
-        transform: 'rotate(90deg)',
-        transformOrigin: 'bottom left',
-        width: '100vh',
-        height: '100vw'
+        width: '100vw',
+        height: '100vh'
     } as CSSProperties;
 
     const marks = [maxWatchedSeconds];
@@ -377,6 +377,8 @@ export const VideoPlayer = (props: {
                     setVolume={setVolume} />
 
             </EpistoDiv>
+
+            {(browser.isIPhone && isFullscreen && window.orientation !== 90) && <ShouldRotatePhoneOverlay setIsFullscreen={setIsFullscreen} />}
 
             {/* visual overlay */}
             <AbsoluteFlexOverlay isVisible={isVisualOverlayVisible}>

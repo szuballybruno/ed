@@ -1,14 +1,14 @@
 
-import { Fullscreen, Pause, PlayArrow } from '@mui/icons-material';
+import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import VolumeDownIcon from '@mui/icons-material/VolumeDown';
 import VolumeMuteIcon from '@mui/icons-material/VolumeMute';
 import VolumeOffIcon from '@mui/icons-material/VolumeOff';
-import VolumeUpIcon from '@mui/icons-material/VolumeUp';
+import { Fullscreen, Pause, PlayArrow } from '@mui/icons-material';
 import { Slider } from '@mui/material';
 import { secondsToTime } from '../../../static/frontendHelpers';
 import { EpistoButton } from '../../controls/EpistoButton';
-import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
+import { EpistoFlex2 } from '../../controls/EpistoFlex';
 
 export const VideoControls = (props: {
     isFullscreen: boolean,
@@ -29,7 +29,6 @@ export const VideoControls = (props: {
 }) => {
 
     const {
-        isFullscreen,
         controlsVisible,
         playedSeconds,
         videoLength,
@@ -57,12 +56,8 @@ export const VideoControls = (props: {
         bottom={0}
         left={0}
         px="10px"
-        width={isFullscreen ? '100vh' : '100%'}
+        width="100%"
         height="40px"
-        marginTop={isFullscreen ? '-40px' : undefined}
-        top={isFullscreen ? '0' : undefined}
-        transform={isFullscreen ? 'rotate(90deg)' : undefined}
-        transformOrigin='bottom left'
         onMouseEnter={() => showControlOverlay(true)}
         onMouseLeave={() => showControlOverlay()}
         opacity={controlsVisible ? 1 : 0}
