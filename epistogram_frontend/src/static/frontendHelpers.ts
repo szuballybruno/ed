@@ -1018,3 +1018,31 @@ export const useImageColor = (src: string, settings?: ImageColorSettingsType) =>
 
     return { colors };
 };
+
+
+const getOrientation = () =>
+    window.orientation;
+
+export const useScreenOrientation = () => {
+    const [orientation, setOrientation] =
+        useState(getOrientation());
+
+    const updateOrientation = () => {
+        setOrientation(getOrientation());
+    };
+
+    useEffect(() => {
+        window.addEventListener(
+            'orientationchange',
+            updateOrientation
+        );
+        return () => {
+            window.removeEventListener(
+                'orientationchange',
+                updateOrientation
+            );
+        };
+    }, []);
+
+    return orientation;
+};

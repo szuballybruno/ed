@@ -8,6 +8,7 @@ import screenfull from 'screenfull';
 import browser from '../../../services/core/browserSniffingService';
 import { readVolumeSettings, writeVolumeSettings } from '../../../services/core/storageService';
 import { VideoPlayerDataDTO } from '../../../shared/dtos/VideoDTO';
+import { useScreenOrientation } from '../../../static/frontendHelpers';
 import { EpistoDiv, EpistoDivProps } from '../../controls/EpistoDiv';
 import { EpistoReactPlayer } from '../../controls/EpistoReactPlayer';
 import { AbsoluteFlexOverlay } from './AbsoluteFlexOverlay';
@@ -259,7 +260,11 @@ export const VideoPlayer = (props: {
         setIsFullscreen
     } = videoPlayerState;
 
+    const screenOrientation = useScreenOrientation();
+
     const iconStyle = { width: '70px', height: '70px', color: 'white' } as CSSProperties;
+
+    console.log(screenOrientation);
 
     const fullScreenStyleRootProps = {
         bottom: 0,
@@ -305,7 +310,7 @@ export const VideoPlayer = (props: {
                 {/* video wrapper */}
                 <EpistoDiv
                     id="videoWrapper"
-                    //className="whall"
+                    className="whall"
                     // pt="56.25%" // to keep 16:9 ratio
                     background='black'
                     style={
@@ -378,7 +383,7 @@ export const VideoPlayer = (props: {
 
             </EpistoDiv>
 
-            {(browser.isIPhone && isFullscreen && window.orientation !== 90) && <ShouldRotatePhoneOverlay setIsFullscreen={setIsFullscreen} />}
+            {(browser.isIPhone && isFullscreen && screenOrientation !== 90) && <ShouldRotatePhoneOverlay setIsFullscreen={setIsFullscreen} />}
 
             {/* visual overlay */}
             <AbsoluteFlexOverlay isVisible={isVisualOverlayVisible}>
