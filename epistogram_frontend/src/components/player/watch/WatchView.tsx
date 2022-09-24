@@ -3,9 +3,11 @@ import { useCallback, useEffect, useState } from 'react';
 import { useReactTimer } from '../../../helpers/reactTimer';
 import { StillWatchingDialogMarker } from '../../../models/types';
 import { PlaybackApiService } from '../../../services/api/playbackApiService';
+import { PlaylistModuleDTO } from '../../../shared/dtos/PlaylistModuleDTO';
 import { QuestionDTO } from '../../../shared/dtos/QuestionDTO';
 import { VideoPlayerDataDTO } from '../../../shared/dtos/VideoDTO';
 import { CourseItemStateType, CourseModeType } from '../../../shared/types/sharedTypes';
+import { Id } from '../../../shared/types/versionId';
 import {
     getRandomInteger,
     isBetweenThreshold,
@@ -13,11 +15,14 @@ import {
     useIsMobileView,
     usePaging
 } from '../../../static/frontendHelpers';
+import { Logger } from '../../../static/Logger';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoButton } from '../../controls/EpistoButton';
+import { EpistoDiv } from '../../controls/EpistoDiv';
+import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
-import { EpistoHeader } from '../../EpistoHeader';
 import { NavigateToCourseItemActionType } from '../../courseItemList/Playlist';
+import { EpistoHeader } from '../../EpistoHeader';
 import { EpistoPaging } from '../../universal/EpistoPaging';
 import { TimeoutFrame } from '../../universal/TimeoutFrame';
 import { VideoQuestionnaire } from '../../universal/VideoQuestionnaire';
@@ -30,12 +35,6 @@ import { usePlaybackWatcher } from './PlaybackWatcherLogic';
 import { StillWatching } from './StillWatching';
 import { useVideoPlayerState, VideoPlayer } from './VideoPlayer';
 import { VideoRating } from './VideoRating';
-import { PlaylistModuleDTO } from '../../../shared/dtos/PlaylistModuleDTO';
-import { Id } from '../../../shared/types/versionId';
-import { Logger } from '../../../static/Logger';
-import { EpistoFlex2 } from '../../controls/EpistoFlex';
-import { EpistoDiv } from '../../controls/EpistoDiv';
-import browser from '../../../services/core/browserSniffingService';
 
 const autoplayTimeoutInS = 3;
 
@@ -232,9 +231,6 @@ export const WatchView = (props: {
         setStillWatchingDilalogMarkers(dialogShowUpSeconds);
     }, [videoLength]);
 
-    console.log('isIos: ' + browser.isIos);
-    console.log('isIPhone: ' + browser.isIPhone);
-    console.log('isWebkit: ' + browser.isWebkit);
 
     // playback watcher
     usePlaybackWatcher(

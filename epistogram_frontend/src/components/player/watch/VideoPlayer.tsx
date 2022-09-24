@@ -10,6 +10,7 @@ import { readVolumeSettings, writeVolumeSettings } from '../../../services/core/
 import { VideoPlayerDataDTO } from '../../../shared/dtos/VideoDTO';
 import { useScreenOrientation } from '../../../static/frontendHelpers';
 import { EpistoDiv, EpistoDivProps } from '../../controls/EpistoDiv';
+import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoReactPlayer } from '../../controls/EpistoReactPlayer';
 import { AbsoluteFlexOverlay } from './AbsoluteFlexOverlay';
 import { ShouldRotatePhoneOverlay } from './ShouldRotatePhoneOverlay';
@@ -110,6 +111,8 @@ export const useVideoPlayerState = (
         showControlOverlay();
         flashVisualOverlay(targetShouldBePlaying ? 'start' : 'pause');
     };
+
+
 
     const jump = (right?: boolean) => {
 
@@ -219,7 +222,8 @@ export const useVideoPlayerState = (
         handleOnVideoEnded,
         setVolume,
         setIsMuted,
-        setIsFullscreen
+        setIsFullscreen,
+        setShouldBePlaying
     };
 };
 
@@ -257,14 +261,29 @@ export const VideoPlayer = (props: {
         handleOnVideoEnded,
         setVolume,
         setIsMuted,
-        setIsFullscreen
+        setIsFullscreen,
+        setShouldBePlaying
     } = videoPlayerState;
 
     const screenOrientation = useScreenOrientation();
 
     const iconStyle = { width: '70px', height: '70px', color: 'white' } as CSSProperties;
 
-    console.log(screenOrientation);
+    const isIPhone = browser.isIPhone;
+
+    useEffect(() => {
+
+        if (!browser.isIPhone)
+            return;
+
+        if (screenOrientation === 90)
+            return setShouldBePlaying(true);
+
+        if (screenOrientation !== 90)
+            return setShouldBePlaying(false);
+
+
+    }, [screenOrientation]);
 
     const fullScreenStyleRootProps = {
         bottom: 0,
@@ -300,7 +319,7 @@ export const VideoPlayer = (props: {
             {...css}>
 
             {/* playback */}
-            <EpistoDiv
+            {!isIPhone && <EpistoDiv
                 id="playbackWrapper"
                 filter={isShowingOverlay ? 'blur(4px)' : 'blur(0px)'}
                 transition="0.3s"
@@ -381,9 +400,21 @@ export const VideoPlayer = (props: {
                     toggleShouldBePlaying={toggleShouldBePlaying}
                     setVolume={setVolume} />
 
-            </EpistoDiv>
+            </EpistoDiv>}
 
-            {(browser.isIPhone && isFullscreen && screenOrientation !== 90) && <ShouldRotatePhoneOverlay setIsFullscreen={setIsFullscreen} />}
+            {(isIPhone && !isFullscreen && screenOrientation !== 90) && <EpistoFlex2
+                onClick={() => setIsFullscreen(x => !x)}
+                width='100vw'
+                h='200px'
+                background='black'
+                align='center'
+                justify='center'>
+
+                <PlayArrowIcon
+                    style={iconStyle} />
+            </EpistoFlex2>}
+
+            {(isIPhone && isFullscreen && screenOrientation !== 90) && <ShouldRotatePhoneOverlay setIsFullscreen={setIsFullscreen} />}
 
             {/* visual overlay */}
             <AbsoluteFlexOverlay isVisible={isVisualOverlayVisible}>
