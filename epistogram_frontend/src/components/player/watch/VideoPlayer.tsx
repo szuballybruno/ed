@@ -59,6 +59,12 @@ export const useVideoPlayerState = (
     console.log('isVideoEnded: ' + isVideoEnded);
     console.log('isSeeking: ' + isSeeking);
 
+    useEffect(() => {
+
+        if (isPlaying)
+            return setIsMuted(false);
+    }, [isLandscape]);
+
     const toggleFullScreen = () => {
 
         if (browser.isIPhone) {
