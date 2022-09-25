@@ -52,12 +52,12 @@ export const useVideoPlayerState = (
         ? (isIPhone && isLandscape && shouldBePlaying && !isVideoEnded && !isSeeking && !isShowingOverlay)
         : (!isVideoEnded && shouldBePlaying && !isShowingOverlay && !isSeeking);
 
-    console.log('isPlaying: ' + isPlaying);
-    console.log('isIPhone: ' + isIPhone);
-    console.log('isLandscape: ' + isLandscape);
-    console.log('shouldBePlaying: ' + shouldBePlaying);
-    console.log('isVideoEnded: ' + isVideoEnded);
-    console.log('isSeeking: ' + isSeeking);
+    /*     console.log('isPlaying: ' + isPlaying);
+        console.log('isIPhone: ' + isIPhone);
+        console.log('isLandscape: ' + isLandscape);
+        console.log('shouldBePlaying: ' + shouldBePlaying);
+        console.log('isVideoEnded: ' + isVideoEnded);
+        console.log('isSeeking: ' + isSeeking); */
 
     const toggleFullScreen = () => {
 
