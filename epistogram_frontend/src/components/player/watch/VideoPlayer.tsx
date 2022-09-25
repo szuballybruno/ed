@@ -62,7 +62,10 @@ export const useVideoPlayerState = (
     useEffect(() => {
 
         if (isPlaying)
-            return setIsMuted(false);
+            setTimeout(() => {
+
+                return setIsMuted(false);
+            }, 500);
     }, [isLandscape]);
 
     const toggleFullScreen = () => {
