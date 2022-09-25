@@ -59,15 +59,6 @@ export const useVideoPlayerState = (
     console.log('isVideoEnded: ' + isVideoEnded);
     console.log('isSeeking: ' + isSeeking);
 
-    useEffect(() => {
-
-        if (isPlaying)
-            setTimeout(() => {
-
-                return setIsMuted(false);
-            }, 500);
-    }, [isLandscape]);
-
     const toggleFullScreen = () => {
 
         if (browser.isIPhone) {
@@ -414,7 +405,10 @@ export const VideoPlayer = (props: {
                     setVolume={setVolume} />
 
                 {(isIPhone && !isFullscreen && !isLandscape) && <EpistoFlex2
-                    onClick={() => setIsFullscreen(x => !x)}
+                    onClick={() => {
+                        toggleShouldBePlaying();
+                        setIsFullscreen(x => !x);
+                    }}
                     top='0'
                     className='whall'
                     background='black'
