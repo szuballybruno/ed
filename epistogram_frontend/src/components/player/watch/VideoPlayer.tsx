@@ -38,10 +38,17 @@ export const useVideoPlayerState = (
     const [volume, setVolume] = useState(1);
     const [isMuted, setIsMuted] = useState(false);
     const [isFullscreen, setIsFullscreen] = useState(false);
-    const controlsVisible = showControls || !shouldBePlaying || isSeeking;
+
+    const isIPhone = browser.isIPhone;
+
+    const screenOrientation = useScreenOrientation();
+    const isLandscape = screenOrientation === 90;
+
+    const controlsVisible = (isIPhone && isLandscape) || showControls || !shouldBePlaying || isSeeking;
 
     const isVideoEnded = (videoLength > 0) && (playedSeconds > (videoLength - 0.1));
-    const isPlaying = !isVideoEnded && shouldBePlaying && !isShowingOverlay && !isSeeking;
+    const isPlaying = !isVideoEnded && shouldBePlaying && !isShowingOverlay && !isSeeking || (isIPhone && isLandscape && shouldBePlaying && !isVideoEnded && !isSeeking);
+
 
     const toggleFullScreen = () => {
 
@@ -56,6 +63,7 @@ export const useVideoPlayerState = (
 
             //@ts-ignore
             screenfull.toggle(playerContainerRef.current);
+            //setIsFullscreen(x => !x);
         }
 
     };
@@ -212,6 +220,8 @@ export const useVideoPlayerState = (
         volume,
         isMuted,
         isFullscreen,
+        isIPhone,
+        isLandscape,
         toggleShouldBePlaying,
         showControlOverlay,
         setPlayedSeconds,
@@ -251,6 +261,8 @@ export const VideoPlayer = (props: {
         volume,
         isMuted,
         isFullscreen,
+        isIPhone,
+        isLandscape,
         toggleShouldBePlaying,
         showControlOverlay,
         setPlayedSeconds,
@@ -265,25 +277,7 @@ export const VideoPlayer = (props: {
         setShouldBePlaying
     } = videoPlayerState;
 
-    const screenOrientation = useScreenOrientation();
-
     const iconStyle = { width: '70px', height: '70px', color: 'white' } as CSSProperties;
-
-    const isIPhone = browser.isIPhone;
-
-    useEffect(() => {
-
-        if (!browser.isIPhone)
-            return;
-
-        if (screenOrientation === 90)
-            return toggleShouldBePlaying();
-
-        if (screenOrientation !== 90)
-            return toggleShouldBePlaying();
-
-
-    }, [screenOrientation]);
 
     const fullScreenStyleRootProps = {
         bottom: 0,
@@ -319,7 +313,7 @@ export const VideoPlayer = (props: {
             {...css}>
 
             {/* playback */}
-            {!isIPhone && <EpistoDiv
+            <EpistoDiv
                 id="playbackWrapper"
                 filter={isShowingOverlay ? 'blur(4px)' : 'blur(0px)'}
                 transition="0.3s"
@@ -352,7 +346,8 @@ export const VideoPlayer = (props: {
                         url={videoUrl}
                         style={{
                             borderRadius: 6,
-                            overflow: 'hidden'
+                            overflow: 'hidden',
+                            zIndex: 13
                         }}
                         width="100%"
                         height="100%"
@@ -400,21 +395,24 @@ export const VideoPlayer = (props: {
                     toggleShouldBePlaying={toggleShouldBePlaying}
                     setVolume={setVolume} />
 
-            </EpistoDiv>}
+                {(isIPhone && !isFullscreen && !isLandscape) && <EpistoFlex2
+                    onClick={() => setIsFullscreen(x => !x)}
+                    top='0'
+                    className='whall'
+                    background='black'
+                    position='absolute'
+                    zIndex='15'
+                    align='center'
+                    justify='center'>
 
-            {(isIPhone && !isFullscreen && screenOrientation !== 90) && <EpistoFlex2
-                onClick={() => setIsFullscreen(x => !x)}
-                width='100vw'
-                h='200px'
-                background='black'
-                align='center'
-                justify='center'>
+                    <PlayArrowIcon
+                        style={iconStyle} />
+                </EpistoFlex2>}
 
-                <PlayArrowIcon
-                    style={iconStyle} />
-            </EpistoFlex2>}
+            </EpistoDiv>
 
-            {(isIPhone && isFullscreen && screenOrientation !== 90) && <ShouldRotatePhoneOverlay setIsFullscreen={setIsFullscreen} />}
+
+            {(isIPhone && isFullscreen && !isLandscape) && <ShouldRotatePhoneOverlay setIsFullscreen={setIsFullscreen} />}
 
             {/* visual overlay */}
             <AbsoluteFlexOverlay isVisible={isVisualOverlayVisible}>
