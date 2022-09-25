@@ -286,6 +286,8 @@ export const VideoPlayer = (props: {
         setShouldBePlaying
     } = videoPlayerState;
 
+    const [isOverwritePlaying, setIsOverwritePlaying] = useState(false);
+
     const iconStyle = { width: '70px', height: '70px', color: 'white' } as CSSProperties;
 
     const fullScreenStyleRootProps = {
@@ -390,7 +392,7 @@ export const VideoPlayer = (props: {
                 <VideoControls
                     isFullscreen={isFullscreen}
                     controlsVisible={controlsVisible}
-                    isPlaying={isPlaying}
+                    isPlaying={isPlaying || isOverwritePlaying}
                     markSeconds={marks}
                     playedSeconds={playedSeconds}
                     videoLength={videoLength}
@@ -406,8 +408,11 @@ export const VideoPlayer = (props: {
 
                 {(isIPhone && !isFullscreen && !isLandscape) && <EpistoFlex2
                     onClick={() => {
-                        toggleShouldBePlaying();
-                        setIsFullscreen(x => !x);
+                        setIsOverwritePlaying(true);
+                        setTimeout(() => {
+                            setIsOverwritePlaying(false);
+                            setIsFullscreen(x => !x);
+                        }, 500);
                     }}
                     top='0'
                     className='whall'
