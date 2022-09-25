@@ -47,8 +47,17 @@ export const useVideoPlayerState = (
     const controlsVisible = (isIPhone && isLandscape) || showControls || !shouldBePlaying || isSeeking;
 
     const isVideoEnded = (videoLength > 0) && (playedSeconds > (videoLength - 0.1));
-    const isPlaying = !isVideoEnded && shouldBePlaying && !isShowingOverlay && !isSeeking || (isIPhone && isLandscape && shouldBePlaying && !isVideoEnded && !isSeeking);
 
+    const isPlaying = isIPhone
+        ? (isIPhone && isLandscape && shouldBePlaying && !isVideoEnded && !isSeeking && !isShowingOverlay)
+        : (!isVideoEnded && shouldBePlaying && !isShowingOverlay && !isSeeking);
+
+    console.log('isPlaying: ' + isPlaying);
+    console.log('isIPhone: ' + isIPhone);
+    console.log('isLandscape: ' + isLandscape);
+    console.log('shouldBePlaying: ' + shouldBePlaying);
+    console.log('isVideoEnded: ' + isVideoEnded);
+    console.log('isSeeking: ' + isSeeking);
 
     const toggleFullScreen = () => {
 
@@ -166,20 +175,20 @@ export const useVideoPlayerState = (
 
     // conflicting with comments, disabled temporarly
     /*    useEventListener('keydown', (e) => {
-   
+     
            if (e.key === ' ' || e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
-   
+     
                e.preventDefault();
-   
+     
                if (isShowingOverlay)
                    return;
-   
+     
                if (e.key === ' ')
                    toggleShouldBePlaying();
-   
+     
                if (e.key === 'ArrowLeft')
                    jump();
-   
+     
                if (e.key === 'ArrowRight')
                    jump(true);
            }
