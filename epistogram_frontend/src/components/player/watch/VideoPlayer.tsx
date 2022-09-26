@@ -108,14 +108,11 @@ export const useVideoPlayerState = (
 
         console.log('handleOnReady runs...');
 
-        if (/* isIPhone && */ !isLandscape) {
+        if (isIPhone && !isLandscape) {
 
-            setTimeout(() => {
-
-                setIsPlaying(false);
-            }, 30);
+            setIsPlaying(false);
         }
-    }, [isLandscape]);
+    }, [isIPhone, isLandscape]);
 
     const toggleFullScreen = () => {
 
