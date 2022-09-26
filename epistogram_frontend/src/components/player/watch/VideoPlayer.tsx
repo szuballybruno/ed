@@ -38,6 +38,7 @@ export const useVideoPlayerState = (
     const [volume, setVolume] = useState(1);
     const [isMuted, setIsMuted] = useState(false);
     const [isFullscreen, setIsFullscreen] = useState(false);
+    const [isPlaying, setIsPlaying] = useState(true);
 
     const isIPhone = browser.isIPhone;
 
@@ -48,16 +49,66 @@ export const useVideoPlayerState = (
 
     const isVideoEnded = (videoLength > 0) && (playedSeconds > (videoLength - 0.1));
 
-    const isPlaying = isIPhone
-        ? (isIPhone && isLandscape && shouldBePlaying && !isVideoEnded && !isSeeking && !isShowingOverlay)
-        : (!isVideoEnded && shouldBePlaying && !isShowingOverlay && !isSeeking);
+    /*  const isPlaying = isIPhone
+         ? (isIPhone && isLandscape && shouldBePlaying && !isVideoEnded && !isSeeking && !isShowingOverlay)
+         : (!isVideoEnded && shouldBePlaying && !isShowingOverlay && !isSeeking); */
+    useEffect(() => {
 
-    /*     console.log('isPlaying: ' + isPlaying);
-        console.log('isIPhone: ' + isIPhone);
-        console.log('isLandscape: ' + isLandscape);
-        console.log('shouldBePlaying: ' + shouldBePlaying);
-        console.log('isVideoEnded: ' + isVideoEnded);
-        console.log('isSeeking: ' + isSeeking); */
+        if (isIPhone && !isLandscape) {
+
+            setTimeout(() => {
+
+                setIsPlaying(false);
+            }, 2000);
+        }
+
+        if (isLandscape && isIPhone) {
+
+            setIsPlaying(true);
+        }
+    }, [isIPhone, isLandscape]);
+
+    useEffect(() => {
+
+        if (isSeeking) {
+
+            setIsPlaying(false);
+        } else {
+
+            setIsPlaying(true);
+        }
+    }, [isSeeking]);
+
+    useEffect(() => {
+
+        if (isVideoEnded) {
+
+            setIsPlaying(false);
+        }
+    }, [isVideoEnded]);
+
+    useEffect(() => {
+
+        if (shouldBePlaying) {
+
+            setIsPlaying(true);
+        } else {
+
+            setIsPlaying(false);
+        }
+    }, [shouldBePlaying]);
+
+    useEffect(() => {
+
+        if (isShowingOverlay) {
+
+            setIsPlaying(false);
+        } else {
+
+            setIsPlaying(true);
+        }
+    }, [isShowingOverlay]);
+
 
     const toggleFullScreen = () => {
 
