@@ -2,7 +2,7 @@ import FastForwardIcon from '@mui/icons-material/FastForward';
 import FastRewindIcon from '@mui/icons-material/FastRewind';
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import React, { CSSProperties, useEffect, useRef, useState } from 'react';
+import React, { CSSProperties, useCallback, useEffect, useRef, useState } from 'react';
 import ReactPlayer from 'react-player';
 import screenfull from 'screenfull';
 import browser from '../../../services/core/browserSniffingService';
@@ -54,17 +54,12 @@ export const useVideoPlayerState = (
          : (!isVideoEnded && shouldBePlaying && !isShowingOverlay && !isSeeking); */
     useEffect(() => {
 
-        if (isIPhone && !isLandscape) {
-
-            setTimeout(() => {
-
-                setIsPlaying(false);
-            }, 2000);
-        }
-
         if (isLandscape && isIPhone) {
 
             setIsPlaying(true);
+        } else {
+
+            setIsPlaying(false);
         }
     }, [isIPhone, isLandscape]);
 
@@ -109,6 +104,18 @@ export const useVideoPlayerState = (
         }
     }, [isShowingOverlay]);
 
+    const onReady = useCallback(() => {
+
+        console.log('Onready runs...');
+
+        if (isIPhone && !isLandscape) {
+
+            setTimeout(() => {
+
+                setIsPlaying(false);
+            }, 200);
+        }
+    }, [isIPhone, isLandscape]);
 
     const toggleFullScreen = () => {
 
@@ -293,7 +300,8 @@ export const useVideoPlayerState = (
         setVolume,
         setIsMuted,
         setIsFullscreen,
-        setShouldBePlaying
+        setShouldBePlaying,
+        onReady
     };
 };
 
@@ -334,7 +342,8 @@ export const VideoPlayer = (props: {
         setVolume,
         setIsMuted,
         setIsFullscreen,
-        setShouldBePlaying
+        setShouldBePlaying,
+        onReady
     } = videoPlayerState;
 
     const iconStyle = { width: '70px', height: '70px', color: 'white' } as CSSProperties;
@@ -422,6 +431,7 @@ export const VideoPlayer = (props: {
                         }}
                         onReady={(e) => {
 
+                            onReady();
                             setVideoLength(e.getDuration());
                         }}
                         config={{
