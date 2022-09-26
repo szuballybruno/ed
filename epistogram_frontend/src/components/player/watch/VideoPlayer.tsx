@@ -104,18 +104,18 @@ export const useVideoPlayerState = (
         }
     }, [isShowingOverlay]);
 
-    const onReady = useCallback(() => {
+    const handleOnReady = useCallback(() => {
 
-        console.log('Onready runs...');
+        console.log('handleOnReady runs...');
 
-        if (isIPhone && !isLandscape) {
+        if (/* isIPhone && */ !isLandscape) {
 
             setTimeout(() => {
 
                 setIsPlaying(false);
-            }, 200);
+            }, 30);
         }
-    }, [isIPhone, isLandscape]);
+    }, [isLandscape]);
 
     const toggleFullScreen = () => {
 
@@ -301,7 +301,7 @@ export const useVideoPlayerState = (
         setIsMuted,
         setIsFullscreen,
         setShouldBePlaying,
-        onReady
+        onReady: handleOnReady
     };
 };
 
