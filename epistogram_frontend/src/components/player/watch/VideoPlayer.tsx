@@ -54,14 +54,14 @@ export const useVideoPlayerState = (
          : (!isVideoEnded && shouldBePlaying && !isShowingOverlay && !isSeeking); */
     useEffect(() => {
 
-        if (isLandscape && isIPhone) {
+        if (isLandscape && isIPhone && isFullscreen) {
 
             setIsPlaying(true);
         } else {
 
             setIsPlaying(false);
         }
-    }, [isIPhone, isLandscape]);
+    }, [isIPhone, isLandscape, isFullscreen]);
 
     useEffect(() => {
 
@@ -338,8 +338,6 @@ export const VideoPlayer = (props: {
         handleOnVideoEnded,
         setVolume,
         setIsMuted,
-        setIsFullscreen,
-        setShouldBePlaying,
         onReady
     } = videoPlayerState;
 
@@ -463,7 +461,7 @@ export const VideoPlayer = (props: {
                     setVolume={setVolume} />
 
                 {(isIPhone && !isFullscreen && !isLandscape) && <EpistoFlex2
-                    onClick={() => { setIsFullscreen(x => !x); }}
+                    onClick={() => { toggleFullScreen(); }}
                     top='0'
                     className='whall'
                     background='black'
@@ -479,7 +477,8 @@ export const VideoPlayer = (props: {
             </EpistoDiv>
 
 
-            {(isIPhone && isFullscreen && !isLandscape) && <ShouldRotatePhoneOverlay setIsFullscreen={setIsFullscreen} />}
+            {(isIPhone && isFullscreen && !isLandscape) && <ShouldRotatePhoneOverlay
+                onExitFullScreen={toggleFullScreen} />}
 
             {/* visual overlay */}
             <AbsoluteFlexOverlay isVisible={isVisualOverlayVisible}>

@@ -1,14 +1,14 @@
 
-import VolumeUpIcon from '@mui/icons-material/VolumeUp';
+import { Fullscreen, Pause, PlayArrow } from '@mui/icons-material';
 import VolumeDownIcon from '@mui/icons-material/VolumeDown';
 import VolumeMuteIcon from '@mui/icons-material/VolumeMute';
 import VolumeOffIcon from '@mui/icons-material/VolumeOff';
-import { Fullscreen, Pause, PlayArrow } from '@mui/icons-material';
+import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import { Slider } from '@mui/material';
-import { secondsToTime } from '../../../static/frontendHelpers';
+import { secondsToTime, useIsMobileView } from '../../../static/frontendHelpers';
 import { EpistoButton } from '../../controls/EpistoButton';
-import { EpistoFont } from '../../controls/EpistoFont';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
+import { EpistoFont } from '../../controls/EpistoFont';
 
 export const VideoControls = (props: {
     isFullscreen: boolean,
@@ -45,6 +45,19 @@ export const VideoControls = (props: {
         setVolume
     } = props;
 
+    const isMobile = useIsMobileView();
+
+    const iconStyle = isMobile
+        ? {
+            height: '30px',
+            width: '30px',
+            maxHeight: '30px',
+            maxWidth: '30px',
+            lineHeight: 0,
+            color: 'white'
+        }
+        : undefined;
+
     return <EpistoFlex2
         background="linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.6814075972185749) 100%)"
         color="white"
@@ -55,33 +68,41 @@ export const VideoControls = (props: {
         zIndex={14}
         bottom={0}
         left={0}
-        px="10px"
+        px={isMobile ? '20px' : '10px'}
         width="100%"
-        height="40px"
+        height={'40px'}
         onMouseEnter={() => showControlOverlay(true)}
         onMouseLeave={() => showControlOverlay()}
         opacity={controlsVisible ? 1 : 0}
         transition="0.15s">
 
         {/* play/pause */}
-        <button
+        <EpistoButton
             onClick={toggleShouldBePlaying}>
 
-            {isPlaying ? <Pause /> : <PlayArrow />}
-        </button>
+            {isPlaying
+                ? <Pause style={iconStyle} />
+                : <PlayArrow style={iconStyle} />}
+        </EpistoButton>
 
         {/* timestamp */}
-        <EpistoFont>
+        <EpistoFont
+            fontSize={isMobile ? 'fontMid' : 'fontSmall'} >
             {`${secondsToTime(playedSeconds)}/${secondsToTime(videoLength)}`}
         </EpistoFont>
 
         {/* slider */}
         <Slider
-            size="small"
+            size={isMobile ? 'medium' : 'small'}
             style={{
                 margin: '0 0px 0 15px',
-                color: 'white'
+                color: 'white',
             }}
+            /*  sx={{
+                 '&.MuiSlider-thumb': {
+                     width: isMobile ? '30px' : undefined
+                 }
+             }} */
             defaultValue={0}
             aria-labelledby="discrete-slider"
             value={playedSeconds}
@@ -108,7 +129,7 @@ export const VideoControls = (props: {
                 margin: '0 15px 0 15px'
             }}
             step={0.05}
-            size="small"
+            size={isMobile ? 'medium' : 'small'}
             defaultValue={1}
             value={volume}
             min={0}
@@ -132,28 +153,41 @@ export const VideoControls = (props: {
             {(() => {
 
                 if (isMuted)
-                    return <VolumeOffIcon className="square25"
-                        style={{ color: 'white' }}></VolumeOffIcon>;
+                    return <VolumeOffIcon
+                        style={{
+                            color: 'white',
+                            ...iconStyle
+                        }} />;
 
                 if (volume > 0.7)
-                    return <VolumeUpIcon className="square25"
-                        style={{ color: 'white' }}></VolumeUpIcon>;
+                    return <VolumeUpIcon
+                        style={{
+                            color: 'white',
+                            ...iconStyle
+                        }} />;
 
                 if (volume <= 0.7 && volume >= 0.3)
-                    return <VolumeDownIcon className="square25"
-                        style={{ color: 'white' }}></VolumeDownIcon>;
+                    return <VolumeDownIcon
+                        style={{
+                            color: 'white',
+                            ...iconStyle
+                        }} />;
 
                 if (volume < 0.3)
-                    return <VolumeMuteIcon className="square25"
-                        style={{ color: 'white' }}></VolumeMuteIcon>;
+                    return <VolumeMuteIcon
+                        style={{
+                            color: 'white',
+                            ...iconStyle
+                        }} />;
             })()}
         </EpistoButton>
 
         {/* Fullscreen */}
-        <button
-            onClick={(e) => toggleFullScreen()}>
+        <EpistoButton
+            onClick={() => toggleFullScreen()}>
 
-            <Fullscreen />
-        </button>
+            <Fullscreen
+                style={iconStyle} />
+        </EpistoButton>
     </EpistoFlex2 >;
 };
