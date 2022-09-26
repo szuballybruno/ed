@@ -49,10 +49,6 @@ export class GivenAnswer {
     @XViewColumn()
     score: number;
 
-    @Column()
-    @XViewColumn()
-    maxScore: number;
-
     //
     // TO ONE
     //

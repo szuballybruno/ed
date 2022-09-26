@@ -24,7 +24,6 @@ export const getGivenAnswerSeedData = (
         creationDate: new Date(Date.now() - (8489 * 60 * 1000)), // current date - 5 days 21 hours 29 minutes,
         elapsedSeconds: 5,
         deletionDate: null,
-        maxScore: 0,
         score: 0
     },
     pretest_excel_given_answer_endre_2: {
@@ -36,7 +35,6 @@ export const getGivenAnswerSeedData = (
         creationDate: new Date(Date.now() - (8489 * 60 * 1000)), // current date - 5 days 21 hours 29 minutes,
         elapsedSeconds: 5,
         deletionDate: null,
-        maxScore: 0,
         score: 0
     },
     pretest_excel_given_answer_endre_3: {
@@ -48,7 +46,6 @@ export const getGivenAnswerSeedData = (
         creationDate: new Date(Date.now() - (8489 * 60 * 1000)), // current date - 5 days 21 hours 29 minutes,
         elapsedSeconds: 5,
         deletionDate: null,
-        maxScore: 0,
         score: 0
     },
     pretest_excel_given_answer_endre_4: {
@@ -60,7 +57,6 @@ export const getGivenAnswerSeedData = (
         creationDate: new Date(Date.now() - (8489 * 60 * 1000)), // current date - 5 days 21 hours 29 minutes,
         elapsedSeconds: 5,
         deletionDate: null,
-        maxScore: 0,
         score: 0
     },
     pretest_excel_given_answer_endre_5: {
@@ -72,7 +68,6 @@ export const getGivenAnswerSeedData = (
         creationDate: new Date(Date.now() - (8489 * 60 * 1000)), // current date - 5 days 21 hours 29 minutes,
         elapsedSeconds: 5,
         deletionDate: null,
-        maxScore: 0,
         score: 0
     }
 });

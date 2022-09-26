@@ -20,6 +20,10 @@ export class QuestionData {
     @XViewColumn()
     questionText: string;
 
+    @Column()
+    @XViewColumn()
+    maxScore: number;
+
     @Column({ type: 'text', nullable: true })
     @XViewColumn()
     imageUrl: string | null;

@@ -8,6 +8,7 @@ import { QuestionEditDataDTO } from '../shared/dtos/QuestionEditDataDTO';
 import { Id } from '../shared/types/versionId';
 import { VersionMigrationContainer } from '../utilities/misc';
 import { MapperService } from './MapperService';
+import { GlobalConfiguration } from './misc/GlobalConfiguration';
 import { XMutatorHelpers } from './misc/XMutatorHelpers';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { VersionSaveService } from './VersionSaveService';
@@ -19,7 +20,8 @@ export class QuestionService {
     constructor(
         private _ormService: ORMConnectionService,
         private _versionSaveService: VersionSaveService,
-        private _mapper: MapperService) {
+        private _mapper: MapperService,
+        private _config: GlobalConfiguration) {
     }
 
     /**
@@ -47,6 +49,7 @@ export class QuestionService {
                 getEntityId: x => x.questionId,
                 getVersionId: x => x.key,
                 getDefaultData: x => ({
+                    maxScore: this._config.questionAnswer.maxQuestionScore,
                     deletionDate: null,
                     imageUrl: null,
                     orderIndex: 0,

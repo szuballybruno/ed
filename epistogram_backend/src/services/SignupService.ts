@@ -118,7 +118,6 @@ export class SignupService {
                 isCorrect,
                 isPractiseAnswer: false,
                 questionVersionId,
-                maxScore: 0,
                 score: 0
             });
 

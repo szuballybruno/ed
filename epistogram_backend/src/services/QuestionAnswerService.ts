@@ -233,7 +233,6 @@ export class QuestionAnswerService {
                     elapsedSeconds: givenAnswerDTO.elapsedSeconds,
                     givenAnswerStreakId: null,
                     score: score,
-                    maxScore: maxQuestionScore,
                     isCorrect: maxQuestionScore === score
                 });
             });
