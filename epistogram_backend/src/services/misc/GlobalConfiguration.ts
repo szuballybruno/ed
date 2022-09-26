@@ -97,6 +97,10 @@ export class GlobalConfiguration {
         incorrectPractiseQuestionDelayMinutes: 5
     };
 
+    questionAnswer = {
+        maxQuestionScore: 4,
+    };
+
     coinRewardAmounts = {
         questionCorrectAnswer: 1,
         videoWatched: 1,

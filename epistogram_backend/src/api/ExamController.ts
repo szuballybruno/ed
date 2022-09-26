@@ -1,5 +1,5 @@
 import { ExamService } from '../services/ExamService';
-import { AnswerQuestionDTO } from '../shared/dtos/AnswerQuestionDTO';
+import { AnswerQuestionsDTO } from '../shared/dtos/AnswerQuestionsDTO';
 import { apiRoutes } from '../shared/types/apiRoutes';
 import { Id } from '../shared/types/versionId';
 import { ServiceProvider } from '../startup/servicesDI';
@@ -20,11 +20,11 @@ export class ExamController implements XController<ExamController> {
     answerExamQuestionAction(params: ActionParams) {
 
         const questionAnswerDTO = params
-            .getBody<AnswerQuestionDTO>()
+            .getBody<AnswerQuestionsDTO>()
             .data;
 
         return this._examService
-            .answerExamQuestionAsync(params.principalId, questionAnswerDTO);
+            .answerExamQuestionsAsync(params.principalId, questionAnswerDTO);
     }
 
     @XControllerAction(apiRoutes.exam.startExam, { isPost: true })

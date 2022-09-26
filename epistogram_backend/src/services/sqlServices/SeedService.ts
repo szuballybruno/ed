@@ -52,8 +52,19 @@ export class SeedService {
                 continue;
             }
 
-            const { script, values } = this.parseSeedList(classType, seedObj as any);
-            await this._sqlConnectionService.executeSQLAsync(script, values);
+            const { script, values } = this
+                .parseSeedList(classType, seedObj as any);
+
+            try {
+
+                await this
+                    ._sqlConnectionService
+                    .executeSQLAsync(script, values);
+            }
+            catch (e: any) {
+
+                throw new Error(`Error while running seed script for ${classType.name}. Msg: ${e.message}`);
+            }
         }
 
         // recalc seqs

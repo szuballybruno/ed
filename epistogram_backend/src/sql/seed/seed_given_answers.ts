@@ -23,7 +23,8 @@ export const getGivenAnswerSeedData = (
         givenAnswerStreakId: givenAnswerStreaks.pretest_excel_given_answer_streak_marosiEndre.id,
         creationDate: new Date(Date.now() - (8489 * 60 * 1000)), // current date - 5 days 21 hours 29 minutes,
         elapsedSeconds: 5,
-        deletionDate: null
+        deletionDate: null,
+        score: 0
     },
     pretest_excel_given_answer_endre_2: {
         questionVersionId: questionsVersions.question_version_pretest_excel_2.id,
@@ -33,7 +34,8 @@ export const getGivenAnswerSeedData = (
         givenAnswerStreakId: givenAnswerStreaks.pretest_excel_given_answer_streak_marosiEndre.id,
         creationDate: new Date(Date.now() - (8489 * 60 * 1000)), // current date - 5 days 21 hours 29 minutes,
         elapsedSeconds: 5,
-        deletionDate: null
+        deletionDate: null,
+        score: 0
     },
     pretest_excel_given_answer_endre_3: {
         questionVersionId: questionsVersions.question_version_pretest_excel_3.id,
@@ -43,7 +45,8 @@ export const getGivenAnswerSeedData = (
         givenAnswerStreakId: givenAnswerStreaks.pretest_excel_given_answer_streak_marosiEndre.id,
         creationDate: new Date(Date.now() - (8489 * 60 * 1000)), // current date - 5 days 21 hours 29 minutes,
         elapsedSeconds: 5,
-        deletionDate: null
+        deletionDate: null,
+        score: 0
     },
     pretest_excel_given_answer_endre_4: {
         questionVersionId: questionsVersions.question_version_pretest_excel_4.id,
@@ -53,7 +56,8 @@ export const getGivenAnswerSeedData = (
         givenAnswerStreakId: givenAnswerStreaks.pretest_excel_given_answer_streak_marosiEndre.id,
         creationDate: new Date(Date.now() - (8489 * 60 * 1000)), // current date - 5 days 21 hours 29 minutes,
         elapsedSeconds: 5,
-        deletionDate: null
+        deletionDate: null,
+        score: 0
     },
     pretest_excel_given_answer_endre_5: {
         questionVersionId: questionsVersions.question_version_pretest_excel_5.id,
@@ -63,7 +67,8 @@ export const getGivenAnswerSeedData = (
         givenAnswerStreakId: givenAnswerStreaks.pretest_excel_given_answer_streak_marosiEndre.id,
         creationDate: new Date(Date.now() - (8489 * 60 * 1000)), // current date - 5 days 21 hours 29 minutes,
         elapsedSeconds: 5,
-        deletionDate: null
+        deletionDate: null,
+        score: 0
     }
 });
 

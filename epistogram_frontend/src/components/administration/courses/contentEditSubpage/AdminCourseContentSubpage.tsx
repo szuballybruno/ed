@@ -85,6 +85,9 @@ export const AdminCourseContentSubpage = () => {
     const modules = moduleEditDialogLogic
         .mutatedItems;
 
+    const nonPretestModules = modules
+        .filter(x => !x.isPretestModule);
+
     // preprocess items 
     const gridRowItems = useMemo(() => {
 
@@ -202,8 +205,8 @@ export const AdminCourseContentSubpage = () => {
      */
     const handleAddRow = (type: 'video' | 'exam') => {
 
-        const moduleVersionId = modules
-            .first(x => !x.isPretestModule)
+        const moduleVersionId = nonPretestModules
+            .first(x => true)
             .moduleVersionId;
 
         const foundModule = itemsMutatorState
@@ -356,6 +359,7 @@ export const AdminCourseContentSubpage = () => {
                 {/* add buttons popper */}
                 <AddNewItemPopper
                     isOpen={isAddButtonsPopperOpen}
+                    hasModules={nonPretestModules.any()}
                     targetElement={ref?.current}
                     onAddItem={handleAddRow}
                     onClose={closeAddPopper} />

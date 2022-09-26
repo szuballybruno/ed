@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { PlayerApiService } from '../../../services/api/PPlayerApiService';
+import { PlayerApiService } from '../../../services/api/PlayerApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { setPageTitle, useIsMobileView } from '../../../static/frontendHelpers';
 import { useStringParam } from '../../../static/locationHelpers';
@@ -72,8 +72,6 @@ export const WatchSubpage = () => {
             return;
 
         const position = parentElement.scrollTop;
-
-        Logger.log('Parentelement' + parentElement.getBoundingClientRect());
 
         setIsScrolledFromTop(position > 50);
     };

@@ -159,8 +159,9 @@ export class VersionSaveService {
                 };
             });
 
-        const dataIds = await this._ormService
-            .createManyAsync(dataSignature, newDatas.map(x => x.newData));
+        const dataIds = (await this._ormService
+            .createManyAsync(dataSignature, newDatas.map(x => x.newData)))
+            .map(x => x.id);
 
         //
         // CREATE ENTITES (FROM ADD MUTATIONS ONLY)
@@ -168,8 +169,9 @@ export class VersionSaveService {
             .filter(x => x.action === 'add')
             .map(getNewEntity);
 
-        const newEntityIds = await this._ormService
-            .createManyAsync(entitySignature, newEntities);
+        const newEntityIds = (await this._ormService
+            .createManyAsync(entitySignature, newEntities))
+            .map(x => x.id);
 
         //
         // CREATE VERSIONS 
@@ -216,8 +218,9 @@ export class VersionSaveService {
                 });
             });
 
-        const newVersionIds = await this._ormService
-            .createManyAsync(versionSignature, newVersions);
+        const newVersionIds = (await this._ormService
+            .createManyAsync(versionSignature, newVersions))
+            .map(x => x.id);
 
         const aggregated = saveActions
             .map((saveAction, index) => {
@@ -370,10 +373,10 @@ export class VersionSaveService {
     private _getOldVersionIds<
         TMutation extends Mutation<any, any>,
         TVersion extends EntityType,
-        >(
-            mutations: TMutation[],
-            oldVersions: EntityType[],
-            getVersionId: (mut: TMutation) => TVersion['id']) {
+    >(
+        mutations: TMutation[],
+        oldVersions: EntityType[],
+        getVersionId: (mut: TMutation) => TVersion['id']) {
 
         const addMutationOldVersionIds = mutations
             .filter(x => x.action === 'add')

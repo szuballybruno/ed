@@ -32,8 +32,6 @@ export const ExamResultStats = ({ stats }: { stats: ExamStatsDTO | null }) => {
         return 'Átlagos';
     })();
 
-    console.log('rendering');
-
     return <EpistoGrid
         width="100%"
         minColumnWidth={'280px'}

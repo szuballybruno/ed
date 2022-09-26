@@ -17,7 +17,6 @@ export const PractiseQuestions = (props: {
 
     const {
         practiseQuestion,
-        practiseQuestionError,
         practiseQuestionState,
         refetchPractiseQuestion
     } = usePractiseQuestion();
@@ -25,20 +24,32 @@ export const PractiseQuestions = (props: {
     const {
         answerQuestionAsync,
         answerResults,
-        answerQuestionError,
         answerQuestionState,
         clearAnswerResults
     } = useAnswerPractiseQuestion();
 
     const handleAnswerQuestionAsync = async (answerVersionId: Id<'AnswerVersion'>[]) => {
 
-        await answerQuestionAsync(answerVersionId, practiseQuestion!.questionVersionId);
+        if (!practiseQuestion)
+            return;
+
+        await answerQuestionAsync({
+            answerSessionId: -1 as any, // ignore, not used,
+            givenAnswer: {
+                answerVersionIds: answerVersionId,
+                elapsedSeconds: 0,
+                questionVersionId: practiseQuestion.questionVersionId
+            }
+        });
     };
 
     useEffect(() => {
         setCoinsAcquired(!!answerResults?.coinAcquires?.normal?.amount);
     }, [answerResults?.coinAcquires]);
 
+    /**
+     * Go to next question
+     */
     const handleNextQuestion = () => {
 
         clearAnswerResults();
@@ -106,12 +117,10 @@ export const PractiseQuestions = (props: {
 
                 <QuesitionView
                     answerQuesitonAsync={handleAnswerQuestionAsync}
-                    correctAnswerVersionIds={answerResults?.correctAnswerVersionIds ?? []}
-                    loadingProps={{ loadingState: answerQuestionState, error: answerQuestionError }}
+                    loadingProps={{ loadingState: answerQuestionState }}
                     question={practiseQuestion}
                     onlyShowAnswers={isAnswered}
-                    coinsAcquired={answerResults?.coinAcquires?.normal?.amount ?? null}
-                    bonusCoinsAcquired={answerResults?.coinAcquires?.bonus ?? null} />
+                    answerResult={answerResults} />
 
                 <EpistoFlex2
                     justifyContent="center"

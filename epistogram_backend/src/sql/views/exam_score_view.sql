@@ -6,7 +6,8 @@ flat_cte AS
 		ev.id exam_version_id,
 		ase.id answer_session_id,
 		qv.id question_version_id,
-		gasv.score,
+		ga.score,
+        qd.max_score question_max_score,
 		ed.title
 	FROM public.exam_version ev
 	
@@ -18,11 +19,13 @@ flat_cte AS
 	
 	LEFT JOIN public.question_version qv
 	ON qv.exam_version_id = ev.id
+	
+	LEFT JOIN public.question_data qd
+	ON qd.id = qv.question_data_id
 
-	LEFT JOIN public.given_answer_score_view gasv
-	ON gasv.question_version_id = qv.id
-	AND gasv.user_id = ase.user_id
-	AND gasv.answer_session_id = ase.id
+	LEFT JOIN public.given_answer ga
+	ON ga.question_version_id = qv.id
+	AND ga.answer_session_id = ase.id
 	
 	ORDER BY
 		ase.user_id,
@@ -38,17 +41,14 @@ grouped_cte AS
 		flat.answer_session_id,
 		COUNT(*)::int question_count,
 		COALESCE(SUM(flat.score), 0)::int exam_score,
-		(COUNT(*) * consts.question_max_score)::int exam_max_score,
+		COALESCE(SUM(flat.question_max_score), 0)::int exam_max_score,
 		COALESCE(SUM(CASE WHEN flat.score IS NOT NULL THEN 1 ELSE 0 END), 0)::int answered_question_count
 	FROM flat_cte flat
-
-	CROSS JOIN public.constant_values_view consts
 
 	GROUP BY 
 		flat.exam_version_id,
 		flat.answer_session_id,
-		flat.user_id,
-		consts.question_max_score
+		flat.user_id
 	
 	ORDER BY
 		flat.user_id,

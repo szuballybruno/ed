@@ -25,7 +25,8 @@ export type EpistoButtonPropsType = {
     isDisabled?: boolean,
     buttonProps?: ButtonProps,
     name?: string
-    type?: 'button' | 'submit' | 'reset' | undefined
+    type?: 'button' | 'submit' | 'reset' | undefined,
+    tooltip?: string
 } & CSSOptionsType;
 
 export const EpistoButton = forwardRef<HTMLButtonElement, EpistoButtonPropsType>((props: EpistoButtonPropsType, ref) => {
@@ -46,6 +47,7 @@ export const EpistoButton = forwardRef<HTMLButtonElement, EpistoButtonPropsType>
         type,
         sx,
         onClickNoPropagation,
+        tooltip,
         ...cssOptions
     } = props;
 
@@ -68,6 +70,7 @@ export const EpistoButton = forwardRef<HTMLButtonElement, EpistoButtonPropsType>
     };
 
     return <Button
+        title={tooltip}
         onClick={(e) => {
 
             if (onClick)
@@ -107,7 +110,11 @@ export const EpistoButton = forwardRef<HTMLButtonElement, EpistoButtonPropsType>
             padding: padding ? padding : undefined,
             fontSize: fontSize ? fontSize : undefined,
             borderColor: 'var(--mildGrey)',
-            pointerEvents: isDisabled ? 'none' : undefined,
+            pointerEvents: tooltip
+                ? 'all'
+                : isDisabled
+                    ? 'none'
+                    : undefined,
             ...style
         }}
         {...buttonProps}>

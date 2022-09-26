@@ -2,13 +2,13 @@ import { VideoPlaybackSampleDTO } from '../../shared/dtos/playback/VideoPlayback
 import { VideoSeekEventDTO } from '../../shared/dtos/playback/VideoSeekEventDTO';
 import { VideoSamplingResultDTO } from '../../shared/dtos/VideoSamplingResultDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
-import { usePostData } from '../core/httpClient';
+import { usePostDataUnsafe } from '../core/httpClient';
 
 export const PlaybackApiService = {
 
     usePostVideoPlaybackSample: () => {
 
-        const qr = usePostData<VideoPlaybackSampleDTO, VideoSamplingResultDTO>(apiRoutes.playback.saveVideoPlaybackSample);
+        const qr = usePostDataUnsafe<VideoPlaybackSampleDTO, VideoSamplingResultDTO>(apiRoutes.playback.saveVideoPlaybackSample);
 
         return {
             postVideoPlaybackSample: qr.postDataAsync,
@@ -18,7 +18,7 @@ export const PlaybackApiService = {
 
     usePostVideoSeekEvent: () => {
 
-        const qr = usePostData<VideoSeekEventDTO, VideoSamplingResultDTO>(apiRoutes.playback.saveVideoSeekEvent);
+        const qr = usePostDataUnsafe<VideoSeekEventDTO, VideoSamplingResultDTO>(apiRoutes.playback.saveVideoSeekEvent);
 
         return {
             postVideoSeekEvent: qr.postDataAsync

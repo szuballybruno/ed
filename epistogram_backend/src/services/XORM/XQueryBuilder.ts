@@ -74,6 +74,8 @@ class SelectBuilder<TResult> {
     }
 }
 
+type XQueryBuilderAsApplyQuery<T extends XQueryBuilder<any, any, any>> = Pick<T, 'getMany' | 'getSingle'>;
+
 export class XQueryBuilder<TEntity, TParams extends ParamConstraintType<TParams>, TResult = TEntity> {
 
     private _connection: XQueryBuilderCore<TEntity, TParams>;
@@ -133,7 +135,8 @@ export class XQueryBuilder<TEntity, TParams extends ParamConstraintType<TParams>
         return this;
     }
 
-    where(keyA: keyof TEntity, op: OperationType, keyB: keyof TParams | SQLStaticValueType) {
+    where(keyA: keyof TEntity, op: OperationType, keyB: keyof TParams | SQLStaticValueType)
+        : Pick<typeof this, 'getMany' | 'getSingle' | 'getOneOrNull' | 'or' | 'and' | 'openBracket' | 'orderBy'> {
 
         this._expression
             .push(new CheckExpression<TEntity, TParams>({

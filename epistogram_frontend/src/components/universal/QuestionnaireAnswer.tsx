@@ -2,15 +2,22 @@ import { ReactNode } from 'react';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoDiv, EpistoDivProps } from '../controls/EpistoDiv';
 
-export const QuestionnaierAnswer = (props: {
+export const QuestionnaierAnswer = ({
+    children,
+    onClick,
+    isSelected,
+    isIncorrect,
+    isCorrect,
+    disabled,
+    ...css
+}: {
     children: ReactNode,
     onClick: () => void,
     isSelected: boolean,
     isIncorrect: boolean,
-    isCorrect: boolean
+    isCorrect: boolean,
+    disabled?: boolean
 } & EpistoDivProps) => {
-
-    const { children, onClick, isSelected, isIncorrect, isCorrect, ...css } = props;
 
     const colors = (() => {
 
@@ -35,9 +42,10 @@ export const QuestionnaierAnswer = (props: {
             variant="outlined"
             onClick={() => onClick()}
             style={{
+                pointerEvents: disabled ? 'none' : 'all',
                 background: colors.bg,
                 color: colors.fg,
-                border: colors.border ? `2px solid ${colors.border}` : undefined
+                border: colors.border ? `2px solid ${colors.border}` : undefined,
             }}>
             {children}
         </EpistoButton>

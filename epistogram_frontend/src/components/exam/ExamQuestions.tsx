@@ -1,23 +1,31 @@
-import {Grid} from '@chakra-ui/layout';
-import {useState} from 'react';
-import {useSaveExamAnswer} from '../../services/api/examApiService';
-import {useShowErrorDialog} from '../../services/core/notifications';
-import {ExamPlayerDataDTO} from '../../shared/dtos/ExamPlayerDataDTO';
-import {Id} from '../../shared/types/versionId';
-import {Environment} from '../../static/Environemnt';
-import {epochDates, usePaging} from '../../static/frontendHelpers';
-import {translatableTexts} from '../../static/translatableTexts';
-import {EpistoFont} from '../controls/EpistoFont';
-import {LoadingFrame} from '../system/LoadingFrame';
-import {useEpistoDialogLogic} from '../universal/epistoDialog/EpistoDialogLogic';
-import {ExamAbortDialog} from './ExamAbortDialog';
-import {ExamLayout} from './ExamLayout';
-import {ExamLayoutContent} from './ExamLayoutContent';
-import {QuestionAnswer} from './QuestionAnswer';
-import {Logger} from '../../static/Logger';
-import {EpistoFlex2} from '../controls/EpistoFlex';
+import { Grid } from '@chakra-ui/layout';
+import { useState } from 'react';
+import { ExamApiService } from '../../services/api/examApiService';
+import { useShowErrorDialog } from '../../services/core/notifications';
+import { AnswerDTO } from '../../shared/dtos/AnswerDTO';
+import { ExamPlayerDataDTO } from '../../shared/dtos/ExamPlayerDataDTO';
+import { GivenAnswerDTO } from '../../shared/dtos/questionAnswer/GivenAnswerDTO';
+import { Id } from '../../shared/types/versionId';
+import { Environment } from '../../static/Environemnt';
+import { epochDates, usePaging } from '../../static/frontendHelpers';
+import { translatableTexts } from '../../static/translatableTexts';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { EpistoFont } from '../controls/EpistoFont';
+import { LoadingFrame } from '../system/LoadingFrame';
+import { useEpistoDialogLogic } from '../universal/epistoDialog/EpistoDialogLogic';
+import { ExamAbortDialog } from './ExamAbortDialog';
+import { ExamLayout } from './ExamLayout';
+import { ExamLayoutContent } from './ExamLayoutContent';
+import { QuestionAnswer } from './QuestionAnswer';
 
-export const ExamQuestions = (props: {
+export const ExamQuestions = ({
+    answerSessionId,
+    onExamFinished,
+    handleAbortExam,
+    exam: { questions, title: examTitle },
+    hideLoading,
+    isExamInProgress
+}: {
     exam: ExamPlayerDataDTO,
     answerSessionId: Id<'AnswerSession'>,
     onExamFinished: () => void,
@@ -27,183 +35,136 @@ export const ExamQuestions = (props: {
 
 }) => {
 
-    const {
-        answerSessionId,
-        onExamFinished,
-        handleAbortExam,
-        exam,
-        hideLoading,
-        isExamInProgress
-    } = props;
-
-    const {
-        questions
-    } = exam;
-
+    // paging
     const questionPaging = usePaging({
         items: questions,
         onNextOverNavigation: onExamFinished
     });
 
-    const [completedQuestionVersionIds, setCompletedQuestionVersionIds] = useState<Id<'QuestionVersion'>[]>([]);
-
+    // dialogs 
     const showError = useShowErrorDialog();
-    const { saveExamAnswer, saveExamAnswerState } = useSaveExamAnswer();
-    const currentQuestion = questionPaging.currentItem!;
-
-    const [selectedAnswers, setSelectedAnswers] = useState<{
-        answerVersionId: Id<'AnswerVersion'>,
-        questionVersionId: Id<'QuestionVersion'>
-    }[]>([]);
-
-    const hasSelectedAnswer = selectedAnswers.length > 0;
-    const [showUpTime, setShowUpTime] = useState<Date>(new Date());
     const abortDialog = useEpistoDialogLogic(ExamAbortDialog);
-    const isLastQuestion = questionPaging.currentIndex === questions.length - 1;
 
-    const removeCompletedQuestion = (questionVersionId: Id<'QuestionVersion'>) => {
+    // http
+    const { saveExamAnswers, saveExamAnswersState } = ExamApiService
+        .useSaveExamAnswers();
 
-        setCompletedQuestionVersionIds(current => current
-            .filter(x => x !== questionVersionId));
-    };
+    // state 
+    const [showUpTime, setShowUpTime] = useState<Date>(new Date());
+    const [givenAnswers, setGivenAnswers] = useState<{ [K: string]: GivenAnswerDTO }>({});
 
-    const addCompletedQuestion = (questionVersionId: Id<'QuestionVersion'>) => {
+    // calc 
+    const currentQuestion = questionPaging.currentItem!;
+    const isLastQuestion = questionPaging.isLast;
 
-        setCompletedQuestionVersionIds([...completedQuestionVersionIds, questionVersionId]);
-    };
+    const currentGivenAnswer = (givenAnswers[currentQuestion.questionVersionId + ''] ?? null) as GivenAnswerDTO | null;
 
+    /**
+     * Open abort dialog 
+     */
     const handleOpenAbortDialog = () => {
 
         abortDialog.openDialog();
     };
 
     /**
-     * Answers a question.
-     * Saves the answer to client side state,
-     * and also sends it to the server.
-     * TODO: This is a known bug, should be fixed.
+     * Handle go to prev question
      */
-    const handleAnswerQuestionAsync = async () => {
+    const handleGoToPreviousQuestion = () => {
+
+        questionPaging.previous();
+    };
+
+    /**
+     * Handle finish exam
+     */
+    const handleFinishExam = async () => {
 
         try {
-
-            // get elapsed time
-            const timeElapsed = epochDates(new Date(), showUpTime);
-
-            const questionVersionId = currentQuestion
-                .questionVersionId;
-
-            const isAnsweredPreviously = completedQuestionVersionIds
-                .any(questionVersionId);
-
-            const selectedAnswerVersionIds = selectedAnswers
-                .map(x => x.answerVersionId);
-
-            const currentQuestionAnswerVersionIds = currentQuestion.answers
-                .map(x => x.answerVersionId);
-
-            const anyAnswersSelected = selectedAnswerVersionIds
-                .some(x => currentQuestionAnswerVersionIds
-                    .includes(x));
-
-            Logger.logScoped('EXAM', 'anyAnswersSelected: ' + anyAnswersSelected);
-
-            // TODO this will definitely cause bugs in the future
-            // answered questions state should come from the server
-            // selected any answers
-            if (anyAnswersSelected && !isAnsweredPreviously) {
-
-                addCompletedQuestion(questionVersionId);
-
-                // Important, that it only sends the answers for the current question!
-                await saveExamAnswer({
-                    answerSessionId: answerSessionId,
-                    answerVersionIds: selectedAnswers
-                        .filter(x => x.questionVersionId === questionVersionId)
-                        .map(x => x.answerVersionId),
-                    questionVersionId,
-                    elapsedSeconds: timeElapsed
-                });
-            } else if (anyAnswersSelected && isAnsweredPreviously) {
-
-                await saveExamAnswer({
-                    answerSessionId: answerSessionId,
-                    answerVersionIds: selectedAnswers
-                        .filter(x => x.questionVersionId === questionVersionId)
-                        .map(x => x.answerVersionId),
-                    questionVersionId,
-                    elapsedSeconds: timeElapsed
-                });
-            }
-
-            // no answers are selected
-            else {
-
-                removeCompletedQuestion(questionVersionId);
-            }
+            await saveExamAnswers({
+                answerSessionId: answerSessionId,
+                givenAnswers: Object
+                    .values(givenAnswers)
+            });
+            onExamFinished();
         }
         catch (e) {
 
             showError(e);
         }
-        finally {
-
-            // clear show up time
-            setShowUpTime(new Date());
-        }
     };
 
-    const handleBack = () => {
-
-        questionPaging.previous();
-    };
-
+    /**
+     * Handle go to next question 
+     */
     const handleNextAsync = async () => {
 
         if (!isExamInProgress)
             return;
-
-        await handleAnswerQuestionAsync();
 
         isLastQuestion
             ? handleOpenAbortDialog()
             : questionPaging.next();
     };
 
+    /**
+     * Handle abort
+     */
     const handleAbortAsync = async () => {
 
         if (!isExamInProgress)
             return;
 
-        await handleAnswerQuestionAsync();
         handleOpenAbortDialog();
     };
 
-    const handleSelectCurrent = <T extends string>(id: Id<T>) => {
+    /**
+     * Sets the selected state for a specific answer 
+     */
+    const handleSetAnswerSelectedState = (answer: AnswerDTO, isSelected: boolean) => {
 
-        const itemIndex = questions.findIndex(x => x.questionVersionId === id);
-        questionPaging.setItem(itemIndex);
-    };
+        const currentSelectedAnswers = currentGivenAnswer?.answerVersionIds ?? [];
 
-    const setAnswerSelectedState = (
-        answerVersionId: Id<'AnswerVersion'>,
-        questionVersionId: Id<'QuestionVersion'>,
-        isSelected: boolean
-    ) => {
+        const newSelectedAnswerIds = isSelected
+            ? [...currentSelectedAnswers.filter(x => x !== answer.answerVersionId), answer.answerVersionId]
+            : currentSelectedAnswers.filter(x => x !== answer.answerVersionId);
 
-        if (isSelected) {
+        const elapsedSeconds = epochDates(new Date(), showUpTime);
 
-            setSelectedAnswers([...selectedAnswers, { answerVersionId, questionVersionId }]);
+        const newGivenAnswers = { ...givenAnswers };
+
+        // set given answer 
+        if (newSelectedAnswerIds.length > 0) {
+
+            newGivenAnswers[currentQuestion.questionVersionId + ''] = {
+                answerVersionIds: newSelectedAnswerIds,
+                elapsedSeconds,
+                questionVersionId: currentQuestion.questionVersionId
+            };
         }
+
+        // delete given answer
         else {
 
-            setSelectedAnswers(selectedAnswers
-                .filter(x => x.answerVersionId !== answerVersionId));
+            delete newGivenAnswers[currentQuestion.questionVersionId + ''];
         }
+
+        setGivenAnswers(newGivenAnswers);
+    };
+
+    /**
+     * Gets the is selected state for a specific answer  
+     */
+    const getAnswerIsSelectedState = (answer: AnswerDTO) => {
+
+        return currentGivenAnswer
+            ? currentGivenAnswer
+                .answerVersionIds
+                .some(answerVersionId => answerVersionId === answer.answerVersionId)
+            : false;
     };
 
     return <LoadingFrame
-        loadingState={hideLoading ? undefined : saveExamAnswerState}
         flex="1"
         direction={'column'}
         alignItems={'center'}
@@ -212,9 +173,9 @@ export const ExamQuestions = (props: {
         {/* abort dialog */}
         <ExamAbortDialog
             dialogLogic={abortDialog}
-            answeredQuestionsCount={completedQuestionVersionIds.length}
+            answeredQuestionsCount={Object.keys(givenAnswers).length}
             handleAbortExam={handleAbortExam}
-            handleExamFinished={onExamFinished}
+            handleExamFinished={handleFinishExam}
             questions={questions} />
 
         <ExamLayout
@@ -231,20 +192,18 @@ export const ExamQuestions = (props: {
                     </EpistoFont>
                 </EpistoFlex2>
             )}
-            stepperLogic={{
-                ids: questions.map(x => x.questionVersionId),
-                currentId: currentQuestion.questionVersionId,
-                completedIds: completedQuestionVersionIds,
-                selectCurrentHandler: handleSelectCurrent
+            stepperParams={{
+                getIsCompleted: question => !!givenAnswers[question.questionVersionId + ''],
+                logic: questionPaging
             }}
-            headerCenterText={exam.title}
+            headerCenterText={examTitle}
             headerButtons={[
                 {
                     title: 'Vizsga befejezése',
                     action: handleAbortAsync
                 }
             ]}
-            handleBack={handleBack}
+            handleBack={handleGoToPreviousQuestion}
             footerButtons={[
                 {
                     title: isLastQuestion
@@ -277,15 +236,12 @@ export const ExamQuestions = (props: {
                             .answers
                             .map((answer, index) => {
 
-                                const isAnswerSelected = selectedAnswers
-                                    .some(x => x.answerVersionId === answer.answerVersionId);
-
                                 return <QuestionAnswer
                                     key={index}
                                     minWidth={400}
-                                    onClick={(isSelected) => setAnswerSelectedState(answer.answerVersionId, currentQuestion.questionVersionId, isSelected)}
+                                    onClick={isSelected => handleSetAnswerSelectedState(answer, isSelected)}
                                     answerText={answer.answerText}
-                                    isSelected={isAnswerSelected} />;
+                                    isSelected={getAnswerIsSelectedState(answer)} />;
                             })}
                     </Grid>
                 </EpistoFlex2>

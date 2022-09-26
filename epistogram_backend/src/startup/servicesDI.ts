@@ -1,3 +1,4 @@
+import { AnswerService } from '../services/AnswerService';
 import { CourseCompletionService } from '../services/CourseCompletionService';
 import { CourseProgressService } from '../services/CourseProgressService';
 import { DomainProviderService } from '../services/DomainProviderService';
@@ -148,7 +149,7 @@ export const getTransientServiceContainer = (singletonProvider: ServiceProvider)
         .addClass(EmailService, [GlobalConfiguration, UrlService, DomainProviderService])
         .addClass(VersionSaveService, [ORMConnectionService, LoggerService])
         .addClass(SignupService, [EmailService, SQLFunctionsService, ORMConnectionService, MapperService, AuthorizationService, QuestionAnswerService])
-        .addClass(QuestionAnswerService, [ORMConnectionService, SQLFunctionsService, CoinAcquireService, VersionSaveService, LoggerService])
+        .addClass(QuestionAnswerService, [ORMConnectionService, CoinAcquireService, LoggerService, GlobalConfiguration])
         .addClass(TeacherInfoService, [ORMConnectionService, MapperService, AuthorizationService])
         .addClass(RoleService, [ORMConnectionService, MapperService, AuthorizationService])
         .addClass(UserService, [ORMConnectionService, MapperService, TeacherInfoService, HashService, RoleService, AuthorizationService, UserCourseBridgeService])
@@ -157,8 +158,9 @@ export const getTransientServiceContainer = (singletonProvider: ServiceProvider)
         .addClass(PasswordChangeService, [UserService, TokenService, EmailService, UrlService, ORMConnectionService, GlobalConfiguration, HashService, AuthorizationService, DomainProviderService])
         .addClass(SeedService, [XDBMSchemaService, GlobalConfiguration, SQLConnectionService, LoggerService])
         .addClass(RecreateDBService, [CreateDBService, SeedService, XDBMSchemaService, SQLConnectionService, LoggerService])
-        .addClass(QuestionService, [ORMConnectionService, VersionSaveService, MapperService])
-        .addClass(CourseItemService, [ORMConnectionService, MapperService, QuestionService, VersionSaveService, QuestionAnswerService, AuthorizationService])
+        .addClass(QuestionService, [ORMConnectionService, VersionSaveService, MapperService, GlobalConfiguration])
+        .addClass(AnswerService, [VersionSaveService, LoggerService])
+        .addClass(CourseItemService, [ORMConnectionService, MapperService, QuestionService, VersionSaveService, AnswerService, AuthorizationService])
         .addClass(UserCourseBridgeService, [ORMConnectionService, MapperService, AuthorizationService, LoggerService, PermissionService])
         .addClass(CourseCompletionService, [MapperService, ORMConnectionService])
         .addClass(ExamService, [UserCourseBridgeService, ORMConnectionService, UserSessionActivityService, QuestionAnswerService, QuestionService, MapperService, AuthorizationService, LoggerService, CourseCompletionService])

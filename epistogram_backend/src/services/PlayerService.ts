@@ -45,79 +45,70 @@ export class PlayerService {
     /**
      * Gets the player data 
      */
-    getPlayerDataAsync(
+    async getPlayerDataAsync(
         principalId: PrincipalId,
         requestedItemCode: string) {
 
-        return {
-            action: async () => {
+        const userId = principalId.getId();
 
-                const userId = principalId.getId();
+        // validate request
+        const { courseId, validItemCode } = await this
+            ._validatePlayerDataRequest(principalId, requestedItemCode);
 
-                // validate request
-                const { courseId, validItemCode } = await this
-                    ._validatePlayerDataRequest(principalId, requestedItemCode);
+        // set current course 
+        await this._userCourseBridgeService
+            .setCurrentCourse(userId, courseId, 'watch', validItemCode);
 
-                // set current course 
-                await this._userCourseBridgeService
-                    .setCurrentCourse(userId, courseId, 'watch', validItemCode);
+        // course items list
+        const modules = await this
+            ._playlistService
+            .getPlaylistModulesAsync(userId, courseId);
 
-                // course items list
-                const modules = await this
-                    ._playlistService
-                    .getPlaylistModulesAsync(userId, courseId);
+        // get course item dto
+        const { itemId, itemType } = readItemCode(validItemCode);
 
-                // get course item dto
-                const { itemId, itemType } = readItemCode(validItemCode);
+        const videoPlayerDTO = itemType === 'video' ? await this
+            ._getVideoPlayerDataDTOAsync(userId, itemId as Id<'Video'>) : null;
 
-                const videoPlayerDTO = itemType === 'video' ? await this
-                    ._getVideoPlayerDataDTOAsync(userId, itemId as Id<'Video'>) : null;
+        const examPlayerDTO = itemType === 'exam' ? await this._examService
+            .getExamPlayerDTOAsync(userId, itemId as Id<'Exam'>) : null;
 
-                const examPlayerDTO = itemType === 'exam' ? await this._examService
-                    .getExamPlayerDTOAsync(userId, itemId as Id<'Exam'>) : null;
+        const modulePlayerDTO = itemType === 'module' ? await this._moduleService
+            .getModuleDetailedDTOAsync(itemId as Id<'Module'>) : null;
 
-                const modulePlayerDTO = itemType === 'module' ? await this._moduleService
-                    .getModuleDetailedDTOAsync(itemId as Id<'Module'>) : null;
+        const userCourseBridge = await this._userCourseBridgeService
+            .getUserCourseBridgeOrFailAsync(userId, courseId);
+        //
+        // get new answer session
+        const answerSessionId = itemType === 'module'
+            ? null
+            : await this._questionAnswerService
+                .createAnswerSessionAsync(userId, examPlayerDTO?.examVersionId ?? null, videoPlayerDTO?.videoVersionId ?? null);
 
-                const userCourseBridge = await this._userCourseBridgeService
-                    .getUserCourseBridgeOrFailAsync(userId, courseId);
-                //
-                // get new answer session
-                const answerSessionId = itemType === 'module'
-                    ? null
-                    : await this._questionAnswerService
-                        .createAnswerSessionAsync(userId, examPlayerDTO?.examVersionId ?? null, videoPlayerDTO?.videoVersionId ?? null);
+        //
+        // get next item 
+        const { nextPlaylistItemCode, nextItemState } = this._getNextPlaylistItem(modules, validItemCode);
 
-                //
-                // get next item 
-                const { nextPlaylistItemCode, nextItemState } = this._getNextPlaylistItem(modules, validItemCode);
+        /**
+         * Get SET_COURSE_MODE permission
+         */
+        const hasPermission = await this
+            ._permissionService
+            .getPermissionAsync(userId, 'SET_COURSE_MODE', { courseId });
 
-                /**
-                 * Get SET_COURSE_MODE permission
-                 */
-                const hasPermission = await this
-                    ._permissionService
-                    .getPermissionAsync(userId, 'SET_COURSE_MODE', { courseId });
-
-                return instantiate<PlayerDataDTO>({
-                    videoPlayerData: videoPlayerDTO,
-                    examPlayerData: examPlayerDTO,
-                    modulePlayerData: modulePlayerDTO,
-                    answerSessionId: answerSessionId,
-                    courseMode: userCourseBridge.courseMode,
-                    courseId: courseId,
-                    currentPlaylistItemCode: requestedItemCode,
-                    modules: modules,
-                    nextPlaylistItemCode,
-                    nextPlaylistItemState: nextItemState,
-                    canChangeMode: !!hasPermission
-                });
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
-            }
-        };
+        return instantiate<PlayerDataDTO>({
+            videoPlayerData: videoPlayerDTO,
+            examPlayerData: examPlayerDTO,
+            modulePlayerData: modulePlayerDTO,
+            answerSessionId: answerSessionId,
+            courseMode: userCourseBridge.courseMode,
+            courseId: courseId,
+            currentPlaylistItemCode: requestedItemCode,
+            modules: modules,
+            nextPlaylistItemCode,
+            nextPlaylistItemState: nextItemState,
+            canChangeMode: !!hasPermission
+        });
     }
 
     //

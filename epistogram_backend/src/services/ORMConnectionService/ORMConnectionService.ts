@@ -3,7 +3,7 @@ import { InsertEntity } from '../../utilities/misc';
 import { ClassType } from '../misc/advancedTypes/ClassType';
 import { GlobalConfiguration } from '../misc/GlobalConfiguration';
 import { SQLConnectionService } from '../sqlServices/SQLConnectionService';
-import { ParamConstraintType, SaveEntityType } from '../XORM/XORMTypes';
+import { EntityType, ParamConstraintType, SaveEntityType } from '../XORM/XORMTypes';
 import { XQueryBuilder } from '../XORM/XQueryBuilder';
 import { XQueryBuilderCore } from '../XORM/XQueryBuilderCore';
 
@@ -96,13 +96,18 @@ export class ORMConnectionService {
     /**
      * Create many entites
      */
-    async createManyAsync<TEntity>(signature: ClassType<TEntity>, ent: InsertEntity<TEntity>[]) {
+    async createManyAsync<TEntity extends EntityType>(signature: ClassType<TEntity>, entities: InsertEntity<TEntity>[]): Promise<TEntity[]> {
 
         const core = new XQueryBuilderCore(this._sqlConnectionService, this._loggingEnabled);
 
-        const ids = await core.insertManyAsync(signature, ent);
+        const ids = await core
+            .insertManyAsync(signature, entities);
 
-        return ids;
+        return entities
+            .map((x, index) => ({
+                ...(x as TEntity),
+                id: ids[index]
+            }));
     }
 
     /**

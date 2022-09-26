@@ -1,39 +1,35 @@
-import React, {useEffect, useState} from 'react';
-import {showNotification} from '../services/core/notifications';
-import {CoinAcquireResultDTO} from '../shared/dtos/CoinAcquireResultDTO';
-import {QuestionDTO} from '../shared/dtos/QuestionDTO';
-import {Id} from '../shared/types/versionId';
-import {Environment} from '../static/Environemnt';
+import { useEffect, useState } from 'react';
+import { showNotification } from '../services/core/notifications';
+import { AnswerResultDTO } from '../shared/dtos/AnswerResultDTO';
+import { QuestionDTO } from '../shared/dtos/QuestionDTO';
+import { Id } from '../shared/types/versionId';
+import { Environment } from '../static/Environemnt';
 import { EpistoFlex2, EpistoFlex2Props } from './controls/EpistoFlex';
-import {EpistoFont} from './controls/EpistoFont';
-import {LoadingFramePropsType} from './system/LoadingFrame';
-import {QuestionnaierAnswer} from './universal/QuestionnaireAnswer';
-import {QuestionnaireLayout} from './universal/QuestionnaireLayout';
+import { EpistoFont } from './controls/EpistoFont';
+import { LoadingFramePropsType } from './system/LoadingFrame';
+import { QuestionnaierAnswer } from './universal/QuestionnaireAnswer';
+import { QuestionnaireLayout } from './universal/QuestionnaireLayout';
 
-export const QuesitionView = (props: {
+export const QuesitionView = ({
+    answerQuesitonAsync,
+    question,
+    loadingProps,
+    onlyShowAnswers,
+    answerResult,
+    ...css
+}: {
     answerQuesitonAsync: (answerVersionId: Id<'AnswerVersion'>[]) => Promise<void>,
-    correctAnswerVersionIds: Id<'AnswerVersion'>[],
     question: QuestionDTO,
     loadingProps: LoadingFramePropsType,
     onlyShowAnswers?: boolean,
-    coinsAcquired: number | null,
-    showCoinsAcquired?: boolean,
-    bonusCoinsAcquired: CoinAcquireResultDTO | null
+    answerResult: AnswerResultDTO | null
 } & EpistoFlex2Props) => {
 
-    const {
-        answerQuesitonAsync,
-        correctAnswerVersionIds,
-        question,
-        loadingProps,
-        onlyShowAnswers,
-        coinsAcquired,
-        showCoinsAcquired,
-        bonusCoinsAcquired,
-        ...css
-    } = props;
-
-    const isAnswered = correctAnswerVersionIds.length > 0;
+    const isAnswered = !!answerResult;
+    const bonusCoinsAcquireData = answerResult?.coinAcquires?.bonus ?? null;
+    const correctAnswerVersionIds = answerResult?.correctAnswerVersionIds ?? [];
+    const coinsAcquired = answerResult?.coinAcquires?.normal ?? null;
+    const showCoinsAcquired = true;
 
     const [selectedAnswerVersionId, setSelectedAnswerVersionId] = useState<Id<'AnswerVersion'> | null>(null);
 
@@ -47,18 +43,18 @@ export const QuesitionView = (props: {
     useEffect(() => {
 
         setSelectedAnswerVersionId(null);
-    }, [question.questionVersionId]);
+    }, [question]);
 
     // bonus coin
     useEffect(() => {
 
-        if (!bonusCoinsAcquired)
+        if (!bonusCoinsAcquireData)
             return;
 
-        const streakLength = bonusCoinsAcquired.reason === 'answer_streak_5' ? 5 : 10;
+        const streakLength = bonusCoinsAcquireData.reason === 'answer_streak_5' ? 5 : 10;
 
         showNotification(
-            `Sikeresen megszereztél ${bonusCoinsAcquired.amount} bónusz EpistoCoin-t ${streakLength} egymást követő helyes válaszért!`,
+            `Sikeresen megszereztél ${bonusCoinsAcquireData.amount} bónusz EpistoCoin-t ${streakLength} egymást követő helyes válaszért!`,
             {
                 type: 'warning',
                 options: {
@@ -69,7 +65,7 @@ export const QuesitionView = (props: {
                         src={Environment.getAssetUrl('images/epistoCoin.png')} />
                 }
             });
-    }, [bonusCoinsAcquired]);
+    }, [bonusCoinsAcquireData]);
 
     return <QuestionnaireLayout
         contentClickable={!isAnswered}
@@ -89,6 +85,7 @@ export const QuesitionView = (props: {
 
                 return <QuestionnaierAnswer
                     key={index}
+                    disabled={isAnswered}
                     isCorrect={isCorrect}
                     isIncorrect={isIncorrect}
                     isSelected={isSelected}

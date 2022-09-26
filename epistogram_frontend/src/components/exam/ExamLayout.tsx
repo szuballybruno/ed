@@ -1,89 +1,84 @@
-import {ArrowBack} from '@mui/icons-material';
-import {ReactNode} from 'react';
-import {isString} from '../../static/frontendHelpers';
-import {EpistoButton} from '../controls/EpistoButton';
-import {EpistoFlex2, EpistoFlex2Props} from '../controls/EpistoFlex';
-import {EpistoFont} from '../controls/EpistoFont';
-import {EpistoStepper, StepperLogicType} from '../universal/EpistoStepper';
+import { ArrowBack } from '@mui/icons-material';
+import { ReactNode } from 'react';
+import { QuestionDTO } from '../../shared/dtos/QuestionDTO';
+import { isString } from '../../static/frontendHelpers';
+import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
+import { EpistoFont } from '../controls/EpistoFont';
+import { EpistoStepper, StepperParamsType } from '../universal/EpistoStepper';
 
-type ExamLayoutButtonProps = {
+type ExamLayoutButtonType = {
     title: string,
     action: () => void,
     icon?: any,
     iconPosition?: 'start' | 'end'
 };
 
-export const ExamLayout = (props: {
+const ExamLayoutButton = (args: ExamLayoutButtonType) => {
+
+    const {
+        title,
+        action,
+        icon,
+        iconPosition
+    } = args;
+
+    return <EpistoButton
+        variant={'colored'}
+        onClick={action}
+        style={{
+            height: '40px',
+            marginLeft: '10px'
+        }}>
+        {iconPosition === 'start' && icon}
+        {title}
+        {iconPosition === 'end' && icon}
+    </EpistoButton>;
+};
+
+const HeaderButtons = ({ buttons }: { buttons: ExamLayoutButtonType[] }) => {
+    return <EpistoFlex2>
+        {buttons
+            .map((x, i) => <ExamLayoutButton
+                key={i}
+                {...x} />)}
+    </EpistoFlex2>;
+};
+
+const FooterButtons = ({ buttons }: { buttons: ExamLayoutButtonType[] }) => {
+
+    return <EpistoFlex2>
+        {buttons
+            .map((x, i) => <ExamLayoutButton
+                key={i}
+                {...x} />)}
+    </EpistoFlex2>;
+};
+
+export const ExamLayout = ({
+    headerButtons,
+    footerButtons,
+    headerCenterText,
+    headerLeftItem,
+    children,
+    handleBack,
+    isHeightMaximized,
+    showFooterButtonsOnTop,
+    stepperParams,
+    isFirst,
+    ...css
+}: {
     children: ReactNode,
     headerLeftItem?: string | ReactNode,
     headerCenterText?: string,
     isHeightMaximized?: boolean,
-    stepperLogic?: StepperLogicType<'QuestionVersion'>,
+    stepperParams?: StepperParamsType<QuestionDTO>,
     handleBack?: () => void,
     showFooterButtonsOnTop?: boolean,
-    footerButtons?: (ExamLayoutButtonProps)[],
-    headerButtons?: (ExamLayoutButtonProps)[],
+    footerButtons?: (ExamLayoutButtonType)[],
+    headerButtons?: (ExamLayoutButtonType)[],
     isFirst?: boolean
 } & EpistoFlex2Props) => {
-
-    const {
-        headerButtons,
-        footerButtons,
-        headerCenterText,
-        headerLeftItem,
-        children,
-        handleBack,
-        isHeightMaximized,
-        showFooterButtonsOnTop,
-        stepperLogic,
-        isFirst,
-        ...css
-    } = props;
-
-    const ExamLayoutButton = (args: ExamLayoutButtonProps) => {
-
-        const {
-            title,
-            action,
-            icon,
-            iconPosition
-        } = args;
-
-        return <EpistoButton
-            variant={'colored'}
-            onClick={action}
-            style={{
-                height: '40px',
-                marginLeft: '10px'
-            }}>
-            {iconPosition === 'start' && icon}
-            {title}
-            {iconPosition === 'end' && icon}
-        </EpistoButton>;
-    };
-
-    const HeaderButtons = () => {
-        return <EpistoFlex2>
-
-            {/* other buttons */}
-            {headerButtons && headerButtons
-                .map((x, i) => <ExamLayoutButton
-                    key={i}
-                    {...x} />)}
-        </EpistoFlex2>;
-    };
-
-    const FooterButtons = () => {
-
-        return <EpistoFlex2>
-
-            {/* other buttons */}
-            {footerButtons && footerButtons
-                .map((x, i) => <ExamLayoutButton
-                    key={i}
-                    {...x} />)}
-        </EpistoFlex2>;
-    };
 
     return <EpistoFlex2
         id='ExamLayout-root'
@@ -111,6 +106,7 @@ export const ExamLayout = (props: {
             minH='60px'
             pl='20px'>
 
+            {/* header left */}
             <EpistoFlex2 minWidth="200">
 
                 {headerLeftItem && (
@@ -126,6 +122,7 @@ export const ExamLayout = (props: {
                 )}
             </EpistoFlex2>
 
+            {/* header center */}
             <EpistoFlex2
                 flex="1"
                 align="center"
@@ -136,13 +133,18 @@ export const ExamLayout = (props: {
                 </EpistoFont>
             </EpistoFlex2>
 
+            {/* header buttons right */}
             <EpistoFlex2 minWidth="200"
                 justify="flex-end"
                 pr='10px'>
 
-                {headerButtons && <HeaderButtons />}
+                {/* render header buttons  */}
+                {headerButtons && <HeaderButtons
+                    buttons={headerButtons} />}
 
-                {(showFooterButtonsOnTop && !headerButtons) && <FooterButtons />}
+                {/* render footer buttons in the header section  */}
+                {(showFooterButtonsOnTop && !headerButtons && footerButtons) && <FooterButtons
+                    buttons={footerButtons} />}
             </EpistoFlex2>
 
         </EpistoFlex2>
@@ -188,11 +190,13 @@ export const ExamLayout = (props: {
                 justify='center'
                 alignItems={'center'}>
 
-                {stepperLogic && <EpistoStepper stepperLogic={stepperLogic} />}
+                {stepperParams && <EpistoStepper {...stepperParams} />}
 
             </EpistoFlex2>
 
-            <FooterButtons />
+            {/* render footer buttons */}
+            {footerButtons && <FooterButtons
+                buttons={footerButtons} />}
         </EpistoFlex2>
     </EpistoFlex2>;
 };

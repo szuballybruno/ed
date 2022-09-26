@@ -2,29 +2,17 @@ import { AnswerQuestionDTO } from '../../shared/dtos/AnswerQuestionDTO';
 import { AnswerResultDTO } from '../../shared/dtos/AnswerResultDTO';
 import { QuestionDTO } from '../../shared/dtos/QuestionDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
-import { Id } from '../../shared/types/versionId';
 import { QueryService } from '../../static/QueryService';
-import { usePostData } from '../core/httpClient';
+import { usePostDataUnsafe } from '../core/httpClient';
 
 export const useAnswerPractiseQuestion = () => {
 
-    const postDataQuery = usePostData<AnswerQuestionDTO, AnswerResultDTO>(apiRoutes.questions.answerPractiseQuestion);
-
-    const answerQuestionAsync = (answerVersionIds: Id<'AnswerVersion'>[], questionVersionId: Id<'QuestionVersion'>) => {
-
-        const dto = {
-            answerVersionIds,
-            questionVersionId
-        } as AnswerQuestionDTO;
-
-        return postDataQuery.postDataAsync(dto);
-    };
+    const postDataQuery = usePostDataUnsafe<AnswerQuestionDTO, AnswerResultDTO>(apiRoutes.questions.answerPractiseQuestion);
 
     return {
         answerResults: postDataQuery.result,
-        answerQuestionError: postDataQuery.error,
         answerQuestionState: postDataQuery.state,
-        answerQuestionAsync,
+        answerQuestionAsync: postDataQuery.postDataAsync,
         clearAnswerResults: postDataQuery.clearCache
     };
 };

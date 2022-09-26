@@ -37,7 +37,6 @@ export const PlaylistItem = (
 
         if (state === 'current') {
 
-            console.log('Current item in the moment before initiating scroll function: ' + title);
             scroll();
         }
 

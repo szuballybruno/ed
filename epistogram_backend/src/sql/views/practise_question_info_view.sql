@@ -2,24 +2,26 @@ WITH
 latest_given_answer_cte AS
 (
     SELECT
-        asv.user_id,
+        ase.user_id,
         ga.question_version_id,
-        asv.answer_session_type,
         MAX(ga.id) latest_id,
         COUNT(*)::int answer_count,
         SUM(CASE WHEN ga.is_practise_answer THEN 1 ELSE 0 END)::int practise_answer_count
     FROM given_answer ga
 
-    LEFT JOIN public.answer_session_view asv
-    ON asv.answer_session_id = ga.answer_session_id
+    LEFT JOIN public.answer_session ase
+    ON ase.id = ga.answer_session_id
+        
+    INNER JOIN public.question_version qv
+    ON qv.id = ga.question_version_id
+    AND qv.video_version_id IS NOT NULL
 
     GROUP BY
         ga.question_version_id,
-        asv.answer_session_type,
-        asv.user_id
+        ase.user_id
 
     ORDER BY
-        asv.user_id
+        ase.user_id
 )
 SELECT
     lgac.user_id,
@@ -41,7 +43,5 @@ ON ase.id = latest_ga.answer_session_id
 
 INNER JOIN public.question_version qv
 ON qv.id = latest_ga.question_version_id
-
-WHERE lgac.answer_session_type = 'video'
 
 

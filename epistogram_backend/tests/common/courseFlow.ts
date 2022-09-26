@@ -4,7 +4,7 @@ import { PrequizController } from '../../src/api/PrequizController';
 import { PretestController } from '../../src/api/PretestController';
 import { Video } from '../../src/models/entity/video/Video';
 import { getItemCode } from '../../src/services/misc/encodeService';
-import { AnswerQuestionDTO } from '../../src/shared/dtos/AnswerQuestionDTO';
+import { AnswerQuestionsDTO } from '../../src/shared/dtos/AnswerQuestionsDTO';
 import { PlayerDataDTO } from '../../src/shared/dtos/PlayerDataDTO';
 import { instantiate } from '../../src/shared/logic/sharedLogic';
 import { PlaylistItemCode } from '../../src/shared/types/PlaylistItemCode';
@@ -155,7 +155,7 @@ export const answerExamQuestion = async (
     return testParams
         .api
         .callEndpoint(ExamController, 'answerExamQuestionAction', {
-            body: instantiate<AnswerQuestionDTO>({
+            body: instantiate<AnswerQuestionsDTO>({
                 answerVersionIds: answerVersionIds,
                 answerSessionId: answerSessionId,
                 elapsedSeconds: 13.831,

@@ -6,10 +6,10 @@ SELECT
 	ase.id answer_session_id,
 	ed.is_final is_final_exam,
 	qd.question_text question_text,
-	COALESCE(gasv.score, 0) question_score,
+	COALESCE(ga.score, 0) question_score,
 	CASE 
-		WHEN gasv.score = 0 OR gasv.score IS NULL THEN 'INCORRECT' 
-		WHEN gasv.score = consts.question_max_score THEN 'CORRECT'
+		WHEN ga.score = 0 OR ga.score IS NULL THEN 'INCORRECT' 
+		WHEN ga.score = consts.question_max_score THEN 'CORRECT'
 		ELSE 'MIXED'
 	END given_answer_state,
 	consts.question_max_score::int question_max_score,
@@ -69,11 +69,6 @@ ON ad.id = av.answer_data_id
 LEFT JOIN public.answer_given_answer_bridge agab
 ON agab.given_answer_id = ga.id
 AND agab.answer_version_id = av.id
-
-LEFT JOIN public.given_answer_score_view gasv
-ON gasv.user_id = u.id 
-AND gasv.question_version_id = qv.id 
-AND gasv.answer_session_id = ase.id
 
 CROSS JOIN public.constant_values_view consts
 
