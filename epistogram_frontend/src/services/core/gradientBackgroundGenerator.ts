@@ -62,10 +62,6 @@ export const gradientBackgroundGenerator = (color?: string, options?: GridGradie
     const defaultCenterColor = color && plainColorValue ? plainColorValue[1] : '0,100,255';
     const defaultBackgroundColor = color && plainColorValue ? `rgba(${plainColorValue[1]}, 0.1)` : 'rgba(0, 100, 255, 0.1)';
 
-    console.log('DefaultCenterColor: ' + defaultCenterColor);
-    console.log('DefaultBackgroundColor: ' + defaultBackgroundColor);
-
-
     const getGradientOptionsOrDefault = (
         optionKey: keyof GridGradientOptions,
         offsetX: string,

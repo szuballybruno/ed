@@ -67,8 +67,6 @@ export const QuesitionView = ({
             });
     }, [bonusCoinsAcquireData]);
 
-    console.log(correctAnswerVersionIds);
-
     return <QuestionnaireLayout
         contentClickable={!isAnswered}
         title={question.questionText}

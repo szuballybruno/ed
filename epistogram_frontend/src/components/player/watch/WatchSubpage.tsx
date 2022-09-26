@@ -73,8 +73,6 @@ export const WatchSubpage = () => {
 
         const position = parentElement.scrollTop;
 
-        Logger.log('Parentelement' + parentElement.getBoundingClientRect());
-
         setIsScrolledFromTop(position > 50);
     };
 
