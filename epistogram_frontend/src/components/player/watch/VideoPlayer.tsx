@@ -13,6 +13,7 @@ import { EpistoDiv, EpistoDivProps } from '../../controls/EpistoDiv';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoReactPlayer } from '../../controls/EpistoReactPlayer';
 import { AbsoluteFlexOverlay } from './AbsoluteFlexOverlay';
+import { PlayerDebugInfo } from './PlayerDebugInfo';
 import { ShouldRotatePhoneOverlay } from './ShouldRotatePhoneOverlay';
 import { VideoControls } from './VideoControls';
 type VisualOverlayType = 'counter' | 'pause' | 'start' | 'seekRight' | 'seekLeft';
@@ -61,7 +62,17 @@ export const useVideoPlayerState = (
 
             setIsPlaying(false);
         }
-    }, [isMobile, isLandscape, isFullscreen]);
+    }, [isMobile, isLandscape]);
+
+    useEffect(() => {
+
+        if (isLandscape && !isFullscreen) {
+
+            setIsFullscreen(true);
+            setIsPlaying(false);
+            setShouldBePlaying(false);
+        }
+    }, [isLandscape]);
 
     useEffect(() => {
 
@@ -236,7 +247,7 @@ export const useVideoPlayerState = (
     // effect
     //
 
-    // conflicting with comments, disabled temporarly
+    // TODO: conflicting with comments, disabled temporarly
     /*    useEventListener('keydown', (e) => {
      
            if (e.key === ' ' || e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
@@ -385,6 +396,8 @@ export const VideoPlayer = (props: {
             }
             {...css}>
 
+            <PlayerDebugInfo videoPlayerState={videoPlayerState} />
+
             {(isMobile && isFullscreen && !isLandscape) && <ShouldRotatePhoneOverlay
                 onExitFullScreen={toggleFullScreen} />}
 
@@ -394,6 +407,7 @@ export const VideoPlayer = (props: {
                 filter={isShowingOverlay ? 'blur(4px)' : 'blur(0px)'}
                 transition="0.3s"
                 position="relative"
+                zIndex={12}
                 className="whall">
 
                 {/* video wrapper */}
@@ -479,16 +493,13 @@ export const VideoPlayer = (props: {
                     position='absolute'
                     align='center'
                     justify='center'
-                    zIndex={8}>
+                    zIndex={15}>
 
                     <PlayArrowIcon
                         style={iconStyle} />
                 </EpistoFlex2>}
 
             </EpistoDiv>
-
-
-
 
             {/* visual overlay */}
             <AbsoluteFlexOverlay isVisible={isVisualOverlayVisible}>

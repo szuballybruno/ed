@@ -67,7 +67,7 @@ export const VideoControls = (props: {
         justify="flex-start"
         align="center"
         position="absolute"
-        zIndex={14}
+        zIndex={5}
         bottom={0}
         left={0}
         px={isMobile ? '20px' : '10px'}
@@ -181,11 +181,11 @@ export const VideoControls = (props: {
         </EpistoButton>
 
         {/* Fullscreen */}
-        <EpistoButton
+        {!isMobile && <EpistoButton
             onClick={() => toggleFullScreen()}>
 
             <Fullscreen
                 style={iconStyle} />
-        </EpistoButton>
+        </EpistoButton>}
     </EpistoFlex2 >;
 };
