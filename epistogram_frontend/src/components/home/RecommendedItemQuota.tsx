@@ -1,6 +1,6 @@
 import { LinearProgress } from '@mui/material';
 import { Environment } from '../../static/Environemnt';
-import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 
 
@@ -9,9 +9,9 @@ export const RecommendedItemQuota = (props: {
     recommendedItemCount: number,
     isDeadlineSet?: boolean,
     isDaily?: boolean
-}) => {
+} & EpistoFlex2Props) => {
 
-    const { isDaily, completedCount, recommendedItemCount, isDeadlineSet } = props;
+    const { isDaily, completedCount, recommendedItemCount, isDeadlineSet, ...css } = props;
 
     const label = isDaily
         ? 'Napi ajánlott videók'
@@ -21,7 +21,8 @@ export const RecommendedItemQuota = (props: {
         <EpistoFlex2
             flex='1'
             mb="10px"
-            direction="column">
+            direction="column"
+            {...css}>
 
             <EpistoFlex2
                 direction={isDeadlineSet ? 'row' : 'column'}

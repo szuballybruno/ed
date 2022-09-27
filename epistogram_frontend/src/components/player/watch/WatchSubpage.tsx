@@ -218,11 +218,11 @@ export const WatchSubpage = () => {
                         </EpistoDiv>
 
                         {/* right sidebar */}
-                        <EpistoFlex2
+                        {!isMobile && <EpistoFlex2
                             id="courseItemListSidebar"
                             justify="flex-start"
                             zIndex="4"
-                            ml={!isShowSidebar ? '0' : '10px'}
+                            ml={!isShowSidebar || isMobile ? '0' : '10px'}
                             bg="var(--transparentWhite70)"
                             maxWidth={!isShowSidebar ? '0px' : '420px'}
                             opacity={!isShowSidebar ? 0 : 1}
@@ -247,7 +247,7 @@ export const WatchSubpage = () => {
                                     isPlayerLoaded={isPlayerLoaded}
                                     refetchPlayerData={refetchPlayerData} />
                             </EpistoFlex2>}
-                        </EpistoFlex2>
+                        </EpistoFlex2>}
                     </EpistoFlex2>
                 </LoadingFrame>
             </>

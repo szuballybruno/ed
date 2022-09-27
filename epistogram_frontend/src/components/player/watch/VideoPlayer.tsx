@@ -8,7 +8,7 @@ import screenfull from 'screenfull';
 import browser from '../../../services/core/browserSniffingService';
 import { readVolumeSettings, writeVolumeSettings } from '../../../services/core/storageService';
 import { VideoPlayerDataDTO } from '../../../shared/dtos/VideoDTO';
-import { useScreenOrientation } from '../../../static/frontendHelpers';
+import { useIsMobileView, useScreenOrientation } from '../../../static/frontendHelpers';
 import { EpistoDiv, EpistoDivProps } from '../../controls/EpistoDiv';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoReactPlayer } from '../../controls/EpistoReactPlayer';
@@ -41,29 +41,31 @@ export const useVideoPlayerState = (
     const [isPlaying, setIsPlaying] = useState(true);
 
     const isIPhone = browser.isIPhone;
+    const isMobile = useIsMobileView();
 
     const screenOrientation = useScreenOrientation();
     const isLandscape = screenOrientation === 90;
 
-    const controlsVisible = (isIPhone && isLandscape) || showControls || !shouldBePlaying || isSeeking;
+    const controlsVisible = (isMobile && isLandscape) || showControls || !shouldBePlaying || isSeeking;
 
     const isVideoEnded = (videoLength > 0) && (playedSeconds > (videoLength - 0.1));
 
-    /*  const isPlaying = isIPhone
-         ? (isIPhone && isLandscape && shouldBePlaying && !isVideoEnded && !isSeeking && !isShowingOverlay)
-         : (!isVideoEnded && shouldBePlaying && !isShowingOverlay && !isSeeking); */
     useEffect(() => {
 
-        if (isLandscape && isIPhone && isFullscreen) {
+        console.log('Triggering isIphone, isLandscape, isFullscreen...');
+
+        if (isLandscape && isMobile && isFullscreen) {
 
             setIsPlaying(true);
         } else {
 
             setIsPlaying(false);
         }
-    }, [isIPhone, isLandscape, isFullscreen]);
+    }, [isMobile, isLandscape, isFullscreen]);
 
     useEffect(() => {
+
+        console.log('Triggering isSeeking...');
 
         if (isSeeking) {
 
@@ -76,6 +78,8 @@ export const useVideoPlayerState = (
 
     useEffect(() => {
 
+        console.log('Triggering isVideoEnded...');
+
         if (isVideoEnded) {
 
             setIsPlaying(false);
@@ -83,6 +87,8 @@ export const useVideoPlayerState = (
     }, [isVideoEnded]);
 
     useEffect(() => {
+
+        console.log('Triggering shouldBePlaying...');
 
         if (shouldBePlaying) {
 
@@ -94,6 +100,8 @@ export const useVideoPlayerState = (
     }, [shouldBePlaying]);
 
     useEffect(() => {
+
+        console.log('Triggering isShowingOverlay...');
 
         if (isShowingOverlay) {
 
@@ -108,15 +116,15 @@ export const useVideoPlayerState = (
 
         console.log('handleOnReady runs...');
 
-        if (isIPhone && !isLandscape) {
+        if (isMobile && !isLandscape) {
 
             setIsPlaying(false);
         }
-    }, [isIPhone, isLandscape]);
+    }, [isMobile, isLandscape]);
 
     const toggleFullScreen = () => {
 
-        if (browser.isIPhone) {
+        if (isMobile) {
 
             document.body.style.overflow === 'hidden'
                 ? document.body.style.overflow = ''
@@ -343,6 +351,8 @@ export const VideoPlayer = (props: {
 
     const iconStyle = { width: '70px', height: '70px', color: 'white' } as CSSProperties;
 
+    const isMobile = useIsMobileView();
+
     const fullScreenStyleRootProps = {
         bottom: 0,
         display: 'block',
@@ -460,7 +470,7 @@ export const VideoPlayer = (props: {
                     toggleShouldBePlaying={toggleShouldBePlaying}
                     setVolume={setVolume} />
 
-                {(isIPhone && !isFullscreen && !isLandscape) && <EpistoFlex2
+                {(isMobile && !isFullscreen && !isLandscape) && <EpistoFlex2
                     onClick={() => { toggleFullScreen(); }}
                     top='0'
                     className='whall'
@@ -477,7 +487,7 @@ export const VideoPlayer = (props: {
             </EpistoDiv>
 
 
-            {(isIPhone && isFullscreen && !isLandscape) && <ShouldRotatePhoneOverlay
+            {(isMobile && isFullscreen && !isLandscape) && <ShouldRotatePhoneOverlay
                 onExitFullScreen={toggleFullScreen} />}
 
             {/* visual overlay */}

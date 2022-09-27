@@ -56,7 +56,9 @@ export const VideoControls = (props: {
             lineHeight: 0,
             color: 'white'
         }
-        : undefined;
+        : {
+            color: 'white'
+        };
 
     return <EpistoFlex2
         background="linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.6814075972185749) 100%)"
@@ -155,28 +157,24 @@ export const VideoControls = (props: {
                 if (isMuted)
                     return <VolumeOffIcon
                         style={{
-                            color: 'white',
                             ...iconStyle
                         }} />;
 
                 if (volume > 0.7)
                     return <VolumeUpIcon
                         style={{
-                            color: 'white',
                             ...iconStyle
                         }} />;
 
                 if (volume <= 0.7 && volume >= 0.3)
                     return <VolumeDownIcon
                         style={{
-                            color: 'white',
                             ...iconStyle
                         }} />;
 
                 if (volume < 0.3)
                     return <VolumeMuteIcon
                         style={{
-                            color: 'white',
                             ...iconStyle
                         }} />;
             })()}
