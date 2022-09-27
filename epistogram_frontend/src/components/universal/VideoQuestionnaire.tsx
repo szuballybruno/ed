@@ -63,7 +63,6 @@ export const VideoQuestionnaire = (props: {
     }, [isShowing]);
 
     return <EpistoFlex2
-        zIndex='6'
         direction="column">
 
         <QuesitionView

@@ -247,14 +247,13 @@ export const WatchView = (props: {
         <EpistoFlex2
             direction='column'
             zIndex={12}
-            // position={isMobile ? 'sticky' : undefined}
-            // top={isMobile ? '0' : undefined}
+            position={isMobile ? 'sticky' : undefined}
+            top={isMobile ? '0' : undefined}
             align="center">
 
             <VideoPlayer
                 //height="calc((var(--playerWidth) - 420px) / 1.80)"
                 className="largeSoftShadow"
-                zIndex={12}
                 videoItem={videoPlayerData}
                 videoPlayerState={videoPlayerState}>
 
@@ -290,11 +289,13 @@ export const WatchView = (props: {
 
                 {/* questionnaire */}
                 <AbsoluteFlexOverlay
+                    zIndex={17}
                     isVisible={isQuestionVisible}
                     hasPointerEvents={true}>
 
                     <OverlayDialog
                         showCloseButton={false}>
+
                         <VideoQuestionnaire
                             answerSessionId={answerSessionId}
                             question={currentQuestion!}
@@ -312,6 +313,7 @@ export const WatchView = (props: {
 
                 {/* still watching */}
                 <AbsoluteFlexOverlay
+                    zIndex={17}
                     isVisible={!!currentStillWatchingMarker}
                     hasPointerEvents={true}>
                     <OverlayDialog showCloseButton={false}>

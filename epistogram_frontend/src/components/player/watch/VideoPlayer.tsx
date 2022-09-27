@@ -135,18 +135,25 @@ export const useVideoPlayerState = (
 
     const toggleFullScreen = () => {
 
-        if (isMobile) {
+        if (isMobile && isIPhone) {
 
             document.body.style.overflow === 'hidden'
                 ? document.body.style.overflow = ''
                 : document.body.style.overflow = 'hidden';
 
             setIsFullscreen(x => !x);
-        } else {
+
+        }
+        if (isMobile && !isIPhone) {
 
             //@ts-ignore
             screenfull.toggle(playerContainerRef.current);
-            //setIsFullscreen(x => !x);
+            setIsFullscreen(x => !x);
+        }
+
+        if (!isMobile && !isIPhone) {
+            //@ts-ignore
+            screenfull.toggle(playerContainerRef.current);
         }
 
     };
@@ -398,6 +405,20 @@ export const VideoPlayer = (props: {
 
             <PlayerDebugInfo videoPlayerState={videoPlayerState} />
 
+            {(isMobile && !isFullscreen && !isLandscape) && <EpistoFlex2
+                onClick={() => { toggleFullScreen(); }}
+                top='0'
+                className='whall'
+                background='black'
+                position='absolute'
+                align='center'
+                justify='center'
+                zIndex={16}>
+
+                <PlayArrowIcon
+                    style={iconStyle} />
+            </EpistoFlex2>}
+
             {(isMobile && isFullscreen && !isLandscape) && <ShouldRotatePhoneOverlay
                 onExitFullScreen={toggleFullScreen} />}
 
@@ -484,20 +505,6 @@ export const VideoPlayer = (props: {
                     toggleFullScreen={toggleFullScreen}
                     toggleShouldBePlaying={toggleShouldBePlaying}
                     setVolume={setVolume} />
-
-                {(isMobile && !isFullscreen && !isLandscape) && <EpistoFlex2
-                    onClick={() => { toggleFullScreen(); }}
-                    top='0'
-                    className='whall'
-                    background='black'
-                    position='absolute'
-                    align='center'
-                    justify='center'
-                    zIndex={15}>
-
-                    <PlayArrowIcon
-                        style={iconStyle} />
-                </EpistoFlex2>}
 
             </EpistoDiv>
 
