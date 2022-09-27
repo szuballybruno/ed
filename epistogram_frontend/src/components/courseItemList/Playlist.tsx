@@ -93,7 +93,7 @@ export const Playlist = (props: {
         <EpistoFlex2
             id="courseItemListRoot"
             direction="column"
-            zIndex='4'
+            zIndex={0}
             justifyContent={'flex-start'}>
 
             {modules
@@ -112,7 +112,8 @@ export const Playlist = (props: {
                         isOpen={isOpen}
                         style={{
                             pointerEvents: isLocked || unclickable ? 'none' : 'all',
-                            color: isLocked ? 'gray' : undefined
+                            color: isLocked ? 'gray' : undefined,
+                            zIndex: 0
                         }}
                         header={() => <EpistoFlex2
                             bg={isSelected ? 'var(--deepBlue)' : undefined}
@@ -122,12 +123,15 @@ export const Playlist = (props: {
                             align="center"
                             height="50px"
                             minH={'50px'}
+                            zIndex={0}
                             pl={isMobile ? '0' : '5px'}>
 
                             {/* open/close */}
-                            <EpistoFlex2 align="center">
+                            <EpistoFlex2
+                                align="center">
 
-                                <EpistoButton onClick={() => handleToggle(module.moduleId)}>
+                                <EpistoButton
+                                    onClick={() => handleToggle(module.moduleId)}>
 
                                     {unclickable
                                         ? <FiberManualRecordIcon style={{ color: headercolor }} />

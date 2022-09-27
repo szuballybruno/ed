@@ -334,7 +334,6 @@ export const VideoPlayer = (props: {
         volume,
         isMuted,
         isFullscreen,
-        isIPhone,
         isLandscape,
         toggleShouldBePlaying,
         showControlOverlay,
@@ -386,6 +385,9 @@ export const VideoPlayer = (props: {
             }
             {...css}>
 
+            {(isMobile && isFullscreen && !isLandscape) && <ShouldRotatePhoneOverlay
+                onExitFullScreen={toggleFullScreen} />}
+
             {/* playback */}
             <EpistoDiv
                 id="playbackWrapper"
@@ -420,8 +422,7 @@ export const VideoPlayer = (props: {
                         url={videoUrl}
                         style={{
                             borderRadius: 6,
-                            overflow: 'hidden',
-                            zIndex: 13
+                            overflow: 'hidden'
                         }}
                         width="100%"
                         height="100%"
@@ -476,9 +477,9 @@ export const VideoPlayer = (props: {
                     className='whall'
                     background='black'
                     position='absolute'
-                    zIndex='15'
                     align='center'
-                    justify='center'>
+                    justify='center'
+                    zIndex={8}>
 
                     <PlayArrowIcon
                         style={iconStyle} />
@@ -487,8 +488,7 @@ export const VideoPlayer = (props: {
             </EpistoDiv>
 
 
-            {(isMobile && isFullscreen && !isLandscape) && <ShouldRotatePhoneOverlay
-                onExitFullScreen={toggleFullScreen} />}
+
 
             {/* visual overlay */}
             <AbsoluteFlexOverlay isVisible={isVisualOverlayVisible}>

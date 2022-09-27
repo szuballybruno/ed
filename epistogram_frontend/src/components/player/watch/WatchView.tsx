@@ -101,6 +101,7 @@ export const PlayerTitleBlock = (props: {
         minHeight={isMobile ? '80px' : '0'}
         background={isMobile ? 'white' : undefined}
         width={isMobile ? '100%' : undefined}
+        zIndex={14}
         align="center">
 
         {/* video title and subtitle */}
@@ -332,6 +333,7 @@ export const WatchView = (props: {
         {/* video player */}
         <EpistoFlex2
             direction='column'
+            zIndex={1}
             position={isMobile ? 'sticky' : undefined}
             top={isMobile ? '0' : undefined}
             align="center">
@@ -339,7 +341,7 @@ export const WatchView = (props: {
             <VideoPlayer
                 //height="calc((var(--playerWidth) - 420px) / 1.80)"
                 className="largeSoftShadow"
-                zIndex="5"
+                zIndex={12}
                 videoItem={videoPlayerData}
                 videoPlayerState={videoPlayerState}>
 
@@ -426,7 +428,6 @@ export const WatchView = (props: {
         {/* under video info */}
         <EpistoDiv
             className="roundBorders largeSoftShadow"
-            zIndex="10"
             mt={isMobile ? '0' : '10px'}
             px="20px"
             pb="200px"
