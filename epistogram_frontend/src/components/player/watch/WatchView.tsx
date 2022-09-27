@@ -332,8 +332,8 @@ export const WatchView = (props: {
         {/* video player */}
         <EpistoFlex2
             direction='column'
-            position='sticky'
-            top='0'
+            position={isMobile ? 'sticky' : undefined}
+            top={isMobile ? '0' : undefined}
             align="center">
 
             <VideoPlayer
