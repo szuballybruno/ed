@@ -27,7 +27,7 @@ export const PlayerDebugInfo = (props: {
         left='0'
         color='red'
         fontWeight='bold'
-        zIndex={99999999999999}>
+        zIndex={17}>
 
 
         {'isFullscreen: ' + isFullscreen}<br />

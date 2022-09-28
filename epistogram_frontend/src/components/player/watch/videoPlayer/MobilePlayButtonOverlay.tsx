@@ -19,6 +19,9 @@ export const MobilePlayButtonOverlay = (props: {
 
         <PlayArrowIcon
             onClick={() => { toggleFullScreen(); }}
-            style={videoPlayerStyles.videoPlayerControlIconStyle} />
+            style={{
+                ...videoPlayerStyles.videoPlayerControlIconStyle,
+                zIndex: 19
+            }} />
     </EpistoFlex2>;
 };
