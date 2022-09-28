@@ -44,6 +44,8 @@ export const VideoPlayer = (props: {
         seekToSeconds,
         setIsSeeking,
         handleOnVideoEnded,
+        disableFullscreenMode,
+        enableFullscreenMode,
         setVolume,
         setIsMuted,
         onReady
@@ -78,18 +80,20 @@ export const VideoPlayer = (props: {
             {...css}>
 
             {/* player debug info */}
-            <PlayerDebugInfo videoPlayerState={videoPlayerState} />
+            <PlayerDebugInfo
+                videoPlayerState={videoPlayerState}
+                videoTitle={videoItem.title} />
 
             {/* MOBILE ONLY: overlay on top of player,
                 since we don't want the user to watch video
                 in portrait */}
             {(isMobile && !isFullscreen && !isLandscape) && <MobilePlayButtonOverlay
-                toggleFullScreen={toggleFullScreen} />}
+                enableFullscreenMode={enableFullscreenMode} />}
 
             {/* MOBILE ONLY: warning to rotate the mobile, the video
                 should only starts in landscape */}
             {(isMobile && isFullscreen && !isLandscape) && <ShouldRotatePhoneOverlay
-                onExitFullScreen={toggleFullScreen} />}
+                onExitFullScreen={disableFullscreenMode} />}
 
             {/* playback */}
             <EpistoDiv
