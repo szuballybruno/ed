@@ -210,13 +210,6 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>({
                 const row = event.row as TSchema;
 
                 return isRowEditable ? isRowEditable(row) : true;
-                // const field = event.field as keyof TSchema;
-                // const column = columns
-                //     .single(column => field === column.field);
-
-                // return column.enabled
-                //     ? column.enabled(row, field)
-                //     : true;
             }}
             getRowId={x => getKey(x as TSchema) as any}
             rows={rows}

@@ -223,7 +223,7 @@ Array.prototype.remove = function <T>(func: (item: T) => boolean) {
 // eslint-disable-next-line no-extend-native
 Array.prototype.orderBy = function <T>(func: (item: T) => number | string | Date) {
 
-    const sorted = this
+    const sorted = [...this]
         .sort((a, b) => {
 
             if (func(a) < func(b))

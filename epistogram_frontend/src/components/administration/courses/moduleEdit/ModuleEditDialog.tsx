@@ -7,6 +7,18 @@ import { EpistoDialog } from '../../../universal/epistoDialog/EpistoDialog';
 import { useModuleEditColumns } from './ModuleEditColumns';
 import { ModuleEditDialogLogicType } from './ModuleEditDialogLogic';
 
+const moveItemInArray = <T,>(workArray: T[], oldIndex: number, newIndex: number): T[] => {
+
+    const copiedArr = [...workArray];
+    const length = copiedArr.length;
+
+    if (oldIndex !== newIndex && length > oldIndex && length > newIndex) {
+        copiedArr.splice(newIndex, 0, copiedArr.splice(oldIndex, 1)[0]);
+    }
+
+    return copiedArr;
+};
+
 export const ModuleEditDialog = ({
     logic,
 }: {
@@ -25,9 +37,12 @@ export const ModuleEditDialog = ({
     } = logic;
 
     const rows = mutatedItems
-        .filter(x => !x.isPretestModule);
+        .filter(x => !x.isPretestModule)
+        .orderBy(x => x.orderIndex);
 
     const columns = useModuleEditColumns({ mutatorFunctions });
+
+    console.log(mutations);
 
     return (
         <EpistoDialog
@@ -63,14 +78,17 @@ export const ModuleEditDialog = ({
                 {/* grid */}
                 <EpistoDataGrid
                     onRowOrderChange={(opts) => {
-                        
-                        console.log(opts);
-                        // mutatorFunctions
-                        //     .mutate({
-                        //         key,
-                        //         field: 'orderIndex',
-                        //         newValue: 
-                        //     });
+
+                        const moved = moveItemInArray(rows, opts.sourceIndex, opts.targetIndex);
+                        moved.forEach((x, i) => x.orderIndex = i);
+
+                        moved
+                            .forEach(({ moduleVersionId, orderIndex }) => mutatorFunctions
+                                .mutate({
+                                    key: moduleVersionId,
+                                    field: 'orderIndex',
+                                    newValue: orderIndex
+                                }));
                     }}
                     hideFooter
                     columns={columns}

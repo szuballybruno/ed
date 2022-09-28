@@ -1,6 +1,7 @@
 import { ModuleEditDTO } from '../../../../shared/dtos/ModuleEditDTO';
 import { Id } from '../../../../shared/types/versionId';
 import { EpistoDataGridColumnBuilder } from '../../../controls/EpistoDataGrid';
+import { EpistoFont } from '../../../controls/EpistoFont';
 import { EpistoImage } from '../../../controls/EpistoImage';
 import { IXMutatorFunctions } from '../../../lib/XMutator/XMutatorCore';
 
@@ -52,7 +53,9 @@ export const useModuleEditColumns = ({
                     key: rowKey,
                     field,
                     newValue: value
-                })
+                }),
+            renderCell: ({ value, key, field }) => <EpistoFont
+                background={mutatorFunctions.isMutated(key, field) ? 'change' : undefined}>{value}</EpistoFont>
         })
         .getColumns();
 };
