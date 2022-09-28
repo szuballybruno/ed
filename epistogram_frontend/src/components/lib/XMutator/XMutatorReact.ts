@@ -26,7 +26,7 @@ export const useXMutatorNew = <
         dto: { new(): TMutatee },
         keyPropName: TKeyField,
         mutatorId: string): [
-        IXMutatorState<TMutatee, TKeyField, TMutatee[TKeyField]>,
+        IXMutatorState<TMutatee, TKeyField>,
         IXMutatorFunctions<TMutatee, TKeyField, TMutatee[TKeyField]>
     ] => {
 
@@ -37,7 +37,7 @@ export const useXMutatorNew = <
         });
     }, [keyPropName, mutatorId]);
 
-    const [state, setState] = useState<IXMutatorState<TMutatee, TKeyField, TMutatee[TKeyField]>>(mutatorCore);
+    const [state, setState] = useState<IXMutatorState<TMutatee, TKeyField>>(mutatorCore);
 
     /**
      * Create a new reference of mutator 

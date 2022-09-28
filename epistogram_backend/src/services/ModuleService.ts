@@ -167,7 +167,7 @@ export class ModuleService {
                     if (name)
                         data.name = name;
 
-                    if (orderIndex)
+                    if (orderIndex !== undefined)
                         data.orderIndex = orderIndex;
 
                     return data;

@@ -24,10 +24,10 @@ export type MutateFnType<TMutatee, TKey> = <TField extends StringKeyof<TMutatee>
     newValue: TMutatee[TField];
 }) => void;
 
-export interface IXMutatorState<TMutatee extends Object, TKeyField extends StringKeyof<TMutatee>, TKey extends TMutatee[TKeyField]> {
+export interface IXMutatorState<TMutatee extends Object, TKeyField extends StringKeyof<TMutatee>> {
     mutatedItems: TMutatee[];
     mutations: Mutation<TMutatee, TKeyField>[];
-    get isAnyItemsMutated(): boolean;
+    isAnyItemsMutated: boolean;
 }
 
 export interface IXMutatorFunctions<TMutatee extends Object, TKeyField extends StringKeyof<TMutatee>, TKey extends TMutatee[TKeyField]> {
@@ -46,7 +46,7 @@ export interface IXMutatorFunctions<TMutatee extends Object, TKeyField extends S
 }
 
 export interface IXMutator<TMutatee extends Object, TKeyField extends StringKeyof<TMutatee>, TKey extends TMutatee[TKeyField]>
-    extends IXMutatorFunctions<TMutatee, TKeyField, TKey>, IXMutatorState<TMutatee, TKeyField, TKey> {
+    extends IXMutatorFunctions<TMutatee, TKeyField, TKey>, IXMutatorState<TMutatee, TKeyField> {
 }
 
 export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof<TMutatee>, TKey extends TMutatee[TKeyField]>
@@ -55,6 +55,7 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
     // public 
     public mutatedItems: TMutatee[] = [];
     public mutations: Mutation<TMutatee, TKeyField>[] = [];
+    public isAnyItemsMutated: boolean = false;
 
     // internal 
     private _isPostMutationsChangedScope: boolean = false;
@@ -130,12 +131,6 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
         this.setMutations([]);
     }
 
-    // getter for isAnyMutated
-    get isAnyItemsMutated(): boolean {
-
-        return this.mutations.length > 0;
-    };
-
     // 
     // FUNCTION: [this.setMutations] 
     // applies mutations on the items array,
@@ -145,6 +140,9 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
 
         // set mutations 
         this.mutations = muts;
+
+        // set is any mutated 
+        this.isAnyItemsMutated = muts.any();
 
         // exit if post mutation changed scope
         // below calls will be handled dieeferntly

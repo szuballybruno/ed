@@ -42,8 +42,6 @@ export const ModuleEditDialog = ({
 
     const columns = useModuleEditColumns({ mutatorFunctions });
 
-    console.log(mutations);
-
     return (
         <EpistoDialog
             logic={dialogLogic}>
