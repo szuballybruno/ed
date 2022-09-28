@@ -114,37 +114,30 @@ export class UserService {
     /**
      * Save user from admin page, where you can edit almost all fileds.
      */
-    saveUserAsync(principalId: PrincipalId, dto: UserEditDTO) {
+    async saveUserAsync(principalId: PrincipalId, dto: UserEditDTO) {
 
-        return {
-            action: async () => {
+        await this._authorizationService
+            .checkPermissionAsync(principalId, 'ACCESS_ADMIN');
 
-                const userId = dto.id;
+        const userId = dto.id;
 
-                // save user
-                await this._ormService
-                    .save(User, {
-                        id: userId,
-                        lastName: dto.lastName,
-                        firstName: dto.firstName,
-                        email: dto.email,
-                        companyId: dto.companyId,
-                        jobTitleId: dto.jobTitleId
-                    });
+        // save user
+        await this._ormService
+            .save(User, {
+                id: userId,
+                lastName: dto.lastName,
+                firstName: dto.firstName,
+                email: dto.email,
+                companyId: dto.companyId,
+                jobTitleId: dto.jobTitleId
+            });
 
-                // save teacher info
-                await this._saveTeacherInfoAsync(userId, dto.isTeacher);
+        // save teacher info
+        await this._saveTeacherInfoAsync(userId, dto.isTeacher);
 
-                // save auth items
-                await this._roleService
-                    .saveUserAssignedAuthItemsAsync(principalId, userId, dto.roles, dto.permissions)
-                    .action();
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ACCESS_ADMIN');
-            }
-        };
+        // save auth items
+        await this._roleService
+            .saveUserAssignedAuthItemsAsync(principalId, userId, dto.roles, dto.permissions);
     }
 
     /**
@@ -321,7 +314,7 @@ export class UserService {
         user.password = hashedPassword;
 
         // insert user
-        const userId = await this._ormService
+        const { id: userId } = await this._ormService
             .createAsync(User, user);
 
         // insert signup answer session
@@ -383,8 +376,6 @@ export class UserService {
                 .on('id', '=', 'jobTitleId', User))
             .where('id', '=', 'userId')
             .getSingle();
-
-        console.log(user.filePath);
 
         return user;
     };

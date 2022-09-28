@@ -1,3 +1,4 @@
+import { instantiate } from '../../shared/logic/sharedLogic';
 import { Id } from '../../shared/types/versionId';
 import { InsertEntity } from '../../utilities/misc';
 import { ClassType } from '../misc/advancedTypes/ClassType';
@@ -83,14 +84,14 @@ export class ORMConnectionService {
     /**
      * Creates a new entity
      */
-    async createAsync<TEntity>(signature: ClassType<TEntity>, ent: InsertEntity<TEntity>): Promise<Id<any>> {
+    async createAsync<TEntity extends EntityType>(signature: ClassType<TEntity>, ent: InsertEntity<TEntity>): Promise<TEntity> {
 
         const core = new XQueryBuilderCore(this._sqlConnectionService, this._loggingEnabled);
 
         const ids = await core
             .insertManyAsync(signature, [ent]);
 
-        return ids[0];
+        return instantiate<TEntity>({ ...ent, id: ids.single() } as TEntity);
     }
 
     /**
@@ -127,7 +128,7 @@ export class ORMConnectionService {
     /**
      * Save or insert entity
      */
-    async saveOrInsertAsync<TEntity>(signature: ClassType<TEntity>, ent: Partial<TEntity>): Promise<Id<'TEntity'>> {
+    async saveOrInsertAsync<TEntity extends EntityType>(signature: ClassType<TEntity>, ent: Partial<TEntity>): Promise<Id<'TEntity'>> {
 
         const entityId = (ent as any).id;
 
@@ -138,7 +139,7 @@ export class ORMConnectionService {
         }
         else {
 
-            return await this.createAsync(signature, ent as InsertEntity<TEntity>);
+            return (await this.createAsync(signature, ent as InsertEntity<TEntity>)).id;
         }
     }
 

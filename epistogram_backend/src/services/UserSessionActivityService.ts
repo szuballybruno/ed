@@ -197,8 +197,10 @@ export class UserSessionActivityService {
                 ._loggerService
                 .logScoped('ROLLING SESSION', insert);
 
-            return await this._ormService
+            const { id: entityId } = await this._ormService
                 .createAsync(entitySignature, insert);
+
+            return entityId;
         }
 
         return prevRollingSession.id;

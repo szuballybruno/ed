@@ -6,6 +6,7 @@ import { EventCodeType } from '../shared/types/sharedTypes';
 import { Id } from '../shared/types/versionId';
 import { AuthorizationResult } from '../utilities/XTurboExpress/XTurboExpressTypes';
 import { AuthorizationService } from './AuthorizationService';
+import { LoggerService } from './LoggerService';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 
@@ -18,7 +19,8 @@ export class EventService {
     constructor(
         mapperService: MapperService,
         conn: ORMConnectionService,
-        authorizationService: AuthorizationService) {
+        authorizationService: AuthorizationService,
+        private _loggerService: LoggerService) {
 
         this._ormService = conn;
         this._mapperService = mapperService;
@@ -42,7 +44,9 @@ export class EventService {
 
     async addEventAsync(userId: Id<'User'>, eventCode: EventCodeType, eventDataDTO: any) {
 
-        console.log(`Queueing new event for user: ${userId} code: ${eventCode}`);
+        this
+            ._loggerService
+            .logScoped('GENERIC', `Queueing new event for user: ${userId} code: ${eventCode}`);
 
         await this._ormService
             .createAsync(Event, {

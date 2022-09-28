@@ -71,9 +71,6 @@ export const RoleIdEnum = {
 
     toRoleType(roleId: Id<'Role'>): RoleType {
 
-        console.log(roleId);
-        console.log(this.administrator);
-
         if (roleId === RoleIdEnum.administrator)
             return 'administrator';
 

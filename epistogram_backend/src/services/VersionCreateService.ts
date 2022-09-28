@@ -1,10 +1,8 @@
-import { Course } from '../models/entity/course/Course';
-import { CourseData } from '../models/entity/course/CourseData';
-import { CourseVersion } from '../models/entity/course/CourseVersion';
 import { Id } from '../shared/types/versionId';
 import { InsertEntity } from '../utilities/misc';
 import { ClassType } from './misc/advancedTypes/ClassType';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { EntityType } from './XORM/XORMTypes';
 
 export class VersionCreateService {
 
@@ -12,7 +10,7 @@ export class VersionCreateService {
 
     }
 
-    async createVersionAsync<TEntity, TData, TVersion>({
+    async createVersionAsync<TEntity extends EntityType, TData extends EntityType, TVersion extends EntityType>({
         data,
         entity,
         version,
@@ -29,17 +27,19 @@ export class VersionCreateService {
     }) {
 
         // create course
-        const entityId = await this._ormService
+        const { id: entityId } = await this._ormService
             .createAsync(entity, createEntity());
 
         // create course data
-        const dataId = await this._ormService
+        const { id: dataId } = await this._ormService
             .createAsync(data, createData());
+
+        const { id: versionId } = await this._ormService
+            .createAsync(version, createVersion({ dataId, entityId }));
 
         // create course version 
         return {
-            versionId: await this._ormService
-                .createAsync(version, createVersion({ dataId, entityId }))
+            versionId
         };
     }
 }

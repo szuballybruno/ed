@@ -1,13 +1,17 @@
-import {CoinAcquireResultDTO} from '../shared/dtos/CoinAcquireResultDTO';
-import {ActivityStreakView} from '../models/views/ActivityStreakView';
-import {UserSessionDailyView} from '../models/views/UserSessionDailyView';
-import {CoinTransactionService} from './CoinTransactionService';
-import {EventService} from './EventService';
-import {ORMConnectionService} from './ORMConnectionService/ORMConnectionService';
-import {Id} from '../shared/types/versionId';
-import {GlobalConfiguration} from './misc/GlobalConfiguration';
-import {LoggerService} from './LoggerService';
-import {CoinTransaction} from '../models/entity/misc/CoinTransaction';
+import { CoinAcquireResultDTO } from '../shared/dtos/CoinAcquireResultDTO';
+import { ActivityStreakView } from '../models/views/ActivityStreakView';
+import { UserSessionDailyView } from '../models/views/UserSessionDailyView';
+import { CoinTransactionService } from './CoinTransactionService';
+import { EventService } from './EventService';
+import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { Id } from '../shared/types/versionId';
+import { GlobalConfiguration } from './misc/GlobalConfiguration';
+import { LoggerService } from './LoggerService';
+import { CoinTransaction } from '../models/entity/misc/CoinTransaction';
+import { instantiate } from '../shared/logic/sharedLogic';
+import { InsertEntity } from '../utilities/misc';
+import { CoinAcquireReasonType } from '../shared/types/sharedTypes';
+import { GivenAnswer } from '../models/entity/misc/GivenAnswer';
 
 export class CoinAcquireService {
 
@@ -43,95 +47,116 @@ export class CoinAcquireService {
     acquireVideoWatchedCoinsAsync = async (userId: Id<'User'>, videoId: Id<'Video'>) => {
 
         await this._coinTransactionService
-            .makeCoinTransactionAsync({userId, amount: this._config.coinRewardAmounts.videoWatched, videoId});
+            .makeCoinTransactionAsync({ userId, amount: this._config.coinRewardAmounts.videoWatched, videoId });
     };
 
     /**
      * Reward user after a question is answered correctly for the first time
      */
-    acquireQuestionAnswerCoinsAsync = async (userId: Id<'User'>, givenAnswerId: Id<'GivenAnswer'>) => {
+    async acquireGivenAnswerCoinsAsync(
+        userId: Id<'User'>,
+        givenAnswers: GivenAnswer[]) {
 
-        const coinsForQuestion = await this._coinTransactionService
-            .getCoinsForQuestionAsync(userId, givenAnswerId);
+        const questionVersionIds = givenAnswers
+            .map(x => x.questionVersionId);
 
-        /**
-         * do not reward user if the question is already answered
-         * correctly and a coin is previously acquired for that
-         */
-        if (coinsForQuestion.length > 0) {
+        const nonRewardedQuestionVersionIds = await this
+            ._coinTransactionService
+            .getUnrewardedQuestionVersionIds(userId, questionVersionIds);
 
-            this._loggerService
-                .logScoped('COINS', `Already rewarded user for this question version (${coinsForQuestion}). Skipping coin aquires...`);
+        const nonRewardedGivenAnswers = givenAnswers
+            .filter(x => nonRewardedQuestionVersionIds
+                .some(y => y === x.questionVersionId));
 
-            return null;
-        }
-
-        /**
-         * Checks passed, insert coin
-         */
-        //TODO REMOVE GIVEN ANSWER FROM MAKE COIN TRANSACTION -> REMOVE SQL FUNCTION
-        await this._ormService
-            .createAsync(CoinTransaction, {
+        const newTransactions = nonRewardedGivenAnswers
+            .map(givenAnswer => instantiate<InsertEntity<CoinTransaction>>({
                 userId,
                 amount: this._config.coinRewardAmounts.questionCorrectAnswer,
                 activitySessionId: null,
                 activityStreakId: null,
-                givenAnswerId: givenAnswerId,
+                givenAnswerId: givenAnswer.id,
                 givenAnswerStreakId: null,
                 videoId: null,
                 creationDate: new Date(Date.now()),
                 isGifted: false,
                 shopItemId: null
-            });
+            }));
 
-        const dto: CoinAcquireResultDTO = {
-            reason: 'correct_answer',
-            amount: this._config.coinRewardAmounts.questionCorrectAnswer
-        };
+        const inserted = await this._ormService
+            .createManyAsync(CoinTransaction, newTransactions);
 
-        return dto;
-    };
+        return inserted;
+    }
 
     /**
      * Reward user with coins based on the given answer streak length
      */
-    handleGivenAnswerStreakCoinsAsync = async (userId: Id<'User'>, streakId: Id<'GivenAnswerStreak'> | null, streakLength: number) => {
+    handleGivenAnswerStreakCoinsAsync = async (userId: Id<'User'>, streakId: Id<'GivenAnswerStreak'>, streakLength: number) => {
 
-        if (streakId === null)
-            return null;
-
-        const prevCoinsGivenForStreak = await this._coinTransactionService
+        const prevCoinsGivenForStreak = await this
+            ._coinTransactionService
             .getCoinsForAnswerStreakAsync(userId, streakId);
 
-        if (streakLength === 5 && prevCoinsGivenForStreak.length === 0) {
+        const { longStreak, shortStreak } = this._config.coinRewardAmounts.answerStreak;
 
-            await this._coinTransactionService
+        /**
+         * Reward streak fn 
+         */
+        const rewardStrekAsync = async ({
+            reason,
+            prevCoinsGiven,
+            length,
+            rewardAmount
+        }: {
+            reason: CoinAcquireReasonType,
+            prevCoinsGiven: number,
+            rewardAmount: number,
+            length: number
+        }) => {
+
+            if (streakLength < length)
+                return;
+
+            if (prevCoinsGivenForStreak.length > prevCoinsGiven)
+                return;
+
+            const res = await this
+                ._coinTransactionService
                 .makeCoinTransactionAsync({
                     userId,
-                    amount: this._config.coinRewardAmounts.answerStreak5,
+                    amount: rewardAmount,
                     givenAnswerStreakId: streakId
                 });
 
             return {
-                amount: this._config.coinRewardAmounts.answerStreak5,
-                reason: 'answer_streak_5'
+                amount: res.amount,
+                reason
             } as CoinAcquireResultDTO;
-        }
+        };
 
-        if (streakLength === 10 && prevCoinsGivenForStreak.length === 1) {
+        /**
+         * Reward short streak
+         */
+        const shortStreakRes = await rewardStrekAsync({
+            prevCoinsGiven: 0,
+            reason: 'answer_streak_5',
+            ...shortStreak
+        });
 
-            await this._coinTransactionService
-                .makeCoinTransactionAsync({
-                    userId,
-                    amount: this._config.coinRewardAmounts.answerStreak10,
-                    givenAnswerStreakId: streakId
-                });
+        if (shortStreakRes)
+            return shortStreakRes;
 
-            return {
-                amount: this._config.coinRewardAmounts.answerStreak10,
-                reason: 'answer_streak_10'
-            } as CoinAcquireResultDTO;
-        }
+        /**
+         * Reward long streak
+         */
+        const longStreakRes = await rewardStrekAsync({
+            prevCoinsGiven: 1,
+            reason: 'answer_streak_10',
+            ...longStreak
+        });
+
+        if (longStreakRes)
+            return longStreakRes;
 
         return null;
     };
@@ -146,7 +171,7 @@ export class CoinAcquireService {
 
         // check if it's not more than 3 sessions today
         const todaysInfo = await this._ormService
-            .query(UserSessionDailyView, {userId})
+            .query(UserSessionDailyView, { userId })
             .where('userId', '=', 'userId')
             .getSingle();
 
@@ -176,7 +201,7 @@ export class CoinAcquireService {
     private acquireActivityStreakCoin = async (userId: Id<'User'>) => {
 
         const currentActivityStreak = await this._ormService
-            .query(ActivityStreakView, {userId})
+            .query(ActivityStreakView, { userId })
             .where('isFinalized', 'IS', 'false')
             .and('userId', '=', 'userId')
             .getSingle();
@@ -195,7 +220,7 @@ export class CoinAcquireService {
             return;
 
         // get proper reason and coin amount
-        const {amount, reason} = (() => {
+        const { amount, reason } = (() => {
 
             if (alreadyGivenCoinsLegth === 0 && currentActivityStreakLenght === 3) {
 
@@ -233,10 +258,10 @@ export class CoinAcquireService {
 
         // actually insert the new coin acquire
         await this._coinTransactionService
-            .makeCoinTransactionAsync({userId, amount, activityStreakId: currentActivityStreakId});
+            .makeCoinTransactionAsync({ userId, amount, activityStreakId: currentActivityStreakId });
 
         // add acquire event
         await this._eventService
-            .addSessionStreakEventAsync(userId, {amount, reason});
+            .addSessionStreakEventAsync(userId, { amount, reason });
     };
 }

@@ -25,11 +25,24 @@ export const QuesitionView = ({
     answerResult: AnswerResultDTO | null
 } & EpistoFlex2Props) => {
 
+    const {
+        coinAcquires,
+        correctAnswerVersionIds,
+        givenAnswerVersionIds,
+        isCorrect
+    } = answerResult ?? {
+        coinAcquires: [],
+        correctAnswerVersionIds: [],
+        givenAnswerVersionIds: [],
+        isCorrect: false
+    };
+
     const isAnswered = !!answerResult;
-    const bonusCoinsAcquireData = answerResult?.coinAcquires?.bonus ?? null;
-    const correctAnswerVersionIds = answerResult?.correctAnswerVersionIds ?? [];
-    const coinsAcquired = answerResult?.coinAcquires?.normal ?? null;
+    const bonusCoinsAcquireData = coinAcquires
+        .firstOrNull(x => x.reason === 'answer_streak_10' || x.reason === 'answer_streak_5');
     const showCoinsAcquired = true;
+    const coinsAcquired = coinAcquires
+        .firstOrNull(x => x.reason === 'correct_answer');
 
     const [selectedAnswerVersionId, setSelectedAnswerVersionId] = useState<Id<'AnswerVersion'> | null>(null);
 

@@ -99,13 +99,22 @@ export class GlobalConfiguration {
 
     questionAnswer = {
         maxQuestionScore: 4,
+        correctAnswerScore: 1,
     };
 
     coinRewardAmounts = {
         questionCorrectAnswer: 1,
         videoWatched: 1,
-        answerStreak5: 5,
-        answerStreak10: 15,
+        answerStreak: {
+            shortStreak: {
+                length: 5,
+                rewardAmount: 5
+            },
+            longStreak: {
+                length: 10,
+                rewardAmount: 15
+            }
+        },
         genericActivity: 10,
         activityStreak3Days: 10,
         activityStreak5Days: 20,

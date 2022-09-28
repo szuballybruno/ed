@@ -198,37 +198,30 @@ export class RoleService extends QueryServiceBase<Role> {
         };
     }
 
-    saveUserAssignedAuthItemsAsync(
+    async saveUserAssignedAuthItemsAsync(
         principalId: PrincipalId,
         savedUserId: Id<'User'>,
         rolesChangeSet: ChangeSet<UserRoleDTO>,
         permissionsChangeSet: ChangeSet<UserPermissionDTO>) {
 
-        return {
-            action: async () => {
-                // TODO authorize userId
-                console.log('TODO Auth: ' + principalId);
+        const { companyId } = await this._ormService
+            .query(User, { userId: principalId.toSQLValue() })
+            .where('id', '=', 'userId')
+            .getSingle();
 
-                // save roles 
-                await this._saveRolesAsync(
-                    principalId,
-                    savedUserId,
-                    rolesChangeSet);
+        await this._authorizationService
+            .checkPermissionAsync(principalId, 'ASSIGN_PREDEFINED_ROLES', { companyId });
 
-                // save permissions
-                await this._savePermissionsAsync(
-                    savedUserId,
-                    permissionsChangeSet);
-            },
-            auth: async () => {
-                const { companyId } = await this._ormService
-                    .query(User, { userId: principalId.toSQLValue() })
-                    .where('id', '=', 'userId')
-                    .getSingle();
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ASSIGN_PREDEFINED_ROLES', { companyId });
-            }
-        };
+        // save roles 
+        await this._saveRolesAsync(
+            principalId,
+            savedUserId,
+            rolesChangeSet);
+
+        // save permissions
+        await this._savePermissionsAsync(
+            savedUserId,
+            permissionsChangeSet);
     }
 
     async _saveRolesAsync(principalId: PrincipalId, saveduserId: Id<'User'>, assignedRoles: ChangeSet<UserRoleDTO>) {
@@ -314,7 +307,7 @@ export class RoleService extends QueryServiceBase<Role> {
                 const userId = principalId.toSQLValue();
 
                 // create role
-                const roleId = await this._ormService
+                const { id: roleId } = await this._ormService
                     .createAsync(Role, {
                         name: dto.name,
                         companyId: dto.companyId,

@@ -267,8 +267,8 @@ export class PlayerService {
             .orderBy(x => x.lastUsageDate)
             .firstOrNull();
 
-        const videoPlaybackSessionId = oldSession
-            ? oldSession.id
+        const { id: videoPlaybackSessionId } = oldSession
+            ? oldSession
             : await this._ormService
                 .createAsync(VideoPlaybackSession, instatiateInsertEntity<VideoPlaybackSession>({
                     creationDate: new Date(),

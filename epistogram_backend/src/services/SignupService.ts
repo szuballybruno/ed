@@ -107,7 +107,7 @@ export class SignupService {
         answerVersionId: Id<'AnswerVersion'>,
         isCorrect: boolean) {
 
-        const givenAnswerId = await this
+        const { id: givenAnswerId } = await this
             ._ormService
             .createAsync(GivenAnswer, {
                 answerSessionId,

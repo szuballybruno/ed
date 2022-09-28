@@ -3,6 +3,7 @@ import { ExamVersion } from '../models/entity/exam/ExamVersion';
 import { AnswerSession } from '../models/entity/misc/AnswerSession';
 import { CourseItemCompletion } from '../models/entity/misc/CourseItemCompletion';
 import { ModuleVersion } from '../models/entity/module/ModuleVersion';
+import { QuestionVersion } from '../models/entity/question/QuestionVersion';
 import { ExamPlayerDataView } from '../models/views/ExamPlayerDataView';
 import { ExamResultStatsView } from '../models/views/ExamResultStatsView';
 import { ExamResultView } from '../models/views/ExamResultView';
@@ -179,6 +180,12 @@ export class ExamService {
         if (!examVersionId)
             throw new Error('Corrupt request.');
 
+        const examQuestionVersionIds = await this
+            ._ormService
+            .query(QuestionVersion, { examVersionId })
+            .where('examVersionId', '=', 'examVersionId')
+            .getMany();
+
         /**
          * Save given answers
          */
@@ -187,8 +194,10 @@ export class ExamService {
             .saveMultipleGivenAnswersAsync({
                 userId,
                 answerSessionId,
-                isPractiseAnswers: false,
-                givenAnswerDTOs: givenAnswers
+                answerType: 'exam',
+                givenAnswerDTOs: givenAnswers,
+                questionVersionIds: examQuestionVersionIds
+                    .map(x => x.id)
             });
 
         /**

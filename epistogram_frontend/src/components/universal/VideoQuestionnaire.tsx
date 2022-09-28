@@ -46,13 +46,13 @@ export const VideoQuestionnaire = (props: {
 
     const reactTimer = useReactTimer(handleCloseDialog, autoCloseSecs * 1000);
 
-    // useEffect(() => {
+    useEffect(() => {
 
-    //     if (!isAnswered)
-    //         return;
+        if (!isAnswered)
+            return;
 
-    //     reactTimer.start();
-    // }, [isAnswered]);
+        reactTimer.start();
+    }, [isAnswered]);
 
     useEffect(() => {
 

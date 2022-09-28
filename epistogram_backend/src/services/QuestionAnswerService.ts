@@ -7,6 +7,7 @@ import { GivenAnswerStreak } from '../models/entity/misc/GivenAnswerStreak';
 import { GivenAnswerView } from '../models/views/GivenAnswerView';
 import { AnswerEditDTO } from '../shared/dtos/AnswerEditDTO';
 import { AnswerResultDTO } from '../shared/dtos/AnswerResultDTO';
+import { CoinAcquireResultDTO } from '../shared/dtos/CoinAcquireResultDTO';
 import { Mutation } from '../shared/dtos/mutations/Mutation';
 import { GivenAnswerDTO } from '../shared/dtos/questionAnswer/GivenAnswerDTO';
 import { instantiate } from '../shared/logic/sharedLogic';
@@ -24,6 +25,7 @@ type QuestionCorrectData = {
     questionVersionId: Id<'QuestionVersion'>;
     givenAnswerId: null | Id<'GivenAnswer'>;
     isCorrect: boolean;
+    isExamQuestion: boolean;
 };
 
 type AnswerScoreDTO = {
@@ -48,7 +50,7 @@ export class QuestionAnswerService {
         examVersionId: Id<'ExamVersion'> | null,
         videoVideoId: Id<'VideoVersion'> | null) {
 
-        const answerSessionId = await this._ormService
+        const { id: answerSessionId } = await this._ormService
             .createAsync(AnswerSession, {
                 examVersionId: examVersionId,
                 videoVersionId: videoVideoId,
@@ -63,7 +65,7 @@ export class QuestionAnswerService {
     /**
      * Save a singular given answer 
      */
-    async saveGivenAnswerAsync({ givenAnswer, ...opts }: {
+    async saveGivenAnswerAsync({ givenAnswer, isPractiseAnswers, ...opts }: {
         userId: Id<'User'>,
         answerSessionId: Id<'AnswerSession'>,
         isPractiseAnswers: boolean,
@@ -72,12 +74,18 @@ export class QuestionAnswerService {
 
         const {
             insertedAnswerGivenAnswerBridges,
-            insertedGivenAnswers
+            insertedGivenAnswers,
+            coinResults
         } = await this
-            .saveMultipleGivenAnswersAsync({ ...opts, givenAnswerDTOs: [givenAnswer] });
+            .saveMultipleGivenAnswersAsync({
+                ...opts,
+                answerType: isPractiseAnswers ? 'practise' : 'video',
+                givenAnswerDTOs: [givenAnswer],
+                questionVersionIds: [givenAnswer.questionVersionId]
+            });
 
         return this
-            ._getAnswerResultAsync(insertedGivenAnswers.single(), insertedAnswerGivenAnswerBridges);
+            ._getAnswerResultAsync(insertedGivenAnswers.single(), insertedAnswerGivenAnswerBridges, coinResults);
     }
 
     /**
@@ -86,33 +94,39 @@ export class QuestionAnswerService {
     async saveMultipleGivenAnswersAsync(
         {
             answerSessionId,
-            isPractiseAnswers,
+            questionVersionIds,
+            answerType,
             userId,
             givenAnswerDTOs
         }: {
             userId: Id<'User'>,
             answerSessionId: Id<'AnswerSession'>,
-            isPractiseAnswers: boolean,
+            questionVersionIds: Id<'QuestionVersion'>[],
+            answerType: 'practise' | 'video' | 'exam',
             givenAnswerDTOs: GivenAnswerDTO[]
         }) {
 
         /**
+         * Get given answer views 
+         */
+        const givenAnswerViews = await this
+            ._ormService
+            .query(GivenAnswerView, { questionVersionIds })
+            .where('questionVersionId', '=', 'questionVersionIds')
+            .getMany();
+
+        /**
          * Get answer scores 
          */
-        const answerVersionIds = givenAnswerDTOs
-            .flatMap(x => x.answerVersionIds);
-
-        const questionVersionIds = givenAnswerDTOs
-            .map(x => x.questionVersionId);
-
         const answerScores = await this
-            ._getAnswerScoresAsync(questionVersionIds, answerVersionIds);
+            ._getAnswerScoresAsync(givenAnswerDTOs
+                .flatMap(x => x.answerVersionIds), givenAnswerViews);
 
         /**
          * Insert given answers 
          */
         const insertedGivenAnswers = await this
-            ._insertGivenAnswersAsync(givenAnswerDTOs, isPractiseAnswers, answerSessionId, answerScores);
+            ._insertGivenAnswersAsync(givenAnswerDTOs, answerType === 'practise', answerSessionId, answerScores);
 
         /**
          * Insert given answr - answer bridges
@@ -124,7 +138,7 @@ export class QuestionAnswerService {
          * Get all questions 
          */
         const questionData = await this
-            ._getQuestionCorrectDataAsync(insertedGivenAnswers, answerSessionId);
+            ._getQuestionCorrectDataAsync(insertedGivenAnswers, givenAnswerViews);
 
         /**
          * Handle given answer steak 
@@ -135,19 +149,23 @@ export class QuestionAnswerService {
         /**
          * Handle coins
          */
-        await this
-            ._handleCoinsAsync(userId, streakId, questionData);
+        const coinResults = await this
+            ._handleCoinsAsync(userId, streakId, insertedGivenAnswers, answerType !== 'exam');
 
         return {
             insertedGivenAnswers,
-            insertedAnswerGivenAnswerBridges
+            insertedAnswerGivenAnswerBridges,
+            coinResults
         };
     }
 
     /**
      * Get answer result async 
      */
-    private async _getAnswerResultAsync(givenAnswer: GivenAnswer, answerGivenAnswerBridges: AnswerGivenAnswerBridge[]) {
+    private async _getAnswerResultAsync(
+        givenAnswer: GivenAnswer,
+        answerGivenAnswerBridges: AnswerGivenAnswerBridge[],
+        coinResults: CoinAcquireResultDTO[]) {
 
         const views = await this
             ._ormService
@@ -162,14 +180,17 @@ export class QuestionAnswerService {
             .filter(x => x.isCorrect)
             .map(x => x.answerVersionId);
 
+        // TODO use a better system of determining 
+        // an answers correctnss
+        const isCorrect = answerGivenAnswerBridges
+            .all(x => correctAnswerVersionIds
+                .some(c => c === x.answerVersionId));
+
         return instantiate<AnswerResultDTO>({
             correctAnswerVersionIds,
             givenAnswerVersionIds,
-            coinAcquires: {
-                bonus: null,
-                normal: null
-            },
-            isCorrect: false
+            coinAcquires: coinResults,
+            isCorrect
         });
     }
 
@@ -178,15 +199,9 @@ export class QuestionAnswerService {
      */
     private async _getQuestionCorrectDataAsync(
         givenAnswers: GivenAnswer[],
-        answerSessionId: Id<'AnswerSession'>) {
+        givenAnswerViews: GivenAnswerView[]) {
 
-        const questionVersions = await this
-            ._ormService
-            .query(GivenAnswerView, { answerSessionId })
-            .where('answerSessionId', '=', 'answerSessionId')
-            .getMany();
-
-        const correctAnswerData = questionVersions
+        const correctAnswerData = givenAnswerViews
             .groupBy(x => x.questionVersionId)
             .map((group): QuestionCorrectData => {
 
@@ -196,7 +211,8 @@ export class QuestionAnswerService {
                 return ({
                     givenAnswerId: givenAnswer?.id ?? null,
                     isCorrect: givenAnswer?.isCorrect ?? false,
-                    questionVersionId: group.key
+                    questionVersionId: group.key,
+                    isExamQuestion: !!group.first.examVersionId
                 });
             });
 
@@ -217,23 +233,26 @@ export class QuestionAnswerService {
         const newGivenAnswers = givenAnswers
             .map(givenAnswerDTO => {
 
+                const { questionVersionId, answerVersionIds, elapsedSeconds } = givenAnswerDTO;
+
                 const score = answerScores
-                    .filter(x => givenAnswerDTO
-                        .answerVersionIds
+                    .filter(x => answerVersionIds
                         .some(id => id === x.answerVersionId))
                     .map(x => x.score)
                     .reduce((p, c) => p + c);
+
+                const isCorrect = maxQuestionScore === score;
 
                 return instantiate<InsertEntity<GivenAnswer>>({
                     isPractiseAnswer: isPractiseAnswers,
                     answerSessionId: answerSessionId,
                     creationDate: new Date(),
                     deletionDate: null,
-                    questionVersionId: givenAnswerDTO.questionVersionId,
-                    elapsedSeconds: givenAnswerDTO.elapsedSeconds,
+                    questionVersionId,
+                    elapsedSeconds,
                     givenAnswerStreakId: null,
-                    score: score,
-                    isCorrect: maxQuestionScore === score
+                    score,
+                    isCorrect
                 });
             });
 
@@ -311,7 +330,7 @@ export class QuestionAnswerService {
          */
         if (isAllCorrect && !currentGivenAnswerStreak) {
 
-            const newGivenAnswerStreakId = await this
+            const { id: newGivenAnswerStreakId } = await this
                 ._ormService
                 .createAsync(GivenAnswerStreak, {
                     isFinalized: false,
@@ -366,27 +385,40 @@ export class QuestionAnswerService {
      * getCorrectAnswerData 
      */
     private async _getAnswerScoresAsync(
-        questionVersionIds: Id<'QuestionVersion'>[],
-        answerVersionIds: Id<'AnswerVersion'>[]): Promise<AnswerScoreDTO[]> {
+        answerVersionIds: Id<'AnswerVersion'>[],
+        givenAnswerViews: GivenAnswerView[]): Promise<AnswerScoreDTO[]> {
 
-        // constnts 
-        const incorrectAnswerValueMultiplier = 0;
+        const { maxQuestionScore } = this._config.questionAnswer;
 
-        const allGaViews = await this
-            ._ormService
-            .query(GivenAnswerView, { questionVersionIds })
-            .where('questionVersionId', '=', 'questionVersionIds')
-            .getMany();
+        /**
+         * Get score multiplier
+         */
+        const scoreMultipliers = givenAnswerViews
+            .groupBy(view => view.questionVersionId)
+            .map(group => {
+
+                const correctAnswerCount = group.items.count(x => x.isCorrect);
+                if (correctAnswerCount === 0)
+                    throw new Error('Trying to calculate the score of a question which has no correct answers. This would cause a 0 division error.');
+
+                return ({
+                    scoreMultiplier: maxQuestionScore / correctAnswerCount,
+                    questionVersionId: group.key
+                });
+            });
 
         return answerVersionIds
             .map(answerVersionId => {
 
-                const answerView = allGaViews
+                const answerView = givenAnswerViews
                     .single(x => x.answerVersionId === answerVersionId);
 
+                const { scoreMultiplier } = scoreMultipliers
+                    .single(x => x.questionVersionId === answerView.questionVersionId);
+
                 const score = answerView.isCorrect
-                    ? 1
-                    : 1 * incorrectAnswerValueMultiplier;
+                    ? scoreMultiplier
+                    : -1 * scoreMultiplier;
 
                 return {
                     answerVersionId,
@@ -401,24 +433,42 @@ export class QuestionAnswerService {
     private async _handleCoinsAsync(
         userId: Id<'User'>,
         streakId: Id<'GivenAnswerStreak'> | null,
-        correctAnswerData: QuestionCorrectData[]) {
+        correctAnswerData: GivenAnswer[],
+        canRewardAnswer: boolean): Promise<CoinAcquireResultDTO[]> {
 
-        /**
-         * Reward streak based on length
-         */
-        if (streakId) {
-
-            const streakLength = await this
-                ._getStreakLengthAsync(streakId);
-        }
+        const correctGivenAnswers = canRewardAnswer
+            ? correctAnswerData
+                .filter(x => x.isCorrect)
+            : [];
 
         /**
          * Reward answers 
          */
-        const isAllCorrect = correctAnswerData
-            .all(x => x.isCorrect);
+        const answerRewardTransactions = await this
+            ._coinAcquireService
+            .acquireGivenAnswerCoinsAsync(userId, correctGivenAnswers);
 
-        // TODO coins
+        const answerRewardResults = answerRewardTransactions
+            .map(x => instantiate<CoinAcquireResultDTO>({
+                amount: x.amount,
+                reason: 'correct_answer'
+            }));
+
+        if (!streakId)
+            return answerRewardResults;
+
+        /**
+         * Reward streak based on length
+         */
+        const streakLength = await this
+            ._getStreakLengthAsync(streakId);
+
+        const streakCoinReward = await this
+            ._coinAcquireService
+            .handleGivenAnswerStreakCoinsAsync(userId, streakId, streakLength);
+
+        return answerRewardResults
+            .concat(streakCoinReward ?? []);
     }
 
     /**

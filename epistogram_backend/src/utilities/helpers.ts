@@ -323,11 +323,9 @@ export const sleepAsync = (seconds: number) => {
 
         const handler = () => {
 
-            console.log('Timeout is over.');
             resolve();
         };
 
-        console.log(`Timeout set for ${seconds}s.`);
         setTimeout(handler, seconds * 1000);
     });
 };

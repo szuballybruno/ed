@@ -221,8 +221,6 @@ export class XDependency {
          */
         const move = (item: DepHierarchyItem<T>) => {
 
-            // console.log(`[${ordered.length + 1}] Ordering... ${item.name}`);
-
             // add to ordered
             ordered
                 .push(item);

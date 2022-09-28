@@ -1,8 +1,8 @@
 import { ClassType } from '../misc/advancedTypes/ClassType';
 import { SQLConnectionService } from '../sqlServices/SQLConnectionService';
 import { getIsDeletedDecoratorPropertyData } from './XORMDecorators';
+import { CheckExpression, ClosingBracketCondition, ColumnSelectObjType, CrossJoinCondition, ExpressionPart, InnerJoinCondition, LeftJoinCondition, OperationType, OrderByExpression, ParamConstraintType, SelectColumnsType, SelectCondition, SimpleExpressionPart, SQLBracketType, SQLStaticValueType } from './XORMTypes';
 import { XQueryBuilderCore } from './XQueryBuilderCore';
-import { CrossJoinCondition, ExpressionPart, InnerJoinCondition, LeftJoinCondition, OperationType, SimpleExpressionPart, SQLStaticValueType, CheckExpression, SelectCondition, ColumnSelectObjType, SelectColumnsType, SQLBracketType, ClosingBracketCondition, ParamConstraintType, OrderByExpression } from './XORMTypes';
 
 // TODO IMPLEMENT ALIASES
 // type ClassType<T> = {new (): T};
@@ -95,6 +95,8 @@ export class XQueryBuilder<TEntity, TParams extends ParamConstraintType<TParams>
         this._mainClassType = classType;
         this._params = params;
         this._loggingEnabled = loggingEnabled;
+
+        this._validateParams();
     }
 
     selectFrom(fn: (builder: SelectBuilder<TResult>) => void) {
@@ -426,5 +428,66 @@ export class XQueryBuilder<TEntity, TParams extends ParamConstraintType<TParams>
                 .insert(whereIndex + 1, getDelChck())
             : this._expression
                 .push(getDelChck());
+    }
+
+    private _validateParams() {
+
+        const paramKeys = Object
+            .keys(this._params ?? {});
+
+        const notAllowedParamValueKeys = paramKeys
+            .filter(key => {
+
+                const value = (this._params as any)[key];
+
+                return !this
+                    ._isAllowedParamValue(value);
+            });
+
+        if (notAllowedParamValueKeys.any())
+            throw new Error(`Param values are of an unallowed type: ${notAllowedParamValueKeys.join(', ')}`);
+    }
+
+    private _isAllowedParamValue(value: any): boolean {
+
+        if (value === undefined)
+            return false;
+
+        if (value === null)
+            return true;
+
+        const typeofValue = typeof value;
+
+        if (typeofValue === 'boolean')
+            return true;
+
+        if (typeofValue === 'number')
+            return true;
+
+        if (typeofValue === 'string')
+            return true;
+
+        if (Array.isArray(value)) {
+
+            const isAllAllowed = value
+                .all(x => {
+
+                    // do not allow arrays of arrays
+                    if (Array.isArray(x))
+                        return false;
+
+                    return this._isAllowedParamValue(x);
+                });
+
+            return isAllAllowed;
+        }
+
+        if (value.toSQLValue)
+            return true;
+
+        if (value instanceof Date && !isNaN(value as any))
+            return true;
+
+        return false;
     }
 }

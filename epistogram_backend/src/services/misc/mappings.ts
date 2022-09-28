@@ -182,8 +182,8 @@ const marray = [
         .addMapping(VideoPlayerDataDTO, ([assetUrlService]) => (
             playerData: VideoPlayerDataView,
             videoQuestions: QuestionDataView[],
-            videoPlaybackSessionId,
-            maxWatchedSeconds
+            videoPlaybackSessionId: Id<'VideoPlaybackSession'>,
+            maxWatchedSeconds: number
         ) => instantiate<VideoPlayerDataDTO>({
             videoVersionId: playerData.videoVersionId,
             subTitle: playerData.subtitle,

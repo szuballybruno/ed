@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useAnswerPractiseQuestion, usePractiseQuestion } from '../../services/api/questionApiService';
 import { Id } from '../../shared/types/versionId';
 import { translatableTexts } from '../../static/translatableTexts';
@@ -10,7 +10,7 @@ import { EpistoConinImage } from '../universal/EpistoCoinImage';
 import { NoQuestionsAvailable } from './NoQuestionsAvailable';
 
 export const PractiseQuestions = (props: {
-    setCoinsAcquired: Dispatch<SetStateAction<boolean>>
+    setCoinsAcquired: (isCoinsAcquired: boolean) => void
 }) => {
 
     const { setCoinsAcquired } = props;
@@ -28,6 +28,9 @@ export const PractiseQuestions = (props: {
         clearAnswerResults
     } = useAnswerPractiseQuestion();
 
+    const { coinAcquires } = answerResults ?? { coinAcquires: [] };
+    const coinsAcquired = coinAcquires.length > 0;
+
     const handleAnswerQuestionAsync = async (answerVersionId: Id<'AnswerVersion'>[]) => {
 
         if (!practiseQuestion)
@@ -44,8 +47,9 @@ export const PractiseQuestions = (props: {
     };
 
     useEffect(() => {
-        setCoinsAcquired(!!answerResults?.coinAcquires?.normal?.amount);
-    }, [answerResults?.coinAcquires]);
+
+        setCoinsAcquired(coinsAcquired);
+    }, [coinsAcquired]);
 
     /**
      * Go to next question

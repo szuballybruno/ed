@@ -531,7 +531,7 @@ export class CourseService {
     /**
      * Returns the currently available courses.
      */
-    getAvailableCoursesAsync(
+    async getAvailableCoursesAsync(
         principalId: PrincipalId,
         searchTerm: string,
         filterCategoryId: number | null,
@@ -540,46 +540,38 @@ export class CourseService {
         orderBy: OrderType
     ) {
 
-        return {
-            auth: () => Promise.resolve(AuthorizationResult.ok),
-            action: async () => {
+        const courses = await this._ormService
+            .query(AvailableCourseView, { principalId })
+            .where('userId', '=', 'principalId')
+            .and('canView', '=', 'true')
+            .getMany();
 
-                const courses = await this._ormService
-                    .query(AvailableCourseView, { principalId })
-                    .where('userId', '=', 'principalId')
-                    .and('canView', '=', 'true')
-                    .getMany();
+        // TODO refactor
+        const filteredCoursesBySearchTerm =
+            filterByProperty(courses, 'title', searchTerm);
 
-                console.log('CategoryId ' + filterCategoryId);
+        const filteredCoursesByCategoryId =
+            filterByProperty(filteredCoursesBySearchTerm, 'categoryId', filterCategoryId);
 
-                // TODO refactor
-                const filteredCoursesBySearchTerm =
-                    filterByProperty(courses, 'title', searchTerm);
+        const filteredCoursesByIsFeatured =
+            filterByProperty(filteredCoursesByCategoryId, 'isFeatured', isFeatured);
 
-                const filteredCoursesByCategoryId =
-                    filterByProperty(filteredCoursesBySearchTerm, 'categoryId', filterCategoryId);
+        const filteredCoursesByIsRecommended =
+            filterByProperty(filteredCoursesByIsFeatured, 'isFeatured', isRecommended);
 
-                const filteredCoursesByIsFeatured =
-                    filterByProperty(filteredCoursesByCategoryId, 'isFeatured', isFeatured);
+        const orderedCourses = (() => {
 
-                const filteredCoursesByIsRecommended =
-                    filterByProperty(filteredCoursesByIsFeatured, 'isFeatured', isRecommended);
+            if (orderBy === 'nameASC')
+                return orderByProperty(filteredCoursesByIsRecommended, 'title', 'asc');
 
-                const orderedCourses = (() => {
+            if (orderBy === 'nameDESC')
+                return orderByProperty(filteredCoursesByIsRecommended, 'title', 'desc');
 
-                    if (orderBy === 'nameASC')
-                        return orderByProperty(filteredCoursesByIsRecommended, 'title', 'asc');
+            return filteredCoursesByIsRecommended;
+        })();
 
-                    if (orderBy === 'nameDESC')
-                        return orderByProperty(filteredCoursesByIsRecommended, 'title', 'desc');
-
-                    return filteredCoursesByIsRecommended;
-                })();
-
-                return this._mapperService
-                    .mapTo(AvailableCourseDTO, [orderedCourses]);
-            }
-        };
+        return this._mapperService
+            .mapTo(AvailableCourseDTO, [orderedCourses]);
     }
 
     /**
@@ -629,7 +621,7 @@ export class CourseService {
             .versionId;
 
         // create new version
-        const newCourseVersionId = await this
+        const { id: newCourseVersionId } = await this
             ._createNewCourseVersionAsync(courseId, oldCourseVersionId);
 
         const courseVersionMigrations = new VersionMigrationContainer([oldCourseVersionId], [newCourseVersionId], ['Course']);

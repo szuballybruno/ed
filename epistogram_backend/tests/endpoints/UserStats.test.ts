@@ -18,8 +18,6 @@ const testCalculateCompanyProductivity = async (testParams: TestParams) => {
             },
             cookies
         });
-
-    console.log(result);
 };
 
 setupIntegrationTest('Testing userStats')

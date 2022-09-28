@@ -126,8 +126,6 @@ export class UserStatsController implements XController<UserStatsController> {
     @XControllerAction(apiRoutes.userStats.getUserCourseStatsOverviewData)
     getUserCourseStatsOverviewDataAction(params: ActionParams) {
 
-        console.log(params.getQuery());
-
         const query = params
             .getQuery<any>();
 

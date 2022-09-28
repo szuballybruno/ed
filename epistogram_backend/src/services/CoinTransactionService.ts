@@ -1,15 +1,15 @@
-import {CoinTransaction} from '../models/entity/misc/CoinTransaction';
-import {CoinTransactionDTO} from '../shared/dtos/CoinTransactionDTO';
-import {CoinBalanceView} from '../models/views/CoinBalanceView';
-import {CoinTransactionView} from '../models/views/CoinTransactionView';
-import {MapperService} from './MapperService';
-import {ORMConnectionService} from './ORMConnectionService/ORMConnectionService';
-import {InsertCoinFnParamsType, SQLFunctionsService} from './sqlServices/FunctionsService';
-import {PrincipalId} from '../utilities/XTurboExpress/ActionParams';
-import {GivenAnswer} from '../models/entity/misc/GivenAnswer';
-import {Id} from '../shared/types/versionId';
-import {AuthorizationService} from './AuthorizationService';
-import {LoggerService} from './LoggerService';
+import { CoinTransaction } from '../models/entity/misc/CoinTransaction';
+import { GivenAnswer } from '../models/entity/misc/GivenAnswer';
+import { CoinBalanceView } from '../models/views/CoinBalanceView';
+import { CoinTransactionView } from '../models/views/CoinTransactionView';
+import { CoinTransactionDTO } from '../shared/dtos/CoinTransactionDTO';
+import { Id } from '../shared/types/versionId';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
+import { AuthorizationService } from './AuthorizationService';
+import { LoggerService } from './LoggerService';
+import { MapperService } from './MapperService';
+import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { InsertCoinFnParamsType, SQLFunctionsService } from './sqlServices/FunctionsService';
 
 export class CoinTransactionService {
 
@@ -36,7 +36,8 @@ export class CoinTransactionService {
         this._loggerService
             .logScoped('COINS', `Adding new coin... ${params.userId} - ${params.amount}`);
 
-        await this._ormConnectionService
+        return await this
+            ._ormConnectionService
             .createAsync(CoinTransaction, {
                 activityStreakId: params.activityStreakId || null,
                 givenAnswerStreakId: params.givenAnswerStreakId || null,
@@ -63,7 +64,7 @@ export class CoinTransactionService {
     ) {
 
         const coinBalance = await this._ormConnectionService
-            .query(CoinBalanceView, {userId})
+            .query(CoinBalanceView, { userId })
             .where('userId', '=', 'userId')
             .getSingle();
 
@@ -89,7 +90,7 @@ export class CoinTransactionService {
     ) {
 
         const coinTransactions = await this._ormConnectionService
-            .query(CoinTransactionView, {userId: userId.toSQLValue()})
+            .query(CoinTransactionView, { userId: userId.toSQLValue() })
             .where('userId', '=', 'userId')
             .getMany();
 
@@ -97,27 +98,34 @@ export class CoinTransactionService {
             .mapTo(CoinTransactionDTO, [coinTransactions]);
     }
 
-    async getCoinsForQuestionAsync(
+    /**
+     * Find coin transactions by given answer ids
+     */
+    async getUnrewardedQuestionVersionIds(
         userId: Id<'User'>,
-        givenAnswerId: Id<'GivenAnswer'>
+        questionVersionIds: Id<'QuestionVersion'>[]
     ) {
 
-        const givenAnswer = await this._ormConnectionService
-            .query(GivenAnswer, {givenAnswerId})
-            .where('id', '=', 'givenAnswerId')
-            .and('isCorrect', '=', 'true')
-            .getOneOrNull();
-
-        if (!givenAnswer)
-            return [0];
-
-        return await this._ormConnectionService
-            .query(CoinTransaction, {userId, questionVersionId: givenAnswer.questionVersionId})
+        const views = await this
+            ._ormConnectionService
+            .withResType<{ questionVersionId: Id<'QuestionVersion'> }>()
+            .query(CoinTransaction, { userId, questionVersionIds })
+            .selectFrom(x => x
+                .columns(GivenAnswer, {
+                    questionVersionId: 'questionVersionId'
+                }))
             .innerJoin(GivenAnswer, x => x
                 .on('id', '=', 'givenAnswerId', CoinTransaction)
-                .and('questionVersionId', '=', 'questionVersionId'))
+                .and('questionVersionId', '=', 'questionVersionIds'))
             .where('userId', '=', 'userId')
             .getMany();
+
+        const rewardedQuestionVersionIds = views
+            .map(x => x.questionVersionId);
+
+        return questionVersionIds
+            .filter(x => !rewardedQuestionVersionIds
+                .some(y => y === x));
     }
 
     async getCoinsForActivitySession(
@@ -125,7 +133,7 @@ export class CoinTransactionService {
         activitySessionId: Id<'ActivitySession'>
     ) {
         return await this._ormConnectionService
-            .query(CoinTransaction, {userId, activitySessionId})
+            .query(CoinTransaction, { userId, activitySessionId })
             .where('userId', '=', 'userId')
             .and('activitySessionId', '=', 'activitySessionId')
             .getOneOrNull();
@@ -136,7 +144,7 @@ export class CoinTransactionService {
         activityStreakId: Id<'ActivityStreak'>
     ) {
         return await this._ormConnectionService
-            .query(CoinTransaction, {userId, activityStreakId})
+            .query(CoinTransaction, { userId, activityStreakId })
             .where('userId', '=', 'userId')
             .and('activityStreakId', '=', 'activityStreakId')
             .getMany();
@@ -148,7 +156,7 @@ export class CoinTransactionService {
     ) {
 
         return await this._ormConnectionService
-            .query(CoinTransaction, {userId, answerStreakId})
+            .query(CoinTransaction, { userId, answerStreakId })
             .where('userId', '=', 'userId')
             .and('givenAnswerStreakId', '=', 'answerStreakId')
             .getMany();
