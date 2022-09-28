@@ -221,7 +221,6 @@ export const WatchSubpage = () => {
                         {!isMobile && <EpistoFlex2
                             id="courseItemListSidebar"
                             justify="flex-start"
-                            zIndex={0}
                             ml={!isShowSidebar || isMobile ? '0' : '10px'}
                             bg="var(--transparentWhite70)"
                             maxWidth={!isShowSidebar ? '0px' : '420px'}
@@ -234,7 +233,6 @@ export const WatchSubpage = () => {
                                 id="courseItemSelectorRoot"
                                 overflowY='scroll'
                                 pb='100px'
-                                zIndex={0}
                                 flex='1'>
 
                                 <CourseItemSelector

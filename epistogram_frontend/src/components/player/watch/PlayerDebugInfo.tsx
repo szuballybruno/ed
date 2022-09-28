@@ -1,5 +1,5 @@
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
-import { VideoPlayerStateType } from './VideoPlayer';
+import { VideoPlayerStateType } from './videoPlayerState';
 
 export const PlayerDebugInfo = (props: {
     videoPlayerState: VideoPlayerStateType

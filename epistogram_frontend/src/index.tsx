@@ -7,6 +7,7 @@ import { createRoot } from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { BrowserRouter } from 'react-router-dom';
 import { XDialogHost } from './components/lib/XDialog/XDialogHost';
+import { VideoPlayerFullscreenContextFrame as VideoPlayerFullscreenFrame } from './components/player/watch/videoPlayer/VideoPlayerFullscreenFrame';
 import { AuthenticationFrame } from './components/system/AuthenticationFrame';
 import { AutoScrollFrame } from './components/system/AutoScrollContext';
 import { ErrorDialogFrame } from './components/system/ErrorDialogFrame';
@@ -86,7 +87,8 @@ const frames: FrameType[] = [
     BusyBarFrame,
     AutoScrollFrame,
     EventListener,
-    ProgressierFrame
+    ProgressierFrame,
+    VideoPlayerFullscreenFrame
 ];
 
 const RenderFrames = ({ frames, children }: { frames: FrameType[] } & PropsWithChildren) => {

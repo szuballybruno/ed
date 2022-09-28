@@ -33,7 +33,8 @@ import { OverlayDialog } from './OverlayDialog';
 import { usePlaybackWatcher } from './PlaybackWatcherLogic';
 import { PlayerTitleBlock } from './PlayerTitleBlock';
 import { StillWatching } from './StillWatching';
-import { useVideoPlayerState, VideoPlayer } from './VideoPlayer';
+import { VideoPlayer } from './videoPlayer/VideoPlayer';
+import { useVideoPlayerState } from './videoPlayer/videoPlayerState';
 
 const autoplayTimeoutInS = 3;
 

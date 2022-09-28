@@ -10,11 +10,13 @@ import { PrequizSubpage } from './prequiz/PrequizSubpage';
 import { PretestGreetingSubpage } from './pretest/PretestGreetingSubpage';
 import { PretestResultsSubpage } from './pretest/PretestResultsSubpage';
 import { PretestSubpage } from './pretest/PretestSubpage';
+import { useVideoPlayerFullscreenContext } from './watch/videoPlayer/videoPlayerState';
 import { WatchSubpage } from './watch/WatchSubpage';
 
 export const PlayerPage = () => {
 
     const isMobile = useIsMobileView();
+    const { isFullscreen } = useVideoPlayerFullscreenContext();
 
     return (
         <PageRootContainer
@@ -31,6 +33,7 @@ export const PlayerPage = () => {
                 minHeight='100vh'
                 minWidth='100%'
                 noOverflow
+                hideNavbar={isFullscreen}
                 isMinimalMode
                 showLogo>
 
