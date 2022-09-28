@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { PlayerApiService } from '../../../services/api/PlayerApiService';
+import browser from '../../../services/core/browserSniffingService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { PlayerDataDTO } from '../../../shared/dtos/PlayerDataDTO';
 import { setPageTitle, useIsMobileView } from '../../../static/frontendHelpers';
@@ -18,6 +19,7 @@ import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogL
 import { CourseItemSelector } from './CourseItemSelector';
 import { ExamPlayer } from './ExamPlayer';
 import { ModuleView } from './ModuleView';
+import { useVideoPlayerFullscreenContext } from './videoPlayer/videoPlayerState';
 import { WatchView } from './WatchView';
 
 export type WatchSubpageState = 'watch' | 'examStart' | 'examInProgress' | 'examResults'
@@ -32,6 +34,11 @@ export const WatchSubpage = () => {
     const { setParent, scroll, parentElement } = useScrollIntoView();
     const isShowSidebar = (watchSubpageState === 'watch' || watchSubpageState === 'examStart');
     const isContentScrollable = (watchSubpageState !== 'examInProgress');
+
+
+    const isIPhone = browser.isIPhone;
+    const { isFullscreen } = useVideoPlayerFullscreenContext();
+    const isIphoneFullscreenMode = (isFullscreen && isIPhone);
 
     // get player page data
     const {
@@ -177,7 +184,7 @@ export const WatchSubpage = () => {
 
                     <EpistoFlex2
                         //px="20px"
-                        height='calc(100% - 70px)'>
+                        height={isIphoneFullscreenMode ? '100vh' : 'calc(100% - 70px)'}>
 
                         {/* main column */}
                         <EpistoDiv
