@@ -25,7 +25,7 @@ export const PlayerPage = () => {
         <PageRootContainer
             style={{
                 '--playerWidth': 'min(min(100vw, 180vh), 1700px)',
-                background: 'var(--gradientBlueBackground)'
+                background: 'pink'//'var(--gradientBlueBackground)'
             } as any}>
 
             <ContentPane
@@ -33,9 +33,12 @@ export const PlayerPage = () => {
                 margin="auto"
                 maxHeight='100vh'
                 minHeight='100vh'
+                position={isIphoneFullscreenMode ? 'fixed' : undefined}
+                top={isIphoneFullscreenMode ? '0' : undefined}
                 minWidth='100%'
                 height={isIphoneFullscreenMode ? '100vh' : undefined}
                 width={isIphoneFullscreenMode ? '100vw' : 'var(--playerWidth)'}
+                background='blue'
                 noOverflow
                 hideNavbar={isIphoneFullscreenMode}
                 isMinimalMode
