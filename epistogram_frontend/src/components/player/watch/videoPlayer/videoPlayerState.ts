@@ -1,22 +1,24 @@
-import FastForwardIcon from '@mui/icons-material/FastForward';
-import FastRewindIcon from '@mui/icons-material/FastRewind';
-import PauseIcon from '@mui/icons-material/Pause';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import React, { CSSProperties, useCallback, useEffect, useRef, useState } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import ReactPlayer from 'react-player';
+import browser from '../../../../services/core/browserSniffingService';
+import { readVolumeSettings, writeVolumeSettings } from '../../../../services/core/storageService';
+import { VideoPlayerDataDTO } from '../../../../shared/dtos/VideoDTO';
+import { useIsMobileView, useScreenOrientation } from '../../../../static/frontendHelpers';
 import screenfull from 'screenfull';
-import browser from '../../../services/core/browserSniffingService';
-import { readVolumeSettings, writeVolumeSettings } from '../../../services/core/storageService';
-import { VideoPlayerDataDTO } from '../../../shared/dtos/VideoDTO';
-import { useIsMobileView, useScreenOrientation } from '../../../static/frontendHelpers';
-import { EpistoDiv, EpistoDivProps } from '../../controls/EpistoDiv';
-import { EpistoFlex2 } from '../../controls/EpistoFlex';
-import { EpistoReactPlayer } from '../../controls/EpistoReactPlayer';
-import { AbsoluteFlexOverlay } from './AbsoluteFlexOverlay';
-import { PlayerDebugInfo } from './PlayerDebugInfo';
-import { ShouldRotatePhoneOverlay } from './ShouldRotatePhoneOverlay';
-import { VideoControls } from './VideoControls';
+
 type VisualOverlayType = 'counter' | 'pause' | 'start' | 'seekRight' | 'seekLeft';
+
+export type VideoPlayerStateType = ReturnType<typeof useVideoPlayerState>;
+
+export const useVideoPlayerFullscreenState = () => {
+
+    const [isFullscreen, setIsFullscreen] = useState(false);
+
+    return {
+        isFullscreen,
+        setIsFullscreen
+    };
+};
 
 export const useVideoPlayerState = (
     videoItem: VideoPlayerDataDTO,
@@ -38,8 +40,9 @@ export const useVideoPlayerState = (
     const [isSeeking, setIsSeeking] = useState(false);
     const [volume, setVolume] = useState(1);
     const [isMuted, setIsMuted] = useState(false);
-    const [isFullscreen, setIsFullscreen] = useState(false);
     const [isPlaying, setIsPlaying] = useState(true);
+
+    const { isFullscreen, setIsFullscreen } = useVideoPlayerFullscreenContext();
 
     const isIPhone = browser.isIPhone;
     const isMobile = useIsMobileView();
@@ -328,195 +331,12 @@ export const useVideoPlayerState = (
     };
 };
 
-export type VideoPlayerStateType = ReturnType<typeof useVideoPlayerState>;
+export type VideoPlayerFullscreenContextType = ReturnType<typeof useVideoPlayerFullscreenState>;
 
-export const VideoPlayer = (props: {
-    videoItem: VideoPlayerDataDTO,
-    videoPlayerState: VideoPlayerStateType
-} & EpistoDivProps) => {
+export const VideoPlayerFullscreenContext = createContext<VideoPlayerFullscreenContextType>({} as VideoPlayerFullscreenContextType);
 
-    const { videoPlayerState, children, videoItem, ...css } = props;
-    const {
-        playerContainerRef,
-        playerRef,
-        isVisualOverlayVisible,
-        visualOverlayType,
-        controlOverlayTimer,
-        videoUrl,
-        controlsVisible,
-        playedSeconds,
-        videoLength,
-        isShowingOverlay,
-        isPlaying,
-        maxWatchedSeconds,
-        volume,
-        isMuted,
-        isFullscreen,
-        isLandscape,
-        toggleShouldBePlaying,
-        showControlOverlay,
-        setPlayedSeconds,
-        setVideoLength,
-        toggleFullScreen,
-        seekToSeconds,
-        setIsSeeking,
-        handleOnVideoEnded,
-        setVolume,
-        setIsMuted,
-        onReady
-    } = videoPlayerState;
+export const useVideoPlayerFullscreenContext = () => {
 
-    const iconStyle = { width: '70px', height: '70px', color: 'white' } as CSSProperties;
-
-    const isMobile = useIsMobileView();
-
-    const fullScreenStyleRootProps = {
-        bottom: 0,
-        display: 'block',
-        left: 0,
-        position: 'fixed',
-        background: 'black',
-        right: 0,
-        top: 0,
-        zIndex: 100
-    } as CSSProperties;
-
-    const fullScreenStyleWrapperProps = {
-        top: '0',
-        left: '0',
-        position: 'absolute',
-        width: '100vw',
-        height: '100vh'
-    } as CSSProperties;
-
-    const marks = [maxWatchedSeconds];
-
-    return (
-        <EpistoDiv
-            id="fullScreenRoot"
-            position="relative"
-            ref={playerContainerRef}
-            style={
-                isFullscreen
-                    ? { ...fullScreenStyleRootProps }
-                    : undefined
-            }
-            {...css}>
-
-            <PlayerDebugInfo videoPlayerState={videoPlayerState} />
-
-            {(isMobile && !isFullscreen && !isLandscape) && <EpistoFlex2
-                onClick={() => { toggleFullScreen(); }}
-                top='0'
-                className='whall'
-                background='black'
-                position='absolute'
-                align='center'
-                justify='center'
-                zIndex={16}>
-
-                <PlayArrowIcon
-                    style={iconStyle} />
-            </EpistoFlex2>}
-
-            {(isMobile && isFullscreen && !isLandscape) && <ShouldRotatePhoneOverlay
-                onExitFullScreen={toggleFullScreen} />}
-
-            {/* playback */}
-            <EpistoDiv
-                id="playbackWrapper"
-                filter={isShowingOverlay ? 'blur(4px)' : 'blur(0px)'}
-                transition="0.3s"
-                position="relative"
-                zIndex={12}
-                className="whall">
-
-                {/* video wrapper */}
-                <EpistoDiv
-                    id="videoWrapper"
-                    className="whall"
-                    // pt="56.25%" // to keep 16:9 ratio
-                    background='black'
-                    style={
-                        isFullscreen
-                            ? { ...fullScreenStyleWrapperProps }
-                            : undefined
-                    }
-                    onClick={toggleShouldBePlaying}
-                    onMouseMove={() => {
-
-                        if (!controlOverlayTimer)
-                            showControlOverlay();
-                    }}
-                    position="relative">
-
-                    {/* the player */}
-                    <EpistoReactPlayer
-                        playbackRate={1}
-                        playerRef={playerRef}
-                        url={videoUrl}
-                        style={{
-                            borderRadius: 6,
-                            overflow: 'hidden'
-                        }}
-                        width="100%"
-                        height="100%"
-                        playsinline
-                        volume={volume}
-                        muted={isMuted}
-                        controls={false}
-                        playing={isPlaying}
-                        onProgress={(playedInfo) => {
-
-                            setPlayedSeconds(playedInfo.playedSeconds);
-                        }}
-                        onReady={(e) => {
-
-                            onReady();
-                            setVideoLength(e.getDuration());
-                        }}
-                        config={{
-                            file: {
-                                attributes: {
-                                    crossOrigin: 'true',
-                                    onContextMenu: e => e.preventDefault()
-                                },
-                                // tracks: subtileTracks,
-                            }
-                        }}
-                        loop={false}
-                        onEnded={handleOnVideoEnded} />
-                </EpistoDiv>
-
-                {/* video controls */}
-                <VideoControls
-                    isFullscreen={isFullscreen}
-                    controlsVisible={controlsVisible}
-                    isPlaying={isPlaying}
-                    markSeconds={marks}
-                    playedSeconds={playedSeconds}
-                    videoLength={videoLength}
-                    volume={volume}
-                    isMuted={isMuted}
-                    setIsMuted={setIsMuted}
-                    showControlOverlay={showControlOverlay}
-                    seekToSeconds={seekToSeconds}
-                    setIsSeeking={setIsSeeking}
-                    toggleFullScreen={toggleFullScreen}
-                    toggleShouldBePlaying={toggleShouldBePlaying}
-                    setVolume={setVolume} />
-
-            </EpistoDiv>
-
-            {/* visual overlay */}
-            <AbsoluteFlexOverlay isVisible={isVisualOverlayVisible}>
-                {visualOverlayType === 'pause' && <PauseIcon style={iconStyle} />}
-                {visualOverlayType === 'start' && <PlayArrowIcon style={iconStyle} />}
-                {visualOverlayType === 'seekRight' && <FastForwardIcon style={iconStyle} />}
-                {visualOverlayType === 'seekLeft' && <FastRewindIcon style={iconStyle} />}
-            </AbsoluteFlexOverlay>
-
-            {children}
-        </EpistoDiv>
-    );
+    return useContext(VideoPlayerFullscreenContext);
 };
+

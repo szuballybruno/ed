@@ -1,4 +1,5 @@
 import { applicationRoutes } from '../../configuration/applicationRoutes';
+import browser from '../../services/core/browserSniffingService';
 import { useIsMobileView } from '../../static/frontendHelpers';
 import { ContentPane } from '../ContentPane';
 import { PageRootContainer } from '../PageRootContainer';
@@ -10,11 +11,15 @@ import { PrequizSubpage } from './prequiz/PrequizSubpage';
 import { PretestGreetingSubpage } from './pretest/PretestGreetingSubpage';
 import { PretestResultsSubpage } from './pretest/PretestResultsSubpage';
 import { PretestSubpage } from './pretest/PretestSubpage';
+import { useVideoPlayerFullscreenContext } from './watch/videoPlayer/videoPlayerState';
 import { WatchSubpage } from './watch/WatchSubpage';
 
 export const PlayerPage = () => {
 
     const isMobile = useIsMobileView();
+    const isIPhone = browser.isIPhone;
+    const { isFullscreen } = useVideoPlayerFullscreenContext();
+    const isIphoneFullscreenMode = (isFullscreen && isIPhone);
 
     return (
         <PageRootContainer
@@ -25,12 +30,16 @@ export const PlayerPage = () => {
 
             <ContentPane
                 noPadding={isMobile}
-                width="var(--playerWidth)"
                 margin="auto"
                 maxHeight='100vh'
                 minHeight='100vh'
+                position={isIphoneFullscreenMode ? 'fixed' : undefined}
+                top={isIphoneFullscreenMode ? '0' : undefined}
                 minWidth='100%'
+                height={isIphoneFullscreenMode ? '100vh' : undefined}
+                width={isIphoneFullscreenMode ? '100vw' : 'var(--playerWidth)'}
                 noOverflow
+                hideNavbar={isIphoneFullscreenMode}
                 isMinimalMode
                 showLogo>
 

@@ -5,10 +5,10 @@ import VolumeMuteIcon from '@mui/icons-material/VolumeMute';
 import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import { Slider } from '@mui/material';
-import { secondsToTime, useIsMobileView } from '../../../static/frontendHelpers';
-import { EpistoButton } from '../../controls/EpistoButton';
-import { EpistoFlex2 } from '../../controls/EpistoFlex';
-import { EpistoFont } from '../../controls/EpistoFont';
+import { useIsMobileView, secondsToTime } from '../../../../static/frontendHelpers';
+import { EpistoButton } from '../../../controls/EpistoButton';
+import { EpistoFlex2 } from '../../../controls/EpistoFlex';
+import { EpistoFont } from '../../../controls/EpistoFont';
 
 export const VideoControls = (props: {
     isFullscreen: boolean,
