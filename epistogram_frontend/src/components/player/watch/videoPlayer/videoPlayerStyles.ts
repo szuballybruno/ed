@@ -15,7 +15,8 @@ export const videoPlayerStyles = {
     } as EpistoDivProps,
 
     fullScreenRootPropsDesktop: {
-        position: 'relative'
+        position: 'relative',
+        background: 'green'
     } as EpistoDivProps,
 
     videoWrapperPropsMobile: {
