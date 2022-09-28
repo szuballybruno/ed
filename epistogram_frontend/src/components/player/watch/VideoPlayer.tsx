@@ -8,11 +8,12 @@ import screenfull from 'screenfull';
 import browser from '../../../services/core/browserSniffingService';
 import { readVolumeSettings, writeVolumeSettings } from '../../../services/core/storageService';
 import { VideoPlayerDataDTO } from '../../../shared/dtos/VideoDTO';
-import { useScreenOrientation } from '../../../static/frontendHelpers';
+import { useIsMobileView, useScreenOrientation } from '../../../static/frontendHelpers';
 import { EpistoDiv, EpistoDivProps } from '../../controls/EpistoDiv';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoReactPlayer } from '../../controls/EpistoReactPlayer';
 import { AbsoluteFlexOverlay } from './AbsoluteFlexOverlay';
+import { PlayerDebugInfo } from './PlayerDebugInfo';
 import { ShouldRotatePhoneOverlay } from './ShouldRotatePhoneOverlay';
 import { VideoControls } from './VideoControls';
 type VisualOverlayType = 'counter' | 'pause' | 'start' | 'seekRight' | 'seekLeft';
@@ -41,29 +42,41 @@ export const useVideoPlayerState = (
     const [isPlaying, setIsPlaying] = useState(true);
 
     const isIPhone = browser.isIPhone;
+    const isMobile = useIsMobileView();
 
     const screenOrientation = useScreenOrientation();
     const isLandscape = screenOrientation === 90;
 
-    const controlsVisible = (isIPhone && isLandscape) || showControls || !shouldBePlaying || isSeeking;
+    const controlsVisible = (isMobile && isLandscape) || showControls || !shouldBePlaying || isSeeking;
 
     const isVideoEnded = (videoLength > 0) && (playedSeconds > (videoLength - 0.1));
 
-    /*  const isPlaying = isIPhone
-         ? (isIPhone && isLandscape && shouldBePlaying && !isVideoEnded && !isSeeking && !isShowingOverlay)
-         : (!isVideoEnded && shouldBePlaying && !isShowingOverlay && !isSeeking); */
     useEffect(() => {
 
-        if (isLandscape && isIPhone) {
+        console.log('Triggering isIphone, isLandscape, isFullscreen...');
+
+        if (isLandscape && isMobile && isFullscreen) {
 
             setIsPlaying(true);
         } else {
 
             setIsPlaying(false);
         }
-    }, [isIPhone, isLandscape]);
+    }, [isMobile, isLandscape]);
 
     useEffect(() => {
+
+        if (isLandscape && !isFullscreen) {
+
+            setIsFullscreen(true);
+            setIsPlaying(false);
+            setShouldBePlaying(false);
+        }
+    }, [isLandscape]);
+
+    useEffect(() => {
+
+        console.log('Triggering isSeeking...');
 
         if (isSeeking) {
 
@@ -76,6 +89,8 @@ export const useVideoPlayerState = (
 
     useEffect(() => {
 
+        console.log('Triggering isVideoEnded...');
+
         if (isVideoEnded) {
 
             setIsPlaying(false);
@@ -83,6 +98,8 @@ export const useVideoPlayerState = (
     }, [isVideoEnded]);
 
     useEffect(() => {
+
+        console.log('Triggering shouldBePlaying...');
 
         if (shouldBePlaying) {
 
@@ -94,6 +111,8 @@ export const useVideoPlayerState = (
     }, [shouldBePlaying]);
 
     useEffect(() => {
+
+        console.log('Triggering isShowingOverlay...');
 
         if (isShowingOverlay) {
 
@@ -108,26 +127,33 @@ export const useVideoPlayerState = (
 
         console.log('handleOnReady runs...');
 
-        if (isIPhone && !isLandscape) {
+        if (isMobile && !isLandscape) {
 
             setIsPlaying(false);
         }
-    }, [isIPhone, isLandscape]);
+    }, [isMobile, isLandscape]);
 
     const toggleFullScreen = () => {
 
-        if (browser.isIPhone) {
+        if (isMobile && isIPhone) {
 
             document.body.style.overflow === 'hidden'
                 ? document.body.style.overflow = ''
                 : document.body.style.overflow = 'hidden';
 
             setIsFullscreen(x => !x);
-        } else {
+
+        }
+        if (isMobile && !isIPhone) {
 
             //@ts-ignore
             screenfull.toggle(playerContainerRef.current);
-            //setIsFullscreen(x => !x);
+            setIsFullscreen(x => !x);
+        }
+
+        if (!isMobile && !isIPhone) {
+            //@ts-ignore
+            screenfull.toggle(playerContainerRef.current);
         }
 
     };
@@ -228,7 +254,7 @@ export const useVideoPlayerState = (
     // effect
     //
 
-    // conflicting with comments, disabled temporarly
+    // TODO: conflicting with comments, disabled temporarly
     /*    useEventListener('keydown', (e) => {
      
            if (e.key === ' ' || e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
@@ -326,7 +352,6 @@ export const VideoPlayer = (props: {
         volume,
         isMuted,
         isFullscreen,
-        isIPhone,
         isLandscape,
         toggleShouldBePlaying,
         showControlOverlay,
@@ -338,12 +363,12 @@ export const VideoPlayer = (props: {
         handleOnVideoEnded,
         setVolume,
         setIsMuted,
-        setIsFullscreen,
-        setShouldBePlaying,
         onReady
     } = videoPlayerState;
 
     const iconStyle = { width: '70px', height: '70px', color: 'white' } as CSSProperties;
+
+    const isMobile = useIsMobileView();
 
     const fullScreenStyleRootProps = {
         bottom: 0,
@@ -378,12 +403,32 @@ export const VideoPlayer = (props: {
             }
             {...css}>
 
+            <PlayerDebugInfo videoPlayerState={videoPlayerState} />
+
+            {(isMobile && !isFullscreen && !isLandscape) && <EpistoFlex2
+                onClick={() => { toggleFullScreen(); }}
+                top='0'
+                className='whall'
+                background='black'
+                position='absolute'
+                align='center'
+                justify='center'
+                zIndex={16}>
+
+                <PlayArrowIcon
+                    style={iconStyle} />
+            </EpistoFlex2>}
+
+            {(isMobile && isFullscreen && !isLandscape) && <ShouldRotatePhoneOverlay
+                onExitFullScreen={toggleFullScreen} />}
+
             {/* playback */}
             <EpistoDiv
                 id="playbackWrapper"
                 filter={isShowingOverlay ? 'blur(4px)' : 'blur(0px)'}
                 transition="0.3s"
                 position="relative"
+                zIndex={12}
                 className="whall">
 
                 {/* video wrapper */}
@@ -412,8 +457,7 @@ export const VideoPlayer = (props: {
                         url={videoUrl}
                         style={{
                             borderRadius: 6,
-                            overflow: 'hidden',
-                            zIndex: 13
+                            overflow: 'hidden'
                         }}
                         width="100%"
                         height="100%"
@@ -462,24 +506,7 @@ export const VideoPlayer = (props: {
                     toggleShouldBePlaying={toggleShouldBePlaying}
                     setVolume={setVolume} />
 
-                {(isIPhone && !isFullscreen && !isLandscape) && <EpistoFlex2
-                    onClick={() => { setIsFullscreen(x => !x); }}
-                    top='0'
-                    className='whall'
-                    background='black'
-                    position='absolute'
-                    zIndex='15'
-                    align='center'
-                    justify='center'>
-
-                    <PlayArrowIcon
-                        style={iconStyle} />
-                </EpistoFlex2>}
-
             </EpistoDiv>
-
-
-            {(isIPhone && isFullscreen && !isLandscape) && <ShouldRotatePhoneOverlay setIsFullscreen={setIsFullscreen} />}
 
             {/* visual overlay */}
             <AbsoluteFlexOverlay isVisible={isVisualOverlayVisible}>

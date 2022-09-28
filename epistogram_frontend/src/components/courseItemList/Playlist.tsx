@@ -2,23 +2,24 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import {useEffect, useState} from 'react';
-import {useNavigation} from '../../services/core/navigatior';
-import {PlaylistItemDTO} from '../../shared/dtos/PlaylistItemDTO';
-import {PlaylistModuleDTO} from '../../shared/dtos/PlaylistModuleDTO';
-import {Id} from '../../shared/types/versionId';
-import {EpistoButton} from '../controls/EpistoButton';
+import { useEffect, useState } from 'react';
+import { useNavigation } from '../../services/core/navigatior';
+import { PlaylistItemDTO } from '../../shared/dtos/PlaylistItemDTO';
+import { PlaylistModuleDTO } from '../../shared/dtos/PlaylistModuleDTO';
+import { Id } from '../../shared/types/versionId';
+import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoDiv } from '../controls/EpistoDiv';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
-import {EpistoFont} from '../controls/EpistoFont';
-import {CollapseItem} from '../universal/CollapseItem';
-import {FlexList} from '../universal/FlexList';
-import {PlaylistItem} from './PlaylistItem';
+import { EpistoFont } from '../controls/EpistoFont';
+import { CollapseItem } from '../universal/CollapseItem';
+import { FlexList } from '../universal/FlexList';
+import { PlaylistItem } from './PlaylistItem';
 
 export type NavigateToCourseItemActionType = (descriptorCode: string) => void;
 
 export const Playlist = (props: {
-    modules: PlaylistModuleDTO[]
+    modules: PlaylistModuleDTO[],
+    isMobile?: boolean
 }) => {
 
     // hooks
@@ -26,7 +27,7 @@ export const Playlist = (props: {
     const { navigateToPlayer } = useNavigation();
 
     // data
-    const { modules } = props;
+    const { modules, isMobile } = props;
 
     const isBeginnerMode = modules
         .flatMap(x => x.items)
@@ -92,7 +93,7 @@ export const Playlist = (props: {
         <EpistoFlex2
             id="courseItemListRoot"
             direction="column"
-            zIndex='4'
+            zIndex={0}
             justifyContent={'flex-start'}>
 
             {modules
@@ -111,7 +112,8 @@ export const Playlist = (props: {
                         isOpen={isOpen}
                         style={{
                             pointerEvents: isLocked || unclickable ? 'none' : 'all',
-                            color: isLocked ? 'gray' : undefined
+                            color: isLocked ? 'gray' : undefined,
+                            zIndex: 0
                         }}
                         header={() => <EpistoFlex2
                             bg={isSelected ? 'var(--deepBlue)' : undefined}
@@ -121,12 +123,15 @@ export const Playlist = (props: {
                             align="center"
                             height="50px"
                             minH={'50px'}
-                            pl="5px">
+                            zIndex={0}
+                            pl={isMobile ? '0' : '5px'}>
 
                             {/* open/close */}
-                            <EpistoFlex2 align="center">
+                            <EpistoFlex2
+                                align="center">
 
-                                <EpistoButton onClick={() => handleToggle(module.moduleId)}>
+                                <EpistoButton
+                                    onClick={() => handleToggle(module.moduleId)}>
 
                                     {unclickable
                                         ? <FiberManualRecordIcon style={{ color: headercolor }} />

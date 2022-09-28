@@ -1,25 +1,25 @@
-import {Divider} from '@chakra-ui/layout';
-import {useEffect, useRef, useState} from 'react';
-import {CourseApiService} from '../../../services/api/courseApiService';
-import {useTempomatMode} from '../../../services/api/tempomatApiService';
-import {useRecommendedItemQuota} from '../../../services/api/userProgressApiService';
-import {useShowErrorDialog} from '../../../services/core/notifications';
-import {PlaylistModuleDTO} from '../../../shared/dtos/PlaylistModuleDTO';
-import {CourseItemStateType, CourseModeType} from '../../../shared/types/sharedTypes';
-import {Id} from '../../../shared/types/versionId';
-import {translatableTexts} from '../../../static/translatableTexts';
-import {EpistoButton} from '../../controls/EpistoButton';
-import {EpistoFont} from '../../controls/EpistoFont';
-import {EpistoPopper} from '../../controls/EpistoPopper';
-import {Playlist} from '../../courseItemList/Playlist';
-import {RecommendedItemQuota} from '../../home/RecommendedItemQuota';
-import {EpistoDialog} from '../../universal/epistoDialog/EpistoDialog';
-import {useEpistoDialogLogic} from '../../universal/epistoDialog/EpistoDialogLogic';
-import {TempomatSettingsDialog} from '../tempomat/TempomatSettingsDialog';
-import {TempomatTempoInfo} from '../tempomat/TempomatTempoInfo';
-import {KeyboardArrowUp} from '@mui/icons-material';
-import {useScrollIntoView} from '../../system/AutoScrollContext';
+import { Divider } from '@chakra-ui/layout';
+import { KeyboardArrowUp } from '@mui/icons-material';
+import { useEffect, useRef, useState } from 'react';
+import { CourseApiService } from '../../../services/api/courseApiService';
+import { useTempomatMode } from '../../../services/api/tempomatApiService';
+import { useRecommendedItemQuota } from '../../../services/api/userProgressApiService';
+import { useShowErrorDialog } from '../../../services/core/notifications';
+import { PlaylistModuleDTO } from '../../../shared/dtos/PlaylistModuleDTO';
+import { CourseItemStateType, CourseModeType } from '../../../shared/types/sharedTypes';
+import { Id } from '../../../shared/types/versionId';
+import { translatableTexts } from '../../../static/translatableTexts';
+import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
+import { EpistoFont } from '../../controls/EpistoFont';
+import { EpistoPopper } from '../../controls/EpistoPopper';
+import { Playlist } from '../../courseItemList/Playlist';
+import { RecommendedItemQuota } from '../../home/RecommendedItemQuota';
+import { useScrollIntoView } from '../../system/AutoScrollContext';
+import { EpistoDialog } from '../../universal/epistoDialog/EpistoDialog';
+import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogLogic';
+import { TempomatSettingsDialog } from '../tempomat/TempomatSettingsDialog';
+import { TempomatTempoInfo } from '../tempomat/TempomatTempoInfo';
 
 export const CourseItemSelector = (props: {
     mode: CourseModeType,
@@ -30,7 +30,8 @@ export const CourseItemSelector = (props: {
     nextItemState: CourseItemStateType | null,
     isScrolledFromTop?: boolean,
     isPlayerLoaded: boolean,
-    canChangeMode?: boolean
+    canChangeMode?: boolean,
+    isMobile?: boolean
 }) => {
 
     const {
@@ -42,7 +43,8 @@ export const CourseItemSelector = (props: {
         courseId,
         modules,
         canChangeMode,
-        isScrolledFromTop
+        isScrolledFromTop,
+        isMobile
     } = props;
 
     const showErrorDialog = useShowErrorDialog();
@@ -53,7 +55,7 @@ export const CourseItemSelector = (props: {
     const { recommendedItemQuota, refetchRecommendedItemQuota } = useRecommendedItemQuota(courseId);
     const { tempomatMode, refetchTempomatMode } = useTempomatMode(courseId, isPlayerLoaded);
     const { setCourseModeAsync } = CourseApiService.useSetCourseMode();
-    const {scrollToTop} = useScrollIntoView();
+    const { scrollToTop } = useScrollIntoView();
 
     // dialog state
     const dialogLogic = useEpistoDialogLogic('advModeChangWarnDialog');
@@ -104,14 +106,14 @@ export const CourseItemSelector = (props: {
     return <>
 
         {/* Tempomat info dialog */}
-        <TempomatSettingsDialog
+        {!isMobile && <TempomatSettingsDialog
             onTempomatModeChanged={onTempomatModeChanged}
             tempomatMode={tempomatMode ?? 'auto'}
             courseId={courseId}
-            tempomatDialogLogic={tempomatDialogLogic} />
+            tempomatDialogLogic={tempomatDialogLogic} />}
 
         {/* warning dialog */}
-        <EpistoDialog
+        {!isMobile && <EpistoDialog
             logic={dialogLogic}
             closeButtonType="top">
 
@@ -124,10 +126,10 @@ export const CourseItemSelector = (props: {
 
                 Biztosan váltasz haladó módra? Ez a művelet nem vonható vissza!
             </EpistoFlex2>
-        </EpistoDialog>
+        </EpistoDialog>}
 
         {/* Tempomat */}
-        <EpistoFlex2
+        {!isMobile && <EpistoFlex2
             align="center"
             padding="20px"
             position='sticky'
@@ -162,7 +164,7 @@ export const CourseItemSelector = (props: {
                     recommendedItemCount={recommendedItemQuota?.recommendedItemsPerDay ?? 0} />
             </EpistoFlex2>
 
-        </EpistoFlex2>
+        </EpistoFlex2>}
 
         {/* option to enable advanced mode
         IF STARTED COURSE  IN BEGINNER MODE */}
@@ -266,33 +268,34 @@ export const CourseItemSelector = (props: {
 
         {isScrolledFromTop && <EpistoButton
             onClick={() => scrollToTop()}
-           style={{
-               padding: '5px 10px',
-               minHeight: '30px',
-               width: '160px',
-               alignSelf: 'center',
-               background: 'var(--epistoTeal)',
-               color: 'white',
-               display: 'flex',
-               zIndex: 100000,
-               alignItems: 'center',
-               position: 'absolute',
-               top: 110,
-               border: '1px solid var(--mildGrey)',
-               borderRadius: '20px'
-           }}>
+            style={{
+                padding: '5px 10px',
+                minHeight: '30px',
+                width: '160px',
+                alignSelf: 'center',
+                background: 'var(--epistoTeal)',
+                color: 'white',
+                display: 'flex',
+                zIndex: 100000,
+                alignItems: 'center',
+                position: 'absolute',
+                top: 110,
+                border: '1px solid var(--mildGrey)',
+                borderRadius: '20px'
+            }}>
 
-           <KeyboardArrowUp />
+            <KeyboardArrowUp />
 
-           <EpistoFont
-               fontSize='fontExtraSmall'
-               isUppercase>
+            <EpistoFont
+                fontSize='fontExtraSmall'
+                isUppercase>
 
                 Görgetés felülre
-           </EpistoFont>
+            </EpistoFont>
         </EpistoButton>}
 
         <Playlist
+            isMobile={isMobile}
             modules={modules}></Playlist>
     </>;
 };

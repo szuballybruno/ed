@@ -5,10 +5,10 @@ import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
 
 export const ShouldRotatePhoneOverlay = (props: {
-    setIsFullscreen: React.Dispatch<React.SetStateAction<boolean>>
+    onExitFullScreen: () => void
 }) => {
 
-    const { setIsFullscreen } = props;
+    const { onExitFullScreen } = props;
 
     return <EpistoFlex2
         direction='column'
@@ -20,7 +20,7 @@ export const ShouldRotatePhoneOverlay = (props: {
         justify='center'
         background='#FFFFFF99'
         backdropFilter='blur(10px)'
-        zIndex='100000'>
+        zIndex={15}>
 
         <EpistoFlex2
             width='100%'
@@ -51,7 +51,7 @@ export const ShouldRotatePhoneOverlay = (props: {
                 overflow: 'visible'
             }}
             onClick={() => {
-                setIsFullscreen(x => !x);
+                onExitFullScreen();
             }}
             variant='outlined'>
 

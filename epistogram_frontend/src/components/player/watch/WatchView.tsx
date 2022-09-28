@@ -22,7 +22,6 @@ import { EpistoDiv } from '../../controls/EpistoDiv';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { NavigateToCourseItemActionType } from '../../courseItemList/Playlist';
-import { EpistoHeader } from '../../EpistoHeader';
 import { EpistoPaging } from '../../universal/EpistoPaging';
 import { TimeoutFrame } from '../../universal/TimeoutFrame';
 import { VideoQuestionnaire } from '../../universal/VideoQuestionnaire';
@@ -32,9 +31,9 @@ import { AbsoluteFlexOverlay } from './AbsoluteFlexOverlay';
 import { CourseItemSelector } from './CourseItemSelector';
 import { OverlayDialog } from './OverlayDialog';
 import { usePlaybackWatcher } from './PlaybackWatcherLogic';
+import { PlayerTitleBlock } from './PlayerTitleBlock';
 import { StillWatching } from './StillWatching';
 import { useVideoPlayerState, VideoPlayer } from './VideoPlayer';
-import { VideoRating } from './VideoRating';
 
 const autoplayTimeoutInS = 3;
 
@@ -245,11 +244,16 @@ export const WatchView = (props: {
     return <>
 
         {/* video player */}
-        <EpistoFlex2 justify="center">
+        <EpistoFlex2
+            direction='column'
+            zIndex={12}
+            position={isMobile ? 'sticky' : undefined}
+            top={isMobile ? '0' : undefined}
+            align="center">
+
             <VideoPlayer
                 //height="calc((var(--playerWidth) - 420px) / 1.80)"
                 className="largeSoftShadow"
-                zIndex="5"
                 videoItem={videoPlayerData}
                 videoPlayerState={videoPlayerState}>
 
@@ -285,11 +289,13 @@ export const WatchView = (props: {
 
                 {/* questionnaire */}
                 <AbsoluteFlexOverlay
+                    zIndex={17}
                     isVisible={isQuestionVisible}
                     hasPointerEvents={true}>
 
                     <OverlayDialog
                         showCloseButton={false}>
+
                         <VideoQuestionnaire
                             answerSessionId={answerSessionId}
                             question={currentQuestion!}
@@ -307,6 +313,7 @@ export const WatchView = (props: {
 
                 {/* still watching */}
                 <AbsoluteFlexOverlay
+                    zIndex={17}
                     isVisible={!!currentStillWatchingMarker}
                     hasPointerEvents={true}>
                     <OverlayDialog showCloseButton={false}>
@@ -324,18 +331,32 @@ export const WatchView = (props: {
                     </OverlayDialog>
                 </AbsoluteFlexOverlay>
             </VideoPlayer>
+
+            {isMobile && <PlayerTitleBlock
+                title={videoPlayerData!.title}
+                subTitle={videoPlayerData!.subTitle}
+                videoVersionId={videoPlayerData!.videoVersionId}
+                isMobile={isMobile}
+                courseId={courseId} />}
         </EpistoFlex2>
 
         {/* under video info */}
         <EpistoDiv
             className="roundBorders largeSoftShadow"
-            zIndex="10"
-            mt="10px"
+            mt={isMobile ? '0' : '10px'}
             px="20px"
             pb="200px"
             background="var(--transparentWhite70)">
 
+            {!isMobile && <PlayerTitleBlock
+                title={videoPlayerData!.title}
+                subTitle={videoPlayerData!.subTitle}
+                videoVersionId={videoPlayerData!.videoVersionId}
+                isMobile={isMobile}
+                courseId={courseId} />}
+
             {isMobile && <CourseItemSelector
+                isMobile={isMobile}
                 isPlayerLoaded={isPlayerLoaded}
                 currentItemCode={currentItemCode}
                 nextItemState={nextItemState}
@@ -344,50 +365,23 @@ export const WatchView = (props: {
                 refetchPlayerData={refetchPlayerData}
                 modules={modules} />}
 
-            <EpistoFlex2
-                id="titleAndSegmentedButtonFlex"
-                justify="space-between"
-                py="20px"
-                flexWrap="wrap"
-                align="center">
-
-                <EpistoFlex2 direction="column"
-                    flex="5">
-
-                    <EpistoFont
-                        fontSize="fontLargePlus"
-                        style={{
-                            fontWeight: 500
-                        }}>
-
-                        {videoPlayerData!.title}
-                    </EpistoFont>
-
-                    <EpistoHeader variant="sub"
-                        text={videoPlayerData!.subTitle} />
-                </EpistoFlex2>
-
-                {/* ratings */}
-                <VideoRating videoVersionId={videoPlayerData!.videoVersionId} />
-            </EpistoFlex2>
-
-            <Divider
+            {!isMobile && <Divider
                 style={{
                     background: 'var(--epistoTeal)',
                     width: '100%',
                     height: '4px',
                     borderRadius: '10px',
                     boxShadow: 'inset -1px -2px 1px 1px rgba(0,0,0,0.10)'
-                }} />
+                }} />}
 
-            <EpistoPaging
+            {!isMobile && <EpistoPaging
                 index={descCommentPaging.currentIndex}
                 slides={[
                     VideoDescription,
                     VideoComments
                 ]}>
 
-            </EpistoPaging>
+            </EpistoPaging>}
         </EpistoDiv>
     </>;
 };

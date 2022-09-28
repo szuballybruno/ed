@@ -1,24 +1,24 @@
 import { useEffect, useMemo, useState } from 'react';
+import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { PlayerApiService } from '../../../services/api/PlayerApiService';
 import { useNavigation } from '../../../services/core/navigatior';
+import { PlayerDataDTO } from '../../../shared/dtos/PlayerDataDTO';
 import { setPageTitle, useIsMobileView } from '../../../static/frontendHelpers';
 import { useStringParam } from '../../../static/locationHelpers';
+import { Logger } from '../../../static/Logger';
 import { translatableTexts } from '../../../static/translatableTexts';
+import { EpistoDiv } from '../../controls/EpistoDiv';
+import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
-import { EpistoDialog } from '../../universal/epistoDialog/EpistoDialog';
+import { useScrollIntoView } from '../../system/AutoScrollContext';
 import { LoadingFrame } from '../../system/LoadingFrame';
 import { Copyright } from '../../universal/Copyright';
+import { EpistoDialog } from '../../universal/epistoDialog/EpistoDialog';
+import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogLogic';
 import { CourseItemSelector } from './CourseItemSelector';
 import { ExamPlayer } from './ExamPlayer';
 import { ModuleView } from './ModuleView';
 import { WatchView } from './WatchView';
-import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogLogic';
-import { PlayerDataDTO } from '../../../shared/dtos/PlayerDataDTO';
-import { applicationRoutes } from '../../../configuration/applicationRoutes';
-import { Logger } from '../../../static/Logger';
-import { useScrollIntoView } from '../../system/AutoScrollContext';
-import { EpistoFlex2 } from '../../controls/EpistoFlex';
-import { EpistoDiv } from '../../controls/EpistoDiv';
 
 export type WatchSubpageState = 'watch' | 'examStart' | 'examInProgress' | 'examResults'
 
@@ -218,11 +218,11 @@ export const WatchSubpage = () => {
                         </EpistoDiv>
 
                         {/* right sidebar */}
-                        <EpistoFlex2
+                        {!isMobile && <EpistoFlex2
                             id="courseItemListSidebar"
                             justify="flex-start"
-                            zIndex="4"
-                            ml={!isShowSidebar ? '0' : '10px'}
+                            zIndex={0}
+                            ml={!isShowSidebar || isMobile ? '0' : '10px'}
                             bg="var(--transparentWhite70)"
                             maxWidth={!isShowSidebar ? '0px' : '420px'}
                             opacity={!isShowSidebar ? 0 : 1}
@@ -234,6 +234,7 @@ export const WatchSubpage = () => {
                                 id="courseItemSelectorRoot"
                                 overflowY='scroll'
                                 pb='100px'
+                                zIndex={0}
                                 flex='1'>
 
                                 <CourseItemSelector
@@ -247,7 +248,7 @@ export const WatchSubpage = () => {
                                     isPlayerLoaded={isPlayerLoaded}
                                     refetchPlayerData={refetchPlayerData} />
                             </EpistoFlex2>}
-                        </EpistoFlex2>
+                        </EpistoFlex2>}
                     </EpistoFlex2>
                 </LoadingFrame>
             </>
