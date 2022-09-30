@@ -1,15 +1,13 @@
-import {applicationRoutes} from '../configuration/applicationRoutes';
-import {useNavigation} from '../services/core/navigatior';
-import {Environment} from '../static/Environemnt';
-import {PropsWithChildren} from '../static/frontendHelpers';
-import {translatableTexts} from '../static/translatableTexts';
-import {EpistoButton} from './controls/EpistoButton';
-import {EpistoFlex2} from './controls/EpistoFlex';
-import {EpistoFont} from './controls/EpistoFont';
-import {FlexFloat} from './controls/FlexFloat';
-import {useAuthorizationContext} from './system/AuthorizationContext';
-import {useTawkApi} from './system/TawkToFrame';
-
+import { applicationRoutes } from '../configuration/applicationRoutes';
+import { CompanyApiService } from '../services/api/companyApiService';
+import { useNavigation } from '../services/core/navigatior';
+import { Environment } from '../static/Environemnt';
+import { PropsWithChildren } from '../static/frontendHelpers';
+import { EpistoFlex2 } from './controls/EpistoFlex';
+import { EpistoImage } from './controls/EpistoImage';
+import { FlexFloat } from './controls/FlexFloat';
+import { useAuthorizationContext } from './system/AuthorizationContext';
+import { useTawkApi } from './system/TawkToFrame';
 export const LeftPane = ({
     padding,
     basis,
@@ -22,7 +20,9 @@ export const LeftPane = ({
     const homeRoute = applicationRoutes.rootHomeRoute;
     const { hasPermission } = useAuthorizationContext();
     const { navigate2 } = useNavigation();
-    const {toggle} = useTawkApi();
+    const { toggle } = useTawkApi();
+    const { companyDetails } = CompanyApiService
+        .useCompanyDetailsByDomain(window.location.origin);
 
     return (
         <FlexFloat
@@ -64,37 +64,14 @@ export const LeftPane = ({
                     }} />
             </EpistoFlex2>
 
-            {/* magic powder top right */}
-            <img
-                style={{
-                    position: 'absolute',
-                    right: 23,
-                    top: -30,
-                    width: 120,
-                    transform: 'rotate(270deg)',
-                    objectFit: 'contain',
-                    zIndex: -1,
-                }}
-                src={Environment.getAssetUrl('/images/bg-art-6.png')}
-                alt="" />
-
             {children}
 
-            {/* magic powder top right */}
-            <img
-                style={{
-                    position: 'absolute',
-                    left: -10,
-                    bottom: 0,
-                    width: 170,
-                    transform: 'rotate(0deg) scale(-1,1)',
-                    objectFit: 'contain',
-                    zIndex: -1,
-                }}
-                src={Environment.getAssetUrl('/images/bela3D.png')}
-                alt="" />
+            <EpistoImage
+                position='absolute'
+                bottom='20px'
+                src={companyDetails?.logoUrl + ''} />
 
-            {/* tina image */}
+            {/* tina image 
             <EpistoFlex2
                 direction="column"
                 position="absolute"
@@ -112,7 +89,7 @@ export const LeftPane = ({
                 </EpistoFont>
             </EpistoFlex2>
 
-            {/* tina button */}
+            {/* tina button 
             <EpistoFlex2
                 direction="column"
                 position="absolute"
@@ -126,7 +103,7 @@ export const LeftPane = ({
 
                     {translatableTexts.leftPane.assistantButtonTitle}
                 </EpistoButton>
-            </EpistoFlex2>
+            </EpistoFlex2>*/}
         </FlexFloat>
     );
 };

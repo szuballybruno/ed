@@ -1,14 +1,16 @@
 import { Divider } from '@chakra-ui/react';
 import { useSetTempomatMode } from '../../../services/api/tempomatApiService';
+import { useRecommendedItemQuota } from '../../../services/api/userProgressApiService';
 import { useShowErrorDialog } from '../../../services/core/notifications';
 import { TempomatModeType } from '../../../shared/types/sharedTypes';
 import { Id } from '../../../shared/types/versionId';
 import { Environment } from '../../../static/Environemnt';
+import { toDateStringFormatted } from '../../../static/frontendHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { EpistoImage } from '../../controls/EpistoImage';
-import { EpistoDialog, } from '../../universal/epistoDialog/EpistoDialog';
+import { EpistoDialog } from '../../universal/epistoDialog/EpistoDialog';
 import { EpistoDialogLogicType } from '../../universal/epistoDialog/EpistoDialogTypes';
 import { TempomatModeTile } from './TempomatModeTile';
 
@@ -22,6 +24,8 @@ export const TempomatSettingsDialog = (props: {
     const { tempomatDialogLogic, tempomatMode, courseId, onTempomatModeChanged } = props;
 
     const showError = useShowErrorDialog();
+
+    const { recommendedItemQuota } = useRecommendedItemQuota();
 
     const { setTempomatMode } = useSetTempomatMode();
 
@@ -117,9 +121,12 @@ export const TempomatSettingsDialog = (props: {
                         </EpistoFont>
 
                         <EpistoFont style={{
+                            margin: '0 0 0 10px',
                             fontWeight: 600
                         }}>
-                            2022.03.14.
+                            {recommendedItemQuota?.previsionedCompletionDate
+                                ? toDateStringFormatted(new Date(recommendedItemQuota.previsionedCompletionDate))
+                                : '-'}
                         </EpistoFont>
                     </EpistoFlex2>
 

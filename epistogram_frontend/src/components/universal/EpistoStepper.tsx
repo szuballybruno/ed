@@ -48,7 +48,7 @@ export const EpistoStepper = <T,>({
                     </EpistoFlex2>
 
                     {/* divider */}
-                    {!logic.isLast && <EpistoFlex2
+                    {logic.items.length > index + 1 && <EpistoFlex2
                         px='5px'
                         mx='5px'
                         py='1px'

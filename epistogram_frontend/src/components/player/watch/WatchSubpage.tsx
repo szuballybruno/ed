@@ -183,7 +183,6 @@ export const WatchSubpage = () => {
                     error={[playerDataError]}>
 
                     <EpistoFlex2
-                        //px="20px"
                         height={isIphoneFullscreenMode ? '100vh' : 'calc(100% - 70px)'}>
 
                         {/* main column */}
