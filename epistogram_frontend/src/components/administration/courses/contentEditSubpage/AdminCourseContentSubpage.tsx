@@ -10,6 +10,7 @@ import { showNotification, useShowErrorDialog } from '../../../../services/core/
 import { CourseContentItemAdminDTO } from '../../../../shared/dtos/admin/CourseContentItemAdminDTO';
 import { VersionCode } from '../../../../shared/types/VersionCode1';
 import { Id } from '../../../../shared/types/versionId';
+import { moveItemInArray } from '../../../../static/frontendHelpers';
 import { useIntParam } from '../../../../static/locationHelpers';
 import { translatableTexts } from '../../../../static/translatableTexts';
 import { EpistoDataGrid } from '../../../controls/EpistoDataGrid';
@@ -44,9 +45,10 @@ export const AdminCourseContentSubpage = () => {
     const dialogParams = itemEditDialogLogic.params!;
     const isAnySelected = !!courseId && (courseId != Id.create<'Course'>(-1));
     const { saveVideoFileAsync, saveVideoFileState } = useUploadVideoFileAsync();
-    const [currentVideoVersionId, setCurrentVideoVersionId] = useState<Id<'VideoVersion'>>(-1 as any);
-
+    
     // state
+    const [currentVideoVersionId, setCurrentVideoVersionId] = useState<Id<'VideoVersion'>>(-1 as any);
+    const [draggedRow, setDraggedRow] = useState<RowSchema | null>(null);
     const [isAddButtonsPopperOpen, setIsAddButtonsPopperOpen] = useState<boolean>(false);
 
     // http
@@ -64,6 +66,7 @@ export const AdminCourseContentSubpage = () => {
     const getItemKey = useCallback((item: CourseContentItemAdminDTO) => item.versionCode, []);
     const getRowKey = useCallback((row: RowSchema) => row.rowKey, []);
     const [itemsMutatorState, itemsMutatorFunctions] = useXMutatorNew(CourseContentItemAdminDTO, 'versionCode', 'ItemMutator');
+    const currentDropModuleId = draggedRow?.module.versionId ?? null;
 
     // busy state
     useSetBusy(CourseApiService.useSaveCourseContentData, saveCourseDataState);
@@ -107,32 +110,6 @@ export const AdminCourseContentSubpage = () => {
 
         return preproItems;
     }, [itemsMutatorFunctions, itemsMutatorState, modules, getItemKey]);
-
-    // recalc  
-    const recalcOrderIndices = useCallback(() => {
-
-        itemsMutatorFunctions
-            .getMutatedItems()
-            .groupBy(x => x.moduleVersionId)
-            .forEach(x => x
-                .items
-                .forEach((x, i) => {
-
-                    itemsMutatorFunctions
-                        .mutate({
-                            key: x.versionCode,
-                            field: 'itemOrderIndex',
-                            newValue: i
-                        });
-                }));
-    }, [itemsMutatorFunctions]);
-
-    // set - on post mutations changed 
-    useEffect(() => {
-
-        itemsMutatorFunctions
-            .setOnPostMutationChanged(recalcOrderIndices);
-    }, [itemsMutatorFunctions, recalcOrderIndices]);
 
     // set - original items if loaded
     useEffect(() => {
@@ -293,7 +270,7 @@ export const AdminCourseContentSubpage = () => {
         }
     }, [courseId, itemsMutatorFunctions, itemsMutatorState, moduleEditDialogLogic, refetchCourseContentAdminData, saveCourseDataAsync, showError]);
 
-    const gridColumns = useGridColumns(modules, openItemEditDialog, itemsMutatorFunctions, handleSelectVideoFile);
+    const gridColumns = useGridColumns(modules, openItemEditDialog, itemsMutatorFunctions, handleSelectVideoFile, currentDropModuleId);
 
     return (
         <CourseAdministartionFrame
@@ -373,7 +350,27 @@ export const AdminCourseContentSubpage = () => {
                         columns={gridColumns}
                         rows={gridRowItems}
                         getKey={getRowKey}
+                        onRowOrderChange={({ sourceIndex, targetIndex }) => {
+
+                            const nonPretestItems = gridRowItems.filter(x => x.itemType.type !== 'pretest');
+                            const shiftedSourceIndex = sourceIndex - 1;
+                            const shiftedTargetIndex = targetIndex - 1;
+                            const reorderedItems = moveItemInArray(nonPretestItems, shiftedSourceIndex, shiftedTargetIndex);
+
+                            reorderedItems
+                                .groupBy(x => x.module.versionId)
+                                .forEach(group => group
+                                    .items
+                                    .forEach((row, index) => itemsMutatorFunctions
+                                        .mutate({
+                                            key: getRowKey(row),
+                                            field: 'itemOrderIndex',
+                                            newValue: index + 1
+                                        })));
+                        }}
                         hideFooter
+                        onDragStart={setDraggedRow}
+                        onDragEnd={() => setDraggedRow(null)}
                         isRowEditable={x => x.itemType.type !== 'pretest'}
                         initialState={{
                             pinnedColumns: {

@@ -17,7 +17,7 @@ export type RowSchemaModule = {
 export type RowSchema = {
     rowKey: VersionCode;
     rowNumber: number;
-    itemOrderIndex: string;
+    itemOrderIndex: number;
     itemTitle: string;
     itemSubtitle: string;
     module: RowSchemaModule;
@@ -139,7 +139,7 @@ export const mapToRowSchema = (
     return ({
         rowKey: item.versionCode,
         rowNumber: rowNumber,
-        itemOrderIndex: isPretest ? '-' : item.itemOrderIndex + '',
+        itemOrderIndex: isPretest ? -1 : item.itemOrderIndex,
         itemTitle: item.itemTitle,
         itemSubtitle: item.itemSubtitle,
         module: instantiate<RowSchemaModule>({

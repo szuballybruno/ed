@@ -620,6 +620,18 @@ export const usePaging = <T>({
     ]);
 };
 
+export const moveItemInArray = <T,>(workArray: T[], oldIndex: number, newIndex: number): T[] => {
+
+    const copiedArr = [...workArray];
+    const length = copiedArr.length;
+
+    if (oldIndex !== newIndex && length > oldIndex && length > newIndex) {
+        copiedArr.splice(newIndex, 0, copiedArr.splice(oldIndex, 1)[0]);
+    }
+
+    return copiedArr;
+};
+
 export type PagingType<T> = {
 
     next: () => void;

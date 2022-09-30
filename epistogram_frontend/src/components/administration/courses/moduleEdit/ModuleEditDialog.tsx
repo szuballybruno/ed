@@ -1,3 +1,4 @@
+import { moveItemInArray } from '../../../../static/frontendHelpers';
 import { translatableTexts } from '../../../../static/translatableTexts';
 import { EpistoButton } from '../../../controls/EpistoButton';
 import { EpistoDataGrid } from '../../../controls/EpistoDataGrid';
@@ -6,18 +7,6 @@ import { EpistoFont } from '../../../controls/EpistoFont';
 import { EpistoDialog } from '../../../universal/epistoDialog/EpistoDialog';
 import { useModuleEditColumns } from './ModuleEditColumns';
 import { ModuleEditDialogLogicType } from './ModuleEditDialogLogic';
-
-const moveItemInArray = <T,>(workArray: T[], oldIndex: number, newIndex: number): T[] => {
-
-    const copiedArr = [...workArray];
-    const length = copiedArr.length;
-
-    if (oldIndex !== newIndex && length > oldIndex && length > newIndex) {
-        copiedArr.splice(newIndex, 0, copiedArr.splice(oldIndex, 1)[0]);
-    }
-
-    return copiedArr;
-};
 
 export const ModuleEditDialog = ({
     logic,

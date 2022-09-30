@@ -41,22 +41,29 @@ export const useGridColumns = (
     modules: ModuleEditDTO[],
     openDialog: (type: 'video' | 'exam', data?: RowSchema) => void,
     itemsMutatorFunctions: IXMutatorFunctions<CourseContentItemAdminDTO, 'versionCode', VersionCode>,
-    onSelectVideoFile: (videoVersionId: Id<'VideoVersion'>) => void) => {
+    onSelectVideoFile: (videoVersionId: Id<'VideoVersion'>) => void,
+    currentDropModuleId: Id<'ModuleVersion'> | null) => {
 
-    const TextCellRenderer = (props: {
+    const TextCellRenderer = ({
+        children,
+        isMutated,
+        isDropEnabled
+    }: {
         children: ReactNode,
-        isMutated: boolean
+        isMutated: boolean,
+        isDropEnabled?: boolean
     }) => {
 
-        const { children, isMutated } = props;
+        return (
+            <div
+                style={isDropEnabled === undefined ? undefined : { background: isDropEnabled ? 'green' : 'red' }}
+                className={`${classses.textCell} ${isMutated ? classses.textCellMutated : ''}`}>
 
-        return <div
-            className={`${classses.textCell} ${isMutated ? classses.textCellMutated : ''}`}>
-
-            <p>
-                {children}
-            </p>
-        </div>;
+                <p>
+                    {children}
+                </p>
+            </div>
+        );
     };
 
     const SelectEditCellRenderer = (props: {
@@ -93,33 +100,9 @@ export const useGridColumns = (
 
     const getIsEditEnabled = (row: RowSchema) => row.itemType.type !== 'pretest';
 
+    const getIsDropEnabled = (row: RowSchema) => currentDropModuleId ? row.module.versionId === currentDropModuleId : undefined;
+
     const gridColumns = new EpistoDataGridColumnBuilder<RowSchema, VersionCode>()
-        .add({
-            field: 'itemOrderIndex',
-            headerName: 'Elhelyezkedés',
-            width: 80,
-            editHandler: ({ rowKey, value }) => {
-                console.log('Edithandler runs...');
-                console.log('rowKey: ' + rowKey);
-                console.log('value: ' + value);
-                itemsMutatorFunctions
-                    .mutate({
-                        field: 'itemOrderIndex',
-                        key: rowKey,
-                        newValue: value as any
-                    });
-            },
-            type: 'int',
-            renderCell: ({ value, row }) => {
-
-                return <TextCellRenderer
-                    isMutated={row.changedProperties.itemOrderIndex}>
-
-                    {value}
-                </TextCellRenderer>;
-            },
-            enabled: getIsEditEnabled
-        })
         .add({
             field: 'itemTitle',
             headerName: 'Cím',
@@ -134,6 +117,7 @@ export const useGridColumns = (
             renderCell: ({ value, row }) => {
 
                 return <TextCellRenderer
+                    isDropEnabled={getIsDropEnabled(row)}
                     isMutated={row.changedProperties.itemTitle}>
 
                     {value}
@@ -154,6 +138,7 @@ export const useGridColumns = (
             renderCell: ({ value, row }) => {
 
                 return <TextCellRenderer
+                    isDropEnabled={getIsDropEnabled(row)}
                     isMutated={row.changedProperties.itemSubtitle}>
 
                     {value}
@@ -176,6 +161,7 @@ export const useGridColumns = (
             renderCell: ({ key, field, row, value }) => {
 
                 return <TextCellRenderer
+                    isDropEnabled={getIsDropEnabled(row)}
                     isMutated={row.changedProperties.moduleId}>
 
                     {value

@@ -80,7 +80,7 @@ const mapToMUIDataGridColumn = <TSchema, TKey>(column: GridColumnType<TSchema, T
     const def: GridColDef = {
         ...others,
         field: field as any,
-        editable: hasEditHandler
+        editable: hasEditHandler,
     };
 
     if (renderCell)
@@ -137,7 +137,9 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>({
     onFocusChanged,
     columnVisibilityModel,
     isRowEditable,
-    onRowOrderChange
+    onRowOrderChange,
+    onDragEnd,
+    onDragStart
 }: {
     rows: TSchema[],
     columns: GridColumnType<TSchema, TKey, keyof TSchema>[],
@@ -157,7 +159,9 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>({
         targetIndex: number,
         sourceRow: TSchema,
         targetRow: TSchema
-    }) => void
+    }) => void,
+    onDragStart?: (row: TSchema) => void,
+    onDragEnd?: (row: TSchema) => void,
 }) => {
 
     Logger.logScoped('GRID', `${id ? `[id: ${id}] ` : ''}Rendering EpistoDataGrid...`);
@@ -184,21 +188,44 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>({
             .setCellMode(params.id, params.field, 'edit');
     }, [apiRef]);
 
+    /**
+     * SUBSCRIBE
+     */
     useEffect(() => {
 
-        return apiRef
-            .current
-            .subscribeEvent(
-                'cellModeChange',
-                (params, event) => {
+        const unsubscribes: (() => void)[] = [];
 
-                    event.defaultMuiPrevented = true;
-                    if (onFocusChanged)
-                        onFocusChanged(params.cellMode === 'edit');
-                },
-                {
-                    isFirst: true
-                });
+        unsubscribes
+            .push(apiRef
+                .current
+                .subscribeEvent(
+                    'cellModeChange',
+                    (params, event) => {
+
+                        event.defaultMuiPrevented = true;
+                        if (onFocusChanged)
+                            onFocusChanged(params.cellMode === 'edit');
+                    },
+                    {
+                        isFirst: true
+                    }));
+
+        if (onDragStart)
+            unsubscribes
+                .push(apiRef
+                    .current
+                    .subscribeEvent('rowDragStart', x => onDragStart(x.row)));
+
+        if (onDragEnd)
+            unsubscribes
+                .push(apiRef
+                    .current
+                    .subscribeEvent('rowDragEnd', x => onDragEnd(x.row)));
+
+        return () => {
+            unsubscribes
+                .forEach(x => x());
+        };
     }, []);
 
     Logger.logScoped('GRID', 'Rendering...');
