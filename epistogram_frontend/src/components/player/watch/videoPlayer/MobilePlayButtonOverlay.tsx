@@ -3,10 +3,10 @@ import { EpistoFlex2 } from '../../../controls/EpistoFlex';
 import { videoPlayerStyles } from './videoPlayerStyles';
 
 export const MobilePlayButtonOverlay = (props: {
-    toggleFullScreen: () => void
+    enableFullscreenMode: () => void
 }) => {
 
-    const { toggleFullScreen } = props;
+    const { enableFullscreenMode: toggleFullScreen } = props;
 
     return <EpistoFlex2
         top='0'

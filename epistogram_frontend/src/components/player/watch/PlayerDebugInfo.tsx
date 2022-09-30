@@ -2,10 +2,11 @@ import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { VideoPlayerStateType } from './videoPlayer/videoPlayerState';
 
 export const PlayerDebugInfo = (props: {
-    videoPlayerState: VideoPlayerStateType
+    videoPlayerState: VideoPlayerStateType,
+    videoTitle: string
 }) => {
 
-    const { videoPlayerState } = props;
+    const { videoPlayerState, videoTitle } = props;
 
     const {
         isFullscreen,
@@ -27,6 +28,8 @@ export const PlayerDebugInfo = (props: {
         left='0'
         color='red'
         fontWeight='bold'
+        background='#FFFFFF33'
+        maxWidth='40%'
         zIndex={17}>
 
 
@@ -41,5 +44,6 @@ export const PlayerDebugInfo = (props: {
         {'controlsVisible: ' + controlsVisible}<br />
         {'shouldBePlaying: ' + shouldBePlaying}<br />
         {'videoLength: ' + videoLength}<br />
+        {'videoTitle: ' + videoTitle}<br />
     </EpistoFlex2>;
 };

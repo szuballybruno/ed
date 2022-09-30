@@ -46,6 +46,7 @@ export const useVideoPlayerState = (
 
     const isIPhone = browser.isIPhone;
     const isMobile = useIsMobileView();
+    const screenfullEnabled = screenfull.isFullscreen;
 
     const screenOrientation = useScreenOrientation();
     const isLandscape = screenOrientation === 90;
@@ -58,23 +59,31 @@ export const useVideoPlayerState = (
 
         console.log('Triggering isIphone, isLandscape, isFullscreen...');
 
-        if (isLandscape && isMobile && isFullscreen) {
+        if (!isMobile)
+            return;
 
+        if (isLandscape && isFullscreen) {
+
+            console.log('Landscape and fullscreen, start playing...');
             setIsPlaying(true);
-        } else {
-
-            setIsPlaying(false);
+            setShouldBePlaying(true);
         }
-    }, [isMobile, isLandscape]);
-
-    useEffect(() => {
 
         if (isLandscape && !isFullscreen) {
 
-            setIsFullscreen(true);
+            console.log('Landscape and not fullscreen, enabling fullscreen mode and stop playing...');
+            enableFullscreenMode();
             setIsPlaying(false);
             setShouldBePlaying(false);
         }
+
+        if (!isLandscape) {
+
+            console.log('Rotated back, stop playing');
+            setIsPlaying(false);
+            setShouldBePlaying(true);
+        }
+
     }, [isLandscape]);
 
     useEffect(() => {
@@ -103,6 +112,9 @@ export const useVideoPlayerState = (
     useEffect(() => {
 
         console.log('Triggering shouldBePlaying...');
+
+        if (isMobile && !isLandscape)
+            return;
 
         if (shouldBePlaying) {
 
@@ -136,29 +148,74 @@ export const useVideoPlayerState = (
         }
     }, [isMobile, isLandscape]);
 
-    const toggleFullScreen = () => {
+    const enableFullscreenMode = () => {
 
+        // iPhone
         if (isMobile && isIPhone) {
 
-            document.body.style.overflow === 'hidden'
-                ? document.body.style.overflow = ''
-                : document.body.style.overflow = 'hidden';
-
-            setIsFullscreen(x => !x);
-
+            document.body.style.overflow === 'hidden';
+            setIsFullscreen(true);
         }
+
+        // other mobile
         if (isMobile && !isIPhone) {
 
-            //@ts-ignore
-            screenfull.toggle(playerContainerRef.current);
-            setIsFullscreen(x => !x);
+            !screenfullEnabled
+                //@ts-ignore
+                ? screenfull.toggle(playerContainerRef.current)
+                : undefined;
+            setIsFullscreen(true);
         }
 
+        // desktop
         if (!isMobile && !isIPhone) {
             //@ts-ignore
-            screenfull.toggle(playerContainerRef.current);
+            !screenfullEnabled
+                //@ts-ignore
+                ? screenfull.toggle(playerContainerRef.current)
+                : undefined;
+        }
+    };
+
+    const disableFullscreenMode = () => {
+
+        console.log('screenfullEnabled: ' + screenfullEnabled);
+        console.log('isMobile: ' + isMobile);
+        console.log('isIphone: ' + isIPhone);
+
+        // iPhone
+        if (isMobile && isIPhone) {
+
+            document.body.style.overflow = '';
+
+            setIsFullscreen(false);
         }
 
+        // other mobile
+        if (isMobile && !isIPhone) {
+
+            screenfullEnabled
+                //@ts-ignore
+                ? screenfull.toggle(playerContainerRef.current)
+                : undefined;
+            setIsFullscreen(false);
+        }
+
+        // desktop
+        if (!isMobile && !isIPhone) {
+            //@ts-ignore
+            screenfullEnabled
+                //@ts-ignore
+                ? screenfull.toggle(playerContainerRef.current)
+                : undefined;
+        }
+    };
+
+    const toggleFullScreen = () => {
+
+        isFullscreen
+            ? disableFullscreenMode()
+            : enableFullscreenMode();
     };
 
     const seekToSeconds = (seconds: number) => {
@@ -325,7 +382,8 @@ export const useVideoPlayerState = (
         handleOnVideoEnded,
         setVolume,
         setIsMuted,
-        setIsFullscreen,
+        enableFullscreenMode,
+        disableFullscreenMode,
         setShouldBePlaying,
         onReady: handleOnReady
     };
