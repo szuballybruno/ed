@@ -12,6 +12,8 @@ export const QuerySubscriptionFrame = ({ children }: PropsWithChildren) => {
 
     useEffect(() => {
 
+        console.log('---------- FRAME useEffect ------------');
+
         eventBus
             .scubscribeEvent('onquery', 'noPermissionWatcher', (x: QueryEventData) => {
 

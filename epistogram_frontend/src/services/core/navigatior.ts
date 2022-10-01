@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { ApplicationRoute } from '../../models/types';
@@ -7,11 +7,19 @@ import { Id } from '../../shared/types/versionId';
 import { getUrl } from '../../static/frontendHelpers';
 import { Logger } from '../../static/Logger';
 
+const useHrefNav = () => {
+
+    const navigate = useNavigate();
+    const hrefNavigate = useMemo(() => navigate, []);
+
+    return { hrefNavigate };
+};
+
 export const useNavigation = () => {
 
-    const domNavigate = useNavigate();
+    const { hrefNavigate } = useHrefNav();
 
-    const navigate2 = <TParams, TQuery>(
+    const navigate2 = useCallback(<TParams, TQuery>(
         route: (ApplicationRoute<TParams, TQuery>),
         ...args: TParams extends void
             ? TQuery extends void
@@ -30,13 +38,13 @@ export const useNavigation = () => {
 
         Logger.logScoped('ROUTING', 'Navigating to: ' + replacedPath);
 
-        domNavigate(replacedPath);
-    };
+        hrefNavigate(replacedPath);
+    }, [hrefNavigate]);
 
     const navigateToHref = useCallback((href: string) => {
 
-        domNavigate(href);
-    }, [domNavigate]);
+        hrefNavigate(href);
+    }, [hrefNavigate]);
 
     const openNewTab = (url: string) => (window as any).open(url, '_blank')
         .focus();
