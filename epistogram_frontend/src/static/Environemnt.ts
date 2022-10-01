@@ -13,8 +13,9 @@ export type LoggingKeysType =
     'BUSY' |
     'AUTO NAV' |
     'EXAM' |
-    'EVENT BUS' |
-    'QUERY';
+    'QUERY' | 
+    'SESSION' |
+    'EVENTS';
 
 export const Environment = (() => {
 
@@ -30,7 +31,7 @@ export const Environment = (() => {
     const eventPoolingIntervalInMs = 5 * 60 * 1000; // 5 mins
     const sessionHangThresholdInMs = 2 * 60 * 60 * 1000; // 2 hours
     const loggingEnabled = true;
-    const loggingEnabledKeys: LoggingKeysType[] = ['WARNING', 'EXAM'];
+    const loggingEnabledKeys: LoggingKeysType[] = ['WARNING', 'EVENTS'];
 
     const getAssetUrl = (path: string, assetUrlPath?: string) => {
 

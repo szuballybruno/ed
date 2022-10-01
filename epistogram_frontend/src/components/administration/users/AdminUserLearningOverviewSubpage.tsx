@@ -1,5 +1,4 @@
 import { Add } from '@mui/icons-material';
-import { LinearProgress } from '@mui/material';
 import { useState } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
@@ -16,6 +15,7 @@ import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { EpistoGrid } from '../../controls/EpistoGrid';
 import { EpistoImage } from '../../controls/EpistoImage';
+import { EpistoProgressBar } from '../../controls/EpistoProgressBar';
 import { FlexFloat } from '../../controls/FlexFloat';
 import { NoProgressChartYet } from '../../home/NoProgressChartYet';
 import { LearningCourseStatsTile } from '../../learningInsights/LearningCourseStatsTile';
@@ -54,7 +54,7 @@ const UserStatisticsProgressWithLabel = (props: {
             {props.title}
         </EpistoFont>
 
-        <LinearProgress
+        <EpistoProgressBar
             value={props.value}
             variant="determinate"
             color='secondary'

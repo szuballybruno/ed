@@ -10,24 +10,41 @@ export class XEventManager<TEventKey extends string> {
 
     scubscribeEvent<T>(eventKey: TEventKey, subscriberKey: string, callback: EventCallbackType<T>) {
 
-        Logger.logScoped('EVENT BUS', `Subscribing to event ${eventKey} by ${subscriberKey}`);
+        Logger.logScoped('EVENTS', `Subscribing to event ${eventKey} by ${subscriberKey}`);
+
+        const previousSubscriptions = this
+            ._store[eventKey] ?? {};
+
+        if (previousSubscriptions[subscriberKey] !== undefined)
+            throw new Error(`Already subscribed by key: ${subscriberKey}`);
 
         this._store[eventKey] = {
-            ...(this._store[eventKey] ?? {}),
+            ...previousSubscriptions,
             [subscriberKey]: callback
         };
     }
 
     fireEvent<T>(eventKey: TEventKey, data: T) {
 
-        Logger.logScoped('EVENT BUS', `Fireing event "${eventKey}", data: `, data);
+        Logger.logScoped('EVENTS', `Fireing event "${eventKey}", data: `, data);
 
-        const storeSlot = this._store[eventKey];
-        if (!storeSlot)
+        const eventSubscriptionObject = this._store[eventKey];
+        if (!eventSubscriptionObject) {
+
+            Logger.logScoped('EVENTS', `Event "${eventKey}" has no subscriptions!`);
             return;
+        }
 
-        Object
-            .values(storeSlot)
+        const subscriptions = Object
+            .values(eventSubscriptionObject);
+
+        if (subscriptions.length === 0) {
+
+            Logger.logScoped('EVENTS', `Event "${eventKey}" has no callbacks!`);
+            return;
+        }
+
+        subscriptions
             .forEach(callback => callback(data));
     }
 }

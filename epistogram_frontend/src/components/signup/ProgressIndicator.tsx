@@ -1,6 +1,7 @@
-import { LinearProgress, LinearProgressProps } from '@mui/material';
+import { LinearProgressProps } from '@mui/material';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
+import { EpistoProgressBar } from '../controls/EpistoProgressBar';
 
 export const LinearProgressWithLabel = (props: LinearProgressProps & { value: number }) => {
     return <EpistoFlex2
@@ -14,7 +15,7 @@ export const LinearProgressWithLabel = (props: LinearProgressProps & { value: nu
             h='10px'
             mr='5px'>
 
-            <LinearProgress
+            <EpistoProgressBar
                 style={{
                     width: '100%'
                 }}

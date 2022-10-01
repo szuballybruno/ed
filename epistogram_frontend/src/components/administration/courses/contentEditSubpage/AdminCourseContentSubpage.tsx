@@ -3,16 +3,17 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { applicationRoutes } from '../../../../configuration/applicationRoutes';
 import { EMPTY_ARRAY } from '../../../../helpers/emptyArray';
 import { CourseApiService } from '../../../../services/api/courseApiService';
-import { useUploadVideoFileAsync } from '../../../../services/api/videoApiService';
+import { useUploadVideoFileAsync, VideoFileUploadCallbackParams } from '../../../../services/api/videoApiService';
 import { getVirtualId } from '../../../../services/core/idService';
 import { useNavigation } from '../../../../services/core/navigatior';
-import { showNotification, useShowErrorDialog } from '../../../../services/core/notifications';
+import { killNotification, showNotification, showNotificationAdvanced, useShowErrorDialog2 } from '../../../../services/core/notifications';
 import { CourseContentItemAdminDTO } from '../../../../shared/dtos/admin/CourseContentItemAdminDTO';
 import { VersionCode } from '../../../../shared/types/VersionCode1';
 import { Id } from '../../../../shared/types/versionId';
 import { moveItemInArray } from '../../../../static/frontendHelpers';
 import { useIntParam } from '../../../../static/locationHelpers';
 import { translatableTexts } from '../../../../static/translatableTexts';
+import { XEventManager } from '../../../../static/XEventManager';
 import { EpistoDataGrid } from '../../../controls/EpistoDataGrid';
 import { EpistoFlex2 } from '../../../controls/EpistoFlex';
 import { useXMutatorNew } from '../../../lib/XMutator/XMutatorReact';
@@ -30,6 +31,7 @@ import { useModuleEditDialogLogic } from '../moduleEdit/ModuleEditDialogLogic';
 import { AddNewItemPopper } from './AddNewItemPopper';
 import { useGridColumns } from './AdminCourseContentSubpageColumns';
 import { mapToRowSchema, RowSchema } from './AdminCourseContentSubpageLogic';
+import { VideoUploadProgressNotification } from './VideoUploadProgressNotification';
 
 export const AdminCourseContentSubpage = () => {
 
@@ -39,15 +41,47 @@ export const AdminCourseContentSubpage = () => {
         .create<'Course'>(useIntParam('courseId')!);
 
     const { navigate2 } = useNavigation();
-    const showError = useShowErrorDialog();
+    const { showErrorDialog } = useShowErrorDialog2();
     const deleteWarningDialogLogic = useEpistoDialogLogic('dvd');
     const itemEditDialogLogic = useEpistoDialogLogic<ItemEditDialogParams>(ItemEditDialog);
     const dialogParams = itemEditDialogLogic.params!;
     const isAnySelected = !!courseId && (courseId != Id.create<'Course'>(-1));
-    const { saveVideoFileAsync, saveVideoFileState } = useUploadVideoFileAsync();
-    
+
+    const videoUploadProgressEventManager = useMemo(() => new XEventManager<'onProgressChanged' | 'onError' | 'onDone'>(), []);
+
+    const videoFileUploadCallback = (params: VideoFileUploadCallbackParams) => {
+
+        videoUploadProgressEventManager
+            .fireEvent('onProgressChanged', {
+                progress: params.currentChunkIndex / params.chunkCount * 100,
+                buffer: Math.min(params.currentChunkIndex + 1, params.chunkCount) / params.chunkCount * 100,
+                isDone: false,
+                videoVersionId: params.videoVersionId
+            });
+    };
+
+    const handleVideoFileUploadError = (params: { error: any, videoVersionId: Id<'VideoVersion'> }) => {
+
+        videoUploadProgressEventManager
+            .fireEvent('onError', {
+                videoVersionId: params.videoVersionId
+            });
+
+        showErrorDialog(params.error);
+    };
+
+    const handleVideoFileUploadDone = (params: { videoVersionId: Id<'VideoVersion'> }) => {
+
+        videoUploadProgressEventManager
+            .fireEvent('onDone', {
+                videoVersionId: params.videoVersionId
+            });
+    };
+
+    const { saveVideoFileAsync, saveVideoFileState } = useUploadVideoFileAsync(videoFileUploadCallback, handleVideoFileUploadError, handleVideoFileUploadDone);
+
     // state
-    const [currentVideoVersionId, setCurrentVideoVersionId] = useState<Id<'VideoVersion'>>(-1 as any);
+    const [fileUploadVideo, setFileUploadVideo] = useState<RowSchema | null>(null);
     const [draggedRow, setDraggedRow] = useState<RowSchema | null>(null);
     const [isAddButtonsPopperOpen, setIsAddButtonsPopperOpen] = useState<boolean>(false);
 
@@ -67,6 +101,7 @@ export const AdminCourseContentSubpage = () => {
     const getRowKey = useCallback((row: RowSchema) => row.rowKey, []);
     const [itemsMutatorState, itemsMutatorFunctions] = useXMutatorNew(CourseContentItemAdminDTO, 'versionCode', 'ItemMutator');
     const currentDropModuleId = draggedRow?.module.versionId ?? null;
+    const fileUploadVideoVersionId = fileUploadVideo?.data?.videoVersionId ?? Id.create<'VideoVersion'>(-1);
 
     // busy state
     useSetBusy(CourseApiService.useSaveCourseContentData, saveCourseDataState);
@@ -126,20 +161,35 @@ export const AdminCourseContentSubpage = () => {
      */
     const handleUploadVideoFile = useCallback((data: SelectedFileDataType) => {
 
-        saveVideoFileAsync(currentVideoVersionId, data.file);
-    }, [saveVideoFileAsync, currentVideoVersionId]);
+        showNotificationAdvanced(<VideoUploadProgressNotification
+            videoVersionId={fileUploadVideoVersionId}
+            defaultPercentage={0}
+            eventManager={videoUploadProgressEventManager}
+            videoTitle={fileUploadVideo?.itemTitle ?? ''}
+            onClose={() => killNotification(fileUploadVideoVersionId.toString())} />, {
+            autoClose: false,
+            closeOnClick: false,
+            closeButton: false,
+            toastId: fileUploadVideoVersionId.toString()
+        });
+
+        saveVideoFileAsync(fileUploadVideoVersionId, data.file);
+    }, [saveVideoFileAsync, fileUploadVideoVersionId]);
 
     /**
      * Use video selector logic
      */
-    const videoFileSelectorLogic = useFileSelectorLogic({ onFileSelected: handleUploadVideoFile, type: 'video' });
+    const videoFileSelectorLogic = useFileSelectorLogic({
+        onFileSelected: handleUploadVideoFile,
+        type: 'video'
+    });
 
     /**
      * Handle select video file 
      */
-    const handleSelectVideoFile = useCallback((videoVersionId: Id<'VideoVersion'>) => {
+    const handleSelectVideoFile = useCallback((row: RowSchema) => {
 
-        setCurrentVideoVersionId(videoVersionId);
+        setFileUploadVideo(row);
         videoFileSelectorLogic.selectFile();
     }, [videoFileSelectorLogic]);
 
@@ -266,9 +316,9 @@ export const AdminCourseContentSubpage = () => {
         }
         catch (e) {
 
-            showError(e);
+            showErrorDialog(e);
         }
-    }, [courseId, itemsMutatorFunctions, itemsMutatorState, moduleEditDialogLogic, refetchCourseContentAdminData, saveCourseDataAsync, showError]);
+    }, [courseId, itemsMutatorFunctions, itemsMutatorState, moduleEditDialogLogic, refetchCourseContentAdminData, saveCourseDataAsync, showErrorDialog]);
 
     const gridColumns = useGridColumns(modules, openItemEditDialog, itemsMutatorFunctions, handleSelectVideoFile, currentDropModuleId);
 

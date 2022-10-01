@@ -1,9 +1,9 @@
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import { LinearProgress } from '@mui/material';
 import { useNavigation } from '../../services/core/navigatior';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
+import { EpistoProgressBar } from '../controls/EpistoProgressBar';
 
 export const CourseProgressDisplay = (props: {
     value: number,
@@ -45,7 +45,7 @@ export const CourseProgressDisplay = (props: {
             <EpistoFlex2 align="center">
 
                 {/* progress bar */}
-                <LinearProgress
+                <EpistoProgressBar
                     variant="determinate"
                     value={value}
                     style={{

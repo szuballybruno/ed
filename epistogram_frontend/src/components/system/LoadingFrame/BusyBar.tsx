@@ -1,5 +1,5 @@
-import { LinearProgress } from '@mui/material';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
+import { EpistoProgressBar } from '../../controls/EpistoProgressBar';
 
 export const BusyBar = ({
     isBusy
@@ -18,7 +18,7 @@ export const BusyBar = ({
             id={BusyBar.name}>
 
             {isBusy && (
-                <LinearProgress
+                <EpistoProgressBar
                     color='inherit'
                     className='whall'
                     style={{

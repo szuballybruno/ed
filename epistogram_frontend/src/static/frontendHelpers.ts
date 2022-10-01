@@ -28,7 +28,7 @@ export const iterate = <T>(n: number, fn: (index) => T) => {
 type SetterFnType<TState> = (state: TState) => void;
 type SetStateFnType<TState> = (setterFnOrState: SetterFnType<TState> | Partial<TState>) => void;
 
-export const useStateObject = <TState extends {}>(obj: TState): [TState, SetStateFnType<TState>] => {
+export const useStateObject = <TState extends {}>(obj: TState): [TState, SetStateFnType<TState>, TState] => {
 
     const forceUpdate = useForceUpdate();
     const state = useRef(obj).current;
@@ -47,7 +47,7 @@ export const useStateObject = <TState extends {}>(obj: TState): [TState, SetStat
         forceUpdate();
     }, [state, forceUpdate]);
 
-    return [state, setState];
+    return [state, setState, state];
 };
 
 export const useStateAndRef = <T>(defaultValue: T): [MutableRefObject<T>, T, (state: T) => void] => {

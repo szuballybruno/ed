@@ -1,4 +1,4 @@
-import { useCallback, useContext } from 'react';
+import { ReactNode, useCallback, useContext } from 'react';
 import { toast, ToastOptions, ToastPosition } from 'react-toastify';
 import { ErrorDialogContext } from '../../components/system/ErrorDialogFrame';
 
@@ -31,13 +31,20 @@ export const showNotification = (text: string, opt?: {
     });
 };
 
+export const showNotificationAdvanced = (content: ReactNode, opts?: ToastOptions) => {
+
+    toast(content, opts);
+};
+
+export const killNotification = (id: number | string) => toast.dismiss(id); 
+
 export const useShowErrorDialog = () => {
 
     const errorDialogLogic = useContext(ErrorDialogContext)!;
 
     const showErrorDialog = useCallback((descriptionOrError?: any, title?: string) => {
 
-        console.error('Opening error dialog... '  + descriptionOrError);
+        console.error('Opening error dialog... ' + descriptionOrError);
 
         errorDialogLogic
             .openDialog({
@@ -49,4 +56,11 @@ export const useShowErrorDialog = () => {
     }, [errorDialogLogic]);
 
     return showErrorDialog;
+};
+
+export const useShowErrorDialog2 = () => {
+
+    const showErrorDialog = useShowErrorDialog();
+
+    return { showErrorDialog };
 };

@@ -1,7 +1,8 @@
-import {LinearProgress, Paper, Rating} from '@mui/material';
+import { Paper, Rating } from '@mui/material';
 import React from 'react';
-import {EpistoFlex2} from '../controls/EpistoFlex';
-import {EpistoFont} from '../controls/EpistoFont';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { EpistoFont } from '../controls/EpistoFont';
+import { EpistoProgressBar } from '../controls/EpistoProgressBar';
 
 export const CourseDetailsRatingSection = () => {
     const mockRatingProgresses = [60, 20, 10, 0, 0];
@@ -95,7 +96,7 @@ export const CourseDetailsRatingSection = () => {
                 flexDir={'column'}
                 justifyContent={'space-evenly'}>
                 {mockRatingProgresses
-                    .map((x, index) => <LinearProgress
+                    .map((x, index) => <EpistoProgressBar
                         key={index}
                         style={{
                             width: '100%',

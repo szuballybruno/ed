@@ -1,7 +1,7 @@
-import { LinearProgress } from '@mui/material';
 import { Environment } from '../../static/Environemnt';
 import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
+import { EpistoProgressBar } from '../controls/EpistoProgressBar';
 
 
 export const RecommendedItemQuota = (props: {
@@ -63,7 +63,7 @@ export const RecommendedItemQuota = (props: {
                 </EpistoFlex2>
             </EpistoFlex2>
 
-            <LinearProgress
+            <EpistoProgressBar
                 value={Math.min(100, completedCount / recommendedItemCount * 100)}
                 variant="determinate"
                 style={{

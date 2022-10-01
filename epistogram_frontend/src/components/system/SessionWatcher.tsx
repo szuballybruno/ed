@@ -4,6 +4,7 @@ import { createContext, FC, useContext, useEffect, useState } from 'react';
 import { Environment } from '../../static/Environemnt';
 import { eventBus } from '../../static/EventBus';
 import { PropsWithChildren, reloadPage } from '../../static/frontendHelpers';
+import { Logger } from '../../static/Logger';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
@@ -32,7 +33,7 @@ class SessionWatcher {
 
                 const handshakeTime = new Date();
 
-                console.log('Handshake... time: ' + handshakeTime);
+                Logger.logScoped('SESSION', 'Handshake... time: ' + handshakeTime);
                 this._lastHandshakeDate = handshakeTime;
             });
     }
@@ -40,7 +41,7 @@ class SessionWatcher {
     private _notifyActivity() {
 
         const activityDate = new Date();
-        console.log('Activity... time: ' + activityDate);
+        Logger.logScoped('SESSION', 'Activity... time: ' + activityDate);
 
         const gapInAtivity = this._lastHandshakeDate < moment(activityDate)
             .subtract(Environment.sessionHangThresholdInMs, 'ms')
@@ -49,7 +50,7 @@ class SessionWatcher {
         if (!gapInAtivity)
             return;
 
-        console.log('Activity gap!');
+        Logger.logScoped('SESSION', 'Activity gap!');
         eventBus.fireEvent('onActivityGap', {});
     };
 };

@@ -41,7 +41,7 @@ export const useGridColumns = (
     modules: ModuleEditDTO[],
     openDialog: (type: 'video' | 'exam', data?: RowSchema) => void,
     itemsMutatorFunctions: IXMutatorFunctions<CourseContentItemAdminDTO, 'versionCode', VersionCode>,
-    onSelectVideoFile: (videoVersionId: Id<'VideoVersion'>) => void,
+    onSelectVideoFile: (row: RowSchema) => void,
     currentDropModuleId: Id<'ModuleVersion'> | null) => {
 
     const TextCellRenderer = ({
@@ -97,8 +97,6 @@ export const useGridColumns = (
             getDisplayValue={x => '' + x?.name}
             getCompareKey={module => '' + module?.moduleVersionId} />;
     };
-
-    const getIsEditEnabled = (row: RowSchema) => row.itemType.type !== 'pretest';
 
     const getIsDropEnabled = (row: RowSchema) => currentDropModuleId ? row.module.versionId === currentDropModuleId : undefined;
 
@@ -225,9 +223,12 @@ export const useGridColumns = (
             width: 180,
             renderCell: ({ row }) => {
 
+                if (row.itemType.type !== 'video')
+                    return <></>;
+
                 return <EpistoButton
                     variant="outlined"
-                    onClick={() => onSelectVideoFile(row.data.videoVersionId!)}>
+                    onClick={() => onSelectVideoFile(row)}>
 
                     Fájl kiválasztása
                 </EpistoButton >;

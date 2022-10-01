@@ -1,11 +1,11 @@
-import { Text} from '@chakra-ui/react';
+import { Text } from '@chakra-ui/react';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import {LinearProgress} from '@mui/material';
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {LoadingStateType} from '../../models/types';
-import {isArray} from '../../static/frontendHelpers';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { LoadingStateType } from '../../models/types';
+import { isArray } from '../../static/frontendHelpers';
 import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
-import {EpistoHeader} from '../EpistoHeader';
+import { EpistoProgressBar } from '../controls/EpistoProgressBar';
+import { EpistoHeader } from '../EpistoHeader';
 
 type ErrorType = any | any[];
 
@@ -149,7 +149,7 @@ export const LoadingFrame = (props: EpistoFlex2Props & LoadingFramePropsType) =>
                 width='100%'
                 height='3px'>
 
-                <LinearProgress
+                <EpistoProgressBar
                     style={{
                         color: 'black',
                         height: 3,

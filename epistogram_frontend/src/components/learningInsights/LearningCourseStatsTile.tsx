@@ -1,15 +1,14 @@
-import {Text} from '@chakra-ui/react';
-import {LinearProgress} from '@mui/material';
-import React from 'react';
-import {CourseLearningDTO} from '../../shared/dtos/CourseLearningDTO';
-import {Environment} from '../../static/Environemnt';
-import {formatTimespan, roundNumber} from '../../static/frontendHelpers';
-import {EpistoButton, EpistoButtonPropsType} from '../controls/EpistoButton';
-import {EpistoDiv} from '../controls/EpistoDiv';
-import {EpistoFlex2, EpistoFlex2Props} from '../controls/EpistoFlex';
-import {EpistoFont} from '../controls/EpistoFont';
-import {FlexFloat} from '../controls/FlexFloat';
-import {SmallStat} from '../universal/SmallStat';
+import { Text } from '@chakra-ui/react';
+import { CourseLearningDTO } from '../../shared/dtos/CourseLearningDTO';
+import { Environment } from '../../static/Environemnt';
+import { formatTimespan, roundNumber } from '../../static/frontendHelpers';
+import { EpistoButton, EpistoButtonPropsType } from '../controls/EpistoButton';
+import { EpistoDiv } from '../controls/EpistoDiv';
+import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
+import { EpistoFont } from '../controls/EpistoFont';
+import { EpistoProgressBar } from '../controls/EpistoProgressBar';
+import { FlexFloat } from '../controls/FlexFloat';
+import { SmallStat } from '../universal/SmallStat';
 
 export const LearningCourseStatsTile = (props: {
     course: CourseLearningDTO,
@@ -150,7 +149,7 @@ export const LearningCourseStatsTile = (props: {
                 width="100%"
                 height="10px">
 
-                <LinearProgress
+                <EpistoProgressBar
                     variant="determinate"
                     style={{
                         width: '100%',

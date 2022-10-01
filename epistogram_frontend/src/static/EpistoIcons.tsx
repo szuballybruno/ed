@@ -1,9 +1,10 @@
-import { Add, Delete, Edit, Subscriptions, Timer, Save, ArrowBack, ArrowForward, FiberManualRecord } from '@mui/icons-material';
+import { Add, Delete, Edit, Subscriptions, Timer, Save, ArrowBack, ArrowForward, FiberManualRecord, Close } from '@mui/icons-material';
 import FiberNewIcon from '@mui/icons-material/FiberNew';
 import RemoveIcon from '@mui/icons-material/Remove';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
 import LocationCityIcon from '@mui/icons-material/LocationCity';
+import BackupIcon from '@mui/icons-material/Backup';
 
 export const EpistoIcons = {
     Delete: Delete,
@@ -19,5 +20,7 @@ export const EpistoIcons = {
     Save: Save,
     ArrowBack: ArrowBack,
     ArrowForward: ArrowForward,
-    Dot: FiberManualRecord
+    Dot: FiberManualRecord,
+    Upload: BackupIcon,
+    Close: Close
 };

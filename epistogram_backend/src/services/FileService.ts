@@ -4,15 +4,15 @@ import { User } from '../models/entity/misc/User';
 import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 import { Id } from '../shared/types/versionId';
 import { fileCodes, FileCodesType } from '../static/FileCodes';
-import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { StringKeyof } from '../utilities/misc';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
+import { AuthorizationService } from './AuthorizationService';
 import { ClassType } from './misc/advancedTypes/ClassType';
 import { log } from './misc/logger';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { StorageService } from './StorageService';
 import { UserService } from './UserService';
 import { EntityType } from './XORM/XORMTypes';
-import { AuthorizationService } from './AuthorizationService';
 
 export class FileService {
 
@@ -59,7 +59,7 @@ export class FileService {
         };
     }
 
-    async uploadAssigendFileAsync<TField extends StringKeyof<T>, T extends EntityType>({
+    async uploadAssigendFileAsync<TField extends StringKeyof<TEntity>, TEntity extends EntityType & { [K in TField]: Id<'StorageFile'> | null }>({
         entitySignature,
         fileBuffer,
         fileCode,
@@ -68,7 +68,7 @@ export class FileService {
     }: {
         entityId: Id<any>,
         fileCode: FileCodesType,
-        entitySignature: ClassType<T>,
+        entitySignature: ClassType<TEntity>,
         storageFileIdField: TField,
         fileBuffer: Buffer,
     }) {
@@ -90,7 +90,7 @@ export class FileService {
         try {
 
             // crate pending storage file
-            const newStorageFileEntityId = await this
+            const { id: newStorageFileEntityId } = await this
                 ._insertFileEntityAsync(newCDNFilePath);
 
             // get entity
@@ -100,13 +100,14 @@ export class FileService {
                 .getSingle();
 
             // get old file id 
-            const oldStorageFileId = entity[storageFileIdField] as any as Id<any> | null;
+            const oldStorageFileId = entity[storageFileIdField];
 
             // save entity
-            const saveData = { id: entityId } as T;
-            (saveData as any)[storageFileIdField] = newStorageFileEntityId;
             await this._ormService
-                .save(entitySignature, saveData);
+                .save(entitySignature, {
+                    id: entityId,
+                    [storageFileIdField]: newStorageFileEntityId
+                } as any);
 
             // delete previous file, and file entity
             if (oldStorageFileId) {
