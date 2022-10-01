@@ -16,8 +16,8 @@ type CompanyAdminEditPagePropsType = { onNameLoaded: (name: string) => void };
 
 export const CompanyAdminEditPage = memo(({ onNameLoaded }: CompanyAdminEditPagePropsType) => {
 
-    const { indexRoute, editRoute, coursesRoute } = applicationRoutes.administrationRoute.companiesRoute;
-    
+    const { indexRoute, editRoute, coursesRoute, activationCodesRoute } = applicationRoutes.administrationRoute.companiesRoute;
+
     const companyId = useRouteParams(editRoute)
         .getValue(x => x.companyId, 'int');
 
@@ -103,7 +103,8 @@ export const CompanyAdminEditPage = memo(({ onNameLoaded }: CompanyAdminEditPage
             tabMenuItems={[
                 indexRoute,
                 editRoute,
-                coursesRoute
+                coursesRoute,
+                activationCodesRoute
             ]}
             navigationQueryParams={{
                 companyId

@@ -130,6 +130,16 @@ const useSaveCourseAssociations = () => {
     };
 };
 
+const useCreateCompanyActivationCodes = () => {
+
+    const qr = usePostDataUnsafe<{ activationCodeCount: number, companyId: Id<'Company'> }, void>(apiRoutes.companies.createCompanyActivationCodes);
+
+    return {
+        createCompanyActivationCodesAsync: qr.postDataAsync,
+        createCompanyActivationCodesState: qr.state
+    };
+};
+
 export const CompanyApiService = {
 
     useCompaniesAdmin,
@@ -142,5 +152,6 @@ export const CompanyApiService = {
     useAvailableCompaniesForRoleCreation,
     useCompanyDetailsByDomain,
     useCourseAssociations,
-    useSaveCourseAssociations
+    useSaveCourseAssociations,
+    useCreateCompanyActivationCodes
 };

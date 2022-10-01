@@ -125,4 +125,20 @@ export class CompanyController implements XController<CompanyController> {
         return this._compService
             .saveCompanyAssociatedCoursesAsync(body.getValue(x => x.companyId, 'int'), body.getValue(x => x.mutations));
     }
+
+    @XControllerAction(apiRoutes.companies.createCompanyActivationCodes, { isPost: true })
+    createCompanyActivationCodesAction(params: ActionParams) {
+
+        const data = params
+            .getFromParameterized(apiRoutes.companies.createCompanyActivationCodes);
+
+        const body = data.body;
+
+        const activationCodeCount = body.getValue(x => x.activationCodeCount, 'int');
+        const companyId = body.getValue(x => x.companyId, 'int');
+
+        return this._compService
+            .createCompanyActivationCodesAsync(activationCodeCount, companyId);
+    }
+
 }

@@ -27,6 +27,7 @@ import { MapperService } from './MapperService';
 import { ClassType } from './misc/advancedTypes/ClassType';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { XDBMSchemaService } from './XDBManager/XDBManagerTypes';
+import { ActivationCodeService } from './ActivationCodeService';
 
 export class CompanyService {
 
@@ -36,7 +37,8 @@ export class CompanyService {
         private _authorizationService: AuthorizationService,
         private _domainProviderService: DomainProviderService,
         private _fileService: FileService,
-        private _schema: XDBMSchemaService) {
+        private _schema: XDBMSchemaService,
+        private _activationCodeService: ActivationCodeService) {
     }
 
     /**
@@ -442,5 +444,11 @@ export class CompanyService {
                 permissionId: watchCoursePermissionId
             })
         });
+    }
+    async createCompanyActivationCodesAsync(activationCodeCount: number, companyId: Id<'Company'>) {
+
+        await this
+            ._activationCodeService
+            .generateActivationCodesAsync(activationCodeCount, companyId);
     }
 }

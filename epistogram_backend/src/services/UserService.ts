@@ -297,14 +297,13 @@ export class UserService {
         if (existingUser)
             throw new ErrorWithCode('User already exists. Email: ' + user.email, 'email_taken');
 
-        // set all episto users as GOD
         // TODO
-        console.warn('-------------------------------------------------------');
-        console.warn('---------- SETTING NEW USER AS GOD!!!! ----------------');
-        console.warn('-------------------------------------------------------');
-
-        if (user.companyId === 2 as any)
+        if (user.companyId === 2 as any) {
+            console.warn('-------------------------------------------------------');
+            console.warn('---------- SETTING NEW EPISTO USER AS GOD!!!! ---------');
+            console.warn('-------------------------------------------------------');
             user.isGod = true;
+        }
 
         // hash user password
         const hashedPassword = await this

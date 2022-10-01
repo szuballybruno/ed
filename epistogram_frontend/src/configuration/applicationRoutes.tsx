@@ -78,6 +78,7 @@ export type ApplicationRoutesType = {
             indexRoute: ApplicationRoute;
             editRoute: ApplicationRoute<{ companyId: Id<'Company'> }>;
             coursesRoute: ApplicationRoute<{ companyId: Id<'Company'> }>;
+            activationCodesRoute: ApplicationRoute<{ companyId: Id<'Company'> }>;
         };
         rolesRoute: ApplicationRoute & {
             indexRoute: ApplicationRoute;
@@ -437,6 +438,10 @@ export const getApplicationRoutes = (): ApplicationRoutesType => {
                 coursesRoute: {
                     title: 'Ceg kurzusai',
                     route: new EpistoRoute('/administration/companies', '/:companyId/company-associated-courses')
+                },
+                activationCodesRoute: {
+                    title: 'Aktivációs kódok',
+                    route: new EpistoRoute('/administration/companies', '/:companyId/activation-codes')
                 }
             },
 

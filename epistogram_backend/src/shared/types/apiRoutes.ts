@@ -51,7 +51,8 @@ export const apiRoutes = {
         getRoleAssignCompanies: '/companies/get-role-assign-companies',
         getCompanyDetailsByDomain: '/companies/get-company-details-by-domain' as ParametrizedRouteType<{ query: { domain: string } }>,
         getCompanyCourseAssociations: '/companies/get-company-course-associations' as ParametrizedRouteType<{ query: { companyId: Id<'Company'> } }>,
-        saveCompanyCourseAssociations: '/companies/save-company-course-associations' as ParametrizedRouteType<{ body: { companyId: Id<'Company'>, mutations: Mutation<CompanyAssociatedCourseDTO, 'courseId'>[] } }>
+        saveCompanyCourseAssociations: '/companies/save-company-course-associations' as ParametrizedRouteType<{ body: { companyId: Id<'Company'>, mutations: Mutation<CompanyAssociatedCourseDTO, 'courseId'>[] } }>,
+        createCompanyActivationCodes: '/companies/create-company-activation-codes' as ParametrizedRouteType<{ body: { activationCodeCount: number, companyId: Id<'Company'> } }>
     },
 
     teacherInfo: {
