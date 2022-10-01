@@ -20,7 +20,7 @@ export class VideoFile {
     // storage file
     @Column({ nullable: true, type: 'int' })
     @XViewColumn()
-    storageFileId: Id<'StorageFile'>;
+    storageFileId: Id<'StorageFile'> | null;
     @XManyToOne<VideoFile>()(() => StorageFile, s => s.videoFiles)
     @XJoinColumn<VideoFile>('storageFileId')
     storageFile: Relation<StorageFile>;

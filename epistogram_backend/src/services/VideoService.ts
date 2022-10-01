@@ -3,7 +3,6 @@ import { getVideoDurationInSeconds } from 'get-video-duration';
 import { VideoData } from '../models/entity/video/VideoData';
 import { VideoFile } from '../models/entity/video/VideoFile';
 import { VideoVersion } from '../models/entity/video/VideoVersion';
-import { LatestVideoView } from '../models/views/LatestVideoView';
 import { QuestionDataView } from '../models/views/QuestionDataView';
 import { VideoPlayerDataView } from '../models/views/VideoPlayerDataView';
 import { AnswerQuestionDTO } from '../shared/dtos/AnswerQuestionDTO';
@@ -50,46 +49,6 @@ export class VideoService {
             });
     }
 
-    setVideoFileIdAsync = async (videoVersionId: Id<'VideoVersion'>, storageFileId: Id<'StorageFile'>) => {
-
-        const videoVersion = await this._ormService
-            .query(VideoVersion, { videoVersionId })
-            .leftJoin(VideoData, x => x
-                .on('id', '=', 'videoDataId', VideoVersion))
-            .leftJoin(VideoFile, x => x
-                .on('id', '=', 'videoFileId', VideoData))
-            .where('id', '=', 'videoVersionId')
-            .getSingle();
-
-        await this._ormService
-            .save(VideoFile, {
-                id: videoVersion.videoData.videoFile.id,
-                storageFileId: storageFileId
-            });
-    };
-
-    setVideoThumbnailFileId = async (videoId: Id<'Video'>, thumbnailFileId: Id<'StorageFile'>) => {
-
-        const videoData = await this._ormService
-            .withResType<VideoData>()
-            .query(LatestVideoView, { videoId })
-            .select(VideoData)
-            .leftJoin(VideoVersion, (x => x
-                .on('id', '=', 'videoVersionId', LatestVideoView)))
-            .leftJoin(VideoData, (x => x
-                .on('id', '=', 'videoDataId', VideoVersion)))
-            .where('videoId', '=', 'videoId')
-            .getSingle();
-
-        const videoDataId = videoData.id;
-
-        await this._ormService
-            .save(VideoData, {
-                id: videoDataId,
-                thumbnailFileId: thumbnailFileId
-            });
-    };
-
     /**
      * Get questions for a particular video.
      */
@@ -103,7 +62,10 @@ export class VideoService {
         return questionData;
     }
 
-    getVideoByVersionIdAsync = async (videoVersionId: Id<'VideoVersion'>) => {
+    /**
+     * getVideoByVersionIdAsync
+     */
+    async getVideoByVersionIdAsync(videoVersionId: Id<'VideoVersion'>) {
 
         const video = await this._ormService
             .query(VideoPlayerDataView, { videoVersionId })
@@ -111,9 +73,12 @@ export class VideoService {
             .getSingle();
 
         return video;
-    };
+    }
 
-    getVideoPlayerDataAsync = async (videoVersionId: Id<'VideoVersion'>) => {
+    /**
+     * getVideoPlayerDataAsync
+     */
+    async getVideoPlayerDataAsync(videoVersionId: Id<'VideoVersion'>) {
 
         const videoPlayerData = await this._ormService
             .query(VideoPlayerDataView, { videoVersionId })
@@ -121,7 +86,7 @@ export class VideoService {
             .getSingle();
 
         return videoPlayerData;
-    };
+    }
 
     /**
      * Upload video file chunk
@@ -197,6 +162,8 @@ export class VideoService {
                 this._loggerService
                     .logScoped('FILE UPLOAD', 'Uploading to cloud storage...');
 
+                // create video file 
+
                 // upload to cloud
                 await this
                     ._uploadVideoFileAsync(videoVersionId, fullFile);
@@ -224,17 +191,8 @@ export class VideoService {
         /**
          * Upload video file to CDN
          */
-        const videoData = await this
-            ._ormService
-            .withResType<VideoData>()
-            .query(VideoVersion, { videoVersionId })
-            .select(VideoData)
-            .leftJoin(VideoData, x => x
-                .on('id', '=', 'videoDataId', VideoVersion))
-            .where('id', '=', 'videoVersionId')
-            .getSingle();
-
-        const videoFileId = videoData.videoFileId!;
+        const videoFileId = await this
+            ._getOrCreateVideoFile(videoVersionId);
 
         const { newCDNFilePath } = await this
             ._fileService
@@ -246,15 +204,43 @@ export class VideoService {
                 storageFileIdField: 'storageFileId'
             });
 
-        this._loggerService
-            .logScoped('FILE UPLOAD', `Upload successful. CDN file path: ${newCDNFilePath}`);
-
         /**
          * Set video file length
          */
         await this
             ._setVideoFileLengthAsync(newCDNFilePath, videoFileId);
+
+        this._loggerService
+            .logScoped('FILE UPLOAD', `Upload successful. CDN file path: ${newCDNFilePath}`);
     };
+
+    /**
+     * Get or create video file
+     */
+    private async _getOrCreateVideoFile(videoVersionId: Id<'VideoVersion'>): Promise<Id<'VideoFile'>> {
+
+        const { videoFileId } = await this
+            ._ormService
+            .withResType<VideoData>()
+            .query(VideoVersion, { videoVersionId })
+            .select(VideoData)
+            .innerJoin(VideoData, x => x
+                .on('id', '=', 'videoDataId', VideoVersion))
+            .where('id', '=', 'videoVersionId')
+            .getSingle();
+
+        if (videoFileId)
+            return videoFileId;
+
+        const { id } = await this
+            ._ormService
+            .createAsync(VideoFile, {
+                lengthSeconds: 0,
+                storageFileId: null
+            });
+
+        return id;
+    }
 
     /**
      * Get video file path
