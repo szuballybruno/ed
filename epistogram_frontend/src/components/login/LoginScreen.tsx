@@ -309,43 +309,8 @@ const LoginScreen = () => {
                     </EpistoFlex2>
                 </EpistoFlex2>
 
-                {/* Magic powder top-left 
-                <img
-                    style={{
-                        position: 'absolute',
-                        left: 50,
-                        top: -80,
-                        width: 300,
-                        transform: 'rotate(270deg)',
-                        objectFit: 'contain',
-                        zIndex: 0,
-                    }}
-                    src={Environment.getAssetUrl('/images/bg-art-2.png')}
-                    alt="" />
 
-                {/* Magic powder bottom-left 
-                <img
-                    style={{
-                        position: 'absolute',
-                        left: -55,
-                        bottom: -150,
-                        transform: 'rotate(-90deg) scale(50%)',
-                        zIndex: 0,
-                    }}
-                    src={Environment.getAssetUrl('/images/bg-art-5.png')}
-                    alt="" />
 
-                {/* Magic powder top-left 
-                <img
-                    style={{
-                        position: 'absolute',
-                        right: -20,
-                        top: -120,
-                        transform: 'rotate(270deg) scale(70%)',
-                        zIndex: 0,
-                    }}
-                    src={Environment.getAssetUrl('/images/bg-art-6.png')}
-                alt="" />*/}
             </LoadingFrame>
         </EpistoFlex2>
 

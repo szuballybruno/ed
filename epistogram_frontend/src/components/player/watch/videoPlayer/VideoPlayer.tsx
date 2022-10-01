@@ -2,6 +2,7 @@ import FastForwardIcon from '@mui/icons-material/FastForward';
 import FastRewindIcon from '@mui/icons-material/FastRewind';
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import { useEffect } from 'react';
 import { VideoPlayerDataDTO } from '../../../../shared/dtos/VideoDTO';
 import { useIsMobileView } from '../../../../static/frontendHelpers';
 import { EpistoDiv, EpistoDivProps } from '../../../controls/EpistoDiv';
@@ -36,10 +37,11 @@ export const VideoPlayer = (props: {
         isMuted,
         isFullscreen,
         isLandscape,
+        showMobilePlayButtonOverlay,
+        showShouldRotatePhoneOverlay,
         toggleShouldBePlaying,
         showControlOverlay,
         setPlayedSeconds,
-        setVideoLength,
         toggleFullScreen,
         seekToSeconds,
         setIsSeeking,
@@ -52,6 +54,11 @@ export const VideoPlayer = (props: {
     } = videoPlayerState;
 
     const isMobile = useIsMobileView();
+
+    useEffect(() => {
+
+        console.log('isPlaying: ' + isPlaying);
+    }, [isPlaying]);
 
     /* styles */
     const {
@@ -87,12 +94,12 @@ export const VideoPlayer = (props: {
             {/* MOBILE ONLY: overlay on top of player,
                 since we don't want the user to watch video
                 in portrait */}
-            {(isMobile && !isFullscreen && !isLandscape) && <MobilePlayButtonOverlay
+            {showMobilePlayButtonOverlay && <MobilePlayButtonOverlay
                 enableFullscreenMode={enableFullscreenMode} />}
 
             {/* MOBILE ONLY: warning to rotate the mobile, the video
                 should only starts in landscape */}
-            {(isMobile && isFullscreen && !isLandscape) && <ShouldRotatePhoneOverlay
+            {showShouldRotatePhoneOverlay && <ShouldRotatePhoneOverlay
                 onExitFullScreen={disableFullscreenMode} />}
 
             {/* playback */}
@@ -135,11 +142,7 @@ export const VideoPlayer = (props: {
 
                             setPlayedSeconds(playedInfo.playedSeconds);
                         }}
-                        onReady={(e) => {
-
-                            onReady();
-                            setVideoLength(e.getDuration());
-                        }}
+                        onReady={onReady}
                         config={{
                             file: {
                                 attributes: {

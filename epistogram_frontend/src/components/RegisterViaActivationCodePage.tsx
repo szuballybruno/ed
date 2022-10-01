@@ -1,17 +1,17 @@
-import {useState} from 'react';
-import {useRegisterUserViaActivationCode} from '../services/api/registrationApiService';
-import {useNavigation} from '../services/core/navigatior';
-import {showNotification, useShowErrorDialog} from '../services/core/notifications';
-import {ErrorCodeType} from '../shared/types/sharedTypes';
-import {Environment} from '../static/Environemnt';
-import {translatableTexts} from '../static/translatableTexts';
-import {EpistoButton} from './controls/EpistoButton';
-import {EpistoEntryNew, useEpistoEntryState} from './controls/EpistoEntryNew';
-import {EpistoFlex2} from './controls/EpistoFlex';
-import {EpistoFont} from './controls/EpistoFont';
-import {validateAllEntries} from './controls/logic/controlsLogic';
-import {PageRootContainer} from './PageRootContainer';
-import {LoadingFrame} from './system/LoadingFrame';
+import { useState } from 'react';
+import { useRegisterUserViaActivationCode } from '../services/api/registrationApiService';
+import { useNavigation } from '../services/core/navigatior';
+import { showNotification, useShowErrorDialog } from '../services/core/notifications';
+import { ErrorCodeType } from '../shared/types/sharedTypes';
+import { Environment } from '../static/Environemnt';
+import { translatableTexts } from '../static/translatableTexts';
+import { EpistoButton } from './controls/EpistoButton';
+import { EpistoEntryNew, useEpistoEntryState } from './controls/EpistoEntryNew';
+import { EpistoFlex2 } from './controls/EpistoFlex';
+import { EpistoFont } from './controls/EpistoFont';
+import { validateAllEntries } from './controls/logic/controlsLogic';
+import { PageRootContainer } from './PageRootContainer';
+import { LoadingFrame } from './system/LoadingFrame';
 
 export const RegisterViaActivationCodePage = () => {
 
@@ -276,44 +276,6 @@ export const RegisterViaActivationCodePage = () => {
                     </EpistoFlex2>
 
                 </LoadingFrame>
-
-                {/* Magic powder top-left */}
-                <img
-                    style={{
-                        position: 'absolute',
-                        left: 50,
-                        top: -80,
-                        width: 300,
-                        transform: 'rotate(270deg)',
-                        objectFit: 'contain',
-                        zIndex: 0,
-                    }}
-                    src={Environment.getAssetUrl('/images/bg-art-2.png')}
-                    alt="" />
-
-                {/* Magic powder bottom-left */}
-                <img
-                    style={{
-                        position: 'absolute',
-                        left: -55,
-                        bottom: -150,
-                        transform: 'rotate(-90deg) scale(50%)',
-                        zIndex: 0,
-                    }}
-                    src={Environment.getAssetUrl('/images/bg-art-5.png')}
-                    alt="" />
-
-                {/* Magic powder top-left */}
-                <img
-                    style={{
-                        position: 'absolute',
-                        right: -20,
-                        top: -120,
-                        transform: 'rotate(270deg) scale(70%)',
-                        zIndex: 0,
-                    }}
-                    src={Environment.getAssetUrl('/images/bg-art-6.png')}
-                    alt="" />
             </EpistoFlex2>
         </EpistoFlex2 >
     </PageRootContainer >;

@@ -47,9 +47,10 @@ export const useVideoPlayerState = (
     const isIPhone = browser.isIPhone;
     const isMobile = useIsMobileView();
     const screenfullEnabled = screenfull.isFullscreen;
-
     const screenOrientation = useScreenOrientation();
     const isLandscape = screenOrientation === 90;
+    const showMobilePlayButtonOverlay = isMobile && !isFullscreen && !isLandscape;
+    const showShouldRotatePhoneOverlay = isMobile && isFullscreen && !isLandscape;
 
     const controlsVisible = (isMobile && isLandscape) || showControls || !shouldBePlaying || isSeeking;
 
@@ -138,14 +139,22 @@ export const useVideoPlayerState = (
         }
     }, [isShowingOverlay]);
 
-    const handleOnReady = useCallback(() => {
+    const handleOnReady = useCallback((e: {
+        getDuration: () => React.SetStateAction<number>;
+    }) => {
 
         console.log('handleOnReady runs...');
 
         if (isMobile && !isLandscape) {
 
-            setIsPlaying(false);
+            console.log('Setting isPlaying to off');
+            return setIsPlaying(false);
         }
+
+        setIsPlaying(false);
+        setIsPlaying(true);
+
+        setVideoLength(e.getDuration());
     }, [isMobile, isLandscape]);
 
     const enableFullscreenMode = () => {
@@ -372,6 +381,8 @@ export const useVideoPlayerState = (
         isFullscreen,
         isIPhone,
         isLandscape,
+        showMobilePlayButtonOverlay,
+        showShouldRotatePhoneOverlay,
         toggleShouldBePlaying,
         showControlOverlay,
         setPlayedSeconds,

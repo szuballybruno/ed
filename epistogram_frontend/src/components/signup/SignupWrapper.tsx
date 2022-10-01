@@ -236,33 +236,5 @@ export const SignupWrapper = (props: {
             </EpistoButton>}
 
         </EpistoFlex2>
-
-        {/* magic powder top left */}
-        <img
-            style={{
-                position: 'absolute',
-                left: 50,
-                top: -60,
-                width: 300,
-                transform: 'rotate(270deg)',
-                objectFit: 'contain',
-                zIndex: -1,
-            }}
-            src={Environment.getAssetUrl('/images/bg-art-2.png')}
-            alt="" />
-
-        {/* magic powder top right */}
-        <img
-            style={{
-                position: 'absolute',
-                right: 50,
-                top: -60,
-                width: 300,
-                transform: 'rotate(270deg)',
-                objectFit: 'contain',
-                zIndex: -1,
-            }}
-            src={Environment.getAssetUrl('/images/bg-art-6.png')}
-            alt="" />
     </EpistoFlex2>;
 };
