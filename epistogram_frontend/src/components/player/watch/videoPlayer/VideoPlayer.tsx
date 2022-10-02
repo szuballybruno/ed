@@ -14,6 +14,7 @@ import { MobilePlayButtonOverlay } from './MobilePlayButtonOverlay';
 import { VideoControls } from './VideoPlayerControls';
 import { VideoPlayerStateType } from './videoPlayerState';
 import { videoPlayerStyles } from './videoPlayerStyles';
+
 export const VideoPlayer = (props: {
     videoItem: VideoPlayerDataDTO,
     videoPlayerState: VideoPlayerStateType
@@ -95,7 +96,7 @@ export const VideoPlayer = (props: {
                 since we don't want the user to watch video
                 in portrait */}
             {showMobilePlayButtonOverlay && <MobilePlayButtonOverlay
-                enableFullscreenMode={enableFullscreenMode} />}
+                videoPlayerState={videoPlayerState} />}
 
             {/* MOBILE ONLY: warning to rotate the mobile, the video
                 should only starts in landscape */}

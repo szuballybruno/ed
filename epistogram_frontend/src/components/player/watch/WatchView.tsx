@@ -104,7 +104,7 @@ export const WatchView = (props: {
     const isShowingOverlay = isQuestionVisible || !!currentStillWatchingMarker;
     const limitSeek = courseMode === 'beginner';
     const videoPlayerState = useVideoPlayerState(videoPlayerData, isShowingOverlay, maxWatchedSeconds, limitSeek, handleVideoSeekEvent);
-    const { playedSeconds, videoLength, isSeeking, isPlaying, isVideoEnded } = videoPlayerState;
+    const { playedSeconds, videoLength, isSeeking, isPlaying, isVideoEnded, setShouldBePlaying } = videoPlayerState;
 
     const VideoDescription = () => <PlayerDescription
         paging={descCommentPaging}
@@ -167,6 +167,7 @@ export const WatchView = (props: {
 
             setShowNewDialogsEnabled(false);
             setCurrentQuestion(unansweredQuestion);
+            setShouldBePlaying(false);
         }
 
         // only show when there are no questions
@@ -262,6 +263,7 @@ export const WatchView = (props: {
                 <AbsoluteFlexOverlay
                     isVisible={isVideoEnded}
                     hasPointerEvents={false}
+                    zIndex='21'
                     align="flex-end"
                     justify="flex-end">
 

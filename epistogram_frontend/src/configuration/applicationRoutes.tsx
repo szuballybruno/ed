@@ -136,6 +136,7 @@ export const getApplicationRoutes = (): ApplicationRoutesType => {
         registerViaActivationCodeRoute: {
             title: translatableTexts.routeTitles.registerViaActivationCode,
             route: new EpistoRoute('/', 'register-via-activation-code'),
+            isUnauthorized: true
         },
 
         homeRoute: {

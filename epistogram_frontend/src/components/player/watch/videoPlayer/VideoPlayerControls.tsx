@@ -54,7 +54,8 @@ export const VideoControls = (props: {
             maxHeight: '30px',
             maxWidth: '30px',
             lineHeight: 0,
-            color: 'white'
+            color: 'white',
+            zIndex: 21
         }
         : {
             color: 'white'
@@ -67,7 +68,7 @@ export const VideoControls = (props: {
         justify="flex-start"
         align="center"
         position="absolute"
-        zIndex={5}
+        zIndex={21}
         bottom={0}
         left={0}
         px={isMobile ? '20px' : '10px'}
