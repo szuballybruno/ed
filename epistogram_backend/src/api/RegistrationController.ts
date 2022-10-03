@@ -65,25 +65,16 @@ export class RegistrationController implements XController<RegistrationControlle
     }
 
     @XControllerAction(apiRoutes.registration.registerUserViaActivationCode, { isPublic: true, isPost: true })
-    registerUserViaActivationCodeAction(params: ActionParams) {
+    async registerUserViaActivationCodeAction(params: ActionParams) {
+        const body = params.getBody<RegisterUserViaActivationCodeDTO>();
 
-        return {
-            action: async () => {
-                const body = params.getBody<RegisterUserViaActivationCodeDTO>();
-
-                await this._registrationService
-                    .registerUserViaActivationCodeAsync(
-                        params.principalId,
-                        body.getValue(x => x.activationCode, 'string'),
-                        body.getValue(x => x.emailAddress, 'string'),
-                        body.getValue(x => x.firstName, 'string'),
-                        body.getValue(x => x.lastName, 'string'));
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(params.principalId, 'ACCESS_APPLICATION');
-            }
-        };
+        await this._registrationService
+            .registerUserViaActivationCodeAsync(
+                params.principalId,
+                body.getValue(x => x.activationCode, 'string'),
+                body.getValue(x => x.emailAddress, 'string'),
+                body.getValue(x => x.firstName, 'string'),
+                body.getValue(x => x.lastName, 'string'));
     }
 
     @XControllerAction(apiRoutes.registration.inviteUser, { isPost: true })

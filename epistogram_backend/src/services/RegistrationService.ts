@@ -74,6 +74,7 @@ export class RegistrationService {
         if (!activationCodeEntity)
             throw new ErrorWithCode(`Activation code ${activationCode} not found in DB, or already used.`, 'activation_code_issue');
 
+        console.log(JSON.stringify(activationCodeEntity));
         // create user
         await this.inviteNewUserAsync({
             email,

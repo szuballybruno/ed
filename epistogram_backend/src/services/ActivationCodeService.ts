@@ -21,7 +21,7 @@ export class ActivationCodeService {
             })
             .where('code', '=', 'code')
             .and('isUsed', 'IS', 'false')
-            .getSingle();
+            .getOneOrNull();
 
         return actCode;
     }
@@ -35,7 +35,7 @@ export class ActivationCodeService {
             });
     }
 
-    async generateActivationCodesAsync(amount: number) {
+    async generateActivationCodesAsync(amount: number, companyId: Id<'Company'>) {
 
         const codes = forN(amount, x => this.genCode());
 
@@ -43,13 +43,14 @@ export class ActivationCodeService {
             .createManyAsync(ActivationCode, codes
                 .map(x => ({
                     code: x,
-                    isUsed: false
+                    isUsed: false,
+                    companyId: companyId
                 } as ActivationCode)));
     }
 
     private genCode = () => {
 
-        return 'PCW-' + generatePassword(8)
+        return 'MELO' + generatePassword(8)
             .toUpperCase();
     };
 }
