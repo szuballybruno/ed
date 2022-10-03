@@ -1,5 +1,7 @@
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import { Logger } from '../../../../static/Logger';
 import { EpistoFlex2 } from '../../../controls/EpistoFlex';
+import { useVideoPlayerFullscreenContext } from './VideoPlayerFullscreenFrame';
 import { VideoPlayerStateType } from './videoPlayerState';
 import { videoPlayerStyles } from './videoPlayerStyles';
 
@@ -9,12 +11,15 @@ export const MobilePlayButtonOverlay = (props: {
 
     const { videoPlayerState } = props;
 
-    const { enableFullscreenMode, isFullscreen, toggleShouldBePlaying } = videoPlayerState;
+    const [isFullscreen] = useVideoPlayerFullscreenContext();
+    const { enableFullscreenMode, isLandscape, toggleIsPlaying } = videoPlayerState;
+
+    Logger.logScoped('PLAYBACK', 'isFullscreen (MobilePlayButtonOverlay): ' + isFullscreen);
 
     return <EpistoFlex2
         top='0'
         background={isFullscreen ? '#00000033' : 'black'}
-        position='absolute'
+        position={isLandscape ? 'fixed' : 'absolute'}
         paddingTop={isFullscreen ? '40px' : '0'}
         align='center'
         justify='center'
@@ -25,7 +30,7 @@ export const MobilePlayButtonOverlay = (props: {
         <PlayArrowIcon
             onClick={() => {
                 isFullscreen
-                    ? toggleShouldBePlaying()
+                    ? toggleIsPlaying()
                     : enableFullscreenMode();
             }}
             style={{
@@ -33,4 +38,4 @@ export const MobilePlayButtonOverlay = (props: {
                 zIndex: 19,
             }} />
     </EpistoFlex2>;
-};
+}; 

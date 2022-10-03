@@ -5,6 +5,7 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { useEffect } from 'react';
 import { VideoPlayerDataDTO } from '../../../../shared/dtos/VideoDTO';
 import { useIsMobileView } from '../../../../static/frontendHelpers';
+import { Logger } from '../../../../static/Logger';
 import { EpistoDiv, EpistoDivProps } from '../../../controls/EpistoDiv';
 import { EpistoReactPlayer } from '../../../controls/EpistoReactPlayer';
 import { AbsoluteFlexOverlay } from '../AbsoluteFlexOverlay';
@@ -12,6 +13,7 @@ import { PlayerDebugInfo } from '../PlayerDebugInfo';
 import { ShouldRotatePhoneOverlay } from '../ShouldRotatePhoneOverlay';
 import { MobilePlayButtonOverlay } from './MobilePlayButtonOverlay';
 import { VideoControls } from './VideoPlayerControls';
+import { useVideoPlayerFullscreenContext } from './VideoPlayerFullscreenFrame';
 import { VideoPlayerStateType } from './videoPlayerState';
 import { videoPlayerStyles } from './videoPlayerStyles';
 
@@ -36,11 +38,9 @@ export const VideoPlayer = (props: {
         maxWatchedSeconds,
         volume,
         isMuted,
-        isFullscreen,
         isLandscape,
         showMobilePlayButtonOverlay,
         showShouldRotatePhoneOverlay,
-        toggleShouldBePlaying,
         showControlOverlay,
         setPlayedSeconds,
         toggleFullScreen,
@@ -49,12 +49,17 @@ export const VideoPlayer = (props: {
         handleOnVideoEnded,
         disableFullscreenMode,
         enableFullscreenMode,
+        toggleIsPlaying,
         setVolume,
         setIsMuted,
         onReady
     } = videoPlayerState;
 
+    const [isFullscreen] = useVideoPlayerFullscreenContext();
     const isMobile = useIsMobileView();
+
+    Logger.logScoped('PLAYBACK', 'isFullscreen (VideoPlayer): ' + isFullscreen);
+
 
     useEffect(() => {
 
@@ -115,7 +120,11 @@ export const VideoPlayer = (props: {
                 {/* video wrapper */}
                 <EpistoDiv
                     id="videoWrapper"
-                    onClick={toggleShouldBePlaying}
+                    onClick={() => {
+                        if (!isMobile) {
+                            toggleIsPlaying();
+                        }
+                    }}
                     onMouseMove={() => {
 
                         if (!controlOverlayTimer)
@@ -172,7 +181,7 @@ export const VideoPlayer = (props: {
                     seekToSeconds={seekToSeconds}
                     setIsSeeking={setIsSeeking}
                     toggleFullScreen={toggleFullScreen}
-                    toggleShouldBePlaying={toggleShouldBePlaying}
+                    toggleIsPlaying={toggleIsPlaying}
                     setVolume={setVolume} />
 
             </EpistoDiv>

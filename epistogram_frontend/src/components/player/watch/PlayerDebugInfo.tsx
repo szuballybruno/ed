@@ -1,4 +1,6 @@
+import { Logger } from '../../../static/Logger';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
+import { useVideoPlayerFullscreenContext } from './videoPlayer/VideoPlayerFullscreenFrame';
 import { VideoPlayerStateType } from './videoPlayer/videoPlayerState';
 
 export const PlayerDebugInfo = (props: {
@@ -8,8 +10,11 @@ export const PlayerDebugInfo = (props: {
 
     const { videoPlayerState, videoTitle } = props;
 
+    const [isFullscreen] = useVideoPlayerFullscreenContext();
+
+    Logger.logScoped('PLAYBACK', 'isFullscreen (PlayerDebugInfo): ' + isFullscreen);
+
     const {
-        isFullscreen,
         isIPhone,
         isMuted,
         isLandscape,
@@ -18,7 +23,7 @@ export const PlayerDebugInfo = (props: {
         isShowingOverlay,
         playedSeconds,
         controlsVisible,
-        shouldBePlaying,
+        isMobile,
         videoLength
     } = videoPlayerState;
 
@@ -32,7 +37,6 @@ export const PlayerDebugInfo = (props: {
         maxWidth='40%'
         zIndex={17}>
 
-
         {'isFullscreen: ' + isFullscreen}<br />
         {'isIPhone: ' + isIPhone}<br />
         {'isMuted: ' + isMuted}<br />
@@ -42,7 +46,7 @@ export const PlayerDebugInfo = (props: {
         {'isShowingOverlay: ' + isShowingOverlay}<br />
         {'playedSeconds: ' + playedSeconds}<br />
         {'controlsVisible: ' + controlsVisible}<br />
-        {'shouldBePlaying: ' + shouldBePlaying}<br />
+        {'isMobile: ' + isMobile}<br />
         {'videoLength: ' + videoLength}<br />
         {'videoTitle: ' + videoTitle}<br />
     </EpistoFlex2>;
