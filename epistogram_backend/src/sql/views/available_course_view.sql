@@ -60,15 +60,7 @@ SELECT
 	cc.id category_id,
 	cc.name category_name,
 	csc.name sub_category_name,
-	ucb.current_item_code current_item_code,
-	CASE WHEN first_civ.video_id IS NOT NULL
-		THEN (SELECT encode((first_civ.video_id || '@video')::bytea, 'base64'))
-		ELSE (SELECT encode((first_civ.exam_id || '@exam')::bytea, 'base64'))
-	END first_item_code,
-	CASE WHEN ucb.current_item_code IS NULL
-		THEN NULL --first_civ.item_code
-		ELSE ucb.current_item_code
-	END continue_item_code,
+	ucb.current_item_code,
 	ucb.stage_name stage_name,
 	ucb.required_completion_date,
 	cov.completed_video_count,
@@ -102,12 +94,6 @@ ON cvlv.course_version_id = cv.id
 
 LEFT JOIN public.course_video_count_view cvcv
 ON cvcv.course_version_id = cv.id
-
-LEFT JOIN public.course_item_view first_civ
-ON first_civ.course_version_id = cv.id
-AND first_civ.item_order_index = 0
-AND first_civ.module_order_index = 1
-AND first_civ.item_type != 'pretest'
 
 LEFT JOIN public.course_state_view cosv
 ON cosv.course_id = co.id

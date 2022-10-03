@@ -1,13 +1,11 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { CourseApiService } from '../../services/api/courseApiService';
 import { useNavigation } from '../../services/core/navigatior';
 import { useShowErrorDialog } from '../../services/core/notifications';
 import { AvailableCourseDTO } from '../../shared/dtos/AvailableCourseDTO';
 import { OrderType } from '../../shared/types/sharedTypes';
 import { Id } from '../../shared/types/versionId';
-import { Environment } from '../../static/Environemnt';
 import { useIsMobileView } from '../../static/frontendHelpers';
-import { Logger } from '../../static/Logger';
 import { useSetBusy } from '../system/LoadingFrame/BusyBarContext';
 import { DesktopAvailableCoursesPage } from './DesktopAvailableCoursesPage';
 import { MobileAvailableCoursesPage } from './MobileAvailableCoursesPage';
@@ -49,7 +47,6 @@ const AvailableCoursesPage = () => {
     const { playCourse, navigateToCourseDetails } = useNavigation();
     const showError = useShowErrorDialog();
 
-
     useSetBusy(CourseApiService.useUserCourses, coursesState, coursesError);
 
     const clearFilters = () => {
@@ -68,11 +65,6 @@ const AvailableCoursesPage = () => {
     };
 
     const handlePlayCourse = async (course: AvailableCourseDTO) => {
-
-        Logger.logScoped('PLAYER DEBUG', 'Playing unmute sound thing');
-
-        new Audio(Environment.getAssetUrl('/sounds/testunmute.mp3'))
-            .play();
 
         playCourse(course.courseId, course.stageName, course.currentItemCode);
     };

@@ -6,7 +6,6 @@ import { CourseCategoryDTO } from '../../shared/dtos/CourseCategoryDTO';
 import { OrderType } from '../../shared/types/sharedTypes';
 import { translatableTexts } from '../../static/translatableTexts';
 import { ContentPane } from '../ContentPane';
-import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoDiv } from '../controls/EpistoDiv';
 import { EpistoFlex, EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
@@ -14,10 +13,18 @@ import { EpistoGrid } from '../controls/EpistoGrid';
 import { EpistoSearch } from '../controls/EpistoSearch';
 import { LeftPane } from '../LeftPane';
 import { PageRootContainer } from '../PageRootContainer';
-import CourseTile from '../universal/CourseTile';
+import { CourseTile } from '../universal/CourseTile';
 import { AvailableCoursesPageFilterType } from './AvailableCoursesPage';
 
-export const DesktopAvailableCoursesPage = (props: {
+export const DesktopAvailableCoursesPage = ({
+    courseCategories,
+    courses,
+    filterProps,
+    handleSetFilterProp,
+    clearFilters,
+    navigateToDetailsPage,
+    handlePlayCourse
+}: {
     courseCategories: CourseCategoryDTO[],
     courses: AvailableCourseDTO[],
     filterProps: AvailableCoursesPageFilterType,
@@ -29,16 +36,6 @@ export const DesktopAvailableCoursesPage = (props: {
     navigateToDetailsPage: (course: AvailableCourseDTO) => void,
     handlePlayCourse: (course: AvailableCourseDTO) => void
 }) => {
-
-    const {
-        courseCategories,
-        courses,
-        filterProps,
-        handleSetFilterProp,
-        clearFilters,
-        navigateToDetailsPage,
-        handlePlayCourse
-    } = props;
 
     const [isSmallerThan1400] = useMediaQuery('(min-width: 1400px)');
 
@@ -221,28 +218,10 @@ export const DesktopAvailableCoursesPage = (props: {
                                     background="var(--transparentWhite70)">
 
                                     <CourseTile
+                                        onDetails={() => navigateToDetailsPage(course)}
+                                        onPlay={() => handlePlayCourse(course)}
                                         course={course}
-                                        key={index}>
-
-                                        <EpistoFlex2 mb="10px">
-
-                                            {/* details */}
-                                            <EpistoButton
-                                                onClick={() => navigateToDetailsPage(course)}
-                                                style={{ flex: '1' }}>
-                                                {translatableTexts.availableCourses.courseDataSheet}
-                                            </EpistoButton>
-
-                                            {/* start course */}
-                                            <EpistoButton
-                                                onClick={() => handlePlayCourse(course)}
-                                                variant="colored"
-                                                style={{ flex: '1' }}>
-
-                                                {translatableTexts.availableCourses.startCourse}
-                                            </EpistoButton>
-                                        </EpistoFlex2>
-                                    </CourseTile>
+                                        key={index} />
                                 </GridItem>;
                             })}
                     </EpistoGrid>

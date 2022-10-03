@@ -442,7 +442,7 @@ const marray = [
     epistoMappingsBuilder
         .addMapping(PretestResultDTO, () => (
             prv: PretestResultView,
-            acv: AvailableCourseView,
+            firstItemPlaylistCode: string,
             originalPrevisionedCompletionDate: Date | null,
             requiredCompletionDate: Date | null,
             recommendedItemsPerDay: number | null
@@ -450,7 +450,7 @@ const marray = [
 
             return instantiate<PretestResultDTO>({
                 correctAnswerRate: prv.scorePercentage,
-                firstItemCode: acv.firstItemCode,
+                firstItemCode: firstItemPlaylistCode,
                 estimatedCompletionDate: originalPrevisionedCompletionDate,
                 requiredCompletionDate: requiredCompletionDate,
                 recommendedVideosPerDay: recommendedItemsPerDay

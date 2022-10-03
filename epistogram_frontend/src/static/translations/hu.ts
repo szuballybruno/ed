@@ -338,6 +338,7 @@ export const huTranslation: TranslationType = {
                 oldToNew: 'Régi-Új'
             },
             startCourse: 'Indítás',
+            continueCourse: 'Folytatás',
             courseDataSheet: 'Adatlap',
             courseDone: 'Teljesítve!'
         },

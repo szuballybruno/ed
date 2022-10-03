@@ -1,10 +1,12 @@
 WITH 
-course_item_light_view AS 
+all_items_cte AS 
 (
     SELECT 
-        uni.*, 
-        mv.course_version_id,
-        mv.module_id
+        cv.course_id,
+        cv.id course_version_id,
+        mv.id module_id,
+        uni.video_version_id,
+        uni.exam_version_id
     FROM 
     (
         SELECT 
@@ -13,7 +15,7 @@ course_item_light_view AS
             null exam_version_id
         FROM public.video_version vv
         UNION
-        SELECT 
+        SELECT
             ev.module_version_id, 
             null video_version_id,
             ev.id exam_version_id
@@ -23,35 +25,46 @@ course_item_light_view AS
     LEFT JOIN public.module_version mv
     ON mv.id = uni.module_version_id 
     
-	-- filter out all pretest modules
-    INNER JOIN public.module_data md
-    ON md.id = mv.module_data_id
-    AND md.order_index != 0
+    LEFT JOIN public.course_version cv
+    ON cv.id = mv.course_version_id
     
-    order by uni.video_version_id
+    ORDER BY
+        cv.course_id,
+        cv.id
 ),
-latest_course_items AS 
+latest_items_cte AS 
+(
+    SELECT 
+        aic.*
+    FROM all_items_cte aic
+    
+	INNER JOIN public.latest_course_version_view lcvi
+	ON lcvi.version_id = aic.course_version_id
+),
+latest_items_with_codes_cte AS 
 (
 	SELECT 
         lcvi.course_id,
 		civ.*,
 	
         -- module code
-        (SELECT encode((cilv.module_id || '@module')::bytea, 'base64')) module_code,
+        (SELECT encode((lic.module_id || '@module')::bytea, 'base64')) module_code,
 
         -- playlist item code
         CASE WHEN civ.video_id IS NULL
             THEN (SELECT encode((civ.exam_id || '@exam')::bytea, 'base64'))
             ELSE (SELECT encode((civ.video_id || '@video')::bytea, 'base64')) 
         END playlist_item_code
-	FROM course_item_light_view cilv 
+	FROM latest_items_cte lic 
 	
 	INNER JOIN public.latest_course_version_view lcvi
-	ON lcvi.version_id = cilv.course_version_id
+	ON lcvi.version_id = lic.course_version_id
     
     INNER JOIN public.course_item_view civ 
-    ON civ.exam_version_id = cilv.exam_version_id 
-    OR civ.video_version_id = cilv.video_version_id
+    ON (civ.exam_version_id = lic.exam_version_id 
+    OR civ.video_version_id = lic.video_version_id)
+    AND civ.item_type <> 'pretest'
+    
 ),
 items_with_user AS
 (
@@ -92,7 +105,7 @@ items_with_user AS
 				THEN 'available'
 				ELSE 'locked'
 		END item_state
-	FROM latest_course_items civ
+	FROM latest_items_with_codes_cte civ
 	
 	LEFT JOIN public.course_version cv 
 	ON cv.id = civ.course_version_id

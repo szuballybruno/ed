@@ -209,9 +209,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
     /**
      * Returns the current course id
      */
-    async getCurrentCourseIdOrFail(
-        userId: Id<'User'>
-    ) {
+    async getCurrentCourseIdOrFail(userId: Id<'User'>) {
 
         const id = await this.getCurrentCourseId(userId);
 
@@ -221,35 +219,11 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
         return id;
     }
 
-    async getCurrentItemCodeOrFailAsync(
-        userId: Id<'User'>
-    ) {
-
-        const currentItemCode = await this
-            .getCurrentItemCodeAsync(userId);
-
-        if (!currentItemCode)
-            throw new Error('Course has no current item!');
-
-        return currentItemCode;
-
-    }
-
-    getPrincipalCurrentItemCodeAsync(
+    async getPrincipalCurrentItemCodeAsync(
         principalId: PrincipalId
     ) {
-        return {
-            action: async () => {
-
-                return await this
-                    .getCurrentItemCodeAsync(principalId.getId());
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
-            }
-        };
-
+        return this
+            .getCurrentItemCodeAsync(principalId);
     }
 
     async getUserCourseBridgeOrFailAsync(
@@ -288,34 +262,34 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
     }
 
     /**
-     * Returns the current
-     * course item code
+     * Gets the current item's playlist code 
+     * throw exception if no current found  
      */
-    private async getCurrentItemCodeAsync(
-        userId: Id<'User'>
-    ) {
-        const stateView = await this
+    async getCurrentItemCodeOrFailAsync(principalId: PrincipalId) {
+
+        const currentItemCode = await this
+            .getCurrentItemCodeAsync(principalId);
+
+        if (!currentItemCode)
+            throw new Error('Course has no current item!');
+
+        return currentItemCode;
+
+    }
+
+    /**
+     * Returns the current playlist item code
+     */
+    private async getCurrentItemCodeAsync(principalId: PrincipalId) {
+
+        const { currentItemCode } = await this
             ._ormService
-            .query(CourseStateView, { userId })
-            .where('userId', '=', 'userId')
+            .query(UserCourseBridge, { principalId })
+            .where('userId', '=', 'principalId')
             .and('isCurrent', '=', 'true')
-            .and('inProgress', '=', 'true')
-            .getOneOrNull();
+            .getOneOrNull() ?? { currentItemCode: null };
 
-        if (!stateView)
-            return;
-
-        const ucb = await this
-            ._ormService
-            .query(UserCourseBridge, {
-                courseId: stateView.courseId,
-                userId
-            })
-            .where('courseId', '=', 'courseId')
-            .and('userId', '=', 'userId')
-            .getSingle();
-
-        return ucb.currentItemCode;
+        return currentItemCode;
     }
 
     private async getUserCourseBridgeAsync(

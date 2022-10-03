@@ -321,6 +321,7 @@ export type TranslationType = {
                 oldToNew: string
             };
             startCourse: string;
+            continueCourse: string;
             courseDataSheet: string;
             courseDone: string
         };

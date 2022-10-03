@@ -39,15 +39,7 @@ export class AvailableCourseView {
 
     @ViewColumn()
     @XViewColumn()
-    firstItemCode: string;
-
-    @ViewColumn()
-    @XViewColumn()
     currentItemCode: string;
-
-    @ViewColumn()
-    @XViewColumn()
-    continueItemCode: string;
 
     @ViewColumn()
     @XViewColumn()

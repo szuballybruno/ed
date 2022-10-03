@@ -2,7 +2,9 @@ import { Exam } from '../models/entity/exam/Exam';
 import { ExamVersion } from '../models/entity/exam/ExamVersion';
 import { ModuleVersion } from '../models/entity/module/ModuleVersion';
 import { AvailableCourseView } from '../models/views/AvailableCourseView';
+import { CourseItemView } from '../models/views/CourseItemView';
 import { LatestCourseVersionView } from '../models/views/LatestCourseVersionView';
+import { PlaylistView } from '../models/views/PlaylistView';
 import { PretestResultView } from '../models/views/PretestResultView';
 import { PretestDataDTO } from '../shared/dtos/PretestDataDTO';
 import { PretestResultDTO } from '../shared/dtos/PretestResultDTO';
@@ -79,66 +81,62 @@ export class PretestService {
     /**
      * Get pretest results
      */
-    getPretestResultsAsync(
+    async getPretestResultsAsync(
         principalId: PrincipalId,
         courseId: Id<'Course'>
     ) {
+        await this._authorizationService
+            .checkPermissionAsync(principalId, 'WATCH_COURSE', { courseId });
 
-        return {
-            action: async () => {
-                const userId = principalId.getId();
+        const userId = principalId.getId();
 
-                /**
-                 * Get pretest results view
-                 */
-                const pretestResultsView = await this._ormService
-                    .query(PretestResultView, { userId: userId, courseId })
-                    .where('userId', '=', 'userId')
-                    .and('courseId', '=', 'courseId')
-                    .getSingle();
+        /**
+         * Get pretest results view
+         */
+        const pretestResultsView = await this._ormService
+            .query(PretestResultView, { userId: userId, courseId })
+            .where('userId', '=', 'userId')
+            .and('courseId', '=', 'courseId')
+            .getSingle();
 
-                /**
-                 * Get course view
-                 */
-                const courseView = await this._ormService
-                    .query(AvailableCourseView, { userId: userId, courseId })
-                    .where('userId', '=', 'userId')
-                    .and('courseId', '=', 'courseId')
-                    .getSingle();
+        /**
+         * Get tempomat data
+         */
+        const tempomatValues = await this._tempomatService
+            .calculateTempomatValuesAsync(userId, courseId);
 
-                /**
-                 * Get tempomat data
-                 */
-                const tempomatValues = await this._tempomatService
-                    .calculateTempomatValuesAsync(userId, courseId);
+        const originalPrevisionedCompletionDate = tempomatValues?.originalPrevisionedCompletionDate || null;
+        const recommendedItemsPerDay = tempomatValues?.recommendedItemsPerDay || null;
+        const requiredCompletionDate = tempomatValues?.requiredCompletionDate || null;
 
-                const originalPrevisionedCompletionDate = tempomatValues?.originalPrevisionedCompletionDate || null;
-                const recommendedItemsPerDay = tempomatValues?.recommendedItemsPerDay || null;
-                const requiredCompletionDate = tempomatValues?.requiredCompletionDate || null;
+        /**
+         * Set stage,
+         * it's the last thing so it won't
+         * be called if an error occures
+         */
+        await this._courseBridgeService
+            .setCurrentCourse(userId, courseId, 'pretest_results', null);
 
+        /**
+         * Get first item playlist code 
+         */
+        const { playlistItemCode: firstItemPlaylistCode } = await this
+            ._ormService
+            .query(PlaylistView, { userId, courseId, zero: 0 })
+            .where('userId', '=', 'userId')
+            .and('courseId', '=', 'courseId')
+            .and('moduleOrderIndex', '=', 'zero')
+            .and('itemOrderIndex', '=', 'zero')
+            .getSingle();
 
-                /**
-                 * Set stage,
-                 * it's the last thing so it won't
-                 * be called if an error occures
-                 */
-                await this._courseBridgeService
-                    .setCurrentCourse(userId, courseId, 'pretest_results', null);
-
-                return this._mapperSerice
-                    .mapTo(PretestResultDTO, [
-                        pretestResultsView,
-                        courseView,
-                        originalPrevisionedCompletionDate,
-                        requiredCompletionDate,
-                        recommendedItemsPerDay
-                    ]);
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'WATCH_COURSE', { courseId });
-            }
-        };
+        return this._mapperSerice
+            .mapTo(PretestResultDTO, [
+                pretestResultsView,
+                firstItemPlaylistCode,
+                originalPrevisionedCompletionDate,
+                requiredCompletionDate,
+                recommendedItemsPerDay
+            ]);
     }
 
     getPretestExamIdAsync(courseId: Id<'Course'>) {

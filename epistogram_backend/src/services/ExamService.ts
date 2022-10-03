@@ -220,8 +220,9 @@ export class ExamService {
         const userId = principalId
             .getId();
 
-        const currentItemCode = await this._userCourseBridgeService
-            .getCurrentItemCodeOrFailAsync(userId);
+        const currentItemCode = await this
+            ._userCourseBridgeService
+            .getCurrentItemCodeOrFailAsync(principalId);
 
         const { itemId, itemType } = readItemCode(currentItemCode);
 

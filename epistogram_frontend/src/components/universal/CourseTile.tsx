@@ -1,19 +1,27 @@
-import {Text} from '@chakra-ui/react';
-import {AvailableCourseDTO} from '../../shared/dtos/AvailableCourseDTO';
-import {Environment} from '../../static/Environemnt';
-import {formatTimespan} from '../../static/frontendHelpers';
-import {translatableTexts} from '../../static/translatableTexts';
-import {EpistoDiv} from '../controls/EpistoDiv';
-import {EpistoFlex2, EpistoFlex2Props} from '../controls/EpistoFlex';
-import {EpistoFont} from '../controls/EpistoFont';
-import {FlexFloat} from '../controls/FlexFloat';
-import {SmallStat} from './SmallStat';
+import { Text } from '@chakra-ui/react';
+import { AvailableCourseDTO } from '../../shared/dtos/AvailableCourseDTO';
+import { Environment } from '../../static/Environemnt';
+import { formatTimespan } from '../../static/frontendHelpers';
+import { translatableTexts } from '../../static/translatableTexts';
+import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoDiv } from '../controls/EpistoDiv';
+import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
+import { EpistoFont } from '../controls/EpistoFont';
+import { FlexFloat } from '../controls/FlexFloat';
+import { SmallStat } from './SmallStat';
 
-const CourseTile = (props: {
-    course: AvailableCourseDTO
+export const CourseTile = ({
+    course,
+    children,
+    onDetails,
+    onPlay,
+    ...css
+}: {
+    course: AvailableCourseDTO,
+    onPlay: () => void,
+    onDetails: () => void
 } & EpistoFlex2Props) => {
 
-    const { course, children, ...css } = props;
     const courseTitle = course.title;
     const courseTeacherName = course.teacherName;
     const courseSubCategory = course.subCategoryName;
@@ -150,8 +158,25 @@ const CourseTile = (props: {
         </EpistoFlex2>
 
         {/* buttons */}
-        {props.children}
+        <EpistoFlex2 mb="10px">
+
+            {/* details */}
+            <EpistoButton
+                onClick={onDetails}
+                style={{ flex: '1' }}>
+                {translatableTexts.availableCourses.courseDataSheet}
+            </EpistoButton>
+
+            {/* start course */}
+            <EpistoButton
+                onClick={onPlay}
+                variant="colored"
+                style={{ flex: '1' }}>
+
+                {course.currentItemCode
+                    ? translatableTexts.availableCourses.continueCourse
+                    : translatableTexts.availableCourses.startCourse}
+            </EpistoButton>
+        </EpistoFlex2>
     </FlexFloat>;
 };
-
-export default CourseTile;
