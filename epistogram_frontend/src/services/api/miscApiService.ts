@@ -2,16 +2,8 @@ import { CourseOverviewDataDTO } from '../../shared/dtos/CourseOverviewDataDTO';
 import { JobTitleDTO } from '../../shared/dtos/JobTitleDTO';
 import { OverviewPageDTO } from '../../shared/dtos/OverviewPageDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
+import { GlobalEventManagerType } from '../../static/EventBus';
 import { QueryService } from '../../static/QueryService';
-
-export const useCurrentCourseItemCode = () => {
-
-    const qr = QueryService.useXQuery<string>(apiRoutes.misc.getCurrentCourseItemCode);
-
-    return {
-        currentCourseItemCode: qr.data
-    };
-};
 
 export const useCourseOverviewData = () => {
 
@@ -43,3 +35,22 @@ export const useOverviewPageDTO = () => {
         error: queryRes.error
     };
 };
+
+export const useMiscApiService = (globalEventManager: GlobalEventManagerType) => {
+
+    const useCurrentCourseItemCode = () => {
+
+        const qr = QueryService.useXQuery<string>(apiRoutes.misc.getCurrentCourseItemCode);
+
+        return {
+            refetchCurrentCourseItemCode: qr.refetch,
+            currentCourseItemCode: qr.data
+        };
+    };
+
+    return {
+        useCurrentCourseItemCode
+    };
+};
+
+export type MiscApiService = ReturnType<typeof useMiscApiService>;

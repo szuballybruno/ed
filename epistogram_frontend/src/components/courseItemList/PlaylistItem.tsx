@@ -9,6 +9,7 @@ import { useScrollIntoView } from '../system/AutoScrollContext';
 import { useEffect } from 'react';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { Environment } from '../../static/Environemnt';
+import { Logger } from '../../static/Logger';
 //import {useScrollIntoView} from '../system/AutoScrollContext';
 
 export const PlaylistItem = (
@@ -43,7 +44,9 @@ export const PlaylistItem = (
     }, [childElement]);
 
     const navigate = () => {
-        console.log('Playing unmute sound thing');
+        
+        Logger.logScoped('PLAYER DEBUG', 'Playing unmute sound thing');
+        
         new Audio(Environment.getAssetUrl('/sounds/testunmute.mp3'))
             .play();
         return navigateToPlayer(playlistItemCode);

@@ -10,6 +10,7 @@ import { XDialogHost } from './components/lib/XDialog/XDialogHost';
 import { VideoPlayerFullscreenContextFrame as VideoPlayerFullscreenFrame } from './components/player/watch/videoPlayer/VideoPlayerFullscreenFrame';
 import { AuthenticationFrame } from './components/system/AuthenticationFrame';
 import { AutoScrollFrame } from './components/system/AutoScrollContext';
+import { CurrentCourseItemFrame } from './components/system/CurrentCourseItemFrame';
 import { ErrorDialogFrame } from './components/system/ErrorDialogFrame';
 import { EventListener } from './components/system/EventListener';
 import { InitFrame } from './components/system/InitFrame';
@@ -19,12 +20,14 @@ import { NotificationsFrame } from './components/system/NotificationsFrame';
 import { PreventMobileFrame } from './components/system/PreventMobileFrame';
 import { ProgressierFrame } from './components/system/ProgressierFrame';
 import { QuerySubscriptionFrame } from './components/system/QuerySubscriptionFrame';
+import { ServiceContainerFrame } from './components/system/ServiceContainerFrame';
 import { SessionWatcherFrame } from './components/system/SessionWatcher';
 import { TawkToFrame } from './components/system/TawkToFrame';
 import { TitleSetterFrame } from './components/system/TitleSetterFrame';
 import { UserGuidingFrame } from './components/system/UserGuidingFrame';
 import { MainRouting } from './MainRouting';
 import './shared/logic/jsExtensions.ts'; // extensions, important
+import { eventBus, GlobalEventManagerType } from './static/EventBus';
 import { PropsWithChildren } from './static/frontendHelpers';
 import './styles/globalCssClasses.css';
 import './styles/globalCssTypes';
@@ -32,10 +35,15 @@ import './styles/index.css';
 
 type FrameType = FC<{ children: ReactNode }>;
 
-LicenseInfo.setLicenseKey('YOUR_LICENSE_KEY');
-// set MUI license key
-const LICENSE_KEY = '692967e82163b6d3d8887b2f05b06718Tz00OTM0OSxFPTE2OTI0NDQ2MDU1MzcsUz1wcm8sTE09c3Vic2NyaXB0aW9uLEtWPTI=';
-LicenseInfo.setLicenseKey(LICENSE_KEY);
+/**
+ * Initialize app
+ */
+(() => {
+    LicenseInfo.setLicenseKey('YOUR_LICENSE_KEY');
+    // set MUI license key
+    const LICENSE_KEY = '692967e82163b6d3d8887b2f05b06718Tz00OTM0OSxFPTE2OTI0NDQ2MDU1MzcsUz1wcm8sTE09c3Vic2NyaXB0aW9uLEtWPTI=';
+    LicenseInfo.setLicenseKey(LICENSE_KEY);
+})();
 
 const LocalizationFrame: FC<PropsWithChildren> = ({ children }) => {
 
@@ -67,29 +75,40 @@ const ChakraProviderFrame: FC<PropsWithChildren> = ({ children }) => {
     </ChakraProvider>;
 };
 
-const frames: FrameType[] = [
-    MUISetupFrame,
-    ChakraProviderFrame,
-    InitFrame,
-    UserGuidingFrame,
-    LocalizationFrame,
-    QueryClienProviderFrame,
-    RoutingFrame,
-    TawkToFrame,
-    XDialogHost,
-    PreventMobileFrame,
-    TitleSetterFrame,
-    QuerySubscriptionFrame,
-    SessionWatcherFrame,
-    AuthenticationFrame,
-    ErrorDialogFrame,
-    NotificationsFrame,
-    BusyBarFrame,
-    AutoScrollFrame,
-    EventListener,
-    ProgressierFrame,
-    VideoPlayerFullscreenFrame
-];
+const getFrames = (globalEventManager: GlobalEventManagerType): FrameType[] => {
+
+    const QuerySubscriptionFrameWrapper = ({ children }: PropsWithChildren) => <QuerySubscriptionFrame
+        globalEventManager={globalEventManager}>{children}</QuerySubscriptionFrame>;
+
+    const ServiceContainerFrameWrapper = ({ children }: PropsWithChildren) => <ServiceContainerFrame
+        globalEventManager={globalEventManager}>{children}</ServiceContainerFrame>;
+
+    return [
+        MUISetupFrame,
+        ChakraProviderFrame,
+        InitFrame,
+        UserGuidingFrame,
+        LocalizationFrame,
+        QueryClienProviderFrame,
+        RoutingFrame,
+        TawkToFrame,
+        XDialogHost,
+        PreventMobileFrame,
+        TitleSetterFrame,
+        ServiceContainerFrameWrapper,
+        CurrentCourseItemFrame,
+        QuerySubscriptionFrameWrapper,
+        SessionWatcherFrame,
+        AuthenticationFrame,
+        ErrorDialogFrame,
+        NotificationsFrame,
+        BusyBarFrame,
+        AutoScrollFrame,
+        EventListener,
+        ProgressierFrame,
+        VideoPlayerFullscreenFrame
+    ];
+};
 
 const RenderFrames = ({ frames, children }: { frames: FrameType[] } & PropsWithChildren) => {
 
@@ -111,6 +130,8 @@ const RenderFrames = ({ frames, children }: { frames: FrameType[] } & PropsWithC
 };
 
 const App: FC = () => {
+
+    const frames = getFrames(eventBus);
 
     return (
         <RenderFrames frames={frames}>

@@ -5,6 +5,7 @@ import { readVolumeSettings, writeVolumeSettings } from '../../../../services/co
 import { VideoPlayerDataDTO } from '../../../../shared/dtos/VideoDTO';
 import { useIsMobileView, useScreenOrientation } from '../../../../static/frontendHelpers';
 import screenfull from 'screenfull';
+import { Logger } from '../../../../static/Logger';
 
 type VisualOverlayType = 'counter' | 'pause' | 'start' | 'seekRight' | 'seekLeft';
 
@@ -58,21 +59,21 @@ export const useVideoPlayerState = (
 
     useEffect(() => {
 
-        console.log('Triggering isIphone, isLandscape, isFullscreen...');
+        Logger.logScoped('PLAYER DEBUG', 'Triggering isIphone, isLandscape, isFullscreen...');
 
         if (!isMobile)
             return;
 
         if (isLandscape && isFullscreen) {
 
-            console.log('Landscape and fullscreen, start playing...');
+            Logger.logScoped('PLAYER DEBUG', 'Landscape and fullscreen, start playing...');
             setIsPlaying(true);
             setShouldBePlaying(true);
         }
 
         if (isLandscape && !isFullscreen) {
 
-            console.log('Landscape and not fullscreen, enabling fullscreen mode and stop playing...');
+            Logger.logScoped('PLAYER DEBUG', 'Landscape and not fullscreen, enabling fullscreen mode and stop playing...');
             enableFullscreenMode();
             setIsPlaying(false);
             setShouldBePlaying(false);
@@ -80,7 +81,7 @@ export const useVideoPlayerState = (
 
         if (!isLandscape) {
 
-            console.log('Rotated back, stop playing');
+            Logger.logScoped('PLAYER DEBUG', 'Rotated back, stop playing');
             setIsPlaying(false);
             setShouldBePlaying(true);
         }
@@ -89,7 +90,7 @@ export const useVideoPlayerState = (
 
     useEffect(() => {
 
-        console.log('Triggering isSeeking...');
+        Logger.logScoped('PLAYER DEBUG', 'Triggering isSeeking...');
 
         if (isSeeking) {
 
@@ -102,7 +103,7 @@ export const useVideoPlayerState = (
 
     useEffect(() => {
 
-        console.log('Triggering isVideoEnded...');
+        Logger.logScoped('PLAYER DEBUG', 'Triggering isVideoEnded...');
 
         if (isVideoEnded) {
 
@@ -112,7 +113,7 @@ export const useVideoPlayerState = (
 
     useEffect(() => {
 
-        console.log('Triggering shouldBePlaying...');
+        Logger.logScoped('PLAYER DEBUG', 'Triggering shouldBePlaying...');
 
         if (isMobile && !isLandscape)
             return;
@@ -128,7 +129,7 @@ export const useVideoPlayerState = (
 
     useEffect(() => {
 
-        console.log('Triggering isShowingOverlay...');
+        Logger.logScoped('PLAYER DEBUG', 'Triggering isShowingOverlay...');
 
         if (isShowingOverlay) {
 
@@ -143,11 +144,11 @@ export const useVideoPlayerState = (
         getDuration: () => React.SetStateAction<number>;
     }) => {
 
-        console.log('handleOnReady runs...');
+        Logger.logScoped('PLAYER DEBUG', 'handleOnReady runs...');
 
         if (isMobile && !isLandscape) {
 
-            console.log('Setting isPlaying to off');
+            Logger.logScoped('PLAYER DEBUG', 'Setting isPlaying to off');
             return setIsPlaying(false);
         }
 
@@ -188,9 +189,9 @@ export const useVideoPlayerState = (
 
     const disableFullscreenMode = () => {
 
-        console.log('screenfullEnabled: ' + screenfullEnabled);
-        console.log('isMobile: ' + isMobile);
-        console.log('isIphone: ' + isIPhone);
+        Logger.logScoped('PLAYER DEBUG', 'screenfullEnabled: ' + screenfullEnabled);
+        Logger.logScoped('PLAYER DEBUG', 'isMobile: ' + isMobile);
+        Logger.logScoped('PLAYER DEBUG', 'isIphone: ' + isIPhone);
 
         // iPhone
         if (isMobile && isIPhone) {

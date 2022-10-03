@@ -5,6 +5,7 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { useEffect } from 'react';
 import { VideoPlayerDataDTO } from '../../../../shared/dtos/VideoDTO';
 import { useIsMobileView } from '../../../../static/frontendHelpers';
+import { Logger } from '../../../../static/Logger';
 import { EpistoDiv, EpistoDivProps } from '../../../controls/EpistoDiv';
 import { EpistoReactPlayer } from '../../../controls/EpistoReactPlayer';
 import { AbsoluteFlexOverlay } from '../AbsoluteFlexOverlay';
@@ -57,7 +58,7 @@ export const VideoPlayer = (props: {
 
     useEffect(() => {
 
-        console.log('isPlaying: ' + isPlaying);
+        Logger.logScoped('PLAYER DEBUG', 'isPlaying: ' + isPlaying);
     }, [isPlaying]);
 
     /* styles */

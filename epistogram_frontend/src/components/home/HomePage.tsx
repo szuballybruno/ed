@@ -1,7 +1,7 @@
 import { useMediaQuery } from '@chakra-ui/react';
 import { useContext, useState } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
-import { useCurrentCourseItemCode, useOverviewPageDTO } from '../../services/api/miscApiService';
+import { useOverviewPageDTO } from '../../services/api/miscApiService';
 import { useActiveCourses } from '../../services/api/userProgressApiService';
 import { useNavigation } from '../../services/core/navigatior';
 import { Environment } from '../../static/Environemnt';
@@ -16,6 +16,7 @@ import { PlaylistItem } from '../courseItemList/PlaylistItem';
 import { LeftPane } from '../LeftPane';
 import { PageRootContainer } from '../PageRootContainer';
 import { CurrentUserContext } from '../system/AuthenticationFrame';
+import { useCurrentCourseItemCodeContext } from '../system/CurrentCourseItemFrame';
 import { useSetBusy } from '../system/LoadingFrame/BusyBarContext';
 import { DashboardSection } from '../universal/DashboardSection';
 import { FlexListItem } from '../universal/FlexListItem';
@@ -98,7 +99,7 @@ const HomePage = () => {
 
     const { activeCourses } = useActiveCourses();
     const activeCoursesPaging = usePaging({ items: activeCourses });
-    const { currentCourseItemCode } = useCurrentCourseItemCode();
+    const { currentCourseItemCode } = useCurrentCourseItemCodeContext();
     const isAnyCourseInProgess = !!currentCourseItemCode;
 
     return <PageRootContainer>

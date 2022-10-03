@@ -1,7 +1,7 @@
 import { memo } from 'react';
-import { useCurrentCourseItemCode } from '../../services/api/miscApiService';
 import { useIsMobileView } from '../../static/frontendHelpers';
 import { FlexFloat } from '../controls/FlexFloat';
+import { useCurrentCourseItemCodeContext } from '../system/CurrentCourseItemFrame';
 import { DesktopNavbar } from './DesktopNavbar';
 import { MobileNavigation } from './MobileNavigation';
 
@@ -15,12 +15,13 @@ const Navbar = memo((props: {
 
     const { backgroundContent, hideLinks, isLowHeight, isMinimalMode, showLogo } = props;
     const isMobile = useIsMobileView();
-    const currentCourseItemCode = useCurrentCourseItemCode();
+
+    const { currentCourseItemCode } = useCurrentCourseItemCodeContext();
 
     // render desktop
     const renderDesktopNavbar = () => <DesktopNavbar
         backgroundContent={backgroundContent}
-        currentCourseItemCode={currentCourseItemCode?.currentCourseItemCode}
+        currentCourseItemCode={currentCourseItemCode}
         hideLinks1={!!hideLinks}
         isLowHeight={isLowHeight}
         isMinimalMode={isMinimalMode}
@@ -40,7 +41,6 @@ const Navbar = memo((props: {
             borderRadius={0}
             bgColor="unset"
             padding={isLowHeight ? '20px 0' : '20px'}>
-
 
             {renderDesktopNavbar()}
         </FlexFloat>;

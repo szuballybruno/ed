@@ -1,17 +1,17 @@
-import {useMediaQuery} from '@chakra-ui/react';
-import {ReactNode} from 'react';
-import {applicationRoutes} from '../../configuration/applicationRoutes';
-import {ApplicationRoute} from '../../models/types';
-import {useNavigation} from '../../services/core/navigatior';
-import {Environment} from '../../static/Environemnt';
-import {ArrayBuilder} from '../../static/frontendHelpers';
-import {Logger} from '../../static/Logger';
-import {EpistoButton} from '../controls/EpistoButton';
-import {EpistoFlex2} from '../controls/EpistoFlex';
-import {useAuthorizationContext} from '../system/AuthorizationContext';
-import {NavbarButton} from '../universal/NavbarButton';
-import {ContinueCourseButton} from './ContinueCourseButton';
-import {ShopAndNotifications} from './ShopAndNotifications';
+import { useMediaQuery } from '@chakra-ui/react';
+import { ReactNode } from 'react';
+import { applicationRoutes } from '../../configuration/applicationRoutes';
+import { ApplicationRoute } from '../../models/types';
+import { useNavigation } from '../../services/core/navigatior';
+import { Environment } from '../../static/Environemnt';
+import { ArrayBuilder } from '../../static/frontendHelpers';
+import { Logger } from '../../static/Logger';
+import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { useAuthorizationContext } from '../system/AuthorizationContext';
+import { NavbarButton } from '../universal/NavbarButton';
+import { ContinueCourseButton } from './ContinueCourseButton';
+import { ShopAndNotifications } from './ShopAndNotifications';
 
 export const DesktopNavbar = ({
     backgroundContent,
@@ -57,7 +57,7 @@ export const DesktopNavbar = ({
         })
         .getArray() as ApplicationRoute[];
 
-    const { navigateToPlayer, navigate2 } = useNavigation();
+    const { navigate2 } = useNavigation();
 
     // context
     const { isAuthenticated } = useAuthorizationContext();
@@ -71,9 +71,6 @@ export const DesktopNavbar = ({
     const isMidMode = (isSmallerThan1180 && !showLogo) || (isSmallerThan1000 && showLogo);
 
     // funcs
-
-
-
     const MinimalRender = () => {
 
         return <EpistoFlex2>
@@ -165,9 +162,6 @@ export const DesktopNavbar = ({
                         cursor: 'pointer',
                     }}
                     alt=""
-                    // onClick={(//user?.userActivity?.canAccessApplication
-                    //     ? () => navigate2(applicationRoutes.homeRoute)
-                    //     : undefined}
                     onClick={() => navigate2(applicationRoutes.homeRoute)} />
             )}
 
