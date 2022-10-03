@@ -2,10 +2,8 @@ import FastForwardIcon from '@mui/icons-material/FastForward';
 import FastRewindIcon from '@mui/icons-material/FastRewind';
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import { useEffect } from 'react';
 import { VideoPlayerDataDTO } from '../../../../shared/dtos/VideoDTO';
 import { useIsMobileView } from '../../../../static/frontendHelpers';
-import { Logger } from '../../../../static/Logger';
 import { EpistoDiv, EpistoDivProps } from '../../../controls/EpistoDiv';
 import { EpistoReactPlayer } from '../../../controls/EpistoReactPlayer';
 import { AbsoluteFlexOverlay } from '../AbsoluteFlexOverlay';
@@ -28,7 +26,6 @@ export const VideoPlayer = (props: {
         playerRef,
         isVisualOverlayVisible,
         visualOverlayType,
-        controlOverlayTimer,
         videoUrl,
         controlsVisible,
         playedSeconds,
@@ -38,7 +35,6 @@ export const VideoPlayer = (props: {
         maxWatchedSeconds,
         volume,
         isMuted,
-        isLandscape,
         showMobilePlayButtonOverlay,
         showShouldRotatePhoneOverlay,
         showControlOverlay,
@@ -48,7 +44,6 @@ export const VideoPlayer = (props: {
         setIsSeeking,
         handleOnVideoEnded,
         disableFullscreenMode,
-        enableFullscreenMode,
         toggleIsPlaying,
         setVolume,
         setIsMuted,
@@ -57,14 +52,6 @@ export const VideoPlayer = (props: {
 
     const [isFullscreen] = useVideoPlayerFullscreenContext();
     const isMobile = useIsMobileView();
-
-    Logger.logScoped('PLAYBACK', 'isFullscreen (VideoPlayer): ' + isFullscreen);
-
-
-    useEffect(() => {
-
-        Logger.logScoped('PLAYER DEBUG', 'isPlaying: ' + isPlaying);
-    }, [isPlaying]);
 
     /* styles */
     const {
@@ -125,11 +112,7 @@ export const VideoPlayer = (props: {
                             toggleIsPlaying();
                         }
                     }}
-                    onMouseMove={() => {
-
-                        if (!controlOverlayTimer)
-                            showControlOverlay();
-                    }}
+                    onMouseMove={() => showControlOverlay()}
                     {...videoWrapperProps}>
 
                     {/* the player */}

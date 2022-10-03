@@ -1,7 +1,6 @@
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import browser from '../../services/core/browserSniffingService';
 import { useIsMobileView } from '../../static/frontendHelpers';
-import { Logger } from '../../static/Logger';
 import { ContentPane } from '../ContentPane';
 import { PageRootContainer } from '../PageRootContainer';
 import { EpistoRoutes } from '../universal/EpistoRoutes';
@@ -14,7 +13,6 @@ import { PretestResultsSubpage } from './pretest/PretestResultsSubpage';
 import { PretestSubpage } from './pretest/PretestSubpage';
 import { useVideoPlayerFullscreenContext } from './watch/videoPlayer/VideoPlayerFullscreenFrame';
 import { WatchSubpage } from './watch/WatchSubpage';
-
 export const PlayerPage = () => {
 
     const isMobile = useIsMobileView();
@@ -22,7 +20,6 @@ export const PlayerPage = () => {
     const [isFullscreen] = useVideoPlayerFullscreenContext();
     const isIphoneFullscreenMode = (isFullscreen && isIPhone);
 
-    Logger.logScoped('PLAYBACK', 'isFullscreen (PlayerPage): ' + isFullscreen);
     return (
         <PageRootContainer
             style={{

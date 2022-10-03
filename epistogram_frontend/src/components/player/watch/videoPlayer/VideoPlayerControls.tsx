@@ -111,10 +111,10 @@ export const VideoControls = (props: {
             value={playedSeconds}
             min={0}
             max={videoLength}
-            onMouseDown={() => setIsSeeking(true)}
             onChangeCommitted={() => setIsSeeking(false)}
             onChange={(event, value) => {
 
+                setIsSeeking(true);
                 seekToSeconds(value as number);
             }}
             marks={

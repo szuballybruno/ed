@@ -1,8 +1,6 @@
-import { Logger } from '../../../static/Logger';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { useVideoPlayerFullscreenContext } from './videoPlayer/VideoPlayerFullscreenFrame';
 import { VideoPlayerStateType } from './videoPlayer/videoPlayerState';
-
 export const PlayerDebugInfo = (props: {
     videoPlayerState: VideoPlayerStateType,
     videoTitle: string
@@ -11,8 +9,6 @@ export const PlayerDebugInfo = (props: {
     const { videoPlayerState, videoTitle } = props;
 
     const [isFullscreen] = useVideoPlayerFullscreenContext();
-
-    Logger.logScoped('PLAYBACK', 'isFullscreen (PlayerDebugInfo): ' + isFullscreen);
 
     const {
         isIPhone,

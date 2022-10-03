@@ -39,8 +39,6 @@ export const WatchSubpage = () => {
     const isIPhone = browser.isIPhone;
     const [isFullscreen] = useVideoPlayerFullscreenContext();
     const isIphoneFullscreenMode = (isFullscreen && isIPhone);
-    Logger.logScoped('PLAYBACK', 'isFullscreen (PlayerPage): ' + isFullscreen);
-
 
     // get player page data
     const {
