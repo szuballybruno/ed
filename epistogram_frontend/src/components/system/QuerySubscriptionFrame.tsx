@@ -1,21 +1,24 @@
 import { useEffect } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { useNavigation } from '../../services/core/navigatior';
-import { eventBus } from '../../static/EventBus';
+import { apiRoutes } from '../../shared/types/apiRoutes';
+import { GlobalEventManagerType } from '../../static/EventBus';
 import { PropsWithChildren } from '../../static/frontendHelpers';
 import { Logger } from '../../static/Logger';
 import { QueryEventData } from '../../static/QueryService';
+import { useCurrentCourseItemCodeContext } from './CurrentCourseItemFrame';
 
-export const QuerySubscriptionFrame = ({ children }: PropsWithChildren) => {
+export const QuerySubscriptionFrame = ({ globalEventManager, children }: { globalEventManager: GlobalEventManagerType } & PropsWithChildren) => {
 
     const { navigate2 } = useNavigation();
+    const { refetchCurrentCourseItemCode } = useCurrentCourseItemCodeContext();
 
     useEffect(() => {
 
         console.log('---------- FRAME useEffect ------------');
 
-        eventBus
-            .scubscribeEvent('onquery', 'noPermissionWatcher', (x: QueryEventData) => {
+        globalEventManager
+            .scubscribeEvent('onquery', `${QuerySubscriptionFrame.name}-'noPermissionWatcher'`, (x: QueryEventData) => {
 
                 if (x.error?.code === 'no permission') {
 
@@ -23,7 +26,17 @@ export const QuerySubscriptionFrame = ({ children }: PropsWithChildren) => {
                     navigate2(applicationRoutes.homeRoute);
                 }
             });
-    }, [navigate2]);
+
+        globalEventManager
+            .scubscribeEvent('onquery', `${QuerySubscriptionFrame.name}-'refetchCurrentCourseItemCode'`, (x: QueryEventData) => {
+
+                if (x.route === apiRoutes.player.getPlayerData && x.state === 'success') {
+
+                    Logger.logScoped('EVENTS', 'Player data successfully retrieved, updating current item code...');
+                    refetchCurrentCourseItemCode();
+                }
+            });
+    }, [globalEventManager, navigate2, refetchCurrentCourseItemCode]);
 
     return (
         <>

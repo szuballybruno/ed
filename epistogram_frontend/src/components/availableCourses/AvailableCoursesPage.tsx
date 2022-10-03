@@ -7,6 +7,7 @@ import { OrderType } from '../../shared/types/sharedTypes';
 import { Id } from '../../shared/types/versionId';
 import { Environment } from '../../static/Environemnt';
 import { useIsMobileView } from '../../static/frontendHelpers';
+import { Logger } from '../../static/Logger';
 import { useSetBusy } from '../system/LoadingFrame/BusyBarContext';
 import { DesktopAvailableCoursesPage } from './DesktopAvailableCoursesPage';
 import { MobileAvailableCoursesPage } from './MobileAvailableCoursesPage';
@@ -68,7 +69,8 @@ const AvailableCoursesPage = () => {
 
     const handlePlayCourse = async (course: AvailableCourseDTO) => {
 
-        console.log('Playing unmute sound thing');
+        Logger.logScoped('PLAYER DEBUG', 'Playing unmute sound thing');
+
         new Audio(Environment.getAssetUrl('/sounds/testunmute.mp3'))
             .play();
 

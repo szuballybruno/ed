@@ -15,7 +15,8 @@ export type LoggingKeysType =
     'EXAM' |
     'QUERY' |
     'SESSION' |
-    'EVENTS';
+    'EVENTS' | 
+    'PLAYER DEBUG';
 
 export const Environment = (() => {
 

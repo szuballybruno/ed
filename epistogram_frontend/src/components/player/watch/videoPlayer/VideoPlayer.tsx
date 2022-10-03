@@ -63,7 +63,7 @@ export const VideoPlayer = (props: {
 
     useEffect(() => {
 
-        console.log('isPlaying: ' + isPlaying);
+        Logger.logScoped('PLAYER DEBUG', 'isPlaying: ' + isPlaying);
     }, [isPlaying]);
 
     /* styles */
