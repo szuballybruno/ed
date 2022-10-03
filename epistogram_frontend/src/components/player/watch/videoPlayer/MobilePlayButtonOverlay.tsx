@@ -20,7 +20,7 @@ export const MobilePlayButtonOverlay = (props: {
         align='center'
         justify='center'
         width={'100%'}
-        height={isFullscreen ? 'calc(100% - 40px)' : '100%'}
+        height={((!isFullscreen && isLandscape) || !isFullscreen) ? '100%' : 'calc(100% - 40px)'}
         zIndex={isFullscreen ? 18 : 16}>
 
         <PlayArrowIcon
