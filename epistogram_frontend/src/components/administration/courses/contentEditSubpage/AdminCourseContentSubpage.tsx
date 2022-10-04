@@ -415,7 +415,7 @@ export const AdminCourseContentSubpage = () => {
                                         .mutate({
                                             key: getRowKey(row),
                                             field: 'itemOrderIndex',
-                                            newValue: index + 1
+                                            newValue: index
                                         })));
                         }}
                         hideFooter
