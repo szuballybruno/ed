@@ -770,7 +770,7 @@ const marray = [
             return instantiate<CourseDetailsDTO>({
 
                 title: detailsView.title,
-                modificationDate: detailsView.modificationDate.toString(),
+                modificationDate: detailsView.modificationDate ? detailsView.modificationDate.toString() : '-',
                 description: detailsView.description,
                 categoryName: detailsView.categoryName,
                 subCategoryName: detailsView.subCategoryName,
