@@ -11,14 +11,13 @@ import { PrequizSubpage } from './prequiz/PrequizSubpage';
 import { PretestGreetingSubpage } from './pretest/PretestGreetingSubpage';
 import { PretestResultsSubpage } from './pretest/PretestResultsSubpage';
 import { PretestSubpage } from './pretest/PretestSubpage';
-import { useVideoPlayerFullscreenContext } from './watch/videoPlayer/videoPlayerState';
+import { useVideoPlayerFullscreenContext } from './watch/videoPlayer/VideoPlayerFullscreenFrame';
 import { WatchSubpage } from './watch/WatchSubpage';
-
 export const PlayerPage = () => {
 
     const isMobile = useIsMobileView();
     const isIPhone = browser.isIPhone;
-    const { isFullscreen } = useVideoPlayerFullscreenContext();
+    const [isFullscreen] = useVideoPlayerFullscreenContext();
     const isIphoneFullscreenMode = (isFullscreen && isIPhone);
 
     return (

@@ -19,7 +19,7 @@ import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogL
 import { CourseItemSelector } from './CourseItemSelector';
 import { ExamPlayer } from './ExamPlayer';
 import { ModuleView } from './ModuleView';
-import { useVideoPlayerFullscreenContext } from './videoPlayer/videoPlayerState';
+import { useVideoPlayerFullscreenContext } from './videoPlayer/VideoPlayerFullscreenFrame';
 import { WatchView } from './WatchView';
 
 export type WatchSubpageState = 'watch' | 'examStart' | 'examInProgress' | 'examResults'
@@ -37,7 +37,7 @@ export const WatchSubpage = () => {
 
 
     const isIPhone = browser.isIPhone;
-    const { isFullscreen } = useVideoPlayerFullscreenContext();
+    const [isFullscreen] = useVideoPlayerFullscreenContext();
     const isIphoneFullscreenMode = (isFullscreen && isIPhone);
 
     // get player page data

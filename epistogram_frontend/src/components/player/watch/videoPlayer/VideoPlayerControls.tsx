@@ -20,7 +20,7 @@ export const VideoControls = (props: {
     volume: number,
     isMuted: boolean,
     setIsMuted: (isMuted: boolean) => void,
-    toggleShouldBePlaying: () => void,
+    toggleIsPlaying: () => void,
     setIsSeeking: (isSeeking: boolean) => void,
     seekToSeconds: (seconds: number) => void,
     toggleFullScreen: () => void,
@@ -38,7 +38,7 @@ export const VideoControls = (props: {
         isMuted,
         setIsMuted,
         showControlOverlay,
-        toggleShouldBePlaying,
+        toggleIsPlaying,
         setIsSeeking,
         seekToSeconds,
         toggleFullScreen,
@@ -81,7 +81,7 @@ export const VideoControls = (props: {
 
         {/* play/pause */}
         <EpistoButton
-            onClick={toggleShouldBePlaying}>
+            onClick={toggleIsPlaying}>
 
             {isPlaying
                 ? <Pause style={iconStyle} />
@@ -111,10 +111,10 @@ export const VideoControls = (props: {
             value={playedSeconds}
             min={0}
             max={videoLength}
-            onMouseDown={() => setIsSeeking(true)}
             onChangeCommitted={() => setIsSeeking(false)}
             onChange={(event, value) => {
 
+                setIsSeeking(true);
                 seekToSeconds(value as number);
             }}
             marks={
