@@ -1,100 +1,15 @@
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (900, 'DEBUG-PZAFUM', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (901, 'DEBUG-TMA8A6', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (902, 'DEBUG-ZJ7RYJ', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (903, 'DEBUG-ONYOGP', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (904, 'DEBUG-IOKCI4', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (905, 'DEBUG-95EIA2', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (906, 'DEBUG-WCE0WQ', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (907, 'DEBUG-IRDLEY', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (908, 'DEBUG-NSHCBJ', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (909, 'DEBUG-AFXQXE', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (910, 'DEBUG-DTDIKS', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (911, 'DEBUG-HJQO0Q', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (912, 'DEBUG-AS2TDA', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (913, 'DEBUG-LG0YDE', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (914, 'DEBUG-6SYCU0', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (915, 'DEBUG-FZNSAF', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (916, 'DEBUG-INCY7S', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (917, 'DEBUG-H93QP0', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (918, 'DEBUG-VCLNYK', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (919, 'DEBUG-QIG64F', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (920, 'DEBUG-FYNUQ4', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (921, 'DEBUG-2SOLJM', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (922, 'DEBUG-LKLG7D', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (923, 'DEBUG-SQAFBL', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (924, 'DEBUG-ENLGPF', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (925, 'DEBUG-GNXUC9', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (926, 'DEBUG-ERSFAR', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (927, 'DEBUG-XXVYGI', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (928, 'DEBUG-FMNABZ', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (929, 'DEBUG-WTQBQF', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (930, 'DEBUG-LXS4MJ', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (931, 'DEBUG-E9T9DW', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (932, 'DEBUG-UUDNXV', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (933, 'DEBUG-OFQMPC', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (934, 'DEBUG-E2UZTZ', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (935, 'DEBUG-OFEM0Y', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (936, 'DEBUG-DY3IM4', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (937, 'DEBUG-CHFVDJ', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (938, 'DEBUG-JIG30S', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (939, 'DEBUG-NQZ0PP', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (940, 'DEBUG-M7ISJM', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (941, 'DEBUG-URTACH', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (942, 'DEBUG-4BAWSQ', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (943, 'DEBUG-XHIXBX', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (944, 'DEBUG-RYM4YE', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (945, 'DEBUG-ZXDMWN', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (946, 'DEBUG-DKJMWN', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (947, 'DEBUG-JZSTK8', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (948, 'DEBUG-GQYGBH', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (949, 'DEBUG-4PEUBF', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (950, 'DEBUG-EBTVGS', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (951, 'DEBUG-CQSSC6', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (952, 'DEBUG-RQSUZI', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (953, 'DEBUG-WPMLFC', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (954, 'DEBUG-AHAQAX', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (955, 'DEBUG-2JLXQ3', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (956, 'DEBUG-MF9S1K', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (957, 'DEBUG-OKBPKW', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (958, 'DEBUG-ISTYAV', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (959, 'DEBUG-9IDPR8', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (960, 'DEBUG-RPSWLM', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (961, 'DEBUG-MGECVR', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (962, 'DEBUG-1QFFOE', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (963, 'DEBUG-FFWFGN', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (964, 'DEBUG-DKKE3G', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (965, 'DEBUG-UKONJC', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (966, 'DEBUG-EAUBFG', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (967, 'DEBUG-AARE0U', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (968, 'DEBUG-VDM8XD', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (969, 'DEBUG-K1FQAU', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (970, 'DEBUG-ISVREF', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (971, 'DEBUG-POGSNO', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (972, 'DEBUG-WVNFE3', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (973, 'DEBUG-XEUCKQ', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (974, 'DEBUG-LLEANC', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (975, 'DEBUG-GQOMKP', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (976, 'DEBUG-F88VFI', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (977, 'DEBUG-QPFZSE', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (978, 'DEBUG-EJNMDL', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (979, 'DEBUG-GQMWDE', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (980, 'DEBUG-56DS6O', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (981, 'DEBUG-OLPM5H', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (982, 'DEBUG-4AZKAF', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (983, 'DEBUG-SV2AOZ', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (984, 'DEBUG-6IAZ1C', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (985, 'DEBUG-HJFZIR', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (986, 'DEBUG-VGSYO2', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (987, 'DEBUG-0MWL8O', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (988, 'DEBUG-UHRPM1', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (989, 'DEBUG-UZMV6P', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (990, 'DEBUG-YXLZ6H', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (991, 'DEBUG-LC4W2I', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (992, 'DEBUG-JKFJD0', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (993, 'DEBUG-DDSIM0', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (994, 'DEBUG-FGPDPY', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (995, 'DEBUG-2JUGID', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (996, 'DEBUG-WPO028', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (997, 'DEBUG-UTSRPG', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (998, 'DEBUG-6RYUF7', 2, false);
-INSERT INTO public.activation_code (id, code, company_id, is_used) VALUES (999, 'DEBUG-NAZ0BU', 2, false);
+INSERT INTO public.activation_code 
+    (code, is_used, company_id)
+VALUES 
+    ('DEVTEST-1', false, 2), 
+    ('DEVTEST-2', false, 2), 
+    ('DEVTEST-3', false, 2), 
+    ('DEVTEST-4', false, 2), 
+    ('DEVTEST-5', false, 2), 
+    ('DEVTEST-6', false, 2), 
+    ('DEVTEST-7', false, 2), 
+    ('DEVTEST-8', false, 2), 
+    ('DEVTEST-9', false, 2), 
+    ('DEVTEST-10', false, 2),
+    ('DEVTEST-11', false, 2);
+
