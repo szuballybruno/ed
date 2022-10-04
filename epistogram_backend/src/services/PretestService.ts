@@ -1,8 +1,6 @@
 import { Exam } from '../models/entity/exam/Exam';
 import { ExamVersion } from '../models/entity/exam/ExamVersion';
 import { ModuleVersion } from '../models/entity/module/ModuleVersion';
-import { AvailableCourseView } from '../models/views/AvailableCourseView';
-import { CourseItemView } from '../models/views/CourseItemView';
 import { LatestCourseVersionView } from '../models/views/LatestCourseVersionView';
 import { PlaylistView } from '../models/views/PlaylistView';
 import { PretestResultView } from '../models/views/PretestResultView';

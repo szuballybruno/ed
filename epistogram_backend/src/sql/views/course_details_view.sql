@@ -101,7 +101,7 @@ LEFT JOIN public.latest_course_version_view lcvv
 ON lcvv.course_id = co.id
 
 LEFT JOIN public.course_version cv
-ON cv.course_id = lcvv.version_id
+ON cv.id = lcvv.version_id
 
 LEFT JOIN public.course_data cd
 ON cd.id = cv.course_data_id
@@ -125,7 +125,7 @@ ON cc.id = cd.category_id
 
 LEFT JOIN public.user_course_bridge ucb
 ON ucb.user_id = u.id
-AND ucb.course_id = co.id
+AND ucb.course_id = cv.course_id
 
 LEFT JOIN public.course_category scc
 ON scc.id = cd.sub_category_id
