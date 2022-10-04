@@ -34,7 +34,6 @@ export const useVideoPlayerState = (
     const [isPlaying, setIsPlaying] = useState(true);
 
     const [isFullscreen, setIsFullscreen] = useVideoPlayerFullscreenContext();
-    console.log(isFullscreen);
 
     const isIPhone = browser.isIPhone;
     const isMobile = useIsMobileView();
@@ -49,6 +48,9 @@ export const useVideoPlayerState = (
 
     const isVideoEnded = (videoLength > 0) && (playedSeconds > (videoLength - 0.1)) && !isShowingOverlay;
 
+    /**
+     * Show control overlay
+     */
     const showControlOverlay = useCallback((indefinate?: boolean) => {
 
         if (controlOverlayTimerRef.current)
@@ -67,6 +69,9 @@ export const useVideoPlayerState = (
         }
     }, [controlOverlayTimerRef]);
 
+    /**
+     * Enable fullscreen mode
+     */
     const enableFullscreenMode = useCallback(() => {
 
         Logger.logScoped('PLAYBACK', 'Enabling fullscreen mode');
@@ -99,6 +104,9 @@ export const useVideoPlayerState = (
     }, [isIPhone, isMobile, screenfullEnabled, setIsFullscreen]);
 
 
+    /**
+     * Stop playing
+     */
     const stopPlaying = useCallback(() => {
 
         Logger.logScoped('PLAYBACK', 'Stop playing...');
@@ -107,6 +115,9 @@ export const useVideoPlayerState = (
         flashVisualOverlay('pause');
     }, [showControlOverlay]);
 
+    /**
+     * Start playing
+     */
     const startPlaying = useCallback(() => {
 
         Logger.logScoped('PLAYBACK', 'Start playing...');
@@ -143,6 +154,7 @@ export const useVideoPlayerState = (
         if (isLandscape && isFullscreen) {
 
             Logger.logScoped('PLAYBACK', 'Landscape and fullscreen, start playing...');
+            stopPlaying();
             startPlaying();
         };
 
