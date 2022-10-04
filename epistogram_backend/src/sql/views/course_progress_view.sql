@@ -1,6 +1,3 @@
--- user progress view
--- provides user course insights
-
 SELECT
 	u.id user_id,
 	co.id course_id,
@@ -8,10 +5,8 @@ SELECT
 	ucpav.total_item_count total_course_item_count,
 	ucpav.total_completed_item_count completed_course_item_count,
 	(ucpav.total_completed_item_count::double precision / ucpav.total_item_count * 100)::int progress_percentage,
-	CASE WHEN ucb.current_item_code IS NULL
-		THEN NULL --first_civ.item_code
-		ELSE ucb.current_item_code
-	END continue_item_code
+	ucb.current_item_code,
+	ucb.stage_name current_stage_name
 FROM public.user u
 
 CROSS JOIN public.course co

@@ -1,25 +1,29 @@
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { useNavigation } from '../../services/core/navigatior';
+import { CourseProgressDTO } from '../../shared/dtos/CourseProgressDTO';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoProgressBar } from '../controls/EpistoProgressBar';
 
-export const CourseProgressDisplay = (props: {
-    value: number,
-    label: string,
-    continueItemCode: string
+export const CourseProgressDisplay = ({
+    dto,
+    ...css
+}: {
+    dto: CourseProgressDTO,
 } & EpistoFlex2Props) => {
 
-    const { value, label, continueItemCode, ...css } = props;
-    const roundValue = Math.round(value);
+    const {
+        courseId,
+        currentItemCode,
+        currentStageName,
+        progressPercentage,
+        title
+    } = dto;
 
-    const { navigateToPlayer } = useNavigation();
+    const roundProgressPercentage = Math.round(progressPercentage);
 
-    const continueCourse = () => {
-
-        navigateToPlayer(continueItemCode);
-    };
+    const { continueCourse: playCourse } = useNavigation();
 
     return (
         <EpistoFlex2
@@ -30,11 +34,13 @@ export const CourseProgressDisplay = (props: {
 
                 {/* title  */}
                 <EpistoFont>
-                    {label}
+                    {title}
                 </EpistoFont>
 
                 {/* start button */}
-                <EpistoButton onClick={continueCourse}>
+                <EpistoButton
+                    onClick={() => playCourse(courseId, currentStageName, currentItemCode)}>
+
                     <PlayArrowIcon
                         style={{
                             color: 'var(--epistoTeal)'
@@ -47,7 +53,7 @@ export const CourseProgressDisplay = (props: {
                 {/* progress bar */}
                 <EpistoProgressBar
                     variant="determinate"
-                    value={value}
+                    value={roundProgressPercentage}
                     style={{
                         flex: '1',
                         marginRight: '10px'
@@ -55,7 +61,7 @@ export const CourseProgressDisplay = (props: {
 
                 {/* progress percentage */}
                 <EpistoFont>
-                    {`${roundValue}%`}
+                    {`${roundProgressPercentage}%`}
                 </EpistoFont>
             </EpistoFlex2>
         </EpistoFlex2>

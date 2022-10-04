@@ -34,7 +34,7 @@ const CourseDetailsPage = () => {
 
     const courseId = Id
         .create<'Course'>(useIntParam('courseId')!);
-    const { playCourse } = useNavigation();
+    const { continueCourse: playCourse } = useNavigation();
     const showError = useShowErrorDialog();
 
     const { userId } = useCurrentUserId();

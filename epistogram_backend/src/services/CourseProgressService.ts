@@ -4,6 +4,7 @@ import { CourseLearningDTO } from '../shared/dtos/CourseLearningDTO';
 import { CourseProgressDTO } from '../shared/dtos/CourseProgressDTO';
 import { CourseProgressShortDTO } from '../shared/dtos/CourseProgressShortDTO';
 import { UserCoursesDataDTO } from '../shared/dtos/UserCoursesDataDTO';
+import { instantiate } from '../shared/logic/sharedLogic';
 import { Id } from '../shared/types/versionId';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { MapperService } from './MapperService';
@@ -89,14 +90,16 @@ export class CourseProgressService {
         const nextItems = await this
             ._getCourseNextItemsAsync(userId, currentCourseId);
 
-        return {
+        return instantiate<CourseProgressDTO>({
+            courseId: courseProgress.courseId,
             title: courseProgress.courseTitle,
             totalCourseItemCount: courseProgress.totalCourseItemCount,
             completedCourseItemCount: courseProgress.completedCourseItemCount,
             progressPercentage: courseProgress.progressPercentage,
-            continueItemCode: courseProgress.continueItemCode,
-            nextItems
-        } as CourseProgressDTO;
+            currentItemCode: courseProgress.currentItemCode,
+            currentStageName: courseProgress.currentStageName,
+            nextItems: courseProgress.currentStageName === 'watch' ? nextItems : []
+        });
     }
 
     /**
