@@ -29,8 +29,8 @@ calc_scores AS
 		u.email,
 		ptc.id personality_trait_category_id,
 		COUNT(ga.id) given_answer_count,
-		COALESCE(SUM((ga.is_correct IS NOT DISTINCT FROM true)::int), 0)::int max_score,
-		COALESCE(SUM((ga.is_correct IS NOT DISTINCT FROM false)::int), 0)::int min_score
+		COALESCE(SUM((ga.state = 'CORRECT')::int), 0)::int max_score,
+		COALESCE(SUM((ga.state <> 'CORRECT')::int), 0)::int min_score
 	FROM public.personality_trait_category ptc
 	
 	CROSS JOIN public.user u

@@ -30,7 +30,7 @@ SELECT
 	av.id answer_version_id,
 	ad.text answer_text,
 	lgai.given_answer_id,
-	ga.is_correct is_correct,
+	ga.state = 'CORRECT' is_correct,
 	agab.answer_version_id given_answer_version_id,
 	agab.answer_version_id = av.id is_given_answer 
 FROM latest_signup_exam_version lsev

@@ -31,7 +31,7 @@ SELECT
     lgac.practise_answer_count,
     latest_ga.creation_date given_answer_date,
     latest_ga.id given_answer_id,
-    latest_ga.is_correct is_correct,
+    latest_ga.state = 'CORRECT' is_correct,
     ase.is_practise is_practise
 FROM latest_given_answer_cte lgac
 

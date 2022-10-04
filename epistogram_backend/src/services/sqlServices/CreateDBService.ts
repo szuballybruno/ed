@@ -207,16 +207,23 @@ export class CreateDBService {
             const viewFile = viewFilesOrdered[index];
             const viewName = viewFile.name;
 
-            this
-                ._loggerService
-                .logScoped('BOOTSTRAP', 'SECONDARY', `Creating view (${index + 1}): [${viewName}]...`);
+            try {
 
-            const script = this
-                ._getViewCreationScript(viewFile.name, viewFile.content);
+                this
+                    ._loggerService
+                    .logScoped('BOOTSTRAP', 'SECONDARY', `Creating view (${index + 1}): [${viewName}]...`);
 
-            await this
-                ._sqlConnectionService
-                .executeSQLAsync(script);
+                const script = this
+                    ._getViewCreationScript(viewFile.name, viewFile.content);
+
+                await this
+                    ._sqlConnectionService
+                    .executeSQLAsync(script);
+            }
+            catch (e: any) {
+
+                throw new Error(`View creation failed: "${viewName}". Msg: ${e.message}`);
+            }
         }
     };
 

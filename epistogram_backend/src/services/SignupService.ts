@@ -115,10 +115,10 @@ export class SignupService {
                 deletionDate: null,
                 elapsedSeconds: 0,
                 givenAnswerStreakId: null,
-                isCorrect,
                 isPractiseAnswer: false,
                 questionVersionId,
-                score: 0
+                score: 0,
+                state: isCorrect ? 'CORRECT' : 'INCORRECT'
             });
 
         await this

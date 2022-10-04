@@ -3,7 +3,7 @@ SELECT
 	sq.user_id,
 	sq.course_id,
 	COUNT(sq.latest_given_answer_id)::int total_answer_count,
-	SUM((ga.is_correct IS NOT DISTINCT FROM true)::int)::int correct_answer_count
+	SUM((ga.state = 'CORRECT')::int)::int correct_answer_count
 FROM 
 (
 	SELECT 

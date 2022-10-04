@@ -25,7 +25,7 @@ answer_counts AS
 	SELECT 
 		vv.id video_version_id,
 		COUNT(ga.id) total_given_answer_count,
-		SUM(ga.is_correct::int) total_correct_answer_count
+		SUM((ga.state = 'CORRECT')::int) total_correct_answer_count
 	FROM public.video_version vv
 	
 	LEFT JOIN public.question_version qv
@@ -47,7 +47,7 @@ video_is_recommended AS
 	SELECT 
 		vv.id video_version_id,
 		ase.user_id,
-		SUM(ga.is_correct::int) != COUNT(ga.id) is_recommended
+		SUM((ga.state = 'CORRECT')::int) != COUNT(ga.id) is_recommended
 	FROM public.video_version vv
 	
 	LEFT JOIN public.question_version qv

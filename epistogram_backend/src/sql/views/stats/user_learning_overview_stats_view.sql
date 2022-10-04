@@ -78,7 +78,7 @@ WITH stats AS
 				 OR asv.answer_session_type = 'practise')
 
 			WHERE asv.user_id = u.id 
-			AND ga.is_correct
+			AND ga.state = 'CORRECT'
 		) correct_answered_video_and_practise_quiz_questions,
 
 		-- average watched videos per day

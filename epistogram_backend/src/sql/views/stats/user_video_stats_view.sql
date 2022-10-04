@@ -18,7 +18,7 @@ last_3_quiz_answer_avg_cte AS
     SELECT
         asv.user_id,
         vv.video_id, 
-        AVG(ga.is_correct::int)::int average_correct_given_answer_count
+        AVG((ga.state = 'CORRECT')::int)::int average_correct_given_answer_count
     FROM public.given_answer ga
 
     LEFT JOIN public.answer_session_view asv

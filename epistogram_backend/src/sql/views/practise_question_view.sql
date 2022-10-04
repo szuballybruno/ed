@@ -64,7 +64,7 @@ practise_questions AS
 			-- incorrect video answer 
 			ga.is_practise_answer = false 
 			AND  
-			ga.is_correct IS DISTINCT FROM true
+			ga.state <> 'CORRECT'
 			AND 
 			ga.creation_date + INTERVAL '5 MINUTES' < NOW() 
 		)
@@ -73,7 +73,7 @@ practise_questions AS
 			-- correct video answer 
 			ga.is_practise_answer = false 
 			AND  
-			ga.is_correct = true 
+			ga.state = 'CORRECT'
 			AND 
 			ga.creation_date + INTERVAL '20 MINUTES' < NOW() 
 		)
@@ -82,7 +82,7 @@ practise_questions AS
 			-- incorrect practise answer 
 			ga.is_practise_answer = true 
 			AND  
-			ga.is_correct IS DISTINCT FROM true
+			ga.state <> 'CORRECT'
 			AND 
 			ga.creation_date + INTERVAL '60 MINUTES' < NOW() 
 		)

@@ -1,6 +1,6 @@
 SELECT 
    ga.id given_answer_id,
-   ga.is_correct given_answer_is_correct,
+   ga.state = 'CORRECT' given_answer_is_correct,
    ga.elapsed_seconds,
    ga.answer_session_id,
    asv.user_id,

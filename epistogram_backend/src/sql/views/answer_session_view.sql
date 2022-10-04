@@ -7,7 +7,7 @@ answer_stats AS
 		ase.user_id,
 		ase.id answer_session_id,
 		COUNT (ga.id)::int given_answer_count,
-		SUM (ga.is_correct::int)::int correct_given_answer_count,
+		SUM ((ga.state = 'CORRECT')::int)::int correct_given_answer_count,
 		(
 			SELECT
 				COUNT(*)

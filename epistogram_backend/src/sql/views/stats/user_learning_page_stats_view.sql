@@ -4,7 +4,7 @@ WITH answer_stats AS
 	SELECT 
 		ase.user_id,
 		COUNT (ga.id)::int total_given_answer_count,
-		SUM (ga.is_correct::int)::int total_correct_given_answer_count
+		SUM ((ga.state = 'CORRECT')::int)::int total_correct_given_answer_count
 	FROM public.given_answer ga
 
 	LEFT JOIN public.answer_session ase
@@ -90,7 +90,7 @@ SELECT
 
 		WHERE ase.user_id = u.id
 		AND qv.video_version_id IS NOT NULL
-		AND ga.is_correct = false
+		AND ga.state = 'CORRECT'
 	) questions_to_be_repeated_count,
 
 	-- completed video count 

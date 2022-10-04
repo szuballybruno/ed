@@ -7,17 +7,13 @@ SELECT
 	ed.is_final is_final_exam,
 	qd.question_text question_text,
 	COALESCE(ga.score, 0) question_score,
-	CASE 
-		WHEN ga.score = 0 OR ga.score IS NULL THEN 'INCORRECT' 
-		WHEN ga.score = consts.question_max_score THEN 'CORRECT'
-		ELSE 'MIXED'
-	END given_answer_state,
+	ga.state given_answer_state,
 	consts.question_max_score::int question_max_score,
 	asv.is_completed is_completed_session,
 	asv.is_successful is_successful_session,
 	ecv.single_successful_session AND asv.is_successful only_successful_session,
 	ga.id given_answer_id,
-	ga.is_correct IS NOT DISTINCT FROM true is_correct,
+	ga.state = 'CORRECT' is_correct,
 	agab.id answer_bridge_id,
 	agab.answer_version_id user_answer_version_id,
 	agab.answer_version_id = av.id IS NOT DISTINCT FROM true is_given_answer,

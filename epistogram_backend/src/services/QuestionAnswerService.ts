@@ -11,6 +11,7 @@ import { CoinAcquireResultDTO } from '../shared/dtos/CoinAcquireResultDTO';
 import { Mutation } from '../shared/dtos/mutations/Mutation';
 import { GivenAnswerDTO } from '../shared/dtos/questionAnswer/GivenAnswerDTO';
 import { instantiate } from '../shared/logic/sharedLogic';
+import { GivenAnswerStateType } from '../shared/types/sharedTypes';
 import { Id } from '../shared/types/versionId';
 import { InsertEntity } from '../utilities/misc';
 import { CoinAcquireService } from './CoinAcquireService';
@@ -210,7 +211,7 @@ export class QuestionAnswerService {
 
                 return ({
                     givenAnswerId: givenAnswer?.id ?? null,
-                    isCorrect: givenAnswer?.isCorrect ?? false,
+                    isCorrect: givenAnswer?.state === 'CORRECT',
                     questionVersionId: group.key,
                     isExamQuestion: !!group.first.examVersionId
                 });
@@ -235,13 +236,17 @@ export class QuestionAnswerService {
 
                 const { questionVersionId, answerVersionIds, elapsedSeconds } = givenAnswerDTO;
 
-                const score = answerScores
+                const score = Math.max(0, answerScores
                     .filter(x => answerVersionIds
                         .some(id => id === x.answerVersionId))
                     .map(x => x.score)
-                    .reduce((p, c) => p + c);
+                    .reduce((p, c) => p + c));
 
-                const isCorrect = maxQuestionScore === score;
+                const state: GivenAnswerStateType = maxQuestionScore === score
+                    ? 'CORRECT'
+                    : score > 0
+                        ? 'MIXED'
+                        : 'INCORRECT';
 
                 return instantiate<InsertEntity<GivenAnswer>>({
                     isPractiseAnswer: isPractiseAnswers,
@@ -252,7 +257,7 @@ export class QuestionAnswerService {
                     elapsedSeconds,
                     givenAnswerStreakId: null,
                     score,
-                    isCorrect
+                    state
                 });
             });
 
@@ -420,10 +425,10 @@ export class QuestionAnswerService {
                     ? scoreMultiplier
                     : -1 * scoreMultiplier;
 
-                return {
+                return instantiate<AnswerScoreDTO>({
                     answerVersionId,
                     score
-                } as AnswerScoreDTO;
+                });
             });
     }
 
@@ -438,7 +443,7 @@ export class QuestionAnswerService {
 
         const correctGivenAnswers = canRewardAnswer
             ? correctAnswerData
-                .filter(x => x.isCorrect)
+                .filter(x => x.state === 'CORRECT')
             : [];
 
         /**

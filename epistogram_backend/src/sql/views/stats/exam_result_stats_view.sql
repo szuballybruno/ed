@@ -5,7 +5,7 @@ question_correct_answer_rates AS
 		ase.id answer_session_id,
 		ase.user_id,
 		qv.id question_version_id,
-		AVG(ga.is_correct::int)::int * 100 correct_answer_rate
+		AVG((ga.state = 'CORRECT')::int)::int * 100 correct_answer_rate
 	FROM public.given_answer ga
 
 	LEFT JOIN public.question_version qv
