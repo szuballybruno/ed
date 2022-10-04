@@ -1,13 +1,13 @@
-import {Grid} from '@chakra-ui/react';
+import { Grid } from '@chakra-ui/react';
 import DoneIcon from '@mui/icons-material/Done';
 import React from 'react';
-import {CourseDetailsDTO} from '../../shared/dtos/CourseDetailsDTO';
-import {defaultCharts} from '../../static/defaultChartOptions';
-import {translatableTexts} from '../../static/translatableTexts';
-import {EpistoFlex2} from '../controls/EpistoFlex';
-import {EpistoFont} from '../controls/EpistoFont';
-import {EpistoHeader} from '../EpistoHeader';
-import {EpistoRadarChart} from '../universal/charts/base_charts/EpistoRadarChart';
+import { CourseDetailsDTO } from '../../shared/dtos/CourseDetailsDTO';
+import { defaultCharts } from '../../static/defaultChartOptions';
+import { translatableTexts } from '../../static/translatableTexts';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { EpistoFont } from '../controls/EpistoFont';
+import { EpistoHeader } from '../EpistoHeader';
+import { EpistoRadarChart } from '../universal/charts/base_charts/EpistoRadarChart';
 
 export const CourseDetailsSummarySection = (props: {
     courseDetails: CourseDetailsDTO
@@ -93,7 +93,7 @@ export const CourseDetailsSummarySection = (props: {
             {/* human skill benefits chart  */}
             <EpistoFlex2 direction={'column'}
                 minWidth={'50%'}>
-                <EpistoRadarChart
+                {courseDetails?.humanSkillBenefits.length > 0 && <EpistoRadarChart
                     title=""
                     areas={[{
                         name: 'Készségek',
@@ -108,7 +108,7 @@ export const CourseDetailsSummarySection = (props: {
                     style={{
                         width: '400px',
                         height: '300px'
-                    }} />
+                    }} />}
             </EpistoFlex2>
         </EpistoFlex2>
     </EpistoFlex2>;
