@@ -202,6 +202,14 @@ export const useVideoPlayerState = (
 
     useEffect(() => {
 
+        if (isIPhone && isPlaying && isLandscape && isFullscreen) {
+            setIsPlaying(false);
+            setIsPlaying(true);
+        }
+    }, [isIPhone, isLandscape, isPlaying, isFullscreen]);
+
+    useEffect(() => {
+
         Logger.logScoped('PLAYBACK', 'Triggering isSeeking effect...');
 
         if (isMobile && !isFullscreen) {
@@ -279,12 +287,12 @@ export const useVideoPlayerState = (
         if (!isShowingOverlay && playedSeconds < 1) {
 
             Logger.logScoped('PLAYBACK', 'Tricking unmuted autoplay by setting isPlaying to false and true');
-            stopPlaying();
-            startPlaying();
+            setIsPlaying(false);
+            setIsPlaying(true);
         }
 
 
-    }, [isPlaying, isSeeking, playedSeconds, isShowingOverlay, isMobile, isLandscape, stopPlaying, startPlaying]);
+    }, [isPlaying, isSeeking, playedSeconds, isShowingOverlay, isMobile, isLandscape, stopPlaying, setIsPlaying]);
 
     const toggleFullScreen = () => {
 
