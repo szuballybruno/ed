@@ -112,7 +112,7 @@ export class CourseItemService {
                     const { itemOrderIndex, itemTitle, itemSubtitle } = XMutatorHelpers
                         .mapMutationToPartialObject(mutation);
 
-                    if (itemOrderIndex)
+                    if (itemOrderIndex !== undefined)
                         data.orderIndex = itemOrderIndex;
 
                     if (itemSubtitle)
@@ -174,7 +174,7 @@ export class CourseItemService {
                     const { itemOrderIndex, itemTitle, itemSubtitle } = XMutatorHelpers
                         .mapMutationToPartialObject(mutation);
 
-                    if (itemOrderIndex)
+                    if (itemOrderIndex !== undefined)
                         data.orderIndex = itemOrderIndex;
 
                     if (itemSubtitle)

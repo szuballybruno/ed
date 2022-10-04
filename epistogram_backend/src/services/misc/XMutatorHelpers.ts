@@ -6,7 +6,7 @@ const mapMutationToPartialObject = <TMutatee extends Object, TKey extends keyof 
 
     mut
         .fieldMutators
-        .forEach(x => obj[x.field] = x.value);
+        .forEach(fieldMutator => obj[fieldMutator.field] = fieldMutator.value);
 
     return obj;
 };

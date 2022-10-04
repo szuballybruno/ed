@@ -144,6 +144,19 @@ export const useGridColumns = (
             }
         })
         .add({
+            field: 'itemOrderIndex',
+            headerName: 'Elhelyezkedés',
+            width: 80,
+            renderCell: ({ value, row }) => {
+
+                return <TextCellRenderer
+                    isMutated={row.changedProperties.itemOrderIndex}>
+
+                    {value}
+                </TextCellRenderer>;
+            }
+        })
+        .add({
             field: 'module',
             headerName: 'Modul',
             width: 250,
