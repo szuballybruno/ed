@@ -122,10 +122,10 @@ export class PretestService {
          */
         const { playlistItemCode: firstItemPlaylistCode } = await this
             ._ormService
-            .query(PlaylistView, { userId, courseId, zero: 0 })
+            .query(PlaylistView, { userId, courseId, one: 1, zero: 0 })
             .where('userId', '=', 'userId')
             .and('courseId', '=', 'courseId')
-            .and('moduleOrderIndex', '=', 'zero')
+            .and('moduleOrderIndex', '=', 'one')
             .and('itemOrderIndex', '=', 'zero')
             .getSingle();
 
