@@ -30,7 +30,7 @@ export const videoPlayerStyles = {
 
     videoWrapperPropsDesktop: {
         className: 'whall',
-        background: 'orange',
+        background: 'black',
         position: 'relative'
     } as EpistoDivProps,
 

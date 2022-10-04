@@ -160,7 +160,7 @@ export class EmailService {
                 .isLocalhost;
 
             const to = isLocalhost
-                ? 'manyoki.bence@epistogram.com'
+                ? 'spengler.manfred@epistogram.com'
                 : email.to;
 
             const templatePath = `${this._config.rootDirectory}/emails/${email.template.name}.html`;
