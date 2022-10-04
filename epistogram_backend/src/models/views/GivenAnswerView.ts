@@ -10,19 +10,11 @@ export class GivenAnswerView {
 
     @ViewColumn()
     @XViewColumn()
-    userId: Id<'User'>;
-
-    @ViewColumn()
-    @XViewColumn()
     examVersionId: Id<'ExamVersion'>;
 
     @ViewColumn()
     @XViewColumn()
     questionVersionId: Id<'QuestionVersion'>;
-
-    @ViewColumn()
-    @XViewColumn()
-    answerSessionId: Id<'AnswerSession'>;
 
     @ViewColumn()
     @XViewColumn()

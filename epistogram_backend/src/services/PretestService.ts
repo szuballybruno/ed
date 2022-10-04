@@ -189,9 +189,14 @@ export class PretestService {
          * Assign SET_COURSE_MODE permission to allow user
          * to start course in their preferred mode
          */
-        await this
+        const assingedSetCourseModePermission = await this
             ._permissionService
-            .assignPermission(principalId.getId(), 'SET_COURSE_MODE', { courseId });
+            .getPermissionAsync(principalId.getId(), 'SET_COURSE_MODE', { courseId });
+
+        if (!assingedSetCourseModePermission)
+            await this
+                ._permissionService
+                .assignPermission(principalId.getId(), 'SET_COURSE_MODE', { courseId });
     }
 
     /**
