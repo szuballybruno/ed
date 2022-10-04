@@ -7,7 +7,6 @@ import { useIsMobileView } from '../../../../static/frontendHelpers';
 import { EpistoDiv, EpistoDivProps } from '../../../controls/EpistoDiv';
 import { EpistoReactPlayer } from '../../../controls/EpistoReactPlayer';
 import { AbsoluteFlexOverlay } from '../AbsoluteFlexOverlay';
-import { PlayerDebugInfo } from '../PlayerDebugInfo';
 import { ShouldRotatePhoneOverlay } from '../ShouldRotatePhoneOverlay';
 import { MobilePlayButtonOverlay } from './MobilePlayButtonOverlay';
 import { VideoControls } from './VideoPlayerControls';
@@ -80,9 +79,9 @@ export const VideoPlayer = (props: {
             {...css}>
 
             {/* player debug info */}
-            <PlayerDebugInfo
+            {/* <PlayerDebugInfo
                 videoPlayerState={videoPlayerState}
-                videoTitle={videoItem.title} />
+                videoTitle={videoItem.title} /> */}
 
             {/* MOBILE ONLY: overlay on top of player,
                 since we don't want the user to watch video
