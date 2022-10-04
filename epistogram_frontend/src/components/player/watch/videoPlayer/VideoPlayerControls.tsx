@@ -5,7 +5,7 @@ import VolumeMuteIcon from '@mui/icons-material/VolumeMute';
 import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import { Slider } from '@mui/material';
-import { useIsMobileView, secondsToTime } from '../../../../static/frontendHelpers';
+import { secondsToTime } from '../../../../static/frontendHelpers';
 import { EpistoButton } from '../../../controls/EpistoButton';
 import { EpistoFlex2 } from '../../../controls/EpistoFlex';
 import { EpistoFont } from '../../../controls/EpistoFont';
@@ -19,6 +19,8 @@ export const VideoControls = (props: {
     markSeconds: number[],
     volume: number,
     isMuted: boolean,
+    isMobile: boolean,
+    isIPhone: boolean,
     setIsMuted: (isMuted: boolean) => void,
     toggleIsPlaying: () => void,
     setIsSeeking: (isSeeking: boolean) => void,
@@ -36,6 +38,8 @@ export const VideoControls = (props: {
         markSeconds,
         volume,
         isMuted,
+        isMobile,
+        isIPhone,
         setIsMuted,
         showControlOverlay,
         toggleIsPlaying,
@@ -45,7 +49,6 @@ export const VideoControls = (props: {
         setVolume
     } = props;
 
-    const isMobile = useIsMobileView();
 
     const iconStyle = isMobile
         ? {
@@ -72,6 +75,7 @@ export const VideoControls = (props: {
         bottom={0}
         left={0}
         px={isMobile ? '20px' : '10px'}
+        pb={isIPhone ? '20px' : '0'}
         width="100%"
         height={'40px'}
         onMouseEnter={() => showControlOverlay(true)}

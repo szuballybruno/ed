@@ -3,10 +3,10 @@ import FastRewindIcon from '@mui/icons-material/FastRewind';
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { VideoPlayerDataDTO } from '../../../../shared/dtos/VideoDTO';
-import { useIsMobileView } from '../../../../static/frontendHelpers';
 import { EpistoDiv, EpistoDivProps } from '../../../controls/EpistoDiv';
 import { EpistoReactPlayer } from '../../../controls/EpistoReactPlayer';
 import { AbsoluteFlexOverlay } from '../AbsoluteFlexOverlay';
+import { PlayerDebugInfo } from '../PlayerDebugInfo';
 import { ShouldRotatePhoneOverlay } from '../ShouldRotatePhoneOverlay';
 import { MobilePlayButtonOverlay } from './MobilePlayButtonOverlay';
 import { VideoControls } from './VideoPlayerControls';
@@ -34,6 +34,8 @@ export const VideoPlayer = (props: {
         maxWatchedSeconds,
         volume,
         isMuted,
+        isMobile,
+        isIPhone,
         showMobilePlayButtonOverlay,
         showShouldRotatePhoneOverlay,
         showControlOverlay,
@@ -50,7 +52,6 @@ export const VideoPlayer = (props: {
     } = videoPlayerState;
 
     const [isFullscreen] = useVideoPlayerFullscreenContext();
-    const isMobile = useIsMobileView();
 
     /* styles */
     const {
@@ -79,9 +80,9 @@ export const VideoPlayer = (props: {
             {...css}>
 
             {/* player debug info */}
-            {/* <PlayerDebugInfo
+            <PlayerDebugInfo
                 videoPlayerState={videoPlayerState}
-                videoTitle={videoItem.title} /> */}
+                videoTitle={videoItem.title} />
 
             {/* MOBILE ONLY: overlay on top of player,
                 since we don't want the user to watch video
@@ -111,7 +112,7 @@ export const VideoPlayer = (props: {
                             toggleIsPlaying();
                         }
                     }}
-                    onMouseMove={() => showControlOverlay()}
+                    onMouseMove={() => showControlOverlay(true)}
                     {...videoWrapperProps}>
 
                     {/* the player */}
@@ -158,6 +159,8 @@ export const VideoPlayer = (props: {
                     videoLength={videoLength}
                     volume={volume}
                     isMuted={isMuted}
+                    isMobile={isMobile}
+                    isIPhone={isIPhone}
                     setIsMuted={setIsMuted}
                     showControlOverlay={showControlOverlay}
                     seekToSeconds={seekToSeconds}

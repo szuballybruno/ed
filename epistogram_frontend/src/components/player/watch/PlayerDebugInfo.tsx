@@ -20,6 +20,8 @@ export const PlayerDebugInfo = (props: {
         playedSeconds,
         controlsVisible,
         isMobile,
+        showMobilePlayButtonOverlay,
+        showShouldRotatePhoneOverlay,
         videoLength
     } = videoPlayerState;
 
@@ -31,7 +33,7 @@ export const PlayerDebugInfo = (props: {
         fontWeight='bold'
         background='#FFFFFF33'
         maxWidth='40%'
-        zIndex={17}>
+        zIndex={31}>
 
         {'isFullscreen: ' + isFullscreen}<br />
         {'isIPhone: ' + isIPhone}<br />
@@ -40,6 +42,8 @@ export const PlayerDebugInfo = (props: {
         {'isPlaying: ' + isPlaying}<br />
         {'isSeeking: ' + isSeeking}<br />
         {'isShowingOverlay: ' + isShowingOverlay}<br />
+        {'showMobilePlayButtonOverlay: ' + showMobilePlayButtonOverlay}<br />
+        {'showShouldRotatePhoneOverlay: ' + showShouldRotatePhoneOverlay}<br />
         {'playedSeconds: ' + playedSeconds}<br />
         {'controlsVisible: ' + controlsVisible}<br />
         {'isMobile: ' + isMobile}<br />

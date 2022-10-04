@@ -88,7 +88,7 @@ items_with_user AS
         ucb.current_item_code = civ.module_code module_is_current,
 		esv.score_percentage,
         uprv.is_recommended_for_practise IS TRUE is_recommended_for_practise,
-    
+ 
         -- state
 		CASE 
 			WHEN ucb.current_item_code = civ.playlist_item_code
@@ -121,7 +121,8 @@ items_with_user AS
 	ON esv.answer_session_id = ehsasv.answer_session_id
 	
 	LEFT JOIN public.course_item_completion cic
-	ON cic.answer_session_id = ehsasv.answer_session_id
+	ON cic.video_version_id = civ.video_version_id
+	OR cic.exam_version_id = ehsasv.exam_version_id
 
     LEFT JOIN public.user_practise_recommendation_view uprv
     ON uprv.video_version_id = civ.video_version_id
