@@ -63,7 +63,7 @@ const main = async () => {
     log('');
 
     const isPurgeMode = process.argv.any(x => x === '--purge');
-    const isLightRecreateMode = process.argv.any(x => x === '--lightRecreate') || GlobalConfiguration.getCurrentEnvironmentName() === 'development';
+    const isLightRecreateMode = process.argv.any(x => x === '--lightRecreate');
     const isShortLife = process.argv.any(x => x === '--shortLife');
     const isKeepAlive = process.argv.any(x => x === '--keepAlive');
 
