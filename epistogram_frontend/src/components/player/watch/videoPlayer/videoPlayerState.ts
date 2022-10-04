@@ -100,6 +100,40 @@ export const useVideoPlayerState = (
                 //@ts-ignore
                 ? screenfull.toggle(playerContainerRef.current)
                 : undefined;
+            setIsFullscreen(true);
+        }
+    }, [isIPhone, isMobile, screenfullEnabled, setIsFullscreen]);
+
+    const disableFullscreenMode = useCallback(() => {
+
+        Logger.logScoped('PLAYBACK', 'Disabling fullscreen mode');
+
+        // iPhone
+        if (isMobile && isIPhone) {
+
+            document.body.style.overflow = '';
+
+            setIsFullscreen(false);
+        }
+
+        // other mobile
+        if (isMobile && !isIPhone) {
+
+            screenfullEnabled
+                //@ts-ignore
+                ? screenfull.toggle(playerContainerRef.current)
+                : undefined;
+            setIsFullscreen(false);
+        }
+
+        // desktop
+        if (!isMobile && !isIPhone) {
+            //@ts-ignore
+            screenfullEnabled
+                //@ts-ignore
+                ? screenfull.toggle(playerContainerRef.current)
+                : undefined;
+            setIsFullscreen(false);
         }
     }, [isIPhone, isMobile, screenfullEnabled, setIsFullscreen]);
 
@@ -207,6 +241,15 @@ export const useVideoPlayerState = (
         }
     }, [isShowingOverlay, isFullscreen, startPlaying, stopPlaying]);
 
+    useEffect(() => {
+
+        Logger.logScoped('PLAYBACK', 'Screenfull trigger effect runs...');
+        if (!screenfullEnabled) {
+
+            disableFullscreenMode();
+        }
+    }, [disableFullscreenMode, screenfullEnabled]);
+
     const handleOnReady = useCallback((e: {
         getDuration: () => React.SetStateAction<number>;
     }) => {
@@ -242,38 +285,6 @@ export const useVideoPlayerState = (
 
 
     }, [isPlaying, isSeeking, playedSeconds, isShowingOverlay, isMobile, isLandscape, stopPlaying, startPlaying]);
-
-    const disableFullscreenMode = () => {
-
-        Logger.logScoped('PLAYBACK', 'Disabling fullscreen mode');
-
-        // iPhone
-        if (isMobile && isIPhone) {
-
-            document.body.style.overflow = '';
-
-            setIsFullscreen(false);
-        }
-
-        // other mobile
-        if (isMobile && !isIPhone) {
-
-            screenfullEnabled
-                //@ts-ignore
-                ? screenfull.toggle(playerContainerRef.current)
-                : undefined;
-            setIsFullscreen(false);
-        }
-
-        // desktop
-        if (!isMobile && !isIPhone) {
-            //@ts-ignore
-            screenfullEnabled
-                //@ts-ignore
-                ? screenfull.toggle(playerContainerRef.current)
-                : undefined;
-        }
-    };
 
     const toggleFullScreen = () => {
 
