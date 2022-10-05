@@ -835,7 +835,7 @@ const marray = [
                     : null,
 
                 avatarUrl: user.filePath
-                    ? urlService.getAssetUrl(user.filePath)
+                    ? user.filePath
                     : null
             });
         }),

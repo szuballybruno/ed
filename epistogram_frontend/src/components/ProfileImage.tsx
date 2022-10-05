@@ -1,4 +1,5 @@
 import { forwardRef, useContext } from 'react';
+import { Environment } from '../static/Environemnt';
 import { EpistoFlex2, EpistoFlex2Props } from './controls/EpistoFlex';
 import { EpistoFont } from './controls/EpistoFont';
 import { EpistoImage } from './controls/EpistoImage';
@@ -48,7 +49,7 @@ export const ProfileImage = forwardRef<HTMLDivElement, ProfileImageProps>((props
                 border="none"
                 className="whall"
                 objectFit="cover"
-                src={url ?? ''}
+                src={Environment.getAssetUrl(url ?? '')}
                 display={showImage ? undefined : 'none'} />
 
             <EpistoFont

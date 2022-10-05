@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useContext, useRef, useState } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { useNavigation } from '../../services/core/navigatior';
 import { Environment } from '../../static/Environemnt';
@@ -9,6 +9,7 @@ import { EpistoDiv } from '../controls/EpistoDiv';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { ProfileImage } from '../ProfileImage';
+import { CurrentUserContext } from '../system/AuthenticationFrame';
 import { useAuthorizationContext } from '../system/AuthorizationContext';
 import { NotificationsPopper } from './NotificationsPopper';
 import { UserContextMenu } from './UserContextMenu';
@@ -24,6 +25,8 @@ export const ShopAndNotifications = (props: {
     const { navigate2 } = useNavigation();
 
     const { isAuthenticated } = useAuthorizationContext();
+
+    const user = useContext(CurrentUserContext);
 
     // refs 
     const userSettingsRef = useRef<HTMLDivElement>(null);
@@ -58,7 +61,7 @@ export const ShopAndNotifications = (props: {
                 <EpistoButton
                     style={{
                         height: 40,
-                        fontStyle: 'normal',    
+                        fontStyle: 'normal',
                     }}
                     onClick={() => navigate2(applicationRoutes.shopRoute)}
                     variant={'plain'}>
@@ -97,6 +100,7 @@ export const ShopAndNotifications = (props: {
                         onClick={() => setSettingsPopperOpen(true)}
                         cursor="pointer"
                         className="square50"
+                        url={user.avatarUrl ?? ''}
                         ref={userSettingsRef} />
                 )}
             </EpistoFlex2>
