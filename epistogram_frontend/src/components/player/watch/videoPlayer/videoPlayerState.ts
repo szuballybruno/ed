@@ -42,7 +42,7 @@ export const useVideoPlayerState = (
     const screenOrientation = useScreenOrientation();
     const isLandscape = screenOrientation === 90;
     const showMobilePlayButtonOverlay = (isMobile && !isFullscreen && !isLandscape) || (isMobile && isLandscape && isFullscreen && !isPlaying && !isShowingOverlay) || (isMobile && isLandscape && !isFullscreen);
-    const showShouldRotatePhoneOverlay = isMobile && isFullscreen && !isLandscape;
+    const [showShouldRotatePhoneOverlay, setShowShouldRotatePhoneOverlay] = useState(false); //= isMobile && isFullscreen && !isLandscape;
 
     // TODO:
     const controlsVisible = (isMobile && isLandscape) || showControls || !isPlaying || isSeeking;
@@ -81,30 +81,21 @@ export const useVideoPlayerState = (
         if (isMobile && isIPhone) {
 
             document.body.style.overflow === 'hidden';
-            setIsFullscreen(true);
+            return setIsFullscreen(true);
         }
 
-        // other mobile
-        if (isMobile && !isIPhone) {
-
-            !screenfullEnabled
-                //@ts-ignore
-                ? screenfull.toggle(playerContainerRef.current)
-                : undefined;
-            setIsFullscreen(true);
-        }
-
-        // desktop
-        if (!isMobile && !isIPhone) {
+        // Android and desktop
+        !screenfullEnabled
             //@ts-ignore
-            !screenfullEnabled
-                //@ts-ignore
-                ? screenfull.toggle(playerContainerRef.current)
-                : undefined;
-            setIsFullscreen(true);
-        }
+            ? screenfull.toggle(playerContainerRef.current)
+            : undefined;
+        setIsFullscreen(true);
+
     }, [isIPhone, isMobile, screenfullEnabled, setIsFullscreen]);
 
+    /**
+     * Disable fullscreen mode
+     */
     const disableFullscreenMode = useCallback(() => {
 
         Logger.logScoped('PLAYBACK', 'Disabling fullscreen mode');
@@ -114,28 +105,16 @@ export const useVideoPlayerState = (
 
             document.body.style.overflow = '';
 
-            setIsFullscreen(false);
+            return setIsFullscreen(false);
         }
 
-        // other mobile
-        if (isMobile && !isIPhone) {
-
-            screenfullEnabled
-                //@ts-ignore
-                ? screenfull.toggle(playerContainerRef.current)
-                : undefined;
-            setIsFullscreen(false);
-        }
-
-        // desktop
-        if (!isMobile && !isIPhone) {
+        // Android and desktop
+        screenfullEnabled
             //@ts-ignore
-            screenfullEnabled
-                //@ts-ignore
-                ? screenfull.toggle(playerContainerRef.current)
-                : undefined;
-            setIsFullscreen(false);
-        }
+            ? screenfull.toggle(playerContainerRef.current)
+            : undefined;
+        setIsFullscreen(false);
+
     }, [isIPhone, isMobile, screenfullEnabled, setIsFullscreen]);
 
 
@@ -183,23 +162,35 @@ export const useVideoPlayerState = (
 
         Logger.logScoped('PLAYBACK', 'Triggering isIphone, isLandscape, isFullscreen effect...');
 
+        if (!isReady)
+            return;
+
         if (!isMobile)
             return;
 
         if (isLandscape && isFullscreen) {
 
             Logger.logScoped('PLAYBACK', 'Landscape and fullscreen, start playing...');
-            stopPlaying();
-            startPlaying();
+            return startPlaying();
         };
 
         if (!isLandscape) {
 
             Logger.logScoped('PLAYBACK', 'Rotated back, stop playing');
-            stopPlaying();
+            return stopPlaying();
         };
 
-    }, [isLandscape, startPlaying, isFullscreen, stopPlaying, isMobile, enableFullscreenMode]);
+    }, [isLandscape, startPlaying, isFullscreen, stopPlaying, isMobile, enableFullscreenMode, isReady]);
+
+    useEffect(() => {
+
+        if (isMobile && !isLandscape && isFullscreen) {
+
+            return setShowShouldRotatePhoneOverlay(true);
+        }
+
+        return setShowShouldRotatePhoneOverlay(false);
+    }, [isFullscreen, isLandscape, isMobile]);
 
     useEffect(() => {
 
@@ -213,13 +204,13 @@ export const useVideoPlayerState = (
 
         if (isSeeking) {
 
-            Logger.logScoped('PLAYBACK', 'Setting isPlaying to false.');
+            Logger.logScoped('PLAYBACK', 'Seeking... Stop playing.');
             return stopPlaying();
         }
 
         if ((!isMobile && !isSeeking && !isShowingOverlay) || (isMobile && isFullscreen && !isSeeking && !isShowingOverlay)) {
 
-            Logger.logScoped('PLAYBACK', 'Setting isPlaying to true.');
+            Logger.logScoped('PLAYBACK', 'Seeking... Stop playing.');
             return startPlaying();
         }
     }, [isSeeking, isMobile, isFullscreen, isShowingOverlay, startPlaying, stopPlaying]);
@@ -253,9 +244,16 @@ export const useVideoPlayerState = (
     const trickUnmutedAutoplay = useCallback(() => {
 
         Logger.logScoped('PLAYBACK', 'Trick unmuted autoplay callback runs...');
-        setIsPlaying(false);
-        setIsPlaying(true);
-    }, []);
+        if (isPlaying) {
+
+            setIsPlaying(false);
+            setIsPlaying(true);
+        } else {
+
+            setIsPlaying(true);
+            setIsPlaying(false);
+        }
+    }, [isPlaying]);
 
     const handleOnReady = useCallback((e: {
         getDuration: () => React.SetStateAction<number>;

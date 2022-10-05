@@ -86,9 +86,8 @@ export const VideoPlayer = (props: {
 
             {/* MOBILE ONLY: warning to rotate the mobile, the video
                 should only starts in landscape */}
-            {/*      {showShouldRotatePhoneOverlay && */}
-            <ShouldRotatePhoneOverlay
-                onExitFullScreen={disableFullscreenMode} />
+            {showShouldRotatePhoneOverlay && <ShouldRotatePhoneOverlay
+                onExitFullScreen={disableFullscreenMode} />}
 
             {/* MOBILE ONLY: overlay on top of player,
                 since we don't want the user to watch video

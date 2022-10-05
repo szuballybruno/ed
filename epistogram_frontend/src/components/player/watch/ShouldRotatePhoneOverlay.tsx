@@ -13,16 +13,15 @@ export const ShouldRotatePhoneOverlay = (props: {
     return <EpistoFlex2
         direction='column'
         position='fixed'
-        bottom='0'
+        top='0'
         left='0'
         width='100vw'
-        height='50vh'
+        height='100vh'
         align='center'
         justify='center'
         background='#FFFFFF99'
-        //backdropFilter='blur(10px)'
-        transform='translate3d(0,0,1px)'
-        zIndex={1000000}>
+        backdropFilter='blur(10px)'
+        zIndex={33}>
 
         <EpistoFlex2
             width='100%'
