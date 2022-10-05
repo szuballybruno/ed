@@ -316,6 +316,7 @@ export class CompanyService {
             ._ormService
             .query(CompanyAssociatedCoursesView, { companyId })
             .where('companyId', '=', 'companyId')
+            .and('isDeleted', '=', 'false')
             .getMany();
 
         return this
@@ -439,7 +440,7 @@ export class CompanyService {
                 assigneeCompanyId: companyId,
                 assigneeGroupId: null,
                 assigneeUserId: null,
-                contextCompanyId: companyId,
+                contextCompanyId: null,
                 contextCourseId: courseId,
                 permissionId: watchCoursePermissionId
             })

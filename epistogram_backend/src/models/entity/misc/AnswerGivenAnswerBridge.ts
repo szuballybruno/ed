@@ -1,5 +1,5 @@
 import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from '../../MyORM';
-import { IsDeletedFlag, XJoinColumn, XViewColumn } from '../../../services/XORM/XORMDecorators';
+import { DeletionDateColumn, XJoinColumn, XViewColumn } from '../../../services/XORM/XORMDecorators';
 import { AnswerVersion } from '../answer/AnswerVersion';
 import { GivenAnswer } from './GivenAnswer';
 import { Id } from '../../../shared/types/versionId';
@@ -11,7 +11,7 @@ export class AnswerGivenAnswerBridge {
     @XViewColumn()
     id: Id<'AnswerGivenAnswerBridge'>;
 
-    @IsDeletedFlag()
+    @DeletionDateColumn()
     @DeleteDateColumn()
     @XViewColumn()
     deletionDate: Date | null;

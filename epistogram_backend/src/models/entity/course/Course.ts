@@ -1,5 +1,5 @@
 import { DeleteDateColumn, Entity, PrimaryGeneratedColumn } from '../../MyORM';
-import { IsDeletedFlag, XOneToMany, XViewColumn } from '../../../services/XORM/XORMDecorators';
+import { DeletionDateColumn, XOneToMany, XViewColumn } from '../../../services/XORM/XORMDecorators';
 import { Id } from '../../../shared/types/versionId';
 import { PermissionAssignmentBridge } from '../authorization/PermissionAssignmentBridge';
 import { CourseAccessBridge } from '../misc/CourseAccessBridge';
@@ -22,7 +22,7 @@ export class Course {
     // deletion date is ignored,
     // but when looking at the latest state, 
     // it will not be shown 
-    @IsDeletedFlag()
+    @DeletionDateColumn()
     @DeleteDateColumn()
     deletionDate: Date | null;
 

@@ -1,5 +1,5 @@
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from '../../MyORM';
-import { IsDeletedFlag, XViewColumn } from '../../../services/XORM/XORMDecorators';
+import { DeletionDateColumn, XViewColumn } from '../../../services/XORM/XORMDecorators';
 import { Id } from '../../../shared/types/versionId';
 import { Comment } from './Comment';
 import { CourseData } from '../course/CourseData';
@@ -12,7 +12,7 @@ export class Like {
     @XViewColumn()
     id: Id<'Like'>;
 
-    @IsDeletedFlag()
+    @DeletionDateColumn()
     @DeleteDateColumn()
     @XViewColumn()
     deletionDate: Date;

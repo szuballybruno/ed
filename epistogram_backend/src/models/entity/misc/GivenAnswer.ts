@@ -9,7 +9,7 @@ import {
     PrimaryGeneratedColumn,
     Relation
 } from '../../MyORM';
-import { IsDeletedFlag, XJoinColumn, XManyToOne, XViewColumn } from '../../../services/XORM/XORMDecorators';
+import { DeletionDateColumn, XJoinColumn, XManyToOne, XViewColumn } from '../../../services/XORM/XORMDecorators';
 import { Id } from '../../../shared/types/versionId';
 import { AnswerGivenAnswerBridge } from './AnswerGivenAnswerBridge';
 import { AnswerSession } from './AnswerSession';
@@ -25,7 +25,7 @@ export class GivenAnswer {
     @XViewColumn()
     id: Id<'GivenAnswer'>;
 
-    @IsDeletedFlag()
+    @DeletionDateColumn()
     @DeleteDateColumn()
     @XViewColumn()
     deletionDate: Date | null;

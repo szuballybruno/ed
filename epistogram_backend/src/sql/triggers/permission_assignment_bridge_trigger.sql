@@ -1,11 +1,11 @@
 
 ----------------- CLEANUP
-DROP TRIGGER IF EXISTS permission_assignment_validity_check_trigger 
+DROP TRIGGER IF EXISTS permission_assignment_bridge_trigger 
 ON permission_assignment_bridge;
-DROP FUNCTION IF EXISTS permission_assignment_validity_check_trigger_function;
+DROP FUNCTION IF EXISTS permission_assignment_bridge_trigger_function;
 
 ----------------- DEFINITION
-CREATE FUNCTION permission_assignment_validity_check_trigger_function() 
+CREATE FUNCTION permission_assignment_bridge_trigger_function() 
 RETURNS TRIGGER 
 LANGUAGE plpgsql 
 AS $$
@@ -35,6 +35,6 @@ BEGIN
 END
 $$;
 
-CREATE TRIGGER permission_assignment_validity_check_trigger
+CREATE TRIGGER permission_assignment_bridge_trigger
 BEFORE INSERT OR UPDATE ON permission_assignment_bridge
-FOR EACH ROW EXECUTE PROCEDURE permission_assignment_validity_check_trigger_function();
+FOR EACH ROW EXECUTE PROCEDURE permission_assignment_bridge_trigger_function();

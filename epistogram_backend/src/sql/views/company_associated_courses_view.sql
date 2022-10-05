@@ -1,6 +1,7 @@
 SELECT 
     com.id company_id,
     co.id course_id,
+    co.deletion_date IS NOT NULL is_deleted,
     cv.id course_version_id,
     cab.id IS NOT NULL is_assigned,
     pab.id IS NOT NULL is_default,

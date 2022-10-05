@@ -1,6 +1,6 @@
 import { ViewColumn, ViewEntity } from '../MyORM';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
-import { IsDeletedFlag } from '../../services/XORM/XORMDecorators';
+import { DeletionDateColumn } from '../../services/XORM/XORMDecorators';
 import { Id } from '../../shared/types/versionId';
 
 @ViewEntity({
@@ -13,7 +13,7 @@ export class CourseAdminShortView {
     @XViewColumn()
     courseId: Id<'Course'>;
 
-    @IsDeletedFlag('bool')
+    @DeletionDateColumn('bool')
     @ViewColumn()
     @XViewColumn()
     isDeleted: boolean;

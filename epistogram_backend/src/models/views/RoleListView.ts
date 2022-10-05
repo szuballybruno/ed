@@ -1,6 +1,6 @@
 import { ViewColumn, ViewEntity } from '../MyORM';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
-import { IsDeletedFlag } from '../../services/XORM/XORMDecorators';
+import { DeletionDateColumn } from '../../services/XORM/XORMDecorators';
 import { PermissionCodeType } from '../../shared/types/sharedTypes';
 import { Id } from '../../shared/types/versionId';
 
@@ -24,7 +24,7 @@ export class RoleListView {
 
     @ViewColumn()
     @XViewColumn()
-    @IsDeletedFlag('bool')
+    @DeletionDateColumn('bool')
     isDeleted: boolean;
 
     @ViewColumn()

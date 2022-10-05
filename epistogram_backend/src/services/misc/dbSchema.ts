@@ -405,7 +405,8 @@ export const createDBSchema = (): XDBMSchemaService => {
             { fileName: 'prequiz_completion_constraints' },
             { fileName: 'course_completion_constraints' },
             { fileName: 'course_access_bridge_constraints' },
-            { fileName: 'prequiz_constraints' }
+            { fileName: 'prequiz_constraints' },
+            { fileName: 'permission_assignment_bridge_constraints' }
         ],
 
         indices: [
@@ -422,7 +423,7 @@ export const createDBSchema = (): XDBMSchemaService => {
         triggers: [
             'role_assignment_validity_check_trigger',
             'exam_pretest_module_integrity_trigger',
-            'permission_assignment_validity_check_trigger',
+            'permission_assignment_bridge_trigger',
             'role_permission_bridge_validity_trigger',
             'ucb_stage_trigger',
             'prequiz_completion_trigger'
