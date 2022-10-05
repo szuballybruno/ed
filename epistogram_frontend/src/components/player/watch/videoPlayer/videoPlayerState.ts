@@ -252,6 +252,7 @@ export const useVideoPlayerState = (
 
     const trickUnmutedAutoplay = useCallback(() => {
 
+        Logger.logScoped('PLAYBACK', 'Trick unmuted autoplay callback runs...');
         stopPlaying();
         return startPlaying();
     }, [startPlaying, stopPlaying]);

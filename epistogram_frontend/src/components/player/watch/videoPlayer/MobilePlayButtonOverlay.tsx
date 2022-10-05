@@ -36,7 +36,7 @@ export const MobilePlayButtonOverlay = (props: {
             onClick={() => {
                 isFullscreen
                     ? toggleIsPlaying()
-                    : enableFullscreenMode();
+                    : startPlayingWithFullscreen();
             }}
             style={{
                 ...videoPlayerStyles.videoPlayerControlIconStyle,
