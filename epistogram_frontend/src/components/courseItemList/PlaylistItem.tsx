@@ -44,9 +44,9 @@ export const PlaylistItem = (
     }, [childElement]);
 
     const navigate = () => {
-        
+
         Logger.logScoped('PLAYER DEBUG', 'Playing unmute sound thing');
-        
+
         new Audio(Environment.getAssetUrl('/sounds/testunmute.mp3'))
             .play();
         return navigateToPlayer(playlistItemCode);
@@ -62,6 +62,27 @@ export const PlaylistItem = (
         ? 'var(--intenseOrange)'
         : 'var(--epistoTeal)';
 
+    const playlistItemTypeColor = (() => {
+
+        if (state === 'current')
+            return 'var(--deepGreen)';
+
+        if (state === 'completed')
+            return 'var(--mildGreen)';
+
+        if (type === 'exam' || type === 'final')
+            return 'var(--mildOrange)';
+
+        if (state === 'locked')
+            return 'var(--mildRed)';
+
+        if (state === 'available')
+            return 'lightgrey';
+
+        return 'lightgrey';
+
+    })();
+
     return (
         <FlexListItem
             ref={el => {
@@ -73,25 +94,9 @@ export const PlaylistItem = (
             onClick={navigate}
             midContent={<EpistoFlex2 align="center">
 
-                {state === 'current' &&
-                    <PlaylistItemTypeIcon
-                        title='Kiválasztott'
-                        color='var(--deepGreen)' />}
-
-                {state === 'locked' &&
-                    <PlaylistItemTypeIcon
-                        title='Zárolva'
-                        color='var(--mildRed)' />}
-
-                {state === 'available' &&
-                    <PlaylistItemTypeIcon
-                        title='Felolva'
-                        color='lightgrey' />}
-
-                {state === 'completed' &&
-                    <PlaylistItemTypeIcon
-                        title='Elvégezve'
-                        color='var(--mildGreen)' />}
+                <PlaylistItemTypeIcon
+                    title='Elvégezve'
+                    color={playlistItemTypeColor} />
 
                 <FlexListTitleSubtitle
                     title={title}

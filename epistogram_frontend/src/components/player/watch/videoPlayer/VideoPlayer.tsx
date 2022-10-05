@@ -7,13 +7,11 @@ import { EpistoDiv, EpistoDivProps } from '../../../controls/EpistoDiv';
 import { EpistoReactPlayer } from '../../../controls/EpistoReactPlayer';
 import { AbsoluteFlexOverlay } from '../AbsoluteFlexOverlay';
 import { PlayerDebugInfo } from '../PlayerDebugInfo';
-import { ShouldRotatePhoneOverlay } from '../ShouldRotatePhoneOverlay';
 import { MobilePlayButtonOverlay } from './MobilePlayButtonOverlay';
 import { VideoControls } from './VideoPlayerControls';
 import { useVideoPlayerFullscreenContext } from './VideoPlayerFullscreenFrame';
 import { VideoPlayerStateType } from './videoPlayerState';
 import { videoPlayerStyles } from './videoPlayerStyles';
-
 export const VideoPlayer = (props: {
     videoItem: VideoPlayerDataDTO,
     videoPlayerState: VideoPlayerStateType
@@ -83,11 +81,6 @@ export const VideoPlayer = (props: {
             <PlayerDebugInfo
                 videoPlayerState={videoPlayerState}
                 videoTitle={videoItem.title} />
-
-            {/* MOBILE ONLY: warning to rotate the mobile, the video
-                should only starts in landscape */}
-            {showShouldRotatePhoneOverlay && <ShouldRotatePhoneOverlay
-                onExitFullScreen={disableFullscreenMode} />}
 
             {/* MOBILE ONLY: overlay on top of player,
                 since we don't want the user to watch video

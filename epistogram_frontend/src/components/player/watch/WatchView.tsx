@@ -32,6 +32,7 @@ import { CourseItemSelector } from './CourseItemSelector';
 import { OverlayDialog } from './OverlayDialog';
 import { usePlaybackWatcher } from './PlaybackWatcherLogic';
 import { PlayerTitleBlock } from './PlayerTitleBlock';
+import { ShouldRotatePhoneOverlay } from './ShouldRotatePhoneOverlay';
 import { StillWatching } from './StillWatching';
 import { VideoPlayer } from './videoPlayer/VideoPlayer';
 import { useVideoPlayerState } from './videoPlayer/videoPlayerState';
@@ -104,7 +105,7 @@ export const WatchView = (props: {
     const isShowingOverlay = isQuestionVisible || !!currentStillWatchingMarker;
     const limitSeek = courseMode === 'beginner';
     const videoPlayerState = useVideoPlayerState(videoPlayerData, isShowingOverlay, maxWatchedSeconds, limitSeek, handleVideoSeekEvent);
-    const { playedSeconds, videoLength, isSeeking, isPlaying, isVideoEnded, stopPlaying } = videoPlayerState;
+    const { playedSeconds, videoLength, isSeeking, isPlaying, isVideoEnded, stopPlaying, showShouldRotatePhoneOverlay, disableFullscreenMode } = videoPlayerState;
 
     const VideoDescription = () => <PlayerDescription
         paging={descCommentPaging}
@@ -244,6 +245,11 @@ export const WatchView = (props: {
         videoPlaybackSessionId);
 
     return <>
+
+        {/* MOBILE ONLY: warning to rotate the mobile, the video
+                should only starts in landscape */}
+        {showShouldRotatePhoneOverlay && <ShouldRotatePhoneOverlay
+            onExitFullScreen={disableFullscreenMode} />}
 
         {/* video player */}
         <EpistoFlex2

@@ -258,7 +258,7 @@ export const AdminUserDataGridSubpage = () => {
                         <Add style={{
                             height: 30
                         }} />
-                        Hozzáadás
+                        Felhasználó hozzáadása
                     </EpistoButton>
                 </Flex>
             </Flex>
