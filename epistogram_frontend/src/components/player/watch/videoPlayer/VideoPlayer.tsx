@@ -86,6 +86,12 @@ export const VideoPlayer = (props: {
                 videoTitle={videoItem.title} />
 
             <EpistoButton
+                variant='colored'
+                style={{
+                    position: 'fixed',
+                    bottom: 100,
+                    zIndex: 100000000000000000000
+                }}
                 onClick={() => {
                     toggleFullScreen();
                 }}>
