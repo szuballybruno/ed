@@ -7,7 +7,6 @@ import { EpistoButton } from '../../../controls/EpistoButton';
 import { EpistoDiv, EpistoDivProps } from '../../../controls/EpistoDiv';
 import { EpistoReactPlayer } from '../../../controls/EpistoReactPlayer';
 import { AbsoluteFlexOverlay } from '../AbsoluteFlexOverlay';
-import { PlayerDebugInfo } from '../PlayerDebugInfo';
 import { ShouldRotatePhoneOverlay } from '../ShouldRotatePhoneOverlay';
 import { MobilePlayButtonOverlay } from './MobilePlayButtonOverlay';
 import { VideoControls } from './VideoPlayerControls';
@@ -82,9 +81,23 @@ export const VideoPlayer = (props: {
             {...css}>
 
             {/* player debug info */}
-            <PlayerDebugInfo
+            {/*       <PlayerDebugInfo
                 videoPlayerState={videoPlayerState}
-                videoTitle={videoItem.title} />
+                videoTitle={videoItem.title} /> */}
+
+            <EpistoButton
+                variant='colored'
+                style={{
+                    position: 'fixed',
+                    bottom: 200,
+                    zIndex: 100000000000000000000
+                }}
+                onClick={() => {
+                    toggleFullScreen();
+                }}>
+
+                FUSLCRLEEN
+            </EpistoButton>
 
             <EpistoButton
                 variant='colored'
@@ -97,7 +110,7 @@ export const VideoPlayer = (props: {
                     setShowShouldRotatePhoneOverlay(x => !x);
                 }}>
 
-                Testing the test testing test
+                OVELAYL
             </EpistoButton>
 
             {/* MOBILE ONLY: warning to rotate the mobile, the video

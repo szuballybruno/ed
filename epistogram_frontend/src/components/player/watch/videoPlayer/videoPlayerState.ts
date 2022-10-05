@@ -77,21 +77,21 @@ export const useVideoPlayerState = (
 
         Logger.logScoped('PLAYBACK', 'Enabling fullscreen mode');
 
-        /*        // iPhone
-               if (isMobile && isIPhone) {
-       
-                   document.body.style.overflow === 'hidden';
-                   return setIsFullscreen(true);
-               }
-       
-               // Android and desktop
-               !screenfullEnabled
-                   //@ts-ignore
-                   ? screenfull.toggle(playerContainerRef.current)
-                   : undefined; */
+        // iPhone
+        if (isMobile && isIPhone) {
+
+            document.body.style.overflow === 'hidden';
+            return setIsFullscreen(true);
+        }
+
+        // Android and desktop
+        !screenfullEnabled
+            //@ts-ignore
+            ? screenfull.toggle(playerContainerRef.current)
+            : undefined;
         setIsFullscreen(true);
 
-    }, [setIsFullscreen]);
+    }, [isIPhone, isMobile, screenfullEnabled, setIsFullscreen]);
 
     /**
      * Disable fullscreen mode
@@ -99,22 +99,22 @@ export const useVideoPlayerState = (
     const disableFullscreenMode = useCallback(() => {
 
         Logger.logScoped('PLAYBACK', 'Disabling fullscreen mode');
-        /* 
-                // iPhone
-                if (isMobile && isIPhone) {
-        
-                    document.body.style.overflow = '';
-                    return setIsFullscreen(false);
-                }
-        
-                // Android and desktop
-                screenfullEnabled
-                    //@ts-ignore
-                    ? screenfull.toggle(playerContainerRef.current)
-                    : undefined; */
+
+        // iPhone
+        if (isMobile && isIPhone) {
+
+            document.body.style.overflow = '';
+            return setIsFullscreen(false);
+        }
+
+        // Android and desktop
+        screenfullEnabled
+            //@ts-ignore
+            ? screenfull.toggle(playerContainerRef.current)
+            : undefined;
         setIsFullscreen(false);
 
-    }, [setIsFullscreen]);
+    }, [isIPhone, isMobile, screenfullEnabled, setIsFullscreen]);
 
 
     /**

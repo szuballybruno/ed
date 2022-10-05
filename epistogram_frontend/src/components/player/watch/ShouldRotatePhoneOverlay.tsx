@@ -10,18 +10,29 @@ export const ShouldRotatePhoneOverlay = (props: {
 
     const { onExitFullScreen } = props;
 
-    return <EpistoFlex2
-        direction='column'
-        position='fixed'
-        top='0'
-        left='0'
-        width='100vw'
-        height='100vh'
-        align='center'
-        justify='center'
-        background='#FFFFFF99'
-        backdropFilter='blur(10px)'
-        zIndex={33}>
+    /*   <EpistoFlex2
+          direction='column'
+          position='fixed'
+          top='0'
+          left='0'
+          width='100vw'
+          height='100vh'
+          align='center'
+          justify='center'
+          background='#FFFFFF99'
+          backdropFilter='blur(10px)'
+          zIndex={33}> */
+
+    return <div
+        style={{
+            position: 'fixed',
+            top: '0',
+            left: '0',
+            background: '#FFFFFF99',
+            width: '100vw',
+            height: '100vh',
+            zIndex: 9999
+        }}>
 
         <EpistoFlex2
             width='100%'
@@ -60,5 +71,5 @@ export const ShouldRotatePhoneOverlay = (props: {
         </EpistoButton>
 
 
-    </EpistoFlex2>;
+    </div>;
 };
