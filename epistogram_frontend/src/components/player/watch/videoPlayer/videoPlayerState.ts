@@ -437,6 +437,7 @@ export const useVideoPlayerState = (
         isReady,
         showMobilePlayButtonOverlay,
         showShouldRotatePhoneOverlay,
+        setShowShouldRotatePhoneOverlay,
         trickUnmutedAutoplay,
         showControlOverlay,
         setPlayedSeconds,

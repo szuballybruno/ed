@@ -39,6 +39,7 @@ export const VideoPlayer = (props: {
         isIPhone,
         showMobilePlayButtonOverlay,
         showShouldRotatePhoneOverlay,
+        setShowShouldRotatePhoneOverlay,
         showControlOverlay,
         setPlayedSeconds,
         toggleFullScreen,
@@ -93,7 +94,7 @@ export const VideoPlayer = (props: {
                     zIndex: 100000000000000000000
                 }}
                 onClick={() => {
-                    toggleFullScreen();
+                    setShowShouldRotatePhoneOverlay(x => !x);
                 }}>
 
                 Testing the test testing test
