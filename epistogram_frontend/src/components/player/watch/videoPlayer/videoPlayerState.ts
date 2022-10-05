@@ -259,9 +259,6 @@ export const useVideoPlayerState = (
         getDuration: () => React.SetStateAction<number>;
     }) => {
 
-        if (isReady)
-            return;
-
         Logger.logScoped('PLAYBACK', 'handleOnReady runs...');
         Logger.logScoped('PLAYBACK', 'Setting video length to: ' + e.getDuration());
         setIsReady(true);
