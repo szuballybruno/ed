@@ -21,6 +21,7 @@ export const ShouldRotatePhoneOverlay = (props: {
         justify='center'
         background='#FFFFFF99'
         backdropFilter='blur(10px)'
+        transform='translate3d(0,0,1px)'
         zIndex={1000000}>
 
         <EpistoFlex2
