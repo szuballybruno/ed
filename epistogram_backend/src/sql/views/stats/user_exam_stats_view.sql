@@ -9,7 +9,7 @@ SELECT DISTINCT ON (e.id)
 		THEN false
 		ELSE true
 	END should_practise_exam,
-	ROUND(asv.answer_session_acquired_points / 4, 4) correct_answer_count,
+	ROUND(asv.answer_session_acquired_points / 4) correct_answer_count,
 	EXTRACT(EPOCH FROM (asv.end_date - asv.start_date)::time)::int exam_length_seconds,
 	asv.end_date last_completion_date,
 	(

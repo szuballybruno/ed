@@ -94,7 +94,7 @@ export const AdminEditUserSubpage = (props: {
 
     const bulkEditButtons = [
         {
-            title: 'Hozzáadás',
+            title: 'Felhasználó hozzáadása',
             icon: <Add
                 style={{
                     margin: '0 3px 0 0',

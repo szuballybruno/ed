@@ -204,27 +204,16 @@ export class UserStatsService {
      * Gets the statistics for the users every completed exam
      */
 
-    getUserExamStatsAsync(principalId: PrincipalId, courseId: Id<'Course'>, userId: Id<'User'>) {
+    async getUserExamStatsAsync(principalId: PrincipalId, courseId: Id<'Course'>, userId: Id<'User'>) {
 
-        return {
-            action: async () => {
+        const stats = await this._ormService
+            .query(UserExamStatsView, { userId, courseId })
+            .where('userId', '=', 'userId')
+            .and('courseId', '=', 'courseId')
+            .getMany();
 
-                const stats = await this._ormService
-                    .query(UserExamStatsView, { userId, courseId })
-                    .where('userId', '=', 'userId')
-                    .and('courseId', '=', 'courseId')
-                    .getMany();
-
-                return this._mapperService
-                    .mapTo(UserExamStatsDTO, [stats]);
-            },
-            auth: async () => {
-
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ACCESS_ADMIN');
-            }
-        };
-
+        return this._mapperService
+            .mapTo(UserExamStatsDTO, [stats]);
     }
 
     /**

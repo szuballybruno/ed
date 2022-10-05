@@ -59,12 +59,6 @@ export const AdminUserCourseContentDialog = (props: {
                         function (): void {
                             throw new Error('Function not implemented.');
                         }} />
-            },
-            {
-                title: 'Kommentek/kérdések',
-                component: <EpistoFlex2>
-                    Kommentek/kérdések
-                </EpistoFlex2>
             }
         ]
         : [];

@@ -26,8 +26,7 @@ export const NavigationLinkList = (props: {
                         p="5px 15px"
                         bg={isCurrent ? 'white' : undefined}
                         align="center"
-                        borderLeft={isCurrent ? 'solid 4px var(--mildDeepBlue)' : undefined}
-                        className={`${isCurrent ? 'mildShadow' : ''}`}
+                        borderLeft={isCurrent ? 'solid 4px var(--mildDeepBlue)' : 'solid 4px transparent'}
                         borderRadius="0px 5px 5px 0px">
 
                         {/* icon */}
