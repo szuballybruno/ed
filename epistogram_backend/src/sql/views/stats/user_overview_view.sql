@@ -25,7 +25,7 @@ completed_course_items AS
 	SELECT
 		cic.user_id,
 		COUNT(*)::int completed_course_item_count
-	FROM public.course_item_completion cic
+	FROM public.course_item_completion_view cic
 
 	GROUP BY cic.user_id
 )

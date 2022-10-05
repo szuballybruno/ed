@@ -13,7 +13,7 @@ WITH user_performances AS (
      SELECT
          cic.user_id,
          SUM((cic.video_version_id IS NOT NULL)::int) watched_videos_count
-     FROM public.course_item_completion cic
+     FROM public.course_item_completion_view cic
      GROUP BY cic.user_id
  ),
  engagement_points AS (

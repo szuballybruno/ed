@@ -9,7 +9,7 @@ FROM
 		ucb.user_id user_id,
 		ucb.course_id,
 		now()::date - ucb.start_date::date + 1 days_elapsed_since_start,
-		COUNT(cicv.course_item_completion_id)::int total_completed_item_count,
+		COUNT(*)::int total_completed_item_count,
 		coicv.item_count total_item_count
 	FROM public.user_course_bridge ucb 
 

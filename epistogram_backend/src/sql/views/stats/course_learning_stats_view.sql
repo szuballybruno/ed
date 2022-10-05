@@ -94,7 +94,7 @@ completed_video_count AS
 	SELECT
 		cicv.user_id,
 		cicv.course_id,
-		COUNT(cicv.course_item_completion_id) completed_video_count
+		COUNT(*) completed_video_count
 	FROM public.course_item_completion_view cicv
 	
 	GROUP BY cicv.user_id, cicv.course_id

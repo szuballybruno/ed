@@ -37,7 +37,6 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
         stageName: CourseStageNameType,
         itemCode: string | null) {
 
-
         const currentCourseBridge = await this._ormService
             .query(UserCourseBridge, {
                 userId,

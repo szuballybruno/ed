@@ -1,8 +1,8 @@
-import { CourseItemCompletion } from '../models/entity/misc/CourseItemCompletion';
+import { UserVideoProgressBridge } from '../models/entity/misc/UserVideoProgressBridge';
+import { VideoCompletion } from '../models/entity/misc/VideoCompletion';
 import { ModuleVersion } from '../models/entity/module/ModuleVersion';
 import { VideoPlaybackSample } from '../models/entity/playback/VideoPlaybackSample';
 import { VideoSeekEvent } from '../models/entity/playback/VideoSeekEvent';
-import { UserVideoProgressBridge } from '../models/entity/misc/UserVideoProgressBridge';
 import { VideoData } from '../models/entity/video/VideoData';
 import { VideoFile } from '../models/entity/video/VideoFile';
 import { VideoVersion } from '../models/entity/video/VideoVersion';
@@ -10,6 +10,7 @@ import { VideoCursorSecondsView } from '../models/views/VideoCursorSecondsView';
 import { VideoPlaybackSampleDTO } from '../shared/dtos/playback/VideoPlaybackSampleDTO';
 import { VideoSeekEventDTO } from '../shared/dtos/playback/VideoSeekEventDTO';
 import { VideoSamplingResultDTO } from '../shared/dtos/VideoSamplingResultDTO';
+import { instantiate } from '../shared/logic/sharedLogic';
 import { Id } from '../shared/types/versionId';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { AuthorizationService } from './AuthorizationService';
@@ -21,7 +22,6 @@ import { ServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { SampleMergeService } from './SampleMergeService';
 import { UserSessionActivityService } from './UserSessionActivityService';
-import { instantiate } from '../shared/logic/sharedLogic';
 
 export class PlaybackService extends ServiceBase {
 
@@ -312,10 +312,8 @@ export class PlaybackService extends ServiceBase {
          */
         if (newCompletionDate)
             await this._ormService
-                .createAsync(CourseItemCompletion, {
-                    answerSessionId: null,
+                .createAsync(VideoCompletion, {
                     completionDate: new Date(),
-                    examVersionId: null,
                     videoVersionId,
                     userId
                 });
@@ -325,8 +323,9 @@ export class PlaybackService extends ServiceBase {
         userId: Id<'User'>,
         videoVersionId: Id<'VideoVersion'>) {
 
-        const courseItemCompletion = await this._ormService
-            .query(CourseItemCompletion, { userId, videoVersionId })
+        const courseItemCompletion = await this
+            ._ormService
+            .query(VideoCompletion, { userId, videoVersionId })
             .where('videoVersionId', '=', 'videoVersionId')
             .and('userId', '=', 'userId')
             .getOneOrNull();

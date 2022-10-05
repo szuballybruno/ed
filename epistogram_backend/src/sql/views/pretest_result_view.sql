@@ -17,7 +17,7 @@ AND e.is_pretest = true
 INNER JOIN public.exam_score_view esv
 ON esv.answer_session_id = lasv.answer_session_id
 
-INNER JOIN public.course_item_completion cic
+INNER JOIN public.course_item_completion_view cic
 ON cic.answer_session_id = lasv.answer_session_id
 
 LEFT JOIN public.module_version mv

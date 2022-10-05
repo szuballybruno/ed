@@ -1,7 +1,4 @@
-import { Exam } from '../models/entity/exam/Exam';
-import { ExamVersion } from '../models/entity/exam/ExamVersion';
-import { ModuleVersion } from '../models/entity/module/ModuleVersion';
-import { LatestCourseVersionView } from '../models/views/LatestCourseVersionView';
+import { LatestExamView } from '../models/views/LatestExamView';
 import { PlaylistView } from '../models/views/PlaylistView';
 import { PretestResultView } from '../models/views/PretestResultView';
 import { PretestDataDTO } from '../shared/dtos/PretestDataDTO';
@@ -40,12 +37,9 @@ export class PretestService {
     ) {
         const userId = principalId.getId();
 
-        // set course as started, and stage to pretest
-        await this._courseBridgeService
-            .setStageAsync(userId, courseId, 'pretest', null);
-
         // get pretest exam
-        const pretestExam = await this._getPretestExamPlayerData(userId, courseId);
+        const pretestExam = await this
+            ._getPretestExamPlayerData(userId, courseId);
 
         // get answer session
         const answerSessionId = await this._questionAnswerService
@@ -87,14 +81,6 @@ export class PretestService {
         const originalPrevisionedCompletionDate = tempomatValues?.originalPrevisionedCompletionDate || null;
         const recommendedItemsPerDay = tempomatValues?.recommendedItemsPerDay || null;
         const requiredCompletionDate = tempomatValues?.requiredCompletionDate || null;
-
-        /**
-         * Set stage,
-         * it's the last thing so it won't
-         * be called if an error occures
-         */
-        await this._courseBridgeService
-            .setStageAsync(userId, courseId, 'pretest_results', null);
 
         /**
          * Get first item playlist code 
@@ -168,17 +154,9 @@ export class PretestService {
     private async _getPretestExamPlayerData(userId: Id<'User'>, courseId: Id<'Course'>) {
 
         const pretestExam = await this._ormService
-            .withResType<ExamVersion>()
-            .query(LatestCourseVersionView, { courseId })
-            .select(ExamVersion)
-            .leftJoin(ModuleVersion, (x) => x
-                .on('courseVersionId', '=', 'versionId', LatestCourseVersionView))
-            .leftJoin(ExamVersion, (x) => x
-                .on('moduleVersionId', '=', 'id', ModuleVersion))
-            .innerJoin(Exam, (x) => x
-                .on('id', '=', 'examId', ExamVersion)
-                .and('isPretest', '=', 'true'))
+            .query(LatestExamView, { courseId })
             .where('courseId', '=', 'courseId')
+            .and('isPretest', '=', 'true')
             .getSingle();
 
         return await this._examService
