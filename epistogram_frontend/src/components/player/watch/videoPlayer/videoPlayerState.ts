@@ -32,6 +32,7 @@ export const useVideoPlayerState = (
     const [volume, setVolume] = useState(1);
     const [isMuted, setIsMuted] = useState(false);
     const [isPlaying, setIsPlaying] = useState(true);
+    const [isReady, setIsReady] = useState(false);
 
     const [isFullscreen, setIsFullscreen] = useVideoPlayerFullscreenContext();
 
@@ -249,18 +250,22 @@ export const useVideoPlayerState = (
         }
     }, [disableFullscreenMode, screenfullEnabled]);
 
+    const trickUnmutedAutoplay = useCallback(() => {
+
+        stopPlaying();
+        return startPlaying();
+    }, [startPlaying, stopPlaying]);
+
     const handleOnReady = useCallback((e: {
         getDuration: () => React.SetStateAction<number>;
     }) => {
 
+        if (isReady)
+            return;
+
         Logger.logScoped('PLAYBACK', 'handleOnReady runs...');
         Logger.logScoped('PLAYBACK', 'Setting video length to: ' + e.getDuration());
-        Logger.logScoped('PLAYBACK', 'Tricking unmuted autoplay by setting isPlaying to false and true');
-        setIsPlaying(false);
-        setTimeout(() => {
-
-            return setIsPlaying(true);
-        }, 2000);
+        setIsReady(true);
         setVideoLength(e.getDuration());
 
         if (isPlaying === false || isSeeking || playedSeconds > 1 || isShowingOverlay) {
@@ -281,13 +286,13 @@ export const useVideoPlayerState = (
             return stopPlaying();
         }
 
-        /*         if (!isShowingOverlay && playedSeconds < 1) { */
+        if (!isShowingOverlay && playedSeconds < 1) {
 
+            Logger.logScoped('PLAYBACK', 'Tricking unmuted autoplay by setting isPlaying to false and true');
+            trickUnmutedAutoplay();
+        }
 
-        /*         } */
-
-
-    }, [isPlaying, isSeeking, playedSeconds, isShowingOverlay, isMobile, isLandscape, stopPlaying, setIsPlaying]);
+    }, [isReady, isPlaying, isSeeking, playedSeconds, isShowingOverlay, isMobile, isLandscape, stopPlaying, trickUnmutedAutoplay]);
 
     const toggleFullScreen = () => {
 
@@ -324,9 +329,6 @@ export const useVideoPlayerState = (
         }, 200);
     };
 
-
-
-
     const toggleIsPlaying = () => {
 
         Logger.logScoped('PLAYBACK', 'toggleIsPlaying runs...');
@@ -338,8 +340,6 @@ export const useVideoPlayerState = (
             ? stopPlaying()
             : startPlaying();
     };
-
-
 
     const jump = (right?: boolean) => {
 
@@ -439,8 +439,10 @@ export const useVideoPlayerState = (
         isIPhone,
         isMobile,
         isLandscape,
+        isReady,
         showMobilePlayButtonOverlay,
         showShouldRotatePhoneOverlay,
+        trickUnmutedAutoplay,
         showControlOverlay,
         setPlayedSeconds,
         setVideoLength,

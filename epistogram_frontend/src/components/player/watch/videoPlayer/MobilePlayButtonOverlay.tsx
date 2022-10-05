@@ -10,7 +10,16 @@ export const MobilePlayButtonOverlay = (props: {
     const { videoPlayerState } = props;
 
     const [isFullscreen] = useVideoPlayerFullscreenContext();
-    const { enableFullscreenMode, isLandscape, toggleIsPlaying } = videoPlayerState;
+    const { enableFullscreenMode, isLandscape, toggleIsPlaying, trickUnmutedAutoplay, isReady } = videoPlayerState;
+
+    const startPlayingWithFullscreen = () => {
+
+        if (isReady) {
+            return trickUnmutedAutoplay();
+        }
+
+        enableFullscreenMode();
+    };
 
     return <EpistoFlex2
         top='0'
