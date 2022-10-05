@@ -11,17 +11,18 @@ LANGUAGE plpgsql
 AS $$
 DECLARE
   var_pretest_comp record;
-  var_prequiz_comp record;
+  var_is_prequiz_completed boolean;
 BEGIN
 
     -- check prequiz
-    SELECT *
-    FROM public.prequiz_completion pc
-    WHERE pc.user_id = NEW.user_id
-    AND pc.course_id = NEW.course_id
-    INTO var_prequiz_comp;
+    SELECT COUNT(*) = 3
+    FROM public.prequiz_user_answer pua
+    WHERE pua.user_id = NEW.user_id
+    AND pua.course_id = NEW.course_id
+    GROUP BY pua.user_id, pua.course_id
+    INTO var_is_prequiz_completed;
 
-	IF (var_prequiz_comp IS NULL AND 
+	IF (var_is_prequiz_completed IS DISTINCT FROM true AND 
         (NEW.stage_name = 'pretest' OR 
         NEW.stage_name = 'pretest_results' OR
         NEW.stage_name = 'watch' OR 

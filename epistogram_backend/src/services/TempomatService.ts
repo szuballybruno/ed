@@ -334,19 +334,20 @@ export class TempomatService {
      *         than on LIGHT MODE and the PREVISIONED VIDEOS PER DAY will be a bit HIGHER
      */
     private _calculatePrevisionedDate(
-        originalPrevisionedCompletionDate: Date,
+        originalPrevisionedCompletionDate: Date | null,
         totalItemCount: number,
         totalCompletedItemCount: number,
         startDate: Date,
         tempomatMode: TempomatModeType,
         adjustmentCorrection: number
     ) {
+        if (!originalPrevisionedCompletionDate)
+            throw new Error('Previsioned length is null, this could mean theres a problem with the prequiz or a view depending on it.');
 
         const originalPrevisionedLength = this
             ._calculateOriginalPrevisionedLength(originalPrevisionedCompletionDate, startDate);
 
-        const originalEstimatedVideosPerDay = this
-            ._calculateOriginalEstimatedVideosPerDay(totalItemCount, originalPrevisionedLength);
+        const originalEstimatedVideosPerDay = totalItemCount / originalPrevisionedLength;
 
         const daysSpentFromStartDate = this
             ._calculateDaysSpentFromStartDate(startDate);
@@ -431,17 +432,6 @@ export class TempomatService {
     private _calculateOriginalPrevisionedLength(originalPrevisionedCompletionDate: Date, startDate: Date) {
 
         return dateDiffInDays(startDate, originalPrevisionedCompletionDate);
-    }
-
-    private _calculateOriginalEstimatedVideosPerDay(
-        videosCount: number,
-        originalPrevisionedLength: number
-    ) {
-
-        if (!originalPrevisionedLength)
-            throw new Error('Pretest hasn\'t been done');
-
-        return videosCount / originalPrevisionedLength;
     }
 
     private _calculateDaysSpentFromStartDate(startDate: Date) {
