@@ -57,7 +57,7 @@ export class PlayerService {
 
         // set current course 
         await this._userCourseBridgeService
-            .setCurrentCourse(userId, courseId, 'watch', validItemCode);
+            .setStageAsync(userId, courseId, 'watch', validItemCode);
 
         // course items list
         const modules = await this

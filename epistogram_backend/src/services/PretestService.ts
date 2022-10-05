@@ -8,9 +8,7 @@ import { PretestDataDTO } from '../shared/dtos/PretestDataDTO';
 import { PretestResultDTO } from '../shared/dtos/PretestResultDTO';
 import { instantiate } from '../shared/logic/sharedLogic';
 import { Id } from '../shared/types/versionId';
-import { throwNotImplemented } from '../utilities/helpers';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
-import { AuthorizationResult } from '../utilities/XTurboExpress/XTurboExpressTypes';
 import { AuthorizationService } from './AuthorizationService';
 import { ExamService } from './ExamService';
 import { MapperService } from './MapperService';
@@ -33,23 +31,6 @@ export class PretestService {
         private _permissionService: PermissionService) {
     }
 
-    async createPretestExamAsync(courseId: Id<'Course'>) {
-
-        throwNotImplemented();
-        // const newExam = {
-        //     courseId,
-        //     orderIndex: 0,
-        //     title: '',
-        //     type: 'pretest',
-        //     subtitle: ''
-        // } as ExamData;
-
-        // await this._examService
-        //     .createExamAsync(newExam);
-
-        // return newExam.id;
-    }
-
     /**
      * Returns pretest data for the principal user - and a course
      */
@@ -61,7 +42,7 @@ export class PretestService {
 
         // set course as started, and stage to pretest
         await this._courseBridgeService
-            .setCurrentCourse(userId, courseId, 'pretest', null);
+            .setStageAsync(userId, courseId, 'pretest', null);
 
         // get pretest exam
         const pretestExam = await this._getPretestExamPlayerData(userId, courseId);
@@ -113,7 +94,7 @@ export class PretestService {
          * be called if an error occures
          */
         await this._courseBridgeService
-            .setCurrentCourse(userId, courseId, 'pretest_results', null);
+            .setStageAsync(userId, courseId, 'pretest_results', null);
 
         /**
          * Get first item playlist code 
@@ -137,37 +118,14 @@ export class PretestService {
             ]);
     }
 
-    getPretestExamIdAsync(courseId: Id<'Course'>) {
-
-        return {
-            action: async () => {
-                throwNotImplemented();
-                // const exam = await this._ormService
-                //     .query(ExamData, {
-                //             courseId,
-                //             type: 'pretest'
-                //         })
-                //     .where('courseId', '=', 'courseId')
-                //     .and('type', '=', 'type')
-                //     .getOneOrNull();
-
-                // return {
-                //     id: exam.id
-                // } as IdResultDTO;
-            },
-            auth: async () => {
-
-                return AuthorizationResult.ok;
-            }
-        };
-    }
-
     /**
      * Finishes a pretest exam
      */
     async finishPretestAsync(
         principalId: PrincipalId,
         answerSessionId: Id<'AnswerSession'>) {
+
+        const userId = principalId.getId();
 
         // finish pretest
         await this
@@ -177,7 +135,7 @@ export class PretestService {
         // start course
         const courseId = await this
             ._courseBridgeService
-            .getCurrentCourseIdOrFail(principalId.getId());
+            .getCurrentCourseIdOrFail(userId);
 
         await this._courseBridgeService
             .setCourseStartDateAsync(principalId, courseId)
@@ -189,12 +147,19 @@ export class PretestService {
          */
         const assingedSetCourseModePermission = await this
             ._permissionService
-            .getPermissionAsync(principalId.getId(), 'SET_COURSE_MODE', { courseId });
+            .getPermissionAsync(userId, 'SET_COURSE_MODE', { courseId });
 
         if (!assingedSetCourseModePermission)
             await this
                 ._permissionService
-                .assignPermission(principalId.getId(), 'SET_COURSE_MODE', { courseId });
+                .assignPermission(userId, 'SET_COURSE_MODE', { courseId });
+
+        /**
+         * Set results stage
+         */
+        await this
+            ._courseBridgeService
+            .setStageAsync(userId, courseId, 'pretest_results', null);
     }
 
     /**

@@ -403,7 +403,8 @@ export const createDBSchema = (): XDBMSchemaService => {
             { fileName: 'course_item_completion_constraints' },
             { fileName: 'prequiz_completion_constraints' },
             { fileName: 'course_completion_constraints' },
-            { fileName: 'course_access_bridge_constraints' }
+            { fileName: 'course_access_bridge_constraints' },
+            { fileName: 'prequiz_constraints' }
         ],
 
         indices: [

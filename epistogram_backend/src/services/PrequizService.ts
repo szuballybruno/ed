@@ -42,7 +42,7 @@ export class PrequizService {
 
                 // set course as started, and stage to prequiz
                 await this._courseBridgeService
-                    .setCurrentCourse(userId, courseId, 'prequiz', null);
+                    .setStageAsync(userId, courseId, 'prequiz', null);
 
                 const views = await this._ormService
                     .query(PrequizQuestionView)

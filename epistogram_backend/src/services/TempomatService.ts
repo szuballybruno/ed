@@ -260,42 +260,49 @@ export class TempomatService {
         requiredCompletionDate
     }: CalculateTempomatValuesArgs): CalculatedTempomatValueType {
 
-        const previsionedCompletionDate = this
-            ._calculatePrevisionedDate(
-                originalPrevisionedCompletionDate,
-                totalItemCount,
-                totalCompletedItemCount,
-                startDate,
-                tempomatMode,
-                tempomatAdjustmentValue
-            );
+        try {
 
-        const { recommendedItemsPerDay, recommendedItemsPerWeek } = this
-            ._calculateRecommendedItemsPerDay(
-                startDate,
+            const previsionedCompletionDate = this
+                ._calculatePrevisionedDate(
+                    originalPrevisionedCompletionDate,
+                    totalItemCount,
+                    totalCompletedItemCount,
+                    startDate,
+                    tempomatMode,
+                    tempomatAdjustmentValue
+                );
+
+            const { recommendedItemsPerDay, recommendedItemsPerWeek } = this
+                ._calculateRecommendedItemsPerDay(
+                    startDate,
+                    previsionedCompletionDate,
+                    requiredCompletionDate,
+                    totalItemCount
+                );
+
+            const lagBehindPercentage = this
+                ._calculateLagBehindPercentage(
+                    startDate,
+                    requiredCompletionDate
+                        ? requiredCompletionDate
+                        : originalPrevisionedCompletionDate,
+                    previsionedCompletionDate
+                );
+
+            return instantiate<CalculatedTempomatValueType>({
                 previsionedCompletionDate,
+                recommendedItemsPerDay,
+                recommendedItemsPerWeek,
+                originalPrevisionedCompletionDate,
                 requiredCompletionDate,
-                totalItemCount
-            );
-
-        const lagBehindPercentage = this
-            ._calculateLagBehindPercentage(
                 startDate,
-                requiredCompletionDate
-                    ? requiredCompletionDate
-                    : originalPrevisionedCompletionDate,
-                previsionedCompletionDate
-            );
+                lagBehindPercentage
+            });
+        }
+        catch (e: any) {
 
-        return instantiate<CalculatedTempomatValueType>({
-            previsionedCompletionDate,
-            recommendedItemsPerDay,
-            recommendedItemsPerWeek,
-            originalPrevisionedCompletionDate,
-            requiredCompletionDate,
-            startDate,
-            lagBehindPercentage
-        });
+            throw new Error(`Tempomat calculation error! Msg: ${e.message}`);
+        }
     }
 
     /**
