@@ -253,9 +253,10 @@ export const useVideoPlayerState = (
     const trickUnmutedAutoplay = useCallback(() => {
 
         Logger.logScoped('PLAYBACK', 'Trick unmuted autoplay callback runs...');
-        stopPlaying();
-        return startPlaying();
-    }, [startPlaying, stopPlaying]);
+        setIsPlaying(false);
+        setIsPlaying(true);
+        return setIsPlaying(false);
+    }, []);
 
     const handleOnReady = useCallback((e: {
         getDuration: () => React.SetStateAction<number>;
