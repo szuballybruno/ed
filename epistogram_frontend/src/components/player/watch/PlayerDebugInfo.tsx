@@ -1,3 +1,4 @@
+import { secondsToTime } from '../../../static/frontendHelpers';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { useVideoPlayerFullscreenContext } from './videoPlayer/VideoPlayerFullscreenFrame';
 import { VideoPlayerStateType } from './videoPlayer/videoPlayerState';
@@ -31,23 +32,24 @@ export const PlayerDebugInfo = (props: {
         left='0'
         color='red'
         fontWeight='bold'
-        background='#FFFFFF33'
+        background='#FFFFFFAA'
         maxWidth='40%'
+        overflow='hidden'
         zIndex={31}>
 
-        {'isFullscreen: ' + isFullscreen}<br />
+        {'isFulls.: ' + isFullscreen}<br />
         {'isIPhone: ' + isIPhone}<br />
-        {'isMuted: ' + isMuted}<br />
-        {'isLandscape: ' + isLandscape}<br />
-        {'isPlaying: ' + isPlaying}<br />
-        {'isSeeking: ' + isSeeking}<br />
-        {'isShowingOverlay: ' + isShowingOverlay}<br />
-        {'showMobilePlayButtonOverlay: ' + showMobilePlayButtonOverlay}<br />
-        {'showShouldRotatePhoneOverlay: ' + showShouldRotatePhoneOverlay}<br />
-        {'playedSeconds: ' + playedSeconds}<br />
-        {'controlsVisible: ' + controlsVisible}<br />
-        {'isMobile: ' + isMobile}<br />
-        {'videoLength: ' + videoLength}<br />
-        {'videoTitle: ' + videoTitle}<br />
+        {'isMuted. ' + isMuted}<br />
+        {'isLands.: ' + isLandscape}<br />
+        {'isPlayi.: ' + isPlaying}<br />
+        {'isSeeki.: ' + isSeeking}<br />
+        {'isShowOv.: ' + isShowingOverlay}<br />
+        {'showMob.: ' + showMobilePlayButtonOverlay}<br />
+        {'showSho.: ' + showShouldRotatePhoneOverlay}<br />
+        {'playedS.: ' + playedSeconds}<br />
+        {'control.: ' + controlsVisible}<br />
+        {'isMobil.: ' + isMobile}<br />
+        {'videoLe.: ' + secondsToTime(videoLength)}<br />
+        {'videoTi.: ' + videoTitle}<br />
     </EpistoFlex2>;
 };
