@@ -255,6 +255,12 @@ export const useVideoPlayerState = (
 
         Logger.logScoped('PLAYBACK', 'handleOnReady runs...');
         Logger.logScoped('PLAYBACK', 'Setting video length to: ' + e.getDuration());
+        Logger.logScoped('PLAYBACK', 'Tricking unmuted autoplay by setting isPlaying to false and true');
+        setIsPlaying(false);
+        setTimeout(() => {
+
+            return setIsPlaying(true);
+        }, 2000);
         setVideoLength(e.getDuration());
 
         if (isPlaying === false || isSeeking || playedSeconds > 1 || isShowingOverlay) {
@@ -277,9 +283,7 @@ export const useVideoPlayerState = (
 
         /*         if (!isShowingOverlay && playedSeconds < 1) { */
 
-        Logger.logScoped('PLAYBACK', 'Tricking unmuted autoplay by setting isPlaying to false and true');
-        setIsPlaying(false);
-        setIsPlaying(true);
+
         /*         } */
 
 
