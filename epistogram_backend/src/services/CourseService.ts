@@ -131,14 +131,16 @@ export class CourseService {
     ) {
 
         const courseDetailsView = await this._ormService
-            .query(CourseDetailsView, { principalId, courseId })
-            .where('userId', '=', 'principalId')
+            .query(CourseDetailsView, { userId: principalId.getId(), courseId })
+            .where('userId', '=', 'userId')
             .and('courseId', '=', 'courseId')
             .getSingle();
 
+        console.log(courseDetailsView);
+
         const moduleViews = await this._ormService
-            .query(PlaylistView, { principalId, courseId })
-            .where('userId', '=', 'principalId')
+            .query(PlaylistView, { userId: principalId.getId(), courseId })
+            .where('userId', '=', 'userId')
             .and('courseId', '=', 'courseId')
             .getMany();
 

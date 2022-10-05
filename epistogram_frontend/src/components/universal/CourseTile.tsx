@@ -27,6 +27,7 @@ export const CourseTile = ({
     const courseSubCategory = course.subCategoryName;
     const thumbnailImageUrl = course.thumbnailImageURL;
     const isComplete = course.isComplete;
+    const isStartedCourse = course.currentItemCode || (course.stageName !== null && course.stageName !== 'assigned');
 
     return <FlexFloat
         className="whall roundBorders"
@@ -173,7 +174,7 @@ export const CourseTile = ({
                 variant="colored"
                 style={{ flex: '1' }}>
 
-                {course.currentItemCode
+                {isStartedCourse
                     ? translatableTexts.availableCourses.continueCourse
                     : translatableTexts.availableCourses.startCourse}
             </EpistoButton>

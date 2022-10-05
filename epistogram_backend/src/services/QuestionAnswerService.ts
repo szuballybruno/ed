@@ -107,6 +107,9 @@ export class QuestionAnswerService {
             givenAnswerDTOs: GivenAnswerDTO[]
         }) {
 
+        const givenAnswersFlat = givenAnswerDTOs
+            .flatMap(x => x.answerVersionIds);
+
         /**
          * Get given answer views 
          */
@@ -120,8 +123,7 @@ export class QuestionAnswerService {
          * Get answer scores 
          */
         const answerScores = await this
-            ._getAnswerScoresAsync(givenAnswerDTOs
-                .flatMap(x => x.answerVersionIds), givenAnswerViews);
+            ._getAnswerScoresAsync(givenAnswersFlat, givenAnswerViews);
 
         /**
          * Insert given answers 
@@ -412,7 +414,7 @@ export class QuestionAnswerService {
                 });
             });
 
-        return answerVersionIds
+        const answerScoreDTOs = answerVersionIds
             .map(answerVersionId => {
 
                 const answerView = givenAnswerViews
@@ -430,6 +432,8 @@ export class QuestionAnswerService {
                     score
                 });
             });
+
+        return answerScoreDTOs;
     }
 
     /**

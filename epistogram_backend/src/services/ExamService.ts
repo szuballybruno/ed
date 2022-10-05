@@ -155,6 +155,9 @@ export class ExamService {
         await this
             ._courseCompletionService
             .tryFinishCourseAsync(principalId.getId(), moduleVersion.courseVersionId);
+
+        this._loggerService
+            .logScoped('GENERIC', 'Exam finished successfully!' + principalId);
     }
 
     /**

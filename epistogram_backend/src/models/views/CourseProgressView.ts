@@ -1,6 +1,7 @@
 import { ViewColumn, ViewEntity } from '../MyORM';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
 import { Id } from '../../shared/types/versionId';
+import { CourseStageNameType } from '../../shared/types/sharedTypes';
 
 @ViewEntity({
     synchronize: false,
@@ -34,5 +35,9 @@ export class CourseProgressView {
 
     @ViewColumn()
     @XViewColumn()
-    continueItemCode: string;
+    currentItemCode: string;
+
+    @ViewColumn()
+    @XViewColumn()
+    currentStageName: CourseStageNameType;
 }

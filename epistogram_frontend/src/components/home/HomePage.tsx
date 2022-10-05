@@ -87,6 +87,7 @@ const CoinsAcquiredHeaderContent = ({ coinsAcquired }: { coinsAcquired }) => {
 const HomePage = () => {
 
     const { pageDTO, status, error } = useOverviewPageDTO();
+    const { currentCourseProgress } = pageDTO ?? { currentCourseProgress: null };
     const { navigate2 } = useNavigation();
 
     useSetBusy(useOverviewPageDTO, status, error);
@@ -108,22 +109,20 @@ const HomePage = () => {
         {!isMobile && <LeftPane>
 
             {/* current course items and progress */}
-            {pageDTO?.currentCourseProgress && <EpistoFlex2
+            {currentCourseProgress && <EpistoFlex2
                 className='roundBorders'
                 mx="10px"
                 direction="column">
 
                 <CourseProgressDisplay
-                    value={pageDTO.currentCourseProgress.progressPercentage}
-                    label={pageDTO.currentCourseProgress.title}
-                    continueItemCode={pageDTO.currentCourseProgress.continueItemCode}
+                    dto={currentCourseProgress}
                     mb="5px" />
 
                 <EpistoFlex2
                     direction="column"
                     mt="5px">
 
-                    {(pageDTO.currentCourseProgress.nextItems ?? [])
+                    {(currentCourseProgress.nextItems ?? [])
                         .map((playlistItem, index) => (
                             <PlaylistItem
                                 key={index}

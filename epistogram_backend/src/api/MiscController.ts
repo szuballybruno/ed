@@ -44,21 +44,10 @@ export class MiscController implements XController<MiscController> {
     }
 
     @XControllerAction(apiRoutes.misc.getHomePageDTO)
-    getOverviewPageDTOAction(params: ActionParams) {
+    async getOverviewPageDTOAction(params: ActionParams) {
 
-        return {
-            action: async () => {
-
-                return this._miscService
-                    .getOverviewPageDTOAsync(params.principalId);
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(params.principalId, 'ACCESS_APPLICATION');
-            }
-        };
-
-
+        return await this._miscService
+            .getOverviewPageDTOAsync(params.principalId);
     }
 
     @XControllerAction(apiRoutes.misc.getJobTitles)

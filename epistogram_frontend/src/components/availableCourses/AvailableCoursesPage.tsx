@@ -44,7 +44,7 @@ const AvailableCoursesPage = () => {
     const { courseCategories, courseCategoriesState, courseCategoriesError } = CourseApiService
         .useAvailableCourseCategories();
 
-    const { playCourse, navigateToCourseDetails } = useNavigation();
+    const { continueCourse: playCourse, navigateToCourseDetails } = useNavigation();
     const showError = useShowErrorDialog();
 
     useSetBusy(CourseApiService.useUserCourses, coursesState, coursesError);

@@ -84,7 +84,7 @@ export const useNavigation = () => {
      */
     const navigateToCourseOverview = (courseId: Id<'Course'>) => navigate2(applicationRoutes.playerRoute.courseOverviewRoute, { courseId });
 
-    const playCourse = (courseId: Id<'Course'>, stageName: CourseStageNameType, currentItemCode: string | null) => {
+    const continueCourse = (courseId: Id<'Course'>, stageName: CourseStageNameType | null, currentItemCode: string | null) => {
 
         if (currentItemCode) {
 
@@ -120,7 +120,7 @@ export const useNavigation = () => {
         navigateToPretestGreeting,
         navigateToCourseRating,
         navigateToCourseOverview,
-        playCourse,
+        continueCourse,
         navigateToAdminCourseList,
         navigateToHref
     };
