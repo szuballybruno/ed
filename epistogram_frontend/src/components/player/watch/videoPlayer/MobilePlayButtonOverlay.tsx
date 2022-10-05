@@ -15,10 +15,10 @@ export const MobilePlayButtonOverlay = (props: {
     const startPlayingWithFullscreen = () => {
 
         if (isReady) {
-            return trickUnmutedAutoplay();
+            trickUnmutedAutoplay();
         }
 
-        enableFullscreenMode();
+        return enableFullscreenMode();
     };
 
     return <EpistoFlex2

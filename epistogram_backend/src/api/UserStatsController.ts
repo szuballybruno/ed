@@ -23,7 +23,7 @@ export class UserStatsController implements XController<UserStatsController> {
     }
 
     @XControllerAction(apiRoutes.userStats.getUserLearningPageStats)
-    getUserLearningPageStatsAction(params: ActionParams) {
+    async getUserLearningPageStatsAction(params: ActionParams) {
 
         return this._userStatsService
             .getUserLearningPageStatsAsync(params.principalId);

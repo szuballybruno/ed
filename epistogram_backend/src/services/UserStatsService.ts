@@ -93,32 +93,23 @@ export class UserStatsService {
         };
     }
 
-    getUserLearningPageStatsAsync(principalId: PrincipalId) {
+    async getUserLearningPageStatsAsync(principalId: PrincipalId) {
 
-        return {
-            action: async () => {
+        const userId = principalId
+            .getId();
 
-                const userId = principalId
-                    .getId();
+        const stats = await this._ormService
+            .query(UserLearningPageStatsView, { userId })
+            .where('userId', '=', 'userId')
+            .getSingle();
 
-                const stats = await this._ormService
-                    .query(UserLearningPageStatsView, { userId })
-                    .where('userId', '=', 'userId')
-                    .getSingle();
+        const avgLagBehindPercentage = await this
+            ._tempomatService
+            .getAvgLagBehindPercentageAsync(userId);
 
-                const avgLagBehindPercentage = await this
-                    ._tempomatService
-                    .getAvgLagBehindPercentageAsync(userId);
-
-                return this
-                    ._mapperService
-                    .mapTo(UserLearningPageStatsDTO, [stats, avgLagBehindPercentage]);
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
-            }
-        };
+        return this
+            ._mapperService
+            .mapTo(UserLearningPageStatsDTO, [stats, avgLagBehindPercentage]);
     }
 
     getImproveYourselfPageStatsAsync(principalId: PrincipalId) {

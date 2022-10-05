@@ -41,7 +41,7 @@ export const ExamResultStats = ({ stats }: { stats: ExamStatsDTO | null }) => {
         {/* score percentage */}
         <StatisticsCard
             height="150px"
-            iconPath={Environment.getAssetUrl('/icons/exam_result_good_answer_count.svg')}
+            iconPath={Environment.getAssetUrl('/icons/exam_result_good_answer_count.png')}
             suffix={translatableTexts.exam.examResultStats.correctAnswersRatio.suffix}
             title={translatableTexts.exam.examResultStats.correctAnswersRatio.title}
             value={scorePercentage} />
@@ -49,21 +49,21 @@ export const ExamResultStats = ({ stats }: { stats: ExamStatsDTO | null }) => {
         {/* score / max score */}
         <StatisticsCard
             height="150px"
-            iconPath={Environment.getAssetUrl('/icons/exam_result_good_answer_percent.svg')}
+            iconPath={Environment.getAssetUrl('/icons/exam_result_good_answer_percent.png')}
             suffix={translatableTexts.exam.examResultStats.correctAnswersCount.suffix}
             title={translatableTexts.exam.examResultStats.correctAnswersCount.title}
             value={`${examScore}/${examMaxScore}`} />
 
         <StatisticsCard
             height="150px"
-            iconPath={Environment.getAssetUrl('/icons/exam_result_time.svg')}
+            iconPath={Environment.getAssetUrl('/icons/exam_result_time.png')}
             suffix={translatableTexts.misc.suffixes.second}
             title={translatableTexts.exam.examResultStats.examDoneInMinutes.title}
             value={formatTime(examLengthSeconds)} />
 
         <StatisticsCard
             height="150px"
-            iconPath={Environment.getAssetUrl('/icons/exam_result_top_percent.svg')}
+            iconPath={Environment.getAssetUrl('/icons/exam_result_top_percent.png')}
             suffix={translatableTexts.exam.examResultStats.fromAllUsers.suffix}
             title={translatableTexts.exam.examResultStats.fromAllUsers.title}
             value={successRateDiffInText} />

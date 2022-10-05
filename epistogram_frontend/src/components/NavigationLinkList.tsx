@@ -39,7 +39,7 @@ export const NavigationLinkList = (props: {
                             isUppercase
                             style={{
                                 marginLeft: '10px',
-                                color: isCurrent ? 'white' : 'var(--mildDeepBlue)',
+                                color: 'var(--mildDeepBlue)',
                                 fontWeight: isCurrent ? 'bold' : 500,
                             }}>
                             {route.title}

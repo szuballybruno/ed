@@ -15,7 +15,7 @@ export const AdminLeftPane = () => {
     const administrationRoutes = applicationRoutes.administrationRoute;
 
     const menuItems = new ArrayBuilder<ApplicationRoute>()
-        .add(administrationRoutes.homeRoute.overviewRoute)
+        //.add(administrationRoutes.homeRoute.overviewRoute)
         .add(administrationRoutes.usersRoute.editRoute as any)
         .addIf(RouteHelpers.isRouteAuthoirzedToVisit(administrationRoutes.coursesRoute, hasPermission), administrationRoutes.coursesRoute)
         .addIf(RouteHelpers.isRouteAuthoirzedToVisit(administrationRoutes.shopRoute, hasPermission), administrationRoutes.shopRoute)
