@@ -39,7 +39,7 @@ export const WatchSubpage = () => {
     const isIPhone = browser.isIPhone;
     const [isFullscreen] = useVideoPlayerFullscreenContext();
     const isLandscape = window.orientation === 90;
-    const isIphoneFullscreenMode = (isFullscreen && isIPhone && isLandscape);
+    const isIphoneFullscreenMode = (isFullscreen && isIPhone);
 
     // get player page data
     const {

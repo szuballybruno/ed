@@ -3,7 +3,6 @@ import FastRewindIcon from '@mui/icons-material/FastRewind';
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { VideoPlayerDataDTO } from '../../../../shared/dtos/VideoDTO';
-import { EpistoButton } from '../../../controls/EpistoButton';
 import { EpistoDiv, EpistoDivProps } from '../../../controls/EpistoDiv';
 import { EpistoReactPlayer } from '../../../controls/EpistoReactPlayer';
 import { AbsoluteFlexOverlay } from '../AbsoluteFlexOverlay';
@@ -84,34 +83,6 @@ export const VideoPlayer = (props: {
             {/*       <PlayerDebugInfo
                 videoPlayerState={videoPlayerState}
                 videoTitle={videoItem.title} /> */}
-
-            <EpistoButton
-                variant='colored'
-                style={{
-                    position: 'fixed',
-                    bottom: 200,
-                    zIndex: 100000000000000000000
-                }}
-                onClick={() => {
-                    toggleFullScreen();
-                }}>
-
-                FUSLCRLEEN
-            </EpistoButton>
-
-            <EpistoButton
-                variant='colored'
-                style={{
-                    position: 'fixed',
-                    bottom: 100,
-                    zIndex: 100000000000000000000
-                }}
-                onClick={() => {
-                    setShowShouldRotatePhoneOverlay(x => !x);
-                }}>
-
-                OVELAYL
-            </EpistoButton>
 
             {/* MOBILE ONLY: warning to rotate the mobile, the video
                 should only starts in landscape */}

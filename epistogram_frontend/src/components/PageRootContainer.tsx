@@ -1,11 +1,9 @@
 import { ReactNode, useEffect } from 'react';
-import browser from '../services/core/browserSniffingService';
 import { gradientBackgroundGenerator } from '../services/core/gradientBackgroundGenerator';
 import { useIsMobileView } from '../static/frontendHelpers';
 import { EpistoFlex2, EpistoFlex2Props } from './controls/EpistoFlex';
 import { EpistoGrid } from './controls/EpistoGrid';
 import { EpistoImage } from './controls/EpistoImage';
-
 export const PageRootContainer = (props: {
     children: ReactNode,
     backgoundImageSrc?: string,
@@ -20,14 +18,12 @@ export const PageRootContainer = (props: {
         document.title = 'EpistoGram';
     }, []);
     const isMobile = useIsMobileView();
-    const isIPhone = browser.isIPhone;
 
     const gradients = gradientBackgroundGenerator(isMobile ? 'rgba(160, 200, 255, 0.1)' : 'rgba(0, 100, 255, 0.1)');
 
     return <EpistoFlex2
         id="pageRootContainer"
         maxWidth={noMaxWidth ? undefined : '1920px'}
-        paddingTop={isIPhone ? '40px' : '0'}
         margin="0 auto"
         position="relative"
         overflow="hidden"
