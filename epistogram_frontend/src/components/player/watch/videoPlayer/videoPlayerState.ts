@@ -204,7 +204,10 @@ export const useVideoPlayerState = (
 
         if (isIPhone && isPlaying && isLandscape && isFullscreen) {
             setIsPlaying(false);
-            setIsPlaying(true);
+            setTimeout(() => {
+
+                setIsPlaying(true);
+            }, 2000);
         }
     }, [isIPhone, isLandscape, isPlaying, isFullscreen]);
 

@@ -152,9 +152,6 @@ export const ExamResultsSlide = (props: {
                                         <EpistoFont margin={{ right: 'px5' }}>
                                             {question.text}
                                         </EpistoFont>
-                                        <EpistoFont>
-                                            ({question.score}/{question.maxScore} pont)
-                                        </EpistoFont>
                                     </EpistoFlex2>
 
                                     <EpistoFlex2 width='100px'>
@@ -164,6 +161,11 @@ export const ExamResultsSlide = (props: {
                                             }}
                                             text={displayState.text}
                                             color={displayState.color} />
+
+
+                                        <EpistoFont>
+                                            ({question.score}/{question.maxScore} pont)
+                                        </EpistoFont>
                                     </EpistoFlex2>
                                 </AccordionSummary>
 

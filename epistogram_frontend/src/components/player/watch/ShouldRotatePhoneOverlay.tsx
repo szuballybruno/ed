@@ -14,13 +14,14 @@ export const ShouldRotatePhoneOverlay = (props: {
         direction='column'
         position='fixed'
         top='0'
+        left='0'
         width='100vw'
         height='100vh'
         align='center'
         justify='center'
         background='#FFFFFF99'
         backdropFilter='blur(10px)'
-        zIndex={30}>
+        zIndex={33}>
 
         <EpistoFlex2
             width='100%'

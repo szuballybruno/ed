@@ -75,7 +75,7 @@ export const VideoControls = (props: {
         bottom={0}
         left={0}
         px={isMobile ? '20px' : '10px'}
-        pb={isIPhone ? '20px' : '0'}
+        pb={isIPhone ? '30px' : '0'}
         width="100%"
         height={'40px'}
         onMouseEnter={() => showControlOverlay(true)}

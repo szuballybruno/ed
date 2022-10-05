@@ -1,5 +1,5 @@
 import { CSSProperties } from 'react';
-import { ClassBuilder } from '../../../helpers/classBuilder';
+import { ArrayBuilder } from '../../../static/frontendHelpers';
 import classes from './css/ChipSmall.module.css';
 
 export const ChipSmall = (props: {
@@ -20,12 +20,13 @@ export const ChipSmall = (props: {
 
     return (
         <p
-            className={new ClassBuilder()
-                .if(size === 'small', 'fontExtraSmall')
-                .if(size !== 'small', 'fontSmall')
-                .custom('roundBorders')
-                .custom(classes.pElement)
-                .build()}
+            className={new ArrayBuilder()
+                .addIf(size === 'small', 'fontExtraSmall')
+                .addIf(size !== 'small', 'fontSmall')
+                .add('roundBorders')
+                .add(classes.pElement)
+                .getArray()
+                .join(' ')}
             title={tooltip}
             style={{
                 color,
