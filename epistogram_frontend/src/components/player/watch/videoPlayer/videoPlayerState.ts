@@ -104,7 +104,6 @@ export const useVideoPlayerState = (
         if (isMobile && isIPhone) {
 
             document.body.style.overflow = '';
-
             return setIsFullscreen(false);
         }
 
@@ -288,7 +287,7 @@ export const useVideoPlayerState = (
             trickUnmutedAutoplay();
         }
 
-    }, [isReady, isPlaying, isSeeking, playedSeconds, isShowingOverlay, isMobile, isLandscape, stopPlaying, trickUnmutedAutoplay]);
+    }, [isPlaying, isSeeking, playedSeconds, isShowingOverlay, isMobile, isLandscape, stopPlaying, trickUnmutedAutoplay]);
 
     const toggleFullScreen = () => {
 

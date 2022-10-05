@@ -33,11 +33,7 @@ export const MobilePlayButtonOverlay = (props: {
         zIndex={isFullscreen ? 18 : 16}>
 
         <PlayArrowIcon
-            onClick={() => {
-                isFullscreen
-                    ? toggleIsPlaying()
-                    : startPlayingWithFullscreen();
-            }}
+            onClick={() => startPlayingWithFullscreen()}
             style={{
                 ...videoPlayerStyles.videoPlayerControlIconStyle,
                 zIndex: 19,
