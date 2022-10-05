@@ -202,17 +202,6 @@ export const useVideoPlayerState = (
 
     useEffect(() => {
 
-        if (isIPhone && isPlaying && isLandscape && isFullscreen) {
-            setIsPlaying(false);
-            setTimeout(() => {
-
-                setIsPlaying(true);
-            }, 2000);
-        }
-    }, [isIPhone, isLandscape, isPlaying, isFullscreen]);
-
-    useEffect(() => {
-
         Logger.logScoped('PLAYBACK', 'Triggering isSeeking effect...');
 
         if (isMobile && !isFullscreen) {
@@ -234,7 +223,6 @@ export const useVideoPlayerState = (
         }
     }, [isSeeking, isMobile, isFullscreen, isShowingOverlay, startPlaying, stopPlaying]);
 
-    useValueCompareTest(isFullscreen, 'isFullscreen');
     useEffect(() => {
 
         Logger.logScoped('PLAYBACK', 'Triggering isShowingOverlay effect...');
@@ -287,12 +275,12 @@ export const useVideoPlayerState = (
             return stopPlaying();
         }
 
-        if (!isShowingOverlay && playedSeconds < 1) {
+        /*         if (!isShowingOverlay && playedSeconds < 1) { */
 
-            Logger.logScoped('PLAYBACK', 'Tricking unmuted autoplay by setting isPlaying to false and true');
-            setIsPlaying(false);
-            setIsPlaying(true);
-        }
+        Logger.logScoped('PLAYBACK', 'Tricking unmuted autoplay by setting isPlaying to false and true');
+        setIsPlaying(false);
+        setIsPlaying(true);
+        /*         } */
 
 
     }, [isPlaying, isSeeking, playedSeconds, isShowingOverlay, isMobile, isLandscape, stopPlaying, setIsPlaying]);
