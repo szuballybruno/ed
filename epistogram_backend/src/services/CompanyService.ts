@@ -1,4 +1,5 @@
 import { UploadedFile } from 'express-fileupload';
+import { Permission } from '../models/entity/authorization/Permission';
 import { PermissionAssignmentBridge } from '../models/entity/authorization/PermissionAssignmentBridge';
 import { Company } from '../models/entity/misc/Company';
 import { CourseAccessBridge } from '../models/entity/misc/CourseAccessBridge';
@@ -17,9 +18,9 @@ import { Mutation } from '../shared/dtos/mutations/Mutation';
 import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 import { PermissionCodeType } from '../shared/types/sharedTypes';
 import { Id } from '../shared/types/versionId';
-import { getPermissionsSeedData } from '../sql/seed/seed_permissions';
 import { InsertEntity } from '../utilities/misc';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
+import { ActivationCodeService } from './ActivationCodeService';
 import { AuthorizationService } from './AuthorizationService';
 import { DomainProviderService } from './DomainProviderService';
 import { FileService } from './FileService';
@@ -27,7 +28,6 @@ import { MapperService } from './MapperService';
 import { ClassType } from './misc/advancedTypes/ClassType';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { XDBMSchemaService } from './XDBManager/XDBManagerTypes';
-import { ActivationCodeService } from './ActivationCodeService';
 
 export class CompanyService {
 
@@ -398,12 +398,11 @@ export class CompanyService {
         /**
          * Save permission assignment bridges according to mutations 
          */
-        const watchCoursePermissionId = this
-            ._schema
-            .seed
-            .getSeedData(getPermissionsSeedData)
-            .WATCH_COURSE
-            .id;
+        const { id: watchCoursePermissionId } = await this
+            ._ormService
+            .query(Permission, { code: 'WATCH_COURSE' })
+            .where('code', '=', 'code')
+            .getSingle();
 
         const courseAccessBridges = await this._ormService
             .query(CourseAccessBridge, { companyId })

@@ -1,8 +1,7 @@
-import { Column, Entity, PrimaryGeneratedColumn, Relation } from '../../MyORM';
 import { XJoinColumn, XManyToOne, XOneToMany, XViewColumn } from '../../../services/XORM/XORMDecorators';
 import { Id } from '../../../shared/types/versionId';
+import { Column, Entity, PrimaryGeneratedColumn, Relation } from '../../MyORM';
 import { StorageFile } from '../misc/StorageFile';
-import { VideoFile } from './VideoFile';
 import { VideoVersion } from './VideoVersion';
 
 @Entity()
@@ -28,23 +27,27 @@ export class VideoData {
     @XViewColumn()
     description: string | null;
 
+    @Column({ nullable: true, type: 'double precision' })
+    @XViewColumn()
+    videoFileLengthSeconds: number | null;
+
     //
     // TO ONE
     // 
 
-    // video file
+    // storage file
     @Column({ nullable: true, type: 'int' })
     @XViewColumn()
-    videoFileId: Id<'VideoFile'> | null;
-    @XManyToOne<VideoData>()(() => VideoFile, x => x.videos)
+    videoFileId: Id<'StorageFile'> | null;
+    @XManyToOne<VideoData>()(() => StorageFile)
     @XJoinColumn<VideoData>('videoFileId')
-    videoFile: Relation<VideoFile>;
+    videoFile: Relation<StorageFile> | null;
 
     // thumbnail file
     @Column({ nullable: true, type: 'int' })
     @XViewColumn()
     thumbnailFileId: Id<'StorageFile'> | null;
-    @XManyToOne<VideoData>()(() => StorageFile, x => x.videos)
+    @XManyToOne<VideoData>()(() => StorageFile)
     @XJoinColumn<VideoData>('thumbnailFileId')
     thumbnailFile: Relation<StorageFile>;
 

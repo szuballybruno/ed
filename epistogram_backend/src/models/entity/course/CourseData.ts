@@ -112,7 +112,7 @@ export class CourseData {
     @Column({ nullable: true })
     @XViewColumn()
     coverFileId: Id<'StorageFile'> | null;
-    @ManyToOne(_ => StorageFile, x => x.courses, { cascade: true })
+    @ManyToOne(_ => StorageFile)
     @JoinColumn({ name: 'cover_file_id' })
     coverFile: Relation<StorageFile>;
 }

@@ -69,7 +69,7 @@ const main = async () => {
 
     log(`MODE FLAGS: [${isPurgeMode ? 'PURGE' : ''}${isLightRecreateMode ? 'LIGHT RECREATE' : ''}${isShortLife ? 'SHORT LIFE' : ''}]`);
 
-    const initializator = new ServiceProviderInitializator(rootDir);
+    const initializator = new ServiceProviderInitializator(rootDir, isPurgeMode);
 
     if (isPurgeMode)
         await recreateDBAsync(initializator.getInitializedTransientServices.bind(initializator));

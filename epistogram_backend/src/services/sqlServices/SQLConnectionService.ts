@@ -1,4 +1,4 @@
-import Postgres from 'pg';
+import Postgres, { QueryResultRow } from 'pg';
 import { LoggerService } from '../LoggerService';
 import { SQLPoolService } from './SQLPoolService';
 
@@ -31,7 +31,7 @@ export class SQLConnectionService {
         await this._poolService.endPool();
     }
 
-    executeSQLAsync = async (sql: string, values?: any[]) => {
+    async executeSQLAsync<T extends QueryResultRow = any>(sql: string, values?: any[]) {
 
         try {
 
@@ -39,11 +39,11 @@ export class SQLConnectionService {
                 throw new Error('Trying to use a disconnected postgres client!');
 
             return await this._client
-                .query(sql, values);
+                .query<T>(sql, values);
         }
         catch (err: any) {
 
             throw new Error(`Message: ${err.message} Detail: ${err.detail}`);
         }
-    };
+    }
 }

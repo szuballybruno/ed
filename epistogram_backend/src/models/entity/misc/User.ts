@@ -113,7 +113,7 @@ export class User {
     @Column({ type: 'int', nullable: true })
     @XViewColumn()
     avatarFileId: Id<'StorageFile'> | null;
-    @ManyToOne(() => StorageFile, sf => sf.users)
+    @ManyToOne(() => StorageFile)
     @JoinColumn({ name: 'avatar_file_id' })
     avatarFile: Relation<StorageFile> | null;
 

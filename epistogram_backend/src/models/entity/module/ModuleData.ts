@@ -31,7 +31,7 @@ export class ModuleData {
     @Column({ nullable: true, type: 'integer' })
     @XViewColumn()
     imageFileId: Id<'StorageFile'> | null;
-    @OneToOne(_ => StorageFile, x => x.courseModule)
+    @OneToOne(_ => StorageFile)
     @JoinColumn({ name: 'image_file_id' })
     imageFile: StorageFile | null;
 

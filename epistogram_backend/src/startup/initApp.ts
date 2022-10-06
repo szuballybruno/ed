@@ -1,5 +1,6 @@
 
 import { ParametrizedConstructor } from '../services/misc/advancedTypes/ParametrizedConstructor';
+import { ORMConnectionService } from '../services/ORMConnectionService/ORMConnectionService';
 import { SQLConnectionService } from '../services/sqlServices/SQLConnectionService';
 import { DependencyContainer } from '../utilities/XDInjection/XDInjector';
 import { getTransientServiceContainer, instansiateSingletonServices, instatiateServices, ServiceProvider } from './servicesDI';
@@ -17,6 +18,7 @@ export class ServiceProviderInitializator implements IInitializeTransientProvide
 
     constructor(
         private _rootDir: string,
+        private _isPurgeMode: boolean,
         private _modifySingletons?: (singletonProvider: ServiceProvider) => void) {
 
         this._singletonProvider = this._initSingletons();
@@ -43,6 +45,12 @@ export class ServiceProviderInitializator implements IInitializeTransientProvide
         await serviceProvider
             .getService(SQLConnectionService)
             .createConnectionClientAsync();
+
+        //
+        // VALIDATE ORM SCHEMA
+        await serviceProvider
+            .getService(ORMConnectionService)
+            .validateSchemaAsync();
 
         return serviceProvider;
     }
@@ -82,7 +90,7 @@ export class ServiceProviderInitializator implements IInitializeTransientProvide
      */
     private _initSingletons() {
 
-        const singletonServiceProvider = instansiateSingletonServices(this._rootDir);
+        const singletonServiceProvider = instansiateSingletonServices(this._rootDir, this._isPurgeMode);
         if (this._modifySingletons)
             this._modifySingletons(singletonServiceProvider);
 

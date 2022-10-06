@@ -1,9 +1,12 @@
 import { instantiate } from '../../shared/logic/sharedLogic';
 import { Id } from '../../shared/types/versionId';
+import { toSQLSnakeCasing } from '../../utilities/helpers';
 import { InsertEntity } from '../../utilities/misc';
 import { ClassType } from '../misc/advancedTypes/ClassType';
 import { GlobalConfiguration } from '../misc/GlobalConfiguration';
 import { SQLConnectionService } from '../sqlServices/SQLConnectionService';
+import { XDBMSchemaService } from '../XDBManager/XDBManagerTypes';
+import { getXViewColumnNames } from '../XORM/XORMDecorators';
 import { EntityType, ParamConstraintType, SaveEntityType } from '../XORM/XORMTypes';
 import { XQueryBuilder } from '../XORM/XQueryBuilder';
 import { XQueryBuilderCore } from '../XORM/XQueryBuilderCore';
@@ -12,11 +15,13 @@ export class ORMConnectionService {
 
     public _sqlConnectionService: SQLConnectionService;
     private _loggingEnabled: boolean;
+    private _entities: Function[];
 
-    constructor(config: GlobalConfiguration, sqlConnectionService: SQLConnectionService) {
+    constructor(config: GlobalConfiguration, sqlConnectionService: SQLConnectionService, schema: XDBMSchemaService) {
 
         this._sqlConnectionService = sqlConnectionService;
         this._loggingEnabled = config.logging.enabledScopes.some(x => x === 'ORM');
+        this._entities = schema.entities;
     }
 
     async beginTransactionAsync() {
@@ -35,6 +40,78 @@ export class ORMConnectionService {
 
         return await this._sqlConnectionService
             .executeSQLAsync('ROLLBACK');
+    }
+
+    async validateSchemaAsync() {
+
+        type ResType = {
+            table_name: string,
+            column_name: string,
+            data_type: string
+        };
+
+        const script = `
+            SELECT 
+                tb.table_name,
+                co.*
+            FROM information_schema.tables tb
+            LEFT JOIN information_schema.columns co
+            ON co.table_name = tb.table_name
+            WHERE tb.table_type = 'BASE TABLE'
+            AND tb.table_schema = 'public';
+        `;
+
+        const { rows } = await this
+            ._sqlConnectionService
+            .executeSQLAsync<ResType>(script);
+
+        const sqlTables = rows
+            .groupBy(x => x.table_name)
+            .map(x => ({
+                tableName: x.key,
+                columns: x.items.map(x => x.column_name)
+            }));
+
+        const missingEntities = this._entities
+            .filter(entity => !sqlTables
+                .some(sqlTable => sqlTable.tableName === toSQLSnakeCasing(entity.name)));
+
+        if (missingEntities.any())
+            throw new Error(`Tables: ${missingEntities
+                .map(x => x.name)
+                .join(', ')} are missing from DB!`);
+
+        const missingColumns = this._entities
+            .map(entity => {
+
+                const entityColumns = getXViewColumnNames(entity as any);
+
+                const sqlTable = sqlTables
+                    .single(x => x.tableName === toSQLSnakeCasing(entity.name));
+
+                const sqlTableColumns = sqlTable
+                    .columns;
+
+                const missingColumns = entityColumns
+                    .map(entityColumn => toSQLSnakeCasing(entityColumn))
+                    .filter(entityColumnSnake => !sqlTableColumns
+                        .includes(entityColumnSnake));
+
+                return {
+                    tableName: sqlTable.tableName,
+                    missingColumns
+                };
+            })
+            .filter(x => x.missingColumns.any());
+
+        if (missingColumns.any()) {
+
+            const log = missingColumns
+                .map(x => `- Table (${x.tableName}): ${x.missingColumns.join(', ')}`)
+                .join('\n');
+
+            throw new Error(`Missing columns: \n${log}`);
+        }
     }
 
     withResType<TResult>() {

@@ -1,10 +1,9 @@
-import { VideoData } from '../../models/entity/video/VideoData';
 import { getSeedList } from '../../services/sqlServices/SeedService';
 import { VideoFilesSeedDataType } from './seed_video_files';
 
 export const getVideoDataSeedData = (
     videoFiles: VideoFilesSeedDataType
-) => getSeedList<VideoData>()({
+) => getSeedList<any>()({
 
     video_data_60: {
         thumbnailFileId: null,

@@ -4,7 +4,6 @@ import { ModuleVersion } from '../models/entity/module/ModuleVersion';
 import { VideoPlaybackSample } from '../models/entity/playback/VideoPlaybackSample';
 import { VideoSeekEvent } from '../models/entity/playback/VideoSeekEvent';
 import { VideoData } from '../models/entity/video/VideoData';
-import { VideoFile } from '../models/entity/video/VideoFile';
 import { VideoVersion } from '../models/entity/video/VideoVersion';
 import { VideoCursorSecondsView } from '../models/views/VideoCursorSecondsView';
 import { VideoPlaybackSampleDTO } from '../shared/dtos/playback/VideoPlaybackSampleDTO';
@@ -244,32 +243,21 @@ export class PlaybackService extends ServiceBase {
         if (samples.length === 0)
             return 0;
 
-        type ResType = {
-            lengthSeconds: number;
-        }
-
-        const video = await this._ormService
-            .withResType<VideoFile>()
+        const { videoFileLengthSeconds } = await this._ormService
+            .withResType<VideoData>()
             .query(VideoVersion, { videoVersionId })
-            .selectFrom(x => x
-                .columns(VideoFile, {
-                    lengthSeconds: 'lengthSeconds'
-                }))
             .leftJoin(VideoData, x => x
                 .on('id', '=', 'videoDataId', VideoVersion))
-            .leftJoin(VideoFile, x => x
-                .on('id', '=', 'videoFileId', VideoData))
-            .where('id', '=', 'videoVersionId')
             .getSingle();
 
-        if (video.lengthSeconds === 0)
+        if (!videoFileLengthSeconds)
             return 0;
 
         const netWatchedSeconds = samples
             .map(x => x.toSeconds - x.fromSeconds)
             .reduce((prev, curr) => curr + prev);
 
-        return Math.round((netWatchedSeconds / video.lengthSeconds) * 100);
+        return Math.round((netWatchedSeconds / videoFileLengthSeconds) * 100);
     }
 
     private async _getVideoPlaybackSamples(

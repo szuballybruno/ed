@@ -1,7 +1,6 @@
 import { UploadedFile } from 'express-fileupload';
 import { getVideoDurationInSeconds } from 'get-video-duration';
 import { VideoData } from '../models/entity/video/VideoData';
-import { VideoFile } from '../models/entity/video/VideoFile';
 import { VideoVersion } from '../models/entity/video/VideoVersion';
 import { QuestionDataView } from '../models/views/QuestionDataView';
 import { VideoPlayerDataView } from '../models/views/VideoPlayerDataView';
@@ -162,8 +161,6 @@ export class VideoService {
                 this._loggerService
                     .logScoped('FILE UPLOAD', 'Uploading to cloud storage...');
 
-                // create video file 
-
                 // upload to cloud
                 await this
                     ._uploadVideoFileAsync(videoVersionId, fullFile);
@@ -191,56 +188,29 @@ export class VideoService {
         /**
          * Upload video file to CDN
          */
-        const videoFileId = await this
-            ._getOrCreateVideoFile(videoVersionId);
+        const { videoDataId } = await this
+            ._ormService
+            .getSingleById(VideoVersion, videoVersionId);
 
         const { newCDNFilePath } = await this
             ._fileService
             .uploadAssigendFileAsync({
-                entitySignature: VideoFile,
-                entityId: videoFileId,
+                entitySignature: VideoData,
+                entityId: videoDataId,
                 fileBuffer: videoFileBuffer,
                 fileCode: 'video_file',
-                storageFileIdField: 'storageFileId'
+                storageFileIdField: 'videoFileId'
             });
 
         /**
          * Set video file length
          */
         await this
-            ._setVideoFileLengthAsync(newCDNFilePath, videoFileId);
+            ._setVideoFileLengthAsync(newCDNFilePath, videoDataId);
 
         this._loggerService
             .logScoped('FILE UPLOAD', `Upload successful. CDN file path: ${newCDNFilePath}`);
     };
-
-    /**
-     * Get or create video file
-     */
-    private async _getOrCreateVideoFile(videoVersionId: Id<'VideoVersion'>): Promise<Id<'VideoFile'>> {
-
-        const { videoFileId } = await this
-            ._ormService
-            .withResType<VideoData>()
-            .query(VideoVersion, { videoVersionId })
-            .select(VideoData)
-            .innerJoin(VideoData, x => x
-                .on('id', '=', 'videoDataId', VideoVersion))
-            .where('id', '=', 'videoVersionId')
-            .getSingle();
-
-        if (videoFileId)
-            return videoFileId;
-
-        const { id } = await this
-            ._ormService
-            .createAsync(VideoFile, {
-                lengthSeconds: 0,
-                storageFileId: null
-            });
-
-        return id;
-    }
 
     /**
      * Get video file path
@@ -259,7 +229,7 @@ export class VideoService {
     /**
      * Set video file length
      */
-    private async _setVideoFileLengthAsync(cdnFilePath: string, videoFileId: Id<'VideoFile'>) {
+    private async _setVideoFileLengthAsync(videoUrl: string, videoDataId: Id<'VideoData'>) {
 
         this._loggerService
             .logScoped('FILE UPLOAD', 'Setting video length...');
@@ -267,16 +237,16 @@ export class VideoService {
         // set video length
         const videoFileUrl = this
             ._assetUrlService
-            .getAssetUrl(cdnFilePath);
+            .getAssetUrl(videoUrl);
 
         const lengthSeconds = await this
             ._getVideoLengthSecondsAsync(videoFileUrl);
 
         await this
             ._ormService
-            .save(VideoFile, {
-                id: videoFileId,
-                lengthSeconds: lengthSeconds
+            .save(VideoData, {
+                id: videoDataId,
+                videoFileLengthSeconds: lengthSeconds
             });
 
         this._loggerService
