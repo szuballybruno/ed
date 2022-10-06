@@ -185,11 +185,12 @@ export const useVideoPlayerState = (
 
         if (isMobile && !isLandscape && isFullscreen) {
 
+            stopPlaying();
             return setShowShouldRotatePhoneOverlay(true);
         }
 
         return setShowShouldRotatePhoneOverlay(false);
-    }, [isFullscreen, isLandscape, isMobile]);
+    }, [isFullscreen, isLandscape, isMobile, stopPlaying]);
 
     useEffect(() => {
 
@@ -243,16 +244,10 @@ export const useVideoPlayerState = (
     const trickUnmutedAutoplay = useCallback(() => {
 
         Logger.logScoped('PLAYBACK', 'Trick unmuted autoplay callback runs...');
-        if (isPlaying) {
-
-            setIsPlaying(false);
+        if (isIPhone) {
             setIsPlaying(true);
-        } else {
-
-            setIsPlaying(true);
-            setIsPlaying(false);
         }
-    }, [isPlaying]);
+    }, [isIPhone]);
 
     const handleOnReady = useCallback((e: {
         getDuration: () => React.SetStateAction<number>;
