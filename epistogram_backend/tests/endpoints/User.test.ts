@@ -57,7 +57,7 @@ const testGetBriefUserDataAction = async (testParams: TestParams) => {
     const usersSeedData = getSeedData(getUserSeedData);
 
     const assignablePermissions: AssignablePermissionType[] = [{
-        permissionCode: 'ADMINISTRATE_COURSE',
+        permissionCode: 'ADMINISTRATE_COMPANY',
         contextCompanyId: null,
         contextCommentId: null,
         contextCourseId: null
@@ -95,7 +95,7 @@ const testGetEditUserDataAction = async (testParams: TestParams) => {
     const usersSeedData = getSeedData(getUserSeedData);
 
     const assignablePermissions: AssignablePermissionType[] = [{
-        permissionCode: 'ADMINISTRATE_COURSE',
+        permissionCode: 'ADMINISTRATE_COMPANY',
         contextCompanyId: null,
         contextCommentId: null,
         contextCourseId: null
@@ -135,7 +135,7 @@ const testGetUserAdministrationUserListAction = async (testParams: TestParams) =
     const usersSeedData = getSeedData(getUserSeedData);
 
     const assignablePermissions: AssignablePermissionType[] = [{
-        permissionCode: 'ADMINISTRATE_COURSE',
+        permissionCode: 'ADMINISTRATE_COMPANY',
         contextCompanyId: null,
         contextCommentId: null,
         contextCourseId: null
@@ -173,7 +173,7 @@ const testDeleteUserAction = async (testParams: TestParams) => {
     const usersSeedData = getSeedData(getUserSeedData);
 
     const assignablePermissions: AssignablePermissionType[] = [{
-        permissionCode: 'ADMINISTRATE_COURSE',
+        permissionCode: 'ADMINISTRATE_COMPANY',
         contextCompanyId: null,
         contextCommentId: null,
         contextCourseId: null

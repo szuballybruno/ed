@@ -9,19 +9,19 @@
 -- select * from public.role 
 
 	
--- Make ADMINISTRATE_COURSE a company scoped permission
+-- Make ADMINISTRATE_COMPANY a company scoped permission
 update public.permission 
 set 
 	scope = 'COMPANY', 
-	code = 'ADMINISTRATE_COURSE' 
+	code = 'ADMINISTRATE_COMPANY' 
 where id = 41
 
--- Create new bridge between 'Company HR Viewer' role and 'ADMINISTRATE_COURSE' permission
+-- Create new bridge between 'Company HR Viewer' role and 'ADMINISTRATE_COMPANY' permission
 insert into public.role_permission_bridge (role_id, permission_id)
 valuesw
 	(2, 41)
 
--- Create new bridge between 'Company Owner' and 'ADMINISTRATE_COURSE' permission
+-- Create new bridge between 'Company Owner' and 'ADMINISTRATE_COMPANY' permission
 insert into public.role_permission_bridge (role_id, permission_id)
 values
 	(1, 41)

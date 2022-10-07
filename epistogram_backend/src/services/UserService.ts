@@ -72,19 +72,11 @@ export class UserService {
         await this._authorizationService
             .checkPermissionAsync(
                 principalId,
-                'ADMINISTRATE_COURSE',
+                'ADMINISTRATE_COMPANY',
                 {
                     companyId: user.companyId
                 }
             );
-
-        await this._authorizationService
-            .checkPermissionAsync(
-                principalId,
-                'EDIT_COMPANY_USER',
-                { companyId: user.companyId }
-            );
-
 
         type ResType = User & {
             teacherInfoId: number
@@ -157,7 +149,7 @@ export class UserService {
             .getUserById(dto.userId);
 
         await this._authorizationService
-            .checkPermissionAsync(principalId, 'ADMINISTRATE_COURSE', { companyId: user.companyId });
+            .checkPermissionAsync(principalId, 'ADMINISTRATE_COMPANY', { companyId: user.companyId });
 
         // save user
         await this._ormService
@@ -254,14 +246,7 @@ export class UserService {
             .getUserById(principalId);
 
         await this._authorizationService
-            .checkPermissionAsync(principalId, 'ADMINISTRATE_COURSE', { companyId: principal.companyId });
-
-        await this._authorizationService
-            .checkPermissionAsync(
-                principalId,
-                'VIEW_COMPANY_USERS',
-                { companyId: principal.companyId }
-            );
+            .checkPermissionAsync(principalId, 'ADMINISTRATE_COMPANY', { companyId: principal.companyId });
 
         const searchTextLower = searchText?.toLowerCase();
 
@@ -307,14 +292,7 @@ export class UserService {
             .getUserById(userId);
 
         await this._authorizationService
-            .checkPermissionAsync(principalId, 'ADMINISTRATE_COURSE', { companyId: user.companyId });
-
-        await this._authorizationService
-            .checkPermissionAsync(
-                principalId,
-                'VIEW_COMPANY_USERS',
-                { companyId: user.companyId }
-            );
+            .checkPermissionAsync(principalId, 'ADMINISTRATE_COMPANY', { companyId: user.companyId });
 
         return {
             id: user.id,
@@ -404,7 +382,7 @@ export class UserService {
             .getUserById(deletedUserId);
 
         await this._authorizationService
-            .checkPermissionAsync(principalId, 'ADMINISTRATE_COURSE', { companyId: user.companyId });
+            .checkPermissionAsync(principalId, 'ADMINISTRATE_COMPANY', { companyId: user.companyId });
 
         await this._authorizationService
             .checkPermissionAsync(
