@@ -19,7 +19,7 @@ export const PlayerPage = () => {
     const isIPhone = browser.isIPhone;
     const [isFullscreen] = useVideoPlayerFullscreenContext();
     const isLandscape = window.orientation === 90;
-    const isIphoneFullscreenMode = ((isFullscreen && isIPhone) || (isIPhone && isLandscape));
+    const isIphoneFullscreenMode = (isFullscreen && isIPhone && isLandscape);
 
     return (
         <PageRootContainer

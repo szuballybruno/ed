@@ -58,6 +58,7 @@ export const MobileNavigation = () => {
         position='fixed'
         bottom='0'
         left='0'
+        zIndex={1}
         width='100%'
         height='80px'
         pb='20px'

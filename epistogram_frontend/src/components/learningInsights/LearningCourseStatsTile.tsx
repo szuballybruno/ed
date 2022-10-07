@@ -1,14 +1,77 @@
-import { Text } from '@chakra-ui/react';
 import { CourseLearningDTO } from '../../shared/dtos/CourseLearningDTO';
 import { Environment } from '../../static/Environemnt';
-import { formatTimespan, roundNumber } from '../../static/frontendHelpers';
+import { formatTimespan } from '../../static/frontendHelpers';
 import { EpistoButton, EpistoButtonPropsType } from '../controls/EpistoButton';
-import { EpistoDiv } from '../controls/EpistoDiv';
 import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
-import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoProgressBar } from '../controls/EpistoProgressBar';
-import { FlexFloat } from '../controls/FlexFloat';
+import { CourseTileIsCompletedBadge } from '../universal/CourseTile';
 import { SmallStat } from '../universal/SmallStat';
+import { VerticalTile } from '../universal/verticalTile/VerticalTile';
+import { VerticalTileImage } from '../universal/verticalTile/VerticalTileImage';
+
+export const LearningCourseStatsTileInfo = (props: {
+    spentTime: string,
+    totalVideoCount: number,
+    completedVideoCount: number,
+    totalVideoQuestionCount: number,
+    answeredVideoQuestionCount: number,
+    progressPercentage: number
+}) => {
+
+    const {
+        spentTime,
+        totalVideoCount,
+        completedVideoCount,
+        totalVideoQuestionCount,
+        answeredVideoQuestionCount,
+        progressPercentage
+    } = props;
+
+    return <>
+
+        {/* small stats */}
+        <EpistoFlex2 mt={7}
+            justify="space-evenly">
+
+            {/* spent time  */}
+            <SmallStat
+                iconUrl={Environment.getAssetUrl('images/time3D.png')}
+                text={spentTime} />
+
+            {/* videos  */}
+            <SmallStat
+                iconUrl={Environment.getAssetUrl('images/videos3D.png')}
+                text={`${totalVideoCount}/${completedVideoCount}`} />
+
+            {/* video questions */}
+            <SmallStat
+                iconUrl={Environment.getAssetUrl('images/rightanswerontile3D.png')}
+                text={`${totalVideoQuestionCount}/${answeredVideoQuestionCount}`} />
+        </EpistoFlex2>
+
+        {/* course progress bar chart */}
+        <EpistoFlex2
+            direction={'row'}
+            alignItems={'center'}
+            mt='7px'
+            width="100%"
+            height="10px">
+
+            <EpistoProgressBar
+                variant="determinate"
+                style={{
+                    width: '100%',
+                }}
+                value={progressPercentage} />
+
+            <EpistoFlex2 m="0 5px 0 20px">
+
+                {`${progressPercentage}%`}
+            </EpistoFlex2>
+
+        </EpistoFlex2>
+    </>;
+};
 
 export const LearningCourseStatsTile = (props: {
     course: CourseLearningDTO,
@@ -31,141 +94,22 @@ export const LearningCourseStatsTile = (props: {
     } = course;
 
     const formattedSpentTime = formatTimespan(totalSpentSeconds);
-    const progressPercentage = roundNumber(completedCourseItemCount / totalCourseItemCount * 100);
+    const progressPercentage = Math.floor(completedCourseItemCount / totalCourseItemCount * 100);
 
-    return <FlexFloat
-        className="whall"
-        direction="column"
-        borderRadius="10px"
-        position="relative"
-        overflow="hidden"
-        shadow={'0 0 10px 1px #CCC'}
-        background="var(--transparentWhite70)"
-        p="5"
-        justifyContent="space-between"
-        {...css}>
-
-        {/* cover image box */}
-        <EpistoDiv
-            flex="1"
-            position="relative"
-            minHeight='150px'
-            maxHeight='150px'>
-
-            {/* cover image */}
-            <img
-                className="whall"
-                style={{
-                    objectFit: 'cover',
-                    borderRadius: 10,
-                    position: 'absolute'
-                }}
-                src={thumbnailImageURL}
-                alt="" />
-
-            {/* is complete label */}
-            {isComplete && <EpistoFlex2
-                position="absolute"
-                top={10}
-                right={0}
-                justify="flex-end">
-
-                <EpistoFlex2
-                    direction="row"
-                    justifyContent="space-around"
-                    alignItems="center"
-                    padding="4px"
-                    width='130px'
-                    bg="#97CC9B"
-                    borderRadius="7px 0 0 7px">
-
-                    <img
-                        src={Environment.getAssetUrl('course_exam_tile_icons/tile_badge_completed.svg')}
-                        alt={''}
-                        style={{
-                            width: 20,
-                            height: 20
-                        }}
-                    />
-
-                    <Text
-                        textTransform={'uppercase'}
-                        color="white">
-
-                        Teljesítve!
-                    </Text>
-                </EpistoFlex2>
-            </EpistoFlex2>}
-        </EpistoDiv>
-
-        {/* content */}
-        <EpistoFlex2 p="10px"
-            direction="column">
-
-            {/* category  */}
-            <EpistoFont
-                style={{
-                    color: 'grey'
-                }}>
-
-                {subCategoryName}
-            </EpistoFont>
-
-            {/* title */}
-            <EpistoFont
-                style={{
-                    fontWeight: 'bold',
-                    fontSize: 'large'
-                }}>
-
-                {title}
-            </EpistoFont>
-
-            {/* small stats */}
-            <EpistoFlex2 mt={7}
-                justify="space-evenly">
-
-                {/* spent time  */}
-                <SmallStat
-                    iconUrl={Environment.getAssetUrl('images/time3D.png')}
-                    text={formattedSpentTime} />
-
-                {/* videos  */}
-                <SmallStat
-                    iconUrl={Environment.getAssetUrl('images/videos3D.png')}
-                    text={`${totalVideoCount}/${completedVideoCount}`} />
-
-                {/* video questions */}
-                <SmallStat
-                    iconUrl={Environment.getAssetUrl('images/rightanswerontile3D.png')}
-                    text={`${totalVideoQuestionCount}/${answeredVideoQuestionCount}`} />
-            </EpistoFlex2>
-
-            {/* course progress bar chart */}
-            <EpistoFlex2
-                direction={'row'}
-                alignItems={'center'}
-                mt='7px'
-                width="100%"
-                height="10px">
-
-                <EpistoProgressBar
-                    variant="determinate"
-                    style={{
-                        width: '100%',
-                    }}
-                    value={progressPercentage} />
-
-                <EpistoFlex2 m="0 5px 0 20px">
-
-                    {`${progressPercentage}%`}
-                </EpistoFlex2>
-
-            </EpistoFlex2>
-        </EpistoFlex2>
-
-        {/* buttons */}
-        <EpistoFlex2 mt="10px">
+    return <VerticalTile
+        title={title}
+        subTitle={subCategoryName}
+        imageComponent={<VerticalTileImage
+            imageUrl={thumbnailImageURL}
+            badgeComponent={isComplete && <CourseTileIsCompletedBadge />} />}
+        infoComponent={<LearningCourseStatsTileInfo
+            spentTime={formattedSpentTime}
+            totalVideoCount={totalVideoCount}
+            answeredVideoQuestionCount={answeredVideoQuestionCount}
+            completedVideoCount={completedVideoCount}
+            progressPercentage={progressPercentage}
+            totalVideoQuestionCount={totalVideoQuestionCount} />}
+        buttonsComponent={<EpistoFlex2 mt="10px">
 
             {actionButtons.map((button, index) => {
                 return <EpistoButton
@@ -177,6 +121,5 @@ export const LearningCourseStatsTile = (props: {
                 </EpistoButton>;
             })}
 
-        </EpistoFlex2>
-    </FlexFloat>;
+        </EpistoFlex2>} />;
 };
