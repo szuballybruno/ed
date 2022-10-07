@@ -14,14 +14,11 @@ FROM public.video_version vv
 LEFT JOIN public.video_data vd
 ON vd.id = vv.video_data_id
 
-LEFT JOIN public.video_file vf
-ON vf.id = vd.video_file_id
-
 LEFT JOIN public.storage_file sf
 ON sf.id = vd.thumbnail_file_id
 
 LEFT JOIN public.storage_file sf2
-ON sf2.id = vf.storage_file_id
+ON sf2.id = vd.video_file_id
 
 LEFT JOIN public.module_version mv
 ON mv.id = vv.module_version_id

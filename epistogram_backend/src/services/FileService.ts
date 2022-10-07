@@ -148,6 +148,88 @@ export class FileService {
         }
     }
 
+    async uploadStorageFileAsync<TField extends StringKeyof<TEntity>, TEntity extends EntityType & { [K in TField]: Id<'StorageFile'> | null }>({
+        entitySignature,
+        fileBuffer,
+        fileCode,
+        storageFileIdField,
+        entityId
+    }: {
+        entityId: Id<any>,
+        fileCode: FileCodesType,
+        entitySignature: ClassType<TEntity>,
+        storageFileIdField: TField,
+        fileBuffer: Buffer,
+    }) {
+
+        // path
+        const newCDNFilePath = this.getFilePath(fileCode, entityId);
+
+        // upload to storage
+        await this._storageService
+            .uploadBufferToStorageAsync(fileBuffer, newCDNFilePath);
+
+        /**
+         * All operations after uploading file 
+         * to CDN are in a try block, because if there's a failure,
+         * we have to revert the upload manually.
+         * DB operations will be reverted automatically, 
+         * since we are in a global transaction scope.
+         */
+        try {
+
+            // crate pending storage file
+            const { id: newStorageFileEntityId } = await this
+                ._insertFileEntityAsync(newCDNFilePath);
+
+            // get entity
+            const entity = await this._ormService
+                .query(entitySignature, { entityId })
+                .where('id', '=', 'entityId')
+                .getSingle();
+
+            // get old file id 
+            const oldStorageFileId = entity[storageFileIdField];
+
+            // delete previous file, and file entity
+            if (oldStorageFileId) {
+
+                const oldFileEntity = await this.getFileEntityAsync(oldStorageFileId);
+
+                try {
+
+                    // TODO delete temporarily disabled
+                    // since while testing, we don't want to lose 
+                    // files from the dev bucket 
+
+                    // await this.deleteFileEntityAsync(oldStorageFileId);
+                    // await this._storageService
+                    //     .deleteStorageFileAsync(oldFileEntity.filePath);
+                }
+                catch (e) {
+
+                    log(e, { entryType: 'warning' });
+                }
+            }
+
+            return { newCDNFilePath, newStorageFileEntityId };
+        }
+        catch (e) {
+
+            /**
+             * In case of any failure, 
+             * delete file from storage bucket
+             */
+            await this._storageService
+                .deleteStorageFileAsync(newCDNFilePath);
+
+            /**
+             * Than throw the error.
+             */
+            throw e;
+        }
+    }
+
     getFilePath = (fileType: FileCodesType, entityId: Id<any>) => {
 
         const extension = fileCodes[fileType][0];

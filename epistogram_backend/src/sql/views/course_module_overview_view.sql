@@ -3,7 +3,7 @@ SELECT
 	mo.id module_id,
 	md.name module_name,
 	vd.title video_title,
-	vf.length_seconds video_length_seconds
+	vd.video_file_length_seconds video_length_seconds
 FROM public.course co
 
 LEFT JOIN public.course_version cv
@@ -23,9 +23,6 @@ ON vv.module_version_id = mv.id
 
 LEFT JOIN public.video_data vd
 ON vd.id = vv.video_data_id
-
-LEFT JOIN public.video_file vf
-ON vf.id = vd.video_file_id
 
 WHERE md.order_index != 0
 

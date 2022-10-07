@@ -7,7 +7,7 @@ FROM
 		cv.id course_id,
 		(
 			SELECT 
-				COALESCE(SUM(vf.length_seconds), 0)::int
+				COALESCE(SUM(vd.video_file_length_seconds), 0)::int
 			FROM public.video_version vv
 
 			LEFT JOIN public.module_version mv
@@ -15,9 +15,6 @@ FROM
 			
 			LEFT JOIN public.video_data vd
 			ON vd.id = vv.video_data_id
-			
-			LEFT JOIN public.video_file vf
-			ON vf.id = vd.video_file_id
 
 			WHERE mv.course_version_id = cv.id
 		) total_video_seconds,

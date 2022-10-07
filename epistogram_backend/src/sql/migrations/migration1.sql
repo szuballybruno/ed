@@ -25,13 +25,12 @@ FROM
 ) sq
 WHERE sq.video_data_id = vd.id
 
--- #3
-ALTER TABLE video_data
-ALTER COLUMN video_file_length_seconds SET NOT NULL;
-
 -- #4
 ALTER TABLE video_data
 ADD FOREIGN KEY (video_file_id) REFERENCES storage_file(id);
 
 -- #5
+-- MODIFY VIEWS 
+
+-- #6
 drop table video_file

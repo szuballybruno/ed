@@ -412,7 +412,8 @@ export const createDBSchema = (isPurgeMode: boolean): XDBMSchemaService => {
             { fileName: 'course_completion_constraints' },
             { fileName: 'course_access_bridge_constraints' },
             { fileName: 'prequiz_constraints' },
-            { fileName: 'permission_assignment_bridge_constraints' }
+            { fileName: 'permission_assignment_bridge_constraints' },
+            { fileName: 'video_data_constraints' }
         ],
 
         indices: [

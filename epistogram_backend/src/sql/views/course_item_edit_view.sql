@@ -42,7 +42,7 @@ LEFT JOIN public.video_data ed
 ON ed.id = ev.exam_data_id
 
 LEFT JOIN public.storage_file sf
-ON sf.id = vf.storage_file_id
+ON sf.id = vd.video_file_id
 
 ORDER BY
 	civ.video_version_id,

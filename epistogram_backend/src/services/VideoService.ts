@@ -192,9 +192,12 @@ export class VideoService {
             ._ormService
             .getSingleById(VideoVersion, videoVersionId);
 
-        const { newCDNFilePath } = await this
+        /**
+         * Create storage file 
+         */
+        const { newCDNFilePath, newStorageFileEntityId } = await this
             ._fileService
-            .uploadAssigendFileAsync({
+            .uploadStorageFileAsync({
                 entitySignature: VideoData,
                 entityId: videoDataId,
                 fileBuffer: videoFileBuffer,
@@ -203,10 +206,21 @@ export class VideoService {
             });
 
         /**
-         * Set video file length
+         * Get length
+         */
+        const videoFileLengthSeconds = await this
+            .getVideoLengthSecondsAsync(newCDNFilePath);
+
+        /**
+         * Save data
          */
         await this
-            ._setVideoFileLengthAsync(newCDNFilePath, videoDataId);
+            ._ormService
+            .save(VideoData, {
+                id: videoDataId,
+                videoFileLengthSeconds,
+                videoFileId: newStorageFileEntityId
+            });
 
         this._loggerService
             .logScoped('FILE UPLOAD', `Upload successful. CDN file path: ${newCDNFilePath}`);
@@ -227,38 +241,15 @@ export class VideoService {
     }
 
     /**
-     * Set video file length
-     */
-    private async _setVideoFileLengthAsync(videoUrl: string, videoDataId: Id<'VideoData'>) {
-
-        this._loggerService
-            .logScoped('FILE UPLOAD', 'Setting video length...');
-
-        // set video length
-        const videoFileUrl = this
-            ._assetUrlService
-            .getAssetUrl(videoUrl);
-
-        const lengthSeconds = await this
-            ._getVideoLengthSecondsAsync(videoFileUrl);
-
-        await this
-            ._ormService
-            .save(VideoData, {
-                id: videoDataId,
-                videoFileLengthSeconds: lengthSeconds
-            });
-
-        this._loggerService
-            .logScoped('FILE UPLOAD', `Video length set: ${lengthSeconds}s`);
-    }
-
-    /**
      * Get video length
      */
-    private async _getVideoLengthSecondsAsync(videoFileUrl: string): Promise<number> {
+    async getVideoLengthSecondsAsync(videoUrl: string): Promise<number> {
 
         try {
+            // set video length
+            const videoFileUrl = this
+                ._assetUrlService
+                .getAssetUrl(videoUrl);
 
             return await getVideoDurationInSeconds(videoFileUrl);
         } catch (e: any) {

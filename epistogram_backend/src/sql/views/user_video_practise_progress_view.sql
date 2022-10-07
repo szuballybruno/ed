@@ -21,7 +21,7 @@ FROM
 			vpsv.creation_date,
 			MIN(from_seconds),
 			MAX(to_seconds),
-			vf.length_seconds,
+			vd.video_file_length_seconds length_seconds,
 			vpsv.total_playback_duration,
 			ROW_NUMBER() OVER 
 			(
@@ -38,12 +38,9 @@ FROM
 		
 		LEFT JOIN public.video_data vd
 		ON vd.id = vv.video_data_id
-		
-		LEFT JOIN public.video_file vf
-		ON vf.id = vd.video_file_id
   		
 		GROUP BY 
-			vf.length_seconds,
+			vd.video_file_length_seconds,
 			vpsv.user_id,
 			vv.video_id,
 			vv.id,
