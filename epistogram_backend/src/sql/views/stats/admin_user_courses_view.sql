@@ -59,7 +59,7 @@ is_final_exam_completed_cte AS
         cv.course_id,
         cic.user_id,
         COUNT(*) > 0 is_final_exam_completed
-    FROM public.course_item_completion cic
+    FROM public.course_item_completion_view cic
 
     LEFT JOIN public.exam_version ev
     ON ev.id = cic.exam_version_id
@@ -96,7 +96,7 @@ completed_exam_count_cte AS
         cv.course_id,
         cic.user_id,
         COUNT(*)::int completed_exam_count
-    FROM public.course_item_completion cic
+    FROM public.course_item_completion_view cic
 
     LEFT JOIN public.exam_version ev
     ON ev.id = cic.exam_version_id

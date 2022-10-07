@@ -92,7 +92,7 @@ export class ServiceProvider {
     }
 }
 
-export const instansiateSingletonServices = (rootDir: string) => {
+export const instansiateSingletonServices = (rootDir: string, isPurgeMode: boolean) => {
 
     //
     // INIT GLOBAL CONFIG
@@ -101,7 +101,7 @@ export const instansiateSingletonServices = (rootDir: string) => {
 
     //
     // INIT DB SCHEMA
-    const dbSchema = createDBSchema();
+    const dbSchema = createDBSchema(isPurgeMode);
 
     const container = XDependency
         .getClassBuilder()
@@ -136,7 +136,7 @@ export const getTransientServiceContainer = (singletonProvider: ServiceProvider)
         .addClass(SQLConnectionService, [SQLPoolService, LoggerService])
         .addClass(TypeORMConnectionService, [GlobalConfiguration, XDBMSchemaService])
         .addClass(CreateDBService, [SQLConnectionService, XDBMSchemaService, GlobalConfiguration, TypeORMConnectionService, LoggerService])
-        .addClass(ORMConnectionService, [GlobalConfiguration, SQLConnectionService])
+        .addClass(ORMConnectionService, [GlobalConfiguration, SQLConnectionService, XDBMSchemaService])
         .addClass(PermissionService, [ORMConnectionService, MapperService])
         .addClass(AuthorizationService, [PermissionService, ORMConnectionService])
         .addClass(SQLFunctionsService, [SQLConnectionService, GlobalConfiguration])

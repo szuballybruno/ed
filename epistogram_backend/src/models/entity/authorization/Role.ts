@@ -1,5 +1,5 @@
 import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Relation } from '../../MyORM';
-import { IsDeletedFlag, XViewColumn } from '../../../services/XORM/XORMDecorators';
+import { DeletionDateColumn, XViewColumn } from '../../../services/XORM/XORMDecorators';
 import { Id } from '../../../shared/types/versionId';
 import { getJoinColumnName } from '../../../utilities/helpers';
 import { Company } from '../misc/Company';
@@ -13,7 +13,7 @@ export class Role {
     @XViewColumn()
     id: Id<'Role'>;
 
-    @IsDeletedFlag()
+    @DeletionDateColumn()
     @DeleteDateColumn()
     @XViewColumn()
     deletionDate: Date | null;

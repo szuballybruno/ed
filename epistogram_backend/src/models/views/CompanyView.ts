@@ -1,5 +1,5 @@
 import { DeleteDateColumn, ViewColumn, ViewEntity } from '../MyORM';
-import { IsDeletedFlag, XViewColumn } from '../../services/XORM/XORMDecorators';
+import { DeletionDateColumn, XViewColumn } from '../../services/XORM/XORMDecorators';
 import { Id } from '../../shared/types/versionId';
 
 @ViewEntity({
@@ -16,7 +16,7 @@ export class CompanyView {
     @XViewColumn()
     companyId: Id<'Company'>;
 
-    @IsDeletedFlag('bool')
+    @DeletionDateColumn('bool')
     @DeleteDateColumn()
     isDeleted: Date;
 

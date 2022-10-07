@@ -94,9 +94,9 @@ SELECT
 		it.question_issues) errors,
 	CONCAT_WS(
 		CHR(10), 
-		CASE WHEN civ.item_type = 'video' AND vf.length_seconds > 480 
+		CASE WHEN civ.item_type = 'video' AND vd.video_file_length_seconds > 480 
 			THEN 'video_too_long' END) warnings,
-	vf.length_seconds video_length
+	vd.video_file_length_seconds video_length
 FROM public.course_admin_short_view casv
 
 LEFT JOIN public.latest_course_version_view lcvv
@@ -114,9 +114,6 @@ ON vv.id = it.video_version_id
 
 LEFT JOIN public.video_data vd
 ON vd.id = vv.video_data_id
-
-LEFT JOIN public.video_file vf
-ON vf.id = vd.video_file_id
 
 ORDER BY 
 	casv.course_id, 

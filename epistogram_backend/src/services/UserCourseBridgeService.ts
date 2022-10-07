@@ -31,12 +31,11 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
     /**
      * Set current course and course current item code.
      */
-    async setCurrentCourse(
+    async setStageAsync(
         userId: Id<'User'>,
         courseId: Id<'Course'>,
         stageName: CourseStageNameType,
         itemCode: string | null) {
-
 
         const currentCourseBridge = await this._ormService
             .query(UserCourseBridge, {

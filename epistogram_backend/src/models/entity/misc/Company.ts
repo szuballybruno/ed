@@ -1,5 +1,5 @@
 import { Column, DeleteDateColumn, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from '../../MyORM';
-import { IsDeletedFlag, XJoinColumn, XManyToOne, XOneToMany, XViewColumn } from '../../../services/XORM/XORMDecorators';
+import { DeletionDateColumn, XJoinColumn, XManyToOne, XOneToMany, XViewColumn } from '../../../services/XORM/XORMDecorators';
 import { Id } from '../../../shared/types/versionId';
 import { ActivationCode } from './ActivationCode';
 import { CompanyOwnerBridge } from '../authorization/CompanyOwnerBridge';
@@ -17,7 +17,7 @@ export class Company {
     @XViewColumn()
     id: Id<'Company'>;
 
-    @IsDeletedFlag()
+    @DeletionDateColumn()
     @DeleteDateColumn()
     @XViewColumn()
     deletionDate: Date | null;

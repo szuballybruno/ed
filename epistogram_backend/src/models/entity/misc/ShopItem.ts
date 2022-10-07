@@ -48,7 +48,7 @@ export class ShopItem {
     @Column({ nullable: true, type: 'int' })
     @XViewColumn()
     coverFileId: Id<'StorageFile'> | null;
-    @ManyToOne(_ => StorageFile, x => x.shopItems)
+    @ManyToOne(_ => StorageFile)
     @JoinColumn({ name: 'cover_file_id' })
     coverFile: StorageFile | null;
 

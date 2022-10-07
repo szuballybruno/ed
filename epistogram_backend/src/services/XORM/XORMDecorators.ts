@@ -9,7 +9,7 @@ const X_VIEW_COLUMN_METADATA_KEY = 'X_VIEW_COLUMN_METADATA_KEY';
 type CheckType = 'null' | 'bool';
 type RelationInputType<TRelationEntity> = (() => ClassType<TRelationEntity>);
 
-export const IsDeletedFlag = (checkType?: CheckType) => {
+export const DeletionDateColumn = (checkType: CheckType = 'null') => {
 
     return (prototype: any, propertyKey: string) => {
 
@@ -19,6 +19,16 @@ export const IsDeletedFlag = (checkType?: CheckType) => {
             : 'null';
 
         XMetadataHandler.regMetadata(className, propertyKey, IS_DELETED_FLAG_METADATA_KEY, chck);
+    };
+};
+
+export const IsDeletedColumn = () => {
+
+    return (prototype: any, propertyKey: string) => {
+
+        const className = prototype.constructor.name;
+
+        XMetadataHandler.regMetadata(className, propertyKey, IS_DELETED_FLAG_METADATA_KEY, 'bool' as CheckType);
     };
 };
 

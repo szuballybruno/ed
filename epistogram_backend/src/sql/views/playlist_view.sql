@@ -93,13 +93,13 @@ items_with_user AS
 		CASE 
 			WHEN ucb.current_item_code = civ.playlist_item_code
 				THEN 'current'
-			WHEN cic.id IS NOT NULL
+			WHEN cic.completion_date IS NOT NULL
 				THEN 'completed'
 			WHEN ucb.course_mode = 'advanced' 
 				THEN 'available'
             WHEN civ.item_order_index = 0 AND civ.module_order_index = 1
                 THEN 'available'
-			WHEN LAG(cic.id, 1) OVER (
+			WHEN LAG(cic.completion_date, 1) OVER (
                 PARTITION BY civ.course_version_id 
                 ORDER BY module_order_index, item_order_index) IS NOT NULL 
 				THEN 'available'

@@ -232,29 +232,15 @@ export const AdminCourseContentSubpage = () => {
      */
     const handleAddRow = (type: 'video' | 'exam') => {
 
-        const moduleVersionId = nonPretestModules
-            .first(x => true)
-            .moduleVersionId;
+        const module = nonPretestModules
+            .lastOrNull();
 
-        const foundModule = itemsMutatorState
-            .mutatedItems
-            .firstOrNull(x => x.moduleVersionId === moduleVersionId);
-
-        const moduleInfo = foundModule
-            ? {
-                name: foundModule.moduleName,
-                id: foundModule.moduleVersionId,
-                orderIndex: foundModule.moduleOrderIndex
-            }
-            : {
-                name: 'no module',
-                id: Id.create<'ModuleVersion'>(-1),
-                orderIndex: -1
-            };
+        if (!module)
+            return;
 
         const itemOrderIndex = itemsMutatorState
             .mutatedItems
-            .filter(x => x.moduleVersionId === moduleVersionId && x.itemType !== 'pretest')
+            .filter(x => x.moduleVersionId === module.moduleVersionId)
             .length;
 
         const itemVersionId = type === 'video'
@@ -279,9 +265,9 @@ export const AdminCourseContentSubpage = () => {
             versionCode: newVersionCode,
             examVersionId: type === 'exam' ? itemVersionId as Id<'ExamVersion'> : null,
             videoVersionId: type === 'video' ? itemVersionId as Id<'VideoVersion'> : null,
-            moduleVersionId: moduleInfo.id,
-            moduleOrderIndex: moduleInfo.orderIndex,
-            moduleName: moduleInfo.name,
+            moduleVersionId: module.moduleVersionId,
+            moduleOrderIndex: module.orderIndex,
+            moduleName: module.name,
             videoLength: 0,
             questionMutations: [],
             answerMutations: []

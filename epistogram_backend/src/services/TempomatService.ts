@@ -260,42 +260,49 @@ export class TempomatService {
         requiredCompletionDate
     }: CalculateTempomatValuesArgs): CalculatedTempomatValueType {
 
-        const previsionedCompletionDate = this
-            ._calculatePrevisionedDate(
-                originalPrevisionedCompletionDate,
-                totalItemCount,
-                totalCompletedItemCount,
-                startDate,
-                tempomatMode,
-                tempomatAdjustmentValue
-            );
+        try {
 
-        const { recommendedItemsPerDay, recommendedItemsPerWeek } = this
-            ._calculateRecommendedItemsPerDay(
-                startDate,
+            const previsionedCompletionDate = this
+                ._calculatePrevisionedDate(
+                    originalPrevisionedCompletionDate,
+                    totalItemCount,
+                    totalCompletedItemCount,
+                    startDate,
+                    tempomatMode,
+                    tempomatAdjustmentValue
+                );
+
+            const { recommendedItemsPerDay, recommendedItemsPerWeek } = this
+                ._calculateRecommendedItemsPerDay(
+                    startDate,
+                    previsionedCompletionDate,
+                    requiredCompletionDate,
+                    totalItemCount
+                );
+
+            const lagBehindPercentage = this
+                ._calculateLagBehindPercentage(
+                    startDate,
+                    requiredCompletionDate
+                        ? requiredCompletionDate
+                        : originalPrevisionedCompletionDate,
+                    previsionedCompletionDate
+                );
+
+            return instantiate<CalculatedTempomatValueType>({
                 previsionedCompletionDate,
+                recommendedItemsPerDay,
+                recommendedItemsPerWeek,
+                originalPrevisionedCompletionDate,
                 requiredCompletionDate,
-                totalItemCount
-            );
-
-        const lagBehindPercentage = this
-            ._calculateLagBehindPercentage(
                 startDate,
-                requiredCompletionDate
-                    ? requiredCompletionDate
-                    : originalPrevisionedCompletionDate,
-                previsionedCompletionDate
-            );
+                lagBehindPercentage
+            });
+        }
+        catch (e: any) {
 
-        return instantiate<CalculatedTempomatValueType>({
-            previsionedCompletionDate,
-            recommendedItemsPerDay,
-            recommendedItemsPerWeek,
-            originalPrevisionedCompletionDate,
-            requiredCompletionDate,
-            startDate,
-            lagBehindPercentage
-        });
+            throw new Error(`Tempomat calculation error! Msg: ${e.message}`);
+        }
     }
 
     /**
@@ -327,19 +334,20 @@ export class TempomatService {
      *         than on LIGHT MODE and the PREVISIONED VIDEOS PER DAY will be a bit HIGHER
      */
     private _calculatePrevisionedDate(
-        originalPrevisionedCompletionDate: Date,
+        originalPrevisionedCompletionDate: Date | null,
         totalItemCount: number,
         totalCompletedItemCount: number,
         startDate: Date,
         tempomatMode: TempomatModeType,
         adjustmentCorrection: number
     ) {
+        if (!originalPrevisionedCompletionDate)
+            throw new Error('Previsioned length is null, this could mean theres a problem with the prequiz or a view depending on it.');
 
         const originalPrevisionedLength = this
             ._calculateOriginalPrevisionedLength(originalPrevisionedCompletionDate, startDate);
 
-        const originalEstimatedVideosPerDay = this
-            ._calculateOriginalEstimatedVideosPerDay(totalItemCount, originalPrevisionedLength);
+        const originalEstimatedVideosPerDay = totalItemCount / originalPrevisionedLength;
 
         const daysSpentFromStartDate = this
             ._calculateDaysSpentFromStartDate(startDate);
@@ -424,17 +432,6 @@ export class TempomatService {
     private _calculateOriginalPrevisionedLength(originalPrevisionedCompletionDate: Date, startDate: Date) {
 
         return dateDiffInDays(startDate, originalPrevisionedCompletionDate);
-    }
-
-    private _calculateOriginalEstimatedVideosPerDay(
-        videosCount: number,
-        originalPrevisionedLength: number
-    ) {
-
-        if (!originalPrevisionedLength)
-            throw new Error('Pretest hasn\'t been done');
-
-        return videosCount / originalPrevisionedLength;
     }
 
     private _calculateDaysSpentFromStartDate(startDate: Date) {

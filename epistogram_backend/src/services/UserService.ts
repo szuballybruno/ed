@@ -299,10 +299,10 @@ export class UserService {
 
         // TODO
         // if (user.companyId === 2 as any) {
-        console.warn('-------------------------------------------------------');
-        console.warn('---------- SETTING NEW EPISTO USER AS GOD!!!! ---------');
-        console.warn('-------------------------------------------------------');
-        user.isGod = true;
+        // console.warn('-------------------------------------------------------');
+        // console.warn('---------- SETTING NEW EPISTO USER AS GOD!!!! ---------');
+        // console.warn('-------------------------------------------------------');
+        // user.isGod = true;
         // }
 
         // hash user password

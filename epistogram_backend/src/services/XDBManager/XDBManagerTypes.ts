@@ -11,11 +11,13 @@ export type XDMBIndexType = {
     tableName: string;
 }
 
+export type SeedDataContainerType = {
+    data: [Function, PropConstraintType<any, any>][],
+    getSeedData: <T extends ParametrizedFunction>(fn: T) => ReturnType<T>
+};
+
 export class XDBMSchemaService {
-    seed: {
-        data: [Function, PropConstraintType<any, any>][],
-        getSeedData: <T extends ParametrizedFunction>(fn: T) => ReturnType<T>
-    };
+    seed: SeedDataContainerType | null;
     functionScripts: string[];
     constraints: XDBMConstraintType[];
     views: Function[];

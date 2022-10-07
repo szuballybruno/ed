@@ -6,7 +6,7 @@ SELECT
 		ELSE ed.title 
 	END title,
     vd.subtitle,
-	vf.length_seconds video_length_seconds,
+	vd.video_file_length_seconds video_length_seconds,
 	sf.file_path video_file_path,
 	qv.id question_version_id,
     qd.question_text question_text,
@@ -41,11 +41,8 @@ ON ev.id = civ.exam_version_id
 LEFT JOIN public.video_data ed
 ON ed.id = ev.exam_data_id
 
-LEFT JOIN public.video_file vf
-ON vf.id = vd.video_file_id
-
 LEFT JOIN public.storage_file sf
-ON sf.id = vf.storage_file_id
+ON sf.id = vd.video_file_id
 
 ORDER BY
 	civ.video_version_id,

@@ -1,5 +1,5 @@
 import {ViewColumn, ViewEntity} from '../MyORM';
-import {IsDeletedFlag, XViewColumn} from '../../services/XORM/XORMDecorators';
+import {DeletionDateColumn, XViewColumn} from '../../services/XORM/XORMDecorators';
 import {Id} from '../../shared/types/versionId';
 
 @ViewEntity({
@@ -24,7 +24,7 @@ export class ExamPlayerDataView {
     @XViewColumn()
     answerSessionId: Id<'AnswerSession'>;
 
-    @IsDeletedFlag('bool')
+    @DeletionDateColumn('bool')
     @ViewColumn()
     @XViewColumn()
     isDeleted: boolean;

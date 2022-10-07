@@ -1,5 +1,5 @@
 import { ViewColumn, ViewEntity } from '../MyORM';
-import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { DeletionDateColumn, IsDeletedColumn, XViewColumn } from '../../services/XORM/XORMDecorators';
 import { Id } from '../../shared/types/versionId';
 
 @ViewEntity({
@@ -15,6 +15,11 @@ export class CompanyAssociatedCoursesView {
     @ViewColumn()
     @XViewColumn()
     courseId: Id<'Course'>;
+
+    @ViewColumn()
+    @XViewColumn()
+    @IsDeletedColumn()
+    isDeleted: boolean;
 
     @ViewColumn()
     @XViewColumn()

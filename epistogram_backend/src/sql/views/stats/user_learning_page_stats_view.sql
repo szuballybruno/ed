@@ -96,7 +96,7 @@ SELECT
 	-- completed video count 
 	(
 		SELECT 
-			COUNT(cicv.course_item_completion_id)::int
+			COUNT(*)::int
 		FROM public.course_item_completion_view cicv
 		WHERE cicv.user_id = u.id
 	) completed_video_count,

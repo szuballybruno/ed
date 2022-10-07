@@ -120,8 +120,15 @@ export class CreateDBService {
             const constraint = constraints[index];
             const script = this.readSQLFile('constraints', constraint.fileName);
 
-            this._loggerService.logScoped('BOOTSTRAP', 'SECONDARY', `Creating constraint(s): [${constraint.fileName}]...`);
-            await this._sqlConnectionService.executeSQLAsync(script);
+            try {
+
+                this._loggerService.logScoped('BOOTSTRAP', 'SECONDARY', `Creating constraint(s): [${constraint.fileName}]...`);
+                await this._sqlConnectionService.executeSQLAsync(script);
+            }
+            catch (e: any) {
+
+                throw new Error(`Creating constraint(s) (${constraint.fileName}) failed: ${e.message}!`);
+            }
         }
     };
 

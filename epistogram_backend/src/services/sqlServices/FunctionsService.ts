@@ -1,8 +1,8 @@
-import {TaskCodeType} from '../../models/Types';
-import {Id} from '../../shared/types/versionId';
-import {GlobalConfiguration} from '../misc/GlobalConfiguration';
-import {logObject} from '../misc/logger';
-import {SQLConnectionService} from './SQLConnectionService';
+import { TaskCodeType } from '../../models/Types';
+import { Id } from '../../shared/types/versionId';
+import { GlobalConfiguration } from '../misc/GlobalConfiguration';
+import { logObject } from '../misc/logger';
+import { SQLConnectionService } from './SQLConnectionService';
 
 export type InsertCoinFnParamsType = {
     userId: Id<'User'>,
@@ -45,7 +45,8 @@ export class SQLFunctionsService {
         // create statement
         const statement = `SELECT ${isMultiResult ? '* FROM' : ''} ${fnName}(${argsIndicies.join(',')})`;
 
-        const result = await this._connectionService
+        const result = await this
+            ._connectionService
             .executeSQLAsync(statement, args.map(x => x === undefined ? null : x));
 
         const firstRow = result.rows[0];

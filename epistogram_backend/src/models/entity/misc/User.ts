@@ -1,5 +1,5 @@
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, Relation } from '../../MyORM';
-import { IsDeletedFlag, XOneToMany, XViewColumn } from '../../../services/XORM/XORMDecorators';
+import { DeletionDateColumn, XOneToMany, XViewColumn } from '../../../services/XORM/XORMDecorators';
 import { Id } from '../../../shared/types/versionId';
 import { RegistrationType } from '../../Types';
 import { ActivitySession } from './ActivitySession';
@@ -35,7 +35,7 @@ export class User {
     @XViewColumn()
     id: Id<'User'>;
 
-    @IsDeletedFlag()
+    @DeletionDateColumn()
     @DeleteDateColumn()
     @XViewColumn()
     deletionDate: Date | null;
@@ -113,7 +113,7 @@ export class User {
     @Column({ type: 'int', nullable: true })
     @XViewColumn()
     avatarFileId: Id<'StorageFile'> | null;
-    @ManyToOne(() => StorageFile, sf => sf.users)
+    @ManyToOne(() => StorageFile)
     @JoinColumn({ name: 'avatar_file_id' })
     avatarFile: Relation<StorageFile> | null;
 

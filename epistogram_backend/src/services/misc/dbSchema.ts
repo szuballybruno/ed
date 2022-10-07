@@ -27,11 +27,11 @@ import { Company } from '../../models/entity/misc/Company';
 import { CourseAccessBridge } from '../../models/entity/misc/CourseAccessBridge';
 import { CourseCategory } from '../../models/entity/misc/CourseCategory';
 import { CourseCompletion } from '../../models/entity/misc/CourseCompletion';
-import { CourseItemCompletion } from '../../models/entity/misc/CourseItemCompletion';
 import { DailyTip } from '../../models/entity/misc/DailyTip';
 import { DailyTipOccurrence } from '../../models/entity/misc/DailyTipOccurrence';
 import { DiscountCode } from '../../models/entity/misc/DiscountCode';
 import { Event } from '../../models/entity/misc/Event';
+import { ExamCompletion } from '../../models/entity/misc/ExamCompletion';
 import { GivenAnswer } from '../../models/entity/misc/GivenAnswer';
 import { GivenAnswerStreak } from '../../models/entity/misc/GivenAnswerStreak';
 import { Group } from '../../models/entity/misc/Group';
@@ -49,6 +49,7 @@ import { User } from '../../models/entity/misc/User';
 import { UserCourseBridge } from '../../models/entity/misc/UserCourseBridge';
 import { UserSessionActivity } from '../../models/entity/misc/UserSessionActivity';
 import { UserVideoProgressBridge } from '../../models/entity/misc/UserVideoProgressBridge';
+import { VideoCompletion } from '../../models/entity/misc/VideoCompletion';
 import { VideoRating } from '../../models/entity/misc/VideoRating';
 import { Module } from '../../models/entity/module/Module';
 import { ModuleData } from '../../models/entity/module/ModuleData';
@@ -65,7 +66,6 @@ import { QuestionData } from '../../models/entity/question/QuestionData';
 import { QuestionVersion } from '../../models/entity/question/QuestionVersion';
 import { Video } from '../../models/entity/video/Video';
 import { VideoData } from '../../models/entity/video/VideoData';
-import { VideoFile } from '../../models/entity/video/VideoFile';
 import { VideoVersion } from '../../models/entity/video/VideoVersion';
 import { ActivityStreakView } from '../../models/views/ActivityStreakView';
 import { AdminUserListView } from '../../models/views/AdminUserListView';
@@ -149,6 +149,7 @@ import { UserWeeklyCourseItemProgressView } from '../../models/views/UserWeeklyC
 import { VideoCursorSecondsView } from '../../models/views/VideoCursorSecondsView';
 import { VideoPlayerDataView } from '../../models/views/VideoPlayerDataView';
 import { VideoVersionView } from '../../models/views/VideoVersionView';
+import { instantiate } from '../../shared/logic/sharedLogic';
 import { getActivationCodeSeedData } from '../../sql/seed/seed_activation_codes';
 import { getActivitySessionSeedData } from '../../sql/seed/seed_activity_sessions';
 import { getAnswersSeedData } from '../../sql/seed/seed_answers';
@@ -163,13 +164,13 @@ import { getCourseSeedData } from '../../sql/seed/seed_courses';
 import { getCourseAccessBridgeSeedData } from '../../sql/seed/seed_course_access_bridge';
 import { getCourseCategoriesSeedData } from '../../sql/seed/seed_course_categories';
 import { getCourseDatasSeedData } from '../../sql/seed/seed_course_datas';
-import { getCourseItemCompletionSeedData } from '../../sql/seed/seed_course_item_completion';
 import { getCourseRatingGroupSeedData } from '../../sql/seed/seed_course_rating_groups';
 import { getCourseRatingQuestionSeedData } from '../../sql/seed/seed_course_rating_question';
 import { getCourseVersionsSeedData } from '../../sql/seed/seed_course_versions';
 import { getDailyTipsSeed } from '../../sql/seed/seed_daily_tips';
 import { getDiscountCodesSeedData } from '../../sql/seed/seed_discount_codes';
 import { getExamSeedData } from '../../sql/seed/seed_exams';
+import { getExamCompletionSeedData } from '../../sql/seed/seed_exam_completion';
 import { getExamDatasSeedData } from '../../sql/seed/seed_exam_datas';
 import { getExamVersionsSeedData } from '../../sql/seed/seed_exam_versions';
 import { getGivenAnswerSeedData } from '../../sql/seed/seed_given_answers';
@@ -205,14 +206,13 @@ import { getVideoDataSeedData } from '../../sql/seed/seed_video_datas';
 import { getVideoFilesSeedData } from '../../sql/seed/seed_video_files';
 import { getVideoVersionSeedData } from '../../sql/seed/seed_video_versions';
 import { XDependency } from '../../utilities/XDInjection/XDInjector';
-import { XDBMSchemaService } from '../XDBManager/XDBManagerTypes';
+import { SeedDataContainerType, XDBMSchemaService } from '../XDBManager/XDBManagerTypes';
 import { ParametrizedFunction } from './advancedTypes/ParametrizedFunction';
 
-export const createDBSchema = (): XDBMSchemaService => {
+const getSeedDataContainer = () => {
 
     const hierarchy = XDependency
         .getFunctionBuilder()
-        .addFunction(() => 1, [], CourseItemCompletion)
         .addFunction(getQuestionTypeSeedData, [], QuestionType)
         .addFunction(getPermissionsSeedData, [], Permission)
         .addFunction(getJobTitlesSeedData, [], JobTitle)
@@ -250,8 +250,8 @@ export const createDBSchema = (): XDBMSchemaService => {
         .addFunction(getModuleDatasSeedData, [getCourseDatasSeedData], ModuleData)
         .addFunction(getDailyTipsSeed, [getStorageFileSeedData, getPersonalityTraitCategoriesSeed], DailyTip)
         .addFunction(getCourseVersionsSeedData, [getCourseDatasSeedData, getCourseSeedData], CourseVersion)
-        .addFunction(getVideoFilesSeedData, [getStorageFileSeedData], VideoFile)
-        .addFunction(getVideoDataSeedData, [getVideoFilesSeedData], VideoData)
+        // .addFunction(getVideoFilesSeedData, [getStorageFileSeedData], VideoFile)
+        // .addFunction(getVideoDataSeedData, [getVideoFilesSeedData], VideoData)
         .addFunction(getModuleVersionsSeedData, [getCourseVersionsSeedData, getModuleDatasSeedData, getModulesSeedData], ModuleVersion)
         .addFunction(getVideoVersionSeedData, [getVideoDataSeedData, getVideosSeedData, getModuleVersionsSeedData], VideoVersion)
         .addFunction(getExamVersionsSeedData, [getModuleVersionsSeedData, getExamDatasSeedData, getExamSeedData], ExamVersion)
@@ -262,9 +262,9 @@ export const createDBSchema = (): XDBMSchemaService => {
         .addFunction(getGivenAnswerStreakSeedData, [getUserSeedData], GivenAnswerStreak)
         .addFunction(getGivenAnswerSeedData, [getUserSeedData, getCourseSeedData, getQuestionVersionsSeedData, getAnswerSessionSeedData, getGivenAnswerStreakSeedData], GivenAnswer)
         .addFunction(getAnswerGivenAnswerBridgeSeedData, [getAnswerVersionsSeedData, getGivenAnswerSeedData], AnswerGivenAnswerBridge)
-        .addFunction(getCourseItemCompletionSeedData, [getUserSeedData, getExamVersionsSeedData, getQuestionVersionsSeedData, getAnswerSessionSeedData], CourseItemCompletion)
+        .addFunction(getExamCompletionSeedData, [getAnswerSessionSeedData], ExamCompletion)
         .addFunction(getCourseAccessBridgeSeedData, [getCompaniesSeedData, getCourseSeedData], CourseAccessBridge)
-        .addFunction(getUserCourseBridgeSeedData, [getUserSeedData, getCourseSeedData, getVideosSeedData, getCourseItemCompletionSeedData], UserCourseBridge)
+        .addFunction(getUserCourseBridgeSeedData, [getUserSeedData, getCourseSeedData, getVideosSeedData, getExamCompletionSeedData], UserCourseBridge)
         .addFunction(getUserVideoProgressBridgeSeedData, [getUserSeedData, getVideoVersionSeedData, getVideoFilesSeedData], UserVideoProgressBridge)
         .addFunction(getRoleAssignmentBridgeSeedData, [getCompaniesSeedData, getRolesSeedData, getUserSeedData], RoleAssignmentBridge)
         .addFunction(getPermissionAssignmentBridgeSeedData, [getCompaniesSeedData, getCourseSeedData, getPermissionsSeedData, getUserSeedData], PermissionAssignmentBridge)
@@ -286,11 +286,17 @@ export const createDBSchema = (): XDBMSchemaService => {
             return [item.params, instance];
         });
 
+    return instantiate<SeedDataContainerType>({
+        data: seedScripts,
+        getSeedData
+    });
+};
+
+export const createDBSchema = (isPurgeMode: boolean): XDBMSchemaService => {
+
     const schema: XDBMSchemaService = {
-        seed: {
-            data: seedScripts,
-            getSeedData
-        },
+
+        seed: isPurgeMode ? getSeedDataContainer() : null,
 
         views: [
             GivenAnswerScoreView,
@@ -400,10 +406,14 @@ export const createDBSchema = (): XDBMSchemaService => {
                 tableName: 'role',
                 fileName: 'role_constraint'
             },
-            { fileName: 'course_item_completion_constraints' },
+            { fileName: 'video_completion_constraints' },
+            { fileName: 'exam_completion_constraints' },
             { fileName: 'prequiz_completion_constraints' },
             { fileName: 'course_completion_constraints' },
-            { fileName: 'course_access_bridge_constraints' }
+            { fileName: 'course_access_bridge_constraints' },
+            { fileName: 'prequiz_constraints' },
+            { fileName: 'permission_assignment_bridge_constraints' },
+            { fileName: 'video_data_constraints' }
         ],
 
         indices: [
@@ -420,9 +430,10 @@ export const createDBSchema = (): XDBMSchemaService => {
         triggers: [
             'role_assignment_validity_check_trigger',
             'exam_pretest_module_integrity_trigger',
-            'permission_assignment_validity_check_trigger',
+            'permission_assignment_bridge_trigger',
             'role_permission_bridge_validity_trigger',
-            'ucb_stage_trigger'
+            'ucb_stage_trigger',
+            'prequiz_completion_trigger'
         ],
 
         entities: [
@@ -441,7 +452,6 @@ export const createDBSchema = (): XDBMSchemaService => {
             Question,
             ActivationCode,
             CourseData,
-            VideoFile,
             Group,
             CourseCategory,
             ExamData,
@@ -494,7 +504,8 @@ export const createDBSchema = (): XDBMSchemaService => {
             CourseRatingQuestionUserAnswer,
             UserVideoProgressBridge,
             TempomatAdjustmentValue,
-            CourseItemCompletion,
+            ExamCompletion,
+            VideoCompletion,
             CourseCompletion
         ]
     };

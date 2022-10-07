@@ -1,7 +1,7 @@
 import { ExamData } from '../models/entity/exam/ExamData';
 import { ExamVersion } from '../models/entity/exam/ExamVersion';
 import { AnswerSession } from '../models/entity/misc/AnswerSession';
-import { CourseItemCompletion } from '../models/entity/misc/CourseItemCompletion';
+import { ExamCompletion } from '../models/entity/misc/ExamCompletion';
 import { ModuleVersion } from '../models/entity/module/ModuleVersion';
 import { QuestionVersion } from '../models/entity/question/QuestionVersion';
 import { ExamPlayerDataView } from '../models/views/ExamPlayerDataView';
@@ -129,12 +129,9 @@ export class ExamService {
 
         await this
             ._ormService
-            .createAsync(CourseItemCompletion, {
+            .createAsync(ExamCompletion, {
                 answerSessionId,
                 completionDate: new Date(),
-                examVersionId: ans.examVersionId,
-                userId: principalId.getId(),
-                videoVersionId: null
             });
 
         /**

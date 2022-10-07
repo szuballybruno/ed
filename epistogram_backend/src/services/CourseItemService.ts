@@ -167,7 +167,8 @@ export class CourseItemService {
                     orderIndex: XMutatorHelpers.getFieldValueOrFail(mutation)('itemOrderIndex'),
                     description: '',
                     thumbnailFileId: null,
-                    videoFileId: null
+                    videoFileId: null,
+                    videoFileLengthSeconds: null
                 }),
                 overrideDataProps: (data, mutation) => {
 

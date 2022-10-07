@@ -1,22 +1,42 @@
+WITH 
+course_item_completion_cte AS 
+(
+    SELECT 
+		ase.exam_version_id,
+		null::int video_version_id,
+		ase.user_id,
+		ase.id answer_session_id,
+		ec.completion_date
+	FROM public.exam_completion ec
+	LEFT JOIN public.answer_session ase
+	ON ase.id = ec.answer_session_id
+    UNION ALL
+    SELECT 
+		null::int exam_version_id,
+		vc.video_version_id,
+		vc.user_id,
+		null::int answer_session_id,
+		vc.completion_date
+	FROM public.video_completion vc
+)
 SELECT
-    cic.id course_item_completion_id,
-    cic.user_id,
-    cic.video_version_id,
+    cice.user_id,
+    cice.video_version_id,
     vv.video_id,
-    cic.exam_version_id,
+    cice.exam_version_id,
     ev.exam_id,
-    cic.answer_session_id,
-    cic.completion_date,
+    cice.answer_session_id,
+    cice.completion_date,
     cv.id course_version_id,
     cv.course_id,
     ex.is_pretest
-FROM public.course_item_completion cic
+FROM course_item_completion_cte cice
 
 LEFT JOIN public.video_version vv
-ON vv.id = cic.video_version_id
+ON vv.id = cice.video_version_id
 
 LEFT JOIN public.exam_version ev
-ON ev.id = cic.exam_version_id
+ON ev.id = cice.exam_version_id
 
 LEFT JOIN public.exam ex
 ON ex.id = ev.exam_id

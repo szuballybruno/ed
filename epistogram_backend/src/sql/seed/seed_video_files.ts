@@ -1,8 +1,7 @@
-import { VideoFile } from '../../models/entity/video/VideoFile';
 import { getSeedList } from '../../services/sqlServices/SeedService';
 import { StorageFileSeedDataType } from './seed_storage_file';
 
-export const getVideoFilesSeedData = (storageFiles: StorageFileSeedDataType) => getSeedList<VideoFile>()({
+export const getVideoFilesSeedData = (storageFiles: StorageFileSeedDataType) => getSeedList<any>()({
 
     video_file_60: {
         lengthSeconds: 511.133333,
