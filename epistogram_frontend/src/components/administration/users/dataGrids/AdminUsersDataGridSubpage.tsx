@@ -7,6 +7,7 @@ import { useUserOverviewStats } from '../../../../services/api/userStatsApiServi
 import { useNavigation } from '../../../../services/core/navigatior';
 import { OrderType } from '../../../../shared/types/sharedTypes';
 import { Id } from '../../../../shared/types/versionId';
+import { Environment } from '../../../../static/Environemnt';
 import { usePaging } from '../../../../static/frontendHelpers';
 import { useRouteQuery } from '../../../../static/locationHelpers';
 import { translatableTexts } from '../../../../static/translatableTexts';
@@ -156,7 +157,7 @@ export const AdminUserDataGridSubpage = () => {
                 renderCell: ({ value }) => <ProfileImage
                     className="square50"
                     objectFit="contain"
-                    url={value.avatarUrl}
+                    url={value.avatarUrl ? Environment.getAssetUrl(value.avatarUrl) : null}
                     firstName={value.firstName}
                     lastName={value.lastName} />
             })

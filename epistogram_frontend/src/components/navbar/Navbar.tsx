@@ -15,6 +15,11 @@ const Navbar = memo((props: {
 
     const { backgroundContent, hideLinks, isLowHeight, isMinimalMode, showLogo } = props;
     const isMobile = useIsMobileView();
+    const isLandscape = window.orientation === 90;
+    const shouldRenderMobileNavigation = (() => {
+
+        return isMobile && !isLandscape;
+    })();
 
     const { currentCourseItemCode } = useCurrentCourseItemCodeContext();
 
@@ -30,7 +35,7 @@ const Navbar = memo((props: {
     // render mobile
     const renderMobileNavbar = () => <MobileNavigation />;
 
-    return isMobile
+    return shouldRenderMobileNavigation
         ? renderMobileNavbar()
         : <FlexFloat
             id="flexFloat-navbarRoot"

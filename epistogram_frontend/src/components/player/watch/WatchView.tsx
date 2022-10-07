@@ -85,7 +85,7 @@ export const WatchView = (props: {
             videoVersionId,
             videoPlaybackSessionId
         });
-    }, [currentItemCode, videoPlaybackSessionId]);
+    }, [postVideoSeekEvent, videoPlaybackSessionId, videoVersionId]);
 
     // questions
     const [currentQuestion, setCurrentQuestion] = useState<QuestionDTO | null>(null);
@@ -229,7 +229,7 @@ export const WatchView = (props: {
                 .join(', '));
 
         setStillWatchingDilalogMarkers(dialogShowUpSeconds);
-    }, [videoLength]);
+    }, [hasQuestions, videoLength]);
 
 
     // playback watcher

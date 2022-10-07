@@ -142,7 +142,7 @@ export const ShopPurchaseConfirmationDialog = (props: {
                 {translatableTexts.shop.purchaseConfirmationDialog.letsGoToCourse}
             </EpistoButton> : <EpistoButton
                 onClick={() => {
-                    //openNewTab(detailsUrl); //TODO: Details url should be here
+                    openNewTab(shopItem?.detailsUrl + ''); //TODO: Details url should be here
                 }}>
 
                 {translatableTexts.shop.purchaseConfirmationDialog.itemPage}

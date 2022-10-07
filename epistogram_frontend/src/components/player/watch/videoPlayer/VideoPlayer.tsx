@@ -75,6 +75,7 @@ export const VideoPlayer = (props: {
     return (
         <EpistoDiv
             id="fullScreenRoot"
+            width='100%'
             ref={playerContainerRef}
             {...fullScreenRootProps}
             {...css}>
@@ -107,6 +108,7 @@ export const VideoPlayer = (props: {
                 {/* video wrapper */}
                 <EpistoDiv
                     id="videoWrapper"
+                    maxHeight='calc(100vh - 200px)'
                     onClick={() => {
                         if (!isMobile) {
                             toggleIsPlaying();
@@ -122,7 +124,9 @@ export const VideoPlayer = (props: {
                         url={videoUrl}
                         style={{
                             borderRadius: 6,
-                            overflow: 'hidden'
+                            overflow: 'hidden',
+                            aspectRatio: '16 / 9',
+                            maxHeight: 'calc(100vh - 200px)'
                         }}
                         width="100%"
                         height="100%"

@@ -100,7 +100,7 @@ export const ShopAndNotifications = (props: {
                         onClick={() => setSettingsPopperOpen(true)}
                         cursor="pointer"
                         className="square50"
-                        url={user.avatarUrl ?? ''}
+                        url={user.avatarUrl ? Environment.getAssetUrl(user.avatarUrl) : null}
                         ref={userSettingsRef} />
                 )}
             </EpistoFlex2>

@@ -33,21 +33,60 @@ export const useVideoPlayerState = (
     const [isMuted, setIsMuted] = useState(false);
     const [isPlaying, setIsPlaying] = useState(true);
     const [isReady, setIsReady] = useState(false);
-
     const [isFullscreen, setIsFullscreen] = useVideoPlayerFullscreenContext();
+    const [showShouldRotatePhoneOverlay, setShowShouldRotatePhoneOverlay] = useState(false);
 
     const isIPhone = browser.isIPhone;
     const isMobile = useIsMobileView();
     const screenfullEnabled = screenfull.isFullscreen;
     const screenOrientation = useScreenOrientation();
     const isLandscape = screenOrientation === 90;
-    const showMobilePlayButtonOverlay = (isMobile && !isFullscreen && !isLandscape) || (isMobile && isLandscape && isFullscreen && !isPlaying && !isShowingOverlay) || (isMobile && isLandscape && !isFullscreen);
-    const [showShouldRotatePhoneOverlay, setShowShouldRotatePhoneOverlay] = useState(false); //= isMobile && isFullscreen && !isLandscape;
 
-    // TODO:
-    const controlsVisible = (isMobile && isLandscape) || showControls || !isPlaying || isSeeking;
+    const showMobilePlayButtonOverlay = (() => {
 
-    const isVideoEnded = (videoLength > 0) && (playedSeconds > (videoLength - 0.1)) && !isShowingOverlay;
+        if (!isMobile)
+            return false;
+
+        if (!isFullscreen && !isLandscape)
+            return true;
+
+        if (isLandscape && isFullscreen && !isPlaying && !isShowingOverlay)
+            return true;
+
+        if (isLandscape && !isFullscreen)
+            return true;
+
+        return false;
+
+    })();
+
+    const controlsVisible = (() => {
+
+        if (showControls)
+            return true;
+
+        if (!isPlaying)
+            return true;
+
+        if (isSeeking)
+            return true;
+
+        if (isMobile && isLandscape)
+            return true;
+
+        return false;
+    })();
+
+    const isVideoEnded = (() => {
+
+        if (isShowingOverlay)
+            return false;
+
+        if (playedSeconds > (videoLength - 0.1) && videoLength > 0)
+            return true;
+
+        return false;
+    })();
 
     /**
      * Show control overlay
@@ -80,15 +119,20 @@ export const useVideoPlayerState = (
         // iPhone
         if (isMobile && isIPhone) {
 
+            // hiding the body overflow which is necessary 
+            // for the iPhone fake full screen mode
             document.body.style.overflow === 'hidden';
-            return setIsFullscreen(true);
         }
 
         // Android and desktop
-        !screenfullEnabled
-            //@ts-ignore
-            ? screenfull.toggle(playerContainerRef.current)
-            : undefined;
+        if (!screenfullEnabled && !isIPhone) {
+
+            // If screenfull is inactive, enable it
+            //  @ts-ignore
+            screenfull.toggle(playerContainerRef.current);
+        }
+
+        // Enabling fullscreen mode
         setIsFullscreen(true);
 
     }, [isIPhone, isMobile, screenfullEnabled, setIsFullscreen]);
@@ -103,15 +147,19 @@ export const useVideoPlayerState = (
         // iPhone
         if (isMobile && isIPhone) {
 
+            // reenabling the body overflow
             document.body.style.overflow = '';
-            return setIsFullscreen(false);
         }
 
         // Android and desktop
-        screenfullEnabled
+        if (screenfullEnabled && !isIPhone) {
+
+            // If screenfull is active, disable it.
             //@ts-ignore
-            ? screenfull.toggle(playerContainerRef.current)
-            : undefined;
+            screenfull.toggle(playerContainerRef.current);
+        }
+
+        // Disabling fullscreen mode
         setIsFullscreen(false);
 
     }, [isIPhone, isMobile, screenfullEnabled, setIsFullscreen]);
@@ -134,6 +182,7 @@ export const useVideoPlayerState = (
     const startPlaying = useCallback(() => {
 
         Logger.logScoped('PLAYBACK', 'Start playing...');
+
         if (isMobile && !isFullscreen) {
 
             Logger.logScoped('PLAYBACK', 'Can\'t start playing, because it\'s not in fullscreen mode.');
@@ -157,9 +206,14 @@ export const useVideoPlayerState = (
         flashVisualOverlay('start');
     }, [isFullscreen, isLandscape, isMobile, isShowingOverlay, showControlOverlay]);
 
+    /**
+     * Mobile playback control effect, which starts playing when
+     * the mobile is rotated and the player is in fullscreen mode.
+     * Stops playing when rotated back to portrait.
+     */
     useEffect(() => {
 
-        Logger.logScoped('PLAYBACK', 'Triggering isIphone, isLandscape, isFullscreen effect...');
+        Logger.logScoped('PLAYBACK', 'Triggering mobile playback control effect...');
 
         if (!isReady)
             return;
@@ -181,7 +235,14 @@ export const useVideoPlayerState = (
 
     }, [isLandscape, startPlaying, isFullscreen, stopPlaying, isMobile, enableFullscreenMode, isReady]);
 
+    /**
+     * Should rotate phone overlay effect, which either shows
+     * or hides an overlay if the phone is not in landscape but 
+     * is in fullscreen mode.
+     */
     useEffect(() => {
+
+        Logger.logScoped('PLAYBACK', 'Triggering rotate overlay effect...');
 
         if (isMobile && !isLandscape && isFullscreen) {
 
@@ -192,6 +253,13 @@ export const useVideoPlayerState = (
         return setShowShouldRotatePhoneOverlay(false);
     }, [isFullscreen, isLandscape, isMobile, stopPlaying]);
 
+    /**
+     * Seeking effect, which stops playing when seeking
+     * is active, resumes playing when seeking ended.
+     * 
+     * Note: It won't resume playing when not in fullscreen
+     *       or there is an overlay showing 
+     */
     useEffect(() => {
 
         Logger.logScoped('PLAYBACK', 'Triggering isSeeking effect...');
@@ -215,6 +283,12 @@ export const useVideoPlayerState = (
         }
     }, [isSeeking, isMobile, isFullscreen, isShowingOverlay, startPlaying, stopPlaying]);
 
+    /**
+     * Overlay effect, which stops playing when an overlay
+     * is active, resumes playing when overlay hides.
+     * 
+     * Note: It won't resume playing when not in fullscreen
+     */
     useEffect(() => {
 
         Logger.logScoped('PLAYBACK', 'Triggering isShowingOverlay effect...');
@@ -232,6 +306,11 @@ export const useVideoPlayerState = (
         }
     }, [isShowingOverlay, isFullscreen, startPlaying, stopPlaying]);
 
+    /**
+     * Screenfull trigger effect, which disables fullscreen
+     * mode, when screenfull is disabled. (e.g.: User leaves the 
+     * fullscreen mode with ESC key on desktop)
+     */
     useEffect(() => {
 
         Logger.logScoped('PLAYBACK', 'Screenfull trigger effect runs...');
@@ -241,6 +320,17 @@ export const useVideoPlayerState = (
         }
     }, [disableFullscreenMode, screenfullEnabled]);
 
+
+    /**
+     * Tricks unmuted autoplay on iPhone by starting the video
+     * on user interaction. The goal here is to not really start
+     * the video, which is achieved by the other effects. 
+     * 
+     * That way the iPhone thinks that it has started playing, 
+     * but because it is not in fullsceen mode, and in landscape mode, 
+     * the other effects will stop playing before the user notices, 
+     * and the video will start without mute. 
+     */
     const trickUnmutedAutoplay = useCallback(() => {
 
         Logger.logScoped('PLAYBACK', 'Trick unmuted autoplay callback runs...');
@@ -249,6 +339,14 @@ export const useVideoPlayerState = (
         }
     }, [isIPhone]);
 
+    /**
+     * onReady function which is called every time the VideoPlayer can
+     * start playing. It sets the video length, and assures that the
+     * playing function is working as intended if the other effects fail.
+     * 
+     * TODO: Most of its functions could be deleted in the future 
+     *       after proper testing on mobile platforms.
+     */
     const handleOnReady = useCallback((e: {
         getDuration: () => React.SetStateAction<number>;
     }) => {
@@ -284,6 +382,11 @@ export const useVideoPlayerState = (
 
     }, [isPlaying, isSeeking, playedSeconds, isShowingOverlay, isMobile, isLandscape, stopPlaying, trickUnmutedAutoplay]);
 
+    /**
+     * Toggles fullscreen mode. Don't use it anywhere else but on
+     * the player control, because it is unsafe. If there is a problem
+     * with the fullscreen state somehow, it will create glitches in the player
+     */
     const toggleFullScreen = () => {
 
         Logger.logScoped('PLAYBACK', 'Toggling fullscreen mode');
@@ -319,6 +422,11 @@ export const useVideoPlayerState = (
         }, 200);
     };
 
+    /**
+     * Toggles isPlaying. Don't use it anywhere else but on
+     * the player control, because it is unsafe. If there is a problem
+     * with the playing state somehow, it will create glitches in the player
+     */
     const toggleIsPlaying = () => {
 
         Logger.logScoped('PLAYBACK', 'toggleIsPlaying runs...');
