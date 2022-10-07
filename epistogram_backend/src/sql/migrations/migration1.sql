@@ -33,4 +33,4 @@ ADD FOREIGN KEY (video_file_id) REFERENCES storage_file(id);
 -- MODIFY VIEWS 
 
 -- #6
-drop table video_file
+-- drop table video_file
