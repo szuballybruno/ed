@@ -8,7 +8,6 @@ import { createDBSchema } from '../services/misc/dbSchema';
 import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
 import { PlaylistService } from '../services/PlaylistService';
 import { CreateDBService } from '../services/sqlServices/CreateDBService';
-import { RecreateDBService } from '../services/sqlServices/RecreateDBService';
 import { SQLPoolService } from '../services/sqlServices/SQLPoolService';
 import { TypeORMConnectionService } from '../services/sqlServices/TypeORMConnectionService';
 import { VersionCreateService } from '../services/VersionCreateService';
@@ -135,7 +134,7 @@ export const getTransientServiceContainer = (singletonProvider: ServiceProvider)
         .addClass(HashService, [GlobalConfiguration])
         .addClass(SQLConnectionService, [SQLPoolService, LoggerService])
         .addClass(TypeORMConnectionService, [GlobalConfiguration, XDBMSchemaService])
-        .addClass(CreateDBService, [SQLConnectionService, XDBMSchemaService, GlobalConfiguration, TypeORMConnectionService, LoggerService])
+        .addClass(CreateDBService, [XDBMSchemaService, GlobalConfiguration, LoggerService])
         .addClass(ORMConnectionService, [GlobalConfiguration, SQLConnectionService, XDBMSchemaService])
         .addClass(PermissionService, [ORMConnectionService, MapperService])
         .addClass(AuthorizationService, [PermissionService, ORMConnectionService])
@@ -157,7 +156,6 @@ export const getTransientServiceContainer = (singletonProvider: ServiceProvider)
         .addClass(AuthenticationService, [ORMConnectionService, UserService, TokenService, UserSessionActivityService, HashService, PermissionService, GlobalConfiguration, LoggerService])
         .addClass(PasswordChangeService, [UserService, TokenService, EmailService, UrlService, ORMConnectionService, GlobalConfiguration, HashService, AuthorizationService, DomainProviderService])
         .addClass(SeedService, [XDBMSchemaService, GlobalConfiguration, SQLConnectionService, LoggerService])
-        .addClass(RecreateDBService, [CreateDBService, SeedService, XDBMSchemaService, SQLConnectionService, LoggerService])
         .addClass(QuestionService, [ORMConnectionService, VersionSaveService, MapperService, GlobalConfiguration])
         .addClass(AnswerService, [VersionSaveService, LoggerService])
         .addClass(CourseItemService, [ORMConnectionService, MapperService, QuestionService, VersionSaveService, AnswerService, AuthorizationService])

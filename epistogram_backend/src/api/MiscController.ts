@@ -1,4 +1,4 @@
-import { JobTitle } from '../models/entity/misc/JobTitle';
+import { Department } from '../models/entity/misc/Department';
 import { AuthorizationService } from '../services/AuthorizationService';
 import { DomainProviderService } from '../services/DomainProviderService';
 import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
@@ -57,7 +57,7 @@ export class MiscController implements XController<MiscController> {
             action: async () => {
 
                 return await this._ormService
-                    .query(JobTitle)
+                    .query(Department)
                     .getMany();
             },
             auth: async () => {

@@ -6,7 +6,6 @@ import { CourseCategory } from '../../models/entity/misc/CourseCategory';
 import { DailyTip } from '../../models/entity/misc/DailyTip';
 import { DiscountCode } from '../../models/entity/misc/DiscountCode';
 import { Event } from '../../models/entity/misc/Event';
-import { JobTitle } from '../../models/entity/misc/JobTitle';
 import { PersonalityTraitCategory } from '../../models/entity/misc/PersonalityTraitCategory';
 import { ShopItem } from '../../models/entity/misc/ShopItem';
 import { ShopItemCategory } from '../../models/entity/misc/ShopItemCategory';
@@ -91,7 +90,6 @@ import { ExamResultsDTO } from '../../shared/dtos/ExamResultsDTO';
 import { ExamStatsDTO } from '../../shared/dtos/ExamStatsDTO';
 import { HomePageStatsDTO } from '../../shared/dtos/HomePageStatsDTO';
 import { ImproveYourselfPageStatsDTO } from '../../shared/dtos/ImproveYourselfPageStatsDTO';
-import { JobTitleDTO } from '../../shared/dtos/JobTitleDTO';
 import { ModuleEditDTO } from '../../shared/dtos/ModuleEditDTO';
 import { ModulePlayerDTO } from '../../shared/dtos/ModulePlayerDTO';
 import { PersonalityTraitCategoryDTO } from '../../shared/dtos/PersonalityTraitCategoryDTO';
@@ -282,7 +280,6 @@ const marray = [
                             .items
                             .map((viewAsPermission): PermissionListDTO => ({
                                 code: viewAsPermission.permissionCode,
-                                id: viewAsPermission.permissionId,
                                 scope: 'USER' // not used
                             }))
                     };
@@ -817,7 +814,11 @@ const marray = [
 
         }),
     epistoMappingsBuilder
-        .addMapping(UserDTO, ([urlService]) => (user: User & { filePath: string }) => {
+        .addMapping(UserDTO, ([urlService]) => (
+            user: User,
+            avatarPath: string | null,
+            departmentId: Id<'Department'> | null,
+            departmentName: string | null) => {
 
             return instantiate<UserDTO>({
                 id: user.id,
@@ -829,13 +830,14 @@ const marray = [
                 isTrusted: user.isTrusted,
                 isInvitationAccepted: user.isInvitationAccepted,
                 name: `${user.lastName} ${user.firstName}`,
-
-                jobTitle: user.jobTitle
-                    ? toJobTitleDTO(user.jobTitle)
+                department: (departmentId && departmentName)
+                    ? {
+                        id: departmentId,
+                        name: departmentName
+                    }
                     : null,
-
-                avatarUrl: user.filePath
-                    ? urlService.getAssetUrl(user.filePath)
+                avatarUrl: avatarPath
+                    ? urlService.getAssetUrl(avatarPath)
                     : null
             });
         }),
@@ -896,7 +898,7 @@ const marray = [
                         roleId: Id.create(0),
                         isInvitationAccepted: user.isInvitationAccepted,
                         isTrusted: user.isTrusted,
-                        jobTitleId: user.jobTitleId,
+                        departmentId: user.departmentId,
                         jobTitleName: user.jobTitleName,
                         companyId: user.companyId,
                         companyName: user.companyName,
@@ -1208,8 +1210,7 @@ const marray = [
 
                 return instantiate<PermissionListDTO>({
                     code: permission.code,
-                    scope: permission.scope,
-                    id: permission.id
+                    scope: permission.scope
                 });
             });
         }),
@@ -1313,14 +1314,6 @@ export const toCourseCategoryDTO = (cc: CourseCategory[]): CourseCategoryDTO[] =
                     }))
             } as CourseCategoryDTO;
         });
-};
-
-export const toJobTitleDTO = (jobTitle: JobTitle) => {
-
-    return {
-        id: jobTitle.id,
-        name: jobTitle.name
-    } as JobTitleDTO;
 };
 
 export const toTaskDTO = (task: Task) => {

@@ -48,8 +48,8 @@
         // run
         {
             "type": "shell",
-            "label": "run backend-lrmon",
-            "command": "yarn --cwd ../epistogram_backend lrmon",
+            "label": "run backend-lightrecreate",
+            "command": "yarn --cwd ../epistogram_backend lightrecreate",
             "problemMatcher": [],
             "presentation": {
                 "group": "run"
@@ -78,7 +78,7 @@
             "label": "run-all",
             "dependsOn": [
                 "run frontend",
-                "run backend-lrmon",
+                "run backend",
             ],
             "problemMatcher": []
         }

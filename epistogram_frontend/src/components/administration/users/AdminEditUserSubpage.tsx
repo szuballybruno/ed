@@ -7,7 +7,7 @@ import { UserApiService } from '../../../services/api/userApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
 import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
-import { UserEditDTO } from '../../../shared/dtos/UserEditDTO';
+import { UserEditDTO } from '../../../shared/dtos/UserEditSaveDTO';
 import { useEventTrigger, useSubscribeEventTrigger } from '../../../static/frontendHelpers';
 import { useRouteParams } from '../../../static/locationHelpers';
 import { EpistoDialog } from '../../universal/epistoDialog/EpistoDialog';

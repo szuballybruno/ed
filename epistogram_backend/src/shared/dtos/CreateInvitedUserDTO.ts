@@ -6,5 +6,5 @@ export type CreateInvitedUserDTO = {
     email: string;
     companyId?: Id<'Company'>;
     roleId: Id<'Role'>;
-    jobTitleId: Id<'JobTitle'>;
+    departmentId: Id<'Department'>;
 }

@@ -86,7 +86,7 @@ export class RegistrationController implements XController<RegistrationControlle
                 'email',
                 'firstName',
                 'lastName',
-                'jobTitleId'
+                'departmentId'
             ]).data;
 
         return await this._registrationService

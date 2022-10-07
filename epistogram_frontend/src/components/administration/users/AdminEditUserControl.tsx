@@ -6,10 +6,10 @@ import { useJobTitles } from '../../../services/api/miscApiService';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
 import { ChangeSet } from '../../../shared/dtos/changeSet/ChangeSet';
 import { CompanyDTO } from '../../../shared/dtos/company/CompanyDTO';
-import { JobTitleDTO } from '../../../shared/dtos/JobTitleDTO';
+import { DepartmentDTO } from '../../../shared/dtos/DepartmentDTO';
 import { UserPermissionDTO } from '../../../shared/dtos/role/UserPermissionDTO';
 import { UserRoleDTO } from '../../../shared/dtos/role/UserRoleDTO';
-import { UserEditDTO } from '../../../shared/dtos/UserEditDTO';
+import { UserEditDTO } from '../../../shared/dtos/UserEditSaveDTO';
 import { Id } from '../../../shared/types/versionId';
 import { EventTriggerType, parseIntOrNull } from '../../../static/frontendHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
@@ -25,7 +25,6 @@ import { useSetBusy } from '../../system/LoadingFrame/BusyBarContext';
 import { EpistoConinImage } from '../../universal/EpistoCoinImage';
 import { EditSection } from '../courses/EditSection';
 import { TailingAdminButtons } from '../TailingAdminButtons';
-import { PermissionAssignerControl } from './permissionAssigner/PermissionAssignerControl';
 
 export const AdminEditUserControl = ({
     editDTO,
@@ -48,11 +47,12 @@ export const AdminEditUserControl = ({
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
-    const [selectedJobTitle, setSelectedJobTitle] = useState<JobTitleDTO | null>(null);
+    const [selectedJobTitle, setSelectedJobTitle] = useState<DepartmentDTO | null>(null);
     const [selectedCompany, setSelectedCompany] = useState<CompanyDTO | null>(null);
     const [isTeacher, setIsTeacher] = useState(false);
     const [rolesChangeSet, setRolesChangeSet] = useState<ChangeSet<UserRoleDTO>>(new ChangeSet<UserRoleDTO>());
     const [permissionsChangeSet, setPermissionsChangeSet] = useState<ChangeSet<UserPermissionDTO>>(new ChangeSet<UserPermissionDTO>());
+    const { canSetUserRole } = editDTO ?? { canSetUserRole: false };
 
     const showError = useShowErrorDialog();
 
@@ -139,7 +139,8 @@ export const AdminEditUserControl = ({
             jobTitleId: selectedJobTitle.id,
             isTeacher,
             permissions: permissionsChangeSet,
-            roles: rolesChangeSet
+            roles: rolesChangeSet,
+            canSetUserRole
         };
 
         return saveUserAsync(editedUserDTO);
@@ -204,7 +205,7 @@ export const AdminEditUserControl = ({
             </EditSection>
 
             {/* company section */}
-            <EditSection title="Cég és beosztás">
+            <EditSection title="Cég és jogosultságkezelés">
 
                 {/* company */}
                 {canSetInvitedUserCompany && <EpistoFlex2
@@ -232,8 +233,8 @@ export const AdminEditUserControl = ({
                         getCompareKey={company => '' + company?.id} />
                 </EpistoFlex2>}
 
-                {/* job title */}
-                {canSetInvitedUserCompany && <EpistoFlex2
+                {/* role */}
+                {canSetUserRole && <EpistoFlex2
                     direction="column"
                     align="stretch"
                     mt="5px"
@@ -247,28 +248,13 @@ export const AdminEditUserControl = ({
                             letterSpacing: '1.2px'
                         }}>
 
-                        {translatableTexts.misc.jobTitle}
+                        {translatableTexts.misc.company}
                     </EpistoFont>
 
-                    <EpistoSelect
-                        items={jobTitles}
-                        selectedValue={selectedJobTitle}
-                        onSelected={setSelectedJobTitle}
-                        getDisplayValue={jt => '' + jt?.name}
-                        getCompareKey={jt => '' + jt?.id} />
+                    {}
                 </EpistoFlex2>}
             </EditSection>
         </EpistoFlex2>
-
-        {/* access management */}
-        <EditSection title="Jogosultságkezelés">
-
-            {editedUserId && <PermissionAssignerControl
-                userCompanyId={editDTO?.companyId ?? null}
-                userId={editedUserId}
-                onChange={onAuthItemsChanged}
-                refetchTrigger={refetchTrigger} />}
-        </EditSection>
 
         {/* coin stuff */}
         <EditSection
@@ -365,6 +351,6 @@ export const AdminEditUserControl = ({
                     // history.goBack();
                 }
             }}
-            onSaveCallback={handleSaveUserAsync } />
+            onSaveCallback={handleSaveUserAsync} />
     </EpistoFlex2 >;
 };

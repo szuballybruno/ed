@@ -1,5 +1,5 @@
 import { Id } from '../types/versionId';
-import { JobTitleDTO } from './JobTitleDTO';
+import { DepartmentDTO } from './DepartmentDTO';
 
 export class UserDTO {
     id: Id<'User'>;
@@ -12,5 +12,5 @@ export class UserDTO {
     name: string;
     isInvitationAccepted: boolean;
     avatarUrl: string | null;
-    jobTitle: JobTitleDTO | null;
+    department: DepartmentDTO | null;
 }

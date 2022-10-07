@@ -1,3 +1,4 @@
+import { writeFileSync } from 'fs';
 import { dirname } from 'path';
 import 'reflect-metadata'; // needs to be imported for TypeORM
 import { fileURLToPath } from 'url';
@@ -9,9 +10,7 @@ import { SQLConnectionService } from './services/sqlServices/SQLConnectionServic
 import './shared/logic/jsExtensions';
 import { ServiceProviderInitializator } from './startup/initApp';
 import { initTurboExpress } from './startup/instatiateTurboExpress';
-import { recreateDBAsync } from './startup/recreateDB';
 import { XTurboExpressListener } from './turboImplementations/XTurboExpressListener';
-import { snoozeAsync } from './utilities/helpers';
 import { GetServiceProviderType } from './utilities/XTurboExpress/XTurboExpressTypes';
 
 const rootDir = dirname(fileURLToPath(import.meta.url));
@@ -27,13 +26,15 @@ const lightRecreateDBAsync = async (getServiceProviderAsync: GetServiceProviderT
     globalConfig
         .overrideLogScopes(globalConfig.logging.enabledScopes.concat(['BOOTSTRAP']));
 
-    await serviceProvider
+    const recerateScript = serviceProvider
         .getService(CreateDBService)
-        .createDatabaseSchemaAsync(false);
+        .getDatabaseLightSchemaRecreateScript();
 
     serviceProvider
         .getService(SQLConnectionService)
         .releaseConnectionClient();
+
+    writeFileSync(globalConfig.getRootRelativePath('/sql/out/recreateLightSchema.sql'), recerateScript);
 };
 
 const startServerAsync = async (initializator: ServiceProviderInitializator) => {
@@ -62,26 +63,19 @@ const main = async () => {
     log('------------- APPLICATION STARTED ----------------');
     log('');
 
-    const isPurgeMode = process.argv.any(x => x === '--purge');
     const isLightRecreateMode = process.argv.any(x => x === '--lightRecreate');
-    const isShortLife = process.argv.any(x => x === '--shortLife');
-    const isKeepAlive = process.argv.any(x => x === '--keepAlive');
 
-    log(`MODE FLAGS: [${isPurgeMode ? 'PURGE' : ''}${isLightRecreateMode ? 'LIGHT RECREATE' : ''}${isShortLife ? 'SHORT LIFE' : ''}]`);
+    log(`MODE: [${isLightRecreateMode ? 'LIGHT RECREATE' : 'NORMAL'}]`);
 
-    const initializator = new ServiceProviderInitializator(rootDir, isPurgeMode);
+    const initializator = new ServiceProviderInitializator(rootDir, false);
+    if (isLightRecreateMode) {
 
-    if (isPurgeMode)
-        await recreateDBAsync(initializator.getInitializedTransientServices.bind(initializator));
-
-    if (isLightRecreateMode)
         await lightRecreateDBAsync(initializator.getInitializedTransientServices.bind(initializator));
+    }
+    else {
 
-    if (isKeepAlive)
-        await snoozeAsync(9999999);
-
-    if (!isShortLife)
         await startServerAsync(initializator);
+    }
 };
 
 await main();

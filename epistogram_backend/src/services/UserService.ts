@@ -1,6 +1,6 @@
 import { AnswerSession } from '../models/entity/misc/AnswerSession';
 import { CourseData } from '../models/entity/course/CourseData';
-import { JobTitle } from '../models/entity/misc/JobTitle';
+import { Department } from '../models/entity/misc/Department';
 import { StorageFile } from '../models/entity/misc/StorageFile';
 import { TeacherInfo } from '../models/entity/misc/TeacherInfo';
 import { User } from '../models/entity/misc/User';
@@ -9,7 +9,6 @@ import { AdminPageUserDTO } from '../shared/dtos/admin/AdminPageUserDTO';
 import { BriefUserDataDTO } from '../shared/dtos/BriefUserDataDTO';
 import { ChangeSet } from '../shared/dtos/changeSet/ChangeSet';
 import { UserDTO } from '../shared/dtos/UserDTO';
-import { UserEditDTO } from '../shared/dtos/UserEditDTO';
 import { UserEditSimpleDTO } from '../shared/dtos/UserEditSimpleDTO';
 import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 import { Id } from '../shared/types/versionId';
@@ -28,6 +27,9 @@ import { CourseAccessBridge } from '../models/entity/misc/CourseAccessBridge';
 import { instantiate } from '../shared/logic/sharedLogic';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { UserCourseBridge } from '../models/entity/misc/UserCourseBridge';
+import { UserEditReadDTO } from '../shared/dtos/UserEditReadDTO';
+import { UserEditSaveDTO } from '../shared/dtos/UserEditSaveDTO';
+import { DepartmentDTO } from '../shared/dtos/DepartmentDTO';
 
 export class UserService {
 
@@ -98,38 +100,50 @@ export class UserService {
             .where('id', '=', 'editedUserId')
             .getSingle();
 
-        return {
-            id: res.id,
+        const roles = await this
+            ._roleService
+            .getUserRolesAsync(principalId, editedUserId);
+
+        return instantiate<UserEditReadDTO>({
+            userId: editedUserId,
             firstName: res.firstName,
             lastName: res.lastName,
             email: res.email,
             isTeacher: !!res.teacherInfoId,
-            jobTitleId: res.jobTitleId,
+            departmentId: res.departmentId,
             companyId: res.companyId,
-            roles: new ChangeSet(),
-            permissions: new ChangeSet()
-        };
+            roles
+        });
     }
 
     /**
      * Save user from admin page, where you can edit almost all fileds.
      */
-    async saveUserAsync(principalId: PrincipalId, dto: UserEditDTO) {
+    async saveUserAsync(principalId: PrincipalId, dto: UserEditSaveDTO) {
 
         await this._authorizationService
             .checkPermissionAsync(principalId, 'ACCESS_ADMIN');
 
-        const userId = dto.id;
+        const {
+            userId,
+            assignedRoleIds,
+            companyId,
+            departmentId,
+            email,
+            firstName,
+            isTeacher,
+            lastName
+        } = dto;
 
         // save user
         await this._ormService
             .save(User, {
                 id: userId,
-                lastName: dto.lastName,
-                firstName: dto.firstName,
-                email: dto.email,
-                companyId: dto.companyId,
-                jobTitleId: dto.jobTitleId
+                lastName,
+                firstName,
+                email,
+                companyId,
+                departmentId
             });
 
         // save teacher info
@@ -137,7 +151,7 @@ export class UserService {
 
         // save auth items
         await this._roleService
-            .saveUserAssignedAuthItemsAsync(principalId, userId, dto.roles, dto.permissions);
+            .saveUserRolesAsync(principalId, userId, dto.assignedRoleIds);
     }
 
     /**
@@ -297,14 +311,6 @@ export class UserService {
         if (existingUser)
             throw new ErrorWithCode('User already exists. Email: ' + user.email, 'email_taken');
 
-        // TODO
-        // if (user.companyId === 2 as any) {
-        // console.warn('-------------------------------------------------------');
-        // console.warn('---------- SETTING NEW EPISTO USER AS GOD!!!! ---------');
-        // console.warn('-------------------------------------------------------');
-        // user.isGod = true;
-        // }
-
         // hash user password
         const hashedPassword = await this
             ._hashService
@@ -361,22 +367,24 @@ export class UserService {
      */
     getUserById = async (userId: Id<'User'>) => {
 
-        const user = await this._ormService
-            .withResType<User & { filePath: string }>()
-            .query(User, { userId })
-            .selectFrom(x => x
-                .columns(User, '*')
-                .columns(StorageFile, {
-                    filePath: 'filePath'
-                }))
-            .leftJoin(StorageFile, x => x
-                .on('id', '=', 'avatarFileId', User))
-            .leftJoin(JobTitle, x => x
-                .on('id', '=', 'jobTitleId', User))
-            .where('id', '=', 'userId')
-            .getSingle();
+        // const user = await this._ormService
+        //     .withResType<User & { filePath: string }>()
+        //     .query(User, { userId })
+        //     .selectFrom(x => x
+        //         .columns(User, '*')
+        //         .columns(StorageFile, {
+        //             filePath: 'filePath'
+        //         }))
+        //     .leftJoin(StorageFile, x => x
+        //         .on('id', '=', 'avatarFileId', User))
+        //     .leftJoin(Department, x => x
+        //         .on('id', '=', 'departmentId', User))
+        //     .where('id', '=', 'userId')
+        //     .getSingle();
 
-        return user;
+        return this
+            ._ormService
+            .getSingleById(User, userId);
     };
 
     /**
@@ -417,28 +425,45 @@ export class UserService {
     /**
      * Get user dto by userId.
      */
-    getUserDTOById = async (userId: Id<'User'>) => {
+    async getUserDTOById(userId: Id<'User'>) {
 
-        const foundUser = await this.getUserById(userId);
+        type Res = User & { filePath: string, departmentId: Id<'Department'>, departmentName: string };
 
-        if (!foundUser)
-            return null;
+        const view = await this
+            ._ormService
+            .withResType<Res>()
+            .query(User, { userId })
+            .selectFrom(x => x
+                .columns(User, '*')
+                .columns(StorageFile, {
+                    filePath: 'filePath'
+                })
+                .columns(Department, {
+                    departmentId: 'id',
+                    departmentName: 'name'
+                }))
+            .leftJoin(StorageFile, x => x
+                .on('id', '=', 'avatarFileId', User))
+            .leftJoin(Department, x => x
+                .on('id', '=', 'departmentId', User))
+            .where('id', '=', 'userId')
+            .getSingle();
 
         return this._mapperService
-            .mapTo(UserDTO, [foundUser]);
-    };
+            .mapTo(UserDTO, [view, view.filePath, view.departmentId, view.departmentName]);
+    }
 
     /**
      * Get user's active refresh token by userId.
      */
-    getUserRefreshTokenById = async (userId: Id<'User'>) => {
+    async getUserRefreshTokenById(userId: Id<'User'>) {
 
         const user = await this.getUserById(userId);
         if (!user)
             return null;
 
         return user.refreshToken;
-    };
+    }
 
     /**
      * Get a user by it's email address.

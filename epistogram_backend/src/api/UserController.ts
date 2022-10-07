@@ -1,6 +1,6 @@
 import { UserService } from '../services/UserService';
 import { UserDTO } from '../shared/dtos/UserDTO';
-import { UserEditDTO } from '../shared/dtos/UserEditDTO';
+import { UserEditSaveDTO } from '../shared/dtos/UserEditSaveDTO';
 import { UserEditSimpleDTO } from '../shared/dtos/UserEditSimpleDTO';
 import { apiRoutes } from '../shared/types/apiRoutes';
 import { Id } from '../shared/types/versionId';
@@ -67,7 +67,7 @@ export class UserController implements XController<UserController> {
     saveUserAction(params: ActionParams) {
 
         const dto = params
-            .getBody<UserEditDTO>(['firstName', 'lastName', 'companyId', 'email', 'id', 'isTeacher'])
+            .getBody<UserEditSaveDTO>(['firstName', 'lastName', 'companyId', 'email', 'userId', 'isTeacher'])
             .data;
 
         return this._userService

@@ -1,7 +1,7 @@
-import { JobTitle } from '../../models/entity/misc/JobTitle';
+import { Department } from '../../models/entity/misc/Department';
 import { getSeedList } from '../../services/sqlServices/SeedService';
 
-export const getJobTitlesSeedData = () => getSeedList<JobTitle>()({
+export const getJobTitlesSeedData = () => getSeedList<Department>()({
     user: {
         name: 'Általános felhasználó'
     },

@@ -46,7 +46,7 @@ export class AdminUserListView {
 
     @ViewColumn()
     @XViewColumn()
-    jobTitleId: Id<'JobTitle'>;
+    departmentId: Id<'Department'>;
 
     @ViewColumn()
     @XViewColumn()

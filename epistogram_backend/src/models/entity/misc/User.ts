@@ -15,7 +15,7 @@ import { CourseRatingQuestionUserAnswer } from '../courseRating/CourseRatingQues
 import { DailyTipOccurrence } from './DailyTipOccurrence';
 import { DiscountCode } from './DiscountCode';
 import { Event } from './Event';
-import { JobTitle } from './JobTitle';
+import { Department } from './Department';
 import { Like } from './Like';
 import { VideoPlaybackSample } from '../playback/VideoPlaybackSample';
 import { VideoPlaybackSession } from '../playback/VideoPlaybackSession';
@@ -128,10 +128,10 @@ export class User {
     // job title 
     @Column({ nullable: true, type: 'number' })
     @XViewColumn()
-    jobTitleId: Id<'JobTitle'> | null;
-    @ManyToOne(_ => JobTitle, x => x.users)
-    @JoinColumn({ name: 'job_title_id' })
-    jobTitle: Relation<JobTitle> | null;
+    departmentId: Id<'Department'> | null;
+    @ManyToOne(_ => Department, x => x.users)
+    @JoinColumn({ name: 'department_id' })
+    department: Relation<Department> | null;
 
     // TO MANY
 
