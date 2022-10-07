@@ -63,16 +63,20 @@ export class UserService {
         principalId: PrincipalId,
         editedUserId: Id<'User'>
     ) {
-        await this._authorizationService
-            .checkPermissionAsync(
-                principalId,
-                'ACCESS_ADMIN'
-            );
 
         const user = await this._ormService
             .query(User, { userId: editedUserId })
             .where('id', '=', 'userId')
             .getSingle();
+
+        await this._authorizationService
+            .checkPermissionAsync(
+                principalId,
+                'ADMINISTRATE_COURSE',
+                {
+                    companyId: user.companyId
+                }
+            );
 
         await this._authorizationService
             .checkPermissionAsync(
@@ -138,9 +142,6 @@ export class UserService {
      */
     async saveUserAsync(principalId: PrincipalId, dto: UserEditSaveDTO) {
 
-        await this._authorizationService
-            .checkPermissionAsync(principalId, 'ACCESS_ADMIN');
-
         const {
             userId,
             assignedRoleIds,
@@ -151,6 +152,12 @@ export class UserService {
             isTeacher,
             lastName
         } = dto;
+
+        const user = await this
+            .getUserById(dto.userId);
+
+        await this._authorizationService
+            .checkPermissionAsync(principalId, 'ADMINISTRATE_COURSE', { companyId: user.companyId });
 
         // save user
         await this._ormService
@@ -169,6 +176,15 @@ export class UserService {
         // save auth items
         await this._roleService
             .saveUserRolesAsync(principalId, userId, assignedRoleIds);
+    }
+
+    private async _getCompanyIdAsync(userId: Id<'User'>) {
+
+        const { companyId } = await this
+            ._ormService
+            .getSingleById(User, userId);
+
+        return { companyId };
     }
 
     /**
@@ -234,22 +250,17 @@ export class UserService {
      */
     async getAdminPageUsersListAsync(principalId: PrincipalId, searchText: string | null) {
 
-        await this._authorizationService
-            .checkPermissionAsync(
-                principalId,
-                'ACCESS_ADMIN'
-            );
+        const principal = await this
+            .getUserById(principalId);
 
-        const user = await this._ormService
-            .query(User, { userId: principalId.getId() })
-            .where('id', '=', 'userId')
-            .getSingle();
+        await this._authorizationService
+            .checkPermissionAsync(principalId, 'ADMINISTRATE_COURSE', { companyId: principal.companyId });
 
         await this._authorizationService
             .checkPermissionAsync(
                 principalId,
                 'VIEW_COMPANY_USERS',
-                { companyId: user.companyId }
+                { companyId: principal.companyId }
             );
 
         const searchTextLower = searchText?.toLowerCase();
@@ -292,16 +303,11 @@ export class UserService {
      */
     async getBriefUserDataAsync(principalId: PrincipalId, userId: Id<'User'>) {
 
-        await this._authorizationService
-            .checkPermissionAsync(
-                principalId,
-                'ACCESS_ADMIN'
-            );
+        const user = await this
+            .getUserById(userId);
 
-        const user = await this._ormService
-            .query(User, { userId })
-            .where('id', '=', 'userId')
-            .getSingle();
+        await this._authorizationService
+            .checkPermissionAsync(principalId, 'ADMINISTRATE_COURSE', { companyId: user.companyId });
 
         await this._authorizationService
             .checkPermissionAsync(
@@ -382,26 +388,11 @@ export class UserService {
     /**
      * Get user entity by it's id.
      */
-    getUserById = async (userId: Id<'User'>) => {
-
-        // const user = await this._ormService
-        //     .withResType<User & { filePath: string }>()
-        //     .query(User, { userId })
-        //     .selectFrom(x => x
-        //         .columns(User, '*')
-        //         .columns(StorageFile, {
-        //             filePath: 'filePath'
-        //         }))
-        //     .leftJoin(StorageFile, x => x
-        //         .on('id', '=', 'avatarFileId', User))
-        //     .leftJoin(Department, x => x
-        //         .on('id', '=', 'departmentId', User))
-        //     .where('id', '=', 'userId')
-        //     .getSingle();
+    getUserById = async (userId: Id<'User'> | PrincipalId) => {
 
         return this
             ._ormService
-            .getSingleById(User, userId);
+            .getSingleById(User, userId as any);
     };
 
     /**
@@ -409,16 +400,11 @@ export class UserService {
      */
     async deleteUserAsync(principalId: PrincipalId, deletedUserId: Id<'User'>) {
 
-        await this._authorizationService
-            .checkPermissionAsync(
-                principalId,
-                'ACCESS_ADMIN'
-            );
+        const user = await this
+            .getUserById(deletedUserId);
 
-        const user = await this._ormService
-            .query(User, { userId: deletedUserId })
-            .where('id', '=', 'userId')
-            .getSingle();
+        await this._authorizationService
+            .checkPermissionAsync(principalId, 'ADMINISTRATE_COURSE', { companyId: user.companyId });
 
         await this._authorizationService
             .checkPermissionAsync(

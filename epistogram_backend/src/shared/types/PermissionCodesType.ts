@@ -187,9 +187,9 @@ export const permissionCodes = fn({
         code: 'VIEW_ANONYM_COMMENTER_NAME',
         scope: 'USER'
     },
-    ACCESS_ADMIN: {
-        code: 'ACCESS_ADMIN',
-        scope: 'USER'
+    ADMINISTRATE_COURSE: {
+        code: 'ADMINISTRATE_COURSE',
+        scope: 'COMPANY'
     },
     ACCESS_APPLICATION: {
         code: 'ACCESS_APPLICATION',

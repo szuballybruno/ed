@@ -409,44 +409,34 @@ export class CourseService {
     /**
      * Gets the course content edit DTO.
      */
-    getCourseContentAdminDataAsync(
+    async getCourseContentAdminDataAsync(
         userId: PrincipalId,
         courseId: Id<'Course'>,
         loadDeleted: boolean
     ) {
 
+        const views = await this._ormService
+            .query(CourseAdminContentView, { courseId })
+            .where('courseId', '=', 'courseId')
+            .getMany();
+
+        const courseVersionId = (await this._ormService
+            .query(LatestCourseVersionView, { courseId })
+            .where('courseId', '=', 'courseId')
+            .getSingle())
+            .versionId;
+
+        const modules = await this._moduleService
+            .getModuleEditDTOsAsync(userId, courseVersionId)
+            .action();
+
+        const items = this._mapperService
+            .mapTo(CourseContentItemAdminDTO, [views]);
+
         return {
-            action: async () => {
-                const views = await this._ormService
-                    .query(CourseAdminContentView, { courseId })
-                    .where('courseId', '=', 'courseId')
-                    .getMany();
-
-                const courseVersionId = (await this._ormService
-                    .query(LatestCourseVersionView, { courseId })
-                    .where('courseId', '=', 'courseId')
-                    .getSingle())
-                    .versionId;
-
-                const modules = await this._moduleService
-                    .getModuleEditDTOsAsync(userId, courseVersionId)
-                    .action();
-
-                const items = this._mapperService
-                    .mapTo(CourseContentItemAdminDTO, [views]);
-
-                return {
-                    items,
-                    modules
-                } as CourseContentAdminDTO;
-            },
-            auth: async () => {
-
-                return this._authorizationService
-                    .checkPermissionAsync(userId, 'ACCESS_ADMIN');
-            }
-        };
-
+            items,
+            modules
+        } as CourseContentAdminDTO;
     }
 
     /**
@@ -479,27 +469,16 @@ export class CourseService {
     /**
      * Returns admin list items
      */
-    getAdminCoursesAsync(
+    async getAdminCoursesAsync(
         userId: PrincipalId
     ) {
 
-        return {
-            action: async () => {
+        const courseAdminShortViews = await this._ormService
+            .query(CourseAdminShortView)
+            .getMany();
 
-                const courseAdminShortViews = await this._ormService
-                    .query(CourseAdminShortView)
-                    .getMany();
-
-                return this._mapperService
-                    .mapTo(CourseAdminListItemDTO, [courseAdminShortViews]);
-            },
-            auth: async () => {
-
-                return this._authorizationService
-                    .checkPermissionAsync(userId, 'ACCESS_ADMIN');
-            }
-        };
-
+        return this._mapperService
+            .mapTo(CourseAdminListItemDTO, [courseAdminShortViews]);
     }
 
     /**

@@ -1,6 +1,7 @@
 import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 import { GetParamByCodeType, GetPermissionScope, PermissionScopeParamType } from '../shared/types/PermissionCodesType';
 import { PermissionCodeType } from '../shared/types/sharedTypes';
+import { Id } from '../shared/types/versionId';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { AuthorizationResult } from '../utilities/XTurboExpress/XTurboExpressTypes';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
@@ -14,6 +15,10 @@ export class AuthorizationService {
 
     }
 
+    async canAccessAdmin(userId: Id<'User'>) {
+
+    }
+
     async checkPermissionAsync<TCode extends PermissionCodeType>(
         ...args: GetPermissionScope<TCode> extends 'USER'
             ? [PrincipalId, TCode]
@@ -22,6 +27,16 @@ export class AuthorizationService {
         const [principalId, searchPermissionCode, params] = args;
         const contextCompanyId = (params as PermissionScopeParamType)?.companyId ?? null;
         const contextCourseId = (params as PermissionScopeParamType)?.courseId ?? null;
+
+        const scope = await this
+            ._permissionService
+            .getPermissionScope(searchPermissionCode);
+
+        if (scope === 'COMPANY' && contextCompanyId === null)
+            throw new Error('Company context id is missing!');
+
+        if (scope === 'COURSE' && contextCourseId === null)
+            throw new Error('Course context id is missing!');
 
         const hasPermission = await this
             ._permissionService

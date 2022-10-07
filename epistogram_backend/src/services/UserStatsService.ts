@@ -186,170 +186,126 @@ export class UserStatsService {
     /**
      * Gets the statistics for the users every watched video
      */
-    getUserVideoStatsAsync(principalId: PrincipalId, courseId: Id<'Course'>, userId: Id<'User'>) {
+    async getUserVideoStatsAsync(principalId: PrincipalId, courseId: Id<'Course'>, userId: Id<'User'>) {
 
-        return {
-            action: async () => {
+        const stats = await this._ormService
+            .query(UserVideoStatsView, { userId, courseId })
+            .where('userId', '=', 'userId')
+            .and('courseId', '=', 'courseId')
+            .getMany();
 
-                const stats = await this._ormService
-                    .query(UserVideoStatsView, { userId, courseId })
-                    .where('userId', '=', 'userId')
-                    .and('courseId', '=', 'courseId')
-                    .getMany();
-
-                return this._mapperService
-                    .mapTo(UserVideoStatsDTO, [stats]);
-            },
-            auth: async () => {
-
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ACCESS_ADMIN');
-            }
-        };
-
+        return this._mapperService
+            .mapTo(UserVideoStatsDTO, [stats]);
     }
 
     /**
      * Gets the statistics for the users every completed exam
      */
 
-    getUserExamStatsAsync(principalId: PrincipalId, courseId: Id<'Course'>, userId: Id<'User'>) {
+    async getUserExamStatsAsync(principalId: PrincipalId, courseId: Id<'Course'>, userId: Id<'User'>) {
 
-        return {
-            action: async () => {
+        const stats = await this._ormService
+            .query(UserExamStatsView, { userId, courseId })
+            .where('userId', '=', 'userId')
+            .and('courseId', '=', 'courseId')
+            .getMany();
 
-                const stats = await this._ormService
-                    .query(UserExamStatsView, { userId, courseId })
-                    .where('userId', '=', 'userId')
-                    .and('courseId', '=', 'courseId')
-                    .getMany();
-
-                return this._mapperService
-                    .mapTo(UserExamStatsDTO, [stats]);
-            },
-            auth: async () => {
-
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ACCESS_ADMIN');
-            }
-        };
-
+        return this._mapperService
+            .mapTo(UserExamStatsDTO, [stats]);
     }
 
     /**
      * Gets the learning overview statistics data for single user
      * TODO: Correct mapping
      */
-    getUserLearningOverviewDataAsync(principalId: PrincipalId, userId: Id<'User'>) {
+    async getUserLearningOverviewDataAsync(principalId: PrincipalId, userId: Id<'User'>) {
+
+        const userSpentTimeRatio = await this._ormService
+            .query(UserSpentTimeRatioView, { userId })
+            .where('userId', '=', 'userId')
+            .getOneOrNull();
+
+        const courses = await this._ormService
+            .query(CourseLearningStatsView, { userId })
+            .where('userId', '=', 'userId')
+            .getMany();
+
+        // in progress courses
+        const inProgressCourses = courses
+            .filter(x => x.isStarted && !x.isCompleted);
+
+        const inProgressCoursesAsCourseShortDTOs = this._mapperService
+            .mapTo(CourseLearningDTO, [inProgressCourses]);
+
+        const stats = await this._ormService
+            .query(UserLearningOverviewStatsView, { userId })
+            .where('userId', '=', 'userId')
+            .getSingle();
+
+        const productivityPercentage = await this
+            .calculateUserProductivityAsync(userId);
 
         return {
-            action: async () => {
-                const userSpentTimeRatio = await this._ormService
-                    .query(UserSpentTimeRatioView, { userId })
-                    .where('userId', '=', 'userId')
-                    .getOneOrNull();
+            overallPerformancePercentage: stats.overallPerformancePercentage,
 
-                const courses = await this._ormService
-                    .query(CourseLearningStatsView, { userId })
-                    .where('userId', '=', 'userId')
-                    .getMany();
+            performancePercentage: stats.performancePercentage,
+            userReactionTimeDifferencePercentage: stats.userReactionTimeDifferencePercentage,
+            reactionTimeScorePoints: stats.totalUserReactionTimePoints,
+            productivityPercentage: productivityPercentage,
 
-                // in progress courses
-                const inProgressCourses = courses
-                    .filter(x => x.isStarted && !x.isCompleted);
+            isAnyCoursesInProgress: inProgressCourses.any(x => true),
+            inProgressCourses: inProgressCoursesAsCourseShortDTOs,
 
-                const inProgressCoursesAsCourseShortDTOs = this._mapperService
-                    .mapTo(CourseLearningDTO, [inProgressCourses]);
-
-                const stats = await this._ormService
-                    .query(UserLearningOverviewStatsView, { userId })
-                    .where('userId', '=', 'userId')
-                    .getSingle();
-
-                const productivityPercentage = await this
-                    .calculateUserProductivityAsync(userId);
-
-                return {
-                    overallPerformancePercentage: stats.overallPerformancePercentage,
-
-                    performancePercentage: stats.performancePercentage,
-                    userReactionTimeDifferencePercentage: stats.userReactionTimeDifferencePercentage,
-                    reactionTimeScorePoints: stats.totalUserReactionTimePoints,
-                    productivityPercentage: productivityPercentage,
-
-                    isAnyCoursesInProgress: inProgressCourses.any(x => true),
-                    inProgressCourses: inProgressCoursesAsCourseShortDTOs,
-
-                    userActivityDistributionData: {
-                        watchingVideosPercentage: userSpentTimeRatio?.totalVideoWatchElapsedTime,
-                        completingExamsPercentage: userSpentTimeRatio?.totalExamSessionElapsedTime,
-                        answeringQuestionsPercentage: userSpentTimeRatio?.totalQuestionElapsedTime,
-                        noActivityPercentage: userSpentTimeRatio?.otherTotalSpentSeconds
-                    },
-
-                    userId: userId,
-                    engagementPoints: stats.engagementPoints,
-                    totalTimeActiveOnPlatformSeconds: stats.totalTimeActiveOnPlatformSeconds,
-                    watchedVideos: stats.watchedVideos,
-                    answeredVideoAndPractiseQuizQuestions: stats.answeredVideoAndPractiseQuizQuestions,
-                    correctAnsweredVideoAndPractiseQuizQuestions: stats.correctAnsweredVideoAndPractiseQuizQuestions,
-                    correctAnswerRatePercentage: stats.correctAnswerRatePercentage,
-                    averageWatchedVideosPerDay: stats.averageWatchedVideosPerDay,
-                    mostFrequentTimeRange: stats.mostFrequentTimeRange,
-                    averageSessionLengthSeconds: stats.averageSessionLengthSeconds,
-                    totalDoneExams: stats.totalDoneExams,
-                    videosToBeRepeatedCount: stats.videosToBeRepeatedCount
-                } as Partial<UserLearningOverviewDataDTO>;
+            userActivityDistributionData: {
+                watchingVideosPercentage: userSpentTimeRatio?.totalVideoWatchElapsedTime,
+                completingExamsPercentage: userSpentTimeRatio?.totalExamSessionElapsedTime,
+                answeringQuestionsPercentage: userSpentTimeRatio?.totalQuestionElapsedTime,
+                noActivityPercentage: userSpentTimeRatio?.otherTotalSpentSeconds
             },
-            auth: async () => {
 
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ACCESS_ADMIN');
-            }
-        };
-
+            userId: userId,
+            engagementPoints: stats.engagementPoints,
+            totalTimeActiveOnPlatformSeconds: stats.totalTimeActiveOnPlatformSeconds,
+            watchedVideos: stats.watchedVideos,
+            answeredVideoAndPractiseQuizQuestions: stats.answeredVideoAndPractiseQuizQuestions,
+            correctAnsweredVideoAndPractiseQuizQuestions: stats.correctAnsweredVideoAndPractiseQuizQuestions,
+            correctAnswerRatePercentage: stats.correctAnswerRatePercentage,
+            averageWatchedVideosPerDay: stats.averageWatchedVideosPerDay,
+            mostFrequentTimeRange: stats.mostFrequentTimeRange,
+            averageSessionLengthSeconds: stats.averageSessionLengthSeconds,
+            totalDoneExams: stats.totalDoneExams,
+            videosToBeRepeatedCount: stats.videosToBeRepeatedCount
+        } as Partial<UserLearningOverviewDataDTO>;
     }
 
-    getUserCourseStatsOverviewData = (
+    async getUserCourseStatsOverviewData(
         principalId: PrincipalId,
         courseId: Id<'Course'>,
         userId: Id<'User'>
-    ) => {
+    ) {
 
-        return {
-            action: async () => {
+        const currentUserId = userId
+            ? userId
+            : principalId.getId();
 
-                const currentUserId = userId
-                    ? userId
-                    : principalId.getId();
+        const courseStats = await this._ormService
+            .query(AdminUserCoursesView, { userId: currentUserId, courseId })
+            .where('userId', '=', 'userId')
+            .and('courseId', '=', 'courseId')
+            .getSingle();
 
-                const courseStats = await this._ormService
-                    .query(AdminUserCoursesView, { userId: currentUserId, courseId })
-                    .where('userId', '=', 'userId')
-                    .and('courseId', '=', 'courseId')
-                    .getSingle();
+        const userSpentTimeRatio = await this._ormService
+            .query(UserSpentTimeRatioView, { userId: currentUserId })
+            .where('userId', '=', 'userId')
+            .getSingle();
 
-                const userSpentTimeRatio = await this._ormService
-                    .query(UserSpentTimeRatioView, { userId: currentUserId })
-                    .where('userId', '=', 'userId')
-                    .getSingle();
+        const progressChartData = await this._userProgressService
+            .getProgressChartDataAsync(principalId, courseId, currentUserId)
+            .action();
 
-                const progressChartData = await this._userProgressService
-                    .getProgressChartDataAsync(principalId, courseId, currentUserId)
-                    .action();
-
-                return this._mapperService
-                    .mapTo(UserCourseStatsOverviewDTO, [courseStats, userSpentTimeRatio, progressChartData as any]);
-
-            },
-            auth: async () => {
-
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ACCESS_ADMIN');
-            }
-        };
-
-    };
+        return this._mapperService
+            .mapTo(UserCourseStatsOverviewDTO, [courseStats, userSpentTimeRatio, progressChartData as any]);
+    }
 
     async getUserOverviewStatsAsync(principalId: PrincipalId, isToBeReviewed: boolean) {
 

@@ -65,6 +65,20 @@ export class PermissionService extends QueryServiceBase<Permission> {
     }
 
     /**
+     * Get permission scope by permission code 
+     */
+    async getPermissionScope(permissionCode: string) {
+
+        const perm = await this
+            ._ormService
+            .query(Permission, { permissionCode })
+            .where('code', '=', 'permissionCode')
+            .getSingle();
+
+        return perm.scope;
+    }
+
+    /**
      * Gets a permission by the 
      * supplied search options  
      */
