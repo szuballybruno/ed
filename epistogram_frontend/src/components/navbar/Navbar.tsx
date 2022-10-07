@@ -18,7 +18,7 @@ const Navbar = memo((props: {
     const isLandscape = window.orientation === 90;
     const shouldRenderMobileNavigation = (() => {
 
-        return isMobile && !isLandscape;
+        return isMobile || !isLandscape;
     })();
 
     const { currentCourseItemCode } = useCurrentCourseItemCodeContext();
