@@ -42,6 +42,7 @@ export const MobileNavigation = () => {
     // util 
     const { logoutUserAsync } = useLogout();
     const showError = useShowErrorDialog();
+    const isLandscape = window.orientation === 90;
 
     const handleLogout = async () => {
         try {
@@ -59,6 +60,7 @@ export const MobileNavigation = () => {
         bottom='0'
         left='0'
         zIndex={1}
+        display={isLandscape ? 'hidden' : 'flex'}
         width='100%'
         height='80px'
         pb='20px'

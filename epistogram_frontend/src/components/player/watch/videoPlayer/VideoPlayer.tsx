@@ -108,7 +108,7 @@ export const VideoPlayer = (props: {
                 {/* video wrapper */}
                 <EpistoDiv
                     id="videoWrapper"
-                    maxHeight='calc(100vh - 200px)'
+                    maxHeight={!isMobile ? 'calc(100vh - 200px)' : undefined}
                     onClick={() => {
                         if (!isMobile) {
                             toggleIsPlaying();
@@ -125,8 +125,8 @@ export const VideoPlayer = (props: {
                         style={{
                             borderRadius: 6,
                             overflow: 'hidden',
-                            aspectRatio: '16 / 9',
-                            maxHeight: 'calc(100vh - 200px)'
+                            aspectRatio: !isMobile ? '16 / 9' : undefined,
+                            maxHeight: !isMobile ? 'calc(100vh - 200px)' : undefined
                         }}
                         width="100%"
                         height="100%"
