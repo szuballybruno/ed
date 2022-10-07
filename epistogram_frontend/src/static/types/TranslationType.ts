@@ -22,7 +22,7 @@ export type TranslationType = {
             firstName: string;
             lastName: string;
             company: string;
-            jobTitle: string;
+            department: string;
             role: string;
             category: string;
 

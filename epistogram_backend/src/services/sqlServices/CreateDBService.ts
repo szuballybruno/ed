@@ -206,7 +206,7 @@ ${script}
 
     private _getCreateScript(tableName: string, name: string, script: string) {
 
-        return `\n--CREATE ${tableName}: ${name}\n${script}`;
+        return `\n--CREATE ${tableName}: ${name}\n${script};`;
     }
 
     private readSQLFile(folderName: string, fileName: string, subFolder?: string) {

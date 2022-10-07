@@ -1,13 +1,13 @@
 import { Add } from '@mui/icons-material';
 import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { ButtonType } from '../../../models/types';
 import { UserApiService } from '../../../services/api/userApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
 import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
-import { UserEditDTO } from '../../../shared/dtos/UserEditSaveDTO';
+import { UserEditReadDTO } from '../../../shared/dtos/UserEditReadDTO';
+import { UserEditSaveDTO } from '../../../shared/dtos/UserEditSaveDTO';
 import { useEventTrigger, useSubscribeEventTrigger } from '../../../static/frontendHelpers';
 import { useRouteParams } from '../../../static/locationHelpers';
 import { EpistoDialog } from '../../universal/epistoDialog/EpistoDialog';
@@ -32,8 +32,6 @@ export const AdminEditUserSubpage = (props: {
     const showError = useShowErrorDialog();
     const { navigate2 } = useNavigation();
     const navigateToAddUser = () => navigate2(applicationRoutes.administrationRoute.usersRoute.addRoute);
-    const navigateToUserCourses = () => navigate2(applicationRoutes.administrationRoute.usersRoute.courseContentRoute, { userId: editedUserId });
-    const location = useLocation();
     const refetchTrigger = useEventTrigger();
 
     /**
@@ -45,7 +43,7 @@ export const AdminEditUserSubpage = (props: {
             return navigate2(applicationRoutes.administrationRoute.usersRoute.editRoute, { userId: users.first().id });
     }, [editedUserId, users]);
 
-    const handleSaveUserAsync = async (dto: UserEditDTO) => {
+    const handleSaveUserAsync = async (dto: UserEditSaveDTO) => {
 
         try {
 
@@ -64,7 +62,8 @@ export const AdminEditUserSubpage = (props: {
 
     const deleteWaningDialogLogic = useEpistoDialogLogic('delwarn');
 
-    const showDeleteUserDialog = (user: UserEditDTO | null) => {
+    const showDeleteUserDialog = (user: UserEditReadDTO | null) => {
+        
         if (!user)
             return;
 
@@ -79,7 +78,7 @@ export const AdminEditUserSubpage = (props: {
 
                             try {
 
-                                await UserApiService.deleteUserAsync(user.id);
+                                await UserApiService.deleteUserAsync(user.userId);
                                 await refetchUsersFunction();
                             }
                             catch (e) {

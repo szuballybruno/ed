@@ -2,7 +2,7 @@
 
 -- #step
 ALTER TABLE video_data
-DROP CONSTRAINT "FK_73a43183bd75d4d2361f973937a"
+DROP CONSTRAINT "FK_73a43183bd75d4d2361f973937a";
 
 -- #step
 ALTER TABLE video_data 
@@ -23,7 +23,7 @@ FROM
 	LEFT JOIN public.video_file vf
 	ON vf.id = vd.video_file_id
 ) sq
-WHERE sq.video_data_id = vd.id
+WHERE sq.video_data_id = vd.id;
 
 -- #4
 ALTER TABLE video_data

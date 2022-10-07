@@ -17,13 +17,13 @@ export const apiRoutes = {
     },
 
     misc: {
-        getJobTitles: '/misc/get-job-titles',
         getHomePageDTO: '/misc/get-overview-page-dto',
         getCurrentCourseItemCode: '/misc/get-current-course-item-code',
         getCourseOverviewData: '/misc/get-course-overview-data'
     },
 
     roles: {
+        getRoles: '/roles/get-roles',
         createRole: '/roles/create-role',
         getRoleEditData: '/roles/get-role-edit-data',
         deleteRole: '/roles/delete-role',

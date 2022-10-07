@@ -127,7 +127,7 @@ AS
 SELECT 
 	ast.*,
 	(EXTRACT (EPOCH FROM ast.end_date - ast.start_date) / 86400)::int AS length_days
-FROM activity_streak ast
+FROM activity_streak ast;
 
 --CREATE VIEW: coin_acquire_per_course_view
 CREATE VIEW coin_acquire_per_course_view
@@ -161,7 +161,7 @@ ON ga.question_version_id = qv.id
 LEFT JOIN public.coin_transaction ct
 ON ct.given_answer_id = ga.id
 
-GROUP BY co.id, ct.user_id, ct.id
+GROUP BY co.id, ct.user_id, ct.id;
 
 --CREATE VIEW: coin_balance_view
 CREATE VIEW coin_balance_view
@@ -175,7 +175,7 @@ LEFT JOIN public.coin_transaction ca
 ON ca.user_id = u.id
 
 GROUP BY 
-	u.id
+	u.id;
 
 --CREATE VIEW: comment_list_view
 CREATE VIEW comment_list_view
@@ -233,7 +233,7 @@ AND l.user_id = owner_user.id
 AND l.deletion_date IS NULL
 
 -- first order by threads then creation_date
-ORDER BY thread_id, creation_date, parent_comment_id desc
+ORDER BY thread_id, creation_date, parent_comment_id desc;
 
 --CREATE VIEW: company_permission_view
 CREATE VIEW company_permission_view
@@ -275,14 +275,14 @@ INNER JOIN public.permission_assignment_bridge pab
 ORDER BY 
 	assignee_company_id,
 	context_company_id,
-	permission_id
+	permission_id;
 
 --CREATE VIEW: constant_values_view
 CREATE VIEW constant_values_view
 AS
 SELECT 
     2.0 incorrect_answer_value_multiplier,
-    4.0 question_max_score
+    4.0 question_max_score;
 
 --CREATE VIEW: course_completion_view
 CREATE VIEW course_completion_view
@@ -298,7 +298,7 @@ ON cv.id = cc.course_version_id
 GROUP BY
 	cv.course_id,
 	cc.user_id
-
+;
 
 --CREATE VIEW: course_item_completion_view
 CREATE VIEW course_item_completion_view
@@ -352,7 +352,7 @@ OR mv.id = ev.module_version_id
 
 LEFT JOIN public.course_version cv
 ON cv.id = mv.course_version_id
-
+;
 
 --CREATE VIEW: course_length_estimation_view
 CREATE VIEW course_length_estimation_view
@@ -393,7 +393,7 @@ FROM
 			AND mv.course_version_id = cv.id
 		)
 	FROM public.course_version cv
-) sq
+) sq;
 
 --CREATE VIEW: course_module_overview_view
 CREATE VIEW course_module_overview_view
@@ -429,7 +429,7 @@ WHERE md.order_index != 0
 ORDER BY
 	co.id,
 	md.order_index,
-	vd.order_index
+	vd.order_index;
 
 --CREATE VIEW: course_questions_success_view
 CREATE VIEW course_questions_success_view
@@ -480,7 +480,7 @@ ON ga.id = sq.latest_given_answer_id
 
 GROUP BY sq.user_id, sq.course_id
 
-ORDER BY sq.user_id, sq.course_id
+ORDER BY sq.user_id, sq.course_id;
 
 --CREATE VIEW: course_rating_question_view
 CREATE VIEW course_rating_question_view
@@ -513,7 +513,7 @@ ORDER BY
 	u.id,
 	co.id,
 	crg.id,
-	crq.id
+	crq.id;
 
 --CREATE VIEW: course_shop_item_list_view
 CREATE VIEW course_shop_item_list_view
@@ -530,7 +530,7 @@ ON cd.id = cv.course_data_id
 LEFT JOIN public.storage_file sf
 ON sf.id = cd.cover_file_id
 
-WHERE cd.visibility = 'private'
+WHERE cd.visibility = 'private';
 
 --CREATE VIEW: course_video_count_view
 CREATE VIEW course_video_count_view
@@ -543,7 +543,7 @@ FROM public.video_version vv
 LEFT JOIN public.module_version mv
 ON mv.id = vv.module_version_id
 
-GROUP BY mv.course_version_id
+GROUP BY mv.course_version_id;
 
 --CREATE VIEW: course_video_length_view
 CREATE VIEW course_video_length_view
@@ -566,7 +566,7 @@ ON mv.id = vv.module_version_id
 WHERE mv.course_version_id IS NOT NULL
 
 GROUP BY
-    mv.course_version_id
+    mv.course_version_id;
 
 --CREATE VIEW: exam_score_view
 CREATE VIEW exam_score_view
@@ -631,7 +631,7 @@ grouped_cte AS
 SELECT 
 	grouped.*,
 	ROUND(grouped.exam_score::numeric / grouped.exam_max_score::numeric * 100, 1)::int score_percentage
-FROM grouped_cte grouped
+FROM grouped_cte grouped;
 
 --CREATE VIEW: exam_version_view
 CREATE VIEW exam_version_view
@@ -662,7 +662,7 @@ ON vd.id = vv.exam_data_id
 
 LEFT JOIN public.module_version mv
 ON mv.id = vv.module_version_id
-
+;
 
 --CREATE VIEW: given_answer_view
 CREATE VIEW given_answer_view
@@ -692,7 +692,7 @@ ORDER BY
 	ev.id,
     vv.id,
     qv.id,
-	av.id
+	av.id;
 
 --CREATE VIEW: latest_answer_session_view
 CREATE VIEW latest_answer_session_view
@@ -708,14 +708,14 @@ OR ase.video_version_id IS NOT NULL
 GROUP BY
     ase.user_id,
     ase.exam_version_id,
-    ase.video_version_id
+    ase.video_version_id;
 
 --CREATE VIEW: latest_course_version_view
 CREATE VIEW latest_course_version_view
 AS
 SELECT MAX(cv.id) version_id, cv.course_id
 FROM public.course_version cv
-GROUP BY cv.course_id
+GROUP BY cv.course_id;
 
 --CREATE VIEW: latest_exam_view
 CREATE VIEW latest_exam_view
@@ -739,7 +739,7 @@ ON cv.id = mv.course_version_id
 GROUP BY 
 	ev.exam_id,
 	cv.course_id,
-	ex.is_pretest
+	ex.is_pretest;
 
 --CREATE VIEW: latest_given_answer_view
 CREATE VIEW latest_given_answer_view
@@ -755,7 +755,7 @@ ON ase.id = ga.answer_session_id
 
 GROUP BY
 	ase.user_id,
-	ga.question_version_id
+	ga.question_version_id;
 
 --CREATE VIEW: latest_video_view
 CREATE VIEW latest_video_view
@@ -777,7 +777,7 @@ ON cv.id = mv.course_version_id
 
 GROUP BY 
 	vv.video_id,
-	cv.course_id
+	cv.course_id;
 
 --CREATE VIEW: module_edit_view
 CREATE VIEW module_edit_view
@@ -802,7 +802,7 @@ LEFT JOIN public.storage_file sf
 ON sf.id = md.image_file_id
 
 ORDER BY
-	md.order_index
+	md.order_index;
 
 --CREATE VIEW: module_player_view
 CREATE VIEW module_player_view
@@ -836,7 +836,7 @@ LEFT JOIN public.storage_file sf
 ON sf.id = md.image_file_id
 
 
-
+;
 
 --CREATE VIEW: personality_trait_category_view
 CREATE VIEW personality_trait_category_view
@@ -855,7 +855,7 @@ SELECT
 		WHERE dt.is_max = true 
 			AND dt.personality_trait_category_id = ptc.id 
 	) max_tips_count
-FROM public.personality_trait_category ptc
+FROM public.personality_trait_category ptc;
 
 --CREATE VIEW: personality_trait_view
 CREATE VIEW personality_trait_view
@@ -946,7 +946,7 @@ AND cs.user_id = u.id
 
 ORDER BY 
 	u.id
-
+;
 
 --CREATE VIEW: practise_question_info_view
 CREATE VIEW practise_question_info_view
@@ -998,7 +998,7 @@ INNER JOIN public.question_version qv
 ON qv.id = latest_ga.question_version_id
 
 
-
+;
 
 --CREATE VIEW: practise_question_view
 CREATE VIEW practise_question_view
@@ -1139,7 +1139,7 @@ ON ad.id = av.answer_data_id
 
 
 
-
+;
 
 --CREATE VIEW: prequiz_question_view
 CREATE VIEW prequiz_question_view
@@ -1163,7 +1163,7 @@ ON pa.question_id = pq.id
 
 ORDER BY 
 	pq.id,
-	pa.id
+	pa.id;
 
 --CREATE VIEW: question_data_view
 CREATE VIEW question_data_view
@@ -1202,13 +1202,13 @@ LEFT JOIN public.answer_version av
 ON av.question_version_id = qv.id
 
 LEFT JOIN public.answer_data ad
-ON ad.id = av.answer_data_id
+ON ad.id = av.answer_data_id;
 
 --CREATE VIEW: schema_version_view
 CREATE VIEW schema_version_view
 AS
-SELECT '14:10:55 2022-10-07 CEDT' last_modification_date, '0.01' version
-
+SELECT '17:13:45 2022-10-07 CEDT' last_modification_date, '0.01' version
+;
 
 --CREATE VIEW: shop_item_stateful_view
 CREATE VIEW shop_item_stateful_view
@@ -1264,7 +1264,7 @@ FROM
 	ON cosf.id = cd.cover_file_id
 
 	ORDER BY user_id, id
-) sq
+) sq;
 
 --CREATE VIEW: shop_item_view
 CREATE VIEW shop_item_view
@@ -1302,7 +1302,7 @@ ON sisf.id = si.cover_file_id
 LEFT JOIN public.storage_file cosf
 ON cosf.id = cd.cover_file_id
 
-ORDER BY id
+ORDER BY id;
 
 --CREATE VIEW: signup_question_view
 CREATE VIEW signup_question_view
@@ -1380,7 +1380,7 @@ ORDER BY
 	 md5(qv.id || '1'), -- randomize
 	 av.id
 	 
-	
+	;
 
 --CREATE VIEW: user_assigned_auth_item_view
 CREATE VIEW user_assigned_auth_item_view
@@ -1394,7 +1394,7 @@ SELECT * FROM
 	FROM role_assignment_bridge
 ) sq
 
-WHERE sq.assignee_user_id IS NOT NULL -- get user assigned only 
+WHERE sq.assignee_user_id IS NOT NULL ;
 
 --CREATE VIEW: user_course_bridge_view
 CREATE VIEW user_course_bridge_view
@@ -1414,7 +1414,7 @@ SELECT
 	ucb.previsioned_completion_date::date - ucb.start_date::date previsioned_length_days,
 	ucb.required_completion_date::date required_completion_date,
 	ucb.required_completion_date::date - CURRENT_DATE required_length_days
-FROM public.user_course_bridge ucb
+FROM public.user_course_bridge ucb;
 
 --CREATE VIEW: user_practise_recommendation_view
 CREATE VIEW user_practise_recommendation_view
@@ -1507,7 +1507,7 @@ LEFT JOIN video_is_recommended vir
 ON vir.video_version_id = vv.id
 
 LEFT JOIN answer_counts ac
-ON ac.video_version_id = vv.id
+ON ac.video_version_id = vv.id;
 
 --CREATE VIEW: user_prequiz_answers_view
 CREATE VIEW user_prequiz_answers_view
@@ -1560,7 +1560,7 @@ FROM public.user_course_bridge ucb
 
 ORDER BY
 	ucb.user_id,
-	ucb.course_id
+	ucb.course_id;
 
 --CREATE VIEW: user_role_view
 CREATE VIEW user_role_view
@@ -1648,7 +1648,7 @@ ORDER BY
 	co.id,
 	ro.id
 	
-	
+	;
 
 --CREATE VIEW: user_session_view
 CREATE VIEW user_session_view
@@ -1657,7 +1657,7 @@ SELECT
 	acse.*,
 	EXTRACT(EPOCH FROM (acse.end_date - acse.start_date))::int AS length_seconds 
 FROM public.activity_session AS acse
-
+;
 
 --CREATE VIEW: video_cursor_seconds_view
 CREATE VIEW video_cursor_seconds_view
@@ -1684,7 +1684,7 @@ GROUP BY
 	
 ORDER BY 
     u.id,
-	vv.id
+	vv.id;
 
 --CREATE VIEW: video_playback_sample_view
 CREATE VIEW video_playback_sample_view
@@ -1698,7 +1698,7 @@ SELECT
 	vps.creation_date,
 	ROUND ((vps.to_seconds - vps.from_seconds)::numeric, 3) total_playback_duration
 FROM public.video_playback_sample vps
-
+;
 
 --CREATE VIEW: video_player_data_view
 CREATE VIEW video_player_data_view
@@ -1728,7 +1728,7 @@ ON sf2.id = vd.video_file_id
 LEFT JOIN public.module_version mv
 ON mv.id = vv.module_version_id
 
-
+;
 
 --CREATE VIEW: video_version_view
 CREATE VIEW video_version_view
@@ -1759,7 +1759,7 @@ ON vd.id = vv.video_data_id
 
 LEFT JOIN public.module_version mv
 ON mv.id = vv.module_version_id
-
+;
 
 --CREATE VIEW: coin_transaction_view
 CREATE VIEW coin_transaction_view
@@ -1811,7 +1811,7 @@ LEFT JOIN public.shop_item_stateful_view sisv ON sisv.id = ca.shop_item_id AND s
 
 ORDER BY 
 	creation_date DESC
-
+;
 
 --CREATE VIEW: company_associated_courses_view
 CREATE VIEW company_associated_courses_view
@@ -1856,7 +1856,7 @@ AND pab.context_course_id = co.id
 ORDER BY 
     com.id,
     cab.id IS NOT NULL DESC,
-    co.id
+    co.id;
 
 --CREATE VIEW: course_admin_detailed_view
 CREATE VIEW course_admin_detailed_view
@@ -1911,7 +1911,7 @@ LEFT JOIN public.course_category scc
 ON scc.id = cd.sub_category_id
 	
 ORDER BY
-	lcvv.course_id
+	lcvv.course_id;
 
 --CREATE VIEW: course_item_view
 CREATE VIEW course_item_view
@@ -2016,7 +2016,7 @@ ORDER BY
 	cv.id,
 	md.order_index,
 	ic.item_order_index
-
+;
 
 --CREATE VIEW: course_item_count_view
 CREATE VIEW course_item_count_view
@@ -2037,7 +2037,7 @@ GROUP BY
 	co.id
 	
 ORDER BY
-	co.id
+	co.id;
 
 --CREATE VIEW: course_item_edit_view
 CREATE VIEW course_item_edit_view
@@ -2091,7 +2091,7 @@ ON sf.id = vd.video_file_id
 ORDER BY
 	civ.video_version_id,
 	civ.exam_version_id,
-	qv.id
+	qv.id;
 
 --CREATE VIEW: course_state_view
 CREATE VIEW course_state_view
@@ -2123,7 +2123,7 @@ FROM sq
     
 ORDER BY 
     sq.user_id,
-    sq.course_id
+    sq.course_id;
 
 --CREATE VIEW: daily_tip_view
 CREATE VIEW daily_tip_view
@@ -2177,7 +2177,7 @@ WHERE dt.is_max = utc.is_max
 ORDER BY
 	u.id,
 	latest_occurance.latest_creation_date ASC NULLS FIRST,
-	dt.id
+	dt.id;
 
 --CREATE VIEW: exam_highest_score_answer_session_view
 CREATE VIEW exam_highest_score_answer_session_view
@@ -2210,7 +2210,7 @@ FROM
     ON ev.id = esv.exam_version_id 
 ) rns 
 
-WHERE rns.is_highest_score
+WHERE rns.is_highest_score;
 
 --CREATE VIEW: user_daily_activity_chart_view
 CREATE VIEW user_daily_activity_chart_view
@@ -2253,7 +2253,7 @@ LEFT JOIN user_session_activity_groups usag
 ON usag.day_of_the_week = gdwu.day_of_the_week
 AND usag.user_id = gdwu.user_id
 
-ORDER BY gdwu.day_of_the_week
+ORDER BY gdwu.day_of_the_week;
 
 --CREATE VIEW: user_latest_activity_view
 CREATE VIEW user_latest_activity_view
@@ -2294,7 +2294,7 @@ ON usl.user_id = u.id
 
 WHERE u.deletion_date IS NULL
 
-ORDER BY svm.latest_activity_date DESC NULLS LAST
+ORDER BY svm.latest_activity_date DESC NULLS LAST;
 
 --CREATE VIEW: user_session_block_view
 CREATE VIEW user_session_block_view
@@ -2332,7 +2332,7 @@ SELECT
 FROM public.user u
 
 LEFT JOIN session_average sa
-ON sa.user_id = u.id
+ON sa.user_id = u.id;
 
 --CREATE VIEW: user_session_daily_view
 CREATE VIEW user_session_daily_view
@@ -2356,7 +2356,7 @@ GROUP BY
 	
 ORDER BY 
 	sq.user_id
-
+;
 
 --CREATE VIEW: user_video_playback_seconds_view
 CREATE VIEW user_video_playback_seconds_view
@@ -2373,7 +2373,7 @@ ON vv.id = vpsv.video_version_id
 GROUP BY
     vpsv.user_id,
     vv.id
-
+;
 
 --CREATE VIEW: user_video_practise_progress_view
 CREATE VIEW user_video_practise_progress_view
@@ -2433,7 +2433,7 @@ FROM
         sq.video_id,
         sq.user_id,
         sq.length_seconds
-) sq2
+) sq2;
 
 --CREATE VIEW: admin_user_list_view
 CREATE VIEW admin_user_list_view
@@ -2448,8 +2448,8 @@ SELECT
 	u.last_name,
 	u.company_id,
 	o.name company_name,
-	u.job_title_id,
-	jt.name job_title_name,
+	u.department_id,
+	dep.name department_name,
 	ulav.latest_activity_date,
 	ulav.total_spent_seconds,
 	EXTRACT(epoch FROM ulav.total_spent_seconds)::int total_spent_seconds_seconds,
@@ -2464,8 +2464,8 @@ ON sf.id = u.avatar_file_id
 LEFT JOIN public.company o
 ON o.id = u.company_id
 
-LEFT JOIN public.job_title jt
-ON jt.id = u.job_title_id
+LEFT JOIN public.department dep
+ON dep.id = u.department_id
 
 LEFT JOIN public.user_latest_activity_view ulav
 ON ulav.id = u.id
@@ -2475,7 +2475,7 @@ ON cbv.user_id = u.id
 
 WHERE u.deletion_date IS NULL
 
-ORDER BY ulav.latest_activity_date DESC NULLS LAST
+ORDER BY ulav.latest_activity_date DESC NULLS LAST;
 
 --CREATE VIEW: answer_session_view
 CREATE VIEW answer_session_view
@@ -2554,7 +2554,7 @@ ON ev.exam_id = e.id
 
 LEFT JOIN public.course_item_completion_view cic
 ON cic.answer_session_id = ase.id
-
+;
 
 --CREATE VIEW: answer_session_evaluation_view
 CREATE VIEW answer_session_evaluation_view
@@ -2645,7 +2645,7 @@ OR tqc.video_version_id = ase.video_version_id
 
 -- ga count 
 LEFT JOIN ga_count gac
-ON gac.answer_session_id = ase.answer_session_id
+ON gac.answer_session_id = ase.answer_session_id;
 
 --CREATE VIEW: answer_session_group_view
 CREATE VIEW answer_session_group_view
@@ -2680,7 +2680,7 @@ GROUP BY
     asv.user_id,
     cv.course_id,
     asv.answer_session_type,
-    asv.start_date
+    asv.start_date;
 
 --CREATE VIEW: correct_answer_rates_split_view
 CREATE VIEW correct_answer_rates_split_view
@@ -2709,7 +2709,7 @@ LEFT JOIN public.answer_session_group_view asgv
 ON asgv.user_id = u.id
 AND asgv.course_id = co.id
 
-ORDER BY u.id
+ORDER BY u.id;
 
 --CREATE VIEW: exam_completed_view
 CREATE VIEW exam_completed_view
@@ -2749,7 +2749,7 @@ GROUP BY
 	
 ORDER BY 
 	u.id,
-	ev.id
+	ev.id;
 
 --CREATE VIEW: most_productive_time_range_view
 CREATE VIEW most_productive_time_range_view
@@ -2812,7 +2812,7 @@ LEFT JOIN user_performance_with_session_blocks upwsb
 ON upwsb.user_id = u.id
 AND upwsb.session_block = gsb.generated_session_block
 
-ORDER BY u.id, gsb.block_end_time
+ORDER BY u.id, gsb.block_end_time;
 
 --CREATE VIEW: user_answer_view
 CREATE VIEW user_answer_view
@@ -2843,7 +2843,7 @@ ON mv.id = ev.module_version_id
 OR mv.id = vv.module_version_id
 
 LEFT JOIN public.course_version cv
-ON cv.id = mv.course_version_id
+ON cv.id = mv.course_version_id;
 
 --CREATE VIEW: user_daily_progress_view
 CREATE VIEW user_daily_progress_view
@@ -3098,7 +3098,7 @@ GROUP BY
 ORDER BY
 	u.id,
 	co.id
-
+;
 
 --CREATE VIEW: user_performance_answer_group_view
 CREATE VIEW user_performance_answer_group_view
@@ -3111,7 +3111,7 @@ SELECT
 	AVG(carsv.video_correct_answer_rate) video_correct_answer_rate
 FROM public.correct_answer_rates_split_view carsv
 
-GROUP BY carsv.user_id, carsv.course_id
+GROUP BY carsv.user_id, carsv.course_id;
 
 --CREATE VIEW: user_performance_view
 CREATE VIEW user_performance_view
@@ -3150,7 +3150,7 @@ FROM public.user u
 
 LEFT JOIN public.user_performance_answer_group_view upagv
 ON upagv.user_id = u.id
-
+;
 
 --CREATE VIEW: user_exam_stats_view
 CREATE VIEW user_exam_stats_view
@@ -3203,7 +3203,7 @@ AND*/ u.id IS NOT NULL
 AND e.is_pretest IS FALSE
 AND e.is_signup IS FALSE
 
-ORDER BY e.id, asv.end_date desc
+ORDER BY e.id, asv.end_date desc;
 
 --CREATE VIEW: course_admin_short_view
 CREATE VIEW course_admin_short_view
@@ -3263,7 +3263,7 @@ LEFT JOIN exam_count ec
 ON ec.course_version_id = lcvv.version_id
 	
 ORDER BY
-	lcvv.course_id
+	lcvv.course_id;
 
 --CREATE VIEW: course_spent_time_view
 CREATE VIEW course_spent_time_view
@@ -3374,7 +3374,7 @@ FROM
 	CROSS JOIN public.user u
 
 	ORDER BY u.id, co.id
-) sq
+) sq;
 
 --CREATE VIEW: user_spent_time_ratio_view
 CREATE VIEW user_spent_time_ratio_view
@@ -3394,7 +3394,7 @@ LEFT JOIN user_session_view usv
 ON cstv.user_id = usv.user_id
 
 GROUP BY
-    u.id
+    u.id;
 
 --CREATE VIEW: signup_completed_view
 CREATE VIEW signup_completed_view
@@ -3412,7 +3412,7 @@ LEFT JOIN public.answer_session_evaluation_view asev
 ON asev.answer_session_id = asv.answer_session_id
 		
 ORDER BY
-	u.id
+	u.id;
 
 --CREATE VIEW: user_active_course_view
 CREATE VIEW user_active_course_view
@@ -3440,7 +3440,7 @@ LEFT JOIN public.storage_file sf
 ON sf.id = cd.cover_file_id
 
 WHERE cosv.in_progress
-
+;
 
 --CREATE VIEW: user_course_completion_current_view
 CREATE VIEW user_course_completion_current_view
@@ -3479,7 +3479,7 @@ FROM
 	ORDER BY
 		ucbv.user_id,
 		ucbv.course_id
-) sq
+) sq;
 
 --CREATE VIEW: user_course_progress_actual_view
 CREATE VIEW user_course_progress_actual_view
@@ -3513,7 +3513,7 @@ FROM
 		ucb.course_id,
 		ucb.start_date,
 		coicv.item_count
-) sq
+) sq;
 
 --CREATE VIEW: course_progress_view
 CREATE VIEW course_progress_view
@@ -3554,7 +3554,7 @@ AND cc.course_version_id = cv.id
 
 WHERE ucb.id IS NOT NULL
 AND cc.id IS NULL
-
+;
 
 --CREATE VIEW: user_course_progress_view
 CREATE VIEW user_course_progress_view
@@ -3595,7 +3595,7 @@ FROM
 
 LEFT JOIN public.user_course_bridge ucb
 ON ucb.course_id = sq.course_id AND ucb.user_id = sq.user_id
-
+;
 
 --CREATE VIEW: user_course_recommended_item_quota_view
 CREATE VIEW user_course_recommended_item_quota_view
@@ -3612,7 +3612,7 @@ ON cicv.course_id = ucb.course_id
 
 LEFT JOIN public.user_course_completion_current_view ucccv
 ON ucccv.course_id = ucb.course_id 
-	AND ucccv.user_id = ucb.user_id 
+	AND ucccv.user_id = ucb.user_id ;
 
 --CREATE VIEW: user_daily_course_item_progress_view
 CREATE VIEW user_daily_course_item_progress_view
@@ -3668,7 +3668,7 @@ AND ucb.user_id = cig.user_id
 LEFT JOIN public.course_item_count_view cicv
 ON cicv.course_id = cig.course_id 
 
-ORDER BY cig.completion_date
+ORDER BY cig.completion_date;
 
 --CREATE VIEW: user_weekly_course_item_progress_view
 CREATE VIEW user_weekly_course_item_progress_view
@@ -3690,7 +3690,7 @@ FROM
 GROUP BY
 	sq.user_id,
 	sq.course_id,
-	sq.completion_date_trunc
+	sq.completion_date_trunc;
 
 --CREATE VIEW: user_inactive_course_view
 CREATE VIEW user_inactive_course_view
@@ -3751,7 +3751,7 @@ FROM (
 
 GROUP BY user_course_sessions.user_id
 
-
+;
 
 --CREATE VIEW: user_permission_view
 CREATE VIEW user_permission_view
@@ -3973,7 +3973,7 @@ v AS
 		pe.id
 )
 SELECT * FROM v
-
+;
 
 --CREATE VIEW: assignable_permission_view
 CREATE VIEW assignable_permission_view
@@ -4004,7 +4004,7 @@ ORDER BY
 	assignee_user_id,
 	permission_scope,
 	context_company_id,
-	permission_id	
+	permission_id	;
 
 --CREATE VIEW: company_view
 CREATE VIEW company_view
@@ -4022,7 +4022,7 @@ CROSS JOIN public.user u
 LEFT JOIN public.user_permission_view upv
 ON upv.context_company_id = co.id 
 	AND upv.assignee_user_id = u.id 
-	AND upv.permission_code = 'MANAGE_COMPANY'
+	AND upv.permission_code = 'MANAGE_COMPANY';
 
 --CREATE VIEW: role_list_view
 CREATE VIEW role_list_view
@@ -4071,7 +4071,7 @@ ORDER BY
 	co.id,
 	r.id,
 	pe.id
-
+;
 
 --CREATE VIEW: user_role_assign_company_view
 CREATE VIEW user_role_assign_company_view
@@ -4092,7 +4092,7 @@ AND upv.permission_code = 'ASSIGN_ROLES_TO_COMPANY'
 
 ORDER BY
 	u.id,
-	co.id
+	co.id;
 
 --CREATE VIEW: assignable_role_view
 CREATE VIEW assignable_role_view
@@ -4187,7 +4187,7 @@ SELECT * FROM perm_join
 -- WHERE assigner_user_id = 1 AND context_company_id = 2 AND assignee_user_id = 2
 
 
-
+;
 
 --CREATE VIEW: user_reaction_time_view
 CREATE VIEW user_reaction_time_view
@@ -4364,7 +4364,7 @@ GROUP BY
     u.id,
     uep.user_exam_length_points,
     urp.user_reaction_time_points,
-    urp.reaction_time_percent_diff
+    urp.reaction_time_percent_diff;
 
 --CREATE VIEW: improve_yourself_page_stats_view
 CREATE VIEW improve_yourself_page_stats_view
@@ -4394,7 +4394,7 @@ SELECT
 				WHERE udacv2.user_id = u.id
 			)
     ) most_active_day
-FROM public.user u
+FROM public.user u;
 
 --CREATE VIEW: user_engagement_view
 CREATE VIEW user_engagement_view
@@ -4487,7 +4487,7 @@ LEFT JOIN total_session_length_points tslp
 ON tslp.user_id = u.id
 
 LEFT JOIN public.user_inactive_course_view uicv
-ON uicv.user_id = u.id
+ON uicv.user_id = u.id;
 
 --CREATE VIEW: course_admin_content_view
 CREATE VIEW course_admin_content_view
@@ -4613,7 +4613,7 @@ ORDER BY
 	casv.course_id, 
 	civ.module_order_index,
 	civ.item_order_index
-
+;
 
 --CREATE VIEW: course_details_view
 CREATE VIEW course_details_view
@@ -4752,7 +4752,7 @@ ON scc.id = cd.sub_category_id
 	
 ORDER BY
 	u.id,
-	co.id
+	co.id;
 
 --CREATE VIEW: exam_player_data_view
 CREATE VIEW exam_player_data_view
@@ -4847,7 +4847,7 @@ AND lasd.exam_version_id = levc.version_id
 ORDER BY
 	u.id,
 	ex.id
-
+;
 
 --CREATE VIEW: pretest_result_view
 CREATE VIEW pretest_result_view
@@ -4878,7 +4878,7 @@ LEFT JOIN public.module_version mv
 ON mv.id = ev.module_version_id
 
 LEFT JOIN public.course_version cv
-ON cv.id = mv.course_version_id
+ON cv.id = mv.course_version_id;
 
 --CREATE VIEW: user_course_completion_original_estimation_view
 CREATE VIEW user_course_completion_original_estimation_view
@@ -4913,7 +4913,7 @@ FROM
 	ORDER BY
 		ucb.user_id,
 		ucb.course_id
-) sq
+) sq;
 
 --CREATE VIEW: exam_result_stats_view
 CREATE VIEW exam_result_stats_view
@@ -5041,7 +5041,7 @@ ORDER BY
 	u.id,
 	e.id,
 	ase.id
-
+;
 
 --CREATE VIEW: home_page_stats_view
 CREATE VIEW home_page_stats_view
@@ -5100,7 +5100,7 @@ SELECT
     ) performance_last_month
 FROM public.user u
 
-GROUP BY u.id
+GROUP BY u.id;
 
 --CREATE VIEW: user_learning_page_stats_view
 CREATE VIEW user_learning_page_stats_view
@@ -5259,7 +5259,7 @@ ON uric.user_id = u.id
 
 WHERE u.deletion_date IS NULL -- AND u.is_invitation_accepted = true
 
-ORDER BY u.id
+ORDER BY u.id;
 
 --CREATE VIEW: user_performance_comparison_stats_view
 CREATE VIEW user_performance_comparison_stats_view
@@ -5321,7 +5321,7 @@ ON u.id = up.user_id
 
 LEFT JOIN required_or_started_courses rosc
 ON rosc.user_id = up.user_id
-
+;
 
 --CREATE VIEW: exam_result_view
 CREATE VIEW exam_result_view
@@ -5404,7 +5404,7 @@ ORDER BY
 	ev.id,
 	qv.id,
 	av.id,
-	ase.id
+	ase.id;
 
 --CREATE VIEW: tempomat_calculation_data_view
 CREATE VIEW tempomat_calculation_data_view
@@ -5446,7 +5446,7 @@ ON upav.user_id = ucb.user_id
 LEFT JOIN public.tempomat_adjustment_value tav
 ON tav.prequiz_answer_id = upav.planned_usage_answer_id 
 	AND tav.tempomat_mode = ucb.tempomat_mode
-
+;
 
 --CREATE VIEW: user_overview_view
 CREATE VIEW user_overview_view
@@ -5511,7 +5511,7 @@ ON cci.user_id = u.id
 
 LEFT JOIN public.user_engagement_view uev
 ON uev.user_id = u.id
-
+;
 
 --CREATE VIEW: playlist_view
 CREATE VIEW playlist_view
@@ -5652,7 +5652,7 @@ ORDER BY
 	user_id,
 	course_id,
 	module_order_index,
-	item_order_index
+	item_order_index;
 
 --CREATE VIEW: course_all_items_completed_view
 CREATE VIEW course_all_items_completed_view
@@ -5677,7 +5677,7 @@ FROM
 		cipv.course_version_id
 ) sq
 
-WHERE sq.completed_count = sq.all_item_count
+WHERE sq.completed_count = sq.all_item_count;
 
 --CREATE VIEW: user_video_stats_view
 CREATE VIEW user_video_stats_view
@@ -5807,7 +5807,7 @@ AND artc.user_id = u.id
 
 LEFT JOIN latest_playback_date_cte lpdc
 ON lpdc.video_id = vv.video_id
-AND lpdc.user_id = u.id
+AND lpdc.user_id = u.id;
 
 --CREATE VIEW: available_course_view
 CREATE VIEW available_course_view
@@ -5945,7 +5945,7 @@ ORDER BY
 
 
 
-
+;
 
 --CREATE VIEW: courses_progress_list_view
 CREATE VIEW courses_progress_list_view
@@ -5953,7 +5953,7 @@ AS
 SELECT acv.*
 FROM public.available_course_view acv
 WHERE acv.is_completed = true
-OR acv.is_started = true
+OR acv.is_started = true;
 
 --CREATE VIEW: user_learning_overview_stats_view
 CREATE VIEW user_learning_overview_stats_view
@@ -6110,7 +6110,7 @@ SELECT
 
 	(st.engagement_points * 3 + st.performance_percentage * 3 + 100 * 0.5) / 6.5 overall_performance_percentage
 FROM stats st
-
+;
 
 --CREATE VIEW: course_learning_stats_view
 CREATE VIEW course_learning_stats_view
@@ -6316,7 +6316,7 @@ ON vqc.course_version_id = cv.id
 
 LEFT JOIN completed_video_count cvc
 ON cvc.user_id = u.id
-AND cvc.course_id = co.id
+AND cvc.course_id = co.id;
 
 --CREATE VIEW: course_overview_view
 CREATE VIEW course_overview_view
@@ -6341,7 +6341,7 @@ FROM public.course co
 CROSS JOIN public.user u
 
 LEFT JOIN public.course_learning_stats_view clsv
-ON clsv.course_id = co.id AND clsv.user_id = u.id
+ON clsv.course_id = co.id AND clsv.user_id = u.id;
 
 --CREATE VIEW: admin_user_courses_view
 CREATE VIEW admin_user_courses_view
@@ -6600,7 +6600,7 @@ ORDER BY
     u.id,
     ucb.id IS NULL,
     co.id
-
+;
 
 
 --
@@ -6646,7 +6646,7 @@ BEGIN
 		RETURN false;	
 	END IF;
 END 
-$$ LANGUAGE 'plpgsql';
+$$ LANGUAGE 'plpgsql';;
 
 --CREATE FUNCTION: create_daily_tip_fn
 CREATE OR REPLACE FUNCTION "create_daily_tip_fn"
@@ -6690,7 +6690,7 @@ BEGIN
 	RETURN "v_new_daily_tip_id";
 	
 END 
-$$ LANGUAGE 'plpgsql';
+$$ LANGUAGE 'plpgsql';;
 
 --CREATE FUNCTION: get_user_session_first_activity_id
 CREATE OR REPLACE FUNCTION "get_user_session_first_activity_id"
@@ -6736,7 +6736,7 @@ BEGIN
 	RETURN var_session_first_activity_id;
 	
 END 
-$$ LANGUAGE 'plpgsql';
+$$ LANGUAGE 'plpgsql';;
 
 
 --
@@ -6762,22 +6762,22 @@ CHECK
 	activity_streak_id IS NOT NULL OR
 	shop_item_id IS NOT NULL OR 
 	is_gifted
-);
+);;
 
 --CREATE CONSTRAINT: activation_code_uniqe_constraint
 ALTER TABLE activation_code
 ADD CONSTRAINT activation_code_uniqe_constraint
-UNIQUE (code);
+UNIQUE (code);;
 
 --CREATE CONSTRAINT: role_permission_bridge_constraint
 ALTER TABLE role_permission_bridge
 ADD CONSTRAINT role_permission_bridge_constraint
-UNIQUE (role_id, permission_id);
+UNIQUE (role_id, permission_id);;
 
 --CREATE CONSTRAINT: role_constraint
 ALTER TABLE role
 ADD CONSTRAINT role_constraint
-CHECK (is_custom = false OR company_id IS NOT NULL);
+CHECK (is_custom = false OR company_id IS NOT NULL);;
 
 --CREATE CONSTRAINT: video_completion_constraints
 
@@ -6787,7 +6787,7 @@ DROP CONSTRAINT IF EXISTS video_completion_unique;
 
 ALTER TABLE public.video_completion
 ADD CONSTRAINT video_completion_unique
-UNIQUE (video_version_id, user_id);
+UNIQUE (video_version_id, user_id);;
 
 --CREATE CONSTRAINT: exam_completion_constraints
 -- UNIQUE EXAM
@@ -6796,7 +6796,7 @@ DROP CONSTRAINT IF EXISTS exam_completion_unique;
 
 ALTER TABLE public.exam_completion
 ADD CONSTRAINT exam_completion_unique
-UNIQUE (answer_session_id);
+UNIQUE (answer_session_id);;
 
 --CREATE CONSTRAINT: prequiz_completion_constraints
 
@@ -6806,7 +6806,7 @@ DROP CONSTRAINT IF EXISTS prequiz_completion_unique;
 
 ALTER TABLE public.prequiz_completion
 ADD CONSTRAINT prequiz_completion_unique
-UNIQUE (user_id, course_id);
+UNIQUE (user_id, course_id);;
 
 --CREATE CONSTRAINT: course_completion_constraints
 
@@ -6816,7 +6816,7 @@ DROP CONSTRAINT IF EXISTS course_completion_unique;
 
 ALTER TABLE public.course_completion
 ADD CONSTRAINT course_completion_unique
-UNIQUE (course_version_id, user_id);
+UNIQUE (course_version_id, user_id);;
 
 --CREATE CONSTRAINT: course_access_bridge_constraints
 -- UNIQUE COMPANY 
@@ -6833,7 +6833,7 @@ DROP CONSTRAINT IF EXISTS course_access_bridge_unique_by_user;
 
 ALTER TABLE public.course_access_bridge
 ADD CONSTRAINT course_access_bridge_unique_by_user
-UNIQUE (course_id, user_id);
+UNIQUE (course_id, user_id);;
 
 --CREATE CONSTRAINT: prequiz_constraints
 
@@ -6843,7 +6843,7 @@ DROP CONSTRAINT IF EXISTS prequiz_user_answer_unique;
 
 ALTER TABLE public.prequiz_user_answer
 ADD CONSTRAINT prequiz_user_answer_unique
-UNIQUE (user_id, course_id, question_id);
+UNIQUE (user_id, course_id, question_id);;
 
 --CREATE CONSTRAINT: permission_assignment_bridge_constraints
 
@@ -6859,7 +6859,7 @@ CHECK (
     (context_company_id IS NOT NULL AND context_course_id IS NULL)
 	OR 
 	(context_company_id IS NULL AND context_course_id IS NULL)
-);
+);;
 
 --CREATE CONSTRAINT: video_data_constraints
 
@@ -6873,7 +6873,7 @@ CHECK (
     (video_file_id IS NULL AND video_file_length_seconds IS NULL) 
     OR
     (video_file_id IS NOT NULL AND video_file_length_seconds IS NOT NULL) 
-);
+);;
 
 
 --
@@ -6888,12 +6888,12 @@ DROP INDEX IF EXISTS single_current_course_bridge_unique_index;
 --CREATE INDEX: user_email_unique_index
 CREATE UNIQUE INDEX user_email_unique_index 
 ON public.user (email) 
-WHERE deletion_date IS NULL;
+WHERE deletion_date IS NULL;;
 
 --CREATE INDEX: single_current_course_bridge_unique_index
 CREATE UNIQUE INDEX single_current_course_bridge_unique_index
 ON public.user_course_bridge (user_id)
-WHERE is_current = true
+WHERE is_current = true;
 
 
 --
@@ -6931,7 +6931,7 @@ $$;
 
 CREATE TRIGGER role_assignment_validity_check_trigger
 BEFORE INSERT OR UPDATE ON role_assignment_bridge
-FOR EACH ROW EXECUTE PROCEDURE role_assignment_validity_check_trigger_function();
+FOR EACH ROW EXECUTE PROCEDURE role_assignment_validity_check_trigger_function();;
 
 --CREATE TRIGGER: exam_pretest_module_integrity_trigger
 
@@ -6975,7 +6975,7 @@ $$;
 
 CREATE TRIGGER exam_pretest_module_integrity_trigger
 BEFORE INSERT OR UPDATE ON exam_version
-FOR EACH ROW EXECUTE PROCEDURE exam_pretest_module_integrity_trigger_function();
+FOR EACH ROW EXECUTE PROCEDURE exam_pretest_module_integrity_trigger_function();;
 
 --CREATE TRIGGER: permission_assignment_bridge_trigger
 
@@ -7017,7 +7017,7 @@ $$;
 
 CREATE TRIGGER permission_assignment_bridge_trigger
 BEFORE INSERT OR UPDATE ON permission_assignment_bridge
-FOR EACH ROW EXECUTE PROCEDURE permission_assignment_bridge_trigger_function();
+FOR EACH ROW EXECUTE PROCEDURE permission_assignment_bridge_trigger_function();;
 
 --CREATE TRIGGER: role_permission_bridge_validity_trigger
 
@@ -7058,7 +7058,7 @@ $$;
 
 CREATE TRIGGER role_permission_bridge_validity_trigger
 BEFORE INSERT OR UPDATE ON role_permission_bridge
-FOR EACH ROW EXECUTE PROCEDURE role_permission_bridge_validity_trigger_function();
+FOR EACH ROW EXECUTE PROCEDURE role_permission_bridge_validity_trigger_function();;
 
 --CREATE TRIGGER: ucb_stage_trigger
 
@@ -7164,7 +7164,7 @@ $$;
 
 CREATE TRIGGER ucb_stage_trigger
 BEFORE INSERT OR UPDATE ON user_course_bridge
-FOR EACH ROW EXECUTE PROCEDURE ucb_stage_trigger_function();
+FOR EACH ROW EXECUTE PROCEDURE ucb_stage_trigger_function();;
 
 --CREATE TRIGGER: prequiz_completion_trigger
 
@@ -7199,4 +7199,4 @@ $$;
 
 CREATE TRIGGER prequiz_completion_trigger
 BEFORE INSERT OR UPDATE ON prequiz_completion
-FOR EACH ROW EXECUTE PROCEDURE prequiz_completion_trigger_function();
+FOR EACH ROW EXECUTE PROCEDURE prequiz_completion_trigger_function();;

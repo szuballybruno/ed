@@ -1,11 +1,22 @@
-import { AssignableRoleDTO } from '../../shared/dtos/AssignableRoleDTO';
-import { RoleAdminListDTO } from '../../shared/dtos/role/RoleAdminListDTO';
 import { RoleCreateDTO } from '../../shared/dtos/role/RoleCreateDTO';
 import { RoleEditDTO } from '../../shared/dtos/role/RoleEditDTO';
+import { RoleAdminListDTO } from '../../shared/dtos/RoleAdminListDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
 import { Id } from '../../shared/types/versionId';
 import { QueryService } from '../../static/QueryService';
 import { usePostDataUnsafe } from '../core/httpClient';
+
+export const useRolesList = () => {
+
+    const qr = QueryService.useXQueryArray<RoleAdminListDTO>(apiRoutes.roles.getRoles);
+
+    return {
+        rolesList: qr.data as any,
+        rolesListError: qr.error,
+        rolesListState: qr.state,
+        refetchRolesList: qr.refetch
+    };
+};
 
 export const useCreateRole = () => {
 

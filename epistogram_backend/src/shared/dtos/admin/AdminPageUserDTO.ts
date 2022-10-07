@@ -11,7 +11,7 @@ export class AdminPageUserDTO {
     isInvitationAccepted: boolean;
     avatarUrl: string | null;
     departmentId: Id<'Department'>;
-    jobTitleName: string;
+    departmentName: string;
     companyId: Id<'Company'>;
     companyName: string;
     roleId: Id<'Role'>;

@@ -1,15 +1,22 @@
-import { AnswerSession } from '../models/entity/misc/AnswerSession';
 import { CourseData } from '../models/entity/course/CourseData';
+import { AnswerSession } from '../models/entity/misc/AnswerSession';
+import { CourseAccessBridge } from '../models/entity/misc/CourseAccessBridge';
 import { Department } from '../models/entity/misc/Department';
 import { StorageFile } from '../models/entity/misc/StorageFile';
 import { TeacherInfo } from '../models/entity/misc/TeacherInfo';
 import { User } from '../models/entity/misc/User';
+import { UserCourseBridge } from '../models/entity/misc/UserCourseBridge';
 import { AdminUserListView } from '../models/views/AdminUserListView';
 import { AdminPageUserDTO } from '../shared/dtos/admin/AdminPageUserDTO';
 import { BriefUserDataDTO } from '../shared/dtos/BriefUserDataDTO';
-import { ChangeSet } from '../shared/dtos/changeSet/ChangeSet';
+import { DepartmentDTO } from '../shared/dtos/DepartmentDTO';
+import { Mutation } from '../shared/dtos/mutations/Mutation';
+import { UserCourseStatsDTO } from '../shared/dtos/UserCourseStatsDTO';
 import { UserDTO } from '../shared/dtos/UserDTO';
+import { UserEditReadDTO } from '../shared/dtos/UserEditReadDTO';
+import { UserEditSaveDTO } from '../shared/dtos/UserEditSaveDTO';
 import { UserEditSimpleDTO } from '../shared/dtos/UserEditSimpleDTO';
+import { instantiate } from '../shared/logic/sharedLogic';
 import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 import { Id } from '../shared/types/versionId';
 import { getFullName, toFullName } from '../utilities/helpers';
@@ -21,15 +28,7 @@ import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { RoleService } from './RoleService';
 import { TeacherInfoService } from './TeacherInfoService';
-import { Mutation } from '../shared/dtos/mutations/Mutation';
-import { UserCourseStatsDTO } from '../shared/dtos/UserCourseStatsDTO';
-import { CourseAccessBridge } from '../models/entity/misc/CourseAccessBridge';
-import { instantiate } from '../shared/logic/sharedLogic';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
-import { UserCourseBridge } from '../models/entity/misc/UserCourseBridge';
-import { UserEditReadDTO } from '../shared/dtos/UserEditReadDTO';
-import { UserEditSaveDTO } from '../shared/dtos/UserEditSaveDTO';
-import { DepartmentDTO } from '../shared/dtos/DepartmentDTO';
 
 export class UserService {
 
@@ -100,9 +99,24 @@ export class UserService {
             .where('id', '=', 'editedUserId')
             .getSingle();
 
-        const roles = await this
+        const availableRoles = await this
+            ._roleService
+            .getAllRolesAsync(principalId, editedUserId);
+
+        const userRoles = await this
             ._roleService
             .getUserRolesAsync(principalId, editedUserId);
+
+        const departments = await this
+            ._ormService
+            .query(Department, {})
+            .getMany();
+
+        const departmentDTOs = departments
+            .map((x): DepartmentDTO => ({
+                id: x.id,
+                name: x.name
+            }));
 
         return instantiate<UserEditReadDTO>({
             userId: editedUserId,
@@ -112,7 +126,10 @@ export class UserService {
             isTeacher: !!res.teacherInfoId,
             departmentId: res.departmentId,
             companyId: res.companyId,
-            roles
+            availableRoles,
+            availableCompanies: [],
+            availableDepartments: departmentDTOs,
+            roleIds: userRoles.map(x => x.roleId)
         });
     }
 
@@ -147,11 +164,11 @@ export class UserService {
             });
 
         // save teacher info
-        await this._saveTeacherInfoAsync(userId, dto.isTeacher);
+        await this._saveTeacherInfoAsync(userId, isTeacher);
 
         // save auth items
         await this._roleService
-            .saveUserRolesAsync(principalId, userId, dto.assignedRoleIds);
+            .saveUserRolesAsync(principalId, userId, assignedRoleIds);
     }
 
     /**

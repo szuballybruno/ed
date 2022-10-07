@@ -899,7 +899,7 @@ const marray = [
                         isInvitationAccepted: user.isInvitationAccepted,
                         isTrusted: user.isTrusted,
                         departmentId: user.departmentId,
-                        jobTitleName: user.jobTitleName,
+                        departmentName: user.departmentName,
                         companyId: user.companyId,
                         companyName: user.companyName,
                         canAccessApplication: true,

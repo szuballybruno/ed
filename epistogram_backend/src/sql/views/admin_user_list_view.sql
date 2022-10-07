@@ -8,8 +8,8 @@ SELECT
 	u.last_name,
 	u.company_id,
 	o.name company_name,
-	u.job_title_id,
-	jt.name job_title_name,
+	u.department_id,
+	dep.name department_name,
 	ulav.latest_activity_date,
 	ulav.total_spent_seconds,
 	EXTRACT(epoch FROM ulav.total_spent_seconds)::int total_spent_seconds_seconds,
@@ -24,8 +24,8 @@ ON sf.id = u.avatar_file_id
 LEFT JOIN public.company o
 ON o.id = u.company_id
 
-LEFT JOIN public.job_title jt
-ON jt.id = u.job_title_id
+LEFT JOIN public.department dep
+ON dep.id = u.department_id
 
 LEFT JOIN public.user_latest_activity_view ulav
 ON ulav.id = u.id

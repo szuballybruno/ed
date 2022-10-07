@@ -7,7 +7,7 @@ export const usePermissionsList = () => {
     const qr = QueryService.useXQuery<PermissionListDTO[]>(apiRoutes.permissions.getPermissions);
 
     return {
-        permissionsList: qr.data ?? [],
+        permissionsList: (qr.data ?? []) as any,
         permissionsListError: qr.error,
         permissionsListState: qr.state,
         refetchPermissionsList: qr.refetch

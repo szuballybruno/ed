@@ -50,7 +50,7 @@ export class AdminUserListView {
 
     @ViewColumn()
     @XViewColumn()
-    jobTitleName: string;
+    departmentName: string;
 
     @ViewColumn()
     @XViewColumn()

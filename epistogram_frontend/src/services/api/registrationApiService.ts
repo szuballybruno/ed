@@ -1,7 +1,7 @@
 import { RegisterUserViaActivationCodeDTO } from '../../shared/dtos/RegisterUserViaActivationCodeDTO';
 import { RegisterUserViaInvitationTokenDTO } from '../../shared/dtos/RegisterUserViaInvitationTokenDTO';
 import { RegisterUserViaPublicTokenDTO } from '../../shared/dtos/RegisterUserViaPublicTokenDTO';
-import { UserEditDTO } from '../../shared/dtos/UserEditSaveDTO';
+import { UserEditSaveDTO } from '../../shared/dtos/UserEditSaveDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
 import { usePostDataUnsafe } from '../core/httpClient';
 
@@ -80,7 +80,7 @@ export const useRegisterUserViaActivationCode = () => {
 
 export const useCreateInviteUserAsync = () => {
 
-    const qr = usePostDataUnsafe<UserEditDTO>(apiRoutes.registration.inviteUser);
+    const qr = usePostDataUnsafe<UserEditSaveDTO>(apiRoutes.registration.inviteUser);
 
     return {
         createInvitedUser: qr.postDataAsync,

@@ -1,5 +1,7 @@
 import { Id } from '../types/versionId';
-import { UserRoleDTO } from './role/UserRoleDTO';
+import { CompanyDTO } from './company/CompanyDTO';
+import { DepartmentDTO } from './DepartmentDTO';
+import { RoleDTO } from './RoleDTO';
 
 export class UserEditReadDTO {
     userId: Id<'User'>;
@@ -9,5 +11,9 @@ export class UserEditReadDTO {
     isTeacher: boolean;
     companyId: Id<'Company'>;
     departmentId: Id<'Department'> | null;
-    roles: UserRoleDTO[];
+    roleIds: Id<'Role'>[];
+    
+    availableRoles: RoleDTO[];
+    availableCompanies: CompanyDTO[];
+    availableDepartments: DepartmentDTO[];
 }

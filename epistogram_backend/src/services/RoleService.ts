@@ -8,6 +8,7 @@ import { PermissionListDTO } from '../shared/dtos/role/PermissionListDTO';
 import { RoleCreateDTO } from '../shared/dtos/role/RoleCreateDTO';
 import { RoleEditDTO } from '../shared/dtos/role/RoleEditDTO';
 import { UserRoleDTO } from '../shared/dtos/role/UserRoleDTO';
+import { RoleDTO } from '../shared/dtos/RoleDTO';
 import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 import { PermissionCodeType } from '../shared/types/sharedTypes';
 import { Id } from '../shared/types/versionId';
@@ -49,6 +50,23 @@ export class RoleService {
                         code: x.permissionCode,
                         scope: 'COMPANY' // not used 
                     }))
+            }));
+    }
+
+    /**
+     * Retrieve the user's permissions 
+     */
+    async getAllRolesAsync(principalId: PrincipalId, userId: Id<'User'>) {
+
+        const roles = await this._ormService
+            .query(Role, {})
+            .where('isCustom', '=', 'false')
+            .getMany();
+
+        return roles
+            .map((x): RoleDTO => ({
+                id: x.id,
+                name: x.name
             }));
     }
 

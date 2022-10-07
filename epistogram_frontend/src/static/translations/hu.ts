@@ -24,7 +24,7 @@ export const huTranslation: TranslationType = {
             firstName: 'Keresztnév',
             lastName: 'Vezetéknév',
             company: 'Cég',
-            jobTitle: 'Beosztás',
+            department: 'Beosztás',
             role: 'Jogosultsági kör',
             category: 'Kategória',
 

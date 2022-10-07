@@ -50,24 +50,6 @@ export class MiscController implements XController<MiscController> {
             .getOverviewPageDTOAsync(params.principalId);
     }
 
-    @XControllerAction(apiRoutes.misc.getJobTitles)
-    getJobTitlesAction(params: ActionParams) {
-
-        return {
-            action: async () => {
-
-                return await this._ormService
-                    .query(Department)
-                    .getMany();
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(params.principalId, 'ACCESS_APPLICATION');
-            }
-        };
-
-    }
-
     @XControllerAction(apiRoutes.misc.getCourseOverviewData)
     getCourseOverviewDataAction(params: ActionParams) {
 
