@@ -82,8 +82,13 @@ export class UserController implements XController<UserController> {
             .data
             .searchText ?? null;
 
+        const companyId = params
+            .getQuery<{ companyId?: Id<'Company'> }>()
+            .data
+            .companyId ?? null;
+
         return this._userService
-            .getAdminPageUsersListAsync(params.principalId, searchText);
+            .getAdminPageUsersListAsync(params.principalId, searchText, companyId);
     }
 
     @XControllerAction(apiRoutes.user.getBriefUserData)

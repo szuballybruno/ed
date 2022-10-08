@@ -26,12 +26,14 @@ export const AdminEditUserControl = ({
     editDTO,
     editedUserId,
     refetchTrigger,
+    selectedCompanyId,
     saveUserAsync,
     showDeleteUserDialog
 }: {
     editedUserId: Id<'User'>,
     editDTO: UserEditReadDTO | null,
     refetchTrigger: EventTriggerType,
+    selectedCompanyId?: Id<'Company'> | null,
     saveUserAsync: (editDTO: UserEditSaveDTO) => Promise<void>
     showDeleteUserDialog?: (UserEditDTO: UserEditReadDTO | null) => void
 }) => {
@@ -66,12 +68,26 @@ export const AdminEditUserControl = ({
         availableRoles: [] as UserEditReadDTO['availableRoles']
     });
 
+    useEffect(() => {
+
+        console.log('mode changed');
+        if (mode === 'ADD') {
+            setFirstName('');
+            setLastName('');
+            setEmail('');
+            setIsTeacher(false);
+            setDepartmentId(null);
+            setCompanyId(null);
+            setAssignedRoleIds([]);
+        }
+    }, [mode]);
+
     /**
      * Load state from editDTO
      */
     useEffect(() => {
 
-        if (!editDTO)
+        if (!editDTO || mode === 'ADD')
             return;
 
         setFirstName(editDTO.firstName);
@@ -80,10 +96,9 @@ export const AdminEditUserControl = ({
         setIsTeacher(editDTO.isTeacher);
         setDepartmentId(editDTO.departmentId);
         setCompanyId(editDTO.companyId);
-        setCompanyId(editDTO.companyId);
         setAssignedRoleIds(editDTO.roleIds);
 
-    }, [editDTO]);
+    }, [editDTO, mode]);
 
     const coinAmountEntryState = useEpistoEntryState({
         isMandatory: true,
@@ -120,21 +135,39 @@ export const AdminEditUserControl = ({
 
     const handleSaveUserAsync = async () => {
 
-        if (!companyId || !departmentId)
-            return;
+        if (mode === 'EDIT' && companyId && departmentId) {
 
-        const editedUserDTO: UserEditSaveDTO = {
-            userId: editedUserId,
-            firstName,
-            lastName,
-            email,
-            companyId,
-            departmentId,
-            isTeacher,
-            assignedRoleIds,
-        };
+            const editedUserDTO: UserEditSaveDTO = {
+                userId: editedUserId,
+                firstName,
+                lastName,
+                email,
+                companyId: companyId,
+                departmentId,
+                isTeacher,
+                assignedRoleIds,
+            };
 
-        return saveUserAsync(editedUserDTO);
+            return saveUserAsync(editedUserDTO);
+        }
+
+        if (mode === 'ADD' && selectedCompanyId && departmentId) {
+
+            const editedUserDTO: UserEditSaveDTO = {
+                userId: editedUserId,
+                firstName,
+                lastName,
+                email,
+                companyId: selectedCompanyId,
+                departmentId,
+                isTeacher,
+                assignedRoleIds,
+            };
+
+            return saveUserAsync(editedUserDTO);
+        }
+
+
     };
 
     return <EpistoFlex2 direction="column"

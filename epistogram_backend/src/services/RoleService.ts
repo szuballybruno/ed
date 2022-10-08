@@ -29,7 +29,7 @@ export class RoleService {
     /**
      * Retrieve the user's permissions 
      */
-    async getUserRolesAsync(principalId: PrincipalId, userId: Id<'User'>) {
+    async getUserRolesAsync(principalId: PrincipalId, userId: Id<'User'> | null) {
 
         const roles = await this._ormService
             .query(UserRoleView, { userId })
@@ -56,7 +56,7 @@ export class RoleService {
     /**
      * Retrieve the user's permissions 
      */
-    async getAllRolesAsync(principalId: PrincipalId, userId: Id<'User'>) {
+    async getAllRolesAsync(principalId: PrincipalId) {
 
         const roles = await this._ormService
             .query(Role, {})

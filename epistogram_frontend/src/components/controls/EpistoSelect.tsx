@@ -1,6 +1,6 @@
 import { ArrowDropDown } from '@mui/icons-material';
 import { translatableTexts } from '../../static/translatableTexts';
-import { EpistoFlex2 } from './EpistoFlex';
+import { EpistoFlex2, EpistoFlex2Props } from './EpistoFlex';
 
 const defaultKey = '___default___';
 
@@ -15,7 +15,7 @@ export type EpistoSelectPropsType<TItem> = {
     isDisabled?: boolean
 };
 
-export const EpistoSelect = <TItem,>(props: EpistoSelectPropsType<TItem>) => {
+export const EpistoSelect = <TItem,>(props: EpistoSelectPropsType<TItem> & EpistoFlex2Props) => {
 
     const {
         items,
@@ -25,7 +25,8 @@ export const EpistoSelect = <TItem,>(props: EpistoSelectPropsType<TItem>) => {
         onSelected,
         getDisplayValue,
         defaultValue,
-        isDisabled
+        isDisabled,
+        ...css
     } = props;
 
     const onSelectedValue = (key: string) => {
@@ -44,7 +45,8 @@ export const EpistoSelect = <TItem,>(props: EpistoSelectPropsType<TItem>) => {
         : defaultKey;
 
     return <EpistoFlex2
-        position='relative'>
+        position='relative'
+        {...css}>
 
         <select
             className="roundBorders tinyShadow"

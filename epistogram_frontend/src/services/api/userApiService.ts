@@ -22,9 +22,9 @@ const useSaveUserAssignedCourses = () => {
 export const UserApiService = {
 
     useSaveUserAssignedCourses,
-    useUserListQuery: (searchText: string | null) => {
+    useUserListQuery: (searchText: string | null, companyId: Id<'Company'> | null) => {
 
-        const queryResult = QueryService.useXQuery<AdminPageUserDTO[]>(apiRoutes.user.getUserListForAdministration, { searchText });
+        const queryResult = QueryService.useXQuery<AdminPageUserDTO[]>(apiRoutes.user.getUserListForAdministration, { searchText, companyId });
 
         return {
             users: queryResult.data ?? [],

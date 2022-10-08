@@ -61,11 +61,11 @@ export class UserService {
           */
     async getEditUserDataAsync(
         principalId: PrincipalId,
-        editedUserId: Id<'User'>
+        editedUserId: Id<'User'> | null
     ) {
 
-        const user = await this._ormService
-            .query(User, { userId: editedUserId })
+        const principalUser = await this._ormService
+            .query(User, { userId: principalId })
             .where('id', '=', 'userId')
             .getSingle();
 
@@ -74,7 +74,7 @@ export class UserService {
                 principalId,
                 'ADMINISTRATE_COMPANY',
                 {
-                    companyId: user.companyId
+                    companyId: principalUser.companyId
                 }
             );
 
@@ -97,7 +97,7 @@ export class UserService {
 
         const availableRoles = await this
             ._roleService
-            .getAllRolesAsync(principalId, editedUserId);
+            .getAllRolesAsync(principalId);
 
         const userRoles = await this
             ._roleService
@@ -240,7 +240,11 @@ export class UserService {
     /**
      * Get user dto-s for the admin page user list.
      */
-    async getAdminPageUsersListAsync(principalId: PrincipalId, searchText: string | null) {
+    async getAdminPageUsersListAsync(
+        principalId: PrincipalId,
+        searchText: string | null,
+        companyId: Id<'Company'> | null
+    ) {
 
         const principal = await this
             .getUserById(principalId);
@@ -255,12 +259,19 @@ export class UserService {
             .query(AdminUserListView)
             .getMany();
 
+        const companyUsers = await this._ormService
+            .query(AdminUserListView, { companyId })
+            .where('companyId', '=', 'companyId')
+            .getMany();
+
+        const availableUsers = companyId ? companyUsers : users;
+
         const filteredUsers = searchTextLower
-            ? users
+            ? availableUsers
                 .filter(x => toFullName(x.firstName, x.lastName, 'hu')
                     .toLowerCase()
                     .includes(searchTextLower))
-            : users;
+            : availableUsers;
 
         return this._mapperService
             .mapTo(AdminPageUserDTO, [filteredUsers]);

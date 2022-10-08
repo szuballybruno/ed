@@ -6,7 +6,9 @@ import { useNavigation } from '../../../../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../../../../services/core/notifications';
 import { LocalStorageService } from '../../../../services/core/storageService';
 import { AdminPageUserDTO } from '../../../../shared/dtos/admin/AdminPageUserDTO';
+import { CompanyDTO } from '../../../../shared/dtos/company/CompanyDTO';
 import { UserCourseStatsDTO } from '../../../../shared/dtos/UserCourseStatsDTO';
+import { Id } from '../../../../shared/types/versionId';
 import { ArrayBuilder } from '../../../../static/frontendHelpers';
 import { useRouteParams } from '../../../../static/locationHelpers';
 import { EpistoDataGrid } from '../../../controls/EpistoDataGrid';
@@ -14,7 +16,7 @@ import { EpistoFlex2 } from '../../../controls/EpistoFlex';
 import { EpistoSwitch } from '../../../controls/EpistoSwitch';
 import { useXMutatorNew } from '../../../lib/XMutator/XMutatorReact';
 import { useSetBusy } from '../../../system/LoadingFrame/BusyBarContext';
-import { AdminBreadcrumbsHeader } from '../../AdminBreadcrumbsHeader';
+import { AdminBreadcrumbsHeader, CompanySelectorDropdown } from '../../AdminBreadcrumbsHeader';
 import { AdminSubpageHeader } from '../../AdminSubpageHeader';
 import { useAdminCourseContentDialogLogic } from '../adminCourseContentDialog/AdminCourseContentDialogLogic';
 import { AdminUserCourseContentDialog } from '../adminCourseContentDialog/AdminUserCourseContentDialog';
@@ -22,10 +24,16 @@ import { AdminUserList } from '../AdminUserList';
 import { UserCoursesRowType, useUserCoursesColumns } from './AdminUserCoursesColumns';
 
 export const AdminUserCoursesSubpage = ({
-    users
+    users,
+    selectedCompanyId,
+    handleSelectCompany,
+    companies
 }: {
     users: AdminPageUserDTO[],
-    refetchUsersFunction: () => void
+    refetchUsersFunction: () => void,
+    selectedCompanyId: Id<'Company'> | null,
+    handleSelectCompany: (companyId: Id<'Company'> | null) => void,
+    companies: CompanyDTO[]
 }) => {
 
     const { usersRoute } = applicationRoutes.administrationRoute;
@@ -98,7 +106,11 @@ export const AdminUserCoursesSubpage = ({
     const { navigate2 } = useNavigation();
     const showError = useShowErrorDialog();
 
-    return <AdminBreadcrumbsHeader>
+    return <AdminBreadcrumbsHeader
+        headerComponent={companies.length > 1 && <CompanySelectorDropdown
+            selectedCompanyId={selectedCompanyId}
+            handleSelectCompany={handleSelectCompany}
+            companies={companies} />}>
 
         <AdminUserList
             currentUserId={userId}

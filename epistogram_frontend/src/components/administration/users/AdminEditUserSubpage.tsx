@@ -6,23 +6,29 @@ import { UserApiService } from '../../../services/api/userApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
 import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
+import { CompanyDTO } from '../../../shared/dtos/company/CompanyDTO';
 import { UserEditReadDTO } from '../../../shared/dtos/UserEditReadDTO';
 import { UserEditSaveDTO } from '../../../shared/dtos/UserEditSaveDTO';
+import { Id } from '../../../shared/types/versionId';
 import { useEventTrigger, useSubscribeEventTrigger } from '../../../static/frontendHelpers';
 import { useRouteParams } from '../../../static/locationHelpers';
 import { EpistoDialog } from '../../universal/epistoDialog/EpistoDialog';
 import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogLogic';
-import { AdminBreadcrumbsHeader } from '../AdminBreadcrumbsHeader';
+import { AdminBreadcrumbsHeader, CompanySelectorDropdown } from '../AdminBreadcrumbsHeader';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { AdminEditUserControl } from './AdminEditUserControl';
 import { AdminUserList } from './AdminUserList';
 
+
 export const AdminEditUserSubpage = (props: {
     users: AdminPageUserDTO[],
-    refetchUsersFunction: () => void
+    refetchUsersFunction: () => void,
+    selectedCompanyId: Id<'Company'> | null,
+    handleSelectCompany: (companyId: Id<'Company'> | null) => void,
+    companies: CompanyDTO[]
 }) => {
 
-    const { users, refetchUsersFunction } = props;
+    const { users, refetchUsersFunction, selectedCompanyId, handleSelectCompany, companies } = props;
 
     const editedUserId = useRouteParams(applicationRoutes.administrationRoute.usersRoute.editRoute)
         .getValueOrNull(x => x.userId, 'int');
@@ -33,6 +39,7 @@ export const AdminEditUserSubpage = (props: {
     const { navigate2 } = useNavigation();
     const navigateToAddUser = () => navigate2(applicationRoutes.administrationRoute.usersRoute.addRoute);
     const refetchTrigger = useEventTrigger();
+
 
     /**
      * Select first user if none selected
@@ -63,7 +70,7 @@ export const AdminEditUserSubpage = (props: {
     const deleteWaningDialogLogic = useEpistoDialogLogic('delwarn');
 
     const showDeleteUserDialog = (user: UserEditReadDTO | null) => {
-        
+
         if (!user)
             return;
 
@@ -99,7 +106,9 @@ export const AdminEditUserSubpage = (props: {
                     margin: '0 3px 0 0',
                     padding: '0 0 1px 0'
                 }} />,
-            action: () => navigateToAddUser()
+            action: () => {
+                navigateToAddUser();
+            }
         }
     ] as ButtonType[];
 
@@ -114,8 +123,14 @@ export const AdminEditUserSubpage = (props: {
 
 
     return <AdminBreadcrumbsHeader
+        headerComponent={companies.length > 1 && <CompanySelectorDropdown
+            selectedCompanyId={selectedCompanyId}
+            handleSelectCompany={handleSelectCompany}
+            companies={companies} />}
         viewSwitchChecked={false}
-        viewSwitchFunction={() => navigate2(applicationRoutes.administrationRoute.usersRoute, { preset: 'all' })}>
+        viewSwitchFunction={() =>
+            navigate2(applicationRoutes.administrationRoute.usersRoute, { preset: 'all' })
+        }>
 
         <AdminUserList
             currentUserId={editedUserId}
@@ -144,7 +159,7 @@ export const AdminEditUserSubpage = (props: {
                 showDeleteUserDialog={showDeleteUserDialog}
                 saveUserAsync={handleSaveUserAsync} />}
         </AdminSubpageHeader>
-    </AdminBreadcrumbsHeader>;
+    </AdminBreadcrumbsHeader >;
 };
 
 export default AdminEditUserSubpage;
