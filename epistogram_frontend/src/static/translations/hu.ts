@@ -219,7 +219,7 @@ export const huTranslation: TranslationType = {
             homePage: 'Kezdőlap',
             shopPage: 'Bolt',
             availableCourses: 'Tanfolyamkereső',
-            learning: 'Tanulás',
+            learning: 'Haladásom',
             learningStatistics: 'Statisztikám',
             learningOverview: 'Áttekintés',
             learningCourses: 'Kurzusaim',
