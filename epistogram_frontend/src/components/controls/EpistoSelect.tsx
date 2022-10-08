@@ -1,5 +1,6 @@
-import React from 'react';
+import { ArrowDropDown } from '@mui/icons-material';
 import { translatableTexts } from '../../static/translatableTexts';
+import { EpistoFlex2 } from './EpistoFlex';
 
 const defaultKey = '___default___';
 
@@ -42,35 +43,54 @@ export const EpistoSelect = <TItem,>(props: EpistoSelectPropsType<TItem>) => {
             : currentKey
         : defaultKey;
 
-    return <select
-        className="whall roundBorders"
-        onChange={(x) => onSelectedValue(x.target.value)}
-        value={currentSelectedKey}
-        disabled={isDisabled}
-        style={{
-            background: 'transparent',
-            outline: 'none',
-            padding: '10px 10px',
-            cursor: 'pointer',
-            pointerEvents: isDisabled ? 'none' : undefined
-        }}>
+    return <EpistoFlex2
+        position='relative'>
 
-        <option value={defaultKey}>
-            {defaultValue ?? translatableTexts.misc.selectOption}
-        </option>
+        <select
+            className="roundBorders tinyShadow"
+            onChange={(x) => onSelectedValue(x.target.value)}
+            value={currentSelectedKey}
+            disabled={isDisabled}
+            style={{
+                appearance: 'none',
+                background: 'white',
+                outline: 'none',
+                margin: '10px 0',
+                height: '40px',
+                padding: '5px 10px',
+                width: '100%',
+                cursor: 'pointer',
+                pointerEvents: isDisabled ? 'none' : undefined
+            }}>
 
-        {items
-            .map((item, index) => {
+            <option value={defaultKey}>
+                {defaultValue ?? translatableTexts.misc.selectOption}
+            </option>
 
-                return <option
-                    key={index}
-                    value={getCompareKey(item)}>
-                    {getDisplayValue
-                        ? item !== undefined && item !== null
-                            ? getDisplayValue(item)
-                            : ''
-                        : '' + item}
-                </option>;
-            })}
-    </select>;
+            {items
+                .map((item, index) => {
+
+                    return <option
+                        key={index}
+                        value={getCompareKey(item)}>
+                        {getDisplayValue
+                            ? item !== undefined && item !== null
+                                ? getDisplayValue(item)
+                                : ''
+                            : '' + item}
+                    </option>;
+                })}
+
+
+        </select>
+
+        <ArrowDropDown
+            style={{
+                pointerEvents: 'none',
+                position: 'absolute',
+                right: '10px',
+                height: '20px',
+                top: '20px'
+            }} />
+    </EpistoFlex2>;
 };

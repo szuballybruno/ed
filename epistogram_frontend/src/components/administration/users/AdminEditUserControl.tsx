@@ -2,6 +2,7 @@ import { Checkbox } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useCoinBalanceOfUser, useGiftCoinsToUser } from '../../../services/api/coinTransactionsApiService';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
+import { RoleDTO } from '../../../shared/dtos/RoleDTO';
 import { UserEditReadDTO } from '../../../shared/dtos/UserEditReadDTO';
 import { UserEditSaveDTO } from '../../../shared/dtos/UserEditSaveDTO';
 import { Id } from '../../../shared/types/versionId';
@@ -232,6 +233,40 @@ export const AdminEditUserControl = ({
                     <EpistoFlex2
                         direction="column">
 
+                        <EpistoSelect
+                            items={availableRoles.filter(x => x.id !== Id.create(3))}
+                            currentKey={5 - assignedRoleIds.length + ''}
+                            onSelected={(value: RoleDTO) => {
+
+                                /* Company role which contains all other roles */
+                                if (value.id === Id.create(1)) {
+
+                                    return setAssignedRoleIds(availableRoles.map(x => x.id));
+                                }
+
+                                /* HR role which contains role manager and user */
+                                if (value.id === Id.create(2)) {
+
+                                    return setAssignedRoleIds(
+                                        availableRoles
+                                            .filter(x => x.id !== Id.create(1))
+                                            .map(x => x.id));
+                                }
+
+                                /* User role */
+                                if (value.id === Id.create(4)) {
+
+                                    return setAssignedRoleIds([Id.create(4)]);
+                                }
+
+                            }}
+                            getCompareKey={(item: RoleDTO) => {
+                                return item.id + '';
+                            }}
+                            getDisplayValue={(item: RoleDTO) => {
+                                return item.name;
+                            }} />
+
                         {availableRoles
                             .map(({ id: roleId, name: roleName }, index) => {
 
@@ -246,6 +281,8 @@ export const AdminEditUserControl = ({
                                         <EpistoFont>
                                             {roleName}
                                         </EpistoFont>
+
+
 
                                         <EpistoCheckbox
                                             value={isAssigned}
