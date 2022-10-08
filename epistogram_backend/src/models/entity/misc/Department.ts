@@ -4,11 +4,11 @@ import { Id } from '../../../shared/types/versionId';
 import { User } from './User';
 
 @Entity()
-export class JobTitle {
+export class Department {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()
-    id: Id<'JobTitle'>;
+    id: Id<'Department'>;
 
     @Column()
     @XViewColumn()
@@ -17,7 +17,7 @@ export class JobTitle {
     // TO MANY
 
     // users
-    @OneToMany(_ => User, x => x.jobTitle)
+    @OneToMany(_ => User, x => x.department)
     @JoinColumn()
     users: User[];
 }

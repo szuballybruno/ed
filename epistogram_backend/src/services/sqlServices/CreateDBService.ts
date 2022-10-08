@@ -5,8 +5,6 @@ import { DepHierarchyItem, XDependency } from '../../utilities/XDInjection/XDInj
 import { LoggerService } from '../LoggerService';
 import { GlobalConfiguration } from '../misc/GlobalConfiguration';
 import { XDBMConstraintType, XDBMSchemaService, XDMBIndexType } from '../XDBManager/XDBManagerTypes';
-import { SQLConnectionService } from './SQLConnectionService';
-import { TypeORMConnectionService } from './TypeORMConnectionService';
 
 type ViewFile = {
     name: string,
@@ -16,40 +14,51 @@ type ViewFile = {
 export class CreateDBService {
 
     constructor(
-        private _sqlConnectionService: SQLConnectionService,
         private _dbSchema: XDBMSchemaService,
         private _config: GlobalConfiguration,
-        private _typeOrmConnectionService: TypeORMConnectionService,
         private _loggerService: LoggerService) {
     }
 
-    createDatabaseSchemaAsync = async (createTables: boolean) => {
+    getDatabaseLightSchemaRecreateScript() {
 
         this._checkSqlFolder();
 
-        if (createTables) {
+        const recreateViews = this
+            ._recreateViewsAsync();
 
-            this._loggerService.logScoped('BOOTSTRAP', 'Creating tables with TypeORM...');
-            await this._typeOrmConnectionService.connectTypeORMAsync();
-        }
+        const recreateFunctions = this
+            ._recreateFunctionsAsync(this._dbSchema.functionScripts);
 
-        this._loggerService.logScoped('BOOTSTRAP', 'Recreating views...');
-        await this.recreateViewsAsync();
+        const recreateConstraints = this
+            ._recreateConstraintsAsync(this._dbSchema.constraints);
 
-        this._loggerService.logScoped('BOOTSTRAP', 'Recreating functions...');
-        await this.recreateFunctionsAsync(this._dbSchema.functionScripts);
+        const recreateInidcesScript = this
+            ._recreateIndicesAsync(this._dbSchema.indices);
 
-        this._loggerService.logScoped('BOOTSTRAP', 'Recreating constraints...');
-        await this.recreateConstraintsAsync(this._dbSchema.constraints);
+        const recteateTriggers = this
+            ._recreateTriggersAsync(this._dbSchema.triggers);
 
-        this._loggerService.logScoped('BOOTSTRAP', 'Recreating indices...');
-        await this.recreateIndicesAsync(this._dbSchema.indices);
-
-        this._loggerService.logScoped('BOOTSTRAP', 'Recreating triggers...');
-        await this.recreateTriggersAsync(this._dbSchema.triggers);
-    };
+        return [
+            this._mainScectionWrapper('VIEWS', recreateViews),
+            this._mainScectionWrapper('FUNCTIONS', recreateFunctions),
+            this._mainScectionWrapper('CONSTRAINTS', recreateConstraints),
+            this._mainScectionWrapper('INDICES', recreateInidcesScript),
+            this._mainScectionWrapper('TRIGGERS', recteateTriggers),
+        ]
+            .join('\n');
+    }
 
     // PRIVATE
+
+    private _mainScectionWrapper(name: string, script: string) {
+
+        return `
+--
+--               RECREATE ${name}
+--  
+${script}
+`;
+    }
 
     private _checkSqlFolder() {
 
@@ -105,152 +114,105 @@ export class CreateDBService {
         return views;
     }
 
-    private recreateConstraintsAsync = async (constraints: XDBMConstraintType[]) => {
+    private _recreateConstraintsAsync(constraints: XDBMConstraintType[]) {
 
         // drop constraints
-        const drops = constraints
+        const dropConstrains = constraints
             .filter(x => !!x.tableName)
-            .map(constraint => `ALTER TABLE public.${constraint.tableName} DROP CONSTRAINT IF EXISTS ${constraint.fileName};`);
-
-        await this._sqlConnectionService.executeSQLAsync(drops.join('\n'));
+            .map(constraint => `ALTER TABLE public.${constraint.tableName} DROP CONSTRAINT IF EXISTS ${constraint.fileName};`)
+            .join('\n');
 
         // create constraints 
-        for (let index = 0; index < constraints.length; index++) {
+        const createConstraints = constraints
+            .map(constraint => this._getCreateScript('CONSTRAINT', constraint.fileName, this.readSQLFile('constraints', constraint.fileName)))
+            .join('\n');
 
-            const constraint = constraints[index];
-            const script = this.readSQLFile('constraints', constraint.fileName);
+        return this._getFullRecreateScript('CONSTRAINTS', dropConstrains, createConstraints);
+    }
 
-            try {
-
-                this._loggerService.logScoped('BOOTSTRAP', 'SECONDARY', `Creating constraint(s): [${constraint.fileName}]...`);
-                await this._sqlConnectionService.executeSQLAsync(script);
-            }
-            catch (e: any) {
-
-                throw new Error(`Creating constraint(s) (${constraint.fileName}) failed: ${e.message}!`);
-            }
-        }
-    };
-
-    private recreateIndicesAsync = async (indices: XDMBIndexType[]) => {
+    private _recreateIndicesAsync(indices: XDMBIndexType[]) {
 
         // drop all indices
-        const drops = indices
-            .map(index => `DROP INDEX IF EXISTS ${index.name};`);
+        const dropsScript = indices
+            .map(index => `DROP INDEX IF EXISTS ${index.name};`)
+            .join('\n');
 
-        await this._sqlConnectionService
-            .executeSQLAsync(drops.join('\n'));
+        const createIndicesScript = indices
+            .map(sqlIndex => this._getCreateScript('INDEX', sqlIndex.name, this
+                .readSQLFile('indices', sqlIndex.name)))
+            .join('\n');
 
-        // create indices 
-        for (let index = 0; index < indices.length; index++) {
+        return this._getFullRecreateScript('INDICES', dropsScript, createIndicesScript);
+    }
 
-            const sqlIndex = indices[index];
-            const script = this.readSQLFile('indices', sqlIndex.name);
+    private _recreateTriggersAsync(triggers: string[]) {
 
-            this._loggerService.logScoped('BOOTSTRAP', 'SECONDARY', `Creating index: [${sqlIndex.tableName} <- ${sqlIndex.name}]...`);
-            await this._sqlConnectionService
-                .executeSQLAsync(script);
-        }
-    };
+        return triggers
+            .map(trigger => this._getCreateScript('TRIGGER', trigger, this.readSQLFile('triggers', trigger)))
+            .join('\n');
+    }
 
-    private recreateTriggersAsync = async (triggers: string[]) => {
+    private _recreateFunctionsAsync(functionNames: string[]) {
 
-        // create triggers 
-        for (let index = 0; index < triggers.length; index++) {
+        const dropScript = functionNames
+            .map(functionName => `DROP FUNCTION IF EXISTS ${functionName};`)
+            .join('\n');
 
-            const triggerName = triggers[index];
-            const script = this.readSQLFile('triggers', triggerName);
+        const createScript = functionNames
+            .map(functionName => this._getCreateScript('FUNCTION', functionName, this
+                .readSQLFile('functions', functionName)))
+            .join('\n');
 
-            this._loggerService.logScoped('BOOTSTRAP', 'SECONDARY', `Creating trigger: [${triggerName}]...`);
-            await this._sqlConnectionService
-                .executeSQLAsync(script);
-        }
-    };
+        return this._getFullRecreateScript('FUNCTIONS', dropScript, createScript);
+    }
 
-    private recreateFunctionsAsync = async (functionNames: string[]) => {
-
-        // drop functions 
-        const drops = functionNames
-            .map(functionName => `DROP FUNCTION IF EXISTS ${functionName};`);
-
-        await this._sqlConnectionService.executeSQLAsync(drops.join('\n'));
-
-        // create functions
-        for (let index = 0; index < functionNames.length; index++) {
-
-            const functionName = functionNames[index];
-            const script = this.readSQLFile('functions', functionName);
-
-            this._loggerService.logScoped('BOOTSTRAP', 'SECONDARY', `Creating function: [${functionName}]...`);
-            await this._sqlConnectionService.executeSQLAsync(script);
-        }
-    };
-
-    private recreateViewsAsync = async () => {
+    private _recreateViewsAsync() {
 
         const viewFiles = this._readViews();
         const nameAndDeps = this._getDepsOfViews(viewFiles);
-        const ordered = XDependency.orderDepHierarchy(nameAndDeps);
+        const ordered = XDependency
+            .orderDepHierarchy(nameAndDeps);
 
+        // drop scripts 
         const revereseOrderedViewNames = ordered
             .map(x => x.getCompareKey())
             .reverse();
 
+        const dropScript = revereseOrderedViewNames
+            .map(viewName => `DROP VIEW IF EXISTS ${viewName} CASCADE;`)
+            .join('\n');
+
+        // create scripts 
         const viewFilesOrdered = ordered
             .map(x => viewFiles
                 .single(y => y.name === x.getCompareKey()));
 
-        // drop in reverse
-        await this.dropViews(revereseOrderedViewNames);
+        const createScripts = viewFilesOrdered
+            .map(x => this._getCreateScript('VIEW', x.name, this._getViewCreationScript(x.name, x.content)))
+            .join('\n');
 
-        // create 
-        await this.createViews(viewFilesOrdered);
-    };
+        return this._getFullRecreateScript('VIEWS', dropScript, createScripts);
+    }
 
-    private createViews = async (viewFilesOrdered: ViewFile[]) => {
-
-        for (let index = 0; index < viewFilesOrdered.length; index++) {
-
-            const viewFile = viewFilesOrdered[index];
-            const viewName = viewFile.name;
-
-            try {
-
-                this
-                    ._loggerService
-                    .logScoped('BOOTSTRAP', 'SECONDARY', `Creating view (${index + 1}): [${viewName}]...`);
-
-                const script = this
-                    ._getViewCreationScript(viewFile.name, viewFile.content);
-
-                await this
-                    ._sqlConnectionService
-                    .executeSQLAsync(script);
-            }
-            catch (e: any) {
-
-                throw new Error(`View creation failed: "${viewName}". Msg: ${e.message}`);
-            }
-        }
-    };
-
-    private dropViews = async (viewNames: string[]) => {
-
-        const drops = viewNames
-            .map(viewName => `DROP VIEW IF EXISTS ${viewName} CASCADE;`);
-
-        await this._sqlConnectionService.executeSQLAsync(drops.join('\n'));
-    };
-
-    private _getViewCreationScript = (viewName: string, viewContent: string) => {
+    private _getViewCreationScript(viewName: string, viewContent: string) {
 
         return `CREATE VIEW ${viewName}\nAS\n${viewContent}`;
-    };
+    }
 
-    private readSQLFile = (folderName: string, fileName: string, subFolder?: string) => {
+    private _getFullRecreateScript(name: string, dropsScript: string, createIndicesScript: string) {
+
+        return `--DROP OLD ${name} \n${dropsScript}\n\n--CREATE ${name}\n${createIndicesScript}`;
+    }
+
+    private _getCreateScript(tableName: string, name: string, script: string) {
+
+        return `\n--CREATE ${tableName}: ${name}\n${script};`;
+    }
+
+    private readSQLFile(folderName: string, fileName: string, subFolder?: string) {
 
         return readFileSync(this._config.getRootRelativePath(`/sql/${folderName}/${subFolder || ''}${subFolder ? '/' : ''}${fileName}.sql`), 'utf8');
-    };
+    }
 
     private _getRootFolderPath(folderName: string) {
 

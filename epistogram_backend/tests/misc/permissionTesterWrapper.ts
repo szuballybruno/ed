@@ -1,15 +1,16 @@
-import {Permission} from '../../src/models/entity/authorization/Permission';
-import {RoleService} from '../../src/services/RoleService';
-import {ChangeSet} from '../../src/shared/dtos/changeSet/ChangeSet';
-import {UserPermissionDTO} from '../../src/shared/dtos/role/UserPermissionDTO';
-import {instantiate} from '../../src/shared/logic/sharedLogic';
+import { Permission } from '../../src/models/entity/authorization/Permission';
+import { RoleService } from '../../src/services/RoleService';
+import { ChangeSet } from '../../src/shared/dtos/changeSet/ChangeSet';
+import { UserPermissionDTO } from '../../src/shared/dtos/role/UserPermissionDTO';
+import { instantiate } from '../../src/shared/logic/sharedLogic';
 import {
     permissionCodes
 } from '../../src/shared/types/PermissionCodesType';
-import {PermissionCodeType} from '../../src/shared/types/sharedTypes';
-import {Id} from '../../src/shared/types/versionId';
-import {ServiceProvider} from '../../src/startup/servicesDI';
-import {JestLogger} from './jestLogger';
+import { PermissionCodeType } from '../../src/shared/types/sharedTypes';
+import { Id } from '../../src/shared/types/versionId';
+import { ServiceProvider } from '../../src/startup/servicesDI';
+import { throwNotImplemented } from '../../src/utilities/helpers';
+import { JestLogger } from './jestLogger';
 
 export type AssignablePermissionType = {
     permissionCode: PermissionCodeType,
@@ -54,13 +55,15 @@ export const permissionTesterWrapper = async (
     // removes all permissions and roles from user
     // TODO: NOT WORKING WITH USER WITH ISGOD FLAG!!
     JestLogger.logMain('Flushing user permissions');
-    await roleService
-        ._flushUserPermissionsAndRolesAsync(assigneeUserId);
+    throwNotImplemented();
+
+    // await roleService
+    //     ._flushUserPermissionsAndRolesAsync(assigneeUserId);
 
     JestLogger.logMain('Running callback fn without permissions');
     await callbackFn();
 
-        // adds the current and access_application permission to user
+    // adds the current and access_application permission to user
     JestLogger.logMain('Adding ACCESS_APPLICATION and ' + JSON.stringify(assignablePermissions.map(x => x.permissionCode)) + ' permissions to user');
     await roleService
         ._savePermissionsAsync(
@@ -75,18 +78,18 @@ export const permissionTesterWrapper = async (
                             return;
 
                         return instantiate<UserPermissionDTO>({
-                                permissionId: currentPermission.id,
-                                permissionCode: currentPermission.code,
-                                assigneeUserId: assigneeUserId,
-                                contextCompanyId: x.contextCompanyId,
-                                contextCourseId: x.contextCourseId,
-                                contextCompanyName: '',
-                                contextCourseName: '',
-                                parentRoleId: null,
-                                parentRoleName: null,
-                                permissionAssignmentBridgeId: null
-                            });
-                        }),
+                            permissionId: currentPermission.id,
+                            permissionCode: currentPermission.code,
+                            assigneeUserId: assigneeUserId,
+                            contextCompanyId: x.contextCompanyId,
+                            contextCourseId: x.contextCourseId,
+                            contextCompanyName: '',
+                            contextCourseName: '',
+                            parentRoleId: null,
+                            parentRoleName: null,
+                            permissionAssignmentBridgeId: null
+                        });
+                    }),
                     instantiate<UserPermissionDTO>({
                         permissionId: getPermissionFromCode('ACCESS_APPLICATION')!.id,
                         permissionCode: 'ACCESS_APPLICATION',
@@ -109,7 +112,8 @@ export const permissionTesterWrapper = async (
 
     // removes all the permissions from user
     JestLogger.logMain('Flushing user permissions');
-    await roleService
-        ._flushUserPermissionsAndRolesAsync(assigneeUserId);
+    throwNotImplemented();
+    // await roleService
+    //     ._flushUserPermissionsAndRolesAsync(assigneeUserId);
 
-    };
+};

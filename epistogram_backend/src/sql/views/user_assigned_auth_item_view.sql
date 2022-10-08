@@ -7,4 +7,4 @@ SELECT * FROM
 	FROM role_assignment_bridge
 ) sq
 
-WHERE sq.assignee_user_id IS NOT NULL -- get user assigned only 
+WHERE sq.assignee_user_id IS NOT NULL 

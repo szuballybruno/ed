@@ -1,303 +1,111 @@
-import { PermissionAssignmentBridge } from '../models/entity/authorization/PermissionAssignmentBridge';
 import { Role } from '../models/entity/authorization/Role';
 import { RoleAssignmentBridge } from '../models/entity/authorization/RoleAssignmentBridge';
 import { RolePermissionBridge } from '../models/entity/authorization/RolePermissionBridge';
-import { AssignablePermissionView } from '../models/views/AssignablePermissionView';
-import { AssignableRoleView } from '../models/views/AssignableRoleView';
-import { RoleListView } from '../models/views/RoleListView';
+import { User } from '../models/entity/misc/User';
 import { UserPermissionView } from '../models/views/UserPermissionView';
 import { UserRoleView } from '../models/views/UserRoleView';
-import { AssignablePermissionDTO } from '../shared/dtos/AssignablePermissionDTO';
-import { AssignableRoleDTO } from '../shared/dtos/AssignableRoleDTO';
-import { ChangeSet } from '../shared/dtos/changeSet/ChangeSet';
 import { PermissionListDTO } from '../shared/dtos/role/PermissionListDTO';
-import { RoleAdminListDTO } from '../shared/dtos/role/RoleAdminListDTO';
 import { RoleCreateDTO } from '../shared/dtos/role/RoleCreateDTO';
 import { RoleEditDTO } from '../shared/dtos/role/RoleEditDTO';
-import { UserPermissionDTO } from '../shared/dtos/role/UserPermissionDTO';
 import { UserRoleDTO } from '../shared/dtos/role/UserRoleDTO';
-import { PermissionCodeType, PermissionScopeType } from '../shared/types/sharedTypes';
+import { RoleDTO } from '../shared/dtos/RoleDTO';
 import { ErrorWithCode } from '../shared/types/ErrorWithCode';
+import { PermissionCodeType } from '../shared/types/sharedTypes';
 import { Id } from '../shared/types/versionId';
-import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { instatiateInsertEntity } from '../utilities/misc';
-import { MapperService } from './MapperService';
-import { QueryServiceBase } from './misc/ServiceBase';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { AuthorizationService } from './AuthorizationService';
-import { User } from '../models/entity/misc/User';
+import { MapperService } from './MapperService';
+import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 
-export class RoleService extends QueryServiceBase<Role> {
-
-    private _authorizationService: AuthorizationService;
+export class RoleService {
 
     constructor(
-        ormService: ORMConnectionService,
-        mapperService: MapperService,
-        authorizationService: AuthorizationService) {
-
-        super(mapperService, ormService, Role);
-
-        this._authorizationService = authorizationService;
+        private _ormService: ORMConnectionService,
+        private _mapperService: MapperService,
+        private _authorizationService: AuthorizationService) {
     }
 
-    getRolesListAdminAsync(principalId: PrincipalId) {
+    /**
+     * Retrieve the user's permissions 
+     */
+    async getUserRolesAsync(principalId: PrincipalId, userId: Id<'User'>) {
 
-        return {
-            action: async () => {
-                const userId = principalId.toSQLValue();
+        const roles = await this._ormService
+            .query(UserRoleView, { userId })
+            .where('assigneeUserId', '=', 'userId')
+            .getMany();
 
-                const roles = await this._ormService
-                    .query(RoleListView, { userId })
-                    .where('userId', '=', 'userId')
-                    .getMany();
+        const roleGroups = roles
+            .groupBy(x => `${x.roleId}${x.contextCompanyId}${x.assignmentBridgeId}${x.assigneeUserId}`);
 
-                return this._mapperService
-                    .mapTo(RoleAdminListDTO, [roles]);
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'VIEW_PREDEFINED_ROLES');
-            }
-        };
+        return roleGroups
+            .map(({ first, items }): UserRoleDTO => ({
+                isInherited: first.isInherited,
+                roleId: first.roleId,
+                roleName: first.roleName,
+                permissions: items
+                    .filter(x => x.permissionId !== null)
+                    .map((x): PermissionListDTO => ({
+                        code: x.permissionCode,
+                        scope: 'COMPANY' // not used 
+                    }))
+            }));
     }
 
-    getAssignablePermissionsAsync(principalId: PrincipalId, courseId: Id<'Course'> | null, companyId: Id<'Company'> | null) {
+    /**
+     * Retrieve the user's permissions 
+     */
+    async getAllRolesAsync(principalId: PrincipalId, userId: Id<'User'>) {
 
-        return {
-            action: async () => {
-                const scope: PermissionScopeType = courseId
-                    ? 'COURSE'
-                    : companyId
-                        ? 'COMPANY'
-                        : 'USER';
+        const roles = await this._ormService
+            .query(Role, {})
+            .where('isCustom', '=', 'false')
+            .getMany();
 
-                const rolesAndPermissions = await this._ormService
-                    .query(AssignablePermissionView, { principalId, companyId, scope })
-                    .where('assigneeUserId', '=', 'principalId')
-                    .and('contextCompanyId', '=', 'companyId')
-                    .and('permissionScope', '=', 'scope')
-                    .getMany();
-
-                return rolesAndPermissions
-                    .map((x): AssignablePermissionDTO => ({
-                        contextCompanyId: x.contextCompanyId,
-                        permissionCode: x.permissionCode,
-                        permissionId: x.permissionId,
-                        userId: x.assigneeUserId
-                    }));
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'VIEW_PERMISSIONS');
-            }
-        };
+        return roles
+            .map((x): RoleDTO => ({
+                id: x.id,
+                name: x.name
+            }));
     }
 
-    getAssignableRolesAsync(principalId: PrincipalId, assigneeUserId: Id<'User'>, companyId: Id<'Company'>) {
+    /**
+     * Saves user assigned roles
+     */
+    async saveUserRolesAsync(principalId: PrincipalId, targetUserId: Id<'User'>, assignedRoleIds: Id<'Role'>[]) {
 
-        return {
-            action: async () => {
-                const roles = await this._ormService
-                    .query(AssignableRoleView, { principalId, assigneeUserId, companyId })
-                    .where('assignerUserId', '=', 'principalId')
-                    .and('assigneeUserId', '=', 'assigneeUserId')
-                    .and('contextCompanyId', '=', 'companyId')
-                    .getMany();
+        const { companyId } = await this
+            ._ormService
+            .getSingleById(User, targetUserId);
 
-                const roleGroups = roles
-                    .groupBy(x => x.roleId);
+        const oldBridges = await this
+            ._ormService
+            .query(RoleAssignmentBridge, { targetUserId })
+            .where('assigneeUserId', '=', 'targetUserId')
+            .getMany();
 
-                return roleGroups
-                    .map((viewAsRole): AssignableRoleDTO => ({
-                        roleId: viewAsRole.first.roleId,
-                        roleName: viewAsRole.first.roleName,
-                        contextCompanyName: viewAsRole.first.contextCompanyName,
-                        ownerCompanyId: viewAsRole.first.ownerCompanyId,
-                        ownerCompanyName: viewAsRole.first.ownerCompanyName,
-                        isCustom: viewAsRole.first.isCustom,
-                        canAssign: viewAsRole.first.canAssign,
-                        isAssigned: viewAsRole.first.isAssigned,
-                        permissions: viewAsRole
-                            .items
-                            .filter(x => x.permissionId !== null)
-                            .map((viewAsPerm): PermissionListDTO => ({
-                                id: viewAsPerm.permissionId,
-                                code: viewAsPerm.permissionCode,
-                                scope: 'COMPANY' // not used 
-                            }))
-                    }));
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ASSIGN_PREDEFINED_ROLES', { companyId });
-            }
-        };
-
-    }
-
-    getUserRolesAsync(principalId: PrincipalId, userId: Id<'User'>) {
-
-        return {
-            action: async () => {
-                const roles = await this._ormService
-                    .query(UserRoleView, { userId })
-                    .where('assigneeUserId', '=', 'userId')
-                    .getMany();
-
-                const rg = roles
-                    .groupBy(x => `${x.roleId}${x.contextCompanyId}${x.assignmentBridgeId}${x.assigneeUserId}`);
-
-                return rg
-                    .map((x): UserRoleDTO => ({
-                        ...(x.first),
-                        permissions: x
-                            .items
-                            .filter(x => x.permissionId !== null)
-                            .map((x): PermissionListDTO => ({
-                                id: x.permissionId,
-                                code: x.permissionCode,
-                                scope: 'COMPANY' // not used 
-                            }))
-                    }));
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'VIEW_PREDEFINED_ROLES');
-            }
-        };
-    }
-
-    getUserPermissionsAsync(principalId: PrincipalId, userId: Id<'User'>) {
-
-        return {
-            action: async () => {
-                const roles = await this._ormService
-                    .query(UserPermissionView, { userId })
-                    .where('assigneeUserId', '=', 'userId')
-                    .getMany();
-
-                return roles
-                    .map((x): UserPermissionDTO => ({
-                        assigneeUserId: x.assigneeUserId,
-                        contextCompanyId: x.contextCompanyId,
-                        contextCompanyName: x.contextCompanyName,
-                        contextCourseId: x.contextCourseId,
-                        contextCourseName: x.contextCourseName,
-                        permissionId: x.permissionId,
-                        permissionCode: x.permissionCode,
-                        permissionAssignmentBridgeId: x.assignmentBridgeId,
-                        parentRoleId: x.parentRoleId,
-                        parentRoleName: x.parentRoleName
-                    }));
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'VIEW_PERMISSIONS');
-            }
-        };
-    }
-
-    async saveUserAssignedAuthItemsAsync(
-        principalId: PrincipalId,
-        savedUserId: Id<'User'>,
-        rolesChangeSet: ChangeSet<UserRoleDTO>,
-        permissionsChangeSet: ChangeSet<UserPermissionDTO>) {
-
-        const { companyId } = await this._ormService
-            .query(User, { userId: principalId.toSQLValue() })
-            .where('id', '=', 'userId')
-            .getSingle();
-
-        await this._authorizationService
-            .checkPermissionAsync(principalId, 'ASSIGN_PREDEFINED_ROLES', { companyId });
-
-        // save roles 
-        await this._saveRolesAsync(
-            principalId,
-            savedUserId,
-            rolesChangeSet);
-
-        // save permissions
-        await this._savePermissionsAsync(
-            savedUserId,
-            permissionsChangeSet);
-    }
-
-    async _saveRolesAsync(principalId: PrincipalId, saveduserId: Id<'User'>, assignedRoles: ChangeSet<UserRoleDTO>) {
-
-        // TODO validation
+        // DELETE BRIDGES
+        await this
+            ._ormService
+            .hardDelete(RoleAssignmentBridge, oldBridges
+                .filter(x => !assignedRoleIds
+                    .some(y => y === x.roleId))
+                .map(x => x.id));
 
         // ASSIGN
-        const newBridges = assignedRoles
-            .newItems
-            .map(userRole => instatiateInsertEntity<RoleAssignmentBridge>({
-                roleId: userRole.roleId,
+        const newBridges = assignedRoleIds
+            .filter(x => !oldBridges
+                .some(o => o.roleId === x))
+            .map(assignedRoleId => instatiateInsertEntity<RoleAssignmentBridge>({
+                roleId: assignedRoleId,
                 assigneeCompanyId: null,
-                assigneeUserId: userRole.assigneeUserId,
-                contextCompanyId: userRole.contextCompanyId,
+                assigneeUserId: targetUserId,
+                contextCompanyId: companyId,
             }));
 
         await this._ormService
             .createManyAsync(RoleAssignmentBridge, newBridges);
-
-        // DEASSING
-        const roleBridgeIdsToDeassign = assignedRoles
-            .deletedItems
-            .map(x => x.assignmentBridgeId);
-
-        await this._ormService
-            .hardDelete(RoleAssignmentBridge, roleBridgeIdsToDeassign);
-    }
-
-    async _flushUserPermissionsAndRolesAsync(userId: Id<'User'>) {
-
-        const userPermissions = await this._ormService
-            .query(PermissionAssignmentBridge, { userId })
-            .where('assigneeUserId', '=', 'userId')
-            .getMany();
-
-        await this._ormService
-            .hardDelete(PermissionAssignmentBridge, userPermissions
-                .map(x => x.id));
-
-        const userRoles = await this._ormService
-            .query(RoleAssignmentBridge, { userId })
-            .where('assigneeUserId', '=', 'userId')
-            .getMany();
-
-        await this._ormService
-            .hardDelete(RoleAssignmentBridge, userRoles
-                .map(x => x.id));
-    }
-
-    async _savePermissionsAsync(
-        savedUserId: Id<'User'>,
-        changeset: ChangeSet<UserPermissionDTO>) {
-
-        // DEASSIGN
-        const idsToDeassign = changeset
-            .deletedItems
-            .filter(x => !!x.permissionAssignmentBridgeId)
-            .map(x => x.permissionAssignmentBridgeId!);
-
-        await this._ormService
-            .hardDelete(PermissionAssignmentBridge, idsToDeassign);
-
-        // ASSIGN
-        const permBridges = changeset
-            .newItems
-            .map((x): PermissionAssignmentBridge => instatiateInsertEntity({
-                assigneeUserId: savedUserId,
-                assigneeCompanyId: null,
-                assigneeGroupId: null,
-                contextCompanyId: x.contextCompanyId,
-                contextCourseId: x.contextCourseId,
-                permissionId: x.permissionId
-            }));
-
-        await this._ormService
-            .createManyAsync(PermissionAssignmentBridge, permBridges);
     }
 
     createRoleAsync(principalId: PrincipalId, dto: RoleCreateDTO) {

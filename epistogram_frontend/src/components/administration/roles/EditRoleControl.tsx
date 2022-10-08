@@ -39,7 +39,7 @@ export const EditRoleControl = (props: {
     const { companies, companiesState } = CompanyApiService.useAvailableCompaniesForRoleCreation();
 
     const [name, setName] = useState('');
-    const [selectedPermissions, setSelectedPermissions] = useState<PermissionListDTO[]>([]);
+    const [selectedPermissions, setSelectedPermissions] = useState<any[]>([]);
     const [selectedCompany, setSelectedCompany] = useState<CompanyDTO | null>(null);
 
     const permissions = useMemo(() => permissionsList

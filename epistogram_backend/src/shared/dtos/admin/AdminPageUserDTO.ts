@@ -10,8 +10,8 @@ export class AdminPageUserDTO {
     canAccessApplication: boolean;
     isInvitationAccepted: boolean;
     avatarUrl: string | null;
-    jobTitleId: Id<'JobTitle'>;
-    jobTitleName: string;
+    departmentId: Id<'Department'>;
+    departmentName: string;
     companyId: Id<'Company'>;
     companyName: string;
     roleId: Id<'Role'>;

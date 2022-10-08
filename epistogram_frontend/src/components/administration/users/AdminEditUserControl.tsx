@@ -1,19 +1,14 @@
 import { Checkbox } from '@mui/material';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useCoinBalanceOfUser, useGiftCoinsToUser } from '../../../services/api/coinTransactionsApiService';
-import { CompanyApiService } from '../../../services/api/companyApiService';
-import { useJobTitles } from '../../../services/api/miscApiService';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
-import { ChangeSet } from '../../../shared/dtos/changeSet/ChangeSet';
-import { CompanyDTO } from '../../../shared/dtos/company/CompanyDTO';
-import { JobTitleDTO } from '../../../shared/dtos/JobTitleDTO';
-import { UserPermissionDTO } from '../../../shared/dtos/role/UserPermissionDTO';
-import { UserRoleDTO } from '../../../shared/dtos/role/UserRoleDTO';
-import { UserEditDTO } from '../../../shared/dtos/UserEditDTO';
+import { UserEditReadDTO } from '../../../shared/dtos/UserEditReadDTO';
+import { UserEditSaveDTO } from '../../../shared/dtos/UserEditSaveDTO';
 import { Id } from '../../../shared/types/versionId';
 import { EventTriggerType, parseIntOrNull } from '../../../static/frontendHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoButton } from '../../controls/EpistoButton';
+import { EpistoCheckbox } from '../../controls/EpistoCheckbox';
 import { EpistoEntry } from '../../controls/EpistoEntry';
 import { EpistoEntryNew, useEpistoEntryState } from '../../controls/EpistoEntryNew';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
@@ -25,7 +20,6 @@ import { useSetBusy } from '../../system/LoadingFrame/BusyBarContext';
 import { EpistoConinImage } from '../../universal/EpistoCoinImage';
 import { EditSection } from '../courses/EditSection';
 import { TailingAdminButtons } from '../TailingAdminButtons';
-import { PermissionAssignerControl } from './permissionAssigner/PermissionAssignerControl';
 
 export const AdminEditUserControl = ({
     editDTO,
@@ -35,38 +29,45 @@ export const AdminEditUserControl = ({
     showDeleteUserDialog
 }: {
     editedUserId: Id<'User'>,
-    editDTO: UserEditDTO | null,
+    editDTO: UserEditReadDTO | null,
     refetchTrigger: EventTriggerType,
-    saveUserAsync: (editDTO: UserEditDTO) => Promise<void>
-    showDeleteUserDialog?: (UserEditDTO: UserEditDTO | null) => void
+    saveUserAsync: (editDTO: UserEditSaveDTO) => Promise<void>
+    showDeleteUserDialog?: (UserEditDTO: UserEditReadDTO | null) => void
 }) => {
 
     const { hasPermission } = useAuthorizationContext();
     const mode = (editedUserId as any) < 0 ? 'ADD' : 'EDIT';
+    const canSetCompanyId = false;
 
     // editable fields
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
-    const [selectedJobTitle, setSelectedJobTitle] = useState<JobTitleDTO | null>(null);
-    const [selectedCompany, setSelectedCompany] = useState<CompanyDTO | null>(null);
+    const [departmentId, setDepartmentId] = useState<Id<'Department'> | null>(null);
+    const [companyId, setCompanyId] = useState<Id<'Company'> | null>(null);
     const [isTeacher, setIsTeacher] = useState(false);
-    const [rolesChangeSet, setRolesChangeSet] = useState<ChangeSet<UserRoleDTO>>(new ChangeSet<UserRoleDTO>());
-    const [permissionsChangeSet, setPermissionsChangeSet] = useState<ChangeSet<UserPermissionDTO>>(new ChangeSet<UserPermissionDTO>());
+    const [assignedRoleIds, setAssignedRoleIds] = useState<Id<'Role'>[]>([]);
 
     const showError = useShowErrorDialog();
 
-    const canSetInvitedUserCompany = true;//hasPermission('i');
-
     const { coinBalance, coinBalanceStatus, coinBalanceError, refetchCoinBalance } = useCoinBalanceOfUser(mode === 'EDIT' ? editedUserId : null);
     const { giftCoinsToUserAsync, giftCoinsToUserState } = useGiftCoinsToUser();
-    const { roleAssignCompanies, roleAssignCompaniesError, roleAssignCompaniesState } = CompanyApiService.useRoleAssignCompanies();
-    const { jobTitles, jobTitlesError, jobTitlesStatus } = useJobTitles();
 
     useSetBusy(useCoinBalanceOfUser, coinBalanceStatus, coinBalanceError);
-    useSetBusy(CompanyApiService.useRoleAssignCompanies, roleAssignCompaniesState, roleAssignCompaniesError);
-    useSetBusy(useJobTitles, jobTitlesStatus, jobTitlesError);
 
+    const {
+        availableCompanies,
+        availableDepartments,
+        availableRoles
+    } = editDTO ?? ({
+        availableCompanies: [] as UserEditReadDTO['availableCompanies'],
+        availableDepartments: [] as UserEditReadDTO['availableDepartments'],
+        availableRoles: [] as UserEditReadDTO['availableRoles']
+    });
+
+    /**
+     * Load state from editDTO
+     */
     useEffect(() => {
 
         if (!editDTO)
@@ -76,21 +77,12 @@ export const AdminEditUserControl = ({
         setLastName(editDTO.lastName);
         setEmail(editDTO.email);
         setIsTeacher(editDTO.isTeacher);
+        setDepartmentId(editDTO.departmentId);
+        setCompanyId(editDTO.companyId);
+        setCompanyId(editDTO.companyId);
+        setAssignedRoleIds(editDTO.roleIds);
 
-        if (jobTitles.length === 0 || roleAssignCompanies.length === 0)
-            return;
-
-        const comp = roleAssignCompanies
-            .single(x => x.id === editDTO.companyId);
-
-        const jt = jobTitles
-            .single(x => x.id === editDTO.jobTitleId);
-
-        setSelectedJobTitle(jt);
-        setSelectedCompany(comp);
-
-
-    }, [editDTO, jobTitles, roleAssignCompanies]);
+    }, [editDTO]);
 
     const coinAmountEntryState = useEpistoEntryState({
         isMandatory: true,
@@ -127,35 +119,22 @@ export const AdminEditUserControl = ({
 
     const handleSaveUserAsync = async () => {
 
-        if (!selectedCompany || !selectedJobTitle)
+        if (!companyId || !departmentId)
             return;
 
-        const editedUserDTO: UserEditDTO = {
-            id: editedUserId,
+        const editedUserDTO: UserEditSaveDTO = {
+            userId: editedUserId,
             firstName,
             lastName,
             email,
-            companyId: selectedCompany.id,
-            jobTitleId: selectedJobTitle.id,
+            companyId,
+            departmentId,
             isTeacher,
-            permissions: permissionsChangeSet,
-            roles: rolesChangeSet
+            assignedRoleIds,
         };
 
         return saveUserAsync(editedUserDTO);
     };
-
-    const onAuthItemsChanged = useCallback((data: {
-        assignedRoles?: ChangeSet<UserRoleDTO>,
-        assignedPermissions?: ChangeSet<UserPermissionDTO>
-    }) => {
-
-        if (data.assignedRoles)
-            setRolesChangeSet(data.assignedRoles);
-
-        if (data.assignedPermissions)
-            setPermissionsChangeSet(data.assignedPermissions);
-    }, [setRolesChangeSet, setPermissionsChangeSet]);
 
     return <EpistoFlex2 direction="column"
         flex="1">
@@ -204,10 +183,10 @@ export const AdminEditUserControl = ({
             </EditSection>
 
             {/* company section */}
-            <EditSection title="Cég és beosztás">
+            <EditSection title="Cég és jogosultságkezelés">
 
                 {/* company */}
-                {canSetInvitedUserCompany && <EpistoFlex2
+                {canSetCompanyId && <EpistoFlex2
                     direction="column"
                     align="stretch"
                     mt="5px"
@@ -225,15 +204,15 @@ export const AdminEditUserControl = ({
                     </EpistoFont>
 
                     <EpistoSelect
-                        items={roleAssignCompanies}
-                        selectedValue={selectedCompany}
-                        onSelected={setSelectedCompany}
-                        getDisplayValue={x => '' + x?.name}
+                        items={availableCompanies}
+                        selectedValue={availableCompanies.firstOrNull(x => x.id === companyId)}
+                        onSelected={x => setCompanyId(x.id)}
+                        getDisplayValue={x => '' + x.name}
                         getCompareKey={company => '' + company?.id} />
                 </EpistoFlex2>}
 
-                {/* job title */}
-                {canSetInvitedUserCompany && <EpistoFlex2
+                {/* role */}
+                <EpistoFlex2
                     direction="column"
                     align="stretch"
                     mt="5px"
@@ -247,28 +226,72 @@ export const AdminEditUserControl = ({
                             letterSpacing: '1.2px'
                         }}>
 
-                        {translatableTexts.misc.jobTitle}
+                        {translatableTexts.misc.role}
+                    </EpistoFont>
+
+                    <EpistoFlex2
+                        direction="column">
+
+                        {availableRoles
+                            .map(({ id: roleId, name: roleName }, index) => {
+
+                                const isAssigned = assignedRoleIds
+                                    .some(x => x === roleId);
+
+                                return (
+                                    <EpistoFlex2
+                                        align="center"
+                                        key={index}>
+
+                                        <EpistoFont>
+                                            {roleName}
+                                        </EpistoFont>
+
+                                        <EpistoCheckbox
+                                            value={isAssigned}
+                                            setValue={isAssigned => {
+
+                                                // add 
+                                                if (isAssigned && !assignedRoleIds.includes(roleId)) {
+
+                                                    setAssignedRoleIds([...assignedRoleIds, roleId]);
+                                                    return;
+                                                }
+
+                                                // remove 
+                                                setAssignedRoleIds(assignedRoleIds
+                                                    .filter(x => x !== roleId));
+                                            }} />
+                                    </EpistoFlex2>
+                                );
+                            })}
+                    </EpistoFlex2>
+                </EpistoFlex2>
+
+                {/* department */}
+                <EpistoFlex2
+                    direction="column">
+
+                    <EpistoFont
+                        isUppercase
+                        fontSize="fontExtraSmall"
+                        style={{
+                            marginTop: '10px',
+                            letterSpacing: '1.2px'
+                        }}>
+
+                        {translatableTexts.misc.department}
                     </EpistoFont>
 
                     <EpistoSelect
-                        items={jobTitles}
-                        selectedValue={selectedJobTitle}
-                        onSelected={setSelectedJobTitle}
-                        getDisplayValue={jt => '' + jt?.name}
-                        getCompareKey={jt => '' + jt?.id} />
-                </EpistoFlex2>}
+                        items={availableDepartments}
+                        selectedValue={availableDepartments.firstOrNull(x => x.id === departmentId)}
+                        onSelected={x => setDepartmentId(x.id)}
+                        getDisplayValue={x => '' + x.name}
+                        getCompareKey={dep => '' + dep?.id} />
+                </EpistoFlex2>
             </EditSection>
         </EpistoFlex2>
-
-        {/* access management */}
-        <EditSection title="Jogosultságkezelés">
-
-            {editedUserId && <PermissionAssignerControl
-                userCompanyId={editDTO?.companyId ?? null}
-                userId={editedUserId}
-                onChange={onAuthItemsChanged}
-                refetchTrigger={refetchTrigger} />}
-        </EditSection>
 
         {/* coin stuff */}
         <EditSection
@@ -365,6 +388,6 @@ export const AdminEditUserControl = ({
                     // history.goBack();
                 }
             }}
-            onSaveCallback={handleSaveUserAsync } />
+            onSaveCallback={handleSaveUserAsync} />
     </EpistoFlex2 >;
 };

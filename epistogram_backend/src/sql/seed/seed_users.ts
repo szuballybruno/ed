@@ -5,7 +5,7 @@ import { JobTitlesSeedDataType } from './seed_job_titles';
 
 const ADMIN_PASSWORD_HASHED = '$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C';
 
-export const getUserSeedData = (companies: CompaniesSeedDataType, jobTitles: JobTitlesSeedDataType) => getSeedList<User>()({
+export const getUserSeedData = (companies: CompaniesSeedDataType, departments: JobTitlesSeedDataType) => getSeedList<User>()({
 
     /**
      * GOD (has ALL permissions and ALL roles)
@@ -30,7 +30,7 @@ export const getUserSeedData = (companies: CompaniesSeedDataType, jobTitles: Job
         lastName: 'Marosi',
         password: ADMIN_PASSWORD_HASHED,
         companyId: companies.EpistoGram.id,
-        jobTitleId: jobTitles.user.id,
+        departmentId: departments.user.id,
         isGod: true
     },
 
@@ -56,7 +56,7 @@ export const getUserSeedData = (companies: CompaniesSeedDataType, jobTitles: Job
         lastName: 'Murry',
         password: ADMIN_PASSWORD_HASHED,
         companyId: companies.EpistoGram.id,
-        jobTitleId: jobTitles.user.id,
+        departmentId: departments.user.id,
         isGod: false
     },
 
@@ -82,7 +82,7 @@ export const getUserSeedData = (companies: CompaniesSeedDataType, jobTitles: Job
         lastName: 'Strand',
         password: ADMIN_PASSWORD_HASHED,
         companyId: companies.Henkel.id,
-        jobTitleId: jobTitles.user.id,
+        departmentId: departments.user.id,
         isGod: false
     },
 
@@ -108,7 +108,7 @@ export const getUserSeedData = (companies: CompaniesSeedDataType, jobTitles: Job
         lastName: 'Blue',
         password: ADMIN_PASSWORD_HASHED,
         companyId: companies.Henkel.id,
-        jobTitleId: jobTitles.user.id,
+        departmentId: departments.user.id,
         isGod: false
     }
 });

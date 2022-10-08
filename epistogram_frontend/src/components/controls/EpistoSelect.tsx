@@ -1,5 +1,5 @@
 import React from 'react';
-import {translatableTexts} from '../../static/translatableTexts';
+import { translatableTexts } from '../../static/translatableTexts';
 
 const defaultKey = '___default___';
 
@@ -8,7 +8,7 @@ export type EpistoSelectPropsType<TItem> = {
     onSelected: (value: TItem) => void,
     getCompareKey: (item: TItem) => string,
     getDisplayValue: (item: TItem) => string,
-    selectedValue?: TItem,
+    selectedValue?: TItem | null,
     currentKey?: string,
     defaultValue?: string,
     isDisabled?: boolean
@@ -66,7 +66,9 @@ export const EpistoSelect = <TItem,>(props: EpistoSelectPropsType<TItem>) => {
                     key={index}
                     value={getCompareKey(item)}>
                     {getDisplayValue
-                        ? getDisplayValue(item)
+                        ? item !== undefined && item !== null
+                            ? getDisplayValue(item)
+                            : ''
                         : '' + item}
                 </option>;
             })}

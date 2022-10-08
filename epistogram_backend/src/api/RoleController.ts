@@ -17,13 +17,6 @@ export class RoleController implements XController<RoleController> {
         this._roleService = serviceProvider.getService(RoleService);
     }
 
-    @XControllerAction(apiRoutes.roles.getRoles)
-    getRolesListAction = (params: ActionParams) => {
-
-        return this._roleService
-            .getRolesListAdminAsync(params.principalId);
-    };
-
     @XControllerAction(apiRoutes.roles.createRole, { isPost: true })
     createRoleAction = (params: ActionParams) => {
 
@@ -64,64 +57,5 @@ export class RoleController implements XController<RoleController> {
             .saveRoleAsync(params.principalId, params
                 .getBody<RoleEditDTO>(['name', 'permissionIds'])
                 .data);
-    };
-
-    @XControllerAction(apiRoutes.roles.getAssignableRoles)
-    getAssignableRolesAction = (params: ActionParams) => {
-
-        const query = params
-            .getQuery();
-
-        const userId = Id
-            .create<'User'>(query
-                .getValue(x => x.userId, 'int'));
-
-        const companyId = Id
-            .create<'Company'>(query
-                .getValue(x => x.companyId, 'int'));
-
-        return this._roleService
-            .getAssignableRolesAsync(
-                params.principalId,
-                userId,
-                companyId
-            );
-    };
-
-    @XControllerAction(apiRoutes.roles.getAssignablePermissions)
-    getAssignablePermissionsAction = (params: ActionParams) => {
-
-        const query = params
-            .getQuery();
-
-        return this._roleService
-            .getAssignablePermissionsAsync(
-                params.principalId,
-                query.getValueOrNull(x => x.courseId, 'int'),
-                query.getValueOrNull(x => x.companyId, 'int'));
-    };
-
-    @XControllerAction(apiRoutes.roles.getUserRoles)
-    getUserRolesAction = (params: ActionParams) => {
-
-        const userId = Id
-            .create<'User'>(params
-                .getQuery()
-                .getValue(x => x.userId, 'int'));
-
-        return this._roleService
-            .getUserRolesAsync(params.principalId, userId);
-    };
-
-    @XControllerAction(apiRoutes.roles.getUserPermissions)
-    getUserPermissionsAsync = (params: ActionParams) => {
-
-        const userId = Id
-            .create<'User'>(params
-                .getQuery()
-                .getValue(x => x.userId, 'int'));
-
-        return this._roleService
-            .getUserPermissionsAsync(params.principalId, userId);
     };
 }

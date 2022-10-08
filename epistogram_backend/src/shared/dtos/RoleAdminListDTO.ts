@@ -1,6 +1,6 @@
 import { Id } from '../types/versionId';
 
-export type JobTitleDTO = {
+export class RoleAdminListDTO {
+    id: Id<'Role'>;
     name: string;
-    id: Id<'JobTitle'>;
 }

@@ -1,6 +1,7 @@
 import { AdminPageUserDTO } from '../../shared/dtos/admin/AdminPageUserDTO';
 import { BriefUserDataDTO } from '../../shared/dtos/BriefUserDataDTO';
-import { UserEditDTO } from '../../shared/dtos/UserEditDTO';
+import { UserEditReadDTO } from '../../shared/dtos/UserEditReadDTO';
+import { UserEditSaveDTO } from '../../shared/dtos/UserEditSaveDTO';
 import { UserEditSimpleDTO } from '../../shared/dtos/UserEditSimpleDTO';
 import { UserLearningOverviewDataDTO } from '../../shared/dtos/UserLearningOverviewDataDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
@@ -45,7 +46,7 @@ export const UserApiService = {
 
     useSaveUser: () => {
 
-        const queryRes = usePostDataUnsafe<UserEditDTO, void>(apiRoutes.user.saveUser);
+        const queryRes = usePostDataUnsafe<UserEditSaveDTO, void>(apiRoutes.user.saveUser);
 
         return {
             saveUserStatus: queryRes.state,
@@ -55,7 +56,7 @@ export const UserApiService = {
 
     useEditUserData: (editedUserId: Id<'User'> | null) => {
 
-        const queryRes = QueryService.useXQuery<UserEditDTO>(apiRoutes.user.getEditUserData, { editedUserId: editedUserId }, !!editedUserId);
+        const queryRes = QueryService.useXQuery<UserEditReadDTO>(apiRoutes.user.getEditUserData, { editedUserId: editedUserId }, !!editedUserId);
 
         return {
             userEditData: queryRes.data,

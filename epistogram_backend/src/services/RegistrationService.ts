@@ -6,7 +6,6 @@ import { CreateInvitedUserDTO } from '../shared/dtos/CreateInvitedUserDTO';
 import { validatePassowrd } from '../shared/logic/sharedLogic';
 import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 import { permissionCodes } from '../shared/types/PermissionCodesType';
-import { JobTitleIdEnum } from '../shared/types/sharedTypes';
 import { Id } from '../shared/types/versionId';
 import { getFullName, throwNotImplemented } from '../utilities/helpers';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
@@ -49,7 +48,7 @@ export class RegistrationService {
         await this
             .inviteNewUserAsync({
                 email: dto.email,
-                jobTitleId: dto.jobTitleId,
+                departmentId: dto.departmentId,
                 firstName: dto.firstName,
                 lastName: dto.lastName,
                 companyId: companyId,
@@ -74,14 +73,24 @@ export class RegistrationService {
         if (!activationCodeEntity)
             throw new ErrorWithCode(`Activation code ${activationCode} not found in DB, or already used.`, 'activation_code_issue');
 
-        console.log(JSON.stringify(activationCodeEntity));
+        // TODO
+        // default depatment
+        // const {} = await this
+        //     ._ormService
+        //     .query(User, { principalId })
+        //     .select(Company)
+        //     .leftJoin(Company, x => x
+        //         .on('id', '=', 'companyId', User))
+        //     .where('id', '=', 'principalId')
+        //     .getSingle();
+
         // create user
         await this.inviteNewUserAsync({
             email,
             firstName,
             lastName,
             companyId: activationCodeEntity.companyId,
-            jobTitleId: JobTitleIdEnum.genericUser
+            departmentId: 1 as any
         });
 
         // invalidate activation code
@@ -203,11 +212,11 @@ export class RegistrationService {
             firstName: string;
             lastName: string;
             companyId: Id<'Company'>;
-            jobTitleId: Id<'JobTitle'>;
+            departmentId: Id<'Department'>;
         },
         noEmailNotification?: boolean) {
 
-        const { email, companyId, firstName, jobTitleId, lastName } = options;
+        const { email, companyId, firstName, departmentId, lastName } = options;
 
         // create invitation token
         const invitationToken = this._tokenService
@@ -221,7 +230,7 @@ export class RegistrationService {
                 lastName,
                 creationDate: new Date(Date.now()),
                 companyId,
-                jobTitleId,
+                departmentId,
                 registrationType: 'Invitation',
                 password: 'guest',
                 invitationToken,

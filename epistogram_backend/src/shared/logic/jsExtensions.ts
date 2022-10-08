@@ -18,6 +18,7 @@ declare global {
         byIndex(index: number): T;
         first(func?: (item: T) => boolean): T;
         last(func?: (item: T) => boolean): T;
+        lastOrNull(func?: (item: T) => boolean): T;
         firstOrNull(func?: (item: T) => boolean): T | null;
         count(func: (item: T) => boolean): number;
         insert(index: number, newItem: T): Array<T>;
@@ -119,6 +120,24 @@ Array.prototype.firstOrNull = function <T>(func?: (item: T) => boolean) {
         return null;
 
     return first;
+};
+
+// eslint-disable-next-line no-extend-native
+Array.prototype.lastOrNull = function <T>(func?: (item: T) => boolean) {
+
+    if (!func)
+        func = (x: T) => true;
+
+    const filtered = this.filter(func);
+    const last = filtered[filtered.length - 1];
+
+    if (last === undefined)
+        return null;
+
+    if (last === null)
+        return null;
+
+    return last;
 };
 
 // eslint-disable-next-line no-extend-native

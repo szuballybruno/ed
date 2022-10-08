@@ -98,11 +98,6 @@ export const RoleIdEnum = {
     }
 };
 
-export const JobTitleIdEnum = {
-    genericUser: Id.create<'JobTitle'>(1),
-    tester: Id.create<'JobTitle'>(2)
-};
-
 export const QuestionTypeEnum = {
     singleAnswer: 1,
     multipleAnswers: 2

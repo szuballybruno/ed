@@ -1,4 +1,4 @@
-import { JobTitle } from '../models/entity/misc/JobTitle';
+import { Department } from '../models/entity/misc/Department';
 import { AuthorizationService } from '../services/AuthorizationService';
 import { DomainProviderService } from '../services/DomainProviderService';
 import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
@@ -48,24 +48,6 @@ export class MiscController implements XController<MiscController> {
 
         return await this._miscService
             .getOverviewPageDTOAsync(params.principalId);
-    }
-
-    @XControllerAction(apiRoutes.misc.getJobTitles)
-    getJobTitlesAction(params: ActionParams) {
-
-        return {
-            action: async () => {
-
-                return await this._ormService
-                    .query(JobTitle)
-                    .getMany();
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(params.principalId, 'ACCESS_APPLICATION');
-            }
-        };
-
     }
 
     @XControllerAction(apiRoutes.misc.getCourseOverviewData)

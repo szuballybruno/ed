@@ -35,7 +35,7 @@ import { ExamCompletion } from '../../models/entity/misc/ExamCompletion';
 import { GivenAnswer } from '../../models/entity/misc/GivenAnswer';
 import { GivenAnswerStreak } from '../../models/entity/misc/GivenAnswerStreak';
 import { Group } from '../../models/entity/misc/Group';
-import { JobTitle } from '../../models/entity/misc/JobTitle';
+import { Department } from '../../models/entity/misc/Department';
 import { Like } from '../../models/entity/misc/Like';
 import { PersonalityTraitCategory } from '../../models/entity/misc/PersonalityTraitCategory';
 import { QuestionType } from '../../models/entity/misc/QuestionType';
@@ -215,7 +215,7 @@ const getSeedDataContainer = () => {
         .getFunctionBuilder()
         .addFunction(getQuestionTypeSeedData, [], QuestionType)
         .addFunction(getPermissionsSeedData, [], Permission)
-        .addFunction(getJobTitlesSeedData, [], JobTitle)
+        .addFunction(getJobTitlesSeedData, [], Department)
         .addFunction(() => 1, [], CourseCompletion)
         .addFunction(getStorageFileSeedData, [], StorageFile)
         .addFunction(getCompaniesSeedData, [getStorageFileSeedData], Company)
@@ -477,7 +477,7 @@ export const createDBSchema = (isPurgeMode: boolean): XDBMSchemaService => {
             Permission,
             RolePermissionBridge,
             RoleAssignmentBridge,
-            JobTitle,
+            Department,
             Comment,
             Like,
             DailyTip,

@@ -1,16 +1,22 @@
-import { AnswerSession } from '../models/entity/misc/AnswerSession';
 import { CourseData } from '../models/entity/course/CourseData';
-import { JobTitle } from '../models/entity/misc/JobTitle';
+import { AnswerSession } from '../models/entity/misc/AnswerSession';
+import { CourseAccessBridge } from '../models/entity/misc/CourseAccessBridge';
+import { Department } from '../models/entity/misc/Department';
 import { StorageFile } from '../models/entity/misc/StorageFile';
 import { TeacherInfo } from '../models/entity/misc/TeacherInfo';
 import { User } from '../models/entity/misc/User';
+import { UserCourseBridge } from '../models/entity/misc/UserCourseBridge';
 import { AdminUserListView } from '../models/views/AdminUserListView';
 import { AdminPageUserDTO } from '../shared/dtos/admin/AdminPageUserDTO';
 import { BriefUserDataDTO } from '../shared/dtos/BriefUserDataDTO';
-import { ChangeSet } from '../shared/dtos/changeSet/ChangeSet';
+import { DepartmentDTO } from '../shared/dtos/DepartmentDTO';
+import { Mutation } from '../shared/dtos/mutations/Mutation';
+import { UserCourseStatsDTO } from '../shared/dtos/UserCourseStatsDTO';
 import { UserDTO } from '../shared/dtos/UserDTO';
-import { UserEditDTO } from '../shared/dtos/UserEditDTO';
+import { UserEditReadDTO } from '../shared/dtos/UserEditReadDTO';
+import { UserEditSaveDTO } from '../shared/dtos/UserEditSaveDTO';
 import { UserEditSimpleDTO } from '../shared/dtos/UserEditSimpleDTO';
+import { instantiate } from '../shared/logic/sharedLogic';
 import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 import { Id } from '../shared/types/versionId';
 import { getFullName, toFullName } from '../utilities/helpers';
@@ -22,12 +28,7 @@ import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { RoleService } from './RoleService';
 import { TeacherInfoService } from './TeacherInfoService';
-import { Mutation } from '../shared/dtos/mutations/Mutation';
-import { UserCourseStatsDTO } from '../shared/dtos/UserCourseStatsDTO';
-import { CourseAccessBridge } from '../models/entity/misc/CourseAccessBridge';
-import { instantiate } from '../shared/logic/sharedLogic';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
-import { UserCourseBridge } from '../models/entity/misc/UserCourseBridge';
 
 export class UserService {
 
@@ -62,11 +63,6 @@ export class UserService {
         principalId: PrincipalId,
         editedUserId: Id<'User'>
     ) {
-        await this._authorizationService
-            .checkPermissionAsync(
-                principalId,
-                'ACCESS_ADMIN'
-            );
 
         const user = await this._ormService
             .query(User, { userId: editedUserId })
@@ -76,10 +72,11 @@ export class UserService {
         await this._authorizationService
             .checkPermissionAsync(
                 principalId,
-                'EDIT_COMPANY_USER',
-                { companyId: user.companyId }
+                'ADMINISTRATE_COMPANY',
+                {
+                    companyId: user.companyId
+                }
             );
-
 
         type ResType = User & {
             teacherInfoId: number
@@ -98,46 +95,88 @@ export class UserService {
             .where('id', '=', 'editedUserId')
             .getSingle();
 
-        return {
-            id: res.id,
+        const availableRoles = await this
+            ._roleService
+            .getAllRolesAsync(principalId, editedUserId);
+
+        const userRoles = await this
+            ._roleService
+            .getUserRolesAsync(principalId, editedUserId);
+
+        const departments = await this
+            ._ormService
+            .query(Department, {})
+            .getMany();
+
+        const departmentDTOs = departments
+            .map((x): DepartmentDTO => ({
+                id: x.id,
+                name: x.name
+            }));
+
+        return instantiate<UserEditReadDTO>({
+            userId: editedUserId,
             firstName: res.firstName,
             lastName: res.lastName,
             email: res.email,
             isTeacher: !!res.teacherInfoId,
-            jobTitleId: res.jobTitleId,
+            departmentId: res.departmentId,
             companyId: res.companyId,
-            roles: new ChangeSet(),
-            permissions: new ChangeSet()
-        };
+            availableRoles,
+            availableCompanies: [],
+            availableDepartments: departmentDTOs,
+            roleIds: userRoles.map(x => x.roleId)
+        });
     }
 
     /**
      * Save user from admin page, where you can edit almost all fileds.
      */
-    async saveUserAsync(principalId: PrincipalId, dto: UserEditDTO) {
+    async saveUserAsync(principalId: PrincipalId, dto: UserEditSaveDTO) {
+
+        const {
+            userId,
+            assignedRoleIds,
+            companyId,
+            departmentId,
+            email,
+            firstName,
+            isTeacher,
+            lastName
+        } = dto;
+
+        const user = await this
+            .getUserById(dto.userId);
 
         await this._authorizationService
-            .checkPermissionAsync(principalId, 'ACCESS_ADMIN');
-
-        const userId = dto.id;
+            .checkPermissionAsync(principalId, 'ADMINISTRATE_COMPANY', { companyId: user.companyId });
 
         // save user
         await this._ormService
             .save(User, {
                 id: userId,
-                lastName: dto.lastName,
-                firstName: dto.firstName,
-                email: dto.email,
-                companyId: dto.companyId,
-                jobTitleId: dto.jobTitleId
+                lastName,
+                firstName,
+                email,
+                companyId,
+                departmentId
             });
 
         // save teacher info
-        await this._saveTeacherInfoAsync(userId, dto.isTeacher);
+        await this._saveTeacherInfoAsync(userId, isTeacher);
 
         // save auth items
         await this._roleService
-            .saveUserAssignedAuthItemsAsync(principalId, userId, dto.roles, dto.permissions);
+            .saveUserRolesAsync(principalId, userId, assignedRoleIds);
+    }
+
+    private async _getCompanyIdAsync(userId: Id<'User'>) {
+
+        const { companyId } = await this
+            ._ormService
+            .getSingleById(User, userId);
+
+        return { companyId };
     }
 
     /**
@@ -203,23 +242,11 @@ export class UserService {
      */
     async getAdminPageUsersListAsync(principalId: PrincipalId, searchText: string | null) {
 
-        await this._authorizationService
-            .checkPermissionAsync(
-                principalId,
-                'ACCESS_ADMIN'
-            );
-
-        const user = await this._ormService
-            .query(User, { userId: principalId.getId() })
-            .where('id', '=', 'userId')
-            .getSingle();
+        const principal = await this
+            .getUserById(principalId);
 
         await this._authorizationService
-            .checkPermissionAsync(
-                principalId,
-                'VIEW_COMPANY_USERS',
-                { companyId: user.companyId }
-            );
+            .checkPermissionAsync(principalId, 'ADMINISTRATE_COMPANY', { companyId: principal.companyId });
 
         const searchTextLower = searchText?.toLowerCase();
 
@@ -261,23 +288,11 @@ export class UserService {
      */
     async getBriefUserDataAsync(principalId: PrincipalId, userId: Id<'User'>) {
 
-        await this._authorizationService
-            .checkPermissionAsync(
-                principalId,
-                'ACCESS_ADMIN'
-            );
-
-        const user = await this._ormService
-            .query(User, { userId })
-            .where('id', '=', 'userId')
-            .getSingle();
+        const user = await this
+            .getUserById(userId);
 
         await this._authorizationService
-            .checkPermissionAsync(
-                principalId,
-                'VIEW_COMPANY_USERS',
-                { companyId: user.companyId }
-            );
+            .checkPermissionAsync(principalId, 'ADMINISTRATE_COMPANY', { companyId: user.companyId });
 
         return {
             id: user.id,
@@ -296,14 +311,6 @@ export class UserService {
         const existingUser = await this.getUserByEmailAsync(user.email);
         if (existingUser)
             throw new ErrorWithCode('User already exists. Email: ' + user.email, 'email_taken');
-
-        // TODO
-        // if (user.companyId === 2 as any) {
-        // console.warn('-------------------------------------------------------');
-        // console.warn('---------- SETTING NEW EPISTO USER AS GOD!!!! ---------');
-        // console.warn('-------------------------------------------------------');
-        // user.isGod = true;
-        // }
 
         // hash user password
         const hashedPassword = await this
@@ -359,24 +366,11 @@ export class UserService {
     /**
      * Get user entity by it's id.
      */
-    getUserById = async (userId: Id<'User'>) => {
+    getUserById = async (userId: Id<'User'> | PrincipalId) => {
 
-        const user = await this._ormService
-            .withResType<User & { filePath: string }>()
-            .query(User, { userId })
-            .selectFrom(x => x
-                .columns(User, '*')
-                .columns(StorageFile, {
-                    filePath: 'filePath'
-                }))
-            .leftJoin(StorageFile, x => x
-                .on('id', '=', 'avatarFileId', User))
-            .leftJoin(JobTitle, x => x
-                .on('id', '=', 'jobTitleId', User))
-            .where('id', '=', 'userId')
-            .getSingle();
-
-        return user;
+        return this
+            ._ormService
+            .getSingleById(User, userId as any);
     };
 
     /**
@@ -384,16 +378,11 @@ export class UserService {
      */
     async deleteUserAsync(principalId: PrincipalId, deletedUserId: Id<'User'>) {
 
-        await this._authorizationService
-            .checkPermissionAsync(
-                principalId,
-                'ACCESS_ADMIN'
-            );
+        const user = await this
+            .getUserById(deletedUserId);
 
-        const user = await this._ormService
-            .query(User, { userId: deletedUserId })
-            .where('id', '=', 'userId')
-            .getSingle();
+        await this._authorizationService
+            .checkPermissionAsync(principalId, 'ADMINISTRATE_COMPANY', { companyId: user.companyId });
 
         await this._authorizationService
             .checkPermissionAsync(
@@ -417,28 +406,45 @@ export class UserService {
     /**
      * Get user dto by userId.
      */
-    getUserDTOById = async (userId: Id<'User'>) => {
+    async getUserDTOById(userId: Id<'User'>) {
 
-        const foundUser = await this.getUserById(userId);
+        type Res = User & { filePath: string, departmentId: Id<'Department'>, departmentName: string };
 
-        if (!foundUser)
-            return null;
+        const view = await this
+            ._ormService
+            .withResType<Res>()
+            .query(User, { userId })
+            .selectFrom(x => x
+                .columns(User, '*')
+                .columns(StorageFile, {
+                    filePath: 'filePath'
+                })
+                .columns(Department, {
+                    departmentId: 'id',
+                    departmentName: 'name'
+                }))
+            .leftJoin(StorageFile, x => x
+                .on('id', '=', 'avatarFileId', User))
+            .leftJoin(Department, x => x
+                .on('id', '=', 'departmentId', User))
+            .where('id', '=', 'userId')
+            .getSingle();
 
         return this._mapperService
-            .mapTo(UserDTO, [foundUser]);
-    };
+            .mapTo(UserDTO, [view, view.filePath, view.departmentId, view.departmentName]);
+    }
 
     /**
      * Get user's active refresh token by userId.
      */
-    getUserRefreshTokenById = async (userId: Id<'User'>) => {
+    async getUserRefreshTokenById(userId: Id<'User'>) {
 
         const user = await this.getUserById(userId);
         if (!user)
             return null;
 
         return user.refreshToken;
-    };
+    }
 
     /**
      * Get a user by it's email address.

@@ -17,8 +17,8 @@ const userDefaults: UserDTO = {
     id: Id.create<'User'>(-1),
     isInvitationAccepted: true,
     isTrusted: true,
-    jobTitle: {
-        id: Id.create<'JobTitle'>(-1),
+    department: {
+        id: Id.create<'Department'>(-1),
         name: ''
     },
     lastName: '',

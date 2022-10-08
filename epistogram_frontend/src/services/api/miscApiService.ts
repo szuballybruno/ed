@@ -1,5 +1,4 @@
 import { CourseOverviewDataDTO } from '../../shared/dtos/CourseOverviewDataDTO';
-import { JobTitleDTO } from '../../shared/dtos/JobTitleDTO';
 import { OverviewPageDTO } from '../../shared/dtos/OverviewPageDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
 import { GlobalEventManagerType } from '../../static/EventBus';
@@ -11,17 +10,6 @@ export const useCourseOverviewData = () => {
 
     return {
         courseOverviewData: qr.data
-    };
-};
-
-export const useJobTitles = () => {
-
-    const queryRes = QueryService.useXQuery<JobTitleDTO[]>(apiRoutes.misc.getJobTitles);
-
-    return {
-        jobTitles: queryRes.data ?? [],
-        jobTitlesStatus: queryRes.state,
-        jobTitlesError: queryRes.error
     };
 };
 

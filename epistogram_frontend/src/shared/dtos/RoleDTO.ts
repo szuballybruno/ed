@@ -1,6 +1,6 @@
 import { Id } from '../types/versionId';
 
-export type RoleDTO = {
+export class RoleDTO {
     id: Id<'Role'>;
     name: string;
 }

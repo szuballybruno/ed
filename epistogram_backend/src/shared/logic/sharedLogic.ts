@@ -1,5 +1,4 @@
 import { UserPermissionDTO } from '../dtos/role/UserPermissionDTO';
-import { UserRoleDTO } from '../dtos/role/UserRoleDTO';
 import { PasswordValidationIssueType } from '../types/sharedTypes';
 
 export const validatePassowrd = (password: string, passwordControl: string): PasswordValidationIssueType | null => {
@@ -97,20 +96,6 @@ export const trimEndChar = (str: string, char: string) => {
         return str;
 
     return str.replace(new RegExp(`${char}+$`, 'g'), '');
-};
-
-export const userRolesEqual = (a: UserRoleDTO, b: UserRoleDTO) => {
-
-    if (a.roleId !== b.roleId)
-        return false;
-
-    if (a.contextCompanyId !== b.contextCompanyId)
-        return false;
-
-    if (a.assigneeUserId !== b.assigneeUserId)
-        return false;
-
-    return true;
 };
 
 export const userPermissionsEqual = (a: UserPermissionDTO, b: UserPermissionDTO) => {
