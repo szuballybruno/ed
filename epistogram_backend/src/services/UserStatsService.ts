@@ -313,6 +313,8 @@ export class UserStatsService {
             .innerJoin(User, x => x
                 .on('companyId', '=', 'principalCompanyId')
                 .and('id', '=', 'userId', TempomatCalculationDataView))
+            .where('startDate', '!=', 'NULL')
+            .and('originalPrevisionedCompletionDate', '!=', 'NULL')
             .getMany();
 
 
@@ -402,6 +404,7 @@ export class UserStatsService {
             .innerJoin(User, x => x
                 .on('companyId', '=', 'companyId')
                 .and('id', '=', 'userId', TempomatCalculationDataView))
+            .where('startDate', '!=', 'NULL')
             .getMany();
 
         const statsViews = await this._ormService

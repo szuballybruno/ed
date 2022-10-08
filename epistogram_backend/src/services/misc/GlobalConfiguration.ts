@@ -88,7 +88,7 @@ export class GlobalConfiguration {
     };
 
     logging = {
-        enabledScopes: ['GENERIC', 'VERSION SAVE', 'ERROR'] as LogScopeType[],
+        enabledScopes: ['GENERIC', 'ERROR'] as LogScopeType[],
     };
 
     practiseQuestions = {
