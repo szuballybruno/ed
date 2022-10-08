@@ -1207,7 +1207,7 @@ ON ad.id = av.answer_data_id;
 --CREATE VIEW: schema_version_view
 CREATE VIEW schema_version_view
 AS
-SELECT '17:13:45 2022-10-07 CEDT' last_modification_date, '0.01' version
+SELECT '09:13:41 2022-10-08 CEDT' last_modification_date, '0.01' version
 ;
 
 --CREATE VIEW: shop_item_stateful_view
@@ -3166,7 +3166,7 @@ SELECT DISTINCT ON (e.id)
 		THEN false
 		ELSE true
 	END should_practise_exam,
-	ROUND(asv.answer_session_acquired_points / 4, 4) correct_answer_count,
+	ROUND(asv.answer_session_acquired_points / 4) correct_answer_count,
 	EXTRACT(EPOCH FROM (asv.end_date - asv.start_date)::time)::int exam_length_seconds,
 	asv.end_date last_completion_date,
 	(
@@ -5158,7 +5158,7 @@ user_rank_inside_company AS
 (
 	SELECT 
 		u.id user_id,
-		(uc.total_coins_aquired_per_user / cac.avg_coins_aquired_by_company)::double precision * 100 user_rank_by_coin_percentage
+		ROUND((uc.total_coins_aquired_per_user / cac.avg_coins_aquired_by_company)::double precision * 100) user_rank_by_coin_percentage
 	FROM public.user u
 	
 	LEFT JOIN company_avg_coins cac
@@ -5606,7 +5606,7 @@ items_with_user AS
         ucb.current_item_code = civ.module_code module_is_current,
 		esv.score_percentage,
         uprv.is_recommended_for_practise IS TRUE is_recommended_for_practise,
-    
+ 
         -- state
 		CASE 
 			WHEN ucb.current_item_code = civ.playlist_item_code
@@ -5638,8 +5638,9 @@ items_with_user AS
 	LEFT JOIN public.exam_score_view esv
 	ON esv.answer_session_id = ehsasv.answer_session_id
 	
-	LEFT JOIN public.course_item_completion_view cic
-	ON cic.answer_session_id = ehsasv.answer_session_id
+	LEFT JOIN public.course_item_completion cic
+	ON cic.video_version_id = civ.video_version_id
+	OR cic.exam_version_id = ehsasv.exam_version_id
 
     LEFT JOIN public.user_practise_recommendation_view uprv
     ON uprv.video_version_id = civ.video_version_id
