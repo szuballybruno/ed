@@ -1207,7 +1207,7 @@ ON ad.id = av.answer_data_id;
 --CREATE VIEW: schema_version_view
 CREATE VIEW schema_version_view
 AS
-SELECT '23:52:45 2022-10-08 CEDT' last_modification_date, '0.01' version
+SELECT '12:27:09 2022-10-09 CEDT' last_modification_date, '0.01' version
 ;
 
 --CREATE VIEW: shop_item_stateful_view
@@ -5622,7 +5622,6 @@ items_with_user AS
                 ORDER BY module_order_index, item_order_index) IS NOT NULL 
 				THEN 'available'
 				ELSE 'locked'
-		
 		END item_state
 	FROM latest_items_with_codes_cte civ
 	
