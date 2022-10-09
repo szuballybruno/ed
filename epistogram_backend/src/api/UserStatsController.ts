@@ -43,8 +43,13 @@ export class UserStatsController implements XController<UserStatsController> {
             .getQuery<{ isToBeReviewed: boolean }>()
             .getValue(x => x.isToBeReviewed, 'boolean');
 
+        const companyId = params
+            .getQuery<{ companyId?: Id<'Company'> }>()
+            .data
+            .companyId ?? null;
+
         return this._userStatsService
-            .getUserOverviewStatsAsync(params.principalId, isToBeReviewed);
+            .getUserOverviewStatsAsync(params.principalId, isToBeReviewed, companyId);
     }
 
     @XControllerAction(apiRoutes.userStats.getAdminUserCourses)

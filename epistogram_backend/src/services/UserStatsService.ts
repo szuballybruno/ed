@@ -298,27 +298,58 @@ export class UserStatsService {
             .mapTo(UserCourseStatsOverviewDTO, [courseStats, userSpentTimeRatio, progressChartData as any]);
     }
 
-    async getUserOverviewStatsAsync(principalId: PrincipalId, isToBeReviewed: boolean) {
+    async getUserOverviewStatsAsync(
+        principalId: PrincipalId,
+        isToBeReviewed: boolean,
+        companyId: Id<'Company'> | null
+    ) {
+        /* 
+                const principalCompanyId = await this._companyService
+                    .getPrincipalCompanyId(principalId); */
 
-        const principalCompanyId = await this._companyService
-            .getPrincipalCompanyId(principalId);
+        if (companyId) {
 
-        const userOverviewViews = await this._ormService
-            .query(UserOverviewView, { principalCompanyId })
-            .where('companyId', '=', 'principalCompanyId')
+            await this._authorizationService
+                .checkPermissionAsync(principalId, 'VIEW_COMPANY_USERS', { companyId: companyId });
+        }
+
+        // TODO: CHECK FOR PERMISSIONS IN VIEW
+        const availableUserOverviewViews = await this._ormService
+            .query(UserOverviewView)
             .getMany();
 
-        const tempomatCalculationViews = await this._ormService
-            .query(TempomatCalculationDataView, { principalCompanyId })
+        const companyUserOverviewViews = await this._ormService
+            .query(UserOverviewView, { companyId })
+            .where('companyId', '=', 'companyId')
+            .getMany();
+
+        // TODO: CHECK FOR PERMISSIONS IN VIEW
+        const availableTempomatCalculationViews = await this._ormService
+            .query(TempomatCalculationDataView)
             .innerJoin(User, x => x
-                .on('companyId', '=', 'principalCompanyId')
+                .on('id', '=', 'userId', TempomatCalculationDataView))
+            .where('startDate', '!=', 'NULL')
+            .and('originalPrevisionedCompletionDate', '!=', 'NULL')
+            .getMany();
+
+        const companyTempomatCalculationViews = await this._ormService
+            .query(TempomatCalculationDataView, { companyId })
+            .innerJoin(User, x => x
+                .on('companyId', '=', 'companyId')
                 .and('id', '=', 'userId', TempomatCalculationDataView))
             .where('startDate', '!=', 'NULL')
             .and('originalPrevisionedCompletionDate', '!=', 'NULL')
             .getMany();
 
+        const selectedUserOverviewViews = companyId
+            ? companyUserOverviewViews
+            : availableUserOverviewViews;
 
-        const userIdsWithLagBehindAvgs = tempomatCalculationViews
+        const selectedTempomatCalculationViews = companyId
+            ? companyTempomatCalculationViews
+            : availableTempomatCalculationViews;
+
+        const userIdsWithLagBehindAvgs = selectedTempomatCalculationViews
             .groupBy(x => x.userId)
             .map(x => {
 
@@ -331,7 +362,7 @@ export class UserStatsService {
                 };
             });
 
-        const userOverviewViewsWithLagBehind = mergeArraysByKey(userOverviewViews, userIdsWithLagBehindAvgs, 'userId');
+        const userOverviewViewsWithLagBehind = mergeArraysByKey(selectedUserOverviewViews, userIdsWithLagBehindAvgs, 'userId');
 
         const userOverviewWithProductivity = userOverviewViewsWithLagBehind
             .groupBy(x => x.userId)
@@ -352,7 +383,7 @@ export class UserStatsService {
             });
 
         const allFlaggedUsers = await this
-            ._flagUsersAsync(principalCompanyId);
+            ._flagUsersAsync(companyId);
 
         if (!allFlaggedUsers)
             return;
@@ -386,20 +417,30 @@ export class UserStatsService {
             .filter(x => x?.flag === 'high');
     }
 
-    private async _flagUsersAsync(companyId: Id<'Company'>) {
+    private async _flagUsersAsync(companyId: Id<'Company'> | null) {
 
-        const userPerformanceViews = await this._ormService
+        const companyUserPerformanceViews = await this._ormService
             .query(UserPerformanceView, { companyId })
             .innerJoin(User, x => x
                 .on('companyId', '=', 'companyId')
                 .and('id', '=', 'userId', UserPerformanceView))
             .getMany();
 
-        if (!userPerformanceViews) {
+        const availableUserPerformanceViews = await this._ormService
+            .query(UserPerformanceView)
+            .innerJoin(User, x => x
+                .on('id', '=', 'userId', UserPerformanceView))
+            .getMany();
+
+        const selectedUserPerformanceViews = companyId
+            ? companyUserPerformanceViews
+            : availableUserPerformanceViews;
+
+        if (!selectedUserPerformanceViews) {
             return;
         }
 
-        const tempomatCalculationViews = await this._ormService
+        const companyTempomatCalculationViews = await this._ormService
             .query(TempomatCalculationDataView, { companyId })
             .innerJoin(User, x => x
                 .on('companyId', '=', 'companyId')
@@ -407,16 +448,35 @@ export class UserStatsService {
             .where('startDate', '!=', 'NULL')
             .getMany();
 
-        const statsViews = await this._ormService
+        const availableTempomatCalculationViews = await this._ormService
+            .query(TempomatCalculationDataView)
+            .innerJoin(User, x => x
+                .on('id', '=', 'userId', TempomatCalculationDataView))
+            .where('startDate', '!=', 'NULL')
+            .getMany();
+
+        const selectedTempomatCalculationViews = companyId
+            ? companyTempomatCalculationViews
+            : availableTempomatCalculationViews;
+
+        const companyStatsViews = await this._ormService
             .query(UserPerformanceComparisonStatsView, { companyId })
             .where('companyId', '=', 'companyId')
             .getMany();
 
+        const availableStatsViews = await this._ormService
+            .query(UserPerformanceComparisonStatsView)
+            .getMany();
+
+        const selectedStatsViews = companyId
+            ? companyStatsViews
+            : availableStatsViews;
+
         const companyAvgPerformancePercentage = this
-            ._calculateCompanyAvgPerformance(userPerformanceViews);
+            ._calculateCompanyAvgPerformance(selectedUserPerformanceViews);
 
         const companyTempomatValues = this._tempomatService
-            .calculateCompanyTempomatValues(tempomatCalculationViews);
+            .calculateCompanyTempomatValues(selectedTempomatCalculationViews);
 
         const companyLagBehindPercentages = this._tempomatService
             .calculateCompanyLagBehinds(companyTempomatValues);
@@ -428,7 +488,7 @@ export class UserStatsService {
             ._calculateCompanyProductivity(companyAvgPerformancePercentage, companyAvgLagBehindPercentage);
 
         const userFlagCalculationData = this
-            ._createUserFlagCalculationData(statsViews, companyTempomatValues);
+            ._createUserFlagCalculationData(selectedStatsViews, companyTempomatValues);
 
         return this
             ._flagUsers(userFlagCalculationData, companyAvgPerformancePercentage, companyProductivity);

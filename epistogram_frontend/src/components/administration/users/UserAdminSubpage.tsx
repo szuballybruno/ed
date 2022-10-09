@@ -49,7 +49,10 @@ export const UserAdminSubpage = () => {
             renderRoutes={[
                 {
                     route: userAdminRoute.indexRoute,
-                    element: <AdminUserDataGridSubpage />
+                    element: <AdminUserDataGridSubpage
+                        selectedCompanyId={selectedCompanyId}
+                        handleSelectCompany={handleSelectCompany}
+                        companies={companies} />
                 },
                 {
                     route: userAdminRoute.addRoute,
