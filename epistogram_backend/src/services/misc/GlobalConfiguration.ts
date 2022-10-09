@@ -126,7 +126,7 @@ export class GlobalConfiguration {
         this.rootDirectory = rootDirectory;
 
         this.cookieOptions = {
-            sameSite: 'none',
+            sameSite: 'strict',
             secure: !this.misc.isLocalhost,
             httpOnly: true,
             domain: '.epistogram.com'
