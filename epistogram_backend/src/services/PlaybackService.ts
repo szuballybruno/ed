@@ -246,8 +246,13 @@ export class PlaybackService extends ServiceBase {
         const { videoFileLengthSeconds } = await this._ormService
             .withResType<VideoData>()
             .query(VideoVersion, { videoVersionId })
+            .selectFrom(x => x
+                .columns(VideoData, {
+                    videoFileLengthSeconds: 'videoFileLengthSeconds'
+                }))
             .leftJoin(VideoData, x => x
                 .on('id', '=', 'videoDataId', VideoVersion))
+            .where('id', '=', 'videoVersionId')
             .getSingle();
 
         if (!videoFileLengthSeconds)

@@ -187,7 +187,7 @@ export const AdminBreadcrumbsHeader = ({
 
     const subRouteName = subRouteLabel
         ? subRouteLabel
-        : (briefUserData?.fullName || courseBriefData?.title || shopItemBriefData?.name);
+        : ((userId && briefUserData?.fullName) || courseBriefData?.title || shopItemBriefData?.name);
 
     const subRoute = subRouteName
         ? { title: subRouteName! }
