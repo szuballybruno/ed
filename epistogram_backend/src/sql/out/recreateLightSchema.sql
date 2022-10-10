@@ -1207,7 +1207,7 @@ ON ad.id = av.answer_data_id;
 --CREATE VIEW: schema_version_view
 CREATE VIEW schema_version_view
 AS
-SELECT '20:54:21 2022-10-09 CEDT' last_modification_date, '0.01' version
+SELECT '17:11:58 2022-10-10 CEDT' last_modification_date, '0.01' version
 ;
 
 --CREATE VIEW: shop_item_stateful_view
@@ -5779,11 +5779,8 @@ INNER JOIN public.playlist_view cisv
 ON cisv.user_id = u.id 
 AND cisv.item_state = 'completed'
 
-INNER JOIN public.video v
-ON v.id = cisv.video_id
-
 LEFT JOIN public.video_version vv
-ON vv.video_id = v.id
+ON vv.id = cisv.video_version_id
 
 LEFT JOIN public.video_data vd
 ON vd.id = vv.video_data_id
@@ -6219,6 +6216,8 @@ completed_video_count AS
 		COUNT(*) completed_video_count
 	FROM public.course_item_completion_view cicv
 	
+	WHERE cicv.video_version_id IS NOT NULL
+	
 	GROUP BY cicv.user_id, cicv.course_id
 )
 
@@ -6245,10 +6244,10 @@ SELECT
 	cstv.total_spent_seconds,
 	ucpav.total_item_count total_course_item_count,
 	ucpav.total_completed_item_count completed_course_item_count,
-	cvc.completed_video_count,
+	COALESCE(cvc.completed_video_count, 0) completed_video_count,
 	cvcv.video_count total_video_count,
 	vqc.video_question_count total_video_question_count,
-	avq.answered_video_question_count,
+	COALESCE(avq.answered_video_question_count, 0) answered_video_question_count,
 	easp.avg_exam_score_percentage,
 	fesp.max_exam_score final_exam_score_percentage,
 	CASE 

@@ -177,10 +177,10 @@ export class UserStatsService {
     /**
      * Gets the statistics for the users every watched video
      */
-    async getUserVideoStatsAsync(principalId: PrincipalId, courseId: Id<'Course'>, userId: Id<'User'>) {
+    async getUserVideoStatsAsync(principalId: PrincipalId, courseId: Id<'Course'>, userId: Id<'User'> | null) {
 
         const stats = await this._ormService
-            .query(UserVideoStatsView, { userId, courseId })
+            .query(UserVideoStatsView, { userId: userId ? userId : principalId, courseId })
             .where('userId', '=', 'userId')
             .and('courseId', '=', 'courseId')
             .getMany();
@@ -193,10 +193,10 @@ export class UserStatsService {
      * Gets the statistics for the users every completed exam
      */
 
-    async getUserExamStatsAsync(principalId: PrincipalId, courseId: Id<'Course'>, userId: Id<'User'>) {
+    async getUserExamStatsAsync(principalId: PrincipalId, courseId: Id<'Course'>, userId: Id<'User'> | null) {
 
         const stats = await this._ormService
-            .query(UserExamStatsView, { userId, courseId })
+            .query(UserExamStatsView, { userId: userId ? userId : principalId, courseId })
             .where('userId', '=', 'userId')
             .and('courseId', '=', 'courseId')
             .getMany();

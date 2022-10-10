@@ -99,6 +99,8 @@ completed_video_count AS
 		COUNT(*) completed_video_count
 	FROM public.course_item_completion_view cicv
 	
+	WHERE cicv.video_version_id IS NOT NULL
+	
 	GROUP BY cicv.user_id, cicv.course_id
 )
 
@@ -125,10 +127,10 @@ SELECT
 	cstv.total_spent_seconds,
 	ucpav.total_item_count total_course_item_count,
 	ucpav.total_completed_item_count completed_course_item_count,
-	cvc.completed_video_count,
+	COALESCE(cvc.completed_video_count, 0) completed_video_count,
 	cvcv.video_count total_video_count,
 	vqc.video_question_count total_video_question_count,
-	avq.answered_video_question_count,
+	COALESCE(avq.answered_video_question_count, 0) answered_video_question_count,
 	easp.avg_exam_score_percentage,
 	fesp.max_exam_score final_exam_score_percentage,
 	CASE 

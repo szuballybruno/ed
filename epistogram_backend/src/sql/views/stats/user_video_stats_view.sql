@@ -92,11 +92,8 @@ INNER JOIN public.playlist_view cisv
 ON cisv.user_id = u.id 
 AND cisv.item_state = 'completed'
 
-INNER JOIN public.video v
-ON v.id = cisv.video_id
-
 LEFT JOIN public.video_version vv
-ON vv.video_id = v.id
+ON vv.id = cisv.video_version_id
 
 LEFT JOIN public.video_data vd
 ON vd.id = vv.video_data_id
