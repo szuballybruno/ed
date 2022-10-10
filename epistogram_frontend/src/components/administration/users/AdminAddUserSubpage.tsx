@@ -27,10 +27,10 @@ export const AdminAddUserSubpage = ({
 
     const refetchTrigger = useEventTrigger();
 
-    const postCreateInvitedUser = useCallback(() => {
+    const postCreateInvitedUser = useCallback(async () => {
 
         showNotification('Felhasználó sikeresen hozzáadva');
-        refetchUsersFunction();
+        await refetchUsersFunction();
     }, [refetchUsersFunction]);
 
     const handleCreateInvitedUser = usePostCallback(createInvitedUser, [postCreateInvitedUser]);

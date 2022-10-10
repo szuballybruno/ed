@@ -2,11 +2,13 @@ import { useContext, useState } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { CompanyApiService } from '../../../services/api/companyApiService';
 import { Id } from '../../../shared/types/versionId';
+import { useIsMatchingCurrentRoute } from '../../../static/frontendHelpers';
 import { useRouteParams2 } from '../../../static/locationHelpers';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { CurrentUserContext } from '../../system/AuthenticationFrame';
 import { EpistoRoutes } from '../../universal/EpistoRoutes';
 import { AdminBreadcrumbsHeader } from '../AdminBreadcrumbsHeader';
+import { AdminAddUserSubpage } from './AdminAddUserSubpage';
 import { AminUserGridView, useAdminUserGridLogic, useGridFilterSettingsLogic } from './AminUserGridView';
 import { CompanySelectorDropdown } from './CompanySelectorDropdown';
 import { UserDetailsRootView } from './UserDetailsRootView';
@@ -19,6 +21,8 @@ export const UserAdminSubpage = () => {
 
     const params = useRouteParams2(applicationRoutes.administrationRoute.usersRoute.userRoute);
     const userId = params.getValueOrNull(x => x.userId, 'int');
+    const isMatchingCurrentAppRoute = useIsMatchingCurrentRoute();
+    const isSimpleView = isMatchingCurrentAppRoute(userAdminRoute.addRoute).isMatchingRouteExactly || !!userId;
 
     const currentUser = useContext(CurrentUserContext);
 
@@ -28,7 +32,7 @@ export const UserAdminSubpage = () => {
 
     const filterLogic = useGridFilterSettingsLogic();
     const gridLogic = useAdminUserGridLogic({
-        isSimpleView: !!userId,
+        isSimpleView,
         filterLogic,
         selectedCompanyId,
     });
@@ -61,6 +65,14 @@ export const UserAdminSubpage = () => {
 
                 <EpistoRoutes
                     renderRoutes={[
+                        {
+                            route: userAdminRoute.addRoute,
+                            element: <AdminAddUserSubpage
+                                headerButtons={[]}
+                                tabMenuItems={[]}
+                                refetchUsersFunction={gridLogic.refetchUsers.bind(gridLogic)}
+                                selectedCompanyId={selectedCompanyId} />
+                        },
                         {
                             route: userAdminRoute.userRoute,
                             element: <UserDetailsRootView

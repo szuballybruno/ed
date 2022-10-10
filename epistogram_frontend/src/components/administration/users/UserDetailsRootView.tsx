@@ -8,7 +8,6 @@ import { ArrayBuilder } from '../../../static/frontendHelpers';
 import { useRouteParams2 } from '../../../static/locationHelpers';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoRoutes } from '../../universal/EpistoRoutes';
-import { AdminAddUserSubpage } from './AdminAddUserSubpage';
 import { AdminEditUserSubpage } from './AdminEditUserSubpage';
 import { AdminUserCoursesSubpage } from './adminUserCoursesSubpage/AdminUserCoursesSubpage';
 import { AdminUserStatisticsSubpage } from './AdminUserLearningOverviewSubpage';
@@ -53,14 +52,6 @@ export const UserDetailsRootView = ({
 
             <EpistoRoutes
                 renderRoutes={[
-                    {
-                        route: usersAdminRoute.addRoute,
-                        element: <AdminAddUserSubpage
-                            headerButtons={headerButtons}
-                            tabMenuItems={menuRoutes}
-                            refetchUsersFunction={refetchUsers}
-                            selectedCompanyId={selectedCompanyId} />
-                    },
                     {
                         route: usersAdminRoute.userRoute.editRoute,
                         element: <AdminEditUserSubpage

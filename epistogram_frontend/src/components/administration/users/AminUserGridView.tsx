@@ -261,7 +261,8 @@ export const AminUserGridView = ({
         .map(mapToRow);
 
     const { navigate2 } = useNavigation();
-    const { userRoute } = applicationRoutes.administrationRoute.usersRoute;
+    const { usersRoute } = applicationRoutes.administrationRoute;
+    const { userRoute } = usersRoute;
     const isMatchingCurrentAppRoute = useIsMatchingCurrentRoute();
 
     const columns = useColumns(isSimpleView, userId => {
@@ -313,7 +314,8 @@ export const AminUserGridView = ({
                         <Add
                             style={{
                                 height: 30
-                            }} />
+                            }}
+                            onClick={() => navigate2(usersRoute.addRoute)} />
                     </EpistoButton>}
                 </EpistoFlex2>
             </Flex>
