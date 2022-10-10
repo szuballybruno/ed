@@ -10,7 +10,7 @@ import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { setAuthCookies } from '../utilities/cookieHelpers';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 import { AuthorizationService } from '../services/AuthorizationService';
-import { AuthorizationResult, XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
+import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
 export class RegistrationController implements XController<RegistrationController> {
 
