@@ -9,7 +9,7 @@ import { CompanyDTO } from '../../../../shared/dtos/company/CompanyDTO';
 import { OrderType } from '../../../../shared/types/sharedTypes';
 import { Id } from '../../../../shared/types/versionId';
 import { Environment } from '../../../../static/Environemnt';
-import { usePaging } from '../../../../static/frontendHelpers';
+import { formatTimespan, usePaging } from '../../../../static/frontendHelpers';
 import { useRouteQuery } from '../../../../static/locationHelpers';
 import { translatableTexts } from '../../../../static/translatableTexts';
 import { EpistoButton } from '../../../controls/EpistoButton';
@@ -33,7 +33,7 @@ class RowType {
     signupDate: string;
     averagePerformancePercentage: number;
     invertedLagBehind: number;
-    totalSessionLengthSeconds: number;
+    totalSessionLengthSeconds: string;
     completedCourseItemCount: number;
     engagementPoints: number;
     productivityPercentage: number;
@@ -143,7 +143,7 @@ export const AdminUserDataGridSubpage = (props: {
                         }) + '',
                     averagePerformancePercentage: user.averagePerformancePercentage,
                     invertedLagBehind: user.invertedLagBehind,
-                    totalSessionLengthSeconds: user.totalSessionLengthSeconds,
+                    totalSessionLengthSeconds: formatTimespan(user.totalSessionLengthSeconds),
                     completedCourseItemCount: user.completedCourseItemCount,
                     engagementPoints: user.engagementPoints,
                     productivityPercentage: user.productivityPercentage,

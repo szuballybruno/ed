@@ -49,7 +49,7 @@ final_exam_score_percentage AS
 	SELECT 
 		lasv.user_id,
 		lev.course_id,
-		esv.exam_score
+		MAX(esv.exam_score) max_exam_score
 	FROM public.latest_answer_session_view lasv
 	
 	INNER JOIN public.latest_exam_view lev
@@ -64,6 +64,8 @@ final_exam_score_percentage AS
 	
 	LEFT JOIN public.exam_score_view esv
 	ON esv.exam_version_id = ev.id
+	
+	GROUP BY lasv.user_id, lev.course_id
 ),
 answered_video_question AS
 (
@@ -128,7 +130,7 @@ SELECT
 	vqc.video_question_count total_video_question_count,
 	avq.answered_video_question_count,
 	easp.avg_exam_score_percentage,
-	fesp.exam_score final_exam_score_percentage,
+	fesp.max_exam_score final_exam_score_percentage,
 	CASE 
 		WHEN cqsv.total_answer_count > 0
 			THEN (cqsv.correct_answer_count::double precision / cqsv.total_answer_count * 100)::int

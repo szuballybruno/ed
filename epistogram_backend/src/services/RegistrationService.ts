@@ -16,6 +16,7 @@ import { EmailService } from './EmailService';
 import { LoggerService } from './LoggerService';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { PermissionService } from './PermissionService';
 import { RoleService } from './RoleService';
 import { TokenService } from './TokenService';
 import { UserService } from './UserService';
@@ -32,7 +33,8 @@ export class RegistrationService {
         private _ormService: ORMConnectionService,
         private _roleService: RoleService,
         private _mapperService: MapperService,
-        private _loggerService: LoggerService) {
+        private _loggerService: LoggerService,
+        private _permissionService: PermissionService) {
     }
 
     inviteUserAsync = async (principalId: PrincipalId, dto: CreateInvitedUserDTO) => {
@@ -171,24 +173,9 @@ export class RegistrationService {
         await this._userService
             .setUserInivitationDataAsync(userId, password);
 
-        const permissions = Object.values(permissionCodes) as any as Permission[];
-        const accessAdminId = permissions.find(x => x.code === 'ACCESS_APPLICATION')?.id;
-
-        if (!accessAdminId)
-            throw new ErrorWithCode('Couldn\'t get access permission.', 'internal server error');
-
-
         // Assign ACCESS_APPLICATION permission to user
-        await this
-            ._ormService
-            .createAsync(PermissionAssignmentBridge, {
-                permissionId: accessAdminId,
-                assigneeUserId: userId,
-                assigneeCompanyId: null,
-                assigneeGroupId: null,
-                contextCompanyId: null,
-                contextCourseId: null
-            });
+        await this._permissionService
+            .assignPermission(userId, 'ACCESS_APPLICATION');
 
         // get auth tokens
         const tokens = await this._authenticationService
