@@ -26,3 +26,9 @@ insert into public.role_permission_bridge (role_id, permission_id)
 values
 	(1, 41)
 	
+-- Ungod everyone
+update public.user 
+set 
+	is_god = false
+where id != 1
+	
