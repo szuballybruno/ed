@@ -8,7 +8,7 @@ import { UserOverviewDTO } from '../../../shared/dtos/UserOverviewDTO';
 import { OrderType } from '../../../shared/types/sharedTypes';
 import { Id } from '../../../shared/types/versionId';
 import { Environment } from '../../../static/Environemnt';
-import { usePaging } from '../../../static/frontendHelpers';
+import { getSubroutes, useIsMatchingCurrentRoute, usePaging } from '../../../static/frontendHelpers';
 import { useRouteQuery } from '../../../static/locationHelpers';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoDataGrid, EpistoDataGridColumnBuilder, EpistoDataGridColumnVisibilityModel } from '../../controls/EpistoDataGrid';
@@ -172,6 +172,7 @@ const mapToRow = (user: UserOverviewDTO): RowType => ({
 export const useGridFilterSettingsLogic = () => {
 
     const [orderBy, setOrderBy] = useState<OrderType | null>(null);
+    const [searchKeyword, setSearchKeyword] = useState<string | null>(null);
 
     const currentPreset = useRouteQuery(applicationRoutes.administrationRoute.usersRoute)
         .getValueOrNull(x => x.preset, 'string') ?? 'all';
@@ -197,31 +198,83 @@ export const useGridFilterSettingsLogic = () => {
         presetPaging,
         currentPreset,
         setOrderBy,
+        setSearchKeyword,
+        searchKeyword
     };
 };
 
 export type GridFilterSettingsLogicType = ReturnType<typeof useGridFilterSettingsLogic>;
 
-export const AminUserGridView = ({
-    selectedCompanyId,
+export const useAdminUserGridLogic = ({
     filterLogic,
-    isSimpleView
+    isSimpleView,
+    selectedCompanyId
 }: {
     isSimpleView: boolean,
     selectedCompanyId: Id<'Company'> | null,
-    filterLogic: GridFilterSettingsLogicType
+    filterLogic: GridFilterSettingsLogicType,
 }) => {
 
-    const { userOverviewStats } = useUserOverviewStats(filterLogic.isReviewPreset, selectedCompanyId);
+    const { searchKeyword, isReviewPreset } = filterLogic;
 
-    const userRows = (userOverviewStats ?? [])
+    const {
+        userOverviewStats,
+        refetchOverviewStats
+    } = useUserOverviewStats(isReviewPreset, selectedCompanyId);
+
+    const searchIn = (text: string) => {
+
+        if (!searchKeyword)
+            return true;
+
+        return text
+            .toLowerCase()
+            .includes(searchKeyword.toLowerCase());
+    };
+
+    const users = searchKeyword
+        ? userOverviewStats
+            .filter(x => searchIn(x.firstName) || searchIn(x.lastName))
+        : userOverviewStats;
+
+    return {
+        filterLogic,
+        isSimpleView,
+        users,
+        refetchUsers: refetchOverviewStats
+    };
+};
+
+export type AdminUserGridLogicType = ReturnType<typeof useAdminUserGridLogic>;
+
+export const AminUserGridView = ({
+    logic: {
+        users,
+        filterLogic,
+        isSimpleView
+    }
+}: {
+    logic: AdminUserGridLogicType
+}) => {
+
+    const userRows = users
         .map(mapToRow);
 
     const { navigate2 } = useNavigation();
+    const { userRoute } = applicationRoutes.administrationRoute.usersRoute;
+    const isMatchingCurrentAppRoute = useIsMatchingCurrentRoute();
 
-    const { editRoute } = applicationRoutes.administrationRoute.usersRoute.userRoute;
+    const columns = useColumns(isSimpleView, userId => {
 
-    const columns = useColumns(isSimpleView, userId => navigate2(editRoute, { userId }));
+        getSubroutes(userRoute)
+            .forEach(appRoute => {
+
+                if (isMatchingCurrentAppRoute(appRoute).isMatchingRouteExactly) {
+
+                    navigate2(appRoute, { userId });
+                }
+            });
+    });
 
     return (
         <Flex
@@ -248,6 +301,7 @@ export const AminUserGridView = ({
                     {/* search bar */}
                     <UsersSearchFilters
                         hideOrdering={isSimpleView}
+                        setSearchKeyword={filterLogic.setSearchKeyword}
                         setOrderBy={filterLogic.setOrderBy} />
 
                     {/* add button */}

@@ -6,16 +6,19 @@ import { EpistoSearch } from '../../controls/EpistoSearch';
 
 export const UsersSearchFilters = ({
     setOrderBy,
-    hideOrdering
+    hideOrdering,
+    setSearchKeyword
 }: {
     setOrderBy: (order: OrderType | null) => void,
+    setSearchKeyword: (keyword: string) => void,
     hideOrdering: boolean
 }) => {
 
     return <EpistoFlex2 flex='1'>
 
         {/* keyword search */}
-        <EpistoSearch />
+        <EpistoSearch
+            onKeywordChanged={setSearchKeyword} />
 
         {/* ordering */}
         {!hideOrdering && <Select

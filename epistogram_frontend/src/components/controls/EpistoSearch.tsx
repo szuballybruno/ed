@@ -3,8 +3,12 @@ import { InputGroup, InputLeftElement } from '@chakra-ui/react';
 import { Search } from '@mui/icons-material';
 import React from 'react';
 
-export const EpistoSearch = (props: {} & InputProps) => {
-    const { ...css } = props;
+export const EpistoSearch = ({
+    onKeywordChanged,
+    ...css
+}: {
+    onKeywordChanged?: (keyword: string) => void
+} & InputProps) => {
 
     return <InputGroup>
         <InputLeftElement
@@ -29,6 +33,10 @@ export const EpistoSearch = (props: {} & InputProps) => {
             placeholder="Keresés..."
             borderRadius="5px"
             background="var(--transparentWhite70)"
+            onChange={x => {
+                if (onKeywordChanged)
+                    onKeywordChanged(x.target.value);
+            }}
             {...css}
         />
     </InputGroup>;

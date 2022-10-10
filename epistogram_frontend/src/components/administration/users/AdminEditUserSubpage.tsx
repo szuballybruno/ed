@@ -36,6 +36,7 @@ export const AdminEditUserSubpage = ({
         try {
 
             await saveUserAsync(dto);
+            await refetchUsersFunction();
             showNotification('A változtatások sikeresen mentésre kerültek.');
             refetchTrigger.fireEvent();
         }

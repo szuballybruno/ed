@@ -69,12 +69,13 @@ export const useUserAssignedCourses = (userId: Id<'User'>, loadAvailable: boolea
 
 export const useUserOverviewStats = (isToBeReviewed: boolean, companyId: Id<'Company'> | null) => {
 
-    const queryRes = QueryService.useXQuery<UserOverviewDTO[]>(apiRoutes.userStats.getUserOverviewStats, { isToBeReviewed, companyId });
+    const queryRes = QueryService.useXQueryArray<UserOverviewDTO>(apiRoutes.userStats.getUserOverviewStats, { isToBeReviewed, companyId });
 
     return {
         userOverviewStats: queryRes.data,
         userOverviewStatsStatus: queryRes.state,
-        userOverviewStatsError: queryRes.error
+        userOverviewStatsError: queryRes.error,
+        refetchOverviewStats: queryRes.refetch
     };
 };
 

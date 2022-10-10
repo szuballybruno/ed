@@ -15,7 +15,7 @@ export type LoggingKeysType =
     'EXAM' |
     'QUERY' |
     'SESSION' |
-    'EVENTS' | 
+    'EVENTS' |
     'PLAYER DEBUG';
 
 export const Environment = (() => {
@@ -32,7 +32,7 @@ export const Environment = (() => {
     const eventPoolingIntervalInMs = 5 * 60 * 1000; // 5 mins
     const sessionHangThresholdInMs = 2 * 60 * 60 * 1000; // 2 hours
     const loggingEnabled = true;
-    const loggingEnabledKeys: LoggingKeysType[] = ['WARNING', 'PLAYBACK', 'QUERY'];
+    const loggingEnabledKeys: LoggingKeysType[] = ['WARNING', 'PLAYBACK'];
 
     const getAssetUrl = (path: string, assetUrlPath?: string) => {
 

@@ -388,6 +388,59 @@ export const useIsMatchingCurrentRoute = () => {
     };
 };
 
+export const getSubroutes = (route: ApplicationRoute<any, any>): ApplicationRoute<any, any>[] => {
+
+    return Object
+        .values(route)
+        .filter(x => !!x.route);
+};
+
+// export const useGetCurrentAppRoute2 = (): ApplicationRoute<any, any> => {
+
+//     const currentUrl = useCurrentUrlPathname();
+//     const isMatchingCurrent = useIsMatchingCurrentRoute();
+
+//     const traverse = (appRoute: ApplicationRoute<any, any>): { depth: number, route: ApplicationRoute<any, any> | null } => {
+
+//         /**
+//          * If not matching this route, 
+//          * return null
+//          */
+//         if (!isMatchingCurrent(appRoute))
+//             return { depth: 0, route: null };
+
+//         /**
+//          * If matching route, and route is exact,
+//          * that's the result 
+//          */
+//         if (appRoute.route.isExact())
+//             return { depth: 0, route: appRoute };
+
+//         /**
+//          * If matching route but it's not exact, 
+//          * result could be a child route 
+//          */
+//         const result = getSubroutes(appRoute)
+//             .map(traverse)
+//             .firstOrNull();
+
+//         if (result)
+//             return result;
+
+//         /**
+//          * If no subroute is matching,
+//          * use this as the result 
+//          */
+//         return appRoute;
+//     };
+
+//     const result = traverse(rootRoute);
+//     if (!result)
+//         throw new Error(`Current route (${currentUrl}) did not match any of the application routes!`);
+
+//     return result;
+// };
+
 export const useGetCurrentAppRoute = () => {
 
     const currentUrl = useCurrentUrlPathname();
