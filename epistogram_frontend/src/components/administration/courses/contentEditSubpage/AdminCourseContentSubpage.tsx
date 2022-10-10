@@ -404,16 +404,12 @@ export const AdminCourseContentSubpage = () => {
                                             newValue: index
                                         })));
                         }}
-                        hideFooter
+                        showFooter
                         onDragStart={setDraggedRow}
                         onDragEnd={() => setDraggedRow(null)}
-                        //TODO: Pretest needs to be editable too, but not all fields
-                        //isRowEditable={x => x.itemType.type !== 'pretest'}
-                        initialState={{
-                            pinnedColumns: {
-                                left: ['rowNumber', 'itemTitle'],
-                                right: ['quickMenu']
-                            }
+                        pinnedColumns={{
+                            left: ['rowNumber', 'itemTitle'],
+                            right: ['quickMenu']
                         }} />
                 </EpistoFlex2>
             </AdminSubpageHeader>

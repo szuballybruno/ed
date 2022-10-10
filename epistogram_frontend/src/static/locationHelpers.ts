@@ -1,4 +1,4 @@
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useLocation, useParams, useSearchParams } from 'react-router-dom';
 import { ApplicationRoute } from '../models/types';
 import { XSafeObjectWrapper } from '../shared/logic/XSafeObjectWrapper';
 
@@ -49,6 +49,61 @@ export const useRouteValues = <TParams, TQuery>(route: ApplicationRoute<TParams,
         params: new XSafeObjectWrapper<TParams>(params as any),
         query: new XSafeObjectWrapper<TQuery>(query as any)
     };
+};
+
+export const useRouteValues2 = <TParams, TQuery>(route: ApplicationRoute<TParams, TQuery>) => {
+
+    // unused, just for UI update triggers 
+    const _ = useLocation();
+
+    const template = route.route.getAbsolutePath();
+    const url = window.location.pathname;
+    const urlSplit = url.split('/');
+    const templateSplit = template.split('/');
+
+    const params = (() => {
+
+        const params = {} as any;
+
+        // lenght error 
+        if (templateSplit.length > urlSplit.length)
+            return {};
+
+        const paramMatches = templateSplit
+            .map((templatePart, index) => {
+
+                const isParam = templatePart.startsWith(':');
+                if (!isParam)
+                    return templatePart === urlSplit[index]
+                        ? 'notparam'
+                        : 'mismatch';
+
+                return { value: urlSplit[index], name: templatePart.replace(':', '') };
+            });
+
+        // mimatch error
+        if (paramMatches.some(x => x === 'mismatch'))
+            return {};
+
+        // set param values 
+        paramMatches
+            .filter(x => x !== 'mismatch' && x !== 'notparam')
+            .forEach((x: any) => {
+
+                params[x.name] = x.value;
+            });
+
+        return params;
+    })();
+
+    return {
+        params: new XSafeObjectWrapper<TParams>(params),
+    };
+};
+
+export const useRouteParams2 = <TParams, TQuery>(route: ApplicationRoute<TParams, TQuery>) => {
+
+    return useRouteValues2(route).params;
 };
 
 /**

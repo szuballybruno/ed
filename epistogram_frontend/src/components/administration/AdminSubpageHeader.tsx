@@ -17,6 +17,7 @@ export const AdminSubpageHeader = ({
     headerContent,
     onSave,
     isInverseBackground,
+    hidden,
     ...css
 }: {
     tabMenuItems?: ApplicationRoute<any>[],
@@ -27,6 +28,7 @@ export const AdminSubpageHeader = ({
     subRouteLabel?: string,
     navigationQueryParams?: any,
     isInverseBackground?: boolean,
+    hidden?: boolean
 } & EpistoFlex2Props) => {
 
     const tabMenuItemsList = (tabMenuItems ?? []);
@@ -69,6 +71,20 @@ export const AdminSubpageHeader = ({
 
     const currentMatchingAbsUrl = currentMatchingRoute?.route?.getAbsolutePath();
 
+    const showHeaderSecion = (() => {
+
+        if (hidden)
+            return false;
+
+        if (tabMenuItems)
+            return true;
+
+        if (onSave)
+            return true;
+
+        return false;
+    })();
+
     return <EpistoFlex2
         id={AdminSubpageHeader.name}
         direction={'column'}
@@ -77,8 +93,8 @@ export const AdminSubpageHeader = ({
         px="5px"
         position="relative">
 
-        {/* tabs */}
-        {(tabMenuItems || onSave) && (
+        {/* header section */}
+        {showHeaderSecion && (
             <EpistoFlex2
                 className="roundBorders"
                 background={isInverseBackground ? 'var(--transparentWhite70)' : undefined}

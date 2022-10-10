@@ -5,7 +5,7 @@ import LocalPoliceIcon from '@mui/icons-material/LocalPolice';
 import LocationCityIcon from '@mui/icons-material/LocationCity';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
-import { UserDataGridPresetType } from '../components/administration/users/dataGrids/AdminUsersDataGridSubpage';
+import { UserDataGridPresetType } from '../components/administration/users/AminUserGridView';
 import { ApplicationRoute, EpistoRoute } from '../models/types';
 import { Id } from '../shared/types/versionId';
 import { Environment } from '../static/Environemnt';
@@ -45,13 +45,15 @@ export type ApplicationRoutesType = {
             overviewRoute: ApplicationRoute;
             detailsRoute: ApplicationRoute;
         };
-        usersRoute: ApplicationRoute<void, { preset: UserDataGridPresetType }> & {
+        usersRoute: ApplicationRoute<void, { preset?: UserDataGridPresetType }> & {
             indexRoute: ApplicationRoute;
             addRoute: ApplicationRoute;
-            editRoute: ApplicationRoute<{ userId: Id<'User'> }>;
-            statsRoute: ApplicationRoute<{ userId: Id<'User'> }>;
-            teacherInfoRoute: ApplicationRoute<{ userId: Id<'User'> }>;
-            courseContentRoute: ApplicationRoute<{ userId: Id<'User'> }>;
+            userRoute: ApplicationRoute<{ userId: Id<'User'> }> & {
+                editRoute: ApplicationRoute<{ userId: Id<'User'> }>;
+                statsRoute: ApplicationRoute<{ userId: Id<'User'> }>;
+                teacherInfoRoute: ApplicationRoute<{ userId: Id<'User'> }>;
+                courseContentRoute: ApplicationRoute<{ userId: Id<'User'> }>;
+            };
         };
         coursesRoute: ApplicationRoute & {
             landingRoute: ApplicationRoute;
@@ -95,9 +97,9 @@ export type ApplicationRoutesType = {
     };
 };
 
-export const getApplicationRoutes = (): ApplicationRoutesType => {
+export const getApplicationRoutes = () => {
 
-    return {
+    const applicationRoutes: ApplicationRoutesType = {
 
         matchAll: {
             title: 'Match all',
@@ -308,23 +310,30 @@ export const getApplicationRoutes = (): ApplicationRoutesType => {
                     title: translatableTexts.routeTitles.administrationAddUser,
                     route: new EpistoRoute('/administration/users', 'add'),
                 },
-                editRoute: {
+                userRoute: {
                     title: translatableTexts.routeTitles.administrationEditUser,
-                    route: new EpistoRoute('/administration/users', ':userId/edit'),
+                    route: new EpistoRoute('/administration/users', ':userId', '*'),
                     icon: <Person className="fontXXL"
                         color={'secondary'} />,
-                },
-                statsRoute: {
-                    title: translatableTexts.routeTitles.administrationUserStatistics,
-                    route: new EpistoRoute('/administration/users', ':userId/statistics'),
-                },
-                teacherInfoRoute: {
-                    title: translatableTexts.routeTitles.administrationEditTeacherInfo,
-                    route: new EpistoRoute('/administration/users', ':userId/teacherinfo'),
-                },
-                courseContentRoute: {
-                    title: translatableTexts.routeTitles.administrationUserCourses,
-                    route: new EpistoRoute('/administration/users', ':userId/courses'),
+
+                    editRoute: {
+                        title: translatableTexts.routeTitles.administrationEditUser,
+                        route: new EpistoRoute('/administration/users/:userId', ''),
+                        icon: <Person className="fontXXL"
+                            color={'secondary'} />,
+                    },
+                    statsRoute: {
+                        title: translatableTexts.routeTitles.administrationUserStatistics,
+                        route: new EpistoRoute('/administration/users/:userId', 'statistics'),
+                    },
+                    teacherInfoRoute: {
+                        title: translatableTexts.routeTitles.administrationEditTeacherInfo,
+                        route: new EpistoRoute('/administration/users/:userId', 'teacherinfo'),
+                    },
+                    courseContentRoute: {
+                        title: translatableTexts.routeTitles.administrationUserCourses,
+                        route: new EpistoRoute('/administration/users/:userId', 'courses'),
+                    },
                 },
             },
 
@@ -500,6 +509,36 @@ export const getApplicationRoutes = (): ApplicationRoutesType => {
             }
         }
     };
+
+    const setNames = (routes: ApplicationRoute<any, any>) => {
+
+        Object
+            .keys(routes)
+            .filter(key => !!routes[key].route)
+            .forEach(key => {
+
+                const route = routes[key] as ApplicationRoute<any, any>;
+                route.name = key;
+
+                setNames(route);
+            });
+    };
+
+    const rootRoute: ApplicationRoute<any> = {
+        route: new EpistoRoute('', '/', '*'),
+        title: 'Root',
+        name: 'root',
+        ...applicationRoutes
+    };
+
+    setNames(rootRoute);
+
+    return {
+        applicationRoutes,
+        rootRoute
+    };
 };
 
-export const applicationRoutes = getApplicationRoutes();
+const routes = getApplicationRoutes();
+export const applicationRoutes = routes.applicationRoutes;
+export const rootRoute = routes.rootRoute;

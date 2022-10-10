@@ -1,33 +1,29 @@
-import React, { useCallback } from 'react';
-import { applicationRoutes } from '../../../configuration/applicationRoutes';
+import { useCallback } from 'react';
+import { ButtonType } from '../../../models/types';
 import { useCreateInviteUserAsync } from '../../../services/api/registrationApiService';
 import { UserApiService } from '../../../services/api/userApiService';
-import { useNavigation } from '../../../services/core/navigatior';
-import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
-import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
-import { CompanyDTO } from '../../../shared/dtos/company/CompanyDTO';
+import { showNotification } from '../../../services/core/notifications';
 import { Id } from '../../../shared/types/versionId';
 import { useEventTrigger, usePostCallback } from '../../../static/frontendHelpers';
-import { AdminBreadcrumbsHeader, CompanySelectorDropdown } from '../AdminBreadcrumbsHeader';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { AdminEditUserControl } from './AdminEditUserControl';
-import { AdminUserList } from './AdminUserList';
 
-const AdminAddUserSubpage = (props: {
-    users: AdminPageUserDTO[],
+export const AdminAddUserSubpage = ({
+    refetchUsersFunction,
+    selectedCompanyId,
+    headerButtons,
+    tabMenuItems
+}: {
     refetchUsersFunction: () => void,
     selectedCompanyId: Id<'Company'> | null,
-    handleSelectCompany: (companyId: Id<'Company'> | null) => void,
-    companies: CompanyDTO[]
+    tabMenuItems: any[],
+    headerButtons: ButtonType[]
 }) => {
 
-    const { users, refetchUsersFunction, selectedCompanyId, handleSelectCompany, companies } = props;
-    const { navigate2 } = useNavigation();
-    const showError = useShowErrorDialog();
-    const { userEditData, refetchEditUserData } = UserApiService.useEditUserData(null);
+    const { userEditData } = UserApiService.useEditUserData(null);
 
     // http 
-    const { createInvitedUser, createInvitedUserState } = useCreateInviteUserAsync();
+    const { createInvitedUser } = useCreateInviteUserAsync();
 
     const refetchTrigger = useEventTrigger();
 
@@ -35,36 +31,21 @@ const AdminAddUserSubpage = (props: {
 
         showNotification('Felhasználó sikeresen hozzáadva');
         refetchUsersFunction();
-        //navigate2(applicationRoutes.administrationRoute.usersRoute.indexRoute);
     }, [refetchUsersFunction]);
 
     const handleCreateInvitedUser = usePostCallback(createInvitedUser, [postCreateInvitedUser]);
 
-    return <AdminBreadcrumbsHeader
-        headerComponent={companies.length > 1 && <CompanySelectorDropdown
-            selectedCompanyId={selectedCompanyId}
-            handleSelectCompany={handleSelectCompany}
-            companies={companies} />}>
-
-        <AdminUserList
-            currentUserId={null}
-            users={users}
-            onUserSelected={(userId) => {
-                navigate2(applicationRoutes.administrationRoute.usersRoute.editRoute, { userId: userId });
-            }} />
-
+    return (
         <AdminSubpageHeader
-            background="var(--transparentWhite10)"
-            className='roundBorders'>
+            headerButtons={headerButtons}
+            tabMenuItems={tabMenuItems}>
 
             <AdminEditUserControl
                 editedUserId={Id.create(-1)}
                 refetchTrigger={refetchTrigger}
                 editDTO={userEditData}
                 selectedCompanyId={selectedCompanyId}
-                saveUserAsync={handleCreateInvitedUser}></AdminEditUserControl>
+                saveUserAsync={handleCreateInvitedUser} />
         </AdminSubpageHeader>
-    </AdminBreadcrumbsHeader>;
+    );
 };
-
-export default AdminAddUserSubpage;

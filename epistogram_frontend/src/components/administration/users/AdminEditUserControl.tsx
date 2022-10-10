@@ -97,7 +97,6 @@ export const AdminEditUserControl = ({
         setDepartmentId(editDTO.departmentId);
         setCompanyId(editDTO.companyId);
         setAssignedRoleIds(editDTO.roleIds);
-
     }, [editDTO, mode]);
 
     const coinAmountEntryState = useEpistoEntryState({
@@ -166,8 +165,6 @@ export const AdminEditUserControl = ({
 
             return saveUserAsync(editedUserDTO);
         }
-
-
     };
 
     return <EpistoFlex2 direction="column"

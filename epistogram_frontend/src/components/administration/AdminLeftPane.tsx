@@ -14,9 +14,8 @@ export const AdminLeftPane = () => {
     const { hasPermission } = useAuthorizationContext();
     const administrationRoutes = applicationRoutes.administrationRoute;
 
-    const menuItems = new ArrayBuilder<ApplicationRoute>()
-        //.add(administrationRoutes.homeRoute.overviewRoute)
-        .add(administrationRoutes.usersRoute.editRoute as any)
+    const menuItems = new ArrayBuilder<ApplicationRoute<any, any>>()
+        .add(administrationRoutes.usersRoute.userRoute)
         .addIf(RouteHelpers.isRouteAuthoirzedToVisit(administrationRoutes.coursesRoute, hasPermission), administrationRoutes.coursesRoute)
         .addIf(RouteHelpers.isRouteAuthoirzedToVisit(administrationRoutes.shopRoute, hasPermission), administrationRoutes.shopRoute)
         .addIf(RouteHelpers.isRouteAuthoirzedToVisit(administrationRoutes.personalityAssessmentRoute, hasPermission), administrationRoutes.personalityAssessmentRoute)

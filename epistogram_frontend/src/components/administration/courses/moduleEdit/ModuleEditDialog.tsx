@@ -77,7 +77,7 @@ export const ModuleEditDialog = ({
                                     newValue: orderIndex
                                 }));
                     }}
-                    hideFooter
+                    showFooter
                     columns={columns}
                     rows={rows}
                     getKey={x => x.moduleVersionId} />

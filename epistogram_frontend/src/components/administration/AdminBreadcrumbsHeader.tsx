@@ -1,5 +1,4 @@
-import { ArrowBack, GridOn, List } from '@mui/icons-material';
-import { FormControl, FormGroup, Switch } from '@mui/material';
+import { ArrowBack } from '@mui/icons-material';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import { ReactNode, useCallback } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
@@ -125,12 +124,6 @@ export const AdminBreadcrumbsHeader = ({
     subRouteLabel,
     children,
     backButtonProps,
-
-    // @deprecated TODO: BIG NONO
-    viewSwitchChecked,
-
-    // @deprecated TODO: BIG NONO
-    viewSwitchFunction,
     headerComponent,
     ...css
 }: {
@@ -253,25 +246,6 @@ export const AdminBreadcrumbsHeader = ({
             <EpistoFlex2 align='center'>
 
                 {headerComponent}
-
-                {viewSwitchFunction && <FormGroup>
-
-                    <FormControl style={{
-                        flexDirection: 'row',
-                        alignItems: 'center'
-                    }}>
-                        <List />
-                        <Switch
-                            checked={viewSwitchChecked}
-                            onChange={(e) => {
-                                if (!viewSwitchFunction)
-                                    return;
-
-                                viewSwitchFunction(e.currentTarget.checked);
-                            }} />
-                        <GridOn />
-                    </FormControl>
-                </FormGroup>}
             </EpistoFlex2>
         </EpistoFlex2>
 

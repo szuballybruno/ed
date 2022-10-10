@@ -14,13 +14,15 @@ export type RenderRoute = {
     isAuthorizedToView?: (hasPermission: HasPermissionFnType) => boolean;
 }
 
-const RouteRenderer = (props: {
+const RouteRenderer = ({
+    children,
+    route,
+    isAuthorizedToView
+}: {
     route: ApplicationRoute,
     children: JSX.Element,
     isAuthorizedToView?: (userActivity: any) => boolean,
 }): JSX.Element => {
-
-    const { children, route, isAuthorizedToView } = props;
 
     const { hasPermission } = useAuthorizationContext();
     const isAuthorizedToViewResult = route.isAuthoirziedToVisit
@@ -29,7 +31,7 @@ const RouteRenderer = (props: {
             ? isAuthorizedToView(hasPermission)
             : true;
 
-    Logger.logScoped('ROUTING', `Route renderer: Abs: '${route.route.getAbsolutePath()}' Rel: '${route.route.getRelativePath()}'`);
+    Logger.logScoped('ROUTING', `Route (${route.name}) matched: '${route.route.getRelativePath()}'`);
 
     // AUTH check, redirect
     if (!isAuthorizedToViewResult) {
@@ -46,18 +48,23 @@ const RouteRenderer = (props: {
     return children;
 };
 
-export const EpistoRoutes = (props: {
+export const EpistoRoutes = ({
+    renderRoutes
+}: {
     renderRoutes: RenderRoute[]
 }) => {
-
-    const { renderRoutes } = props;
 
     return <Routes>
         {renderRoutes
             .map((renderRoute, index) => {
 
+                const relativePath = renderRoute
+                    .route
+                    .route
+                    .getRelativePath();
+
                 return <Route
-                    path={renderRoute.route.route.getRelativePath()}
+                    path={relativePath}
                     element={<>
                         <RouteRenderer
                             route={renderRoute.route}

@@ -2,8 +2,8 @@ import { useMediaQuery } from '@chakra-ui/react';
 import quantize from 'quantize';
 import React, { ComponentType, MutableRefObject, ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { applicationRoutes } from '../configuration/applicationRoutes';
-import { ApplicationRoute, EpistoRoute } from '../models/types';
+import { rootRoute } from '../configuration/applicationRoutes';
+import { ApplicationRoute } from '../models/types';
 import { useNavigation } from '../services/core/navigatior';
 import { useShowErrorDialog } from '../services/core/notifications';
 import { validatePassowrd } from '../shared/logic/sharedLogic';
@@ -359,6 +359,9 @@ export const useIsMatchingCurrentRoute = () => {
         if (!appRoute)
             throw new Error('Route is null or undefined!');
 
+        if (!appRoute.route)
+            throw new Error(`Application route (${JSON.stringify(appRoute.title)}) /route property is null or undefined!`);
+
         const compareRoute = appRoute.route.getAbsolutePath();
         const currentUrlSegments = currentUrl.split('/');
         const compareRouteSegments = compareRoute.split('/');
@@ -436,12 +439,6 @@ export const useGetCurrentAppRoute = () => {
             .firstOrNull(x => !!x);
 
         return matchingSubRoute;
-    };
-
-    const rootRoute: ApplicationRoute<any> = {
-        route: new EpistoRoute('', '/', '*'),
-        title: 'Root',
-        ...applicationRoutes
     };
 
     const matchingRoute = getMatchingRoute(rootRoute);
@@ -804,10 +801,24 @@ export class ArrayBuilder<T = any> {
         return this;
     }
 
+    addMany(items: T[]) {
+
+        this._array = this._array.concat(items);
+        return this;
+    }
+
     addIf(cond: boolean, item: T) {
 
         if (cond)
             this.add(item);
+
+        return this;
+    }
+
+    addIfMany(cond: boolean, items: T[]) {
+
+        if (cond)
+            this.addMany(items);
 
         return this;
     }

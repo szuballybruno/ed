@@ -47,6 +47,7 @@ export class EpistoRoute {
 }
 
 export type ApplicationRoute<TParams = void, TQuery = void> = {
+    name?: string;
     title: string;
     route: EpistoRoute;
     icon?: JSX.Element;

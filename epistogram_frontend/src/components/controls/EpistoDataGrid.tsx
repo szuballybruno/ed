@@ -44,13 +44,6 @@ export type GridColumnType<TRow, TKey, TField extends keyof TRow> = {
     enabled?: (row: TRow, field: TField) => boolean
 };
 
-export type InitialStateType<TSchema> = {
-    pinnedColumns?: {
-        left?: (keyof TSchema)[],
-        right?: (keyof TSchema)[]
-    }
-}
-
 export class EpistoDataGridColumnBuilder<TRow, TKey> {
 
     private _columns: GridColumnType<TRow, TKey, any>[] = [];
@@ -130,12 +123,13 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>({
     columns,
     id,
     rows,
-    initialState,
+    pinnedColumns,
     density,
-    hideFooter,
+    showFooter,
     getKey,
     onFocusChanged,
     columnVisibilityModel,
+    dragEnabled,
     isRowEditable,
     onRowOrderChange,
     onDragEnd,
@@ -144,14 +138,18 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>({
     rows: TSchema[],
     columns: GridColumnType<TSchema, TKey, keyof TSchema>[],
     getKey: (row: TSchema) => TKey,
-    initialState?: InitialStateType<TSchema>,
+    pinnedColumns?: {
+        left?: (keyof TSchema)[],
+        right?: (keyof TSchema)[]
+    },
     deps?: any[],
     density?: 'dense' | 'spaced',
-    hideFooter?: boolean,
+    showFooter?: boolean,
     id?: string,
     onFocusChanged?: (hasFocus: boolean) => void,
     columnVisibilityModel?: EpistoDataGridColumnVisibilityModel<TSchema>,
     isRowEditable?: (row: TSchema) => boolean,
+    dragEnabled?: boolean,
     onRowOrderChange?: (opts: {
         sourceKey: TKey,
         targetKey: TKey,
@@ -241,7 +239,7 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>({
             getRowId={x => getKey(x as TSchema) as any}
             rows={rows}
             apiRef={apiRef}
-            rowReordering
+            rowReordering={!!dragEnabled}
             onRowOrderChange={onRowOrderChange
                 ? ({ oldIndex, targetIndex }) => {
 
@@ -259,12 +257,12 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>({
                 }
                 : undefined}
             onCellClick={handleCellClick}
-            initialState={initialState as any}
+            initialState={{ pinnedColumns: pinnedColumns as any }}
             columnVisibilityModel={columnVisibilityModel as GridColumnVisibilityModel}
             density={density === 'dense'
                 ? 'compact'
                 : 'standard'}
-            hideFooter={hideFooter}
+            hideFooter={!showFooter}
             onCellEditCommit={(params) => {
 
                 const value = params.value as any;

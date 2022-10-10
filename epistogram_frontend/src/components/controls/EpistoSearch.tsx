@@ -12,11 +12,10 @@ export const EpistoSearch = (props: {} & InputProps) => {
             pointerEvents="none"
             style={{
                 height: '100%',
-                width: 41,
-                margin: '0 0 0 10px',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center'
+                justifyContent: 'center',
+                padding: '0 10px 0 10px'
             }}>
 
             <Search />

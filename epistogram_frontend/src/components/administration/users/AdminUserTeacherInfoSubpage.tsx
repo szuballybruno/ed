@@ -1,42 +1,38 @@
 import { Checkbox, Slider } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { applicationRoutes } from '../../../configuration/applicationRoutes';
+import { ButtonType } from '../../../models/types';
 import { useSaveTeacherInfoData, useTeacherInfoEditData } from '../../../services/api/teacherInfoApiService';
 import { UserApiService } from '../../../services/api/userApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
-import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
-import { CompanyDTO } from '../../../shared/dtos/company/CompanyDTO';
 import { TeacherBadgeNameType } from '../../../shared/types/sharedTypes';
 import { Id } from '../../../shared/types/versionId';
-import { useRouteParams } from '../../../static/locationHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoEntry } from '../../controls/EpistoEntry';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { EpistoLabel } from '../../controls/EpistoLabel';
-import { AdminBreadcrumbsHeader, CompanySelectorDropdown } from '../AdminBreadcrumbsHeader';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { EditSection } from '../courses/EditSection';
-import { AdminUserList } from './AdminUserList';
 
-export const AdminUserTeacherInfoSubpage = (props: {
-    users: AdminPageUserDTO[],
-    selectedCompanyId: Id<'Company'> | null,
-    handleSelectCompany: (companyId: Id<'Company'> | null) => void,
-    companies: CompanyDTO[]
+export const AdminUserTeacherInfoSubpage = ({
+    tabMenuItems,
+    headerButtons,
+    userId
+}: {
+    tabMenuItems: any[],
+    headerButtons: ButtonType[],
+    userId: Id<'User'>
 }) => {
 
-    const { users, selectedCompanyId, handleSelectCompany, companies } = props;
+    const { teacherInfoEditData } = useTeacherInfoEditData(userId);
 
-    const editedUserId = useRouteParams(applicationRoutes.administrationRoute.usersRoute.teacherInfoRoute)
-        .getValue(x => x.userId, 'int');
-
-    const { teacherInfoEditData } = useTeacherInfoEditData(editedUserId);
     const { userEditData, refetchEditUserData } = UserApiService
-        .useEditUserData(editedUserId);
+        .useEditUserData(userId);
+
     const { saveTeacherInfoAsync, saveTeacherInfoState } = useSaveTeacherInfoData();
+
     const { navigate2 } = useNavigation();
     const showError = useShowErrorDialog();
 
@@ -103,26 +99,10 @@ export const AdminUserTeacherInfoSubpage = (props: {
         }
     };
 
-    return <AdminBreadcrumbsHeader
-        headerComponent={companies.length > 1 && <CompanySelectorDropdown
-            selectedCompanyId={selectedCompanyId}
-            handleSelectCompany={handleSelectCompany}
-            companies={companies} />}
-        subRouteLabel={`${userEditData?.lastName} ${userEditData?.firstName}`}>
-
-        <AdminUserList
-            currentUserId={editedUserId}
-            users={users}
-            onUserSelected={(userId) => navigate2(applicationRoutes.administrationRoute.usersRoute.teacherInfoRoute, { userId: userId })} />
-
-        {/* admin header */}
+    return (
         <AdminSubpageHeader
-            tabMenuItems={[
-                applicationRoutes.administrationRoute.usersRoute.editRoute,
-                applicationRoutes.administrationRoute.usersRoute.statsRoute,
-                applicationRoutes.administrationRoute.usersRoute.courseContentRoute,
-                applicationRoutes.administrationRoute.usersRoute.teacherInfoRoute
-            ]}>
+            headerButtons={headerButtons}
+            tabMenuItems={tabMenuItems}>
 
             <EpistoFlex2
                 flex="1"
@@ -241,9 +221,7 @@ export const AdminUserTeacherInfoSubpage = (props: {
                         {translatableTexts.misc.save}
                     </EpistoButton>
                 </EditSection>
-
-
             </EpistoFlex2>
         </AdminSubpageHeader>
-    </AdminBreadcrumbsHeader>;
+    );
 };

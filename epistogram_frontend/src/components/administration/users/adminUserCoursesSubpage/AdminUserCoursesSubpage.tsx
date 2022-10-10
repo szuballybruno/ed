@@ -1,45 +1,33 @@
 import { useCallback, useEffect, useState } from 'react';
 import { applicationRoutes } from '../../../../configuration/applicationRoutes';
+import { ButtonType } from '../../../../models/types';
 import { UserApiService } from '../../../../services/api/userApiService';
 import { useUserAssignedCourses } from '../../../../services/api/userStatsApiService';
-import { useNavigation } from '../../../../services/core/navigatior';
-import { showNotification, useShowErrorDialog } from '../../../../services/core/notifications';
+import { showNotification } from '../../../../services/core/notifications';
 import { LocalStorageService } from '../../../../services/core/storageService';
-import { AdminPageUserDTO } from '../../../../shared/dtos/admin/AdminPageUserDTO';
-import { CompanyDTO } from '../../../../shared/dtos/company/CompanyDTO';
 import { UserCourseStatsDTO } from '../../../../shared/dtos/UserCourseStatsDTO';
 import { Id } from '../../../../shared/types/versionId';
-import { ArrayBuilder } from '../../../../static/frontendHelpers';
-import { useRouteParams } from '../../../../static/locationHelpers';
 import { EpistoDataGrid } from '../../../controls/EpistoDataGrid';
 import { EpistoFlex2 } from '../../../controls/EpistoFlex';
 import { EpistoSwitch } from '../../../controls/EpistoSwitch';
 import { useXMutatorNew } from '../../../lib/XMutator/XMutatorReact';
 import { useSetBusy } from '../../../system/LoadingFrame/BusyBarContext';
-import { AdminBreadcrumbsHeader, CompanySelectorDropdown } from '../../AdminBreadcrumbsHeader';
 import { AdminSubpageHeader } from '../../AdminSubpageHeader';
 import { useAdminCourseContentDialogLogic } from '../adminCourseContentDialog/AdminCourseContentDialogLogic';
 import { AdminUserCourseContentDialog } from '../adminCourseContentDialog/AdminUserCourseContentDialog';
-import { AdminUserList } from '../AdminUserList';
 import { UserCoursesRowType, useUserCoursesColumns } from './AdminUserCoursesColumns';
 
 export const AdminUserCoursesSubpage = ({
-    users,
-    selectedCompanyId,
-    handleSelectCompany,
-    companies
+    tabMenuItems,
+    headerButtons,
+    userId
 }: {
-    users: AdminPageUserDTO[],
-    refetchUsersFunction: () => void,
-    selectedCompanyId: Id<'Company'> | null,
-    handleSelectCompany: (companyId: Id<'Company'> | null) => void,
-    companies: CompanyDTO[]
+    tabMenuItems: any[],
+    headerButtons: ButtonType[],
+    userId: Id<'User'>
 }) => {
 
     const { usersRoute } = applicationRoutes.administrationRoute;
-
-    const userId = useRouteParams(usersRoute.courseContentRoute)
-        .getValue(x => x.userId, 'int');
 
     const [editModeEnabled, setEditModeEnabled] = useState(LocalStorageService
         .readStorage('editModeEnabled') === 'true');
@@ -103,43 +91,23 @@ export const AdminUserCoursesSubpage = ({
 
     const { adminCourseContentDialogLogic } = useAdminCourseContentDialogLogic();
 
-    const { navigate2 } = useNavigation();
-    const showError = useShowErrorDialog();
-
-    return <AdminBreadcrumbsHeader
-        headerComponent={companies.length > 1 && <CompanySelectorDropdown
-            selectedCompanyId={selectedCompanyId}
-            handleSelectCompany={handleSelectCompany}
-            companies={companies} />}>
-
-        <AdminUserList
-            currentUserId={userId}
-            users={users}
-            onUserSelected={userId => {
-
-                navigate2(usersRoute.courseContentRoute, { userId: userId });
-            }} />
-
+    return (
         <AdminSubpageHeader
             direction="row"
-            tabMenuItems={new ArrayBuilder()
-                .add(usersRoute.editRoute)
-                .add(usersRoute.statsRoute)
-                .add(usersRoute.courseContentRoute)
-                .addIf(!!userEditData?.isTeacher, usersRoute.teacherInfoRoute)
-                .getArray()}
+            tabMenuItems={tabMenuItems}
             headerContent={<>
                 <EpistoSwitch
                     checked={editModeEnabled}
                     setChecked={setEditModeEnabled}
                     label={editModeEnabled ? 'Disable editing' : 'Enable editing'} />
             </>}
-            headerButtons={editModeEnabled
-                ? [{
-                    title: 'Save',
-                    action: handleSaveUserCourses,
-                }]
-                : []}>
+            headerButtons={headerButtons
+                .concat(editModeEnabled
+                    ? [{
+                        title: 'Save',
+                        action: handleSaveUserCourses,
+                    }]
+                    : [])}>
 
             <AdminUserCourseContentDialog
                 dialogLogic={adminCourseContentDialogLogic} />
@@ -159,5 +127,5 @@ export const AdminUserCoursesSubpage = ({
                 A felhasználó még egyetlen kurzust sem kezdett el
             </EpistoFlex2>}
         </AdminSubpageHeader>
-    </AdminBreadcrumbsHeader>;
+    );
 };

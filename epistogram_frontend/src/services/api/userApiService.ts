@@ -19,6 +19,30 @@ const useSaveUserAssignedCourses = () => {
     };
 };
 
+const useEditUserData = (editedUserId: Id<'User'> | null) => {
+
+    const queryRes = QueryService.useXQuery<UserEditReadDTO>(apiRoutes.user.getEditUserData, { editedUserId: editedUserId }, !!editedUserId);
+
+    return {
+        userEditData: queryRes.data,
+        userEditDataStatus: queryRes.state,
+        userEditDataError: queryRes.error,
+        refetchEditUserData: queryRes.refetch
+    };
+};
+
+const useUserIsTeacher = (editedUserId: Id<'User'> | null) => {
+
+    const queryRes = QueryService.useXQuery<UserEditReadDTO>(apiRoutes.user.getEditUserData, { editedUserId: editedUserId }, !!editedUserId);
+
+    return {
+        userIsTeacher: queryRes.data?.isTeacher ?? false,
+        userIsTeacherStatus: queryRes.state,
+        userIsTeacherError: queryRes.error,
+        refetchUserIsTeacher: queryRes.refetch
+    };
+};
+
 export const UserApiService = {
 
     useSaveUserAssignedCourses,
@@ -54,17 +78,8 @@ export const UserApiService = {
         };
     },
 
-    useEditUserData: (editedUserId: Id<'User'> | null) => {
-
-        const queryRes = QueryService.useXQuery<UserEditReadDTO>(apiRoutes.user.getEditUserData, { editedUserId: editedUserId }, !!editedUserId);
-
-        return {
-            userEditData: queryRes.data,
-            userEditDataStatus: queryRes.state,
-            userEditDataError: queryRes.error,
-            refetchEditUserData: queryRes.refetch
-        };
-    },
+    useEditUserData,
+    useUserIsTeacher,
 
     useUserLearningOverviewData: (userId: Id<'User'>) => {
 
