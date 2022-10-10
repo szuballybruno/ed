@@ -199,10 +199,15 @@ export const postMultipartAsync = async (url: string, files?: FilesObject, data?
         formData.append('document', jsonData);
     }
 
+    const getHeaders = x => {
+        return x.headers = { ...x.headers, 'Content-Type': 'multipart/form-data' };
+    };
+
     return await httpPostAsync(
         url,
         formData,
-        x => x.headers = { ...x.headers, 'Content-Type': 'multipart/form-data' });
+        getHeaders
+    );
 };
 
 export const addBearerToken = (config: AxiosRequestConfig, bearerToken: string) => {
