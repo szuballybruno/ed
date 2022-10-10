@@ -1,10 +1,11 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 import { EMPTY_ARRAY } from '../helpers/emptyArray';
 import { LoadingStateType } from '../models/types';
 import { httpGetAsync } from '../services/core/httpClient';
 import { GetParametrizedRouteType, ParametrizedRouteType } from '../shared/types/apiRoutes';
 import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 import { eventBus } from './EventBus';
+import { useForceUpdate } from './frontendHelpers';
 import { Logger } from './Logger';
 
 export type QueryState<T> = {
@@ -21,14 +22,14 @@ export type QueryEventData = {
     route: string;
 } & QueryState<any>;
 
-class QueryStateType {
+class GlobalQueryStateType {
     params: any[];
     qr: QueryState<any>;
 };
 
 class XQueryGlobalState {
 
-    static globalState: { [K: string]: QueryStateType } = {};
+    static globalState: { [K: string]: GlobalQueryStateType } = {};
 
     static getState(url: string) {
 
@@ -42,60 +43,86 @@ class XQueryGlobalState {
         return state;
     };
 
-    static setState(url: string, state: QueryStateType) {
+    static setState(url: string, state: GlobalQueryStateType) {
 
-        Logger.logScoped('QUERY', `-- Setting cache item ${url}...`);
+        Logger.logScoped('QUERY', `-- Setting global state ${url} - ${state.qr.state} - ${JSON.stringify(state.params)}...`);
         this.globalState[url] = state;
     };
 }
 
 class XQueryCore<T> {
 
-    constructor(private _url, private _onChange: (queryResult: QueryState<T | null>) => void) {
+    private _idleState: QueryState<T | null> = {
+        data: null,
+        error: null,
+        state: 'idle'
+    };
 
-        this._onChange(XQueryGlobalState.getState(this._url)?.qr ?? { data: null, error: null, state: 'idle' });
+    constructor(private _url, private _onChange: () => void) {
     }
 
-    async tryQueryAsync(query: any, isEnabled?: boolean) {
+    tryQuery(query: any, isEnabled?: boolean): QueryState<T | null> {
 
         const url = this._url;
         Logger.logScoped('QUERY', `Querying: ${url}`);
 
-        // check if querying is enabled 
-        const queryingEnabled = isEnabled === false ? false : true;
-        if (!queryingEnabled) {
-
-            Logger.logScoped('QUERY', `-- [CANCEL] Query is not enabled. ${url}`);
-            return;
-        }
+        // get state from global store 
+        const cachedState = XQueryGlobalState
+            .getState(url);
 
         // process query object 
         const newQueryParams = this
             ._processQueryObj(query);
 
-        // get state from global store 
-        const state = XQueryGlobalState
-            .getState(url);
+        /**
+         * If querying is disabled 
+         * return last state or idle 
+         */
+        const queryingEnabled = isEnabled === false ? false : true;
+        if (!queryingEnabled) {
 
-        // check if is loading currently 
-        if (state?.qr?.state === 'loading') {
+            Logger.logScoped('QUERY', `-- [CANCEL] Query is not enabled. ${url}`);
+
+            return cachedState
+                ? cachedState.qr
+                : this._idleState;
+        }
+
+        /**
+         * Never set cache - meaning query is still in IDLE state
+         */
+        if (!cachedState) {
+
+            this.fetchAsync(newQueryParams, queryingEnabled);
+            return this._idleState;
+        }
+
+        /**
+         * If has been queried before, but querying again, 
+         * and is currently loading, 
+         * return last cahced state
+         */
+        if (cachedState?.qr?.state === 'loading') {
 
             Logger.logScoped('QUERY', `-- [CANCEL] Query is already in loading state. ${url}`);
-            return;
+            return cachedState.qr;
         }
 
-        // check data cache
-        const isOldDataStillValid = this
-            ._checkCache(newQueryParams, state?.params);
+        /**
+         * Check if old cache is still valid 
+         */
+        if (!this._isCacheValid(newQueryParams, cachedState.params)) {
 
-        if (isOldDataStillValid) {
-
-            Logger.logScoped('QUERY', `-- [CANCEL] Old data is still valid. ${url}`);
-            return;
+            // fetch data
+            this.fetchAsync(newQueryParams, isEnabled);
         }
 
-        // fetch data
-        await this.fetchAsync(newQueryParams, isEnabled);
+        /**
+         * No exceptional state has been found, 
+         * returning last cached data
+         */
+        Logger.logScoped('QUERY', `-- [CANCEL] Old data is still valid. ${url}`);
+        return cachedState.qr;
     }
 
     async fetchAsync(queryObject: any, isEnabled?: boolean) {
@@ -116,7 +143,7 @@ class XQueryCore<T> {
 
         Logger.logScoped('QUERY', `-- Fetching: ${url}`);
 
-        this._setState(url, {
+        this._setGlobalState(url, {
             params: queryObject,
             qr: {
                 state: 'loading',
@@ -130,7 +157,7 @@ class XQueryCore<T> {
             // fetch data
             const data = await httpGetAsync(url, queryObject);
 
-            this._setState(url, {
+            this._setGlobalState(url, {
                 params: queryObject,
                 qr: {
                     state: 'success',
@@ -141,7 +168,7 @@ class XQueryCore<T> {
         }
         catch (e: any) {
 
-            this._setState(url, {
+            this._setGlobalState(url, {
                 params: queryObject,
                 qr: {
                     state: 'error',
@@ -152,24 +179,24 @@ class XQueryCore<T> {
         }
     }
 
-    private _checkCache(newParams: any, oldParams: any): boolean {
+    private _isCacheValid(newQueryParams: any, cachedQueryParams: any): boolean {
 
-        if (!oldParams)
+        Logger.logScoped('QUERY', `-- Comparing new/cahced query params: ${JSON.stringify(newQueryParams)} - ${JSON.stringify(cachedQueryParams)}`);
+
+        if (!cachedQueryParams)
             return false;
 
         const unequalKeys = Object
-            .keys(newParams)
+            .keys(newQueryParams)
             .filter(key => {
 
-                const cacheParamsValue = oldParams[key];
-
-                return cacheParamsValue !== newParams[key];
+                return cachedQueryParams[key] !== newQueryParams[key];
             });
 
         if (unequalKeys.length > 0) {
 
-            Logger.logScoped('QUERY', '--' + unequalKeys
-                .map(key => `Cache key (${key}) value mismatch: ${JSON.stringify(oldParams[key])} <> ${JSON.stringify(newParams[key])}`)
+            Logger.logScoped('QUERY', '-- ' + unequalKeys
+                .map(key => `Cache key (${key}) value mismatch: ${JSON.stringify(cachedQueryParams[key])} <> ${JSON.stringify(newQueryParams[key])}`)
                 .join('\n'));
 
             return false;
@@ -191,13 +218,14 @@ class XQueryCore<T> {
         return obj;
     }
 
-    private _setState(url: string, newState: QueryStateType) {
+    private _setGlobalState(url: string, newState: GlobalQueryStateType) {
 
         // set new state
-        XQueryGlobalState.setState(url, newState);
+        XQueryGlobalState
+            .setState(url, newState);
 
         // call events
-        this._onChange(newState.qr);
+        this._onChange();
         this._execOnQueryEvent(url, newState.qr);
     }
 
@@ -212,15 +240,11 @@ class XQueryCore<T> {
 
 const useXQuery = <TData extends Object>(url: string, query?: any, isEnabled?: boolean): QueryResult<TData | null> => {
 
-    const [queryState, setQueryState] = useState<QueryState<any>>({
-        data: null,
-        error: null,
-        state: 'idle'
-    });
+    const forceUpdate = useForceUpdate();
 
-    const xQuery = useMemo(() => new XQueryCore(url, setQueryState), [url]);
+    const xQuery = useMemo(() => new XQueryCore<TData>(url, forceUpdate), [url, forceUpdate]);
 
-    xQuery.tryQueryAsync(query, isEnabled);
+    const queryState = xQuery.tryQuery(query, isEnabled);
 
     const refetch = useCallback(() => xQuery.fetchAsync(query, isEnabled), [query, isEnabled, xQuery]);
 

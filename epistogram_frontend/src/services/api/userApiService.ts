@@ -21,7 +21,8 @@ const useSaveUserAssignedCourses = () => {
 
 const useEditUserData = (editedUserId: Id<'User'> | null) => {
 
-    const queryRes = QueryService.useXQuery<UserEditReadDTO>(apiRoutes.user.getEditUserData, { editedUserId: editedUserId }, !!editedUserId);
+    const queryRes = QueryService
+        .useXQuery<UserEditReadDTO>(apiRoutes.user.getEditUserData, { editedUserId }, !!editedUserId);
 
     return {
         userEditData: queryRes.data,

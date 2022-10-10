@@ -25,8 +25,6 @@ export const AdminEditUserSubpage = ({
 
     const { userEditData, refetchEditUserData } = UserApiService.useEditUserData(userId);
 
-    console.log(userEditData?.email);
-
     const { saveUserAsync } = UserApiService.useSaveUser();
     const showError = useShowErrorDialog();
     const { navigate2 } = useNavigation();
