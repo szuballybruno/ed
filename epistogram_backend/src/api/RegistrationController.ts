@@ -10,7 +10,7 @@ import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { setAuthCookies } from '../utilities/cookieHelpers';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 import { AuthorizationService } from '../services/AuthorizationService';
-import { AuthorizationResult, XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
+import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
 export class RegistrationController implements XController<RegistrationController> {
 
@@ -42,26 +42,17 @@ export class RegistrationController implements XController<RegistrationControlle
     }
 
     @XControllerAction(apiRoutes.registration.registerUserViaInvitationToken, { isPublic: true, isPost: true })
-    registerUserViaInvitationTokenAction(params: ActionParams) {
+    async registerUserViaInvitationTokenAction(params: ActionParams) {
 
-        return {
-            action: async () => {
+        const body = params.getBody<RegisterUserViaInvitationTokenDTO>();
 
-                const body = params.getBody<RegisterUserViaInvitationTokenDTO>();
+        const { accessToken, refreshToken } = await this._registrationService
+            .registerInvitedUserAsync(
+                body.getValue(x => x.invitationToken, 'string'),
+                body.getValue(x => x.password, 'string'),
+                body.getValue(x => x.passwordCompare, 'string'));
 
-                const { accessToken, refreshToken } = await this._registrationService
-                    .registerInvitedUserAsync(
-                        body.getValue(x => x.invitationToken, 'string'),
-                        body.getValue(x => x.password, 'string'),
-                        body.getValue(x => x.passwordCompare, 'string'));
-
-                setAuthCookies(this._config, params.res, accessToken, refreshToken, this._config.cookieOptions);
-            },
-            auth: async () => {
-                return AuthorizationResult.ok;
-            }
-        };
-
+        setAuthCookies(this._config, params.res, accessToken, refreshToken, this._config.cookieOptions);
     }
 
     @XControllerAction(apiRoutes.registration.registerUserViaActivationCode, { isPublic: true, isPost: true })
