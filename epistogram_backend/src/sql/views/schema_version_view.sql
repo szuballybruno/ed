@@ -1,1 +1,1 @@
-SELECT '16:18:17 2022-10-10 CEDT' last_modification_date, '0.01' version
+SELECT '16:47:27 2022-10-10 CEDT' last_modification_date, '0.01' version
