@@ -35,7 +35,6 @@ import { PlayerTitleBlock } from './PlayerTitleBlock';
 import { StillWatching } from './StillWatching';
 import { VideoPlayer } from './videoPlayer/VideoPlayer';
 import { useVideoPlayerState } from './videoPlayer/videoPlayerState';
-
 const autoplayTimeoutInS = 3;
 
 export const WatchView = (props: {
@@ -86,7 +85,7 @@ export const WatchView = (props: {
             videoVersionId,
             videoPlaybackSessionId
         });
-    }, [currentItemCode, videoPlaybackSessionId]);
+    }, [postVideoSeekEvent, videoPlaybackSessionId, videoVersionId]);
 
     // questions
     const [currentQuestion, setCurrentQuestion] = useState<QuestionDTO | null>(null);
@@ -230,7 +229,7 @@ export const WatchView = (props: {
                 .join(', '));
 
         setStillWatchingDilalogMarkers(dialogShowUpSeconds);
-    }, [videoLength]);
+    }, [hasQuestions, videoLength]);
 
 
     // playback watcher

@@ -164,8 +164,9 @@ export class CourseItemService {
                 getDefaultData: mutation => ({
                     title: '',
                     subtitle: '',
-                    orderIndex: XMutatorHelpers.getFieldValueOrFail(mutation)('itemOrderIndex'),
                     description: '',
+                    //TODO: Fix this properly. It crashes the app when adding video to new module
+                    orderIndex: 0, //XMutatorHelpers.getFieldValueOrFail(mutation)('itemOrderIndex'),
                     thumbnailFileId: null,
                     videoFileId: null,
                     videoFileLengthSeconds: null

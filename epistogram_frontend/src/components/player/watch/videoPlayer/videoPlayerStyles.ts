@@ -11,7 +11,7 @@ export const videoPlayerStyles = {
         background: 'black',
         right: 0,
         top: 0,
-        zIndex: 100
+        zIndex: 21
     } as EpistoDivProps,
 
     fullScreenRootPropsDesktop: {

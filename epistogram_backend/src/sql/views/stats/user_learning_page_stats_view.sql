@@ -51,7 +51,7 @@ user_rank_inside_company AS
 (
 	SELECT 
 		u.id user_id,
-		(uc.total_coins_aquired_per_user / cac.avg_coins_aquired_by_company)::double precision * 100 user_rank_by_coin_percentage
+		ROUND((uc.total_coins_aquired_per_user / cac.avg_coins_aquired_by_company)::double precision * 100) user_rank_by_coin_percentage
 	FROM public.user u
 	
 	LEFT JOIN company_avg_coins cac

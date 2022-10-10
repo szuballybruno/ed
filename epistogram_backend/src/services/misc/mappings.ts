@@ -836,8 +836,9 @@ const marray = [
                         name: departmentName
                     }
                     : null,
+
                 avatarUrl: avatarPath
-                    ? urlService.getAssetUrl(avatarPath)
+                    ? avatarPath
                     : null
             });
         }),

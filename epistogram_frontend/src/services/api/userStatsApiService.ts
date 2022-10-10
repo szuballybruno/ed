@@ -67,9 +67,9 @@ export const useUserAssignedCourses = (userId: Id<'User'>, loadAvailable: boolea
     };
 };
 
-export const useUserOverviewStats = (isToBeReviewed: boolean) => {
+export const useUserOverviewStats = (isToBeReviewed: boolean, companyId: Id<'Company'> | null) => {
 
-    const queryRes = QueryService.useXQuery<UserOverviewDTO[]>(apiRoutes.userStats.getUserOverviewStats, { isToBeReviewed });
+    const queryRes = QueryService.useXQuery<UserOverviewDTO[]>(apiRoutes.userStats.getUserOverviewStats, { isToBeReviewed, companyId });
 
     return {
         userOverviewStats: queryRes.data,

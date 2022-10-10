@@ -173,7 +173,7 @@ const HomePage = () => {
                     title={translatableTexts.homePage.practiseTitle}
                     headerContent={<CoinsAcquiredHeaderContent
                         coinsAcquired={coinsAcquired} />}
-                    background={isMobile ? '#7CC0C2' : 'var(--transparentIntenseBlue85)'}
+                    background={isMobile ? '#1d6784' : '#1d6784'} //#7CC0C2
                     className="largeSoftShadow roundBorders"
                     color="white"
                     showDivider

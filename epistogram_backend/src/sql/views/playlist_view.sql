@@ -88,18 +88,18 @@ items_with_user AS
         ucb.current_item_code = civ.module_code module_is_current,
 		esv.score_percentage,
         uprv.is_recommended_for_practise IS TRUE is_recommended_for_practise,
-    
+ 
         -- state
 		CASE 
 			WHEN ucb.current_item_code = civ.playlist_item_code
 				THEN 'current'
-			WHEN cic.completion_date IS NOT NULL
+			WHEN vc.completion_date IS NOT NULL OR ec.completion_date IS NOT NULL
 				THEN 'completed'
 			WHEN ucb.course_mode = 'advanced' 
 				THEN 'available'
             WHEN civ.item_order_index = 0 AND civ.module_order_index = 1
                 THEN 'available'
-			WHEN LAG(cic.completion_date, 1) OVER (
+			WHEN LAG(vc.completion_date, 1) OVER (
                 PARTITION BY civ.course_version_id 
                 ORDER BY module_order_index, item_order_index) IS NOT NULL 
 				THEN 'available'
@@ -120,8 +120,11 @@ items_with_user AS
 	LEFT JOIN public.exam_score_view esv
 	ON esv.answer_session_id = ehsasv.answer_session_id
 	
-	LEFT JOIN public.course_item_completion_view cic
-	ON cic.answer_session_id = ehsasv.answer_session_id
+	LEFT JOIN public.video_completion vc
+	ON vc.video_version_id = civ.video_version_id
+	
+	LEFT JOIN public.exam_completion ec
+	ON ec.answer_session_id = ehsasv.answer_session_id
 
     LEFT JOIN public.user_practise_recommendation_view uprv
     ON uprv.video_version_id = civ.video_version_id

@@ -6,6 +6,8 @@ import { ButtonType } from '../../../models/types';
 import { UserApiService } from '../../../services/api/userApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { AdminPageUserDTO } from '../../../shared/dtos/admin/AdminPageUserDTO';
+import { CompanyDTO } from '../../../shared/dtos/company/CompanyDTO';
+import { Id } from '../../../shared/types/versionId';
 import { defaultCharts } from '../../../static/defaultChartOptions';
 import { Environment } from '../../../static/Environemnt';
 import { usePaging } from '../../../static/frontendHelpers';
@@ -22,7 +24,7 @@ import { LearningCourseStatsTile } from '../../learningInsights/LearningCourseSt
 import StatisticsCard from '../../statisticsCard/StatisticsCard';
 import { LoadingFrame } from '../../system/LoadingFrame';
 import { EpistoPieChart } from '../../universal/charts/base_charts/EpistoPieChart';
-import { AdminBreadcrumbsHeader } from '../AdminBreadcrumbsHeader';
+import { AdminBreadcrumbsHeader, CompanySelectorDropdown } from '../AdminBreadcrumbsHeader';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { EditSection } from '../courses/EditSection';
 import { useAdminCourseContentDialogLogic } from './adminCourseContentDialog/AdminCourseContentDialogLogic';
@@ -84,10 +86,13 @@ const measurementDescriptions = [
 ];
 
 export const AdminUserStatisticsSubpage = (props: {
-    users: AdminPageUserDTO[]
+    users: AdminPageUserDTO[],
+    selectedCompanyId: Id<'Company'> | null,
+    handleSelectCompany: (companyId: Id<'Company'> | null) => void,
+    companies: CompanyDTO[]
 }) => {
 
-    const { users } = props;
+    const { users, selectedCompanyId, handleSelectCompany, companies } = props;
 
     const usersRoute = applicationRoutes.administrationRoute.usersRoute;
 
@@ -148,6 +153,10 @@ export const AdminUserStatisticsSubpage = (props: {
         error={userLearningOverviewDataError}>
 
         <AdminBreadcrumbsHeader
+            headerComponent={companies.length > 1 && <CompanySelectorDropdown
+                selectedCompanyId={selectedCompanyId}
+                handleSelectCompany={handleSelectCompany}
+                companies={companies} />}
             viewSwitchChecked={false}
             viewSwitchFunction={() => navigate2(usersRoute, { preset: 'all' })}
             subRouteLabel={`${userEditData?.lastName} ${userEditData?.firstName}`}>

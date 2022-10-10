@@ -1207,7 +1207,7 @@ ON ad.id = av.answer_data_id;
 --CREATE VIEW: schema_version_view
 CREATE VIEW schema_version_view
 AS
-SELECT '19:25:34 2022-10-07 CEDT' last_modification_date, '0.01' version
+SELECT '12:27:09 2022-10-09 CEDT' last_modification_date, '0.01' version
 ;
 
 --CREATE VIEW: shop_item_stateful_view
@@ -3166,7 +3166,7 @@ SELECT DISTINCT ON (e.id)
 		THEN false
 		ELSE true
 	END should_practise_exam,
-	ROUND(asv.answer_session_acquired_points / 4, 4) correct_answer_count,
+	ROUND(asv.answer_session_acquired_points / 4) correct_answer_count,
 	EXTRACT(EPOCH FROM (asv.end_date - asv.start_date)::time)::int exam_length_seconds,
 	asv.end_date last_completion_date,
 	(
@@ -5158,7 +5158,7 @@ user_rank_inside_company AS
 (
 	SELECT 
 		u.id user_id,
-		(uc.total_coins_aquired_per_user / cac.avg_coins_aquired_by_company)::double precision * 100 user_rank_by_coin_percentage
+		ROUND((uc.total_coins_aquired_per_user / cac.avg_coins_aquired_by_company)::double precision * 100) user_rank_by_coin_percentage
 	FROM public.user u
 	
 	LEFT JOIN company_avg_coins cac
@@ -5606,18 +5606,18 @@ items_with_user AS
         ucb.current_item_code = civ.module_code module_is_current,
 		esv.score_percentage,
         uprv.is_recommended_for_practise IS TRUE is_recommended_for_practise,
-    
+ 
         -- state
 		CASE 
 			WHEN ucb.current_item_code = civ.playlist_item_code
 				THEN 'current'
-			WHEN cic.completion_date IS NOT NULL
+			WHEN vc.completion_date IS NOT NULL OR ec.completion_date IS NOT NULL
 				THEN 'completed'
 			WHEN ucb.course_mode = 'advanced' 
 				THEN 'available'
             WHEN civ.item_order_index = 0 AND civ.module_order_index = 1
                 THEN 'available'
-			WHEN LAG(cic.completion_date, 1) OVER (
+			WHEN LAG(vc.completion_date, 1) OVER (
                 PARTITION BY civ.course_version_id 
                 ORDER BY module_order_index, item_order_index) IS NOT NULL 
 				THEN 'available'
@@ -5638,8 +5638,11 @@ items_with_user AS
 	LEFT JOIN public.exam_score_view esv
 	ON esv.answer_session_id = ehsasv.answer_session_id
 	
-	LEFT JOIN public.course_item_completion_view cic
-	ON cic.answer_session_id = ehsasv.answer_session_id
+	LEFT JOIN public.video_completion vc
+	ON vc.video_version_id = civ.video_version_id
+	
+	LEFT JOIN public.exam_completion ec
+	ON ec.answer_session_id = ehsasv.answer_session_id
 
     LEFT JOIN public.user_practise_recommendation_view uprv
     ON uprv.video_version_id = civ.video_version_id

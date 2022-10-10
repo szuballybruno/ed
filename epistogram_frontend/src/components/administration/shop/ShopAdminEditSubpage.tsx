@@ -193,10 +193,11 @@ export const ShopAdminEditSubpage = () => {
         <LoadingFrame
             loadingState={[shopItemEditDataState, privateCoursesState, saveShopItemState]}
             error={[shopItemEditDataError, privateCoursesError]}
-            className="whall">
+            flex='1'>
 
             <AdminSubpageHeader
                 direction="column"
+                flex='1'
                 px="30px"
                 onSave={handleSaveAsync}>
 

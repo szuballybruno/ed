@@ -5,8 +5,10 @@ import { useEffect, useState } from 'react';
 import { applicationRoutes } from '../../../../configuration/applicationRoutes';
 import { useUserOverviewStats } from '../../../../services/api/userStatsApiService';
 import { useNavigation } from '../../../../services/core/navigatior';
+import { CompanyDTO } from '../../../../shared/dtos/company/CompanyDTO';
 import { OrderType } from '../../../../shared/types/sharedTypes';
 import { Id } from '../../../../shared/types/versionId';
+import { Environment } from '../../../../static/Environemnt';
 import { usePaging } from '../../../../static/frontendHelpers';
 import { useRouteQuery } from '../../../../static/locationHelpers';
 import { translatableTexts } from '../../../../static/translatableTexts';
@@ -16,7 +18,7 @@ import { EpistoSearch } from '../../../controls/EpistoSearch';
 import { SegmentedButton } from '../../../controls/SegmentedButton';
 import { segmentedButtonStyles } from '../../../controls/segmentedButtonStyles';
 import { ProfileImage } from '../../../ProfileImage';
-import { AdminBreadcrumbsHeader } from '../../AdminBreadcrumbsHeader';
+import { AdminBreadcrumbsHeader, CompanySelectorDropdown } from '../../AdminBreadcrumbsHeader';
 import { AdminSubpageHeader } from '../../AdminSubpageHeader';
 
 class RowType {
@@ -52,8 +54,13 @@ const reviewRequiredPreset: EpistoDataGridColumnVisibilityModel<RowType> = {
     signupDate: false
 };
 
-export const AdminUserDataGridSubpage = () => {
+export const AdminUserDataGridSubpage = (props: {
+    selectedCompanyId: Id<'Company'> | null,
+    handleSelectCompany: (companyId: Id<'Company'> | null) => void,
+    companies: CompanyDTO[]
+}) => {
 
+    const { selectedCompanyId, handleSelectCompany, companies } = props;
     const { navigate2 } = useNavigation();
     const [currentUserId, setCurrentUserId] = useState<Id<'User'> | null>(null);
     const [orderBy, setOrderBy] = useState<OrderType | null>(null);
@@ -77,7 +84,7 @@ export const AdminUserDataGridSubpage = () => {
             return paging.setItem(1);
     }, []);
 
-    const { userOverviewStats } = useUserOverviewStats(paging.currentItem?.preset === reviewRequiredPreset);
+    const { userOverviewStats } = useUserOverviewStats(paging.currentItem?.preset === reviewRequiredPreset, selectedCompanyId);
 
     const AdminUsersSearchBar = () => {
         return <Flex flex='1'>
@@ -156,7 +163,7 @@ export const AdminUserDataGridSubpage = () => {
                 renderCell: ({ value }) => <ProfileImage
                     className="square50"
                     objectFit="contain"
-                    url={value.avatarUrl}
+                    url={value.avatarUrl ? Environment.getAssetUrl(value.avatarUrl) : null}
                     firstName={value.firstName}
                     lastName={value.lastName} />
             })
@@ -219,7 +226,13 @@ export const AdminUserDataGridSubpage = () => {
 
 
     return <AdminBreadcrumbsHeader
-        headerComponent={<AdminUsersSearchBar />}
+        headerComponent={<>
+            {companies.length > 1 && <CompanySelectorDropdown
+                selectedCompanyId={selectedCompanyId}
+                handleSelectCompany={handleSelectCompany}
+                companies={companies} />}
+            <AdminUsersSearchBar />
+        </>}
         backButtonProps={selectedPreset === 'reviewRequired'
             ? {
                 children: 'Vissza az összesítő nézetbe',
@@ -258,7 +271,7 @@ export const AdminUserDataGridSubpage = () => {
                         <Add style={{
                             height: 30
                         }} />
-                        Hozzáadás
+                        Felhasználó hozzáadása
                     </EpistoButton>
                 </Flex>
             </Flex>

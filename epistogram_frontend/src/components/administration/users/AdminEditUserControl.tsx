@@ -2,6 +2,7 @@ import { Checkbox } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useCoinBalanceOfUser, useGiftCoinsToUser } from '../../../services/api/coinTransactionsApiService';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
+import { RoleDTO } from '../../../shared/dtos/RoleDTO';
 import { UserEditReadDTO } from '../../../shared/dtos/UserEditReadDTO';
 import { UserEditSaveDTO } from '../../../shared/dtos/UserEditSaveDTO';
 import { Id } from '../../../shared/types/versionId';
@@ -25,12 +26,14 @@ export const AdminEditUserControl = ({
     editDTO,
     editedUserId,
     refetchTrigger,
+    selectedCompanyId,
     saveUserAsync,
     showDeleteUserDialog
 }: {
     editedUserId: Id<'User'>,
     editDTO: UserEditReadDTO | null,
     refetchTrigger: EventTriggerType,
+    selectedCompanyId?: Id<'Company'> | null,
     saveUserAsync: (editDTO: UserEditSaveDTO) => Promise<void>
     showDeleteUserDialog?: (UserEditDTO: UserEditReadDTO | null) => void
 }) => {
@@ -65,12 +68,26 @@ export const AdminEditUserControl = ({
         availableRoles: [] as UserEditReadDTO['availableRoles']
     });
 
+    useEffect(() => {
+
+        console.log('mode changed');
+        if (mode === 'ADD') {
+            setFirstName('');
+            setLastName('');
+            setEmail('');
+            setIsTeacher(false);
+            setDepartmentId(null);
+            setCompanyId(null);
+            setAssignedRoleIds([]);
+        }
+    }, [mode]);
+
     /**
      * Load state from editDTO
      */
     useEffect(() => {
 
-        if (!editDTO)
+        if (!editDTO || mode === 'ADD')
             return;
 
         setFirstName(editDTO.firstName);
@@ -79,10 +96,9 @@ export const AdminEditUserControl = ({
         setIsTeacher(editDTO.isTeacher);
         setDepartmentId(editDTO.departmentId);
         setCompanyId(editDTO.companyId);
-        setCompanyId(editDTO.companyId);
         setAssignedRoleIds(editDTO.roleIds);
 
-    }, [editDTO]);
+    }, [editDTO, mode]);
 
     const coinAmountEntryState = useEpistoEntryState({
         isMandatory: true,
@@ -119,21 +135,39 @@ export const AdminEditUserControl = ({
 
     const handleSaveUserAsync = async () => {
 
-        if (!companyId || !departmentId)
-            return;
+        if (mode === 'EDIT' && companyId && departmentId) {
 
-        const editedUserDTO: UserEditSaveDTO = {
-            userId: editedUserId,
-            firstName,
-            lastName,
-            email,
-            companyId,
-            departmentId,
-            isTeacher,
-            assignedRoleIds,
-        };
+            const editedUserDTO: UserEditSaveDTO = {
+                userId: editedUserId,
+                firstName,
+                lastName,
+                email,
+                companyId: companyId,
+                departmentId,
+                isTeacher,
+                assignedRoleIds,
+            };
 
-        return saveUserAsync(editedUserDTO);
+            return saveUserAsync(editedUserDTO);
+        }
+
+        if (mode === 'ADD' && selectedCompanyId && departmentId) {
+
+            const editedUserDTO: UserEditSaveDTO = {
+                userId: editedUserId,
+                firstName,
+                lastName,
+                email,
+                companyId: selectedCompanyId,
+                departmentId,
+                isTeacher,
+                assignedRoleIds,
+            };
+
+            return saveUserAsync(editedUserDTO);
+        }
+
+
     };
 
     return <EpistoFlex2 direction="column"
@@ -232,6 +266,40 @@ export const AdminEditUserControl = ({
                     <EpistoFlex2
                         direction="column">
 
+                        <EpistoSelect
+                            items={availableRoles.filter(x => x.id !== Id.create(3))}
+                            currentKey={5 - assignedRoleIds.length + ''}
+                            onSelected={(value: RoleDTO) => {
+
+                                /* Company role which contains all other roles */
+                                if (value.id === Id.create(1)) {
+
+                                    return setAssignedRoleIds(availableRoles.map(x => x.id));
+                                }
+
+                                /* HR role which contains role manager and user */
+                                if (value.id === Id.create(2)) {
+
+                                    return setAssignedRoleIds(
+                                        availableRoles
+                                            .filter(x => x.id !== Id.create(1))
+                                            .map(x => x.id));
+                                }
+
+                                /* User role */
+                                if (value.id === Id.create(4)) {
+
+                                    return setAssignedRoleIds([Id.create(4)]);
+                                }
+
+                            }}
+                            getCompareKey={(item: RoleDTO) => {
+                                return item.id + '';
+                            }}
+                            getDisplayValue={(item: RoleDTO) => {
+                                return item.name;
+                            }} />
+
                         {availableRoles
                             .map(({ id: roleId, name: roleName }, index) => {
 
@@ -246,6 +314,8 @@ export const AdminEditUserControl = ({
                                         <EpistoFont>
                                             {roleName}
                                         </EpistoFont>
+
+
 
                                         <EpistoCheckbox
                                             value={isAssigned}

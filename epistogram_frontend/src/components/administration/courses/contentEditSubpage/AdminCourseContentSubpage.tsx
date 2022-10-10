@@ -258,7 +258,7 @@ export const AdminCourseContentSubpage = () => {
             itemType: type === 'exam' ? 'exam' : 'video',
             itemSubtitle: '',
             itemTitle: '',
-            itemOrderIndex,
+            itemOrderIndex: itemOrderIndex,
             courseId,
             warnings: [],
             errors: [],
@@ -407,7 +407,8 @@ export const AdminCourseContentSubpage = () => {
                         hideFooter
                         onDragStart={setDraggedRow}
                         onDragEnd={() => setDraggedRow(null)}
-                        isRowEditable={x => x.itemType.type !== 'pretest'}
+                        //TODO: Pretest needs to be editable too, but not all fields
+                        //isRowEditable={x => x.itemType.type !== 'pretest'}
                         initialState={{
                             pinnedColumns: {
                                 left: ['rowNumber', 'itemTitle'],

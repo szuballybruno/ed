@@ -8,6 +8,7 @@ import { ApplicationRoute } from '../../models/types';
 import { CourseApiService } from '../../services/api/courseApiService';
 import { useShopItemBriefData } from '../../services/api/shopApiService';
 import { UserApiService } from '../../services/api/userApiService';
+import { CompanyDTO } from '../../shared/dtos/company/CompanyDTO';
 import { getKeys } from '../../shared/logic/sharedLogic';
 import { Id } from '../../shared/types/versionId';
 import { ArrayBuilder, useIsMatchingCurrentRoute } from '../../static/frontendHelpers';
@@ -15,6 +16,7 @@ import { EpistoButton, EpistoButtonPropsType } from '../controls/EpistoButton';
 import { EpistoDiv } from '../controls/EpistoDiv';
 import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
+import { EpistoSelect } from '../controls/EpistoSelect';
 
 const Content = (props: {
     isCurrent: boolean,
@@ -48,6 +50,43 @@ const Content = (props: {
             </EpistoFont>
         </EpistoFlex2>
     );
+};
+
+export type CompanySelectorDropdownType = {
+    id: Id<'Company'> | null,
+    name: string
+}
+
+
+export const CompanySelectorDropdown = (props: {
+    selectedCompanyId: Id<'Company'> | null,
+    handleSelectCompany: (companyId: Id<'Company'> | null) => void,
+    companies: CompanyDTO[]
+}) => {
+
+    const {
+        selectedCompanyId,
+        handleSelectCompany,
+        companies
+    } = props;
+
+    return <EpistoSelect
+        currentKey={selectedCompanyId + ''}
+        width='180px'
+        mr='10px'
+        items={[{
+            id: null,
+            name: 'Összes elérhető cég'
+        }, ...companies]}
+        onSelected={(value: CompanySelectorDropdownType) => {
+            handleSelectCompany(value.id);
+        }}
+        getCompareKey={(item: CompanySelectorDropdownType) => {
+            return item.id + '';
+        }}
+        getDisplayValue={(item: CompanySelectorDropdownType) => {
+            return item.name;
+        }} />;
 };
 
 export const BreadcrumbLink = (props: {
@@ -148,7 +187,7 @@ export const AdminBreadcrumbsHeader = ({
 
     const subRouteName = subRouteLabel
         ? subRouteLabel
-        : (briefUserData?.fullName || courseBriefData?.title || shopItemBriefData?.name);
+        : ((userId && briefUserData?.fullName) || courseBriefData?.title || shopItemBriefData?.name);
 
     const subRoute = subRouteName
         ? { title: subRouteName! }

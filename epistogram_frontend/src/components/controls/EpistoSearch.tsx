@@ -13,6 +13,7 @@ export const EpistoSearch = (props: {} & InputProps) => {
             style={{
                 height: '100%',
                 width: 41,
+                margin: '0 0 0 10px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center'

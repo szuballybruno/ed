@@ -3,7 +3,6 @@ import FastRewindIcon from '@mui/icons-material/FastRewind';
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { VideoPlayerDataDTO } from '../../../../shared/dtos/VideoDTO';
-import { useIsMobileView } from '../../../../static/frontendHelpers';
 import { EpistoDiv, EpistoDivProps } from '../../../controls/EpistoDiv';
 import { EpistoReactPlayer } from '../../../controls/EpistoReactPlayer';
 import { AbsoluteFlexOverlay } from '../AbsoluteFlexOverlay';
@@ -34,8 +33,11 @@ export const VideoPlayer = (props: {
         maxWatchedSeconds,
         volume,
         isMuted,
+        isMobile,
+        isIPhone,
         showMobilePlayButtonOverlay,
         showShouldRotatePhoneOverlay,
+        setShowShouldRotatePhoneOverlay,
         showControlOverlay,
         setPlayedSeconds,
         toggleFullScreen,
@@ -50,7 +52,6 @@ export const VideoPlayer = (props: {
     } = videoPlayerState;
 
     const [isFullscreen] = useVideoPlayerFullscreenContext();
-    const isMobile = useIsMobileView();
 
     /* styles */
     const {
@@ -74,25 +75,26 @@ export const VideoPlayer = (props: {
     return (
         <EpistoDiv
             id="fullScreenRoot"
+            width='100%'
             ref={playerContainerRef}
             {...fullScreenRootProps}
             {...css}>
 
             {/* player debug info */}
-            {/* <PlayerDebugInfo
+            {/*       <PlayerDebugInfo
                 videoPlayerState={videoPlayerState}
                 videoTitle={videoItem.title} /> */}
+
+            {/* MOBILE ONLY: warning to rotate the mobile, the video
+                should only starts in landscape */}
+            {showShouldRotatePhoneOverlay && <ShouldRotatePhoneOverlay
+                onExitFullScreen={disableFullscreenMode} />}
 
             {/* MOBILE ONLY: overlay on top of player,
                 since we don't want the user to watch video
                 in portrait */}
             {showMobilePlayButtonOverlay && <MobilePlayButtonOverlay
                 videoPlayerState={videoPlayerState} />}
-
-            {/* MOBILE ONLY: warning to rotate the mobile, the video
-                should only starts in landscape */}
-            {showShouldRotatePhoneOverlay && <ShouldRotatePhoneOverlay
-                onExitFullScreen={disableFullscreenMode} />}
 
             {/* playback */}
             <EpistoDiv
@@ -106,12 +108,13 @@ export const VideoPlayer = (props: {
                 {/* video wrapper */}
                 <EpistoDiv
                     id="videoWrapper"
+                    maxHeight={(!isMobile && !isFullscreen) ? 'calc(100vh - 200px)' : undefined}
                     onClick={() => {
                         if (!isMobile) {
                             toggleIsPlaying();
                         }
                     }}
-                    onMouseMove={() => showControlOverlay()}
+                    onMouseMove={() => showControlOverlay(true)}
                     {...videoWrapperProps}>
 
                     {/* the player */}
@@ -121,7 +124,9 @@ export const VideoPlayer = (props: {
                         url={videoUrl}
                         style={{
                             borderRadius: 6,
-                            overflow: 'hidden'
+                            overflow: 'hidden',
+                            aspectRatio: !isMobile ? '16 / 9' : undefined,
+                            maxHeight: (!isMobile && !isFullscreen) ? 'calc(100vh - 200px)' : undefined
                         }}
                         width="100%"
                         height="100%"
@@ -158,6 +163,8 @@ export const VideoPlayer = (props: {
                     videoLength={videoLength}
                     volume={volume}
                     isMuted={isMuted}
+                    isMobile={isMobile}
+                    isIPhone={isIPhone}
                     setIsMuted={setIsMuted}
                     showControlOverlay={showControlOverlay}
                     seekToSeconds={seekToSeconds}

@@ -3,6 +3,7 @@ import { useUploadAvatarFile } from '../../services/api/fileApiService';
 import { useRequestPasswordChangeAuthenticated } from '../../services/api/passwordChangeApiService';
 import { UserApiService } from '../../services/api/userApiService';
 import { showNotification, useShowErrorDialog } from '../../services/core/notifications';
+import { Environment } from '../../static/Environemnt';
 import { reloadPage } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
@@ -144,7 +145,7 @@ export const Preferences = () => {
 
                         <ProfileImage
                             flex="1"
-                            url={avatarSrc ?? null}
+                            url={user.avatarUrl ? Environment.getAssetUrl(user.avatarUrl) : null}
                             ref={imageRef}
                             className="whall" />
                     </EpistoImageSelector>
