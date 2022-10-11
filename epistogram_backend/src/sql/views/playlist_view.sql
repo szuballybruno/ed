@@ -4,7 +4,7 @@ all_items_cte AS
     SELECT 
         cv.course_id,
         cv.id course_version_id,
-        mv.id module_id,
+        mv.module_id module_id,
         uni.video_version_id,
         uni.exam_version_id
     FROM 
@@ -79,6 +79,7 @@ items_with_user AS
 		civ.course_version_id,
 		civ.video_id,
 		civ.exam_id,
+		civ.module_version_id,
 		civ.module_id,
 		civ.module_name,
 		civ.module_code,

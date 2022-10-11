@@ -835,6 +835,8 @@ ON md.id = mv.module_data_id
 LEFT JOIN public.storage_file sf
 ON sf.id = md.image_file_id
 
+WHERE md.order_index != 0
+
 
 ;
 
@@ -1207,7 +1209,7 @@ ON ad.id = av.answer_data_id;
 --CREATE VIEW: schema_version_view
 CREATE VIEW schema_version_view
 AS
-SELECT '17:11:58 2022-10-10 CEDT' last_modification_date, '0.01' version
+SELECT '22:07:14 2022-10-10 CEDT' last_modification_date, '0.01' version
 ;
 
 --CREATE VIEW: shop_item_stateful_view
@@ -2363,7 +2365,7 @@ CREATE VIEW user_video_playback_seconds_view
 AS
 SELECT 
     vpsv.user_id,
-    vv.id video_id,
+    vv.video_id video_id,
     SUM(vpsv.total_playback_duration) total_playback_seconds
 FROM public.video_playback_sample_view vpsv
 
@@ -5522,7 +5524,7 @@ all_items_cte AS
     SELECT 
         cv.course_id,
         cv.id course_version_id,
-        mv.id module_id,
+        mv.module_id module_id,
         uni.video_version_id,
         uni.exam_version_id
     FROM 
@@ -5597,6 +5599,7 @@ items_with_user AS
 		civ.course_version_id,
 		civ.video_id,
 		civ.exam_id,
+		civ.module_version_id,
 		civ.module_id,
 		civ.module_name,
 		civ.module_code,
@@ -5694,11 +5697,21 @@ video_replays_cte AS
         GREATEST(COUNT(*) - 1, 0)::int video_repetition_count
     FROM public.user_video_practise_progress_view uvppv
 
-    WHERE uvppv.watch_percentage > 20
+    --WHERE uvppv.watch_percentage > 20
     
     GROUP BY
         uvppv.user_id,
         uvppv.video_id
+),
+summed_video_playbacks_cte AS
+(
+	SELECT
+		uvpsv.user_id,
+		uvpsv.video_id,
+		SUM(uvpsv.total_playback_seconds) total_playback_seconds
+	FROM public.user_video_playback_seconds_view uvpsv
+	
+	GROUP BY uvpsv.user_id, uvpsv.video_id
 ),
 last_3_quiz_answer_avg_cte AS
 (
@@ -5773,21 +5786,23 @@ SELECT
     -- When was the last time the user watched the video
     lpdc.latest_playback_date last_watch_time
     
-FROM public.user u
+FROM summed_video_playbacks_cte uvpsv
+
+LEFT JOIN public.user u
+ON u.id = uvpsv.user_id
 
 INNER JOIN public.playlist_view cisv
 ON cisv.user_id = u.id 
-AND cisv.item_state = 'completed'
+AND cisv.video_id = uvpsv.video_id
+-- TODO at this point the video completion is
+-- inconsistent, so showing all started
+--AND cisv.item_state = 'completed'
 
-LEFT JOIN public.video_version vv
+INNER JOIN public.video_version vv
 ON vv.id = cisv.video_version_id
 
 LEFT JOIN public.video_data vd
 ON vd.id = vv.video_data_id
-
-LEFT JOIN public.user_video_playback_seconds_view uvpsv
-ON uvpsv.user_id = u.id
-AND uvpsv.video_id = vv.video_id
 
 LEFT JOIN video_replays_cte vrc
 ON vrc.user_id = u.id
@@ -5844,7 +5859,7 @@ final_exam_score_percentage AS
 	SELECT 
 		lasv.user_id,
 		lev.course_id,
-		esv.exam_score final_exam_score_percentage
+		MAX(esv.exam_score) final_exam_score_percentage
 	FROM public.latest_answer_session_view lasv
 	
 	INNER JOIN public.latest_exam_view lev
@@ -5859,6 +5874,8 @@ final_exam_score_percentage AS
 	
 	LEFT JOIN public.exam_score_view esv
 	ON esv.exam_version_id = ev.id
+	
+	GROUP BY lasv.user_id, lev.course_id
 )
 SELECT
 	u.id user_id,
@@ -6504,8 +6521,8 @@ SELECT
     ucpav.completed_percentage course_progress_percentage,
     cvc.completed_video_count,
     cstv.total_spent_seconds total_spent_seconds,
-    qac.video_quesiton_answer_count answered_video_question_count,
-    qac.practise_quesiton_answer_count answered_practise_question_count,
+    COALESCE(qac.video_quesiton_answer_count, 0) answered_video_question_count,
+    COALESCE(qac.practise_quesiton_answer_count, 0) answered_practise_question_count,
     tcdv.required_completion_date,
     tcdv.tempomat_adjustment_value,
     tcdv.tempomat_mode,
