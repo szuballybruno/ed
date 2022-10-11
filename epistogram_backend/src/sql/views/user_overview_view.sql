@@ -58,3 +58,5 @@ ON cci.user_id = u.id
 
 LEFT JOIN public.user_engagement_view uev
 ON uev.user_id = u.id
+
+WHERE u.deletion_date IS NULL
