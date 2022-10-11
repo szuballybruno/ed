@@ -2,12 +2,13 @@ import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 
-export const TailingAdminButtons = (props: {
+export const TailingAdminButtons = ({
+    onDeleteCallback,
+    onSaveCallback
+}: {
     onSaveCallback: () => void,
-    onDeleteCallback: () => void
+    onDeleteCallback?: () => void
 }) => {
-
-    const { onDeleteCallback, onSaveCallback } = props;
 
     return (
         <EpistoFlex2
@@ -18,7 +19,7 @@ export const TailingAdminButtons = (props: {
             p="10px">
 
             {/* delete button */}
-            <EpistoButton
+            {onDeleteCallback && <EpistoButton
                 variant='outlined'
                 onClick={onDeleteCallback}
                 style={{
@@ -26,7 +27,7 @@ export const TailingAdminButtons = (props: {
                 }}>
 
                 {translatableTexts.misc.remove}
-            </EpistoButton>
+            </EpistoButton>}
 
             {/* save button */}
             <EpistoButton

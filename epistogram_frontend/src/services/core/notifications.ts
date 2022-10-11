@@ -36,7 +36,7 @@ export const showNotificationAdvanced = (content: ReactNode, opts?: ToastOptions
     toast(content, opts);
 };
 
-export const killNotification = (id: number | string) => toast.dismiss(id); 
+export const killNotification = (id: number | string) => toast.dismiss(id);
 
 export const useShowErrorDialog = () => {
 
@@ -44,14 +44,10 @@ export const useShowErrorDialog = () => {
 
     const showErrorDialog = useCallback((descriptionOrError?: any, title?: string) => {
 
-        console.error('Opening error dialog... ' + descriptionOrError);
-
         errorDialogLogic
             .openDialog({
-                title: title ?? 'Ismeretlen hiba',
-                description: descriptionOrError?.message
-                    ?? descriptionOrError
-                    ?? 'Ismeretlen hiba történt, kérlek próbáld újra később!'
+                descriptionOrError,
+                title
             });
     }, [errorDialogLogic]);
 

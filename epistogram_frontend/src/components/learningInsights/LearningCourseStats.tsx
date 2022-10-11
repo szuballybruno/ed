@@ -67,10 +67,8 @@ export const LearningCourseStats = () => {
                                     children: 'Részletek',
                                     onClick: () => adminCourseContentDialogLogic
                                         .openDialog({
-                                            params: {
-                                                courseId: course.courseId,
-                                                userId: userId
-                                            }
+                                            courseId: course.courseId,
+                                            userId: userId
                                         })
                                 }, {
                                     children: course.isComplete ? 'Újrakezdem' : 'Folytatom',
@@ -110,10 +108,8 @@ export const LearningCourseStats = () => {
                                 children: 'Részletek',
                                 onClick: () => adminCourseContentDialogLogic
                                     .openDialog({
-                                        params: {
-                                            courseId: course.courseId,
-                                            userId: userId
-                                        }
+                                        courseId: course.courseId,
+                                        userId: userId
                                     })
                             }, {
                                 children: course.isComplete ? 'Újrakezdem' : 'Folytatom',

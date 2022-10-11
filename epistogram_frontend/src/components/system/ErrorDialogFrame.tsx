@@ -4,14 +4,22 @@ import { EpistoDialog } from '../universal/epistoDialog/EpistoDialog';
 import { useEpistoDialogLogic } from '../universal/epistoDialog/EpistoDialogLogic';
 import { EpistoDialogLogicType } from '../universal/epistoDialog/EpistoDialogTypes';
 
-export const ErrorDialogContext = React.createContext<EpistoDialogLogicType | null>(null);
+export type ErrorDialogProps = {
+    descriptionOrError?: any,
+    title?: string
+};
 
-const ErrorDialog = ({ dialogLogic }: { dialogLogic: EpistoDialogLogicType }) => {
+export const ErrorDialogContext = React.createContext<EpistoDialogLogicType<ErrorDialogProps> | null>(null);
+
+const ErrorDialog = ({ dialogLogic }: { dialogLogic: EpistoDialogLogicType<ErrorDialogProps> }) => {
 
     return <EpistoDialog
         closeButtonType='top'
-        title='Asd!'
-        logic={dialogLogic}>
+        title={'Ismeretlen hiba'}
+        description={({ descriptionOrError }) => descriptionOrError?.message
+            ?? descriptionOrError
+            ?? 'Ismeretlen hiba történt, kérlek próbáld újra később!'}
+        logic={dialogLogic} >
 
         <EpistoFlex2
             p='15px'
@@ -20,14 +28,14 @@ const ErrorDialog = ({ dialogLogic }: { dialogLogic: EpistoDialogLogicType }) =>
             An error has occured!
             Please try again later.
         </EpistoFlex2>
-    </EpistoDialog>;
+    </EpistoDialog >;
 };
 
 export const ErrorDialogFrame = (props: {
     children: ReactNode
 }) => {
 
-    const dialogLogic = useEpistoDialogLogic('errordialog');
+    const dialogLogic = useEpistoDialogLogic<ErrorDialogProps>('errordialog');
     const { children } = props;
 
     return <>

@@ -279,10 +279,8 @@ export const AdminUserStatisticsSubpage = ({
                                 children: translatableTexts.misc.details,
                                 onClick: () => adminCourseContentDialogLogic
                                     .openDialog({
-                                        params: {
-                                            courseId: course.courseId,
-                                            userId
-                                        }
+                                        courseId: course.courseId,
+                                        userId
                                     })
                             }]}
                             course={course}

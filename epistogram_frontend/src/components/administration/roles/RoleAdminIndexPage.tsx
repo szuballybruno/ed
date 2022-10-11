@@ -47,13 +47,13 @@ export const RoleAdminIndexPage = memo(() => {
     const handleEdit = useCallback((roleId: Id<'Role'>) => {
 
         editDialogLogic
-            .openDialog({ params: { roleId } });
+            .openDialog({ roleId });
     }, [editDialogLogic]);
 
     const handleDelete = useCallback((roleId: Id<'Role'>) => {
 
         deleteWarningDialogLogic
-            .openDialog({ params: { roleId } });
+            .openDialog({ roleId });
     }, [deleteWarningDialogLogic.openDialog]);
 
     const columns = useMemo(() => {
@@ -132,7 +132,7 @@ export const RoleAdminIndexPage = memo(() => {
             <EpistoDialog
                 logic={deleteWarningDialogLogic}
                 closeButtonType="top"
-                buttonComponents={[
+                getButtonComponents={() => [
                     {
                         title: 'Yup',
                         action: (params) => handleDeleteRole({ roleId: params.params.roleId })

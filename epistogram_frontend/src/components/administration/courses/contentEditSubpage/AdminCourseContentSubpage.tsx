@@ -209,15 +209,13 @@ export const AdminCourseContentSubpage = () => {
         if (type === 'exam' || type === 'video')
             itemEditDialogLogic
                 .openDialog({
-                    params: {
-                        isVideo,
-                        itemVersionId: isVideo ? data.videoVersionId! : data.examVersionId!,
-                        itemTitle: data.itemTitle,
-                        courseTitle: 'Course name',
-                        versionCode: data.versionCode,
-                        questionMutations: data.questionMutations,
-                        answerMutations: data.answerMutations
-                    }
+                    isVideo,
+                    itemVersionId: isVideo ? data.videoVersionId! : data.examVersionId!,
+                    itemTitle: data.itemTitle,
+                    courseTitle: 'Course name',
+                    versionCode: data.versionCode,
+                    questionMutations: data.questionMutations,
+                    answerMutations: data.answerMutations
                 });
 
         if (type === 'module')

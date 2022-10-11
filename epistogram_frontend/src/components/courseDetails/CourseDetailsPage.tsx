@@ -400,10 +400,8 @@ const CourseDetailsPage = () => {
 
                                     adminCourseContentDialogLogic
                                         .openDialog({
-                                            params: {
-                                                courseId: courseDetails.courseId,
-                                                userId: userId
-                                            }
+                                            courseId: courseDetails.courseId,
+                                            userId: userId
                                         });
                                 }}>
 
