@@ -7,12 +7,14 @@ export const EpistoConinInfo = (props: {} & EpistoFlex2Props) => {
 
     const { coinBalance } = useCoinBalance();
 
-    return <EpistoFlex2 align="center"
+    return <EpistoFlex2
+        align="center"
+        pb='4px'
         {...props}>
 
         {/* coin value  */}
         <EpistoFont
-            style={{ marginRight: '5px' }}
+            style={{ marginRight: '5px', marginBottom: '2px' }}
             fontSize="fontHuge">
 
             {coinBalance + '' || ''}

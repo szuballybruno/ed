@@ -28,7 +28,7 @@ export const QuestionnaierAnswer = ({
             return { bg: '#7cf25e', fg: 'black' };
 
         if (isCorrect)
-            return { bg: 'transparent', fg: 'black', border: '#7cf25e' };
+            return { bg: '#FFFFFF', fg: 'black', border: '#7cf25e' };
 
         if (isSelected)
             return { bg: 'var(--deepBlue)', fg: 'white' };
@@ -45,7 +45,7 @@ export const QuestionnaierAnswer = ({
                 pointerEvents: disabled ? 'none' : 'all',
                 background: colors.bg,
                 color: colors.fg,
-                border: colors.border ? `2px solid ${colors.border}` : undefined,
+                border: colors.border ? `4px solid ${colors.border}` : undefined,
             }}>
             {children}
         </EpistoButton>

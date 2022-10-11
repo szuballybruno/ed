@@ -14,7 +14,6 @@ import { ExamLayout } from '../../exam/ExamLayout';
 import { ExamLayoutContent } from '../../exam/ExamLayoutContent';
 import { LoadingFrame } from '../../system/LoadingFrame';
 import { RatingStars } from '../../universal/RatingStars';
-
 export const CourseRatingSubpage = () => {
 
     const courseId = Id
@@ -90,6 +89,8 @@ export const CourseRatingSubpage = () => {
             height="100%">
 
             <ExamLayout
+                isHeightMaximized
+                maxH='calc(100vh - 120px)'
                 headerCenterText="Kurzus értékelése"
                 footerButtons={new ArrayBuilder()
                     .addIf(canContinue, {
@@ -101,10 +102,7 @@ export const CourseRatingSubpage = () => {
 
                 <ExamLayoutContent
                     style={{
-                        background: '#ffffffbf',
-                        borderRadius: '5px',
-                        boxShadow: 'white 0 0 20px 5px',
-                        width: '95%'
+                        maxHeight: '100%'
                     }}
                     title={currentRatingGroup?.name ?? ''}>
 

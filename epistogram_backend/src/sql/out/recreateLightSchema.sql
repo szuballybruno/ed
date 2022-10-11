@@ -1209,7 +1209,7 @@ ON ad.id = av.answer_data_id;
 --CREATE VIEW: schema_version_view
 CREATE VIEW schema_version_view
 AS
-SELECT '22:07:14 2022-10-10 CEDT' last_modification_date, '0.01' version
+SELECT '15:01:06 2022-10-11 CEDT' last_modification_date, '0.01' version
 ;
 
 --CREATE VIEW: shop_item_stateful_view

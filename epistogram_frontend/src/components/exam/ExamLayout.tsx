@@ -82,13 +82,14 @@ export const ExamLayout = ({
 
     return <EpistoFlex2
         id='ExamLayout-root'
-        minH='calc(100vh - 200px)'
-        maxH={isHeightMaximized ? '100vh - 120px' : 'unset'}
+        minH='calc(100vh - 120px)'
+        maxH={isHeightMaximized ? 'calc(100vh - 120px)' : 'unset'}
         height='100%'
         width='100%'
         px='5px'
         direction="column"
         alignItems="center"
+        flex='1'
         {...css}>
 
         {/* header */}
@@ -152,13 +153,14 @@ export const ExamLayout = ({
         {/* content */}
         <EpistoFlex2
             id='ExamLayout-content'
-            flex="1"
-            my="20px"
+            my={isHeightMaximized ? '20px' : '20px'}
             minH="300px"
+            height='100%'
             width="100%"
             align="center"
             justify="center"
             direction="column"
+            flex='1'
             {...css}>
 
             {children}

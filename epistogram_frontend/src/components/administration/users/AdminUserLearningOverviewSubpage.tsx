@@ -73,10 +73,10 @@ const UserStatisticsProgressWithLabel = (props: {
 };
 
 const measurementDescriptions = [
-    'engagementDesc',
-    'performanceDesc',
-    'productivityDesc',
-    'reactionTimeDesc'
+    'A hatékony tanulás egyik alappillére, hogy a felhasználó milyen intenzitással képzi magát. A belépések számából, gyakoriságából, valamint időtartamából számoljuk az elköteleződést, és figyeljük azt is, hogyan változik ez a tananyag folyamán, így mérve a kritikus pontokat. Amennyiben a felhasználó számára elérhető vagy teljesítésre váró tanfolyam áll a rendelkezésre, úgy az elköteleződés csökkenéséről értesítjük őt, így segítve, hogy ismét a megfelelő ütemben folytathassa a képzést. Számszerűsítve 50 pont feletti elköteleződés már jónak számít, 70 pont felett pedig motivált tanulóról és rendszerezett tanulásról beszélhetünk.',
+    'Teljesítménymutatónk súlyozva összegzi a videós tananyagok, vizsgák, előugró és ismétlő kérdésekre adott válaszok eredményét, így pedig egyetlen, mérőszámból meg tudjuk állapítani, hogy az adott felhasználó eredményesen tanul-e, vagy esetleg összességében szükséges-e javítani a teljesítményén. 70 pont feletti érték esetén beszélhetünk jó teljesítményről, 85 pont felett pedig megnyugodhatunk, felhasználónk rendkívül eredményesen képzi saját magát.',
+    'Komplex algoritmusunk a felhasználó összes szokását és tevékenységét megvizsgálja segít megállapítani, mennyire effektív a tanulás. Előfordulhat, hogy egy felhasználó lassan tanul, ugyanakkor kimagasló eredményt ér el, de a gyors haladás sokszor a megértés kárára megy, így nem szabad pusztán a megtekintett videók mennyiségéből kiindulni. Produktivitás mutatónk ezeket összegezve segíti megmutatni, melyek azok a felhasználók, ahol esetleg még lehetne csiszolni az effektivitáson. 70 pont feletti érték esetén beszélhetünk megfelelő produktivitásról, 85 pont felett pedig extrán produktívnak számít az adott felhasználó.',
+    'Miért fontos a felhasználók reakcióidejének vizsgálata? Hosszú távon megállapítható, mennyire fejlett döntéshozási, reagálási képességük, valamint az esetleges csalások kiszűrésében is extra segítséget jelent. Az átlagál 3-4x rosszabb reakcióidő, ellenben kiemelkedően magasabb teljesítmény ugyanis azt is jelentheti, hogy a felhasználónk más forrás segítségét is igénybe veszi.'
 ];
 
 export const AdminUserStatisticsSubpage = ({

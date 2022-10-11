@@ -1,7 +1,7 @@
-import {CSSProperties, ReactNode} from 'react';
-import {Environment} from '../../static/Environemnt';
-import {EpistoFlex2} from '../controls/EpistoFlex';
-import {EpistoFont} from '../controls/EpistoFont';
+import { CSSProperties, ReactNode } from 'react';
+import { Environment } from '../../static/Environemnt';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { EpistoFont } from '../controls/EpistoFont';
 
 export const ExamLayoutContent = (props: {
     children: ReactNode,
@@ -19,12 +19,12 @@ export const ExamLayoutContent = (props: {
             alignItems={'center'}
             justifyContent={'center'}
             width={'100%'}
+            flex='1'
             background='var(--transparentWhite70)'
-            flex={1}
             style={style}>
 
             <EpistoFlex2
-                p='200px'
+                maxW='calc(100% - 100px)'
                 direction='column'>
 
                 {/* header */}
