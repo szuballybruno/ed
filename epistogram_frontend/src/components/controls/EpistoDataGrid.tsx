@@ -164,8 +164,6 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>({
 
     Logger.logScoped('GRID', `${id ? `[id: ${id}] ` : ''}Rendering EpistoDataGrid...`);
 
-    removeOverlay();
-
     const muiDataGridColumnDefs = columns
         .map(column => mapToMUIDataGridColumn(column, getKey));
 

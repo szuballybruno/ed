@@ -578,12 +578,14 @@ export const usePaging = <T>({
     items,
     onNextOverNavigation,
     onPrevious,
-    onPreviousOverNavigation
+    onPreviousOverNavigation,
+    onItemSet
 }: {
     items: T[] | number,
     onPreviousOverNavigation?: () => void,
     onNextOverNavigation?: () => void,
-    onPrevious?: () => void
+    onPrevious?: () => void,
+    onItemSet?: (opts: { item: T, index: number }) => void
 }) => {
 
     if (!hasValue(items))
@@ -638,6 +640,9 @@ export const usePaging = <T>({
             throw new Error('Item index is more than the length of the items collection!');
 
         setCurrentItemIndex(itemIndex);
+
+        if (onItemSet)
+            onItemSet({ item: items[itemIndex], index: itemIndex });
     }, [setCurrentItemIndex]);
 
     const jumpToLast = useCallback(() => {

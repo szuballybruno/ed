@@ -6,7 +6,6 @@ import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { ApplicationRoute } from '../../models/types';
 import { CourseApiService } from '../../services/api/courseApiService';
 import { useShopItemBriefData } from '../../services/api/shopApiService';
-import { UserApiService } from '../../services/api/userApiService';
 import { getKeys } from '../../shared/logic/sharedLogic';
 import { Id } from '../../shared/types/versionId';
 import { ArrayBuilder, useIsMatchingCurrentRoute } from '../../static/frontendHelpers';
@@ -127,7 +126,6 @@ export const AdminBreadcrumbsHeader = ({
     const isMatchingCurrentRoute = useIsMatchingCurrentRoute();
 
     // http
-    const { briefUserData } = UserApiService.useBriefUserData(userId);
     const { courseBriefData } = CourseApiService.useCourseBriefData(courseId);
     const { shopItemBriefData } = useShopItemBriefData(shopItemId);
 
@@ -146,7 +144,7 @@ export const AdminBreadcrumbsHeader = ({
 
     const subRouteName = subRouteLabel
         ? subRouteLabel
-        : ((userId && briefUserData?.fullName) || courseBriefData?.title || shopItemBriefData?.name);
+        : (courseBriefData?.title || shopItemBriefData?.name);
 
     const subRoute = subRouteName
         ? { title: subRouteName! }

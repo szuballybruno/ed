@@ -83,9 +83,7 @@ class XQueryCore<T> {
 
             Logger.logScoped('QUERY', `-- [CANCEL] Query is not enabled. ${url}`);
 
-            return cachedState
-                ? cachedState.qr
-                : this._idleState;
+            return this._idleState;
         }
 
         /**

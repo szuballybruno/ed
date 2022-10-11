@@ -106,6 +106,18 @@ export const useRouteParams2 = <TParams, TQuery>(route: ApplicationRoute<TParams
     return useRouteValues2(route).params;
 };
 
+export const useSetQueryParams = () => {
+
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    const setQueryParams = (key: string, value: string) => {
+
+        setSearchParams({ ...searchParams, [key]: value });
+    };
+
+    return { setQueryParams };
+};
+
 /**
  * @deprecated use "useRouteParams" 
  */

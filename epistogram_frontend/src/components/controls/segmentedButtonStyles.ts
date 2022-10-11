@@ -82,14 +82,14 @@ export const segmentedButtonStyles = {
             },
 
             '&.Mui-selected': {
-                color: '#444',
+                color: 'white',
                 fontWeight: 'bold',
                 background: 'var(--transparentIntenseTeal)'
 
             },
             '&.Mui-selected, &.Mui-selected:hover': {
                 background: 'var(--transparentIntenseTeal)', // theme.palette.primary.main
-                color: '#444',
+                color: 'white',
                 fontWeight: 'bold'
             }
         },
