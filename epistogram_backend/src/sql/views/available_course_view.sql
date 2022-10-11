@@ -30,7 +30,7 @@ final_exam_score_percentage AS
 	SELECT 
 		lasv.user_id,
 		lev.course_id,
-		esv.exam_score final_exam_score_percentage
+		MAX(esv.exam_score) final_exam_score_percentage
 	FROM public.latest_answer_session_view lasv
 	
 	INNER JOIN public.latest_exam_view lev
@@ -45,6 +45,8 @@ final_exam_score_percentage AS
 	
 	LEFT JOIN public.exam_score_view esv
 	ON esv.exam_version_id = ev.id
+	
+	GROUP BY lasv.user_id, lev.course_id
 )
 SELECT
 	u.id user_id,

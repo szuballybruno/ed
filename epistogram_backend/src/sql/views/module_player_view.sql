@@ -26,4 +26,6 @@ ON md.id = mv.module_data_id
 LEFT JOIN public.storage_file sf
 ON sf.id = md.image_file_id
 
+WHERE md.order_index != 0
+
 

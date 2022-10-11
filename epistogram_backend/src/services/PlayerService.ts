@@ -49,6 +49,8 @@ export class PlayerService {
         principalId: PrincipalId,
         requestedItemCode: string) {
 
+        console.log('Requested code: ' + requestedItemCode);
+
         const userId = principalId.getId();
 
         // validate request
@@ -66,6 +68,9 @@ export class PlayerService {
 
         // get course item dto
         const { itemId, itemType } = readItemCode(validItemCode);
+
+        console.log('itemId: ' + itemId);
+        console.log('itemType: ' + itemType);
 
         const videoPlayerDTO = itemType === 'video' ? await this
             ._getVideoPlayerDataDTOAsync(userId, itemId as Id<'Video'>) : null;
