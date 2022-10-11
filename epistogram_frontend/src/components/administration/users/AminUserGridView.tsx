@@ -1,6 +1,6 @@
 import { Flex } from '@chakra-ui/react';
 import { Add } from '@mui/icons-material';
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { useUserOverviewStats } from '../../../services/api/userStatsApiService';
 import { useNavigation } from '../../../services/core/navigatior';
@@ -9,9 +9,9 @@ import { OrderType } from '../../../shared/types/sharedTypes';
 import { Id } from '../../../shared/types/versionId';
 import { Environment } from '../../../static/Environemnt';
 import { getSubroutes, useIsMatchingCurrentRoute, usePaging } from '../../../static/frontendHelpers';
-import { useRouteQuery } from '../../../static/locationHelpers';
+import { useRouteQuery, useSetQueryParams } from '../../../static/locationHelpers';
 import { EpistoButton } from '../../controls/EpistoButton';
-import { EpistoDataGrid, EpistoDataGridColumnBuilder, EpistoDataGridColumnVisibilityModel } from '../../controls/EpistoDataGrid';
+import { EpistoDataGrid, EpistoDataGridColumnBuilder } from '../../controls/EpistoDataGrid';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { SegmentedButton } from '../../controls/SegmentedButton';
@@ -19,7 +19,7 @@ import { segmentedButtonStyles } from '../../controls/segmentedButtonStyles';
 import { ProfileImage } from '../../ProfileImage';
 import { UsersSearchFilters } from './UsersSearchFilters';
 
-const useColumns = (isSimpleView: boolean, openUser: (userId: Id<'User'>) => void) => {
+const useColumns = (isSimpleView: boolean, userId: Id<'User'> | null, openUser: (userId: Id<'User'>) => void) => {
 
     const { navigate2 } = useNavigation();
 
@@ -28,43 +28,53 @@ const useColumns = (isSimpleView: boolean, openUser: (userId: Id<'User'>) => voi
             field: 'avatar',
             headerName: 'Avatar',
             width: isSimpleView ? 60 : 80,
-            renderCell: ({ value }) => <ProfileImage
-                className={isSimpleView ? 'square40' : 'square50'}
-                objectFit="contain"
-                url={value.avatarUrl ? Environment.getAssetUrl(value.avatarUrl) : null}
-                firstName={value.firstName}
-                lastName={value.lastName} />
-        })
-        .add(isSimpleView
-            ? {
-                field: 'name',
+            renderCell: ({ value, row }) => <EpistoFlex2
+                className="whall"
+                justify="center"
+                align='center'
+                cursor={isSimpleView ? 'pointer' : undefined}
+                onClick={isSimpleView ? () => openUser(row.userId) : undefined}>
+                <ProfileImage
+                    className={isSimpleView ? 'square40' : 'square50'}
+                    objectFit="contain"
+                    url={value.avatarUrl ? Environment.getAssetUrl(value.avatarUrl) : null}
+                    firstName={value.firstName}
+                    lastName={value.lastName} />
+            </EpistoFlex2>
+        });
+
+    if (isSimpleView)
+        return columns
+            .add({
+                field: 'nameSimple',
                 headerName: 'Név',
                 width: 250,
                 renderCell: ({ row }) => (
                     <EpistoFlex2
+                        className='whall'
                         cursor='pointer'
                         onClick={() => openUser(row.userId)}
-                        direction="column">
-                        <EpistoFont>
+                        direction="column"
+                        justify='center'>
+                        <EpistoFont
+                            fontWeight={userId === row.userId ? 'heavy' : undefined}>
                             {row.name}
                         </EpistoFont>
-                        <EpistoFont>
+                        <EpistoFont
+                            fontWeight={userId === row.userId ? 'heavy' : undefined}>
                             {row.email}
                         </EpistoFont>
                     </EpistoFlex2>
                 )
-            }
-            : {
-                field: 'name',
-                headerName: 'Név',
-                width: 250
-            });
-
-    if (isSimpleView)
-        return columns
+            })
             .getColumns();
 
-    return columns
+    const allColumns = columns
+        .add({
+            field: 'name',
+            headerName: 'Név',
+            width: 250
+        })
         .add({
             field: 'email',
             headerName: 'E-mail',
@@ -110,6 +120,8 @@ const useColumns = (isSimpleView: boolean, openUser: (userId: Id<'User'>) => voi
                 </EpistoButton>
         })
         .getColumns();
+
+    return allColumns;
 };
 
 class RowType {
@@ -120,6 +132,7 @@ class RowType {
         lastName: string
     };
     name: string;
+    nameSimple: string;
     email: string;
     signupDate: string;
     averagePerformancePercentage: number;
@@ -133,64 +146,71 @@ class RowType {
 
 export type UserDataGridPresetType = 'reviewRequired' | 'all'
 
-const defaultPreset: EpistoDataGridColumnVisibilityModel<RowType> = {
-    engagementPoints: false,
-    productivityPercentage: false
-};
+const mapToRow = (user: UserOverviewDTO): RowType => {
 
-const reviewRequiredPreset: EpistoDataGridColumnVisibilityModel<RowType> = {
-    invertedLagBehind: false,
-    totalSessionLengthSeconds: false,
-    completedCourseItemCount: false,
-    signupDate: false
-};
+    const name = user.firstName ? `${user.lastName} ${user.firstName}` : '';
 
-const mapToRow = (user: UserOverviewDTO): RowType => ({
-    userId: user.userId,
-    avatar: {
-        avatarUrl: user.avatarFilePath,
-        firstName: user.firstName,
-        lastName: user.lastName
-    },
-    name: user.firstName ? `${user.lastName} ${user.firstName}` : '',
-    email: user.userEmail,
-    signupDate: new Date(user.signupDate)
-        .toLocaleDateString('hu-hu', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit'
-        }) + '',
-    averagePerformancePercentage: user.averagePerformancePercentage,
-    invertedLagBehind: user.invertedLagBehind,
-    totalSessionLengthSeconds: user.totalSessionLengthSeconds,
-    completedCourseItemCount: user.completedCourseItemCount,
-    engagementPoints: user.engagementPoints,
-    productivityPercentage: user.productivityPercentage,
-    detailsButton: user.userId
-});
+    return ({
+        userId: user.userId,
+        avatar: {
+            avatarUrl: user.avatarFilePath,
+            firstName: user.firstName,
+            lastName: user.lastName
+        },
+        name,
+        nameSimple: name,
+        email: user.userEmail,
+        signupDate: new Date(user.signupDate)
+            .toLocaleDateString('hu-hu', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit'
+            }) + '',
+        averagePerformancePercentage: user.averagePerformancePercentage,
+        invertedLagBehind: user.invertedLagBehind,
+        totalSessionLengthSeconds: user.totalSessionLengthSeconds,
+        completedCourseItemCount: user.completedCourseItemCount,
+        engagementPoints: user.engagementPoints,
+        productivityPercentage: user.productivityPercentage,
+        detailsButton: user.userId
+    });
+};
 
 export const useGridFilterSettingsLogic = () => {
 
     const [orderBy, setOrderBy] = useState<OrderType | null>(null);
     const [searchKeyword, setSearchKeyword] = useState<string | null>(null);
 
+    const presets = useMemo(() => [
+        {
+            title: 'Alapértelmezett nézet',
+            preset: 'all' as UserDataGridPresetType
+        },
+        {
+            title: 'Áttekintésre javasolt',
+            preset: 'reviewRequired' as UserDataGridPresetType
+        }
+    ], []);
+
+    const { setQueryParams } = useSetQueryParams();
+
+    const presetPaging = usePaging({ items: presets, onItemSet: ({ item }) => setQueryParams('preset', item.preset) });
+
     const currentPreset = useRouteQuery(applicationRoutes.administrationRoute.usersRoute)
         .getValueOrNull(x => x.preset, 'string') ?? 'all';
 
-    const presetPaging = usePaging({
-        items: [
-            {
-                title: 'Alapértelmezett nézet',
-                preset: defaultPreset
-            },
-            {
-                title: 'Áttekintésre javasolt',
-                preset: reviewRequiredPreset
-            }
-        ]
-    });
+    const currentPresetIndex = presets
+        .singleIndex(x => x.preset === currentPreset);
 
     const isReviewPreset = currentPreset === 'reviewRequired';
+
+    /**
+     * sync paging selected item to url
+     */
+    useEffect(() => {
+
+        presetPaging.setItem(currentPresetIndex);
+    }, [currentPresetIndex]);
 
     return {
         orderBy,
@@ -208,14 +228,18 @@ export type GridFilterSettingsLogicType = ReturnType<typeof useGridFilterSetting
 export const useAdminUserGridLogic = ({
     filterLogic,
     isSimpleView,
-    selectedCompanyId
+    selectedCompanyId,
+    userId
 }: {
     isSimpleView: boolean,
     selectedCompanyId: Id<'Company'> | null,
     filterLogic: GridFilterSettingsLogicType,
+    userId: Id<'User'> | null
 }) => {
 
     const { searchKeyword, isReviewPreset } = filterLogic;
+
+    console.log(isReviewPreset);
 
     const {
         userOverviewStats,
@@ -241,7 +265,8 @@ export const useAdminUserGridLogic = ({
         filterLogic,
         isSimpleView,
         users,
-        refetchUsers: refetchOverviewStats
+        refetchUsers: refetchOverviewStats,
+        userId
     };
 };
 
@@ -251,7 +276,8 @@ export const AminUserGridView = ({
     logic: {
         users,
         filterLogic,
-        isSimpleView
+        isSimpleView,
+        userId
     }
 }: {
     logic: AdminUserGridLogicType
@@ -265,7 +291,7 @@ export const AminUserGridView = ({
     const { userRoute } = usersRoute;
     const isMatchingCurrentAppRoute = useIsMatchingCurrentRoute();
 
-    const columns = useColumns(isSimpleView, userId => {
+    const columns = useColumns(isSimpleView, userId, userId => {
 
         getSubroutes(userRoute)
             .forEach(appRoute => {
@@ -301,7 +327,7 @@ export const AminUserGridView = ({
 
                     {/* search bar */}
                     <UsersSearchFilters
-                        hideOrdering={isSimpleView}
+                        hideOrdering={true}
                         setSearchKeyword={filterLogic.setSearchKeyword}
                         setOrderBy={filterLogic.setOrderBy} />
 

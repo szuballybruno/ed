@@ -1,6 +1,7 @@
 import { useContext, useState } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { CompanyApiService } from '../../../services/api/companyApiService';
+import { UserApiService } from '../../../services/api/userApiService';
 import { Id } from '../../../shared/types/versionId';
 import { useIsMatchingCurrentRoute } from '../../../static/frontendHelpers';
 import { useRouteParams2 } from '../../../static/locationHelpers';
@@ -21,6 +22,7 @@ export const UserAdminSubpage = () => {
 
     const params = useRouteParams2(applicationRoutes.administrationRoute.usersRoute.userRoute);
     const userId = params.getValueOrNull(x => x.userId, 'int');
+
     const isMatchingCurrentAppRoute = useIsMatchingCurrentRoute();
     const isSimpleView = isMatchingCurrentAppRoute(userAdminRoute.addRoute).isMatchingRouteExactly || !!userId;
 
@@ -35,6 +37,7 @@ export const UserAdminSubpage = () => {
         isSimpleView,
         filterLogic,
         selectedCompanyId,
+        userId
     });
 
     const handleSelectCompany = (companyId: Id<'Company'> | null) => {
@@ -48,8 +51,12 @@ export const UserAdminSubpage = () => {
         handleSelectCompany={handleSelectCompany}
         companies={companies} />;
 
+    const { briefUserData } = UserApiService.useBriefUserData(userId);
+    const subRouteLabel = briefUserData?.fullName;
+
     return (
         <AdminBreadcrumbsHeader
+            subRouteLabel={subRouteLabel}
             headerComponent={companiesHeaderComponent}>
 
             <EpistoFlex2
