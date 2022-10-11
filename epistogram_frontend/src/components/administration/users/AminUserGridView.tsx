@@ -2,12 +2,15 @@ import { Flex } from '@chakra-ui/react';
 import { Add } from '@mui/icons-material';
 import { useEffect, useMemo, useState } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
+import { UserApiService } from '../../../services/api/userApiService';
 import { useUserOverviewStats } from '../../../services/api/userStatsApiService';
 import { useNavigation } from '../../../services/core/navigatior';
+import { useShowErrorDialog } from '../../../services/core/notifications';
 import { UserOverviewDTO } from '../../../shared/dtos/UserOverviewDTO';
 import { OrderType } from '../../../shared/types/sharedTypes';
 import { Id } from '../../../shared/types/versionId';
 import { Environment } from '../../../static/Environemnt';
+import { EpistoIcons } from '../../../static/EpistoIcons';
 import { getSubroutes, useIsMatchingCurrentRoute, usePaging } from '../../../static/frontendHelpers';
 import { useRouteQuery, useSetQueryParams } from '../../../static/locationHelpers';
 import { EpistoButton } from '../../controls/EpistoButton';
@@ -17,9 +20,15 @@ import { EpistoFont } from '../../controls/EpistoFont';
 import { SegmentedButton } from '../../controls/SegmentedButton';
 import { segmentedButtonStyles } from '../../controls/segmentedButtonStyles';
 import { ProfileImage } from '../../ProfileImage';
+import { EpistoDialog } from '../../universal/epistoDialog/EpistoDialog';
+import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogLogic';
 import { UsersSearchFilters } from './UsersSearchFilters';
 
-const useColumns = (isSimpleView: boolean, userId: Id<'User'> | null, openUser: (userId: Id<'User'>) => void) => {
+const useColumns = (
+    isSimpleView: boolean,
+    userId: Id<'User'> | null,
+    showDeleteUserDialog: (user: RowType) => void,
+    openUser: (userId: Id<'User'>) => void) => {
 
     const { navigate2 } = useNavigation();
 
@@ -110,14 +119,25 @@ const useColumns = (isSimpleView: boolean, userId: Id<'User'> | null, openUser: 
         .add({
             field: 'detailsButton',
             headerName: '',
-            renderCell: ({ value }) =>
-
+            width: 175,
+            renderCell: ({ value, row }) => <EpistoFlex2
+                align="center">
                 <EpistoButton
                     variant="outlined"
                     onClick={() => navigate2(applicationRoutes.administrationRoute.usersRoute.userRoute.editRoute, { userId: value })}>
 
                     Bovebben
                 </EpistoButton>
+                <EpistoButton
+                    margin={{
+                        left: 'px5'
+                    }}
+                    variant="outlined"
+                    onClick={() => showDeleteUserDialog(row)}>
+
+                    <EpistoIcons.Delete />
+                </EpistoButton>
+            </EpistoFlex2>
         })
         .getColumns();
 
@@ -239,8 +259,6 @@ export const useAdminUserGridLogic = ({
 
     const { searchKeyword, isReviewPreset } = filterLogic;
 
-    console.log(isReviewPreset);
-
     const {
         userOverviewStats,
         refetchOverviewStats
@@ -277,7 +295,8 @@ export const AminUserGridView = ({
         users,
         filterLogic,
         isSimpleView,
-        userId
+        userId,
+        refetchUsers
     }
 }: {
     logic: AdminUserGridLogicType
@@ -291,7 +310,17 @@ export const AminUserGridView = ({
     const { userRoute } = usersRoute;
     const isMatchingCurrentAppRoute = useIsMatchingCurrentRoute();
 
-    const columns = useColumns(isSimpleView, userId, userId => {
+
+    const deleteWaningDialogLogic = useEpistoDialogLogic<RowType>('delwarn');
+    const showError = useShowErrorDialog();
+
+    const showDeleteUserDialog = (user: RowType) => {
+
+        deleteWaningDialogLogic
+            .openDialog(user);
+    };
+
+    const columns = useColumns(isSimpleView, userId, showDeleteUserDialog, userId => {
 
         getSubroutes(userRoute)
             .forEach(appRoute => {
@@ -310,6 +339,29 @@ export const AminUserGridView = ({
             background={'var(--transparentWhite70)'}
             px="5px"
             position="relative">
+
+            <EpistoDialog
+                logic={deleteWaningDialogLogic}
+                getButtonComponents={({ userId }) => [
+                    {
+                        title: 'Törlés',
+                        action: async () => {
+
+                            try {
+
+                                await UserApiService.deleteUserAsync(userId!);
+                                await refetchUsers();
+                            }
+                            catch (e) {
+
+                                showError(e);
+                            }
+                        }
+                    }
+                ]}
+                title='Biztosan törlöd a felhasználót?'
+                description={({ name }) => `${name} nevű felhasználó visszavonhatatlanul törölve lesz!`} />
+
 
             {/* header */}
             <Flex

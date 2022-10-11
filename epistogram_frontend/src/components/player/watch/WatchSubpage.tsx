@@ -26,7 +26,7 @@ export type WatchSubpageState = 'watch' | 'examStart' | 'examInProgress' | 'exam
 
 export const WatchSubpage = () => {
 
-    const warningDialogLogic = useEpistoDialogLogic('warn3');
+    const warningDialogLogic = useEpistoDialogLogic<{ descriptorCode: string }>('warn3');
     const { navigate2, navigateToPlayer } = useNavigation();
     const urlPlaylistItemCode = useStringParam('descriptorCode')!;
     const [watchSubpageState, setWatchSubpageState] = useState<WatchSubpageState>('watch');
@@ -131,16 +131,7 @@ export const WatchSubpage = () => {
     const navigateToCourseItem = (descriptorCode: string) => {
 
         warningDialogLogic
-            .openDialog({
-                title: translatableTexts.player.doYouReallyStopExam,
-                description: translatableTexts.player.stopExamWarning,
-                buttons: [
-                    {
-                        title: translatableTexts.player.yes,
-                        action: () => navigateToPlayer(descriptorCode)
-                    }
-                ],
-            });
+            .openDialog({ descriptorCode });
     };
 
     const isMobile = useIsMobileView();
@@ -175,7 +166,16 @@ export const WatchSubpage = () => {
                 </EpistoFlex2>
             </>
             : <>
-                <EpistoDialog logic={warningDialogLogic} />
+                <EpistoDialog
+                    logic={warningDialogLogic}
+                    title={translatableTexts.player.doYouReallyStopExam}
+                    description={translatableTexts.player.stopExamWarning}
+                    getButtonComponents={({ descriptorCode }) => [
+                        {
+                            title: translatableTexts.player.yes,
+                            action: () => navigateToPlayer(descriptorCode!)
+                        }
+                    ]} />
 
                 <LoadingFrame
                     loadingState={[]}

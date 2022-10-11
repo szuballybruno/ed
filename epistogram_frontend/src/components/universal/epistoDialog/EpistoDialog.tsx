@@ -7,38 +7,48 @@ import { EpistoHeader } from '../../EpistoHeader';
 import { XDialog } from '../../lib/XDialog/XDialog';
 import { EpistoDialogLogicType } from './EpistoDialogTypes';
 
-export const EpistoDialog = <TParams = any>(props: {
+export const EpistoDialog = <TParams = any>({
+    closeButtonType,
+    children,
+    logic,
+    getButtonComponents,
+    fullScreenX,
+    fullScreenY,
+    ...td
+}: {
     closeButtonType?: 'bottom' | 'top',
     logic: EpistoDialogLogicType<TParams>,
     fullScreenX?: boolean,
     fullScreenY?: boolean,
-    buttonComponents?: ButtonType<any>[],
+    getButtonComponents?: (params: Partial<TParams>) => ButtonType<any>[],
     children?: ReactNode,
-    title?: string,
-    description?: string
+    title?: string | ((params: Partial<TParams>) => string),
+    description?: string | ((params: Partial<TParams>) => string)
 }) => {
 
-    const dialogLogic = props.logic;
+    const paramsNonNullable = (logic.params ?? {}) as Partial<TParams>;
 
-    const {
-        closeButtonType,
-        children, logic,
-        buttonComponents,
-        fullScreenX,
-        fullScreenY
-    } = props;
+    const buttonComponents = getButtonComponents
+        ? getButtonComponents(paramsNonNullable)
+        : [];
 
-    const dialogButtons = props.logic.buttons
+    const title = typeof td.title === 'function'
+        ? td.title(paramsNonNullable)
+        : td.title;
+
+    const description = typeof td.description === 'function'
+        ? td.description(paramsNonNullable)
+        : td.description;
+
+    const dialogButtons = buttonComponents
         .concat(closeButtonType === 'bottom'
             ? [
                 {
                     title: 'Bezárás',
-                    action: (x: EpistoDialogLogicType<TParams>) => dialogLogic.closeDialog()
+                    action: (x: EpistoDialogLogicType<TParams>) => logic.closeDialog()
                 }
             ]
             : []);
-
-    const { title, description } = props;
 
     return <XDialog
         logic={logic.xlogic}>
@@ -61,7 +71,7 @@ export const EpistoDialog = <TParams = any>(props: {
                 text={title} />}
 
             {closeButtonType === 'top' && <Close
-                onClick={dialogLogic.closeDialog}
+                onClick={logic.closeDialog}
                 style={{
                     color: 'black',
                     margin: '15px',
@@ -81,7 +91,7 @@ export const EpistoDialog = <TParams = any>(props: {
                 minHeight="70px">
 
                 {/* simple text content */}
-                {description && description}
+                {description}
 
                 {/* react node contnet */}
                 {children}
@@ -102,7 +112,7 @@ export const EpistoDialog = <TParams = any>(props: {
                                 if (x.action)
                                     x.action(logic);
 
-                                dialogLogic.closeDialog();
+                                logic.closeDialog();
                             }}>
                             {x.title}
                         </EpistoButton>)}

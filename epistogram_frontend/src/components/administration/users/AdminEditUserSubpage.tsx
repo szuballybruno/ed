@@ -2,12 +2,9 @@ import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { UserApiService } from '../../../services/api/userApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
-import { UserEditReadDTO } from '../../../shared/dtos/UserEditReadDTO';
 import { UserEditSaveDTO } from '../../../shared/dtos/UserEditSaveDTO';
 import { Id } from '../../../shared/types/versionId';
 import { useEventTrigger, useSubscribeEventTrigger } from '../../../static/frontendHelpers';
-import { EpistoDialog } from '../../universal/epistoDialog/EpistoDialog';
-import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogLogic';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { AdminEditUserControl } from './AdminEditUserControl';
 
@@ -49,49 +46,15 @@ export const AdminEditUserSubpage = ({
     // subscribe refetch trigger
     useSubscribeEventTrigger(refetchTrigger, refetchEditUserData);
 
-    const deleteWaningDialogLogic = useEpistoDialogLogic('delwarn');
-
-    const showDeleteUserDialog = (user: UserEditReadDTO | null) => {
-
-        if (!user)
-            return;
-
-        deleteWaningDialogLogic
-            .openDialog({
-                title: 'Biztosan törlöd a felhasználót?',
-                description: `${user.lastName} ${user.firstName} nevű felhasználó visszavonhatatlanul törölve lesz!`,
-                buttons: [
-                    {
-                        title: 'Törlés',
-                        action: async () => {
-
-                            try {
-
-                                await UserApiService.deleteUserAsync(user.userId);
-                                await refetchUsersFunction();
-                            }
-                            catch (e) {
-
-                                showError(e);
-                            }
-                        }
-                    }
-                ]
-            });
-    };
-
     return (
         <AdminSubpageHeader
             tabMenuItems={tabMenuItems}
             headerButtons={headerButtons}>
 
-            <EpistoDialog logic={deleteWaningDialogLogic} />
-
             <AdminEditUserControl
                 editedUserId={userId}
                 refetchTrigger={refetchTrigger}
                 editDTO={userEditData}
-                showDeleteUserDialog={showDeleteUserDialog}
                 saveUserAsync={handleSaveUserAsync} />
         </AdminSubpageHeader>
     );

@@ -28,14 +28,12 @@ export const AdminEditUserControl = ({
     refetchTrigger,
     selectedCompanyId,
     saveUserAsync,
-    showDeleteUserDialog
 }: {
     editedUserId: Id<'User'>,
     editDTO: UserEditReadDTO | null,
     refetchTrigger: EventTriggerType,
     selectedCompanyId?: Id<'Company'> | null,
     saveUserAsync: (editDTO: UserEditSaveDTO) => Promise<void>
-    showDeleteUserDialog?: (UserEditDTO: UserEditReadDTO | null) => void
 }) => {
 
     const { hasPermission } = useAuthorizationContext();
@@ -444,17 +442,6 @@ export const AdminEditUserControl = ({
 
         {/* buttons */}
         <TailingAdminButtons
-            onDeleteCallback={() => {
-
-                if (showDeleteUserDialog) {
-
-                    showDeleteUserDialog(editDTO);
-                } else {
-
-                    throw new Error('Not implemented!');
-                    // history.goBack();
-                }
-            }}
             onSaveCallback={handleSaveUserAsync} />
     </EpistoFlex2 >;
 };

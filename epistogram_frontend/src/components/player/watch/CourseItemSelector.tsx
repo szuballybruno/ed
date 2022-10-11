@@ -67,14 +67,7 @@ export const CourseItemSelector = (props: {
     const changeToAdvancedModePermanently = () => {
 
         dialogLogic
-            .openDialog({
-                buttons: [
-                    {
-                        action: () => setCourseMode('advanced'),
-                        title: 'Váltás haladó módra',
-                    }
-                ]
-            });
+            .openDialog();
     };
 
     const onTempomatModeChanged = async () => {
@@ -115,6 +108,12 @@ export const CourseItemSelector = (props: {
         {/* warning dialog */}
         {!isMobile && <EpistoDialog
             logic={dialogLogic}
+            getButtonComponents={() => [
+                {
+                    action: () => setCourseMode('advanced'),
+                    title: 'Váltás haladó módra',
+                }
+            ]}
             closeButtonType="top">
 
             <EpistoFlex2
