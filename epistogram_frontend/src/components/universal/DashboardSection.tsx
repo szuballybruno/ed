@@ -71,6 +71,7 @@ export const DashboardSection = ({
             </EpistoHeader>
 
             <EpistoFlex2
+                flex='1'
                 p='0 10px'>
 
                 {children}
