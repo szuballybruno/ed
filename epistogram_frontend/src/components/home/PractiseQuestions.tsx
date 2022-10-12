@@ -78,82 +78,78 @@ export const PractiseQuestions = (props: {
      * If questions are available, 
      * return practise questions view 
      */
-    return (
+    return <>
+
         <EpistoFlex2
-            className="whall"
-            wrap="wrap">
+            position="absolute"
+            top="-35"
+            right="10"
+            align="center"
+            display={isCorrectAnswer ? undefined : 'none'}>
+
+            <EpistoFont>
+                {translatableTexts.practiseQuestions.epistoCoinAquired_BeforeCoinIcon}
+            </EpistoFont>
+
+            <EpistoConinImage />
+
+            <EpistoFont>
+                {translatableTexts.practiseQuestions.epistoCoinAquired_AfterCoinIcon}
+            </EpistoFont>
+        </EpistoFlex2>
+
+        {/* question section */}
+        <EpistoFlex2
+            flex="1"
+            direction="column"
+            margin="auto"
+            minWidth="300px">
+
+            <EpistoFont
+                style={{
+                    display: isAnswered ? undefined : 'none',
+                    marginTop: 20,
+                    fontSize: 16,
+                    alignSelf: 'center'
+                }}>
+
+                {practiseQuestion.questionText}
+            </EpistoFont>
+
+            <QuesitionView
+                answerQuesitonAsync={handleAnswerQuestionAsync}
+                loadingProps={{ loadingState: answerQuestionState }}
+                question={practiseQuestion}
+                onlyShowAnswers={isAnswered}
+                answerResult={answerResults} />
 
             <EpistoFlex2
-                position="absolute"
-                top="-35"
-                right="10"
-                align="center"
-                display={isCorrectAnswer ? undefined : 'none'}>
-
-                <EpistoFont>
-                    {translatableTexts.practiseQuestions.epistoCoinAquired_BeforeCoinIcon}
-                </EpistoFont>
-
-                <EpistoConinImage />
-
-                <EpistoFont>
-                    {translatableTexts.practiseQuestions.epistoCoinAquired_AfterCoinIcon}
-                </EpistoFont>
-            </EpistoFlex2>
-
-            {/* question section */}
-            <EpistoFlex2
-                flex="1"
-                direction="column"
-                margin="auto"
-                minWidth="300px">
+                justifyContent="center"
+                display={isAnswered ? undefined : 'none'}>
 
                 <EpistoFont
                     style={{
                         display: isAnswered ? undefined : 'none',
-                        marginTop: 20,
                         fontSize: 16,
+                        marginRight: 15,
                         alignSelf: 'center'
                     }}>
 
-                    {practiseQuestion.questionText}
+                    {isCorrectAnswer
+                        ? translatableTexts.practiseQuestions.answerIsCorrect
+                        : translatableTexts.practiseQuestions.answerIsIncorrect}
                 </EpistoFont>
 
-                <QuesitionView
-                    answerQuesitonAsync={handleAnswerQuestionAsync}
-                    loadingProps={{ loadingState: answerQuestionState }}
-                    question={practiseQuestion}
-                    onlyShowAnswers={isAnswered}
-                    answerResult={answerResults} />
+                <EpistoButton
+                    variant="colored"
+                    style={{
+                        fontSize: 15
+                    }}
+                    onClick={handleNextQuestion}>
 
-                <EpistoFlex2
-                    justifyContent="center"
-                    display={isAnswered ? undefined : 'none'}>
-
-                    <EpistoFont
-                        style={{
-                            display: isAnswered ? undefined : 'none',
-                            fontSize: 16,
-                            marginRight: 15,
-                            alignSelf: 'center'
-                        }}>
-
-                        {isCorrectAnswer
-                            ? translatableTexts.practiseQuestions.answerIsCorrect
-                            : translatableTexts.practiseQuestions.answerIsIncorrect}
-                    </EpistoFont>
-
-                    <EpistoButton
-                        variant="colored"
-                        style={{
-                            fontSize: 15
-                        }}
-                        onClick={handleNextQuestion}>
-
-                        {translatableTexts.practiseQuestions.nextQuestion}
-                    </EpistoButton>
-                </EpistoFlex2>
+                    {translatableTexts.practiseQuestions.nextQuestion}
+                </EpistoButton>
             </EpistoFlex2>
         </EpistoFlex2>
-    );
+    </>;
 };
