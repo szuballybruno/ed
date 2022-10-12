@@ -50,11 +50,11 @@ export const UserContextMenu = (props: {
             icon: applicationRoutes.settingsRoute.icon,
             onClick: () => navigate2(applicationRoutes.settingsRoute.preferencesRoute),
         })
-        .add({
+        /* .add({
             name: applicationRoutes.settingsRoute.featurePreviewRoute.title,
             icon: applicationRoutes.settingsRoute.featurePreviewRoute.icon,
             onClick: () => openNewTab('https://epistogram.com/upcoming-features'),
-        })
+        }) */
         .add({
             name: translatableTexts.navbar.signout,
             icon: <LogoutIcon></LogoutIcon>,

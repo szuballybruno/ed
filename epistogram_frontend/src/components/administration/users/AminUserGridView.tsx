@@ -127,7 +127,7 @@ const useColumns = (
                     variant="outlined"
                     onClick={() => navigate2(applicationRoutes.administrationRoute.usersRoute.userRoute.editRoute, { userId: value })}>
 
-                    Bovebben
+                    Bővebben
                 </EpistoButton>
                 <EpistoButton
                     margin={{
@@ -392,14 +392,19 @@ export const AminUserGridView = ({
                     {/* add button */}
                     {!isSimpleView && <EpistoButton
                         style={{
-                            alignItems: 'center'
+                            alignItems: 'center',
+                            margin: '0 5px'
                         }}>
 
                         <Add
                             style={{
-                                height: 30
+                                height: 20,
+                                margin: '0 5px 2px 2px'
                             }}
                             onClick={() => navigate2(usersRoute.addRoute)} />
+
+                        Felhasználó hozzáadása
+
                     </EpistoButton>}
                 </EpistoFlex2>
             </Flex>

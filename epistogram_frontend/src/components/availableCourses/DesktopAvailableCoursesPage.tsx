@@ -165,14 +165,18 @@ export const DesktopAvailableCoursesPage = ({
                         </ToggleButton>
                     </ToggleButtonGroup>
 
-                    <EpistoSearch
-                        onChange={(e) => {
-                            handleSetFilterProp('searchText', e.currentTarget.value);
-                        }}
-                        value={filterProps.searchText || ''}
-                        flex="5"
-                        height="40px"
-                        mx="10px" />
+                    <EpistoFlex2
+                        flex='5'
+                        mx='5px'>
+
+                        <EpistoSearch
+                            onChange={(e) => {
+                                handleSetFilterProp('searchText', e.currentTarget.value);
+                            }}
+                            value={filterProps.searchText || ''}
+                            flex="1" />
+                    </EpistoFlex2>
+
 
                     <Select
                         native

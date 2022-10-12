@@ -551,8 +551,8 @@ export const huTranslation: TranslationType = {
             editUserControl: {
                 selectAsTeacher: 'Megjelölés tanárként',
                 selectUserAsTeacher: 'Megjelölöm a felhasználót tanárként',
-                surveyIsRequiredLabel: 'Survey is required',
-                surveyIsRequiredCheckboxLabel: 'Mark survery as required',
+                surveyIsRequiredLabel: 'Tanulási stílust felmérő kérdőív',
+                surveyIsRequiredCheckboxLabel: 'A felhasználó számára kötelezően kitöltendő regisztrációnál',
             },
             teacherInfoSubpage: {
                 teacherInfoSaved: 'Tanár információk sikeresen mentve!',

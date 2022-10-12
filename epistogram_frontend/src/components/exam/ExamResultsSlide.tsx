@@ -47,6 +47,7 @@ export const ExamResultsSlide = (props: {
                 title: translatableTexts.exam.continueCourse,
                 action: continueCourse
             })
+            /* will be reenabled later             
             .addIf(!!exam.isFinalExam, {
                 title: 'Kurzus értékelése',
                 action: goToCourseRating
@@ -57,7 +58,7 @@ export const ExamResultsSlide = (props: {
 
                     navigate2(applicationRoutes.playerRoute.courseOverviewRoute, { courseId });
                 }
-            })
+            }) */
             .addIf(!!exam.isFinalExam, {
                 title: 'Vissza a tanfolyamkeresőbe',
                 action: () => {

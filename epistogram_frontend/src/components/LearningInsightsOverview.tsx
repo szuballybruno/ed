@@ -1,11 +1,9 @@
 import { useMediaQuery } from '@chakra-ui/react';
-import { ImproveYourselfSection } from './learningInsights/ImproveYourselfSection';
-import { LearningStatistics } from './learningInsights/LearningStatistics';
-import { DashboardSection } from './universal/DashboardSection';
-import { PersonalityAssessment } from './learningInsights/PersonalityAssessment';
 import { Id } from '../shared/types/versionId';
 import { EpistoFlex2 } from './controls/EpistoFlex';
-
+import { LearningStatistics } from './learningInsights/LearningStatistics';
+import { PersonalityAssessment } from './learningInsights/PersonalityAssessment';
+import { DashboardSection } from './universal/DashboardSection';
 export const LearningInsightsOverview = () => {
 
     const [isSmallerThan1400] = useMediaQuery('(min-width: 1400px)');
@@ -38,7 +36,7 @@ export const LearningInsightsOverview = () => {
             <PersonalityAssessment />
         </DashboardSection>
 
-        <DashboardSection
+        {/* <DashboardSection
             title='Hozd ki magadból a maximumot'
             background="var(--transparentWhite70)"
             borderRadius="6px"
@@ -47,6 +45,6 @@ export const LearningInsightsOverview = () => {
             marginBottom="10px">
 
             <ImproveYourselfSection />
-        </DashboardSection>
+        </DashboardSection> */}
     </EpistoFlex2>;
 };

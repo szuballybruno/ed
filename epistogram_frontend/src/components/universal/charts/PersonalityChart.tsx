@@ -28,6 +28,9 @@ export const PersonalityChart = (props: {
     }];
 
     return <EpistoRadarChart
+        style={{
+            minWidth: '100%'
+        }}
         title=""
         areas={traitAreas}
         radarIndicators={traitNames
