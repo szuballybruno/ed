@@ -41,7 +41,8 @@ export const NoQuestionsAvailable = () => {
                         display: 'inline-block'
                     }}>
 
-                    {translatableTexts.practiseQuestions.noMoreQuestionsGoWatchVideosTwo}
+                    {translatableTexts.practiseQuestions.noMoreQuestionsGoWatchVideosTwo}<br />
+                    {translatableTexts.practiseQuestions.noMoreQuestionsGoWatchVideosFour}
                 </EpistoFont>
 
                 <EpistoFont

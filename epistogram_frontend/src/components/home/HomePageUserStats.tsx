@@ -30,10 +30,10 @@ const HomePageUserStatsWrapper = (props: {
             className='whall'
             auto='fill'
             gap='10px'
-            minW='400px'
+            minW='450px'
             autoRows={isSmallDesktop ? '120px' : '150px'}
             gridTemplateColumns={isSmallDesktop ? 'auto auto auto auto' : 'auto auto'}
-            minColumnWidth={isSmallDesktop ? '140px' : '200px'}>
+            minColumnWidth={isSmallDesktop ? '140px' : '225px'}>
 
             {children}
         </EpistoGrid>;
@@ -55,7 +55,7 @@ export const HomePageUserStats = (props: {
         {/* videos to be repeated count */}
         <StatisticsCard
             isMobile={isMobile || isSmallDesktop}
-            minWidth={isSmallDesktop ? '140px' : undefined}
+            minWidth={isSmallDesktop ? '140px' : '225px'}
             marginTop={isMobile ? '5px' : undefined}
             title={translatableTexts.homePage.statsSummary.videosToBeRepeatedCount.title}
             value={homePageStats?.videosToBeRepeatedCount}
@@ -66,7 +66,7 @@ export const HomePageUserStats = (props: {
         {/* completed videos last month */}
         <StatisticsCard
             isMobile={isMobile || isSmallDesktop}
-            minWidth={isSmallDesktop ? '140px' : undefined}
+            minWidth={isSmallDesktop ? '140px' : '225px'}
             marginTop={isMobile ? '5px' : undefined}
             title={translatableTexts.homePage.statsSummary.completedVideosLastMonth.title}
             value={homePageStats?.completedVideosLastMonth}
@@ -77,7 +77,7 @@ export const HomePageUserStats = (props: {
         {/* progress  */}
         <StatisticsCard
             isMobile={isMobile || isSmallDesktop}
-            minWidth={isSmallDesktop ? '140px' : undefined}
+            minWidth={isSmallDesktop ? '140px' : '225px'}
             marginTop={isMobile ? '5px' : undefined}
             title={translatableTexts.homePage.statsSummary.lagBehindPercentage.title}
             value={getProgressFromLagBehind(homePageStats?.lagBehindPercentage)}
@@ -88,7 +88,7 @@ export const HomePageUserStats = (props: {
         {/* performance last month  */}
         <StatisticsCard
             isMobile={isMobile || isSmallDesktop}
-            minWidth={isSmallDesktop ? '140px' : undefined}
+            minWidth={isSmallDesktop ? '140px' : '225px'}
             marginTop={isMobile ? '5px' : undefined}
             title={translatableTexts.homePage.statsSummary.performanceLastMonth.title}
             value={homePageStats?.performanceLastMonth}

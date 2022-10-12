@@ -265,6 +265,7 @@ export type TranslationType = {
             nextQuestion: string;
             noMoreQuestionsGoWatchVideosOne: string;
             noMoreQuestionsGoWatchVideosTwo: string;
+            noMoreQuestionsGoWatchVideosFour: string;
             noMoreQuestionsGoWatchVideosThree: string;
             noMoreQuestionsGoWatchVideosButton: string;
             initialGreetingsFirst: string;
