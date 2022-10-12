@@ -125,7 +125,8 @@ export class UserService {
             availableRoles,
             availableCompanies: [],
             availableDepartments: departmentDTOs,
-            roleIds: userRoles.map(x => x.roleId)
+            roleIds: userRoles.map(x => x.roleId),
+            isSurveyRequired: res.isSurveyRequired
         });
     }
 
@@ -170,15 +171,6 @@ export class UserService {
         // save auth items
         await this._roleService
             .saveUserRolesAsync(principalId, userId, assignedRoleIds);
-    }
-
-    private async _getCompanyIdAsync(userId: Id<'User'>) {
-
-        const { companyId } = await this
-            ._ormService
-            .getSingleById(User, userId);
-
-        return { companyId };
     }
 
     /**

@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { ApplicationRoute, ButtonType } from '../../models/types';
 import { useNavigation } from '../../services/core/navigatior';
 import { useIsMatchingCurrentRoute } from '../../static/frontendHelpers';
+import { LocationHelpers } from '../../static/locationHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
@@ -44,6 +45,8 @@ export const AdminSubpageHeader = ({
     const currentMatchingRoute = tabMenuItemsList
         .firstOrNull(route => isMatchingCurrentRoute(route).isMatchingRouteExactly);
 
+    const { data: queryParams } = LocationHelpers.useQueryParams();
+
     const handleNavigateToTab = (path: string) => {
 
         const targetRoute = tabMenuItemsList
@@ -58,14 +61,16 @@ export const AdminSubpageHeader = ({
         }
         else {
 
-            navigate2(targetRoute, {
+            const routeParms = {
                 userId,
                 courseId,
                 videoId,
                 examId,
                 shopItemId,
-                ...navigationQueryParams
-            });
+                ...navigationQueryParams,
+            };
+
+            navigate2(targetRoute, routeParms, queryParams);
         }
     };
 

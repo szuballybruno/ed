@@ -1,4 +1,3 @@
-import { Checkbox } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useCoinBalanceOfUser, useGiftCoinsToUser } from '../../../services/api/coinTransactionsApiService';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
@@ -11,10 +10,12 @@ import { parseIntOrNull } from '../../../static/frontendHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoCheckbox } from '../../controls/EpistoCheckbox';
+import { EpistoCheckboxLabel } from '../../controls/EpistoCheckboxLabel';
 import { EpistoEntry } from '../../controls/EpistoEntry';
 import { EpistoEntryNew, useEpistoEntryState } from '../../controls/EpistoEntryNew';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
+import { EpistoFormLabel } from '../../controls/EpistoFormLabel';
 import { EpistoLabel } from '../../controls/EpistoLabel';
 import { EpistoSelect } from '../../controls/EpistoSelect';
 import { useSetBusy } from '../../system/LoadingFrame/BusyBarContext';
@@ -25,7 +26,6 @@ import { TailingAdminButtons } from '../TailingAdminButtons';
 export const AdminEditUserControl = ({
     editDTO,
     editedUserId,
-    selectedCompanyId,
     saveUserAsync,
     activeCompany,
     companies
@@ -33,7 +33,6 @@ export const AdminEditUserControl = ({
     editedUserId: Id<'User'>,
     editDTO: UserEditReadDTO | null,
     companies: CompanyDTO[],
-    selectedCompanyId?: Id<'Company'> | null,
     saveUserAsync: (editDTO: UserEditSaveDTO) => Promise<void>,
     activeCompany: CompanyDTO | null
 }) => {
@@ -46,7 +45,7 @@ export const AdminEditUserControl = ({
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [departmentId, setDepartmentId] = useState<Id<'Department'> | null>(null);
-    const [companyId, setCompanyId] = useState<Id<'Company'> | null>(null);
+    const [selectedCompanyId, setSelectedCompanyId] = useState<Id<'Company'> | null>(null);
     const [isTeacher, setIsTeacher] = useState(false);
     const [assignedRoleIds, setAssignedRoleIds] = useState<Id<'Role'>[]>([]);
     const [isSurveyRequired, setIsSurveyRequired] = useState(true);
@@ -69,7 +68,7 @@ export const AdminEditUserControl = ({
     const defaultCompany = activeCompany ?? companies.firstOrNull();
 
     const company = companies
-        .firstOrNull(x => x.id === companyId) ?? defaultCompany;
+        .firstOrNull(x => x.id === selectedCompanyId) ?? defaultCompany;
 
     /**
      * Load state from editDTO
@@ -90,8 +89,9 @@ export const AdminEditUserControl = ({
             email,
             isTeacher,
             departmentId,
-            companyId,
-            roleIds
+            roleIds,
+            isSurveyRequired,
+            companyId
         } = editDTO ?? {
             firstName: '',
             lastName: '',
@@ -99,7 +99,8 @@ export const AdminEditUserControl = ({
             isTeacher: false,
             departmentId: null,
             companyId: defaultCompanyId,
-            roleIds: [] as Id<'Role'>[]
+            roleIds: [] as Id<'Role'>[],
+            isSurveyRequired: defaultIsSurveyRequired
         };
 
         setFirstName(firstName);
@@ -107,10 +108,10 @@ export const AdminEditUserControl = ({
         setEmail(email);
         setIsTeacher(isTeacher);
         setDepartmentId(departmentId);
-        setCompanyId(companyId);
+        setSelectedCompanyId(companyId);
         setAssignedRoleIds(roleIds);
         setAssignedRoleIds(roleIds);
-        setIsSurveyRequired(defaultIsSurveyRequired);
+        setIsSurveyRequired(isSurveyRequired);
     }, [editDTO, defaultCompany]);
 
     const coinAmountEntryState = useEpistoEntryState({
@@ -148,39 +149,25 @@ export const AdminEditUserControl = ({
 
     const handleSaveUserAsync = async () => {
 
-        if (mode === 'EDIT' && companyId && departmentId) {
+        if (!company)
+            throw new Error('Can not save without company id!');
 
-            const editedUserDTO: UserEditSaveDTO = {
-                userId: editedUserId,
-                firstName,
-                lastName,
-                email,
-                companyId,
-                departmentId,
-                isTeacher,
-                assignedRoleIds,
-                isSurveyRequired
-            };
+        if (!departmentId)
+            throw new Error('Can not save without department id!');
 
-            return saveUserAsync(editedUserDTO);
-        }
+        const editedUserDTO: UserEditSaveDTO = {
+            userId: editedUserId,
+            firstName,
+            lastName,
+            email,
+            companyId: company.id,
+            departmentId,
+            isTeacher,
+            assignedRoleIds,
+            isSurveyRequired
+        };
 
-        if (mode === 'ADD' && selectedCompanyId && departmentId) {
-
-            const editedUserDTO: UserEditSaveDTO = {
-                userId: editedUserId,
-                firstName,
-                lastName,
-                email,
-                companyId: selectedCompanyId,
-                departmentId,
-                isTeacher,
-                assignedRoleIds,
-                isSurveyRequired
-            };
-
-            return saveUserAsync(editedUserDTO);
-        }
+        return saveUserAsync(editedUserDTO);
     };
 
     return <EpistoFlex2 direction="column"
@@ -254,7 +241,7 @@ export const AdminEditUserControl = ({
                         ? <EpistoSelect
                             items={companies}
                             selectedValue={company}
-                            onSelected={x => setCompanyId(x.id)}
+                            onSelected={x => setSelectedCompanyId(x.id)}
                             getDisplayValue={x => '' + x.name}
                             getCompareKey={company => '' + company?.id} />
                         : <EpistoFont
@@ -440,27 +427,31 @@ export const AdminEditUserControl = ({
         <EditSection
             title="Alkalmazás adatai">
 
+            {/* is survey required */}
+            <EpistoFormLabel
+                text={translatableTexts.administration.editUserControl.surveyIsRequiredLabel}>
+
+                <EpistoCheckboxLabel
+                    label={translatableTexts.administration.editUserControl.surveyIsRequiredCheckboxLabel}>
+
+                    <EpistoCheckbox
+                        value={isSurveyRequired}
+                        setValue={setIsSurveyRequired} />
+                </EpistoCheckboxLabel>
+            </EpistoFormLabel>
+
             {/* is teacher */}
-            <EpistoFont isUppercase
-                fontSize="fontExtraSmall"
-                style={{
-                    marginTop: 10,
-                    letterSpacing: '1.2px'
-                }}>
-                {translatableTexts.administration.editUserControl.selectAsTeacher}
-            </EpistoFont>
+            <EpistoFormLabel
+                text={translatableTexts.administration.editUserControl.selectAsTeacher}>
 
-            <EpistoFlex2 align="center">
-                <Checkbox
-                    checked={isTeacher}
-                    onChange={(_, x) => setIsTeacher(x)} />
+                <EpistoCheckboxLabel
+                    label={translatableTexts.administration.editUserControl.selectUserAsTeacher}>
 
-                <EpistoFont
-                    style={{ flex: '1' }}>
-
-                    {translatableTexts.administration.editUserControl.selectUserAsTeacher}
-                </EpistoFont>
-            </EpistoFlex2>
+                    <EpistoCheckbox
+                        value={isTeacher}
+                        setValue={setIsTeacher} />
+                </EpistoCheckboxLabel>
+            </EpistoFormLabel>
         </EditSection>
 
         {/* buttons */}

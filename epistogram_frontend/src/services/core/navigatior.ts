@@ -23,18 +23,18 @@ export const useNavigation = () => {
         route: (ApplicationRoute<TParams, TQuery>),
         ...args: TParams extends void
             ? TQuery extends void
-            ? []
-            : [TQuery]
+                ? []
+                : [TQuery]
             : TQuery extends void
-            ? [TParams]
-            : [TParams, TQuery]) => {
+                ? [TParams]
+                : [TParams, TQuery]) => {
 
-        const [params] = args;
+        const [params, query] = args;
 
         if (!route.route)
             return;
 
-        const replacedPath = getUrl(route.route.getAbsolutePath(), params);
+        const replacedPath = getUrl(route.route.getAbsolutePath(), params, query);
 
         Logger.logScoped('ROUTING', 'Navigating to: ' + replacedPath);
 

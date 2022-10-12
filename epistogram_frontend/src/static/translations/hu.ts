@@ -547,8 +547,10 @@ export const huTranslation: TranslationType = {
                 dateRange: 'Vizsgált időszak'
             },
             editUserControl: {
+                selectAsTeacher: 'Megjelölés tanárként',
                 selectUserAsTeacher: 'Megjelölöm a felhasználót tanárként',
-                selectAsTeacher: 'Megjelölés tanárként'
+                surveyIsRequiredLabel: 'Survey is required',
+                surveyIsRequiredCheckboxLabel: 'Mark survery as required',
             },
             teacherInfoSubpage: {
                 teacherInfoSaved: 'Tanár információk sikeresen mentve!',

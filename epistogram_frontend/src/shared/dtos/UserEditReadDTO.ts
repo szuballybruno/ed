@@ -12,6 +12,7 @@ export class UserEditReadDTO {
     companyId: Id<'Company'>;
     departmentId: Id<'Department'> | null;
     roleIds: Id<'Role'>[];
+    isSurveyRequired: boolean;
 
     availableRoles: RoleDTO[];
     availableCompanies: CompanyDTO[];

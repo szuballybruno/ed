@@ -1190,7 +1190,7 @@ const marray = [
                 return instantiate<CompanyDTO>({
                     id: view.companyId,
                     name: view.companyName,
-                    isSurveyRequired: false
+                    isSurveyRequired: view.isSurveyRequired
                 });
             });
         }),

@@ -3,7 +3,7 @@ import { Id } from '../../../shared/types/versionId';
 import { LocationHelpers } from '../../../static/locationHelpers';
 import { EpistoSelect } from '../../controls/EpistoSelect';
 
-export const useCompanySelectorDropdownLogic = ({
+export const useCompanySelectorLogic = ({
     companies
 }: {
     companies: CompanyDTO[]
@@ -35,7 +35,7 @@ export const useCompanySelectorDropdownLogic = ({
     };
 };
 
-export type CompanySelectorDropdownLogicType = ReturnType<typeof useCompanySelectorDropdownLogic>;
+export type CompanySelectorLogicType = ReturnType<typeof useCompanySelectorLogic>;
 
 export const CompanySelectorDropdown = ({
     logic: {
@@ -44,7 +44,7 @@ export const CompanySelectorDropdown = ({
         activeCompanyId
     }
 }: {
-    logic: CompanySelectorDropdownLogicType
+    logic: CompanySelectorLogicType
 }) => {
 
     const companyItems: CompanyDTO[] = [

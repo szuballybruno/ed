@@ -42,8 +42,11 @@ export class CompanyService {
     }
 
     /**
-     * TODO
-     * Does something wtf is this?
+     * Get all companies accessable by principal
+     * these are used in a dropdown in admin,
+     * tho select the active company, the principal is viewing. 
+     * Non admin users useually should have only one (their) company available 
+     * to them.
      */
     async getPrincipalCompaniesAsync(principalId: PrincipalId) {
 

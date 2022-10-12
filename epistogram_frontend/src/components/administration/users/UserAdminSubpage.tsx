@@ -10,7 +10,7 @@ import { EpistoRoutes } from '../../universal/EpistoRoutes';
 import { AdminBreadcrumbsHeader } from '../AdminBreadcrumbsHeader';
 import { AdminAddUserSubpage } from './AdminAddUserSubpage';
 import { AminUserGridView, useAdminUserGridLogic, useGridFilterSettingsLogic } from './AminUserGridView';
-import { CompanySelectorDropdown, useCompanySelectorDropdownLogic } from './CompanySelectorDropdown';
+import { CompanySelectorDropdown, useCompanySelectorLogic } from './CompanySelectorDropdown';
 import { UserDetailsRootView } from './UserDetailsRootView';
 
 export const UserAdminSubpage = () => {
@@ -31,7 +31,7 @@ export const UserAdminSubpage = () => {
 
     const filterLogic = useGridFilterSettingsLogic();
 
-    const companySelectorLogic = useCompanySelectorDropdownLogic({ companies });
+    const companySelectorLogic = useCompanySelectorLogic({ companies });
 
     const gridLogic = useAdminUserGridLogic({
         isSimpleView,
@@ -59,7 +59,8 @@ export const UserAdminSubpage = () => {
                     minWidth="350px">
 
                     <AminUserGridView
-                        logic={gridLogic} />
+                        logic={gridLogic}
+                        companySelectorLogic={companySelectorLogic} />
                 </EpistoFlex2>
 
                 <EpistoRoutes
