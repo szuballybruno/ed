@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useCoinBalanceOfUser, useGiftCoinsToUser } from '../../../services/api/coinTransactionsApiService';
+import { UserApiService } from '../../../services/api/userApiService';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
 import { CompanyDTO } from '../../../shared/dtos/company/CompanyDTO';
 import { RoleDTO } from '../../../shared/dtos/RoleDTO';
@@ -54,17 +55,12 @@ export const AdminEditUserControl = ({
 
     const { coinBalance, coinBalanceStatus, coinBalanceError, refetchCoinBalance } = useCoinBalanceOfUser(mode === 'EDIT' ? editedUserId : null);
     const { giftCoinsToUserAsync, giftCoinsToUserState } = useGiftCoinsToUser();
+    const { userControlDropdownData } = UserApiService.useUserControlDropdownData();
 
     useSetBusy(useCoinBalanceOfUser, coinBalanceStatus, coinBalanceError);
 
-    const {
-        availableDepartments,
-        availableRoles
-    } = editDTO ?? ({
-        availableDepartments: [] as UserEditReadDTO['availableDepartments'],
-        availableRoles: [] as UserEditReadDTO['availableRoles']
-    });
-
+    const availableDepartments = userControlDropdownData?.departments ?? [];
+    const availableRoles = userControlDropdownData?.availableRoles ?? [];
     const defaultCompany = activeCompany ?? companies.firstOrNull();
 
     const company = companies

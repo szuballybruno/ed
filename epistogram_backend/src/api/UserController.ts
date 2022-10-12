@@ -52,6 +52,13 @@ export class UserController implements XController<UserController> {
             .saveUserSimpleAsync(params.principalId, dto);
     }
 
+    @XControllerAction(apiRoutes.user.getUserControlDropdownData)
+    userControlDropdownDataAction(params: ActionParams) {
+
+        return this._userService
+            .getUserControlDropdownDataAsync(params.principalId);
+    }
+
     @XControllerAction(apiRoutes.user.saveUser, { isPost: true })
     saveUserAction(params: ActionParams) {
 

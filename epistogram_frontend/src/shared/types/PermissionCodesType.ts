@@ -229,7 +229,7 @@ export type PermissionScopeParamType = {
 
 type ScopeParamByScopeType<T extends PermissionScopeType> = T extends 'COMPANY'
     ? {
-        companyId: Id<'Company'> | 'any'
+        companyId: Id<'Company'> 
     }
     : T extends 'COURSE'
     ? {

@@ -1,5 +1,6 @@
 import { AdminPageUserDTO } from '../../shared/dtos/admin/AdminPageUserDTO';
 import { BriefUserDataDTO } from '../../shared/dtos/BriefUserDataDTO';
+import { UserControlDropdownDataDTO } from '../../shared/dtos/UserControlDropdownDataDTO';
 import { UserEditReadDTO } from '../../shared/dtos/UserEditReadDTO';
 import { UserEditSaveDTO } from '../../shared/dtos/UserEditSaveDTO';
 import { UserEditSimpleDTO } from '../../shared/dtos/UserEditSimpleDTO';
@@ -44,9 +45,23 @@ const useUserIsTeacher = (editedUserId: Id<'User'> | null) => {
     };
 };
 
+const useUserControlDropdownData = () => {
+
+    const queryRes = QueryService
+        .useXQuery<UserControlDropdownDataDTO>(apiRoutes.user.getUserControlDropdownData);
+
+    return {
+        userControlDropdownData: queryRes.data,
+        userControlDropdownDataStatus: queryRes.state,
+        userControlDropdownDataError: queryRes.error,
+        refetchUserControlDropdownData: queryRes.refetch
+    };
+};
+
 export const UserApiService = {
 
     useSaveUserAssignedCourses,
+    useUserControlDropdownData,
     useUserListQuery: (searchText: string | null, companyId: Id<'Company'> | null) => {
 
         const queryResult = QueryService.useXQuery<AdminPageUserDTO[]>(apiRoutes.user.getUserListForAdministration, { searchText, companyId });

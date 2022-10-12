@@ -1,6 +1,7 @@
 
 import { AuthenticationController } from '../api/AuthenticationController';
 import { CourseProgressController } from '../api/CourseProgressController';
+import { InvitationController } from '../api/InvitationController';
 import { PlaylistController } from '../api/PlaylistController';
 import { LoggerService } from '../services/LoggerService';
 import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
@@ -121,6 +122,7 @@ export const initTurboExpress = (
         .addController(CommentController)
         .addController(AuthenticationController)
         .addController(ExamController)
+        .addController(InvitationController)
         .addController(RegistrationController)
         .addController(TempomatController)
         .addController(DailyTipController)
