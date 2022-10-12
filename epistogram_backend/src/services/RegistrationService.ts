@@ -89,7 +89,7 @@ export class RegistrationService {
             firstName,
             lastName,
             companyId: activationCodeEntity.companyId,
-            departmentId: 1 as any
+            departmentId: 26 as any
         });
 
         // invalidate activation code
