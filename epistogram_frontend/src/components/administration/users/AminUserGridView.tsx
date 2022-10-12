@@ -22,6 +22,7 @@ import { segmentedButtonStyles } from '../../controls/segmentedButtonStyles';
 import { ProfileImage } from '../../ProfileImage';
 import { EpistoDialog } from '../../universal/epistoDialog/EpistoDialog';
 import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogLogic';
+import { CompanySelectorLogicType } from './CompanySelectorDropdown';
 import { UsersSearchFilters } from './UsersSearchFilters';
 
 const useColumns = (
@@ -187,11 +188,11 @@ const mapToRow = (user: UserOverviewDTO): RowType => {
                 day: '2-digit'
             }) + '',
         averagePerformancePercentage: user.averagePerformancePercentage,
-        invertedLagBehind: user.invertedLagBehind,
+        invertedLagBehind: user.invertedLagBehind!,
         totalSessionLengthSeconds: user.totalSessionLengthSeconds,
         completedCourseItemCount: user.completedCourseItemCount,
         engagementPoints: user.engagementPoints,
-        productivityPercentage: user.productivityPercentage,
+        productivityPercentage: user.productivityPercentage!,
         detailsButton: user.userId
     });
 };
@@ -297,9 +298,11 @@ export const AminUserGridView = ({
         isSimpleView,
         userId,
         refetchUsers
-    }
+    },
+    companySelectorLogic
 }: {
-    logic: AdminUserGridLogicType
+    logic: AdminUserGridLogicType,
+    companySelectorLogic: CompanySelectorLogicType
 }) => {
 
     const userRows = users
@@ -309,7 +312,6 @@ export const AminUserGridView = ({
     const { usersRoute } = applicationRoutes.administrationRoute;
     const { userRoute } = usersRoute;
     const isMatchingCurrentAppRoute = useIsMatchingCurrentRoute();
-
 
     const deleteWaningDialogLogic = useEpistoDialogLogic<RowType>('delwarn');
     const showError = useShowErrorDialog();
@@ -327,7 +329,11 @@ export const AminUserGridView = ({
 
                 if (isMatchingCurrentAppRoute(appRoute).isMatchingRouteExactly) {
 
-                    navigate2(appRoute, { userId });
+                    const query = companySelectorLogic.activeCompanyId
+                        ? { companyId: companySelectorLogic.activeCompanyId }
+                        : undefined;
+
+                    navigate2(appRoute, { userId }, query);
                 }
             });
     });

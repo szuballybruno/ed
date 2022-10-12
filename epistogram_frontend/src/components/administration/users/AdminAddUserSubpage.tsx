@@ -3,6 +3,7 @@ import { ButtonType } from '../../../models/types';
 import { useCreateInviteUserAsync } from '../../../services/api/registrationApiService';
 import { UserApiService } from '../../../services/api/userApiService';
 import { showNotification } from '../../../services/core/notifications';
+import { CompanyDTO } from '../../../shared/dtos/company/CompanyDTO';
 import { Id } from '../../../shared/types/versionId';
 import { useEventTrigger, usePostCallback } from '../../../static/frontendHelpers';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
@@ -10,14 +11,16 @@ import { AdminEditUserControl } from './AdminEditUserControl';
 
 export const AdminAddUserSubpage = ({
     refetchUsersFunction,
-    selectedCompanyId,
+    activeCompany,
     headerButtons,
-    tabMenuItems
+    tabMenuItems,
+    companies
 }: {
     refetchUsersFunction: () => void,
-    selectedCompanyId: Id<'Company'> | null,
+    activeCompany: CompanyDTO | null,
     tabMenuItems: any[],
-    headerButtons: ButtonType[]
+    headerButtons: ButtonType[],
+    companies: CompanyDTO[]
 }) => {
 
     const { userEditData } = UserApiService.useEditUserData(null);
@@ -41,10 +44,10 @@ export const AdminAddUserSubpage = ({
             tabMenuItems={tabMenuItems}>
 
             <AdminEditUserControl
+                companies={companies}
                 editedUserId={Id.create(-1)}
-                refetchTrigger={refetchTrigger}
                 editDTO={userEditData}
-                selectedCompanyId={selectedCompanyId}
+                activeCompany={activeCompany}
                 saveUserAsync={handleCreateInvitedUser} />
         </AdminSubpageHeader>
     );

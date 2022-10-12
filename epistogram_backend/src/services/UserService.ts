@@ -11,6 +11,7 @@ import { AdminPageUserDTO } from '../shared/dtos/admin/AdminPageUserDTO';
 import { BriefUserDataDTO } from '../shared/dtos/BriefUserDataDTO';
 import { DepartmentDTO } from '../shared/dtos/DepartmentDTO';
 import { Mutation } from '../shared/dtos/mutations/Mutation';
+import { UserControlDropdownDataDTO } from '../shared/dtos/UserControlDropdownDataDTO';
 import { UserCourseStatsDTO } from '../shared/dtos/UserCourseStatsDTO';
 import { UserDTO } from '../shared/dtos/UserDTO';
 import { UserEditReadDTO } from '../shared/dtos/UserEditReadDTO';
@@ -57,6 +58,32 @@ export class UserService {
     }
 
     /**
+     * Gets some dropdown data for the user control 
+     */
+    async getUserControlDropdownDataAsync(principalId: PrincipalId) {
+
+        const departments = await this
+            ._ormService
+            .query(Department, {})
+            .getMany();
+
+        const availableRoles = await this
+            ._roleService
+            .getAllRolesAsync(principalId);
+
+        const departmentDTOs = departments
+            .map((x): DepartmentDTO => ({
+                id: x.id,
+                name: x.name
+            }));
+
+        return instantiate<UserControlDropdownDataDTO>({
+            departments: departmentDTOs,
+            availableRoles
+        });
+    }
+
+    /**
      * Get user edit data
           */
     async getEditUserDataAsync(
@@ -95,24 +122,9 @@ export class UserService {
             .where('id', '=', 'editedUserId')
             .getSingle();
 
-        const availableRoles = await this
-            ._roleService
-            .getAllRolesAsync(principalId);
-
         const userRoles = await this
             ._roleService
             .getUserRolesAsync(principalId, editedUserId);
-
-        const departments = await this
-            ._ormService
-            .query(Department, {})
-            .getMany();
-
-        const departmentDTOs = departments
-            .map((x): DepartmentDTO => ({
-                id: x.id,
-                name: x.name
-            }));
 
         return instantiate<UserEditReadDTO>({
             userId: editedUserId,
@@ -122,10 +134,8 @@ export class UserService {
             isTeacher: !!res.teacherInfoId,
             departmentId: res.departmentId,
             companyId: res.companyId,
-            availableRoles,
-            availableCompanies: [],
-            availableDepartments: departmentDTOs,
-            roleIds: userRoles.map(x => x.roleId)
+            roleIds: userRoles.map(x => x.roleId),
+            isSurveyRequired: res.isSurveyRequired
         });
     }
 
@@ -142,7 +152,8 @@ export class UserService {
             email,
             firstName,
             isTeacher,
-            lastName
+            lastName,
+            isSurveyRequired
         } = dto;
 
         const user = await this
@@ -159,7 +170,8 @@ export class UserService {
                 firstName,
                 email,
                 companyId,
-                departmentId
+                departmentId,
+                isSurveyRequired
             });
 
         // save teacher info
@@ -168,15 +180,6 @@ export class UserService {
         // save auth items
         await this._roleService
             .saveUserRolesAsync(principalId, userId, assignedRoleIds);
-    }
-
-    private async _getCompanyIdAsync(userId: Id<'User'>) {
-
-        const { companyId } = await this
-            ._ormService
-            .getSingleById(User, userId);
-
-        return { companyId };
     }
 
     /**

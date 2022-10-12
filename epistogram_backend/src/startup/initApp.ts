@@ -90,7 +90,7 @@ export class ServiceProviderInitializator implements IInitializeTransientProvide
      */
     private _initSingletons() {
 
-        const singletonServiceProvider = instansiateSingletonServices(this._rootDir, this._isPurgeMode);
+        const singletonServiceProvider = instansiateSingletonServices(this._rootDir);
         if (this._modifySingletons)
             this._modifySingletons(singletonServiceProvider);
 

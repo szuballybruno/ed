@@ -1,27 +1,63 @@
 import { CompanyDTO } from '../../../shared/dtos/company/CompanyDTO';
 import { Id } from '../../../shared/types/versionId';
+import { LocationHelpers } from '../../../static/locationHelpers';
 import { EpistoSelect } from '../../controls/EpistoSelect';
 
-export const CompanySelectorDropdown = ({
-    selectedCompanyId,
-    handleSelectCompany,
+export const useCompanySelectorLogic = ({
     companies
 }: {
-    selectedCompanyId: Id<'Company'> | null,
-    handleSelectCompany: (companyId: Id<'Company'> | null) => void,
     companies: CompanyDTO[]
 }) => {
 
-    const companyItems = [
+    const queryParams = LocationHelpers
+        .useQueryParams<{ companyId: Id<'Company'> }>();
+
+    const { setQueryParams } = LocationHelpers
+        .useSetQueryParams<{ companyId: string }>();
+
+    const activeCompanyId = queryParams
+        .getValueOrNull(x => x.companyId, 'int');
+
+    const activeCompany = companies
+        .firstOrNull(x => x.id === activeCompanyId);
+
+    const handleSelectCompany = (companyId: Id<'Company'> | null) => {
+
+        const queryValue = companyId === -1 as any ? null : companyId + '';
+        setQueryParams('companyId', queryValue);
+    };
+
+    return {
+        activeCompanyId,
+        handleSelectCompany,
+        companies,
+        activeCompany
+    };
+};
+
+export type CompanySelectorLogicType = ReturnType<typeof useCompanySelectorLogic>;
+
+export const CompanySelectorDropdown = ({
+    logic: {
+        companies,
+        handleSelectCompany,
+        activeCompanyId
+    }
+}: {
+    logic: CompanySelectorLogicType
+}) => {
+
+    const companyItems: CompanyDTO[] = [
         {
-            id: null,
-            name: 'Összes elérhető cég'
+            id: -1 as any,
+            name: 'Összes elérhető cég',
+            isSurveyRequired: true
         },
         ...companies
     ];
 
     return <EpistoSelect
-        currentKey={selectedCompanyId + ''}
+        currentKey={activeCompanyId + ''}
         width='180px'
         mr='10px'
         items={companyItems}

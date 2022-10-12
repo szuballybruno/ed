@@ -2,7 +2,7 @@ import { House } from '@mui/icons-material';
 import { Chip } from '@mui/material';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ButtonType, LoadingStateType } from '../../../models/types';
-import { CompanyApiService } from '../../../services/api/companyApiService';
+import { CompanyApiService } from '../../../services/api/CompanyApiService1';
 import { usePermissionsList } from '../../../services/api/permissionsApiService';
 import { CompanyDTO } from '../../../shared/dtos/company/CompanyDTO';
 import { PermissionListDTO } from '../../../shared/dtos/role/PermissionListDTO';

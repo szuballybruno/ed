@@ -512,6 +512,8 @@ export type TranslationType = {
             editUserControl: {
                 selectUserAsTeacher: string;
                 selectAsTeacher: string
+                surveyIsRequiredLabel: string
+                surveyIsRequiredCheckboxLabel: string
             };
             teacherInfoSubpage: {
                 teacherInfoSaved: string;

@@ -6,6 +6,7 @@ export class UserEditSaveDTO {
     lastName: string;
     email: string;
     isTeacher: boolean;
+    isSurveyRequired: boolean;
     companyId: Id<'Company'>;
     departmentId: Id<'Department'> | null;
     assignedRoleIds: Id<'Role'>[];

@@ -29,6 +29,9 @@ export const useRouteQuery = <TParams, TQuery>(route: ApplicationRoute<TParams, 
     return useRouteValues(route).query;
 };
 
+/**
+ * @deprecated nono
+ */
 export const useRouteValues = <TParams, TQuery>(route: ApplicationRoute<TParams, TQuery>) => {
 
     const queryObj = useSearchParams()[0];
@@ -51,7 +54,7 @@ export const useRouteValues = <TParams, TQuery>(route: ApplicationRoute<TParams,
     };
 };
 
-export const useRouteValues2 = <TParams, TQuery>(route: ApplicationRoute<TParams, TQuery>) => {
+export const useRouteParams2 = <TParams, TQuery>(route: ApplicationRoute<TParams, TQuery>) => {
 
     // unused, just for UI update triggers 
     const _ = useLocation();
@@ -61,7 +64,7 @@ export const useRouteValues2 = <TParams, TQuery>(route: ApplicationRoute<TParams
     const urlSplit = url.split('/');
     const templateSplit = template.split('/');
 
-    const params = (() => {
+    const paramsObj = (() => {
 
         const params = {} as any;
 
@@ -96,26 +99,62 @@ export const useRouteValues2 = <TParams, TQuery>(route: ApplicationRoute<TParams
         return params;
     })();
 
-    return {
-        params: new XSafeObjectWrapper<TParams>(params),
-    };
+    return new XSafeObjectWrapper<TParams>(paramsObj);
 };
 
-export const useRouteParams2 = <TParams, TQuery>(route: ApplicationRoute<TParams, TQuery>) => {
+export const useSetQueryParams = <TParmas = any>() => {
 
-    return useRouteValues2(route).params;
-};
+    const [, setSearchParams] = useSearchParams();
+    const searchParams = useQueryParams().data;
 
-export const useSetQueryParams = () => {
+    const setQueryParams = (key: keyof TParmas, value: string | null) => {
 
-    const [searchParams, setSearchParams] = useSearchParams();
+        // append param 
+        if (value !== null) {
 
-    const setQueryParams = (key: string, value: string) => {
+            setSearchParams({ ...searchParams, [key]: value });
+        }
 
-        setSearchParams({ ...searchParams, [key]: value });
+        // remove param 
+        else {
+
+            const newParmas: any = { ...searchParams };
+            delete newParmas[key];
+            console.log(newParmas);
+            setSearchParams(newParmas);
+        }
     };
 
     return { setQueryParams };
+};
+
+const useQueryParams = <TParams = any>() => {
+
+    const [searchParams] = useSearchParams();
+
+    const searchParamsObj = (() => {
+
+        const query = {} as any;
+        const keysIterator = searchParams.keys();
+
+        let currentIter = keysIterator.next();
+        while (!currentIter.done) {
+
+            const key = currentIter.value;
+
+            // HACKY! TODO
+            if (key !== 'done' && key !== 'value'){
+
+                query[key] = searchParams.get(key);
+            }
+
+            currentIter = keysIterator.next();
+        }
+
+        return query;
+    })();
+
+    return new XSafeObjectWrapper<TParams>(searchParamsObj as any);
 };
 
 /**
@@ -173,4 +212,10 @@ export const stringifyQueryObject = (queryObj: any) => {
     }
 
     return qs;
+};
+
+export const LocationHelpers = {
+    useRouteParams2,
+    useSetQueryParams,
+    useQueryParams
 };

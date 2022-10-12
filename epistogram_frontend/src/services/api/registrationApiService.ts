@@ -7,7 +7,7 @@ import { usePostDataUnsafe } from '../core/httpClient';
 
 export const useRegisterUser = () => {
 
-    const postDataResult = usePostDataUnsafe(apiRoutes.registration.registerUserViaPublicToken);
+    const postDataResult = usePostDataUnsafe(apiRoutes.registration.registerViaPublicToken);
 
     const registerUserAsync = (
         regToken: string,
@@ -32,7 +32,7 @@ export const useRegisterUser = () => {
 
 export const useRegisterInvitedUser = () => {
 
-    const postDataResult = usePostDataUnsafe(apiRoutes.registration.registerUserViaInvitationToken);
+    const postDataResult = usePostDataUnsafe(apiRoutes.registration.registerViaInvitationToken);
 
     const registerInvitedUserAsync = (
         invitationToken: string,
@@ -55,7 +55,7 @@ export const useRegisterInvitedUser = () => {
 
 export const useRegisterUserViaActivationCode = () => {
 
-    const postDataResult = usePostDataUnsafe(apiRoutes.registration.registerUserViaActivationCode);
+    const postDataResult = usePostDataUnsafe(apiRoutes.registration.registerViaActivationCode);
 
     const registerUserViaActivationCodeAsync = (
         activationCode: string,
@@ -80,7 +80,7 @@ export const useRegisterUserViaActivationCode = () => {
 
 export const useCreateInviteUserAsync = () => {
 
-    const qr = usePostDataUnsafe<UserEditSaveDTO>(apiRoutes.registration.inviteUser);
+    const qr = usePostDataUnsafe<UserEditSaveDTO>(apiRoutes.invitation.inviteUser);
 
     return {
         createInvitedUser: qr.postDataAsync,

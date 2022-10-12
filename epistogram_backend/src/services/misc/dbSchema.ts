@@ -29,13 +29,13 @@ import { CourseCategory } from '../../models/entity/misc/CourseCategory';
 import { CourseCompletion } from '../../models/entity/misc/CourseCompletion';
 import { DailyTip } from '../../models/entity/misc/DailyTip';
 import { DailyTipOccurrence } from '../../models/entity/misc/DailyTipOccurrence';
+import { Department } from '../../models/entity/misc/Department';
 import { DiscountCode } from '../../models/entity/misc/DiscountCode';
 import { Event } from '../../models/entity/misc/Event';
 import { ExamCompletion } from '../../models/entity/misc/ExamCompletion';
 import { GivenAnswer } from '../../models/entity/misc/GivenAnswer';
 import { GivenAnswerStreak } from '../../models/entity/misc/GivenAnswerStreak';
 import { Group } from '../../models/entity/misc/Group';
-import { Department } from '../../models/entity/misc/Department';
 import { Like } from '../../models/entity/misc/Like';
 import { PersonalityTraitCategory } from '../../models/entity/misc/PersonalityTraitCategory';
 import { QuestionType } from '../../models/entity/misc/QuestionType';
@@ -149,154 +149,11 @@ import { UserWeeklyCourseItemProgressView } from '../../models/views/UserWeeklyC
 import { VideoCursorSecondsView } from '../../models/views/VideoCursorSecondsView';
 import { VideoPlayerDataView } from '../../models/views/VideoPlayerDataView';
 import { VideoVersionView } from '../../models/views/VideoVersionView';
-import { instantiate } from '../../shared/logic/sharedLogic';
-import { getActivationCodeSeedData } from '../../sql/seed/seed_activation_codes';
-import { getActivitySessionSeedData } from '../../sql/seed/seed_activity_sessions';
-import { getAnswersSeedData } from '../../sql/seed/seed_answers';
-import { getAnswerDatasSeedData } from '../../sql/seed/seed_answer_datas';
-import { getAnswerGivenAnswerBridgeSeedData } from '../../sql/seed/seed_answer_given_answer_bridges';
-import { getAnswerSessionSeedData } from '../../sql/seed/seed_answer_sessions';
-import { getAnswerVersionsSeedData } from '../../sql/seed/seed_answer_versions';
-import { getCommentsSeedData } from '../../sql/seed/seed_comments';
-import { getCompaniesSeedData } from '../../sql/seed/seed_companies';
-import { getCompanyOwnerBridgeSeedData } from '../../sql/seed/seed_company_owner_bridges';
-import { getCourseSeedData } from '../../sql/seed/seed_courses';
-import { getCourseAccessBridgeSeedData } from '../../sql/seed/seed_course_access_bridge';
-import { getCourseCategoriesSeedData } from '../../sql/seed/seed_course_categories';
-import { getCourseDatasSeedData } from '../../sql/seed/seed_course_datas';
-import { getCourseRatingGroupSeedData } from '../../sql/seed/seed_course_rating_groups';
-import { getCourseRatingQuestionSeedData } from '../../sql/seed/seed_course_rating_question';
-import { getCourseVersionsSeedData } from '../../sql/seed/seed_course_versions';
-import { getDailyTipsSeed } from '../../sql/seed/seed_daily_tips';
-import { getDiscountCodesSeedData } from '../../sql/seed/seed_discount_codes';
-import { getExamSeedData } from '../../sql/seed/seed_exams';
-import { getExamCompletionSeedData } from '../../sql/seed/seed_exam_completion';
-import { getExamDatasSeedData } from '../../sql/seed/seed_exam_datas';
-import { getExamVersionsSeedData } from '../../sql/seed/seed_exam_versions';
-import { getGivenAnswerSeedData } from '../../sql/seed/seed_given_answers';
-import { getGivenAnswerStreakSeedData } from '../../sql/seed/seed_given_answer_streak';
-import { getJobTitlesSeedData } from '../../sql/seed/seed_job_titles';
-import { getModulesSeedData } from '../../sql/seed/seed_modules';
-import { getModuleDatasSeedData } from '../../sql/seed/seed_module_datas';
-import { getModuleVersionsSeedData } from '../../sql/seed/seed_module_versions';
-import { getPermissionsSeedData } from '../../sql/seed/seed_permissions';
-import { getPermissionAssignmentBridgeSeedData } from '../../sql/seed/seed_permission_assignment_bridges';
-import { getPersonalityTraitCategoriesSeed } from '../../sql/seed/seed_personality_trait_categories';
-import { getPrequizAnswersSeedData } from '../../sql/seed/seed_prequiz_answers';
-import { getPrequizQuestionsSeedData } from '../../sql/seed/seed_prequiz_questions';
-import { getPrequizUserAnswerSeedData } from '../../sql/seed/seed_prequiz_user_answer';
-import { getPrequizCompletionSeedData } from '../../sql/seed/seed_pretest_completion';
-import { getQuestionSeedData } from '../../sql/seed/seed_questions';
-import { getQuestionDatasSeedData } from '../../sql/seed/seed_question_datas';
-import { getQuestionTypeSeedData } from '../../sql/seed/seed_question_types';
-import { getQuestionVersionsSeedData } from '../../sql/seed/seed_question_versions';
-import { getRolesSeedData } from '../../sql/seed/seed_roles';
-import { getRoleAssignmentBridgeSeedData } from '../../sql/seed/seed_role_assignment_bridges';
-import { getRolePermissionBridgeSeedData } from '../../sql/seed/seed_role_permission_bridges';
-import { getShopItemSeedData } from '../../sql/seed/seed_shop_items';
-import { getShopItemCategoriesSeedData } from '../../sql/seed/seed_shop_item_categories';
-import { getStorageFileSeedData } from '../../sql/seed/seed_storage_file';
-import { getTeacherInfoSeedData } from '../../sql/seed/seed_teacher_info';
-import { getTempomatAdjustmentValueSeedData } from '../../sql/seed/seed_tempomat_adjustment_values';
-import { getUserSeedData } from '../../sql/seed/seed_users';
-import { getUserCourseBridgeSeedData } from '../../sql/seed/seed_user_course_bridges';
-import { getUserVideoProgressBridgeSeedData } from '../../sql/seed/seed_user_video_progress_bridges';
-import { getVideosSeedData } from '../../sql/seed/seed_videos';
-import { getVideoDataSeedData } from '../../sql/seed/seed_video_datas';
-import { getVideoFilesSeedData } from '../../sql/seed/seed_video_files';
-import { getVideoVersionSeedData } from '../../sql/seed/seed_video_versions';
-import { XDependency } from '../../utilities/XDInjection/XDInjector';
-import { SeedDataContainerType, XDBMSchemaService } from '../XDBManager/XDBManagerTypes';
-import { ParametrizedFunction } from './advancedTypes/ParametrizedFunction';
+import { XDBMSchemaService } from '../XDBManager/XDBManagerTypes';
 
-const getSeedDataContainer = () => {
-
-    const hierarchy = XDependency
-        .getFunctionBuilder()
-        .addFunction(getQuestionTypeSeedData, [], QuestionType)
-        .addFunction(getPermissionsSeedData, [], Permission)
-        .addFunction(getJobTitlesSeedData, [], Department)
-        .addFunction(() => 1, [], CourseCompletion)
-        .addFunction(getStorageFileSeedData, [], StorageFile)
-        .addFunction(getCompaniesSeedData, [getStorageFileSeedData], Company)
-        .addFunction(getPersonalityTraitCategoriesSeed, [], PersonalityTraitCategory)
-        .addFunction(getQuestionDatasSeedData, [], QuestionData)
-        .addFunction(getCourseCategoriesSeedData, [], CourseCategory)
-        .addFunction(getCourseRatingGroupSeedData, [], CourseRatingGroup)
-        .addFunction(getShopItemCategoriesSeedData, [], ShopItemCategory)
-        .addFunction(getPrequizQuestionsSeedData, [], PrequizQuestion)
-        .addFunction(getExamDatasSeedData, [], ExamData)
-        .addFunction(getVideosSeedData, [], Video)
-        .addFunction(getExamSeedData, [], Exam)
-        .addFunction(getModulesSeedData, [], Module)
-        .addFunction(getCourseSeedData, [], Course)
-        .addFunction(getQuestionSeedData, [], Question)
-        .addFunction(getAnswersSeedData, [], Answer)
-        .addFunction(getActivationCodeSeedData, [getCompaniesSeedData], ActivationCode)
-        .addFunction(getRolesSeedData, [getCompaniesSeedData], Role)
-        .addFunction(getRolePermissionBridgeSeedData, [getPermissionsSeedData, getRolesSeedData], RolePermissionBridge)
-        .addFunction(getPrequizAnswersSeedData, [getPrequizQuestionsSeedData], PrequizAnswer)
-        .addFunction(getTempomatAdjustmentValueSeedData, [getPrequizAnswersSeedData], TempomatAdjustmentValue)
-        .addFunction(getShopItemSeedData, [getStorageFileSeedData, getShopItemCategoriesSeedData], ShopItem)
-        .addFunction(getDiscountCodesSeedData, [getShopItemSeedData], DiscountCode)
-        .addFunction(getCourseRatingQuestionSeedData, [getCourseRatingGroupSeedData], CourseRatingQuestion)
-        .addFunction(getUserSeedData, [getCompaniesSeedData, getJobTitlesSeedData], User)
-        .addFunction(getActivitySessionSeedData, [getUserSeedData], ActivitySession)
-        .addFunction(getPrequizCompletionSeedData, [getUserSeedData, getCourseSeedData], PrequizCompletion)
-        .addFunction(getCompanyOwnerBridgeSeedData, [getUserSeedData, getCompaniesSeedData], CompanyOwnerBridge)
-        .addFunction(getTeacherInfoSeedData, [getUserSeedData], TeacherInfo)
-        .addFunction(getAnswerSessionSeedData, [getUserSeedData, getExamVersionsSeedData], AnswerSession)
-        .addFunction(getCourseDatasSeedData, [getCourseCategoriesSeedData, getStorageFileSeedData, getUserSeedData], CourseData)
-        .addFunction(getModuleDatasSeedData, [getCourseDatasSeedData], ModuleData)
-        .addFunction(getDailyTipsSeed, [getStorageFileSeedData, getPersonalityTraitCategoriesSeed], DailyTip)
-        .addFunction(getCourseVersionsSeedData, [getCourseDatasSeedData, getCourseSeedData], CourseVersion)
-        // .addFunction(getVideoFilesSeedData, [getStorageFileSeedData], VideoFile)
-        // .addFunction(getVideoDataSeedData, [getVideoFilesSeedData], VideoData)
-        .addFunction(getModuleVersionsSeedData, [getCourseVersionsSeedData, getModuleDatasSeedData, getModulesSeedData], ModuleVersion)
-        .addFunction(getVideoVersionSeedData, [getVideoDataSeedData, getVideosSeedData, getModuleVersionsSeedData], VideoVersion)
-        .addFunction(getExamVersionsSeedData, [getModuleVersionsSeedData, getExamDatasSeedData, getExamSeedData], ExamVersion)
-        .addFunction(getCommentsSeedData, [getVideoVersionSeedData, getUserSeedData], Comment)
-        .addFunction(getQuestionVersionsSeedData, [getQuestionSeedData, getQuestionDatasSeedData, getExamVersionsSeedData, getVideoVersionSeedData, getPersonalityTraitCategoriesSeed], QuestionVersion)
-        .addFunction(getAnswerDatasSeedData, [getQuestionDatasSeedData], AnswerData)
-        .addFunction(getAnswerVersionsSeedData, [getAnswersSeedData, getAnswerDatasSeedData, getQuestionVersionsSeedData], AnswerVersion)
-        .addFunction(getGivenAnswerStreakSeedData, [getUserSeedData], GivenAnswerStreak)
-        .addFunction(getGivenAnswerSeedData, [getUserSeedData, getCourseSeedData, getQuestionVersionsSeedData, getAnswerSessionSeedData, getGivenAnswerStreakSeedData], GivenAnswer)
-        .addFunction(getAnswerGivenAnswerBridgeSeedData, [getAnswerVersionsSeedData, getGivenAnswerSeedData], AnswerGivenAnswerBridge)
-        .addFunction(getExamCompletionSeedData, [getAnswerSessionSeedData], ExamCompletion)
-        .addFunction(getCourseAccessBridgeSeedData, [getCompaniesSeedData, getCourseSeedData], CourseAccessBridge)
-        .addFunction(getUserCourseBridgeSeedData, [getUserSeedData, getCourseSeedData, getVideosSeedData, getExamCompletionSeedData], UserCourseBridge)
-        .addFunction(getUserVideoProgressBridgeSeedData, [getUserSeedData, getVideoVersionSeedData, getVideoFilesSeedData], UserVideoProgressBridge)
-        .addFunction(getRoleAssignmentBridgeSeedData, [getCompaniesSeedData, getRolesSeedData, getUserSeedData], RoleAssignmentBridge)
-        .addFunction(getPermissionAssignmentBridgeSeedData, [getCompaniesSeedData, getCourseSeedData, getPermissionsSeedData, getUserSeedData], PermissionAssignmentBridge)
-        .addFunction(getPrequizUserAnswerSeedData, [getUserSeedData, getCourseSeedData, getPrequizQuestionsSeedData, getPrequizAnswersSeedData], PrequizUserAnswer)
-        .getContainer();
-
-    const { itemInstancePairs } = XDependency
-        .instantiate(hierarchy);
-
-    const getSeedData = <T extends ParametrizedFunction>(fn: T): ReturnType<T> => {
-
-        return itemInstancePairs
-            .single(x => x[0].key.name === fn.name)[1];
-    };
-
-    const seedScripts = itemInstancePairs
-        .map(([item, instance]): [Function, any] => {
-
-            return [item.params, instance];
-        });
-
-    return instantiate<SeedDataContainerType>({
-        data: seedScripts,
-        getSeedData
-    });
-};
-
-export const createDBSchema = (isPurgeMode: boolean): XDBMSchemaService => {
+export const createDBSchema = (): XDBMSchemaService => {
 
     const schema: XDBMSchemaService = {
-
-        seed: isPurgeMode ? getSeedDataContainer() : null,
 
         views: [
             GivenAnswerScoreView,
