@@ -69,10 +69,10 @@ const useSaveCompany = () => {
 
 const useCompanies = () => {
 
-    const qr = QueryService.useXQuery<CompanyDTO[]>(apiRoutes.companies.getCompanies);
+    const qr = QueryService.useXQueryArray<CompanyDTO>(apiRoutes.companies.getCompanies);
 
     return {
-        companies: qr.data ?? [],
+        companies: qr.data,
         companiesState: qr.state
     };
 };

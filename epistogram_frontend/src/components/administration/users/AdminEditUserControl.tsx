@@ -1,8 +1,8 @@
 import { Checkbox } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useCoinBalanceOfUser, useGiftCoinsToUser } from '../../../services/api/coinTransactionsApiService';
-import { CompanyApiService } from '../../../services/api/CompanyApiService1';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
+import { CompanyDTO } from '../../../shared/dtos/company/CompanyDTO';
 import { RoleDTO } from '../../../shared/dtos/RoleDTO';
 import { UserEditReadDTO } from '../../../shared/dtos/UserEditReadDTO';
 import { UserEditSaveDTO } from '../../../shared/dtos/UserEditSaveDTO';
@@ -27,16 +27,19 @@ export const AdminEditUserControl = ({
     editedUserId,
     selectedCompanyId,
     saveUserAsync,
+    activeCompany,
+    companies
 }: {
     editedUserId: Id<'User'>,
     editDTO: UserEditReadDTO | null,
+    companies: CompanyDTO[],
     selectedCompanyId?: Id<'Company'> | null,
-    saveUserAsync: (editDTO: UserEditSaveDTO) => Promise<void>
+    saveUserAsync: (editDTO: UserEditSaveDTO) => Promise<void>,
+    activeCompany: CompanyDTO | null
 }) => {
 
     const mode = (editedUserId as any) < 0 ? 'ADD' : 'EDIT';
     const canSetCompanyId = false;
-    const { userInvitationCompanyData } = CompanyApiService.useUserInvitationCompanyData();
 
     // editable fields
     const [firstName, setFirstName] = useState('');
@@ -56,30 +59,30 @@ export const AdminEditUserControl = ({
     useSetBusy(useCoinBalanceOfUser, coinBalanceStatus, coinBalanceError);
 
     const {
-        availableCompanies,
         availableDepartments,
         availableRoles
     } = editDTO ?? ({
-        availableCompanies: [] as UserEditReadDTO['availableCompanies'],
         availableDepartments: [] as UserEditReadDTO['availableDepartments'],
         availableRoles: [] as UserEditReadDTO['availableRoles']
     });
 
-    /**
-     * Load isSurveyRequired state
-     */
-    useEffect(() => {
+    const defaultCompany = activeCompany ?? companies.firstOrNull();
 
-        console.log(userInvitationCompanyData);
-
-        setIsSurveyRequired(userInvitationCompanyData?.isSurveyRequired ?? false);
-        setCompanyId(userInvitationCompanyData?.companyId ?? null);
-    }, [userInvitationCompanyData]);
+    const company = companies
+        .firstOrNull(x => x.id === companyId) ?? defaultCompany;
 
     /**
      * Load state from editDTO
      */
     useEffect(() => {
+
+        if (!defaultCompany)
+            return;
+
+        const {
+            id: defaultCompanyId,
+            isSurveyRequired: defaultIsSurveyRequired
+        } = defaultCompany;
 
         const {
             firstName,
@@ -95,7 +98,7 @@ export const AdminEditUserControl = ({
             email: '',
             isTeacher: false,
             departmentId: null,
-            companyId: null,
+            companyId: defaultCompanyId,
             roleIds: [] as Id<'Role'>[]
         };
 
@@ -106,7 +109,9 @@ export const AdminEditUserControl = ({
         setDepartmentId(departmentId);
         setCompanyId(companyId);
         setAssignedRoleIds(roleIds);
-    }, [editDTO]);
+        setAssignedRoleIds(roleIds);
+        setIsSurveyRequired(defaultIsSurveyRequired);
+    }, [editDTO, defaultCompany]);
 
     const coinAmountEntryState = useEpistoEntryState({
         isMandatory: true,
@@ -150,7 +155,7 @@ export const AdminEditUserControl = ({
                 firstName,
                 lastName,
                 email,
-                companyId: companyId,
+                companyId,
                 departmentId,
                 isTeacher,
                 assignedRoleIds,
@@ -177,11 +182,6 @@ export const AdminEditUserControl = ({
             return saveUserAsync(editedUserDTO);
         }
     };
-
-    const company = availableCompanies
-        .firstOrNull(x => x.id === companyId);
-
-    console.log(company);
 
     return <EpistoFlex2 direction="column"
         flex="1">
@@ -252,13 +252,16 @@ export const AdminEditUserControl = ({
 
                     {canSetCompanyId
                         ? <EpistoSelect
-                            items={availableCompanies}
+                            items={companies}
                             selectedValue={company}
                             onSelected={x => setCompanyId(x.id)}
                             getDisplayValue={x => '' + x.name}
                             getCompareKey={company => '' + company?.id} />
-                        : <EpistoFont>
-                            {company?.name}
+                        : <EpistoFont
+                            margin={{
+                                top: 'px5'
+                            }}>
+                            {company?.name ?? '-'}
                         </EpistoFont>}
                 </EpistoFlex2>
 

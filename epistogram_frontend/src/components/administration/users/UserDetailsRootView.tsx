@@ -2,7 +2,7 @@ import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { ButtonType } from '../../../models/types';
 import { UserApiService } from '../../../services/api/userApiService';
 import { useNavigation } from '../../../services/core/navigatior';
-import { Id } from '../../../shared/types/versionId';
+import { CompanyDTO } from '../../../shared/dtos/company/CompanyDTO';
 import { EpistoIcons } from '../../../static/EpistoIcons';
 import { ArrayBuilder } from '../../../static/frontendHelpers';
 import { useRouteParams2 } from '../../../static/locationHelpers';
@@ -15,10 +15,12 @@ import { AdminUserTeacherInfoSubpage } from './AdminUserTeacherInfoSubpage';
 
 export const UserDetailsRootView = ({
     refetchUsers,
-    selectedCompanyId
+    activeCompany,
+    companies
 }: {
     refetchUsers: () => void,
-    selectedCompanyId: Id<'Company'> | null,
+    activeCompany: CompanyDTO | null,
+    companies: CompanyDTO[]
 }) => {
 
     const params = useRouteParams2(applicationRoutes.administrationRoute.usersRoute.userRoute);
@@ -56,8 +58,10 @@ export const UserDetailsRootView = ({
                         route: usersAdminRoute.userRoute.editRoute,
                         element: <AdminEditUserSubpage
                             headerButtons={headerButtons}
+                            companies={companies}
                             refetchUsersFunction={refetchUsers}
                             tabMenuItems={menuRoutes}
+                            activeCompany={activeCompany}
                             userId={userId} />
                     },
                     {

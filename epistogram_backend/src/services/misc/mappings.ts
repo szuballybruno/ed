@@ -1190,21 +1190,18 @@ const marray = [
                 return instantiate<CompanyDTO>({
                     id: view.companyId,
                     name: view.companyName,
-                    //canManage: view.canManage
+                    isSurveyRequired: false
                 });
             });
         }),
     epistoMappingsBuilder
-        .addArrayMapping(CompanyDTO, () => (companies: Company[]) => {
-
-            return companies.map(company => {
-
-                return instantiate<CompanyDTO>({
-                    id: company.id,
-                    name: company.name
-                });
-            });
-        }),
+        .addArrayMapping(CompanyDTO, () => (companies: Company[]) => companies
+            .map(company => instantiate<CompanyDTO>({
+                id: company.id,
+                name: company.name,
+                isSurveyRequired: company.isSurveyRequired
+            }))
+        ),
     epistoMappingsBuilder
         .addArrayMapping(PermissionListDTO, () => (permissions: Permission[]) => {
 

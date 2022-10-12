@@ -15,23 +15,22 @@ export type EpistoSelectPropsType<TItem> = {
     isDisabled?: boolean
 };
 
-export const EpistoSelect = <TItem,>(props: EpistoSelectPropsType<TItem> & EpistoFlex2Props) => {
-
-    const {
-        items,
-        getCompareKey,
-        selectedValue,
-        currentKey,
-        onSelected,
-        getDisplayValue,
-        defaultValue,
-        isDisabled,
-        ...css
-    } = props;
+export const EpistoSelect = <TItem,>({
+    items,
+    getCompareKey,
+    selectedValue,
+    currentKey,
+    onSelected,
+    getDisplayValue,
+    defaultValue,
+    isDisabled,
+    ...css
+}: EpistoSelectPropsType<TItem> & EpistoFlex2Props) => {
 
     const onSelectedValue = (key: string) => {
 
-        const currentItem = items.filter(x => getCompareKey(x) === key)[0];
+        const currentItem = items
+            .filter(x => getCompareKey(x) === key)[0];
 
         onSelected(currentItem);
     };

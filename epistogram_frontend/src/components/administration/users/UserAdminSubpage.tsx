@@ -1,8 +1,7 @@
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { CompanyApiService } from '../../../services/api/CompanyApiService1';
 import { UserApiService } from '../../../services/api/userApiService';
-import { Id } from '../../../shared/types/versionId';
 import { useIsMatchingCurrentRoute } from '../../../static/frontendHelpers';
 import { useRouteParams2 } from '../../../static/locationHelpers';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
@@ -11,7 +10,7 @@ import { EpistoRoutes } from '../../universal/EpistoRoutes';
 import { AdminBreadcrumbsHeader } from '../AdminBreadcrumbsHeader';
 import { AdminAddUserSubpage } from './AdminAddUserSubpage';
 import { AminUserGridView, useAdminUserGridLogic, useGridFilterSettingsLogic } from './AminUserGridView';
-import { CompanySelectorDropdown } from './CompanySelectorDropdown';
+import { CompanySelectorDropdown, useCompanySelectorDropdownLogic } from './CompanySelectorDropdown';
 import { UserDetailsRootView } from './UserDetailsRootView';
 
 export const UserAdminSubpage = () => {
@@ -28,28 +27,21 @@ export const UserAdminSubpage = () => {
 
     const currentUser = useContext(CurrentUserContext);
 
-    const [selectedCompanyId, setSelectedCompanyId] = useState<Id<'Company'> | null>(currentUser.companyId);
-
     const { companies } = CompanyApiService.useCompanies();
 
     const filterLogic = useGridFilterSettingsLogic();
+
+    const companySelectorLogic = useCompanySelectorDropdownLogic({ companies });
+
     const gridLogic = useAdminUserGridLogic({
         isSimpleView,
         filterLogic,
-        selectedCompanyId,
+        selectedCompanyId: companySelectorLogic.activeCompanyId,
         userId
     });
 
-    const handleSelectCompany = (companyId: Id<'Company'> | null) => {
-
-        setSelectedCompanyId(companyId);
-        gridLogic.refetchUsers();
-    };
-
     const companiesHeaderComponent = companies.length > 1 && <CompanySelectorDropdown
-        selectedCompanyId={selectedCompanyId}
-        handleSelectCompany={handleSelectCompany}
-        companies={companies} />;
+        logic={companySelectorLogic} />;
 
     const { briefUserData } = UserApiService.useBriefUserData(userId);
     const subRouteLabel = briefUserData?.fullName;
@@ -75,16 +67,18 @@ export const UserAdminSubpage = () => {
                         {
                             route: userAdminRoute.addRoute,
                             element: <AdminAddUserSubpage
+                                companies={companies}
                                 headerButtons={[]}
                                 tabMenuItems={[]}
-                                refetchUsersFunction={gridLogic.refetchUsers.bind(gridLogic)}
-                                selectedCompanyId={selectedCompanyId} />
+                                activeCompany={companySelectorLogic.activeCompany}
+                                refetchUsersFunction={gridLogic.refetchUsers.bind(gridLogic)} />
                         },
                         {
                             route: userAdminRoute.userRoute,
                             element: <UserDetailsRootView
                                 refetchUsers={gridLogic.refetchUsers.bind(gridLogic)}
-                                selectedCompanyId={selectedCompanyId} />
+                                activeCompany={companySelectorLogic.activeCompany}
+                                companies={companies} />
                         }
                     ]} />
             </EpistoFlex2>
