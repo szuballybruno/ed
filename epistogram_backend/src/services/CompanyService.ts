@@ -307,6 +307,21 @@ export class CompanyService {
                 secondaryColor,
                 isSurveyRequired
             });
+
+        // set users isSurveyRequired according to company's 
+        const userUpdateSet = (await this
+            ._ormService
+            .query(User, { companyId })
+            .where('companyId', '=', 'companyId')
+            .getMany())
+            .map(x => ({
+                id: x.id,
+                isSurveyRequired
+            } as User));
+
+        await this
+            ._ormService
+            .save(User, userUpdateSet);
     }
 
     /**
