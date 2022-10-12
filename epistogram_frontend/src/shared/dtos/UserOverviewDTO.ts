@@ -12,6 +12,6 @@ export class UserOverviewDTO {
     totalSessionLengthSeconds: number;
     engagementPoints: number;
     completedCourseItemCount: number;
-    productivityPercentage: number;
-    invertedLagBehind: number;
+    productivityPercentage: number | null;
+    invertedLagBehind: number | null;
 }

@@ -10,10 +10,13 @@ export type GetParametrizedRouteType<T> = T extends ParametrizedRouteType<infer 
 export const apiRoutes = {
 
     registration: {
-        registerUserViaPublicToken: '/registration/register-user-via-public-token',
-        registerUserViaInvitationToken: '/registration/register-user-via-invitation-token',
-        registerUserViaActivationCode: '/registration/register-user-via-activation-code',
-        inviteUser: '/registration/invite-user'
+        registerViaPublicToken: '/registration/register-via-public-token',
+        registerViaInvitationToken: '/registration/register-via-invitation-token',
+        registerViaActivationCode: '/registration/register-via-activation-code',
+    },
+
+    invitation: {
+        inviteUser: '/invitation/invite-user'
     },
 
     misc: {
@@ -46,7 +49,8 @@ export const apiRoutes = {
         getCompanyDetailsByDomain: '/companies/get-company-details-by-domain' as ParametrizedRouteType<{ query: { domain: string } }>,
         getCompanyCourseAssociations: '/companies/get-company-course-associations' as ParametrizedRouteType<{ query: { companyId: Id<'Company'> } }>,
         saveCompanyCourseAssociations: '/companies/save-company-course-associations' as ParametrizedRouteType<{ body: { companyId: Id<'Company'>, mutations: Mutation<CompanyAssociatedCourseDTO, 'courseId'>[] } }>,
-        createCompanyActivationCodes: '/companies/create-company-activation-codes' as ParametrizedRouteType<{ body: { activationCodeCount: number, companyId: Id<'Company'> } }>
+        createCompanyActivationCodes: '/companies/create-company-activation-codes' as ParametrizedRouteType<{ body: { activationCodeCount: number, companyId: Id<'Company'> } }>,
+        getUserInvitationCompanyData: '/companies/get-user-invitation-company-data' as ParametrizedRouteType<{}>
     },
 
     teacherInfo: {

@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
-import { CompanyApiService } from '../../../services/api/companyApiService';
+import { CompanyApiService } from '../../../services/api/CompanyApiService1';
 import { UserApiService } from '../../../services/api/userApiService';
 import { Id } from '../../../shared/types/versionId';
 import { useIsMatchingCurrentRoute } from '../../../static/frontendHelpers';

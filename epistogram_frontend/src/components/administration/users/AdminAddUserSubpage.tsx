@@ -42,7 +42,6 @@ export const AdminAddUserSubpage = ({
 
             <AdminEditUserControl
                 editedUserId={Id.create(-1)}
-                refetchTrigger={refetchTrigger}
                 editDTO={userEditData}
                 selectedCompanyId={selectedCompanyId}
                 saveUserAsync={handleCreateInvitedUser} />

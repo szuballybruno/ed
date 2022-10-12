@@ -140,8 +140,20 @@ const useCreateCompanyActivationCodes = () => {
     };
 };
 
-export const CompanyApiService = {
+const useUserInvitationCompanyData = () => {
 
+    const { data, state, error, refetch } = QueryService
+        .useXQuery<{ isSurveyRequired: boolean, companyId: Id<'Company'> }>(apiRoutes.companies.getUserInvitationCompanyData);
+
+    return {
+        userInvitationCompanyData: data,
+        userInvitationCompanyDataError: error,
+        userInvitationCompanyDataState: state,
+        refetchUserInvitationCompanyData: refetch
+    };
+};
+
+export const CompanyApiService = {
     useCompaniesAdmin,
     useRoleAssignCompanies,
     useCreateCompany,
@@ -153,5 +165,6 @@ export const CompanyApiService = {
     useCompanyDetailsByDomain,
     useCourseAssociations,
     useSaveCourseAssociations,
-    useCreateCompanyActivationCodes
+    useCreateCompanyActivationCodes,
+    useUserInvitationCompanyData
 };

@@ -94,6 +94,14 @@ export class CompanyController implements XController<CompanyController> {
             .saveCompanyAsync(params.principalId, dto, logoFile, coverFile);
     }
 
+    @XControllerAction(apiRoutes.companies.getUserInvitationCompanyData)
+    getUserInvitationCompanyDataAction(params: ActionParams) {
+
+        return this
+            ._compService
+            .getUserInvitationCompanyDataAsync(params.principalId);
+    }
+
     @XControllerAction(apiRoutes.companies.getCompanyDetailsByDomain, { isPublic: true })
     getCompanyDetailsByDomainAction(params: ActionParams) {
 

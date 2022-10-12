@@ -142,7 +142,8 @@ export class UserService {
             email,
             firstName,
             isTeacher,
-            lastName
+            lastName,
+            isSurveyRequired
         } = dto;
 
         const user = await this
@@ -159,7 +160,8 @@ export class UserService {
                 firstName,
                 email,
                 companyId,
-                departmentId
+                departmentId,
+                isSurveyRequired
             });
 
         // save teacher info

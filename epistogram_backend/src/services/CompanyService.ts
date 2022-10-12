@@ -56,6 +56,9 @@ export class CompanyService {
             .mapTo(CompanyDTO, [companies]);
     }
 
+    /**
+     * Get principal's company id  
+     */
     async getPrincipalCompanyId(principalId: PrincipalId): Promise<Id<'Company'>> {
 
         const user = await this._ormService
@@ -67,6 +70,24 @@ export class CompanyService {
             throw new ErrorWithCode('internal server error');
 
         return user.companyId;
+    }
+
+    /**
+     * Get company info such as isSurveyRequired etc
+     * this is used for user invitation, since it will need to 
+     * set user's isSurveyRequired prop to an initial state 
+     */
+    async getUserInvitationCompanyDataAsync(principalId: PrincipalId) {
+
+        const { isSurveyRequired, id: companyId } = await this
+            ._ormService
+            .query(Company, { principalId })
+            .innerJoin(User, x => x
+                .on('companyId', '=', 'id', Company)
+                .and('id', '=', 'principalId'))
+            .getSingle();
+
+        return { isSurveyRequired, companyId };
     }
 
     /**
@@ -210,7 +231,8 @@ export class CompanyService {
                 isCustomDomainCompany: false,
                 logoFileId: null,
                 primaryColor: null,
-                secondaryColor: null
+                secondaryColor: null,
+                isSurveyRequired: true
             });
     }
 
@@ -238,12 +260,23 @@ export class CompanyService {
         await this._authorizationService
             .checkPermissionAsync(principalId, 'EDIT_COMPANY', { companyId: dto.id });
 
+        const {
+            id: companyId,
+            backdropColor,
+            domain,
+            legalName,
+            name,
+            primaryColor,
+            secondaryColor,
+            isSurveyRequired
+        } = dto;
+
         if (logoFile)
             await this
                 ._fileService
                 .uploadAssigendFileAsync({
                     entitySignature: Company,
-                    entityId: dto.id,
+                    entityId: companyId,
                     fileBuffer: logoFile.data,
                     fileCode: 'company_logo',
                     storageFileIdField: 'logoFileId'
@@ -254,7 +287,7 @@ export class CompanyService {
                 ._fileService
                 .uploadAssigendFileAsync({
                     entitySignature: Company,
-                    entityId: dto.id,
+                    entityId: companyId,
                     fileBuffer: coverFile.data,
                     fileCode: 'company_cover',
                     storageFileIdField: 'coverFileId'
@@ -262,13 +295,14 @@ export class CompanyService {
 
         await this._ormService
             .save(Company, {
-                id: dto.id,
-                name: dto.name,
-                legalName: dto.legalName,
-                domain: dto.domain,
-                backdropColor: dto.backdropColor,
-                primaryColor: dto.primaryColor,
-                secondaryColor: dto.secondaryColor,
+                id: companyId,
+                name,
+                legalName,
+                domain,
+                backdropColor,
+                primaryColor,
+                secondaryColor,
+                isSurveyRequired
             });
     }
 

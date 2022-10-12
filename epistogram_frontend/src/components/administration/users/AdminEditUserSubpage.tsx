@@ -53,7 +53,6 @@ export const AdminEditUserSubpage = ({
 
             <AdminEditUserControl
                 editedUserId={userId}
-                refetchTrigger={refetchTrigger}
                 editDTO={userEditData}
                 saveUserAsync={handleSaveUserAsync} />
         </AdminSubpageHeader>

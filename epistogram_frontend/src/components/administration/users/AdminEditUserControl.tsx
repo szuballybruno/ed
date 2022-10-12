@@ -1,12 +1,13 @@
 import { Checkbox } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useCoinBalanceOfUser, useGiftCoinsToUser } from '../../../services/api/coinTransactionsApiService';
+import { CompanyApiService } from '../../../services/api/CompanyApiService1';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
 import { RoleDTO } from '../../../shared/dtos/RoleDTO';
 import { UserEditReadDTO } from '../../../shared/dtos/UserEditReadDTO';
 import { UserEditSaveDTO } from '../../../shared/dtos/UserEditSaveDTO';
 import { Id } from '../../../shared/types/versionId';
-import { EventTriggerType, parseIntOrNull } from '../../../static/frontendHelpers';
+import { parseIntOrNull } from '../../../static/frontendHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoCheckbox } from '../../controls/EpistoCheckbox';
@@ -16,7 +17,6 @@ import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { EpistoLabel } from '../../controls/EpistoLabel';
 import { EpistoSelect } from '../../controls/EpistoSelect';
-import { useAuthorizationContext } from '../../system/AuthorizationContext';
 import { useSetBusy } from '../../system/LoadingFrame/BusyBarContext';
 import { EpistoConinImage } from '../../universal/EpistoCoinImage';
 import { EditSection } from '../courses/EditSection';
@@ -25,20 +25,18 @@ import { TailingAdminButtons } from '../TailingAdminButtons';
 export const AdminEditUserControl = ({
     editDTO,
     editedUserId,
-    refetchTrigger,
     selectedCompanyId,
     saveUserAsync,
 }: {
     editedUserId: Id<'User'>,
     editDTO: UserEditReadDTO | null,
-    refetchTrigger: EventTriggerType,
     selectedCompanyId?: Id<'Company'> | null,
     saveUserAsync: (editDTO: UserEditSaveDTO) => Promise<void>
 }) => {
 
-    const { hasPermission } = useAuthorizationContext();
     const mode = (editedUserId as any) < 0 ? 'ADD' : 'EDIT';
     const canSetCompanyId = false;
+    const { userInvitationCompanyData } = CompanyApiService.useUserInvitationCompanyData();
 
     // editable fields
     const [firstName, setFirstName] = useState('');
@@ -48,6 +46,7 @@ export const AdminEditUserControl = ({
     const [companyId, setCompanyId] = useState<Id<'Company'> | null>(null);
     const [isTeacher, setIsTeacher] = useState(false);
     const [assignedRoleIds, setAssignedRoleIds] = useState<Id<'Role'>[]>([]);
+    const [isSurveyRequired, setIsSurveyRequired] = useState(true);
 
     const showError = useShowErrorDialog();
 
@@ -66,36 +65,48 @@ export const AdminEditUserControl = ({
         availableRoles: [] as UserEditReadDTO['availableRoles']
     });
 
+    /**
+     * Load isSurveyRequired state
+     */
     useEffect(() => {
 
-        console.log('mode changed');
-        if (mode === 'ADD') {
-            setFirstName('');
-            setLastName('');
-            setEmail('');
-            setIsTeacher(false);
-            setDepartmentId(null);
-            setCompanyId(null);
-            setAssignedRoleIds([]);
-        }
-    }, [mode]);
+        console.log(userInvitationCompanyData);
+
+        setIsSurveyRequired(userInvitationCompanyData?.isSurveyRequired ?? false);
+        setCompanyId(userInvitationCompanyData?.companyId ?? null);
+    }, [userInvitationCompanyData]);
 
     /**
      * Load state from editDTO
      */
     useEffect(() => {
 
-        if (!editDTO || mode === 'ADD')
-            return;
+        const {
+            firstName,
+            lastName,
+            email,
+            isTeacher,
+            departmentId,
+            companyId,
+            roleIds
+        } = editDTO ?? {
+            firstName: '',
+            lastName: '',
+            email: '',
+            isTeacher: false,
+            departmentId: null,
+            companyId: null,
+            roleIds: [] as Id<'Role'>[]
+        };
 
-        setFirstName(editDTO.firstName);
-        setLastName(editDTO.lastName);
-        setEmail(editDTO.email);
-        setIsTeacher(editDTO.isTeacher);
-        setDepartmentId(editDTO.departmentId);
-        setCompanyId(editDTO.companyId);
-        setAssignedRoleIds(editDTO.roleIds);
-    }, [editDTO, mode]);
+        setFirstName(firstName);
+        setLastName(lastName);
+        setEmail(email);
+        setIsTeacher(isTeacher);
+        setDepartmentId(departmentId);
+        setCompanyId(companyId);
+        setAssignedRoleIds(roleIds);
+    }, [editDTO]);
 
     const coinAmountEntryState = useEpistoEntryState({
         isMandatory: true,
@@ -143,6 +154,7 @@ export const AdminEditUserControl = ({
                 departmentId,
                 isTeacher,
                 assignedRoleIds,
+                isSurveyRequired
             };
 
             return saveUserAsync(editedUserDTO);
@@ -159,11 +171,17 @@ export const AdminEditUserControl = ({
                 departmentId,
                 isTeacher,
                 assignedRoleIds,
+                isSurveyRequired
             };
 
             return saveUserAsync(editedUserDTO);
         }
     };
+
+    const company = availableCompanies
+        .firstOrNull(x => x.id === companyId);
+
+    console.log(company);
 
     return <EpistoFlex2 direction="column"
         flex="1">
@@ -215,7 +233,7 @@ export const AdminEditUserControl = ({
             <EditSection title="Cég és jogosultságkezelés">
 
                 {/* company */}
-                {canSetCompanyId && <EpistoFlex2
+                <EpistoFlex2
                     direction="column"
                     align="stretch"
                     mt="5px"
@@ -232,13 +250,17 @@ export const AdminEditUserControl = ({
                         {translatableTexts.misc.company}
                     </EpistoFont>
 
-                    <EpistoSelect
-                        items={availableCompanies}
-                        selectedValue={availableCompanies.firstOrNull(x => x.id === companyId)}
-                        onSelected={x => setCompanyId(x.id)}
-                        getDisplayValue={x => '' + x.name}
-                        getCompareKey={company => '' + company?.id} />
-                </EpistoFlex2>}
+                    {canSetCompanyId
+                        ? <EpistoSelect
+                            items={availableCompanies}
+                            selectedValue={company}
+                            onSelected={x => setCompanyId(x.id)}
+                            getDisplayValue={x => '' + x.name}
+                            getCompareKey={company => '' + company?.id} />
+                        : <EpistoFont>
+                            {company?.name}
+                        </EpistoFont>}
+                </EpistoFlex2>
 
                 {/* role */}
                 <EpistoFlex2
@@ -309,8 +331,6 @@ export const AdminEditUserControl = ({
                                         <EpistoFont>
                                             {roleName}
                                         </EpistoFont>
-
-
 
                                         <EpistoCheckbox
                                             value={isAssigned}

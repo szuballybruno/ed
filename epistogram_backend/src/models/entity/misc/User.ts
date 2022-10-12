@@ -64,6 +64,10 @@ export class User {
 
     @Column()
     @XViewColumn()
+    isSurveyRequired: boolean;
+
+    @Column()
+    @XViewColumn()
     email: string;
 
     @Column({ nullable: true })

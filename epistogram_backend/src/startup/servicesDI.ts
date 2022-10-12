@@ -10,6 +10,8 @@ import { PlaylistService } from '../services/PlaylistService';
 import { CreateDBService } from '../services/sqlServices/CreateDBService';
 import { SQLPoolService } from '../services/sqlServices/SQLPoolService';
 import { TypeORMConnectionService } from '../services/sqlServices/TypeORMConnectionService';
+import { UserInvitationService } from '../services/UserInvitationService';
+import { UserRegistrationService } from '../services/UserRegistrationService';
 import { VersionCreateService } from '../services/VersionCreateService';
 import { VersionSaveService } from '../services/VersionSaveService';
 import { XDBMSchemaService } from '../services/XDBManager/XDBManagerTypes';
@@ -46,13 +48,11 @@ import { PrequizService } from './../services/PrequizService';
 import { PretestService } from './../services/PretestService';
 import { QuestionAnswerService } from './../services/QuestionAnswerService';
 import { QuestionService } from './../services/QuestionService';
-import { RegistrationService } from './../services/RegistrationService';
 import { RoleService } from './../services/RoleService';
 import { SampleMergeService } from './../services/SampleMergeService';
 import { ShopService } from './../services/ShopService';
 import { SignupService } from './../services/SignupService';
 import { SQLFunctionsService } from './../services/sqlServices/FunctionsService';
-import { SeedService } from './../services/sqlServices/SeedService';
 import { SQLConnectionService } from './../services/sqlServices/SQLConnectionService';
 import { StorageService } from './../services/StorageService';
 import { TeacherInfoService } from './../services/TeacherInfoService';
@@ -91,7 +91,7 @@ export class ServiceProvider {
     }
 }
 
-export const instansiateSingletonServices = (rootDir: string, isPurgeMode: boolean) => {
+export const instansiateSingletonServices = (rootDir: string) => {
 
     //
     // INIT GLOBAL CONFIG
@@ -100,7 +100,7 @@ export const instansiateSingletonServices = (rootDir: string, isPurgeMode: boole
 
     //
     // INIT DB SCHEMA
-    const dbSchema = createDBSchema(isPurgeMode);
+    const dbSchema = createDBSchema();
 
     const container = XDependency
         .getClassBuilder()
@@ -155,7 +155,6 @@ export const getTransientServiceContainer = (singletonProvider: ServiceProvider)
         .addClass(TokenService, [GlobalConfiguration])
         .addClass(AuthenticationService, [ORMConnectionService, UserService, TokenService, UserSessionActivityService, HashService, PermissionService, GlobalConfiguration, LoggerService])
         .addClass(PasswordChangeService, [UserService, TokenService, EmailService, UrlService, ORMConnectionService, GlobalConfiguration, HashService, AuthorizationService, DomainProviderService])
-        .addClass(SeedService, [XDBMSchemaService, GlobalConfiguration, SQLConnectionService, LoggerService])
         .addClass(QuestionService, [ORMConnectionService, VersionSaveService, MapperService, GlobalConfiguration])
         .addClass(AnswerService, [VersionSaveService, LoggerService])
         .addClass(CourseItemService, [ORMConnectionService, MapperService, QuestionService, VersionSaveService, AnswerService, AuthorizationService])
@@ -184,7 +183,8 @@ export const getTransientServiceContainer = (singletonProvider: ServiceProvider)
         .addClass(PractiseQuestionService, [ORMConnectionService, QuestionAnswerService, MapperService, AuthorizationService, GlobalConfiguration, QuestionService])
         .addClass(UserStatsService, [ORMConnectionService, MapperService, TempomatService, AuthorizationService, UserProgressService, CompanyService])
         .addClass(PrequizService, [ORMConnectionService, MapperService, UserCourseBridgeService, AuthorizationService])
-        .addClass(RegistrationService, [ActivationCodeService, EmailService, UserService, AuthenticationService, AuthorizationService, TokenService, ORMConnectionService, RoleService, MapperService, LoggerService, PermissionService])
+        .addClass(UserInvitationService, [EmailService, UserService, TokenService, ORMConnectionService, LoggerService])
+        .addClass(UserRegistrationService, [UserInvitationService, ActivationCodeService, UserService, TokenService, ORMConnectionService, AuthenticationService, PermissionService])
         .addClass(CourseRatingService, [MapperService, ORMConnectionService, AuthorizationService])
         .addClass(UserProgressService, [MapperService, ORMConnectionService, TempomatService, AuthorizationService])
         .addClass(CommentService, [ORMConnectionService, MapperService, AuthorizationService])

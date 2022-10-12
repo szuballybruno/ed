@@ -1,5 +1,5 @@
 import { applicationRoutes } from '../configuration/applicationRoutes';
-import { CompanyApiService } from '../services/api/companyApiService';
+import { CompanyApiService } from '../services/api/CompanyApiService1';
 import { useNavigation } from '../services/core/navigatior';
 import { Environment } from '../static/Environemnt';
 import { PropsWithChildren } from '../static/frontendHelpers';

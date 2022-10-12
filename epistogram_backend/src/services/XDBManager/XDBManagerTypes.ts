@@ -17,7 +17,6 @@ export type SeedDataContainerType = {
 };
 
 export class XDBMSchemaService {
-    seed: SeedDataContainerType | null;
     functionScripts: string[];
     constraints: XDBMConstraintType[];
     views: Function[];
@@ -27,7 +26,6 @@ export class XDBMSchemaService {
 
     constructor(opts: XDBMSchemaService) {
 
-        this.seed = opts.seed;
         this.functionScripts = opts.functionScripts;
         this.constraints = opts.constraints;
         this.views = opts.views;

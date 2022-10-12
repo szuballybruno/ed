@@ -187,11 +187,11 @@ const mapToRow = (user: UserOverviewDTO): RowType => {
                 day: '2-digit'
             }) + '',
         averagePerformancePercentage: user.averagePerformancePercentage,
-        invertedLagBehind: user.invertedLagBehind,
+        invertedLagBehind: user.invertedLagBehind!,
         totalSessionLengthSeconds: user.totalSessionLengthSeconds,
         completedCourseItemCount: user.completedCourseItemCount,
         engagementPoints: user.engagementPoints,
-        productivityPercentage: user.productivityPercentage,
+        productivityPercentage: user.productivityPercentage!,
         detailsButton: user.userId
     });
 };

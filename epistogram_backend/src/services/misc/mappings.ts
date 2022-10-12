@@ -856,6 +856,7 @@ const marray = [
                 secondaryColor: company.secondaryColor,
                 logoUrl: urlService.getAssetUrlNullable(logoFilePath),
                 coverUrl: urlService.getAssetUrlNullable(coverFilePath),
+                isSurveyRequired: company.isSurveyRequired
             });
         }),
     epistoMappingsBuilder

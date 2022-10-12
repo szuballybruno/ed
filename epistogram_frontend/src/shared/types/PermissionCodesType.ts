@@ -189,7 +189,7 @@ export const permissionCodes = fn({
     },
     ADMINISTRATE_COMPANY: {
         code: 'ADMINISTRATE_COMPANY',
-        scope: 'USER'
+        scope: 'COMPANY'
     },
     ACCESS_APPLICATION: {
         code: 'ACCESS_APPLICATION',
@@ -229,7 +229,7 @@ export type PermissionScopeParamType = {
 
 type ScopeParamByScopeType<T extends PermissionScopeType> = T extends 'COMPANY'
     ? {
-        companyId: Id<'Company'>
+        companyId: Id<'Company'> | 'any'
     }
     : T extends 'COURSE'
     ? {

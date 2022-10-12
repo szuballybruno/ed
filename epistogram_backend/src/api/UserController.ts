@@ -1,5 +1,4 @@
 import { UserService } from '../services/UserService';
-import { UserDTO } from '../shared/dtos/UserDTO';
 import { UserEditSaveDTO } from '../shared/dtos/UserEditSaveDTO';
 import { UserEditSimpleDTO } from '../shared/dtos/UserEditSimpleDTO';
 import { apiRoutes } from '../shared/types/apiRoutes';
@@ -16,16 +15,6 @@ export class UserController implements XController<UserController> {
     constructor(serviceProvider: ServiceProvider) {
 
         this._userService = serviceProvider.getService(UserService);
-    }
-
-    async saveUserDataAction(params: ActionParams) {
-
-        const dto = params
-            .getBody<UserDTO>(['firstName', 'lastName', 'phoneNumber'])
-            .data;
-
-        return this._userService
-            .saveUserDataAsync(params.principalId, dto);
     }
 
     @XControllerAction(apiRoutes.user.deleteUser, { isPost: true })
@@ -67,7 +56,7 @@ export class UserController implements XController<UserController> {
     saveUserAction(params: ActionParams) {
 
         const dto = params
-            .getBody<UserEditSaveDTO>(['firstName', 'lastName', 'companyId', 'email', 'userId', 'isTeacher'])
+            .getBody<UserEditSaveDTO>(['firstName', 'lastName', 'companyId', 'email', 'userId', 'isTeacher', 'isSurveyRequired'])
             .data;
 
         return this._userService

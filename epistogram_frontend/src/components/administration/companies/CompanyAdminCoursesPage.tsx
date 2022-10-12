@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
-import { CompanyApiService } from '../../../services/api/companyApiService';
+import { CompanyApiService } from '../../../services/api/CompanyApiService1';
 import { showNotification } from '../../../services/core/notifications';
 import { CompanyAssociatedCourseDTO } from '../../../shared/dtos/company/CompanyAssociatedCourseDTO';
 import { Id } from '../../../shared/types/versionId';

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { AuthenticationStateType, useLogInUser } from '../../services/api/authenticationApiService';
-import { CompanyApiService } from '../../services/api/companyApiService';
+import { CompanyApiService } from '../../services/api/CompanyApiService1';
 import { gradientBackgroundGenerator } from '../../services/core/gradientBackgroundGenerator';
 import { useNavigation } from '../../services/core/navigatior';
 import { useShowErrorDialog } from '../../services/core/notifications';
