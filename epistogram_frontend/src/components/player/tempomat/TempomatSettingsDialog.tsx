@@ -4,12 +4,10 @@ import { useRecommendedItemQuota } from '../../../services/api/userProgressApiSe
 import { useShowErrorDialog } from '../../../services/core/notifications';
 import { TempomatModeType } from '../../../shared/types/sharedTypes';
 import { Id } from '../../../shared/types/versionId';
-import { Environment } from '../../../static/Environemnt';
 import { toDateStringFormatted } from '../../../static/frontendHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
-import { EpistoImage } from '../../controls/EpistoImage';
 import { EpistoDialog } from '../../universal/epistoDialog/EpistoDialog';
 import { EpistoDialogLogicType } from '../../universal/epistoDialog/EpistoDialogTypes';
 import { TempomatModeTile } from './TempomatModeTile';
@@ -25,7 +23,7 @@ export const TempomatSettingsDialog = (props: {
 
     const showError = useShowErrorDialog();
 
-    const { recommendedItemQuota } = useRecommendedItemQuota();
+    const { recommendedItemQuota } = useRecommendedItemQuota(courseId);
 
     const { setTempomatMode } = useSetTempomatMode();
 
@@ -124,13 +122,14 @@ export const TempomatSettingsDialog = (props: {
                             margin: '0 0 0 10px',
                             fontWeight: 600
                         }}>
+
                             {recommendedItemQuota?.previsionedCompletionDate
                                 ? toDateStringFormatted(new Date(recommendedItemQuota.previsionedCompletionDate))
                                 : '-'}
                         </EpistoFont>
                     </EpistoFlex2>
 
-                    <EpistoFlex2
+                    {/* <EpistoFlex2
                         mx="10px"
                         align="center">
 
@@ -144,7 +143,7 @@ export const TempomatSettingsDialog = (props: {
                         <EpistoFont>
                             Módosítom a kitűzött befejezési dátumot
                         </EpistoFont>
-                    </EpistoFlex2>
+                    </EpistoFlex2> */}
                 </EpistoFlex2>
             </EpistoFlex2>
         </EpistoDialog >

@@ -207,8 +207,9 @@ const HomePage = () => {
 
             {/* stats */}
             {!isMobile && <DashboardSection
-                title={`Kurzus során nyújtott teljesítményed: ${activeCoursesPaging.currentItem?.title}`}
-                bg="red"
+                title={activeCoursesPaging.currentItem?.title
+                    ? `Kurzus során nyújtott teljesítményed: ${activeCoursesPaging.currentItem.title}`
+                    : 'Kurzus során nyújtott teljesítményed'}
                 headerContent={<ActiveCourseSelectorHeader
                     activeCoursesPaging={activeCoursesPaging} />}
                 background="var(--transparentWhite70)">
