@@ -1,5 +1,4 @@
 import React, { ReactNode } from 'react';
-import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoDialog } from '../universal/epistoDialog/EpistoDialog';
 import { useEpistoDialogLogic } from '../universal/epistoDialog/EpistoDialogLogic';
 import { EpistoDialogLogicType } from '../universal/epistoDialog/EpistoDialogTypes';
@@ -20,15 +19,7 @@ const ErrorDialog = ({ dialogLogic }: { dialogLogic: EpistoDialogLogicType<Error
             ?? descriptionOrError
             ?? 'Ismeretlen hiba történt, kérlek próbáld újra később!'}
         logic={dialogLogic} >
-
-        <EpistoFlex2
-            p='15px'
-            width='400px'>
-
-            An error has occured!
-            Please try again later.
-        </EpistoFlex2>
-    </EpistoDialog >;
+    </EpistoDialog>;
 };
 
 export const ErrorDialogFrame = (props: {

@@ -1,5 +1,4 @@
-import { Company } from '../models/entity/misc/Company';
-import { CreateInvitedUserDTO } from '../shared/dtos/CreateInvitedUserDTO';
+import { UserEditSaveDTO } from '../shared/dtos/UserEditSaveDTO';
 import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 import { Id } from '../shared/types/versionId';
 import { getFullName } from '../utilities/helpers';
@@ -23,7 +22,7 @@ export class UserInvitationService {
     /**
      * Invite user from admin? TODO
      */
-    async inviteUserAsync(principalId: PrincipalId, dto: CreateInvitedUserDTO) {
+    async inviteUserAsync(principalId: PrincipalId, dto: UserEditSaveDTO) {
 
         const {
             companyId,
@@ -31,16 +30,13 @@ export class UserInvitationService {
             email,
             firstName,
             lastName,
+            isSurveyRequired
         } = dto;
 
         if (!companyId)
             throw new ErrorWithCode(`Current user is not an administrator, 
                 but has rights to add users, but has no company,  
                 in which he/she could add users.`, 'bad request');
-
-        const { isSurveyRequired } = await this
-            ._ormService
-            .getSingleById(Company, companyId);
 
         await this
             .createInvitedUserAsync({
