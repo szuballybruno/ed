@@ -69,6 +69,9 @@ export const LeftPane = ({
             <EpistoImage
                 position='absolute'
                 bottom='20px'
+                left='0'
+                width='100%'
+                padding='20px'
                 src={companyDetails?.logoUrl + ''} />
 
             {/* tina image 
