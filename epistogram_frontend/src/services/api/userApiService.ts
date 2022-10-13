@@ -8,7 +8,7 @@ import { UserLearningOverviewDataDTO } from '../../shared/dtos/UserLearningOverv
 import { apiRoutes } from '../../shared/types/apiRoutes';
 import { Id } from '../../shared/types/versionId';
 import { QueryService } from '../../static/QueryService';
-import { httpPostAsync, usePostDataUnsafe } from '../core/httpClient';
+import { usePostDataUnsafe } from '../core/httpClient';
 
 const useSaveUserAssignedCourses = () => {
 
@@ -120,8 +120,12 @@ export const UserApiService = {
         };
     },
 
-    deleteUserAsync: (userId: Id<'User'>) => {
+    useDeleteUserAsync: () => {
 
-        return httpPostAsync(apiRoutes.user.deleteUser, { userId });
+        const { postDataAsync } = usePostDataUnsafe(apiRoutes.user.deleteUser);
+
+        return {
+            deleteUserAsync: postDataAsync
+        };
     }
 };
