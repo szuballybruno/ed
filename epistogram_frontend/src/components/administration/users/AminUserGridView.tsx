@@ -11,7 +11,7 @@ import { OrderType } from '../../../shared/types/sharedTypes';
 import { Id } from '../../../shared/types/versionId';
 import { Environment } from '../../../static/Environemnt';
 import { EpistoIcons } from '../../../static/EpistoIcons';
-import { getSubroutes, useIsMatchingCurrentRoute, usePaging } from '../../../static/frontendHelpers';
+import { formatTimespan, getSubroutes, useIsMatchingCurrentRoute, usePaging } from '../../../static/frontendHelpers';
 import { useRouteQuery, useSetQueryParams } from '../../../static/locationHelpers';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoDataGrid, EpistoDataGridColumnBuilder } from '../../controls/EpistoDataGrid';
@@ -104,6 +104,7 @@ const useColumns = (
         .add({
             field: 'totalSessionLengthSeconds',
             headerName: 'Platformon eltöltött idő',
+            renderCell: (value) => value ? formatTimespan(value.value) : '-'
         })
         .add({
             field: 'completedCourseItemCount',

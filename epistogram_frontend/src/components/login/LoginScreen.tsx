@@ -303,10 +303,11 @@ const LoginScreen = () => {
                                 style={{
                                     color: companyDetails?.secondaryColor!,
                                     fontWeight: 600,
-                                    textAlign: 'right'
+                                    textAlign: 'right',
+                                    marginLeft: 20
                                 }}>
 
-                                Váltsd be itt aktivációs kódodat
+                                Váltsd be itt aktivációs kódodat!
                             </EpistoFont>
                         </EpistoFlex2>
                     </EpistoFlex2>

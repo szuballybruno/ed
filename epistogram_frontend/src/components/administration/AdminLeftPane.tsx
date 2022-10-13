@@ -14,8 +14,8 @@ export const AdminLeftPane = () => {
     const administrationRoutes = applicationRoutes.administrationRoute;
 
     const menuItems = new ArrayBuilder<ApplicationRoute<any, any>>()
-        .addIf(hasPermission('ADMINISTRATE_COMPANY'), administrationRoutes.statsRoute)
         .addIf(hasPermission('ADMINISTRATE_COMPANY'), administrationRoutes.usersRoute)
+        .addIf(hasPermission('ADMINISTRATE_COMPANY'), administrationRoutes.statsRoute)
         .addIf(hasPermission('ADMINISTRATE_COMPANY'), administrationRoutes.coursesRoute)
         .addIf(hasPermission('CAN_VIEW_HIDDEN_MENUS'), administrationRoutes.shopRoute)
         .addIf(hasPermission('CAN_VIEW_HIDDEN_MENUS'), administrationRoutes.personalityAssessmentRoute)
