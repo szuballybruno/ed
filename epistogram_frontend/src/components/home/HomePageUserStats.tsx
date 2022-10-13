@@ -9,11 +9,12 @@ import StatisticsCard from '../statisticsCard/StatisticsCard';
 import { CurrentUserContext } from '../system/AuthenticationFrame';
 
 const HomePageUserStatsWrapper = (props: {
+    isSmallDesktop: boolean,
     isMobile: boolean,
     children: ReactNode
 }) => {
 
-    const { isMobile, children } = props;
+    const { isMobile, isSmallDesktop, children } = props;
 
     return isMobile
         ? <EpistoGrid
@@ -29,26 +30,32 @@ const HomePageUserStatsWrapper = (props: {
             className='whall'
             auto='fill'
             gap='10px'
-            mt='5px'
-            minW='500px'
-            minColumnWidth='280px'>
+            minW='450px'
+            autoRows={isSmallDesktop ? '120px' : '150px'}
+            gridTemplateColumns={isSmallDesktop ? 'auto auto auto auto' : 'auto auto'}
+            minColumnWidth={isSmallDesktop ? '140px' : '225px'}>
 
             {children}
         </EpistoGrid>;
 };
 
-export const HomePageUserStats = () => {
+export const HomePageUserStats = (props: {
+    isSmallDesktop: boolean
+}) => {
 
+    const { isSmallDesktop } = props;
     const { id } = useContext(CurrentUserContext);
     const { homePageStats } = useHomePageStats();
     const isMobile = useIsMobileView();
 
     return <HomePageUserStatsWrapper
+        isSmallDesktop={isSmallDesktop}
         isMobile={isMobile}>
 
         {/* videos to be repeated count */}
         <StatisticsCard
-            isMobile={isMobile}
+            isMobile={isMobile || isSmallDesktop}
+            minWidth={isSmallDesktop ? '140px' : '225px'}
             marginTop={isMobile ? '5px' : undefined}
             title={translatableTexts.homePage.statsSummary.videosToBeRepeatedCount.title}
             value={homePageStats?.videosToBeRepeatedCount}
@@ -58,7 +65,8 @@ export const HomePageUserStats = () => {
 
         {/* completed videos last month */}
         <StatisticsCard
-            isMobile={isMobile}
+            isMobile={isMobile || isSmallDesktop}
+            minWidth={isSmallDesktop ? '140px' : '225px'}
             marginTop={isMobile ? '5px' : undefined}
             title={translatableTexts.homePage.statsSummary.completedVideosLastMonth.title}
             value={homePageStats?.completedVideosLastMonth}
@@ -68,7 +76,8 @@ export const HomePageUserStats = () => {
 
         {/* progress  */}
         <StatisticsCard
-            isMobile={isMobile}
+            isMobile={isMobile || isSmallDesktop}
+            minWidth={isSmallDesktop ? '140px' : '225px'}
             marginTop={isMobile ? '5px' : undefined}
             title={translatableTexts.homePage.statsSummary.lagBehindPercentage.title}
             value={getProgressFromLagBehind(homePageStats?.lagBehindPercentage)}
@@ -78,7 +87,8 @@ export const HomePageUserStats = () => {
 
         {/* performance last month  */}
         <StatisticsCard
-            isMobile={isMobile}
+            isMobile={isMobile || isSmallDesktop}
+            minWidth={isSmallDesktop ? '140px' : '225px'}
             marginTop={isMobile ? '5px' : undefined}
             title={translatableTexts.homePage.statsSummary.performanceLastMonth.title}
             value={homePageStats?.performanceLastMonth}

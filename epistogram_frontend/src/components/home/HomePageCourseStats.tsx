@@ -11,10 +11,11 @@ import { UserProgressChart } from '../universal/charts/UserProgressChart';
 import { NoProgressChartYet } from './NoProgressChartYet';
 
 export const HomePageCourseStats = (props: {
-    activeCoursesPaging: PagingType<UserActiveCourseDTO>
+    activeCoursesPaging: PagingType<UserActiveCourseDTO>,
+    isSmallDesktop: boolean
 }) => {
 
-    const { activeCoursesPaging } = props;
+    const { activeCoursesPaging, isSmallDesktop } = props;
 
     const courseId = activeCoursesPaging?.currentItem?.courseId;
 
@@ -47,7 +48,7 @@ export const HomePageCourseStats = (props: {
             minHeight='400px'
             width='100%'
             align='center'
-            flexWrap='wrap'
+            flexWrap={isSmallDesktop ? 'wrap' : 'nowrap'}
             justify='space-between'
             flex='1'>
 
@@ -58,27 +59,30 @@ export const HomePageCourseStats = (props: {
                     ? <Grid
                         background='transparent'
                         boxShadow="unset"
-                        w='550px'
+                        w={isSmallDesktop ? '100%' : '550px'}
                         minW={'550px'}
-                        p="10px"
+                        p={isSmallDesktop ? '10px 0' : '10px'}
                         style={{
                             boxSizing: 'border-box',
                             gap: '10px',
                             gridAutoFlow: 'row dense',
-                            gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
-                            gridAutoRows: '160px'
+                            gridTemplateColumns: isSmallDesktop ? 'auto auto auto auto' : 'repeat(auto-fill, minmax(250px, 1fr))',
+                            gridAutoRows: isSmallDesktop ? '120px' : '150px'
                         }} >
+
                         <img
                             src={currentCourse?.coverFilePath ?? ''}
                             alt=""
                             style={{
                                 height: '100%',
                                 width: '100%',
+                                minWidth: isSmallDesktop ? '150px' : '0',
                                 objectFit: 'cover'
                             }}
                             className="roundBorders" />
 
                         <StatisticsCard
+                            isMobile={isSmallDesktop}
                             title={'Teljesítve az ajánlott napi videókból'}
                             value={`${recommendedItemQuota?.completedToday}/${recommendedItemQuota?.recommendedItemsPerDay}` ?? '0'}
                             suffix={''}
@@ -86,6 +90,7 @@ export const HomePageCourseStats = (props: {
                             isOpenByDefault={false} />
 
                         <StatisticsCard
+                            isMobile={isSmallDesktop}
                             title={'Teljesítve az ajánlott heti videókból'}
                             value={`${recommendedItemQuota?.completedThisWeek}/${recommendedItemQuota?.recommendedItemsPerWeek}` ?? '0'}
                             suffix={''}
@@ -93,6 +98,7 @@ export const HomePageCourseStats = (props: {
                             isOpenByDefault={false} />
 
                         <StatisticsCard
+                            isMobile={isSmallDesktop}
                             title={'A kurzus várható befejezési ideje'}
                             value={estimatedCompletionDateString}
                             suffix={''}
@@ -122,7 +128,7 @@ export const HomePageCourseStats = (props: {
                 background='transparent'
                 boxShadow="unset"
                 minW='500px'
-                h='100%'
+                h={isSmallDesktop ? '400px' : '100%'}
                 direction="column"
                 p="10px" >
 

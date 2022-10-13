@@ -29,7 +29,7 @@ export const EditRoleDialog = (props: {
             saveState={[roleEditDataState, saveRoleState]}
             onSave={x => handleSaveRole(x)}
             saveButton={{
-                title: 'Save',
+                title: 'Mentés',
                 icon: <Save></Save>
             }} />
     );

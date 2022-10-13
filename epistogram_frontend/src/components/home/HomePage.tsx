@@ -95,7 +95,7 @@ const HomePage = () => {
     const user = useContext(CurrentUserContext);
     const { refetchAuthHandshake } = useRefetchUserAsync();
 
-    const [isSmallerThan1400] = useMediaQuery('(min-width: 1400px)');
+    const [isSmallerThan1320] = useMediaQuery('(max-width: 1320px)');
     const isMobile = useIsMobileView();
     const [coinsAcquired, setCoinsAcquired] = useState(false);
 
@@ -157,7 +157,7 @@ const HomePage = () => {
             px='20px'
             pb={isMobile ? '80px' : undefined}
             direction="column"
-            minWidth={isSmallerThan1400 && !isMobile ? '1060px' : undefined}
+            minWidth={!isSmallerThan1320 && !isMobile ? '1060px' : undefined}
             noMaxWidth>
 
             {isMobile && <MobileWelcomeHeader user={user} />}
@@ -179,16 +179,17 @@ const HomePage = () => {
                     color="white"
                     showDivider
                     isMobile={isMobile}
-                    minHeight="200px"
+                    minHeight="350px"
+                    maxWidth={!isSmallerThan1320 ? '900px' : undefined}
                     m={isMobile ? '10px 0' : '0 5px 10px 0'}
-                    flex={isMobile ? '1' : '3 3 550px'}>
+                    flex={(isMobile || isSmallerThan1320) ? '1' : '3'}>
 
                     {isAnyCourseInProgess
                         ? <PractiseQuestions setCoinsAcquired={setCoinsAcquired} />
                         : <Greetings />}
                 </DashboardSection>
 
-                {/* tip of the day */}
+                {/* most relevant stat */}
                 <DashboardSection
                     isMobile={isMobile}
                     title={translatableTexts.homePage.mostRelevantStatistics}
@@ -197,12 +198,10 @@ const HomePage = () => {
                     showDivider
                     boxShadow={isMobile ? 'none' : undefined}
                     className={'largeSoftShadow'}
-                    minHeight="30px"
                     marginBottom="10px"
-                    p={isMobile ? '0' : ''}
-                    flex={isMobile ? '1' : '2 2 350px'}>
+                    flex={(isMobile || isSmallerThan1320) ? '1' : '2'}>
 
-                    <HomePageUserStats />
+                    <HomePageUserStats isSmallDesktop={isSmallerThan1320} />
                 </DashboardSection>
             </EpistoFlex2>
 
@@ -215,6 +214,7 @@ const HomePage = () => {
                 background="var(--transparentWhite70)">
 
                 <HomePageCourseStats
+                    isSmallDesktop={isSmallerThan1320}
                     activeCoursesPaging={activeCoursesPaging} />
             </DashboardSection>}
         </ContentPane>

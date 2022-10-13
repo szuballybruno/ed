@@ -65,12 +65,17 @@ export const DashboardSection = ({
                 text={title}
                 showDivider={showDivider}
                 variant="strongSub"
-                m="5px 10px 0 10px">
+                m="5px 10px 5px 10px">
 
                 {headerContent}
             </EpistoHeader>
 
-            {children}
+            <EpistoFlex2
+                flex='1'
+                p='0 10px'>
+
+                {children}
+            </EpistoFlex2>
         </FlexFloat>
     );
 };

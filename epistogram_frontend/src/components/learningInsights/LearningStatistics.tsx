@@ -1,6 +1,7 @@
 import { useMediaQuery } from '@chakra-ui/react';
 import { useUserLearningPageStats } from '../../services/api/userStatsApiService';
 import { Id } from '../../shared/types/versionId';
+import { Environment } from '../../static/Environemnt';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoGrid } from '../controls/EpistoGrid';
 import StatisticsCard, { StatisticsCardProps } from '../statisticsCard/StatisticsCard';
@@ -39,37 +40,45 @@ export const LearningStatistics = (props: {
     const statsss: StatisticsCardProps[] = [
         {
             title: 'Haladásom',
+            iconPath: Environment.getAssetUrl('/images/learningpagestaticon1.png'),
             value: getProgressFromLagBehind(userLearningPageStats?.totalLagBehindPercentage)
         }, {
             title: 'Ismétlésre ajánlott videók',
+            iconPath: Environment.getAssetUrl('/images/learningpagestaticon2.png'),
             suffix: 'db',
             value: userLearningPageStats?.videosToBeRepeatedCount
         }, {
             title: 'Ismétlésre ajánlott kérdések',
+            iconPath: Environment.getAssetUrl('/images/learningpagestaticon3.png'),
             suffix: 'db',
             value: userLearningPageStats?.questionsToBeRepeatedCount
         }, {
             title: 'Megtekintett videók száma',
+            iconPath: Environment.getAssetUrl('/images/learningpagestaticon4.png'),
             suffix: 'db',
             value: userLearningPageStats?.completedVideoCount + '' || '-'
         }, {
             title: 'Aktívan eltöltött idő',
+            iconPath: Environment.getAssetUrl('/images/learningpagestaticon5.png'),
             suffix: 'óra',
             value: userLearningPageStats?.totalSessionLengthSeconds
                 ? Math.floor(userLearningPageStats.totalSessionLengthSeconds / 60 / 60)
                 : '-'
         }, {
             title: 'Megválaszolt kérdések száma',
+            iconPath: Environment.getAssetUrl('/images/learningpagestaticon6.png'),
             suffix: 'db',
             value: userLearningPageStats?.answeredQuestionsCount
         }, {
             title: 'Helyes válaszok aránya',
+            iconPath: Environment.getAssetUrl('/images/learningpagestaticon7.png'),
             suffix: '%',
             value: userLearningPageStats?.totalCorrectAnswerRate
                 ? Math.floor(userLearningPageStats.totalCorrectAnswerRate)
                 : '-'
         }, {
             title: 'Céges rangsor',
+            iconPath: Environment.getAssetUrl('/images/learningpagestaticon8.png'),
             suffix: '%',
             value: userLearningPageStats?.rankInsideCompany
         }

@@ -2,6 +2,7 @@ import { DataGridPro, GridCellParams, GridColDef, GridColumnVisibilityModel, Gri
 import { ReactNode, useCallback, useEffect } from 'react';
 import { areArraysEqual, typedMemo } from '../../static/frontendHelpers';
 import { Logger } from '../../static/Logger';
+import { EpistoFlex2 } from './EpistoFlex';
 
 const removeOverlay = () => {
 
@@ -238,6 +239,18 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>({
             rows={rows}
             apiRef={apiRef}
             rowReordering={!!dragEnabled}
+            components={{
+                NoRowsOverlay: () => (
+                    <EpistoFlex2
+                        align='center'
+                        justify='center'
+                        fontSize='14px'
+                        className='whall'>
+
+                        Ezen szűrési feltételekkel jelenleg nincs rendelkezésre álló adat
+                    </EpistoFlex2>
+                ),
+            }}
             onRowOrderChange={onRowOrderChange
                 ? ({ oldIndex, targetIndex }) => {
 
@@ -255,6 +268,7 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>({
                 }
                 : undefined}
             onCellClick={handleCellClick}
+            disableColumnMenu
             initialState={{ pinnedColumns: pinnedColumns as any }}
             columnVisibilityModel={columnVisibilityModel as GridColumnVisibilityModel}
             density={density === 'dense'

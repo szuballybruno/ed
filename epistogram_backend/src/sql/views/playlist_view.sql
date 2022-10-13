@@ -123,6 +123,7 @@ items_with_user AS
 	
 	LEFT JOIN public.video_completion vc
 	ON vc.video_version_id = civ.video_version_id
+	AND vc.user_id = ucb.user_id
 	
 	LEFT JOIN public.exam_completion ec
 	ON ec.answer_session_id = ehsasv.answer_session_id
@@ -132,7 +133,7 @@ items_with_user AS
     AND uprv.user_id = ucb.user_id
 )
 SELECT * 
-FROM items_with_user 
+FROM items_with_user
 
 ORDER BY
 	user_id,

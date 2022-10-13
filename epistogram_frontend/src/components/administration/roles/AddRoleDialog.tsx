@@ -22,7 +22,7 @@ export const AddRoleDialog = (props: {
             error={[]}
             onSave={createRoleCallback}
             saveButton={{
-                title: 'Create',
+                title: 'Létrehozás',
                 icon: <ArrowUpward></ArrowUpward>
             }} />
     );

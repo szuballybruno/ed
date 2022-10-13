@@ -42,7 +42,7 @@ export const UserDetailsRootView = ({
 
     const headerButtons: ButtonType[] = [
         {
-            title: 'Back',
+            title: 'Vissza az Áttekintés nézetbe',
             icon: <EpistoIcons.Close />,
             action: () => navigate2(applicationRoutes.administrationRoute.usersRoute, { preset: undefined })
         }

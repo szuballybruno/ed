@@ -6,10 +6,11 @@ import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoRadarChart } from './base_charts/EpistoRadarChart';
 
 export const PersonalityChart = (props: {
-    data: PersonalityChartDataDTO
+    data: PersonalityChartDataDTO,
+    isSmallDesktop?: boolean
 }) => {
 
-    const personalityData = props.data;
+    const { data: personalityData, isSmallDesktop } = props;
 
     const traitNames = personalityData
         .traits
@@ -28,6 +29,13 @@ export const PersonalityChart = (props: {
     }];
 
     return <EpistoRadarChart
+        style={{
+            display: 'flex',
+            flex: '1',
+            justifyContent: 'center',
+            width: '100%',
+            minWidth: isSmallDesktop ? '100%' : '500px'
+        }}
         title=""
         areas={traitAreas}
         radarIndicators={traitNames
