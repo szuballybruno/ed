@@ -3,7 +3,7 @@ import { parseIntOrFail } from './sharedLogic';
 
 type SafeObjectValidatorFunctionType<TValue> = (value: TValue) => boolean;
 
-type SafeObjCastType =
+export type SafeObjCastType =
     | 'string' | 'int' | 'float' | 'boolean'
     | 'string[]' | 'int[]' | 'float[]' | 'boolean[]'
     | 'custom'

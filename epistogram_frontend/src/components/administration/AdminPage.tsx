@@ -1,6 +1,8 @@
 import { applicationRoutes } from '../../configuration/applicationRoutes';
+import { ArrayBuilder } from '../../static/frontendHelpers';
 import { ContentPane } from '../ContentPane';
 import { PageRootContainer } from '../PageRootContainer';
+import { useAuthorizationContext } from '../system/AuthorizationContext';
 import { EpistoRoutes } from '../universal/EpistoRoutes';
 import { AdminLeftPane } from './AdminLeftPane';
 import { CompanyAdminPage } from './companies/CompanyAdminPage';
@@ -18,6 +20,7 @@ import { UserAdminSubpage } from './users/UserAdminSubpage';
 export const AdminPage = () => {
 
     const adminRoute = applicationRoutes.administrationRoute;
+    const { hasPermission } = useAuthorizationContext();
 
     return <PageRootContainer>
 
@@ -31,10 +34,10 @@ export const AdminPage = () => {
             padding="0 10px 10px 10px">
 
             <EpistoRoutes
-                renderRoutes={[
+                renderRoutes={new ArrayBuilder()
 
                     // administration home
-                    {
+                    .add({
                         route: adminRoute.homeRoute,
                         element: <EpistoRoutes
                             renderRoutes={[
@@ -47,28 +50,28 @@ export const AdminPage = () => {
                                     element: <AdminHomeDetails />
                                 },
                             ]} />
-                    },
+                    })
 
                     // user administration
-                    {
+                    .add({
                         route: adminRoute.usersRoute,
                         element: <UserAdminSubpage />
-                    },
+                    })
 
                     // course administartion
-                    {
+                    .add({
                         route: adminRoute.coursesRoute,
                         element: <CourseAdministartionSubpage />
-                    },
+                    })
 
                     // shop administartion
-                    {
+                    .addIf(hasPermission('CAN_VIEW_HIDDEN_MENUS'), {
                         route: adminRoute.shopRoute,
                         element: <ShopAdminSubpage />
-                    },
+                    })
 
                     // personality assessment administartion
-                    {
+                    .addIf(hasPermission('CAN_VIEW_HIDDEN_MENUS'), {
                         route: adminRoute.personalityAssessmentRoute,
                         element: <EpistoRoutes
                             renderRoutes={[
@@ -85,23 +88,24 @@ export const AdminPage = () => {
                                     element: <EditDailyTipSubpage />
                                 }
                             ]} />,
-                    },
+                    })
 
-                    {
+                    .addIf(hasPermission('CAN_VIEW_HIDDEN_MENUS'), {
                         route: adminRoute.companiesRoute,
                         element: <CompanyAdminPage />
-                    },
+                    })
 
-                    {
+                    .addIf(hasPermission('CAN_VIEW_HIDDEN_MENUS'), {
                         route: adminRoute.rolesRoute,
                         element: <RoleAdminPage />
-                    },
+                    })
 
-                    {
+                    .addIf(hasPermission('CAN_VIEW_HIDDEN_MENUS'), {
                         route: adminRoute.debugRoute,
                         element: <DebugPage />
-                    }
-                ]} />
+                    })
+
+                    .getArray()} />
         </ContentPane>
     </PageRootContainer>;
 };
