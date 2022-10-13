@@ -1209,7 +1209,7 @@ ON ad.id = av.answer_data_id;
 --CREATE VIEW: schema_version_view
 CREATE VIEW schema_version_view
 AS
-SELECT '08:45:15 2022-10-12 CEDT' last_modification_date, '0.01' version
+SELECT '14:49:46 2022-10-13 CEDT' last_modification_date, '0.01' version
 ;
 
 --CREATE VIEW: shop_item_stateful_view
@@ -5656,6 +5656,7 @@ items_with_user AS
 	
 	LEFT JOIN public.video_completion vc
 	ON vc.video_version_id = civ.video_version_id
+	AND vc.user_id = ucb.user_id
 	
 	LEFT JOIN public.exam_completion ec
 	ON ec.answer_session_id = ehsasv.answer_session_id
@@ -5665,7 +5666,7 @@ items_with_user AS
     AND uprv.user_id = ucb.user_id
 )
 SELECT * 
-FROM items_with_user 
+FROM items_with_user
 
 ORDER BY
 	user_id,
