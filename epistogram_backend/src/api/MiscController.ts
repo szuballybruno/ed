@@ -1,10 +1,5 @@
-import { Department } from '../models/entity/misc/Department';
-import { AuthorizationService } from '../services/AuthorizationService';
 import { DomainProviderService } from '../services/DomainProviderService';
-import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
 import { MiscService } from '../services/MiscService';
-import { ORMConnectionService } from '../services/ORMConnectionService/ORMConnectionService';
-import { PractiseQuestionService } from '../services/PractiseQuestionService';
 import { TokenService } from '../services/TokenService';
 import { UserCourseBridgeService } from '../services/UserCourseBridgeService';
 import { apiRoutes } from '../shared/types/apiRoutes';
@@ -16,23 +11,15 @@ import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
 export class MiscController implements XController<MiscController> {
 
     private _miscService: MiscService;
-    private _practiseQuestionService: PractiseQuestionService;
     private _tokenService: TokenService;
-    private _ormService: ORMConnectionService;
-    private _config: GlobalConfiguration;
     private _courseBridgeService: UserCourseBridgeService;
-    private _authorizationService: AuthorizationService;
     private _domainProviderService: DomainProviderService;
 
     constructor(serviceProvider: ServiceProvider) {
 
         this._miscService = serviceProvider.getService(MiscService);
-        this._practiseQuestionService = serviceProvider.getService(PractiseQuestionService);
         this._tokenService = serviceProvider.getService(TokenService);
-        this._ormService = serviceProvider.getService(ORMConnectionService);
-        this._config = serviceProvider.getService(GlobalConfiguration);
         this._courseBridgeService = serviceProvider.getService(UserCourseBridgeService);
-        this._authorizationService = serviceProvider.getService(AuthorizationService);
         this._domainProviderService = serviceProvider.getService(DomainProviderService);
     }
 
@@ -53,18 +40,8 @@ export class MiscController implements XController<MiscController> {
     @XControllerAction(apiRoutes.misc.getCourseOverviewData)
     getCourseOverviewDataAction(params: ActionParams) {
 
-        return {
-            action: async () => {
-
-                return this._miscService
-                    .getCourseOverviewDataAsync(params.principalId);
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(params.principalId, 'ACCESS_APPLICATION');
-            }
-        };
-
+        return this._miscService
+            .getCourseOverviewDataAsync(params.principalId);
     }
 
     async getRegistrationLinkAction(params: ActionParams) {

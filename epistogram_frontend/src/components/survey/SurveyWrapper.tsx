@@ -10,7 +10,7 @@ import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoImage } from '../controls/EpistoImage';
 import { EpistoHeader } from '../EpistoHeader';
 
-export const SignupWrapper = (props: {
+export const SurveyWrapper = (props: {
     children?: ReactNode,
     nextButtonTitle?: string
     currentImage?: string,

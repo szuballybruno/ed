@@ -105,10 +105,6 @@ export class UserRegistrationService {
         await this._userService
             .setUserInivitationDataAsync(userId, password);
 
-        // Assign ACCESS_APPLICATION permission to user
-        await this._permissionService
-            .assignPermission(userId, 'ACCESS_APPLICATION');
-
         // get auth tokens
         const tokens = await this._authenticationService
             .getUserLoginTokens(user);

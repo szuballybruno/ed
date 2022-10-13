@@ -16,7 +16,7 @@ export type ApplicationRoutesType = {
     loginRoute: ApplicationRoute<any, any>;
     underMaintanenceRoute: ApplicationRoute;
     registrationRoute: ApplicationRoute<{ token: string, isInvited: boolean }>;
-    signupRoute: ApplicationRoute;
+    surveyRoute: ApplicationRoute;
     setNewPasswordRoute: ApplicationRoute<void, { token: string }>;
     registerViaActivationCodeRoute: ApplicationRoute;
     homeRoute: ApplicationRoute;
@@ -123,9 +123,9 @@ export const getApplicationRoutes = () => {
             isUnauthorized: true,
         },
 
-        signupRoute: {
-            title: translatableTexts.routeTitles.registration,
-            route: new EpistoRoute('/', 'signup'),
+        surveyRoute: {
+            title: translatableTexts.routeTitles.survey,
+            route: new EpistoRoute('/', 'survey'),
             ignoreAccessAppRestriction: true
         },
 

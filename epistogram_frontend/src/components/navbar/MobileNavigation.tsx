@@ -1,14 +1,11 @@
 import { Home, Person, Search } from '@mui/icons-material';
-import { ReactNode, useContext } from 'react';
+import { ReactNode } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { ApplicationRoute } from '../../models/types';
-import { useLogout } from '../../services/api/authenticationApiService';
 import { useNavigation } from '../../services/core/navigatior';
-import { useShowErrorDialog } from '../../services/core/notifications';
 import { isCurrentRoute } from '../../static/frontendHelpers';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
-import { RefetchUserAsyncContext } from '../system/AuthenticationFrame';
 
 const MobileNavigationButton = (props: {
     title: string,
@@ -35,24 +32,6 @@ const MobileNavigationButton = (props: {
 };
 
 export const MobileNavigation = () => {
-
-
-    const fetchUserAsync = useContext(RefetchUserAsyncContext);
-
-    // util 
-    const { logoutUserAsync } = useLogout();
-    const showError = useShowErrorDialog();
-
-    const handleLogout = async () => {
-        try {
-
-            await logoutUserAsync();
-            await fetchUserAsync();
-        } catch (e) {
-
-            showError(e);
-        }
-    };
 
     return <EpistoFlex2
         position='fixed'

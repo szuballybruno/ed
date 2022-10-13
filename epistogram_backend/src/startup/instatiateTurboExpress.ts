@@ -34,7 +34,7 @@ import { QuestionController } from './../api/QuestionController';
 import { RegistrationController } from './../api/RegistrationController';
 import { RoleController } from './../api/RoleController';
 import { ShopController } from './../api/ShopController';
-import { SignupController } from './../api/SignupController';
+import { SurveyController } from '../api/SurveyController';
 import { TempomatController } from './../api/TempomatController';
 import { UserController } from './../api/UserController';
 import { UserProgressController } from './../api/UserProgressController';
@@ -138,7 +138,7 @@ export const initTurboExpress = (
         .addController(UserStatsController)
         .addController(UserProgressController)
         .addController(FileController)
-        .addController(SignupController)
+        .addController(SurveyController)
         .addController(PlayerController)
         .addController(PlaybackController)
         .addController(CourseController)

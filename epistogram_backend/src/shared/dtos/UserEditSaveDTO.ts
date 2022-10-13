@@ -8,6 +8,6 @@ export class UserEditSaveDTO {
     isTeacher: boolean;
     isSurveyRequired: boolean;
     companyId: Id<'Company'>;
-    departmentId: Id<'Department'> | null;
+    departmentId: Id<'Department'>;
     assignedRoleIds: Id<'Role'>[];
 }

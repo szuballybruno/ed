@@ -100,27 +100,17 @@ export class TempomatService {
     /**
      * Temp mode
      */
-    getTempomatModeAsync(principalId: PrincipalId, courseId: Id<'Course'>) {
+    async getTempomatModeAsync(principalId: PrincipalId, courseId: Id<'Course'>) {
 
-        return {
-            action: async () => {
-                const userId = principalId.toSQLValue();
+        const userId = principalId.toSQLValue();
 
-                const bridge = await this._ormService
-                    .query(UserCourseBridge, { courseId, userId })
-                    .where('courseId', '=', 'courseId')
-                    .and('userId', '=', 'userId')
-                    .getSingle();
+        const bridge = await this._ormService
+            .query(UserCourseBridge, { courseId, userId })
+            .where('courseId', '=', 'courseId')
+            .and('userId', '=', 'userId')
+            .getSingle();
 
-                return bridge.tempomatMode;
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
-            }
-        };
-
-
+        return bridge.tempomatMode;
     }
 
     /**

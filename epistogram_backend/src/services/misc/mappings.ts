@@ -110,7 +110,7 @@ import { ShopItemCategoryDTO } from '../../shared/dtos/ShopItemCategoryDTO';
 import { ShopItemDTO } from '../../shared/dtos/ShopItemDTO';
 import { ShopItemEditDTO } from '../../shared/dtos/ShopItemEditDTO';
 import { SignupAnswerDTO } from '../../shared/dtos/SignupAnswerDTO';
-import { SignupDataDTO } from '../../shared/dtos/SignupDataDTO';
+import { SurveyDataDTO } from '../../shared/dtos/SurveyDataDTO';
 import { SignupQuestionDTO } from '../../shared/dtos/SignupQuestionDTO';
 import { TaskDTO } from '../../shared/dtos/TaskDTO';
 import { TeacherInfoEditDTO } from '../../shared/dtos/TeacherInfoEditDTO';
@@ -195,7 +195,7 @@ const marray = [
         })),
 
     epistoMappingsBuilder
-        .addMapping(SignupDataDTO, ([assetUrlService]) => (questions: SignupQuestionView[], isCompletedSignup: boolean) => {
+        .addMapping(SurveyDataDTO, ([assetUrlService]) => (questions: SignupQuestionView[], isCompletedSignup: boolean) => {
 
             return {
                 questions: questions
@@ -222,7 +222,7 @@ const marray = [
                         } as SignupQuestionDTO;
                     }),
                 isCompleted: isCompletedSignup
-            } as SignupDataDTO;
+            } as SurveyDataDTO;
         }),
 
     epistoMappingsBuilder
@@ -1390,5 +1390,5 @@ export const toSignupDataDTO = (questions: SignupQuestionView[], isCompletedSign
                 } as SignupQuestionDTO;
             }),
         isCompleted: isCompletedSignup
-    } as SignupDataDTO;
+    } as SurveyDataDTO;
 };

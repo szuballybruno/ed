@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export const useRegistrationFinalizationFormState = () => {
+export const useRegistrationFormLogic = () => {
 
     const [phoneNumber, setPhoneNumber] = useState('');
     const [password, setPassword] = useState('');
@@ -18,4 +18,4 @@ export const useRegistrationFinalizationFormState = () => {
     };
 };
 
-export type RegFormStateType = ReturnType<typeof useRegistrationFinalizationFormState>
+export type RegistrationFormLogicType = ReturnType<typeof useRegistrationFormLogic>

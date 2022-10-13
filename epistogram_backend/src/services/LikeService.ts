@@ -22,80 +22,60 @@ export class LikeService extends QueryServiceBase<Like> {
     }
 
     // create like with current user
-    createUserCommentLikeBridgeAsync(
+    async createUserCommentLikeBridgeAsync(
         principalId: PrincipalId,
         commentId: Id<'Comment'>
     ) {
 
-        return {
-            action: async () => {
+        const userId = principalId.getId();
 
-                const userId = principalId.getId();
+        // check if comment exists
+        const comment = await this
+            ._ormService
+            .query(Comment, { commentId })
+            .where('id', '=', 'commentId')
+            .getOneOrNull();
 
-                // check if comment exists
-                const comment = await this
-                    ._ormService
-                    .query(Comment, { commentId })
-                    .where('id', '=', 'commentId')
-                    .getOneOrNull();
+        if (!comment)
+            throw new Error('Comment doesn\'t exist.');
 
-                if (!comment)
-                    throw new Error('Comment doesn\'t exist.');
+        // check if user already liked the comment
+        const userComment = await this
+            ._ormService
+            .query(Like, { currentUserId: userId, commentId })
+            .where('commentId', '=', 'commentId')
+            .and('userId', '=', 'currentUserId')
+            .getOneOrNull();
 
-                // check if user already liked the comment
-                const userComment = await this
-                    ._ormService
-                    .query(Like, { currentUserId: userId, commentId })
-                    .where('commentId', '=', 'commentId')
-                    .and('userId', '=', 'currentUserId')
-                    .getOneOrNull();
+        if (userComment)
+            throw new Error('This user already liked this comment.');
 
-                if (userComment)
-                    throw new Error('This user already liked this comment.');
-
-                await this
-                    ._ormService
-                    .createAsync(Like, {
-                        commentId: commentId,
-                        userId: userId
-                    } as Like);
-            },
-            auth: async () => {
-
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
-            }
-        };
+        await this
+            ._ormService
+            .createAsync(Like, {
+                commentId: commentId,
+                userId: userId
+            } as Like);
     }
 
     // delete like with current user
-    softDeleteUserCommentLikeBridgeAsync(
+    async softDeleteUserCommentLikeBridgeAsync(
         principalId: PrincipalId,
         commentId: Id<'Comment'>
     ) {
 
-        return {
-            action: async () => {
+        const userComment = await this
+            ._ormService
+            .query(Like, { principalId, commentId })
+            .where('commentId', '=', 'commentId')
+            .and('userId', '=', 'principalId')
+            .getOneOrNull();
 
-                const userComment = await this
-                    ._ormService
-                    .query(Like, { principalId, commentId })
-                    .where('commentId', '=', 'commentId')
-                    .and('userId', '=', 'principalId')
-                    .getOneOrNull();
+        if (!userComment)
+            throw new Error('This user haven\'t liked this comment yet.');
 
-                if (!userComment)
-                    throw new Error('This user haven\'t liked this comment yet.');
-
-                await this
-                    ._ormService
-                    .softDelete(Like, [userComment.id]);
-            },
-            auth: async () => {
-
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
-            }
-        };
+        await this
+            ._ormService
+            .softDelete(Like, [userComment.id]);
     }
 }

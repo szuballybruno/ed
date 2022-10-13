@@ -124,72 +124,62 @@ export class DailyTipService {
      */
     async getDailyTipAsync(principalId: PrincipalId) {
 
-        return {
-            action: async () => {
-                // get daily tip views 
-                const dailyTips = await this._ormService
-                    .query(DailyTipView, { principalId })
-                    .where('userId', '=', 'principalId')
-                    .getMany();
+        // get daily tip views 
+        const dailyTips = await this._ormService
+            .query(DailyTipView, { principalId })
+            .where('userId', '=', 'principalId')
+            .getMany();
 
-                // get a tip 
-                const tip = (() => {
+        // get a tip 
+        const tip = (() => {
 
-                    // check if there are daily tips 
-                    if (dailyTips.length === 0)
-                        return null;
+            // check if there are daily tips 
+            if (dailyTips.length === 0)
+                return null;
 
-                    // is current tip available 
-                    const todaysTip = dailyTips
-                        .firstOrNull(x => x.isCurrentTip);
+            // is current tip available 
+            const todaysTip = dailyTips
+                .firstOrNull(x => x.isCurrentTip);
 
-                    if (todaysTip)
-                        return todaysTip;
+            if (todaysTip)
+                return todaysTip;
 
-                    // is new tip available  
-                    const newTip = dailyTips
-                        .firstOrNull(x => x.isNew);
+            // is new tip available  
+            const newTip = dailyTips
+                .firstOrNull(x => x.isNew);
 
-                    if (newTip)
-                        return newTip;
+            if (newTip)
+                return newTip;
 
-                    // reuse already shown tip
-                    const newCurrentTip = dailyTips
-                        .splice(0, dailyTips.length > 3
-                            ? dailyTips.length - 3
-                            : dailyTips.length)
-                        .orderBy(_ => getRandomNumber())
-                        .first();
+            // reuse already shown tip
+            const newCurrentTip = dailyTips
+                .splice(0, dailyTips.length > 3
+                    ? dailyTips.length - 3
+                    : dailyTips.length)
+                .orderBy(_ => getRandomNumber())
+                .first();
 
-                    return newCurrentTip;
-                })();
+            return newCurrentTip;
+        })();
 
-                // no tips found :(
-                if (!tip)
-                    return null;
+        // no tips found :(
+        if (!tip)
+            return null;
 
-                // if tip is not current, 
-                // meaning it already has an occurance for today, 
-                // insert a new occurance 
-                if (!tip.isCurrentTip) {
+        // if tip is not current, 
+        // meaning it already has an occurance for today, 
+        // insert a new occurance 
+        if (!tip.isCurrentTip) {
 
-                    await this._ormService
-                        .createAsync(DailyTipOccurrence, {
-                            dailyTipId: tip.dailyTipId,
-                            userId: principalId.getId()
-                        } as DailyTipOccurrence);
-                }
+            await this._ormService
+                .createAsync(DailyTipOccurrence, {
+                    dailyTipId: tip.dailyTipId,
+                    userId: principalId.getId()
+                } as DailyTipOccurrence);
+        }
 
-                // map tip
-                return this._mapperService
-                    .mapTo(DailyTipDTO, [tip]);
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
-            }
-        };
-
-
+        // map tip
+        return this._mapperService
+            .mapTo(DailyTipDTO, [tip]);
     }
 }

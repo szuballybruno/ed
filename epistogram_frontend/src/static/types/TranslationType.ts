@@ -108,7 +108,7 @@ export type TranslationType = {
                 label: string;
                 placeholder: string
             };
-            signup: string;
+            register: string;
             dontHaveAccount: string;
             buySubscription: string;
             signupSuccessfulDescriptions: string[];
@@ -190,6 +190,7 @@ export type TranslationType = {
             login: string;
             underMaintanence: string;
             registration: string;
+            survey: string;
             player: string;
             courseOverview: string;
             pretest: string;

@@ -1,7 +1,7 @@
 import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, useMediaQuery } from '@chakra-ui/react';
 import { InfoOutlined } from '@mui/icons-material';
 import { useRef, useState } from 'react';
-import { usePersonalityData } from '../../services/api/signupApiService';
+import { SurveyApiService } from '../../services/api/SurveyApiService';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoDiv } from '../controls/EpistoDiv';
@@ -19,7 +19,7 @@ export const PersonalityAssessment = (props: EpistoFlex2Props) => {
         personalityData,
         personalityDataError,
         personalityDataState
-    } = usePersonalityData();
+    } = SurveyApiService.usePersonalityData();
 
     const ref = useRef<HTMLButtonElement>(null);
 

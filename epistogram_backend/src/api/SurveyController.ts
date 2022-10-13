@@ -7,7 +7,7 @@ import {apiRoutes} from '../shared/types/apiRoutes';
 import {ServiceProvider} from '../startup/servicesDI';
 import {XController} from '../utilities/XTurboExpress/XTurboExpressTypes';
 
-export class SignupController implements XController<SignupController> {
+export class SurveyController implements XController<SurveyController> {
 
     private _signupService: SignupService;
     private _personalityAssessmentService: PersonalityAssessmentService;
@@ -18,7 +18,7 @@ export class SignupController implements XController<SignupController> {
         this._personalityAssessmentService = serviceProvider.getService(PersonalityAssessmentService);
     }
 
-    @XControllerAction(apiRoutes.signup.answerSignupQuestion, {isPost: true})
+    @XControllerAction(apiRoutes.survey.answerSurveyQuestion, {isPost: true})
     answerSignupQuestionAction(params: ActionParams) {
 
         const dto = params
@@ -29,14 +29,14 @@ export class SignupController implements XController<SignupController> {
             .answerSignupQuestionAsync(params.principalId, dto);
     }
 
-    @XControllerAction(apiRoutes.signup.getSignupData)
+    @XControllerAction(apiRoutes.survey.getSurveyData)
     getSignupDataAction = (params: ActionParams) => {
 
         return this._signupService
             .getSignupDataAsync(params.principalId);
     };
 
-    @XControllerAction(apiRoutes.signup.getUserPersonalityData)
+    @XControllerAction(apiRoutes.survey.getUserPersonalityData)
     getUserPersonalityDataAction(params: ActionParams) {
 
         return this._personalityAssessmentService

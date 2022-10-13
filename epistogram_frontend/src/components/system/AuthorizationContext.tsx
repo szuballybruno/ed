@@ -1,18 +1,12 @@
 import { createContext, useContext } from 'react';
-import { GetParamByCodeType, GetPermissionScope } from '../../shared/types/PermissionCodesType';
 import { PermissionCodeType } from '../../shared/types/sharedTypes';
 
 export const getAuthorizationContextLogic = (_permissionCodes: PermissionCodeType[]) => {
 
-    const hasPermission = <TCode extends PermissionCodeType>(
-        ...args: GetPermissionScope<TCode> extends 'USER'
-            ? [TCode]
-            : [TCode, GetParamByCodeType<TCode>]) => {
-
-        const [searchPermissionCode, params] = args;
+    const hasPermission = <TCode extends PermissionCodeType>(code: TCode) => {
 
         const isFound = _permissionCodes
-            .any(userPermissionCode => userPermissionCode === searchPermissionCode);
+            .any(userPermissionCode => userPermissionCode === code);
 
         return isFound;
     };

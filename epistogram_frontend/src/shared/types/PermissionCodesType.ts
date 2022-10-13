@@ -191,10 +191,6 @@ export const permissionCodes = fn({
         code: 'ADMINISTRATE_COMPANY',
         scope: 'COMPANY'
     },
-    ACCESS_APPLICATION: {
-        code: 'ACCESS_APPLICATION',
-        scope: 'USER'
-    },
     MANAGE_SHOP: {
         code: 'MANAGE_SHOP',
         scope: 'USER'
@@ -203,9 +199,9 @@ export const permissionCodes = fn({
         code: 'SET_OWN_EMAIL_ADDRESS',
         scope: 'USER'
     },
-    IS_SIGNUP_MANDATORY: {
-        code: 'IS_SIGNUP_MANDATORY',
-        scope: 'USER'
+    BYPASS_SURVEY: {
+        code: 'BYPASS_SURVEY',
+        scope: 'COMPANY'
     },
     EDIT_COMMENT: {
         code: 'EDIT_COMMENT',

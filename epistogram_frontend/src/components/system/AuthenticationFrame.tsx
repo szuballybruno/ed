@@ -1,9 +1,9 @@
 import { createContext, useContext, useEffect } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
-import { AuthenticationStateType, useGetAuthHandshake } from '../../services/api/authenticationApiService';
+import { AuthenticationStateType, useAuthHandshake } from '../../services/api/authenticationApiService';
 import { useNavigation } from '../../services/core/navigatior';
+import { AuthDataDTO } from '../../shared/dtos/AuthDataDTO';
 import { UserDTO } from '../../shared/dtos/UserDTO';
-import { PermissionCodeType } from '../../shared/types/sharedTypes';
 import { Id } from '../../shared/types/versionId';
 import { PropsWithChildren, useCurrentUrlPathname, useGetCurrentAppRoute } from '../../static/frontendHelpers';
 import { Logger } from '../../static/Logger';
@@ -27,7 +27,7 @@ const userDefaults: UserDTO = {
 };
 
 export const CurrentUserContext = createContext<UserDTO>(userDefaults);
-export const RefetchUserAsyncContext = createContext<() => Promise<void>>(() => Promise.resolve());
+const RefetchUserAsyncContext = createContext<() => Promise<AuthDataDTO>>(null as any);
 export const AuthenticationStateContext = createContext<AuthenticationStateType>('loading');
 
 export const useCurrentUserId = () => {
@@ -36,14 +36,19 @@ export const useCurrentUserId = () => {
     return { userId: ct.id };
 };
 
+export const useRefetchUserAsync = () => {
+
+    const refetchAuthHandshake = useContext(RefetchUserAsyncContext);
+    return { refetchAuthHandshake };
+};
+
 const AuthFirewall = (props: PropsWithChildren & {
     authState: AuthenticationStateType
 }): JSX.Element => {
 
     const { authState, children } = props;
     const dest = useCurrentUrlPathname();
-    const loginRoute = applicationRoutes.loginRoute;
-    const signupRoute = applicationRoutes.signupRoute;
+    const { loginRoute, surveyRoute } = applicationRoutes;
     const { navigate2 } = useNavigation();
     const currentRoute = useGetCurrentAppRoute();
     const { hasPermission } = useAuthorizationContext();
@@ -85,17 +90,38 @@ const AuthFirewall = (props: PropsWithChildren & {
     }
 
     // check authorization
-    const canAccess = hasPermission('ACCESS_APPLICATION');
-    const ignoreAccessAppRestriction = !!currentRoute.ignoreAccessAppRestriction;
-    if (!canAccess && !ignoreAccessAppRestriction && !isUnauthorized) {
+    const authCheckResult = (() => {
 
-        Logger.logScoped('AUTH', `canaccess: ${canAccess} ignore: ${ignoreAccessAppRestriction} isunauth: ${isUnauthorized}`);
-        Logger.logScoped('AUTH', `Auth state: ${authState}. No ${'ACCESS_APPLICATION' as PermissionCodeType} permission. Redirecting...`);
+        // if skip survey is enabled, let execution continue
+        const bypassSurvey = hasPermission('BYPASS_SURVEY');
+        if (bypassSurvey)
+            return;
 
-        navigate2(signupRoute);
+        // access app restriction is ignored, 
+        // for example on the survey route itself, 
+        // let execution continue
+        const ignoreAccessAppRestriction = !!currentRoute.ignoreAccessAppRestriction;
+        if (ignoreAccessAppRestriction)
+            return;
+
+        // if route is unauthorized, 
+        // for example on register routes, 
+        // let execution continue
+        if (isUnauthorized)
+            return;
+
+        /**
+         * No conditions matched, nothing left to do 
+         * but to navigate user back to survey
+         */
+        Logger.logScoped('AUTH', 'Redirecting to survey...');
+        navigate2(surveyRoute);
 
         return <div></div>;
-    }
+    })();
+    
+    if (authCheckResult)
+        return authCheckResult;
 
     Logger.logScoped('AUTH', `Auth state: ${authState}. Rendering content...`);
 
@@ -107,7 +133,7 @@ const AuthFirewall = (props: PropsWithChildren & {
 export const AuthenticationFrame = (props) => {
 
     // start auth pooling
-    const { authData, authState, refetchAuthHandshake } = useGetAuthHandshake();
+    const { authData, authState, refetchAuthHandshake } = useAuthHandshake();
 
     Logger.logScoped('AUTH', `Auth state is: '${authState}'...`);
 
@@ -115,7 +141,7 @@ export const AuthenticationFrame = (props) => {
     const authContextData = getAuthorizationContextLogic(authData?.permissions ?? []);
 
     return <AuthenticationStateContext.Provider value={authState}>
-        <RefetchUserAsyncContext.Provider value={() => refetchAuthHandshake()}>
+        <RefetchUserAsyncContext.Provider value={refetchAuthHandshake}>
             <CurrentUserContext.Provider value={authData?.currentUser ?? userDefaults}>
                 <AuthorizationContext.Provider value={authContextData}>
                     <AuthFirewall authState={authState}>

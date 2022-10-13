@@ -1,37 +1,36 @@
-import React from 'react';
 import { EpistoEntry } from '../controls/EpistoEntry';
-import { RegFormStateType } from './SignupFormLogic';
+import { RegistrationFormLogicType } from './RegistrationFormLogic';
 
-export const SignupForm = (props: { regFormState: RegFormStateType }) => {
+export const RegistrationForm = ({ logic }: { logic: RegistrationFormLogicType }) => {
 
     return (
         <form >
             <div>
                 <EpistoEntry
-                    value={props.regFormState.phoneNumber}
+                    value={logic.phoneNumber}
                     labelVariant="top"
                     label="Telefonszám"
                     placeholder="Telefonszám"
                     name="phoneNumber"
-                    setValue={props.regFormState.setPhoneNumber}
+                    setValue={logic.setPhoneNumber}
                     height="50px" />
 
                 <EpistoEntry
-                    value={props.regFormState.password}
+                    value={logic.password}
                     labelVariant="top"
                     label="Jelszó"
                     placeholder="Jelszó"
                     name="password"
-                    setValue={props.regFormState.setPassword}
+                    setValue={logic.setPassword}
                     height="50px" />
 
                 <EpistoEntry
-                    value={props.regFormState.passwordControl}
+                    value={logic.passwordControl}
                     labelVariant="top"
                     label="Jelszó mégegyszer"
                     placeholder="Jelszó mégegyszer"
                     name="password"
-                    setValue={props.regFormState.setPasswordControl}
+                    setValue={logic.setPasswordControl}
                     height="50px" />
             </div>
         </form>

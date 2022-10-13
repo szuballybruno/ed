@@ -133,36 +133,26 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
                 ._permissionService
                 .removePersmission(userId, 'SET_COURSE_MODE', { courseId });
         }
-
     }
 
     /**
      * Sets the course mode (beginner / advanced).
      */
-    setCourseStartDateAsync(principalId: PrincipalId, courseId: Id<'Course'>) {
+    async setCourseStartDateAsync(principalId: PrincipalId, courseId: Id<'Course'>) {
 
-        return {
-            action: async () => {
+        const userId = principalId.getId();
 
-                const userId = principalId.getId();
+        const userCourseBridge = await this.getUserCourseBridgeAsync(userId, courseId);
+        if (!userCourseBridge)
+            throw new Error('User course bridge not found!');
 
-                const userCourseBridge = await this.getUserCourseBridgeAsync(userId, courseId);
-                if (!userCourseBridge)
-                    throw new Error('User course bridge not found!');
-
-                await this._ormService
-                    .save(UserCourseBridge, {
-                        courseId: courseId,
-                        userId: userId,
-                        id: userCourseBridge.id,
-                        startDate: new Date()
-                    });
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
-            }
-        };
+        await this._ormService
+            .save(UserCourseBridge, {
+                courseId: courseId,
+                userId: userId,
+                id: userCourseBridge.id,
+                startDate: new Date()
+            });
     }
 
     async getCurrentCourseId(
@@ -183,26 +173,18 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
     /**
      * Returns the current course id
      */
-    getCurrentCourseIdAsync(
+    async getCurrentCourseIdAsync(
         principalId: PrincipalId,
         userId: Id<'User'>
     ) {
 
-        return {
-            action: async () => {
-                const courseBridge = await this._ormService
-                    .query(UserCourseBridge, { userId })
-                    .where('userId', '=', 'userId')
-                    .and('isCurrent', '=', 'true')
-                    .getOneOrNull();
+        const courseBridge = await this._ormService
+            .query(UserCourseBridge, { userId })
+            .where('userId', '=', 'userId')
+            .and('isCurrent', '=', 'true')
+            .getOneOrNull();
 
-                return courseBridge?.courseId ?? null;
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
-            }
-        };
+        return courseBridge?.courseId ?? null;
     }
 
     /**

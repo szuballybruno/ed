@@ -118,7 +118,7 @@ export const huTranslation: TranslationType = {
                 label: 'Aktivációs kódod',
                 placeholder: 'Kód'
             },
-            signup: 'Regisztráció',
+            register: 'Regisztráció',
             dontHaveAccount: 'Nincs még hozzáférésed?',
             buySubscription: 'Vásárold meg kedvezményesen erre a linkre kattintva!',
             signupSuccessfulDescriptions: [
@@ -207,6 +207,7 @@ export const huTranslation: TranslationType = {
             login: 'Bejelentkezés',
             underMaintanence: 'Under maintanence',
             registration: 'Regisztráció',
+            survey: 'Regisztrációs kérdőív',
             player: 'Lejátszó',
             courseOverview: 'Kurzus összegző',
             pretest: 'Pretest',

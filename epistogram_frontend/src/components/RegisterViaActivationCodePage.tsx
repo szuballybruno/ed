@@ -214,7 +214,7 @@ export const RegisterViaActivationCodePage = () => {
                             onClick={handleRegisterAsync}
                             variant="colored">
 
-                            {translatableTexts.registerViaActivationCodePage.signup}
+                            {translatableTexts.registerViaActivationCodePage.register}
                         </EpistoButton>
                     </EpistoFlex2>
 

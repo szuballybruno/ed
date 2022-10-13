@@ -19,6 +19,12 @@ DROP VIEW IF EXISTS user_performance_comparison_stats_view CASCADE;
 DROP VIEW IF EXISTS user_learning_page_stats_view CASCADE;
 DROP VIEW IF EXISTS home_page_stats_view CASCADE;
 DROP VIEW IF EXISTS exam_result_stats_view CASCADE;
+DROP VIEW IF EXISTS assignable_role_view CASCADE;
+DROP VIEW IF EXISTS user_role_assign_company_view CASCADE;
+DROP VIEW IF EXISTS role_list_view CASCADE;
+DROP VIEW IF EXISTS company_view CASCADE;
+DROP VIEW IF EXISTS assignable_permission_view CASCADE;
+DROP VIEW IF EXISTS user_permission_view CASCADE;
 DROP VIEW IF EXISTS user_course_completion_original_estimation_view CASCADE;
 DROP VIEW IF EXISTS pretest_result_view CASCADE;
 DROP VIEW IF EXISTS exam_player_data_view CASCADE;
@@ -27,12 +33,6 @@ DROP VIEW IF EXISTS course_admin_content_view CASCADE;
 DROP VIEW IF EXISTS user_engagement_view CASCADE;
 DROP VIEW IF EXISTS improve_yourself_page_stats_view CASCADE;
 DROP VIEW IF EXISTS user_reaction_time_view CASCADE;
-DROP VIEW IF EXISTS assignable_role_view CASCADE;
-DROP VIEW IF EXISTS user_role_assign_company_view CASCADE;
-DROP VIEW IF EXISTS role_list_view CASCADE;
-DROP VIEW IF EXISTS company_view CASCADE;
-DROP VIEW IF EXISTS assignable_permission_view CASCADE;
-DROP VIEW IF EXISTS user_permission_view CASCADE;
 DROP VIEW IF EXISTS user_inactive_course_view CASCADE;
 DROP VIEW IF EXISTS user_weekly_course_item_progress_view CASCADE;
 DROP VIEW IF EXISTS user_daily_course_item_progress_view CASCADE;
@@ -3735,442 +3735,6 @@ GROUP BY user_course_sessions.user_id
 
 ;
 
---CREATE VIEW: user_permission_view
-CREATE VIEW user_permission_view
-AS
-WITH 
-user_assigned_permissions AS 
-(
-	SELECT 
-		u.id assignee_user_id,
-		pab.context_company_id,
-		pab.context_course_id,
-		NULL::int role_id,
-		pab.permission_id,
-		pab.id assignment_bridge_id
-	FROM public.user u
-
-	INNER JOIN public.permission_assignment_bridge pab
-	ON pab.assignee_user_id = u.id
-),
-role_inherited_permissions AS 
-(
-	SELECT
-		u.id assignee_user_id,
-		rab.context_company_id,
-		NULL::int context_course_id,
-		rpb.role_id,
-		rpb.permission_id,
-		NULL::int assignment_bridge_id
-	FROM public.user u
-
-	INNER JOIN public.role_assignment_bridge rab
-	ON rab.assignee_user_id = u.id
-	
-	LEFT JOIN public.role_permission_bridge rpb
-	ON rpb.role_id = rab.role_id
-),
-company_inherited_permissions AS 
-(
-	SELECT 
-		u.id assignee_user_id, 
-		cpv.context_company_id, 
-		cpv.context_course_id, 
-		cpv.role_id,
-		cpv.permission_id,
-		NULL::int assignment_bridge_id
-	FROM public.company_permission_view cpv
-	
-	INNER JOIN public.user u
-	ON u.company_id = cpv.assignee_company_id
-),
-inherited_or_assigned_permissions AS 
-(
-	-- permissions assigned to user 
-	SELECT uap.*
-	FROM user_assigned_permissions uap
-
-	UNION
-
-	-- role inherited permissions 
-	SELECT rip.*
-	FROM role_inherited_permissions rip
-
-	UNION
-
-	-- permissions inherited from user's company
-	SELECT cip.* 
-	FROM company_inherited_permissions cip
-),
-watch_course_permissions AS 
-(
-	SELECT 
-        cab.user_id assignee_user_id,
-		cab.course_id context_course_id,
-		pe.id permission_id
-    FROM public.course_access_bridge cab
-
-    LEFT JOIN public.permission pe 
-	ON pe.code = 'WATCH_COURSE'
-),
-user_god_permissions AS (
-	SELECT 
-		u.id assignee_user_id,
-		co.id context_company_id,
-		cour.id context_course_id,
-		comm.id context_comment_id,
-		pe.id permission_id
-	FROM public.permission pe
-
-	LEFT JOIN public.company co
-	ON pe.scope = 'COMPANY'
-	
-	LEFT JOIN public.course cour
-	ON pe.scope = 'COURSE'
-	
-	LEFT JOIN public.comment comm
-	ON pe.scope = 'COMMENT'
-	
-	INNER JOIN public.user u
-	ON u.is_god = true
-	
-	ORDER BY
-		u.id,
-		co.id,
-		cour.id,
-		pe.id
-),
-comment_permissions AS 
-(
-	SELECT 
-		co.user_id assignee_user_id,
-		co.id context_comment_id,
-		pe.id permission_id
-	FROM public.comment co
-	
-	LEFT JOIN public.permission pe
-	ON pe.code = 'EDIT_COMMENT' 
-	OR pe.code = 'DELETE_COMMENT'
-),
-all_permissions AS 
-(
-	SELECT
-		cp.assignee_user_id,
-		NULL::int context_company_id,
-		NULL::int context_course_id,
-		cp.context_comment_id,
-		NULL::int role_id,
-		cp.permission_id,
-		NULL::int assignment_bridge_id 
-	FROM comment_permissions cp
-	
-	UNION
-	
-	-- permissions assigned to user 
-	SELECT 
-		ioa.assignee_user_id,
-		ioa.context_company_id,
-		ioa.context_course_id,
-		NULL::int context_comment_id,
-		ioa.role_id,
-		ioa.permission_id,
-		ioa.assignment_bridge_id
-	FROM inherited_or_assigned_permissions ioa
-
-	UNION
-
-	-- god permissions only the best of us can have
-	SELECT 
-		ugp.assignee_user_id,
-		ugp.context_company_id,
-		ugp.context_course_id,
-		ugp.context_comment_id,
-		NULL::int role_id,
-		ugp.permission_id,
-		NULL::int assignment_bridge_id
-	FROM user_god_permissions ugp
-
-	UNION
-
--- 	watch course permissions 
-	SELECT 
-		wcp.assignee_user_id,
-		NULL::int context_company_id,
-		wcp.context_course_id,
-		NULL::int context_comment_id,
-		NULL::int role_id,
-		wcp.permission_id,
-		NULL::int assignment_bridge_id
-	FROM watch_course_permissions wcp
-),
-v AS 
-(
-	SELECT
-		u.id assignee_user_id,
-		
-		-- context company
-		co.id context_company_id,
-		co.name context_company_name,
-		
-		-- context course 
-		ap.context_course_id,
-		cd.title context_course_name,
-		
-		-- context course 
-		ap.context_comment_id,
-	
-		pe.id permission_id,
-		pe.code permission_code,
-		pe.scope permission_scope,
-		parent_ro.id parent_role_id,
-		parent_ro.name parent_role_name,
-		ap.assignment_bridge_id
-	FROM public.user u
-
-	INNER JOIN all_permissions ap
-	ON ap.assignee_user_id = u.id
-
-	INNER JOIN public.permission pe
-	ON pe.id = ap.permission_id
-
-	LEFT JOIN public.company co
-	ON co.id = ap.context_company_id
-
-	LEFT JOIN public.latest_course_version_view lcv
-	ON lcv.course_id = ap.context_course_id
-	
-	LEFT JOIN public.course_version cv
-	ON cv.id = lcv.version_id
-	
-	LEFT JOIN public.course_data cd
-	ON cd.id = cv.course_data_id
-
-	LEFT JOIN public.role parent_ro
-	ON parent_ro.id = ap.role_id
-
-	ORDER BY
-		u.id,
-		ap.context_company_id,
-		ap.context_course_id,
-		pe.id
-)
-SELECT * FROM v
-;
-
---CREATE VIEW: assignable_permission_view
-CREATE VIEW assignable_permission_view
-AS
--- Assignable permission view for a user in a company
--- ther's intentionally no context_course_id present since we 
--- are assigning course level permissions in a course level admin page as well.
-
-WITH 
-permissions AS 
-(
-	SELECT 
-		upv.assignee_user_id,
-		upv.context_company_id,
-		pe.id permission_id,
-		pe.code permission_code,
-		pe.scope permission_scope
-	FROM public.permission pe
-	
-	INNER JOIN public.user_permission_view upv
-	ON (upv.permission_code = 'ASSIGN_COMPANY_PERMISSIONS' AND pe.scope = 'COMPANY')
-	OR (upv.permission_code = 'ASSIGN_GLOBAL_PERMISSIONS' AND pe.scope = 'USER')
-	OR (upv.permission_code = 'ASSIGN_COURSE_PERMISSIONS' AND pe.scope = 'COURSE')
-)
-SELECT * FROM permissions
-
-ORDER BY
-	assignee_user_id,
-	permission_scope,
-	context_company_id,
-	permission_id	;
-
---CREATE VIEW: company_view
-CREATE VIEW company_view
-AS
-SELECT 
-	u.id user_id,
-	co.id company_id,
-	co.deletion_date IS NOT NULL is_deleted,
-	co.name company_name,
-	upv.assignee_user_id IS NOT NULL can_manage
-FROM company co 
-
-CROSS JOIN public.user u
-
-LEFT JOIN public.user_permission_view upv
-ON upv.context_company_id = co.id 
-	AND upv.assignee_user_id = u.id 
-	AND upv.permission_code = 'MANAGE_COMPANY';
-
---CREATE VIEW: role_list_view
-CREATE VIEW role_list_view
-AS
-WITH 
-roles AS 
-(
-	SELECT 
-		upv.assignee_user_id, 
-		r.id role_id
-	FROM public.role r
-
-	INNER JOIN public.user_permission_view upv
-	ON (upv.context_company_id = r.company_id AND upv.permission_code = 'VIEW_CUSTOM_ROLES')
-	OR (r.company_id IS NULL AND upv.permission_code = 'VIEW_PREDEFINED_ROLES')
-)
-SELECT 
-	u.id user_id,
-	u.email user_email,
-	co.id owner_company_id,
-	r.deletion_date IS NOT NULL is_deleted,
-	r.id role_id,
-	r.name role_name,
-	co.name owner_name,
-	pe.id permission_id,
-	pe.code permission_code
-FROM roles
-
-LEFT JOIN public.user u
-ON u.id = roles.assignee_user_id
-
-LEFT JOIN public.role r
-ON r.id = roles.role_id
-
-LEFT JOIN public.company co
-ON co.id = r.company_id
-
-LEFT JOIN public.role_permission_bridge rpb
-ON rpb.role_id = r.id
-
-LEFT JOIN public.permission pe
-ON pe.id = rpb.permission_id
-
-ORDER BY
-	u.id,
-	co.id,
-	r.id,
-	pe.id
-;
-
---CREATE VIEW: user_role_assign_company_view
-CREATE VIEW user_role_assign_company_view
-AS
-SELECT 
-	u.id user_id,
-	co.id company_id,
-	co.name company_name,
-	upv.assignee_user_id IS NOT NULL can_assign
-FROM public.company co
-
-CROSS JOIN public.user u
-
-LEFT JOIN public.user_permission_view upv
-ON upv.context_company_id = co.id
-AND upv.assignee_user_id = u.id
-AND upv.permission_code = 'ASSIGN_ROLES_TO_COMPANY'
-
-ORDER BY
-	u.id,
-	co.id;
-
---CREATE VIEW: assignable_role_view
-CREATE VIEW assignable_role_view
-AS
-WITH 
-assignable_role_ids AS 
-(
-	SELECT 
-		u.id assigner_user_id,
-		upv.context_company_id,
-		ro.id role_id,
-		ro.name role_name
-	FROM public.user u
-	
-	LEFT JOIN public.user_permission_view upv
-	ON upv.assignee_user_id = u.id
-	AND (upv.permission_code = 'ASSIGN_PREDEFINED_ROLES' 
-		OR upv.permission_code = 'ASSIGN_CUSTOM_ROLES')
-	
-	INNER JOIN public.role ro
-	ON (ro.is_custom = false AND upv.permission_code = 'ASSIGN_PREDEFINED_ROLES') 
-	OR (ro.company_id = upv.context_company_id AND upv.permission_code = 'ASSIGN_CUSTOM_ROLES') 
-	
-	ORDER BY 
-		u.id,
-		upv.context_company_id,
-		ro.id
-),
-roles AS
-(
-	SELECT 
-		assigner_u.id assigner_user_id,
-		assignee_u.id assignee_user_id,
-		co.id context_company_id,
-		co.name context_company_name,
-		ro.id role_id,
-		ro.name role_name,
-		ro.is_custom,
-		CASE WHEN ro.is_custom THEN co.id ELSE NULL END owner_company_id,
-		CASE WHEN ro.is_custom THEN co.name ELSE NULL END owner_company_name,
-		urv.role_id IS NOT NULL is_assigned,
-		CASE WHEN assignee_u.is_god THEN false ELSE ari.role_id IS NOT NULL END can_assign 
-	FROM public.user assigner_u
-	
-	CROSS JOIN public.user assignee_u
-	
-	CROSS JOIN public.company co
-
-	LEFT JOIN public.role ro
-	ON ro.is_custom = false OR ro.company_id = co.id
-	
-	LEFT JOIN public.user_role_view urv
-	ON urv.assignee_user_id = assignee_u.id
-	AND urv.role_id = ro.id 
-	AND (urv.context_company_id IS NULL OR urv.context_company_id = co.id) 
-	
-	LEFT JOIN assignable_role_ids ari
-	ON ari.assigner_user_id = assigner_u.id
-		AND ari.role_id = ro.id
-		AND ari.context_company_id = co.id
-	
-	ORDER BY 
-		assigner_user_id,
-		assignee_user_id,
-		context_company_id,
-		role_id
-),
-perm_join AS 
-(
-	SELECT 
-		ro.*,
-		pe.id permission_id,
-		pe.code permission_code
-	FROM roles ro
-
-	LEFT JOIN public.role_permission_bridge rpb
-	ON rpb.role_id = ro.role_id
-	
-	LEFT JOIN public.permission pe
-	ON pe.id = rpb.permission_id
-
-	ORDER BY 
-		ro.assigner_user_id,
-		ro.assignee_user_id,
-		ro.context_company_id,
-		ro.role_id,
-		rpb.permission_id
-)
-SELECT * FROM perm_join
--- SELECT * FROM assignable_role_ids
-
--- WHERE assigner_user_id = 1 AND context_company_id = 2 AND assignee_user_id = 2
-
-
-;
-
 --CREATE VIEW: user_reaction_time_view
 CREATE VIEW user_reaction_time_view
 AS
@@ -4896,6 +4460,473 @@ FROM
 		ucb.user_id,
 		ucb.course_id
 ) sq;
+
+--CREATE VIEW: user_permission_view
+CREATE VIEW user_permission_view
+AS
+WITH 
+user_assigned_permissions AS 
+(
+	SELECT 
+		u.id assignee_user_id,
+		pab.context_company_id,
+		pab.context_course_id,
+		NULL::int role_id,
+		pab.permission_id,
+		pab.id assignment_bridge_id
+	FROM public.user u
+
+	INNER JOIN public.permission_assignment_bridge pab
+	ON pab.assignee_user_id = u.id
+),
+role_inherited_permissions AS 
+(
+	SELECT
+		u.id assignee_user_id,
+		rab.context_company_id,
+		NULL::int context_course_id,
+		rpb.role_id,
+		rpb.permission_id,
+		NULL::int assignment_bridge_id
+	FROM public.user u
+
+	INNER JOIN public.role_assignment_bridge rab
+	ON rab.assignee_user_id = u.id
+	
+	LEFT JOIN public.role_permission_bridge rpb
+	ON rpb.role_id = rab.role_id
+),
+company_inherited_permissions AS 
+(
+	SELECT 
+		u.id assignee_user_id, 
+		cpv.context_company_id, 
+		cpv.context_course_id, 
+		cpv.role_id,
+		cpv.permission_id,
+		NULL::int assignment_bridge_id
+	FROM public.company_permission_view cpv
+	
+	INNER JOIN public.user u
+	ON u.company_id = cpv.assignee_company_id
+),
+inherited_or_assigned_permissions AS 
+(
+	-- permissions assigned to user 
+	SELECT uap.*
+	FROM user_assigned_permissions uap
+
+	UNION
+
+	-- role inherited permissions 
+	SELECT rip.*
+	FROM role_inherited_permissions rip
+
+	UNION
+
+	-- permissions inherited from user's company
+	SELECT cip.* 
+	FROM company_inherited_permissions cip
+),
+watch_course_permissions AS 
+(
+	SELECT 
+        cab.user_id assignee_user_id,
+		cab.course_id context_course_id,
+		pe.id permission_id
+    FROM public.course_access_bridge cab
+
+    LEFT JOIN public.permission pe 
+	ON pe.code = 'WATCH_COURSE'
+),
+survey_permissions AS 
+(
+	SELECT 
+        u.id assignee_user_id,
+		pe.id permission_id,
+		u.company_id context_company_id
+    FROM public.user u
+	
+	LEFT JOIN public.signup_completed_view scv
+	ON scv.user_id = u.id
+	
+    LEFT JOIN public.permission pe 
+	ON pe.code = 'BYPASS_SURVEY'
+	
+	WHERE u.is_survey_required = false 
+	OR scv.is_signup_complete
+),
+user_god_permissions AS (
+	SELECT 
+		u.id assignee_user_id,
+		co.id context_company_id,
+		cour.id context_course_id,
+		comm.id context_comment_id,
+		pe.id permission_id
+	FROM public.permission pe
+
+	LEFT JOIN public.company co
+	ON pe.scope = 'COMPANY'
+	
+	LEFT JOIN public.course cour
+	ON pe.scope = 'COURSE'
+	
+	LEFT JOIN public.comment comm
+	ON pe.scope = 'COMMENT'
+	
+	INNER JOIN public.user u
+	ON u.is_god = true
+	
+	ORDER BY
+		u.id,
+		co.id,
+		cour.id,
+		pe.id
+),
+comment_permissions AS 
+(
+	SELECT 
+		co.user_id assignee_user_id,
+		co.id context_comment_id,
+		pe.id permission_id
+	FROM public.comment co
+	
+	LEFT JOIN public.permission pe
+	ON pe.code = 'EDIT_COMMENT' 
+	OR pe.code = 'DELETE_COMMENT'
+),
+all_permissions AS 
+(
+	SELECT
+		cp.assignee_user_id,
+		NULL::int context_company_id,
+		NULL::int context_course_id,
+		cp.context_comment_id,
+		NULL::int role_id,
+		cp.permission_id,
+		NULL::int assignment_bridge_id 
+	FROM comment_permissions cp
+	
+	UNION
+	
+	-- permissions assigned to user 
+	SELECT 
+		ioa.assignee_user_id,
+		ioa.context_company_id,
+		ioa.context_course_id,
+		NULL::int context_comment_id,
+		ioa.role_id,
+		ioa.permission_id,
+		ioa.assignment_bridge_id
+	FROM inherited_or_assigned_permissions ioa
+
+	UNION
+
+	-- god permissions only the best of us can have
+	SELECT 
+		ugp.assignee_user_id,
+		ugp.context_company_id,
+		ugp.context_course_id,
+		ugp.context_comment_id,
+		NULL::int role_id,
+		ugp.permission_id,
+		NULL::int assignment_bridge_id
+	FROM user_god_permissions ugp
+
+	UNION
+
+-- 	watch course permissions 
+	SELECT 
+		wcp.assignee_user_id,
+		NULL::int context_company_id,
+		wcp.context_course_id,
+		NULL::int context_comment_id,
+		NULL::int role_id,
+		wcp.permission_id,
+		NULL::int assignment_bridge_id
+	FROM watch_course_permissions wcp
+
+	UNION
+
+-- 	watch course permissions 
+	SELECT 
+		supe.assignee_user_id,
+		supe.context_company_id,
+		NULL::int context_course_id,
+		NULL::int context_comment_id,
+		NULL::int role_id,
+		supe.permission_id,
+		NULL::int assignment_bridge_id
+	FROM survey_permissions supe
+),
+v AS 
+(
+	SELECT
+		u.id assignee_user_id,
+		
+		-- context company
+		co.id context_company_id,
+		co.name context_company_name,
+		
+		-- context course 
+		ap.context_course_id,
+		cd.title context_course_name,
+		
+		-- context course 
+		ap.context_comment_id,
+	
+		pe.id permission_id,
+		pe.code permission_code,
+		pe.scope permission_scope,
+		parent_ro.id parent_role_id,
+		parent_ro.name parent_role_name,
+		ap.assignment_bridge_id
+	FROM public.user u
+
+	INNER JOIN all_permissions ap
+	ON ap.assignee_user_id = u.id
+
+	INNER JOIN public.permission pe
+	ON pe.id = ap.permission_id
+
+	LEFT JOIN public.company co
+	ON co.id = ap.context_company_id
+
+	LEFT JOIN public.latest_course_version_view lcv
+	ON lcv.course_id = ap.context_course_id
+	
+	LEFT JOIN public.course_version cv
+	ON cv.id = lcv.version_id
+	
+	LEFT JOIN public.course_data cd
+	ON cd.id = cv.course_data_id
+
+	LEFT JOIN public.role parent_ro
+	ON parent_ro.id = ap.role_id
+
+	ORDER BY
+		u.id,
+		ap.context_company_id,
+		ap.context_course_id,
+		pe.id
+)
+SELECT * FROM v
+;
+
+--CREATE VIEW: assignable_permission_view
+CREATE VIEW assignable_permission_view
+AS
+-- Assignable permission view for a user in a company
+-- ther's intentionally no context_course_id present since we 
+-- are assigning course level permissions in a course level admin page as well.
+
+WITH 
+permissions AS 
+(
+	SELECT 
+		upv.assignee_user_id,
+		upv.context_company_id,
+		pe.id permission_id,
+		pe.code permission_code,
+		pe.scope permission_scope
+	FROM public.permission pe
+	
+	INNER JOIN public.user_permission_view upv
+	ON (upv.permission_code = 'ASSIGN_COMPANY_PERMISSIONS' AND pe.scope = 'COMPANY')
+	OR (upv.permission_code = 'ASSIGN_GLOBAL_PERMISSIONS' AND pe.scope = 'USER')
+	OR (upv.permission_code = 'ASSIGN_COURSE_PERMISSIONS' AND pe.scope = 'COURSE')
+)
+SELECT * FROM permissions
+
+ORDER BY
+	assignee_user_id,
+	permission_scope,
+	context_company_id,
+	permission_id	;
+
+--CREATE VIEW: company_view
+CREATE VIEW company_view
+AS
+SELECT 
+	u.id user_id,
+	co.id company_id,
+	co.deletion_date IS NOT NULL is_deleted,
+	co.name company_name,
+	upv.assignee_user_id IS NOT NULL can_manage,
+	co.is_survey_required
+FROM company co 
+
+CROSS JOIN public.user u
+
+LEFT JOIN public.user_permission_view upv
+ON upv.context_company_id = co.id 
+	AND upv.assignee_user_id = u.id 
+	AND upv.permission_code = 'MANAGE_COMPANY';
+
+--CREATE VIEW: role_list_view
+CREATE VIEW role_list_view
+AS
+WITH 
+roles AS 
+(
+	SELECT 
+		upv.assignee_user_id, 
+		r.id role_id
+	FROM public.role r
+
+	INNER JOIN public.user_permission_view upv
+	ON (upv.context_company_id = r.company_id AND upv.permission_code = 'VIEW_CUSTOM_ROLES')
+	OR (r.company_id IS NULL AND upv.permission_code = 'VIEW_PREDEFINED_ROLES')
+)
+SELECT 
+	u.id user_id,
+	u.email user_email,
+	co.id owner_company_id,
+	r.deletion_date IS NOT NULL is_deleted,
+	r.id role_id,
+	r.name role_name,
+	co.name owner_name,
+	pe.id permission_id,
+	pe.code permission_code
+FROM roles
+
+LEFT JOIN public.user u
+ON u.id = roles.assignee_user_id
+
+LEFT JOIN public.role r
+ON r.id = roles.role_id
+
+LEFT JOIN public.company co
+ON co.id = r.company_id
+
+LEFT JOIN public.role_permission_bridge rpb
+ON rpb.role_id = r.id
+
+LEFT JOIN public.permission pe
+ON pe.id = rpb.permission_id
+
+ORDER BY
+	u.id,
+	co.id,
+	r.id,
+	pe.id
+;
+
+--CREATE VIEW: user_role_assign_company_view
+CREATE VIEW user_role_assign_company_view
+AS
+SELECT 
+	u.id user_id,
+	co.id company_id,
+	co.name company_name,
+	upv.assignee_user_id IS NOT NULL can_assign
+FROM public.company co
+
+CROSS JOIN public.user u
+
+LEFT JOIN public.user_permission_view upv
+ON upv.context_company_id = co.id
+AND upv.assignee_user_id = u.id
+AND upv.permission_code = 'ASSIGN_ROLES_TO_COMPANY'
+
+ORDER BY
+	u.id,
+	co.id;
+
+--CREATE VIEW: assignable_role_view
+CREATE VIEW assignable_role_view
+AS
+WITH 
+assignable_role_ids AS 
+(
+	SELECT 
+		u.id assigner_user_id,
+		upv.context_company_id,
+		ro.id role_id,
+		ro.name role_name
+	FROM public.user u
+	
+	LEFT JOIN public.user_permission_view upv
+	ON upv.assignee_user_id = u.id
+	AND (upv.permission_code = 'ASSIGN_PREDEFINED_ROLES' 
+		OR upv.permission_code = 'ASSIGN_CUSTOM_ROLES')
+	
+	INNER JOIN public.role ro
+	ON (ro.is_custom = false AND upv.permission_code = 'ASSIGN_PREDEFINED_ROLES') 
+	OR (ro.company_id = upv.context_company_id AND upv.permission_code = 'ASSIGN_CUSTOM_ROLES') 
+	
+	ORDER BY 
+		u.id,
+		upv.context_company_id,
+		ro.id
+),
+roles AS
+(
+	SELECT 
+		assigner_u.id assigner_user_id,
+		assignee_u.id assignee_user_id,
+		co.id context_company_id,
+		co.name context_company_name,
+		ro.id role_id,
+		ro.name role_name,
+		ro.is_custom,
+		CASE WHEN ro.is_custom THEN co.id ELSE NULL END owner_company_id,
+		CASE WHEN ro.is_custom THEN co.name ELSE NULL END owner_company_name,
+		urv.role_id IS NOT NULL is_assigned,
+		CASE WHEN assignee_u.is_god THEN false ELSE ari.role_id IS NOT NULL END can_assign 
+	FROM public.user assigner_u
+	
+	CROSS JOIN public.user assignee_u
+	
+	CROSS JOIN public.company co
+
+	LEFT JOIN public.role ro
+	ON ro.is_custom = false OR ro.company_id = co.id
+	
+	LEFT JOIN public.user_role_view urv
+	ON urv.assignee_user_id = assignee_u.id
+	AND urv.role_id = ro.id 
+	AND (urv.context_company_id IS NULL OR urv.context_company_id = co.id) 
+	
+	LEFT JOIN assignable_role_ids ari
+	ON ari.assigner_user_id = assigner_u.id
+		AND ari.role_id = ro.id
+		AND ari.context_company_id = co.id
+	
+	ORDER BY 
+		assigner_user_id,
+		assignee_user_id,
+		context_company_id,
+		role_id
+),
+perm_join AS 
+(
+	SELECT 
+		ro.*,
+		pe.id permission_id,
+		pe.code permission_code
+	FROM roles ro
+
+	LEFT JOIN public.role_permission_bridge rpb
+	ON rpb.role_id = ro.role_id
+	
+	LEFT JOIN public.permission pe
+	ON pe.id = rpb.permission_id
+
+	ORDER BY 
+		ro.assigner_user_id,
+		ro.assignee_user_id,
+		ro.context_company_id,
+		ro.role_id,
+		rpb.permission_id
+)
+SELECT * FROM perm_join
+-- SELECT * FROM assignable_role_ids
+
+-- WHERE assigner_user_id = 1 AND context_company_id = 2 AND assignee_user_id = 2
+
+
+;
 
 --CREATE VIEW: exam_result_stats_view
 CREATE VIEW exam_result_stats_view

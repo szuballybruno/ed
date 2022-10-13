@@ -87,35 +87,27 @@ export class PlaybackService extends ServiceBase {
     /**
      * Saves a video seek event
      */
-    saveVideoSeekEventAsync(principalId: PrincipalId, videoSeekEventDTO: VideoSeekEventDTO) {
+    async saveVideoSeekEventAsync(principalId: PrincipalId, videoSeekEventDTO: VideoSeekEventDTO) {
 
-        return {
-            action: async () => {
-                const userId = principalId.getId();
+        const userId = principalId.getId();
 
-                const {
-                    fromSeconds,
-                    toSeconds,
-                    videoVersionId,
-                    videoPlaybackSessionId
-                } = videoSeekEventDTO;
+        const {
+            fromSeconds,
+            toSeconds,
+            videoVersionId,
+            videoPlaybackSessionId
+        } = videoSeekEventDTO;
 
-                await this._ormService
-                    .createAsync(VideoSeekEvent, {
-                        creationDate: new Date(),
-                        fromSeconds: fromSeconds,
-                        toSeconds: toSeconds,
-                        userId: userId,
-                        videoVersionId,
-                        videoPlaybackSessionId: videoPlaybackSessionId,
-                        isForward: fromSeconds <= toSeconds
-                    });
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
-            }
-        };
+        await this._ormService
+            .createAsync(VideoSeekEvent, {
+                creationDate: new Date(),
+                fromSeconds: fromSeconds,
+                toSeconds: toSeconds,
+                userId: userId,
+                videoVersionId,
+                videoPlaybackSessionId: videoPlaybackSessionId,
+                isForward: fromSeconds <= toSeconds
+            });
     }
 
     /**

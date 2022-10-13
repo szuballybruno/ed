@@ -15,7 +15,7 @@ import { EpistoFont } from '../controls/EpistoFont';
 import { PlaylistItem } from '../courseItemList/PlaylistItem';
 import { LeftPane } from '../LeftPane';
 import { PageRootContainer } from '../PageRootContainer';
-import { CurrentUserContext } from '../system/AuthenticationFrame';
+import { CurrentUserContext, useRefetchUserAsync } from '../system/AuthenticationFrame';
 import { useCurrentCourseItemCodeContext } from '../system/CurrentCourseItemFrame';
 import { useSetBusy } from '../system/LoadingFrame/BusyBarContext';
 import { DashboardSection } from '../universal/DashboardSection';
@@ -93,6 +93,7 @@ const HomePage = () => {
     useSetBusy(useOverviewPageDTO, status, error);
 
     const user = useContext(CurrentUserContext);
+    const { refetchAuthHandshake } = useRefetchUserAsync();
 
     const [isSmallerThan1320] = useMediaQuery('(max-width: 1320px)');
     const isMobile = useIsMobileView();

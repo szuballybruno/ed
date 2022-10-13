@@ -31,15 +31,6 @@
             },
         },
         {
-            "label": "purge-db",
-            "type": "shell",
-            "command": "yarn --cwd ../epistogram_backend purge",
-            "problemMatcher": [],
-            "presentation": {
-                "group": "run"
-            }
-        },
-        {
             "label": "run test-misc",
             "type": "shell",
             "command": "npx jest -i misc.test.ts",
@@ -48,8 +39,8 @@
         // run
         {
             "type": "shell",
-            "label": "run backend-lightrecreate",
-            "command": "yarn --cwd ../epistogram_backend lightrecreate",
+            "label": "run backend-lr",
+            "command": "yarn --cwd ../epistogram_backend lr",
             "problemMatcher": [],
             "presentation": {
                 "group": "run"

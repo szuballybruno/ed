@@ -174,10 +174,10 @@ export const apiRoutes = {
         uploadUserAvatar: '/file/upload-user-avatar'
     },
 
-    signup: {
-        answerSignupQuestion: '/signup/answer-signup-question',
-        getSignupData: '/signup/get-signup-data',
-        getUserPersonalityData: '/signup/get-user-personality-data'
+    survey: {
+        answerSurveyQuestion: '/survey/answer-question',
+        getSurveyData: '/survey/get-data',
+        getUserPersonalityData: '/survey/get-user-personality-data'
     },
 
     player: {

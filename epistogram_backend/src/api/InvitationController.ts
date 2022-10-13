@@ -1,5 +1,5 @@
 import { UserInvitationService } from '../services/UserInvitationService';
-import { CreateInvitedUserDTO } from '../shared/dtos/CreateInvitedUserDTO';
+import { UserEditSaveDTO } from '../shared/dtos/UserEditSaveDTO';
 import { apiRoutes } from '../shared/types/apiRoutes';
 import { ServiceProvider } from '../startup/servicesDI';
 import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
@@ -16,18 +16,22 @@ export class InvitationController implements XController<InvitationController> {
     }
 
     @XControllerAction(apiRoutes.invitation.inviteUser, { isPost: true })
-    async inviteUserAction(params: ActionParams) {
+    inviteUserAction(params: ActionParams) {
 
         const dto = params
-            .getBody<CreateInvitedUserDTO>([
+            .getBody<UserEditSaveDTO>([
                 'companyId',
                 'email',
                 'firstName',
                 'lastName',
                 'departmentId',
+                'isSurveyRequired',
+                'assignedRoleIds',
+                'isTeacher',
+                'userId',
             ]).data;
 
-        return await this._userInvitationService
+        return this._userInvitationService
             .inviteUserAsync(params.principalId, dto);
     }
 }

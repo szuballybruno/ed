@@ -1,6 +1,6 @@
 import { Divider } from '@chakra-ui/react';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { MutableRefObject, useContext } from 'react';
+import { MutableRefObject } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { useLogout } from '../../services/api/authenticationApiService';
 import { useNavigation } from '../../services/core/navigatior';
@@ -13,7 +13,7 @@ import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoPopper } from '../controls/EpistoPopper';
 import { EpistoConinInfo } from '../EpistoCoinInfo';
-import { RefetchUserAsyncContext } from '../system/AuthenticationFrame';
+import { useRefetchUserAsync } from '../system/AuthenticationFrame';
 import { useAuthorizationContext } from '../system/AuthorizationContext';
 
 export const UserContextMenu = (props: {
@@ -26,7 +26,7 @@ export const UserContextMenu = (props: {
 
     // context
     const { hasPermission } = useAuthorizationContext();
-    const fetchUserAsync = useContext(RefetchUserAsyncContext);
+    const { refetchAuthHandshake } = useRefetchUserAsync();
 
     // util 
     const { navigate2, openNewTab } = useNavigation();
@@ -37,7 +37,7 @@ export const UserContextMenu = (props: {
         try {
 
             await logoutUserAsync();
-            await fetchUserAsync();
+            await refetchAuthHandshake();
         } catch (e) {
 
             showError(e);
