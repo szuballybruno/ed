@@ -37,7 +37,7 @@ export const DesktopNavbar = ({
     const menuItems = new ArrayBuilder<Omit<ApplicationRoute, 'icon'> & { icon: ReactNode }>()
         .addIf(hasPermission('ADMINISTRATE_COMPANY'), {
             title: applicationRoutes.administrationRoute.title,
-            route: applicationRoutes.administrationRoute.usersRoute.route,
+            route: applicationRoutes.administrationRoute.statsRoute.route,
             icon: applicationRoutes.administrationRoute.icon
         })
         .add({

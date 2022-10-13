@@ -11,7 +11,7 @@ import { EpistoPieChart } from '../../universal/charts/base_charts/EpistoPieChar
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 const weekdayLabels = Object.values(translatableTexts.misc.daysOfWeekFromMonday);
 
-export const AdminHomeDetails = () => {
+export const AdminStatsSubpage = () => {
 
     const { navigateToHref } = useNavigation();
 
