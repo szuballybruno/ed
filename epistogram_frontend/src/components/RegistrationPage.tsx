@@ -71,8 +71,16 @@ export const RegistrationPage = () => {
             }
 
             showNotification(translatableTexts.registrationPage.successfulRegistration);
-            await refetchAuthHandshake();
-            navigate2(applicationRoutes.surveyRoute);
+            const { permissions } = await refetchAuthHandshake();
+
+            if(permissions.any(x => x === 'BYPASS_SURVEY')){
+
+                navigate2(applicationRoutes.homeRoute);
+            }
+            else {
+                
+                navigate2(applicationRoutes.surveyRoute);
+            }
         }
         catch (e) {
 
