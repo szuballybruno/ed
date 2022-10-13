@@ -140,6 +140,10 @@ export const permissionCodes = fn({
         code: 'VIEW_DAILY_TIP_ADMIN',
         scope: 'USER'
     },
+    CAN_VIEW_HIDDEN_MENUS: {
+        code: 'CAN_VIEW_HIDDEN_MENUS',
+        scope: 'USER'
+    },
 
     // misc company scoped
     VIEW_SHOP: {

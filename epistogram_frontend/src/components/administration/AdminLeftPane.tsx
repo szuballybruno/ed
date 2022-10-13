@@ -3,7 +3,6 @@ import { ApplicationRoute } from '../../models/types';
 import { useNavigation } from '../../services/core/navigatior';
 import { Environment } from '../../static/Environemnt';
 import { ArrayBuilder } from '../../static/frontendHelpers';
-import { RouteHelpers } from '../../static/RouteHelpers';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { NavigationLinkList } from '../NavigationLinkList';
 import { useAuthorizationContext } from '../system/AuthorizationContext';
@@ -15,14 +14,14 @@ export const AdminLeftPane = () => {
     const administrationRoutes = applicationRoutes.administrationRoute;
 
     const menuItems = new ArrayBuilder<ApplicationRoute<any, any>>()
-        .add(administrationRoutes.usersRoute)
-        .add(administrationRoutes.homeRoute.detailsRoute)
-        .addIf(RouteHelpers.isRouteAuthoirzedToVisit(administrationRoutes.coursesRoute, hasPermission), administrationRoutes.coursesRoute)
-        .addIf(RouteHelpers.isRouteAuthoirzedToVisit(administrationRoutes.shopRoute, hasPermission), administrationRoutes.shopRoute)
-        .addIf(RouteHelpers.isRouteAuthoirzedToVisit(administrationRoutes.personalityAssessmentRoute, hasPermission), administrationRoutes.personalityAssessmentRoute)
-        .add(administrationRoutes.companiesRoute)
-        .add(administrationRoutes.rolesRoute)
-        .add(administrationRoutes.debugRoute)
+        .addIf(hasPermission('ADMINISTRATE_COMPANY'), administrationRoutes.statsRoute)
+        .addIf(hasPermission('ADMINISTRATE_COMPANY'), administrationRoutes.usersRoute)
+        .addIf(hasPermission('ADMINISTRATE_COMPANY'), administrationRoutes.coursesRoute)
+        .addIf(hasPermission('CAN_VIEW_HIDDEN_MENUS'), administrationRoutes.shopRoute)
+        .addIf(hasPermission('CAN_VIEW_HIDDEN_MENUS'), administrationRoutes.personalityAssessmentRoute)
+        .addIf(hasPermission('CAN_VIEW_HIDDEN_MENUS'), administrationRoutes.companiesRoute)
+        .addIf(hasPermission('CAN_VIEW_HIDDEN_MENUS'), administrationRoutes.rolesRoute)
+        .addIf(hasPermission('CAN_VIEW_HIDDEN_MENUS'), administrationRoutes.debugRoute)
         .getArray();
 
     return (
