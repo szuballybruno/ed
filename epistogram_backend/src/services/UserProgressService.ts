@@ -58,6 +58,8 @@ export class UserProgressService extends ServiceBase {
         const previsionedCompletionDate = tempomatData?.previsionedCompletionDate || null;
         const recommendedItemsPerDay = tempomatData?.recommendedItemsPerDay || null;
 
+        console.log(previsionedCompletionDate);
+
         const currentDailyCompletedView = await this._ormService
             .query(UserDailyCourseItemProgressView, { userId, courseId })
             .where('userId', '=', 'userId')

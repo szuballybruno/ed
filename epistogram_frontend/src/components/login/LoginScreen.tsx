@@ -306,7 +306,7 @@ const LoginScreen = () => {
                                     textAlign: 'right'
                                 }}>
 
-                                Igényeld a HR-nél
+                                Váltsd be itt aktivációs kódodat
                             </EpistoFont>
                         </EpistoFlex2>
                     </EpistoFlex2>
