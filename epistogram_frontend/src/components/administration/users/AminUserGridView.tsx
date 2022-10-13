@@ -312,6 +312,7 @@ export const AminUserGridView = ({
     const { usersRoute } = applicationRoutes.administrationRoute;
     const { userRoute } = usersRoute;
     const isMatchingCurrentAppRoute = useIsMatchingCurrentRoute();
+    const { deleteUserAsync } = UserApiService.useDeleteUserAsync();
 
     const deleteWaningDialogLogic = useEpistoDialogLogic<RowType>('delwarn');
     const showError = useShowErrorDialog();
@@ -355,7 +356,7 @@ export const AminUserGridView = ({
 
                             try {
 
-                                await UserApiService.deleteUserAsync(userId!);
+                                await deleteUserAsync(userId!);
                                 await refetchUsers();
                             }
                             catch (e) {

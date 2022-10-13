@@ -1,12 +1,12 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import { useCallback, useState } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
+import { LoadingStateType } from '../../models/types';
+import HttpErrorResponseDTO from '../../shared/dtos/HttpErrorResponseDTO';
+import { ParametrizedRouteType, RouteParameterType } from '../../shared/types/apiRoutes';
+import { ErrorWithCode } from '../../shared/types/ErrorWithCode';
 import { Environment } from '../../static/Environemnt';
 import { getErrorTypeByHTTPCode, getUrl } from '../../static/frontendHelpers';
-import HttpErrorResponseDTO from '../../shared/dtos/HttpErrorResponseDTO';
-import { LoadingStateType } from '../../models/types';
-import { ErrorWithCode } from '../../shared/types/ErrorWithCode';
-import { ParametrizedRouteType, RouteParameterType } from '../../shared/types/apiRoutes';
 
 export class HTTPResponse {
     code: number;
@@ -38,26 +38,34 @@ const instance = (() => {
     return axiosInst;
 })();
 
-export const httpPostAsync = async (
+export const httpPostAsync = async ({
+    urlEnding,
+    configure,
+    data,
+    queryObject
+}: {
     urlEnding: string,
     data?: any,
-    configure?: (config: AxiosRequestConfig) => void,
-    queryObject?: any) => {
+    configure?: (baseConfig: AxiosRequestConfig) => AxiosRequestConfig,
+    queryObject?: any
+}) => {
 
     try {
 
-        const config = {
-            withCredentials: true
-        } as AxiosRequestConfig;
+        const baseConfig: AxiosRequestConfig = {
+            withCredentials: true,
+            baseURL: Environment.serverUrl,
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        };
 
-        // set bearer token
-        if (configure) {
-
-            configure(config);
-        }
+        const config = configure
+            ? configure(baseConfig)
+            : baseConfig;
 
         const url = getUrl(urlEnding, undefined, queryObject);
-        const axiosResponse = await instance.post(url, data);
+        const axiosResponse = await axios.post(url, data, config);
         const response = new HTTPResponse(axiosResponse.status, axiosResponse.data);
 
         return response.data;
@@ -109,7 +117,12 @@ export const usePostDataUnsafe = <TData = any, TResult = void>(url: string | Par
             setState('loading');
 
             const postData = data ? data : undefined;
-            const postResult = await httpPostAsync(url, postData, undefined, undefined) as TResult;
+            const postResult = await httpPostAsync({
+                urlEnding: url,
+                data: postData,
+                configure: undefined,
+                queryObject: undefined
+            }) as TResult;
 
             setState('idle');
             setResult(postResult);
@@ -179,35 +192,45 @@ type FilesObject = {
  */
 export const postMultipartAsync = async (url: string, files?: FilesObject, data?: any) => {
 
-    const formData = new FormData();
+    let formKeyDatas = [] as { key: string, data: any }[];
 
     // append file data
     if (files) {
 
-        Object
+        const fileKeyDatas = Object
             .keys(files)
-            .map((key): [string, File | null] => [key, files[key]])
-            .filter(([, file]) => !!file)
-            .forEach(([key, file]) => formData
-                .append(key, file!));
+            .map(key => ({ key, data: files[key] }))
+            .filter(kd => !!kd.data);
+
+        formKeyDatas = formKeyDatas
+            .concat(fileKeyDatas);
     }
 
     // append json data 
     if (data) {
 
         const jsonData = JSON.stringify(data);
-        formData.append('document', jsonData);
+        formKeyDatas = formKeyDatas
+            .concat([{ key: 'document', data: jsonData }]);
     }
 
-    const getHeaders = x => {
-        return x.headers = { ...x.headers, 'Content-Type': 'multipart/form-data' };
-    };
+    const formData = new FormData();
 
-    return await httpPostAsync(
-        url,
-        formData,
-        getHeaders
-    );
+    formKeyDatas
+        .forEach(kd => formData
+            .append(kd.key, kd.data));
+
+    return await httpPostAsync({
+        urlEnding: url,
+        data: formData,
+        configure: baseConfig => {
+
+            if (baseConfig.headers)
+                baseConfig.headers['Content-Type'] = 'multipart/form-data';
+
+            return baseConfig;
+        }
+    });
 };
 
 export const addBearerToken = (config: AxiosRequestConfig, bearerToken: string) => {
