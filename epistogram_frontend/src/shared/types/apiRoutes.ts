@@ -177,6 +177,7 @@ export const apiRoutes = {
     survey: {
         answerSurveyQuestion: '/survey/answer-question',
         getSurveyData: '/survey/get-data',
+        completeSignupSurvey: '/survey/complete-signup-survey',
         getUserPersonalityData: '/survey/get-user-personality-data'
     },
 
