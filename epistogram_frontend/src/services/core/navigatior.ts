@@ -38,6 +38,8 @@ export const useNavigation = () => {
 
         Logger.logScoped('ROUTING', 'Navigating to: ' + replacedPath);
 
+        console.log(replacedPath);
+
         hrefNavigate(replacedPath);
     }, [hrefNavigate]);
 

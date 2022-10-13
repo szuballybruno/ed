@@ -395,17 +395,16 @@ export const AminUserGridView = ({
                         style={{
                             alignItems: 'center',
                             margin: '0 5px'
-                        }}>
+                        }}
+                        onClick={() => navigate2(usersRoute.addRoute)}>
 
                         <Add
                             style={{
                                 height: 20,
                                 margin: '0 5px 2px 2px'
-                            }}
-                            onClick={() => navigate2(usersRoute.addRoute)} />
+                            }} />
 
                         Felhasználó hozzáadása
-
                     </EpistoButton>}
                 </EpistoFlex2>
             </Flex>
