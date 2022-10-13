@@ -1,15 +1,15 @@
-import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel } from '@chakra-ui/react';
+import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, useMediaQuery } from '@chakra-ui/react';
 import { InfoOutlined } from '@mui/icons-material';
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { usePersonalityData } from '../../services/api/signupApiService';
 import { translatableTexts } from '../../static/translatableTexts';
-import { LoadingFrame } from '../system/LoadingFrame';
 import { EpistoButton } from '../controls/EpistoButton';
-import { EpistoPopper } from '../controls/EpistoPopper';
-import { PersonalityChart } from '../universal/charts/PersonalityChart';
-import { EpistoFont } from '../controls/EpistoFont';
-import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 import { EpistoDiv } from '../controls/EpistoDiv';
+import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
+import { EpistoFont } from '../controls/EpistoFont';
+import { EpistoPopper } from '../controls/EpistoPopper';
+import { LoadingFrame } from '../system/LoadingFrame';
+import { PersonalityChart } from '../universal/charts/PersonalityChart';
 
 export const PersonalityAssessment = (props: EpistoFlex2Props) => {
 
@@ -24,6 +24,8 @@ export const PersonalityAssessment = (props: EpistoFlex2Props) => {
     const ref = useRef<HTMLButtonElement>(null);
 
     const [isShowHelperPopper, setIsShowHelperPopper] = useState(false);
+
+    const [isSmallerThan1320] = useMediaQuery('(max-width: 1320px)');
 
     const personalityDescriptionAccordions = (personalityData?.personalityTraitCategories ?? [])
         .map(x => ({
@@ -45,7 +47,7 @@ export const PersonalityAssessment = (props: EpistoFlex2Props) => {
         {/* left wrapper */}
         <EpistoFlex2
             direction="row"
-            flexWrap="wrap"
+            flexWrap={isSmallerThan1320 ? 'wrap' : 'nowrap'}
             align="flex-start"
             justify="center"
             flex="1"
@@ -55,13 +57,16 @@ export const PersonalityAssessment = (props: EpistoFlex2Props) => {
             <EpistoFlex2
                 className="roundBorders"
                 justify="center"
-                direction="column"
+                align='center'
+                direction="row"
                 background="var(--transparentWhite70)"
                 position="relative"
                 flex="1"
+                minWidth={isSmallerThan1320 ? '100%' : '500px'}
                 height="400px">
 
                 {personalityData?.chartData && <PersonalityChart
+                    isSmallDesktop={isSmallerThan1320}
                     data={personalityData.chartData} />}
             </EpistoFlex2>
 

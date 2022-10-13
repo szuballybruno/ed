@@ -1,5 +1,4 @@
 import { Grid } from '@chakra-ui/react';
-import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { useNavigation } from '../../../services/core/navigatior';
 import { defaultCharts } from '../../../static/defaultChartOptions';
 import { Environment } from '../../../static/Environemnt';
@@ -193,7 +192,7 @@ export const AdminHomeDetails = () => {
     return <AdminSubpageHeader
         direction="column"
         isInverseBackground
-        tabMenuItems={[{
+       /*  tabMenuItems={[{
             route: applicationRoutes.administrationRoute.homeRoute.overviewRoute.route,
             title: applicationRoutes.administrationRoute.homeRoute.overviewRoute.title
         }, {
@@ -206,7 +205,7 @@ export const AdminHomeDetails = () => {
 
                 navigateToHref(applicationRoutes.administrationRoute.usersRoute.route.getAbsolutePath() + '?preset=reviewRequired');
             }
-        }]}>
+        }]} */>
 
         {adminHomeDetailsStatistics
             .map((section, index) => {

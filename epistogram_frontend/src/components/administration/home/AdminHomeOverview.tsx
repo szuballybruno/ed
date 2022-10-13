@@ -1,6 +1,5 @@
 import { ArrowBack, ArrowForward, ArrowRight, FiberManualRecord } from '@mui/icons-material';
 import { ReactNode } from 'react';
-import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { useActiveCourses } from '../../../services/api/userProgressApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { Environment } from '../../../static/Environemnt';
@@ -52,7 +51,7 @@ export const AdminHomeOverview = () => {
 
     return <AdminSubpageHeader
         isInverseBackground
-        tabMenuItems={[
+        /* tabMenuItems={[
             applicationRoutes.administrationRoute.homeRoute.overviewRoute,
             applicationRoutes.administrationRoute.homeRoute.detailsRoute, {
                 title: 'Felhasználók áttekintése',
@@ -62,7 +61,7 @@ export const AdminHomeOverview = () => {
                     navigateToHref(applicationRoutes.administrationRoute.usersRoute.route.getAbsolutePath() + '?preset=reviewRequired');
                 }
             }
-        ]}>
+        ]} */>
         <EpistoFlex2 flex="3"
             direction="column">
 

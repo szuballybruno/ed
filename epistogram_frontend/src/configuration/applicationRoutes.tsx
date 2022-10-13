@@ -1,4 +1,4 @@
-import { AdminPanelSettings, Build, Business, Home, Person, School, Search, Settings, Subscriptions } from '@mui/icons-material';
+import { AdminPanelSettings, Build, Business, Equalizer, Home, Person, School, Search, Settings, Subscriptions } from '@mui/icons-material';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import LocalPoliceIcon from '@mui/icons-material/LocalPolice';
@@ -285,12 +285,14 @@ export const getApplicationRoutes = () => {
                 overviewRoute: {
                     title: translatableTexts.routeTitles.administrationHomeOverview,
                     route: new EpistoRoute('/administration/home', 'overview'),
-                    icon: <Home className="fontXXL"
+                    icon: <Equalizer className="fontXXL"
                         color={'secondary'} />
                 },
                 detailsRoute: {
                     title: translatableTexts.routeTitles.administrationHomeDetails,
-                    route: new EpistoRoute('/administration/home', 'details')
+                    route: new EpistoRoute('/administration/home', 'details'),
+                    icon: <Equalizer className="fontXXL"
+                        color={'secondary'} />
                 },
             },
 
