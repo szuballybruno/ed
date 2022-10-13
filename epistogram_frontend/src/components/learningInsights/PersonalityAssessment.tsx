@@ -1,15 +1,15 @@
-import {Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel} from '@chakra-ui/react';
-import {InfoOutlined} from '@mui/icons-material';
-import React, {useRef, useState} from 'react';
-import {usePersonalityData} from '../../services/api/signupApiService';
-import {translatableTexts} from '../../static/translatableTexts';
-import {LoadingFrame} from '../system/LoadingFrame';
-import {EpistoButton} from '../controls/EpistoButton';
-import {EpistoPopper} from '../controls/EpistoPopper';
-import {PersonalityChart} from '../universal/charts/PersonalityChart';
-import {EpistoFont} from '../controls/EpistoFont';
-import {EpistoFlex2, EpistoFlex2Props} from '../controls/EpistoFlex';
-import {EpistoDiv} from '../controls/EpistoDiv';
+import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel } from '@chakra-ui/react';
+import { InfoOutlined } from '@mui/icons-material';
+import React, { useRef, useState } from 'react';
+import { translatableTexts } from '../../static/translatableTexts';
+import { LoadingFrame } from '../system/LoadingFrame';
+import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoPopper } from '../controls/EpistoPopper';
+import { PersonalityChart } from '../universal/charts/PersonalityChart';
+import { EpistoFont } from '../controls/EpistoFont';
+import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
+import { EpistoDiv } from '../controls/EpistoDiv';
+import { SurveyApiService } from '../../services/api/SurveyApiService';
 
 export const PersonalityAssessment = (props: EpistoFlex2Props) => {
 
@@ -19,7 +19,7 @@ export const PersonalityAssessment = (props: EpistoFlex2Props) => {
         personalityData,
         personalityDataError,
         personalityDataState
-    } = usePersonalityData();
+    } = SurveyApiService.usePersonalityData();
 
     const ref = useRef<HTMLButtonElement>(null);
 
@@ -186,7 +186,7 @@ export const PersonalityAssessment = (props: EpistoFlex2Props) => {
 
                                 {/* content  */}
                                 <AccordionPanel
-                                   // pb={'4px'}
+                                    // pb={'4px'}
                                     //mt="10px"
                                     fontSize="13px">
 

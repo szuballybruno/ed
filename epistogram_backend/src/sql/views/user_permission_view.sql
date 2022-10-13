@@ -73,6 +73,23 @@ watch_course_permissions AS
     LEFT JOIN public.permission pe 
 	ON pe.code = 'WATCH_COURSE'
 ),
+survey_permissions AS 
+(
+	SELECT 
+        u.id assignee_user_id,
+		pe.id permission_id,
+		u.company_id context_company_id
+    FROM public.user u
+	
+	LEFT JOIN public.signup_completed_view scv
+	ON scv.user_id = u.id
+	
+    LEFT JOIN public.permission pe 
+	ON pe.code = 'BYPASS_SURVEY'
+	
+	WHERE u.is_survey_required = false 
+	OR scv.is_signup_complete
+),
 user_god_permissions AS (
 	SELECT 
 		u.id assignee_user_id,
@@ -162,6 +179,19 @@ all_permissions AS
 		wcp.permission_id,
 		NULL::int assignment_bridge_id
 	FROM watch_course_permissions wcp
+
+	UNION
+
+-- 	watch course permissions 
+	SELECT 
+		supe.assignee_user_id,
+		supe.context_company_id,
+		NULL::int context_course_id,
+		NULL::int context_comment_id,
+		NULL::int role_id,
+		supe.permission_id,
+		NULL::int assignment_bridge_id
+	FROM survey_permissions supe
 ),
 v AS 
 (

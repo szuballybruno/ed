@@ -214,30 +214,21 @@ export class UserService {
     /**
      * Save user data which the user itself can edit.
      */
-    saveUserSimpleAsync(
+    async saveUserSimpleAsync(
         principalId: PrincipalId,
         dto: UserEditSimpleDTO
     ) {
 
-        return {
-            action: async () => {
+        const userId = principalId.getId();
 
-                const userId = principalId.getId();
-
-                // save user
-                await this._ormService
-                    .save(User, {
-                        id: userId,
-                        lastName: dto.lastName,
-                        firstName: dto.firstName,
-                        phoneNumber: dto.phoneNumber
-                    });
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
-            }
-        };
+        // save user
+        await this._ormService
+            .save(User, {
+                id: userId,
+                lastName: dto.lastName,
+                firstName: dto.firstName,
+                phoneNumber: dto.phoneNumber
+            });
     }
 
     /**

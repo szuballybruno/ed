@@ -26,80 +26,60 @@ export class CommentService extends QueryServiceBase<Comment> {
         this._authorizationService = authorizationService;
     }
 
-    createCommentAsync(principalId: PrincipalId, comment: CommentCreateDTO) {
+    async createCommentAsync(principalId: PrincipalId, comment: CommentCreateDTO) {
 
-        return {
-            action: async () => {
-                const {
-                    text,
-                    itemCode,
-                    isAnonymous,
-                    isQuestion,
-                    replyToCommentId,
-                    userId
-                } = comment;
+        const {
+            text,
+            itemCode,
+            isAnonymous,
+            isQuestion,
+            replyToCommentId,
+            userId
+        } = comment;
 
-                const { itemId, itemType } = readItemCode(itemCode);
+        const { itemId, itemType } = readItemCode(itemCode);
 
-                if (itemType !== 'video')
-                    throw new Error('Wrong item type!');
+        if (itemType !== 'video')
+            throw new Error('Wrong item type!');
 
-                const latestVideoVersion = await this._ormService
-                    .query(LatestVideoView, { itemId })
-                    .where('videoId', '=', 'itemId')
-                    .getSingle();
+        const latestVideoVersion = await this._ormService
+            .query(LatestVideoView, { itemId })
+            .where('videoId', '=', 'itemId')
+            .getSingle();
 
-                if (!latestVideoVersion.videoVersionId)
-                    throw new Error('Video not found');
+        if (!latestVideoVersion.videoVersionId)
+            throw new Error('Video not found');
 
-                const newComment = instantiate<InsertEntity<Comment>>({
-                    isAnonymous: isAnonymous,
-                    isQuestion: isQuestion,
-                    deletionDate: null,
-                    creationDate: new Date(Date.now()),
-                    text: text,
-                    userId: userId,
-                    parentCommentId: replyToCommentId,
-                    videoVersionId: latestVideoVersion.videoVersionId
-                });
+        const newComment = instantiate<InsertEntity<Comment>>({
+            isAnonymous: isAnonymous,
+            isQuestion: isQuestion,
+            deletionDate: null,
+            creationDate: new Date(Date.now()),
+            text: text,
+            userId: userId,
+            parentCommentId: replyToCommentId,
+            videoVersionId: latestVideoVersion.videoVersionId
+        });
 
-                await this._ormService
-                    .createAsync(Comment, newComment);
-            },
-            auth: async () => {
-
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
-            }
-        };
-
+        await this._ormService
+            .createAsync(Comment, newComment);
     }
 
-    getCommentsAsync(playlistItemCode: string, principalId: PrincipalId) {
+    async getCommentsAsync(playlistItemCode: string, principalId: PrincipalId) {
 
-        return {
-            action: async () => {
-                const { itemId, itemType } = readItemCode(playlistItemCode);
+        const { itemId, itemType } = readItemCode(playlistItemCode);
 
-                if (itemType !== 'video')
-                    throw new Error('Wrong item type!');
+        if (itemType !== 'video')
+            throw new Error('Wrong item type!');
 
-                const userComments = await this._ormService
-                    .query(CommentListView, { videoId: itemId, principalId })
-                    .where('videoId', '=', 'videoId')
-                    .and('currentUserId', '=', 'principalId')
-                    .getMany();
+        const userComments = await this._ormService
+            .query(CommentListView, { videoId: itemId, principalId })
+            .where('videoId', '=', 'videoId')
+            .and('currentUserId', '=', 'principalId')
+            .getMany();
 
-                return this
-                    ._mapperService
-                    .mapTo(CommentListDTO, [userComments]);
-            },
-            auth: async () => {
-
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
-            }
-        };
-
+        return this
+            ._mapperService
+            .mapTo(CommentListDTO, [userComments]);
     }
 }

@@ -66,31 +66,22 @@ export class UserStatsService {
         this._companyService = companyService;
     }
 
-    getHomePageStatsAsync(principalId: PrincipalId) {
+    async getHomePageStatsAsync(principalId: PrincipalId) {
 
-        return {
-            action: async () => {
+        const userId = principalId
+            .getId();
 
-                const userId = principalId
-                    .getId();
+        const stats = await this._ormService
+            .query(HomePageStatsView, { userId })
+            .where('userId', '=', 'userId')
+            .getSingle();
 
-                const stats = await this._ormService
-                    .query(HomePageStatsView, { userId })
-                    .where('userId', '=', 'userId')
-                    .getSingle();
+        const avgLagBehindPercentage = await this
+            ._tempomatService
+            .getAvgLagBehindPercentageAsync(userId);
 
-                const avgLagBehindPercentage = await this
-                    ._tempomatService
-                    .getAvgLagBehindPercentageAsync(userId);
-
-                return this._mapperService
-                    .mapTo(HomePageStatsDTO, [stats, avgLagBehindPercentage]);
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
-            }
-        };
+        return this._mapperService
+            .mapTo(HomePageStatsDTO, [stats, avgLagBehindPercentage]);
     }
 
     async getUserLearningPageStatsAsync(principalId: PrincipalId) {
@@ -112,35 +103,27 @@ export class UserStatsService {
             .mapTo(UserLearningPageStatsDTO, [stats, avgLagBehindPercentage]);
     }
 
-    getImproveYourselfPageStatsAsync(principalId: PrincipalId) {
+    async getImproveYourselfPageStatsAsync(principalId: PrincipalId) {
 
-        return {
-            action: async () => {
-                const userId = principalId.toSQLValue();
+        const userId = principalId.toSQLValue();
 
-                const stats = await this._ormService
-                    .query(ImproveYourselfPageStatsView, { userId })
-                    .where('userId', '=', 'userId')
-                    .getSingle();
+        const stats = await this._ormService
+            .query(ImproveYourselfPageStatsView, { userId })
+            .where('userId', '=', 'userId')
+            .getSingle();
 
-                const mostProductiveTimeRangeView = await this._ormService
-                    .query(MostProductiveTimeRangeView, { userId })
-                    .where('userId', '=', 'userId')
-                    .getMany();
+        const mostProductiveTimeRangeView = await this._ormService
+            .query(MostProductiveTimeRangeView, { userId })
+            .where('userId', '=', 'userId')
+            .getMany();
 
-                const userDailyActivityChartView = await this._ormService
-                    .query(UserDailyActivityChartView, { userId })
-                    .where('userId', '=', 'userId')
-                    .getMany();
+        const userDailyActivityChartView = await this._ormService
+            .query(UserDailyActivityChartView, { userId })
+            .where('userId', '=', 'userId')
+            .getMany();
 
-                return this._mapperService
-                    .mapTo(ImproveYourselfPageStatsDTO, [stats, mostProductiveTimeRangeView, userDailyActivityChartView]);
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
-            }
-        };
+        return this._mapperService
+            .mapTo(ImproveYourselfPageStatsDTO, [stats, mostProductiveTimeRangeView, userDailyActivityChartView]);
     }
 
     /**
@@ -291,8 +274,7 @@ export class UserStatsService {
             .getSingle();
 
         const progressChartData = await this._userProgressService
-            .getProgressChartDataAsync(principalId, courseId, currentUserId)
-            .action();
+            .getProgressChartDataAsync(principalId, courseId, currentUserId);
 
         return this._mapperService
             .mapTo(UserCourseStatsOverviewDTO, [courseStats, userSpentTimeRatio, progressChartData as any]);

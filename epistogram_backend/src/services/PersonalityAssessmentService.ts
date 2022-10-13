@@ -30,28 +30,17 @@ export class PersonalityAssessmentService {
     /**
      * Returns the personality assessment DTO, that can be used externally.
      */
-    getUserPersonalityAssessmentDTOAsync(principalId: PrincipalId) {
+    async getUserPersonalityAssessmentDTOAsync(principalId: PrincipalId) {
+
+        const userIdAsIdType = Id.create<'User'>(principalId.toSQLValue());
+
+        const chartData = await this.getUserPersonalityDataAsync(userIdAsIdType);
+        const personalityTraitCategories = await this.getPersonalityDescriptionsDTOAsync(userIdAsIdType);
 
         return {
-            action: async () => {
-
-                const userIdAsIdType = Id.create<'User'>(principalId.toSQLValue());
-
-                const chartData = await this.getUserPersonalityDataAsync(userIdAsIdType);
-                const personalityTraitCategories = await this.getPersonalityDescriptionsDTOAsync(userIdAsIdType);
-
-                return {
-                    chartData: chartData,
-                    personalityTraitCategories
-                } as PersonalityAssessmentDTO;
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
-            }
-        };
-
-
+            chartData: chartData,
+            personalityTraitCategories
+        } as PersonalityAssessmentDTO;
     }
 
     /**
@@ -68,32 +57,21 @@ export class PersonalityAssessmentService {
     /**
      * Return the personality trait category with details, like tips etc.
      */
-    getPersonalityTraitCategoryDetailsAsync(principalId: PrincipalId, personalityTraitCategoryId: Id<'PersonalityTraitCategory'>, isMax: boolean) {
+    async getPersonalityTraitCategoryDetailsAsync(principalId: PrincipalId, personalityTraitCategoryId: Id<'PersonalityTraitCategory'>, isMax: boolean) {
 
-        return {
-            action: async () => {
+        const category = await this._ormService
+            .query(PersonalityTraitCategory, { personalityTraitCategoryId })
+            .where('id', '=', 'personalityTraitCategoryId')
+            .getSingle();
 
-                const category = await this._ormService
-                    .query(PersonalityTraitCategory, { personalityTraitCategoryId })
-                    .where('id', '=', 'personalityTraitCategoryId')
-                    .getSingle();
+        const tips = await this._ormService
+            .query(DailyTip, { isMax, personalityTraitCategoryId })
+            .where('isMax', '=', 'isMax')
+            .and('personalityTraitCategoryId', '=', 'personalityTraitCategoryId')
+            .getMany();
 
-                const tips = await this._ormService
-                    .query(DailyTip, { isMax, personalityTraitCategoryId })
-                    .where('isMax', '=', 'isMax')
-                    .and('personalityTraitCategoryId', '=', 'personalityTraitCategoryId')
-                    .getMany();
-
-                return this._mapperService
-                    .mapTo(PersonalityTraitCategoryDTO, [category, tips]);
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
-            }
-        };
-
-
+        return this._mapperService
+            .mapTo(PersonalityTraitCategoryDTO, [category, tips]);
     }
 
     /**
@@ -101,36 +79,25 @@ export class PersonalityAssessmentService {
      * Expanded, so in the return data one category will 
      * be split to 2 objects, min <> max value
      */
-    getPersonalityTraitCategoriesAsync(principalId: PrincipalId) {
+    async getPersonalityTraitCategoriesAsync(principalId: PrincipalId) {
 
-        return {
-            action: async () => {
+        const categories = await this._ormService
+            .query(PersonalityTraitCategoryView)
+            .getMany();
 
-                const categories = await this._ormService
-                    .query(PersonalityTraitCategoryView)
-                    .getMany();
+        const minMaxCatList = categories
+            .flatMap(category => {
 
-                const minMaxCatList = categories
-                    .flatMap(category => {
+                const minCat = this._mapperService
+                    .mapTo(PersonalityTraitCategoryShortDTO, [category, false]);
 
-                        const minCat = this._mapperService
-                            .mapTo(PersonalityTraitCategoryShortDTO, [category, false]);
+                const maxCat = this._mapperService
+                    .mapTo(PersonalityTraitCategoryShortDTO, [category, true]);
 
-                        const maxCat = this._mapperService
-                            .mapTo(PersonalityTraitCategoryShortDTO, [category, true]);
+                return [minCat, maxCat];
+            });
 
-                        return [minCat, maxCat];
-                    });
-
-                return minMaxCatList;
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
-            }
-        };
-
-
+        return minMaxCatList;
     }
 
     /**

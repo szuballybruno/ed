@@ -5,8 +5,8 @@ import { Id } from '../../shared/types/versionId';
 import { usePaging } from '../../static/frontendHelpers';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
-import { LinearProgressWithLabel } from '../signup/ProgressIndicator';
-import { SignupWrapper } from '../signup/SignupWrapper';
+import { LinearProgressWithLabel } from '../survey/ProgressIndicator';
+import { SurveyWrapper } from '../survey/SurveyWrapper';
 
 export const useSignupQuestionsState = (options: {
     questions: SignupQuestionDTO[],
@@ -119,7 +119,7 @@ export const SingupQuestionSlides = (props: { state: SignupQuestionsStateType })
         .filter(x => x.isGiven)[0]?.answerVersionId as null | Id<'AnswerVersion'>;
 
     return <>
-        {currentQuestion && <SignupWrapper
+        {currentQuestion && <SurveyWrapper
             title={currentQuestion!.questionText}
             upperTitle={upperTitle}
             nextButtonTitle="Következő"
@@ -156,6 +156,6 @@ export const SingupQuestionSlides = (props: { state: SignupQuestionsStateType })
                         control={<Radio checked={answer.answerVersionId === selectedAnswerVersionId} />}
                         label={answer.answerText} />)}
             </RadioGroup>
-        </SignupWrapper>}
+        </SurveyWrapper>}
     </>;
 };

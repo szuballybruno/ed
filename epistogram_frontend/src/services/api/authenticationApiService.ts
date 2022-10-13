@@ -19,7 +19,7 @@ export const useLogout = () => {
     };
 };
 
-export const useGetAuthHandshake = () => {
+export const useAuthHandshake = () => {
 
     const qr = useQuery(
         'useGetAuthHandshake',
@@ -56,7 +56,11 @@ export const useGetAuthHandshake = () => {
         return 'error';
     })();
 
-    const refetchAuthHandshake = useCallback((): Promise<void> => refetch() as any, [refetch]);
+    const refetchAuthHandshake = useCallback(async (): Promise<AuthDataDTO> => {
+
+        const result = await refetch();
+        return result.data;
+    }, [refetch]);
 
     return {
         authData: authData,

@@ -11,7 +11,7 @@ import { PlayerPage } from './components/player/PlayerPage';
 import { RegisterViaActivationCodePage } from './components/RegisterViaActivationCodePage';
 import { RegistrationPage } from './components/RegistrationPage';
 import { SetNewPasswordPage } from './components/SetNewPasswordPage';
-import { SignupPage } from './components/signup/SignupPage';
+import { SurveyPage } from './components/survey/SurveyPage';
 import { EpistoRoutes } from './components/universal/EpistoRoutes';
 import { UserSettingsPage } from './components/userSettings/UserSettingsPage';
 import { applicationRoutes } from './configuration/applicationRoutes';
@@ -44,8 +44,8 @@ export const MainRouting = () => {
 
                 // protected routes 
                 {
-                    route: applicationRoutes.signupRoute,
-                    element: <SignupPage />,
+                    route: applicationRoutes.surveyRoute,
+                    element: <SurveyPage />,
                 },
                 {
                     route: applicationRoutes.playerRoute,

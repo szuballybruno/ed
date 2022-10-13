@@ -25,14 +25,17 @@ export class AuthenticationService {
         private _loggerService: LoggerService) {
     }
 
-    getRequestAccessTokenPayload = (accessToken: string) => {
+    /**
+     * Retrieve access token payload 
+     */
+    getRequestAccessTokenPayload(accessToken: string) {
 
         const tokenPayload = this._tokenService.verifyAccessToken(accessToken);
         if (!tokenPayload)
             throw new ErrorWithCode('Token is invalid.', 'bad request');
 
         return tokenPayload;
-    };
+    }
 
     /**
      * Acquires a new access token by a refresh token

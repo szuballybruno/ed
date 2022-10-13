@@ -3,7 +3,7 @@ import { Environment } from '../../static/Environemnt';
 import { toDateStringFormatted } from '../../static/frontendHelpers';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoImage } from '../controls/EpistoImage';
-import { LinearProgressWithLabel } from '../signup/ProgressIndicator';
+import { LinearProgressWithLabel } from '../survey/ProgressIndicator';
 import { FlexListItem } from '../universal/FlexListItem';
 import { FlexListTitleSubtitle } from '../universal/FlexListTitleSubtitle';
 import { SmallStat } from '../universal/SmallStat';

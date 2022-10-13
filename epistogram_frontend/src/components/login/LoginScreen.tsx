@@ -15,7 +15,7 @@ import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoGrid } from '../controls/EpistoGrid';
 import { PageRootContainer } from '../PageRootContainer';
-import { AuthenticationStateContext, RefetchUserAsyncContext } from '../system/AuthenticationFrame';
+import { AuthenticationStateContext, useRefetchUserAsync } from '../system/AuthenticationFrame';
 import { useAuthorizationContext } from '../system/AuthorizationContext';
 import { LoadingFrame } from '../system/LoadingFrame';
 import { useEpistoDialogLogic } from '../universal/epistoDialog/EpistoDialogLogic';
@@ -27,7 +27,7 @@ const LoginScreen = () => {
     const { navigate2, navigateToHref } = useNavigation();
     const showErrorDialog = useShowErrorDialog();
     const authState = useContext(AuthenticationStateContext);
-    const refetchUser = useContext(RefetchUserAsyncContext);
+    const { refetchAuthHandshake } = useRefetchUserAsync();
     const { hasPermission } = useAuthorizationContext();
     const dest = useQueryVal('dest');
     const [isUpToDate, setIsUpToDate] = useState(false);
@@ -61,7 +61,7 @@ const LoginScreen = () => {
         try {
 
             await loginUserAsync(emailRef.current?.value, pwRef.current?.value);
-            refetchUser();
+            await refetchAuthHandshake();
         }
         catch (e: any) {
 
@@ -88,38 +88,41 @@ const LoginScreen = () => {
         // TODO
     };
 
-    useEffect(() => {
-
-        Logger.logScoped('AUTH', 'Refetching user...');
-
-        // refetchUser()
-        //     .then(() => setIsUpToDate(true));
-    }, [refetchUser]);
-
     // watch for auth state change
     // and navigate to home page if athenticated
     useEffect(() => {
 
-        if (authState === 'authenticated') {
+        /**
+         * Unauthenticated is not allowed to be navigated 
+         * to either survey or home page
+         */
+        if (authState !== 'authenticated')
+            return;
 
-            Logger.logScoped('AUTO NAV', `Auth state is ${'authenticated' as AuthenticationStateType}, navigating...`);
+        Logger.logScoped('AUTO NAV', `Auth state is ${'authenticated' as AuthenticationStateType}, navigating...`);
 
-            if (hasPermission('ACCESS_APPLICATION')) {
+        /**
+         * Survey can't be bypassed, navigating to survey
+         */
+        if (!hasPermission('BYPASS_SURVEY')) {
 
-                if (dest) {
-
-                    navigateToHref(dest);
-                }
-                else {
-
-                    navigate2(applicationRoutes.homeRoute);
-                }
-            }
-            else {
-
-                navigate2(applicationRoutes.signupRoute);
-            }
+            navigate2(applicationRoutes.surveyRoute);
+            return;
         }
+
+        /**
+         * Survey can be bypassed and there's a des prop, going to dest
+         */
+        if (dest) {
+
+            navigateToHref(dest);
+            return;
+        }
+
+        /**
+         * Survey can be bypassed, going to home
+         */
+        navigate2(applicationRoutes.homeRoute);
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [authState]);

@@ -33,30 +33,22 @@ export class FileService {
         this._authorizationService = authorizationService;
     }
 
-    uploadAvatarFileAsync(principalId: PrincipalId, file: UploadedFile) {
+    async uploadAvatarFileAsync(principalId: PrincipalId, file: UploadedFile) {
 
-        return {
-            action: async () => {
-                const userId = principalId.getId();
+        const userId = principalId.getId();
 
-                //TODO: Create a validation function
-                if (!['image/png', 'image/jpeg'].includes(file.mimetype))
-                    throw new ErrorWithCode('File upload failed: Only jpeg or png', 'bad request');
+        //TODO: Create a validation function
+        if (!['image/png', 'image/jpeg'].includes(file.mimetype))
+            throw new ErrorWithCode('File upload failed: Only jpeg or png', 'bad request');
 
-                await this
-                    .uploadAssigendFileAsync({
-                        entityId: userId,
-                        entitySignature: User,
-                        fileBuffer: file.data,
-                        fileCode: 'user_avatar',
-                        storageFileIdField: 'avatarFileId'
-                    });
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
-            }
-        };
+        await this
+            .uploadAssigendFileAsync({
+                entityId: userId,
+                entitySignature: User,
+                fileBuffer: file.data,
+                fileCode: 'user_avatar',
+                storageFileIdField: 'avatarFileId'
+            });
     }
 
     async uploadAssigendFileAsync<TField extends StringKeyof<TEntity>, TEntity extends EntityType & { [K in TField]: Id<'StorageFile'> | null }>({

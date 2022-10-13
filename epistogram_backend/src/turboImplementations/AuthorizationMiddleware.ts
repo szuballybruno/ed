@@ -20,8 +20,10 @@ export class AuthorizationMiddleware implements ITurboMiddlewareInstance<ActionP
         if (params.options.isUnauthorized)
             return params.inParams;
 
+        const { companyId } = params.inParams;
+
         await this._authorizationService
-            .checkPermissionAsync(params.inParams.principalId, 'ACCESS_APPLICATION');
+            .checkPermissionAsync(params.inParams.principalId, 'BYPASS_SURVEY', { companyId });
 
         return params.inParams;
     }

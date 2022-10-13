@@ -16,99 +16,71 @@ export class VideoRatingService {
         this._authorizationService = authorizationService;
     }
 
-    rateVideoExperienceAsync(principalId: PrincipalId, dto: VideoRatingDTO) {
+    async rateVideoExperienceAsync(principalId: PrincipalId, dto: VideoRatingDTO) {
 
-        return {
-            action: async () => {
+        const userId = Id
+            .create<'User'>(principalId.toSQLValue());
 
-                const userId = Id
-                    .create<'User'>(principalId.toSQLValue());
+        const existingRating = await this._ormService
+            .query(VideoRating, {
+                userId: userId,
+                videoVersionId: dto.videoVersionId
+            })
+            .where('userId', '=', 'userId')
+            .and('videoVersionId', '=', 'videoVersionId')
+            .getOneOrNull();
 
-                const existingRating = await this._ormService
-                    .query(VideoRating, {
-                        userId: userId,
-                        videoVersionId: dto.videoVersionId
-                    })
-                    .where('userId', '=', 'userId')
-                    .and('videoVersionId', '=', 'videoVersionId')
-                    .getOneOrNull();
-
-                await this._ormService
-                    .saveOrInsertAsync(VideoRating, {
-                        id: existingRating ? existingRating.id : undefined,
-                        experience: dto.experience,
-                        userId,
-                        videoVersionId: dto.videoVersionId
-                    });
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
-            }
-        };
-
+        await this._ormService
+            .saveOrInsertAsync(VideoRating, {
+                id: existingRating ? existingRating.id : undefined,
+                experience: dto.experience,
+                userId,
+                videoVersionId: dto.videoVersionId
+            });
     }
 
-    rateVideoDifficultyAsync(principalId: PrincipalId, dto: VideoRatingDTO) {
+    async rateVideoDifficultyAsync(principalId: PrincipalId, dto: VideoRatingDTO) {
 
-        return {
-            action: async () => {
-                const userId = Id
-                    .create<'User'>(principalId.toSQLValue());
+        const userId = Id
+            .create<'User'>(principalId.toSQLValue());
 
-                const existingRating = await this._ormService
-                    .query(VideoRating, {
-                        userId: userId,
-                        videoVersionId: dto.videoVersionId
-                    })
-                    .where('userId', '=', 'userId')
-                    .and('videoVersionId', '=', 'videoVersionId')
-                    .getOneOrNull();
+        const existingRating = await this._ormService
+            .query(VideoRating, {
+                userId: userId,
+                videoVersionId: dto.videoVersionId
+            })
+            .where('userId', '=', 'userId')
+            .and('videoVersionId', '=', 'videoVersionId')
+            .getOneOrNull();
 
-                await this._ormService
-                    .saveOrInsertAsync(VideoRating, {
-                        id: existingRating
-                            ? existingRating.id
-                            : undefined,
-                        difficulty: dto.difficulty,
-                        userId,
-                        videoVersionId: dto.videoVersionId
-                    });
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
-            }
-        };
-
-
+        await this._ormService
+            .saveOrInsertAsync(VideoRating, {
+                id: existingRating
+                    ? existingRating.id
+                    : undefined,
+                difficulty: dto.difficulty,
+                userId,
+                videoVersionId: dto.videoVersionId
+            });
     }
 
-    getVideoRatingAsync(principalId: PrincipalId, videoVersionId: Id<'VideoVersion'>) {
+    async getVideoRatingAsync(principalId: PrincipalId, videoVersionId: Id<'VideoVersion'>) {
+
+        const userId = Id
+            .create<'User'>(principalId.toSQLValue());
+
+        const rating = await this._ormService
+            .query(VideoRating, {
+                userId: userId,
+                videoVersionId: videoVersionId
+            })
+            .where('userId', '=', 'userId')
+            .and('videoVersionId', '=', 'videoVersionId')
+            .getOneOrNull();
 
         return {
-            action: async () => {
-                const userId = Id
-                    .create<'User'>(principalId.toSQLValue());
-
-                const rating = await this._ormService
-                    .query(VideoRating, {
-                        userId: userId,
-                        videoVersionId: videoVersionId
-                    })
-                    .where('userId', '=', 'userId')
-                    .and('videoVersionId', '=', 'videoVersionId')
-                    .getOneOrNull();
-
-                return {
-                    difficulty: rating?.difficulty ?? null,
-                    experience: rating?.experience ?? null
-                } as VideoRatingDTO;
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
-            }
-        };
+            difficulty: rating?.difficulty ?? null,
+            experience: rating?.experience ?? null
+        } as VideoRatingDTO;
     }
 }

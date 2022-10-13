@@ -88,22 +88,13 @@ export class ExamService {
     /**
      * Sets the start date of the answer session, so it can be tracked once finished.
      */
-    startExamAsync(principalId: PrincipalId, answerSessionId: Id<'AnswerSession'>) {
+    async startExamAsync(principalId: PrincipalId, answerSessionId: Id<'AnswerSession'>) {
 
-        return {
-            action: async () => {
-                await this._ormService
-                    .save(AnswerSession, {
-                        id: answerSessionId,
-                        startDate: new Date()
-                    });
-            },
-            auth: async () => {
-
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
-            }
-        };
+        await this._ormService
+            .save(AnswerSession, {
+                id: answerSessionId,
+                startDate: new Date()
+            });
     }
 
     /**

@@ -100,26 +100,16 @@ export class CourseService {
     /**
      * Returns course brief data async
      */
-    getCourseBriefDataAsync(
+    async getCourseBriefDataAsync(
         principalId: PrincipalId,
         courseId: Id<'Course'>
     ) {
 
-        return {
+        const course = await this._ormService
+            .getSingleById(CourseData, courseId);
 
-            action: async () => {
-
-                const course = await this._ormService
-                    .getSingleById(CourseData, courseId);
-
-                return this._mapperService
-                    .mapTo(CourseBriefData, [course, courseId]);
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'ACCESS_APPLICATION');
-            }
-        };
+        return this._mapperService
+            .mapTo(CourseBriefData, [course, courseId]);
     }
 
     /**

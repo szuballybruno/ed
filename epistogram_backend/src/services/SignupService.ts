@@ -1,7 +1,7 @@
 import { SignupCompletedView } from '../models/views/SignupCompletedView';
 import { SignupQuestionView } from '../models/views/SignupQuestionView';
 import { AnswerSignupQuestionDTO } from '../shared/dtos/AnswerSignupQuestionDTO';
-import { SignupDataDTO } from '../shared/dtos/SignupDataDTO';
+import { SurveyDataDTO } from '../shared/dtos/SurveyDataDTO';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { AuthorizationResult } from '../utilities/XTurboExpress/XTurboExpressTypes';
 import { AuthorizationService } from './AuthorizationService';
@@ -90,7 +90,7 @@ export class SignupService {
                     .where('userId', '=', 'userId')
                     .getMany();
 
-                return this._mapperService.mapTo(SignupDataDTO, [questions, !!userSignupCompltedView?.isSignupComplete]);
+                return this._mapperService.mapTo(SurveyDataDTO, [questions, !!userSignupCompltedView?.isSignupComplete]);
             },
             auth: async () => {
                 return AuthorizationResult.ok;

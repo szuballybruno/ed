@@ -59,7 +59,7 @@ export const LeftPane = ({
                     alt=""
                     onClick={() => {
 
-                        if (hasPermission('ACCESS_APPLICATION'))
+                        if (hasPermission('BYPASS_SURVEY'))
                             navigate2(homeRoute);
                     }} />
             </EpistoFlex2>

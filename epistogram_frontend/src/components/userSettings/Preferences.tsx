@@ -11,7 +11,7 @@ import { EpistoEntry } from '../controls/EpistoEntry';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { ProfileImage } from '../ProfileImage';
-import { CurrentUserContext, RefetchUserAsyncContext } from '../system/AuthenticationFrame';
+import { CurrentUserContext, useRefetchUserAsync } from '../system/AuthenticationFrame';
 import { LoadingFrame } from '../system/LoadingFrame';
 import { DashboardSection } from '../universal/DashboardSection';
 import { EpistoImageSelector } from '../universal/EpistoImageSelector';
@@ -38,7 +38,7 @@ export const Preferences = () => {
     const { postAvatarFileAsync, postAvatarFileState } = useUploadAvatarFile();
     const { requestChangePasswordAsync, requestChangePasswordState } = useRequestPasswordChangeAuthenticated();
 
-    const refetchUser = useContext(RefetchUserAsyncContext);
+    const { refetchAuthHandshake } = useRefetchUserAsync();
 
     const [isPasswordChangeOpen, setIsPasswordChangeOpen] = useState(false);
 
@@ -73,7 +73,7 @@ export const Preferences = () => {
             }
             else {
 
-                refetchUser();
+                refetchAuthHandshake();
             }
         }
         catch (e: any) {

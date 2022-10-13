@@ -124,8 +124,7 @@ export class PretestService {
             .getCurrentCourseIdOrFail(userId);
 
         await this._courseBridgeService
-            .setCourseStartDateAsync(principalId, courseId)
-            .action();
+            .setCourseStartDateAsync(principalId, courseId);
 
         /**
          * Assign SET_COURSE_MODE permission to allow user

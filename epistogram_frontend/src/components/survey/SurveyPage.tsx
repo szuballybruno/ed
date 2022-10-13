@@ -1,4 +1,3 @@
-import React, { useContext } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { useNavigation } from '../../services/core/navigatior';
 import { startUserGuide } from '../../services/core/userGuidingService';
@@ -8,16 +7,16 @@ import { translatableTexts } from '../../static/translatableTexts';
 import { ContentPane } from '../ContentPane';
 import { EpistoFont } from '../controls/EpistoFont';
 import { PageRootContainer } from '../PageRootContainer';
-import { SignupQuestions } from '../SignupQuestions';
-import { RefetchUserAsyncContext } from '../system/AuthenticationFrame';
+import { useRefetchUserAsync } from '../system/AuthenticationFrame';
 import { EpistoPaging } from '../universal/EpistoPaging';
-import { SignupWrapper } from './SignupWrapper';
+import { SurveyQuestions } from './SurveyQuestions';
+import { SurveyWrapper } from './SurveyWrapper';
 
-export const SignupPage = () => {
+export const SurveyPage = () => {
 
     // slides
     const slidesState = usePaging({ items: [1, 2, 3] });
-    const refetchUserAsync = useContext(RefetchUserAsyncContext)!;
+    const { refetchAuthHandshake } = useRefetchUserAsync();
     const isInvitedUser = true;
 
     const { navigate2 } = useNavigation();
@@ -25,7 +24,7 @@ export const SignupPage = () => {
     const handleGoToSummary = () => {
 
         slidesState.next();
-        refetchUserAsync();
+        refetchAuthHandshake();
     };
 
     const handleGoToHomePage = () => {
@@ -35,20 +34,20 @@ export const SignupPage = () => {
         startUserGuide();
     };
 
-    const GreetSlide = () => <SignupWrapper
+    const GreetSlide = () => <SurveyWrapper
         title={translatableTexts.signupPage.greetSlideTitle}
         currentImage={Environment.getAssetUrl('/signupQuestionImages/regisztracio.svg')}
         description={translatableTexts.signupPage.greetSlideDescription}
         onNext={() => slidesState.next()}
         nextButtonTitle={translatableTexts.signupPage.greetSlideNextButton}>
-    </SignupWrapper>;
+    </SurveyWrapper>;
 
-    const QuestionnaireSlide = () => <SignupQuestions
+    const QuestionnaireSlide = () => <SurveyQuestions
         onNextOverNavigation={handleGoToSummary}
         onPrevoiusOverNavigation={slidesState.previous}
         onJumpToResults={slidesState.jumpToLast} />;
 
-    const SummarySlide = (isCurrent: boolean) => <SignupWrapper
+    const SummarySlide = (isCurrent: boolean) => <SurveyWrapper
         currentImage={Environment.getAssetUrl('/images/analysis3D.png')}
         description={<EpistoFont isMultiline>
 
@@ -72,7 +71,7 @@ export const SignupPage = () => {
         nextButtonTitle={isInvitedUser ? translatableTexts.signupPage.goToHomePage : undefined}
         onNavPrevious={() => slidesState.previous()}
         headerRightButton={isInvitedUser ? { name: translatableTexts.signupPage.goToHomePage, action: handleGoToHomePage } : undefined}>
-    </SignupWrapper >;
+    </SurveyWrapper >;
 
     const slides = [
         GreetSlide,
