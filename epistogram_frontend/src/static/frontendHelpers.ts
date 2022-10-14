@@ -7,6 +7,7 @@ import { ApplicationRoute } from '../models/types';
 import { useNavigation } from '../services/core/navigatior';
 import { useShowErrorDialog } from '../services/core/notifications';
 import { validatePassowrd } from '../shared/logic/sharedLogic';
+import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 import { ErrorCodeType, RoleIdEnum } from '../shared/types/sharedTypes';
 import { Id } from '../shared/types/versionId';
 import { CSSOptionsType, getCSSClassKeyFromOptions } from '../styles/globalCssTypes';
@@ -27,6 +28,38 @@ export const iterate = <T>(n: number, fn: (index) => T) => {
 
 type SetterFnType<TState> = (state: TState) => void;
 type SetStateFnType<TState> = (setterFnOrState: SetterFnType<TState> | Partial<TState>) => void;
+
+export const useTryCatchWrapper = (getMessageFromCode: (code: ErrorCodeType) => string | undefined) => {
+
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+    const getWrappedAction = (action: () => Promise<void>) => {
+
+        return async () => {
+
+            try {
+
+                await action();
+                setErrorMessage(null);
+            }
+            catch (e: any) {
+
+                const defaultMessage = 'Ismeretlen hiba tortent!';
+                const errorWithCode = (e as ErrorWithCode);
+                const customMessage = errorWithCode.code
+                    ? getMessageFromCode(errorWithCode.code)
+                    : null;
+
+                setErrorMessage(customMessage ?? defaultMessage);
+            }
+        };
+    };
+
+    return {
+        getWrappedAction,
+        errorMessage
+    };
+};
 
 export const useStateObject = <TState extends {}>(obj: TState): [TState, SetStateFnType<TState>, TState] => {
 
