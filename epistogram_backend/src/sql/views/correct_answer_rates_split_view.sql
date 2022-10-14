@@ -1,6 +1,7 @@
 SELECT
     u.id user_id,
     co.id course_id,
+	mv.module_id module_id,
     asgv.start_date,
     CASE 
         WHEN asgv.answer_session_type = 'exam'
@@ -17,6 +18,12 @@ SELECT
 FROM public.user u
 
 CROSS JOIN public.course co
+
+LEFT JOIN public.course_version cv
+ON cv.course_id = co.id
+
+LEFT JOIN public.module_version mv
+ON mv.course_version_id = cv.id
 
 LEFT JOIN public.answer_session_group_view asgv
 ON asgv.user_id = u.id

@@ -20,12 +20,4 @@ export class UserPerformanceView {
     @ViewColumn()
     @XViewColumn()
     performancePercentage: number;
-
-    /*     @ViewColumn()
-        @XViewColumn()
-        userExamLengthPoints: number;
-    
-        @ViewColumn()
-        @XViewColumn()
-        userReactionTimePoints: number; */
 }

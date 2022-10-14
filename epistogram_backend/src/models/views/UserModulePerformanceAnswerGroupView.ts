@@ -6,7 +6,7 @@ import { XViewColumn } from '../../services/XORM/XORMDecorators';
     synchronize: false,
     expression: ''
 })
-export class UserPerformanceAnswerGroupView {
+export class UserModulePerformanceAnswerGroupView {
 
     @XViewColumn()
     @ViewColumn()
@@ -15,6 +15,10 @@ export class UserPerformanceAnswerGroupView {
     @XViewColumn()
     @ViewColumn()
     courseId: Id<'Course'>;
+
+    @XViewColumn()
+    @ViewColumn()
+    moduleId: Id<'Module'>;
 
     @XViewColumn()
     @ViewColumn()
