@@ -108,7 +108,7 @@ export class AuthenticationService {
          * Check if sent credentials are valid 
          */
         if (!email || !password)
-            throw new ErrorWithCode('Email or password is null.', 'bad request');
+            throw new ErrorWithCode('Email or password is null.', 'corrupt_credentials');
 
         /**
          * Check if user exists by email
@@ -117,7 +117,7 @@ export class AuthenticationService {
             .getUserByEmailAsync(email);
 
         if (!user)
-            throw new ErrorWithCode('Invalid email.', 'forbidden');
+            throw new ErrorWithCode('Invalid email.', 'corrupt_credentials');
 
         /**
          * Check company
@@ -131,7 +131,7 @@ export class AuthenticationService {
             .comparePasswordAsync(password, user.password);
 
         if (!isPasswordCorrect)
-            throw new ErrorWithCode('Invalid password.', 'forbidden');
+            throw new ErrorWithCode('Invalid password.', 'corrupt_credentials');
 
         /**
          * Save session activity
