@@ -21,7 +21,7 @@ export class TeacherInfoService {
 
     /**
      * Delete a teacher info obj by it's id.
-          */
+     */
     async deleteTeacherInfoAsync(teacherInfoId: Id<'TeacherInfo'>) {
 
         await this._ormService
@@ -30,21 +30,35 @@ export class TeacherInfoService {
 
     /**
      * Get a teacher info by user id.
-          */
-    async getTeacherInfoAsync(userId: Id<'User'>) {
+     */
+    async getTeacherInfoOrNullAsync(userId: Id<'User'>): Promise<TeacherInfo | null> {
 
         const teacherInfo = await this
             ._ormService
             .query(TeacherInfo, { userId })
             .where('userId', '=', 'userId')
-            .getSingle();
+            .getOneOrNull();
+
+        return teacherInfo;
+    }
+
+    /**
+     * Get a teacher info by user id.
+     */
+    async getTeacherInfoAsync(userId: Id<'User'>): Promise<TeacherInfo> {
+
+        const teacherInfo = await this
+            .getTeacherInfoOrNullAsync(userId);
+
+        if (!teacherInfo)
+            throw new Error('Teacher info no attached to user!');
 
         return teacherInfo;
     }
 
     /**
      * Get an edit DTO for the teacher info entity, realated to a user.
-          */
+     */
     async getTeacherInfoEditDTOAsync(principalId: PrincipalId, userId: Id<'User'>) {
 
         const teacherInfo = await this
@@ -56,7 +70,7 @@ export class TeacherInfoService {
 
     /**
      * Get an edit DTO for the teacher info entity, realated to a user.
-          */
+     */
     async saveTeacherInfoAsync(principalId: PrincipalId, teacherInfoEditDTO: TeacherInfoEditDTO) {
 
         await this._ormService

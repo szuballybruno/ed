@@ -405,21 +405,21 @@ export const getSubroutes = (route: ApplicationRoute<any, any>): ApplicationRout
 //         /**
 //          * If not matching this route, 
 //          * return null
-//          */
+//     */
 //         if (!isMatchingCurrent(appRoute))
 //             return { depth: 0, route: null };
 
 //         /**
 //          * If matching route, and route is exact,
 //          * that's the result 
-//          */
+//     */
 //         if (appRoute.route.isExact())
 //             return { depth: 0, route: appRoute };
 
 //         /**
 //          * If matching route but it's not exact, 
 //          * result could be a child route 
-//          */
+//     */
 //         const result = getSubroutes(appRoute)
 //             .map(traverse)
 //             .firstOrNull();
@@ -430,7 +430,7 @@ export const getSubroutes = (route: ApplicationRoute<any, any>): ApplicationRout
 //         /**
 //          * If no subroute is matching,
 //          * use this as the result 
-//          */
+//     */
 //         return appRoute;
 //     };
 

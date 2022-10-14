@@ -129,13 +129,13 @@ export class FileService {
             /**
              * In case of any failure, 
              * delete file from storage bucket
-             */
+        */
             await this._storageService
                 .deleteStorageFileAsync(newCDNFilePath);
 
             /**
              * Than throw the error.
-             */
+        */
             throw e;
         }
     }
@@ -211,13 +211,13 @@ export class FileService {
             /**
              * In case of any failure, 
              * delete file from storage bucket
-             */
+        */
             await this._storageService
                 .deleteStorageFileAsync(newCDNFilePath);
 
             /**
              * Than throw the error.
-             */
+        */
             throw e;
         }
     }

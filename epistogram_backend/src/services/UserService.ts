@@ -177,7 +177,7 @@ export class UserService {
 
     /**
      * Get user edit data
-          */
+     */
     async getEditUserDataAsync(
         principalId: PrincipalId,
         editedUserId: Id<'User'> | null
@@ -279,8 +279,9 @@ export class UserService {
      */
     async saveTeacherInfoAsync(userId: Id<'User'>, isTeacher: boolean) {
 
-        const teacherInfo = await this._teacherInfoService
-            .getTeacherInfoAsync(userId);
+        const teacherInfo = await this
+            ._teacherInfoService
+            .getTeacherInfoOrNullAsync(userId);
 
         // teacher info exists
         if (teacherInfo) {

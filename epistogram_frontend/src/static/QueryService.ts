@@ -80,7 +80,7 @@ class XQueryCore<T> {
             /**
              * If querying is disabled 
              * return last state or idle 
-             */
+        */
             const queryingEnabled = isEnabled === false ? false : true;
             if (!queryingEnabled) {
 
@@ -91,7 +91,7 @@ class XQueryCore<T> {
 
             /**
              * Never set cache - meaning query is still in IDLE state
-             */
+        */
             if (!cachedState) {
 
                 this.fetchAsync(newQueryParams, queryingEnabled);
@@ -102,7 +102,7 @@ class XQueryCore<T> {
              * If has been queried before, but querying again, 
              * and is currently loading, 
              * return last cahced state
-             */
+        */
             if (cachedState?.qr?.state === 'loading') {
 
                 Logger.logScoped('QUERY', `-- [${url}] Query is already in loading state.`);
@@ -111,7 +111,7 @@ class XQueryCore<T> {
 
             /**
              * Check if old cache is still valid 
-             */
+        */
             if (!this._isCacheValid(url, newQueryParams, cachedState.params)) {
 
                 // fetch data
@@ -121,7 +121,7 @@ class XQueryCore<T> {
             /**
              * No exceptional state has been found, 
              * returning last cached data
-             */
+        */
             Logger.logScoped('QUERY', `-- [${url}] Old data is still valid. `);
             return cachedState.qr;
         })();
