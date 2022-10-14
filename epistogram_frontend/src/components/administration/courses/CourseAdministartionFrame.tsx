@@ -78,7 +78,8 @@ export const CourseAdministartionFrame = (params: {
             <AdminBreadcrumbsHeader
                 headerComponent={<EpistoButton
                     onClick={handleCreateCourse}>
-                    Add course
+
+                    Kurzus hozzáadása
                 </EpistoButton>}>
 
                 {/* course list */}

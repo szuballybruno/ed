@@ -2,14 +2,10 @@ import {
     ArrowDropDown,
     ArrowDropUp,
     ArrowRight,
-    FiberManualRecord,
-    Fullscreen,
-    FullscreenExit,
-    Lock
+    FiberManualRecord, Lock
 } from '@mui/icons-material';
 import React, { useState } from 'react';
 import { EpistoButton } from '../controls/EpistoButton';
-import { EpistoDiv } from '../controls/EpistoDiv';
 import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { FlexFloat } from '../controls/FlexFloat';
@@ -237,7 +233,7 @@ const StatisticsCard = (props: StatisticsCardProps & EpistoFlex2Props) => {
             </EpistoButton>
         }
 
-        {/* open / close button */}
+        {/* open / close button 
         {
             children && <EpistoDiv position="absolute">
                 <EpistoButton
@@ -251,7 +247,7 @@ const StatisticsCard = (props: StatisticsCardProps & EpistoFlex2Props) => {
                     {isOpen ? <FullscreenExit /> : <Fullscreen />}
                 </EpistoButton>
             </EpistoDiv>
-        }
+        }*/}
     </FlexFloat >;
 };
 
