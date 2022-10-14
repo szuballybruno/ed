@@ -1,5 +1,4 @@
 import { TeacherInfo } from '../models/entity/misc/TeacherInfo';
-import { User } from '../models/entity/misc/User';
 import { TeacherInfoEditDTO } from '../shared/dtos/TeacherInfoEditDTO';
 import { Id } from '../shared/types/versionId';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
@@ -34,14 +33,11 @@ export class TeacherInfoService {
           */
     async getTeacherInfoAsync(userId: Id<'User'>) {
 
-        const user = await this._ormService
-            .query(User, { userId })
-            .leftJoin(TeacherInfo, x => x
-                .on('userId', '=', 'userId'))
-            .where('id', '=', 'userId')
+        const teacherInfo = await this
+            ._ormService
+            .query(TeacherInfo, { userId })
+            .where('userId', '=', 'userId')
             .getSingle();
-
-        const teacherInfo = user.teacherInfo;
 
         return teacherInfo;
     }
@@ -49,20 +45,13 @@ export class TeacherInfoService {
     /**
      * Get an edit DTO for the teacher info entity, realated to a user.
           */
-    getTeacherInfoEditDTOAsync(principalId: PrincipalId, userId: Id<'User'>) {
+    async getTeacherInfoEditDTOAsync(principalId: PrincipalId, userId: Id<'User'>) {
 
-        return {
-            action: async () => {
-                const teacherInfo = await this.getTeacherInfoAsync(userId);
+        const teacherInfo = await this
+            .getTeacherInfoAsync(userId);
 
-                return this._mapperService
-                    .mapTo(TeacherInfoEditDTO, [teacherInfo]);
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'VIEW_TEACHER_OVERVIEW');
-            }
-        };
+        return this._mapperService
+            .mapTo(TeacherInfoEditDTO, [teacherInfo]);
     }
 
     /**

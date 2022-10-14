@@ -960,16 +960,16 @@ const marray = [
             });
         }),
     epistoMappingsBuilder
-        .addMapping(TeacherInfoEditDTO, () => (teacher: TeacherInfo) => {
+        .addMapping(TeacherInfoEditDTO, () => (teacherInfo: TeacherInfo) => {
             return instantiate<TeacherInfoEditDTO>({
-                id: teacher.id,
-                courseCount: teacher.courseCount,
-                rating: teacher.rating,
-                studentCount: teacher.studentCount,
-                videoCount: teacher.videoCount,
-                skills: teacher.skills,
-                badges: parseCommaSeparatedStringList(teacher.badges) as TeacherBadgeNameType[],
-                description: teacher.description
+                id: teacherInfo.id,
+                courseCount: teacherInfo.courseCount,
+                rating: teacherInfo.rating,
+                studentCount: teacherInfo.studentCount,
+                videoCount: teacherInfo.videoCount,
+                skills: teacherInfo.skills,
+                badges: parseCommaSeparatedStringList(teacherInfo.badges) as TeacherBadgeNameType[],
+                description: teacherInfo.description
             });
         }),
     epistoMappingsBuilder
