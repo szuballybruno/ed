@@ -436,36 +436,36 @@ export class XQueryBuilder<TEntity, TParams extends ParamConstraintType<TParams>
             .keys(this._params ?? {});
 
         const notAllowedParamValueKeys = paramKeys
-            .filter(key => {
-
-                const value = (this._params as any)[key];
-
-                return !this
-                    ._isAllowedParamValue(value);
-            });
+            .map(key => ({
+                key, checkResult: this
+                    ._isAllowedParamValue((this._params as any)[key])
+            }))
+            .filter(x => !x.checkResult[0]);
 
         if (notAllowedParamValueKeys.any())
-            throw new Error(`Param values are of an unallowed type: ${notAllowedParamValueKeys.join(', ')}`);
+            throw new Error(`Param values are of an unallowed type: ${notAllowedParamValueKeys
+                .map(x => `${x.key} - cause: ${x.checkResult[1]}`)
+                .join(', ')}`);
     }
 
-    private _isAllowedParamValue(value: any): boolean {
+    private _isAllowedParamValue(value: any): [boolean, string | null] {
 
         if (value === undefined)
-            return false;
+            return [false, 'undefined'];
 
         if (value === null)
-            return true;
+            return [true, null];
 
         const typeofValue = typeof value;
 
         if (typeofValue === 'boolean')
-            return true;
+            return [true, null];
 
         if (typeofValue === 'number')
-            return true;
+            return [true, null];
 
         if (typeofValue === 'string')
-            return true;
+            return [true, null];
 
         if (Array.isArray(value)) {
 
@@ -476,18 +476,18 @@ export class XQueryBuilder<TEntity, TParams extends ParamConstraintType<TParams>
                     if (Array.isArray(x))
                         return false;
 
-                    return this._isAllowedParamValue(x);
+                    return this._isAllowedParamValue(x)[0];
                 });
 
-            return isAllAllowed;
+            return [isAllAllowed, isAllAllowed ? null : 'Array contains values of invalid types'];
         }
 
         if (value.toSQLValue)
-            return true;
+            return [true, null];
 
         if (value instanceof Date && !isNaN(value as any))
-            return true;
+            return [true, null];
 
-        return false;
+        return [true, 'value did not match any valid type'];
     }
 }
