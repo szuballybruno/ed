@@ -2,6 +2,7 @@ import { CompanyDTO } from '../../../shared/dtos/company/CompanyDTO';
 import { Id } from '../../../shared/types/versionId';
 import { LocationHelpers } from '../../../static/locationHelpers';
 import { EpistoSelect } from '../../controls/EpistoSelect';
+import { useCurrentUserContext } from '../../system/AuthenticationFrame';
 
 export const useCompanySelectorLogic = ({
     companies
@@ -12,11 +13,13 @@ export const useCompanySelectorLogic = ({
     const queryParams = LocationHelpers
         .useQueryParams<{ companyId: Id<'Company'> }>();
 
+    const { companyId: currentUserCompanyId } = useCurrentUserContext();
+
     const { setQueryParams } = LocationHelpers
         .useSetQueryParams<{ companyId: string }>();
 
     const activeCompanyId = queryParams
-        .getValueOrNull(x => x.companyId, 'int');
+        .getValueOrNull(x => x.companyId, 'int') ?? currentUserCompanyId;
 
     const activeCompany = companies
         .firstOrNull(x => x.id === activeCompanyId);

@@ -1,11 +1,12 @@
 import { useContext } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { CompanyApiService } from '../../../services/api/CompanyApiService1';
-import { UserApiService } from '../../../services/api/userApiService';
+import { UserApiService } from '../../../services/api/UserApiService1';
 import { useIsMatchingCurrentRoute } from '../../../static/frontendHelpers';
 import { useRouteParams2 } from '../../../static/locationHelpers';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { CurrentUserContext } from '../../system/AuthenticationFrame';
+import { useAuthorizationContext } from '../../system/AuthorizationContext';
 import { EpistoRoutes } from '../../universal/EpistoRoutes';
 import { AdminBreadcrumbsHeader } from '../AdminBreadcrumbsHeader';
 import { AdminAddUserSubpage } from './AdminAddUserSubpage';
@@ -18,6 +19,8 @@ export const UserAdminSubpage = () => {
     const userAdminRoute = applicationRoutes
         .administrationRoute
         .usersRoute;
+
+    const { hasPermission } = useAuthorizationContext();
 
     const params = useRouteParams2(applicationRoutes.administrationRoute.usersRoute.userRoute);
     const userId = params.getValueOrNull(x => x.userId, 'int');
@@ -40,7 +43,7 @@ export const UserAdminSubpage = () => {
         userId
     });
 
-    const companiesHeaderComponent = companies.length > 1 && <CompanySelectorDropdown
+    const companiesHeaderComponent = hasPermission('CAN_VIEW_HIDDEN_MENUS') && <CompanySelectorDropdown
         logic={companySelectorLogic} />;
 
     const { briefUserData } = UserApiService.useBriefUserData(userId);

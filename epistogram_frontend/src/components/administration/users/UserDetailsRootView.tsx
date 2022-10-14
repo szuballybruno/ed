@@ -1,6 +1,6 @@
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { ButtonType } from '../../../models/types';
-import { UserApiService } from '../../../services/api/userApiService';
+import { UserApiService } from '../../../services/api/UserApiService1';
 import { useNavigation } from '../../../services/core/navigatior';
 import { CompanyDTO } from '../../../shared/dtos/company/CompanyDTO';
 import { EpistoIcons } from '../../../static/EpistoIcons';

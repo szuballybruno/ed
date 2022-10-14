@@ -1,6 +1,6 @@
 import { Id } from '../types/versionId';
 
-export class UserOverviewDTO {
+export class UserAdminListDTO {
     userId: Id<'User'>;
     companyId: Id<'Company'>;
     userEmail: string;

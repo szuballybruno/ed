@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useCoinBalanceOfUser, useGiftCoinsToUser } from '../../../services/api/coinTransactionsApiService';
-import { UserApiService } from '../../../services/api/userApiService';
+import { UserApiService } from '../../../services/api/UserApiService1';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
 import { CompanyDTO } from '../../../shared/dtos/company/CompanyDTO';
 import { RoleDTO } from '../../../shared/dtos/RoleDTO';
@@ -62,6 +62,8 @@ export const AdminEditUserControl = ({
     const availableDepartments = userControlDropdownData?.departments ?? [];
     const availableRoles = userControlDropdownData?.availableRoles ?? [];
     const defaultCompany = activeCompany ?? companies.firstOrNull();
+
+    console.log(activeCompany);
 
     const company = companies
         .firstOrNull(x => x.id === selectedCompanyId) ?? defaultCompany;

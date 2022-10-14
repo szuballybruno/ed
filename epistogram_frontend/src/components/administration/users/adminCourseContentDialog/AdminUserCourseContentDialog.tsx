@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { CourseApiService } from '../../../../services/api/courseApiService';
-import { UserApiService } from '../../../../services/api/userApiService';
+import { UserApiService } from '../../../../services/api/UserApiService1';
 import { Id } from '../../../../shared/types/versionId';
 import { EpistoFlex2 } from '../../../controls/EpistoFlex';
 import { EpistoFont } from '../../../controls/EpistoFont';

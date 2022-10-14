@@ -9,7 +9,6 @@ import { UserDailyActivityChartView } from '../models/views/UserDailyActivityCha
 import { UserExamStatsView } from '../models/views/UserExamStatsView';
 import { UserLearningOverviewStatsView } from '../models/views/UserLearningOverviewStatsView';
 import { UserLearningPageStatsView } from '../models/views/UserLearningPageStatsView';
-import { UserOverviewView } from '../models/views/UserOverviewView';
 import { UserPerformanceComparisonStatsView } from '../models/views/UserPerformanceComparisonStatsView';
 import { UserPerformanceView } from '../models/views/UserPerformanceView';
 import { UserSpentTimeRatioView } from '../models/views/UserSpentTimeRatioView';
@@ -22,17 +21,14 @@ import { UserCourseStatsOverviewDTO } from '../shared/dtos/UserCourseStatsOvervi
 import { UserExamStatsDTO } from '../shared/dtos/UserExamStatsDTO';
 import { UserLearningOverviewDataDTO } from '../shared/dtos/UserLearningOverviewDataDTO';
 import { UserLearningPageStatsDTO } from '../shared/dtos/UserLearningPageStatsDTO';
-import { UserOverviewDTO } from '../shared/dtos/UserOverviewDTO';
 import { UserVideoStatsDTO } from '../shared/dtos/UserVideoStatsDTO';
 import { instantiate } from '../shared/logic/sharedLogic';
 import { Id } from '../shared/types/versionId';
-import { adjustByPercentage, dateDiffInDays, getArrayAverage, mergeArraysByKey } from '../utilities/helpers';
+import { adjustByPercentage, dateDiffInDays, getArrayAverage } from '../utilities/helpers';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
-import { AuthorizationService } from './AuthorizationService';
-import { CompanyService } from './CompanyService';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
-import { CalculatedTempomatValueTypeWithUserId, CalculatedTempomatValueType, TempomatService } from './TempomatService';
+import { CalculatedTempomatValueType, CalculatedTempomatValueTypeWithUserId, TempomatService } from './TempomatService';
 import { UserProgressService } from './UserProgressService';
 
 interface UserFlagCalculationType extends UserPerformanceComparisonStatsView {
@@ -46,24 +42,18 @@ export class UserStatsService {
     private _ormService: ORMConnectionService;
     private _mapperService: MapperService;
     private _tempomatService: TempomatService;
-    private _authorizationService: AuthorizationService;
     private _userProgressService: UserProgressService;
-    private _companyService: CompanyService;
 
     constructor(
         ormService: ORMConnectionService,
         mapperSvc: MapperService,
         tempomatService: TempomatService,
-        authorizationService: AuthorizationService,
-        userProgressService: UserProgressService,
-        companyService: CompanyService) {
+        userProgressService: UserProgressService) {
 
         this._ormService = ormService;
         this._mapperService = mapperSvc;
         this._tempomatService = tempomatService;
-        this._authorizationService = authorizationService;
         this._userProgressService = userProgressService;
-        this._companyService = companyService;
     }
 
     async getHomePageStatsAsync(principalId: PrincipalId) {
@@ -280,111 +270,10 @@ export class UserStatsService {
             .mapTo(UserCourseStatsOverviewDTO, [courseStats, userSpentTimeRatio, progressChartData as any]);
     }
 
-    async getUserOverviewStatsAsync(
-        principalId: PrincipalId,
-        isToBeReviewed: boolean,
-        companyId: Id<'Company'> | null
-    ) {
-        /* 
-                const principalCompanyId = await this._companyService
-                    .getPrincipalCompanyId(principalId); */
-
-        if (companyId) {
-
-            await this._authorizationService
-                .checkPermissionAsync(principalId, 'VIEW_COMPANY_USERS', { companyId: companyId });
-        }
-
-        // TODO: CHECK FOR PERMISSIONS IN VIEW
-        const availableUserOverviewViews = await this._ormService
-            .query(UserOverviewView)
-            .getMany();
-
-        const companyUserOverviewViews = await this._ormService
-            .query(UserOverviewView, { companyId })
-            .where('companyId', '=', 'companyId')
-            .getMany();
-
-        // TODO: CHECK FOR PERMISSIONS IN VIEW
-        const availableTempomatCalculationViews = await this._ormService
-            .query(TempomatCalculationDataView)
-            .innerJoin(User, x => x
-                .on('id', '=', 'userId', TempomatCalculationDataView))
-            .where('startDate', '!=', 'NULL')
-            .and('originalPrevisionedCompletionDate', '!=', 'NULL')
-            .getMany();
-
-        const companyTempomatCalculationViews = await this._ormService
-            .query(TempomatCalculationDataView, { companyId })
-            .innerJoin(User, x => x
-                .on('companyId', '=', 'companyId')
-                .and('id', '=', 'userId', TempomatCalculationDataView))
-            .where('startDate', '!=', 'NULL')
-            .and('originalPrevisionedCompletionDate', '!=', 'NULL')
-            .getMany();
-
-        const selectedUserOverviewViews = companyId
-            ? companyUserOverviewViews
-            : availableUserOverviewViews;
-
-        const selectedTempomatCalculationViews = companyId
-            ? companyTempomatCalculationViews
-            : availableTempomatCalculationViews;
-
-        const userIdsWithLagBehindAvgs = selectedTempomatCalculationViews
-            .groupBy(x => x.userId)
-            .map(x => {
-
-                const lagBehindAvg = this._tempomatService
-                    .getAvgLagBehindPercentage(x.items);
-
-                return {
-                    userId: x.first.userId,
-                    lagBehindAvg
-                };
-            });
-
-        const userOverviewViewsWithLagBehind = mergeArraysByKey(selectedUserOverviewViews, userIdsWithLagBehindAvgs, 'userId');
-
-        const userOverviewWithProductivity = userOverviewViewsWithLagBehind
-            .groupBy(x => x.userId)
-            .map(x => {
-
-                const first = x.first;
-
-                const productivityPercentage = this
-                    .calculateProductivity(first.averagePerformancePercentage, first.lagBehindAvg);
-
-                return {
-                    ...first,
-                    productivityPercentage,
-                    invertedLagBehind: first.lagBehindAvg
-                        ? 100 - first.lagBehindAvg
-                        : null
-                };
-            });
-
-        const allFlaggedUsers = await this
-            ._flagUsersAsync(companyId);
-
-        if (!allFlaggedUsers)
-            return;
-
-        const flaggedUsersOnly = userOverviewWithProductivity
-            .filter(x => allFlaggedUsers
-                .filter(x => x?.flag === 'low')
-                .some(y => y?.userId === x.userId));
-
-
-        return this._mapperService
-            .mapTo(UserOverviewDTO, [isToBeReviewed ? flaggedUsersOnly : userOverviewWithProductivity]);
-
-    }
-
     async getAdminHomeOverviewStatsAsync(companyId: Id<'Company'>) {
 
         const allFlaggedUsers = await this
-            ._flagUsersAsync(companyId);
+            .flagUsersAsync(companyId);
 
         if (!allFlaggedUsers)
             return;
@@ -399,7 +288,10 @@ export class UserStatsService {
             .filter(x => x?.flag === 'high');
     }
 
-    private async _flagUsersAsync(companyId: Id<'Company'> | null) {
+    /**
+     * TODO what the absolute goddamn clusterfuck is this????
+     */
+    async flagUsersAsync(companyId: Id<'Company'> | null) {
 
         const companyUserPerformanceViews = await this._ormService
             .query(UserPerformanceView, { companyId })
@@ -653,7 +545,7 @@ export class UserStatsService {
             });
     }
 
-    private calculateProductivity(avgPerformancePercentage: number, avgLagBehindPercentage: number) {
+    calculateProductivity(avgPerformancePercentage: number, avgLagBehindPercentage: number) {
 
         const lagBehindPoints = 100 - avgLagBehindPercentage;
 
