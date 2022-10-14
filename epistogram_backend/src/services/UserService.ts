@@ -6,8 +6,8 @@ import { StorageFile } from '../models/entity/misc/StorageFile';
 import { TeacherInfo } from '../models/entity/misc/TeacherInfo';
 import { User } from '../models/entity/misc/User';
 import { UserCourseBridge } from '../models/entity/misc/UserCourseBridge';
-import { AdminUserListView } from '../models/views/AdminUserListView';
-import { AdminPageUserDTO } from '../shared/dtos/admin/AdminPageUserDTO';
+import { TempomatCalculationDataView } from '../models/views/TempomatCalculationDataView';
+import { UserOverviewView } from '../models/views/UserOverviewView';
 import { BriefUserDataDTO } from '../shared/dtos/BriefUserDataDTO';
 import { DepartmentDTO } from '../shared/dtos/DepartmentDTO';
 import { Mutation } from '../shared/dtos/mutations/Mutation';
@@ -17,10 +17,11 @@ import { UserDTO } from '../shared/dtos/UserDTO';
 import { UserEditReadDTO } from '../shared/dtos/UserEditReadDTO';
 import { UserEditSaveDTO } from '../shared/dtos/UserEditSaveDTO';
 import { UserEditSimpleDTO } from '../shared/dtos/UserEditSimpleDTO';
+import { UserAdminListDTO } from '../shared/dtos/UserAdminListDTO';
 import { instantiate } from '../shared/logic/sharedLogic';
 import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 import { Id } from '../shared/types/versionId';
-import { getFullName, toFullName } from '../utilities/helpers';
+import { getFullName, mergeArraysByKey } from '../utilities/helpers';
 import { InsertEntity } from '../utilities/misc';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { AuthorizationService } from './AuthorizationService';
@@ -29,32 +30,123 @@ import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { RoleService } from './RoleService';
 import { TeacherInfoService } from './TeacherInfoService';
+import { TempomatService } from './TempomatService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
+import { UserStatsService } from './UserStatsService';
 
 export class UserService {
 
-    private _ormService: ORMConnectionService;
-    private _mapperService: MapperService;
-    private _teacherInfoService: TeacherInfoService;
-    private _hashService: HashService;
-    private _roleService: RoleService;
-    private _authorizationService: AuthorizationService;
-
     constructor(
-        ormService: ORMConnectionService,
-        mapperService: MapperService,
-        teacherInfoService: TeacherInfoService,
-        hashService: HashService,
-        roleService: RoleService,
-        authorizationService: AuthorizationService,
-        private _userCourseBridgeService: UserCourseBridgeService) {
+        private _ormService: ORMConnectionService,
+        private _mapperService: MapperService,
+        private _teacherInfoService: TeacherInfoService,
+        private _hashService: HashService,
+        private _roleService: RoleService,
+        private _authorizationService: AuthorizationService,
+        private _userCourseBridgeService: UserCourseBridgeService,
+        private _userStatsService: UserStatsService,
+        private _tempomatService: TempomatService) {
+    }
 
-        this._ormService = ormService;
-        this._mapperService = mapperService;
-        this._teacherInfoService = teacherInfoService;
-        this._hashService = hashService;
-        this._roleService = roleService;
-        this._authorizationService = authorizationService;
+    /**
+     * Get admin user list  
+     * TODO: what an absolute fucking garbage clusterfuck this is... NEEDS A SHITTON OF REFACTORING!
+     */
+    async getUserAdminListAsync(
+        principalId: PrincipalId,
+        isToBeReviewed: boolean,
+        companyId: Id<'Company'> | null
+    ) {
+
+        // check if user can administrate selected company
+        if (companyId)
+            await this._authorizationService
+                .checkPermissionAsync(principalId, 'ADMINISTRATE_COMPANY', { companyId: companyId });
+
+        // TODO: CHECK FOR PERMISSIONS IN VIEW
+        const availableUserOverviewViews = await this._ormService
+            .query(UserOverviewView)
+            .getMany();
+
+        const companyUserOverviewViews = await this._ormService
+            .query(UserOverviewView, { companyId })
+            .where('companyId', '=', 'companyId')
+            .getMany();
+
+        // TODO: CHECK FOR PERMISSIONS IN VIEW
+        const availableTempomatCalculationViews = await this._ormService
+            .query(TempomatCalculationDataView)
+            .innerJoin(User, x => x
+                .on('id', '=', 'userId', TempomatCalculationDataView))
+            .where('startDate', '!=', 'NULL')
+            .and('originalPrevisionedCompletionDate', '!=', 'NULL')
+            .getMany();
+
+        const companyTempomatCalculationViews = await this._ormService
+            .query(TempomatCalculationDataView, { companyId })
+            .innerJoin(User, x => x
+                .on('companyId', '=', 'companyId')
+                .and('id', '=', 'userId', TempomatCalculationDataView))
+            .where('startDate', '!=', 'NULL')
+            .and('originalPrevisionedCompletionDate', '!=', 'NULL')
+            .getMany();
+
+        const selectedUserOverviewViews = companyId
+            ? companyUserOverviewViews
+            : availableUserOverviewViews;
+
+        const selectedTempomatCalculationViews = companyId
+            ? companyTempomatCalculationViews
+            : availableTempomatCalculationViews;
+
+        const userIdsWithLagBehindAvgs = selectedTempomatCalculationViews
+            .groupBy(x => x.userId)
+            .map(x => {
+
+                const lagBehindAvg = this._tempomatService
+                    .getAvgLagBehindPercentage(x.items);
+
+                return {
+                    userId: x.first.userId,
+                    lagBehindAvg
+                };
+            });
+
+        const userOverviewViewsWithLagBehind = mergeArraysByKey(selectedUserOverviewViews, userIdsWithLagBehindAvgs, 'userId');
+
+        const userOverviewWithProductivity = userOverviewViewsWithLagBehind
+            .groupBy(x => x.userId)
+            .map(x => {
+
+                const first = x.first;
+
+                const productivityPercentage = this
+                    ._userStatsService
+                    .calculateProductivity(first.averagePerformancePercentage, first.lagBehindAvg);
+
+                return {
+                    ...first,
+                    productivityPercentage,
+                    invertedLagBehind: first.lagBehindAvg
+                        ? 100 - first.lagBehindAvg
+                        : null
+                };
+            });
+
+        const allFlaggedUsers = await this
+            ._userStatsService
+            .flagUsersAsync(companyId);
+
+        if (!allFlaggedUsers)
+            return;
+
+        const flaggedUsersOnly = userOverviewWithProductivity
+            .filter(x => allFlaggedUsers
+                .filter(x => x?.flag === 'low')
+                .some(y => y?.userId === x.userId));
+
+        return this._mapperService
+            .mapTo(UserAdminListDTO, [isToBeReviewed ? flaggedUsersOnly : userOverviewWithProductivity]);
     }
 
     /**
@@ -229,46 +321,6 @@ export class UserService {
                 firstName: dto.firstName,
                 phoneNumber: dto.phoneNumber
             });
-    }
-
-    /**
-     * Get user dto-s for the admin page user list.
-     */
-    async getAdminPageUsersListAsync(
-        principalId: PrincipalId,
-        searchText: string | null,
-        companyId: Id<'Company'> | null
-    ) {
-
-        const principal = await this
-            .getUserById(principalId);
-
-        await this._authorizationService
-            .checkPermissionAsync(principalId, 'ADMINISTRATE_COMPANY', { companyId: principal.companyId });
-
-        const searchTextLower = searchText?.toLowerCase();
-
-        // TODO CHECK VIEW COMPANY USERS PERMISSION
-        const users = await this._ormService
-            .query(AdminUserListView)
-            .getMany();
-
-        const companyUsers = await this._ormService
-            .query(AdminUserListView, { companyId })
-            .where('companyId', '=', 'companyId')
-            .getMany();
-
-        const availableUsers = companyId ? companyUsers : users;
-
-        const filteredUsers = searchTextLower
-            ? availableUsers
-                .filter(x => toFullName(x.firstName, x.lastName, 'hu')
-                    .toLowerCase()
-                    .includes(searchTextLower))
-            : availableUsers;
-
-        return this._mapperService
-            .mapTo(AdminPageUserDTO, [filteredUsers]);
     }
 
     /**

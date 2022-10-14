@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { ButtonType } from '../../../models/types';
 import { useCreateInviteUserAsync } from '../../../services/api/registrationApiService';
-import { UserApiService } from '../../../services/api/userApiService';
+import { UserApiService } from '../../../services/api/UserApiService1';
 import { showNotification } from '../../../services/core/notifications';
 import { CompanyDTO } from '../../../shared/dtos/company/CompanyDTO';
 import { Id } from '../../../shared/types/versionId';

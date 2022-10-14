@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { CompanyApiService } from '../../../services/api/CompanyApiService1';
-import { UserApiService } from '../../../services/api/userApiService';
+import { UserApiService } from '../../../services/api/UserApiService1';
 import { useIsMatchingCurrentRoute } from '../../../static/frontendHelpers';
 import { useRouteParams2 } from '../../../static/locationHelpers';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';

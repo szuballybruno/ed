@@ -2,11 +2,10 @@ import { Flex } from '@chakra-ui/react';
 import { Add } from '@mui/icons-material';
 import { useEffect, useMemo, useState } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
-import { UserApiService } from '../../../services/api/userApiService';
-import { useUserOverviewStats } from '../../../services/api/userStatsApiService';
+import { UserApiService } from '../../../services/api/UserApiService1';
 import { useNavigation } from '../../../services/core/navigatior';
 import { useShowErrorDialog } from '../../../services/core/notifications';
-import { UserOverviewDTO } from '../../../shared/dtos/UserOverviewDTO';
+import { UserAdminListDTO } from '../../../shared/dtos/UserAdminListDTO';
 import { OrderType } from '../../../shared/types/sharedTypes';
 import { Id } from '../../../shared/types/versionId';
 import { Environment } from '../../../static/Environemnt';
@@ -168,7 +167,7 @@ class RowType {
 
 export type UserDataGridPresetType = 'reviewRequired' | 'all'
 
-const mapToRow = (user: UserOverviewDTO): RowType => {
+const mapToRow = (user: UserAdminListDTO): RowType => {
 
     const name = user.firstName ? `${user.lastName} ${user.firstName}` : '';
 
@@ -264,7 +263,7 @@ export const useAdminUserGridLogic = ({
     const {
         userOverviewStats,
         refetchOverviewStats
-    } = useUserOverviewStats(isReviewPreset, selectedCompanyId);
+    } = UserApiService.useUserAdminList(isReviewPreset, selectedCompanyId);
 
     const searchIn = (text: string) => {
 

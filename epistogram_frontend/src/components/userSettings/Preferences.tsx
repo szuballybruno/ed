@@ -1,7 +1,7 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import { useUploadAvatarFile } from '../../services/api/fileApiService';
 import { useRequestPasswordChangeAuthenticated } from '../../services/api/passwordChangeApiService';
-import { UserApiService } from '../../services/api/userApiService';
+import { UserApiService } from '../../services/api/UserApiService1';
 import { showNotification, useShowErrorDialog } from '../../services/core/notifications';
 import { Environment } from '../../static/Environemnt';
 import { reloadPage } from '../../static/frontendHelpers';

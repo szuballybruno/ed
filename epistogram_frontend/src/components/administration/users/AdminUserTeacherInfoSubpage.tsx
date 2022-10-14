@@ -2,7 +2,7 @@ import { Checkbox, Slider } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { ButtonType } from '../../../models/types';
 import { useSaveTeacherInfoData, useTeacherInfoEditData } from '../../../services/api/teacherInfoApiService';
-import { UserApiService } from '../../../services/api/userApiService';
+import { UserApiService } from '../../../services/api/UserApiService1';
 import { useNavigation } from '../../../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
 import { TeacherBadgeNameType } from '../../../shared/types/sharedTypes';

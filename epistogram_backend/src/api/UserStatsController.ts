@@ -36,22 +36,6 @@ export class UserStatsController implements XController<UserStatsController> {
             .getImproveYourselfPageStatsAsync(params.principalId);
     }
 
-    @XControllerAction(apiRoutes.userStats.getUserOverviewStats)
-    getUserOverviewStatsAction(params: ActionParams) {
-
-        const isToBeReviewed = params
-            .getQuery<{ isToBeReviewed: boolean }>()
-            .getValue(x => x.isToBeReviewed, 'boolean');
-
-        const companyId = params
-            .getQuery<{ companyId?: Id<'Company'> }>()
-            .data
-            .companyId ?? null;
-
-        return this._userStatsService
-            .getUserOverviewStatsAsync(params.principalId, isToBeReviewed, companyId);
-    }
-
     @XControllerAction(apiRoutes.userStats.getAdminUserCourses)
     getUserCourseStatsAction(params: ActionParams) {
 

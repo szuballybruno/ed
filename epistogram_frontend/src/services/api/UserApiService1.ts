@@ -1,5 +1,5 @@
-import { AdminPageUserDTO } from '../../shared/dtos/admin/AdminPageUserDTO';
 import { BriefUserDataDTO } from '../../shared/dtos/BriefUserDataDTO';
+import { UserAdminListDTO } from '../../shared/dtos/UserAdminListDTO';
 import { UserControlDropdownDataDTO } from '../../shared/dtos/UserControlDropdownDataDTO';
 import { UserEditReadDTO } from '../../shared/dtos/UserEditReadDTO';
 import { UserEditSaveDTO } from '../../shared/dtos/UserEditSaveDTO';
@@ -58,21 +58,23 @@ const useUserControlDropdownData = () => {
     };
 };
 
+export const useUserAdminList = (isToBeReviewed: boolean, companyId: Id<'Company'> | null) => {
+
+    const queryRes = QueryService.useXQueryArray<UserAdminListDTO>(apiRoutes.user.getAdminUsersList, { isToBeReviewed, companyId });
+
+    return {
+        userOverviewStats: queryRes.data,
+        userOverviewStatsStatus: queryRes.state,
+        userOverviewStatsError: queryRes.error,
+        refetchOverviewStats: queryRes.refetch
+    };
+};
+
 export const UserApiService = {
 
     useSaveUserAssignedCourses,
     useUserControlDropdownData,
-    useUserListQuery: (searchText: string | null, companyId: Id<'Company'> | null) => {
-
-        const queryResult = QueryService.useXQuery<AdminPageUserDTO[]>(apiRoutes.user.getUserListForAdministration, { searchText, companyId });
-
-        return {
-            users: queryResult.data ?? [],
-            usersStatus: queryResult.state,
-            usersError: queryResult.error,
-            refetchUsers: queryResult.refetch,
-        };
-    },
+    useUserAdminList,
 
     useSaveUserSimple: () => {
 

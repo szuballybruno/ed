@@ -137,7 +137,6 @@ export const apiRoutes = {
         getHomePageStats: '/userstats/get-home-page-stats',
         getUserLearningPageStats: '/userstats/get-user-learning-page-stats',
         getImproveYourselfPageStats: '/userstats/get-improve-yourself-page-stats',
-        getUserOverviewStats: '/userstats/get-user-overview-stats',
         getAdminUserCourses: '/userstats/get-user-courses' as ParametrizedRouteType<{ query: { userId: Id<'User'>, loadAvailable: boolean } }>,
         getUserVideoStats: '/userstats/get-user-video-stats',
         getUserExamStats: '/userstats/get-user-exam-stats',
@@ -160,13 +159,13 @@ export const apiRoutes = {
     },
 
     user: {
+        getAdminUsersList: '/users/get-admin-user-list',
         getEditUserData: '/users/get-edit-user-data',
         deleteUser: '/users/delete-user',
         saveUser: '/users/save-user',
         saveUserSimple: '/users/save-user-simple',
         getBriefUserData: '/users/get-brief-user-data',
         saveUserCourses: '/users/save-user-courses' as ParametrizedRouteType<{ body: { mutations: Mutation<UserCourseStatsDTO, 'courseId'>[], userId: Id<'User'> } }>,
-        getUserListForAdministration: '/users/get-user-administartion-user-list',
         getUserControlDropdownData: '/users/get-user-control-dropdown-data'
     },
 

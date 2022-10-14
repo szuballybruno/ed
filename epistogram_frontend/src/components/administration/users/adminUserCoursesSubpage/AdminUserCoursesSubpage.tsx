@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { applicationRoutes } from '../../../../configuration/applicationRoutes';
 import { ButtonType } from '../../../../models/types';
-import { UserApiService } from '../../../../services/api/userApiService';
+import { UserApiService } from '../../../../services/api/UserApiService1';
 import { useUserAssignedCourses } from '../../../../services/api/userStatsApiService';
 import { showNotification } from '../../../../services/core/notifications';
 import { LocalStorageService } from '../../../../services/core/storageService';

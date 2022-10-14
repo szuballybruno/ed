@@ -4,7 +4,6 @@ import { UserCourseStatsDTO } from '../../shared/dtos/UserCourseStatsDTO';
 import { UserCourseStatsOverviewDTO } from '../../shared/dtos/UserCourseStatsOverviewDTO';
 import { UserExamStatsDTO } from '../../shared/dtos/UserExamStatsDTO';
 import { UserLearningPageStatsDTO } from '../../shared/dtos/UserLearningPageStatsDTO';
-import { UserOverviewDTO } from '../../shared/dtos/UserOverviewDTO';
 import { UserVideoStatsDTO } from '../../shared/dtos/UserVideoStatsDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
 import { Id } from '../../shared/types/versionId';
@@ -32,17 +31,6 @@ export const useUserLearningPageStats = (userId: Id<'User'>) => {
     };
 };
 
-export const useUserCourseStatsOverviewData = (userId: Id<'User'>, courseId: Id<'Course'>) => {
-
-    const queryRes = QueryService.useXQuery<UserCourseStatsOverviewDTO>(apiRoutes.userStats.getUserCourseStatsOverviewData, { userId, courseId });
-
-    return {
-        userCourseStatsOverviewData: queryRes.data,
-        userCourseStatsOverviewDataStatus: queryRes.state,
-        userCourseStatsOverviewDataError: queryRes.error
-    };
-};
-
 export const useImproveYourselfPageStats = () => {
 
     const queryRes = QueryService.useXQuery<ImproveYourselfPageStatsDTO>(apiRoutes.userStats.getImproveYourselfPageStats);
@@ -67,18 +55,6 @@ export const useUserAssignedCourses = (userId: Id<'User'>, loadAvailable: boolea
     };
 };
 
-export const useUserOverviewStats = (isToBeReviewed: boolean, companyId: Id<'Company'> | null) => {
-
-    const queryRes = QueryService.useXQueryArray<UserOverviewDTO>(apiRoutes.userStats.getUserOverviewStats, { isToBeReviewed, companyId });
-
-    return {
-        userOverviewStats: queryRes.data,
-        userOverviewStatsStatus: queryRes.state,
-        userOverviewStatsError: queryRes.error,
-        refetchOverviewStats: queryRes.refetch
-    };
-};
-
 export const useUserVideoStats = (courseId: Id<'Course'>, userId: Id<'User'>) => {
 
     const queryRes = QueryService.useXQuery<UserVideoStatsDTO[]>(apiRoutes.userStats.getUserVideoStats, { courseId, userId });
@@ -98,5 +74,16 @@ export const useUserExamStats = (courseId: Id<'Course'>, userId: Id<'User'>) => 
         userExamStats: queryRes.data,
         userExamStatsStatus: queryRes.state,
         userExamStatsError: queryRes.error
+    };
+};
+
+export const useUserCourseStatsOverviewData = (userId: Id<'User'>, courseId: Id<'Course'>) => {
+
+    const queryRes = QueryService.useXQuery<UserCourseStatsOverviewDTO>(apiRoutes.userStats.getUserCourseStatsOverviewData, { userId, courseId });
+
+    return {
+        userCourseStatsOverviewData: queryRes.data,
+        userCourseStatsOverviewDataStatus: queryRes.state,
+        userCourseStatsOverviewDataError: queryRes.error
     };
 };

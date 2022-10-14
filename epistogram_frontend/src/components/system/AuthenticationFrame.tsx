@@ -36,6 +36,11 @@ export const useCurrentUserId = () => {
     return { userId: ct.id };
 };
 
+export const useCurrentUserContext = () => {
+
+    return useContext(CurrentUserContext);
+};
+
 export const useRefetchUserAsync = () => {
 
     const refetchAuthHandshake = useContext(RefetchUserAsyncContext);
@@ -119,7 +124,7 @@ const AuthFirewall = (props: PropsWithChildren & {
 
         return <div></div>;
     })();
-    
+
     if (authCheckResult)
         return authCheckResult;
 

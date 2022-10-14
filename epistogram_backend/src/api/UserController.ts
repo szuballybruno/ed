@@ -17,6 +17,21 @@ export class UserController implements XController<UserController> {
         this._userService = serviceProvider.getService(UserService);
     }
 
+    @XControllerAction(apiRoutes.user.getAdminUsersList)
+    getUserOverviewStatsAction(params: ActionParams) {
+
+        const isToBeReviewed = params
+            .getQuery<{ isToBeReviewed: boolean }>()
+            .getValue(x => x.isToBeReviewed, 'boolean');
+
+        const companyId = params
+            .getQuery<{ companyId?: Id<'Company'> }>()
+            .getValueOrNull(x => x.companyId, 'int') ?? null;
+
+        return this._userService
+            .getUserAdminListAsync(params.principalId, isToBeReviewed, companyId);
+    }
+
     @XControllerAction(apiRoutes.user.deleteUser, { isPost: true })
     async deleteUserAction(params: ActionParams) {
 
@@ -68,23 +83,6 @@ export class UserController implements XController<UserController> {
 
         return this._userService
             .saveUserAsync(params.principalId, dto);
-    }
-
-    @XControllerAction(apiRoutes.user.getUserListForAdministration)
-    getUserAdministrationUserListAction(params: ActionParams) {
-
-        const searchText = params
-            .getQuery<{ searchText?: string }>()
-            .data
-            .searchText ?? null;
-
-        const companyId = params
-            .getQuery<{ companyId?: Id<'Company'> }>()
-            .data
-            .companyId ?? null;
-
-        return this._userService
-            .getAdminPageUsersListAsync(params.principalId, searchText, companyId);
     }
 
     @XControllerAction(apiRoutes.user.getBriefUserData)

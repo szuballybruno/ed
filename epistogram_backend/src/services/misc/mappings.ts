@@ -12,7 +12,6 @@ import { ShopItemCategory } from '../../models/entity/misc/ShopItemCategory';
 import { Task } from '../../models/entity/misc/Task';
 import { TeacherInfo } from '../../models/entity/misc/TeacherInfo';
 import { User } from '../../models/entity/misc/User';
-import { AdminUserListView } from '../../models/views/AdminUserListView';
 import { AvailableCourseView } from '../../models/views/AvailableCourseView';
 import { CoinTransactionView } from '../../models/views/CoinTransactionView';
 import { CommentListView } from '../../models/views/CommentListView';
@@ -55,7 +54,6 @@ import { UserOverviewView } from '../../models/views/UserOverviewView';
 import { UserSpentTimeRatioView } from '../../models/views/UserSpentTimeRatioView';
 import { UserVideoStatsView } from '../../models/views/UserVideoStatsView';
 import { VideoPlayerDataView } from '../../models/views/VideoPlayerDataView';
-import { AdminPageUserDTO } from '../../shared/dtos/admin/AdminPageUserDTO';
 import { CourseAdminListItemDTO } from '../../shared/dtos/admin/CourseAdminListItemDTO';
 import { CourseContentItemAdminDTO } from '../../shared/dtos/admin/CourseContentItemAdminDTO';
 import { CourseContentItemIssueDTO } from '../../shared/dtos/admin/CourseContentItemIssueDTO';
@@ -110,8 +108,8 @@ import { ShopItemCategoryDTO } from '../../shared/dtos/ShopItemCategoryDTO';
 import { ShopItemDTO } from '../../shared/dtos/ShopItemDTO';
 import { ShopItemEditDTO } from '../../shared/dtos/ShopItemEditDTO';
 import { SignupAnswerDTO } from '../../shared/dtos/SignupAnswerDTO';
-import { SurveyDataDTO } from '../../shared/dtos/SurveyDataDTO';
 import { SignupQuestionDTO } from '../../shared/dtos/SignupQuestionDTO';
+import { SurveyDataDTO } from '../../shared/dtos/SurveyDataDTO';
 import { TaskDTO } from '../../shared/dtos/TaskDTO';
 import { TeacherInfoEditDTO } from '../../shared/dtos/TeacherInfoEditDTO';
 import { UserActiveCourseDTO } from '../../shared/dtos/UserActiveCourseDTO';
@@ -121,7 +119,7 @@ import { UserCourseStatsOverviewDTO } from '../../shared/dtos/UserCourseStatsOve
 import { UserDTO } from '../../shared/dtos/UserDTO';
 import { UserExamStatsDTO } from '../../shared/dtos/UserExamStatsDTO';
 import { UserLearningPageStatsDTO } from '../../shared/dtos/UserLearningPageStatsDTO';
-import { UserOverviewDTO } from '../../shared/dtos/UserOverviewDTO';
+import { UserAdminListDTO } from '../../shared/dtos/UserAdminListDTO';
 import { UserVideoStatsDTO } from '../../shared/dtos/UserVideoStatsDTO';
 import { VideoPlayerDataDTO } from '../../shared/dtos/VideoDTO';
 import { instantiate } from '../../shared/logic/sharedLogic';
@@ -139,14 +137,14 @@ export const epistoMappingsBuilder = new XMappingsBuilder<[UrlService]>();
 const marray = [
 
     epistoMappingsBuilder
-        .addArrayMapping(UserOverviewDTO, () => (
+        .addArrayMapping(UserAdminListDTO, () => (
             userOverviewViews: (UserOverviewView & {
                 productivityPercentage: number,
                 invertedLagBehind: number | null
             })[]) => {
 
-            return userOverviewViews.map(x => instantiate<UserOverviewDTO>({
-                ...x as UserOverviewDTO
+            return userOverviewViews.map(x => instantiate<UserAdminListDTO>({
+                ...x as UserAdminListDTO
             }));
         }),
 
@@ -880,36 +878,6 @@ const marray = [
                     ? urlService.getAssetUrl(view.filePath)
                     : urlService.getAssetUrl('/images/defaultCourseCover.jpg') */
             });
-        }),
-    // TODO: RoleId missing. Check if its needed
-    epistoMappingsBuilder
-        .addArrayMapping(AdminPageUserDTO, ([urlService]) => (users: AdminUserListView[]) => {
-
-            return users
-                .map(user => {
-
-                    return instantiate<AdminPageUserDTO>({
-                        id: user.userId,
-                        name: toFullName(user.firstName, user.lastName, 'hu'),
-                        firstName: user.firstName,
-                        lastName: user.lastName,
-                        avatarUrl: user.avatarFilePath
-                            ? urlService.getAssetUrl(user.avatarFilePath)
-                            : null,
-                        email: user.email,
-                        roleId: Id.create(0),
-                        isInvitationAccepted: user.isInvitationAccepted,
-                        isTrusted: user.isTrusted,
-                        departmentId: user.departmentId,
-                        departmentName: user.departmentName,
-                        companyId: user.companyId,
-                        companyName: user.companyName,
-                        canAccessApplication: true,
-                        latestActivityDate: user.latestActivityDate,
-                        totalSpentTimeSeconds: user.totalSpentSeconds,
-                        coinBalance: user.coinBalance,
-                    });
-                });
         }),
     epistoMappingsBuilder
         .addMapping(DailyTipDTO, ([urlService]) => (view: DailyTipView) => {
