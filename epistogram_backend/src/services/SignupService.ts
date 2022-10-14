@@ -1,21 +1,22 @@
+import { AnswerData } from '../models/entity/answer/AnswerData';
+import { AnswerVersion } from '../models/entity/answer/AnswerVersion';
+import { AnswerGivenAnswerBridge } from '../models/entity/misc/AnswerGivenAnswerBridge';
+import { AnswerSession } from '../models/entity/misc/AnswerSession';
+import { GivenAnswer } from '../models/entity/misc/GivenAnswer';
 import { SignupCompletedView } from '../models/views/SignupCompletedView';
 import { SignupQuestionView } from '../models/views/SignupQuestionView';
 import { AnswerSignupQuestionDTO } from '../shared/dtos/AnswerSignupQuestionDTO';
 import { SurveyDataDTO } from '../shared/dtos/SurveyDataDTO';
+import { Id } from '../shared/types/versionId';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
-import { AuthorizationResult } from '../utilities/XTurboExpress/XTurboExpressTypes';
 import { AuthorizationService } from './AuthorizationService';
+import { CompanyService } from './CompanyService';
 import { EmailService } from './EmailService';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
-import { SQLFunctionsService } from './sqlServices/FunctionsService';
-import { Id } from '../shared/types/versionId';
-import { AnswerSession } from '../models/entity/misc/AnswerSession';
+import { PermissionService } from './PermissionService';
 import { QuestionAnswerService } from './QuestionAnswerService';
-import { AnswerVersion } from '../models/entity/answer/AnswerVersion';
-import { AnswerData } from '../models/entity/answer/AnswerData';
-import { GivenAnswer } from '../models/entity/misc/GivenAnswer';
-import { AnswerGivenAnswerBridge } from '../models/entity/misc/AnswerGivenAnswerBridge';
+import { SQLFunctionsService } from './sqlServices/FunctionsService';
 
 export class SignupService {
 
@@ -25,6 +26,8 @@ export class SignupService {
     private _mapperService: MapperService;
     private _authorizationService: AuthorizationService;
     private _questionAnswerService: QuestionAnswerService;
+    private _permissionService: PermissionService;
+    private _companyService: CompanyService;
 
     constructor(
         emailService: EmailService,
@@ -32,7 +35,9 @@ export class SignupService {
         ormService: ORMConnectionService,
         mapperService: MapperService,
         authorizationService: AuthorizationService,
-        questionAnswerService: QuestionAnswerService) {
+        questionAnswerService: QuestionAnswerService,
+        permissionService: PermissionService,
+        companyService: CompanyService) {
 
         this._emailService = emailService;
         this._sqlFuncService = sqlFuncService;
@@ -40,6 +45,8 @@ export class SignupService {
         this._mapperService = mapperService;
         this._authorizationService = authorizationService;
         this._questionAnswerService = questionAnswerService;
+        this._permissionService = permissionService;
+        this._companyService = companyService;
     }
 
     /**
@@ -56,7 +63,7 @@ export class SignupService {
             .and('examVersionId', '=', 'examVersionId')
             .getSingle();
 
-        const answerData = this._ormService
+        const answerData = await this._ormService
             .query(AnswerVersion, { answerVersionId })
             .innerJoin(AnswerData, x => x
                 .on('id', '=', 'answerDataId', AnswerVersion)
@@ -74,28 +81,32 @@ export class SignupService {
         );
     }
 
-    getSignupDataAsync(principalId: PrincipalId) {
+    async completeSignupSurveyAsync(principalId: PrincipalId) {
 
-        return {
-            action: async () => {
-                const userId = principalId.toSQLValue();
+        const companyId = await this._companyService
+            .getPrincipalCompanyId(principalId);
 
-                const userSignupCompltedView = await this._ormService
-                    .query(SignupCompletedView, { userId })
-                    .where('userId', '=', 'userId')
-                    .getOneOrNull();
+        const userId = principalId.getId();
 
-                const questions = await this._ormService
-                    .query(SignupQuestionView, { userId })
-                    .where('userId', '=', 'userId')
-                    .getMany();
+        await this._permissionService
+            .assignPermission(userId, 'BYPASS_SURVEY', { companyId: companyId });
+    }
 
-                return this._mapperService.mapTo(SurveyDataDTO, [questions, !!userSignupCompltedView?.isSignupComplete]);
-            },
-            auth: async () => {
-                return AuthorizationResult.ok;
-            }
-        };
+    async getSignupDataAsync(principalId: PrincipalId) {
+
+        const userId = principalId.toSQLValue();
+
+        const userSignupCompltedView = await this._ormService
+            .query(SignupCompletedView, { userId })
+            .where('userId', '=', 'userId')
+            .getOneOrNull();
+
+        const questions = await this._ormService
+            .query(SignupQuestionView, { userId })
+            .where('userId', '=', 'userId')
+            .getMany();
+
+        return this._mapperService.mapTo(SurveyDataDTO, [questions, !!userSignupCompltedView?.isSignupComplete]);
     }
 
     /**

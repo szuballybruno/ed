@@ -1,11 +1,11 @@
-import {AnswerSignupQuestionDTO} from '../shared/dtos/AnswerSignupQuestionDTO';
-import {PersonalityAssessmentService} from '../services/PersonalityAssessmentService';
-import {SignupService} from '../services/SignupService';
-import {ActionParams} from '../utilities/XTurboExpress/ActionParams';
-import {XControllerAction} from '../utilities/XTurboExpress/XTurboExpressDecorators';
-import {apiRoutes} from '../shared/types/apiRoutes';
-import {ServiceProvider} from '../startup/servicesDI';
-import {XController} from '../utilities/XTurboExpress/XTurboExpressTypes';
+import { AnswerSignupQuestionDTO } from '../shared/dtos/AnswerSignupQuestionDTO';
+import { PersonalityAssessmentService } from '../services/PersonalityAssessmentService';
+import { SignupService } from '../services/SignupService';
+import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
+import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
+import { apiRoutes } from '../shared/types/apiRoutes';
+import { ServiceProvider } from '../startup/servicesDI';
+import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
 export class SurveyController implements XController<SurveyController> {
 
@@ -18,7 +18,7 @@ export class SurveyController implements XController<SurveyController> {
         this._personalityAssessmentService = serviceProvider.getService(PersonalityAssessmentService);
     }
 
-    @XControllerAction(apiRoutes.survey.answerSurveyQuestion, {isPost: true})
+    @XControllerAction(apiRoutes.survey.answerSurveyQuestion, { isPost: true })
     answerSignupQuestionAction(params: ActionParams) {
 
         const dto = params
@@ -34,6 +34,13 @@ export class SurveyController implements XController<SurveyController> {
 
         return this._signupService
             .getSignupDataAsync(params.principalId);
+    };
+
+    @XControllerAction(apiRoutes.survey.completeSignupSurvey, { isPost: true })
+    completeSignupSurveyAction = (params: ActionParams) => {
+
+        return this._signupService
+            .completeSignupSurveyAsync(params.principalId);
     };
 
     @XControllerAction(apiRoutes.survey.getUserPersonalityData)

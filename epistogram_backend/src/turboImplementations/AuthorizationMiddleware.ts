@@ -1,4 +1,5 @@
 import { AuthorizationService } from '../services/AuthorizationService';
+import { apiRoutes } from '../shared/types/apiRoutes';
 import { ServiceProvider } from '../startup/servicesDI';
 import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { ITurboMiddlewareInstance, ITurboRequest, ITurboResponse, MiddlewareParams } from '../utilities/XTurboExpress/XTurboExpressTypes';
@@ -18,6 +19,15 @@ export class AuthorizationMiddleware implements ITurboMiddlewareInstance<ActionP
             return params.inParams;
 
         if (params.options.isUnauthorized)
+            return params.inParams;
+
+        if (params.req.path === apiRoutes.survey.getSurveyData)
+            return params.inParams;
+
+        if (params.req.path === apiRoutes.survey.answerSurveyQuestion)
+            return params.inParams;
+
+        if (params.req.path === apiRoutes.survey.completeSignupSurvey)
             return params.inParams;
 
         const { companyId } = params.inParams;

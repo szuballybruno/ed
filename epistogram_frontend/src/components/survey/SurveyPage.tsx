@@ -1,4 +1,5 @@
 import { applicationRoutes } from '../../configuration/applicationRoutes';
+import { SurveyApiService } from '../../services/api/SurveyApiService';
 import { useNavigation } from '../../services/core/navigatior';
 import { startUserGuide } from '../../services/core/userGuidingService';
 import { Environment } from '../../static/Environemnt';
@@ -17,6 +18,7 @@ export const SurveyPage = () => {
     // slides
     const slidesState = usePaging({ items: [1, 2, 3] });
     const { refetchAuthHandshake } = useRefetchUserAsync();
+    const { completeSurveyAsync } = SurveyApiService.useCompleteSurvey();
     const isInvitedUser = true;
 
     const { navigate2 } = useNavigation();
@@ -24,6 +26,7 @@ export const SurveyPage = () => {
     const handleGoToSummary = () => {
 
         slidesState.next();
+        completeSurveyAsync();
         refetchAuthHandshake();
     };
 

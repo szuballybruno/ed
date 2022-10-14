@@ -29,6 +29,16 @@ const useSurveyData = () => {
     };
 };
 
+const useCompleteSurvey = () => {
+
+    const qr = usePostDataUnsafe(apiRoutes.survey.completeSignupSurvey);
+
+    return {
+        completeSurveyStatus: qr.state,
+        completeSurveyAsync: qr.postDataAsync
+    };
+};
+
 const useAnswerSurveyQuestion = () => {
 
     const qr = usePostDataUnsafe<AnswerSignupQuestionDTO, AnswerDTO>(apiRoutes.survey.answerSurveyQuestion);
@@ -42,6 +52,7 @@ const useAnswerSurveyQuestion = () => {
 
 export const SurveyApiService = {
     usePersonalityData,
+    useCompleteSurvey,
     useSurveyData,
     useAnswerSurveyQuestion
 };
