@@ -99,7 +99,7 @@ export class PasswordChangeService {
                 resetPasswordToken: resetPawsswordToken
             });
 
-        const domain = this
+        const domain = await this
             ._domainProviderService
             .getDomainAsync(principalId.getId());
 
