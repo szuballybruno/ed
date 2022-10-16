@@ -33,8 +33,6 @@ export const SetNewPasswordPage = () => {
 
     const { navigate2 } = useNavigation();
 
-    console.log(password);
-
     const handleSetNewPassword = async () => {
         try {
 
@@ -59,7 +57,9 @@ export const SetNewPasswordPage = () => {
         backgoundImageSrc={Environment.getAssetUrl('loginScreen/surveybg.png')}
         position="relative">
 
-        <ContentPane navbarBg="white">
+        <ContentPane
+            hideNavbar
+            navbarBg="white">
 
             <LoadingFrame
                 direction="column"

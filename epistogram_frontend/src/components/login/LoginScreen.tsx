@@ -5,6 +5,7 @@ import { CompanyApiService } from '../../services/api/CompanyApiService1';
 import { gradientBackgroundGenerator } from '../../services/core/gradientBackgroundGenerator';
 import { useNavigation } from '../../services/core/navigatior';
 import { useShowErrorDialog } from '../../services/core/notifications';
+import { ErrorWithCode } from '../../shared/types/ErrorWithCode';
 import { useIsScreenWiderThan } from '../../static/frontendHelpers';
 import { useQueryVal } from '../../static/locationHelpers';
 import { Logger } from '../../static/Logger';
@@ -63,23 +64,20 @@ const LoginScreen = () => {
             await loginUserAsync(emailRef.current?.value, pwRef.current?.value);
             await refetchAuthHandshake();
         }
-        catch (e: any) {
+        catch (error: any) {
 
-            if (!e)
+            console.log(error);
+
+            if (!error)
                 return;
 
-            if (e.errorType === 'bad request') {
+            if ((error as ErrorWithCode).code === 'corrupt_credentials') {
 
                 setErrorMessage('Hibás adatok!');
+                return;
             }
-            else if (e.errorType) {
 
-                showErrorDialog(e.message);
-            }
-            else {
-
-                showErrorDialog('' + e);
-            }
+            showErrorDialog(error);
         }
     };
 

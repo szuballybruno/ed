@@ -128,19 +128,19 @@ export class TurboExpressBuilder<
 
             /**
              * Instantiate controller 
-             */
+        */
             const controllerInstance = new controllerSignature(serviceProvider);
 
             /**
              * Get controller action and execute it
-             */
+        */
             const controllerAction: ApiActionType<TActionParams> = controllerInstance[functionName];
             const boundControllerAction: (params: TActionParams) => ControllerActionReturnType = controllerAction.bind(controllerInstance);
             const controllerActionResultOrData: ControllerActionReturnType = await boundControllerAction(actionParams);
 
             /**
              * Complicated solution 
-             */
+        */
             if ((controllerActionResultOrData as any)?.auth) {
 
                 const controllerActionResult = controllerActionResultOrData as any;
@@ -165,7 +165,7 @@ export class TurboExpressBuilder<
 
             /**
              * Simple solution
-             */
+        */
             else {
 
                 return controllerActionResultOrData;
@@ -187,13 +187,13 @@ export class TurboExpressBuilder<
             /**
              * Instatiate all services, 
              * establish connection to DB
-             */
+        */
             const serviceProvider = await this._getServiceProvider();
 
             /**
              * Executes the middlewares, 
              * then the controller action (with action params returned from middlewares) 
-             */
+        */
             const executeMiddlewaresAndControllerAction = async () => {
 
                 const actionParams = await runMiddlewaresAsync(req, res, serviceProvider);
@@ -204,7 +204,7 @@ export class TurboExpressBuilder<
              * Execute middlewares, 
              * and controller action in the action wrapper function, 
              * which is an external async wrapper (for flexibility)
-             */
+        */
             const actionWrapperResult = await this
                 ._actionWrapperFunction(serviceProvider, executeMiddlewaresAndControllerAction);
 

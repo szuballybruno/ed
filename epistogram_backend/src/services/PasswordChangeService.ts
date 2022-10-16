@@ -51,10 +51,15 @@ export class PasswordChangeService {
      */
     async requestPasswordChangeAsync(email: string) {
 
-        const user = await this._userService
-            .getUserByEmailOrFailAsync(email);
+        const user = await this
+            ._userService
+            .getUserByEmailAsync(email);
 
-        const token = this._tokenService
+        if (!user)
+            throw new ErrorWithCode('User does not exist with this email!', 'corrupt_credentials');
+
+        const token = this
+            ._tokenService
             .createSetNewPasswordToken(user.id);
 
         // save user's reset token in DB, it's only valid this way
@@ -99,7 +104,7 @@ export class PasswordChangeService {
                 resetPasswordToken: resetPawsswordToken
             });
 
-        const domain = this
+        const domain = await this
             ._domainProviderService
             .getDomainAsync(principalId.getId());
 

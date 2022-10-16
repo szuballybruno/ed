@@ -44,6 +44,7 @@ import { VideoRatingController } from './../api/VideoRatingController';
 import { TurboExpressBuilder } from './../utilities/XTurboExpress/TurboExpress';
 import { ServiceProviderInitializator } from './initApp';
 import { ServiceProvider } from './servicesDI';
+import { TeacherInfoController } from '../api/TeacherInfoController';
 
 export const actionWrapper: ActionWrapperFunctionType = async (serviceProvider: ServiceProvider, action: () => Promise<any>) => {
 
@@ -139,6 +140,7 @@ export const initTurboExpress = (
         .addController(UserProgressController)
         .addController(FileController)
         .addController(SurveyController)
+        .addController(TeacherInfoController)
         .addController(PlayerController)
         .addController(PlaybackController)
         .addController(CourseController)

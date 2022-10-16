@@ -177,7 +177,7 @@ export class UserService {
 
     /**
      * Get user edit data
-          */
+     */
     async getEditUserDataAsync(
         principalId: PrincipalId,
         editedUserId: Id<'User'> | null
@@ -267,7 +267,7 @@ export class UserService {
             });
 
         // save teacher info
-        await this._saveTeacherInfoAsync(userId, isTeacher);
+        await this.saveTeacherInfoAsync(userId, isTeacher);
 
         // save auth items
         await this._roleService
@@ -277,10 +277,11 @@ export class UserService {
     /**
      * Saves user teacher info
      */
-    private async _saveTeacherInfoAsync(userId: Id<'User'>, isTeacher: boolean) {
+    async saveTeacherInfoAsync(userId: Id<'User'>, isTeacher: boolean) {
 
-        const teacherInfo = await this._teacherInfoService
-            .getTeacherInfoAsync(userId);
+        const teacherInfo = await this
+            ._teacherInfoService
+            .getTeacherInfoOrNullAsync(userId);
 
         // teacher info exists
         if (teacherInfo) {
@@ -362,29 +363,29 @@ export class UserService {
     /**
      * Create a new user.
      */
-    createUserAsync = async (user: InsertEntity<User>, unhashedPassword: string): Promise<User> => {
+    createUserAsync = async (insertUser: InsertEntity<User>, unhashedPassword: string): Promise<User> => {
 
         // check if user already exists with email
-        const existingUser = await this.getUserByEmailAsync(user.email);
+        const existingUser = await this.getUserByEmailAsync(insertUser.email);
         if (existingUser)
-            throw new ErrorWithCode('User already exists. Email: ' + user.email, 'email_taken');
+            throw new ErrorWithCode('User already exists. Email: ' + insertUser.email, 'email_taken');
 
         // hash user password
         const hashedPassword = await this
             ._hashService
             .hashPasswordAsync(unhashedPassword);
 
-        user.password = hashedPassword;
+        insertUser.password = hashedPassword;
 
         // insert user
-        const { id: userId } = await this._ormService
-            .createAsync(User, user);
+        const createdUser = await this._ormService
+            .createAsync(User, insertUser);
 
         // insert signup answer session
         await this
             ._ormService
             .createAsync(AnswerSession, {
-                userId: userId,
+                userId: createdUser.id,
                 examVersionId: Id.create<'ExamVersion'>(1),
                 isPractise: false,
                 startDate: new Date(),
@@ -395,14 +396,14 @@ export class UserService {
         await this
             ._ormService
             .createAsync(AnswerSession, {
-                userId: userId,
+                userId: createdUser.id,
                 isPractise: true,
                 examVersionId: null,
                 startDate: new Date(),
                 videoVersionId: null
             });
 
-        return user as User;
+        return createdUser;
     };
 
     /**

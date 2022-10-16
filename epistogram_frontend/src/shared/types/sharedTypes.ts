@@ -9,7 +9,7 @@ export type ErrorCodeType =
     'bad request' |
     'http error' |
     'under maintenance' |
-    'passwordInvalid' |
+    'corrupt_credentials' |
     'unknown' |
     'courseItemNotFound' |
     'activation_code_issue' |

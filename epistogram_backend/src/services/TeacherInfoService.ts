@@ -1,5 +1,4 @@
 import { TeacherInfo } from '../models/entity/misc/TeacherInfo';
-import { User } from '../models/entity/misc/User';
 import { TeacherInfoEditDTO } from '../shared/dtos/TeacherInfoEditDTO';
 import { Id } from '../shared/types/versionId';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
@@ -22,7 +21,7 @@ export class TeacherInfoService {
 
     /**
      * Delete a teacher info obj by it's id.
-          */
+     */
     async deleteTeacherInfoAsync(teacherInfoId: Id<'TeacherInfo'>) {
 
         await this._ormService
@@ -31,43 +30,47 @@ export class TeacherInfoService {
 
     /**
      * Get a teacher info by user id.
-          */
-    async getTeacherInfoAsync(userId: Id<'User'>) {
+     */
+    async getTeacherInfoOrNullAsync(userId: Id<'User'>): Promise<TeacherInfo | null> {
 
-        const user = await this._ormService
-            .query(User, { userId })
-            .leftJoin(TeacherInfo, x => x
-                .on('userId', '=', 'userId'))
-            .where('id', '=', 'userId')
-            .getSingle();
+        const teacherInfo = await this
+            ._ormService
+            .query(TeacherInfo, { userId })
+            .where('userId', '=', 'userId')
+            .getOneOrNull();
 
-        const teacherInfo = user.teacherInfo;
+        return teacherInfo;
+    }
+
+    /**
+     * Get a teacher info by user id.
+     */
+    async getTeacherInfoAsync(userId: Id<'User'>): Promise<TeacherInfo> {
+
+        const teacherInfo = await this
+            .getTeacherInfoOrNullAsync(userId);
+
+        if (!teacherInfo)
+            throw new Error('Teacher info no attached to user!');
 
         return teacherInfo;
     }
 
     /**
      * Get an edit DTO for the teacher info entity, realated to a user.
-          */
-    getTeacherInfoEditDTOAsync(principalId: PrincipalId, userId: Id<'User'>) {
+     */
+    async getTeacherInfoEditDTOAsync(principalId: PrincipalId, userId: Id<'User'>) {
 
-        return {
-            action: async () => {
-                const teacherInfo = await this.getTeacherInfoAsync(userId);
+        const teacherInfo = await this
+            .getTeacherInfoAsync(userId);
 
-                return this._mapperService
-                    .mapTo(TeacherInfoEditDTO, [teacherInfo]);
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'VIEW_TEACHER_OVERVIEW');
-            }
-        };
+        return this._mapperService
+            .mapTo(TeacherInfoEditDTO, [teacherInfo]);
     }
 
     /**
      * Get an edit DTO for the teacher info entity, realated to a user.
-          */
+     */
     async saveTeacherInfoAsync(principalId: PrincipalId, teacherInfoEditDTO: TeacherInfoEditDTO) {
 
         await this._ormService

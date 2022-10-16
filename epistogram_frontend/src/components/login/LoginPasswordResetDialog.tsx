@@ -1,9 +1,9 @@
 import { Input } from '@chakra-ui/react';
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useRequestPasswordChange } from '../../services/api/passwordChangeApiService';
-import { showNotification, useShowErrorDialog } from '../../services/core/notifications';
-import { getEventValueCallback } from '../../static/frontendHelpers';
+import { showNotification } from '../../services/core/notifications';
+import { getEventValueCallback, useTryCatchWrapper } from '../../static/frontendHelpers';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
@@ -20,26 +20,20 @@ export const LoginPasswordResetDialog = (params: {
     const { passwordResetDialogLogic } = params;
 
     const [email, setEmail] = useState('');
-
-    const showError = useShowErrorDialog();
+    const { errorMessage, getWrappedAction } = useTryCatchWrapper(errorCode => {
+        if (errorCode === 'corrupt_credentials')
+            return 'A megadott email cim hibas!';
+    });
 
     // http
     const { requestPasswordChangeAsync, requestPasswordChangeState } = useRequestPasswordChange();
 
-    const handleResetPw = async () => {
+    const handleResetPw = getWrappedAction(async () => {
 
-        try {
-
-            await requestPasswordChangeAsync({ email });
-
-            showNotification('Kérelmed fogadtuk, az emailt nemsokára meg fogod kapni a visszaállító linkkel!');
-
-            passwordResetDialogLogic.closeDialog();
-        } catch (e) {
-
-            showError(e);
-        }
-    };
+        await requestPasswordChangeAsync({ email });
+        showNotification('Kérelmed fogadtuk, az emailt nemsokára meg fogod kapni a visszaállító linkkel!');
+        passwordResetDialogLogic.closeDialog();
+    });
 
     return (
         <EpistoDialog
@@ -110,6 +104,17 @@ export const LoginPasswordResetDialog = (params: {
                             onChange={getEventValueCallback(setEmail)} />
                     </FlexFloat>
                 </EpistoLabel>
+
+                {/* error */}
+                {errorMessage && <EpistoFont
+                    fontSize="fontSmall"
+                    color="fontError"
+                    style={{
+                        padding: '5px',
+                    }}>
+
+                    {errorMessage}
+                </EpistoFont>}
 
                 {/* affirmation */}
                 <EpistoFont
