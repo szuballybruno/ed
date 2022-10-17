@@ -4,11 +4,12 @@ import { useNavigation } from '../../../services/core/navigatior';
 import { useShowErrorDialog } from '../../../services/core/notifications';
 import { ExamPlayerDataDTO } from '../../../shared/dtos/ExamPlayerDataDTO';
 import { Id } from '../../../shared/types/versionId';
-import { usePaging } from '../../../static/frontendHelpers';
+import { useIsMobileView, usePaging } from '../../../static/frontendHelpers';
 import { ExamGreetSlide } from '../../exam/ExamGreetSlide';
 import { ExamQuestions } from '../../exam/ExamQuestions';
 import { ExamResultsSlide } from '../../exam/ExamResultsSlide';
 import { EpistoPaging } from '../../universal/EpistoPaging';
+import { useVideoPlayerFullscreenContext } from './videoPlayer/VideoPlayerFullscreenFrame';
 import { WatchSubpageState } from './WatchSubpage';
 
 export const ExamPlayer = (props: {
@@ -32,6 +33,8 @@ export const ExamPlayer = (props: {
     const { startExamAsync, startExamState } = useStartExam();
     const showError = useShowErrorDialog();
     const { navigateToCourseRating } = useNavigation();
+    const isMobile = useIsMobileView();
+    const [isFullscreen, setIsFullscreen] = useVideoPlayerFullscreenContext();
 
     const examWorkflowSlides = usePaging({ items: [1, 2, 3, 4] });
 
@@ -41,6 +44,10 @@ export const ExamPlayer = (props: {
 
         try {
             await startExamAsync({ answerSessionId });
+            if (isMobile) {
+
+                setIsFullscreen(true);
+            }
             setWatchSubpageState('examInProgress');
             examWorkflowSlides.next();
         }
@@ -53,6 +60,10 @@ export const ExamPlayer = (props: {
     const handleExamFinished = async () => {
 
         await finishExamAsync({ answerSessionId });
+        if (isMobile) {
+
+            setIsFullscreen(false);
+        }
         setWatchSubpageState('examResults');
         examWorkflowSlides.next();
     };
@@ -60,6 +71,10 @@ export const ExamPlayer = (props: {
     const handleAbortExam = () => {
 
         examWorkflowSlides.setItem(0);
+        if (isMobile) {
+
+            setIsFullscreen(false);
+        }
         setWatchSubpageState('examStart');
     };
 

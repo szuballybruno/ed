@@ -1,16 +1,15 @@
 import { ReplayCircleFilled } from '@mui/icons-material';
+import { useEffect } from 'react';
 import { useNavigation } from '../../services/core/navigatior';
 import { PlaylistItemDTO } from '../../shared/dtos/PlaylistItemDTO';
+import { Environment } from '../../static/Environemnt';
+import { Logger } from '../../static/Logger';
 import { ChipSmall } from '../administration/courses/ChipSmall';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { useScrollIntoView } from '../system/AutoScrollContext';
 import { FlexListItem } from '../universal/FlexListItem';
 import { FlexListTitleSubtitle } from '../universal/FlexListTitleSubtitle';
 import { PlaylistItemTypeIcon } from './PlaylistItemTypeIcon';
-import { useScrollIntoView } from '../system/AutoScrollContext';
-import { useEffect } from 'react';
-import { EpistoFlex2 } from '../controls/EpistoFlex';
-import { Environment } from '../../static/Environemnt';
-import { Logger } from '../../static/Logger';
-//import {useScrollIntoView} from '../system/AutoScrollContext';
 
 export const PlaylistItem = (
     {

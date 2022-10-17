@@ -221,7 +221,7 @@ export const WatchSubpage = () => {
                             {modulePlayerData && <ModuleView module={modulePlayerData}
                                 startModule={handleContinueCourse} />}
 
-                            <Copyright />
+                            {!isMobile && <Copyright />}
                         </EpistoDiv>
 
                         {/* right sidebar */}

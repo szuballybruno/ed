@@ -59,7 +59,6 @@ DROP VIEW IF EXISTS correct_answer_rates_split_view CASCADE;
 DROP VIEW IF EXISTS answer_session_group_view CASCADE;
 DROP VIEW IF EXISTS answer_session_evaluation_view CASCADE;
 DROP VIEW IF EXISTS answer_session_view CASCADE;
-DROP VIEW IF EXISTS admin_user_list_view CASCADE;
 DROP VIEW IF EXISTS user_video_practise_progress_view CASCADE;
 DROP VIEW IF EXISTS user_video_playback_seconds_view CASCADE;
 DROP VIEW IF EXISTS user_session_daily_view CASCADE;
@@ -1211,7 +1210,7 @@ ON ad.id = av.answer_data_id;
 --CREATE VIEW: schema_version_view
 CREATE VIEW schema_version_view
 AS
-SELECT '09:33:12 2022-10-14 CEDT' last_modification_date, '0.01' version
+SELECT '11:24:40 2022-10-14 CEDT' last_modification_date, '0.01' version
 ;
 
 --CREATE VIEW: shop_item_stateful_view
@@ -2438,48 +2437,6 @@ FROM
         sq.user_id,
         sq.length_seconds
 ) sq2;
-
---CREATE VIEW: admin_user_list_view
-CREATE VIEW admin_user_list_view
-AS
-SELECT 
-	u.id user_id,
-	u.is_invitation_accepted,
-	u.is_trusted,
-	u.registration_type,
-	u.email,
-	u.first_name,
-	u.last_name,
-	u.company_id,
-	o.name company_name,
-	u.department_id,
-	dep.name department_name,
-	ulav.latest_activity_date,
-	ulav.total_spent_seconds,
-	EXTRACT(epoch FROM ulav.total_spent_seconds)::int total_spent_seconds_seconds,
-	sf.file_path avatar_file_path,
-	-- uafv.can_access_application,
-	cbv.coin_balance
-FROM public.user u 
-
-LEFT JOIN public.storage_file sf
-ON sf.id = u.avatar_file_id
-
-LEFT JOIN public.company o
-ON o.id = u.company_id
-
-LEFT JOIN public.department dep
-ON dep.id = u.department_id
-
-LEFT JOIN public.user_latest_activity_view ulav
-ON ulav.id = u.id
-
-LEFT JOIN public.coin_balance_view cbv
-ON cbv.user_id = u.id
-
-WHERE u.deletion_date IS NULL
-
-ORDER BY ulav.latest_activity_date DESC NULLS LAST;
 
 --CREATE VIEW: answer_session_view
 CREATE VIEW answer_session_view

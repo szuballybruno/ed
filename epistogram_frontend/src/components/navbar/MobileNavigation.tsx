@@ -6,6 +6,7 @@ import { useNavigation } from '../../services/core/navigatior';
 import { isCurrentRoute } from '../../static/frontendHelpers';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { useVideoPlayerFullscreenContext } from '../player/watch/videoPlayer/VideoPlayerFullscreenFrame';
 
 const MobileNavigationButton = (props: {
     title: string,
@@ -33,33 +34,36 @@ const MobileNavigationButton = (props: {
 
 export const MobileNavigation = () => {
 
-    return <EpistoFlex2
-        position='fixed'
-        bottom='0'
-        left='0'
-        zIndex={1}
-        width='100%'
-        height='80px'
-        pb='20px'
-        justify='space-evenly'
-        background='white'>
+    const [isFullscreen, setIsFullscreen] = useVideoPlayerFullscreenContext();
 
-        <MobileNavigationButton
-            title='Kezdőlap'
-            icon={<Home className='square30' />}
-            to={applicationRoutes.homeRoute} />
+    return !isFullscreen
+        ? <EpistoFlex2
+            position='fixed'
+            bottom='0'
+            left='0'
+            zIndex={1}
+            width='100%'
+            height='80px'
+            pb='20px'
+            justify='space-evenly'
+            background='white'>
 
-        <MobileNavigationButton
-            title='Tanfolyamaim'
-            icon={<Search className='square30' />}
-            to={applicationRoutes.availableCoursesRoute} />
+            <MobileNavigationButton
+                title='Kezdőlap'
+                icon={<Home className='square30' />}
+                to={applicationRoutes.homeRoute} />
 
-        <MobileNavigationButton
-            title='Profilom'
-            icon={<Person className='square30' />}
-            to={applicationRoutes.settingsRoute} />
+            <MobileNavigationButton
+                title='Tanfolyamaim'
+                icon={<Search className='square30' />}
+                to={applicationRoutes.availableCoursesRoute} />
 
-        {/*      <EpistoButton
+            <MobileNavigationButton
+                title='Profilom'
+                icon={<Person className='square30' />}
+                to={applicationRoutes.settingsRoute} />
+
+            {/*      <EpistoButton
             variant='colored'
             onClick={handleLogout}
             style={{
@@ -70,5 +74,6 @@ export const MobileNavigation = () => {
             Kijelentkezés
         </EpistoButton> */}
 
-    </EpistoFlex2>;
+        </EpistoFlex2>
+        : <></>;
 };

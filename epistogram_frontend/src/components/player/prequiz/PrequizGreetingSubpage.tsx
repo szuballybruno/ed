@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { useNavigation } from '../../../services/core/navigatior';
 import { Environment } from '../../../static/Environemnt';
@@ -5,13 +6,19 @@ import { useRouteParams } from '../../../static/locationHelpers';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { ExamLayout } from '../../exam/ExamLayout';
+import { useVideoPlayerFullscreenContext } from '../watch/videoPlayer/VideoPlayerFullscreenFrame';
 
 export const PrequizGreetingSubpage = () => {
 
     const { navigate2 } = useNavigation();
+    const [isFullscreen, setIsFullscreen] = useVideoPlayerFullscreenContext();
 
     const courseId = useRouteParams(applicationRoutes.playerRoute.prequizGreetingRoute)
         .getValue(x => x.courseId, 'int');
+
+    useEffect(() => {
+        setIsFullscreen(true);
+    }, []);
 
     const gotToPrequiz = () => {
 

@@ -17,7 +17,6 @@ export const MobileCourseTile = (props: {
     const { course, navigateToDetailsPage, handlePlayCourse } = props;
 
     return <EpistoFlex2
-        onClick={() => navigateToDetailsPage(course)}
         direction='column'>
 
         <FlexListItem

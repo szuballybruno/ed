@@ -1,9 +1,10 @@
 import { CSSProperties, ReactNode } from 'react';
 import { Environment } from '../../static/Environemnt';
+import { useIsMobileView } from '../../static/frontendHelpers';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 
-export const ExamLayoutContent = (props: {
+export const DesktopExamLayoutContent = (props: {
     children: ReactNode,
     title: string,
     style?: CSSProperties
@@ -65,4 +66,76 @@ export const ExamLayoutContent = (props: {
 
         </EpistoFlex2>
     );
+};
+
+export const MobileExamLayoutContent = (props: {
+    children: ReactNode,
+    title: string,
+    style?: CSSProperties
+}) => {
+
+    const { children, title, style } = props;
+
+    return (
+        <EpistoFlex2
+            id="examLayoutContentRoot"
+            className='roundBorders mildShadow'
+            direction={'column'}
+            alignItems={'center'}
+            justifyContent={'center'}
+            width={'100%'}
+            flex='1'
+            background='var(--transparentWhite70)'
+            style={style}>
+
+            <EpistoFlex2
+                direction='column'>
+
+                {/* header */}
+                <EpistoFlex2
+                    direction='column'
+                    id="examLayoutContentHeader"
+                    p='0 20px 20px 20px'
+                    align="center">
+
+                    <img
+                        style={{
+                            padding: '8px',
+                            width: '70px',
+                            height: '70px',
+                            objectFit: 'contain',
+                            marginRight: '30px',
+                            marginLeft: '-5px'
+                        }}
+                        alt=""
+                        src={Environment.getAssetUrl('/images/rightanswer3D.png')} />
+
+                    <EpistoFont
+                        style={{
+                            textAlign: 'center'
+                        }}
+                        fontWeight='heavy'>
+                        {title}
+                    </EpistoFont>
+                </EpistoFlex2>
+
+
+                {children}
+            </EpistoFlex2>
+
+        </EpistoFlex2>
+    );
+};
+
+export const ExamLayoutContent = (props: {
+    children: ReactNode,
+    title: string,
+    style?: CSSProperties
+}) => {
+
+    const isMobile = useIsMobileView();
+
+    return isMobile
+        ? <MobileExamLayoutContent {...props} />
+        : <DesktopExamLayoutContent {...props} />;
 };
