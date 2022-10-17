@@ -238,6 +238,7 @@ export const ExamQuestions = ({
                                 .map((answer, index) => {
 
                                     return <QuestionAnswer
+                                        mb='10px'
                                         key={index}
                                         onClick={isSelected => handleSetAnswerSelectedState(answer, isSelected)}
                                         answerText={answer.answerText}

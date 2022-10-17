@@ -1,5 +1,5 @@
 import { ArrowBack } from '@mui/icons-material';
-import { ReactNode } from 'react';
+import { CSSProperties, ReactNode, useEffect } from 'react';
 import { QuestionDTO } from '../../shared/dtos/QuestionDTO';
 import { isString, useIsMobileView } from '../../static/frontendHelpers';
 import { EpistoButton } from '../controls/EpistoButton';
@@ -12,7 +12,8 @@ type ExamLayoutButtonType = {
     title: string,
     action: () => void,
     icon?: any,
-    iconPosition?: 'start' | 'end'
+    iconPosition?: 'start' | 'end',
+    style?: CSSProperties
 };
 
 const ExamLayoutButton = (args: ExamLayoutButtonType) => {
@@ -21,15 +22,19 @@ const ExamLayoutButton = (args: ExamLayoutButtonType) => {
         title,
         action,
         icon,
-        iconPosition
+        iconPosition,
+        style
     } = args;
 
     return <EpistoButton
         variant={'colored'}
         onClick={action}
         style={{
-            height: '40px',
-            marginLeft: '10px'
+            ...{
+                height: '40px',
+                margin: '0 5px',
+            },
+            ...style
         }}>
         {iconPosition === 'start' && icon}
         {title}
@@ -54,6 +59,19 @@ const FooterButtons = ({ buttons }: { buttons: ExamLayoutButtonType[] }) => {
                 key={i}
                 {...x} />)}
     </EpistoFlex2>;
+};
+
+const MobileFooterButtons = ({ buttons }: { buttons: ExamLayoutButtonType[] }) => {
+
+    return <>
+        {buttons
+            .map((x, i) => <ExamLayoutButton
+                style={{
+                    flex: 1
+                }}
+                key={i}
+                {...x} />)}
+    </>;
 };
 
 export interface ExamLayoutProps extends EpistoFlex2Props {
@@ -84,11 +102,25 @@ export const MobileExamLayout = ({
 }: ExamLayoutProps) => {
 
     const [isFullscreen, setIsFullscreen] = useVideoPlayerFullscreenContext();
+    const isLandscape = window.orientation === 90;
+
+    useEffect(() => {
+        setIsFullscreen(true);
+    });
 
     return <EpistoFlex2
         id='ExamLayout-root'
         minH={isFullscreen ? '100vh' : 'calc(100vh - 80px)'}
-        maxH={(!isHeightMaximized || isFullscreen) ? 'unset' : 'calc(100vh - 80px)'}
+        maxH={(() => {
+
+            if (isHeightMaximized)
+                return 'calc(100vh - 80px)';
+
+            if (!isFullscreen)
+                return 'calc(100vh - 80px)';
+
+            return undefined;
+        })()}
         height='100%'
         width='100%'
         px='5px'
@@ -150,7 +182,7 @@ export const MobileExamLayout = ({
                     buttons={headerButtons} />}
 
                 {/* render footer buttons in the header section  */}
-                {(showFooterButtonsOnTop && !headerButtons && footerButtons) && <FooterButtons
+                {(showFooterButtonsOnTop && !headerButtons && footerButtons) && <MobileFooterButtons
                     buttons={footerButtons} />}
             </EpistoFlex2>
 
@@ -160,7 +192,6 @@ export const MobileExamLayout = ({
         <EpistoFlex2
             id='ExamLayout-content'
             my={'5px'}
-            minH="300px"
             height='100%'
             width="100%"
             align="center"
@@ -187,8 +218,11 @@ export const MobileExamLayout = ({
             {/* back button */}
             {(handleBack && !isFirst) && ExamLayoutButton({
                 title: 'Vissza',
+                style: {
+                    flex: 1
+                },
                 action: handleBack,
-                icon: <ArrowBack />,
+                //icon: <ArrowBack />,
                 iconPosition: 'start'
             })}
 
@@ -204,7 +238,7 @@ export const MobileExamLayout = ({
             </EpistoFlex2>*/}
 
             {/* render footer buttons */}
-            {footerButtons && <FooterButtons
+            {footerButtons && <MobileFooterButtons
                 buttons={footerButtons} />}
         </EpistoFlex2>
     </EpistoFlex2>;
@@ -353,9 +387,6 @@ export const ExamLayout = (props: ExamLayoutProps) => {
 
     return isMobile
         ? <MobileExamLayout
-            {...props}
-            handleBack={() => {
-                return;
-            }} />
+            {...props} />
         : <DesktopExamLayout {...props} />;
 };

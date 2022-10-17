@@ -1,18 +1,19 @@
-import {Grid} from '@chakra-ui/react';
-import {CourseApiService} from '../../../services/api/courseApiService';
-import {PretestApiService} from '../../../services/api/pretestApiService';
-import {useNavigation} from '../../../services/core/navigatior';
-import {useShowErrorDialog} from '../../../services/core/notifications';
-import {CourseModeType} from '../../../shared/types/sharedTypes';
-import {Id} from '../../../shared/types/versionId';
-import {Environment} from '../../../static/Environemnt';
-import {useIntParam} from '../../../static/locationHelpers';
-import {EpistoButton} from '../../controls/EpistoButton';
-import {EpistoFlex2} from '../../controls/EpistoFlex';
-import {EpistoFont} from '../../controls/EpistoFont';
-import {EpistoImage} from '../../controls/EpistoImage';
+import { Grid } from '@chakra-ui/react';
+import { CourseApiService } from '../../../services/api/courseApiService';
+import { PretestApiService } from '../../../services/api/pretestApiService';
+import { useNavigation } from '../../../services/core/navigatior';
+import { useShowErrorDialog } from '../../../services/core/notifications';
+import { CourseModeType } from '../../../shared/types/sharedTypes';
+import { Id } from '../../../shared/types/versionId';
+import { Environment } from '../../../static/Environemnt';
+import { useIsMobileView } from '../../../static/frontendHelpers';
+import { useIntParam } from '../../../static/locationHelpers';
+import { EpistoButton } from '../../controls/EpistoButton';
+import { EpistoFlex2 } from '../../controls/EpistoFlex';
+import { EpistoFont } from '../../controls/EpistoFont';
+import { EpistoImage } from '../../controls/EpistoImage';
 import StatisticsCard from '../../statisticsCard/StatisticsCard';
-import {LoadingFrame} from '../../system/LoadingFrame';
+import { LoadingFrame } from '../../system/LoadingFrame';
 
 export const PretestDateInfo = (props: {
     description: string,
@@ -69,6 +70,7 @@ export const PretestResultsSubpage = () => {
     const { pretestResults, pretestResultsError, pretestResultsState } = PretestApiService.usePretestResults(courseId);
     const correctAnswerRate = pretestResults?.correctAnswerRate ?? 0;
     const isBeginner = correctAnswerRate < 50;
+    const isMobile = useIsMobileView();
 
     const { setCourseModeAsync, setCourseModeState } = CourseApiService.useSetCourseMode();
     const showError = useShowErrorDialog();
@@ -89,13 +91,15 @@ export const PretestResultsSubpage = () => {
     return (
         <LoadingFrame
             height="100%"
+            overflowY={isMobile ? 'scroll' : undefined}
+            overflowX='hidden'
             error={pretestResultsError}
             direction="column">
 
             <EpistoFlex2
                 flex="1"
                 direction="column"
-                minHeight='calc(100vh - 100px)'
+                minHeight={isMobile ? undefined : 'calc(100vh - 100px)'}
                 p="20px"
                 align='center'
                 justify='center'
@@ -123,24 +127,33 @@ export const PretestResultsSubpage = () => {
                     gap={'10px'}
                     padding="10px"
                     marginTop='50px'
-                    gridAutoRows="150px"
+                    gridAutoRows={isMobile ? '80px' : '150px'}
                     justifyContent='center'
-                    gridTemplateColumns='repeat(4, 280px)'
+                    gridTemplateColumns={isMobile ? 'auto' : 'repeat(4, 280px)'}
                     minH='150px'>
 
                     <StatisticsCard
+                        isMobile={isMobile}
+                        minWidth='calc(100vw - 20px)'
+                        pl='10px'
                         iconPath={Environment.getAssetUrl('/images/pretest1.png')}
                         value={correctAnswerRate.toString()}
                         suffix="%"
                         title="Elért eredmény a felmérő teszten" />
 
                     <StatisticsCard
+                        isMobile={isMobile}
+                        minWidth='calc(100vw - 20px)'
+                        pl='10px'
                         iconPath={Environment.getAssetUrl('/images/pretest2.png')}
                         value={pretestResults?.recommendedVideosPerDay}
                         suffix="db"
                         title="Megtekintésre ajánlott napi videó" />
 
                     <StatisticsCard
+                        isMobile={isMobile}
+                        minWidth='calc(100vw - 20px)'
+                        pl='10px'
                         iconPath={Environment.getAssetUrl('/images/pretest3.png')}
                         value={isBeginner
                             ? 'Kezdő'
@@ -149,6 +162,9 @@ export const PretestResultsSubpage = () => {
                         title="Üzemmód ajánlott" />
 
                     <StatisticsCard
+                        isMobile={isMobile}
+                        minWidth='calc(100vw - 20px)'
+                        pl='10px'
                         title={pretestResults?.requiredCompletionDate
                             ? 'Munkáltatód által megszabott befejezési határidő'
                             : 'A kurzus várható befejezési ideje'}
@@ -182,13 +198,14 @@ export const PretestResultsSubpage = () => {
                 <EpistoFlex2
                     direction='column'
                     align='center'
+                    width={isMobile ? '100%' : undefined}
                     maxW='1120px'
                     justify='flex-start'>
 
                     <EpistoFlex2
                         px="10px"
-                        pb='40px'
-                        pt='50px'
+                        pb={isMobile ? '10px' : '40px'}
+                        pt={isMobile ? '20px' : '50px'}
                         justify="center"
                         align="center">
 
@@ -202,11 +219,16 @@ export const PretestResultsSubpage = () => {
 
                     {
                         pretestResults && <EpistoFlex2
-                            my="15px"
+                            width={isMobile ? '100%' : undefined}
+                            direction={isMobile ? 'column' : 'row'}
+                            my={isMobile ? '0' : '15px'}
                             justify="center"
                             align="center">
 
                             <EpistoButton
+                                style={{
+                                    width: isMobile ? '100%' : undefined
+                                }}
                                 onClick={() => setModeAndNavigateAsync('beginner')}
                                 variant={isBeginner ? 'colored' : 'plain'}>
 
@@ -215,6 +237,8 @@ export const PretestResultsSubpage = () => {
 
                             <EpistoButton
                                 style={{
+                                    width: isMobile ? '100%' : undefined,
+                                    marginTop: isMobile ? '10px' : undefined,
                                     marginLeft: 10
                                 }}
                                 onClick={() => setModeAndNavigateAsync('advanced')}
