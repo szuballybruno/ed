@@ -138,7 +138,6 @@ export class SignupService {
                 answerVersionId,
                 givenAnswerId,
                 deletionDate: null,
-                score: 0
             });
     }
 }

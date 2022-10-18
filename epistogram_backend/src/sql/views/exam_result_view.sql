@@ -74,6 +74,7 @@ CROSS JOIN public.constant_values_view consts
 ORDER BY 
 	u.id,
 	ev.id,
+	ga.id DESC NULLS LAST,
 	qv.id,
 	av.id,
 	ase.id

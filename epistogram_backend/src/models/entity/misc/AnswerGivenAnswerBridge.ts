@@ -16,10 +16,6 @@ export class AnswerGivenAnswerBridge {
     @XViewColumn()
     deletionDate: Date | null;
 
-    @Column()
-    @XViewColumn()
-    score: number;
-
     // given answer
     @Column()
     @XViewColumn()

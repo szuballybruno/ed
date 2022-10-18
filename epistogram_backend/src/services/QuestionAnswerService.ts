@@ -34,6 +34,23 @@ type AnswerScoreDTO = {
     answerVersionId: Id<'AnswerVersion'>
 }
 
+type QuestionData = {
+    answerCount: number,
+    correctAnswerCount: number,
+    incorrectAnswerCount: number,
+    correctInclusive: number,
+    incorrectInclusive: number,
+    correctUserAnswerCount: number,
+    incorrectUserAnswerCount: number,
+    answers: GivenAnswerView[],
+    questionVersionId: Id<'QuestionVersion'>
+};
+
+type QuestionDataWithScores = {
+    questionData: QuestionData;
+    questionScore: number;
+};
+
 export class QuestionAnswerService {
 
     constructor(
@@ -107,47 +124,61 @@ export class QuestionAnswerService {
             givenAnswerDTOs: GivenAnswerDTO[]
         }) {
 
-        const givenAnswersFlat = givenAnswerDTOs
+        const givenAnswerVersionIdsFlat = givenAnswerDTOs
             .flatMap(x => x.answerVersionIds);
 
         /**
          * Get given answer views 
          */
-        const givenAnswerViews = await this
+        const givenAnswerViews = (await this
             ._ormService
             .query(GivenAnswerView, { questionVersionIds })
             .where('questionVersionId', '=', 'questionVersionIds')
-            .getMany();
+            .getMany())
+            .orderBy(x => givenAnswerDTOs
+                .firstOrNullIndex(i => i.questionVersionId === x.questionVersionId) ?? 999);
 
         /**
-         * Get answer scores 
+         * Get question data with scores 
          */
-        const answerScores = await this
-            ._getAnswerScoresAsync(givenAnswersFlat, givenAnswerViews);
+        const questioDatasWithScores = this
+            ._getQuestionDataWithScores(givenAnswerVersionIdsFlat, givenAnswerViews);
+
+        /**
+         * Get given answers 
+         */
+        const givenAnswers = this
+            ._getGivenAnswers(givenAnswerDTOs, questioDatasWithScores, answerType === 'practise', answerSessionId);
 
         /**
          * Insert given answers 
          */
-        const insertedGivenAnswers = await this
-            ._insertGivenAnswersAsync(givenAnswerDTOs, answerType === 'practise', answerSessionId, answerScores);
+        const insertedGivenAnswers = await this._ormService
+            .createManyAsync(GivenAnswer, givenAnswers);
+
+        /**
+         * Get given answr - answer bridges
+         */
+        const answerGivenAnswerBridges = this
+            ._getAnswerGivenAnswerBridges(insertedGivenAnswers, givenAnswerDTOs);
 
         /**
          * Insert given answr - answer bridges
          */
-        const insertedAnswerGivenAnswerBridges = await this
-            ._insertAnswerGivenAnswerBridgesAsync(answerScores, insertedGivenAnswers, givenAnswerDTOs);
+        const insertedAnswerGivenAnswerBridges = await this._ormService
+            .createManyAsync(AnswerGivenAnswerBridge, answerGivenAnswerBridges);
 
         /**
          * Get all questions 
          */
-        const questionData = await this
-            ._getQuestionCorrectDataAsync(insertedGivenAnswers, givenAnswerViews);
+        const questionCorrectData = this
+            ._getQuestionCorrectData(insertedGivenAnswers, givenAnswerViews);
 
         /**
          * Handle given answer steak 
          */
         const streakId = await this
-            ._handleAnswerStreakAsync(userId, questionData);
+            ._handleAnswerStreakAsync(userId, questionCorrectData);
 
         /**
          * Handle coins
@@ -200,7 +231,7 @@ export class QuestionAnswerService {
     /**
      * Get question correct data
      */
-    private async _getQuestionCorrectDataAsync(
+    private _getQuestionCorrectData(
         givenAnswers: GivenAnswer[],
         givenAnswerViews: GivenAnswerView[]) {
 
@@ -225,28 +256,24 @@ export class QuestionAnswerService {
     /**
      * Insert given answers async 
      */
-    private async _insertGivenAnswersAsync(
+    private _getGivenAnswers(
         givenAnswers: GivenAnswerDTO[],
+        questionDatasWithScores: QuestionDataWithScores[],
         isPractiseAnswers: boolean,
-        answerSessionId: Id<'AnswerSession'>,
-        answerScores: AnswerScoreDTO[]) {
+        answerSessionId: Id<'AnswerSession'>) {
 
         const { maxQuestionScore } = this._config.questionAnswer;
 
         const newGivenAnswers = givenAnswers
             .map(givenAnswerDTO => {
 
-                const { questionVersionId, answerVersionIds, elapsedSeconds } = givenAnswerDTO;
+                const { questionVersionId, elapsedSeconds } = givenAnswerDTO;
+                const { questionScore } = questionDatasWithScores
+                    .single(x => x.questionData.questionVersionId === questionVersionId);
 
-                const score = Math.max(0, answerScores
-                    .filter(x => answerVersionIds
-                        .some(id => id === x.answerVersionId))
-                    .map(x => x.score)
-                    .reduce((p, c) => p + c));
-
-                const state: GivenAnswerStateType = maxQuestionScore === score
+                const state: GivenAnswerStateType = maxQuestionScore === questionScore
                     ? 'CORRECT'
-                    : score > 0
+                    : questionScore > 0
                         ? 'MIXED'
                         : 'INCORRECT';
 
@@ -258,22 +285,18 @@ export class QuestionAnswerService {
                     questionVersionId,
                     elapsedSeconds,
                     givenAnswerStreakId: null,
-                    score,
+                    score: questionScore,
                     state
                 });
             });
 
-        const insertedGivenAnswers = await this._ormService
-            .createManyAsync(GivenAnswer, newGivenAnswers);
-
-        return insertedGivenAnswers;
+        return newGivenAnswers;
     }
 
     /**
      * Insert given answer bridges 
      */
-    private async _insertAnswerGivenAnswerBridgesAsync(
-        answerScores: AnswerScoreDTO[],
+    private _getAnswerGivenAnswerBridges(
         givenAnswers: GivenAnswer[],
         givenAnswerDTOs: GivenAnswerDTO[]) {
 
@@ -287,17 +310,11 @@ export class QuestionAnswerService {
                     .map((answerVersionId): InsertEntity<AnswerGivenAnswerBridge> => ({
                         givenAnswerId: givenAnswer.id,
                         answerVersionId,
-                        deletionDate: null,
-                        score: answerScores
-                            .single(x => x.answerVersionId === answerVersionId)
-                            .score
+                        deletionDate: null
                     }));
             });
 
-        const insertedAnswerGivenAnswerBridges = await this._ormService
-            .createManyAsync(AnswerGivenAnswerBridge, givenAnswerAnswerBridges);
-
-        return insertedAnswerGivenAnswerBridges;
+        return givenAnswerAnswerBridges;
     }
 
     /**
@@ -391,49 +408,143 @@ export class QuestionAnswerService {
     /**
      * getCorrectAnswerData 
      */
-    private async _getAnswerScoresAsync(
-        answerVersionIds: Id<'AnswerVersion'>[],
-        givenAnswerViews: GivenAnswerView[]): Promise<AnswerScoreDTO[]> {
+    private _getQuestionDataWithScores(
+        givenAnswerVersionIds: Id<'AnswerVersion'>[],
+        givenAnswerViews: GivenAnswerView[]): QuestionDataWithScores[] {
 
-        const { maxQuestionScore } = this._config.questionAnswer;
+        const { maxQuestionScore } = this
+            ._config
+            .questionAnswer;
 
-        /**
-         * Get score multiplier
-         */
-        const scoreMultipliers = givenAnswerViews
+        const { questionDatas } = this
+            ._getQuestionDatas({
+                givenAnswerVersionIds,
+                givenAnswerViews
+            });
+
+        const questionDatasWithAnswerScores = questionDatas
+            .map((questionData): QuestionDataWithScores => {
+
+                const {
+                    answerCount,
+                    correctAnswerCount,
+                    correctInclusive,
+                    correctUserAnswerCount,
+                    incorrectAnswerCount,
+                    incorrectInclusive,
+                    incorrectUserAnswerCount,
+                } = questionData;
+
+                const { questionScore } = this
+                    ._getQuestionScore({
+                        answerCount,
+                        correctAnswerCount,
+                        incorrectAnswerCount,
+                        correctInclusive,
+                        incorrectInclusive,
+                        correctUserAnswerCount,
+                        incorrectUserAnswerCount
+                    });
+
+                return {
+                    questionData,
+                    questionScore
+                };
+            });
+
+        return questionDatasWithAnswerScores;
+    }
+
+    /**
+     * Get question datas 
+     */
+    private _getQuestionDatas({
+        givenAnswerViews,
+        givenAnswerVersionIds
+    }: {
+        givenAnswerViews: GivenAnswerView[],
+        givenAnswerVersionIds: Id<'AnswerVersion'>[]
+    }): { questionDatas: QuestionData[] } {
+
+        const questionDatas = givenAnswerViews
             .groupBy(view => view.questionVersionId)
             .map(group => {
 
-                const correctAnswerCount = group.items.count(x => x.isCorrect);
-                if (correctAnswerCount === 0)
-                    throw new Error('Trying to calculate the score of a question which has no correct answers. This would cause a 0 division error.');
+                const answerCount = group
+                    .items
+                    .length;
 
-                return ({
-                    scoreMultiplier: maxQuestionScore / correctAnswerCount,
+                const correctAnswerCount = group
+                    .items
+                    .count(x => x.isCorrect);
+
+                const incorrectAnswerCount = answerCount - correctAnswerCount;
+
+                const correctInclusive = group
+                    .items
+                    .filter(x => x.isCorrect === givenAnswerVersionIds.includes(x.answerVersionId))
+                    .length;
+
+                const incorrectInclusive = answerCount - correctInclusive;
+
+                const correctUserAnswerCount = group
+                    .items
+                    .filter(x => x.isCorrect && givenAnswerVersionIds.includes(x.answerVersionId))
+                    .length;
+
+                const incorrectUserAnswerCount = group
+                    .items
+                    .filter(x => !x.isCorrect && givenAnswerVersionIds.includes(x.answerVersionId))
+                    .length;
+
+                const qd: QuestionData = {
+                    answerCount,
+                    correctAnswerCount,
+                    incorrectAnswerCount,
+                    correctInclusive,
+                    incorrectInclusive,
+                    correctUserAnswerCount,
+                    incorrectUserAnswerCount,
+                    answers: group.items,
                     questionVersionId: group.key
-                });
+                };
+
+                return qd;
             });
 
-        const answerScoreDTOs = answerVersionIds
-            .map(answerVersionId => {
+        return { questionDatas };
+    }
 
-                const answerView = givenAnswerViews
-                    .single(x => x.answerVersionId === answerVersionId);
+    /**
+     * Get question score
+     */
+    private _getQuestionScore({
+        answerCount,
+        correctAnswerCount,
+        correctUserAnswerCount,
+        incorrectUserAnswerCount,
+        correctInclusive,
+        incorrectInclusive
+    }: {
+        answerCount: number,
+        correctAnswerCount: number,
+        incorrectAnswerCount: number,
+        correctUserAnswerCount: number,
+        incorrectUserAnswerCount: number,
+        correctInclusive: number,
+        incorrectInclusive: number
+    }) {
 
-                const { scoreMultiplier } = scoreMultipliers
-                    .single(x => x.questionVersionId === answerView.questionVersionId);
+        const noUserAnswer = Math.min(correctUserAnswerCount, 1);
+        const score = correctInclusive * noUserAnswer;
+        const whereToPunish = Math.min(1, Math.abs((correctUserAnswerCount + incorrectUserAnswerCount) - correctAnswerCount));
+        const punishment = Math.min(score, incorrectInclusive * whereToPunish);
+        const punishedScore = score - punishment;
 
-                const score = answerView.isCorrect
-                    ? scoreMultiplier
-                    : -1 * scoreMultiplier;
-
-                return instantiate<AnswerScoreDTO>({
-                    answerVersionId,
-                    score
-                });
-            });
-
-        return answerScoreDTOs;
+        return {
+            questionScore: punishedScore,
+            punishment
+        };
     }
 
     /**
