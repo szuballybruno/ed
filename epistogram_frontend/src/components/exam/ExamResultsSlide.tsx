@@ -6,7 +6,7 @@ import { useExamResults } from '../../services/api/examApiService';
 import { useNavigation } from '../../services/core/navigatior';
 import { ExamPlayerDataDTO } from '../../shared/dtos/ExamPlayerDataDTO';
 import { Id } from '../../shared/types/versionId';
-import { ArrayBuilder } from '../../static/frontendHelpers';
+import { ArrayBuilder, useIsMobileView } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { ChipSmall } from '../administration/courses/ChipSmall';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
@@ -28,6 +28,7 @@ export const ExamResultsSlide = (props: {
     const { examResults } = useExamResults(answerSessionId);
     const questionsAnswers = examResults?.questions ?? [];
     const { navigate2 } = useNavigation();
+    const isMobile = useIsMobileView();
 
     const courseId = Id.create<'Course'>(1);
 
@@ -75,7 +76,7 @@ export const ExamResultsSlide = (props: {
             height='100%'
             flex='1'
             background='var(--transparentWhite70)'
-            px='20px'
+            px={isMobile ? '10px' : '20px'}
             justify='flex-start'>
 
             {/* title */}
@@ -117,7 +118,7 @@ export const ExamResultsSlide = (props: {
                     id="answersRoot"
                     direction={'column'}
                     flex={1}
-                    m='10px 5px 5px 5px'
+                    m={isMobile ? '10px 0 5px 0' : '10px 5px 5px 5px'}
                     pb='20px'
                     h='100%'
                     boxSizing='border-box'
@@ -149,14 +150,17 @@ export const ExamResultsSlide = (props: {
                                     aria-controls="panel1a-content"
                                     id="panel1a-header">
 
-                                    <EpistoFlex2 flex='1'>
+                                    <EpistoFlex2 flex={isMobile ? '2' : '1'}>
                                         <EpistoFont margin={{ right: 'px5' }}>
                                             {question.text}
                                         </EpistoFont>
                                     </EpistoFlex2>
 
                                     <EpistoFlex2
-                                        flexBasis='220px'>
+                                        align={isMobile ? 'center' : undefined}
+                                        justify={isMobile ? 'center' : undefined}
+                                        direction={isMobile ? 'column' : 'row'}
+                                        flexBasis={!isMobile ? '220px' : undefined}>
 
                                         <EpistoFont>
 
@@ -165,7 +169,7 @@ export const ExamResultsSlide = (props: {
 
                                         <ChipSmall
                                             style={{
-                                                margin: '0 10px 0 30px'
+                                                margin: isMobile ? '10px 10px 0 30px' : '0 10px 0 30px'
                                             }}
                                             text={displayState.text}
                                             color={displayState.color} />

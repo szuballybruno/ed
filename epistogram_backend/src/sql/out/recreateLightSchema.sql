@@ -49,6 +49,8 @@ DROP VIEW IF EXISTS course_admin_short_view CASCADE;
 DROP VIEW IF EXISTS user_exam_stats_view CASCADE;
 DROP VIEW IF EXISTS user_performance_view CASCADE;
 DROP VIEW IF EXISTS user_performance_answer_group_view CASCADE;
+DROP VIEW IF EXISTS user_module_performance_view CASCADE;
+DROP VIEW IF EXISTS user_module_performance_answer_group_view CASCADE;
 DROP VIEW IF EXISTS user_daily_progress_view CASCADE;
 DROP VIEW IF EXISTS user_answer_view CASCADE;
 DROP VIEW IF EXISTS most_productive_time_range_view CASCADE;
@@ -1208,7 +1210,11 @@ ON ad.id = av.answer_data_id;
 --CREATE VIEW: schema_version_view
 CREATE VIEW schema_version_view
 AS
+<<<<<<< HEAD
 SELECT '09:33:12 2022-10-14 CEDT' last_modification_date, '0.01' version
+=======
+SELECT '15:25:19 2022-10-17 CEDT' last_modification_date, '0.01' version
+>>>>>>> f58a490aee536ce91672ad140c3ea7ce92a361fc
 ;
 
 --CREATE VIEW: shop_item_stateful_view
@@ -2647,6 +2653,7 @@ AS
 SELECT
     u.id user_id,
     co.id course_id,
+	mv.module_id module_id,
     asgv.start_date,
     CASE 
         WHEN asgv.answer_session_type = 'exam'
@@ -2663,6 +2670,12 @@ SELECT
 FROM public.user u
 
 CROSS JOIN public.course co
+
+LEFT JOIN public.course_version cv
+ON cv.course_id = co.id
+
+LEFT JOIN public.module_version mv
+ON mv.course_version_id = cv.id
 
 LEFT JOIN public.answer_session_group_view asgv
 ON asgv.user_id = u.id
@@ -3059,15 +3072,49 @@ ORDER BY
 	co.id
 ;
 
+--CREATE VIEW: user_module_performance_answer_group_view
+CREATE VIEW user_module_performance_answer_group_view
+AS
+SELECT
+	carsv.user_id,
+	carsv.course_id,
+	carsv.module_id,
+	AVG(carsv.exam_correct_answer_rate)::double precision exam_correct_answer_rate,
+	AVG(carsv.practise_correct_answer_rate)::double precision practise_correct_answer_rate,
+	AVG(carsv.video_correct_answer_rate)::double precision video_correct_answer_rate
+FROM public.correct_answer_rates_split_view carsv
+
+GROUP BY carsv.user_id, carsv.course_id, carsv.module_id;
+
+--CREATE VIEW: user_module_performance_view
+CREATE VIEW user_module_performance_view
+AS
+SELECT
+    u.id user_id,
+    upagv.course_id,
+	upagv.module_id,
+	
+    -- one module avg per row
+    (
+        COALESCE(upagv.exam_correct_answer_rate * 2.5, 0) +
+        COALESCE(upagv.video_correct_answer_rate * 1.5, 0) +
+        COALESCE(upagv.practise_correct_answer_rate, 0)
+    )::double precision / 5 performance_percentage
+FROM public.user u
+
+LEFT JOIN public.user_module_performance_answer_group_view upagv
+ON upagv.user_id = u.id
+;
+
 --CREATE VIEW: user_performance_answer_group_view
 CREATE VIEW user_performance_answer_group_view
 AS
 SELECT
 	carsv.user_id,
 	carsv.course_id,
-	AVG(carsv.exam_correct_answer_rate) exam_correct_answer_rate,
-	AVG(carsv.practise_correct_answer_rate) practise_correct_answer_rate,
-	AVG(carsv.video_correct_answer_rate) video_correct_answer_rate
+	AVG(carsv.exam_correct_answer_rate)::double precision exam_correct_answer_rate,
+	AVG(carsv.practise_correct_answer_rate)::double precision practise_correct_answer_rate,
+	AVG(carsv.video_correct_answer_rate)::double precision video_correct_answer_rate
 FROM public.correct_answer_rates_split_view carsv
 
 GROUP BY carsv.user_id, carsv.course_id;
@@ -3084,7 +3131,7 @@ SELECT
         COALESCE(upagv.exam_correct_answer_rate * 2.5, 0) +
         COALESCE(upagv.video_correct_answer_rate * 1.5, 0) +
         COALESCE(upagv.practise_correct_answer_rate, 0)
-    )::int / 5 performance_percentage
+    )::double precision / 5 performance_percentage
 FROM public.user u
 
 LEFT JOIN public.user_performance_answer_group_view upagv
@@ -5042,7 +5089,7 @@ SELECT
     -- performance last month
     (
         SELECT
-            ROUND(AVG(upv.performance_percentage), 0)
+            ROUND(AVG(upv.performance_percentage::int), 0)
         FROM public.activity_session ase
     
         LEFT JOIN public.user_session_activity AS usa

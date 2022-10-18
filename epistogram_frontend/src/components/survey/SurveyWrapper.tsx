@@ -1,6 +1,6 @@
 import { useMediaQuery } from '@chakra-ui/react';
 import { ArrowBack } from '@mui/icons-material';
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { Environment } from '../../static/Environemnt';
 import { hasValue, isString, useIsMobileView } from '../../static/frontendHelpers';
 import { EpistoButton } from '../controls/EpistoButton';
@@ -110,6 +110,7 @@ export const SurveyWrapper = (props: {
 
             {/* content */}
             <EpistoFlex2
+                direction={isMobile ? 'column' : 'row'}
                 id="content"
                 wrap="nowrap"
                 justify="center"
@@ -122,18 +123,20 @@ export const SurveyWrapper = (props: {
                     flex="5"
                     align="center"
                     flexShrink={1}
-                    minWidth="300px"
-                    minH='400px'
-                    height="400"
+                    minWidth={isMobile ? undefined : '300px'}
+                    minH={isMobile ? undefined : '400px'}
+                    height={isMobile ? '250px' : '400px'}
+                    margin={isMobile ? '0 0 20px 0' : undefined}
                     justifyContent={!isMobile ? 'flex-end' : 'center'}>
 
-                    <EpistoImage maxW='350px'
-                        minWidth="300px"
+                    <EpistoImage
+                        maxW='350px'
+                        minWidth={isMobile ? undefined : '300px'}
                         maxH="300px"
                         height="100%"
                         style={{
                             objectFit: 'contain',
-                            margin: '0 30px'
+                            margin: isMobile ? '0' : '0 30px'
                         }}
                         src={currentImage!} />
                 </EpistoFlex2>}
@@ -142,17 +145,18 @@ export const SurveyWrapper = (props: {
                 <EpistoFlex2
                     id="content"
                     flex="5"
-                    minWidth='400px'//window.innerWidth > 500 ? 300 : "calc(100% - 200px)"}
+                    minWidth={isMobile ? undefined : '400px'}//window.innerWidth > 500 ? 300 : "calc(100% - 200px)"}
                     direction="column">
 
                     {/* title */}
                     {hasTitle && <EpistoHeader
+                        textHeight={isMobile ? '100%' : undefined}
                         variant="strongSub"
                         type="strong"
-                        m="10px 10px 30px 0px"
+                        m={isMobile ? '10px 10px 10px 0' : '10px 10px 30px 0px'}
                         alignSelf={hasImage ? 'flex-start' : 'center'}
                         text={title!}
-                        maxW='400px'>
+                        maxW={isMobile ? '100%' : '400px'}>
                     </EpistoHeader>}
 
                     {/* description */}
@@ -169,7 +173,9 @@ export const SurveyWrapper = (props: {
                     </EpistoDiv>}
 
                     {/* content */}
-                    <EpistoFlex2 justify={hasImage ? 'flex-start' : 'center'}>
+                    <EpistoFlex2
+                        direction='column'
+                        justify={hasImage ? 'flex-start' : 'center'}>
                         {children}
                     </EpistoFlex2>
 
@@ -185,10 +191,10 @@ export const SurveyWrapper = (props: {
             width="100%"
             borderRadius="7px"
             bgColor="white"
-            justifyContent={'space-between'}
+            justifyContent={isMobile ? 'center' : 'space-between'}
             boxShadow={'5px 5px 15px 3px rgba(0,0,0,0.07)'}
             px="10px"
-            my="20"
+            my={isMobile ? '0' : '20'}
         >
 
             {/* back button */}
@@ -211,7 +217,8 @@ export const SurveyWrapper = (props: {
             <EpistoDiv
                 id="footerBox"
                 flex="1"
-                mx="20">
+                pl={isMobile ? '10px' : '0'}
+                mx={isMobile ? '5px' : '20'}>
                 {props.bottomComponent}
             </EpistoDiv>
 
@@ -220,11 +227,7 @@ export const SurveyWrapper = (props: {
                 variant={'outlined'}
                 onClick={() => onNext!()}
                 style={{
-                    alignSelf: !isMobile
-                        ? hasImage
-                            ? 'center'
-                            : 'center'
-                        : 'flex-end',
+                    alignSelf: 'center',
                     color: 'white',
                     backgroundColor: '#97C9CC',
                     height: '40px',

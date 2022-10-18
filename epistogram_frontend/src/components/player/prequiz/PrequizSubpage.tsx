@@ -1,19 +1,19 @@
-import { Grid} from '@chakra-ui/react';
-import {Slider} from '@mui/material';
-import {useEffect, useState} from 'react';
-import {PrequizApiService} from '../../../services/api/prequizApiService';
-import {useNavigation} from '../../../services/core/navigatior';
-import {useShowErrorDialog} from '../../../services/core/notifications';
-import {Id} from '../../../shared/types/versionId';
-import {Environment} from '../../../static/Environemnt';
-import {ArrayBuilder, usePaging} from '../../../static/frontendHelpers';
-import {useIntParam} from '../../../static/locationHelpers';
-import {translatableTexts} from '../../../static/translatableTexts';
-import {EpistoFont} from '../../controls/EpistoFont';
-import {ExamLayout} from '../../exam/ExamLayout';
-import {ExamLayoutContent} from '../../exam/ExamLayoutContent';
-import {QuestionAnswer} from '../../exam/QuestionAnswer';
-import {CourseApiService} from '../../../services/api/courseApiService';
+import { Grid } from '@chakra-ui/react';
+import { Slider } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { PrequizApiService } from '../../../services/api/prequizApiService';
+import { useNavigation } from '../../../services/core/navigatior';
+import { useShowErrorDialog } from '../../../services/core/notifications';
+import { Id } from '../../../shared/types/versionId';
+import { Environment } from '../../../static/Environemnt';
+import { ArrayBuilder, useIsMobileView, usePaging } from '../../../static/frontendHelpers';
+import { useIntParam } from '../../../static/locationHelpers';
+import { translatableTexts } from '../../../static/translatableTexts';
+import { EpistoFont } from '../../controls/EpistoFont';
+import { ExamLayout } from '../../exam/ExamLayout';
+import { ExamLayoutContent } from '../../exam/ExamLayoutContent';
+import { QuestionAnswer } from '../../exam/QuestionAnswer';
+import { CourseApiService } from '../../../services/api/courseApiService';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoDiv } from '../../controls/EpistoDiv';
@@ -54,6 +54,8 @@ export const PrequizSubpage = () => {
     const [selectedAnswerId, setSelectedAnswerId] = useState<Id<'Answer'> | null>();
     const canContinue = question?.isNumeric || !!selectedAnswerId;
     const progressPercentage = (currentQuestionIndex) / totalQuestionsCount * 100;
+    const isMobile = useIsMobileView();
+    const isLandscape = window.orientation === 90;
 
     const [numericValue, setNumericValue] = useState(0);
 
@@ -124,6 +126,9 @@ export const PrequizSubpage = () => {
                 : undefined}>
 
             <ExamLayoutContent
+                style={{
+                    padding: isMobile ? '0 10px' : undefined
+                }}
                 title={paging.currentIndex === 0
                     ? question?.text + ' "' + courseBriefData?.title + '" témakörben?'
                     : question?.text!}>
@@ -189,26 +194,44 @@ export const PrequizSubpage = () => {
 
 
                     </EpistoFlex2>
-                    : <Grid
-                        templateColumns="repeat(2, 1fr)"
-                        gridAutoRows="minmax(0,1fr)"
-                        dir="column"
-                        gridGap="10px"
-                        flex="1">
+                    : (isMobile && !isLandscape)
+                        ? <EpistoFlex2
+                            direction='column'>
 
-                        {question && question
-                            .answers
-                            .map((answer, index) => {
+                            {question && question
+                                .answers
+                                .map((answer, index) => {
 
-                                const isAnswerSelected = answer.id === selectedAnswerId;
+                                    const isAnswerSelected = answer.id === selectedAnswerId;
 
-                                return <QuestionAnswer
-                                    key={index}
-                                    onClick={() => setSelectedAnswerId(answer.id)}
-                                    answerText={answer.text}
-                                    isSelected={isAnswerSelected} />;
-                            })}
-                    </Grid>}
+                                    return <QuestionAnswer
+                                        mb='10px'
+                                        key={index}
+                                        onClick={() => setSelectedAnswerId(answer.id)}
+                                        answerText={answer.text}
+                                        isSelected={isAnswerSelected} />;
+                                })}
+                        </EpistoFlex2>
+                        : <Grid
+                            templateColumns="repeat(2, 1fr)"
+                            gridAutoRows="minmax(0,1fr)"
+                            dir="column"
+                            gridGap="10px"
+                            flex="1">
+
+                            {question && question
+                                .answers
+                                .map((answer, index) => {
+
+                                    const isAnswerSelected = answer.id === selectedAnswerId;
+
+                                    return <QuestionAnswer
+                                        key={index}
+                                        onClick={() => setSelectedAnswerId(answer.id)}
+                                        answerText={answer.text}
+                                        isSelected={isAnswerSelected} />;
+                                })}
+                        </Grid>}
             </ExamLayoutContent>
         </ExamLayout >
     );

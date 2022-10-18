@@ -7,7 +7,7 @@ import { ExamPlayerDataDTO } from '../../shared/dtos/ExamPlayerDataDTO';
 import { GivenAnswerDTO } from '../../shared/dtos/questionAnswer/GivenAnswerDTO';
 import { Id } from '../../shared/types/versionId';
 import { Environment } from '../../static/Environemnt';
-import { epochDates, usePaging } from '../../static/frontendHelpers';
+import { epochDates, useIsMobileView, usePaging } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
@@ -58,6 +58,7 @@ export const ExamQuestions = ({
     const isLastQuestion = questionPaging.isLast;
 
     const currentGivenAnswer = (givenAnswers[currentQuestion.questionVersionId + ''] ?? null) as GivenAnswerDTO | null;
+    const isMobile = useIsMobileView();
 
     /**
      * Open abort dialog 
@@ -227,23 +228,40 @@ export const ExamQuestions = ({
                     pt='10px'
                     width="100%">
 
-                    <Grid
-                        templateColumns="repeat(2, 1fr)"
-                        gridAutoRows="minmax(0,1fr)"
-                        gridGap="10px">
+                    {isMobile
+                        ? <EpistoFlex2
+                            px='5px'
+                            direction='column'>
 
-                        {currentQuestion
-                            .answers
-                            .map((answer, index) => {
+                            {currentQuestion
+                                .answers
+                                .map((answer, index) => {
 
-                                return <QuestionAnswer
-                                    key={index}
-                                    minWidth={400}
-                                    onClick={isSelected => handleSetAnswerSelectedState(answer, isSelected)}
-                                    answerText={answer.answerText}
-                                    isSelected={getAnswerIsSelectedState(answer)} />;
-                            })}
-                    </Grid>
+                                    return <QuestionAnswer
+                                        mb='10px'
+                                        key={index}
+                                        onClick={isSelected => handleSetAnswerSelectedState(answer, isSelected)}
+                                        answerText={answer.answerText}
+                                        isSelected={getAnswerIsSelectedState(answer)} />;
+                                })}
+                        </EpistoFlex2>
+                        : <Grid
+                            templateColumns="repeat(2, 1fr)"
+                            gridAutoRows="minmax(0,1fr)"
+                            gridGap="10px">
+
+                            {currentQuestion
+                                .answers
+                                .map((answer, index) => {
+
+                                    return <QuestionAnswer
+                                        key={index}
+                                        minWidth={400}
+                                        onClick={isSelected => handleSetAnswerSelectedState(answer, isSelected)}
+                                        answerText={answer.answerText}
+                                        isSelected={getAnswerIsSelectedState(answer)} />;
+                                })}
+                        </Grid>}
                 </EpistoFlex2>
             </ExamLayoutContent>
         </ExamLayout>

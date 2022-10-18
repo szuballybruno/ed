@@ -6,7 +6,7 @@ import { gradientBackgroundGenerator } from '../../services/core/gradientBackgro
 import { useNavigation } from '../../services/core/navigatior';
 import { useShowErrorDialog } from '../../services/core/notifications';
 import { ErrorWithCode } from '../../shared/types/ErrorWithCode';
-import { useIsScreenWiderThan } from '../../static/frontendHelpers';
+import { useIsMobileView } from '../../static/frontendHelpers';
 import { useQueryVal } from '../../static/locationHelpers';
 import { Logger } from '../../static/Logger';
 import { EpistoButton } from '../controls/EpistoButton';
@@ -42,7 +42,7 @@ const LoginScreen = () => {
 
     const passwordResetDialogLogic = useEpistoDialogLogic('pwreset');
 
-    const isDesktopView = useIsScreenWiderThan(1200);
+    const isMobile = useIsMobileView();
 
     // http 
     const { loginUserAsync, loginUserState } = useLogInUser();
@@ -163,7 +163,7 @@ const LoginScreen = () => {
                 overflow="hidden"
                 position={'relative'}>
 
-                <EpistoFlex2
+                {!isMobile && <EpistoFlex2
                     flex='1'
                     direction='column'
                     align='center'
@@ -182,7 +182,7 @@ const LoginScreen = () => {
                             zIndex: -1
                         }}
                         alt="" />
-                </EpistoFlex2>
+                </EpistoFlex2>}
 
                 <EpistoFlex2
                     flex='1'
@@ -196,8 +196,10 @@ const LoginScreen = () => {
                         direction="column"
                         align='center'
                         justify="center"
-                        p='80px 100px'
-                        maxH='calc(100% - 100px)'
+                        width={isMobile ? '100%' : undefined}
+                        height={isMobile ? '100%' : undefined}
+                        p={isMobile ? '20px' : '80px 100px'}
+                        maxH={isMobile ? undefined : 'calc(100% - 100px)'}
                         background="var(--transparentWhite70)"
                         zIndex="7">
 

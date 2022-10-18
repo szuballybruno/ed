@@ -132,6 +132,8 @@ import { UserExamStatsView } from '../../models/views/UserExamStatsView';
 import { UserInactiveCourseView } from '../../models/views/UserInactiveCourseView';
 import { UserLearningOverviewStatsView } from '../../models/views/UserLearningOverviewStatsView';
 import { UserLearningPageStatsView } from '../../models/views/UserLearningPageStatsView';
+import { UserModulePerformanceAnswerGroupView } from '../../models/views/UserModulePerformanceAnswerGroupView';
+import { UserModulePerformanceView } from '../../models/views/UserModulePerformanceView';
 import { UserPerformanceAnswerGroupView } from '../../models/views/UserPerformanceAnswerGroupView';
 import { UserPerformanceComparisonStatsView } from '../../models/views/UserPerformanceComparisonStatsView';
 import { UserPerformanceView } from '../../models/views/UserPerformanceView';
@@ -204,10 +206,12 @@ export const createDBSchema = (): XDBMSchemaService => {
             AnswerSessionGroupView,
             CorrectAnswerRatesSplitView,
             UserPerformanceAnswerGroupView,
+            UserModulePerformanceAnswerGroupView,
             UserReactionTimeView,
             MostProductiveTimeRangeView,
             UserSessionDailyView,
             UserPerformanceView,
+            UserModulePerformanceView,
             SignupCompletedView,
             DailyTipView,
             CourseAdminDetailedView,

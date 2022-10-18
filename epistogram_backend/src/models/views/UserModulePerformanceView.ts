@@ -1,30 +1,27 @@
 import { ViewColumn, ViewEntity } from '../MyORM';
-import { Id } from '../../shared/types/versionId';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '../../shared/types/versionId';
 
 @ViewEntity({
     synchronize: false,
     expression: ''
 })
-export class UserPerformanceAnswerGroupView {
 
-    @XViewColumn()
+export class UserModulePerformanceView {
+
     @ViewColumn()
+    @XViewColumn()
     userId: Id<'User'>;
 
-    @XViewColumn()
     @ViewColumn()
+    @XViewColumn()
     courseId: Id<'Course'>;
 
-    @XViewColumn()
     @ViewColumn()
-    examCorrectAnswerRate: number;
+    @XViewColumn()
+    moduleId: Id<'Module'>;
 
-    @XViewColumn()
     @ViewColumn()
-    practiseCorrectAnswerRate: number;
-
     @XViewColumn()
-    @ViewColumn()
-    videoCorrectAnswerRate: number;
+    performancePercentage: number;
 }

@@ -16,11 +16,11 @@ export const NoQuestionsAvailable = () => {
     return <EpistoFlex2
         flex='1'
         align='center'
-        minWidth='400px'>
+        minWidth={isMobile ? undefined : '400px'}>
 
         <EpistoFlex2
             flex={1}
-            align={isMobile ? 'center' : undefined}
+            align={isMobile ? 'flex-start' : undefined}
             justify={isMobile ? 'space-between' : undefined}
             padding='10px 20px 10px 10px'
             direction={'column'}>
@@ -58,7 +58,7 @@ export const NoQuestionsAvailable = () => {
                 <EpistoButton
                     variant='light'
                     style={{
-                        margin: !isMobile ? '20px 0 0 0' : undefined,
+                        margin: '20px 0 0 0',
                         maxWidth: '300px'
                     }}>
 
