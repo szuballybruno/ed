@@ -3,7 +3,7 @@ import { SurveyApiService } from '../../services/api/SurveyApiService';
 import { useNavigation } from '../../services/core/navigatior';
 import { startUserGuide } from '../../services/core/userGuidingService';
 import { Environment } from '../../static/Environemnt';
-import { usePaging } from '../../static/frontendHelpers';
+import { useIsMobileView, usePaging } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { ContentPane } from '../ContentPane';
 import { EpistoFont } from '../controls/EpistoFont';
@@ -20,6 +20,7 @@ export const SurveyPage = () => {
     const { refetchAuthHandshake } = useRefetchUserAsync();
     const { completeSurveyAsync } = SurveyApiService.useCompleteSurvey();
     const isInvitedUser = true;
+    const isMobile = useIsMobileView();
 
     const { navigate2 } = useNavigation();
 
@@ -97,11 +98,11 @@ export const SurveyPage = () => {
                 <EpistoPaging
                     className="roundBorders largeSoftShadow"
                     alwaysRender={true}
-                    width="calc(100% - 150px)"
+                    width={isMobile ? '100vw' : 'calc(100% - 150px)'}
                     maxW="1400px"
-                    height="calc(100vh - 100px)"
+                    height={isMobile ? '100vh' : 'calc(100vh - 100px)'}
                     background="var(--transparentWhite70)"
-                    maxH="800px"
+                    maxH={isMobile ? undefined : '800px'}
                     p="10px"
                     zIndex="1"
                     flex="1"

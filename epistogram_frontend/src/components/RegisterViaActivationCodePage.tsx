@@ -4,6 +4,7 @@ import { useNavigation } from '../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../services/core/notifications';
 import { ErrorCodeType } from '../shared/types/sharedTypes';
 import { Environment } from '../static/Environemnt';
+import { useIsMobileView } from '../static/frontendHelpers';
 import { translatableTexts } from '../static/translatableTexts';
 import { EpistoButton } from './controls/EpistoButton';
 import { EpistoEntryNew, useEpistoEntryState } from './controls/EpistoEntryNew';
@@ -22,6 +23,7 @@ export const RegisterViaActivationCodePage = () => {
 
     const showError = useShowErrorDialog();
     const { navigate2 } = useNavigation();
+    const isMobile = useIsMobileView();
 
     // state
     const [registrationSuccessful, setRegistrationSuccessful] = useState(false);
@@ -82,7 +84,8 @@ export const RegisterViaActivationCodePage = () => {
         <EpistoFlex2
             justify={'center'}
             background="gradientBlueBackground"
-            py="60px"
+            py={isMobile ? undefined : '60px'}
+            pt={isMobile ? '10px' : undefined}
             overflowY={'scroll'}
             height="100%"
             width="100%">
@@ -95,8 +98,8 @@ export const RegisterViaActivationCodePage = () => {
                 width="100%"
                 maxW="1700px"
                 height="fit-content"
-                mx="100px"
-                p="50px 150px"
+                mx={isMobile ? undefined : '100px'}
+                p={isMobile ? '10px' : '50px 150px'}
                 overflow="hidden"
                 position={'relative'}>
 
@@ -106,6 +109,7 @@ export const RegisterViaActivationCodePage = () => {
                     justify="center"
                     //bgColor="green"
                     zIndex="7"
+                    width={isMobile ? '100%' : undefined}
                     minWidth="300px"
                     flex="5">
 
@@ -113,7 +117,7 @@ export const RegisterViaActivationCodePage = () => {
                     <img
                         src={Environment.getAssetUrl('/images/logo.svg')}
                         style={{
-                            width: '250px',
+                            width: isMobile ? '120px' : '250px',
                             maxHeight: '100px',
                             objectFit: 'contain',
                             marginLeft: '15px',
@@ -126,9 +130,9 @@ export const RegisterViaActivationCodePage = () => {
                         src={Environment.getAssetUrl('/images/redeem3D.png')}
                         style={{
                             width: '100%',
-                            maxHeight: '350px',
+                            maxHeight: isMobile ? '200px' : '350px',
                             objectFit: 'contain',
-                            marginLeft: '15px',
+                            marginLeft: isMobile ? undefined : '15px',
                             cursor: 'pointer',
                         }}
                         alt="" />
@@ -138,7 +142,7 @@ export const RegisterViaActivationCodePage = () => {
                 {/* form */}
                 <LoadingFrame
                     id="form"
-                    minWidth="400px"
+                    minWidth={isMobile ? undefined : '400px'}
                     loadingState={registerUserViaActivationCodeState}
                     direction="column"
                     zIndex="7"
@@ -172,7 +176,7 @@ export const RegisterViaActivationCodePage = () => {
                             label="E-mail"
                             placeholder="te@email.com"
                             name="email"
-                            height="30px" />
+                            height={isMobile ? '40px' : '30px'} />
 
                         <EpistoEntryNew
                             state={lastNameEntryState}
@@ -180,7 +184,7 @@ export const RegisterViaActivationCodePage = () => {
                             label={translatableTexts.misc.lastName}
                             placeholder={translatableTexts.misc.lastName}
                             name="lastName"
-                            height="30px" />
+                            height={isMobile ? '40px' : '30px'} />
 
                         <EpistoEntryNew
                             state={firstNameEntryState}
@@ -188,7 +192,7 @@ export const RegisterViaActivationCodePage = () => {
                             label={translatableTexts.misc.firstName}
                             placeholder={translatableTexts.misc.firstName}
                             name="firstName"
-                            height="30px" />
+                            height={isMobile ? '40px' : '30px'} />
 
                         <EpistoEntryNew
                             state={activationCodeEntryState}
@@ -196,7 +200,7 @@ export const RegisterViaActivationCodePage = () => {
                             label={translatableTexts.registerViaActivationCodePage.activationCode.label}
                             placeholder={translatableTexts.registerViaActivationCodePage.activationCode.placeholder}
                             name="activationCode"
-                            height="30px" />
+                            height={isMobile ? '40px' : '30px'} />
                     </EpistoFlex2>
 
                     {/* registration button */}

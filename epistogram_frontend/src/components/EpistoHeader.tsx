@@ -8,10 +8,11 @@ export const EpistoHeader = (props: {
     variant?: 'main' | 'sub' | 'strongSub' | 'giant' | 'xxl',
     type?: 'strong' | 'normal',
     showDivider?: boolean,
-    children?: ReactNode
+    children?: ReactNode,
+    textHeight?: string
 } & EpistoFlex2Props) => {
 
-    const { text, showDivider, type, variant, children, ...css } = props;
+    const { text, showDivider, type, variant, children, textHeight, ...css } = props;
 
     const h = (() => {
 
@@ -32,7 +33,7 @@ export const EpistoHeader = (props: {
         <EpistoFlex2
             align='center'
             justify='space-between'
-            h='25px'>
+            h={textHeight ?? '25px'}>
 
             <EpistoFont
                 fontSize={variant === 'giant'

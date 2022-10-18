@@ -116,10 +116,11 @@ export const EpistoEntryNew = forwardRef<HTMLInputElement, EpistoEntryNewPropsTy
         value
     } = state;
 
-    return <EpistoFlex2 direction="column"
-mt={marginTop ?? '10px'}
-flex={flex}
-style={style}>
+    return <EpistoFlex2
+        direction="column"
+        mt={marginTop ?? '10px'}
+        flex={flex}
+        style={style}>
 
         {labelVariant === 'top' && <EpistoFont
             isUppercase
@@ -132,6 +133,7 @@ style={style}>
         </EpistoFont>}
 
         <TextField
+            className='tinyShadow'
             inputRef={ref}
             disabled={disabled}
             size="small"
