@@ -16,6 +16,7 @@ declare global {
         findLastIndex(func: (item: T) => boolean): number | null;
         single(func?: (item: T) => boolean): T;
         singleIndex(func?: (item: T) => boolean): number;
+        firstOrNullIndex(func?: (item: T) => boolean): number;
         byIndex(index: number): T;
         first(func?: (item: T) => boolean): T;
         last(func?: (item: T) => boolean): T;
@@ -204,6 +205,24 @@ Array.prototype.singleIndex = function <T>(func: (item: T) => boolean) {
         throw new Error('Single operation found more than one matching element!');
 
     return indices[0];
+};
+
+// eslint-disable-next-line no-extend-native
+Array.prototype.firstOrNullIndex = function <T>(func: (item: T) => boolean) {
+
+    const indices: number[] = [];
+
+    for (let index = 0; index < this.length; index++) {
+
+        const element = this[index];
+
+        if (!func(element))
+            continue;
+
+        indices.push(index);
+    }
+
+    return indices[0] ?? null;
 };
 
 // eslint-disable-next-line no-extend-native

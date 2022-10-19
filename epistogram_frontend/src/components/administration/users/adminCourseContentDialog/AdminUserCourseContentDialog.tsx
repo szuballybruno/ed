@@ -10,6 +10,7 @@ import { EpistoDialog } from '../../../universal/epistoDialog/EpistoDialog';
 import { EpistoDialogLogicType } from '../../../universal/epistoDialog/EpistoDialogTypes';
 import { AdminUserCourseStatsOverview } from '../AdminUserCourseStatsOverview';
 import { AdminUserExamsDataGridControl } from '../dataGrids/AdminUserExamsDataGridControl';
+import { AdminUserModulesDataGridControl } from '../dataGrids/AdminUserModulesDataGridControl';
 import { AdminUserVideosDataGridControl } from '../dataGrids/AdminUserVideosDataGridControl';
 
 export const AdminUserCourseContentDialog = (props: {
@@ -54,6 +55,15 @@ export const AdminUserCourseContentDialog = (props: {
             {
                 title: 'Vizsgák',
                 component: <AdminUserExamsDataGridControl
+                    courseId={dialogParams.courseId}
+                    handleMoreButton={
+                        function (): void {
+                            throw new Error('Function not implemented.');
+                        }} />
+            },
+            {
+                title: 'Modulok',
+                component: <AdminUserModulesDataGridControl
                     courseId={dialogParams.courseId}
                     handleMoreButton={
                         function (): void {

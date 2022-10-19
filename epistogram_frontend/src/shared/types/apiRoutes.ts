@@ -140,6 +140,7 @@ export const apiRoutes = {
         getAdminUserCourses: '/userstats/get-user-courses' as ParametrizedRouteType<{ query: { userId: Id<'User'>, loadAvailable: boolean } }>,
         getUserVideoStats: '/userstats/get-user-video-stats',
         getUserExamStats: '/userstats/get-user-exam-stats',
+        getUserModuleStats: '/userstats/get-user-module-stats',
         getUserLearningOverviewData: '/userstats/get-user-learning-overview-data',
         getAdminHomeOverviewStats: '/userstats/get-admin-home-overview-stats',
         getUserCourseStatsOverviewData: '/userstats/get-user-course-stats-overview-data'

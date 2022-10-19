@@ -9,6 +9,7 @@ import { UserDailyActivityChartView } from '../models/views/UserDailyActivityCha
 import { UserExamStatsView } from '../models/views/UserExamStatsView';
 import { UserLearningOverviewStatsView } from '../models/views/UserLearningOverviewStatsView';
 import { UserLearningPageStatsView } from '../models/views/UserLearningPageStatsView';
+import { UserModuleStatsView } from '../models/views/UserModuleStatsView';
 import { UserPerformanceComparisonStatsView } from '../models/views/UserPerformanceComparisonStatsView';
 import { UserPerformanceView } from '../models/views/UserPerformanceView';
 import { UserSpentTimeRatioView } from '../models/views/UserSpentTimeRatioView';
@@ -21,6 +22,7 @@ import { UserCourseStatsOverviewDTO } from '../shared/dtos/UserCourseStatsOvervi
 import { UserExamStatsDTO } from '../shared/dtos/UserExamStatsDTO';
 import { UserLearningOverviewDataDTO } from '../shared/dtos/UserLearningOverviewDataDTO';
 import { UserLearningPageStatsDTO } from '../shared/dtos/UserLearningPageStatsDTO';
+import { UserModuleStatsDTO } from '../shared/dtos/UserModuleStatsDTO';
 import { UserVideoStatsDTO } from '../shared/dtos/UserVideoStatsDTO';
 import { instantiate } from '../shared/logic/sharedLogic';
 import { Id } from '../shared/types/versionId';
@@ -176,6 +178,21 @@ export class UserStatsService {
 
         return this._mapperService
             .mapTo(UserExamStatsDTO, [stats]);
+    }
+
+    /**
+     * Gets the statistics for the users every watched video
+     */
+     async getUserModuleStatsAsync(principalId: PrincipalId, courseId: Id<'Course'>, userId: Id<'User'> | null) {
+
+        const stats = await this._ormService
+            .query(UserModuleStatsView, { userId: userId ? userId : principalId, courseId })
+            .where('userId', '=', 'userId')
+            .and('courseId', '=', 'courseId')
+            .getMany();
+
+        return this._mapperService
+            .mapTo(UserModuleStatsDTO, [stats]);
     }
 
     /**

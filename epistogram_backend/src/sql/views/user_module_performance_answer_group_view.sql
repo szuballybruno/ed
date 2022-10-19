@@ -8,3 +8,5 @@ SELECT
 FROM public.correct_answer_rates_split_view carsv
 
 GROUP BY carsv.user_id, carsv.course_id, carsv.module_id
+
+ORDER BY carsv.user_id, carsv.course_id, carsv.module_id
