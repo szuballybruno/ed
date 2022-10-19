@@ -210,7 +210,7 @@ SELECT
 		AND l.deletion_date IS NULL
 	)::int comment_like_count,
 
-	-- virtual thread id for ordering
+	-- virtual thread id for orderin
 	CASE
 		WHEN co.parent_comment_id IS NULL
 		THEN co.id
