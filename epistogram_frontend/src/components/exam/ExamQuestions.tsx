@@ -229,7 +229,7 @@ export const ExamQuestions = ({
 
             <ExamLayoutContent
                 style={{
-                    maxHeight: 'calc(100% - 60px)'
+                    maxHeight: 'calc(100% - 10px)'
                 }}
                 title={currentQuestion.questionText}>
 

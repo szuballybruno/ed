@@ -126,6 +126,16 @@ export const MobileExamLayout = ({
 
             return undefined;
         })()}
+        maxH={(() => {
+
+            if (isIPhone) {
+                return 'calc(100vh - 120px)';
+            }
+
+            if (isMobile) {
+                return 'calc(100vh - 120px)';
+            }
+        })()}
         height='100%'
         width='100%'
         px='5px'
@@ -196,16 +206,6 @@ export const MobileExamLayout = ({
         {/* content */}
         < EpistoFlex2
             overflowY='scroll'
-            maxH={(() => {
-
-                if (isIPhone) {
-                    return 'calc(100vh - 150px)';
-                }
-
-                if (isMobile) {
-                    return 'calc(100vh - 120px)';
-                }
-            })()}
             id='ExamLayout-content'
             my={'5px'}
             width="100%"

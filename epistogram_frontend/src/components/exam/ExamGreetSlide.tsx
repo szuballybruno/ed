@@ -36,9 +36,8 @@ export const ExamGreetSlide = (props: {
             align="center"
             //justify='center'
             background='var(--transparentWhite70)'
-            flex="1"
             p='20px'
-            className="whall roundBorders mildShadow">
+            className="roundBorders mildShadow">
 
             <img
                 src={Environment.getAssetUrl('/images/examCover.png')}
