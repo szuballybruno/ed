@@ -112,7 +112,6 @@ export const MobileExamLayout = ({
     });
 
     return <EpistoFlex2
-        overflowY='scroll'
         id='ExamLayout-root'
         minH={(() => {
 
@@ -196,6 +195,17 @@ export const MobileExamLayout = ({
 
         {/* content */}
         < EpistoFlex2
+            overflowY='scroll'
+            maxH={(() => {
+
+                if (isIPhone) {
+                    return 'calc(100vh - 150px)';
+                }
+
+                if (isMobile) {
+                    return 'calc(100vh - 120px)';
+                }
+            })()}
             id='ExamLayout-content'
             my={'5px'}
             width="100%"

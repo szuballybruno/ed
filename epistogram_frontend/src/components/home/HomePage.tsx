@@ -3,6 +3,7 @@ import { useContext, useState } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { useOverviewPageDTO } from '../../services/api/miscApiService';
 import { useActiveCourses } from '../../services/api/userProgressApiService';
+import browser from '../../services/core/browserSniffingService';
 import { useNavigation } from '../../services/core/navigatior';
 import { Environment } from '../../static/Environemnt';
 import { EpistoIcons } from '../../static/EpistoIcons';
@@ -97,6 +98,7 @@ const HomePage = () => {
 
     const [isSmallerThan1320] = useMediaQuery('(max-width: 1320px)');
     const isMobile = useIsMobileView();
+    const isIPhone = browser.isIPhone;
     const [coinsAcquired, setCoinsAcquired] = useState(false);
 
     const { activeCourses } = useActiveCourses();
@@ -156,7 +158,16 @@ const HomePage = () => {
         <ContentPane
             px='20px'
             noOverflow={isMobile}
-            pb={isMobile ? '80px' : undefined}
+            pb={(() => {
+
+                if (isIPhone)
+                    return '120px';
+
+                if (isMobile)
+                    return '80px';
+
+                return undefined;
+            })()}
             direction="column"
             minWidth={!isSmallerThan1320 && !isMobile ? '1060px' : undefined}
             noMaxWidth>
