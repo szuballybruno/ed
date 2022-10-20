@@ -5,9 +5,10 @@ import { apiRoutes } from '../../shared/types/apiRoutes';
 import { ErrorWithCode } from '../../shared/types/ErrorWithCode';
 import { Environment } from '../../static/Environemnt';
 import { eventBus } from '../../static/EventBus';
+import { useGetCurrentAppRoute } from '../../static/frontendHelpers';
 import { httpGetAsync, usePostDataUnsafe } from '../core/httpClient';
 
-export type AuthenticationStateType = 'loading' | 'authenticated' | 'forbidden' | 'error';
+export type AuthenticationStateType = 'idle' | 'loading' | 'authenticated' | 'forbidden' | 'error';
 
 export const useLogout = () => {
 
@@ -20,6 +21,9 @@ export const useLogout = () => {
 };
 
 export const useAuthHandshake = () => {
+
+    const currentRoute = useGetCurrentAppRoute();
+    const isEnabled = !currentRoute.isUnauthorized;
 
     const qr = useQuery(
         'useGetAuthHandshake',
@@ -34,15 +38,22 @@ export const useAuthHandshake = () => {
         retry: false,
         refetchOnWindowFocus: false,
         refetchInterval: Environment.getAuthHandshakeIntervalInMs,
-        enabled: true,
+        enabled: isEnabled,
         notifyOnChangeProps: ['data', 'isSuccess', 'status']
     });
 
-    const { refetch, isLoading, isError } = qr;
-    const authData = isError ? null : qr.data as AuthDataDTO;
+    const { refetch, isLoading, isError, isIdle } = qr;
+    const authData = isEnabled
+        ? isError
+            ? null
+            : qr.data as AuthDataDTO
+        : null;
     const error = qr.error as ErrorWithCode | null;
 
     const authState = ((): AuthenticationStateType => {
+
+        if (isIdle || isEnabled)
+            return 'idle';
 
         if (isLoading)
             return 'loading';

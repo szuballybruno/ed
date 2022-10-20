@@ -97,7 +97,7 @@ const LoginScreen = () => {
         if (authState !== 'authenticated')
             return;
 
-        Logger.logScoped('AUTO NAV', `Auth state is ${'authenticated' as AuthenticationStateType}, navigating...`);
+        Logger.logScoped('AUTH', `Auth state is ${'authenticated' as AuthenticationStateType}, navigating...`);
 
         /**
          * Survey can't be bypassed, navigating to survey

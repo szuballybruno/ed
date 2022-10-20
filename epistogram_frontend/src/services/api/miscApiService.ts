@@ -2,6 +2,7 @@ import { CourseOverviewDataDTO } from '../../shared/dtos/CourseOverviewDataDTO';
 import { OverviewPageDTO } from '../../shared/dtos/OverviewPageDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
 import { GlobalEventManagerType } from '../../static/EventBus';
+import { useGetCurrentAppRoute } from '../../static/frontendHelpers';
 import { QueryService } from '../../static/QueryService';
 
 export const useCourseOverviewData = () => {
@@ -28,7 +29,9 @@ export const useMiscApiService = (globalEventManager: GlobalEventManagerType) =>
 
     const useCurrentCourseItemCode = () => {
 
-        const qr = QueryService.useXQuery<string>(apiRoutes.misc.getCurrentCourseItemCode);
+        const currentRoute = useGetCurrentAppRoute();
+        const isEnabled = !currentRoute.isUnauthorized;
+        const qr = QueryService.useXQuery<string>(apiRoutes.misc.getCurrentCourseItemCode, undefined, isEnabled);
 
         return {
             refetchCurrentCourseItemCode: qr.refetch,

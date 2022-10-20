@@ -5,10 +5,13 @@ import { Environment } from '../../static/Environemnt';
 import { EventDTO } from '../../shared/dtos/EventDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
 import { httpGetAsync } from '../core/httpClient';
+import { useGetCurrentAppRoute } from '../../static/frontendHelpers';
 
 export const useEventListener = () => {
 
     const authState = useContext(AuthenticationStateContext);
+    const currentRoute = useGetCurrentAppRoute();
+    const isEnabled = !currentRoute.isUnauthorized;
 
     const { data } = useQuery(
         ['eventListenerQuery'],
@@ -18,7 +21,7 @@ export const useEventListener = () => {
         refetchInterval: Environment.eventPoolingIntervalInMs,
         refetchIntervalInBackground: true,
         notifyOnChangeProps: ['data'],
-        enabled: authState === 'authenticated'
+        enabled: isEnabled && authState === 'authenticated'
     });
 
     return {

@@ -16,7 +16,10 @@ export type ErrorCodeType =
     'deleted' |
     'email_taken' |
     'no permission' |
-    'forbidden player stage';
+    'forbidden player stage' |
+    'email_invalid' |
+    'first_name_invalid' |
+    'last_name_invalid';
 
 export type GivenAnswerStateType = 'INCORRECT' | 'CORRECT' | 'MIXED';
 

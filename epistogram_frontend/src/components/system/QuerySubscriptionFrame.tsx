@@ -15,14 +15,12 @@ export const QuerySubscriptionFrame = ({ globalEventManager, children }: { globa
 
     useEffect(() => {
 
-        console.log('---------- FRAME useEffect ------------');
-
         globalEventManager
             .scubscribeEvent('onquery', `${QuerySubscriptionFrame.name}-'noPermissionWatcher'`, (x: QueryEventData) => {
 
                 if (x.error?.code === 'no permission') {
 
-                    Logger.logScoped('AUTO NAV', 'No permission to access resource, navigating to home page...');
+                    Logger.logScoped('AUTH', 'No permission to access resource, navigating to home page...');
                     navigate2(applicationRoutes.homeRoute);
                 }
             });

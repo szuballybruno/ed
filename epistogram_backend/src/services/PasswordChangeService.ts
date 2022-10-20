@@ -1,5 +1,5 @@
 import { User } from '../models/entity/misc/User';
-import { validatePassowrd } from '../shared/logic/sharedLogic';
+import { getPassowrdValidationError } from '../shared/logic/sharedLogic';
 import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 import { Id } from '../shared/types/versionId';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
@@ -123,7 +123,7 @@ export class PasswordChangeService {
         passwordResetToken: string) {
 
         // verify new password with compare password 
-        if (validatePassowrd(password, passwordCompare))
+        if (getPassowrdValidationError(password, passwordCompare))
             throw new ErrorWithCode('Password is invalid.', 'bad request');
 
         // verify token

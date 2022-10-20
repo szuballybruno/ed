@@ -68,7 +68,7 @@ const AuthFirewall = (props: PropsWithChildren & {
         // error
         if (authState === 'error' && !isCurrentRouteLogin) {
 
-            Logger.logScoped('AUTO NAV', `Auth state: ${authState}. Redirecting to login.`);
+            Logger.logScoped('AUTH', `Auth state: ${authState}. Redirecting to login.`);
 
             navigate2(loginRoute);
         }

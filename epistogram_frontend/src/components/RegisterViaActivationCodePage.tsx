@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useMemo } from 'react';
+import { applicationRoutes } from '../configuration/applicationRoutes';
 import { useRegisterUserViaActivationCode } from '../services/api/registrationApiService';
 import { useNavigation } from '../services/core/navigatior';
-import { showNotification, useShowErrorDialog } from '../services/core/notifications';
+import { showNotification } from '../services/core/notifications';
 import { Environment } from '../static/Environemnt';
 import { useIsMobileView, useTryCatchWrapper } from '../static/frontendHelpers';
 import { translatableTexts } from '../static/translatableTexts';
@@ -21,7 +22,6 @@ export const RegisterViaActivationCodePage = () => {
         registerUserViaActivationCodeState
     } = useRegisterUserViaActivationCode();
 
-    const showError = useShowErrorDialog();
     const { navigate2 } = useNavigation();
     const isMobile = useIsMobileView();
     const { errorMessage, getWrappedAction } = useTryCatchWrapper(code => {
@@ -44,8 +44,6 @@ export const RegisterViaActivationCodePage = () => {
     });
 
     // state
-    const [registrationSuccessful, setRegistrationSuccessful] = useState(false);
-
     const emailEntryState = useEpistoEntryState({ isMandatory: true });
     const firstNameEntryState = useEpistoEntryState({ isMandatory: true });
     const lastNameEntryState = useEpistoEntryState({ isMandatory: true });
@@ -54,16 +52,24 @@ export const RegisterViaActivationCodePage = () => {
 
     // func
 
-    const validateAll = () => validateAllEntries([
-        emailEntryState,
-        firstNameEntryState,
-        lastNameEntryState,
-        activationCodeEntryState
-    ]);
+    const isAllValid = useMemo(() => {
+
+        const entriesValid = validateAllEntries([
+            emailEntryState,
+            firstNameEntryState,
+            lastNameEntryState,
+            activationCodeEntryState
+        ]);
+
+        const pwStateValid = !passwordState
+            .hasCredentialError;
+
+        return entriesValid && pwStateValid;
+    }, [emailEntryState, firstNameEntryState, lastNameEntryState, activationCodeEntryState, passwordState]);
 
     const handleRegisterAsync = getWrappedAction(async () => {
 
-        if (!validateAll())
+        if (!isAllValid)
             return;
 
         await registerUserViaActivationCodeAsync({
@@ -75,8 +81,8 @@ export const RegisterViaActivationCodePage = () => {
             passwordCompare: passwordState.passwordCompare
         });
 
-        setRegistrationSuccessful(true);
         showNotification(translatableTexts.registerViaActivationCodePage.successfulSignup);
+        navigate2(applicationRoutes.homeRoute);
     });
 
     return <PageRootContainer>
@@ -216,9 +222,10 @@ export const RegisterViaActivationCodePage = () => {
                         <EpistoButton
                             style={{
                                 width: '100%',
-                                backgroundColor: '#324658',
+                                backgroundColor: isAllValid ? '#324658' : undefined,
                                 height: 60
                             }}
+                            isDisabled={!isAllValid}
                             onClick={handleRegisterAsync}
                             variant="colored">
 
@@ -252,39 +259,8 @@ export const RegisterViaActivationCodePage = () => {
                             </a>
                         </EpistoFont>
                     </EpistoFlex2>
-
-
-                    <EpistoFlex2
-                        position="fixed"
-                        align="center"
-                        justify="center"
-                        width="100vw"
-                        height="100vh"
-                        background="var(--transparentWhite70)"
-                        top="0"
-                        left="0"
-                        display={registrationSuccessful ? undefined : 'none'}>
-
-                        <EpistoFlex2
-                            className="roundBorders mildShadow"
-                            background="white"
-                            align="center"
-                            justify="center"
-                            padding="50px"
-                            width="500px"
-                            height="250px">
-
-                            <EpistoFont style={{ textAlign: 'center' }}>
-                                {translatableTexts.registerViaActivationCodePage.signupSuccessfulDescriptions[0]}
-                                {emailEntryState.value}
-                                {translatableTexts.registerViaActivationCodePage.signupSuccessfulDescriptions[1]}
-                            </EpistoFont>
-                        </EpistoFlex2>
-
-                    </EpistoFlex2>
-
                 </LoadingFrame>
             </EpistoFlex2>
-        </EpistoFlex2 >
-    </PageRootContainer >;
+        </EpistoFlex2>
+    </PageRootContainer>;
 };

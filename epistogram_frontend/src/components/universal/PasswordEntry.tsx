@@ -1,6 +1,6 @@
 import { TextField } from '@mui/material';
-import { useCallback, useEffect, useState } from 'react';
-import { validatePassowrd } from '../../shared/logic/sharedLogic';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { getPassowrdValidationError } from '../../shared/logic/sharedLogic';
 import { EpistoEntryNew, EpistoEntryNewPropsType, useEpistoEntryState } from '../controls/EpistoEntryNew';
 
 export const usePasswordEntryState = () => {
@@ -15,7 +15,7 @@ export const usePasswordEntryState = () => {
 
     const getValidationErrors = useCallback((password: string, passwordCompare: string) => {
 
-        const pwValidationErrorCode = validatePassowrd(password, passwordCompare);
+        const pwValidationErrorCode = getPassowrdValidationError(password, passwordCompare);
 
         const [passwordErrorMessage, passwordCompareErrorMessage] = ((): [string | null, string | null] => {
 
@@ -28,11 +28,11 @@ export const usePasswordEntryState = () => {
             if (pwValidationErrorCode === 'tooLong')
                 return ['A jelszó túl hosszú!', null];
 
-            if (pwValidationErrorCode === 'doesNotMatchControlPassword')
-                return ['A jelszavak nem egyeznek!', 'A jelszavak nem egyeznek!'];
-
             if (pwValidationErrorCode === 'hasNoNumber')
                 return ['A jelszó nem tartalmaz számot!', null];
+
+            if (pwValidationErrorCode === 'doesNotMatchControlPassword')
+                return ['A jelszavak nem egyeznek!', 'A jelszavak nem egyeznek!'];
 
             return [null, null];
         })();
@@ -54,7 +54,7 @@ export const usePasswordEntryState = () => {
         setPasswordCompareError(passwordCompareErrorMessage);
 
         return passwordErrorMessage && passwordCompareErrorMessage;
-    }, [password, passwordCompare]);
+    }, [password, passwordCompare, getValidationErrors]);
 
     /**
      * Validate passwords whenever validate function ref changes 
@@ -64,62 +64,24 @@ export const usePasswordEntryState = () => {
         validate();
     }, [validate]);
 
-    return {
-        password,
-        passwordCompare,
-        passwordError,
-        passwordCompareError,
-        hasCredentialError: !!passwordError || !!passwordCompareError,
-        getValidationErrors,
-        setPassword,
-        setPasswordCompare,
-        validate
-    };
-};
-
-export type PasswordEntryStateType = ReturnType<typeof usePasswordEntryState>;
-
-export const PasswordEntry = ({
-    state,
-    display = 'MUI',
-    epistoEntryProps
-}: {
-    state: PasswordEntryStateType,
-    display?: 'MUI' | 'EPISTO',
-    epistoEntryProps?: EpistoEntryNewPropsType
-}) => {
-
-    const {
-        passwordError,
-        passwordCompareError,
-        setPassword,
-        setPasswordCompare,
-        getValidationErrors
-    } = state;
-
-    const labels = {
-        pw: 'Jelszó',
-        pwCompare: 'Jelszó mégegyszer'
-    };
-
     /**
      * Validators 
      */
-    const validatePassowrd = useCallback((pw: string) => {
+    const validatePassowrdEntry = useCallback((pw: string) => {
 
-        return getValidationErrors(pw, state.passwordCompare).passwordErrorMessage;
-    }, [state.passwordCompare, getValidationErrors]);
+        return getValidationErrors(pw, passwordCompare).passwordErrorMessage;
+    }, [passwordCompare, getValidationErrors]);
 
-    const validatePassowrdCompare = useCallback((pwCompare: string) => {
+    const validatePassowrdCompareEntry = useCallback((pwCompare: string) => {
 
-        return getValidationErrors(state.password, pwCompare).passwordCompareErrorMessage;
-    }, [state.password, getValidationErrors]);
+        return getValidationErrors(password, pwCompare).passwordCompareErrorMessage;
+    }, [password, getValidationErrors]);
 
     /**
      * Episto entry states 
      */
-    const pwState = useEpistoEntryState({ isMandatory: true, validateFunction: validatePassowrd });
-    const pwCompareState = useEpistoEntryState({ isMandatory: true, validateFunction: validatePassowrdCompare });
+    const pwState = useEpistoEntryState({ isMandatory: true, validateFunction: validatePassowrdEntry });
+    const pwCompareState = useEpistoEntryState({ isMandatory: true, validateFunction: validatePassowrdCompareEntry });
 
     /**
      * Propagate pw state value to upper state 
@@ -140,6 +102,77 @@ export const PasswordEntry = ({
 
         setPasswordCompare(pwCompareStateValue);
     }, [setPasswordCompare, pwCompareStateValue]);
+
+    const hasCredentialError = useMemo(() => {
+
+        if (passwordError)
+            return true;
+
+        if (passwordCompareError)
+            return true;
+
+        if (pwState.errorMsg)
+            return true;
+
+        if (pwCompareState.errorMsg)
+            return true;
+
+        return false;
+    }, [passwordError, passwordCompareError, pwState.errorMsg, pwCompareState.errorMsg]);
+
+    return useMemo(() => ({
+        password,
+        passwordCompare,
+        passwordError,
+        passwordCompareError,
+        hasCredentialError,
+        pwState,
+        pwCompareState,
+        getValidationErrors,
+        setPassword,
+        setPasswordCompare,
+        validate
+    }), [
+        password,
+        passwordCompare,
+        passwordError,
+        passwordCompareError,
+        hasCredentialError,
+        pwState,
+        pwCompareState,
+        getValidationErrors,
+        setPassword,
+        setPasswordCompare,
+        validate
+    ]);
+};
+
+export type PasswordEntryStateType = ReturnType<typeof usePasswordEntryState>;
+
+export const PasswordEntry = ({
+    state,
+    display = 'MUI',
+    epistoEntryProps
+}: {
+    state: PasswordEntryStateType,
+    display?: 'MUI' | 'EPISTO',
+    epistoEntryProps?: EpistoEntryNewPropsType
+}) => {
+
+    const {
+        passwordError,
+        passwordCompareError,
+        pwState,
+        pwCompareState,
+        setPassword,
+        setPasswordCompare,
+        getValidationErrors
+    } = state;
+
+    const labels = {
+        pw: 'Jelszó',
+        pwCompare: 'Jelszó mégegyszer'
+    };
 
     return (
         display === 'MUI'

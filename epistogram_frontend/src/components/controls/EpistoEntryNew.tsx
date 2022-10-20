@@ -1,5 +1,5 @@
 import { InputAdornment, TextField } from '@mui/material';
-import { forwardRef, useCallback, useEffect, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useMemo, useState } from 'react';
 import { EpistoFlex2 } from './EpistoFlex';
 import { EpistoFont } from './EpistoFont';
 
@@ -42,13 +42,19 @@ export const useEpistoEntryState = (options?: {
         validate();
     }, [value, validate]);
 
-    return {
+    return useMemo(() => ({
         value,
         errorMsg,
         validate,
         setValue,
         setErrorMsg
-    };
+    }), [
+        value,
+        errorMsg,
+        validate,
+        setValue,
+        setErrorMsg
+    ]);
 };
 
 export type EpistoEntryStateType = ReturnType<typeof useEpistoEntryState>;

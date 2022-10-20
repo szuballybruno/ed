@@ -100,29 +100,17 @@ export class UserInvitationService {
 
         // create user
         const createdUser = await this._userService
-            .createUserAsync({
+            .createUserSimpleAsync({
                 email,
                 firstName,
                 lastName,
-                creationDate: new Date(Date.now()),
                 companyId,
                 departmentId,
                 registrationType: 'Invitation',
-                password: 'guest',
                 invitationToken,
-                isGod: false,
-                avatarFileId: null,
-                deletionDate: null,
-                isInvitationAccepted: false,
-                isTrusted: true,
-                linkedInUrl: null,
-                phoneNumber: null,
-                refreshToken: null,
-                resetPasswordToken: null,
-                userDescription: null,
-                username: '',
-                isSurveyRequired
-            }, 'guest');
+                isSurveyRequired,
+                unhashedPassword: 'guest'
+            });
 
         // send email
         if (!noEmailNotification)
