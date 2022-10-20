@@ -1210,11 +1210,7 @@ ON ad.id = av.answer_data_id;
 --CREATE VIEW: schema_version_view
 CREATE VIEW schema_version_view
 AS
-<<<<<<< HEAD
-SELECT '09:33:12 2022-10-14 CEDT' last_modification_date, '0.01' version
-=======
-SELECT '15:25:19 2022-10-17 CEDT' last_modification_date, '0.01' version
->>>>>>> f58a490aee536ce91672ad140c3ea7ce92a361fc
+SELECT '10:48:16 2022-10-18 CEDT' last_modification_date, '0.01' version
 ;
 
 --CREATE VIEW: shop_item_stateful_view

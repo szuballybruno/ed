@@ -5,7 +5,6 @@ import { useRegisterInvitedUser, useRegisterUser } from '../services/api/registr
 import { useNavigation } from '../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../services/core/notifications';
 import { Environment } from '../static/Environemnt';
-import { usePasswordEntryState } from '../static/frontendHelpers';
 import { LocationHelpers } from '../static/locationHelpers';
 import { translatableTexts } from '../static/translatableTexts';
 import { EpistoButton } from './controls/EpistoButton';
@@ -14,6 +13,7 @@ import { EpistoFont } from './controls/EpistoFont';
 import { EpistoImage } from './controls/EpistoImage';
 import { useRefetchUserAsync } from './system/AuthenticationFrame';
 import { LoadingFrame } from './system/LoadingFrame';
+import { PasswordEntry, usePasswordEntryState } from './universal/PasswordEntry';
 
 export const RegistrationPage = () => {
 
@@ -30,16 +30,7 @@ export const RegistrationPage = () => {
     const [firstName, setFirstName] = useState('');
     const [emailAddress, setEmailAddress] = useState('');
 
-    const {
-        password,
-        passwordCompare,
-        passwordCompareError,
-        passwordError,
-        hasCredentialError,
-        setPassword,
-        setPasswordCompare,
-        validate
-    } = usePasswordEntryState();
+    const passwordEntryState = usePasswordEntryState();
 
     const { navigate2 } = useNavigation();
     const showErrorDialog = useShowErrorDialog();
@@ -50,7 +41,7 @@ export const RegistrationPage = () => {
 
     const handleRegisterUser = async () => {
 
-        if (!validate()) {
+        if (!passwordEntryState.validate()) {
 
             showErrorDialog('Validation failed!');
             throw new Error('Validation failed!');
@@ -61,7 +52,7 @@ export const RegistrationPage = () => {
             // reigster user via invitation token
             if (isInvited) {
 
-                await registerInvitedUserAsync(token, password, passwordCompare);
+                await registerInvitedUserAsync(token, passwordEntryState.password, passwordEntryState.passwordCompare);
             }
 
             // register user via public token  
@@ -73,12 +64,12 @@ export const RegistrationPage = () => {
             showNotification(translatableTexts.registrationPage.successfulRegistration);
             const { permissions } = await refetchAuthHandshake();
 
-            if(permissions.any(x => x === 'BYPASS_SURVEY')){
+            if (permissions.any(x => x === 'BYPASS_SURVEY')) {
 
                 navigate2(applicationRoutes.homeRoute);
             }
             else {
-                
+
                 navigate2(applicationRoutes.surveyRoute);
             }
         }
@@ -155,34 +146,8 @@ export const RegistrationPage = () => {
             </>}
 
             {/* invited */}
-            {isInvited && <>
-
-                <TextField
-                    variant="standard"
-                    label={translatableTexts.registrationPage.passwordLabel}
-                    type="password"
-                    value={password}
-                    error={!!passwordError}
-                    helperText={passwordError}
-                    onChange={x => {
-                        setPassword(x.currentTarget.value);
-                    }}
-                    style={{ margin: '10px' }}></TextField>
-
-                <TextField
-                    variant="standard"
-                    type="password"
-                    label={translatableTexts.registrationPage.passwordAgainLabel}
-                    value={passwordCompare}
-                    error={!!passwordCompareError}
-                    helperText={passwordCompareError}
-                    onChange={x => {
-                        setPasswordCompare(x.currentTarget.value);
-                    }}
-                    style={{ margin: '10px' }}>
-
-                </TextField>
-            </>}
+            {isInvited && <PasswordEntry
+                state={passwordEntryState} />}
 
             <EpistoFlex2 direction={'row'}
                 alignItems={'center'}>
@@ -216,7 +181,7 @@ export const RegistrationPage = () => {
             <EpistoButton
                 onClick={handleRegisterUser}
                 variant="outlined"
-                isDisabled={!isPrivacyPolicyAccepted || (isInvited && hasCredentialError)}
+                isDisabled={!isPrivacyPolicyAccepted || (isInvited && passwordEntryState.hasCredentialError)}
                 style={{
                     width: '200px',
                     alignSelf: 'center',
