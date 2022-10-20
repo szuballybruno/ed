@@ -106,7 +106,10 @@ const HomePage = () => {
     const { currentCourseItemCode } = useCurrentCourseItemCodeContext();
     const isAnyCourseInProgess = !!currentCourseItemCode;
 
-    return <PageRootContainer>
+    return <PageRootContainer
+        maxH={isIPhone ? '100vh' : undefined}
+        maxW={isIPhone ? '100vw' : undefined}
+        overflow={isIPhone ? 'hidden' : undefined}>
 
         {/* sidebar / left pane */}
         {!isMobile && <LeftPane>
@@ -157,17 +160,14 @@ const HomePage = () => {
         {/* content */}
         <ContentPane
             px='20px'
-            noOverflow={isMobile}
             pb={(() => {
-
-                if (isIPhone)
-                    return '120px';
 
                 if (isMobile)
                     return '80px';
 
                 return undefined;
             })()}
+            //noOverflow={isMobile}
             direction="column"
             minWidth={!isSmallerThan1320 && !isMobile ? '1060px' : undefined}
             noMaxWidth>
