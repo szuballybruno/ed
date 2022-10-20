@@ -4,6 +4,7 @@ import { AnswerResultDTO } from '../shared/dtos/AnswerResultDTO';
 import { QuestionDTO } from '../shared/dtos/QuestionDTO';
 import { Id } from '../shared/types/versionId';
 import { Environment } from '../static/Environemnt';
+import { useIsMobileView } from '../static/frontendHelpers';
 import { EpistoFlex2, EpistoFlex2Props } from './controls/EpistoFlex';
 import { EpistoFont } from './controls/EpistoFont';
 import { LoadingFramePropsType } from './system/LoadingFrame';
@@ -16,13 +17,15 @@ export const QuesitionView = ({
     loadingProps,
     onlyShowAnswers,
     answerResult,
+    isPractise,
     ...css
 }: {
     answerQuesitonAsync: (answerVersionId: Id<'AnswerVersion'>[]) => Promise<void>,
     question: QuestionDTO,
     loadingProps: LoadingFramePropsType,
     onlyShowAnswers?: boolean,
-    answerResult: AnswerResultDTO | null
+    answerResult: AnswerResultDTO | null,
+    isPractise: boolean
 } & EpistoFlex2Props) => {
 
     const {
@@ -43,6 +46,7 @@ export const QuesitionView = ({
     const showCoinsAcquired = true;
     const coinsAcquired = coinAcquires
         .firstOrNull(x => x.reason === 'correct_answer');
+    const isMobile = useIsMobileView();
 
     const [selectedAnswerVersionId, setSelectedAnswerVersionId] = useState<Id<'AnswerVersion'> | null>(null);
 
@@ -85,6 +89,9 @@ export const QuesitionView = ({
         title={question.questionText}
         loadingProps={loadingProps}
         onlyShowAnswers={onlyShowAnswers}
+        width={(isMobile && !isPractise) ? '100vw' : undefined}
+        height={(isMobile && !isPractise) ? '100vh' : undefined}
+        justify={(isMobile && !isPractise) ? 'center' : undefined}
         {...css}>
 
         {question

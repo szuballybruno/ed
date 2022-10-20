@@ -4,12 +4,13 @@ import { useRequestPasswordChangeAuthenticated } from '../../services/api/passwo
 import { UserApiService } from '../../services/api/UserApiService1';
 import { showNotification, useShowErrorDialog } from '../../services/core/notifications';
 import { Environment } from '../../static/Environemnt';
-import { reloadPage } from '../../static/frontendHelpers';
+import { reloadPage, useIsMobileView } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoEntry } from '../controls/EpistoEntry';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
+import { EpistoConinInfo } from '../EpistoCoinInfo';
 import { ProfileImage } from '../ProfileImage';
 import { CurrentUserContext, useRefetchUserAsync } from '../system/AuthenticationFrame';
 import { LoadingFrame } from '../system/LoadingFrame';
@@ -26,6 +27,8 @@ export const Preferences = () => {
     const [avatarSrc, setAvatarSrc] = useState(user.avatarUrl!);
 
     const [avatarFile, setAvatarFile] = useState<File | null>(null);
+
+    const isMobile = useIsMobileView();
 
     const imageRef = useRef<HTMLImageElement>(null);
 
@@ -109,23 +112,26 @@ export const Preferences = () => {
     return <LoadingFrame
         direction="column"
         justify="flex-start"
+        maxH={isMobile ? 'calc(100vh - 80px)' : undefined}
         flex="1"
         align="center"
         loadingState={[saveUserSimpleState, postAvatarFileState, requestChangePasswordState]}>
 
         <DashboardSection
+            p={isMobile ? 0 : undefined}
             flex='1'
-            title='Beállítások'
+            title={isMobile ? '' : 'Beállítások'}
             background="var(--transparentWhite70)"
             borderRadius="6px"
-            showDivider
+            showDivider={!isMobile}
             width='100%'
             className="largeSoftShadow"
-            marginBottom="10px">
+            marginBottom={isMobile ? undefined : '10px'}>
 
             <EpistoFlex2
+                width={isMobile ? '100%' : undefined}
                 direction='column'
-                ml='10px'
+                ml={isMobile ? undefined : '10px'}
                 maxW='500px'>
 
                 {/* profile image selector */}
@@ -149,6 +155,15 @@ export const Preferences = () => {
                             ref={imageRef}
                             className="whall" />
                     </EpistoImageSelector>
+
+                    {isMobile && <EpistoFlex2
+                        pr='10px'
+                        justify='flex-end'
+                        align='flex-end'
+                        flex='1'>
+
+                        <EpistoConinInfo />
+                    </EpistoFlex2>}
                 </EpistoFlex2>
 
                 {/* inputs container */}

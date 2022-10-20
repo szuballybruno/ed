@@ -155,6 +155,7 @@ const HomePage = () => {
         {/* content */}
         <ContentPane
             px='20px'
+            noOverflow={isMobile}
             pb={isMobile ? '80px' : undefined}
             direction="column"
             minWidth={!isSmallerThan1320 && !isMobile ? '1060px' : undefined}

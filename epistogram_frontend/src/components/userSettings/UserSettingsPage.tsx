@@ -1,4 +1,5 @@
 import { applicationRoutes } from '../../configuration/applicationRoutes';
+import { useIsMobileView } from '../../static/frontendHelpers';
 import { ContentPane } from '../ContentPane';
 import { LeftPane } from '../LeftPane';
 import { NavigationLinkList } from '../NavigationLinkList';
@@ -9,9 +10,11 @@ import { Preferences } from './Preferences';
 
 export const UserSettingsPage = () => {
 
+    const isMobile = useIsMobileView();
+
     return <PageRootContainer>
 
-        <LeftPane
+        {!isMobile && <LeftPane
             padding="20px"
             basis="300px" >
 
@@ -19,9 +22,12 @@ export const UserSettingsPage = () => {
                 routes={[
                     applicationRoutes.settingsRoute.preferencesRoute
                 ]} />
-        </LeftPane>
+        </LeftPane>}
 
-        <ContentPane noMaxWidth>
+        <ContentPane
+            noPadding={isMobile}
+            noMaxWidth={!isMobile}>
+
             <EpistoRoutes
                 renderRoutes={[
                     {
