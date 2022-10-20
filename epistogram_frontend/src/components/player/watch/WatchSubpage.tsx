@@ -33,13 +33,13 @@ export const WatchSubpage = () => {
     const [isScrolledFromTop, setIsScrolledFromTop] = useState(false);
     const { setParent, scroll, parentElement } = useScrollIntoView();
     const isShowSidebar = (watchSubpageState === 'watch' || watchSubpageState === 'examStart');
-    const isContentScrollable = (watchSubpageState !== 'examInProgress');
-
 
     const isIPhone = browser.isIPhone;
     const [isFullscreen] = useVideoPlayerFullscreenContext();
     const isLandscape = window.orientation === 90;
     const isIphoneFullscreenMode = (isFullscreen && isIPhone);
+
+    const isContentScrollable = (watchSubpageState !== 'examInProgress' && !isFullscreen);
 
     // get player page data
     const {

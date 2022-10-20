@@ -111,6 +111,7 @@ export const ExamPlayer = (props: {
 
     return <EpistoPaging
         flex="1"
+        height={isMobile ? '100vh' : undefined}
         slides={examWorkflowPages}
         index={examWorkflowSlides.currentIndex} />;
 };

@@ -1,6 +1,6 @@
 import { ExamPlayerDataDTO } from '../../shared/dtos/ExamPlayerDataDTO';
 import { Environment } from '../../static/Environemnt';
-import { ArrayBuilder } from '../../static/frontendHelpers';
+import { ArrayBuilder, useIsMobileView } from '../../static/frontendHelpers';
 
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
@@ -18,8 +18,10 @@ export const ExamGreetSlide = (props: {
         startExam
     } = props;
 
+    const isMobile = useIsMobileView();
+
     return <ExamLayout
-        className='whall'
+        className={!isMobile ? 'whall' : undefined}
         justify='flex-start'
         headerCenterText={exam.title}
         footerButtons={new ArrayBuilder()
@@ -32,11 +34,12 @@ export const ExamGreetSlide = (props: {
         <EpistoFlex2
             direction="column"
             align="center"
-            justify='center'
+            //justify='center'
             background='var(--transparentWhite70)'
             flex="1"
             p='20px'
             className="whall roundBorders mildShadow">
+
             <img
                 src={Environment.getAssetUrl('/images/examCover.png')}
                 alt={''}
@@ -64,7 +67,10 @@ export const ExamGreetSlide = (props: {
             </EpistoFont>
 
             {/* if previously completed  */}
-            {exam.examStats && <>
+            {exam.examStats && <EpistoFlex2
+                direction='column'
+                width='100%'
+                height='100%'>
 
                 {/* stats label */}
                 <EpistoFont>
@@ -82,7 +88,7 @@ export const ExamGreetSlide = (props: {
                     <ExamResultStats
                         stats={exam.examStats} />
                 </EpistoFlex2>
-            </>}
+            </EpistoFlex2>}
         </EpistoFlex2>
     </ExamLayout>;
 };

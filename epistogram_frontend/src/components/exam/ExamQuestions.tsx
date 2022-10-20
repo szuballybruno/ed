@@ -181,6 +181,7 @@ export const ExamQuestions = ({
 
         <ExamLayout
             maxH='calc(100vh - 120px)'
+            height={isMobile ? '100%' : undefined}
             headerLeftItem={(
                 <EpistoFlex2 align="center">
                     <img

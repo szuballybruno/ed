@@ -105,17 +105,19 @@ export const MobileExamLayout = ({
     const [isFullscreen, setIsFullscreen] = useVideoPlayerFullscreenContext();
     const isLandscape = window.orientation === 90;
     const isIPhone = browser.isIPhone;
+    const isMobile = useIsMobileView();
 
     useEffect(() => {
         setIsFullscreen(true);
     });
 
     return <EpistoFlex2
+        overflowY='scroll'
         id='ExamLayout-root'
         minH={(() => {
 
             if (isFullscreen && isIPhone)
-                return 'calc(100vh - 80px)';
+                return 'calc(100vh - 120px)';
 
             if (isIPhone)
                 return 'calc(100vh - 120px)';
@@ -123,30 +125,13 @@ export const MobileExamLayout = ({
             if (isFullscreen)
                 return '100vh';
 
-            return 'calc(100vh - 80px)';
-
-            return undefined;
-        })()}
-        maxH={(() => {
-
-            if (isIPhone)
-                return 'calc(100vh - 120px)';
-
-            if (isHeightMaximized)
-                return 'calc(100vh - 80px)';
-
-            if (!isFullscreen)
-                return 'calc(100vh - 80px)';
-
             return undefined;
         })()}
         height='100%'
         width='100%'
         px='5px'
         direction="column"
-        alignItems="center"
-        flex='1'
-        {...css}>
+        alignItems="center">
 
         {/* header */}
         < EpistoFlex2
@@ -213,12 +198,10 @@ export const MobileExamLayout = ({
         < EpistoFlex2
             id='ExamLayout-content'
             my={'5px'}
-            height='100%'
             width="100%"
             align="center"
             justify="center"
             direction="column"
-            flex='1'
             {...css}>
 
             {children}
