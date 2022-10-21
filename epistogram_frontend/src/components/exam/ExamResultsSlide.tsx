@@ -11,6 +11,7 @@ import { translatableTexts } from '../../static/translatableTexts';
 import { ChipSmall } from '../administration/courses/ChipSmall';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
+import { useVideoPlayerFullscreenContext } from '../player/watch/videoPlayer/VideoPlayerFullscreenFrame';
 import { WatchSubpageState } from '../player/watch/WatchSubpage';
 import { ExamLayout } from './ExamLayout';
 import { ExamResultStats } from './ExamResultStats';
@@ -29,6 +30,8 @@ export const ExamResultsSlide = (props: {
     const questionsAnswers = examResults?.questions ?? [];
     const { navigate2 } = useNavigation();
     const isMobile = useIsMobileView();
+
+    const [isFullscreen, setIsFullscreen] = useVideoPlayerFullscreenContext();
 
     const courseId = Id.create<'Course'>(1);
 
@@ -63,6 +66,10 @@ export const ExamResultsSlide = (props: {
             .addIf(!!exam.isFinalExam, {
                 title: 'Vissza a tanfolyamkeresőbe',
                 action: () => {
+
+                    if (isMobile) {
+                        setIsFullscreen(false);
+                    }
 
                     navigate2(applicationRoutes.availableCoursesRoute);
                 }
