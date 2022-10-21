@@ -113,19 +113,16 @@ export const MobileExamLayout = ({
 
     return <EpistoFlex2
         id='ExamLayout-root'
-        minH={'100vh'/* (() => {
-
-            if (isFullscreen && isIPhone)
-                return 'calc(100vh - 60px)';
+        minH={(() => {
 
             if (isIPhone)
-                return 'calc(100vh - 60px)';
+                return 'calc(100vh - 40px)';
 
             if (isFullscreen)
                 return '100vh';
 
             return undefined;
-        })() */}
+        })()}
         maxH={(() => {
 
             if (isIPhone) {
