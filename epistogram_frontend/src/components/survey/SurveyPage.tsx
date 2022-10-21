@@ -6,7 +6,6 @@ import { Environment } from '../../static/Environemnt';
 import { useIsMobileView, usePaging } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { ContentPane } from '../ContentPane';
-import { EpistoFont } from '../controls/EpistoFont';
 import { PageRootContainer } from '../PageRootContainer';
 import { useRefetchUserAsync } from '../system/AuthenticationFrame';
 import { EpistoPaging } from '../universal/EpistoPaging';
@@ -53,24 +52,24 @@ export const SurveyPage = () => {
 
     const SummarySlide = (isCurrent: boolean) => <SurveyWrapper
         currentImage={Environment.getAssetUrl('/images/analysis3D.png')}
-        description={<EpistoFont isMultiline>
+        // description={<EpistoFont isMultiline>
 
-            {/* this part should be bolder */}
-            <EpistoFont
-                style={{ fontWeight: 500 }}>
+        //     {/* this part should be bolder */}
+        //     <EpistoFont
+        //         style={{ fontWeight: 500 }}>
 
-                {translatableTexts.signupPage.summarySlideDescriptionParts[0]}
-            </EpistoFont>
+        //         {translatableTexts.signupPage.summarySlideDescriptionParts[0]}
+        //     </EpistoFont>
 
-            {translatableTexts.signupPage.summarySlideDescriptionParts[1]}
+        //     {translatableTexts.signupPage.summarySlideDescriptionParts[1]}
 
-            {/* this part should be bolder */}
-            <EpistoFont
-                style={{ fontWeight: 500 }}>
+        //     {/* this part should be bolder */}
+        //     <EpistoFont
+        //         style={{ fontWeight: 500 }}>
 
-                {translatableTexts.signupPage.summarySlideDescriptionParts[2]}
-            </EpistoFont>
-        </EpistoFont>}
+        //         {translatableTexts.signupPage.summarySlideDescriptionParts[2]}
+        //     </EpistoFont>
+        // </EpistoFont>}
         onNext={isInvitedUser ? handleGoToHomePage : undefined}
         nextButtonTitle={isInvitedUser ? translatableTexts.signupPage.goToHomePage : undefined}
         onNavPrevious={() => slidesState.previous()}

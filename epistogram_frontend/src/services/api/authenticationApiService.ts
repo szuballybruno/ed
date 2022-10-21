@@ -25,16 +25,16 @@ export const useAuthHandshake = () => {
     const currentRoute = useGetCurrentAppRoute();
     const isEnabled = !currentRoute.isUnauthorized;
 
+    const queryFn = useCallback(() => {
+
+        const res = httpGetAsync(apiRoutes.authentication.establishAuthHandshake);
+        eventBus.fireEvent('onAuthHandshake', {});
+        return res;
+    }, []);
+
     const qr = useQuery(
         'useGetAuthHandshake',
-        () => {
-
-            const res = httpGetAsync(apiRoutes.authentication.establishAuthHandshake);
-
-            eventBus.fireEvent('onAuthHandshake', {});
-
-            return res;
-        }, {
+        queryFn, {
         retry: false,
         refetchOnWindowFocus: false,
         refetchInterval: Environment.getAuthHandshakeIntervalInMs,
@@ -43,16 +43,15 @@ export const useAuthHandshake = () => {
     });
 
     const { refetch, isLoading, isError, isIdle } = qr;
-    const authData = isEnabled
-        ? isError
-            ? null
-            : qr.data as AuthDataDTO
-        : null;
+    const authData = isError
+        ? null
+        : qr.data as AuthDataDTO;
+
     const error = qr.error as ErrorWithCode | null;
 
     const authState = ((): AuthenticationStateType => {
 
-        if (isIdle || isEnabled)
+        if (isIdle)
             return 'idle';
 
         if (isLoading)
@@ -64,7 +63,10 @@ export const useAuthHandshake = () => {
         if (error?.code === 'forbidden')
             return 'forbidden';
 
-        return 'error';
+        if (isError)
+            return 'error';
+
+        throw new Error('Something is not right...');
     })();
 
     const refetchAuthHandshake = useCallback(async (): Promise<AuthDataDTO> => {

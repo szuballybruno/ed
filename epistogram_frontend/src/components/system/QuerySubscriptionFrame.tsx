@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { useNavigation } from '../../services/core/navigatior';
 import { apiRoutes } from '../../shared/types/apiRoutes';
@@ -13,10 +13,17 @@ export const QuerySubscriptionFrame = ({ globalEventManager, children }: { globa
     const { navigate2 } = useNavigation();
     const { refetchCurrentCourseItemCode } = useCurrentCourseItemCodeContext();
 
+    const callbackParamsRef = useRef({
+        navigate2,
+        refetchCurrentCourseItemCode
+    });
+
     useEffect(() => {
 
         globalEventManager
             .scubscribeEvent('onquery', `${QuerySubscriptionFrame.name}-'noPermissionWatcher'`, (x: QueryEventData) => {
+
+                const { navigate2 } = callbackParamsRef.current;
 
                 if (x.error?.code === 'no permission') {
 
@@ -28,13 +35,15 @@ export const QuerySubscriptionFrame = ({ globalEventManager, children }: { globa
         globalEventManager
             .scubscribeEvent('onquery', `${QuerySubscriptionFrame.name}-'refetchCurrentCourseItemCode'`, (x: QueryEventData) => {
 
+                const { refetchCurrentCourseItemCode } = callbackParamsRef.current;
+
                 if (x.route === apiRoutes.player.getPlayerData && x.state === 'success') {
 
                     Logger.logScoped('EVENTS', 'Player data successfully retrieved, updating current item code...');
                     refetchCurrentCourseItemCode();
                 }
             });
-    }, [globalEventManager, navigate2, refetchCurrentCourseItemCode]);
+    }, [globalEventManager]);
 
     return (
         <>
