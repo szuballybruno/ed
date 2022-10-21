@@ -116,7 +116,7 @@ export const MobileExamLayout = ({
         minH={(() => {
 
             if (isIPhone)
-                return 'calc(100vh - 50px)';
+                return 'calc(100vh - 60px)';
 
             if (isFullscreen)
                 return '100vh';
