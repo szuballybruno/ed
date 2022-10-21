@@ -1,9 +1,7 @@
 import { InputAdornment, TextField } from '@mui/material';
-import { forwardRef, useEffect, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useMemo, useState } from 'react';
 import { EpistoFlex2 } from './EpistoFlex';
 import { EpistoFont } from './EpistoFont';
-
-// state
 
 export const useEpistoEntryState = (options?: {
     isMandatory?: boolean,
@@ -11,68 +9,55 @@ export const useEpistoEntryState = (options?: {
 }) => {
 
     // state 
-
     const [value, setValue] = useState('');
-    const [error, setError] = useState<string | null>(null);
-    const [initialState, setInitialState] = useState(true);
+    const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+    const { isMandatory, validateFunction } = options ?? {};
 
     // funcs 
-
-    const validate = () => {
+    const validate = useCallback(() => {
 
         const error = ((): string | null => {
 
             // is mandatory validation 
-            if (options?.isMandatory && !value)
+            if (isMandatory && !value)
                 return 'Ez a mező nem lehet üres!';
 
             // external validation
-            if (options?.validateFunction) {
-
-                const extError = options?.validateFunction(value);
-                if (extError)
-                    return extError;
-            }
+            if (validateFunction)
+                return validateFunction(value);
 
             // no error 
             return null;
         })();
 
-        setError(error);
+        setErrorMsg(error);
 
         return !error;
-    };
-
-    const setValue2 = (value: string) => {
-
-        setValue(value);
-
-        if (initialState)
-            setInitialState(false);
-    };
+    }, [isMandatory, validateFunction, value]);
 
     // effects 
-
     useEffect(() => {
 
-        if (initialState)
-            return;
-
         validate();
-    }, [value]);
+    }, [value, validate]);
 
-    return {
+    return useMemo(() => ({
         value,
-        error,
+        errorMsg,
         validate,
-        setValue: setValue2,
-        setError
-    };
+        setValue,
+        setErrorMsg
+    }), [
+        value,
+        errorMsg,
+        validate,
+        setValue,
+        setErrorMsg
+    ]);
 };
 
 export type EpistoEntryStateType = ReturnType<typeof useEpistoEntryState>;
-
-// component 
 
 export type EpistoEntryNewPropsType = {
     state: EpistoEntryStateType,
@@ -111,7 +96,7 @@ export const EpistoEntryNew = forwardRef<HTMLInputElement, EpistoEntryNewPropsTy
     } = props;
 
     const {
-        error,
+        errorMsg: error,
         setValue,
         value
     } = state;

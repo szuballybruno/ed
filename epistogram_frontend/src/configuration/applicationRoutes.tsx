@@ -9,6 +9,7 @@ import { UserDataGridPresetType } from '../components/administration/users/AminU
 import { ApplicationRoute, EpistoRoute } from '../models/types';
 import { Id } from '../shared/types/versionId';
 import { Environment } from '../static/Environemnt';
+import { EpistoIcons } from '../static/EpistoIcons';
 import { translatableTexts } from '../static/translatableTexts';
 
 export type ApplicationRoutesType = {
@@ -18,7 +19,7 @@ export type ApplicationRoutesType = {
     registrationRoute: ApplicationRoute<{ token: string, isInvited: boolean }>;
     surveyRoute: ApplicationRoute;
     setNewPasswordRoute: ApplicationRoute<void, { token: string }>;
-    registerViaActivationCodeRoute: ApplicationRoute;
+    registerViaActivationCodeRoute: ApplicationRoute<void, { activationCode?: string }>;
     homeRoute: ApplicationRoute;
     rootHomeRoute: ApplicationRoute;
     shopRoute: ApplicationRoute;
@@ -83,6 +84,7 @@ export type ApplicationRoutesType = {
             indexRoute: ApplicationRoute;
             editRoute: ApplicationRoute<{ roleId: Id<'Role'> }>;
         };
+        activationCodesRoute: ApplicationRoute;
         debugRoute: ApplicationRoute & {
             indexRoute: ApplicationRoute;
         };
@@ -452,6 +454,14 @@ export const getApplicationRoutes = () => {
                     title: 'Role edit',
                     route: new EpistoRoute('/administration/roles', '/:roleId/edit')
                 },
+            },
+
+            activationCodesRoute: {
+                title: 'Activation Codes',
+                route: new EpistoRoute('/administration', 'activation-codes'),
+                icon: <EpistoIcons.Link
+                    className="fontXXL"
+                    color={'secondary'} />
             },
 
             debugRoute: {

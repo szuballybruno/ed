@@ -410,7 +410,7 @@ export const AdminEditUserControl = ({
                         state={coinAmountEntryState} />
 
                     <EpistoButton
-                        isDisabled={!!coinAmountEntryState.error}
+                        isDisabled={!!coinAmountEntryState.errorMsg}
                         onClick={handleAddCoinsAsync}
                         variant="colored">
 

@@ -134,23 +134,10 @@ export class AuthenticationService {
             throw new ErrorWithCode('Invalid password.', 'corrupt_credentials');
 
         /**
-         * Save session activity
+         * Login user 
          */
-        const userId = user.id;
-
-        await this._userSessionActivityService
-            .saveUserSessionActivityAsync(userId, 'login');
-
-        /**
-         * Get new auth tokens
-         */
-        const tokens = await this.getUserLoginTokens(user);
-
-        /**
-         * Pair new refresh token to user 
-         */
-        await this._userService
-            .setUserActiveRefreshToken(userId, tokens.refreshToken);
+        const tokens = await this
+            .loginUserInternallyAsync(user.id);
 
         return tokens;
     }
@@ -169,21 +156,6 @@ export class AuthenticationService {
     };
 
     /**
-     * Creates user tokens
-     */
-    getUserLoginTokens = async (user: User) => {
-
-        // get tokens
-        const accessToken = this._tokenService.createAccessToken(user);
-        const refreshToken = this._tokenService.createRefreshToken(user);
-
-        return {
-            accessToken,
-            refreshToken
-        };
-    };
-
-    /**
      * Checks if company id matches user's company,
      * otherwise throws error 
      */
@@ -196,6 +168,47 @@ export class AuthenticationService {
 
         if (user.companyId !== companyId)
             throw new ErrorWithCode('User company differs from provided comapny id!', 'forbidden');
+    }
+
+    async loginUserInternallyAsync(userId: Id<'User'>) {
+
+        // get user 
+        const user = await this._userService
+            .getUserById(userId);
+
+        if (!user)
+            throw new ErrorWithCode('User not found by id ' + userId, 'internal server error');
+
+        // Save session activity
+        await this
+            ._userSessionActivityService
+            .saveUserSessionActivityAsync(userId, 'login');
+
+        // get tokens
+        const tokens = await this
+            ._getUserLoginTokens(user);
+
+        // save refresh token to DB
+        await this
+            ._userService
+            .setUserActiveRefreshToken(user.id, tokens.refreshToken);
+
+        return tokens;
+    }
+
+    /**
+     * Creates user tokens
+     */
+    private async _getUserLoginTokens(user: User) {
+
+        // get tokens
+        const accessToken = this._tokenService.createAccessToken(user);
+        const refreshToken = this._tokenService.createRefreshToken(user);
+
+        return {
+            accessToken,
+            refreshToken
+        };
     }
 
     private _renewUserSessionAsync = async (userId: Id<'User'>, prevRefreshToken: string) => {
@@ -211,23 +224,9 @@ export class AuthenticationService {
                 throw new ErrorWithCode(`User has no active token, or it's not the same as the one in request! User id '${userId}', active token '${refreshTokenFromDb}'`, 'forbidden');
         }
 
-        // get user 
-        const user = await this._userService
-            .getUserById(userId);
+        const tokens = await this
+            .loginUserInternallyAsync(userId);
 
-        if (!user)
-            throw new ErrorWithCode('User not found by id ' + userId, 'internal server error');
-
-        // get tokens
-        const { accessToken, refreshToken } = await this.getUserLoginTokens(user);
-
-        // save refresh token to DB
-        await this._userService
-            .setUserActiveRefreshToken(user.id, prevRefreshToken);
-
-        return {
-            accessToken,
-            refreshToken
-        };
+        return tokens;
     };
 }

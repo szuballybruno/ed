@@ -55,26 +55,11 @@ export const useRegisterInvitedUser = () => {
 
 export const useRegisterUserViaActivationCode = () => {
 
-    const postDataResult = usePostDataUnsafe(apiRoutes.registration.registerViaActivationCode);
-
-    const registerUserViaActivationCodeAsync = (
-        activationCode: string,
-        emailAddress: string,
-        firstName: string,
-        lastName: string) => {
-
-        return postDataResult
-            .postDataAsync({
-                activationCode,
-                emailAddress,
-                firstName,
-                lastName
-            } as RegisterUserViaActivationCodeDTO);
-    };
+    const postDataResult = usePostDataUnsafe<RegisterUserViaActivationCodeDTO>(apiRoutes.registration.registerViaActivationCode);
 
     return {
         registerUserViaActivationCodeState: postDataResult.state,
-        registerUserViaActivationCodeAsync
+        registerUserViaActivationCodeAsync: postDataResult.postDataAsync
     };
 };
 

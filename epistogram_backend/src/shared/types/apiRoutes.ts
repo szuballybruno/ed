@@ -22,7 +22,8 @@ export const apiRoutes = {
     misc: {
         getHomePageDTO: '/misc/get-overview-page-dto',
         getCurrentCourseItemCode: '/misc/get-current-course-item-code',
-        getCourseOverviewData: '/misc/get-course-overview-data'
+        getCourseOverviewData: '/misc/get-course-overview-data',
+        getActivationCodeLinks: '/misc/get-activation-code-links' as ParametrizedRouteType<{ query: { urlTemplate: string, companyId: Id<'Company'> } }>
     },
 
     roles: {

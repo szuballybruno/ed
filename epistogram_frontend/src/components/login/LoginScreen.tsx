@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { AuthenticationStateType, useLogInUser } from '../../services/api/authenticationApiService';
 import { CompanyApiService } from '../../services/api/CompanyApiService1';
@@ -86,18 +86,10 @@ const LoginScreen = () => {
         // TODO
     };
 
-    // watch for auth state change
-    // and navigate to home page if athenticated
-    useEffect(() => {
-
-        /**
-         * Unauthenticated is not allowed to be navigated 
-         * to either survey or home page
-         */
-        if (authState !== 'authenticated')
-            return;
-
-        Logger.logScoped('AUTO NAV', `Auth state is ${'authenticated' as AuthenticationStateType}, navigating...`);
+    /**
+     * Navigate to app function
+     */
+    const navigateToApp = useCallback(() => {
 
         /**
          * Survey can't be bypassed, navigating to survey
@@ -121,6 +113,24 @@ const LoginScreen = () => {
          * Survey can be bypassed, going to home
          */
         navigate2(applicationRoutes.homeRoute);
+    }, [dest, hasPermission, navigate2, navigateToHref]);
+
+    console.log(authState);
+
+    // watch for auth state change
+    // and navigate to home page if athenticated
+    useEffect(() => {
+
+        /**
+         * Unauthenticated is not allowed to be navigated 
+         * to either survey or home page
+         */
+        if (authState !== 'authenticated')
+            return;
+
+        Logger.logScoped('AUTH', `Auth state is ${'authenticated' as AuthenticationStateType}, navigating...`);
+
+        navigateToApp();
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [authState]);
@@ -298,7 +308,7 @@ const LoginScreen = () => {
                             </EpistoFont>
 
                             <EpistoFont
-                                onClick={() => navigate2(applicationRoutes.registerViaActivationCodeRoute)}
+                                onClick={() => navigate2(applicationRoutes.registerViaActivationCodeRoute, {})}
                                 fontSize="fontSmall"
                                 style={{
                                     color: companyDetails?.secondaryColor!,

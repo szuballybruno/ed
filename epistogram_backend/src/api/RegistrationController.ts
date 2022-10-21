@@ -55,13 +55,24 @@ export class RegistrationController implements XController<RegistrationControlle
     async registerUserViaActivationCodeAction(params: ActionParams) {
 
         const body = params
-            .getBody<RegisterUserViaActivationCodeDTO>(['activationCode', 'emailAddress', 'firstName', 'lastName']);
+            .getBody<RegisterUserViaActivationCodeDTO>([
+                'activationCode',
+                'emailAddress',
+                'firstName',
+                'lastName',
+                'password',
+                'passwordCompare'
+            ]);
 
-        await this._userRegistrationService
+        const { accessToken, refreshToken } = await this._userRegistrationService
             .selfRegisterWithActivationCodeAsync(
                 body.getValue(x => x.activationCode, 'string'),
                 body.getValue(x => x.emailAddress, 'string'),
                 body.getValue(x => x.firstName, 'string'),
-                body.getValue(x => x.lastName, 'string'));
+                body.getValue(x => x.lastName, 'string'),
+                body.getValue(x => x.password, 'string'),
+                body.getValue(x => x.passwordCompare, 'string'));
+
+        setAuthCookies(this._config, params.res, accessToken, refreshToken, this._config.cookieOptions);
     }
 }

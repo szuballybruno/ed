@@ -1,6 +1,6 @@
 import { Company } from '../models/entity/misc/Company';
 import { TokenPair } from '../models/TokenPair';
-import { validatePassowrd } from '../shared/logic/sharedLogic';
+import { getPassowrdValidationError } from '../shared/logic/sharedLogic';
 import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 import { throwNotImplemented } from '../utilities/helpers';
 import { ActivationCodeService } from './ActivationCodeService';
@@ -32,14 +32,34 @@ export class UserRegistrationService {
         activationCode: string,
         email: string,
         firstName: string,
-        lastName: string) {
+        lastName: string,
+        password: string,
+        passwordCompare: string) {
 
         // check code
-        const activationCodeEntity = await this._activationCodeService
-            .isValidCodeAsync(activationCode);
-
+        const activationCodeEntity = await this._activationCodeService.isValidCodeAsync(activationCode);
         if (!activationCodeEntity)
             throw new ErrorWithCode(`Activation code ${activationCode} not found in DB, or already used.`, 'activation_code_issue');
+
+        // check given password
+        const passwordValidationError = getPassowrdValidationError(password, passwordCompare);
+        if (passwordValidationError)
+            throw new ErrorWithCode(`Given password is invalid. Issue code: ${passwordValidationError}`, 'corrupt_credentials');
+
+        // check email
+        const isEmailValid = this._validateEmail(email);
+        if (!isEmailValid)
+            throw new ErrorWithCode('Given email is invalid.', 'email_invalid');
+
+        // check fisrst name
+        const isFirstNameValid = this._validateName(firstName);
+        if (!isFirstNameValid)
+            throw new ErrorWithCode('Given first name is invalid.', 'first_name_invalid');
+
+        // check last name
+        const isLastNameValid = this._validateName(firstName);
+        if (!isLastNameValid)
+            throw new ErrorWithCode('Given last name is invalid.', 'last_name_invalid');
 
         const { companyId } = activationCodeEntity;
 
@@ -59,20 +79,30 @@ export class UserRegistrationService {
         //     .getSingle();
 
         // create user
-        await this
-            ._userInvitationService
-            .createInvitedUserAsync({
+        const { id: userId } = await this
+            ._userService
+            .createUserSimpleAsync({
                 email,
                 firstName,
                 lastName,
                 companyId,
                 departmentId: 26 as any,
-                isSurveyRequired
+                registrationType: 'Invitation',
+                invitationToken: null,
+                isSurveyRequired,
+                unhashedPassword: 'guest'
             });
 
         // invalidate activation code
-        await this._activationCodeService
+        await this
+            ._activationCodeService
             .invalidateCodeAsync(activationCodeEntity.id);
+
+        // login user 
+        const tokens = await this._authenticationService
+            .loginUserInternallyAsync(userId);
+
+        return tokens;
     }
 
     /**
@@ -98,20 +128,16 @@ export class UserRegistrationService {
         const userId = user.id;
 
         // check passwords
-        if (validatePassowrd(password, passwordControl))
-            throw new ErrorWithCode('Password is invalid.', 'bad request');
+        if (getPassowrdValidationError(password, passwordControl))
+            throw new ErrorWithCode('Password is invalid.', 'corrupt_credentials');
 
         // update user
         await this._userService
             .setUserInivitationDataAsync(userId, password);
 
-        // get auth tokens
+        // login user 
         const tokens = await this._authenticationService
-            .getUserLoginTokens(user);
-
-        // set user current refresh token
-        await this._userService
-            .setUserActiveRefreshToken(userId, tokens.refreshToken);
+            .loginUserInternallyAsync(user.id);
 
         return tokens;
     }
@@ -158,5 +184,33 @@ export class UserRegistrationService {
         //     .setUserActiveRefreshToken(userId, tokens.refreshToken);
 
         // return tokens;
+    }
+
+    /**
+     * Validate email address based on regex from StackOverflow,
+     * TODO: tests.
+     */
+    private _validateEmail(email: string) {
+
+        const emailFormat = /^[a-zA-Z0-9_.+]+(?<!^[0-9]*)@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
+
+        if (email === '')
+            return false;
+
+        if (!email.match(emailFormat))
+            return false;
+
+        return true;
+    }
+
+    /**
+     * Validate name
+     */
+    private _validateName(name: string) {
+
+        if (name.length > 60)
+            return false;
+
+        return true;
     }
 }

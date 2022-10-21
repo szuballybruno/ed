@@ -61,6 +61,9 @@ export class ActionParams<
         this.files = this.getFiles();
     }
 
+    /**
+     * @deprecated use: getFromParameterized
+     */
     getBody<T = any>(notNullOrUndefined: (keyof T)[] = []) {
 
         if (this.isMultipart) {
@@ -86,6 +89,9 @@ export class ActionParams<
         }
     }
 
+    /**
+     * @deprecated use: getFromParameterized
+     */
     getQuery<T = any>() {
 
         const query = withValueOrBadRequest<T>(this.req.query);

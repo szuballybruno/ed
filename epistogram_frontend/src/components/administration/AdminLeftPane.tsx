@@ -21,6 +21,7 @@ export const AdminLeftPane = () => {
         .addIf(hasPermission('CAN_VIEW_HIDDEN_MENUS'), administrationRoutes.personalityAssessmentRoute)
         .addIf(hasPermission('CAN_VIEW_HIDDEN_MENUS'), administrationRoutes.companiesRoute)
         .addIf(hasPermission('CAN_VIEW_HIDDEN_MENUS'), administrationRoutes.rolesRoute)
+        .addIf(hasPermission('CAN_VIEW_HIDDEN_MENUS'), administrationRoutes.activationCodesRoute)
         .addIf(hasPermission('CAN_VIEW_HIDDEN_MENUS'), administrationRoutes.debugRoute)
         .getArray();
 

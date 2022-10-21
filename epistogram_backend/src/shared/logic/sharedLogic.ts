@@ -1,16 +1,10 @@
 import { UserPermissionDTO } from '../dtos/role/UserPermissionDTO';
 import { PasswordValidationIssueType } from '../types/sharedTypes';
 
-export const validatePassowrd = (password: string, passwordControl: string): PasswordValidationIssueType | null => {
+export const getPassowrdValidationError = (password: string, passwordControl: string): PasswordValidationIssueType | null => {
 
     if (!password || password === '')
         return 'passwordIsEmpty';
-
-    if (!passwordControl || passwordControl === '')
-        return 'controlPasswordIsEmpty';
-
-    if (passwordControl !== password)
-        return 'doesNotMatchControlPassword';
 
     if (password.length < 6)
         return 'tooShort';
@@ -20,6 +14,9 @@ export const validatePassowrd = (password: string, passwordControl: string): Pas
 
     if (!textContainsNumber(password))
         return 'hasNoNumber';
+
+    if (passwordControl !== password)
+        return 'doesNotMatchControlPassword';
 
     return null;
 };

@@ -68,7 +68,7 @@ const AuthFirewall = (props: PropsWithChildren & {
         // error
         if (authState === 'error' && !isCurrentRouteLogin) {
 
-            Logger.logScoped('AUTO NAV', `Auth state: ${authState}. Redirecting to login.`);
+            Logger.logScoped('AUTH', `Auth state: ${authState}. Redirecting to login.`);
 
             navigate2(loginRoute);
         }
@@ -145,15 +145,17 @@ export const AuthenticationFrame = (props) => {
     // authorization context 
     const authContextData = getAuthorizationContextLogic(authData?.permissions ?? []);
 
-    return <AuthenticationStateContext.Provider value={authState}>
-        <RefetchUserAsyncContext.Provider value={refetchAuthHandshake}>
-            <CurrentUserContext.Provider value={authData?.currentUser ?? userDefaults}>
-                <AuthorizationContext.Provider value={authContextData}>
-                    <AuthFirewall authState={authState}>
-                        {props.children}
-                    </AuthFirewall>
-                </AuthorizationContext.Provider>
-            </CurrentUserContext.Provider>
-        </RefetchUserAsyncContext.Provider>
-    </AuthenticationStateContext.Provider> as JSX.Element;
+    return (
+        <AuthenticationStateContext.Provider value={authState}>
+            <RefetchUserAsyncContext.Provider value={refetchAuthHandshake}>
+                <CurrentUserContext.Provider value={authData?.currentUser ?? userDefaults}>
+                    <AuthorizationContext.Provider value={authContextData}>
+                        <AuthFirewall authState={authState}>
+                            {props.children}
+                        </AuthFirewall>
+                    </AuthorizationContext.Provider>
+                </CurrentUserContext.Provider>
+            </RefetchUserAsyncContext.Provider>
+        </AuthenticationStateContext.Provider>
+    );
 };

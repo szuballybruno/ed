@@ -6,7 +6,6 @@ import { rootRoute } from '../configuration/applicationRoutes';
 import { ApplicationRoute } from '../models/types';
 import { useNavigation } from '../services/core/navigatior';
 import { useShowErrorDialog } from '../services/core/notifications';
-import { validatePassowrd } from '../shared/logic/sharedLogic';
 import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 import { ErrorCodeType, RoleIdEnum } from '../shared/types/sharedTypes';
 import { Id } from '../shared/types/versionId';
@@ -29,7 +28,7 @@ export const iterate = <T>(n: number, fn: (index) => T) => {
 type SetterFnType<TState> = (state: TState) => void;
 type SetStateFnType<TState> = (setterFnOrState: SetterFnType<TState> | Partial<TState>) => void;
 
-export const useTryCatchWrapper = (getMessageFromCode: (code: ErrorCodeType) => string | undefined) => {
+export const useTryCatchWrapper = (getMessageFromCode: (code: ErrorCodeType) => string | undefined | void | 'PREVENT MSG') => {
 
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -50,7 +49,8 @@ export const useTryCatchWrapper = (getMessageFromCode: (code: ErrorCodeType) => 
                     ? getMessageFromCode(errorWithCode.code)
                     : null;
 
-                setErrorMessage(customMessage ?? defaultMessage);
+                if (customMessage !== 'PREVENT MSG')
+                    setErrorMessage(customMessage ?? defaultMessage);
             }
         };
     };
@@ -748,68 +748,6 @@ export const useIsScreenWiderThan = (minimumPixels: number) => {
     const isTrue = queryRes[0];
 
     return isTrue;
-};
-
-export const usePasswordEntryState = () => {
-
-    const [password, setPassword] = useState('');
-    const [passwordCompare, setPasswordCompare] = useState('');
-    const [passwordError, setPasswordError] = useState<string | null>(null);
-    const [passwordCompareError, setPasswordCompareError] = useState<string | null>(null);
-
-    const validate = () => {
-
-        const error = validatePassowrd(password, passwordCompare);
-
-        switch (error) {
-
-            case 'passwordIsEmpty':
-                setPasswordError(null);
-                setPasswordCompareError(null);
-                return false;
-
-            case 'tooShort':
-                setPasswordError('A jelszó túl rövid!');
-                setPasswordCompareError(null);
-                return false;
-
-            case 'tooLong':
-                setPasswordError('A jelszó túl hosszú!');
-                setPasswordCompareError(null);
-                return false;
-
-            case 'doesNotMatchControlPassword':
-                setPasswordError('A jelszavak nem egyeznek!');
-                setPasswordCompareError('A jelszavak nem egyeznek!');
-                return false;
-
-            case 'hasNoNumber':
-                setPasswordError('A jelszó nem tartalmaz számot!');
-                setPasswordCompareError(null);
-                return false;
-
-            default:
-                setPasswordError(null);
-                setPasswordCompareError(null);
-                return true;
-        }
-    };
-
-    useEffect(() => {
-
-        validate();
-    }, [validate]);
-
-    return {
-        password,
-        passwordCompare,
-        passwordError,
-        passwordCompareError,
-        hasCredentialError: !!passwordError || !!passwordCompareError,
-        setPassword,
-        setPasswordCompare,
-        validate
-    };
 };
 
 export type PropsWithChildren = { children: ReactNode };

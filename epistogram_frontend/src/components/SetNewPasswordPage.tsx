@@ -1,30 +1,21 @@
-import { TextField } from '@mui/material';
 import { applicationRoutes } from '../configuration/applicationRoutes';
 import { useSetNewPassword } from '../services/api/passwordChangeApiService';
 import { useNavigation } from '../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../services/core/notifications';
 import { Environment } from '../static/Environemnt';
-import { usePasswordEntryState } from '../static/frontendHelpers';
 import { useRouteQuery } from '../static/locationHelpers';
 import { ContentPane } from './ContentPane';
 import { EpistoButton } from './controls/EpistoButton';
 import { EpistoHeader } from './EpistoHeader';
 import { PageRootContainer } from './PageRootContainer';
 import { LoadingFrame } from './system/LoadingFrame';
+import { PasswordEntry, usePasswordEntryState } from './universal/PasswordEntry';
 
 export const SetNewPasswordPage = () => {
 
     const { setNewPassword, setNewPasswordState } = useSetNewPassword();
 
-    const {
-        password,
-        passwordCompare,
-        passwordCompareError,
-        passwordError,
-        setPassword,
-        setPasswordCompare,
-        validate
-    } = usePasswordEntryState();
+    const passwordEntryState = usePasswordEntryState();
 
     const token = useRouteQuery(applicationRoutes.setNewPasswordRoute)
         .getValue(x => x.token, 'string');
@@ -36,10 +27,10 @@ export const SetNewPasswordPage = () => {
     const handleSetNewPassword = async () => {
         try {
 
-            if (!validate())
+            if (!passwordEntryState.validate())
                 return;
 
-            await setNewPassword(password, passwordCompare, token);
+            await setNewPassword(passwordEntryState.password, passwordEntryState.passwordCompare, token);
 
             showNotification('Új jelszó sikeresen beállítva!');
             navigate2(applicationRoutes.homeRoute);
@@ -77,25 +68,8 @@ export const SetNewPasswordPage = () => {
 
                 </EpistoHeader>
 
-                <TextField
-                    style={{ margin: '20px' }}
-                    variant="standard"
-                    type="password"
-                    autoComplete="new-password"
-                    error={!!passwordError}
-                    helperText={passwordError}
-                    onChange={x => setPassword(x.currentTarget.value)}
-                    label="Jelszó"></TextField>
-
-                <TextField
-                    style={{ margin: '0 20px 20px 20px' }}
-                    variant="standard"
-                    autoComplete="new-password"
-                    type="password"
-                    error={!!passwordCompareError}
-                    helperText={passwordCompareError}
-                    onChange={x => setPasswordCompare(x.currentTarget.value)}
-                    label="Jelszó mégegyszer"></TextField>
+                <PasswordEntry
+                    state={passwordEntryState} />
 
                 <EpistoButton
                     variant="outlined"

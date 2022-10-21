@@ -33,6 +33,7 @@ import { TeacherInfoService } from './TeacherInfoService';
 import { TempomatService } from './TempomatService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { UserStatsService } from './UserStatsService';
+import { RegistrationType } from '../models/Types';
 
 export class UserService {
 
@@ -49,7 +50,7 @@ export class UserService {
     }
 
     /**
-     * Get admin user list  
+     * Get admin user list
      * TODO: what an absolute fucking garbage clusterfuck this is... NEEDS A SHITTON OF REFACTORING!
      */
     async getUserAdminListAsync(
@@ -150,7 +151,7 @@ export class UserService {
     }
 
     /**
-     * Gets some dropdown data for the user control 
+     * Gets some dropdown data for the user control
      */
     async getUserControlDropdownDataAsync(principalId: PrincipalId) {
 
@@ -361,25 +362,76 @@ export class UserService {
     }
 
     /**
+     * Create user simple
+     */
+    async createUserSimpleAsync({
+        email,
+        firstName,
+        lastName,
+        companyId,
+        departmentId,
+        invitationToken,
+        isSurveyRequired,
+        unhashedPassword,
+        registrationType
+    }: {
+        email: string,
+        firstName: string,
+        lastName: string,
+        companyId: Id<'Company'>,
+        departmentId: Id<'Department'>,
+        invitationToken: string | null,
+        isSurveyRequired: boolean,
+        unhashedPassword: string,
+        registrationType: RegistrationType
+    }) {
+
+        return await this
+            .createUserAsync({
+                email,
+                firstName,
+                lastName,
+                creationDate: new Date(Date.now()),
+                companyId,
+                departmentId,
+                registrationType,
+                password: 'guest',
+                invitationToken,
+                isGod: false,
+                avatarFileId: null,
+                deletionDate: null,
+                isInvitationAccepted: false,
+                isTrusted: true,
+                linkedInUrl: null,
+                phoneNumber: null,
+                refreshToken: null,
+                resetPasswordToken: null,
+                userDescription: null,
+                username: '',
+                isSurveyRequired
+            }, unhashedPassword);
+    }
+
+    /**
      * Create a new user.
      */
-    createUserAsync = async (insertUser: InsertEntity<User>, unhashedPassword: string): Promise<User> => {
+    createUserAsync = async (user: InsertEntity<User>, unhashedPassword: string): Promise<User> => {
 
         // check if user already exists with email
-        const existingUser = await this.getUserByEmailAsync(insertUser.email);
+        const existingUser = await this.getUserByEmailAsync(user.email);
         if (existingUser)
-            throw new ErrorWithCode('User already exists. Email: ' + insertUser.email, 'email_taken');
+            throw new ErrorWithCode('User already exists. Email: ' + user.email, 'email_taken');
 
         // hash user password
         const hashedPassword = await this
             ._hashService
             .hashPasswordAsync(unhashedPassword);
 
-        insertUser.password = hashedPassword;
+        user.password = hashedPassword;
 
         // insert user
         const createdUser = await this._ormService
-            .createAsync(User, insertUser);
+            .createAsync(User, user);
 
         // insert signup answer session
         await this

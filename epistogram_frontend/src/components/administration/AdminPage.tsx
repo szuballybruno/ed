@@ -4,6 +4,7 @@ import { ContentPane } from '../ContentPane';
 import { PageRootContainer } from '../PageRootContainer';
 import { useAuthorizationContext } from '../system/AuthorizationContext';
 import { EpistoRoutes } from '../universal/EpistoRoutes';
+import { ActivationCodesAdminPage } from './activationCodes/ActivationCodesAdminPage';
 import { AdminLeftPane } from './AdminLeftPane';
 import { CompanyAdminPage } from './companies/CompanyAdminPage';
 import { CourseAdministartionSubpage } from './courses/CourseAdministartionSubpage';
@@ -87,6 +88,11 @@ export const AdminPage = () => {
                     .addIf(hasPermission('CAN_VIEW_HIDDEN_MENUS'), {
                         route: adminRoute.rolesRoute,
                         element: <RoleAdminPage />
+                    })
+
+                    .addIf(hasPermission('CAN_VIEW_HIDDEN_MENUS'), {
+                        route: adminRoute.activationCodesRoute,
+                        element: <ActivationCodesAdminPage />
                     })
 
                     .addIf(hasPermission('CAN_VIEW_HIDDEN_MENUS'), {
