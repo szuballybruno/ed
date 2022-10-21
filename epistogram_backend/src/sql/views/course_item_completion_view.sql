@@ -29,6 +29,7 @@ SELECT
     cice.completion_date,
     cv.id course_version_id,
     cv.course_id,
+	mv.module_id,
     ex.is_pretest
 FROM course_item_completion_cte cice
 

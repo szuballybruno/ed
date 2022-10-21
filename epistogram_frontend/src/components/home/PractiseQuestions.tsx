@@ -117,6 +117,7 @@ export const PractiseQuestions = (props: {
             </EpistoFont>
 
             <QuesitionView
+                isPractise
                 answerQuesitonAsync={handleAnswerQuestionAsync}
                 loadingProps={{ loadingState: answerQuestionState }}
                 question={practiseQuestion}

@@ -3,7 +3,7 @@ import { useReactTimer } from '../../helpers/reactTimer';
 import { PlayerApiService } from '../../services/api/PlayerApiService';
 import { QuestionDTO } from '../../shared/dtos/QuestionDTO';
 import { Id } from '../../shared/types/versionId';
-import { epochDates } from '../../static/frontendHelpers';
+import { epochDates, useIsMobileView } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
@@ -24,6 +24,7 @@ export const VideoQuestionnaire = (props: {
     const isAnswered = !!answerResult;
     const autoCloseSecs = 8;
     const [showUpTime, setShowUpTime] = useState<Date>(new Date());
+    const isMobile = useIsMobileView();
 
     const handleAnswerQuestionAsync = async (answerVersionIds: Id<'AnswerVersion'>[]) => {
 
@@ -63,6 +64,8 @@ export const VideoQuestionnaire = (props: {
     }, [isShowing]);
 
     return <EpistoFlex2
+        width={isMobile ? '100vw' : undefined}
+        height={isMobile ? '100vh' : undefined}
         direction="column">
 
         <QuesitionView
@@ -70,9 +73,11 @@ export const VideoQuestionnaire = (props: {
             loadingProps={{ loadingState: answerQuestionState }}
             question={question}
             answerResult={answerResult}
+            isPractise={false}
             {...css} />
 
         <EpistoFlex2
+            padding={isMobile ? '30px' : undefined}
             display={isAnswered ? undefined : 'none'}
             justify="flex-end">
 

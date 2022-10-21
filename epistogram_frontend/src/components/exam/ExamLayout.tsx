@@ -1,5 +1,6 @@
 import { ArrowBack } from '@mui/icons-material';
 import { CSSProperties, ReactNode, useEffect } from 'react';
+import browser from '../../services/core/browserSniffingService';
 import { QuestionDTO } from '../../shared/dtos/QuestionDTO';
 import { isString, useIsMobileView } from '../../static/frontendHelpers';
 import { EpistoButton } from '../controls/EpistoButton';
@@ -103,6 +104,8 @@ export const MobileExamLayout = ({
 
     const [isFullscreen, setIsFullscreen] = useVideoPlayerFullscreenContext();
     const isLandscape = window.orientation === 90;
+    const isIPhone = browser.isIPhone;
+    const isMobile = useIsMobileView();
 
     useEffect(() => {
         setIsFullscreen(true);
@@ -110,27 +113,34 @@ export const MobileExamLayout = ({
 
     return <EpistoFlex2
         id='ExamLayout-root'
-        minH={isFullscreen ? '100vh' : 'calc(100vh - 80px)'}
-        maxH={(() => {
+        minH={(() => {
 
-            if (isHeightMaximized)
-                return 'calc(100vh - 80px)';
+            if (isIPhone)
+                return 'calc(100vh - 60px)';
 
-            if (!isFullscreen)
-                return 'calc(100vh - 80px)';
+            if (isFullscreen)
+                return '100vh';
 
             return undefined;
+        })()}
+        maxH={(() => {
+
+            if (isIPhone) {
+                return 'calc(100vh - 120px)';
+            }
+
+            if (isMobile) {
+                return 'calc(100vh - 120px)';
+            }
         })()}
         height='100%'
         width='100%'
         px='5px'
         direction="column"
-        alignItems="center"
-        flex='1'
-        {...css}>
+        alignItems="center">
 
         {/* header */}
-        <EpistoFlex2
+        < EpistoFlex2
             id='ExamLayout-header'
             direction={'row'}
             justify='space-between'
@@ -143,23 +153,25 @@ export const MobileExamLayout = ({
             zIndex='1000'
             height='60px'
             minH='60px'
-            pl='20px'>
+            pl='20px' >
 
             {/* header left */}
-            <EpistoFlex2 >
+            <EpistoFlex2>
 
-                {headerLeftItem && (
-                    isString(headerLeftItem)
-                        ? (
-                            <EpistoFont>
-                                {headerLeftItem}
-                            </EpistoFont>
-                        )
-                        : (
-                            headerLeftItem
-                        )
-                )}
-            </EpistoFlex2>
+                {
+                    headerLeftItem && (
+                        isString(headerLeftItem)
+                            ? (
+                                <EpistoFont>
+                                    {headerLeftItem}
+                                </EpistoFont>
+                            )
+                            : (
+                                headerLeftItem
+                            )
+                    )
+                }
+            </EpistoFlex2 >
 
             {/* header center 
             <EpistoFlex2
@@ -186,25 +198,24 @@ export const MobileExamLayout = ({
                     buttons={footerButtons} />}
             </EpistoFlex2>
 
-        </EpistoFlex2>
+        </EpistoFlex2 >
 
         {/* content */}
-        <EpistoFlex2
+        < EpistoFlex2
+            overflowY='scroll'
             id='ExamLayout-content'
             my={'5px'}
-            height='100%'
             width="100%"
             align="center"
             justify="center"
             direction="column"
-            flex='1'
             {...css}>
 
             {children}
-        </EpistoFlex2>
+        </EpistoFlex2 >
 
         {/* footer */}
-        <EpistoFlex2
+        < EpistoFlex2
             id='ExamLayout-footer'
             width="100%"
             className="roundBorders mildShadow"
@@ -213,18 +224,20 @@ export const MobileExamLayout = ({
             align='center'
             justify={isFirst ? 'flex-end' : 'space-between'}
             mb='5px'
-            p='20px'>
+            p='20px' >
 
             {/* back button */}
-            {(handleBack && !isFirst) && ExamLayoutButton({
-                title: 'Vissza',
-                style: {
-                    flex: 1
-                },
-                action: handleBack,
-                //icon: <ArrowBack />,
-                iconPosition: 'start'
-            })}
+            {
+                (handleBack && !isFirst) && ExamLayoutButton({
+                    title: 'Vissza',
+                    style: {
+                        flex: 1
+                    },
+                    action: handleBack,
+                    //icon: <ArrowBack />,
+                    iconPosition: 'start'
+                })
+            }
 
             {/* progress line 
             <EpistoFlex2
@@ -238,10 +251,12 @@ export const MobileExamLayout = ({
             </EpistoFlex2>*/}
 
             {/* render footer buttons */}
-            {footerButtons && <MobileFooterButtons
-                buttons={footerButtons} />}
-        </EpistoFlex2>
-    </EpistoFlex2>;
+            {
+                footerButtons && <MobileFooterButtons
+                    buttons={footerButtons} />
+            }
+        </EpistoFlex2 >
+    </EpistoFlex2 >;
 };
 
 export const DesktopExamLayout = ({

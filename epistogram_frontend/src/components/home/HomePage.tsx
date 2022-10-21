@@ -3,6 +3,7 @@ import { useContext, useState } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { useOverviewPageDTO } from '../../services/api/miscApiService';
 import { useActiveCourses } from '../../services/api/userProgressApiService';
+import browser from '../../services/core/browserSniffingService';
 import { useNavigation } from '../../services/core/navigatior';
 import { Environment } from '../../static/Environemnt';
 import { EpistoIcons } from '../../static/EpistoIcons';
@@ -97,6 +98,7 @@ const HomePage = () => {
 
     const [isSmallerThan1320] = useMediaQuery('(max-width: 1320px)');
     const isMobile = useIsMobileView();
+    const isIPhone = browser.isIPhone;
     const [coinsAcquired, setCoinsAcquired] = useState(false);
 
     const { activeCourses } = useActiveCourses();
@@ -104,7 +106,10 @@ const HomePage = () => {
     const { currentCourseItemCode } = useCurrentCourseItemCodeContext();
     const isAnyCourseInProgess = !!currentCourseItemCode;
 
-    return <PageRootContainer>
+    return <PageRootContainer
+        maxH={isIPhone ? '100vh' : undefined}
+        maxW={isIPhone ? '100vw' : undefined}
+        overflow={isIPhone ? 'hidden' : undefined}>
 
         {/* sidebar / left pane */}
         {!isMobile && <LeftPane>
@@ -155,7 +160,14 @@ const HomePage = () => {
         {/* content */}
         <ContentPane
             px='20px'
-            pb={isMobile ? '80px' : undefined}
+            pb={(() => {
+
+                if (isMobile)
+                    return '80px';
+
+                return undefined;
+            })()}
+            //noOverflow={isMobile}
             direction="column"
             minWidth={!isSmallerThan1320 && !isMobile ? '1060px' : undefined}
             noMaxWidth>

@@ -131,6 +131,8 @@ import { CalculatedTempomatValueType } from '../TempomatService';
 import { UrlService } from '../UrlService';
 import { XMappingsBuilder } from './XMapperService/XMapperService';
 import { Mutable } from './XMapperService/XMapperTypes';
+import { UserModuleStatsDTO } from '../../shared/dtos/UserModuleStatsDTO';
+import { UserModuleStatsView } from '../../models/views/UserModuleStatsView';
 
 export const epistoMappingsBuilder = new XMappingsBuilder<[UrlService]>();
 
@@ -145,6 +147,22 @@ const marray = [
 
             return userOverviewViews.map(x => instantiate<UserAdminListDTO>({
                 ...x as UserAdminListDTO
+            }));
+        }),
+    epistoMappingsBuilder
+        .addArrayMapping(UserModuleStatsDTO, () => (
+            views: UserModuleStatsView[]) => {
+
+            return views.map(x => instantiate<UserModuleStatsDTO>({
+                userId: x.userId,
+                courseId: x.courseId,
+                moduleId: x.moduleId,
+                moduleName: x.moduleName,
+                moduleProgress: x.moduleProgress,
+                performancePercentage: x.performancePercentage,
+                lastExamScore: x.lastExamScore,
+                moduleQuestionSuccessRate: x.moduleQuestionSuccessRate,
+                videosToBeRepeatedCount: x.videosToBeRepeatedCount
             }));
         }),
 

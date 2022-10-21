@@ -1,6 +1,7 @@
 import { Grid } from '@chakra-ui/layout';
 import { useState } from 'react';
 import { ExamApiService } from '../../services/api/examApiService';
+import browser from '../../services/core/browserSniffingService';
 import { useShowErrorDialog } from '../../services/core/notifications';
 import { AnswerDTO } from '../../shared/dtos/AnswerDTO';
 import { ExamPlayerDataDTO } from '../../shared/dtos/ExamPlayerDataDTO';
@@ -59,6 +60,7 @@ export const ExamQuestions = ({
 
     const currentGivenAnswer = (givenAnswers[currentQuestion.questionVersionId + ''] ?? null) as GivenAnswerDTO | null;
     const isMobile = useIsMobileView();
+    const isIPhone = browser.isIPhone;
 
     /**
      * Open abort dialog 
@@ -180,7 +182,17 @@ export const ExamQuestions = ({
             questions={questions} />
 
         <ExamLayout
-            maxH='calc(100vh - 120px)'
+            maxH={(() => {
+
+                if (isIPhone) {
+                    return 'calc(100vh - 150px)';
+                }
+
+                if (isMobile) {
+                    return 'calc(100vh - 120px)';
+                }
+            })()}
+            height={isMobile ? 'calc(100% - 120px)' : undefined}
             headerLeftItem={(
                 <EpistoFlex2 align="center">
                     <img
@@ -217,7 +229,7 @@ export const ExamQuestions = ({
 
             <ExamLayoutContent
                 style={{
-                    maxHeight: '100%'
+                    maxHeight: 'calc(100% - 10px)'
                 }}
                 title={currentQuestion.questionText}>
 
@@ -265,5 +277,5 @@ export const ExamQuestions = ({
                 </EpistoFlex2>
             </ExamLayoutContent>
         </ExamLayout>
-    </LoadingFrame>;
+    </LoadingFrame >;
 };

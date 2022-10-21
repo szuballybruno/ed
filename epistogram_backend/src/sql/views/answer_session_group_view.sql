@@ -4,6 +4,7 @@
 SELECT
     asv.user_id,
     cv.course_id,
+	mv.module_id,
     asv.answer_session_type,
     asv.start_date,
     AVG(asv.answer_session_success_rate) answer_session_success_rate
@@ -27,5 +28,6 @@ WHERE asv.answer_session_type != 'pretest'
 GROUP BY 
     asv.user_id,
     cv.course_id,
+	mv.module_id,
     asv.answer_session_type,
     asv.start_date
