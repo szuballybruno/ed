@@ -1,10 +1,11 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { applicationRoutes } from '../configuration/applicationRoutes';
 import { useRegisterUserViaActivationCode } from '../services/api/registrationApiService';
 import { useNavigation } from '../services/core/navigatior';
 import { showNotification } from '../services/core/notifications';
 import { Environment } from '../static/Environemnt';
 import { useIsMobileView, useTryCatchWrapper } from '../static/frontendHelpers';
+import { LocationHelpers } from '../static/locationHelpers';
 import { translatableTexts } from '../static/translatableTexts';
 import { EpistoButton } from './controls/EpistoButton';
 import { EpistoEntryNew, useEpistoEntryState } from './controls/EpistoEntryNew';
@@ -24,6 +25,38 @@ export const RegisterViaActivationCodePage = () => {
 
     const { navigate2 } = useNavigation();
     const isMobile = useIsMobileView();
+    const query = LocationHelpers
+        .useQueryParams<{ activationCode: string }>();
+
+    const activationCode = query
+        .getValueOrNull(x => x.activationCode, 'string');
+
+    // state
+    const emailEntryState = useEpistoEntryState({ isMandatory: true });
+    const firstNameEntryState = useEpistoEntryState({ isMandatory: true });
+    const lastNameEntryState = useEpistoEntryState({ isMandatory: true });
+    const activationCodeEntryState = useEpistoEntryState({ isMandatory: true });
+    const passwordState = usePasswordEntryState();
+
+    /**
+     * Set activation code
+     */
+    useEffect(() => {
+
+        if (!activationCode)
+            return;
+
+        if (activationCodeEntryState.value)
+            return;
+
+        activationCodeEntryState
+            .setValue(activationCode);
+    }, [activationCode, activationCodeEntryState]);
+
+    /**
+     * Prepare error handler wrapper 
+     * for register function
+     */
     const { errorMessage, getWrappedAction } = useTryCatchWrapper(code => {
 
         if (code === 'activation_code_issue') {
@@ -43,15 +76,9 @@ export const RegisterViaActivationCodePage = () => {
         }
     });
 
-    // state
-    const emailEntryState = useEpistoEntryState({ isMandatory: true });
-    const firstNameEntryState = useEpistoEntryState({ isMandatory: true });
-    const lastNameEntryState = useEpistoEntryState({ isMandatory: true });
-    const activationCodeEntryState = useEpistoEntryState({ isMandatory: true });
-    const passwordState = usePasswordEntryState();
-
-    // func
-
+    /**
+     * Is validation ok
+     */
     const isAllValid = useMemo(() => {
 
         const entriesValid = validateAllEntries([
@@ -67,6 +94,9 @@ export const RegisterViaActivationCodePage = () => {
         return entriesValid && pwStateValid;
     }, [emailEntryState, firstNameEntryState, lastNameEntryState, activationCodeEntryState, passwordState]);
 
+    /**
+     * Register async 
+     */
     const handleRegisterAsync = getWrappedAction(async () => {
 
         if (!isAllValid)

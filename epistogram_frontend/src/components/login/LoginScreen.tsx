@@ -308,7 +308,7 @@ const LoginScreen = () => {
                             </EpistoFont>
 
                             <EpistoFont
-                                onClick={() => navigate2(applicationRoutes.registerViaActivationCodeRoute)}
+                                onClick={() => navigate2(applicationRoutes.registerViaActivationCodeRoute, {})}
                                 fontSize="fontSmall"
                                 style={{
                                     color: companyDetails?.secondaryColor!,

@@ -1,6 +1,4 @@
-import { DomainProviderService } from '../services/DomainProviderService';
 import { MiscService } from '../services/MiscService';
-import { TokenService } from '../services/TokenService';
 import { UserCourseBridgeService } from '../services/UserCourseBridgeService';
 import { apiRoutes } from '../shared/types/apiRoutes';
 import { ServiceProvider } from '../startup/servicesDI';
@@ -11,16 +9,12 @@ import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
 export class MiscController implements XController<MiscController> {
 
     private _miscService: MiscService;
-    private _tokenService: TokenService;
     private _courseBridgeService: UserCourseBridgeService;
-    private _domainProviderService: DomainProviderService;
 
     constructor(serviceProvider: ServiceProvider) {
 
         this._miscService = serviceProvider.getService(MiscService);
-        this._tokenService = serviceProvider.getService(TokenService);
         this._courseBridgeService = serviceProvider.getService(UserCourseBridgeService);
-        this._domainProviderService = serviceProvider.getService(DomainProviderService);
     }
 
     @XControllerAction(apiRoutes.misc.getCurrentCourseItemCode)
@@ -44,12 +38,16 @@ export class MiscController implements XController<MiscController> {
             .getCourseOverviewDataAsync(params.principalId);
     }
 
-    async getRegistrationLinkAction(params: ActionParams) {
+    @XControllerAction(apiRoutes.misc.getActivationCodeLinks)
+    getActivationCodeLinksAction(params: ActionParams) {
 
-        const domain = await this
-            ._domainProviderService
-            .getDomainAsync(params.principalId.getId());
+        const { query } = params
+            .getFromParameterized(apiRoutes.misc.getActivationCodeLinks);
 
-        return Promise.resolve(`${domain}/registration?token=${this._tokenService.createRegistrationToken()}`);
+        return this
+            ._miscService
+            .getActivationCodeLinks(
+                query.getValue(x => x.urlTemplate, 'string'),
+                query.getValue(x => x.companyId, 'int'));
     }
 }

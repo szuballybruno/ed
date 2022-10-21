@@ -1,6 +1,8 @@
+import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { CourseOverviewDataDTO } from '../../shared/dtos/CourseOverviewDataDTO';
 import { OverviewPageDTO } from '../../shared/dtos/OverviewPageDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
+import { Id } from '../../shared/types/versionId';
 import { GlobalEventManagerType } from '../../static/EventBus';
 import { useGetCurrentAppRoute } from '../../static/frontendHelpers';
 import { QueryService } from '../../static/QueryService';
@@ -39,8 +41,41 @@ export const useMiscApiService = (globalEventManager: GlobalEventManagerType) =>
         };
     };
 
+    const useActivationCodeLinks = (companyId: Id<'Company'>) => {
+
+        const regViaActivationCodeRoute = applicationRoutes
+            .registerViaActivationCodeRoute;
+
+        const tokens = {
+            code: '%CODE%',
+            domain: '%DOMAIN%'
+        };
+
+        const query: typeof regViaActivationCodeRoute.queryType = { activationCode: tokens.code };
+
+        const queryKey = Object
+            .keys(query)
+            .single();
+
+        const path = regViaActivationCodeRoute
+            .route
+            .getAbsolutePath();
+
+        const urlTemplate = `${tokens.domain}${path}?${queryKey}=${query[queryKey]}`;
+
+        const qr = QueryService
+            .useXQueryArrayParametrized(String, apiRoutes.misc.getActivationCodeLinks, { companyId, urlTemplate });
+
+        return {
+            activationCodeLinks: qr.data,
+            activationCodeLinksState: qr.state,
+            activationCodeLinksError: qr.error,
+        };
+    };
+
     return {
-        useCurrentCourseItemCode
+        useCurrentCourseItemCode,
+        useActivationCodeLinks
     };
 };
 
