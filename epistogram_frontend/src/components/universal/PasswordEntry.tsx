@@ -205,6 +205,9 @@ export const PasswordEntry = ({
                     label={labels.pw}
                     placeholder={labels.pw}
                     name="password"
+                    style={{
+                        width: '100%'
+                    }}
                     onFocusLost={setPassword}
                     {...{
                         state: pwState,
@@ -218,6 +221,9 @@ export const PasswordEntry = ({
                     placeholder={labels.pwCompare}
                     onFocusLost={setPasswordCompare}
                     name="passwordCompare"
+                    style={{
+                        width: '100%'
+                    }}
                     {...{
                         state: pwCompareState,
                         ...(epistoEntryProps ?? {})

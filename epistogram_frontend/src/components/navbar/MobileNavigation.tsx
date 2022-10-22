@@ -63,17 +63,6 @@ export const MobileNavigation = () => {
                 icon={<Person className='square30' />}
                 to={applicationRoutes.settingsRoute} />
 
-            {/*      <EpistoButton
-            variant='colored'
-            onClick={handleLogout}
-            style={{
-                background: 'var(--mildRed)',
-                margin: '20px 0 0 0'
-            }}>
-
-            Kijelentkezés
-        </EpistoButton> */}
-
         </EpistoFlex2>
         : <></>;
 };

@@ -210,7 +210,7 @@ SELECT
 		AND l.deletion_date IS NULL
 	)::int comment_like_count,
 
-	-- virtual thread id for orderin
+	-- virtual thread id for ordering
 	CASE
 		WHEN co.parent_comment_id IS NULL
 		THEN co.id
@@ -1212,7 +1212,7 @@ ON ad.id = av.answer_data_id;
 --CREATE VIEW: schema_version_view
 CREATE VIEW schema_version_view
 AS
-SELECT '10:48:16 2022-10-18 CEDT' last_modification_date, '0.01' version
+SELECT '09:52:38 2022-10-21 CEDT' last_modification_date, '0.01' version
 ;
 
 --CREATE VIEW: shop_item_stateful_view
@@ -3256,113 +3256,175 @@ ORDER BY
 --CREATE VIEW: course_spent_time_view
 CREATE VIEW course_spent_time_view
 AS
-SELECT 
-	sq.*,
-	COALESCE(sq.total_exam_session_elapsed_time, 0)
-		+ COALESCE(sq.total_video_watch_elapsed_time, 0)
-		+ COALESCE(sq.total_video_question_elapsed_time, 0)
-		+ COALESCE(sq.total_practise_question_elapsed_time, 0) total_spent_seconds
-FROM 
+WITH 
+exam_elapsed_time_cte AS
 (
 	SELECT 
-		u.id AS user_id,
-		co.id AS course_id,
-		(
-			SELECT 
-				EXTRACT(EPOCH FROM SUM(sq.elapsed))
-			FROM (
-				SELECT 
-					cicv.completion_date - start_date AS elapsed
-				FROM public.exam_version ev
-				
-				LEFT JOIN public.module_version mv
-				ON mv.id = ev.module_version_id
-				
-				LEFT JOIN public.course_version cv
-				ON cv.id = mv.course_version_id
+		asev.user_id,
+		cv.course_id,
+		EXTRACT(EPOCH FROM SUM(cicv.completion_date - asev.start_date)) exam_elapsed_time
+	FROM public.exam_version ev
 
-				LEFT JOIN public.answer_session_view asev
-				ON asev.exam_version_id = ev.id 
-					AND asev.user_id = u.id
-					AND asev.start_date IS NOT NULL
+	LEFT JOIN public.module_version mv
+	ON mv.id = ev.module_version_id
 
-				INNER JOIN public.course_item_completion_view cicv
-				ON cicv.answer_session_id = asev.answer_session_id
+	LEFT JOIN public.course_version cv
+	ON cv.id = mv.course_version_id
 
-				WHERE asev.answer_session_type = 'exam'
-				AND cv.course_id = co.id
-				AND asev.user_id = u.id
-			) sq
-		) total_exam_session_elapsed_time,
-		(
-			SELECT 
-				SUM(vps.to_seconds - vps.from_seconds)
-			FROM public.video_playback_sample vps
+	INNER JOIN public.answer_session_view asev
+	ON asev.exam_version_id = ev.id 
+	AND asev.start_date IS NOT NULL
 
-			LEFT JOIN public.video_version vv
-			ON vv.id = vps.video_version_id 
-				AND vps.user_id = u.id
-			
-			LEFT JOIN public.module_version mv
-			ON mv.id = vv.module_version_id
+	INNER JOIN public.course_item_completion_view cicv
+	ON cicv.answer_session_id = asev.answer_session_id
 
-			LEFT JOIN public.course_version cv
-			ON cv.id = mv.course_version_id
+	WHERE asev.answer_session_type = 'exam'
+	AND cicv.completion_date IS NOT NULL
 
-			WHERE cv.course_id = co.id
-			AND vps.user_id = u.id
-			
-		) total_video_watch_elapsed_time,
-		(
-			SELECT 
-				SUM(ga.elapsed_seconds)
-			FROM public.video_version vv
+	GROUP BY asev.user_id, cv.course_id
+),
+video_watch_elapsed_time_cte AS
+(
+	SELECT 
+		vps.user_id,
+		cv.course_id,
+		SUM(vps.to_seconds - vps.from_seconds) video_elapsed_time
+	FROM public.video_playback_sample vps
 
-			LEFT JOIN public.answer_session_view asev
-			ON asev.video_version_id = vv.id 
-				AND asev.user_id = u.id
-				AND asev.answer_session_type = 'normal'
+	LEFT JOIN public.video_version vv
+	ON vv.id = vps.video_version_id 
 
-			LEFT JOIN public.given_answer ga
-			ON ga.answer_session_id = asev.answer_session_id
-			
-			LEFT JOIN public.module_version mv
-			ON mv.id = vv.module_version_id
+	LEFT JOIN public.module_version mv
+	ON mv.id = vv.module_version_id
 
-			LEFT JOIN public.course_version cv
-			ON cv.id = mv.course_version_id
+	LEFT JOIN public.course_version cv
+	ON cv.id = mv.course_version_id
 
-			WHERE asev.user_id = u.id
-			AND cv.course_id = co.id
-		) total_video_question_elapsed_time,
-		(
-			SELECT 
-				(COUNT(ga.id) * 15)::integer
-			FROM public.video_version vv
+	GROUP BY 
+		cv.course_id, 
+		vps.user_id
+),
+video_question_elapsed_time_cte AS
+(
+	SELECT
+		asv.user_id,
+		cv.course_id,
+		SUM(ga.elapsed_seconds) video_question_elapsed_time
+	FROM public.given_answer ga
+	
+	LEFT JOIN public.answer_session_view asv
+	ON asv.answer_session_id = ga.answer_session_id
+	
+	LEFT JOIN public.question_version qv
+	ON qv.id = ga.question_version_id
+	
+	LEFT JOIN public.video_version vv
+	ON vv.id = qv.video_version_id
 
-			LEFT JOIN public.answer_session_view asev
-			ON asev.video_version_id = vv.id 
-				AND asev.user_id = u.id
-				AND asev.answer_session_type = 'practise'
+	LEFT JOIN public.module_version mv
+	ON mv.id = vv.module_version_id
 
-			LEFT JOIN public.given_answer ga
-			ON ga.answer_session_id = asev.answer_session_id
+	LEFT JOIN public.course_version cv
+	ON cv.id = mv.course_version_id
+	
+	WHERE ga.is_practise_answer IS NOT TRUE
+	
+	GROUP BY asv.user_id, cv.course_id
+),
+practise_question_elapsed_time_cte AS
+(
+	SELECT
+		asv.user_id,
+		cv.course_id,
+		(COUNT(ga.id) * 15)::integer practise_question_elapsed_time
+	FROM public.given_answer ga
+	
+	LEFT JOIN public.answer_session_view asv
+	ON asv.answer_session_id = ga.answer_session_id
+	
+	LEFT JOIN public.question_version qv
+	ON qv.id = ga.question_version_id
+	
+	LEFT JOIN public.video_version vv
+	ON vv.id = qv.video_version_id
 
-			LEFT JOIN public.module_version mv
-			ON mv.id = vv.module_version_id
+	LEFT JOIN public.module_version mv
+	ON mv.id = vv.module_version_id
 
-			LEFT JOIN public.course_version cv
-			ON cv.id = mv.course_version_id
+	LEFT JOIN public.course_version cv
+	ON cv.id = mv.course_version_id
+	
+	WHERE ga.is_practise_answer IS TRUE
+	
+	GROUP BY asv.user_id, cv.course_id
+),
 
-			WHERE asev.user_id = u.id
-			AND cv.course_id = u.id
-		) total_practise_question_elapsed_time
-	FROM public.course co
+spent_time_sum_view_cte AS
+(
+	SELECT 
+		eetc.user_id,
+		eetc.course_id,
+		SUM(eetc.exam_elapsed_time) total_exam_session_elapsed_time,
+		SUM(vwetc.video_elapsed_time) total_video_watch_elapsed_time,
+		SUM(vqetc.video_question_elapsed_time) total_video_question_elapsed_time,
+		SUM(pqetc.practise_question_elapsed_time) total_practise_question_elapsed_time
+	FROM exam_elapsed_time_cte eetc
 
-	CROSS JOIN public.user u
+	LEFT JOIN video_watch_elapsed_time_cte vwetc
+	ON vwetc.user_id = eetc.user_id
+	AND vwetc.course_id = eetc.course_id
 
-	ORDER BY u.id, co.id
-) sq;
+	LEFT JOIN video_question_elapsed_time_cte vqetc
+	ON vqetc.user_id = eetc.user_id
+	AND vqetc.course_id = eetc.course_id
+	
+	LEFT JOIN practise_question_elapsed_time_cte pqetc
+	ON pqetc.user_id = eetc.user_id
+	AND pqetc.course_id = eetc.course_id
+	
+	GROUP BY eetc.user_id, eetc.course_id
+)
+
+SELECT 
+	u.id user_id,
+	co.id course_id,
+	stsvc.total_exam_session_elapsed_time,
+	stsvc.total_video_watch_elapsed_time,
+	stsvc.total_video_question_elapsed_time,
+	stsvc.total_practise_question_elapsed_time,
+	(
+		COALESCE(eetc.exam_elapsed_time, 0)
+		+ COALESCE(vwetc.video_elapsed_time, 0)
+		+ COALESCE(vqetc.video_question_elapsed_time, 0)
+		+ COALESCE(pqetc.practise_question_elapsed_time, 0)
+	) total_spent_seconds
+FROM public.user u
+
+CROSS JOIN public.course co
+
+LEFT JOIN exam_elapsed_time_cte eetc
+ON eetc.user_id = u.id
+AND eetc.course_id = co.id
+
+LEFT JOIN video_watch_elapsed_time_cte vwetc
+ON vwetc.user_id = u.id
+AND vwetc.course_id = co.id
+
+LEFT JOIN video_question_elapsed_time_cte vqetc
+ON vqetc.user_id = u.id
+AND vqetc.course_id = co.id
+
+LEFT JOIN practise_question_elapsed_time_cte pqetc
+ON pqetc.user_id = u.id
+AND pqetc.course_id = co.id
+
+LEFT JOIN spent_time_sum_view_cte stsvc
+ON stsvc.user_id = u.id
+AND stsvc.course_id = co.id
+
+ORDER BY 
+	u.id,
+	co.id;
 
 --CREATE VIEW: user_spent_time_ratio_view
 CREATE VIEW user_spent_time_ratio_view
@@ -6557,27 +6619,33 @@ AND cvc.course_id = co.id;
 --CREATE VIEW: course_overview_view
 CREATE VIEW course_overview_view
 AS
+WITH
+episto_coin_sum_cte AS
+(
+	SELECT
+		coapcv.user_id,
+		coapcv.course_id,
+		SUM(coapcv.amount) episto_coin_amount
+	FROM public.coin_acquire_per_course_view coapcv
+	
+	GROUP BY coapcv.user_id, coapcv.course_id
+)
+
 SELECT 
-	u.id user_id,
-	co.id course_id,
+	clsv.user_id,
+	clsv.course_id,
 	clsv.total_spent_seconds,
 	clsv.completed_video_count,
 	clsv.answered_video_question_count,
 	clsv.question_success_rate,
-	clsv.avg_exam_score_percentage,
-	clsv.final_exam_score_percentage,
-	(
-		SELECT COALESCE(SUM (coapcv.amount), 0) 
-		FROM public.coin_acquire_per_course_view coapcv
+	clsv.avg_exam_score_percentage exam_success_rate_average,
+	clsv.final_exam_score_percentage final_exam_success_rate,
+	COALESCE(ecsc.episto_coin_amount) coins_acquired
+FROM public.course_learning_stats_view clsv
 
-		WHERE coapcv.course_id = co.id AND coapcv.user_id = u.id 
-	) coins_acquired
-FROM public.course co
-
-CROSS JOIN public.user u
-
-LEFT JOIN public.course_learning_stats_view clsv
-ON clsv.course_id = co.id AND clsv.user_id = u.id;
+LEFT JOIN episto_coin_sum_cte ecsc
+ON ecsc.course_id = clsv.course_id
+AND ecsc.user_id = clsv.user_id;
 
 --CREATE VIEW: admin_user_courses_view
 CREATE VIEW admin_user_courses_view

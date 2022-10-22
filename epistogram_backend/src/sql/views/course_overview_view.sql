@@ -1,21 +1,27 @@
+WITH
+episto_coin_sum_cte AS
+(
+	SELECT
+		coapcv.user_id,
+		coapcv.course_id,
+		SUM(coapcv.amount) episto_coin_amount
+	FROM public.coin_acquire_per_course_view coapcv
+	
+	GROUP BY coapcv.user_id, coapcv.course_id
+)
+
 SELECT 
-	u.id user_id,
-	co.id course_id,
+	clsv.user_id,
+	clsv.course_id,
 	clsv.total_spent_seconds,
 	clsv.completed_video_count,
 	clsv.answered_video_question_count,
 	clsv.question_success_rate,
-	clsv.avg_exam_score_percentage,
-	clsv.final_exam_score_percentage,
-	(
-		SELECT COALESCE(SUM (coapcv.amount), 0) 
-		FROM public.coin_acquire_per_course_view coapcv
+	clsv.avg_exam_score_percentage exam_success_rate_average,
+	clsv.final_exam_score_percentage final_exam_success_rate,
+	COALESCE(ecsc.episto_coin_amount) coins_acquired
+FROM public.course_learning_stats_view clsv
 
-		WHERE coapcv.course_id = co.id AND coapcv.user_id = u.id 
-	) coins_acquired
-FROM public.course co
-
-CROSS JOIN public.user u
-
-LEFT JOIN public.course_learning_stats_view clsv
-ON clsv.course_id = co.id AND clsv.user_id = u.id
+LEFT JOIN episto_coin_sum_cte ecsc
+ON ecsc.course_id = clsv.course_id
+AND ecsc.user_id = clsv.user_id

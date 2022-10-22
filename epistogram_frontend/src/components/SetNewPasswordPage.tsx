@@ -1,8 +1,10 @@
+import React from 'react';
 import { applicationRoutes } from '../configuration/applicationRoutes';
+import { CompanyApiService } from '../services/api/CompanyApiService1';
 import { useSetNewPassword } from '../services/api/passwordChangeApiService';
 import { useNavigation } from '../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../services/core/notifications';
-import { Environment } from '../static/Environemnt';
+import { useIsMobileView } from '../static/frontendHelpers';
 import { useRouteQuery } from '../static/locationHelpers';
 import { ContentPane } from './ContentPane';
 import { EpistoButton } from './controls/EpistoButton';
@@ -19,6 +21,10 @@ export const SetNewPasswordPage = () => {
 
     const token = useRouteQuery(applicationRoutes.setNewPasswordRoute)
         .getValue(x => x.token, 'string');
+
+    const { companyDetails } = CompanyApiService.useCompanyDetailsByDomain(window.location.origin);
+
+    const isMobile = useIsMobileView();
 
     const showErrorDialog = useShowErrorDialog();
 
@@ -45,22 +51,42 @@ export const SetNewPasswordPage = () => {
     return <PageRootContainer
         align="flex-start"
         justify="center"
-        backgoundImageSrc={Environment.getAssetUrl('loginScreen/surveybg.png')}
         position="relative">
 
         <ContentPane
             hideNavbar
-            navbarBg="white">
+            navbarBg="white"
+            flex='1'
+            className="whall"
+            justify='center'
+            align='center'>
 
             <LoadingFrame
+                className='roundBorders mildShadow'
+                id="form"
                 direction="column"
-                mt="20vh"
-                position="relative"
-                className="roundBorders"
-                bg="white"
-                p="30px"
-                loadingState={setNewPasswordState}
-                minWidth="400px">
+                align='center'
+                justify="center"
+                width={isMobile ? '100%' : undefined}
+                height={isMobile ? '100%' : undefined}
+                p={isMobile ? '10px' : '80px 100px'}
+                maxH={'calc(100% - 100px)'}
+                background="var(--transparentWhite70)"
+                zIndex="7"
+                loadingState={setNewPasswordState}>
+
+                {/* company logo */}
+                <img
+                    src={companyDetails?.logoUrl!}
+                    style={{
+                        width: '250px',
+                        maxHeight: '115px',
+                        objectFit: 'contain',
+                        marginLeft: '15px',
+                        marginBottom: '20px',
+                        cursor: 'pointer',
+                    }}
+                    alt="" />
 
                 <EpistoHeader text="Új jelszó megadása"
                     mt="30px"
@@ -69,12 +95,19 @@ export const SetNewPasswordPage = () => {
                 </EpistoHeader>
 
                 <PasswordEntry
+                    display='EPISTO'
                     state={passwordEntryState} />
 
                 <EpistoButton
-                    variant="outlined"
-                    onClick={handleSetNewPassword}
-                    style={{ alignSelf: 'flex-end', margin: '20px' }}>
+                    variant="colored"
+                    padding="10px"
+                    type="submit"
+                    style={{
+                        marginTop: '20px',
+                        width: '100%',
+                        backgroundColor: companyDetails?.primaryColor!
+                    }}
+                    onClick={handleSetNewPassword}>
 
                     Elküldés
                 </EpistoButton>
