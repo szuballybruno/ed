@@ -31,7 +31,7 @@ FROM (
 	
 	LEFT JOIN public.course_version cv
 	ON cv.id = mv.course_version_id
-
+ 
     LEFT JOIN public.course_progress_view AS cpv
     ON cpv.user_id = usv.user_id
     AND cpv.course_id = cv.course_id
@@ -49,7 +49,7 @@ FROM (
 
     GROUP BY usv.user_id, usv.start_date, usv.end_date, cv.course_id
 
-    ORDER BY course_id, usv.end_date desc -- important for distinct on so it can get the latest session for course
+    ORDER BY course_id, usv.end_date desc -- important for distinct on so it can get the latest session for coursea
 ) user_course_sessions
 
 GROUP BY user_course_sessions.user_id
