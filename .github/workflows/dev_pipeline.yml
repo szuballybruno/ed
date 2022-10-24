@@ -230,9 +230,9 @@ jobs:
     steps:
     
       - name: Select users 
-        run: |
-          PGPASSWORD=${{ secrets.DB_SERVICE_USER_PASSWORD }} psql -U dev_service_user -tc "SELECT * FROM public.user" 
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
           service_account_email: ${{ secrets.GCP_EMAIL }}
           service_account_key: ${{ secrets.GCP_CREDENTIALS }}
+        run: |
+          PGPASSWORD=${{ secrets.DB_SERVICE_USER_PASSWORD }} psql -U dev_service_user -tc "SELECT * FROM public.user" 
