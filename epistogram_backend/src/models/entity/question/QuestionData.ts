@@ -37,6 +37,7 @@ export class QuestionData {
     showUpTimeSeconds: number | null;
 
     @Column({ type: 'int' })
+    @XViewColumn()
     moduleId: Id<'Module'>;
 
     // 
