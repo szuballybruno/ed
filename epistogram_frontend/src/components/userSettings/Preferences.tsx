@@ -1,4 +1,5 @@
 import { useContext, useEffect, useRef, useState } from 'react';
+import { useLogout } from '../../services/api/authenticationApiService';
 import { useUploadAvatarFile } from '../../services/api/fileApiService';
 import { useRequestPasswordChangeAuthenticated } from '../../services/api/passwordChangeApiService';
 import { UserApiService } from '../../services/api/UserApiService1';
@@ -53,6 +54,20 @@ export const Preferences = () => {
         phoneNumber !== user.phoneNumber,
         avatarFile !== null
     ].some(x => x);
+
+    const { logoutUserAsync } = useLogout();
+    const showError = useShowErrorDialog();
+
+    const handleLogout = async () => {
+        try {
+
+            await logoutUserAsync();
+            await refetchAuthHandshake();
+        } catch (e) {
+
+            showError(e);
+        }
+    };
 
     const saveChangesAsync = async () => {
 
@@ -262,8 +277,33 @@ export const Preferences = () => {
                                     {translatableTexts.preferences.sendResetMail}
                                 </EpistoButton>
                             </EpistoFlex2>
+
                         </EpistoFlex2>}
+
                     </EpistoFlex2>
+
+                    {/* Logout on mobile */}
+                    {isMobile && <EpistoFont
+                        isUppercase
+                        fontSize="fontExtraSmall"
+                        style={{
+                            margin: '13px 0 5px 0',
+                            letterSpacing: '1.2px'
+                        }}>
+
+                        Kijelentkezés
+                    </EpistoFont>}
+
+                    {isMobile && <EpistoButton
+                        variant='colored'
+                        onClick={handleLogout}
+                        style={{
+                            background: 'var(--mildRed)',
+                            width: '100%'
+                        }}>
+
+                        Kijelentkezés
+                    </EpistoButton>}
 
                 </EpistoFlex2>
 

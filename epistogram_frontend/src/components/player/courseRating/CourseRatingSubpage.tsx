@@ -13,8 +13,14 @@ import { EpistoFont } from '../../controls/EpistoFont';
 import { ExamLayout } from '../../exam/ExamLayout';
 import { ExamLayoutContent } from '../../exam/ExamLayoutContent';
 import { LoadingFrame } from '../../system/LoadingFrame';
+import { EpistoDialogLogicType } from '../../universal/epistoDialog/EpistoDialogTypes';
 import { RatingStars } from '../../universal/RatingStars';
-export const CourseRatingSubpage = () => {
+
+export const CourseRatingSubpage = (props: {
+    coinAcquiredDialogLogic: EpistoDialogLogicType
+}) => {
+
+    const { coinAcquiredDialogLogic } = props;
 
     const courseId = Id
         .create<'Course'>(useIntParam('courseId')!);
@@ -58,6 +64,11 @@ export const CourseRatingSubpage = () => {
                 courseId
             });
 
+            if (paging.isLast) {
+
+                coinAcquiredDialogLogic.openDialog();
+            }
+
             await refetchCourseRatingGroupsAsync();
 
             paging.next();
@@ -89,7 +100,6 @@ export const CourseRatingSubpage = () => {
             height="100%">
 
             <ExamLayout
-                isHeightMaximized
                 maxH='calc(100vh - 120px)'
                 headerCenterText="Kurzus értékelése"
                 footerButtons={new ArrayBuilder()
@@ -102,7 +112,7 @@ export const CourseRatingSubpage = () => {
 
                 <ExamLayoutContent
                     style={{
-                        maxHeight: '100%'
+                        overflowY: 'scroll'
                     }}
                     title={currentRatingGroup?.name ?? ''}>
 
@@ -135,6 +145,7 @@ export const CourseRatingSubpage = () => {
                                         direction="column"
                                         mb="25px"
                                         width="60%"
+                                        minWidth='500px'
                                         align="center">
 
                                         <EpistoFont>
@@ -162,6 +173,7 @@ export const CourseRatingSubpage = () => {
                                         {question.type === 'free_text' && <>
                                             <EpistoEntry
                                                 isMultiline
+                                                height='400px'
                                                 setValue={text => setCurrentAnswer(null, text)}
                                                 value={currentAnswer?.text ?? ''}
                                                 style={{

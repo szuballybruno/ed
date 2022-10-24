@@ -1,8 +1,10 @@
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import browser from '../../services/core/browserSniffingService';
 import { useIsMobileView } from '../../static/frontendHelpers';
+import { CoinRewardDialog } from '../CoinRewardDialog';
 import { ContentPane } from '../ContentPane';
 import { PageRootContainer } from '../PageRootContainer';
+import { useEpistoDialogLogic } from '../universal/epistoDialog/EpistoDialogLogic';
 import { EpistoRoutes } from '../universal/EpistoRoutes';
 import { CourseOverviewSubpage } from './courseOverview/CourseOverviewSubpage';
 import { CourseRatingSubpage } from './courseRating/CourseRatingSubpage';
@@ -21,12 +23,20 @@ export const PlayerPage = () => {
     const isLandscape = window.orientation === 90;
     const isIphoneFullscreenMode = (isFullscreen && isIPhone && isLandscape);
 
+    const coinAcquiredDialogLogic = useEpistoDialogLogic('courseRatingCoinAcquired');
+
     return (
         <PageRootContainer
             style={{
                 '--playerWidth': 'min(min(100vw, 180vh), 1700px)',
                 background: 'var(--gradientBlueBackground)'
             } as any}>
+
+            <CoinRewardDialog
+                lottiePath={'lottie_json/session_streak_3.json'}
+                coinRewardAmount={300}
+                text='Köszönjük, hogy megosztottad velünk a véleményed. A jutalmad:'
+                dialogLogic={coinAcquiredDialogLogic} />
 
             <ContentPane
                 noPadding={isMobile}
@@ -71,7 +81,7 @@ export const PlayerPage = () => {
                         },
                         {
                             route: applicationRoutes.playerRoute.courseRatingRoute,
-                            element: <CourseRatingSubpage />
+                            element: <CourseRatingSubpage coinAcquiredDialogLogic={coinAcquiredDialogLogic} />
                         },
                         {
                             route: applicationRoutes.playerRoute.courseOverviewRoute,

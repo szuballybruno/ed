@@ -118,7 +118,6 @@ export const EpistoEntryNew = forwardRef<HTMLInputElement, EpistoEntryNewPropsTy
         </EpistoFont>}
 
         <TextField
-            className='tinyShadow'
             inputRef={ref}
             disabled={disabled}
             size="small"
@@ -133,7 +132,8 @@ export const EpistoEntryNew = forwardRef<HTMLInputElement, EpistoEntryNewPropsTy
             sx={{
                 '& .MuiOutlinedInput-root': {
                     height: height,
-                    background: 'var(--transparentWhite90)'
+                    background: 'var(--transparentWhite90)',
+                    boxShadow: '0 0 4px #0000001f'
                 },
                 '& .MuiOutlinedInput-notchedOutline': {
                     border: 'none'

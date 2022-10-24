@@ -11,6 +11,7 @@ import { translatableTexts } from '../../static/translatableTexts';
 import { ChipSmall } from '../administration/courses/ChipSmall';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
+import { useVideoPlayerFullscreenContext } from '../player/watch/videoPlayer/VideoPlayerFullscreenFrame';
 import { WatchSubpageState } from '../player/watch/WatchSubpage';
 import { ExamLayout } from './ExamLayout';
 import { ExamResultStats } from './ExamResultStats';
@@ -30,6 +31,8 @@ export const ExamResultsSlide = (props: {
     const { navigate2 } = useNavigation();
     const isMobile = useIsMobileView();
 
+    const [isFullscreen, setIsFullscreen] = useVideoPlayerFullscreenContext();
+
     const courseId = Id.create<'Course'>(1);
 
     // effects
@@ -48,7 +51,6 @@ export const ExamResultsSlide = (props: {
                 title: translatableTexts.exam.continueCourse,
                 action: continueCourse
             })
-            /* will be reenabled later             
             .addIf(!!exam.isFinalExam, {
                 title: 'Kurzus értékelése',
                 action: goToCourseRating
@@ -59,10 +61,14 @@ export const ExamResultsSlide = (props: {
 
                     navigate2(applicationRoutes.playerRoute.courseOverviewRoute, { courseId });
                 }
-            }) */
+            })
             .addIf(!!exam.isFinalExam, {
                 title: 'Vissza a tanfolyamkeresőbe',
                 action: () => {
+
+                    if (isMobile) {
+                        setIsFullscreen(false);
+                    }
 
                     navigate2(applicationRoutes.availableCoursesRoute);
                 }
