@@ -33,41 +33,42 @@ session_points AS
 	GROUP BY
 		sg.user_id
 ),
+user_session_lengths AS
+(
+	SELECT
+		usv.user_id,
+		SUM(usv.length_seconds) / 60 length_minutes
+	FROM public.user_session_view usv
+	WHERE usv.start_date > CURRENT_DATE - 30
+	GROUP BY usv.user_id
+),
 total_session_length_points AS
 (
 	SELECT
 		-- gets points for total session length
-		sq.user_id user_id,
+		usl.user_id user_id,
         CASE
             -- if total length of sessions longer than 360 minutes then 50 points
-			WHEN sq.length_minutes > 360
+			WHEN usl.length_minutes > 360
                 THEN 50
             -- if total length of sessions longer than 240 minutes then 45 points
-			WHEN sq.length_minutes > 240
+			WHEN usl.length_minutes > 240
                 THEN 45
             -- if total length of sessions longer than 180 minutes then 40 points
-			WHEN sq.length_minutes > 180
+			WHEN usl.length_minutes > 180
                 THEN 40
             -- if total length of sessions longer than 120 minutes then 30 points
-			WHEN sq.length_minutes > 120
+			WHEN usl.length_minutes > 120
                 THEN 30
             -- if total length of sessions longer than 60 minutes then 15 points
-            WHEN sq.length_minutes > 60
+            WHEN usl.length_minutes > 60
                 THEN 15
             -- if total length of sessions longer than 0 minutes then 10 points
-            WHEN sq.length_minutes > 0
+            WHEN usl.length_minutes > 0
                 THEN 10
             ELSE 0
         END total_session_length_points
-	FROM
-	(
-		SELECT
-			usv.user_id,
-			SUM(usv.length_seconds) / 60 length_minutes
-		FROM user_session_view usv
-		WHERE usv.start_date > CURRENT_DATE - 30
-		GROUP BY usv.user_id
-	) sq
+	FROM user_session_lengths usl
 )
 
 SELECT

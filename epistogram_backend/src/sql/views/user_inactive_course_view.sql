@@ -4,20 +4,17 @@
 * - Inactive for the last 14 days AND
 * - The progress is less than 50%
 */
-SELECT
-    user_course_sessions.user_id user_id,
-    COUNT(course_id) inactive_course_count
-FROM (
-    SELECT DISTINCT ON (course_id)
-        usv.user_id user_id,
-        usv.end_date session_end_date,
-        cv.course_id course_id,
-        EXTRACT(WEEK FROM usv.start_date) AS week,
-        COUNT(cv.course_id * -10) points
-    FROM public.user_session_view usv
-
-    LEFT JOIN public.user_session_activity AS usa
-    ON usa.activity_session_id = usv.id
+WITH 
+latest_user_sessions AS
+(
+	SELECT
+		usv.user_id,
+		cv.course_id,
+		MAX(usa.creation_date) latest_course_activity
+	FROM user_session_activity AS usa
+	
+	LEFT JOIN public.user_session_view usv
+    ON usv.id = usa.activity_session_id
 
     LEFT JOIN public.video_version vv
     ON vv.id = usa.video_version_id
@@ -31,26 +28,31 @@ FROM (
 	
 	LEFT JOIN public.course_version cv
 	ON cv.id = mv.course_version_id
- 
-    LEFT JOIN public.course_progress_view AS cpv
-    ON cpv.user_id = usv.user_id
-    AND cpv.course_id = cv.course_id
-
-    LEFT JOIN public.user_course_bridge AS ucb
-    ON ucb.user_id = usv.user_id
-    AND ucb.course_id = cv.course_id
-
-    WHERE usv.start_date > CURRENT_DATE - 30 -- sessions only from the last 30 days
-    AND usv.end_date < CURRENT_DATE - 14 -- no session since 14 days
-    AND ucb.creation_date > CURRENT_DATE - 30 -- courses started in the last 30 days
-    AND cpv.progress_percentage < 50 -- courses with less than 50 percent progress
+	
+	WHERE cv.course_id IS NOT NULL
+	AND usa.creation_date > CURRENT_DATE - 30 -- sessions only from the last 30 days
     AND usv.length_seconds != 0 -- no empty sessions
     AND usv.is_finalized = true -- no not finalized sessions
+	
+	GROUP BY usv.user_id, cv.course_id
+)
 
-    GROUP BY usv.user_id, usv.start_date, usv.end_date, cv.course_id
+SELECT 
+	lus.user_id,
+	COUNT(lus.course_id) inactive_course_count
+FROM latest_user_sessions lus
 
-    ORDER BY course_id, usv.end_date desc -- important for distinct on so it can get the latest session for coursea
-) user_course_sessions
+INNER JOIN public.course_progress_view AS cpv
+ON cpv.user_id = lus.user_id
+AND cpv.course_id = lus.course_id
+AND cpv.progress_percentage < 50
 
-GROUP BY user_course_sessions.user_id
+INNER JOIN public.user_course_bridge AS ucb 
+ON ucb.user_id = lus.user_id
+AND ucb.course_id = lus.course_id
+AND ucb.creation_date > CURRENT_DATE - 30
+
+WHERE lus.latest_course_activity < CURRENT_DATE - 14 -- no session since 14 days
+
+GROUP BY lus.user_id
 

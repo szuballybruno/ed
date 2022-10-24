@@ -1,4 +1,5 @@
-WITH user_performance_averages AS
+WITH 
+user_performance_averages AS
 (
 	SELECT
 		upv.user_id,
