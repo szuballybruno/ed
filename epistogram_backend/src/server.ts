@@ -2,6 +2,7 @@ import { writeFileSync } from 'fs';
 import { dirname } from 'path';
 import 'reflect-metadata'; // needs to be imported for TypeORM
 import { fileURLToPath } from 'url';
+import { FileSystemService } from './services/FileSystemService';
 import { LoggerService } from './services/LoggerService';
 import { GlobalConfiguration } from './services/misc/GlobalConfiguration';
 import { log } from './services/misc/logger';
@@ -23,18 +24,53 @@ const lightRecreateDBAsync = async (getServiceProviderAsync: GetServiceProviderT
     const globalConfig = serviceProvider
         .getService(GlobalConfiguration);
 
+    const fileSystemService = serviceProvider
+        .getService(FileSystemService);
+
     globalConfig
         .overrideLogScopes(globalConfig.logging.enabledScopes.concat(['BOOTSTRAP']));
 
-    const recerateScript = serviceProvider
+    /**
+     * Get recreate script 
+     */
+    const recerateScriptParts = serviceProvider
         .getService(CreateDBService)
         .getDatabaseLightSchemaRecreateScript();
+
+    const recerateScript = recerateScriptParts.dropScript + '\n\n\n' + recerateScriptParts.createScript;
 
     serviceProvider
         .getService(SQLConnectionService)
         .releaseConnectionClient();
 
+    /**
+     * Get migration script 
+     */
+    const migrationsFolderFilePath = globalConfig
+        .getRootRelativePath('/sql/migrations');
+
+    const migrationScriptFileName = fileSystemService
+        .getAllFilePaths(migrationsFolderFilePath)
+        .orderBy(x => x)
+        .last();
+
+    const migrationFileContents = fileSystemService
+        .readFileAsText(`${migrationsFolderFilePath}/${migrationScriptFileName}`);
+
+    const fullMigrationScript =
+`
+-- DROP SOFT SCHEMA
+${recerateScriptParts.dropScript}
+
+-- TRANSFORM TABLES / MIGRATE DATA
+${migrationFileContents}
+
+-- CREATE SOFT SCHEMA
+${recerateScriptParts.createScript}
+`;
+
     writeFileSync(globalConfig.getRootRelativePath('/sql/out/recreateLightSchema.sql'), recerateScript);
+    writeFileSync(globalConfig.getRootRelativePath('/sql/out/fullMigrationScript.sql'), fullMigrationScript);
 };
 
 const startServerAsync = async (initializator: ServiceProviderInitializator) => {

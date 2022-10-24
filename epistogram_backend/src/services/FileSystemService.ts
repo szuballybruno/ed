@@ -7,6 +7,22 @@ export class FileSystemService {
     }
 
     /**
+     * Returns the file paths of the files in a specified folder 
+     */
+    getAllFilePaths(directoryPath: string) {
+
+        return fs.readdirSync(directoryPath);
+    }
+
+    /**
+     * Read file as utf-8 text
+     */
+    readFileAsText(filePath: string) {
+
+        return fs.readFileSync(filePath, 'utf-8');
+    }
+
+    /**
      * Returns if a file exists or not 
      * @param filePath Full file path with extension 
      */

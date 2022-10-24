@@ -38,26 +38,39 @@ export class CreateDBService {
         const recteateTriggers = this
             ._recreateTriggersAsync(this._dbSchema.triggers);
 
-        return [
-            this._mainScectionWrapper('VIEWS', recreateViews),
-            this._mainScectionWrapper('FUNCTIONS', recreateFunctions),
-            this._mainScectionWrapper('CONSTRAINTS', recreateConstraints),
-            this._mainScectionWrapper('INDICES', recreateInidcesScript),
-            this._mainScectionWrapper('TRIGGERS', recteateTriggers),
-        ]
-            .join('\n');
+        const drops = [
+            this._mainScectionWrapper('DROP', 'VIEWS', recreateViews.dropScript),
+            this._mainScectionWrapper('DROP', 'FUNCTIONS', recreateFunctions.dropScript),
+            this._mainScectionWrapper('DROP', 'CONSTRAINTS', recreateConstraints.dropScript),
+            this._mainScectionWrapper('DROP', 'INDICES', recreateInidcesScript.dropScript),
+            this._mainScectionWrapper('DROP', 'TRIGGERS', recteateTriggers.dropScript),
+        ];
+
+        const creates = [
+            this._mainScectionWrapper('CREATE', 'VIEWS', recreateViews.createScript),
+            this._mainScectionWrapper('CREATE', 'FUNCTIONS', recreateFunctions.createScript),
+            this._mainScectionWrapper('CREATE', 'CONSTRAINTS', recreateConstraints.createScript),
+            this._mainScectionWrapper('CREATE', 'INDICES', recreateInidcesScript.createScript),
+            this._mainScectionWrapper('CREATE', 'TRIGGERS', recteateTriggers.createScript),
+        ];
+
+        return {
+            dropScript: drops.join('\n'),
+            createScript: creates.join('\n')
+        };
     }
 
     // PRIVATE
 
-    private _mainScectionWrapper(name: string, script: string) {
+    private _mainScectionWrapper(op: 'DROP' | 'CREATE', schemaItemName: string, script: string) {
 
-        return `
---
---               RECREATE ${name}
---  
+        const sc =
+            `
+-- ${op} ${schemaItemName}
 ${script}
 `;
+
+        return sc;
     }
 
     private _checkSqlFolder() {
@@ -117,39 +130,41 @@ ${script}
     private _recreateConstraintsAsync(constraints: XDBMConstraintType[]) {
 
         // drop constraints
-        const dropConstrains = constraints
+        const dropScript = constraints
             .filter(x => !!x.tableName)
             .map(constraint => `ALTER TABLE public.${constraint.tableName} DROP CONSTRAINT IF EXISTS ${constraint.fileName};`)
             .join('\n');
 
         // create constraints 
-        const createConstraints = constraints
+        const createScript = constraints
             .map(constraint => this._getCreateScript('CONSTRAINT', constraint.fileName, this.readSQLFile('constraints', constraint.fileName)))
             .join('\n');
 
-        return this._getFullRecreateScript('CONSTRAINTS', dropConstrains, createConstraints);
+        return { dropScript, createScript };
     }
 
     private _recreateIndicesAsync(indices: XDMBIndexType[]) {
 
         // drop all indices
-        const dropsScript = indices
+        const dropScript = indices
             .map(index => `DROP INDEX IF EXISTS ${index.name};`)
             .join('\n');
 
-        const createIndicesScript = indices
+        const createScript = indices
             .map(sqlIndex => this._getCreateScript('INDEX', sqlIndex.name, this
                 .readSQLFile('indices', sqlIndex.name)))
             .join('\n');
 
-        return this._getFullRecreateScript('INDICES', dropsScript, createIndicesScript);
+        return { dropScript, createScript };
     }
 
     private _recreateTriggersAsync(triggers: string[]) {
 
-        return triggers
+        const createScript = triggers
             .map(trigger => this._getCreateScript('TRIGGER', trigger, this.readSQLFile('triggers', trigger)))
             .join('\n');
+
+        return { dropScript: '', createScript };
     }
 
     private _recreateFunctionsAsync(functionNames: string[]) {
@@ -163,7 +178,7 @@ ${script}
                 .readSQLFile('functions', functionName)))
             .join('\n');
 
-        return this._getFullRecreateScript('FUNCTIONS', dropScript, createScript);
+        return { dropScript, createScript };
     }
 
     private _recreateViewsAsync() {
@@ -187,11 +202,11 @@ ${script}
             .map(x => viewFiles
                 .single(y => y.name === x.getCompareKey()));
 
-        const createScripts = viewFilesOrdered
+        const createScript = viewFilesOrdered
             .map(x => this._getCreateScript('VIEW', x.name, this._getViewCreationScript(x.name, x.content)))
             .join('\n');
 
-        return this._getFullRecreateScript('VIEWS', dropScript, createScripts);
+        return { dropScript, createScript };
     }
 
     private _getViewCreationScript(viewName: string, viewContent: string) {

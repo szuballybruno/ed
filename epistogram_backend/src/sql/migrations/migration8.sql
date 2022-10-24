@@ -35,7 +35,7 @@ WHERE sq.qd_id = qd.id;
 
 -- delete 85
 delete from public.question_data 
-where id = 85 
+where id = 85;
 
 -- set column as non-nullable
 ALTER TABLE public.question_data
