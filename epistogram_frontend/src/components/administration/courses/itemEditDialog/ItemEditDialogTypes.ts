@@ -11,7 +11,7 @@ export type ItemEditDialogParams = {
     courseTitle: string;
     questionMutations: QuestionMutationsType;
     answerMutations: AnswerMutationsType;
-    defaultModuleVersionId: Id<'ModuleVersion'> | null;
+    defaultModuleId: Id<'Module'> | null;
     modules: ModuleEditDTO[];
     examType: 'normal' | 'pretest' | 'final';
 };

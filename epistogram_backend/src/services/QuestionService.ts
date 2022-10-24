@@ -32,7 +32,7 @@ export class QuestionService {
         questionMutations: QuestionMutationType[],
         isVideo: boolean) {
 
-        const result = await this
+        const questionVersionIdMigrations = await this
             ._versionSaveService
             .saveAsync({
                 dtoSignature: QuestionEditDataReadDTO,
@@ -55,7 +55,8 @@ export class QuestionService {
                     orderIndex: 0,
                     questionText: '',
                     showUpTimeSeconds: null,
-                    typeId: 1
+                    typeId: 1,
+                    moduleId: null as any
                 }),
                 getNewEntity: x => ({}),
                 getNewVersion: ({ entityId, newDataId, newParentVersionId }) => ({
@@ -69,7 +70,7 @@ export class QuestionService {
                 parentVersionIdMigrations: itemVersionIdMigrations,
                 overrideDataProps: (data, mut) => {
 
-                    const { questionShowUpTimeSeconds, questionText } = XMutatorHelpers
+                    const { questionShowUpTimeSeconds, questionText, moduleId } = XMutatorHelpers
                         .mapMutationToPartialObject(mut);
 
                     if (questionShowUpTimeSeconds)
@@ -78,23 +79,16 @@ export class QuestionService {
                     if (questionText)
                         data.questionText = questionText;
 
+                    if (moduleId)
+                        data.moduleId = moduleId;
+
                     return data;
                 },
                 getDataDisplayNameArg: x => x.questionText
             });
 
-        return result;
+        return questionVersionIdMigrations;
     }
-
-    /**
-     * Saves question module bridges 
-     */
-    // async saveQuestionModuleBridgesAsync(itemVersionIdMigrations) {
-
-    //     const asd = await this
-    //         ._ormService
-    //         .query(QuestionVersion, {})
-    // }
 
     /**
      * Returns question data by id 

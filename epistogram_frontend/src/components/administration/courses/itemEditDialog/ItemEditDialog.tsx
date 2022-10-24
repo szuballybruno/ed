@@ -26,7 +26,7 @@ export const ItemEditDialog = ({
         itemVersionId,
         answerMutations,
         questionMutations,
-        defaultModuleVersionId,
+        defaultModuleId,
         modules,
         courseTitle,
         itemTitle,
@@ -35,7 +35,7 @@ export const ItemEditDialog = ({
         isVideo: false,
         itemVersionId: null,
         answerMutations: EMPTY_ARRAY,
-        defaultModuleVersionId: null,
+        defaultModuleId: null,
         modules: EMPTY_ARRAY,
         questionMutations: EMPTY_ARRAY,
         itemTitle: '',
@@ -61,7 +61,7 @@ export const ItemEditDialog = ({
                     onClose={handleCallback}
                     answerMutations={answerMutations}
                     questionMutations={questionMutations}
-                    defaultModuleVersionId={defaultModuleVersionId}
+                    defaultModuleId={defaultModuleId}
                     modules={modules} />,
                 title: 'Kérdések'
             })
@@ -76,7 +76,7 @@ export const ItemEditDialog = ({
                     endabled={dialogLogic.isOpen}
                     questionMutations={questionMutations}
                     answerMutations={answerMutations}
-                    defaultModuleVersionId={defaultModuleVersionId}
+                    defaultModuleId={defaultModuleId}
                     modules={modules}
                     showQuestionModuleSelector={examType !== 'normal'} />,
                 title: 'Kérdések',

@@ -17,7 +17,7 @@ export const VideoEditor = ({
     onClose,
     questionMutations,
     answerMutations,
-    defaultModuleVersionId,
+    defaultModuleId,
     modules
 }: {
     enabled: boolean,
@@ -25,7 +25,7 @@ export const VideoEditor = ({
     onClose: (questionMutations: QuestionMutationsType, answerMutations: AnswerMutationsType) => void,
     questionMutations: QuestionMutationsType,
     answerMutations: AnswerMutationsType,
-    defaultModuleVersionId: Id<'ModuleVersion'> | null,
+    defaultModuleId: Id<'Module'> | null,
     modules: ModuleEditDTO[]
 }) => {
 
@@ -49,7 +49,7 @@ export const VideoEditor = ({
         answerMutations,
         videoVersionId,
         examVersionId: null,
-        defaultModuleId: defaultModuleVersionId,
+        defaultModuleId,
         modules,
         showTiming: true,
         getPlayedSeconds,

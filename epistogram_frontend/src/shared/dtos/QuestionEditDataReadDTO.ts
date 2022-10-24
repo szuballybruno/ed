@@ -8,6 +8,6 @@ export class QuestionEditDataReadDTO {
     questionText: string;
     questionShowUpTimeSeconds?: number;
 
-    moduleVersionId: Id<'ModuleVersion'>;
+    moduleId: Id<'Module'>;
     answers: AnswerEditDTO[];
 }

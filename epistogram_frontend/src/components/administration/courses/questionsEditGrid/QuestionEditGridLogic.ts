@@ -26,7 +26,7 @@ export const useQuestionEditGridLogic = ({
     answerMutations: AnswerMutationsType,
     videoVersionId: Id<'VideoVersion'> | null,
     examVersionId: Id<'ExamVersion'> | null,
-    defaultModuleId: Id<'ModuleVersion'> | null,
+    defaultModuleId: Id<'Module'> | null,
     modules: ModuleEditDTO[],
     showQuestionModuleSelector: boolean,
     showTiming?: boolean,
@@ -99,7 +99,7 @@ export const useQuestionEditGridLogic = ({
             videoVersionId,
             examVersionId,
             answers: [],
-            moduleVersionId: defaultModuleId!
+            moduleId: defaultModuleId!
         };
 
         questionMutatorFunctions
@@ -126,7 +126,7 @@ export const useQuestionEditGridLogic = ({
                     questionText: question.questionText,
                     questionVersionId: question.questionVersionId,
                     itemText: question.questionText,
-                    moduleVersionId: question.moduleVersionId,
+                    moduleId: question.moduleId,
                     text: ''
                 };
 

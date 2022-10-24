@@ -335,7 +335,7 @@ const marray = [
                             questionShowUpTimeSeconds: viewAsQuestion.questionShowUpTimeSeconds,
                             examVersionId: viewAsQuestion.examVersionId,
                             videoVersionId: viewAsQuestion.videoVersionId,
-                            moduleVersionId: viewAsQuestion.moduleVersionId,
+                            moduleId: viewAsQuestion.moduleId,
 
                             // map answers
                             answers: questionGroup
@@ -583,6 +583,7 @@ const marray = [
                     name: x.name,
                     orderIndex: x.orderIndex,
                     imageFilePath: url.getAssetUrlNullable(x.coverFilePath),
+                    moduleId: x.moduleId
                 }));
         }),
     epistoMappingsBuilder.addArrayMapping(UserVideoStatsDTO, () => (stats: UserVideoStatsView[]) => {
@@ -770,7 +771,7 @@ const marray = [
                     videoLength: view.videoLength,
                     itemType: view.itemType,
                     questionMutations: [],
-                    answerMutations: []
+                    answerMutations: [],
                 });
             });
         }),

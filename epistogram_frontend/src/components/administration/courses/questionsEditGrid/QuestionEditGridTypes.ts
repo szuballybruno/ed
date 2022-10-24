@@ -16,7 +16,7 @@ export type RowSchema = {
     questionVersionId: Id<'QuestionVersion'>;
     questionText: string;
     questionShowUpTimeSeconds?: number;
-    moduleVersionId: Id<'ModuleVersion'>;
+    moduleId: Id<'Module'>;
 
     // ans fileds 
     answerVersionId?: Id<'AnswerVersion'>;

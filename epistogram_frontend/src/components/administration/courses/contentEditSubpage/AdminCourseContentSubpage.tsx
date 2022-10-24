@@ -216,8 +216,8 @@ export const AdminCourseContentSubpage = () => {
                     versionCode: data.versionCode,
                     questionMutations: data.questionMutations,
                     answerMutations: data.answerMutations,
-                    defaultModuleVersionId: modules
-                        .firstOrNull(x => x.moduleVersionId === data.moduleVersionId)?.moduleVersionId ?? null,
+                    defaultModuleId: modules
+                        .firstOrNull(x => x.moduleVersionId === data.moduleVersionId)?.moduleId ?? null,
                     modules,
                     examType: data.itemType === 'pretest'
                         ? 'pretest'

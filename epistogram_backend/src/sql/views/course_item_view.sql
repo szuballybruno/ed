@@ -11,12 +11,11 @@ exam_item AS
 		ed.order_index item_order_index,
 		ed.title item_title,
 		ed.subtitle item_subtitle,
-		CASE WHEN e.is_signup
-			THEN 'signup'
-			ELSE CASE WHEN e.is_pretest
-				THEN 'pretest'
-				ELSE 'exam'
-			END
+		CASE 
+			WHEN e.is_signup THEN 'signup'
+			WHEN e.is_pretest THEN 'pretest'
+			WHEN ed.is_final THEN 'final'
+			ELSE 'exam'
 		END item_type,
 		'exam_version@' || ev.id version_code
 	FROM public.exam_version ev

@@ -38,12 +38,16 @@ export const useModuleEditDialogLogic = ({
         const moduleVersionId = Id
             .create<'ModuleVersion'>(getVirtualId());
 
+        const moduleId = Id
+            .create<'Module'>(getVirtualId());
+
         mutatorFunctions
             .create(moduleVersionId, {
                 name: '',
                 description: '',
                 imageFilePath: '',
                 moduleVersionId,
+                moduleId,
                 isPretestModule: false,
                 orderIndex: mutatorFunctions
                     .getMutatedItems()

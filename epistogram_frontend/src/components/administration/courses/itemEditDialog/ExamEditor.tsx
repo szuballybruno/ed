@@ -16,7 +16,7 @@ export const ExamEditor = ({
     callback,
     questionMutations,
     answerMutations,
-    defaultModuleVersionId,
+    defaultModuleId,
     modules,
     showQuestionModuleSelector
 }: {
@@ -25,7 +25,7 @@ export const ExamEditor = ({
     callback: (questionMutations: QuestionMutationsType, answerMutations: AnswerMutationsType) => void,
     questionMutations: QuestionMutationsType,
     answerMutations: AnswerMutationsType,
-    defaultModuleVersionId: Id<'ModuleVersion'> | null,
+    defaultModuleId: Id<'Module'> | null,
     modules: ModuleEditDTO[],
     showQuestionModuleSelector: boolean
 }) => {
@@ -42,7 +42,7 @@ export const ExamEditor = ({
         answerMutations,
         videoVersionId: null,
         examVersionId,
-        defaultModuleId: defaultModuleVersionId,
+        defaultModuleId,
         modules,
         showTiming: true,
         showQuestionModuleSelector

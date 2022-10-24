@@ -14,6 +14,10 @@ export class ModuleEditView {
 
     @ViewColumn()
     @XViewColumn()
+    moduleId: Id<'Module'>;
+
+    @ViewColumn()
+    @XViewColumn()
     isPretestModule: boolean;
 
     @ViewColumn()

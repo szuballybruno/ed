@@ -82,20 +82,20 @@ export const useQuestionEditGridColumns = (logic: QuestionEditGridLogicType) => 
 
         // module 
         .addIf(showQuestionModuleSelector, {
-            field: 'moduleVersionId',
+            field: 'moduleId',
             headerName: 'Module',
             width: 200,
             renderCell: ({ row, value }) => row.isQuestionHeader
                 ? (
                     <EpistoSelect
                         items={modules}
-                        getCompareKey={x => x.moduleVersionId + ''}
+                        getCompareKey={x => x.moduleId + ''}
                         getDisplayValue={x => x.name}
                         currentKey={value + ''}
                         onSelected={x => mutateQuestion({
                             key: row.questionVersionId,
-                            field: 'moduleVersionId',
-                            newValue: x.moduleVersionId
+                            field: 'moduleId',
+                            newValue: x.moduleId
                         })} />
                 )
                 : <></>

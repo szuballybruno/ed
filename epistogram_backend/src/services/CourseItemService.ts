@@ -105,11 +105,11 @@ export class CourseItemService {
                     subtitle: '',
                     thumbnailUrl: null,
                     acceptanceThreshold: null,
-                    title: ''
+                    title: '',
                 }),
                 overrideDataProps: (data, mutation) => {
 
-                    const { itemOrderIndex, itemTitle, itemSubtitle } = XMutatorHelpers
+                    const { itemOrderIndex, itemTitle, itemSubtitle, itemType } = XMutatorHelpers
                         .mapMutationToPartialObject(mutation);
 
                     if (itemOrderIndex !== undefined)
@@ -120,6 +120,9 @@ export class CourseItemService {
 
                     if (itemTitle)
                         data.title = itemTitle;
+
+                    if (itemType)
+                        data.isFinal = itemType === 'final';
 
                     return data;
                 },

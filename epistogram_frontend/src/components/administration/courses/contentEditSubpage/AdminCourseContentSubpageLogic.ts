@@ -129,11 +129,12 @@ export const mapToRowSchema = (
     const module = isPretest
         ? instantiate<ModuleEditDTO>({
             moduleVersionId: Id.create<'ModuleVersion'>(-1),
+            moduleId: Id.create<'Module'>(-1),
             name: 'none',
             orderIndex: -1,
             description: '',
             imageFilePath: '',
-            isPretestModule: true
+            isPretestModule: true,
         })
         : getItemModule();
 

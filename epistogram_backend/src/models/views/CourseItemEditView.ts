@@ -18,7 +18,7 @@ export class CourseItemEditView {
 
     @ViewColumn()
     @XViewColumn()
-    moduleVersionId: Id<'ModuleVersion'>;
+    moduleId: Id<'Module'>;
 
     @ViewColumn()
     @XViewColumn()
