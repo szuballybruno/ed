@@ -7,6 +7,7 @@ import { ModuleEditDTO } from '../../../../shared/dtos/ModuleEditDTO';
 import { VersionCode } from '../../../../shared/types/VersionCode1';
 import { Id } from '../../../../shared/types/versionId';
 import { EpistoButton } from '../../../controls/EpistoButton';
+import { EpistoCheckbox } from '../../../controls/EpistoCheckbox';
 import { EpistoDataGridColumnBuilder } from '../../../controls/EpistoDataGrid';
 import { EpistoSelect } from '../../../controls/EpistoSelect';
 import { IXMutatorFunctions } from '../../../lib/XMutator/XMutatorCore';
@@ -99,6 +100,21 @@ export const useGridColumns = (
     };
 
     const getIsDropEnabled = (row: RowSchema) => currentDropModuleId ? row.module.versionId === currentDropModuleId : undefined;
+
+    const canMarkAsFinal = (row: RowSchema) => {
+
+        if (row.itemType.type === 'pretest')
+            return false;
+
+        if (row.itemType.type === 'video')
+            return false;
+
+        return true;
+    };
+
+    const isMarkAsFinalDisabled = (row: RowSchema) => itemsMutatorFunctions
+        .getMutatedItems()
+        .any(x => x.itemType === 'final') && row.itemType.type !== 'final';
 
     const gridColumns = new EpistoDataGridColumnBuilder<RowSchema, VersionCode>()
         .add({
@@ -200,6 +216,26 @@ export const useGridColumns = (
                     text={value.label}
                     color={value.color} />;
             }
+        })
+        .add({
+            field: 'isFinal',
+            headerName: 'Zaro',
+            width: 80,
+            renderCell: ({ value, key, row }) => canMarkAsFinal(row)
+                ? (
+                    <EpistoCheckbox
+                        value={value}
+                        disabled={isMarkAsFinalDisabled(row)}
+                        setValue={(isFinalChecked) => itemsMutatorFunctions
+                            .mutate({
+                                key,
+                                field: 'itemType',
+                                newValue: isFinalChecked
+                                    ? 'final'
+                                    : 'exam'
+                            })} />
+                )
+                : <></>
         })
         .add({
             field: 'videoLength',

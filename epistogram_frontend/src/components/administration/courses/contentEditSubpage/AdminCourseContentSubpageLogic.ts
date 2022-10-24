@@ -21,6 +21,7 @@ export type RowSchema = {
     itemTitle: string;
     itemSubtitle: string;
     module: RowSchemaModule;
+    isFinal: boolean;
     itemType: {
         type: CourseItemType;
         label: string;
@@ -142,6 +143,7 @@ export const mapToRowSchema = (
         itemOrderIndex: isPretest ? -1 : item.itemOrderIndex,
         itemTitle: item.itemTitle,
         itemSubtitle: item.itemSubtitle,
+        isFinal: item.itemType === 'final',
         module: instantiate<RowSchemaModule>({
             isPretestModule: isPretest,
             versionId: module.moduleVersionId,
