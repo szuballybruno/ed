@@ -1,6 +1,8 @@
 import { ArrowBack, ArrowForward, ArrowRight, FiberManualRecord } from '@mui/icons-material';
 import { ReactNode } from 'react';
+import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { useActiveCourses } from '../../../services/api/userProgressApiService';
+import { useAdminHomeOverviewStatsData } from '../../../services/api/userStatsApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { Environment } from '../../../static/Environemnt';
 import { usePaging } from '../../../static/frontendHelpers';
@@ -45,15 +47,16 @@ export const AdminHomeOverview = () => {
 
     const { activeCourses } = useActiveCourses();
     const activeCoursesPaging = usePaging({ items: activeCourses });
-    const currentCourse = activeCoursesPaging.currentItem;
+    const { adminHomePageOverviewStats, adminHomePageOverviewStatsError, adminHomePageOverviewStatsStatus } = useAdminHomeOverviewStatsData();
+    const currentCourse = adminHomePageOverviewStats?.companyCourseStats[activeCoursesPaging.currentIndex];
 
     const { navigateToHref } = useNavigation();
 
     return <AdminSubpageHeader
         isInverseBackground
-        /* tabMenuItems={[
-            applicationRoutes.administrationRoute.homeRoute.overviewRoute,
-            applicationRoutes.administrationRoute.homeRoute.detailsRoute, {
+        tabMenuItems={[
+            applicationRoutes.administrationRoute.statsRoute.overviewRoute,
+            applicationRoutes.administrationRoute.statsRoute.detailsRoute, {
                 title: 'Felhasználók áttekintése',
                 route: applicationRoutes.administrationRoute.usersRoute.route,
                 navAction: () => {
@@ -61,7 +64,7 @@ export const AdminHomeOverview = () => {
                     navigateToHref(applicationRoutes.administrationRoute.usersRoute.route.getAbsolutePath() + '?preset=reviewRequired');
                 }
             }
-        ]} */>
+        ]}>
         <EpistoFlex2 flex="3"
             direction="column">
 
@@ -88,7 +91,7 @@ export const AdminHomeOverview = () => {
                         p="10px 0"
                         iconPath={Environment.getAssetUrl('/images/teacherdashboard1.png')}
                         title="Átlagon felül teljesítenek"
-                        value="19"
+                        value={adminHomePageOverviewStats?.outstandingUsers}
                         suffix="-en" />
 
                     <StatisticsCard
@@ -97,7 +100,7 @@ export const AdminHomeOverview = () => {
                         p="10px 0"
                         iconPath={Environment.getAssetUrl('/images/teacherdashboard2.png')}
                         title="Átlagosan teljesítenek"
-                        value="89"
+                        value={adminHomePageOverviewStats?.avgUsers}
                         suffix="-en" />
 
                     <StatisticsCard
@@ -106,7 +109,7 @@ export const AdminHomeOverview = () => {
                         p="10px 0"
                         iconPath={Environment.getAssetUrl('/images/teacherdashboard3.png')}
                         title="Áttekintés javasolt"
-                        value="9"
+                        value={adminHomePageOverviewStats?.flaggedUsers}
                         suffix="esetben" />
                 </EpistoGrid>
 
@@ -270,7 +273,7 @@ export const AdminHomeOverview = () => {
 
                     <EpistoFlex2 flex="1">
                         <img
-                            src={currentCourse?.coverFilePath ?? ''}
+                            src={/* currentCourse?.coverFilePath ??  */''}
                             alt=""
                             style={{
                                 objectFit: 'contain'
@@ -282,7 +285,7 @@ export const AdminHomeOverview = () => {
                         direction="column"
                         p="20px">
                         <EpistoFont>
-                            Microsoft Excel Alapok
+                            {currentCourse?.courseId}
                         </EpistoFont>
                         {/* navigation buttons */}
                         <EpistoFlex2
@@ -328,7 +331,7 @@ export const AdminHomeOverview = () => {
                         p="10px 0"
                         iconPath={Environment.getAssetUrl('/images/teacherdashboard4.png')}
                         title="Felhasználó jelenleg"
-                        value="43"
+                        value={currentCourse?.activeUsersCount}
                         suffix="aktív" />
 
                     <StatisticsCard
@@ -336,7 +339,7 @@ export const AdminHomeOverview = () => {
                         p="10px 0"
                         iconPath={Environment.getAssetUrl('/images/teacherdashboard5.png')}
                         title="Végezte el a kurzust"
-                        value="32"
+                        value={currentCourse?.completedUsersCount}
                         suffix="tanuló" />
 
                     <StatisticsCard
@@ -344,7 +347,7 @@ export const AdminHomeOverview = () => {
                         p="10px 0"
                         iconPath={Environment.getAssetUrl('/images/teacherdashboard6.png')}
                         title="Hagyta félbe a tanfolyamot"
-                        value="13"
+                        value={currentCourse?.suspendedUsersCount}
                         suffix="tanuló" />
 
                     <StatisticsCard
@@ -352,7 +355,7 @@ export const AdminHomeOverview = () => {
                         p="10px 0"
                         iconPath={Environment.getAssetUrl('/images/teacherdashboard7.png')}
                         title="Átlagos teljesítmény"
-                        value="79"
+                        value={currentCourse?.avgCoursePerformancePercentage}
                         suffix="%" />
 
                     <StatisticsCard
@@ -360,7 +363,7 @@ export const AdminHomeOverview = () => {
                         p="10px 0"
                         iconPath={Environment.getAssetUrl('/images/teacherdashboard8.png')}
                         title="Nehéznek megjelölve"
-                        value="19"
+                        value={currentCourse?.difficultVideosCount}
                         suffix="videó" />
 
                     <StatisticsCard
@@ -368,7 +371,7 @@ export const AdminHomeOverview = () => {
                         p="10px 0"
                         iconPath={Environment.getAssetUrl('/images/teacherdashboard9.png')}
                         title="Vár válaszokra a tanártól"
-                        value="8"
+                        value={currentCourse?.questionsWaitingToBeAnswered}
                         suffix="kérdés" />
                 </EpistoGrid>
             </AdminSectionWithButton>

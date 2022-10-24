@@ -1,3 +1,4 @@
+import { AdminHomePageOverviewDTO } from '../../shared/dtos/admin/AdminHomePageOverviewDTO';
 import { HomePageStatsDTO } from '../../shared/dtos/HomePageStatsDTO';
 import { ImproveYourselfPageStatsDTO } from '../../shared/dtos/ImproveYourselfPageStatsDTO';
 import { UserCourseStatsDTO } from '../../shared/dtos/UserCourseStatsDTO';
@@ -86,6 +87,17 @@ export const useUserExamStats = (courseId: Id<'Course'>, userId: Id<'User'>) => 
         userExamStats: queryRes.data,
         userExamStatsStatus: queryRes.state,
         userExamStatsError: queryRes.error
+    };
+};
+
+export const useAdminHomeOverviewStatsData = () => {
+
+    const queryRes = QueryService.useXQuery<AdminHomePageOverviewDTO>(apiRoutes.userStats.getAdminHomeOverviewStats);
+
+    return {
+        adminHomePageOverviewStats: queryRes.data,
+        adminHomePageOverviewStatsStatus: queryRes.state,
+        adminHomePageOverviewStatsError: queryRes.error
     };
 };
 

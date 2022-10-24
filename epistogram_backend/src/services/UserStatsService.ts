@@ -1,4 +1,5 @@
 import { User } from '../models/entity/misc/User';
+import { AdminHomePageOverviewView } from '../models/views/AdminHomePageOverviewView';
 import { CourseLearningStatsView } from '../models/views/CourseLearningStatsView';
 import { HomePageStatsView } from '../models/views/HomePageStatsView';
 import { ImproveYourselfPageStatsView } from '../models/views/ImproveYourselfPageStatsView';
@@ -14,6 +15,7 @@ import { UserPerformanceComparisonStatsView } from '../models/views/UserPerforma
 import { UserPerformanceView } from '../models/views/UserPerformanceView';
 import { UserSpentTimeRatioView } from '../models/views/UserSpentTimeRatioView';
 import { UserVideoStatsView } from '../models/views/UserVideoStatsView';
+import { AdminHomePageOverviewDTO } from '../shared/dtos/admin/AdminHomePageOverviewDTO';
 import { CourseLearningDTO } from '../shared/dtos/CourseLearningDTO';
 import { HomePageStatsDTO } from '../shared/dtos/HomePageStatsDTO';
 import { ImproveYourselfPageStatsDTO } from '../shared/dtos/ImproveYourselfPageStatsDTO';
@@ -183,7 +185,7 @@ export class UserStatsService {
     /**
      * Gets the statistics for the users every watched video
      */
-     async getUserModuleStatsAsync(principalId: PrincipalId, courseId: Id<'Course'>, userId: Id<'User'> | null) {
+    async getUserModuleStatsAsync(principalId: PrincipalId, courseId: Id<'Course'>, userId: Id<'User'> | null) {
 
         const stats = await this._ormService
             .query(UserModuleStatsView, { userId: userId ? userId : principalId, courseId })
@@ -287,7 +289,14 @@ export class UserStatsService {
             .mapTo(UserCourseStatsOverviewDTO, [courseStats, userSpentTimeRatio, progressChartData as any]);
     }
 
-    async getAdminHomeOverviewStatsAsync(companyId: Id<'Company'>) {
+    async getAdminHomeOverviewStatsAsync(principalId: PrincipalId) {
+
+        const user = await this._ormService
+            .query(User, { userId: principalId })
+            .where('id', '=', 'userId')
+            .getSingle();
+
+        const companyId = user.companyId;
 
         const allFlaggedUsers = await this
             .flagUsersAsync(companyId);
@@ -296,13 +305,24 @@ export class UserStatsService {
             return;
 
         const flaggedUsers = allFlaggedUsers
-            .filter(x => x?.flag === 'low');
+            .filter(x => x?.flag === 'low')
+            .length;
 
         const avgUsers = allFlaggedUsers
-            .filter(x => x?.flag === 'avg');
+            .filter(x => x?.flag === 'avg')
+            .length;
 
         const outstandingUsers = allFlaggedUsers
-            .filter(x => x?.flag === 'high');
+            .filter(x => x?.flag === 'high')
+            .length;
+
+        const companyCourseStats = await this._ormService
+            .query(AdminHomePageOverviewView, { companyId })
+            .where('companyId', '=', 'companyId')
+            .getMany();
+
+        return this._mapperService
+            .mapTo(AdminHomePageOverviewDTO, [companyCourseStats, flaggedUsers, avgUsers, outstandingUsers]);
     }
 
     /**
