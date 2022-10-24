@@ -1,4 +1,5 @@
 {
+    "root": true,
     "env": {
         "browser": true,
         "es2021": true
@@ -22,6 +23,11 @@
         "react-hooks",
         "unused-imports"
     ],
+    "settings": {
+        "react": {
+            "version": "18.2.0"
+        }
+    },
     "rules": {
         "unused-imports/no-unused-imports": "error",
         "@typescript-eslint/no-explicit-any": "off",
