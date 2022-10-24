@@ -210,7 +210,7 @@ SELECT
 		AND l.deletion_date IS NULL
 	)::int comment_like_count,
 
-	-- virtual thread id for orderin
+	-- virtual thread id for ordering
 	CASE
 		WHEN co.parent_comment_id IS NULL
 		THEN co.id
@@ -1212,7 +1212,7 @@ ON ad.id = av.answer_data_id;
 --CREATE VIEW: schema_version_view
 CREATE VIEW schema_version_view
 AS
-SELECT '10:48:16 2022-10-18 CEDT' last_modification_date, '0.01' version
+SELECT '09:40:24 2022-10-21 CEDT' last_modification_date, '0.01' version
 ;
 
 --CREATE VIEW: shop_item_stateful_view
@@ -2062,7 +2062,8 @@ SELECT
     qd.show_up_time_seconds question_show_up_time_seconds,
     av.id answer_version_id,
     ad.text answer_text,
-    ad.is_correct answer_is_correct
+    ad.is_correct answer_is_correct,
+	qv.module_version_id
 FROM public.course_item_view civ
 
 LEFT JOIN public.question_version qv

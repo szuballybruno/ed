@@ -1,5 +1,6 @@
 import { useCallback, useMemo } from 'react';
 import { CourseItemApiService } from '../../../../services/api/CourseItemApiService';
+import { ModuleEditDTO } from '../../../../shared/dtos/ModuleEditDTO';
 import { Id } from '../../../../shared/types/versionId';
 import { translatableTexts } from '../../../../static/translatableTexts';
 import { EpistoButton } from '../../../controls/EpistoButton';
@@ -14,13 +15,19 @@ export const ExamEditor = ({
     endabled,
     callback,
     questionMutations,
-    answerMutations
+    answerMutations,
+    defaultModuleVersionId,
+    modules,
+    showQuestionModuleSelector
 }: {
     examVersionId: Id<'ExamVersion'>,
     endabled: boolean,
     callback: (questionMutations: QuestionMutationsType, answerMutations: AnswerMutationsType) => void,
     questionMutations: QuestionMutationsType,
-    answerMutations: AnswerMutationsType
+    answerMutations: AnswerMutationsType,
+    defaultModuleVersionId: Id<'ModuleVersion'> | null,
+    modules: ModuleEditDTO[],
+    showQuestionModuleSelector: boolean
 }) => {
 
     // http
@@ -29,12 +36,23 @@ export const ExamEditor = ({
 
     const questions = useMemo(() => courseItemEditData?.questions ?? [], [courseItemEditData]);
 
-    const logic = useQuestionEditGridLogic(questions, questionMutations, answerMutations, null, examVersionId);
+    const logic = useQuestionEditGridLogic({
+        questions,
+        questionMutations,
+        answerMutations,
+        videoVersionId: null,
+        examVersionId,
+        defaultModuleId: defaultModuleVersionId,
+        modules,
+        showTiming: true,
+        showQuestionModuleSelector
+    });
 
     const handleFinishItemEdit = useCallback(() => {
 
         callback(logic.questionMutations, logic.answerMutations);
     }, [callback, logic]);
+
     return <LoadingFrame
         loadingState={'success'}
         flex='1'

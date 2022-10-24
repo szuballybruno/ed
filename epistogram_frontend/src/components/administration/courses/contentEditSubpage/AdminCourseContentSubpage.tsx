@@ -215,7 +215,15 @@ export const AdminCourseContentSubpage = () => {
                     courseTitle: 'Course name',
                     versionCode: data.versionCode,
                     questionMutations: data.questionMutations,
-                    answerMutations: data.answerMutations
+                    answerMutations: data.answerMutations,
+                    defaultModuleVersionId: modules
+                        .firstOrNull(x => x.moduleVersionId === data.moduleVersionId)?.moduleVersionId ?? null,
+                    modules,
+                    examType: data.itemType === 'pretest'
+                        ? 'pretest'
+                        : data.itemType === 'final'
+                            ? 'final'
+                            : 'normal'
                 });
 
         if (type === 'module')

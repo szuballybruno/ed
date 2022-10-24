@@ -3,7 +3,7 @@ import { VersionCode } from '../../types/VersionCode1';
 import { Id } from '../../types/versionId';
 import { AnswerEditDTO } from '../AnswerEditDTO';
 import { Mutation } from '../mutations/Mutation';
-import { QuestionEditDataDTO } from '../QuestionEditDataDTO';
+import { QuestionEditDataReadDTO } from '../QuestionEditDataReadDTO';
 import { CourseContentItemIssueDTO } from './CourseContentItemIssueDTO';
 
 export class CourseContentItemAdminDTO {
@@ -21,6 +21,6 @@ export class CourseContentItemAdminDTO {
 	warnings: CourseContentItemIssueDTO[];
 	videoLength: number;
 	itemType: CourseItemType;
-	questionMutations: Mutation<QuestionEditDataDTO, 'questionVersionId'>[];
+	questionMutations: Mutation<QuestionEditDataReadDTO, 'questionVersionId'>[];
 	answerMutations: Mutation<AnswerEditDTO, 'answerVersionId'>[];
 }

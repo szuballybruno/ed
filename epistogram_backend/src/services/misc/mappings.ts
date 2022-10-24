@@ -335,6 +335,7 @@ const marray = [
                             questionShowUpTimeSeconds: viewAsQuestion.questionShowUpTimeSeconds,
                             examVersionId: viewAsQuestion.examVersionId,
                             videoVersionId: viewAsQuestion.videoVersionId,
+                            moduleVersionId: viewAsQuestion.moduleVersionId,
 
                             // map answers
                             answers: questionGroup

@@ -1,5 +1,5 @@
 import { Id } from '../types/versionId';
-import { QuestionEditDataDTO } from './QuestionEditDataDTO';
+import { QuestionEditDataReadDTO } from './QuestionEditDataReadDTO';
 
 export class CourseItemEditDTO {
     examVersionId: Id<'ExamVersion'>;
@@ -9,5 +9,5 @@ export class CourseItemEditDTO {
     videoLengthSeconds: number | null;
     videoUrl: string | null;
 
-    questions: QuestionEditDataDTO[];
+    questions: QuestionEditDataReadDTO[];
 }

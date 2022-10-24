@@ -4,7 +4,7 @@ import { QuestionVersion } from '../models/entity/question/QuestionVersion';
 import { QuestionDataView } from '../models/views/QuestionDataView';
 import { Mutation } from '../shared/dtos/mutations/Mutation';
 import { QuestionDTO } from '../shared/dtos/QuestionDTO';
-import { QuestionEditDataDTO } from '../shared/dtos/QuestionEditDataDTO';
+import { QuestionEditDataReadDTO } from '../shared/dtos/QuestionEditDataReadDTO';
 import { Id } from '../shared/types/versionId';
 import { VersionMigrationContainer } from '../utilities/misc';
 import { MapperService } from './MapperService';
@@ -13,7 +13,7 @@ import { XMutatorHelpers } from './misc/XMutatorHelpers';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { VersionSaveService } from './VersionSaveService';
 
-type QuestionMutationType = Mutation<QuestionEditDataDTO, 'questionVersionId'>;
+type QuestionMutationType = Mutation<QuestionEditDataReadDTO, 'questionVersionId'>;
 
 export class QuestionService {
 
@@ -35,7 +35,7 @@ export class QuestionService {
         const result = await this
             ._versionSaveService
             .saveAsync({
-                dtoSignature: QuestionEditDataDTO,
+                dtoSignature: QuestionEditDataReadDTO,
                 versionSignature: QuestionVersion,
                 dataSignature: QuestionData,
                 entitySignature: Question,
@@ -85,6 +85,16 @@ export class QuestionService {
 
         return result;
     }
+
+    /**
+     * Saves question module bridges 
+     */
+    // async saveQuestionModuleBridgesAsync(itemVersionIdMigrations) {
+
+    //     const asd = await this
+    //         ._ormService
+    //         .query(QuestionVersion, {})
+    // }
 
     /**
      * Returns question data by id 

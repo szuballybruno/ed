@@ -55,6 +55,14 @@ export class EpistoDataGridColumnBuilder<TRow, TKey> {
         return this;
     }
 
+    addIf<TField extends keyof TRow>(cond: boolean, column: GridColumnType<TRow, TKey, TField>) {
+
+        if (cond)
+            this._columns.push(column);
+
+        return this;
+    }
+
     getColumns() {
 
         return this._columns;

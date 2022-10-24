@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useState } from 'react';
 import { CourseItemApiService } from '../../../../services/api/CourseItemApiService';
+import { ModuleEditDTO } from '../../../../shared/dtos/ModuleEditDTO';
 import { Id } from '../../../../shared/types/versionId';
 import { useStateAndRef } from '../../../../static/frontendHelpers';
 import { translatableTexts } from '../../../../static/translatableTexts';
@@ -15,13 +16,17 @@ export const VideoEditor = ({
     enabled,
     onClose,
     questionMutations,
-    answerMutations
+    answerMutations,
+    defaultModuleVersionId,
+    modules
 }: {
     enabled: boolean,
     videoVersionId: Id<'VideoVersion'>,
     onClose: (questionMutations: QuestionMutationsType, answerMutations: AnswerMutationsType) => void,
     questionMutations: QuestionMutationsType,
-    answerMutations: AnswerMutationsType
+    answerMutations: AnswerMutationsType,
+    defaultModuleVersionId: Id<'ModuleVersion'> | null,
+    modules: ModuleEditDTO[]
 }) => {
 
     // http
@@ -38,7 +43,19 @@ export const VideoEditor = ({
 
     const [questionGridHasFocusRef, questionGridHasFocus, setQuestionGridHasFocus] = useStateAndRef(false);
 
-    const logic = useQuestionEditGridLogic(questions, questionMutations, answerMutations, videoVersionId, null, true, getPlayedSeconds, setQuestionGridHasFocus);
+    const logic = useQuestionEditGridLogic({
+        questions,
+        questionMutations,
+        answerMutations,
+        videoVersionId,
+        examVersionId: null,
+        defaultModuleId: defaultModuleVersionId,
+        modules,
+        showTiming: true,
+        getPlayedSeconds,
+        onFocusChanged: setQuestionGridHasFocus,
+        showQuestionModuleSelector: false
+    });
 
     const onCloseHandler = useCallback(() => {
 

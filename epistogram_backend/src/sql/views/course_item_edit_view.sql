@@ -13,7 +13,8 @@ SELECT
     qd.show_up_time_seconds question_show_up_time_seconds,
     av.id answer_version_id,
     ad.text answer_text,
-    ad.is_correct answer_is_correct
+    ad.is_correct answer_is_correct,
+	qv.module_version_id
 FROM public.course_item_view civ
 
 LEFT JOIN public.question_version qv

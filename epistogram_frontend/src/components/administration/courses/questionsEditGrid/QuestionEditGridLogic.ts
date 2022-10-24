@@ -1,23 +1,40 @@
 import { useCallback, useEffect, useMemo } from 'react';
 import { getVirtualId } from '../../../../services/core/idService';
 import { AnswerEditDTO } from '../../../../shared/dtos/AnswerEditDTO';
-import { QuestionEditDataDTO } from '../../../../shared/dtos/QuestionEditDataDTO';
+import { ModuleEditDTO } from '../../../../shared/dtos/ModuleEditDTO';
+import { QuestionEditDataReadDTO } from '../../../../shared/dtos/QuestionEditDataReadDTO';
 import { Id } from '../../../../shared/types/versionId';
 import { iterate } from '../../../../static/frontendHelpers';
 import { useXMutatorNew } from '../../../lib/XMutator/XMutatorReact';
 import { AnswerMutationsType, QuestionMutationsType, RowSchema } from './QuestionEditGridTypes';
 
-export const useQuestionEditGridLogic = (
-    questions: QuestionEditDataDTO[],
+export const useQuestionEditGridLogic = ({
+    answerMutations,
+    defaultModuleId,
+    examVersionId,
+    modules,
+    questionMutations,
+    questions,
+    showQuestionModuleSelector,
+    videoVersionId,
+    getPlayedSeconds,
+    onFocusChanged,
+    showTiming
+}: {
+    questions: QuestionEditDataReadDTO[],
     questionMutations: QuestionMutationsType,
     answerMutations: AnswerMutationsType,
     videoVersionId: Id<'VideoVersion'> | null,
     examVersionId: Id<'ExamVersion'> | null,
+    defaultModuleId: Id<'ModuleVersion'> | null,
+    modules: ModuleEditDTO[],
+    showQuestionModuleSelector: boolean,
     showTiming?: boolean,
     getPlayedSeconds?: () => number,
-    onFocusChanged?: (hasFocus: boolean) => void) => {
+    onFocusChanged?: (hasFocus: boolean) => void
+}) => {
 
-    const [questionMutatorState, questionMutatorFunctions] = useXMutatorNew(QuestionEditDataDTO, 'questionVersionId', 'QuestionMutator');
+    const [questionMutatorState, questionMutatorFunctions] = useXMutatorNew(QuestionEditDataReadDTO, 'questionVersionId', 'QuestionMutator');
     const [answerMutatorState, answerMutatorFunctions] = useXMutatorNew(AnswerEditDTO, 'answerVersionId', 'AnswerMutator');
 
     /**
@@ -75,18 +92,19 @@ export const useQuestionEditGridLogic = (
                 });
         });
 
-        const question: QuestionEditDataDTO = {
+        const question: QuestionEditDataReadDTO = {
             questionVersionId: questionVersionId,
             questionText: '',
             questionShowUpTimeSeconds: 0,
             videoVersionId,
             examVersionId,
-            answers: []
+            answers: [],
+            moduleVersionId: defaultModuleId!
         };
 
         questionMutatorFunctions
             .create(question.questionVersionId, question);
-    }, [videoVersionId, examVersionId, answerMutatorFunctions, questionMutatorFunctions]);
+    }, [videoVersionId, examVersionId, answerMutatorFunctions, questionMutatorFunctions, defaultModuleId]);
 
     /**
      * get rows 
@@ -100,15 +118,17 @@ export const useQuestionEditGridLogic = (
             .mutatedItems
             .flatMap((question): RowSchema[] => {
 
-                const headerRow = {
+                const headerRow: RowSchema = {
                     isQuestionHeader: true,
                     rowKey: `${question.questionVersionId}`,
                     questionEditDTO: question,
                     questionShowUpTimeSeconds: question.questionShowUpTimeSeconds,
                     questionText: question.questionText,
                     questionVersionId: question.questionVersionId,
-                    itemText: question.questionText
-                } as RowSchema;
+                    itemText: question.questionText,
+                    moduleVersionId: question.moduleVersionId,
+                    text: ''
+                };
 
                 const answerRows = answerMutatorState
                     .mutatedItems
@@ -158,7 +178,9 @@ export const useQuestionEditGridLogic = (
         createAnswer: answerMutatorFunctions.create.bind(answerMutatorFunctions),
         mutateAnswer: answerMutatorFunctions.mutate.bind(answerMutatorFunctions),
         deleteAnswer: answerMutatorFunctions.remove.bind(answerMutatorFunctions),
-        onFocusChanged
+        onFocusChanged,
+        modules,
+        showQuestionModuleSelector
     };
 };
 

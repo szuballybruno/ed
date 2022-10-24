@@ -1,6 +1,6 @@
 import { AnswerEditDTO } from '../../../../shared/dtos/AnswerEditDTO';
 import { Mutation } from '../../../../shared/dtos/mutations/Mutation';
-import { QuestionEditDataDTO } from '../../../../shared/dtos/QuestionEditDataDTO';
+import { QuestionEditDataReadDTO } from '../../../../shared/dtos/QuestionEditDataReadDTO';
 import { Id } from '../../../../shared/types/versionId';
 
 export type RowSchema = {
@@ -8,20 +8,21 @@ export type RowSchema = {
     // misc
     isQuestionHeader: boolean;
     rowKey: string;
-    questionEditDTO: QuestionEditDataDTO;
-    answerEditDTO: AnswerEditDTO;
+    questionEditDTO: QuestionEditDataReadDTO;
+    answerEditDTO?: AnswerEditDTO;
     itemText: string;
 
     // question fileds
     questionVersionId: Id<'QuestionVersion'>;
     questionText: string;
     questionShowUpTimeSeconds?: number;
+    moduleVersionId: Id<'ModuleVersion'>;
 
     // ans fileds 
-    answerVersionId: Id<'AnswerVersion'>;
-    text: string;
-    isCorrect: boolean;
+    answerVersionId?: Id<'AnswerVersion'>;
+    text?: string;
+    isCorrect?: boolean;
 };
 
-export type QuestionMutationsType = Mutation<QuestionEditDataDTO, 'questionVersionId'>[];
+export type QuestionMutationsType = Mutation<QuestionEditDataReadDTO, 'questionVersionId'>[];
 export type AnswerMutationsType = Mutation<AnswerEditDTO, 'answerVersionId'>[];

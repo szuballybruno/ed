@@ -11,6 +11,7 @@ import { VideoEditor } from './VideoEditor';
 import { AdminVideoStatisticsModalPage } from './VideoStats';
 import { Id } from '../../../../shared/types/versionId';
 import { Logger } from '../../../../static/Logger';
+import { EMPTY_ARRAY } from '../../../../helpers/emptyArray';
 
 export const ItemEditDialog = ({
     dialogLogic,
@@ -20,12 +21,27 @@ export const ItemEditDialog = ({
     callback: (questionMutations: QuestionMutationsType, answerMutations: AnswerMutationsType) => void,
 }) => {
 
-    const dialogParams = dialogLogic.params;
-    const isExam = !dialogParams?.isVideo;
-    const isVideo = !isExam;
-    const itemVersionId = dialogParams?.itemVersionId;
-    const answerMutations = dialogParams?.answerMutations;
-    const questionMutations = dialogParams?.questionMutations;
+    const {
+        isVideo,
+        itemVersionId,
+        answerMutations,
+        questionMutations,
+        defaultModuleVersionId,
+        modules,
+        courseTitle,
+        itemTitle,
+        examType
+    } = dialogLogic.params ?? {
+        isVideo: false,
+        itemVersionId: null,
+        answerMutations: EMPTY_ARRAY,
+        defaultModuleVersionId: null,
+        modules: EMPTY_ARRAY,
+        questionMutations: EMPTY_ARRAY,
+        itemTitle: '',
+        courseTitle: '',
+        examType: 'normal'
+    };
 
     const handleCallback = useCallback((questionMutations: QuestionMutationsType, answerMutations: AnswerMutationsType) => {
 
@@ -44,23 +60,28 @@ export const ItemEditDialog = ({
                     videoVersionId={itemVersionId as Id<'VideoVersion'>}
                     onClose={handleCallback}
                     answerMutations={answerMutations}
-                    questionMutations={questionMutations} />,
+                    questionMutations={questionMutations}
+                    defaultModuleVersionId={defaultModuleVersionId}
+                    modules={modules} />,
                 title: 'Kérdések'
             })
             .addIf(isVideo, {
                 content: () => <AdminVideoStatisticsModalPage />,
                 title: 'Statisztika'
             })
-            .addIf(isExam, {
+            .addIf(!isVideo, {
                 content: () => <ExamEditor
                     callback={handleCallback}
                     examVersionId={itemVersionId as Id<'ExamVersion'>}
                     endabled={dialogLogic.isOpen}
                     questionMutations={questionMutations}
-                    answerMutations={answerMutations} />,
+                    answerMutations={answerMutations}
+                    defaultModuleVersionId={defaultModuleVersionId}
+                    modules={modules}
+                    showQuestionModuleSelector={examType !== 'normal'} />,
                 title: 'Kérdések',
             })
-            .addIf(isExam, {
+            .addIf(!isVideo, {
                 content: () => <AdminExamStatisticsModalPage />,
                 title: 'Statisztika',
             })
@@ -71,8 +92,8 @@ export const ItemEditDialog = ({
 
     return <EditDialogBase
         logic={dialogLogic}
-        title={dialogParams?.itemTitle ?? ''}
-        subTitle={dialogParams?.courseTitle ?? ''}
+        title={itemTitle}
+        subTitle={courseTitle}
         chipText={isVideo ? 'Videó' : 'Vizsga'}
         chipColor={isVideo ? 'var(--deepBlue)' : 'var(--deepOrange)'}
         paging={paging} />;

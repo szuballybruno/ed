@@ -18,6 +18,10 @@ export class CourseItemEditView {
 
     @ViewColumn()
     @XViewColumn()
+    moduleVersionId: Id<'ModuleVersion'>;
+
+    @ViewColumn()
+    @XViewColumn()
     title: string;
 
     @ViewColumn()
