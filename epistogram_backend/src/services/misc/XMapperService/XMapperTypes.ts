@@ -22,7 +22,7 @@ export type ContainerType = ArrayWithAtLeastOneItem<ContainerItemType<any, any, 
  * Replaces non-matching types in the array with undefined. 
  */
 type Filter<TContainer extends ContainerType, TSearch> = {
-    [K in keyof TContainer]: TContainer[K] extends TSearch ? TContainer[K] : undefined;
+    [K in keyof TContainer]: TContainer[K] extends TSearch ? TSearch extends TContainer[K] ? TContainer[K] : undefined : undefined;
 }
 
 /**

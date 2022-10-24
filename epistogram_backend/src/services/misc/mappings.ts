@@ -586,23 +586,24 @@ const marray = [
                     moduleId: x.moduleId
                 }));
         }),
-    epistoMappingsBuilder.addArrayMapping(UserVideoStatsDTO, () => (stats: UserVideoStatsView[]) => {
-        return stats.map(x => {
-            return {
-                userId: x.userId,
-                videoId: x.videoId,
-                videoTitle: x.videoTitle,
-                courseId: x.courseId,
-                lengthSeconds: x.lengthSeconds,
-                totalSpentTimeSeconds: x.totalSpentTimeSeconds,
-                videoReplaysCount: x.videoReplaysCount,
-                isRecommendedForRetry: x.isRecommendedForRetry,
-                lastThreeAnswerAverage: x.lastThreeAnswerAverage,
-                averageReactionTime: x.averageReactionTime,
-                lastWatchTime: x.lastWatchTime
-            };
-        });
-    }),
+    epistoMappingsBuilder
+        .addArrayMapping(UserVideoStatsDTO, () => (stats: UserVideoStatsView[]) => {
+            return stats.map(x => {
+                return {
+                    userId: x.userId,
+                    videoId: x.videoId,
+                    videoTitle: x.videoTitle,
+                    courseId: x.courseId,
+                    lengthSeconds: x.lengthSeconds,
+                    totalSpentTimeSeconds: x.totalSpentTimeSeconds,
+                    videoReplaysCount: x.videoReplaysCount,
+                    isRecommendedForRetry: x.isRecommendedForRetry,
+                    lastThreeAnswerAverage: x.lastThreeAnswerAverage,
+                    averageReactionTime: x.averageReactionTime,
+                    lastWatchTime: x.lastWatchTime
+                };
+            });
+        }),
     epistoMappingsBuilder
         .addArrayMapping(UserExamStatsDTO, () => (stats: UserExamStatsView[]) => {
 

@@ -787,6 +787,7 @@ CREATE VIEW module_edit_view
 AS
 SELECT 
 	mv.id module_version_id,
+	mv.module_id,
 	mv.course_version_id,
 	mod.is_pretest_module,
 	md.name,

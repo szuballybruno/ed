@@ -46,7 +46,8 @@ export class ModuleService {
             .where('moduleId', '=', 'moduleId')
             .getSingle();
 
-        return this._mapperService
+        return this
+            ._mapperService
             .mapTo(ModulePlayerDTO, [view]);
     }
 
