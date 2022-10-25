@@ -63,6 +63,9 @@ const lightRecreateDBAsync = async (getServiceProviderAsync: GetServiceProviderT
     const fullMigrationScript =
 `-- MIGRATION VERSION: ${migrationName}
 
+-- BEGIN TRANSACTION
+BEGIN;
+
 -- STORE MIGRATION VERSION
 CREATE TABLE IF NOT EXISTS public.migration_version
 (
@@ -72,6 +75,9 @@ CREATE TABLE IF NOT EXISTS public.migration_version
 
 INSERT INTO public.migration_version
 VALUES ('${migrationName}', now()); 
+
+ALTER TABLE public.migration_version 
+DROP CONSTRAINT IF EXISTS unique_mig_ver;
 
 ALTER TABLE public.migration_version
 ADD CONSTRAINT unique_mig_ver 
@@ -85,6 +91,9 @@ ${migrationFileContents}
 
 -- CREATE SOFT SCHEMA
 ${recerateScriptParts.createScript}
+
+-- COMMIT TRANSACTION
+COMMIT;
 `;
 
     writeFileSync(globalConfig.getRootRelativePath('/sql/out/recreateLightSchema.sql'), recerateScript);
