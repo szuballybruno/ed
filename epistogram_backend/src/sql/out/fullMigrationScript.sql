@@ -168,8 +168,8 @@ DROP INDEX IF EXISTS single_current_course_bridge_unique_index;
 -- TRANSFORM TABLES / MIGRATE DATA
 -- TEST MIGRATION 
 create table test_table (
-	aname varchara
-)
+	aname varchar
+);
 
 -- CREATE SOFT SCHEMA
 
