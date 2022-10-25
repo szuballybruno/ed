@@ -61,20 +61,21 @@ const lightRecreateDBAsync = async (getServiceProviderAsync: GetServiceProviderT
         .readFileAsText(`${migrationsFolderFilePath}/${migrationScriptFileName}`);
 
     const fullMigrationScript =
-`
-------------------------------------------
--- MIGRATION VERSION: [${migrationName}]--
-------------------------------------------
+`-- MIGRATION VERSION: ${migrationName}
 
 -- STORE MIGRATION VERSION
-CREATE TABLE IF NOT EXISTS public.migration_versions
+CREATE TABLE IF NOT EXISTS public.migration_version
 (
 	version_name varchar,
-	createion_date timestamptz
+	creation_date timestamptz
 );
 
-INSERT INTO public.migration_versions
+INSERT INTO public.migration_version
 VALUES ('${migrationName}', now()); 
+
+ALTER TABLE public.migration_version
+ADD CONSTRAINT unique_mig_ver 
+UNIQUE (version_name);
 
 -- DROP SOFT SCHEMA
 ${recerateScriptParts.dropScript}

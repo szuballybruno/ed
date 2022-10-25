@@ -35,6 +35,7 @@
 				"password": "admin"
 			}
 		],
-		"task.allowAutomaticTasks": true
+		"task.allowAutomaticTasks": true,
+		"powershell.cwd": "c:\\GitRepositories\\epistogram\\epistogram_backend"
 	}
 }
