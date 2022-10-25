@@ -6,6 +6,7 @@ import { FileSystemService } from './services/FileSystemService';
 import { LoggerService } from './services/LoggerService';
 import { GlobalConfiguration } from './services/misc/GlobalConfiguration';
 import { log } from './services/misc/logger';
+import { ORMConnectionService } from './services/ORMConnectionService/ORMConnectionService';
 import { CreateDBService } from './services/sqlServices/CreateDBService';
 import { SQLConnectionService } from './services/sqlServices/SQLConnectionService';
 import './shared/logic/jsExtensions';
@@ -61,7 +62,7 @@ const lightRecreateDBAsync = async (getServiceProviderAsync: GetServiceProviderT
         .readFileAsText(`${migrationsFolderFilePath}/${migrationScriptFileName}`);
 
     const fullMigrationScript =
-`-- MIGRATION VERSION: ${migrationName}
+        `-- MIGRATION VERSION: ${migrationName}
 
 -- BEGIN TRANSACTION
 BEGIN;
@@ -108,6 +109,19 @@ const startServerAsync = async (initializator: ServiceProviderInitializator) => 
             .getService(LoggerService),
         initializator
     );
+
+    /**
+     * Validate schema
+     */
+    await initializator
+        .useTransientServicesContextAsync(async serviceProvider => {
+
+            const ormService = serviceProvider
+                .getService(ORMConnectionService);
+
+            await ormService
+                .validateSchemaAsync();
+        });
 
     /**
      * INIT TURBO EXPRESS
