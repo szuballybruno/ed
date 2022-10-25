@@ -1,4 +1,4 @@
--- MIGRATION VERSION: migration9
+-- MIGRATION VERSION: migration10
 
 -- BEGIN TRANSACTION
 BEGIN;
@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS public.migration_version
 );
 
 INSERT INTO public.migration_version
-VALUES ('migration9', now()); 
+VALUES ('migration10', now()); 
 
 ALTER TABLE public.migration_version 
 DROP CONSTRAINT IF EXISTS unique_mig_ver;
@@ -167,7 +167,7 @@ DROP INDEX IF EXISTS single_current_course_bridge_unique_index;
 
 -- TRANSFORM TABLES / MIGRATE DATA
 -- TEST MIGRATION 
-create table test_table (
+create table test_table2 (
 	aname varchar
 );
 

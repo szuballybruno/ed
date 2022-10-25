@@ -10,6 +10,7 @@ import { ORMConnectionService } from './services/ORMConnectionService/ORMConnect
 import { CreateDBService } from './services/sqlServices/CreateDBService';
 import { SQLConnectionService } from './services/sqlServices/SQLConnectionService';
 import './shared/logic/jsExtensions';
+import { parseIntOrFail } from './shared/logic/sharedLogic';
 import { ServiceProviderInitializator } from './startup/initApp';
 import { initTurboExpress } from './startup/instatiateTurboExpress';
 import { XTurboExpressListener } from './turboImplementations/XTurboExpressListener';
@@ -52,7 +53,7 @@ const lightRecreateDBAsync = async (getServiceProviderAsync: GetServiceProviderT
 
     const migrationScriptFileName = fileSystemService
         .getAllFilePaths(migrationsFolderFilePath)
-        .orderBy(x => x)
+        .orderBy(x => parseIntOrFail(x.replace('migration', '')))
         .last();
 
     const migrationName = migrationScriptFileName
