@@ -227,6 +227,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
+      - name: Checkout branch
+        uses: actions/checkout@v2
+        with:
+          ref: dev
     
       - name: Migrate schema
         working-directory: epistogram_backend
