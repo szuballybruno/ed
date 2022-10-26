@@ -1,11 +1,9 @@
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
 import { Id } from '../../shared/types/versionId';
 
-
-
 export class UserPractiseRecommendationView {
 
-    @XViewColumn()
+    // TODO
     questionId: Id<'Question'>;
 
     @XViewColumn()
@@ -23,7 +21,7 @@ export class UserPractiseRecommendationView {
     @XViewColumn()
     userId: Id<'User'>;
 
-    @XViewColumn()
+    // TODO
     lastThreeAnswerAverage: number;
 
 }

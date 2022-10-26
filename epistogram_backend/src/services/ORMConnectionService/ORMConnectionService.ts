@@ -11,17 +11,22 @@ import { EntityType, ParamConstraintType, SaveEntityType } from '../XORM/XORMTyp
 import { XQueryBuilder } from '../XORM/XQueryBuilder';
 import { XQueryBuilderCore } from '../XORM/XQueryBuilderCore';
 
+type SQLSchemaObjectType = {
+    name: string;
+    columnNames: string[];
+}
+
 export class ORMConnectionService {
 
     public _sqlConnectionService: SQLConnectionService;
     private _loggingEnabled: boolean;
-    private _entities: Function[];
+    private _schema: XDBMSchemaService;
 
     constructor(config: GlobalConfiguration, sqlConnectionService: SQLConnectionService, schema: XDBMSchemaService) {
 
         this._sqlConnectionService = sqlConnectionService;
         this._loggingEnabled = config.logging.enabledScopes.some(x => x === 'ORM');
-        this._entities = schema.entities;
+        this._schema = schema;
     }
 
     async beginTransactionAsync() {
@@ -43,6 +48,75 @@ export class ORMConnectionService {
     }
 
     async validateSchemaAsync() {
+
+        const sqlTables = await this._getTableSchema();
+        this._validateSchemaObjects({
+            type: 'Tables',
+            schemaFromDB: sqlTables,
+            ormSchemaEntities: this._schema.entities
+        });
+
+        const sqlViews = await this._getViewSchema();
+        this._validateSchemaObjects({
+            type: 'Views',
+            schemaFromDB: sqlViews,
+            ormSchemaEntities: this._schema.views
+        });
+    }
+
+    private _validateSchemaObjects({
+        type,
+        schemaFromDB,
+        ormSchemaEntities
+    }: {
+        type: 'Views' | 'Tables',
+        schemaFromDB: SQLSchemaObjectType[],
+        ormSchemaEntities: Function[]
+    }) {
+
+        const missingEntities = ormSchemaEntities
+            .filter(entity => !schemaFromDB
+                .some(sqlTable => sqlTable.name === toSQLSnakeCasing(entity.name)));
+
+        if (missingEntities.any())
+            throw new Error(`${type}: ${missingEntities
+                .map(x => x.name)
+                .join(', ')} are missing from DB!`);
+
+        const missingColumns = ormSchemaEntities
+            .map(entity => {
+
+                const entityColumns = getXViewColumnNames(entity as any);
+
+                const sqlTable = schemaFromDB
+                    .single(x => x.name === toSQLSnakeCasing(entity.name));
+
+                const sqlTableColumns = sqlTable
+                    .columnNames;
+
+                const missingColumns = entityColumns
+                    .map(entityColumn => toSQLSnakeCasing(entityColumn))
+                    .filter(entityColumnSnake => !sqlTableColumns
+                        .includes(entityColumnSnake));
+
+                return {
+                    tableName: sqlTable.name,
+                    missingColumns
+                };
+            })
+            .filter(x => x.missingColumns.any());
+
+        if (missingColumns.any()) {
+
+            const log = missingColumns
+                .map(x => `- ${type} (${x.tableName}): ${x.missingColumns.join(', ')}`)
+                .join('\n');
+
+            throw new Error(`Missing columns: \n${log}`);
+        }
+    }
+
+    private async _getTableSchema() {
 
         type ResType = {
             table_name: string,
@@ -68,50 +142,42 @@ export class ORMConnectionService {
         const sqlTables = rows
             .groupBy(x => x.table_name)
             .map(x => ({
-                tableName: x.key,
-                columns: x.items.map(x => x.column_name)
+                name: x.key,
+                columnNames: x.items.map(x => x.column_name)
             }));
 
-        const missingEntities = this._entities
-            .filter(entity => !sqlTables
-                .some(sqlTable => sqlTable.tableName === toSQLSnakeCasing(entity.name)));
+        return sqlTables;
+    }
 
-        if (missingEntities.any())
-            throw new Error(`Tables: ${missingEntities
-                .map(x => x.name)
-                .join(', ')} are missing from DB!`);
+    private async _getViewSchema() {
 
-        const missingColumns = this._entities
-            .map(entity => {
+        type ResType = {
+            view_name: string,
+            column_name: string,
+        };
 
-                const entityColumns = getXViewColumnNames(entity as any);
+        const script = `
+            SELECT 
+            tb.table_name view_name,
+            co.column_name
+            FROM information_schema.views tb
+            LEFT JOIN information_schema.columns co
+            ON co.table_name = tb.table_name
+            WHERE tb.table_schema = 'public';
+        `;
 
-                const sqlTable = sqlTables
-                    .single(x => x.tableName === toSQLSnakeCasing(entity.name));
+        const { rows } = await this
+            ._sqlConnectionService
+            .executeSQLAsync<ResType>(script);
 
-                const sqlTableColumns = sqlTable
-                    .columns;
+        const views = rows
+            .groupBy(x => x.view_name)
+            .map(x => ({
+                name: x.key,
+                columnNames: x.items.map(x => x.column_name)
+            }));
 
-                const missingColumns = entityColumns
-                    .map(entityColumn => toSQLSnakeCasing(entityColumn))
-                    .filter(entityColumnSnake => !sqlTableColumns
-                        .includes(entityColumnSnake));
-
-                return {
-                    tableName: sqlTable.tableName,
-                    missingColumns
-                };
-            })
-            .filter(x => x.missingColumns.any());
-
-        if (missingColumns.any()) {
-
-            const log = missingColumns
-                .map(x => `- Table (${x.tableName}): ${x.missingColumns.join(', ')}`)
-                .join('\n');
-
-            throw new Error(`Missing columns: \n${log}`);
-        }
+        return views;
     }
 
     withResType<TResult>() {

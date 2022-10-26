@@ -1905,6 +1905,8 @@ SELECT
 	cd.human_skill_benefits human_skill_benefits,
 	cd.human_skill_benefits_description human_skill_benefits_description,
 	cd.requirements_description technical_requirements_description,
+	cd.is_prequiz_required,
+	cd.is_pretest_required,
 	
 	-- cat 
 	cc.id category_id,

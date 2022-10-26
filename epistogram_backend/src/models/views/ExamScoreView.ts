@@ -6,9 +6,9 @@ export class ExamScoreView {
     @XViewColumn()
     examVersionId: number;
 
-    @XViewColumn()
+    // TODO
     examAcquiredPoints: number;
 
-    @XViewColumn()
+    // TODO
     examMaximumPoints: number;
 }

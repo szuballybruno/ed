@@ -15,12 +15,12 @@ export class UserAnswerView {
     @XViewColumn()
     courseId: Id<'Course'>;
 
-    @XViewColumn()
+    // TODO
     isCorrect: boolean;
 
     @XViewColumn()
     elapsedSeconds: number;
 
-    @XViewColumn()
+    // TODO
     givenAnswerType: string;
 }

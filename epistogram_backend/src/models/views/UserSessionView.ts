@@ -7,9 +7,9 @@ export class UserSessionView {
     @XViewColumn()
     userId: Id<'User'>;
 
-    @XViewColumn()
+    // TODO
     sessionStartDate: Date;
 
-    @XViewColumn()
+    // TODO
     sessionEndDate: Date;
 }

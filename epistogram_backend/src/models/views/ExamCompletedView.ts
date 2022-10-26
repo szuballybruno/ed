@@ -3,35 +3,27 @@ import { Id } from '../../shared/types/versionId';
 
 
 export class ExamCompletedView {
-
 	
 	@XViewColumn()
 	userId: Id<'User'>;
-
 	
-	@XViewColumn()
+    // TODO
 	examId: Id<'Exam'>;
 
-	
-	@XViewColumn()
+    // TODO
 	courseId: Id<'Course'>;
-
 	
 	@XViewColumn()
 	isFinalExam: number;
 
-	
 	@XViewColumn()
 	orderIndex: number;
 
-	
 	@XViewColumn()
 	successfulSessionCount: boolean;
 
-	
 	@XViewColumn()
 	hasSuccessfulSession: boolean;
-
 	
 	@XViewColumn()
 	singleSuccessfulSession: boolean;

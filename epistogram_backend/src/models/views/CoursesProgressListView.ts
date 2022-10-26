@@ -25,7 +25,7 @@ export class CoursesProgressListView {
     @XViewColumn()
     currentItemCode: string;
 
-    @XViewColumn()
+    // TODO
     continueItemCode: string;
 
     @XViewColumn()
@@ -49,10 +49,10 @@ export class CoursesProgressListView {
     @XViewColumn()
     totalVideoSumLengthSeconds: number;
 
-    @XViewColumn()
+    // TODO
     totalCourseItemCount: number;
 
-    @XViewColumn()
+    // TODO
     completedCourseItemCount: number;
 
     @XViewColumn()
@@ -61,18 +61,18 @@ export class CoursesProgressListView {
     @XViewColumn()
     completedVideoCount: number;
 
-    @XViewColumn()
+    // TODO
     totalVideoQuestionCount: number;
 
-    @XViewColumn()
+    // TODO
     answeredVideoQuestionCount: number;
 
-    @XViewColumn()
+    // TODO
     examSuccessRateAverage: number;
 
-    @XViewColumn()
+    // TODO
     questionSuccessRate: number;
 
-    @XViewColumn()
+    // TODO
     finalExamSuccessRate: number;
 }
