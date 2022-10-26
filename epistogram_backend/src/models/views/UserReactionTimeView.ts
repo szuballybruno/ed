@@ -1,24 +1,20 @@
-import { ViewColumn, ViewEntity } from '../MyORM';
+import { XViewColumn } from '../../services/XORM/XORMDecorators';
 import { Id } from '../../shared/types/versionId';
 
-@ViewEntity({
-    synchronize: false,
-    expression: ''
-})
 export class UserReactionTimeView {
 
-    @ViewColumn()
+    @XViewColumn()
     userId: Id<'User'>;
 
-    @ViewColumn()
+    @XViewColumn()
     userExamLengthPoints: number;
 
-    @ViewColumn()
+    @XViewColumn()
     userReactionTimePoints: number;
 
-    @ViewColumn()
+    @XViewColumn()
     totalUserReactionTimePoints: number;
 
-    @ViewColumn()
+    @XViewColumn()
     reactionTimePercentDiff: number;
 }

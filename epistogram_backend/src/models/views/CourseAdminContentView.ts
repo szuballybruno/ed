@@ -1,13 +1,9 @@
-import { ViewEntity } from '../MyORM';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
 import { CourseItemType } from '../../shared/types/sharedTypes';
 import { VersionCode } from '../../shared/types/VersionCode1';
 import { Id } from '../../shared/types/versionId';
 
-@ViewEntity({
-    synchronize: false,
-    expression: ''
-})
+
 export class CourseAdminContentView {
 
     @XViewColumn()

@@ -1,31 +1,39 @@
-import { ViewColumn, ViewEntity } from '../MyORM';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
 import { Id } from '../../shared/types/versionId';
 
-@ViewEntity({
-	synchronize: false,
-	expression: ''
-})
+
 export class QuestionEditDataView {
 
-	@ViewColumn()
 	@XViewColumn()
 	questionId: Id<'Question'>;
 
-	@ViewColumn()
 	@XViewColumn()
 	dataId: number;
-
-	@ViewColumn()
+	
 	@XViewColumn()
 	versionId: number;
 
+	@XViewColumn()
 	examId: number;
+	
+	@XViewColumn()
 	videoId: number;
+
+	@XViewColumn()
 	questionText: string;
+
+	@XViewColumn()
 	answerId: Id<'Answer'>;
+
+	@XViewColumn()
 	answerIsCorrect: boolean;
+
+	@XViewColumn()
 	answerText: string;
+
+	@XViewColumn()
 	showUpTimeSeconds?: number;
+
+	@XViewColumn()
 	typeId: number;
 }

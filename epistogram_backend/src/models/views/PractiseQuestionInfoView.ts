@@ -1,13 +1,7 @@
-import { ViewEntity } from '../MyORM';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
 import { Id } from '../../shared/types/versionId';
 
-@ViewEntity({
-    synchronize: false,
-    expression: ''
-})
 export class PractiseQuestionInfoView {
-    
     @XViewColumn()
     userId: Id<'User'>;
 
@@ -16,13 +10,13 @@ export class PractiseQuestionInfoView {
 
     @XViewColumn()
     practiseAnswerCount: number;
-    
+
     @XViewColumn()
     isCorrect: boolean;
-    
+
     @XViewColumn()
     givenAnswerDate: Date;
-    
+
     @XViewColumn()
     isPractise: boolean;
 }

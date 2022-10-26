@@ -1,4 +1,4 @@
--- MIGRATION VERSION: migration10
+-- MIGRATION VERSION: migration11
 
 -- BEGIN TRANSACTION
 BEGIN;
@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS public.migration_version
 );
 
 INSERT INTO public.migration_version
-VALUES ('migration10', now()); 
+VALUES ('migration11', now()); 
 
 ALTER TABLE public.migration_version 
 DROP CONSTRAINT IF EXISTS unique_mig_ver;
@@ -166,10 +166,21 @@ DROP INDEX IF EXISTS single_current_course_bridge_unique_index;
 
 
 -- TRANSFORM TABLES / MIGRATE DATA
--- TEST MIGRATION 
-create table test_table2 (
-	aname varchar
-);
+ALTER TABLE public.course_data
+ADD COLUMN is_prequiz_required boolean;
+
+ALTER TABLE public.course_data
+ADD COLUMN is_pretest_required boolean;
+
+UPDATE public.course_data SET 
+	is_prequiz_required = true, 
+	is_pretest_required = true;
+
+ALTER TABLE public.course_data
+ALTER COLUMN is_prequiz_required SET NOT NULL;
+
+ALTER TABLE public.course_data
+ALTER COLUMN is_pretest_required SET NOT NULL;
 
 -- CREATE SOFT SCHEMA
 

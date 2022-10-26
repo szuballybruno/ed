@@ -126,8 +126,6 @@ export class CourseService {
             .and('courseId', '=', 'courseId')
             .getSingle();
 
-        console.log(courseDetailsView);
-
         const moduleViews = await this._ormService
             .query(PlaylistView, { userId: principalId.getId(), courseId })
             .where('userId', '=', 'userId')
@@ -183,7 +181,9 @@ export class CourseService {
                     skillBenefits: '',
                     coverFileId: null,
                     isFeatured: false,
-                    modificationDate: new Date()
+                    modificationDate: new Date(),
+                    isPrequizRequired: true,
+                    isPretestRequired: true
                 }),
                 createVersion: ({ entityId, dataId }) => ({
                     courseDataId: dataId,
@@ -308,7 +308,6 @@ export class CourseService {
         userId: PrincipalId,
         courseId: number
     ) {
-
 
         // get course
         const view = await this._ormService

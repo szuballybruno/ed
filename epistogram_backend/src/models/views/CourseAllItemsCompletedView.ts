@@ -5,7 +5,6 @@ export class CourseAllItemsCompletedView {
 
     @XViewColumn()
     courseVersionId: Id<'Course'>;
-    
     @XViewColumn()
     userId: Id<'User'>;
 }
