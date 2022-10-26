@@ -60,6 +60,14 @@ export class CourseData {
 
     @Column()
     @XViewColumn()
+    isPrequizRequired: boolean;
+
+    @Column()
+    @XViewColumn()
+    isPretestRequired: boolean;
+
+    @Column()
+    @XViewColumn()
     skillBenefits: string;
 
     @Column()
