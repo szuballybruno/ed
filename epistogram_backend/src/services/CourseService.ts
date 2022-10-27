@@ -318,7 +318,8 @@ export class CourseService {
                 courseId,
                 currentItemCode,
                 stageName,
-                userId: principalId.getId()
+                userId: principalId.getId(),
+                startDate: stageName === 'watch' ? new Date() : null
             });
     }
 

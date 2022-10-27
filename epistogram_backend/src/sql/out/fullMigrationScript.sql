@@ -6002,7 +6002,7 @@ items_with_user AS
 	LEFT JOIN public.course_version cv 
 	ON cv.id = civ.course_version_id
 	
-	LEFT JOIN public.user_course_bridge ucb
+	INNER JOIN public.user_course_bridge ucb
 	ON ucb.course_id = cv.course_id
 
 	LEFT JOIN public.exam_highest_score_answer_session_view ehsasv
@@ -7641,6 +7641,7 @@ LANGUAGE plpgsql
 AS $$
 DECLARE
   var_pretest_comp record;
+  var_course_data record;
   var_is_prequiz_completed boolean;
   var_new_order_num int;
   var_old_order_num int;
@@ -7680,6 +7681,16 @@ BEGIN
 		THEN RAISE EXCEPTION 'Trying to set stage to "%" which is lower order than the current stage. This is not allowed, users are only allowed to progress forward, not backward.', NEW.stage_name;
 	END IF;
 
+	-- get course data
+	SELECT cd.*
+	FROM public.latest_course_version_view lcvv
+	LEFT JOIN public.course_version cv
+	ON cv.id = lcvv.version_id
+	LEFT JOIN public.course_data cd
+	ON cd.id = cv.course_data_id
+	WHERE lcvv.course_id = NEW.course_id
+	INTO var_course_data;
+
     -- check prequiz
     SELECT COUNT(*) = 3
     FROM public.prequiz_user_answer pua
@@ -7688,7 +7699,8 @@ BEGIN
     GROUP BY pua.user_id, pua.course_id
     INTO var_is_prequiz_completed;
 
-	IF (var_is_prequiz_completed IS DISTINCT FROM true AND 
+	IF (var_is_prequiz_completed IS DISTINCT FROM true AND
+		var_course_data.is_prequiz_required = true AND
         (NEW.stage_name = 'pretest' OR 
         NEW.stage_name = 'pretest_results' OR
         NEW.stage_name = 'watch' OR 
@@ -7711,6 +7723,7 @@ BEGIN
 	INTO var_pretest_comp;
 
 	IF (var_pretest_comp.is_completed_pretest = false AND 
+		var_course_data.is_pretest_required = true AND
         (NEW.stage_name = 'pretest_results' OR
         NEW.stage_name = 'watch' OR 
         NEW.stage_name = 'finished'))

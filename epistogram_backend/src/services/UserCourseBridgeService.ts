@@ -25,14 +25,37 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
         userId,
         courseId,
         stageName,
-        currentItemCode
+        currentItemCode,
+        startDate
     }: {
         userId: Id<'User'>,
         courseId: Id<'Course'>,
         stageName: CourseStageNameType,
-        currentItemCode: string | null
+        currentItemCode: string | null,
+        startDate: Date | null
     }) {
 
+        /**
+         * Unset prev current 
+         */
+        const prevCurrent = await this
+            ._ormService
+            .query(UserCourseBridge, { userId })
+            .where('userId', '=', 'userId')
+            .and('isCurrent', '=', 'true')
+            .getOneOrNull();
+
+        if (prevCurrent)
+            await this
+                ._ormService
+                .save(UserCourseBridge, {
+                    id: prevCurrent.id,
+                    isCurrent: false
+                });
+
+        /**
+         * Create new 
+         */
         await this
             ._ormService
             .createAsync(UserCourseBridge, {
@@ -45,7 +68,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
                 previsionedCompletionDate: null,
                 requiredCompletionDate: null,
                 stageName,
-                startDate: null,
+                startDate,
                 tempomatMode: 'auto'
             });
     }
