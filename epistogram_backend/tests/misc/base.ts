@@ -6,7 +6,7 @@ import { initJsExtensions } from '../../src/shared/logic/jsExtensions';
 import { ServiceProviderInitializator } from '../../src/startup/initApp';
 import { initTurboExpress } from '../../src/startup/instatiateTurboExpress';
 import { recreateDBAsync } from '../../src/startup/recreateDB';
-import { ServiceProvider } from '../../src/startup/servicesDI';
+import { ServiceProvider } from '../../src/startup/serviceDependencyContainer';
 import { customIt } from './customHooks';
 import { JestLogger } from './jestLogger';
 import { normalizeJestConsole } from './normalizeConsole';

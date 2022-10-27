@@ -180,6 +180,22 @@ const useAvailableCourseCategories = () => {
     };
 };
 
+const useGreetingData = (courseId: Id<'Course'>) => {
+
+    const qr = QueryService
+        .useXQuery<{
+            isPrequizRequired: boolean,
+            isPretestRequired: boolean,
+            firstItemPlaylistCode: string
+        }>(apiRoutes.course.getGreetingsData, { courseId });
+
+    return {
+        greetingsData: qr.data,
+        greetingsDataError: qr.error,
+        greetingsDataState: qr.state
+    };
+};
+
 export const CourseApiService = {
     usePermissionAssignCourses,
     useAdminCourseList,
@@ -194,5 +210,6 @@ export const CourseApiService = {
     useCourseBriefData,
     useCourseDetails,
     useUserCourses,
-    useAvailableCourseCategories
+    useAvailableCourseCategories,
+    useGreetingData
 };

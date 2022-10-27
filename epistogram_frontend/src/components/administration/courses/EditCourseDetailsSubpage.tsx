@@ -1,16 +1,19 @@
 import { Slider } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
+import { EMPTY_ARRAY } from '../../../helpers/emptyArray';
 import { CourseApiService } from '../../../services/api/courseApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
 import { CourseCategoryDTO } from '../../../shared/dtos/CourseCategoryDTO';
 import { CourseDetailsEditDataDTO } from '../../../shared/dtos/CourseDetailsEditDataDTO';
-import { HumanSkillBenefitDTO } from '../../../shared/dtos/HumanSkillBenefitDTO';
+import { instantiate, parseIntOrFail } from '../../../shared/logic/sharedLogic';
 import { CourseVisibilityType } from '../../../shared/types/sharedTypes';
 import { Id } from '../../../shared/types/versionId';
-import { iterate } from '../../../static/frontendHelpers';
+import { iterate, useStateObject } from '../../../static/frontendHelpers';
 import { useIntParam } from '../../../static/locationHelpers';
+import { EpistoCheckbox } from '../../controls/EpistoCheckbox';
+import { EpistoCheckboxLabel } from '../../controls/EpistoCheckboxLabel';
 import { EpistoEntry } from '../../controls/EpistoEntry';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoImage } from '../../controls/EpistoImage';
@@ -39,36 +42,64 @@ export const EditCourseDetailsSubpage = () => {
     const { deleteCourseAsync, deleteCourseState } = CourseApiService.useDeleteCourse();
 
     // calc
-    const categories = courseDetailsEditData?.categories ?? [];
-    const teachers = courseDetailsEditData?.teachers ?? [];
+    const categories = courseDetailsEditData?.categories ?? EMPTY_ARRAY;
+    const teachers = courseDetailsEditData?.teachers ?? EMPTY_ARRAY;
 
-    // state
-    const [title, setTitle] = useState('');
-    const [thumbnailSrc, setThumbnailSrc] = useState('');
-    const [thumbnailImageFile, setThumbnailImageFile] = useState<File | null>(null);
-    const [category, setCategory] = useState<CourseCategoryDTO | null>(null);
-    const [subCategory, setSubCategory] = useState<CourseCategoryDTO | null>(null);
-    const [shortDescription, setShortDescription] = useState('');
-    const [technicalRequirementsDescription, setTechnicalRequirementsDescription] = useState('');
-    const [description, setDescription] = useState('');
-    const [difficulty, setDifficulty] = useState(0);
-    const [benchmark, setBenchmark] = useState(0);
-    const [prevCompletedCount, setPrevCompletedCount] = useState('');
-    const [language, setLanguage] = useState('');
-    const [visibility, setVisibility] = useState<CourseVisibilityType>('public');
-    const [teacherId, setTeacherId] = useState<Id<'User'>>(Id.create<'User'>(0));
-    const [skillBenefits, setSkillBenefits] = useState<string[]>([
+    // defaults
+    const defaultHumanSkillBenefits = useMemo(() => iterate(10, () => ({
+        text: '',
+        value: 0
+    })), []);
+
+    const defaultSkillBenefits = useMemo(() => [
         'Alapvető műveletek elvégzése',
         'Grafikai elemek használata',
         'Grafikonok és diagramok létrehozása'
-    ]);
-    const [technicalRequirements, setTechnicalRequirements] = useState<string[]>([]);
-    const [humanSkillBenefitsDescription, setHumanSkillBenefitsDescription] = useState('');
-    const [humanSkillBenefits, setHumanSkillBenefits] = useState<HumanSkillBenefitDTO[]>(iterate(10, () => ({
-        text: '',
-        value: 0
-    })));
+    ], []);
 
+    const [{
+        title,
+        thumbnailSrc,
+        thumbnailImageFile,
+        category,
+        subCategory,
+        shortDescription,
+        technicalRequirementsDescription,
+        description,
+        difficulty,
+        benchmark,
+        prevCompletedCount,
+        language,
+        visibility,
+        teacherId,
+        skillBenefits,
+        technicalRequirements,
+        humanSkillBenefitsDescription,
+        humanSkillBenefits,
+        isPrequizRequired,
+        isPretestRequired
+    }, setState, stateObj] = useStateObject({
+        title: '',
+        thumbnailSrc: '',
+        thumbnailImageFile: null as File | null,
+        category: null as CourseCategoryDTO | null,
+        subCategory: null as CourseCategoryDTO | null,
+        shortDescription: '',
+        technicalRequirementsDescription: '',
+        description: '',
+        difficulty: 0,
+        benchmark: 0,
+        prevCompletedCount: '',
+        language: '',
+        visibility: 'public' as CourseVisibilityType,
+        teacherId: Id.create<'User'>(0),
+        skillBenefits: defaultSkillBenefits,
+        technicalRequirements: [] as any[],
+        humanSkillBenefitsDescription: '',
+        humanSkillBenefits: defaultHumanSkillBenefits,
+        isPrequizRequired: true,
+        isPretestRequired: true
+    });
 
     // func
     const handleSaveCourseAsync = async () => {
@@ -76,7 +107,7 @@ export const EditCourseDetailsSubpage = () => {
         if (!courseDetailsEditData)
             return;
 
-        const dto = {
+        const dto: CourseDetailsEditDataDTO = {
             courseId: courseId,
             title: title,
             thumbnailURL: thumbnailSrc,
@@ -91,17 +122,21 @@ export const EditCourseDetailsSubpage = () => {
             humanSkillBenefits: humanSkillBenefits,
             visibility: visibility,
             teacherId: teacherId,
-            previouslyCompletedCount: parseInt(prevCompletedCount),
+            previouslyCompletedCount: parseIntOrFail(prevCompletedCount),
             technicalRequirementsDescription: technicalRequirementsDescription,
+            isPrequizRequired,
+            isPretestRequired,
+            categories: [],
+            teachers: [],
 
             category: {
                 id: category?.id!
-            },
+            } as CourseCategoryDTO,
 
             subCategory: {
                 id: subCategory?.id!
-            }
-        } as CourseDetailsEditDataDTO;
+            } as CourseCategoryDTO
+        };
 
         try {
 
@@ -137,33 +172,32 @@ export const EditCourseDetailsSubpage = () => {
         if (!courseDetailsEditData)
             return;
 
+        const {
+            technicalRequirements,
+            thumbnailURL,
+            previouslyCompletedCount,
+            humanSkillBenefits,
+            category,
+            ...spreadable
+        } = courseDetailsEditData;
+
+        const humanSkillBenefitsOrDefault = humanSkillBenefits.length === 0
+            ? defaultHumanSkillBenefits
+            : humanSkillBenefits;
+
         const currentCategory = categories
-            .filter(x => x.id === courseDetailsEditData.category.id)[0];
+            .filter(x => x.id === category.id)[0];
 
-        setTitle(courseDetailsEditData.title);
-        setThumbnailSrc(courseDetailsEditData.thumbnailURL);
-        setCategory(currentCategory);
-        setSubCategory(courseDetailsEditData.subCategory);
-        setShortDescription(courseDetailsEditData.shortDescription);
-        setDescription(courseDetailsEditData.description);
-        setDifficulty(courseDetailsEditData.difficulty);
-        setBenchmark(courseDetailsEditData.benchmark);
-        setLanguage(courseDetailsEditData.language);
-        setVisibility(courseDetailsEditData.visibility);
-        setTeacherId(courseDetailsEditData.teacherId);
-        setHumanSkillBenefitsDescription(courseDetailsEditData.humanSkillBenefitsDescription);
-        setSkillBenefits(courseDetailsEditData.skillBenefits);
-        setTechnicalRequirements(courseDetailsEditData.technicalRequirements);
-        courseDetailsEditData.humanSkillBenefits.length === 0
-            ? iterate(10, () => ({
-                text: '',
-                value: 0
-            }))
-            : setHumanSkillBenefits(courseDetailsEditData.humanSkillBenefits);
-        setPrevCompletedCount(courseDetailsEditData.previouslyCompletedCount + '');
-        setTechnicalRequirementsDescription(courseDetailsEditData.technicalRequirementsDescription + '');
-
-    }, [courseDetailsEditData]);
+        setState(instantiate<typeof stateObj>({
+            ...spreadable,
+            thumbnailSrc: thumbnailURL,
+            prevCompletedCount: previouslyCompletedCount + '',
+            technicalRequirements: [],
+            thumbnailImageFile: null,
+            humanSkillBenefits: humanSkillBenefitsOrDefault,
+            category: currentCategory
+        }));
+    }, [courseDetailsEditData, categories, defaultHumanSkillBenefits, setState]);
 
     return <LoadingFrame
         loadingState={[saveCourseDataState, deleteCourseState, courseDetailsEditDataState, saveCourseThumbnailState]}
@@ -216,8 +250,8 @@ export const EditCourseDetailsSubpage = () => {
                                 <EpistoImageSelector
                                     width="192px"
                                     height="108px"
-                                    setImageFile={setThumbnailImageFile}
-                                    setImageSource={setThumbnailSrc}>
+                                    setImageFile={x => setState(s => s.thumbnailImageFile = x)}
+                                    setImageSource={x => setState(s => s.thumbnailSrc = x)}>
                                     <EpistoImage className="whall"
                                         objectFit="cover"
                                         src={thumbnailSrc} />
@@ -230,7 +264,7 @@ export const EditCourseDetailsSubpage = () => {
                                 isMultiline={true}
                                 value={title}
                                 label="Név"
-                                setValue={setTitle} />
+                                setValue={x => setState(s => s.title = x)} />
 
                             {/* Language */}
                             <EpistoEntry
@@ -238,7 +272,7 @@ export const EditCourseDetailsSubpage = () => {
                                 isMultiline={true}
                                 value={language}
                                 label="Nyelv"
-                                setValue={setLanguage} />
+                                setValue={x => setState(s => s.language = x)} />
 
                             {/* Main category */}
                             <EpistoLabel
@@ -250,7 +284,7 @@ export const EditCourseDetailsSubpage = () => {
                                     getDisplayValue={x => x?.name + ''}
                                     items={categories}
                                     selectedValue={category}
-                                    onSelected={setCategory} />
+                                    onSelected={x => setState(s => s.category = x)} />
                             </EpistoLabel>
 
                             {/* Subcategory */}
@@ -263,7 +297,7 @@ export const EditCourseDetailsSubpage = () => {
                                     getDisplayValue={x => x?.name + ''}
                                     items={category?.childCategories ?? []}
                                     selectedValue={subCategory}
-                                    onSelected={setSubCategory} />
+                                    onSelected={x => setState(s => s.subCategory = x)} />
                             </EpistoLabel>
 
                             {/* Subcategory */}
@@ -276,7 +310,30 @@ export const EditCourseDetailsSubpage = () => {
                                     getDisplayValue={x => x?.fullName + ''}
                                     items={teachers}
                                     selectedValue={teachers.filter(x => x.id === teacherId)[0]}
-                                    onSelected={x => setTeacherId(x.id)} />
+                                    onSelected={x => setState(state => state.teacherId = x.id)} />
+                            </EpistoLabel>
+
+                            {/* is pretest required  */}
+                            {/* is prequiz required  */}
+                            <EpistoLabel
+                                isOverline
+                                text='Elozetes tesztek'>
+
+                                <EpistoCheckboxLabel
+                                    label="Is pretest required?">
+
+                                    <EpistoCheckbox
+                                        value={isPretestRequired}
+                                        setValue={x => setState(s => s.isPretestRequired = x)} />
+                                </EpistoCheckboxLabel>
+
+                                <EpistoCheckboxLabel
+                                    label="Is prequiz required?">
+
+                                    <EpistoCheckbox
+                                        value={isPrequizRequired}
+                                        setValue={x => setState(s => s.isPrequizRequired = x)} />
+                                </EpistoCheckboxLabel>
                             </EpistoLabel>
                         </EditSection>
 
@@ -291,7 +348,7 @@ export const EditCourseDetailsSubpage = () => {
                                     getDisplayValue={x => x === 'public' ? 'Publikus' : 'Privat'}
                                     items={['public', 'private'] as CourseVisibilityType[]}
                                     selectedValue={visibility}
-                                    onSelected={setVisibility} />
+                                    onSelected={x => setState(s => s.visibility = x)} />
                             </EpistoLabel>
                         </EditSection>
 
@@ -303,7 +360,7 @@ export const EditCourseDetailsSubpage = () => {
                                 isMultiline={true}
                                 value={shortDescription}
                                 label="Áttekintés"
-                                setValue={setShortDescription} />
+                                setValue={x => setState(s => s.shortDescription = x)} />
 
                             {/* Overview description */}
                             <EpistoEntry
@@ -311,7 +368,7 @@ export const EditCourseDetailsSubpage = () => {
                                 isMultiline={true}
                                 value={description}
                                 label="Részletes leírás"
-                                setValue={setDescription} />
+                                setValue={x => setState(s => s.description = x)} />
 
                             {/* Difficulty */}
                             <EpistoLabel
@@ -324,7 +381,7 @@ export const EditCourseDetailsSubpage = () => {
                                     valueLabelDisplay="auto"
                                     step={0.5}
                                     value={difficulty}
-                                    onChange={(_, val) => setDifficulty(val as number)}
+                                    onChange={(_, val) => setState(s => s.difficulty = val as number)}
                                     marks
                                     min={0}
                                     max={10} />
@@ -340,7 +397,7 @@ export const EditCourseDetailsSubpage = () => {
                                     valueLabelDisplay="auto"
                                     value={benchmark}
                                     step={0.5}
-                                    onChange={(_, val) => setBenchmark(val as number)}
+                                    onChange={(_, val) => setState(s => s.benchmark = val as number)}
                                     marks
                                     min={0}
                                     max={5} />
@@ -355,7 +412,7 @@ export const EditCourseDetailsSubpage = () => {
                                 type="number"
                                 value={prevCompletedCount}
                                 label="Elvégzések száma"
-                                setValue={setPrevCompletedCount} />
+                                setValue={x => setState(s => s.prevCompletedCount = x)} />
 
                         </EditSection>
                     </EpistoFlex2>
@@ -378,14 +435,14 @@ export const EditCourseDetailsSubpage = () => {
                                 isMultiline={true}
                                 value={technicalRequirementsDescription}
                                 label="Technikai ajánlás"
-                                setValue={setTechnicalRequirementsDescription} />
+                                setValue={x => setState(s => s.technicalRequirementsDescription = x)} />
 
                             <SimpleEditList
                                 mt="10px"
                                 title="Technikai követelmények"
                                 items={technicalRequirements}
                                 initialValue=""
-                                setItems={setTechnicalRequirements} />
+                                setItems={x => setState(s => s.technicalRequirements = x)} />
                         </EditSection>
 
                         {/* requirements section */}
@@ -401,7 +458,7 @@ export const EditCourseDetailsSubpage = () => {
                                 title="Elsajátítható technikai ismeretek"
                                 items={skillBenefits}
                                 initialValue=""
-                                setItems={setSkillBenefits} />
+                                setItems={x => setState(s => s.skillBenefits = x)} />
                             {/* skill improvement description */}
                             <EpistoEntry
                                 marginTop="30px"
@@ -409,13 +466,13 @@ export const EditCourseDetailsSubpage = () => {
                                 isMultiline={true}
                                 value={humanSkillBenefitsDescription}
                                 label="Elsajátítható készségek leírása"
-                                setValue={setHumanSkillBenefitsDescription} />
+                                setValue={x => setState(s => s.humanSkillBenefitsDescription = x)} />
                             <SimpleEditList
                                 mt="10px"
                                 title="Elsajátítható készségek és azok aránya"
                                 items={humanSkillBenefits}
                                 initialValue={{ text: '', value: 0 }}
-                                setItems={x => setHumanSkillBenefits(x)}
+                                setItems={x => setState(s => s.humanSkillBenefits = x)}
                                 renderChild={(item, onItemChanged) => (
                                     <EpistoFlex2
                                         flexDir={'row'}
@@ -452,24 +509,6 @@ export const EditCourseDetailsSubpage = () => {
                                 minH="300px"
                                 align="center"
                                 justify="center">
-
-                                {/* // TODO */}
-                                {/* <EpistoRadarChart
-                                    title=""
-                                    areas={[{
-                                        name: "Készségek",
-                                        value: humanSkillBenefits.map(x => x.value)
-                                    }]}
-                                    radarIndicators={humanSkillBenefits.map(x => ({
-                                        name: x.text,
-                                        color: 'black',
-                                        max: 10
-                                    }))}
-                                    options={defaultCharts.radar}
-                                    style={{
-                                        width: '400px',
-                                        height: '300px'
-                                    }} /> */}
                             </EpistoFlex2>
                         </EditSection>
                     </EpistoFlex2>

@@ -1,7 +1,7 @@
 import { UserInvitationService } from '../services/UserInvitationService';
 import { UserEditSaveDTO } from '../shared/dtos/UserEditSaveDTO';
 import { apiRoutes } from '../shared/types/apiRoutes';
-import { ServiceProvider } from '../startup/servicesDI';
+import { ServiceProvider } from '../startup/serviceDependencyContainer';
 import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';

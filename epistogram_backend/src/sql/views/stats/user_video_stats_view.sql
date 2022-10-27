@@ -101,7 +101,7 @@ FROM summed_video_playbacks_cte uvpsv
 LEFT JOIN public.user u
 ON u.id = uvpsv.user_id
 
-INNER JOIN public.playlist_view cisv
+INNER JOIN public.user_playlist_view cisv
 ON cisv.user_id = u.id 
 AND cisv.video_id = uvpsv.video_id
 -- TODO at this point the video completion is

@@ -4,7 +4,7 @@ import { VideoService } from '../services/VideoService';
 import { AnswerQuestionDTO } from '../shared/dtos/AnswerQuestionDTO';
 import { AnswerResultDTO } from '../shared/dtos/AnswerResultDTO';
 import { apiRoutes } from '../shared/types/apiRoutes';
-import { ServiceProvider } from '../startup/servicesDI';
+import { ServiceProvider } from '../startup/serviceDependencyContainer';
 import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';

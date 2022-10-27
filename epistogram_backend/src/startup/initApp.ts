@@ -2,7 +2,7 @@
 import { ParametrizedConstructor } from '../services/misc/advancedTypes/ParametrizedConstructor';
 import { SQLConnectionService } from '../services/sqlServices/SQLConnectionService';
 import { DependencyContainer } from '../utilities/XDInjection/XDInjector';
-import { getTransientServiceContainer, instansiateSingletonServices, instatiateServices, ServiceProvider } from './servicesDI';
+import { getTransientServiceContainer, instansiateSingletonServices, instatiateServices, ServiceProvider } from './serviceDependencyContainer';
 
 export type UseTransientServicesContextFunction = <T>(fnInTransientContext: (transientProvider: ServiceProvider) => Promise<T>) => Promise<T>;
 

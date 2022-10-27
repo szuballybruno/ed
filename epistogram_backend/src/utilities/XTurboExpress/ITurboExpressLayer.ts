@@ -1,4 +1,4 @@
-import { ServiceProvider } from '../../startup/servicesDI';
+import { ServiceProvider } from '../../startup/serviceDependencyContainer';
 
 export interface ITurboExpressLayer<T = any> {
 

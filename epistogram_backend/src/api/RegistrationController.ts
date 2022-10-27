@@ -4,7 +4,7 @@ import { RegisterUserViaActivationCodeDTO } from '../shared/dtos/RegisterUserVia
 import { RegisterUserViaInvitationTokenDTO } from '../shared/dtos/RegisterUserViaInvitationTokenDTO';
 import { RegisterUserViaPublicTokenDTO } from '../shared/dtos/RegisterUserViaPublicTokenDTO';
 import { apiRoutes } from '../shared/types/apiRoutes';
-import { ServiceProvider } from '../startup/servicesDI';
+import { ServiceProvider } from '../startup/serviceDependencyContainer';
 import { setAuthCookies } from '../utilities/cookieHelpers';
 import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';

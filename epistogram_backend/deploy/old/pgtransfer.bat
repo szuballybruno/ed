@@ -19,7 +19,7 @@ SET PG_PSQL_BIN="C:\Program Files\PostgreSQL\14\bin\psql.exe"
 SET DEST_NICK=%DEST_HOST%/%DEST_DATABASE%
 
 @REM common
-SET DUMP_FILENAME=C:\sql_migration\backup.sql
+SET DUMP_FILENAME=.\backup_bat.sql
 SET USER=dev_service_user
 
 @REM backup src DB

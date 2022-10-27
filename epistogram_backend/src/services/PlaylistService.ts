@@ -1,4 +1,4 @@
-import { PlaylistView } from '../models/views/PlaylistView';
+import { UserPlaylistView } from '../models/views/UserPlaylistView';
 import { PlaylistModuleDTO } from '../shared/dtos/PlaylistModuleDTO';
 import { Id } from '../shared/types/versionId';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
@@ -36,7 +36,7 @@ export class PlaylistService {
     async getPlaylistModulesAsync(userId: Id<'User'>, courseId: Id<'Course'>) {
 
         const views = await this._ormService
-            .query(PlaylistView, { courseId, userId })
+            .query(UserPlaylistView, { courseId, userId })
             .where('userId', '=', 'userId')
             .and('courseId', '=', 'courseId')
             .getMany();

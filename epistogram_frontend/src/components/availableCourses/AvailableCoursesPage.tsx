@@ -44,7 +44,7 @@ const AvailableCoursesPage = () => {
     const { courseCategories, courseCategoriesState, courseCategoriesError } = CourseApiService
         .useAvailableCourseCategories();
 
-    const { continueCourse: playCourse, navigateToCourseDetails } = useNavigation();
+    const { continueCourse, navigateToCourseDetails } = useNavigation();
     const showError = useShowErrorDialog();
 
     useSetBusy(CourseApiService.useUserCourses, coursesState, coursesError);
@@ -66,7 +66,7 @@ const AvailableCoursesPage = () => {
 
     const handlePlayCourse = async (course: AvailableCourseDTO) => {
 
-        playCourse(course.courseId, course.stageName, course.currentItemCode);
+        continueCourse(course.courseId, course.stageName, course.currentItemCode);
     };
 
     const handleSetFilterProp = <TKey extends keyof AvailableCoursesPageFilterType, TValue extends AvailableCoursesPageFilterType[TKey]>(

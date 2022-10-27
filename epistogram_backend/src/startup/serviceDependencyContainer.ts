@@ -16,56 +16,56 @@ import { VersionCreateService } from '../services/VersionCreateService';
 import { VersionSaveService } from '../services/VersionSaveService';
 import { XDBMSchemaService } from '../services/XDBManager/XDBManagerTypes';
 import { DependencyContainer, DepHierarchyFunction, XDependency } from '../utilities/XDInjection/XDInjector';
-import { ActivationCodeService } from './../services/ActivationCodeService';
-import { AuthenticationService } from './../services/AuthenticationService';
-import { AuthorizationService } from './../services/AuthorizationService';
-import { CoinAcquireService } from './../services/CoinAcquireService';
-import { CoinTransactionService } from './../services/CoinTransactionService';
-import { CommentService } from './../services/CommentService';
-import { CompanyService } from './../services/CompanyService';
-import { CourseItemService } from './../services/CourseItemService';
-import { CourseRatingService } from './../services/CourseRatingService';
-import { CourseService } from './../services/CourseService';
-import { DailyTipService } from './../services/DailyTipService';
-import { EmailService } from './../services/EmailService';
-import { EventService } from './../services/EventService';
-import { ExamService } from './../services/ExamService';
-import { FileService } from './../services/FileService';
-import { HashService } from './../services/HashService';
-import { LikeService } from './../services/LikeService';
-import { LoggerService } from './../services/LoggerService';
-import { MapperService } from './../services/MapperService';
-import { MiscService } from './../services/MiscService';
-import { ModuleService } from './../services/ModuleService';
-import { ORMConnectionService } from './../services/ORMConnectionService/ORMConnectionService';
-import { PasswordChangeService } from './../services/PasswordChangeService';
-import { PermissionService } from './../services/PermissionService';
-import { PersonalityAssessmentService } from './../services/PersonalityAssessmentService';
-import { PlaybackService } from './../services/PlaybackService';
-import { PlayerService } from './../services/PlayerService';
-import { PractiseQuestionService } from './../services/PractiseQuestionService';
-import { PrequizService } from './../services/PrequizService';
-import { PretestService } from './../services/PretestService';
-import { QuestionAnswerService } from './../services/QuestionAnswerService';
-import { QuestionService } from './../services/QuestionService';
-import { RoleService } from './../services/RoleService';
-import { SampleMergeService } from './../services/SampleMergeService';
-import { ShopService } from './../services/ShopService';
-import { SignupService } from './../services/SignupService';
-import { SQLFunctionsService } from './../services/sqlServices/FunctionsService';
-import { SQLConnectionService } from './../services/sqlServices/SQLConnectionService';
-import { StorageService } from './../services/StorageService';
-import { TeacherInfoService } from './../services/TeacherInfoService';
-import { TempomatService } from './../services/TempomatService';
-import { TokenService } from './../services/TokenService';
-import { UrlService } from './../services/UrlService';
-import { UserCourseBridgeService } from './../services/UserCourseBridgeService';
-import { UserProgressService } from './../services/UserProgressService';
-import { UserService } from './../services/UserService';
-import { UserSessionActivityService } from './../services/UserSessionActivityService';
-import { UserStatsService } from './../services/UserStatsService';
-import { VideoRatingService } from './../services/VideoRatingService';
-import { VideoService } from './../services/VideoService';
+import { ActivationCodeService } from '../services/ActivationCodeService';
+import { AuthenticationService } from '../services/AuthenticationService';
+import { AuthorizationService } from '../services/AuthorizationService';
+import { CoinAcquireService } from '../services/CoinAcquireService';
+import { CoinTransactionService } from '../services/CoinTransactionService';
+import { CommentService } from '../services/CommentService';
+import { CompanyService } from '../services/CompanyService';
+import { CourseItemService } from '../services/CourseItemService';
+import { CourseRatingService } from '../services/CourseRatingService';
+import { CourseService } from '../services/CourseService';
+import { DailyTipService } from '../services/DailyTipService';
+import { EmailService } from '../services/EmailService';
+import { EventService } from '../services/EventService';
+import { ExamService } from '../services/ExamService';
+import { FileService } from '../services/FileService';
+import { HashService } from '../services/HashService';
+import { LikeService } from '../services/LikeService';
+import { LoggerService } from '../services/LoggerService';
+import { MapperService } from '../services/MapperService';
+import { MiscService } from '../services/MiscService';
+import { ModuleService } from '../services/ModuleService';
+import { ORMConnectionService } from '../services/ORMConnectionService/ORMConnectionService';
+import { PasswordChangeService } from '../services/PasswordChangeService';
+import { PermissionService } from '../services/PermissionService';
+import { PersonalityAssessmentService } from '../services/PersonalityAssessmentService';
+import { PlaybackService } from '../services/PlaybackService';
+import { PlayerService } from '../services/PlayerService';
+import { PractiseQuestionService } from '../services/PractiseQuestionService';
+import { PrequizService } from '../services/PrequizService';
+import { PretestService } from '../services/PretestService';
+import { QuestionAnswerService } from '../services/QuestionAnswerService';
+import { QuestionService } from '../services/QuestionService';
+import { RoleService } from '../services/RoleService';
+import { SampleMergeService } from '../services/SampleMergeService';
+import { ShopService } from '../services/ShopService';
+import { SignupService } from '../services/SignupService';
+import { SQLFunctionsService } from '../services/sqlServices/FunctionsService';
+import { SQLConnectionService } from '../services/sqlServices/SQLConnectionService';
+import { StorageService } from '../services/StorageService';
+import { TeacherInfoService } from '../services/TeacherInfoService';
+import { TempomatService } from '../services/TempomatService';
+import { TokenService } from '../services/TokenService';
+import { UrlService } from '../services/UrlService';
+import { UserCourseBridgeService } from '../services/UserCourseBridgeService';
+import { UserProgressService } from '../services/UserProgressService';
+import { UserService } from '../services/UserService';
+import { UserSessionActivityService } from '../services/UserSessionActivityService';
+import { UserStatsService } from '../services/UserStatsService';
+import { VideoRatingService } from '../services/VideoRatingService';
+import { VideoService } from '../services/VideoService';
 
 type CTAnyArgs<T> = { new(...args: any[]): T };
 
@@ -176,11 +176,11 @@ export const getTransientServiceContainer = (singletonProvider: ServiceProvider)
         .addClass(VideoRatingService, [ORMConnectionService, AuthorizationService])
         .addClass(DailyTipService, [ORMConnectionService, MapperService, AuthorizationService])
         .addClass(TempomatService, [ORMConnectionService, LoggerService, EventService, AuthorizationService])
-        .addClass(PretestService, [ORMConnectionService, MapperService, ExamService, UserCourseBridgeService, QuestionAnswerService, AuthorizationService, TempomatService, PermissionService])
+        .addClass(PretestService, [ORMConnectionService, MapperService, ExamService, UserCourseBridgeService, QuestionAnswerService, AuthorizationService, TempomatService, PermissionService, PlayerService])
         .addClass(VersionCreateService, [ORMConnectionService])
-        .addClass(CourseService, [ModuleService, ORMConnectionService, MapperService, FileService, PretestService, AuthorizationService, VersionCreateService])
+        .addClass(CourseService, [ModuleService, ORMConnectionService, MapperService, FileService, PretestService, AuthorizationService, VersionCreateService, PlayerService])
         .addClass(ShopService, [ORMConnectionService, MapperService, CoinTransactionService, CourseService, EmailService, FileService, UrlService, AuthorizationService])
-        .addClass(PlayerService, [ORMConnectionService, CourseService, PlaylistService, ExamService, ModuleService, VideoService, QuestionAnswerService, PlaybackService, UserCourseBridgeService, MapperService, AuthorizationService, PermissionService])
+        .addClass(PlayerService, [ORMConnectionService, PlaylistService, ExamService, ModuleService, VideoService, QuestionAnswerService, PlaybackService, UserCourseBridgeService, MapperService, PermissionService])
         .addClass(PractiseQuestionService, [ORMConnectionService, QuestionAnswerService, MapperService, AuthorizationService, GlobalConfiguration, QuestionService])
         .addClass(PrequizService, [ORMConnectionService, MapperService, UserCourseBridgeService, AuthorizationService])
         .addClass(UserInvitationService, [EmailService, UserService, TokenService, ORMConnectionService, LoggerService, RoleService])

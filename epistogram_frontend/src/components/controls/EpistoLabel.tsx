@@ -8,15 +8,17 @@ export const EpistoLabel = (props: {
 
     const { text, isOverline, ...css } = props;
 
-    return <EpistoFlex2 mt="10px"
-direction="column"
-{...css}>
+    return <EpistoFlex2
+        mt="10px"
+        direction="column"
+        {...css}>
+
         <EpistoFont
             isUppercase={isOverline}
             fontSize={isOverline ? 'fontExtraSmall' : undefined}
             style={{
                 marginTop: isOverline ? '10px' : undefined,
-                letterSpacing: isOverline ? '1.2px' : undefined
+                letterSpacing: isOverline ? '1.2px' : undefined,
             }}>
 
             {text}

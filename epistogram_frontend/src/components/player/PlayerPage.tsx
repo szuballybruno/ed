@@ -8,7 +8,7 @@ import { useEpistoDialogLogic } from '../universal/epistoDialog/EpistoDialogLogi
 import { EpistoRoutes } from '../universal/EpistoRoutes';
 import { CourseOverviewSubpage } from './courseOverview/CourseOverviewSubpage';
 import { CourseRatingSubpage } from './courseRating/CourseRatingSubpage';
-import { PrequizGreetingSubpage } from './prequiz/PrequizGreetingSubpage';
+import { GreetingSubpage } from './greeting/GreetingSubpage';
 import { PrequizSubpage } from './prequiz/PrequizSubpage';
 import { PretestGreetingSubpage } from './pretest/PretestGreetingSubpage';
 import { PretestResultsSubpage } from './pretest/PretestResultsSubpage';
@@ -56,8 +56,8 @@ export const PlayerPage = () => {
                 <EpistoRoutes
                     renderRoutes={[
                         {
-                            route: applicationRoutes.playerRoute.prequizGreetingRoute,
-                            element: <PrequizGreetingSubpage />
+                            route: applicationRoutes.playerRoute.greetingRoute,
+                            element: <GreetingSubpage />
                         },
                         {
                             route: applicationRoutes.playerRoute.prequizRoute,

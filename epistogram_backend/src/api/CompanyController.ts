@@ -2,7 +2,7 @@ import { CompanyService } from '../services/CompanyService';
 import { CompanyEditDataDTO } from '../shared/dtos/company/CompanyEditDataDTO';
 import { apiRoutes } from '../shared/types/apiRoutes';
 import { Id } from '../shared/types/versionId';
-import { ServiceProvider } from '../startup/servicesDI';
+import { ServiceProvider } from '../startup/serviceDependencyContainer';
 import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';

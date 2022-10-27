@@ -1,6 +1,7 @@
 import moment from 'moment';
 import { VideoPlaybackSession } from '../models/entity/playback/VideoPlaybackSession';
 import { CourseItemView } from '../models/views/CourseItemView';
+import { UserPlaylistView } from '../models/views/UserPlaylistView';
 import { PretestResultView } from '../models/views/PretestResultView';
 import { PlayerDataDTO } from '../shared/dtos/PlayerDataDTO';
 import { PlaylistModuleDTO } from '../shared/dtos/PlaylistModuleDTO';
@@ -11,8 +12,6 @@ import { CourseItemStateType } from '../shared/types/sharedTypes';
 import { Id } from '../shared/types/versionId';
 import { instatiateInsertEntity } from '../utilities/misc';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
-import { AuthorizationService } from './AuthorizationService';
-import { CourseService } from './CourseService';
 import { ExamService } from './ExamService';
 import { MapperService } from './MapperService';
 import { readItemCode } from './misc/encodeService';
@@ -29,7 +28,6 @@ export class PlayerService {
 
     constructor(
         private _ormService: ORMConnectionService,
-        private _courseService: CourseService,
         private _playlistService: PlaylistService,
         private _examService: ExamService,
         private _moduleService: ModuleService,
@@ -38,8 +36,24 @@ export class PlayerService {
         private _playbackService: PlaybackService,
         private _userCourseBridgeService: UserCourseBridgeService,
         private _mapperService: MapperService,
-        private _authorizationService: AuthorizationService,
         private _permissionService: PermissionService) {
+    }
+
+    /**
+     * getFirstPlaylistItemCode
+     */
+    async getFirstPlaylistItemCodeAsync(userId: Id<'User'>, courseId: Id<'Course'>) {
+
+        const { playlistItemCode: firstItemPlaylistCode } = await this
+            ._ormService
+            .query(UserPlaylistView, { userId, courseId, one: 1, zero: 0 })
+            .where('userId', '=', 'userId')
+            .and('courseId', '=', 'courseId')
+            .and('moduleOrderIndex', '=', 'one')
+            .and('itemOrderIndex', '=', 'zero')
+            .getSingle();
+
+        return { firstItemPlaylistCode };
     }
 
     /**
@@ -129,7 +143,7 @@ export class PlayerService {
             .getId();
 
         // get current course id
-        const courseId = await this._courseService
+        const courseId = await this
             .getCourseIdOrFailAsync(requestedPlaylistItemCode);
 
         // get valid course item 
@@ -148,6 +162,31 @@ export class PlayerService {
             throw new ErrorWithCode('Tring to watch course, but "pretest" is not completed yet!', 'forbidden player stage');
 
         return { validItemCode, courseId };
+    }
+
+    /**
+     * Returns the course id from an item code.
+     */
+    async getCourseIdOrFailAsync(playlistItemCode: string) {
+
+        const playlistViewByItemCode = await this._ormService
+            .query(UserPlaylistView, { playlistItemCode })
+            .where('playlistItemCode', '=', 'playlistItemCode')
+            .getOneOrNull();
+
+        if (playlistViewByItemCode)
+            return playlistViewByItemCode.courseId;
+
+        const playlistViewByModuleCode = await this._ormService
+            .query(UserPlaylistView, { moduleCode: playlistItemCode, itemOrderIndex: 0 })
+            .where('moduleCode', '=', 'moduleCode')
+            .and('itemOrderIndex', '=', 'itemOrderIndex')
+            .getOneOrNull();
+
+        if (playlistViewByModuleCode)
+            return playlistViewByModuleCode.courseId;
+
+        throw new Error(`Playlist code (${playlistItemCode}) is corrupt: not found in playlist view!`);
     }
 
     /**

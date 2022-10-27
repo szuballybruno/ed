@@ -5,7 +5,7 @@ import {
 } from '../../src/shared/types/PermissionCodesType';
 import { PermissionCodeType } from '../../src/shared/types/sharedTypes';
 import { Id } from '../../src/shared/types/versionId';
-import { ServiceProvider } from '../../src/startup/servicesDI';
+import { ServiceProvider } from '../../src/startup/serviceDependencyContainer';
 import { throwNotImplemented } from '../../src/utilities/helpers';
 import { JestLogger } from './jestLogger';
 

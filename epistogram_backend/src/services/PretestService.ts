@@ -1,5 +1,4 @@
 import { LatestExamView } from '../models/views/LatestExamView';
-import { PlaylistView } from '../models/views/PlaylistView';
 import { PretestResultView } from '../models/views/PretestResultView';
 import { PretestDataDTO } from '../shared/dtos/PretestDataDTO';
 import { PretestResultDTO } from '../shared/dtos/PretestResultDTO';
@@ -11,6 +10,7 @@ import { ExamService } from './ExamService';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { PermissionService } from './PermissionService';
+import { PlayerService } from './PlayerService';
 import { QuestionAnswerService } from './QuestionAnswerService';
 import { TempomatService } from './TempomatService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
@@ -25,7 +25,8 @@ export class PretestService {
         private _questionAnswerService: QuestionAnswerService,
         private _authorizationService: AuthorizationService,
         private _tempomatService: TempomatService,
-        private _permissionService: PermissionService) {
+        private _permissionService: PermissionService,
+        private _playerService: PlayerService) {
     }
 
     /**
@@ -85,14 +86,9 @@ export class PretestService {
         /**
          * Get first item playlist code 
          */
-        const { playlistItemCode: firstItemPlaylistCode } = await this
-            ._ormService
-            .query(PlaylistView, { userId, courseId, one: 1, zero: 0 })
-            .where('userId', '=', 'userId')
-            .and('courseId', '=', 'courseId')
-            .and('moduleOrderIndex', '=', 'one')
-            .and('itemOrderIndex', '=', 'zero')
-            .getSingle();
+        const { firstItemPlaylistCode } = await this
+            ._playerService
+            .getFirstPlaylistItemCodeAsync(principalId.getId(), courseId);
 
         return this._mapperSerice
             .mapTo(PretestResultDTO, [

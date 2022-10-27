@@ -104,7 +104,7 @@ export const useNavigation = () => {
             return;
         }
 
-        navigate2(applicationRoutes.playerRoute.prequizGreetingRoute, { courseId });
+        navigate2(applicationRoutes.playerRoute.greetingRoute, { courseId });
     };
 
     const navigateToAdminCourseList = () => navigate2(applicationRoutes.administrationRoute.coursesRoute);

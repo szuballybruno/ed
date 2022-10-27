@@ -1,11 +1,14 @@
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
-import { CourseItemType } from '../../shared/types/sharedTypes';
+import { CourseItemStateType, CourseItemType } from '../../shared/types/sharedTypes';
 import { Id } from '../../shared/types/versionId';
 
-export class PlaylistView {
+export class UserPlaylistView {
 
     @XViewColumn()
     courseId: Id<'Course'>;
+
+    @XViewColumn()
+    userId: Id<'User'>;
 
     @XViewColumn()
     videoId: Id<'Video'>;
@@ -39,4 +42,16 @@ export class PlaylistView {
 
     @XViewColumn()
     playlistItemCode: string;
+
+    @XViewColumn()
+    moduleIsCurrent: boolean;
+
+    @XViewColumn()
+    itemState: CourseItemStateType;
+
+    @XViewColumn()
+    isRecommendedForPractise: boolean;
+
+    @XViewColumn()
+    scorePercentage: number;
 }

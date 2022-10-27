@@ -8,7 +8,7 @@ import { Mutation } from '../shared/dtos/mutations/Mutation';
 import { apiRoutes } from '../shared/types/apiRoutes';
 import { CourseModeType } from '../shared/types/sharedTypes';
 import { Id } from '../shared/types/versionId';
-import { ServiceProvider } from '../startup/servicesDI';
+import { ServiceProvider } from '../startup/serviceDependencyContainer';
 import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
@@ -120,6 +120,19 @@ export class CourseController implements XController<CourseController> {
                 dto
             );
     };
+
+    @XControllerAction(apiRoutes.course.getGreetingsData)
+    async getGreetingDataAction(params: ActionParams) {
+
+        const courseId = params
+            .getFromParameterized(apiRoutes.course.getGreetingsData)
+            .query
+            .getValue(x => x.courseId, 'int');
+
+        return this
+            ._courseService
+            .getGreetingDataAsync(params.principalId, courseId);
+    }
 
     @XControllerAction(apiRoutes.course.saveCourseContent, { isPost: true })
     saveCourseContentAction = (params: ActionParams) => {

@@ -18,7 +18,7 @@ import { CourseAdminDetailedView } from '../models/views/CourseAdminDetailedView
 import { CourseAdminShortView } from '../models/views/CourseAdminShortView';
 import { CourseDetailsView } from '../models/views/CourseDetailsView';
 import { LatestCourseVersionView } from '../models/views/LatestCourseVersionView';
-import { PlaylistView } from '../models/views/PlaylistView';
+import { UserPlaylistView } from '../models/views/UserPlaylistView';
 import { CourseAdminListItemDTO } from '../shared/dtos/admin/CourseAdminListItemDTO';
 import { CourseContentAdminDTO } from '../shared/dtos/admin/CourseContentAdminDTO';
 import { CourseContentItemAdminDTO } from '../shared/dtos/admin/CourseContentItemAdminDTO';
@@ -43,6 +43,7 @@ import { MapperService } from './MapperService';
 import { createCharSeparatedList } from './misc/mappings';
 import { ModuleService } from './ModuleService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { PlayerService } from './PlayerService';
 import { PretestService } from './PretestService';
 import { VersionCreateService } from './VersionCreateService';
 
@@ -55,7 +56,8 @@ export class CourseService {
         private _fileService: FileService,
         private _pretestService: PretestService,
         private _authorizationService: AuthorizationService,
-        private _verisonCreateService: VersionCreateService) {
+        private _verisonCreateService: VersionCreateService,
+        private _playerService: PlayerService) {
     }
 
     /**
@@ -127,7 +129,7 @@ export class CourseService {
             .getSingle();
 
         const moduleViews = await this._ormService
-            .query(PlaylistView, { userId: principalId.getId(), courseId })
+            .query(UserPlaylistView, { userId: principalId.getId(), courseId })
             .where('userId', '=', 'userId')
             .and('courseId', '=', 'courseId')
             .getMany();
@@ -277,31 +279,6 @@ export class CourseService {
     }
 
     /**
-     * Returns the course id from an item code.
-     */
-    async getCourseIdOrFailAsync(playlistItemCode: string) {
-
-        const playlistViewByItemCode = await this._ormService
-            .query(PlaylistView, { playlistItemCode })
-            .where('playlistItemCode', '=', 'playlistItemCode')
-            .getOneOrNull();
-
-        if (playlistViewByItemCode)
-            return playlistViewByItemCode.courseId;
-
-        const playlistViewByModuleCode = await this._ormService
-            .query(PlaylistView, { moduleCode: playlistItemCode, itemOrderIndex: 0 })
-            .where('moduleCode', '=', 'moduleCode')
-            .and('itemOrderIndex', '=', 'itemOrderIndex')
-            .getOneOrNull();
-
-        if (playlistViewByModuleCode)
-            return playlistViewByModuleCode.courseId;
-
-        throw new Error(`Playlist code (${playlistItemCode}) is corrupt: not found in playlist view!`);
-    }
-
-    /**
      * Gets the course details edit DTO.
      */
     async getCourseDetailsEditDataAsync(
@@ -327,7 +304,37 @@ export class CourseService {
 
         return this._mapperService
             .mapTo(CourseDetailsEditDataDTO, [view, categories, teachers]);
+    }
 
+    /**
+     * getGreetingDataAsync
+     */
+    async getGreetingDataAsync(principalId: PrincipalId, courseId: Id<'Course'>) {
+
+        const { isPrequizRequired, isPretestRequired } = await this
+            ._ormService
+            .withResType<CourseData>()
+            .query(LatestCourseVersionView, { courseId })
+            .select(CourseData)
+            .leftJoin(CourseVersion, x => x
+                .on('id', '=', 'versionId', LatestCourseVersionView))
+            .leftJoin(CourseData, x => x
+                .on('id', '=', 'courseDataId', CourseVersion))
+            .where('courseId', '=', 'courseId')
+            .getSingle();
+
+        /**
+         * Get first item playlist code 
+         */
+        const { firstItemPlaylistCode } = await this
+            ._playerService
+            .getFirstPlaylistItemCodeAsync(principalId.getId(), courseId);
+
+        return {
+            isPrequizRequired,
+            isPretestRequired,
+            firstItemPlaylistCode
+        };
     }
 
     /**
@@ -338,61 +345,47 @@ export class CourseService {
      * or playlist order indices. Changing the course name, or description etc.
      * is not considered a breaking change.
      */
-    saveCourseDetailsAsync(
+    async saveCourseDetailsAsync(
         userId: PrincipalId,
         dto: CourseDetailsEditDataDTO
     ) {
 
-        return {
-            action: async () => {
+        const cv = await this._ormService
+            .withResType<CourseVersion>()
+            .query(LatestCourseVersionView, { courseId: dto.courseId })
+            .select(CourseVersion)
+            .leftJoin(CourseVersion, x => x
+                .on('id', '=', 'versionId', LatestCourseVersionView))
+            .where('courseId', '=', 'courseId')
+            .getSingle();
 
-                const cv = await this._ormService
-                    .withResType<CourseVersion>()
-                    .query(LatestCourseVersionView, { courseId: dto.courseId })
-                    .select(CourseVersion)
-                    .leftJoin(CourseVersion, x => x
-                        .on('id', '=', 'versionId', LatestCourseVersionView))
-                    .where('courseId', '=', 'courseId')
-                    .getSingle();
+        const courseDataId = cv.courseDataId;
 
-                const courseDataId = cv.courseDataId;
-
-                // save basic info
-                await this._ormService
-                    .save(CourseData, {
-                        id: courseDataId,
-                        title: dto.title,
-                        teacherId: dto.teacherId,
-                        categoryId: dto.category.id,
-                        subCategoryId: dto.subCategory.id,
-                        benchmark: dto.benchmark,
-                        description: dto.description,
-                        difficulty: dto.difficulty,
-                        language: dto.language,
-                        shortDescription: dto.shortDescription,
-                        previouslyCompletedCount: dto.previouslyCompletedCount,
-                        humanSkillBenefitsDescription: dto.humanSkillBenefitsDescription,
-                        skillBenefits: createCharSeparatedList(dto.skillBenefits ?? []),
-                        technicalRequirements: createCharSeparatedList(dto.technicalRequirements ?? []),
-                        requirementsDescription: dto.technicalRequirementsDescription,
-                        humanSkillBenefits: createCharSeparatedList(dto
-                            .humanSkillBenefits
-                            .map(x => `${x.text}: ${x.value}`)),
-                        visibility: dto.visibility
-                    });
-            },
-            auth: async () => {
-
-                const { companyId } = await this._ormService
-                    .query(User, { userId })
-                    .where('id', '=', 'userId')
-                    .getSingle();
-
-                return this._authorizationService
-                    .checkPermissionAsync(userId, 'EDIT_COMPANY_COURSES', { companyId });
-            }
-        };
-
+        // save basic info
+        await this._ormService
+            .save(CourseData, {
+                id: courseDataId,
+                title: dto.title,
+                teacherId: dto.teacherId,
+                categoryId: dto.category.id,
+                subCategoryId: dto.subCategory.id,
+                benchmark: dto.benchmark,
+                description: dto.description,
+                difficulty: dto.difficulty,
+                language: dto.language,
+                shortDescription: dto.shortDescription,
+                previouslyCompletedCount: dto.previouslyCompletedCount,
+                humanSkillBenefitsDescription: dto.humanSkillBenefitsDescription,
+                skillBenefits: createCharSeparatedList(dto.skillBenefits ?? []),
+                technicalRequirements: createCharSeparatedList(dto.technicalRequirements ?? []),
+                requirementsDescription: dto.technicalRequirementsDescription,
+                humanSkillBenefits: createCharSeparatedList(dto
+                    .humanSkillBenefits
+                    .map(x => `${x.text}: ${x.value}`)),
+                visibility: dto.visibility,
+                isPrequizRequired: dto.isPrequizRequired,
+                isPretestRequired: dto.isPretestRequired
+            });
     }
 
     /**
@@ -503,11 +496,11 @@ export class CourseService {
      */
     async getAvailableCoursesAsync(
         principalId: PrincipalId,
-        searchTerm: string,
+        searchTerm: string | null,
         filterCategoryId: number | null,
-        isFeatured: boolean,
-        isRecommended: boolean,
-        orderBy: OrderType
+        isFeatured: boolean | null,
+        isRecommended: boolean | null,
+        orderBy: OrderType | null
     ) {
 
         const courses = await this._ormService

@@ -3,7 +3,7 @@ import { DailyTipService } from '../services/DailyTipService';
 import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 import { apiRoutes } from '../shared/types/apiRoutes';
-import { ServiceProvider } from '../startup/servicesDI';
+import { ServiceProvider } from '../startup/serviceDependencyContainer';
 import { Id } from '../shared/types/versionId';
 
 export class DailyTipController {

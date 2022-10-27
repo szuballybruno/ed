@@ -37,7 +37,7 @@ import { ModuleEditView } from '../../models/views/ModuleEditView';
 import { ModulePlayerView } from '../../models/views/ModulePlayerView';
 import { MostProductiveTimeRangeView } from '../../models/views/MostProductiveTimeRangeView';
 import { PersonalityTraitCategoryView } from '../../models/views/PersonalityTraitCategoryView';
-import { PlaylistView } from '../../models/views/PlaylistView';
+import { UserPlaylistView } from '../../models/views/UserPlaylistView';
 import { PrequizQuestionView } from '../../models/views/PrequizQuestionView';
 import { PretestResultView } from '../../models/views/PretestResultView';
 import { QuestionDataView } from '../../models/views/QuestionDataView';
@@ -355,7 +355,7 @@ const marray = [
         }),
 
     epistoMappingsBuilder
-        .addArrayMapping(PlaylistModuleDTO, () => (views: PlaylistView[]) => {
+        .addArrayMapping(PlaylistModuleDTO, () => (views: UserPlaylistView[]) => {
 
             return views
                 .groupBy(x => x.moduleId)

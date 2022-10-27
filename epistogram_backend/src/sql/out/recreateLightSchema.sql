@@ -9,7 +9,7 @@ DROP VIEW IF EXISTS available_course_view CASCADE;
 DROP VIEW IF EXISTS user_video_stats_view CASCADE;
 DROP VIEW IF EXISTS user_module_stats_view CASCADE;
 DROP VIEW IF EXISTS course_all_items_completed_view CASCADE;
-DROP VIEW IF EXISTS playlist_view CASCADE;
+DROP VIEW IF EXISTS user_playlist_view CASCADE;
 DROP VIEW IF EXISTS user_overview_view CASCADE;
 DROP VIEW IF EXISTS tempomat_calculation_data_view CASCADE;
 DROP VIEW IF EXISTS exam_result_view CASCADE;
@@ -42,6 +42,7 @@ DROP VIEW IF EXISTS user_course_progress_actual_view CASCADE;
 DROP VIEW IF EXISTS user_course_completion_current_view CASCADE;
 DROP VIEW IF EXISTS user_active_course_view CASCADE;
 DROP VIEW IF EXISTS signup_completed_view CASCADE;
+DROP VIEW IF EXISTS playlist_view CASCADE;
 DROP VIEW IF EXISTS user_spent_time_ratio_view CASCADE;
 DROP VIEW IF EXISTS course_spent_time_view CASCADE;
 DROP VIEW IF EXISTS course_admin_short_view CASCADE;
@@ -3472,6 +3473,85 @@ ON cstv.user_id = usv.user_id
 GROUP BY
     u.id;
 
+--CREATE VIEW: playlist_view
+CREATE VIEW playlist_view
+AS
+WITH 
+all_items_cte AS 
+(
+    SELECT 
+        cv.course_id,
+        cv.id course_version_id,
+        mv.module_id module_id,
+        uni.video_version_id,
+        uni.exam_version_id
+    FROM 
+    (
+        SELECT 
+            vv.module_version_id, 
+            vv.id video_version_id,
+            null exam_version_id
+        FROM public.video_version vv
+        UNION
+        SELECT
+            ev.module_version_id, 
+            null video_version_id,
+            ev.id exam_version_id
+        FROM public.exam_version ev
+    ) uni
+    
+    LEFT JOIN public.module_version mv
+    ON mv.id = uni.module_version_id 
+    
+    LEFT JOIN public.course_version cv
+    ON cv.id = mv.course_version_id
+    
+    ORDER BY
+        cv.course_id,
+        cv.id
+),
+latest_items_cte AS 
+(
+    SELECT 
+        aic.*
+    FROM all_items_cte aic
+    
+	INNER JOIN public.latest_course_version_view lcvi
+	ON lcvi.version_id = aic.course_version_id
+),
+latest_items_with_codes_cte AS 
+(
+	SELECT 
+        lcvi.course_id,
+		civ.*,
+	
+        -- module code
+        (SELECT encode((lic.module_id || '@module')::bytea, 'base64')) module_code,
+
+        -- playlist item code
+        CASE WHEN civ.video_id IS NULL
+            THEN (SELECT encode((civ.exam_id || '@exam')::bytea, 'base64'))
+            ELSE (SELECT encode((civ.video_id || '@video')::bytea, 'base64')) 
+        END playlist_item_code
+	FROM latest_items_cte lic 
+	
+	INNER JOIN public.latest_course_version_view lcvi
+	ON lcvi.version_id = lic.course_version_id
+    
+    INNER JOIN public.course_item_view civ 
+    ON (civ.exam_version_id = lic.exam_version_id 
+    OR civ.video_version_id = lic.video_version_id)
+    AND civ.item_type <> 'pretest'
+    
+)
+SELECT * 
+FROM latest_items_with_codes_cte
+
+ORDER BY
+	course_id,
+	module_order_index,
+	item_order_index;
+
 --CREATE VIEW: signup_completed_view
 CREATE VIEW signup_completed_view
 AS
@@ -5847,77 +5927,10 @@ ON uev.user_id = u.id
 WHERE u.deletion_date IS NULL
 ;
 
---CREATE VIEW: playlist_view
-CREATE VIEW playlist_view
+--CREATE VIEW: user_playlist_view
+CREATE VIEW user_playlist_view
 AS
 WITH 
-all_items_cte AS 
-(
-    SELECT 
-        cv.course_id,
-        cv.id course_version_id,
-        mv.module_id module_id,
-        uni.video_version_id,
-        uni.exam_version_id
-    FROM 
-    (
-        SELECT 
-            vv.module_version_id, 
-            vv.id video_version_id,
-            null exam_version_id
-        FROM public.video_version vv
-        UNION
-        SELECT
-            ev.module_version_id, 
-            null video_version_id,
-            ev.id exam_version_id
-        FROM public.exam_version ev
-    ) uni
-    
-    LEFT JOIN public.module_version mv
-    ON mv.id = uni.module_version_id 
-    
-    LEFT JOIN public.course_version cv
-    ON cv.id = mv.course_version_id
-    
-    ORDER BY
-        cv.course_id,
-        cv.id
-),
-latest_items_cte AS 
-(
-    SELECT 
-        aic.*
-    FROM all_items_cte aic
-    
-	INNER JOIN public.latest_course_version_view lcvi
-	ON lcvi.version_id = aic.course_version_id
-),
-latest_items_with_codes_cte AS 
-(
-	SELECT 
-        lcvi.course_id,
-		civ.*,
-	
-        -- module code
-        (SELECT encode((lic.module_id || '@module')::bytea, 'base64')) module_code,
-
-        -- playlist item code
-        CASE WHEN civ.video_id IS NULL
-            THEN (SELECT encode((civ.exam_id || '@exam')::bytea, 'base64'))
-            ELSE (SELECT encode((civ.video_id || '@video')::bytea, 'base64')) 
-        END playlist_item_code
-	FROM latest_items_cte lic 
-	
-	INNER JOIN public.latest_course_version_view lcvi
-	ON lcvi.version_id = lic.course_version_id
-    
-    INNER JOIN public.course_item_view civ 
-    ON (civ.exam_version_id = lic.exam_version_id 
-    OR civ.video_version_id = lic.video_version_id)
-    AND civ.item_type <> 'pretest'
-    
-),
 items_with_user AS
 (
 	SELECT 
@@ -5958,7 +5971,7 @@ items_with_user AS
 				THEN 'available'
 				ELSE 'locked'
 		END item_state
-	FROM latest_items_with_codes_cte civ
+	FROM public.playlist_view civ
 	
 	LEFT JOIN public.course_version cv 
 	ON cv.id = civ.course_version_id
@@ -6008,7 +6021,7 @@ FROM
 		cipv.user_id,
 		COUNT(cipv.course_id) all_item_count,
 		SUM(CASE WHEN cipv.item_state = 'completed' THEN 1 ELSE 0 END) completed_count
-	FROM public.playlist_view cipv
+	FROM public.user_playlist_view cipv
 
 	GROUP BY 
 		cipv.course_id,
@@ -6318,7 +6331,7 @@ FROM summed_video_playbacks_cte uvpsv
 LEFT JOIN public.user u
 ON u.id = uvpsv.user_id
 
-INNER JOIN public.playlist_view cisv
+INNER JOIN public.user_playlist_view cisv
 ON cisv.user_id = u.id 
 AND cisv.video_id = uvpsv.video_id
 -- TODO at this point the video completion is

@@ -2,7 +2,7 @@ import { AuthenticationService } from '../services/AuthenticationService';
 import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
 import { apiRoutes } from '../shared/types/apiRoutes';
 import { ErrorWithCode } from '../shared/types/ErrorWithCode';
-import { ServiceProvider } from '../startup/servicesDI';
+import { ServiceProvider } from '../startup/serviceDependencyContainer';
 import { setAuthCookies } from '../utilities/cookieHelpers';
 import { getAuthCookies } from '../utilities/helpers';
 import { ActionParams } from '../utilities/XTurboExpress/ActionParams';

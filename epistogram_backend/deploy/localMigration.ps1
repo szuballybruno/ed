@@ -1,2 +1,12 @@
+$dest_pass= 'epistogram'
+$dest_host= 'localhost'
+$dest_port= '7014'
+$dest_user= 'dev_service_user'
+$dest_db_name= 'localhostDB'
 
-.\migVersionCore.ps1 -dbpass 'epistogram' -dbhost 'localhost' -dbport '7014' -dbname 'localhostDB' -dbuser 'dev_service_user'
+.\migVersionCore.ps1 `
+    -dbpass $dest_pass `
+    -dbhost $dest_host `
+    -dbport $dest_port `
+    -dbname $dest_db_name `
+    -dbuser $dest_user

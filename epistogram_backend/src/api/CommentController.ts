@@ -4,7 +4,7 @@ import { CommentCreateDTO } from '../shared/dtos/CommentCreateDTO';
 import { apiRoutes } from '../shared/types/apiRoutes';
 import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
-import { ServiceProvider } from '../startup/servicesDI';
+import { ServiceProvider } from '../startup/serviceDependencyContainer';
 import { Id } from '../shared/types/versionId';
 import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
 

@@ -43,7 +43,7 @@ import { VideoController } from './../api/VideoController';
 import { VideoRatingController } from './../api/VideoRatingController';
 import { TurboExpressBuilder } from './../utilities/XTurboExpress/TurboExpress';
 import { ServiceProviderInitializator } from './initApp';
-import { ServiceProvider } from './servicesDI';
+import { ServiceProvider } from './serviceDependencyContainer';
 import { TeacherInfoController } from '../api/TeacherInfoController';
 
 export const actionWrapper: ActionWrapperFunctionType = async (serviceProvider: ServiceProvider, action: () => Promise<any>) => {

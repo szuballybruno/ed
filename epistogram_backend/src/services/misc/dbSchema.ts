@@ -106,7 +106,7 @@ import { ModulePlayerView } from '../../models/views/ModulePlayerView';
 import { MostProductiveTimeRangeView } from '../../models/views/MostProductiveTimeRangeView';
 import { PersonalityTraitCategoryView } from '../../models/views/PersonalityTraitCategoryView';
 import { PersonalityTraitView } from '../../models/views/PersonalityTraitView';
-import { PlaylistView } from '../../models/views/PlaylistView';
+import { UserPlaylistView } from '../../models/views/UserPlaylistView';
 import { PractiseQuestionView } from '../../models/views/PractiseQuestionView';
 import { PrequizQuestionView } from '../../models/views/PrequizQuestionView';
 import { PretestResultView } from '../../models/views/PretestResultView';
@@ -151,12 +151,14 @@ import { VideoCursorSecondsView } from '../../models/views/VideoCursorSecondsVie
 import { VideoPlayerDataView } from '../../models/views/VideoPlayerDataView';
 import { VideoVersionView } from '../../models/views/VideoVersionView';
 import { XDBMSchemaService } from '../XDBManager/XDBManagerTypes';
+import { PlaylistView } from '../../models/views/PlaylistView';
 
 export const createDBSchema = (): XDBMSchemaService => {
 
     const schema: XDBMSchemaService = {
 
         views: [
+            PlaylistView,
             ActivityStreakView,
             AnswerSessionView,
             CoinBalanceView,
@@ -188,7 +190,7 @@ export const createDBSchema = (): XDBMSchemaService => {
             ExamScoreView,
             VideoPlayerDataView,
             ExamCompletedView,
-            PlaylistView,
+            UserPlaylistView,
             CourseDetailsView,
             AvailableCourseView,
             ExamResultView,

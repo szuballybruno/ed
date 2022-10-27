@@ -202,6 +202,7 @@ export const apiRoutes = {
         getCourseDetailsEditData: '/course/get-course-details-edit-data',
         getCourseBriefData: '/course/get-course-brief-data',
         saveCourseDetails: '/course/save-course-details-data',
+        getGreetingsData: '/courses/get-greetings-data' as ParametrizedRouteType<{ query: { courseId: Id<'Course'> } }>,
         saveCourseContent: '/course/save-course-content-data',
         saveCourseThumbnail: '/course/save-course-thumbnail',
         getAvailableCourses: '/course/get-available-courses',

@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
+import { CourseApiService } from '../../../services/api/courseApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { Environment } from '../../../static/Environemnt';
 import { useRouteParams } from '../../../static/locationHelpers';
@@ -8,29 +9,50 @@ import { EpistoFont } from '../../controls/EpistoFont';
 import { ExamLayout } from '../../exam/ExamLayout';
 import { useVideoPlayerFullscreenContext } from '../watch/videoPlayer/VideoPlayerFullscreenFrame';
 
-export const PrequizGreetingSubpage = () => {
+export const GreetingSubpage = () => {
 
     const { navigate2 } = useNavigation();
-    const [isFullscreen, setIsFullscreen] = useVideoPlayerFullscreenContext();
+    const [, setIsFullscreen] = useVideoPlayerFullscreenContext();
 
-    const courseId = useRouteParams(applicationRoutes.playerRoute.prequizGreetingRoute)
+    const courseId = useRouteParams(applicationRoutes.playerRoute.greetingRoute)
         .getValue(x => x.courseId, 'int');
+
+    const { greetingsData } = CourseApiService
+        .useGreetingData(courseId);
 
     useEffect(() => {
         setIsFullscreen(true);
     }, []);
 
-    const gotToPrequiz = () => {
+    const {
+        nextTitle,
+        navigate
+    } = (() => {
 
-        navigate2(applicationRoutes.playerRoute.prequizRoute, { courseId });
-    };
+        if (greetingsData?.isPrequizRequired)
+            return {
+                nextTitle: 'Tanfolyami kérdőív',
+                navigate: () => navigate2(applicationRoutes.playerRoute.prequizRoute, { courseId })
+            };
+
+        if (greetingsData?.isPretestRequired)
+            return {
+                nextTitle: 'Tudasfelmero kerdoiv',
+                navigate: () => navigate2(applicationRoutes.playerRoute.pretestRoute, { courseId })
+            };
+
+        return {
+            nextTitle: 'Kurzus elso videoja',
+            navigate: () => navigate2(applicationRoutes.playerRoute.watchRoute, { descriptorCode: greetingsData?.firstItemPlaylistCode })
+        };
+    })();
 
     return (
         <ExamLayout
-            headerCenterText='Tanfolyami kérdőív'
+            headerCenterText={nextTitle}
             footerButtons={[{
                 title: 'Kezdés',
-                action: gotToPrequiz
+                action: navigate
             }]}>
 
             <EpistoFlex2
@@ -52,8 +74,7 @@ export const PrequizGreetingSubpage = () => {
 
                 <EpistoFont
                     fontSize="fontHuge">
-
-                    {'Tanfolyami kérdőív'}
+                    {nextTitle}
                 </EpistoFont>
 
                 <EpistoFont
