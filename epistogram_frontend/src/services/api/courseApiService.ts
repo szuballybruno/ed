@@ -7,6 +7,7 @@ import { CourseCategoryDTO } from '../../shared/dtos/CourseCategoryDTO';
 import { CourseDetailsDTO } from '../../shared/dtos/CourseDetailsDTO';
 import { CourseDetailsEditDataDTO } from '../../shared/dtos/CourseDetailsEditDataDTO';
 import { CoursePermissionAssignDTO } from '../../shared/dtos/CoursePermissionAssignDTO';
+import { CourseStartDTO } from '../../shared/dtos/CourseStartDTO';
 import { CreateCourseDTO } from '../../shared/dtos/CreateCourseDTO';
 import { IdResultDTO } from '../../shared/dtos/IdResultDTO';
 import { ModuleEditDTO } from '../../shared/dtos/ModuleEditDTO';
@@ -116,6 +117,16 @@ const useSaveCourseContentData = () => {
     };
 };
 
+const useStartCourse = () => {
+
+    const qr = usePostDataUnsafe<CourseStartDTO, void>(apiRoutes.course.startCourse);
+
+    return {
+        startCourse: qr.postDataAsync,
+        startCourseState: qr.state,
+    };
+};
+
 const useUploadCourseThumbnailAsync = () => {
 
     const qr = usePostMultipartDataUnsafe<{ courseId: Id<'Course'> }>(apiRoutes.course.saveCourseThumbnail);
@@ -197,6 +208,7 @@ const useGreetingData = (courseId: Id<'Course'>) => {
 };
 
 export const CourseApiService = {
+    useStartCourse,
     usePermissionAssignCourses,
     useAdminCourseList,
     useSetCourseMode,

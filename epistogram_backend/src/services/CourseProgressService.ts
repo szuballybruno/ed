@@ -71,7 +71,7 @@ export class CourseProgressService {
 
         // get current course id 
         const currentCourseId = await this._userCourseBridgeService
-            .getCurrentCourseId(userId);
+            .getCurrentInProgressCourseIdAsync(userId);
 
         if (!currentCourseId)
             return null;

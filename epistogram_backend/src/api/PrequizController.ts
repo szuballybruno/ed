@@ -89,6 +89,6 @@ export class PrequizController implements XController<PrequizController> {
             .getValue(x => x.courseId, 'int');
 
         return this._prequizService
-            .finishPrequiz(params.principalId, courseId);
+            .finishPrequizAsync(params.principalId, courseId);
     }
 }

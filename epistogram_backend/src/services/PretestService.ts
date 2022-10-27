@@ -88,7 +88,7 @@ export class PretestService {
          */
         const { firstItemPlaylistCode } = await this
             ._playerService
-            .getFirstPlaylistItemCodeAsync(principalId.getId(), courseId);
+            .getFirstPlaylistItemCodeAsync(courseId);
 
         return this._mapperSerice
             .mapTo(PretestResultDTO, [

@@ -22,7 +22,7 @@ export class PlaylistService {
         const userId = principalId.getId();
 
         const courseId = await this._userCourseBridgeService
-            .getCurrentCourseId(userId);
+            .getCurrentInProgressCourseIdAsync(userId);
 
         if (!courseId)
             throw new Error('There\'s no current course!');
@@ -35,11 +35,15 @@ export class PlaylistService {
      */
     async getPlaylistModulesAsync(userId: Id<'User'>, courseId: Id<'Course'>) {
 
-        const views = await this._ormService
+        const views = await this
+            ._ormService
             .query(UserPlaylistView, { courseId, userId })
             .where('userId', '=', 'userId')
             .and('courseId', '=', 'courseId')
             .getMany();
+
+        if (views.length === 0)
+            throw new Error('Playlist is empty!');
 
         return this._mapperService
             .mapTo(PlaylistModuleDTO, [views]);

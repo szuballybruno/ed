@@ -1,4 +1,5 @@
 import { CompanyAssociatedCourseDTO } from '../dtos/company/CompanyAssociatedCourseDTO';
+import { CourseStartDTO } from '../dtos/CourseStartDTO';
 import { Mutation } from '../dtos/mutations/Mutation';
 import { UserCourseStatsDTO } from '../dtos/UserCourseStatsDTO';
 import { Id } from './versionId';
@@ -211,7 +212,8 @@ export const apiRoutes = {
         getCourseDetails: '/course/get-course-details',
         getAdminCourseList: '/course/get-admin-course-list',
         setCourseMode: '/course/set-course-mode',
-        getAvailableCourseCategories: '/course/get-available-course-categories'
+        getAvailableCourseCategories: '/course/get-available-course-categories',
+        startCourse: '/course/start-course' as ParametrizedRouteType<{ body: CourseStartDTO }>
     },
 
     courseProgress: {

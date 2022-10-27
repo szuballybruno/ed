@@ -18,6 +18,7 @@ declare global {
         singleIndex(func?: (item: T) => boolean): number;
         firstOrNullIndex(func?: (item: T) => boolean): number;
         byIndex(index: number): T;
+        byIndexOrNull(index: number): T | null;
         first(func?: (item: T) => boolean): T;
         last(func?: (item: T) => boolean): T;
         lastOrNull(func?: (item: T) => boolean): T;
@@ -223,6 +224,16 @@ Array.prototype.firstOrNullIndex = function <T>(func: (item: T) => boolean) {
     }
 
     return indices[0] ?? null;
+};
+
+// eslint-disable-next-line no-extend-native
+Array.prototype.byIndexOrNull = function <T>(index: number) {
+
+    const item = this[index];
+    if (item === undefined)
+        return null;
+
+    return item;
 };
 
 // eslint-disable-next-line no-extend-native

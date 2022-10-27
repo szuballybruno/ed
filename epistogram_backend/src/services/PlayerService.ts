@@ -1,13 +1,12 @@
 import moment from 'moment';
 import { VideoPlaybackSession } from '../models/entity/playback/VideoPlaybackSession';
 import { CourseItemView } from '../models/views/CourseItemView';
+import { PlaylistView } from '../models/views/PlaylistView';
 import { UserPlaylistView } from '../models/views/UserPlaylistView';
-import { PretestResultView } from '../models/views/PretestResultView';
 import { PlayerDataDTO } from '../shared/dtos/PlayerDataDTO';
 import { PlaylistModuleDTO } from '../shared/dtos/PlaylistModuleDTO';
 import { VideoPlayerDataDTO } from '../shared/dtos/VideoDTO';
 import { instantiate } from '../shared/logic/sharedLogic';
-import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 import { CourseItemStateType } from '../shared/types/sharedTypes';
 import { Id } from '../shared/types/versionId';
 import { instatiateInsertEntity } from '../utilities/misc';
@@ -42,13 +41,12 @@ export class PlayerService {
     /**
      * getFirstPlaylistItemCode
      */
-    async getFirstPlaylistItemCodeAsync(userId: Id<'User'>, courseId: Id<'Course'>) {
+    async getFirstPlaylistItemCodeAsync(courseId: Id<'Course'>) {
 
         const { playlistItemCode: firstItemPlaylistCode } = await this
             ._ormService
-            .query(UserPlaylistView, { userId, courseId, one: 1, zero: 0 })
-            .where('userId', '=', 'userId')
-            .and('courseId', '=', 'courseId')
+            .query(PlaylistView, { courseId, one: 1, zero: 0 })
+            .where('courseId', '=', 'courseId')
             .and('moduleOrderIndex', '=', 'one')
             .and('itemOrderIndex', '=', 'zero')
             .getSingle();
@@ -63,13 +61,15 @@ export class PlayerService {
         principalId: PrincipalId,
         requestedItemCode: string) {
 
-        console.log('Requested code: ' + requestedItemCode);
-
         const userId = principalId.getId();
 
-        // validate request
-        const { courseId, validItemCode } = await this
-            ._validatePlayerDataRequest(principalId, requestedItemCode);
+        // get current course id
+        const courseId = await this
+            .getCourseIdOrFailAsync(requestedItemCode);
+
+        // get valid course item 
+        const validItemCode = await this
+            ._getValidCourseItemCodeAsync(userId, courseId, requestedItemCode);
 
         // set current course 
         await this._userCourseBridgeService
@@ -133,36 +133,6 @@ export class PlayerService {
     //
     // PRIVATE
     //
-
-    /**
-     * Validates request 
-     */
-    private async _validatePlayerDataRequest(principalId: PrincipalId, requestedPlaylistItemCode: string) {
-
-        const userId = principalId
-            .getId();
-
-        // get current course id
-        const courseId = await this
-            .getCourseIdOrFailAsync(requestedPlaylistItemCode);
-
-        // get valid course item 
-        const validItemCode = await this
-            ._getValidCourseItemCodeAsync(userId, courseId, requestedPlaylistItemCode);
-
-        // check pretest 
-        const pcv = await this
-            ._ormService
-            .query(PretestResultView, { userId, courseId })
-            .where('userId', '=', 'userId')
-            .and('courseId', '=', 'courseId')
-            .getOneOrNull();
-
-        if (!pcv)
-            throw new ErrorWithCode('Tring to watch course, but "pretest" is not completed yet!', 'forbidden player stage');
-
-        return { validItemCode, courseId };
-    }
 
     /**
      * Returns the course id from an item code.
@@ -232,10 +202,15 @@ export class PlayerService {
             .findIndex(x => x.playlistItemState === 'locked');
 
         const prevIndex = firstLockedIndex - 1;
+        const prevItem = courseItemsFlat
+            .byIndexOrNull(prevIndex);
 
-        return (courseItemsFlat[prevIndex]
-            ? courseItemsFlat[prevIndex]
-            : courseItemsFlat[0]).playlistItemCode;
+        if (prevItem)
+            return prevItem.playlistItemCode;
+
+        return courseItemsFlat
+            .first()
+            .playlistItemCode;
     }
 
     /**

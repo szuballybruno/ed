@@ -6002,7 +6002,7 @@ items_with_user AS
 	LEFT JOIN public.course_version cv 
 	ON cv.id = civ.course_version_id
 	
-	INNER JOIN public.user_course_bridge ucb
+	LEFT JOIN public.user_course_bridge ucb
 	ON ucb.course_id = cv.course_id
 
 	LEFT JOIN public.exam_highest_score_answer_session_view ehsasv

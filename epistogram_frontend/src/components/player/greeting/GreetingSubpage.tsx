@@ -20,6 +20,9 @@ export const GreetingSubpage = () => {
     const { greetingsData } = CourseApiService
         .useGreetingData(courseId);
 
+    const { startCourse, startCourseState } = CourseApiService
+        .useStartCourse();
+
     useEffect(() => {
         setIsFullscreen(true);
     }, []);
@@ -32,18 +35,44 @@ export const GreetingSubpage = () => {
         if (greetingsData?.isPrequizRequired)
             return {
                 nextTitle: 'Tanfolyami kérdőív',
-                navigate: () => navigate2(applicationRoutes.playerRoute.prequizRoute, { courseId })
+                navigate: async () => {
+
+                    await startCourse({
+                        courseId,
+                        currentItemCode: null,
+                        stageName: 'prequiz'
+                    });
+                    navigate2(applicationRoutes.playerRoute.prequizRoute, { courseId });
+                }
             };
 
         if (greetingsData?.isPretestRequired)
             return {
                 nextTitle: 'Tudasfelmero kerdoiv',
-                navigate: () => navigate2(applicationRoutes.playerRoute.pretestRoute, { courseId })
+                navigate: async () => {
+
+                    await startCourse({
+                        courseId,
+                        currentItemCode: null,
+                        stageName: 'pretest'
+                    });
+                    navigate2(applicationRoutes.playerRoute.pretestRoute, { courseId });
+                }
             };
 
         return {
             nextTitle: 'Kurzus elso videoja',
-            navigate: () => navigate2(applicationRoutes.playerRoute.watchRoute, { descriptorCode: greetingsData?.firstItemPlaylistCode })
+            navigate: async () => {
+
+                const code = greetingsData?.firstItemPlaylistCode!;
+
+                await startCourse({
+                    courseId,
+                    currentItemCode: code,
+                    stageName: 'watch'
+                });
+                navigate2(applicationRoutes.playerRoute.watchRoute, { descriptorCode: code });
+            }
         };
     })();
 

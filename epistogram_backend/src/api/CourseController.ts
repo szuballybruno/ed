@@ -134,6 +134,19 @@ export class CourseController implements XController<CourseController> {
             .getGreetingDataAsync(params.principalId, courseId);
     }
 
+    @XControllerAction(apiRoutes.course.startCourse, { isPost: true })
+    async startCourseAction(params: ActionParams) {
+
+        const dto = params
+            .getFromParameterized(apiRoutes.course.startCourse)
+            .body
+            .data;
+
+        return this
+            ._courseService
+            .startCourseAsync({ principalId: params.principalId, ...dto });
+    }
+
     @XControllerAction(apiRoutes.course.saveCourseContent, { isPost: true })
     saveCourseContentAction = (params: ActionParams) => {
 

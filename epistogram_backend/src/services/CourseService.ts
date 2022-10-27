@@ -27,6 +27,7 @@ import { CourseBriefData } from '../shared/dtos/CourseBriefData';
 import { CourseCategoryDTO } from '../shared/dtos/CourseCategoryDTO';
 import { CourseDetailsDTO } from '../shared/dtos/CourseDetailsDTO';
 import { CourseDetailsEditDataDTO } from '../shared/dtos/CourseDetailsEditDataDTO';
+import { CourseStartDTO } from '../shared/dtos/CourseStartDTO';
 import { CreateCourseDTO } from '../shared/dtos/CreateCourseDTO';
 import { ModuleEditDTO } from '../shared/dtos/ModuleEditDTO';
 import { Mutation } from '../shared/dtos/mutations/Mutation';
@@ -44,7 +45,7 @@ import { createCharSeparatedList } from './misc/mappings';
 import { ModuleService } from './ModuleService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { PlayerService } from './PlayerService';
-import { PretestService } from './PretestService';
+import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { VersionCreateService } from './VersionCreateService';
 
 export class CourseService {
@@ -54,7 +55,7 @@ export class CourseService {
         private _ormService: ORMConnectionService,
         private _mapperService: MapperService,
         private _fileService: FileService,
-        private _pretestService: PretestService,
+        private _userCourseBridgeService: UserCourseBridgeService,
         private _authorizationService: AuthorizationService,
         private _verisonCreateService: VersionCreateService,
         private _playerService: PlayerService) {
@@ -307,6 +308,21 @@ export class CourseService {
     }
 
     /**
+     * Start course 
+     */
+    async startCourseAsync({ principalId, courseId, currentItemCode, stageName }: { principalId: PrincipalId } & CourseStartDTO) {
+
+        await this
+            ._userCourseBridgeService
+            .createUserCourseBridgeAsync({
+                courseId,
+                currentItemCode,
+                stageName,
+                userId: principalId.getId()
+            });
+    }
+
+    /**
      * getGreetingDataAsync
      */
     async getGreetingDataAsync(principalId: PrincipalId, courseId: Id<'Course'>) {
@@ -328,7 +344,7 @@ export class CourseService {
          */
         const { firstItemPlaylistCode } = await this
             ._playerService
-            .getFirstPlaylistItemCodeAsync(principalId.getId(), courseId);
+            .getFirstPlaylistItemCodeAsync(courseId);
 
         return {
             isPrequizRequired,

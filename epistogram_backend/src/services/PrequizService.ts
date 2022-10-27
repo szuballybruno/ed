@@ -146,7 +146,7 @@ export class PrequizService {
     /**
      * Finish prequiz
      */
-    async finishPrequiz(principalId: PrincipalId, courseId: Id<'Course'>) {
+    async finishPrequizAsync(principalId: PrincipalId, courseId: Id<'Course'>) {
 
         /**
          * Set stage
