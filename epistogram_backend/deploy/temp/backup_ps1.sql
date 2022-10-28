@@ -9550,7 +9550,8 @@ COPY public.activity_session (id, start_date, end_date, is_finalized, user_id, a
 709	2022-10-26 09:48:08.558+00	2022-10-26 09:48:08.928+00	t	1	\N
 710	2022-10-27 08:30:51.248+00	2022-10-27 08:30:51.616+00	t	1	\N
 711	2022-10-27 08:35:52.386+00	2022-10-27 08:35:52.75+00	t	1	\N
-712	2022-10-27 08:40:53.591+00	2022-10-27 08:40:53.942+00	f	1	\N
+712	2022-10-27 08:40:53.591+00	2022-10-27 08:40:53.942+00	t	1	\N
+713	2022-10-28 13:12:34.983+00	2022-10-28 13:12:35.331+00	f	1	\N
 \.
 
 
@@ -9603,7 +9604,8 @@ COPY public.activity_streak (id, start_date, end_date, is_finalized, user_id) FR
 37	2022-10-16 18:04:10.007+00	2022-10-19 10:17:56.814+00	t	41
 17	2022-10-07 16:04:17.37+00	2022-10-14 13:31:46.803+00	t	1
 43	2022-10-21 06:54:25.505+00	2022-10-21 06:54:25.505+00	t	41
-45	2022-10-24 11:44:13.866+00	2022-10-27 08:40:53.894+00	f	1
+45	2022-10-24 11:44:13.866+00	2022-10-27 08:40:53.894+00	t	1
+46	2022-10-28 13:12:34.856+00	2022-10-28 13:12:35.282+00	f	1
 \.
 
 
@@ -27748,6 +27750,7 @@ COPY public.coin_transaction (id, creation_date, amount, is_gifted, user_id, act
 211	2022-10-27 08:30:51.348+00	10	f	1	710	\N	\N	\N	\N	\N
 212	2022-10-27 08:35:52.483+00	10	f	1	711	\N	\N	\N	\N	\N
 213	2022-10-27 08:40:53.69+00	10	f	1	712	\N	\N	\N	\N	\N
+214	2022-10-28 13:12:35.081+00	10	f	1	713	\N	\N	\N	\N	\N
 \.
 
 
@@ -35518,7 +35521,7 @@ COPY public."user" (id, deletion_date, creation_date, is_god, is_invitation_acce
 48	\N	2022-10-14 13:17:14.793+00	f	t	Invitation	t	ateceged4@demoaccounts.epistogram.com		Jenő	Nagy	\N	\N	\N	$2a$12$ARwyfEuOmTJ.NrY5WYfFtebnz2jxK04BK7mYRIHF7xmYlUV69bVDS	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQ4LCJpYXQiOjE2NjYxNzg4NjgsImV4cCI6MTY2NjQzODA2OH0.wi4H5pSdQk_bnqETSM8eGx7uhjj6QGs0XeQtitDYU1g	\N	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyRW1haWwiOiJ4bnd2ZGR2dmR6cXZwZXlzYm9AdG1td2oubmV0IiwiaWF0IjoxNjY1NzUzNDM0LCJleHAiOjE2NjYyMTA2MzR9.BezDec4HpF-Q84qzrwniFz5osOTlOj0agnEa1k_WBjo	\N	4	26	t
 46	\N	2022-10-14 09:34:38.8+00	f	t	Invitation	t	ateceged@epistogram.com		SimaUser	aTecéged	\N	\N	\N	$2a$12$IpEDXrXaLg0vsNf4zVMNBurcz.TVlnmubg7RMXeuGvQYLaduI5fc.	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQ2LCJpYXQiOjE2NjU3NTM2OTYsImV4cCI6MTY2NjAxMjg5Nn0.feK14I2_RtwaIyokXbHEdnVsskGkk_v_dXHGTzVhiuA	\N	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyRW1haWwiOiJhdGVjZWdlZEBlcGlzdG9ncmFtLmNvbSIsImlhdCI6MTY2NTc0MDA3OCwiZXhwIjoxNjY2MTk3Mjc4fQ.VBZzQuXJvoY_2P2lf7k372tmPnol7HCwDq6SkVOayrk	\N	4	8	t
 38	\N	2022-10-13 16:48:01.773+00	f	t	Invitation	t	atecegedadmin2@epistogram.com		Boglárka	Szegedi	\N	\N	\N	$2a$12$ABeAse47tghrfZmAUmxD8eNoSn45NRL8o11dSBA5FQlBG5yCNhnx2	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjM4LCJpYXQiOjE2NjU3NTUwMzEsImV4cCI6MTY2NjAxNDIzMX0.OxKCfhoM71nEID1lPpDbR9kHDsahw1gTWo_CktP-rX4	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjM4LCJpYXQiOjE2NjU2OTI4MDksImV4cCI6MTY2NTcyMTYwOX0.ginmmx1YOs6Ntmuj9Hy52gzdUEnRNFZET1yixNkGcsQ	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyRW1haWwiOiJhdGVjZWdlZGFkbWluQGVwaXN0b2dyYW0uY29tIiwiaWF0IjoxNjY1Njc5NjgxLCJleHAiOjE2NjYxMzY4ODF9.NVa3PkSDqL6IB8ntvzhfNcjSTXSO0NaY9PvCu1WB37g	\N	4	7	t
-1	\N	2022-10-04 10:02:36.025+00	t	t	Invitation	t	endre.marosi@epistogram.com	endremarosi	Endre	Marosi	\N	\N	\N	$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTY2Njg2MDA1NCwiZXhwIjoxNjY3MTE5MjU0fQ.vUb9_KDkaBkryOGchB-sicujNK2GCP7ilA8GpoXkuP4	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTY2NTE2NTI5MywiZXhwIjoxNjY1MTk0MDkzfQ.s36BTvYQ0YRKWKcmuvRp7FPBoY8nT9cQDk3aWfATdNc	\N	\N	2	26	t
+1	\N	2022-10-04 10:02:36.025+00	t	t	Invitation	t	endre.marosi@epistogram.com	endremarosi	Endre	Marosi	\N	\N	\N	$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTY2Njk2Mjc1NSwiZXhwIjoxNjY3MjIxOTU1fQ.f85pNce2VTNSmN3oznPOa4neJL4Rsx8RzwzvF0smllU	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTY2NTE2NTI5MywiZXhwIjoxNjY1MTk0MDkzfQ.s36BTvYQ0YRKWKcmuvRp7FPBoY8nT9cQDk3aWfATdNc	\N	\N	2	26	t
 \.
 
 
@@ -37675,6 +37678,8 @@ COPY public.user_session_activity (id, creation_date, type, video_version_id, ex
 2096	2022-10-27 08:35:52.774+00	login	\N	\N	711
 2097	2022-10-27 08:40:53.615+00	generic	\N	\N	712
 2098	2022-10-27 08:40:53.966+00	login	\N	\N	712
+2099	2022-10-28 13:12:35.008+00	generic	\N	\N	713
+2100	2022-10-28 13:12:35.354+00	login	\N	\N	713
 \.
 
 
@@ -41580,14 +41585,14 @@ SELECT pg_catalog.setval('public.activity_id_seq', 6, true);
 -- Name: activity_session_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dev_service_user
 --
 
-SELECT pg_catalog.setval('public.activity_session_id_seq', 712, true);
+SELECT pg_catalog.setval('public.activity_session_id_seq', 713, true);
 
 
 --
 -- Name: activity_streak_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dev_service_user
 --
 
-SELECT pg_catalog.setval('public.activity_streak_id_seq', 45, true);
+SELECT pg_catalog.setval('public.activity_streak_id_seq', 46, true);
 
 
 --
@@ -41629,7 +41634,7 @@ SELECT pg_catalog.setval('public.answer_version_id_seq', 11717, true);
 -- Name: coin_transaction_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dev_service_user
 --
 
-SELECT pg_catalog.setval('public.coin_transaction_id_seq', 213, true);
+SELECT pg_catalog.setval('public.coin_transaction_id_seq', 214, true);
 
 
 --
@@ -42035,7 +42040,7 @@ SELECT pg_catalog.setval('public.user_id_seq', 48, true);
 -- Name: user_session_activity_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dev_service_user
 --
 
-SELECT pg_catalog.setval('public.user_session_activity_id_seq', 2098, true);
+SELECT pg_catalog.setval('public.user_session_activity_id_seq', 2100, true);
 
 
 --
