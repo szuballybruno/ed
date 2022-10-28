@@ -13,7 +13,7 @@
     "tsdev": "tsnd --respawn server.ts",
     "node": "node --async-stack-traces server.ts",
     "nodenew": "nodemon -x node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm src/server.ts",
-    "lr": "nodemon -x node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm src/server.ts --lightRecreate",
+    "lr": "npx ts-node --esm --experimentalSpecifierResolution node ./src/server.ts --lightRecreate",
     "test": "jest -i ",
     "integtest": "jest -i StartCourse.test.ts",
     "testesm": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",

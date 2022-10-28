@@ -100,6 +100,7 @@ COMMIT;
 
     writeFileSync(globalConfig.getRootRelativePath('/sql/out/recreateLightSchema.sql'), recerateScript);
     writeFileSync(globalConfig.getRootRelativePath('/sql/out/fullMigrationScript.sql'), fullMigrationScript);
+    writeFileSync(globalConfig.getRootRelativePath('/sql/out/createSoftSchema.sql'), recerateScriptParts.createScript);
 };
 
 const startServerAsync = async (initializator: ServiceProviderInitializator) => {
