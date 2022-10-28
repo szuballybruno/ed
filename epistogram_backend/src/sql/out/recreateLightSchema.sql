@@ -6,11 +6,12 @@
 DROP VIEW IF EXISTS admin_user_courses_view CASCADE;
 DROP VIEW IF EXISTS course_overview_view CASCADE;
 DROP VIEW IF EXISTS course_learning_stats_view CASCADE;
+DROP VIEW IF EXISTS admin_course_user_stats_view CASCADE;
 DROP VIEW IF EXISTS user_learning_overview_stats_view CASCADE;
-DROP VIEW IF EXISTS courses_progress_list_view CASCADE;
-DROP VIEW IF EXISTS available_course_view CASCADE;
 DROP VIEW IF EXISTS user_video_stats_view CASCADE;
 DROP VIEW IF EXISTS user_module_stats_view CASCADE;
+DROP VIEW IF EXISTS courses_progress_list_view CASCADE;
+DROP VIEW IF EXISTS available_course_view CASCADE;
 DROP VIEW IF EXISTS course_all_items_completed_view CASCADE;
 DROP VIEW IF EXISTS playlist_view CASCADE;
 DROP VIEW IF EXISTS user_overview_view CASCADE;
@@ -20,6 +21,7 @@ DROP VIEW IF EXISTS user_performance_comparison_stats_view CASCADE;
 DROP VIEW IF EXISTS user_learning_page_stats_view CASCADE;
 DROP VIEW IF EXISTS home_page_stats_view CASCADE;
 DROP VIEW IF EXISTS exam_result_stats_view CASCADE;
+DROP VIEW IF EXISTS admin_home_page_overview_view CASCADE;
 DROP VIEW IF EXISTS assignable_role_view CASCADE;
 DROP VIEW IF EXISTS user_role_assign_company_view CASCADE;
 DROP VIEW IF EXISTS role_list_view CASCADE;
@@ -28,12 +30,14 @@ DROP VIEW IF EXISTS assignable_permission_view CASCADE;
 DROP VIEW IF EXISTS user_permission_view CASCADE;
 DROP VIEW IF EXISTS user_course_completion_original_estimation_view CASCADE;
 DROP VIEW IF EXISTS pretest_result_view CASCADE;
+DROP VIEW IF EXISTS module_last_exam_score_view CASCADE;
+DROP VIEW IF EXISTS final_exam_score_view CASCADE;
 DROP VIEW IF EXISTS exam_player_data_view CASCADE;
 DROP VIEW IF EXISTS course_details_view CASCADE;
 DROP VIEW IF EXISTS course_admin_content_view CASCADE;
+DROP VIEW IF EXISTS module_item_count_view CASCADE;
 DROP VIEW IF EXISTS user_engagement_view CASCADE;
 DROP VIEW IF EXISTS improve_yourself_page_stats_view CASCADE;
-DROP VIEW IF EXISTS admin_home_page_overview_view CASCADE;
 DROP VIEW IF EXISTS user_reaction_time_view CASCADE;
 DROP VIEW IF EXISTS user_inactive_course_view CASCADE;
 DROP VIEW IF EXISTS user_weekly_course_item_progress_view CASCADE;
@@ -61,17 +65,24 @@ DROP VIEW IF EXISTS correct_answer_rates_split_view CASCADE;
 DROP VIEW IF EXISTS answer_session_group_view CASCADE;
 DROP VIEW IF EXISTS answer_session_evaluation_view CASCADE;
 DROP VIEW IF EXISTS answer_session_view CASCADE;
+DROP VIEW IF EXISTS course_video_count_view CASCADE;
+DROP VIEW IF EXISTS course_item_count_view CASCADE;
+DROP VIEW IF EXISTS course_exam_count_view CASCADE;
+DROP VIEW IF EXISTS completed_module_item_count_view CASCADE;
+DROP VIEW IF EXISTS completed_course_video_count_view CASCADE;
+DROP VIEW IF EXISTS completed_course_item_count_view CASCADE;
+DROP VIEW IF EXISTS completed_course_exam_count_view CASCADE;
 DROP VIEW IF EXISTS user_video_practise_progress_view CASCADE;
 DROP VIEW IF EXISTS user_video_playback_seconds_view CASCADE;
 DROP VIEW IF EXISTS user_session_daily_view CASCADE;
 DROP VIEW IF EXISTS user_session_block_view CASCADE;
 DROP VIEW IF EXISTS user_latest_activity_view CASCADE;
 DROP VIEW IF EXISTS user_daily_activity_chart_view CASCADE;
+DROP VIEW IF EXISTS module_last_exam_view CASCADE;
 DROP VIEW IF EXISTS exam_highest_score_answer_session_view CASCADE;
 DROP VIEW IF EXISTS daily_tip_view CASCADE;
 DROP VIEW IF EXISTS course_state_view CASCADE;
 DROP VIEW IF EXISTS course_item_edit_view CASCADE;
-DROP VIEW IF EXISTS course_item_count_view CASCADE;
 DROP VIEW IF EXISTS course_item_view CASCADE;
 DROP VIEW IF EXISTS course_admin_detailed_view CASCADE;
 DROP VIEW IF EXISTS company_associated_courses_view CASCADE;
@@ -107,7 +118,6 @@ DROP VIEW IF EXISTS given_answer_view CASCADE;
 DROP VIEW IF EXISTS exam_version_view CASCADE;
 DROP VIEW IF EXISTS exam_score_view CASCADE;
 DROP VIEW IF EXISTS course_video_length_view CASCADE;
-DROP VIEW IF EXISTS course_video_count_view CASCADE;
 DROP VIEW IF EXISTS course_shop_item_list_view CASCADE;
 DROP VIEW IF EXISTS course_rating_question_view CASCADE;
 DROP VIEW IF EXISTS course_questions_success_view CASCADE;
@@ -306,18 +316,37 @@ GROUP BY
 --CREATE VIEW: course_item_completion_view
 CREATE VIEW course_item_completion_view
 AS
+
+-- This view returns only the unique course item completions.
+-- Video completions are unique, exam completions made unique
+-- by selecting the latests.
+
 WITH 
-course_item_completion_cte AS 
+-- Returns the latest exam completion, with the largest
+-- answer_session_id which is also the latest
+latest_exam_completion_cte AS
 (
-    SELECT 
-		ase.exam_version_id,
-		null::int video_version_id,
+	SELECT
 		ase.user_id,
-		ase.id answer_session_id,
-		ec.completion_date
+		ase.exam_version_id,
+		MAX(ec.completion_date) completion_date,
+		MAX(ase.id) answer_session_id
 	FROM public.exam_completion ec
+
 	LEFT JOIN public.answer_session ase
 	ON ase.id = ec.answer_session_id
+
+	GROUP BY ase.user_id, ase.exam_version_id
+),
+course_item_completion_cte AS 
+(
+    SELECT DISTINCT
+		lecc.exam_version_id,
+		null::int video_version_id,
+		lecc.user_id,
+		lecc.answer_session_id,
+		lecc.completion_date
+	FROM latest_exam_completion_cte lecc
     UNION ALL
     SELECT 
 		null::int exam_version_id,
@@ -535,19 +564,6 @@ LEFT JOIN public.storage_file sf
 ON sf.id = cd.cover_file_id
 
 WHERE cd.visibility = 'private';
-
---CREATE VIEW: course_video_count_view
-CREATE VIEW course_video_count_view
-AS
-SELECT 
-    COUNT(vv.id)::int video_count, 
-    mv.course_version_id
-FROM public.video_version vv
-
-LEFT JOIN public.module_version mv
-ON mv.id = vv.module_version_id
-
-GROUP BY mv.course_version_id;
 
 --CREATE VIEW: course_video_length_view
 CREATE VIEW course_video_length_view
@@ -1213,7 +1229,7 @@ ON ad.id = av.answer_data_id;
 --CREATE VIEW: schema_version_view
 CREATE VIEW schema_version_view
 AS
-SELECT '13:48:53 2022-10-24 CEDT' last_modification_date, '0.01' version
+SELECT '21:20:57 2022-10-24 CEDT' last_modification_date, '0.01' version
 ;
 
 --CREATE VIEW: shop_item_stateful_view
@@ -2024,27 +2040,6 @@ ORDER BY
 	ic.item_order_index
 ;
 
---CREATE VIEW: course_item_count_view
-CREATE VIEW course_item_count_view
-AS
-SELECT 
-	co.id course_id,
-	COUNT(*)::int item_count
-FROM public.course co 
-
-LEFT JOIN public.course_version cv
-ON cv.course_id = co.id
-
-LEFT JOIN public.course_item_view civ
-ON civ.course_version_id = cv.id 
-	AND civ.item_type != 'pretest'
-
-GROUP BY
-	co.id
-	
-ORDER BY
-	co.id;
-
 --CREATE VIEW: course_item_edit_view
 CREATE VIEW course_item_edit_view
 AS
@@ -2217,6 +2212,40 @@ FROM
 ) rns 
 
 WHERE rns.is_highest_score;
+
+--CREATE VIEW: module_last_exam_view
+CREATE VIEW module_last_exam_view
+AS
+
+-- Returns the last exams of the latest modules.
+-- Final exams and pretest are excluded.
+
+SELECT
+    cv.course_id,
+    mv.module_id,
+    ev.exam_id,
+    ev.id exam_version_id,
+    MAX(ed.order_index) item_order_index
+FROM public.latest_course_version_view lcvv 
+
+LEFT JOIN public.course_version cv
+ON cv.id = lcvv.version_id
+
+LEFT JOIN public.module_version mv
+ON mv.course_version_id = cv.id
+
+LEFT JOIN public.exam_version ev
+ON ev.module_version_id = mv.id
+
+LEFT JOIN public.exam_data ed
+ON ed.id = ev.exam_data_id
+
+WHERE ed.order_index != 0
+AND ed.is_final IS NOT TRUE
+
+GROUP BY cv.course_id, mv.module_id, ev.exam_id, ev.id
+
+ORDER BY cv.course_id, mv.module_id, ev.exam_id, ev.id;
 
 --CREATE VIEW: user_daily_activity_chart_view
 CREATE VIEW user_daily_activity_chart_view
@@ -2440,6 +2469,120 @@ FROM
         sq.user_id,
         sq.length_seconds
 ) sq2;
+
+--CREATE VIEW: completed_course_exam_count_view
+CREATE VIEW completed_course_exam_count_view
+AS
+SELECT
+    cicv.user_id,
+    cicv.course_id,
+    COUNT(*) completed_exam_count
+FROM public.course_item_completion_view cicv
+
+WHERE cicv.exam_version_id IS NOT NULL
+
+GROUP BY cicv.user_id, cicv.course_id;
+
+--CREATE VIEW: completed_course_item_count_view
+CREATE VIEW completed_course_item_count_view
+AS
+SELECT
+    cicv.user_id,
+    cicv.course_id,
+    COUNT(*) completed_course_item_count
+FROM public.course_item_completion_view cicv
+
+GROUP BY cicv.user_id, cicv.course_id;
+
+--CREATE VIEW: completed_course_video_count_view
+CREATE VIEW completed_course_video_count_view
+AS
+SELECT
+    cicv.user_id,
+    cicv.course_id,
+    COUNT(*) completed_video_count
+FROM public.course_item_completion_view cicv
+
+WHERE cicv.video_version_id IS NOT NULL
+
+GROUP BY cicv.user_id, cicv.course_id;
+
+--CREATE VIEW: completed_module_item_count_view
+CREATE VIEW completed_module_item_count_view
+AS
+SELECT
+    cicv.user_id,
+    cicv.course_id,
+    cicv.module_id,
+    COUNT(*) completed_course_item_count
+FROM public.course_item_completion_view cicv
+
+GROUP BY cicv.user_id, cicv.course_id, cicv.module_id
+
+ORDER BY cicv.user_id, cicv.course_id, cicv.module_id;
+
+--CREATE VIEW: course_exam_count_view
+CREATE VIEW course_exam_count_view
+AS
+SELECT 
+	co.id course_id,
+	COUNT(*)::int exam_count
+FROM public.course co 
+
+LEFT JOIN public.course_version cv
+ON cv.course_id = co.id
+
+LEFT JOIN public.course_item_view civ
+ON civ.course_version_id = cv.id 
+	AND civ.item_type = 'exam'
+
+GROUP BY
+	co.id
+	
+ORDER BY
+	co.id;
+
+--CREATE VIEW: course_item_count_view
+CREATE VIEW course_item_count_view
+AS
+SELECT 
+	co.id course_id,
+	COUNT(*)::int item_count
+FROM public.course co 
+
+LEFT JOIN public.course_version cv
+ON cv.course_id = co.id
+
+LEFT JOIN public.course_item_view civ
+ON civ.course_version_id = cv.id 
+	AND civ.item_type != 'pretest'
+
+GROUP BY
+	co.id
+	
+ORDER BY
+	co.id;
+
+--CREATE VIEW: course_video_count_view
+CREATE VIEW course_video_count_view
+AS
+SELECT 
+	co.id course_id,
+	COUNT(*)::int video_count
+FROM public.course co 
+
+LEFT JOIN public.course_version cv
+ON cv.course_id = co.id
+
+LEFT JOIN public.course_item_view civ
+ON civ.course_version_id = cv.id 
+	AND civ.item_type = 'video'
+
+GROUP BY
+	co.id
+	
+ORDER BY
+	co.id;
 
 --CREATE VIEW: answer_session_view
 CREATE VIEW answer_session_view
@@ -2681,6 +2824,7 @@ ON mv.course_version_id = cv.id
 LEFT JOIN public.answer_session_group_view asgv
 ON asgv.user_id = u.id
 AND asgv.course_id = co.id
+AND asgv.module_id = mv.module_id
 
 ORDER BY u.id;
 
@@ -3092,6 +3236,11 @@ ORDER BY carsv.user_id, carsv.course_id, carsv.module_id;
 --CREATE VIEW: user_module_performance_view
 CREATE VIEW user_module_performance_view
 AS
+
+-- This view returns the performance per user per module
+-- calculated from different answers.
+-- Later it could replace the user_performance_view.
+
 SELECT
     u.id user_id,
     upagv.course_id,
@@ -3246,7 +3395,7 @@ LEFT JOIN public.course_category scc
 ON scc.id = cd.sub_category_id
 
 LEFT JOIN public.course_video_count_view cvcv
-ON cvcv.course_version_id = lcvv.version_id
+ON cvcv.course_id = co.id
 
 LEFT JOIN exam_count ec
 ON ec.course_version_id = lcvv.version_id
@@ -3535,36 +3684,46 @@ FROM
 --CREATE VIEW: user_course_progress_actual_view
 CREATE VIEW user_course_progress_actual_view
 AS
-SELECT 
-	sq.*,
-	NULLIF(sq.total_completed_item_count, 0) / NULLIF(sq.days_elapsed_since_start::double precision, 0) avg_completed_items_per_day,
-	ROUND(NULLIF(sq.total_completed_item_count, 0) / NULLIF(sq.total_item_count::double precision, 0) * 100) completed_percentage,
-	sq.total_item_count - sq.total_completed_item_count remaining_item_count
-FROM 
+WITH
+completed_course_item_counts AS
+(
+	SELECT
+		cicv.user_id,
+		cicv.course_id,
+		COUNT(*)::int total_completed_item_count
+	FROM public.course_item_completion_view cicv
+
+	GROUP BY cicv.user_id, cicv.course_id
+),
+days_elapsed_since_start AS
 (
 	SELECT 
 		ucb.user_id user_id,
 		ucb.course_id,
-		now()::date - ucb.start_date::date + 1 days_elapsed_since_start,
-		COUNT(*)::int total_completed_item_count,
-		coicv.item_count total_item_count
+		now()::date - ucb.start_date::date + 1 days_elapsed_since_start
 	FROM public.user_course_bridge ucb 
+)
 
-	LEFT JOIN public.course_item_completion_view cicv
-	ON cicv.user_id = ucb.user_id
-	AND cicv.course_id = ucb.course_id
+SELECT 
+	ucb.user_id,
+	ucb.course_id,
+	ccic.total_completed_item_count,
+	NULLIF(ccic.total_completed_item_count, 0) / NULLIF(dess.days_elapsed_since_start::double precision, 0) avg_completed_items_per_day,
+	ROUND(NULLIF(ccic.total_completed_item_count, 0) / NULLIF(coicv.item_count::double precision, 0) * 100) completed_percentage,
+	coicv.item_count - ccic.total_completed_item_count remaining_item_count,
+	coicv.item_count total_item_count
+FROM public.user_course_bridge ucb
 
-	LEFT JOIN public.course_item_count_view coicv
-	ON ucb.course_id = coicv.course_id
+LEFT JOIN days_elapsed_since_start dess
+ON dess.user_id = ucb.user_id
+AND dess.course_id = ucb.course_id
 
--- 	WHERE cicv IS NOT NULL
-	
-	GROUP BY
-		ucb.user_id,
-		ucb.course_id,
-		ucb.start_date,
-		coicv.item_count
-) sq;
+LEFT JOIN public.course_item_count_view coicv
+ON coicv.course_id = ucb.course_id
+
+LEFT JOIN completed_course_item_counts ccic
+ON ccic.user_id = ucb.user_id
+AND ccic.course_id = ucb.course_id;
 
 --CREATE VIEW: course_progress_view
 CREATE VIEW course_progress_view
@@ -3983,230 +4142,6 @@ GROUP BY
     urp.user_reaction_time_points,
     urp.reaction_time_percent_diff;
 
---CREATE VIEW: admin_home_page_overview_view
-CREATE VIEW admin_home_page_overview_view
-AS
-WITH
-latest_course_activity_cte AS
-(
-	SELECT 
-		cic.user_id,
-		cv.course_id,
-		MAX(cic.completion_date) latest_course_item_completion_date
-	FROM public.course_item_completion_view cic
-
-	LEFT JOIN public.video_version vv
-	ON vv.id = cic.video_version_id
-
-	LEFT JOIN public.exam_version ev
-	ON ev.id = cic.exam_version_id
-
-	LEFT JOIN public.module_version mv
-	ON mv.id = vv.module_version_id
-	OR mv.id = ev.module_version_id
-
-	LEFT JOIN public.course_version cv
-	ON cv.id = mv.course_version_id
-
-	GROUP BY cic.user_id, cv.course_id
-),
-
-is_final_exam_completed_cte AS 
-(
-    SELECT
-        cv.course_id,
-        cic.user_id,
-        (COUNT(*) > 0) is_final_exam_completed
-    FROM public.course_item_completion_view cic
-
-    LEFT JOIN public.exam_version ev
-    ON ev.id = cic.exam_version_id
-
-    LEFT JOIN public.exam_data ed
-    ON ed.id = ev.exam_data_id
-
-    LEFT JOIN public.module_version mv
-    ON mv.id = ev.module_version_id
-
-    LEFT JOIN public.course_version cv
-    ON cv.id = mv.course_version_id
-
-    WHERE ed.is_final IS TRUE
-    
-    GROUP BY 
-        cv.course_id,
-        cic.user_id
-),
-active_user_count_cte AS
-(
-	SELECT
-		lcac.course_id,
-		u.company_id,
-		COUNT(*) active_user_count
-	FROM latest_course_activity_cte lcac
-
-	LEFT JOIN is_final_exam_completed_cte ifecc
-	ON ifecc.user_id = lcac.user_id
-	AND ifecc.course_id = lcac.course_id
-	AND ifecc.is_final_exam_completed IS NOT TRUE
-	
-	LEFT JOIN public.user u
-	ON u.id = lcac.user_id
-	
-	WHERE lcac.latest_course_item_completion_date > CURRENT_DATE - 14	
-	
-	GROUP BY lcac.course_id, u.company_id
-),
-suspended_user_count_cte AS
-(
-	SELECT
-		lcac.course_id,
-		u.company_id,
-		COUNT(*) suspended_user_count
-	FROM latest_course_activity_cte lcac
-
-	LEFT JOIN is_final_exam_completed_cte ifecc
-	ON ifecc.user_id = lcac.user_id
-	AND ifecc.course_id = lcac.course_id
-	AND ifecc.is_final_exam_completed IS NOT TRUE
-	
-	LEFT JOIN public.user u
-	ON u.id = lcac.user_id
-	
-	WHERE lcac.latest_course_item_completion_date < CURRENT_DATE - 14	
-	
-	GROUP BY lcac.course_id, u.company_id
-),
-completed_user_count_cte AS
-(
-	SELECT
-		lcac.course_id,
-		u.company_id,
-		COUNT(*) completed_user_count
-	FROM latest_course_activity_cte lcac
-
-	INNER JOIN is_final_exam_completed_cte ifecc
-	ON ifecc.user_id = lcac.user_id
-	AND ifecc.course_id = lcac.course_id
-	AND ifecc.is_final_exam_completed IS TRUE
-	
-	LEFT JOIN public.user u
-	ON u.id = lcac.user_id
-		
-	GROUP BY lcac.course_id, u.company_id
-),
-course_avg_performance_cte AS
-(
-	SELECT
-		upv.course_id,
-		u.company_id,
-		AVG(upv.performance_percentage) avg_performance_percentage
-	FROM public.user_performance_view upv
-	
-	LEFT JOIN public.user u
-	ON u.id = upv.user_id
-	
-	WHERE upv.performance_percentage != 0
-	
-	GROUP BY upv.course_id, u.company_id
-),
-course_difficulty_count_cte AS
-(
-	SELECT
-		cv.course_id,
-		u.company_id,
-		COUNT(*) difficult_videos_count
-	FROM public.video_rating vr
-	
-	LEFT JOIN public.video_version vv
-	ON vv.id = vr.video_version_id
-	
-	LEFT JOIN public.module_version mv
-	ON mv.id = vv.module_version_id
-	
-	LEFT JOIN public.course_version cv
-	ON cv.id = mv.course_version_id
-	
-	LEFT JOIN public.user u
-	ON vr.user_id = u.id
-	
-	WHERE vr.difficulty > 4
-	
-	GROUP BY cv.course_id, u.company_id
-),
-questions_to_be_answered_count_cte AS
-(
-	SELECT
-		u.company_id,
-		cv.course_id,
-		COUNT(*) questions_to_be_answered_count
-	FROM public.comment com
-	
-	LEFT JOIN public.user u
-	ON com.user_id = u.id
-	
-	LEFT JOIN public.video_version vv
-	ON vv.id = com.video_version_id
-	
-	LEFT JOIN public.module_version mv
-	ON mv.id = vv.module_version_id
-	
-	LEFT JOIN public.course_version cv
-	ON cv.id = mv.course_version_id
-	
-	WHERE 
-	com.id NOT IN 
-	(
-		SELECT
-			comp.id
-		FROM public.comment comp
-
-		INNER JOIN public.comment comc
-		ON comc.parent_comment_id = comp.id
-	)
-	AND com.parent_comment_id IS NULL
-	
-	GROUP BY u.company_id, cv.course_id
-)
-
-SELECT
-	co.id course_id,
-	comp.id company_id,
-	COALESCE(aucc.active_user_count, 0) active_users_count,
-	COALESCE(succ.suspended_user_count, 0) suspended_users_count,
-	COALESCE(cucc.completed_user_count, 0) completed_users_count,
-	capc.avg_performance_percentage avg_course_performance_percentage,
-	COALESCE(cdcc.difficult_videos_count, 0) difficult_videos_count,
-	COALESCE(qtbacc.questions_to_be_answered_count, 0) questions_waiting_to_be_answered
-FROM public.course co
-
-CROSS JOIN public.company comp
-
-LEFT JOIN active_user_count_cte aucc
-ON aucc.course_id = co.id
-AND aucc.company_id = comp.id
-
-LEFT JOIN suspended_user_count_cte succ
-ON succ.course_id = co.id
-AND succ.company_id = comp.id
-
-LEFT JOIN completed_user_count_cte cucc
-ON cucc.course_id = co.id
-AND cucc.company_id = comp.id
-
-LEFT JOIN course_avg_performance_cte capc
-ON capc.course_id = co.id
-AND capc.company_id = comp.id
-
-LEFT JOIN course_difficulty_count_cte cdcc
-ON cdcc.course_id = co.id
-AND cdcc.company_id = comp.id
-
-LEFT JOIN questions_to_be_answered_count_cte qtbacc
-ON qtbacc.course_id = co.id
-AND qtbacc.company_id = comp.id
-;
-
 --CREATE VIEW: improve_yourself_page_stats_view
 CREATE VIEW improve_yourself_page_stats_view
 AS
@@ -4330,6 +4265,24 @@ ON tslp.user_id = u.id
 
 LEFT JOIN public.user_inactive_course_view uicv
 ON uicv.user_id = u.id;
+
+--CREATE VIEW: module_item_count_view
+CREATE VIEW module_item_count_view
+AS
+SELECT 
+    mv.module_id,
+    COUNT(*)::int item_count
+FROM public.latest_course_version_view lcvv
+
+LEFT JOIN public.module_version mv
+ON mv.course_version_id = lcvv.version_id
+
+LEFT JOIN public.course_item_view civ
+ON civ.module_id = mv.module_id
+AND civ.item_type != 'pretest'
+
+GROUP BY
+    mv.module_id;
 
 --CREATE VIEW: course_admin_content_view
 CREATE VIEW course_admin_content_view
@@ -4508,11 +4461,7 @@ SELECT
 	sf.file_path cover_file_path,
 	
 	-- calculated
-	(
-		SELECT cvcv.video_count
-		FROM public.course_video_count_view cvcv
-		WHERE cvcv.course_version_id = cv.id
-	) total_video_count,
+	cvcv.video_count total_video_count,
 	(
 		SELECT cvlv.sum_length_seconds
 		FROM public.course_video_length_view cvlv
@@ -4591,6 +4540,9 @@ AND ucb.course_id = cv.course_id
 
 LEFT JOIN public.course_category scc
 ON scc.id = cd.sub_category_id
+
+LEFT JOIN public.course_video_count_view cvcv
+ON cvcv.course_id = cv.course_id
 	
 ORDER BY
 	u.id,
@@ -4690,6 +4642,51 @@ ORDER BY
 	u.id,
 	ex.id
 ;
+
+--CREATE VIEW: final_exam_score_view
+CREATE VIEW final_exam_score_view
+AS
+SELECT 
+    lasv.user_id,
+    lev.course_id,
+    MAX(esv.exam_score) final_exam_score_percentage
+FROM public.latest_answer_session_view lasv
+
+INNER JOIN public.latest_exam_view lev
+ON lev.exam_version_id = lasv.exam_version_id
+
+INNER JOIN public.exam_version ev
+ON ev.id = lev.exam_version_id 
+
+INNER JOIN public.exam_data ed
+ON ed.id = ev.exam_data_id
+AND ed.is_final = true
+
+LEFT JOIN public.exam_score_view esv
+ON esv.exam_version_id = ev.id
+
+GROUP BY lasv.user_id, lev.course_id
+;
+
+--CREATE VIEW: module_last_exam_score_view
+CREATE VIEW module_last_exam_score_view
+AS
+
+-- Returns the latest score of every modules 
+-- last exam for every user.
+
+SELECT 
+    asv.user_id,
+    asv.answer_session_success_rate exam_score,
+    mlev.module_id,
+    mlev.course_id
+FROM public.module_last_exam_view mlev
+
+INNER JOIN public.latest_answer_session_view lasv
+ON lasv.exam_version_id = mlev.exam_version_id
+
+LEFT JOIN public.answer_session_view asv
+ON asv.answer_session_id = lasv.answer_session_id;
 
 --CREATE VIEW: pretest_result_view
 CREATE VIEW pretest_result_view
@@ -5224,6 +5221,250 @@ SELECT * FROM perm_join
 
 ;
 
+--CREATE VIEW: admin_home_page_overview_view
+CREATE VIEW admin_home_page_overview_view
+AS
+WITH
+-- When did the user made the last activity in
+-- the course
+latest_course_activity_cte AS
+(
+	SELECT 
+		cic.user_id,
+		cv.course_id,
+		MAX(cic.completion_date) latest_course_item_completion_date
+	FROM public.course_item_completion_view cic
+
+	LEFT JOIN public.video_version vv
+	ON vv.id = cic.video_version_id
+
+	LEFT JOIN public.exam_version ev
+	ON ev.id = cic.exam_version_id
+
+	LEFT JOIN public.module_version mv
+	ON mv.id = vv.module_version_id
+	OR mv.id = ev.module_version_id
+
+	LEFT JOIN public.course_version cv
+	ON cv.id = mv.course_version_id
+
+	GROUP BY cic.user_id, cv.course_id
+),
+
+is_final_exam_completed_cte AS 
+(
+    SELECT
+        cv.course_id,
+        cic.user_id,
+        (COUNT(*) > 0) is_final_exam_completed
+    FROM public.course_item_completion_view cic
+
+    LEFT JOIN public.exam_version ev
+    ON ev.id = cic.exam_version_id
+
+    LEFT JOIN public.exam_data ed
+    ON ed.id = ev.exam_data_id
+
+    LEFT JOIN public.module_version mv
+    ON mv.id = ev.module_version_id
+
+    LEFT JOIN public.course_version cv
+    ON cv.id = mv.course_version_id
+
+    WHERE ed.is_final IS TRUE
+    
+    GROUP BY 
+        cv.course_id,
+        cic.user_id
+),
+active_user_count_cte AS
+(
+	SELECT
+		lcac.course_id,
+		u.company_id,
+		COUNT(*) active_user_count
+	FROM latest_course_activity_cte lcac
+
+	LEFT JOIN is_final_exam_completed_cte ifecc
+	ON ifecc.user_id = lcac.user_id
+	AND ifecc.course_id = lcac.course_id
+	AND ifecc.is_final_exam_completed IS NOT TRUE
+	
+	LEFT JOIN public.user u
+	ON u.id = lcac.user_id
+	
+	WHERE lcac.latest_course_item_completion_date > CURRENT_DATE - 14	
+	
+	GROUP BY lcac.course_id, u.company_id
+),
+suspended_user_count_cte AS
+(
+	SELECT
+		lcac.course_id,
+		u.company_id,
+		COUNT(*) suspended_user_count
+	FROM latest_course_activity_cte lcac
+
+	LEFT JOIN is_final_exam_completed_cte ifecc
+	ON ifecc.user_id = lcac.user_id
+	AND ifecc.course_id = lcac.course_id
+	AND ifecc.is_final_exam_completed IS NOT TRUE
+	
+	LEFT JOIN public.user u
+	ON u.id = lcac.user_id
+	
+	WHERE lcac.latest_course_item_completion_date < CURRENT_DATE - 14	
+	
+	GROUP BY lcac.course_id, u.company_id
+),
+completed_user_count_cte AS
+(
+	SELECT
+		lcac.course_id,
+		u.company_id,
+		COUNT(*) completed_user_count
+	FROM latest_course_activity_cte lcac
+
+	INNER JOIN is_final_exam_completed_cte ifecc
+	ON ifecc.user_id = lcac.user_id
+	AND ifecc.course_id = lcac.course_id
+	AND ifecc.is_final_exam_completed IS TRUE
+	
+	LEFT JOIN public.user u
+	ON u.id = lcac.user_id
+		
+	GROUP BY lcac.course_id, u.company_id
+),
+course_avg_performance_cte AS
+(
+	SELECT
+		upv.course_id,
+		u.company_id,
+		AVG(upv.performance_percentage) avg_performance_percentage
+	FROM public.user_performance_view upv
+	
+	LEFT JOIN public.user u
+	ON u.id = upv.user_id
+	
+	WHERE upv.performance_percentage != 0
+	
+	GROUP BY upv.course_id, u.company_id
+),
+course_difficulty_count_cte AS
+(
+	SELECT
+		cv.course_id,
+		u.company_id,
+		COUNT(*) difficult_videos_count
+	FROM public.video_rating vr
+	
+	LEFT JOIN public.video_version vv
+	ON vv.id = vr.video_version_id
+	
+	LEFT JOIN public.module_version mv
+	ON mv.id = vv.module_version_id
+	
+	LEFT JOIN public.course_version cv
+	ON cv.id = mv.course_version_id
+	
+	LEFT JOIN public.user u
+	ON vr.user_id = u.id
+	
+	WHERE vr.difficulty > 4
+	
+	GROUP BY cv.course_id, u.company_id
+),
+questions_to_be_answered_count_cte AS
+(
+	SELECT
+		u.company_id,
+		cv.course_id,
+		COUNT(*) questions_to_be_answered_count
+	FROM public.comment com
+	
+	LEFT JOIN public.user u
+	ON com.user_id = u.id
+	
+	LEFT JOIN public.video_version vv
+	ON vv.id = com.video_version_id
+	
+	LEFT JOIN public.module_version mv
+	ON mv.id = vv.module_version_id
+	
+	LEFT JOIN public.course_version cv
+	ON cv.id = mv.course_version_id
+	
+	WHERE 
+	com.id NOT IN 
+	(
+		SELECT
+			comp.id
+		FROM public.comment comp
+
+		INNER JOIN public.comment comc
+		ON comc.parent_comment_id = comp.id
+	)
+	AND com.parent_comment_id IS NULL
+	
+	GROUP BY u.company_id, cv.course_id
+)
+
+SELECT
+	co.id course_id,
+	comp.id company_id,
+	cd.title,
+	sf.file_path thumbnail_url,
+	COALESCE(aucc.active_user_count, 0) active_users_count,
+	COALESCE(succ.suspended_user_count, 0) suspended_users_count,
+	COALESCE(cucc.completed_user_count, 0) completed_users_count,
+	capc.avg_performance_percentage avg_course_performance_percentage,
+	COALESCE(cdcc.difficult_videos_count, 0) difficult_videos_count,
+	COALESCE(qtbacc.questions_to_be_answered_count, 0) questions_waiting_to_be_answered
+FROM public.company comp
+
+LEFT JOIN public.course_access_bridge cab
+ON cab.company_id = comp.id
+
+LEFT JOIN public.course co
+ON co.id = cab.course_id
+
+LEFT JOIN active_user_count_cte aucc
+ON aucc.course_id = co.id
+AND aucc.company_id = comp.id
+
+LEFT JOIN suspended_user_count_cte succ
+ON succ.course_id = co.id
+AND succ.company_id = comp.id
+
+LEFT JOIN completed_user_count_cte cucc
+ON cucc.course_id = co.id
+AND cucc.company_id = comp.id
+
+LEFT JOIN course_avg_performance_cte capc
+ON capc.course_id = co.id
+AND capc.company_id = comp.id
+
+LEFT JOIN course_difficulty_count_cte cdcc
+ON cdcc.course_id = co.id
+AND cdcc.company_id = comp.id
+
+LEFT JOIN questions_to_be_answered_count_cte qtbacc
+ON qtbacc.course_id = co.id
+AND qtbacc.company_id = comp.id
+
+LEFT JOIN public.latest_course_version_view lcvv
+ON lcvv.course_id = co.id
+
+LEFT JOIN public.course_version cv
+ON cv.id = lcvv.version_id
+
+LEFT JOIN public.course_data cd
+ON cd.id = cv.course_data_id
+
+LEFT JOIN public.storage_file sf
+ON sf.id = cd.cover_file_id
+;
+
 --CREATE VIEW: exam_result_stats_view
 CREATE VIEW exam_result_stats_view
 AS
@@ -5587,7 +5828,7 @@ WITH user_performances AS (
  watched_videos AS (
      SELECT
          cic.user_id,
-         SUM((cic.video_version_id IS NOT NULL)::int) watched_videos_count
+         SUM((cic.video_version_id IS NOT NULL)::int)::int watched_videos_count
      FROM public.course_item_completion_view cic
      GROUP BY cic.user_id
  ),
@@ -5616,7 +5857,7 @@ SELECT
     rosc.is_any_course_required_or_started,
     up.user_performance_average,
     COALESCE(ep.engagement_points, 0) engagement_points,
-    COALESCE(wv.watched_videos_count, 0) watched_videos_count
+    COALESCE(wv.watched_videos_count, 0)::int watched_videos_count
 FROM user_performances up
 
 LEFT JOIN watched_videos wv
@@ -5732,7 +5973,7 @@ SELECT
 		THEN 1
 		ELSE CASE WHEN ucb.tempomat_mode = 'strict'
 			THEN 0
-			ELSE (tav.min_value + ((tav.max_value - tav.min_value) / 10 * upav.experience)) * 0.01
+			ELSE ((tav.min_value::int + ((tav.max_value::int - tav.min_value::int) / 10 * upav.experience::int)) * 0.01)::double precision
 		END 
 	END tempomat_adjustment_value
 FROM public.user_course_bridge ucb
@@ -5997,86 +6238,135 @@ FROM
 
 WHERE sq.completed_count = sq.all_item_count;
 
+--CREATE VIEW: available_course_view
+CREATE VIEW available_course_view
+AS
+WITH
+assigned_courses AS
+(
+	SELECT
+		u.id user_id,
+		co.id course_id
+	FROM public.user u
+
+	INNER JOIN public.user_permission_view upv
+	ON upv.assignee_user_id = u.id
+	AND upv.permission_code = 'WATCH_COURSE'
+
+	INNER JOIN public.course co
+	ON co.id = upv.context_course_id
+),
+completed_videos AS
+(
+	SELECT
+		cicv.user_id,
+		cicv.course_version_id,
+		COUNT(*) completed_video_count
+	FROM public.course_item_completion_view cicv
+	
+	WHERE cicv.video_version_id IS NOT NULL
+	
+	GROUP BY cicv.course_version_id, cicv.user_id
+)
+SELECT
+	u.id user_id,
+	co.id course_id,
+	cd.title,
+	true can_view,
+	sf.file_path file_path,
+	cosv.is_completed is_completed,
+	cosv.in_progress is_started,
+	csc.id sub_category_id,
+	cd.is_featured,
+	false is_recommended,
+	cc.id category_id,
+	cc.name category_name,
+	csc.name sub_category_name,
+	ucb.current_item_code,
+	ucb.stage_name stage_name,
+	ucb.required_completion_date,
+	cov.completed_video_count,
+	fesv.final_exam_score_percentage,
+	teacher.id teacher_id,
+	teacher.first_name teacher_first_name,
+	teacher.last_name teacher_last_name,
+	cvlv.sum_length_seconds total_video_sum_length_seconds,
+	cvcv.video_count total_video_count,
+	cd.difficulty,
+	cd.benchmark
+FROM assigned_courses ac
+
+LEFT JOIN public.course co
+ON co.id = ac.course_id
+
+LEFT JOIN public.latest_course_version_view lcv
+ON lcv.course_id = co.id
+
+LEFT JOIN public.course_version cv
+ON cv.id = lcv.version_id
+
+LEFT JOIN public.course_data cd
+ON cd.id = cv.course_data_id
+
+LEFT JOIN public.user u
+ON u.id = ac.user_id
+
+LEFT JOIN public.course_video_length_view cvlv
+ON cvlv.course_version_id = cv.id
+
+LEFT JOIN public.course_video_count_view cvcv
+ON cvcv.course_id = co.id
+
+LEFT JOIN public.course_state_view cosv
+ON cosv.course_id = co.id
+AND cosv.user_id = u.id
+
+LEFT JOIN public.storage_file sf
+ON sf.id = cd.cover_file_id
+
+LEFT JOIN public.user_course_bridge ucb
+ON ucb.user_id = u.id
+AND ucb.course_id = co.id
+
+LEFT JOIN public.course_category cc
+ON cc.id = cd.category_id
+
+LEFT JOIN public.course_category csc
+ON csc.id = cd.sub_category_id
+
+LEFT JOIN public.user teacher
+ON teacher.id = cd.teacher_id
+
+LEFT JOIN completed_videos cov
+ON cov.user_id = u.id
+AND cov.course_version_id = cv.id
+
+LEFT JOIN final_exam_score_view fesv
+ON fesv.user_id = u.id
+AND fesv.course_id = co.id
+
+WHERE co.deletion_date IS NULL
+
+ORDER BY
+	u.id,
+	co.id
+
+
+
+;
+
+--CREATE VIEW: courses_progress_list_view
+CREATE VIEW courses_progress_list_view
+AS
+SELECT acv.*
+FROM public.available_course_view acv
+WHERE acv.is_completed = true
+OR acv.is_started = true;
+
 --CREATE VIEW: user_module_stats_view
 CREATE VIEW user_module_stats_view
 AS
 WITH 
-module_item_count_cte AS
-(
-	SELECT 
-		mv.module_id,
-		COUNT(*)::int total_item_count
-	FROM public.latest_course_version_view lcvv
-
-	LEFT JOIN public.module_version mv
-	ON mv.course_version_id = lcvv.version_id
-
-	LEFT JOIN public.course_item_view civ
-	ON civ.module_id = mv.module_id
-		AND civ.item_type != 'pretest'
-
-	GROUP BY
-		mv.module_id
-),
-course_item_completion_distinct AS 
-(
-	SELECT DISTINCT
-		cicv.user_id,
-		cicv.course_id,
-		cicv.module_id,
-		cicv.video_id,
-		cicv.exam_id
-	FROM public.course_item_completion_view cicv
-),
-module_progress_cte AS 
-(
-	SELECT DISTINCT
-		cicd.user_id,
-		cicd.course_id,
-		cicd.module_id,
-		COUNT(*) completed_course_item_count
-	FROM course_item_completion_distinct cicd
-	
-	GROUP BY cicd.user_id, cicd.course_id, cicd.module_id
-),
--- Selects the last exam of a module
-module_last_exam AS
-(
-	SELECT
-		mv.module_id,
-		ev.exam_id,
-		MAX(ed.order_index) item_order_index
-	FROM public.module_version mv
-	
-	LEFT JOIN public.exam_version ev
-	ON ev.module_version_id = mv.id
-	
-	LEFT JOIN public.exam_data ed
-	ON ed.id = ev.exam_data_id
-	
-	WHERE ed.order_index != 0
-	
-	GROUP BY mv.module_id, ev.exam_id
-	
-	ORDER BY mv.module_id, ev.exam_id
-),
-module_last_exam_score_cte AS 
-(
-	SELECT
-		lasv.user_id,
-		mle.module_id,
-		asv.answer_session_success_rate last_exam_score
-	FROM public.latest_answer_session_view lasv
-	
-	LEFT JOIN public.exam_version ev
-	ON ev.id = lasv.exam_version_id
-	
-	INNER JOIN module_last_exam mle
-	ON mle.exam_id = ev.exam_id
-	
-	LEFT JOIN public.answer_session_view asv
-	ON asv.answer_session_id = lasv.answer_session_id
-),
 module_question_success_rate_cte AS
 (
 	SELECT 
@@ -6124,17 +6414,17 @@ SELECT
 	-- Modul neve
 	mpc.user_id,
 	cv.course_id,
-	mpc.module_id,
+	mv.module_id,
 	md.name module_name,
 	
 	-- Haladás a modulban
-	(mpc.completed_course_item_count::double precision / micc.total_item_count::double precision) * 100 module_progress,
+	(mpc.completed_course_item_count::double precision / micv.item_count::double precision) * 100 module_progress,
 
 	-- Modul teljesítménye
 	umpv.performance_percentage,
 	
 	-- Modulzáró vizsga eredménye
-	mlesc.last_exam_score last_exam_score,
+	mlesv.exam_score last_exam_score,
 	
 	-- Videós kérdések eredménye 
 	mqsrc.question_success_rate module_question_success_rate,
@@ -6143,7 +6433,7 @@ SELECT
 	mvtbrc.videos_to_be_repeated_count videos_to_be_repeated_count
 	
 	-- Modul ismetlesre ajánlott?
-FROM module_progress_cte mpc
+FROM public.completed_module_item_count_view mpc
 
 LEFT JOIN public.latest_course_version_view lcvv
 ON lcvv.course_id = mpc.course_id
@@ -6161,16 +6451,16 @@ AND mv.module_id = mpc.module_id
 LEFT JOIN public.module_data md
 ON md.id = mv.module_data_id
 
-LEFT JOIN module_item_count_cte micc
-ON micc.module_id = mv.module_id
+LEFT JOIN public.module_item_count_view micv
+ON micv.module_id = mv.module_id
 
 LEFT JOIN public.user_module_performance_view umpv
 ON umpv.module_id = mv.module_id
 AND umpv.user_id = mpc.user_id
 
-LEFT JOIN module_last_exam_score_cte mlesc
-ON mlesc.user_id = mpc.user_id
-AND mlesc.module_id = mv.module_id
+LEFT JOIN public.module_last_exam_score_view mlesv
+ON mlesv.user_id = mpc.user_id
+AND mlesv.module_id = mv.module_id
 
 LEFT JOIN module_question_success_rate_cte mqsrc
 ON mqsrc.user_id = mpc.user_id
@@ -6180,16 +6470,13 @@ LEFT JOIN module_videos_to_be_repeated_cte mvtbrc
 ON mvtbrc.user_id = mpc.user_id
 AND mvtbrc.module_id = mv.module_id
 
-WHERE mpc.module_id != 1
+WHERE mv.module_id != 1
 AND md.order_index != 0
 
 ORDER BY 
 	mpc.user_id,
 	cv.course_id,
-	mpc.module_id
-
-
-;
+	mv.module_id;
 
 --CREATE VIEW: user_video_stats_view
 CREATE VIEW user_video_stats_view
@@ -6329,154 +6616,6 @@ AND artc.user_id = u.id
 LEFT JOIN latest_playback_date_cte lpdc
 ON lpdc.video_id = vv.video_id
 AND lpdc.user_id = u.id;
-
---CREATE VIEW: available_course_view
-CREATE VIEW available_course_view
-AS
-WITH
-assigned_courses AS
-(
-	SELECT
-		u.id user_id,
-		co.id course_id
-	FROM public.user u
-
-	INNER JOIN public.user_permission_view upv
-	ON upv.assignee_user_id = u.id
-	AND upv.permission_code = 'WATCH_COURSE'
-
-	INNER JOIN public.course co
-	ON co.id = upv.context_course_id
-),
-completed_videos AS
-(
-	SELECT
-		cicv.user_id,
-		cicv.course_version_id,
-		COUNT(*) completed_video_count
-	FROM public.course_item_completion_view cicv
-	
-	WHERE cicv.video_version_id IS NOT NULL
-	
-	GROUP BY cicv.course_version_id, cicv.user_id
-),
-final_exam_score_percentage AS
-(
-	SELECT 
-		lasv.user_id,
-		lev.course_id,
-		MAX(esv.exam_score) final_exam_score_percentage
-	FROM public.latest_answer_session_view lasv
-	
-	INNER JOIN public.latest_exam_view lev
-	ON lev.exam_version_id = lasv.exam_version_id
-	
-	INNER JOIN public.exam_version ev
-	ON ev.id = lev.exam_version_id 
-	
-	INNER JOIN public.exam_data ed
-	ON ed.id = ev.exam_data_id
-	AND ed.is_final = true
-	
-	LEFT JOIN public.exam_score_view esv
-	ON esv.exam_version_id = ev.id
-	
-	GROUP BY lasv.user_id, lev.course_id
-)
-SELECT
-	u.id user_id,
-	co.id course_id,
-	cd.title,
-	true can_view,
-	sf.file_path file_path,
-	cosv.is_completed is_completed,
-	cosv.in_progress is_started,
-	csc.id sub_category_id,
-	cd.is_featured,
-	false is_recommended,
-	cc.id category_id,
-	cc.name category_name,
-	csc.name sub_category_name,
-	ucb.current_item_code,
-	ucb.stage_name stage_name,
-	ucb.required_completion_date,
-	cov.completed_video_count,
-	fesp.final_exam_score_percentage,
-	teacher.id teacher_id,
-	teacher.first_name teacher_first_name,
-	teacher.last_name teacher_last_name,
-	cvlv.sum_length_seconds total_video_sum_length_seconds,
-	cvcv.video_count total_video_count,
-	cd.difficulty,
-	cd.benchmark
-FROM assigned_courses ac
-
-LEFT JOIN public.course co
-ON co.id = ac.course_id
-
-LEFT JOIN public.latest_course_version_view lcv
-ON lcv.course_id = co.id
-
-LEFT JOIN public.course_version cv
-ON cv.id = lcv.version_id
-
-LEFT JOIN public.course_data cd
-ON cd.id = cv.course_data_id
-
-LEFT JOIN public.user u
-ON u.id = ac.user_id
-
-LEFT JOIN public.course_video_length_view cvlv
-ON cvlv.course_version_id = cv.id
-
-LEFT JOIN public.course_video_count_view cvcv
-ON cvcv.course_version_id = cv.id
-
-LEFT JOIN public.course_state_view cosv
-ON cosv.course_id = co.id
-AND cosv.user_id = u.id
-
-LEFT JOIN public.storage_file sf
-ON sf.id = cd.cover_file_id
-
-LEFT JOIN public.user_course_bridge ucb
-ON ucb.user_id = u.id
-AND ucb.course_id = co.id
-
-LEFT JOIN public.course_category cc
-ON cc.id = cd.category_id
-
-LEFT JOIN public.course_category csc
-ON csc.id = cd.sub_category_id
-
-LEFT JOIN public.user teacher
-ON teacher.id = cd.teacher_id
-
-LEFT JOIN completed_videos cov
-ON cov.user_id = u.id
-AND cov.course_version_id = cv.id
-
-LEFT JOIN final_exam_score_percentage fesp
-ON fesp.user_id = u.id
-AND fesp.course_id = co.id
-
-WHERE co.deletion_date IS NULL
-
-ORDER BY
-	u.id,
-	co.id
-
-
-
-;
-
---CREATE VIEW: courses_progress_list_view
-CREATE VIEW courses_progress_list_view
-AS
-SELECT acv.*
-FROM public.available_course_view acv
-WHERE acv.is_completed = true
-OR acv.is_started = true;
 
 --CREATE VIEW: user_learning_overview_stats_view
 CREATE VIEW user_learning_overview_stats_view
@@ -6635,6 +6774,124 @@ SELECT
 FROM stats st
 ;
 
+--CREATE VIEW: admin_course_user_stats_view
+CREATE VIEW admin_course_user_stats_view
+AS
+-- Haladás
+-- Teljesítmény
+-- Megtekintett videók (x/y)
+-- Elvégzett vizsgák (x/y)
+-- Eltöltött idő
+-- Kurzuszáró eredménye
+-- Határidő
+--/ Várható befejezés vagy 'elvégezve'
+--/ Lemaradás - itt % helyett lehet érdemes lenne minden ilyen lemaradást napban megadni, mert úgy lesz értelmezhető a HR számára, 30% lehet 10 nap meg 2 is
+--/ Bővebben - itt azt a modalt hozza fel, mint mikor egyenként nézzük a haladást a usereknél az adott kurzusnál
+--+Összesített eredmény 
+--    Összes NMI kérdésre adott válasza az adott tanfolyamban a kurzuszáró vizsgáig % x1
+--    Összes modulzáró vizsgája % x 2
+--    Kurzuszáró vizsga %  x3
+-- Majd ezt leosztjuk 6-al
+--+Kurzus összegző report
+
+WITH 
+module_last_exam_averages AS
+(
+    SELECT 
+        mlesv.user_id,
+        mlesv.course_id,
+        AVG(mlesv.exam_score) avg_module_last_exam_score
+    FROM public.module_last_exam_score_view mlesv
+
+    GROUP BY mlesv.user_id, mlesv.course_id
+),
+summerized_answer_result AS
+(
+    SELECT
+        mlea.user_id,
+        mlea.course_id,
+        (
+            (COALESCE(upagv.practise_correct_answer_rate, 0)) + 
+            (COALESCE(mlea.avg_module_last_exam_score, 0) * 2) +
+            (COALESCE(fesv.final_exam_score_percentage, 0) * 3)
+        ) / 6 summerized_score
+    FROM module_last_exam_averages mlea
+
+    LEFT JOIN public.final_exam_score_view fesv
+    ON fesv.user_id = mlea.user_id
+	AND fesv.course_id = mlea.course_id
+
+    LEFT JOIN public.user_performance_answer_group_view upagv
+    ON upagv.user_id = mlea.user_id
+    AND upagv.course_id = mlea.course_id
+) 
+
+SELECT 
+    comp.id company_id,
+    u.id user_id,
+    co.id course_id,
+    ucpav.completed_percentage,
+    upv.performance_percentage,
+    ccvcv.completed_video_count,
+    ccecv.completed_exam_count,
+    cvcv.video_count,
+    cecv.exam_count,
+    cstv.total_spent_seconds,
+    fesv.final_exam_score_percentage,
+    ucb.required_completion_date,
+    sar.summerized_score
+FROM public.company comp
+
+LEFT JOIN public.user u
+ON u.company_id = comp.id
+
+LEFT JOIN public.course_access_bridge cab
+ON cab.company_id = comp.id
+OR cab.user_id = u.id
+
+LEFT JOIN public.course co
+ON co.id = cab.course_id
+
+LEFT JOIN public.user_course_progress_actual_view ucpav
+ON ucpav.user_id = u.id
+AND ucpav.course_id = co.id
+
+LEFT JOIN public.user_performance_view upv
+ON upv.user_id = u.id
+AND upv.course_id = co.id
+
+LEFT JOIN public.completed_course_video_count_view ccvcv
+ON ccvcv.user_id = u.id
+AND ccvcv.course_id = co.id
+
+LEFT JOIN public.completed_course_exam_count_view ccecv
+ON ccecv.user_id = u.id
+AND ccecv.course_id = co.id
+
+LEFT JOIN public.course_video_count_view cvcv
+ON cvcv.course_id = co.id
+
+LEFT JOIN public.course_exam_count_view cecv
+ON cecv.course_id = co.id
+
+LEFT JOIN public.user_course_bridge ucb
+ON ucb.user_id = u.id
+AND ucb.course_id = co.id
+
+LEFT JOIN public.course_spent_time_view cstv
+ON cstv.user_id = u.id
+AND cstv.course_id = co.id
+
+LEFT JOIN public.final_exam_score_view fesv
+ON fesv.user_id = u.id
+AND fesv.course_id = co.id
+
+LEFT JOIN summerized_answer_result sar
+ON sar.user_id = u.id
+AND sar.course_id = co.id
+
+ORDER BY comp.id, u.id, co.id;
+
 --CREATE VIEW: course_learning_stats_view
 CREATE VIEW course_learning_stats_view
 AS
@@ -6684,29 +6941,6 @@ exam_avg_score_percentage AS
 		ase.user_id,
 		cv.course_id
 ),
-final_exam_score_percentage AS
-(
-	SELECT 
-		lasv.user_id,
-		lev.course_id,
-		MAX(esv.exam_score) max_exam_score
-	FROM public.latest_answer_session_view lasv
-	
-	INNER JOIN public.latest_exam_view lev
-	ON lev.exam_version_id = lasv.exam_version_id
-	
-	INNER JOIN public.exam_version ev
-	ON ev.id = lev.exam_version_id 
-	
-	INNER JOIN public.exam_data ed
-	ON ed.id = ev.exam_data_id
-	AND ed.is_final = true
-	
-	LEFT JOIN public.exam_score_view esv
-	ON esv.exam_version_id = ev.id
-	
-	GROUP BY lasv.user_id, lev.course_id
-),
 answered_video_question AS
 (
 	SELECT
@@ -6730,18 +6964,6 @@ answered_video_question AS
 	WHERE asv.answer_session_type = 'video'
 	
 	GROUP BY asv.user_id, cv.course_id
-),
-completed_video_count AS
-(
-	SELECT
-		cicv.user_id,
-		cicv.course_id,
-		COUNT(*) completed_video_count
-	FROM public.course_item_completion_view cicv
-	
-	WHERE cicv.video_version_id IS NOT NULL
-	
-	GROUP BY cicv.user_id, cicv.course_id
 )
 
 SELECT 
@@ -6765,14 +6987,14 @@ SELECT
 	teacher.last_name teacher_last_name,
 
 	cstv.total_spent_seconds,
-	ucpav.total_item_count total_course_item_count,
-	ucpav.total_completed_item_count completed_course_item_count,
-	COALESCE(cvc.completed_video_count, 0) completed_video_count,
+	cicv.item_count total_course_item_count,
+	ccicv.completed_course_item_count,
+	COALESCE(ccvcv.completed_video_count, 0) completed_video_count,
 	cvcv.video_count total_video_count,
 	vqc.video_question_count total_video_question_count,
 	COALESCE(avq.answered_video_question_count, 0) answered_video_question_count,
 	easp.avg_exam_score_percentage,
-	fesp.max_exam_score final_exam_score_percentage,
+	fesv.final_exam_score_percentage,
 	CASE 
 		WHEN cqsv.total_answer_count > 0
 			THEN (cqsv.correct_answer_count::double precision / cqsv.total_answer_count * 100)::int
@@ -6800,7 +7022,7 @@ ON cc.user_id = u.id
 AND cc.course_version_id = cv.id
 
 LEFT JOIN public.course_video_count_view cvcv
-ON cvcv.course_version_id = cv.id
+ON cvcv.course_id = co.id
 
 LEFT JOIN public.storage_file sf
 ON sf.id = cd.cover_file_id
@@ -6818,13 +7040,16 @@ LEFT JOIN public.course_spent_time_view cstv
 ON cstv.user_id = u.id
 AND cstv.course_id = co.id
 
-LEFT JOIN public.user_course_progress_actual_view ucpav
-ON ucpav.user_id = u.id
-AND ucpav.course_id = co.id
+LEFT JOIN public.course_item_count_view cicv
+ON cicv.course_id = co.id
 
-LEFT JOIN final_exam_score_percentage fesp
-ON fesp.user_id = u.id
-AND fesp.course_id = co.id
+LEFT JOIN public.completed_course_item_count_view ccicv
+ON ccicv.user_id = u.id
+AND ccicv.course_id = co.id
+
+LEFT JOIN public.final_exam_score_view fesv
+ON fesv.user_id = u.id
+AND fesv.course_id = co.id
 
 LEFT JOIN public.course_questions_success_view cqsv
 ON cqsv.user_id = u.id
@@ -6841,9 +7066,9 @@ AND avq.course_id = co.id
 LEFT JOIN video_question_count vqc
 ON vqc.course_version_id = cv.id
 
-LEFT JOIN completed_video_count cvc
-ON cvc.user_id = u.id
-AND cvc.course_id = co.id;
+LEFT JOIN public.completed_course_video_count_view ccvcv
+ON ccvcv.user_id = u.id
+AND ccvcv.course_id = co.id;
 
 --CREATE VIEW: course_overview_view
 CREATE VIEW course_overview_view
@@ -6868,13 +7093,17 @@ SELECT
 	clsv.answered_video_question_count,
 	clsv.question_success_rate,
 	clsv.avg_exam_score_percentage exam_success_rate_average,
-	clsv.final_exam_score_percentage final_exam_success_rate,
+	fesv.final_exam_score_percentage final_exam_success_rate,
 	COALESCE(ecsc.episto_coin_amount) coins_acquired
 FROM public.course_learning_stats_view clsv
 
 LEFT JOIN episto_coin_sum_cte ecsc
 ON ecsc.course_id = clsv.course_id
-AND ecsc.user_id = clsv.user_id;
+AND ecsc.user_id = clsv.user_id
+
+LEFT JOIN public.final_exam_score_view fesv
+ON fesv.course_id = clsv.course_id
+AND fesv.user_id = clsv.user_id;
 
 --CREATE VIEW: admin_user_courses_view
 CREATE VIEW admin_user_courses_view

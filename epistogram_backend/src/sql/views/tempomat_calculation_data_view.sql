@@ -11,7 +11,7 @@ SELECT
 		THEN 1
 		ELSE CASE WHEN ucb.tempomat_mode = 'strict'
 			THEN 0
-			ELSE (tav.min_value + ((tav.max_value - tav.min_value) / 10 * upav.experience)) * 0.01
+			ELSE ((tav.min_value::int + ((tav.max_value::int - tav.min_value::int) / 10 * upav.experience::int)) * 0.01)::double precision
 		END 
 	END tempomat_adjustment_value
 FROM public.user_course_bridge ucb

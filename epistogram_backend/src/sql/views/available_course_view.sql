@@ -24,29 +24,6 @@ completed_videos AS
 	WHERE cicv.video_version_id IS NOT NULL
 	
 	GROUP BY cicv.course_version_id, cicv.user_id
-),
-final_exam_score_percentage AS
-(
-	SELECT 
-		lasv.user_id,
-		lev.course_id,
-		MAX(esv.exam_score) final_exam_score_percentage
-	FROM public.latest_answer_session_view lasv
-	
-	INNER JOIN public.latest_exam_view lev
-	ON lev.exam_version_id = lasv.exam_version_id
-	
-	INNER JOIN public.exam_version ev
-	ON ev.id = lev.exam_version_id 
-	
-	INNER JOIN public.exam_data ed
-	ON ed.id = ev.exam_data_id
-	AND ed.is_final = true
-	
-	LEFT JOIN public.exam_score_view esv
-	ON esv.exam_version_id = ev.id
-	
-	GROUP BY lasv.user_id, lev.course_id
 )
 SELECT
 	u.id user_id,
@@ -66,7 +43,7 @@ SELECT
 	ucb.stage_name stage_name,
 	ucb.required_completion_date,
 	cov.completed_video_count,
-	fesp.final_exam_score_percentage,
+	fesv.final_exam_score_percentage,
 	teacher.id teacher_id,
 	teacher.first_name teacher_first_name,
 	teacher.last_name teacher_last_name,
@@ -95,7 +72,7 @@ LEFT JOIN public.course_video_length_view cvlv
 ON cvlv.course_version_id = cv.id
 
 LEFT JOIN public.course_video_count_view cvcv
-ON cvcv.course_version_id = cv.id
+ON cvcv.course_id = co.id
 
 LEFT JOIN public.course_state_view cosv
 ON cosv.course_id = co.id
@@ -121,9 +98,9 @@ LEFT JOIN completed_videos cov
 ON cov.user_id = u.id
 AND cov.course_version_id = cv.id
 
-LEFT JOIN final_exam_score_percentage fesp
-ON fesp.user_id = u.id
-AND fesp.course_id = co.id
+LEFT JOIN final_exam_score_view fesv
+ON fesv.user_id = u.id
+AND fesv.course_id = co.id
 
 WHERE co.deletion_date IS NULL
 

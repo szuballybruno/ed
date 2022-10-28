@@ -1,7 +1,6 @@
 import { ArrowBack, ArrowForward, ArrowRight, FiberManualRecord } from '@mui/icons-material';
 import { ReactNode } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
-import { useActiveCourses } from '../../../services/api/userProgressApiService';
 import { useAdminHomeOverviewStatsData } from '../../../services/api/userStatsApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { Environment } from '../../../static/Environemnt';
@@ -45,9 +44,9 @@ const AdminSectionWithButton = (props: {
 
 export const AdminHomeOverview = () => {
 
-    const { activeCourses } = useActiveCourses();
-    const activeCoursesPaging = usePaging({ items: activeCourses });
     const { adminHomePageOverviewStats, adminHomePageOverviewStatsError, adminHomePageOverviewStatsStatus } = useAdminHomeOverviewStatsData();
+    const courses = adminHomePageOverviewStats?.companyCourseStats ? adminHomePageOverviewStats.companyCourseStats : [];
+    const activeCoursesPaging = usePaging({ items: courses });
     const currentCourse = adminHomePageOverviewStats?.companyCourseStats[activeCoursesPaging.currentIndex];
 
     const { navigateToHref } = useNavigation();
@@ -273,7 +272,7 @@ export const AdminHomeOverview = () => {
 
                     <EpistoFlex2 flex="1">
                         <img
-                            src={/* currentCourse?.coverFilePath ??  */''}
+                            src={Environment.getAssetUrl(currentCourse?.thumbnailUrl ? currentCourse.thumbnailUrl : '')}
                             alt=""
                             style={{
                                 objectFit: 'contain'
@@ -281,12 +280,15 @@ export const AdminHomeOverview = () => {
                             className="roundBorders" />
                     </EpistoFlex2>
 
-                    <EpistoFlex2 flex="1"
+                    <EpistoFlex2
+                        flex="1"
                         direction="column"
                         p="20px">
+
                         <EpistoFont>
-                            {currentCourse?.courseId}
+                            {currentCourse?.title}
                         </EpistoFont>
+
                         {/* navigation buttons */}
                         <EpistoFlex2
                             h="30px"
@@ -294,6 +296,7 @@ export const AdminHomeOverview = () => {
                             justify="center">
 
                             <EpistoButton onClick={() => activeCoursesPaging.previous()}>
+
                                 <ArrowBack />
                             </EpistoButton>
 
@@ -308,16 +311,13 @@ export const AdminHomeOverview = () => {
                                     }} />)}
 
                             <EpistoButton onClick={() => activeCoursesPaging.next()}>
+
                                 <ArrowForward />
                             </EpistoButton>
 
                         </EpistoFlex2>
-
                     </EpistoFlex2>
-
                 </EpistoFlex2>
-
-
 
                 <EpistoGrid
                     auto="fill"
@@ -355,7 +355,9 @@ export const AdminHomeOverview = () => {
                         p="10px 0"
                         iconPath={Environment.getAssetUrl('/images/teacherdashboard7.png')}
                         title="Átlagos teljesítmény"
-                        value={currentCourse?.avgCoursePerformancePercentage}
+                        value={currentCourse?.avgCoursePerformancePercentage
+                            ? Math.round(currentCourse.avgCoursePerformancePercentage)
+                            : null}
                         suffix="%" />
 
                     <StatisticsCard

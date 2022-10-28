@@ -162,6 +162,8 @@ const marray = [
 
                         return {
                             courseId: courseStats.courseId,
+                            title: courseStats.title,
+                            thumbnailUrl: courseStats.thumbnailUrl,
                             activeUsersCount: courseStats.activeUsersCount,
                             suspendedUsersCount: courseStats.suspendedUsersCount,
                             completedUsersCount: courseStats.completedUsersCount,

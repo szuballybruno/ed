@@ -7,6 +7,8 @@ export class AdminHomePageOverviewDTO {
     outstandingUsers: number;
     companyCourseStats: {
         courseId: Id<'Course'>;
+        thumbnailUrl: string;
+        title: string;
         activeUsersCount: number;
         suspendedUsersCount: number;
         completedUsersCount: number;

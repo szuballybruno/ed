@@ -1,15 +1,34 @@
+
+-- This view returns only the unique course item completions.
+-- Video completions are unique, exam completions made unique
+-- by selecting the latests.
+
 WITH 
-course_item_completion_cte AS 
+-- Returns the latest exam completion, with the largest
+-- answer_session_id which is also the latest
+latest_exam_completion_cte AS
 (
-    SELECT 
-		ase.exam_version_id,
-		null::int video_version_id,
+	SELECT
 		ase.user_id,
-		ase.id answer_session_id,
-		ec.completion_date
+		ase.exam_version_id,
+		MAX(ec.completion_date) completion_date,
+		MAX(ase.id) answer_session_id
 	FROM public.exam_completion ec
+
 	LEFT JOIN public.answer_session ase
 	ON ase.id = ec.answer_session_id
+
+	GROUP BY ase.user_id, ase.exam_version_id
+),
+course_item_completion_cte AS 
+(
+    SELECT DISTINCT
+		lecc.exam_version_id,
+		null::int video_version_id,
+		lecc.user_id,
+		lecc.answer_session_id,
+		lecc.completion_date
+	FROM latest_exam_completion_cte lecc
     UNION ALL
     SELECT 
 		null::int exam_version_id,

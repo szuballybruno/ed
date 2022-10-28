@@ -1,5 +1,5 @@
 import { CircularProgress, CircularProgressProps } from '@mui/material';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGridPro } from '@mui/x-data-grid-pro';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { getRandomInteger } from '../../../static/frontendHelpers';
 import { EpistoDiv } from '../../controls/EpistoDiv';
@@ -66,7 +66,7 @@ export const AdminCourseUserProgressSubpage = () => {
         'Kovács Írisz'
     ];
 
-    const gridRows = () => {
+    const gridRows = (() => {
 
         return users.map((user, index) => {
             const userWithIndex = {
@@ -85,7 +85,7 @@ export const AdminCourseUserProgressSubpage = () => {
             return userWithIndex;
         });
 
-    };
+    })();
 
     const gridColumns: {
         field: string,
@@ -130,7 +130,7 @@ export const AdminCourseUserProgressSubpage = () => {
 
     return <CourseAdministartionFrame
         isAnySelected={true}>
-        
+
         {/* Right side content */}
         <AdminSubpageHeader
             tabMenuItems={[
@@ -142,7 +142,8 @@ export const AdminCourseUserProgressSubpage = () => {
             //onSave={handleSaveCourseAsync}
             direction="column">
 
-            <DataGrid rows={gridRows()}
+            <DataGridPro
+                rows={gridRows}
                 columns={gridColumns} />
         </AdminSubpageHeader>
     </CourseAdministartionFrame>;

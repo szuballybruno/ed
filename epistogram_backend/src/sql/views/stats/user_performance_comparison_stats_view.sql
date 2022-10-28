@@ -12,7 +12,7 @@ WITH user_performances AS (
  watched_videos AS (
      SELECT
          cic.user_id,
-         SUM((cic.video_version_id IS NOT NULL)::int) watched_videos_count
+         SUM((cic.video_version_id IS NOT NULL)::int)::int watched_videos_count
      FROM public.course_item_completion_view cic
      GROUP BY cic.user_id
  ),
@@ -41,7 +41,7 @@ SELECT
     rosc.is_any_course_required_or_started,
     up.user_performance_average,
     COALESCE(ep.engagement_points, 0) engagement_points,
-    COALESCE(wv.watched_videos_count, 0) watched_videos_count
+    COALESCE(wv.watched_videos_count, 0)::int watched_videos_count
 FROM user_performances up
 
 LEFT JOIN watched_videos wv

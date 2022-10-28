@@ -1,3 +1,8 @@
+
+-- This view returns the performance per user per module
+-- calculated from different answers.
+-- Later it could replace the user_performance_view.
+
 SELECT
     u.id user_id,
     upagv.course_id,

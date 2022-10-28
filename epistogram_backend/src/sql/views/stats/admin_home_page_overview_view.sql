@@ -1,4 +1,6 @@
 WITH
+-- When did the user made the last activity in
+-- the course
 latest_course_activity_cte AS
 (
 	SELECT 
@@ -184,15 +186,21 @@ questions_to_be_answered_count_cte AS
 SELECT
 	co.id course_id,
 	comp.id company_id,
+	cd.title,
+	sf.file_path thumbnail_url,
 	COALESCE(aucc.active_user_count, 0) active_users_count,
 	COALESCE(succ.suspended_user_count, 0) suspended_users_count,
 	COALESCE(cucc.completed_user_count, 0) completed_users_count,
 	capc.avg_performance_percentage avg_course_performance_percentage,
 	COALESCE(cdcc.difficult_videos_count, 0) difficult_videos_count,
 	COALESCE(qtbacc.questions_to_be_answered_count, 0) questions_waiting_to_be_answered
-FROM public.course co
+FROM public.company comp
 
-CROSS JOIN public.company comp
+LEFT JOIN public.course_access_bridge cab
+ON cab.company_id = comp.id
+
+LEFT JOIN public.course co
+ON co.id = cab.course_id
 
 LEFT JOIN active_user_count_cte aucc
 ON aucc.course_id = co.id
@@ -217,3 +225,15 @@ AND cdcc.company_id = comp.id
 LEFT JOIN questions_to_be_answered_count_cte qtbacc
 ON qtbacc.course_id = co.id
 AND qtbacc.company_id = comp.id
+
+LEFT JOIN public.latest_course_version_view lcvv
+ON lcvv.course_id = co.id
+
+LEFT JOIN public.course_version cv
+ON cv.id = lcvv.version_id
+
+LEFT JOIN public.course_data cd
+ON cd.id = cv.course_data_id
+
+LEFT JOIN public.storage_file sf
+ON sf.id = cd.cover_file_id

@@ -44,29 +44,6 @@ exam_avg_score_percentage AS
 		ase.user_id,
 		cv.course_id
 ),
-final_exam_score_percentage AS
-(
-	SELECT 
-		lasv.user_id,
-		lev.course_id,
-		MAX(esv.exam_score) max_exam_score
-	FROM public.latest_answer_session_view lasv
-	
-	INNER JOIN public.latest_exam_view lev
-	ON lev.exam_version_id = lasv.exam_version_id
-	
-	INNER JOIN public.exam_version ev
-	ON ev.id = lev.exam_version_id 
-	
-	INNER JOIN public.exam_data ed
-	ON ed.id = ev.exam_data_id
-	AND ed.is_final = true
-	
-	LEFT JOIN public.exam_score_view esv
-	ON esv.exam_version_id = ev.id
-	
-	GROUP BY lasv.user_id, lev.course_id
-),
 answered_video_question AS
 (
 	SELECT
@@ -90,18 +67,6 @@ answered_video_question AS
 	WHERE asv.answer_session_type = 'video'
 	
 	GROUP BY asv.user_id, cv.course_id
-),
-completed_video_count AS
-(
-	SELECT
-		cicv.user_id,
-		cicv.course_id,
-		COUNT(*) completed_video_count
-	FROM public.course_item_completion_view cicv
-	
-	WHERE cicv.video_version_id IS NOT NULL
-	
-	GROUP BY cicv.user_id, cicv.course_id
 )
 
 SELECT 
@@ -125,14 +90,14 @@ SELECT
 	teacher.last_name teacher_last_name,
 
 	cstv.total_spent_seconds,
-	ucpav.total_item_count total_course_item_count,
-	ucpav.total_completed_item_count completed_course_item_count,
-	COALESCE(cvc.completed_video_count, 0) completed_video_count,
+	cicv.item_count total_course_item_count,
+	ccicv.completed_course_item_count,
+	COALESCE(ccvcv.completed_video_count, 0) completed_video_count,
 	cvcv.video_count total_video_count,
 	vqc.video_question_count total_video_question_count,
 	COALESCE(avq.answered_video_question_count, 0) answered_video_question_count,
 	easp.avg_exam_score_percentage,
-	fesp.max_exam_score final_exam_score_percentage,
+	fesv.final_exam_score_percentage,
 	CASE 
 		WHEN cqsv.total_answer_count > 0
 			THEN (cqsv.correct_answer_count::double precision / cqsv.total_answer_count * 100)::int
@@ -160,7 +125,7 @@ ON cc.user_id = u.id
 AND cc.course_version_id = cv.id
 
 LEFT JOIN public.course_video_count_view cvcv
-ON cvcv.course_version_id = cv.id
+ON cvcv.course_id = co.id
 
 LEFT JOIN public.storage_file sf
 ON sf.id = cd.cover_file_id
@@ -178,13 +143,16 @@ LEFT JOIN public.course_spent_time_view cstv
 ON cstv.user_id = u.id
 AND cstv.course_id = co.id
 
-LEFT JOIN public.user_course_progress_actual_view ucpav
-ON ucpav.user_id = u.id
-AND ucpav.course_id = co.id
+LEFT JOIN public.course_item_count_view cicv
+ON cicv.course_id = co.id
 
-LEFT JOIN final_exam_score_percentage fesp
-ON fesp.user_id = u.id
-AND fesp.course_id = co.id
+LEFT JOIN public.completed_course_item_count_view ccicv
+ON ccicv.user_id = u.id
+AND ccicv.course_id = co.id
+
+LEFT JOIN public.final_exam_score_view fesv
+ON fesv.user_id = u.id
+AND fesv.course_id = co.id
 
 LEFT JOIN public.course_questions_success_view cqsv
 ON cqsv.user_id = u.id
@@ -201,6 +169,6 @@ AND avq.course_id = co.id
 LEFT JOIN video_question_count vqc
 ON vqc.course_version_id = cv.id
 
-LEFT JOIN completed_video_count cvc
-ON cvc.user_id = u.id
-AND cvc.course_id = co.id
+LEFT JOIN public.completed_course_video_count_view ccvcv
+ON ccvcv.user_id = u.id
+AND ccvcv.course_id = co.id
