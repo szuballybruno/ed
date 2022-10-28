@@ -28,5 +28,6 @@ ON mv.course_version_id = cv.id
 LEFT JOIN public.answer_session_group_view asgv
 ON asgv.user_id = u.id
 AND asgv.course_id = co.id
+AND asgv.module_id = mv.module_id
 
 ORDER BY u.id

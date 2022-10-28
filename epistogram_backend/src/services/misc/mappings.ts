@@ -133,11 +133,47 @@ import { XMappingsBuilder } from './XMapperService/XMapperService';
 import { Mutable } from './XMapperService/XMapperTypes';
 import { UserModuleStatsDTO } from '../../shared/dtos/UserModuleStatsDTO';
 import { UserModuleStatsView } from '../../models/views/UserModuleStatsView';
+import { AdminHomePageOverviewView } from '../../models/views/AdminHomePageOverviewView';
+import { AdminHomePageOverviewDTO } from '../../shared/dtos/admin/AdminHomePageOverviewDTO';
 
 export const epistoMappingsBuilder = new XMappingsBuilder<[UrlService]>();
 
 const marray = [
 
+    epistoMappingsBuilder
+        .addMapping(AdminHomePageOverviewDTO, () => (
+            companyCourseStats: AdminHomePageOverviewView[],
+            flaggedUsers: number,
+            avgUsers: number,
+            outstandingUsers: number
+        ) => {
+            return instantiate<AdminHomePageOverviewDTO>({
+                companyId: companyCourseStats
+                    .first()
+                    .companyId,
+                flaggedUsers: flaggedUsers,
+                avgUsers: avgUsers,
+                outstandingUsers: outstandingUsers,
+                companyCourseStats: companyCourseStats
+                    .groupBy(x => x.courseId)
+                    .map(companyCourseStatGroups => {
+
+                        const courseStats = companyCourseStatGroups.first;
+
+                        return {
+                            courseId: courseStats.courseId,
+                            title: courseStats.title,
+                            thumbnailUrl: courseStats.thumbnailUrl,
+                            activeUsersCount: courseStats.activeUsersCount,
+                            suspendedUsersCount: courseStats.suspendedUsersCount,
+                            completedUsersCount: courseStats.completedUsersCount,
+                            avgCoursePerformancePercentage: courseStats.avgCoursePerformancePercentage,
+                            difficultVideosCount: courseStats.difficultVideosCount,
+                            questionsWaitingToBeAnswered: courseStats.questionsWaitingToBeAnswered
+                        };
+                    })
+            });
+        }),
     epistoMappingsBuilder
         .addArrayMapping(UserAdminListDTO, () => (
             userOverviewViews: (UserOverviewView & {

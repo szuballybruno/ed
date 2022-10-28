@@ -122,7 +122,8 @@ ${script}
 
         const rootFolder = this._getRootFolderPath('views');
         const views = readFolder(rootFolder)
-            .concat(readFolder(rootFolder + '\\stats'));
+            .concat(readFolder(rootFolder + '\\stats'))
+            .concat(readFolder(rootFolder + '\\counts'));
 
         return views;
     }

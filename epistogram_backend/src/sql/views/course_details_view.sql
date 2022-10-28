@@ -46,11 +46,7 @@ SELECT
 	sf.file_path cover_file_path,
 	
 	-- calculated
-	(
-		SELECT cvcv.video_count
-		FROM public.course_video_count_view cvcv
-		WHERE cvcv.course_version_id = cv.id
-	) total_video_count,
+	cvcv.video_count total_video_count,
 	(
 		SELECT cvlv.sum_length_seconds
 		FROM public.course_video_length_view cvlv
@@ -129,6 +125,9 @@ AND ucb.course_id = cv.course_id
 
 LEFT JOIN public.course_category scc
 ON scc.id = cd.sub_category_id
+
+LEFT JOIN public.course_video_count_view cvcv
+ON cvcv.course_id = cv.course_id
 	
 ORDER BY
 	u.id,

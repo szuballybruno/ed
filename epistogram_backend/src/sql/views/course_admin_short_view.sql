@@ -47,7 +47,7 @@ LEFT JOIN public.course_category scc
 ON scc.id = cd.sub_category_id
 
 LEFT JOIN public.course_video_count_view cvcv
-ON cvcv.course_version_id = lcvv.version_id
+ON cvcv.course_id = co.id
 
 LEFT JOIN exam_count ec
 ON ec.course_version_id = lcvv.version_id

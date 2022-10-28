@@ -1,4 +1,5 @@
 import { User } from '../models/entity/misc/User';
+import { AdminHomePageOverviewView } from '../models/views/AdminHomePageOverviewView';
 import { CourseLearningStatsView } from '../models/views/CourseLearningStatsView';
 import { HomePageStatsView } from '../models/views/HomePageStatsView';
 import { ImproveYourselfPageStatsView } from '../models/views/ImproveYourselfPageStatsView';
@@ -14,6 +15,7 @@ import { UserPerformanceComparisonStatsView } from '../models/views/UserPerforma
 import { UserPerformanceView } from '../models/views/UserPerformanceView';
 import { UserSpentTimeRatioView } from '../models/views/UserSpentTimeRatioView';
 import { UserVideoStatsView } from '../models/views/UserVideoStatsView';
+import { AdminHomePageOverviewDTO } from '../shared/dtos/admin/AdminHomePageOverviewDTO';
 import { CourseLearningDTO } from '../shared/dtos/CourseLearningDTO';
 import { HomePageStatsDTO } from '../shared/dtos/HomePageStatsDTO';
 import { ImproveYourselfPageStatsDTO } from '../shared/dtos/ImproveYourselfPageStatsDTO';
@@ -26,7 +28,7 @@ import { UserModuleStatsDTO } from '../shared/dtos/UserModuleStatsDTO';
 import { UserVideoStatsDTO } from '../shared/dtos/UserVideoStatsDTO';
 import { instantiate } from '../shared/logic/sharedLogic';
 import { Id } from '../shared/types/versionId';
-import { adjustByPercentage, dateDiffInDays, getArrayAverage } from '../utilities/helpers';
+import { adjustByPercentage, dateDiffInDays, getArrayAverage, mergeArraysByKey } from '../utilities/helpers';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
@@ -34,7 +36,17 @@ import { CalculatedTempomatValueType, CalculatedTempomatValueTypeWithUserId, Tem
 import { UserProgressService } from './UserProgressService';
 
 interface UserFlagCalculationType extends UserPerformanceComparisonStatsView {
-    userProductivity: number
+    userProductivity: number,
+    companyAvgPerformancePercentage: number,
+    companyAvgProductivityPercentage: number
+}
+
+interface CompanyUserPerformance extends UserPerformanceView {
+    companyId: Id<'Company'>
+}
+
+interface CompanyTempomatCalculationData extends TempomatCalculationDataView {
+    companyId: Id<'Company'>
 }
 
 type UserFlagType = 'low' | 'avg' | 'high'
@@ -183,7 +195,7 @@ export class UserStatsService {
     /**
      * Gets the statistics for the users every watched video
      */
-     async getUserModuleStatsAsync(principalId: PrincipalId, courseId: Id<'Course'>, userId: Id<'User'> | null) {
+    async getUserModuleStatsAsync(principalId: PrincipalId, courseId: Id<'Course'>, userId: Id<'User'> | null) {
 
         const stats = await this._ormService
             .query(UserModuleStatsView, { userId: userId ? userId : principalId, courseId })
@@ -287,7 +299,14 @@ export class UserStatsService {
             .mapTo(UserCourseStatsOverviewDTO, [courseStats, userSpentTimeRatio, progressChartData as any]);
     }
 
-    async getAdminHomeOverviewStatsAsync(companyId: Id<'Company'>) {
+    async getAdminHomeOverviewStatsAsync(principalId: PrincipalId) {
+
+        const user = await this._ormService
+            .query(User, { userId: principalId })
+            .where('id', '=', 'userId')
+            .getSingle();
+
+        const companyId = user.companyId;
 
         const allFlaggedUsers = await this
             .flagUsersAsync(companyId);
@@ -296,13 +315,24 @@ export class UserStatsService {
             return;
 
         const flaggedUsers = allFlaggedUsers
-            .filter(x => x?.flag === 'low');
+            .filter(x => x?.flag === 'low')
+            .length;
 
         const avgUsers = allFlaggedUsers
-            .filter(x => x?.flag === 'avg');
+            .filter(x => x?.flag === 'avg')
+            .length;
 
         const outstandingUsers = allFlaggedUsers
-            .filter(x => x?.flag === 'high');
+            .filter(x => x?.flag === 'high')
+            .length;
+
+        const companyCourseStats = await this._ormService
+            .query(AdminHomePageOverviewView, { companyId })
+            .where('companyId', '=', 'companyId')
+            .getMany();
+
+        return this._mapperService
+            .mapTo(AdminHomePageOverviewDTO, [companyCourseStats, flaggedUsers, avgUsers, outstandingUsers]);
     }
 
     /**
@@ -310,79 +340,75 @@ export class UserStatsService {
      */
     async flagUsersAsync(companyId: Id<'Company'> | null) {
 
-        const companyUserPerformanceViews = await this._ormService
+        const isCompanyFiltered = companyId
+            ? '='
+            : '!=';
+
+        const userPerformanceViews = await this._ormService
+            .withResType<CompanyUserPerformance>()
             .query(UserPerformanceView, { companyId })
+            .selectFrom(x => x
+                .columns(UserPerformanceView, '*')
+                .columns(User, {
+                    companyId: 'companyId'
+                }))
             .innerJoin(User, x => x
-                .on('companyId', '=', 'companyId')
+                .on('companyId', isCompanyFiltered, 'companyId')
                 .and('id', '=', 'userId', UserPerformanceView))
             .getMany();
 
-        const availableUserPerformanceViews = await this._ormService
-            .query(UserPerformanceView)
+        const tempomatCalculationViews = await this._ormService
+            .withResType<CompanyTempomatCalculationData>()
+            .query(TempomatCalculationDataView, { companyId })
+            .selectFrom(x => x
+                .columns(TempomatCalculationDataView, '*')
+                .columns(User, {
+                    companyId: 'companyId'
+                }))
             .innerJoin(User, x => x
-                .on('id', '=', 'userId', UserPerformanceView))
+                .on('companyId', isCompanyFiltered, 'companyId')
+                .and('id', '=', 'userId', TempomatCalculationDataView))
+            .where('startDate', 'IS NOT', 'NULL')
             .getMany();
 
-        const selectedUserPerformanceViews = companyId
-            ? companyUserPerformanceViews
-            : availableUserPerformanceViews;
+        const performanceComparisonStatsViews = await this._ormService
+            .query(UserPerformanceComparisonStatsView, { companyId })
+            .where('companyId', isCompanyFiltered, 'companyId')
+            .getMany();
 
-        if (!selectedUserPerformanceViews) {
+        if (!userPerformanceViews) {
             return;
         }
 
-        const companyTempomatCalculationViews = await this._ormService
-            .query(TempomatCalculationDataView, { companyId })
-            .innerJoin(User, x => x
-                .on('companyId', '=', 'companyId')
-                .and('id', '=', 'userId', TempomatCalculationDataView))
-            .where('startDate', '!=', 'NULL')
-            .getMany();
+        const companyAvgPerformancePercentages = this
+            ._calculateCompanyAvgPerformance(userPerformanceViews);
 
-        const availableTempomatCalculationViews = await this._ormService
-            .query(TempomatCalculationDataView)
-            .innerJoin(User, x => x
-                .on('id', '=', 'userId', TempomatCalculationDataView))
-            .where('startDate', '!=', 'NULL')
-            .getMany();
-
-        const selectedTempomatCalculationViews = companyId
-            ? companyTempomatCalculationViews
-            : availableTempomatCalculationViews;
-
-        const companyStatsViews = await this._ormService
-            .query(UserPerformanceComparisonStatsView, { companyId })
-            .where('companyId', '=', 'companyId')
-            .getMany();
-
-        const availableStatsViews = await this._ormService
-            .query(UserPerformanceComparisonStatsView)
-            .getMany();
-
-        const selectedStatsViews = companyId
-            ? companyStatsViews
-            : availableStatsViews;
-
-        const companyAvgPerformancePercentage = this
-            ._calculateCompanyAvgPerformance(selectedUserPerformanceViews);
+        console.log(companyAvgPerformancePercentages);
 
         const companyTempomatValues = this._tempomatService
-            .calculateCompanyTempomatValues(selectedTempomatCalculationViews);
+            .calculateCompanyTempomatValues(tempomatCalculationViews);
 
-        const companyLagBehindPercentages = this._tempomatService
-            .calculateCompanyLagBehinds(companyTempomatValues);
+        //console.log(companyTempomatValues);
 
-        const companyAvgLagBehindPercentage =
-            getArrayAverage(companyLagBehindPercentages);
+        const companyAvgLagBehindPercentages = this
+            ._calculateCompanyAvgLagBehindPercentages(tempomatCalculationViews);
 
-        const companyProductivity = this
-            ._calculateCompanyProductivity(companyAvgPerformancePercentage, companyAvgLagBehindPercentage);
+        console.log(companyAvgLagBehindPercentages);
+
+        const companyAvgProductivity = this
+            ._calculateCompanyProductivity(companyAvgPerformancePercentages, companyAvgLagBehindPercentages);
 
         const userFlagCalculationData = this
-            ._createUserFlagCalculationData(selectedStatsViews, companyTempomatValues);
+            ._createUserFlagCalculationData(
+                performanceComparisonStatsViews,
+                companyTempomatValues,
+                companyAvgPerformancePercentages,
+                companyAvgProductivity);
+
+        console.log(userFlagCalculationData);
 
         return this
-            ._flagUsers(userFlagCalculationData, companyAvgPerformancePercentage, companyProductivity);
+            ._flagUsers(userFlagCalculationData);
     }
 
     calculateUserProductivityAsync = async (userId: Id<'User'>) => {
@@ -423,13 +449,13 @@ export class UserStatsService {
      * @returns 
      */
     private _flagUsers(
-        calculationData: (UserFlagCalculationType | null)[],
-        companyAvgPerformancePercentage: number,
-        companyAvgProductivityPercentage: number
+        calculationData: (UserFlagCalculationType | null)[]
     ): ({ userId: Id<'User'>, flag: UserFlagType } | null)[] {
 
         return calculationData
             .map(x => {
+
+                console.log(x);
 
                 if (!x)
                     return null;
@@ -438,12 +464,12 @@ export class UserStatsService {
                 const daysFromSignup = dateDiffInDays(x.creationDate, new Date(Date.now()));
 
                 // defining company avg performance min and max values
-                const companyPerformanceAverageMinValue = adjustByPercentage(companyAvgPerformancePercentage, -15);
-                const companyPerformanceAverageMaxValue = adjustByPercentage(companyAvgPerformancePercentage, 5);
+                const companyPerformanceAverageMinValue = adjustByPercentage(x.companyAvgPerformancePercentage, -15);
+                const companyPerformanceAverageMaxValue = adjustByPercentage(x.companyAvgPerformancePercentage, 5);
 
                 // defining company avg productivity min and max values
-                const companyProductivityAverageMinValue = adjustByPercentage(companyAvgProductivityPercentage, -15);
-                const companyProductivityAverageMaxValue = adjustByPercentage(companyAvgProductivityPercentage, 5);
+                const companyProductivityAverageMinValue = adjustByPercentage(x.companyAvgProductivityPercentage, -15);
+                const companyProductivityAverageMaxValue = adjustByPercentage(x.companyAvgProductivityPercentage, 5);
 
                 // compare user performance to company making 3 groups
                 const isUserPerformanceLow = x.userPerformanceAverage < companyPerformanceAverageMinValue;
@@ -535,9 +561,21 @@ export class UserStatsService {
      */
     private _createUserFlagCalculationData(
         statsViews: UserPerformanceComparisonStatsView[],
-        companyTempomatValues: CalculatedTempomatValueTypeWithUserId[]
+        companyTempomatValues: CalculatedTempomatValueTypeWithUserId[],
+        companyAvgPerformancePercentages: {
+            companyId: Id<'Company'>,
+            avgPerformancePercentage: number
+        }[],
+        companyAvgProductivity: {
+            companyId: Id<'Company'>,
+            avgProductivityPercentage: number
+        }[]
     ) {
-        return statsViews
+        const statsWithPerformance = mergeArraysByKey(statsViews, companyAvgPerformancePercentages, 'companyId');
+        const statsWithProductivity = mergeArraysByKey(statsWithPerformance, companyAvgProductivity, 'companyId');
+
+        console.log(statsWithProductivity);
+        return statsWithProductivity
             .map(x => {
 
                 const userTempomatValuesFiltered = companyTempomatValues
@@ -557,7 +595,9 @@ export class UserStatsService {
 
                 return instantiate<UserFlagCalculationType>({
                     ...x,
-                    userProductivity: userProductivity
+                    userProductivity: userProductivity,
+                    companyAvgPerformancePercentage: x.avgPerformancePercentage,
+                    companyAvgProductivityPercentage: x.avgProductivityPercentage
                 });
             });
     }
@@ -577,16 +617,94 @@ export class UserStatsService {
         return compensatedProductivityPerformance;
     }
 
-    private _calculateCompanyAvgPerformance(userPerformanceViews: UserPerformanceView[]) {
-        return getArrayAverage(
-            userPerformanceViews
-                .map(x => x.performancePercentage));
+    private _calculateCompanyAvgPerformance(companyUserPerformances: CompanyUserPerformance[]) {
+
+        const companyUserPerformanceGroups = companyUserPerformances
+            .groupBy(x => x.companyId);
+
+        return companyUserPerformanceGroups
+            .map(x => {
+
+                return {
+                    companyId: x.first.companyId,
+                    avgPerformancePercentage: (() => {
+
+                        return getArrayAverage(x.items
+                            .filter(y => y.performancePercentage !== 0)
+                            .map(y => {
+                                return y.performancePercentage;
+                            })
+                        );
+                    })()
+                };
+            });
     }
 
-    private _calculateCompanyProductivity(companyAvgPerformancePercentage: number, companyAvgLagBehindPercentage: number) {
+    private _calculateCompanyAvgLagBehindPercentages(companyTempomatCalculationDatas: CompanyTempomatCalculationData[]) {
 
-        return this
-            .calculateProductivity(companyAvgPerformancePercentage, companyAvgLagBehindPercentage);
+        const companyTempomatCalculationDataGroups = companyTempomatCalculationDatas
+            .groupBy(x => x.companyId);
+
+        return companyTempomatCalculationDataGroups
+            .map(x => {
+
+                return {
+                    companyId: x.first.companyId,
+                    avgLagBehindPercentage: (() => {
+                        const lagBehindAverages = x.items
+                            .map(y => {
+
+                                return this._tempomatService
+                                    .calculateTempomatValues({
+                                        originalPrevisionedCompletionDate: y.originalPrevisionedCompletionDate,
+                                        totalItemCount: y.totalItemCount,
+                                        totalCompletedItemCount: y.totalCompletedItemCount,
+                                        startDate: y.startDate,
+                                        tempomatMode: y.tempomatMode,
+                                        tempomatAdjustmentValue: y.tempomatAdjustmentValue,
+                                        requiredCompletionDate: y.requiredCompletionDate
+                                    }).lagBehindPercentage;
+                            });
+
+                        // filter out NaN values
+                        return getArrayAverage(lagBehindAverages
+                            .filter(lba => lba));
+                    })()
+                };
+            });
     }
 
+    /**
+     * Calculates the companies avg productivity values,
+     * from the company avg performance and company avg
+     * lag behind.
+     * 
+     * @param companyAvgPerformancePercentage 
+     * @param companyAvgLagBehindPercentage 
+     */
+    private _calculateCompanyProductivity(
+        companyAvgPerformancePercentage: {
+            companyId: Id<'Company'>,
+            avgPerformancePercentage: number
+        }[],
+        companyAvgLagBehindPercentage: {
+            companyId: Id<'Company'>,
+            avgLagBehindPercentage: number
+        }[]
+    ) {
+
+        const companyProductivityBaseValues = mergeArraysByKey(
+            companyAvgPerformancePercentage,
+            companyAvgLagBehindPercentage,
+            'companyId'
+        );
+
+        return companyProductivityBaseValues.map(x => {
+            return {
+                companyId: x.companyId,
+                avgProductivityPercentage: this
+                    .calculateProductivity(x.avgPerformancePercentage, x.avgLagBehindPercentage)
+            };
+        });
+    }
 }

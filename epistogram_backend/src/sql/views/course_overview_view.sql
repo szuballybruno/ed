@@ -18,10 +18,14 @@ SELECT
 	clsv.answered_video_question_count,
 	clsv.question_success_rate,
 	clsv.avg_exam_score_percentage exam_success_rate_average,
-	clsv.final_exam_score_percentage final_exam_success_rate,
+	fesv.final_exam_score_percentage final_exam_success_rate,
 	COALESCE(ecsc.episto_coin_amount) coins_acquired
 FROM public.course_learning_stats_view clsv
 
 LEFT JOIN episto_coin_sum_cte ecsc
 ON ecsc.course_id = clsv.course_id
 AND ecsc.user_id = clsv.user_id
+
+LEFT JOIN public.final_exam_score_view fesv
+ON fesv.course_id = clsv.course_id
+AND fesv.user_id = clsv.user_id

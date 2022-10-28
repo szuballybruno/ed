@@ -134,7 +134,7 @@ export const PretestResultsSubpage = () => {
 
                     <StatisticsCard
                         isMobile={isMobile}
-                        minWidth='calc(100vw - 20px)'
+                        minWidth={isMobile ? 'calc(100vw - 20px)' : undefined}
                         pl='10px'
                         iconPath={Environment.getAssetUrl('/images/pretest1.png')}
                         value={correctAnswerRate.toString()}
@@ -143,7 +143,7 @@ export const PretestResultsSubpage = () => {
 
                     <StatisticsCard
                         isMobile={isMobile}
-                        minWidth='calc(100vw - 20px)'
+                        minWidth={isMobile ? 'calc(100vw - 20px)' : undefined}
                         pl='10px'
                         iconPath={Environment.getAssetUrl('/images/pretest2.png')}
                         value={pretestResults?.recommendedVideosPerDay}
@@ -152,7 +152,7 @@ export const PretestResultsSubpage = () => {
 
                     <StatisticsCard
                         isMobile={isMobile}
-                        minWidth='calc(100vw - 20px)'
+                        minWidth={isMobile ? 'calc(100vw - 20px)' : undefined}
                         pl='10px'
                         iconPath={Environment.getAssetUrl('/images/pretest3.png')}
                         value={isBeginner
@@ -163,7 +163,7 @@ export const PretestResultsSubpage = () => {
 
                     <StatisticsCard
                         isMobile={isMobile}
-                        minWidth='calc(100vw - 20px)'
+                        minWidth={isMobile ? 'calc(100vw - 20px)' : undefined}
                         pl='10px'
                         title={pretestResults?.requiredCompletionDate
                             ? 'Munkáltatód által megszabott befejezési határidő'

@@ -150,6 +150,7 @@ export class QuestionAnswerService {
         const givenAnswers = this
             ._getGivenAnswers(givenAnswerDTOs, questioDatasWithScores, answerType === 'practise', answerSessionId);
 
+        console.log(givenAnswers);
         /**
          * Insert given answers 
          */

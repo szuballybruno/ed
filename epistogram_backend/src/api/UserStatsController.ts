@@ -118,15 +118,11 @@ export class UserStatsController implements XController<UserStatsController> {
     @XControllerAction(apiRoutes.userStats.getAdminHomeOverviewStats)
     getAdminHomeOverviewStatsAction(params: ActionParams) {
 
-        const query = params
-            .getQuery<any>();
-
-        const companyId = Id
-            .create<'Company'>(query
-                .getValue(x => x.companyId, 'int'));
+        const principalId = params
+            .principalId;
 
         return this._userStatsService
-            .getAdminHomeOverviewStatsAsync(companyId);
+            .getAdminHomeOverviewStatsAsync(principalId);
     }
 
     @XControllerAction(apiRoutes.userStats.getUserCourseStatsOverviewData)

@@ -42,7 +42,10 @@ export type ApplicationRoutesType = {
         myExamsRoute: ApplicationRoute;
     };
     administrationRoute: ApplicationRoute & {
-        statsRoute: ApplicationRoute;
+        statsRoute: ApplicationRoute & {
+            overviewRoute: ApplicationRoute;
+            detailsRoute: ApplicationRoute;
+        };
         usersRoute: ApplicationRoute<void, { preset?: UserDataGridPresetType }> & {
             indexRoute: ApplicationRoute;
             addRoute: ApplicationRoute;
@@ -276,10 +279,20 @@ export const getApplicationRoutes = () => {
             icon: <AdminPanelSettings />,
 
             statsRoute: {
-                title: translatableTexts.routeTitles.administrationHomeDetails,
+                title: translatableTexts.routeTitles.administrationHomeOverview,
                 route: new EpistoRoute('/administration', 'stats'),
                 icon: <Equalizer className="fontXXL"
-                    color={'secondary'} />
+                    color={'secondary'} />,
+
+                overviewRoute: {
+                    title: translatableTexts.routeTitles.administrationHomeOverview,
+                    route: new EpistoRoute('/administration/users', 'add'),
+                },
+
+                detailsRoute: {
+                    title: translatableTexts.routeTitles.administrationHomeDetails,
+                    route: new EpistoRoute('/administration/users', 'add'),
+                },
             },
 
             usersRoute: {
