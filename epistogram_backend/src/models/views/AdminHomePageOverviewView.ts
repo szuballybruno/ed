@@ -13,11 +13,9 @@ export class AdminHomePageOverviewView {
     @XViewColumn()
     thumbnailUrl: string;
 
-    @ViewColumn()
     @XViewColumn()
     title: string;
 
-    @ViewColumn()
     @XViewColumn()
     activeUsersCount: number;
 
