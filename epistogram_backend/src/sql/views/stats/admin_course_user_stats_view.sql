@@ -51,6 +51,9 @@ SELECT
     comp.id company_id,
     u.id user_id,
     co.id course_id,
+    u.first_name,
+    u.last_name,
+    sf.file_path avatar_url,
     ucpav.completed_percentage,
     upv.performance_percentage,
     ccvcv.completed_video_count,
@@ -60,7 +63,15 @@ SELECT
     cstv.total_spent_seconds,
     fesv.final_exam_score_percentage,
     ucb.required_completion_date,
-    sar.summerized_score
+    sar.summerized_score,
+
+    -- tempomat
+    ucb.start_date,
+    tcdv.tempomat_adjustment_value,
+    tcdv.tempomat_mode,
+    tcdv.original_previsioned_completion_date,
+    tcdv.total_item_count,
+    tcdv.total_completed_item_count
 FROM public.company comp
 
 LEFT JOIN public.user u
@@ -110,5 +121,12 @@ AND fesv.course_id = co.id
 LEFT JOIN summerized_answer_result sar
 ON sar.user_id = u.id
 AND sar.course_id = co.id
+
+LEFT JOIN public.tempomat_calculation_data_view tcdv
+ON tcdv.user_id = u.id
+AND tcdv.course_id = co.id
+
+LEFT JOIN public.storage_file sf
+ON sf.id = u.avatar_file_id
 
 ORDER BY comp.id, u.id, co.id

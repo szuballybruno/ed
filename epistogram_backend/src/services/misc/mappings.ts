@@ -135,10 +135,42 @@ import { UserModuleStatsDTO } from '../../shared/dtos/UserModuleStatsDTO';
 import { UserModuleStatsView } from '../../models/views/UserModuleStatsView';
 import { AdminHomePageOverviewView } from '../../models/views/AdminHomePageOverviewView';
 import { AdminHomePageOverviewDTO } from '../../shared/dtos/admin/AdminHomePageOverviewDTO';
+import { AdminCourseUserStatsView } from '../../models/views/AdminCourseUserStatsView';
+import { AdminCourseUserStatsDTO } from '../../shared/dtos/admin/AdminCourseUserStatsDTO';
 
 export const epistoMappingsBuilder = new XMappingsBuilder<[UrlService]>();
 
 const marray = [
+
+    epistoMappingsBuilder
+        .addArrayMapping(AdminCourseUserStatsDTO, () => (
+            views: (AdminCourseUserStatsView & {
+                previsionedDate: Date | null,
+                lagBehindDays: number | null
+            })[],
+        ) => {
+
+            return views.map(x => instantiate<AdminCourseUserStatsDTO>({
+                companyId: x.companyId,
+                userId: x.userId,
+                courseId: x.courseId,
+                firstName: x.firstName,
+                lastName: x.lastName,
+                avatarUrl: x.avatarUrl,
+                completedPercentage: x.completedPercentage,
+                performancePercentage: x.performancePercentage,
+                completedVideoCount: x.completedVideoCount,
+                completedExamCount: x.completedExamCount,
+                videoCount: x.videoCount,
+                examCount: x.examCount,
+                totalSpentSeconds: x.totalSpentSeconds,
+                finalExamScorePercentage: x.finalExamScorePercentage,
+                summerizedScore: x.summerizedScore,
+                requiredCompletionDate: x.requiredCompletionDate,
+                previsionedDate: x.previsionedDate,
+                lagBehindDays: x.lagBehindDays,
+            }));
+        }),
 
     epistoMappingsBuilder
         .addMapping(AdminHomePageOverviewDTO, () => (

@@ -50,6 +50,20 @@ export class UserStatsController implements XController<UserStatsController> {
                 query.getValue(x => x.loadAvailable, 'boolean'));
     }
 
+    @XControllerAction(apiRoutes.userStats.getAdminCourseUsers)
+    getCourseUserStatsAction(params: ActionParams) {
+
+        const query = params
+            .getFromParameterized(apiRoutes.userStats.getAdminCourseUsers)
+            .query;
+
+        return this._userStatsService
+            .getCourseUserStatsAsync(
+                params.principalId,
+                query.getValue(x => x.courseId, 'int'),
+                query.getValue(x => x.preset));
+    }
+
     @XControllerAction(apiRoutes.userStats.getUserVideoStats)
     getUserVideoStatsAction(params: ActionParams) {
 

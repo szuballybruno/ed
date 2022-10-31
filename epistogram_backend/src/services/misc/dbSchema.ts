@@ -152,6 +152,7 @@ import { VideoPlayerDataView } from '../../models/views/VideoPlayerDataView';
 import { VideoVersionView } from '../../models/views/VideoVersionView';
 import { XDBMSchemaService } from '../XDBManager/XDBManagerTypes';
 import { PlaylistView } from '../../models/views/PlaylistView';
+import { AdminCourseUserStatsView } from '../../models/views/AdminCourseUserStatsView';
 
 export const createDBSchema = (): XDBMSchemaService => {
 
@@ -241,7 +242,8 @@ export const createDBSchema = (): XDBMSchemaService => {
             UserSpentTimeRatioView,
             UserLearningPageStatsView,
             ImproveYourselfPageStatsView,
-            GivenAnswerView
+            GivenAnswerView,
+            AdminCourseUserStatsView
         ],
 
         functionScripts: [
