@@ -90,7 +90,7 @@ AND ucpav.course_id = co.id
 
 LEFT JOIN public.user_performance_view upv
 ON upv.user_id = u.id
-AND upv.course_id = co.id
+AND upv.course_id = co.id 
 
 LEFT JOIN public.completed_course_video_count_view ccvcv
 ON ccvcv.user_id = u.id
