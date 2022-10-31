@@ -934,14 +934,21 @@ ALTER TABLE public.video_version OWNER TO dev_service_user;
 --
 
 CREATE VIEW public.course_item_completion_view AS
- WITH course_item_completion_cte AS (
-         SELECT ase.exam_version_id,
-            NULL::integer AS video_version_id,
-            ase.user_id,
-            ase.id AS answer_session_id,
-            ec.completion_date
+ WITH latest_exam_completion_cte AS (
+         SELECT ase.user_id,
+            ase.exam_version_id,
+            max(ec.completion_date) AS completion_date,
+            max(ase.id) AS answer_session_id
            FROM (public.exam_completion ec
              LEFT JOIN public.answer_session ase ON ((ase.id = ec.answer_session_id)))
+          GROUP BY ase.user_id, ase.exam_version_id
+        ), course_item_completion_cte AS (
+         SELECT DISTINCT lecc.exam_version_id,
+            NULL::integer AS video_version_id,
+            lecc.user_id,
+            lecc.answer_session_id,
+            lecc.completion_date
+           FROM latest_exam_completion_cte lecc
         UNION ALL
          SELECT NULL::integer AS exam_version_id,
             vc.video_version_id,
@@ -1167,26 +1174,6 @@ CREATE VIEW public.answer_session_group_view AS
 ALTER TABLE public.answer_session_group_view OWNER TO dev_service_user;
 
 --
--- Name: comment; Type: TABLE; Schema: public; Owner: dev_service_user
---
-
-CREATE TABLE public.comment (
-    id integer NOT NULL,
-    deletion_date timestamp without time zone,
-    creation_date timestamp with time zone DEFAULT now() NOT NULL,
-    text character varying NOT NULL,
-    is_question boolean DEFAULT false NOT NULL,
-    is_anonymous boolean DEFAULT false NOT NULL,
-    parent_comment_id integer,
-    user_id integer NOT NULL,
-    video_version_id integer NOT NULL,
-    video_id integer
-);
-
-
-ALTER TABLE public.comment OWNER TO dev_service_user;
-
---
 -- Name: company; Type: TABLE; Schema: public; Owner: dev_service_user
 --
 
@@ -1207,6 +1194,36 @@ CREATE TABLE public.company (
 
 
 ALTER TABLE public.company OWNER TO dev_service_user;
+
+--
+-- Name: completed_course_exam_count_view; Type: VIEW; Schema: public; Owner: dev_service_user
+--
+
+CREATE VIEW public.completed_course_exam_count_view AS
+ SELECT cicv.user_id,
+    cicv.course_id,
+    count(*) AS completed_exam_count
+   FROM public.course_item_completion_view cicv
+  WHERE (cicv.exam_version_id IS NOT NULL)
+  GROUP BY cicv.user_id, cicv.course_id;
+
+
+ALTER TABLE public.completed_course_exam_count_view OWNER TO dev_service_user;
+
+--
+-- Name: completed_course_video_count_view; Type: VIEW; Schema: public; Owner: dev_service_user
+--
+
+CREATE VIEW public.completed_course_video_count_view AS
+ SELECT cicv.user_id,
+    cicv.course_id,
+    count(*) AS completed_video_count
+   FROM public.course_item_completion_view cicv
+  WHERE (cicv.video_version_id IS NOT NULL)
+  GROUP BY cicv.user_id, cicv.course_id;
+
+
+ALTER TABLE public.completed_course_video_count_view OWNER TO dev_service_user;
 
 --
 -- Name: course; Type: TABLE; Schema: public; Owner: dev_service_user
@@ -1277,311 +1294,11 @@ CREATE VIEW public.correct_answer_rates_split_view AS
      CROSS JOIN public.course co)
      LEFT JOIN public.course_version cv ON ((cv.course_id = co.id)))
      LEFT JOIN public.module_version mv ON ((mv.course_version_id = cv.id)))
-     LEFT JOIN public.answer_session_group_view asgv ON (((asgv.user_id = u.id) AND (asgv.course_id = co.id))))
+     LEFT JOIN public.answer_session_group_view asgv ON (((asgv.user_id = u.id) AND (asgv.course_id = co.id) AND (asgv.module_id = mv.module_id))))
   ORDER BY u.id;
 
 
 ALTER TABLE public.correct_answer_rates_split_view OWNER TO dev_service_user;
-
---
--- Name: user_performance_answer_group_view; Type: VIEW; Schema: public; Owner: dev_service_user
---
-
-CREATE VIEW public.user_performance_answer_group_view AS
- SELECT carsv.user_id,
-    carsv.course_id,
-    (avg(carsv.exam_correct_answer_rate))::double precision AS exam_correct_answer_rate,
-    (avg(carsv.practise_correct_answer_rate))::double precision AS practise_correct_answer_rate,
-    (avg(carsv.video_correct_answer_rate))::double precision AS video_correct_answer_rate
-   FROM public.correct_answer_rates_split_view carsv
-  GROUP BY carsv.user_id, carsv.course_id;
-
-
-ALTER TABLE public.user_performance_answer_group_view OWNER TO dev_service_user;
-
---
--- Name: user_performance_view; Type: VIEW; Schema: public; Owner: dev_service_user
---
-
-CREATE VIEW public.user_performance_view AS
- SELECT u.id AS user_id,
-    upagv.course_id,
-    (((COALESCE((upagv.exam_correct_answer_rate * (2.5)::double precision), (0)::double precision) + COALESCE((upagv.video_correct_answer_rate * (1.5)::double precision), (0)::double precision)) + COALESCE(upagv.practise_correct_answer_rate, (0)::double precision)) / (5)::double precision) AS performance_percentage
-   FROM (public."user" u
-     LEFT JOIN public.user_performance_answer_group_view upagv ON ((upagv.user_id = u.id)));
-
-
-ALTER TABLE public.user_performance_view OWNER TO dev_service_user;
-
---
--- Name: video_rating; Type: TABLE; Schema: public; Owner: dev_service_user
---
-
-CREATE TABLE public.video_rating (
-    id integer NOT NULL,
-    experience integer,
-    difficulty integer,
-    video_version_id integer NOT NULL,
-    user_id integer NOT NULL
-);
-
-
-ALTER TABLE public.video_rating OWNER TO dev_service_user;
-
---
--- Name: admin_home_page_overview_view; Type: VIEW; Schema: public; Owner: dev_service_user
---
-
-CREATE VIEW public.admin_home_page_overview_view AS
- WITH latest_course_activity_cte AS (
-         SELECT cic.user_id,
-            cv.course_id,
-            max(cic.completion_date) AS latest_course_item_completion_date
-           FROM ((((public.course_item_completion_view cic
-             LEFT JOIN public.video_version vv ON ((vv.id = cic.video_version_id)))
-             LEFT JOIN public.exam_version ev ON ((ev.id = cic.exam_version_id)))
-             LEFT JOIN public.module_version mv ON (((mv.id = vv.module_version_id) OR (mv.id = ev.module_version_id))))
-             LEFT JOIN public.course_version cv ON ((cv.id = mv.course_version_id)))
-          GROUP BY cic.user_id, cv.course_id
-        ), is_final_exam_completed_cte AS (
-         SELECT cv.course_id,
-            cic.user_id,
-            (count(*) > 0) AS is_final_exam_completed
-           FROM ((((public.course_item_completion_view cic
-             LEFT JOIN public.exam_version ev ON ((ev.id = cic.exam_version_id)))
-             LEFT JOIN public.exam_data ed ON ((ed.id = ev.exam_data_id)))
-             LEFT JOIN public.module_version mv ON ((mv.id = ev.module_version_id)))
-             LEFT JOIN public.course_version cv ON ((cv.id = mv.course_version_id)))
-          WHERE (ed.is_final IS TRUE)
-          GROUP BY cv.course_id, cic.user_id
-        ), active_user_count_cte AS (
-         SELECT lcac.course_id,
-            u.company_id,
-            count(*) AS active_user_count
-           FROM ((latest_course_activity_cte lcac
-             LEFT JOIN is_final_exam_completed_cte ifecc ON (((ifecc.user_id = lcac.user_id) AND (ifecc.course_id = lcac.course_id) AND (ifecc.is_final_exam_completed IS NOT TRUE))))
-             LEFT JOIN public."user" u ON ((u.id = lcac.user_id)))
-          WHERE (lcac.latest_course_item_completion_date > (CURRENT_DATE - 14))
-          GROUP BY lcac.course_id, u.company_id
-        ), suspended_user_count_cte AS (
-         SELECT lcac.course_id,
-            u.company_id,
-            count(*) AS suspended_user_count
-           FROM ((latest_course_activity_cte lcac
-             LEFT JOIN is_final_exam_completed_cte ifecc ON (((ifecc.user_id = lcac.user_id) AND (ifecc.course_id = lcac.course_id) AND (ifecc.is_final_exam_completed IS NOT TRUE))))
-             LEFT JOIN public."user" u ON ((u.id = lcac.user_id)))
-          WHERE (lcac.latest_course_item_completion_date < (CURRENT_DATE - 14))
-          GROUP BY lcac.course_id, u.company_id
-        ), completed_user_count_cte AS (
-         SELECT lcac.course_id,
-            u.company_id,
-            count(*) AS completed_user_count
-           FROM ((latest_course_activity_cte lcac
-             JOIN is_final_exam_completed_cte ifecc ON (((ifecc.user_id = lcac.user_id) AND (ifecc.course_id = lcac.course_id) AND (ifecc.is_final_exam_completed IS TRUE))))
-             LEFT JOIN public."user" u ON ((u.id = lcac.user_id)))
-          GROUP BY lcac.course_id, u.company_id
-        ), course_avg_performance_cte AS (
-         SELECT upv.course_id,
-            u.company_id,
-            avg(upv.performance_percentage) AS avg_performance_percentage
-           FROM (public.user_performance_view upv
-             LEFT JOIN public."user" u ON ((u.id = upv.user_id)))
-          WHERE (upv.performance_percentage <> (0)::double precision)
-          GROUP BY upv.course_id, u.company_id
-        ), course_difficulty_count_cte AS (
-         SELECT cv.course_id,
-            u.company_id,
-            count(*) AS difficult_videos_count
-           FROM ((((public.video_rating vr
-             LEFT JOIN public.video_version vv ON ((vv.id = vr.video_version_id)))
-             LEFT JOIN public.module_version mv ON ((mv.id = vv.module_version_id)))
-             LEFT JOIN public.course_version cv ON ((cv.id = mv.course_version_id)))
-             LEFT JOIN public."user" u ON ((vr.user_id = u.id)))
-          WHERE (vr.difficulty > 4)
-          GROUP BY cv.course_id, u.company_id
-        ), questions_to_be_answered_count_cte AS (
-         SELECT u.company_id,
-            cv.course_id,
-            count(*) AS questions_to_be_answered_count
-           FROM ((((public.comment com
-             LEFT JOIN public."user" u ON ((com.user_id = u.id)))
-             LEFT JOIN public.video_version vv ON ((vv.id = com.video_version_id)))
-             LEFT JOIN public.module_version mv ON ((mv.id = vv.module_version_id)))
-             LEFT JOIN public.course_version cv ON ((cv.id = mv.course_version_id)))
-          WHERE ((NOT (com.id IN ( SELECT comp_1.id
-                   FROM (public.comment comp_1
-                     JOIN public.comment comc ON ((comc.parent_comment_id = comp_1.id)))))) AND (com.parent_comment_id IS NULL))
-          GROUP BY u.company_id, cv.course_id
-        )
- SELECT co.id AS course_id,
-    comp.id AS company_id,
-    COALESCE(aucc.active_user_count, (0)::bigint) AS active_users_count,
-    COALESCE(succ.suspended_user_count, (0)::bigint) AS suspended_users_count,
-    COALESCE(cucc.completed_user_count, (0)::bigint) AS completed_users_count,
-    capc.avg_performance_percentage AS avg_course_performance_percentage,
-    COALESCE(cdcc.difficult_videos_count, (0)::bigint) AS difficult_videos_count,
-    COALESCE(qtbacc.questions_to_be_answered_count, (0)::bigint) AS questions_waiting_to_be_answered
-   FROM (((((((public.course co
-     CROSS JOIN public.company comp)
-     LEFT JOIN active_user_count_cte aucc ON (((aucc.course_id = co.id) AND (aucc.company_id = comp.id))))
-     LEFT JOIN suspended_user_count_cte succ ON (((succ.course_id = co.id) AND (succ.company_id = comp.id))))
-     LEFT JOIN completed_user_count_cte cucc ON (((cucc.course_id = co.id) AND (cucc.company_id = comp.id))))
-     LEFT JOIN course_avg_performance_cte capc ON (((capc.course_id = co.id) AND (capc.company_id = comp.id))))
-     LEFT JOIN course_difficulty_count_cte cdcc ON (((cdcc.course_id = co.id) AND (cdcc.company_id = comp.id))))
-     LEFT JOIN questions_to_be_answered_count_cte qtbacc ON (((qtbacc.course_id = co.id) AND (qtbacc.company_id = comp.id))));
-
-
-ALTER TABLE public.admin_home_page_overview_view OWNER TO dev_service_user;
-
---
--- Name: answer_session_evaluation_view; Type: VIEW; Schema: public; Owner: dev_service_user
---
-
-CREATE VIEW public.answer_session_evaluation_view AS
- WITH non_practise_answer_sessions AS (
-         SELECT ase_1.answer_session_id,
-            ase_1.user_id,
-            ase_1.exam_version_id,
-            ase_1.video_version_id,
-            ase_1.start_date,
-            ase_1.answer_session_acquired_points,
-            ase_1.answer_session_success_rate,
-            ase_1.is_successful,
-            ase_1.answered_question_count,
-            ase_1.correct_given_answer_count,
-            ase_1.given_answer_count,
-            ase_1.is_completed,
-            ase_1.end_date,
-            ase_1.answer_session_type
-           FROM public.answer_session_view ase_1
-          WHERE (ase_1.answer_session_type <> 'practise'::text)
-        ), total_question_count AS (
-         SELECT ev.id AS exam_version_id,
-            NULL::integer AS video_version_id,
-            count(qv.id) AS question_count
-           FROM (public.exam_version ev
-             LEFT JOIN public.question_version qv ON ((qv.exam_version_id = ev.id)))
-          GROUP BY ev.id
-        UNION ALL
-         SELECT NULL::integer AS exam_version_id,
-            vv.id AS video_version_id,
-            count(qv.id) AS question_count
-           FROM (public.video_version vv
-             LEFT JOIN public.question_version qv ON ((qv.video_version_id = vv.id)))
-          GROUP BY vv.id
-        ), ga_count AS (
-         SELECT ga.answer_session_id,
-            count(1) AS answered_count,
-            COALESCE((sum((((ga.state)::text = 'CORRECT'::text))::integer))::integer, 0) AS correct_count
-           FROM public.given_answer ga
-          GROUP BY ga.answer_session_id
-        )
- SELECT ase.answer_session_id,
-    u.id AS user_id,
-    ase.video_version_id,
-    ase.exam_version_id,
-    tqc.question_count,
-    COALESCE(gac.answered_count, (0)::bigint) AS answered_question_count,
-    COALESCE(((tqc.question_count = gac.answered_count) AND (gac.answered_count > 0)), false) AS is_completed,
-    COALESCE(gac.correct_count, 0) AS correct_answer_count,
-    ase.is_successful,
-    ase.answer_session_success_rate AS correct_answer_rate
-   FROM (((non_practise_answer_sessions ase
-     LEFT JOIN public."user" u ON ((u.id = ase.user_id)))
-     LEFT JOIN total_question_count tqc ON (((tqc.exam_version_id = ase.exam_version_id) OR (tqc.video_version_id = ase.video_version_id))))
-     LEFT JOIN ga_count gac ON ((gac.answer_session_id = ase.answer_session_id)));
-
-
-ALTER TABLE public.answer_session_evaluation_view OWNER TO dev_service_user;
-
---
--- Name: permission_assignment_bridge; Type: TABLE; Schema: public; Owner: dev_service_user
---
-
-CREATE TABLE public.permission_assignment_bridge (
-    id integer NOT NULL,
-    permission_id integer NOT NULL,
-    assignee_user_id integer,
-    assignee_company_id integer,
-    assignee_group_id integer,
-    context_company_id integer,
-    context_course_id integer,
-    CONSTRAINT permission_assignment_bridge_check CHECK ((((context_company_id IS NULL) AND (context_course_id IS NOT NULL)) OR ((context_company_id IS NOT NULL) AND (context_course_id IS NULL)) OR ((context_company_id IS NULL) AND (context_course_id IS NULL))))
-);
-
-
-ALTER TABLE public.permission_assignment_bridge OWNER TO dev_service_user;
-
---
--- Name: role; Type: TABLE; Schema: public; Owner: dev_service_user
---
-
-CREATE TABLE public.role (
-    id integer NOT NULL,
-    deletion_date timestamp without time zone,
-    name character varying NOT NULL,
-    is_custom boolean NOT NULL,
-    company_id integer,
-    CONSTRAINT role_constraint CHECK (((is_custom = false) OR (company_id IS NOT NULL)))
-);
-
-
-ALTER TABLE public.role OWNER TO dev_service_user;
-
---
--- Name: role_assignment_bridge; Type: TABLE; Schema: public; Owner: dev_service_user
---
-
-CREATE TABLE public.role_assignment_bridge (
-    id integer NOT NULL,
-    role_id integer NOT NULL,
-    assignee_user_id integer,
-    assignee_company_id integer,
-    context_company_id integer
-);
-
-
-ALTER TABLE public.role_assignment_bridge OWNER TO dev_service_user;
-
---
--- Name: role_permission_bridge; Type: TABLE; Schema: public; Owner: dev_service_user
---
-
-CREATE TABLE public.role_permission_bridge (
-    id integer NOT NULL,
-    role_id integer NOT NULL,
-    permission_id integer NOT NULL
-);
-
-
-ALTER TABLE public.role_permission_bridge OWNER TO dev_service_user;
-
---
--- Name: company_permission_view; Type: VIEW; Schema: public; Owner: dev_service_user
---
-
-CREATE VIEW public.company_permission_view AS
- SELECT co.id AS assignee_company_id,
-    rab.context_company_id,
-    NULL::integer AS context_course_id,
-    rpb.role_id,
-    rpb.permission_id
-   FROM (((public.company co
-     JOIN public.role_assignment_bridge rab ON ((rab.assignee_company_id = co.id)))
-     LEFT JOIN public.role r ON ((r.id = rab.role_id)))
-     LEFT JOIN public.role_permission_bridge rpb ON ((rpb.role_id = r.id)))
-UNION
- SELECT co.id AS assignee_company_id,
-    pab.context_company_id,
-    pab.context_course_id,
-    NULL::integer AS role_id,
-    pab.permission_id
-   FROM (public.company co
-     JOIN public.permission_assignment_bridge pab ON ((pab.assignee_company_id = co.id)))
-  ORDER BY 1, 2, 5;
-
-
-ALTER TABLE public.company_permission_view OWNER TO dev_service_user;
 
 --
 -- Name: course_access_bridge; Type: TABLE; Schema: public; Owner: dev_service_user
@@ -1596,65 +1313,6 @@ CREATE TABLE public.course_access_bridge (
 
 
 ALTER TABLE public.course_access_bridge OWNER TO dev_service_user;
-
---
--- Name: course_completion; Type: TABLE; Schema: public; Owner: dev_service_user
---
-
-CREATE TABLE public.course_completion (
-    id integer NOT NULL,
-    course_version_id integer NOT NULL,
-    user_id integer NOT NULL
-);
-
-
-ALTER TABLE public.course_completion OWNER TO dev_service_user;
-
---
--- Name: course_completion_view; Type: VIEW; Schema: public; Owner: dev_service_user
---
-
-CREATE VIEW public.course_completion_view AS
- SELECT cv.course_id,
-    cc.user_id
-   FROM (public.course_completion cc
-     LEFT JOIN public.course_version cv ON ((cv.id = cc.course_version_id)))
-  GROUP BY cv.course_id, cc.user_id;
-
-
-ALTER TABLE public.course_completion_view OWNER TO dev_service_user;
-
---
--- Name: course_data; Type: TABLE; Schema: public; Owner: dev_service_user
---
-
-CREATE TABLE public.course_data (
-    id integer NOT NULL,
-    modification_date timestamp with time zone DEFAULT now() NOT NULL,
-    title character varying NOT NULL,
-    short_description character varying NOT NULL,
-    description character varying NOT NULL,
-    difficulty double precision NOT NULL,
-    benchmark double precision NOT NULL,
-    previously_completed_count integer NOT NULL,
-    language character varying NOT NULL,
-    technical_requirements character varying NOT NULL,
-    requirements_description character varying NOT NULL,
-    is_featured boolean NOT NULL,
-    skill_benefits character varying NOT NULL,
-    human_skill_benefits character varying NOT NULL,
-    human_skill_benefits_description character varying NOT NULL,
-    visibility text DEFAULT 'public'::text NOT NULL,
-    category_id integer NOT NULL,
-    sub_category_id integer NOT NULL,
-    teacher_id integer NOT NULL,
-    cover_file_id integer,
-    is_prequiz_required boolean NOT NULL,
-    is_pretest_required boolean NOT NULL
-);
-
-
-ALTER TABLE public.course_data OWNER TO dev_service_user;
 
 --
 -- Name: latest_course_version_view; Type: VIEW; Schema: public; Owner: dev_service_user
@@ -1821,6 +1479,22 @@ CREATE VIEW public.course_item_view AS
 ALTER TABLE public.course_item_view OWNER TO dev_service_user;
 
 --
+-- Name: course_exam_count_view; Type: VIEW; Schema: public; Owner: dev_service_user
+--
+
+CREATE VIEW public.course_exam_count_view AS
+ SELECT co.id AS course_id,
+    (count(*))::integer AS exam_count
+   FROM ((public.course co
+     LEFT JOIN public.course_version cv ON ((cv.course_id = co.id)))
+     LEFT JOIN public.course_item_view civ ON (((civ.course_version_id = cv.id) AND (civ.item_type = 'exam'::text))))
+  GROUP BY co.id
+  ORDER BY co.id;
+
+
+ALTER TABLE public.course_exam_count_view OWNER TO dev_service_user;
+
+--
 -- Name: course_item_count_view; Type: VIEW; Schema: public; Owner: dev_service_user
 --
 
@@ -1835,61 +1509,6 @@ CREATE VIEW public.course_item_count_view AS
 
 
 ALTER TABLE public.course_item_count_view OWNER TO dev_service_user;
-
---
--- Name: course_length_estimation_view; Type: VIEW; Schema: public; Owner: dev_service_user
---
-
-CREATE VIEW public.course_length_estimation_view AS
- SELECT sq.course_id,
-    sq.total_video_seconds,
-    sq.total_exam_seconds,
-    (sq.total_video_seconds + sq.total_exam_seconds) AS total_length_seconds
-   FROM ( SELECT cv.id AS course_id,
-            ( SELECT (COALESCE(sum(vd.video_file_length_seconds), (0)::double precision))::integer AS "coalesce"
-                   FROM ((public.video_version vv
-                     LEFT JOIN public.module_version mv ON (((mv.course_version_id = cv.id) AND (mv.id = vv.module_version_id))))
-                     LEFT JOIN public.video_data vd ON ((vd.id = vv.video_data_id)))
-                  WHERE (mv.course_version_id = cv.id)) AS total_video_seconds,
-            ( SELECT ((count(1))::integer * 20) AS total_exam_seconds
-                   FROM ((public.exam_version ev
-                     LEFT JOIN public.exam e ON ((e.id = ev.exam_id)))
-                     LEFT JOIN public.module_version mv ON (((mv.course_version_id = cv.id) AND (mv.id = ev.module_version_id))))
-                  WHERE ((e.is_pretest = false) AND (e.is_signup = false) AND (mv.course_version_id = cv.id))) AS total_exam_seconds
-           FROM public.course_version cv) sq;
-
-
-ALTER TABLE public.course_length_estimation_view OWNER TO dev_service_user;
-
---
--- Name: course_questions_success_view; Type: VIEW; Schema: public; Owner: dev_service_user
---
-
-CREATE VIEW public.course_questions_success_view AS
- SELECT sq.user_id,
-    sq.course_id,
-    (count(sq.latest_given_answer_id))::integer AS total_answer_count,
-    (sum((((ga.state)::text = 'CORRECT'::text))::integer))::integer AS correct_answer_count
-   FROM (( SELECT u.id AS user_id,
-            c.id AS course_id,
-            vv.id AS video_version_id,
-            qv.id AS question_version_id,
-            max(ga_1.id) AS latest_given_answer_id
-           FROM (((((((public.course c
-             LEFT JOIN public.course_version cv ON ((cv.course_id = c.id)))
-             LEFT JOIN public."user" u ON (true))
-             LEFT JOIN public.module_version mv ON ((mv.course_version_id = cv.id)))
-             LEFT JOIN public.video_version vv ON ((vv.module_version_id = mv.id)))
-             LEFT JOIN public.question_version qv ON ((qv.video_version_id = vv.id)))
-             LEFT JOIN public.answer_session ase ON (((ase.user_id = u.id) AND (ase.video_version_id = vv.id))))
-             LEFT JOIN public.given_answer ga_1 ON (((ga_1.question_version_id = qv.id) AND (ga_1.answer_session_id = ase.id))))
-          GROUP BY u.id, vv.id, qv.id, c.id) sq
-     LEFT JOIN public.given_answer ga ON ((ga.id = sq.latest_given_answer_id)))
-  GROUP BY sq.user_id, sq.course_id
-  ORDER BY sq.user_id, sq.course_id;
-
-
-ALTER TABLE public.course_questions_success_view OWNER TO dev_service_user;
 
 --
 -- Name: video_playback_sample; Type: TABLE; Schema: public; Owner: dev_service_user
@@ -1990,6 +1609,112 @@ CREATE VIEW public.course_spent_time_view AS
 ALTER TABLE public.course_spent_time_view OWNER TO dev_service_user;
 
 --
+-- Name: course_video_count_view; Type: VIEW; Schema: public; Owner: dev_service_user
+--
+
+CREATE VIEW public.course_video_count_view AS
+ SELECT co.id AS course_id,
+    (count(*))::integer AS video_count
+   FROM ((public.course co
+     LEFT JOIN public.course_version cv ON ((cv.course_id = co.id)))
+     LEFT JOIN public.course_item_view civ ON (((civ.course_version_id = cv.id) AND (civ.item_type = 'video'::text))))
+  GROUP BY co.id
+  ORDER BY co.id;
+
+
+ALTER TABLE public.course_video_count_view OWNER TO dev_service_user;
+
+--
+-- Name: latest_answer_session_view; Type: VIEW; Schema: public; Owner: dev_service_user
+--
+
+CREATE VIEW public.latest_answer_session_view AS
+ SELECT ase.user_id,
+    ase.exam_version_id,
+    ase.video_version_id,
+    max(ase.id) AS answer_session_id
+   FROM public.answer_session ase
+  WHERE ((ase.exam_version_id IS NOT NULL) OR (ase.video_version_id IS NOT NULL))
+  GROUP BY ase.user_id, ase.exam_version_id, ase.video_version_id;
+
+
+ALTER TABLE public.latest_answer_session_view OWNER TO dev_service_user;
+
+--
+-- Name: latest_exam_view; Type: VIEW; Schema: public; Owner: dev_service_user
+--
+
+CREATE VIEW public.latest_exam_view AS
+ SELECT ev.exam_id,
+    max(ev.id) AS exam_version_id,
+    cv.course_id,
+    ex.is_pretest
+   FROM (((public.exam_version ev
+     LEFT JOIN public.exam ex ON ((ex.id = ev.exam_id)))
+     LEFT JOIN public.module_version mv ON ((mv.id = ev.module_version_id)))
+     LEFT JOIN public.course_version cv ON ((cv.id = mv.course_version_id)))
+  GROUP BY ev.exam_id, cv.course_id, ex.is_pretest;
+
+
+ALTER TABLE public.latest_exam_view OWNER TO dev_service_user;
+
+--
+-- Name: final_exam_score_view; Type: VIEW; Schema: public; Owner: dev_service_user
+--
+
+CREATE VIEW public.final_exam_score_view AS
+ SELECT lasv.user_id,
+    lev.course_id,
+    max(esv.exam_score) AS final_exam_score_percentage
+   FROM ((((public.latest_answer_session_view lasv
+     JOIN public.latest_exam_view lev ON ((lev.exam_version_id = lasv.exam_version_id)))
+     JOIN public.exam_version ev ON ((ev.id = lev.exam_version_id)))
+     JOIN public.exam_data ed ON (((ed.id = ev.exam_data_id) AND (ed.is_final = true))))
+     LEFT JOIN public.exam_score_view esv ON ((esv.exam_version_id = ev.id)))
+  GROUP BY lasv.user_id, lev.course_id;
+
+
+ALTER TABLE public.final_exam_score_view OWNER TO dev_service_user;
+
+--
+-- Name: module_last_exam_view; Type: VIEW; Schema: public; Owner: dev_service_user
+--
+
+CREATE VIEW public.module_last_exam_view AS
+ SELECT cv.course_id,
+    mv.module_id,
+    ev.exam_id,
+    ev.id AS exam_version_id,
+    max(ed.order_index) AS item_order_index
+   FROM ((((public.latest_course_version_view lcvv
+     LEFT JOIN public.course_version cv ON ((cv.id = lcvv.version_id)))
+     LEFT JOIN public.module_version mv ON ((mv.course_version_id = cv.id)))
+     LEFT JOIN public.exam_version ev ON ((ev.module_version_id = mv.id)))
+     LEFT JOIN public.exam_data ed ON ((ed.id = ev.exam_data_id)))
+  WHERE ((ed.order_index <> 0) AND (ed.is_final IS NOT TRUE))
+  GROUP BY cv.course_id, mv.module_id, ev.exam_id, ev.id
+  ORDER BY cv.course_id, mv.module_id, ev.exam_id, ev.id;
+
+
+ALTER TABLE public.module_last_exam_view OWNER TO dev_service_user;
+
+--
+-- Name: module_last_exam_score_view; Type: VIEW; Schema: public; Owner: dev_service_user
+--
+
+CREATE VIEW public.module_last_exam_score_view AS
+ SELECT asv.user_id,
+    asv.answer_session_success_rate AS exam_score,
+    mlev.module_id,
+    mlev.course_id
+   FROM ((public.module_last_exam_view mlev
+     JOIN public.latest_answer_session_view lasv ON ((lasv.exam_version_id = mlev.exam_version_id)))
+     LEFT JOIN public.answer_session_view asv ON ((asv.answer_session_id = lasv.answer_session_id)));
+
+
+ALTER TABLE public.module_last_exam_score_view OWNER TO dev_service_user;
+
+--
 -- Name: user_course_bridge; Type: TABLE; Schema: public; Owner: dev_service_user
 --
 
@@ -2010,6 +1735,542 @@ CREATE TABLE public.user_course_bridge (
 
 
 ALTER TABLE public.user_course_bridge OWNER TO dev_service_user;
+
+--
+-- Name: user_course_progress_actual_view; Type: VIEW; Schema: public; Owner: dev_service_user
+--
+
+CREATE VIEW public.user_course_progress_actual_view AS
+ WITH completed_course_item_counts AS (
+         SELECT cicv.user_id,
+            cicv.course_id,
+            (count(*))::integer AS total_completed_item_count
+           FROM public.course_item_completion_view cicv
+          GROUP BY cicv.user_id, cicv.course_id
+        ), days_elapsed_since_start AS (
+         SELECT ucb_1.user_id,
+            ucb_1.course_id,
+            (((now())::date - (ucb_1.start_date)::date) + 1) AS days_elapsed_since_start
+           FROM public.user_course_bridge ucb_1
+        )
+ SELECT ucb.user_id,
+    ucb.course_id,
+    ccic.total_completed_item_count,
+    ((NULLIF(ccic.total_completed_item_count, 0))::double precision / NULLIF((dess.days_elapsed_since_start)::double precision, (0)::double precision)) AS avg_completed_items_per_day,
+    round((((NULLIF(ccic.total_completed_item_count, 0))::double precision / NULLIF((coicv.item_count)::double precision, (0)::double precision)) * (100)::double precision)) AS completed_percentage,
+    (coicv.item_count - ccic.total_completed_item_count) AS remaining_item_count,
+    coicv.item_count AS total_item_count
+   FROM (((public.user_course_bridge ucb
+     LEFT JOIN days_elapsed_since_start dess ON (((dess.user_id = ucb.user_id) AND (dess.course_id = ucb.course_id))))
+     LEFT JOIN public.course_item_count_view coicv ON ((coicv.course_id = ucb.course_id)))
+     LEFT JOIN completed_course_item_counts ccic ON (((ccic.user_id = ucb.user_id) AND (ccic.course_id = ucb.course_id))));
+
+
+ALTER TABLE public.user_course_progress_actual_view OWNER TO dev_service_user;
+
+--
+-- Name: user_performance_answer_group_view; Type: VIEW; Schema: public; Owner: dev_service_user
+--
+
+CREATE VIEW public.user_performance_answer_group_view AS
+ SELECT carsv.user_id,
+    carsv.course_id,
+    (avg(carsv.exam_correct_answer_rate))::double precision AS exam_correct_answer_rate,
+    (avg(carsv.practise_correct_answer_rate))::double precision AS practise_correct_answer_rate,
+    (avg(carsv.video_correct_answer_rate))::double precision AS video_correct_answer_rate
+   FROM public.correct_answer_rates_split_view carsv
+  GROUP BY carsv.user_id, carsv.course_id;
+
+
+ALTER TABLE public.user_performance_answer_group_view OWNER TO dev_service_user;
+
+--
+-- Name: user_performance_view; Type: VIEW; Schema: public; Owner: dev_service_user
+--
+
+CREATE VIEW public.user_performance_view AS
+ SELECT u.id AS user_id,
+    upagv.course_id,
+    (((COALESCE((upagv.exam_correct_answer_rate * (2.5)::double precision), (0)::double precision) + COALESCE((upagv.video_correct_answer_rate * (1.5)::double precision), (0)::double precision)) + COALESCE(upagv.practise_correct_answer_rate, (0)::double precision)) / (5)::double precision) AS performance_percentage
+   FROM (public."user" u
+     LEFT JOIN public.user_performance_answer_group_view upagv ON ((upagv.user_id = u.id)));
+
+
+ALTER TABLE public.user_performance_view OWNER TO dev_service_user;
+
+--
+-- Name: admin_course_user_stats_view; Type: VIEW; Schema: public; Owner: dev_service_user
+--
+
+CREATE VIEW public.admin_course_user_stats_view AS
+ WITH module_last_exam_averages AS (
+         SELECT mlesv.user_id,
+            mlesv.course_id,
+            avg(mlesv.exam_score) AS avg_module_last_exam_score
+           FROM public.module_last_exam_score_view mlesv
+          GROUP BY mlesv.user_id, mlesv.course_id
+        ), summerized_answer_result AS (
+         SELECT mlea.user_id,
+            mlea.course_id,
+            (((COALESCE(upagv.practise_correct_answer_rate, (0)::double precision) + ((COALESCE(mlea.avg_module_last_exam_score, (0)::numeric) * (2)::numeric))::double precision) + ((COALESCE(fesv_1.final_exam_score_percentage, 0) * 3))::double precision) / (6)::double precision) AS summerized_score
+           FROM ((module_last_exam_averages mlea
+             LEFT JOIN public.final_exam_score_view fesv_1 ON (((fesv_1.user_id = mlea.user_id) AND (fesv_1.course_id = mlea.course_id))))
+             LEFT JOIN public.user_performance_answer_group_view upagv ON (((upagv.user_id = mlea.user_id) AND (upagv.course_id = mlea.course_id))))
+        )
+ SELECT comp.id AS company_id,
+    u.id AS user_id,
+    co.id AS course_id,
+    ucpav.completed_percentage,
+    upv.performance_percentage,
+    ccvcv.completed_video_count,
+    ccecv.completed_exam_count,
+    cvcv.video_count,
+    cecv.exam_count,
+    cstv.total_spent_seconds,
+    fesv.final_exam_score_percentage,
+    ucb.required_completion_date,
+    sar.summerized_score
+   FROM (((((((((((((public.company comp
+     LEFT JOIN public."user" u ON ((u.company_id = comp.id)))
+     LEFT JOIN public.course_access_bridge cab ON (((cab.company_id = comp.id) OR (cab.user_id = u.id))))
+     LEFT JOIN public.course co ON ((co.id = cab.course_id)))
+     LEFT JOIN public.user_course_progress_actual_view ucpav ON (((ucpav.user_id = u.id) AND (ucpav.course_id = co.id))))
+     LEFT JOIN public.user_performance_view upv ON (((upv.user_id = u.id) AND (upv.course_id = co.id))))
+     LEFT JOIN public.completed_course_video_count_view ccvcv ON (((ccvcv.user_id = u.id) AND (ccvcv.course_id = co.id))))
+     LEFT JOIN public.completed_course_exam_count_view ccecv ON (((ccecv.user_id = u.id) AND (ccecv.course_id = co.id))))
+     LEFT JOIN public.course_video_count_view cvcv ON ((cvcv.course_id = co.id)))
+     LEFT JOIN public.course_exam_count_view cecv ON ((cecv.course_id = co.id)))
+     LEFT JOIN public.user_course_bridge ucb ON (((ucb.user_id = u.id) AND (ucb.course_id = co.id))))
+     LEFT JOIN public.course_spent_time_view cstv ON (((cstv.user_id = u.id) AND (cstv.course_id = co.id))))
+     LEFT JOIN public.final_exam_score_view fesv ON (((fesv.user_id = u.id) AND (fesv.course_id = co.id))))
+     LEFT JOIN summerized_answer_result sar ON (((sar.user_id = u.id) AND (sar.course_id = co.id))))
+  ORDER BY comp.id, u.id, co.id;
+
+
+ALTER TABLE public.admin_course_user_stats_view OWNER TO dev_service_user;
+
+--
+-- Name: comment; Type: TABLE; Schema: public; Owner: dev_service_user
+--
+
+CREATE TABLE public.comment (
+    id integer NOT NULL,
+    deletion_date timestamp without time zone,
+    creation_date timestamp with time zone DEFAULT now() NOT NULL,
+    text character varying NOT NULL,
+    is_question boolean DEFAULT false NOT NULL,
+    is_anonymous boolean DEFAULT false NOT NULL,
+    parent_comment_id integer,
+    user_id integer NOT NULL,
+    video_version_id integer NOT NULL,
+    video_id integer
+);
+
+
+ALTER TABLE public.comment OWNER TO dev_service_user;
+
+--
+-- Name: course_data; Type: TABLE; Schema: public; Owner: dev_service_user
+--
+
+CREATE TABLE public.course_data (
+    id integer NOT NULL,
+    modification_date timestamp with time zone DEFAULT now() NOT NULL,
+    title character varying NOT NULL,
+    short_description character varying NOT NULL,
+    description character varying NOT NULL,
+    difficulty double precision NOT NULL,
+    benchmark double precision NOT NULL,
+    previously_completed_count integer NOT NULL,
+    language character varying NOT NULL,
+    technical_requirements character varying NOT NULL,
+    requirements_description character varying NOT NULL,
+    is_featured boolean NOT NULL,
+    skill_benefits character varying NOT NULL,
+    human_skill_benefits character varying NOT NULL,
+    human_skill_benefits_description character varying NOT NULL,
+    visibility text DEFAULT 'public'::text NOT NULL,
+    category_id integer NOT NULL,
+    sub_category_id integer NOT NULL,
+    teacher_id integer NOT NULL,
+    cover_file_id integer,
+    is_prequiz_required boolean NOT NULL,
+    is_pretest_required boolean NOT NULL
+);
+
+
+ALTER TABLE public.course_data OWNER TO dev_service_user;
+
+--
+-- Name: storage_file; Type: TABLE; Schema: public; Owner: dev_service_user
+--
+
+CREATE TABLE public.storage_file (
+    id integer NOT NULL,
+    file_path character varying NOT NULL
+);
+
+
+ALTER TABLE public.storage_file OWNER TO dev_service_user;
+
+--
+-- Name: video_rating; Type: TABLE; Schema: public; Owner: dev_service_user
+--
+
+CREATE TABLE public.video_rating (
+    id integer NOT NULL,
+    experience integer,
+    difficulty integer,
+    video_version_id integer NOT NULL,
+    user_id integer NOT NULL
+);
+
+
+ALTER TABLE public.video_rating OWNER TO dev_service_user;
+
+--
+-- Name: admin_home_page_overview_view; Type: VIEW; Schema: public; Owner: dev_service_user
+--
+
+CREATE VIEW public.admin_home_page_overview_view AS
+ WITH latest_course_activity_cte AS (
+         SELECT cic.user_id,
+            cv_1.course_id,
+            max(cic.completion_date) AS latest_course_item_completion_date
+           FROM ((((public.course_item_completion_view cic
+             LEFT JOIN public.video_version vv ON ((vv.id = cic.video_version_id)))
+             LEFT JOIN public.exam_version ev ON ((ev.id = cic.exam_version_id)))
+             LEFT JOIN public.module_version mv ON (((mv.id = vv.module_version_id) OR (mv.id = ev.module_version_id))))
+             LEFT JOIN public.course_version cv_1 ON ((cv_1.id = mv.course_version_id)))
+          GROUP BY cic.user_id, cv_1.course_id
+        ), is_final_exam_completed_cte AS (
+         SELECT cv_1.course_id,
+            cic.user_id,
+            (count(*) > 0) AS is_final_exam_completed
+           FROM ((((public.course_item_completion_view cic
+             LEFT JOIN public.exam_version ev ON ((ev.id = cic.exam_version_id)))
+             LEFT JOIN public.exam_data ed ON ((ed.id = ev.exam_data_id)))
+             LEFT JOIN public.module_version mv ON ((mv.id = ev.module_version_id)))
+             LEFT JOIN public.course_version cv_1 ON ((cv_1.id = mv.course_version_id)))
+          WHERE (ed.is_final IS TRUE)
+          GROUP BY cv_1.course_id, cic.user_id
+        ), active_user_count_cte AS (
+         SELECT lcac.course_id,
+            u.company_id,
+            count(*) AS active_user_count
+           FROM ((latest_course_activity_cte lcac
+             LEFT JOIN is_final_exam_completed_cte ifecc ON (((ifecc.user_id = lcac.user_id) AND (ifecc.course_id = lcac.course_id) AND (ifecc.is_final_exam_completed IS NOT TRUE))))
+             LEFT JOIN public."user" u ON ((u.id = lcac.user_id)))
+          WHERE (lcac.latest_course_item_completion_date > (CURRENT_DATE - 14))
+          GROUP BY lcac.course_id, u.company_id
+        ), suspended_user_count_cte AS (
+         SELECT lcac.course_id,
+            u.company_id,
+            count(*) AS suspended_user_count
+           FROM ((latest_course_activity_cte lcac
+             LEFT JOIN is_final_exam_completed_cte ifecc ON (((ifecc.user_id = lcac.user_id) AND (ifecc.course_id = lcac.course_id) AND (ifecc.is_final_exam_completed IS NOT TRUE))))
+             LEFT JOIN public."user" u ON ((u.id = lcac.user_id)))
+          WHERE (lcac.latest_course_item_completion_date < (CURRENT_DATE - 14))
+          GROUP BY lcac.course_id, u.company_id
+        ), completed_user_count_cte AS (
+         SELECT lcac.course_id,
+            u.company_id,
+            count(*) AS completed_user_count
+           FROM ((latest_course_activity_cte lcac
+             JOIN is_final_exam_completed_cte ifecc ON (((ifecc.user_id = lcac.user_id) AND (ifecc.course_id = lcac.course_id) AND (ifecc.is_final_exam_completed IS TRUE))))
+             LEFT JOIN public."user" u ON ((u.id = lcac.user_id)))
+          GROUP BY lcac.course_id, u.company_id
+        ), course_avg_performance_cte AS (
+         SELECT upv.course_id,
+            u.company_id,
+            avg(upv.performance_percentage) AS avg_performance_percentage
+           FROM (public.user_performance_view upv
+             LEFT JOIN public."user" u ON ((u.id = upv.user_id)))
+          WHERE (upv.performance_percentage <> (0)::double precision)
+          GROUP BY upv.course_id, u.company_id
+        ), course_difficulty_count_cte AS (
+         SELECT cv_1.course_id,
+            u.company_id,
+            count(*) AS difficult_videos_count
+           FROM ((((public.video_rating vr
+             LEFT JOIN public.video_version vv ON ((vv.id = vr.video_version_id)))
+             LEFT JOIN public.module_version mv ON ((mv.id = vv.module_version_id)))
+             LEFT JOIN public.course_version cv_1 ON ((cv_1.id = mv.course_version_id)))
+             LEFT JOIN public."user" u ON ((vr.user_id = u.id)))
+          WHERE (vr.difficulty > 4)
+          GROUP BY cv_1.course_id, u.company_id
+        ), questions_to_be_answered_count_cte AS (
+         SELECT u.company_id,
+            cv_1.course_id,
+            count(*) AS questions_to_be_answered_count
+           FROM ((((public.comment com
+             LEFT JOIN public."user" u ON ((com.user_id = u.id)))
+             LEFT JOIN public.video_version vv ON ((vv.id = com.video_version_id)))
+             LEFT JOIN public.module_version mv ON ((mv.id = vv.module_version_id)))
+             LEFT JOIN public.course_version cv_1 ON ((cv_1.id = mv.course_version_id)))
+          WHERE ((NOT (com.id IN ( SELECT comp_1.id
+                   FROM (public.comment comp_1
+                     JOIN public.comment comc ON ((comc.parent_comment_id = comp_1.id)))))) AND (com.parent_comment_id IS NULL))
+          GROUP BY u.company_id, cv_1.course_id
+        )
+ SELECT co.id AS course_id,
+    comp.id AS company_id,
+    cd.title,
+    sf.file_path AS thumbnail_url,
+    COALESCE(aucc.active_user_count, (0)::bigint) AS active_users_count,
+    COALESCE(succ.suspended_user_count, (0)::bigint) AS suspended_users_count,
+    COALESCE(cucc.completed_user_count, (0)::bigint) AS completed_users_count,
+    capc.avg_performance_percentage AS avg_course_performance_percentage,
+    COALESCE(cdcc.difficult_videos_count, (0)::bigint) AS difficult_videos_count,
+    COALESCE(qtbacc.questions_to_be_answered_count, (0)::bigint) AS questions_waiting_to_be_answered
+   FROM ((((((((((((public.company comp
+     LEFT JOIN public.course_access_bridge cab ON ((cab.company_id = comp.id)))
+     LEFT JOIN public.course co ON ((co.id = cab.course_id)))
+     LEFT JOIN active_user_count_cte aucc ON (((aucc.course_id = co.id) AND (aucc.company_id = comp.id))))
+     LEFT JOIN suspended_user_count_cte succ ON (((succ.course_id = co.id) AND (succ.company_id = comp.id))))
+     LEFT JOIN completed_user_count_cte cucc ON (((cucc.course_id = co.id) AND (cucc.company_id = comp.id))))
+     LEFT JOIN course_avg_performance_cte capc ON (((capc.course_id = co.id) AND (capc.company_id = comp.id))))
+     LEFT JOIN course_difficulty_count_cte cdcc ON (((cdcc.course_id = co.id) AND (cdcc.company_id = comp.id))))
+     LEFT JOIN questions_to_be_answered_count_cte qtbacc ON (((qtbacc.course_id = co.id) AND (qtbacc.company_id = comp.id))))
+     LEFT JOIN public.latest_course_version_view lcvv ON ((lcvv.course_id = co.id)))
+     LEFT JOIN public.course_version cv ON ((cv.id = lcvv.version_id)))
+     LEFT JOIN public.course_data cd ON ((cd.id = cv.course_data_id)))
+     LEFT JOIN public.storage_file sf ON ((sf.id = cd.cover_file_id)));
+
+
+ALTER TABLE public.admin_home_page_overview_view OWNER TO dev_service_user;
+
+--
+-- Name: answer_session_evaluation_view; Type: VIEW; Schema: public; Owner: dev_service_user
+--
+
+CREATE VIEW public.answer_session_evaluation_view AS
+ WITH non_practise_answer_sessions AS (
+         SELECT ase_1.answer_session_id,
+            ase_1.user_id,
+            ase_1.exam_version_id,
+            ase_1.video_version_id,
+            ase_1.start_date,
+            ase_1.answer_session_acquired_points,
+            ase_1.answer_session_success_rate,
+            ase_1.is_successful,
+            ase_1.answered_question_count,
+            ase_1.correct_given_answer_count,
+            ase_1.given_answer_count,
+            ase_1.is_completed,
+            ase_1.end_date,
+            ase_1.answer_session_type
+           FROM public.answer_session_view ase_1
+          WHERE (ase_1.answer_session_type <> 'practise'::text)
+        ), total_question_count AS (
+         SELECT ev.id AS exam_version_id,
+            NULL::integer AS video_version_id,
+            count(qv.id) AS question_count
+           FROM (public.exam_version ev
+             LEFT JOIN public.question_version qv ON ((qv.exam_version_id = ev.id)))
+          GROUP BY ev.id
+        UNION ALL
+         SELECT NULL::integer AS exam_version_id,
+            vv.id AS video_version_id,
+            count(qv.id) AS question_count
+           FROM (public.video_version vv
+             LEFT JOIN public.question_version qv ON ((qv.video_version_id = vv.id)))
+          GROUP BY vv.id
+        ), ga_count AS (
+         SELECT ga.answer_session_id,
+            count(1) AS answered_count,
+            COALESCE((sum((((ga.state)::text = 'CORRECT'::text))::integer))::integer, 0) AS correct_count
+           FROM public.given_answer ga
+          GROUP BY ga.answer_session_id
+        )
+ SELECT ase.answer_session_id,
+    u.id AS user_id,
+    ase.video_version_id,
+    ase.exam_version_id,
+    tqc.question_count,
+    COALESCE(gac.answered_count, (0)::bigint) AS answered_question_count,
+    COALESCE(((tqc.question_count = gac.answered_count) AND (gac.answered_count > 0)), false) AS is_completed,
+    COALESCE(gac.correct_count, 0) AS correct_answer_count,
+    ase.is_successful,
+    ase.answer_session_success_rate AS correct_answer_rate
+   FROM (((non_practise_answer_sessions ase
+     LEFT JOIN public."user" u ON ((u.id = ase.user_id)))
+     LEFT JOIN total_question_count tqc ON (((tqc.exam_version_id = ase.exam_version_id) OR (tqc.video_version_id = ase.video_version_id))))
+     LEFT JOIN ga_count gac ON ((gac.answer_session_id = ase.answer_session_id)));
+
+
+ALTER TABLE public.answer_session_evaluation_view OWNER TO dev_service_user;
+
+--
+-- Name: permission_assignment_bridge; Type: TABLE; Schema: public; Owner: dev_service_user
+--
+
+CREATE TABLE public.permission_assignment_bridge (
+    id integer NOT NULL,
+    permission_id integer NOT NULL,
+    assignee_user_id integer,
+    assignee_company_id integer,
+    assignee_group_id integer,
+    context_company_id integer,
+    context_course_id integer,
+    CONSTRAINT permission_assignment_bridge_check CHECK ((((context_company_id IS NULL) AND (context_course_id IS NOT NULL)) OR ((context_company_id IS NOT NULL) AND (context_course_id IS NULL)) OR ((context_company_id IS NULL) AND (context_course_id IS NULL))))
+);
+
+
+ALTER TABLE public.permission_assignment_bridge OWNER TO dev_service_user;
+
+--
+-- Name: role; Type: TABLE; Schema: public; Owner: dev_service_user
+--
+
+CREATE TABLE public.role (
+    id integer NOT NULL,
+    deletion_date timestamp without time zone,
+    name character varying NOT NULL,
+    is_custom boolean NOT NULL,
+    company_id integer,
+    CONSTRAINT role_constraint CHECK (((is_custom = false) OR (company_id IS NOT NULL)))
+);
+
+
+ALTER TABLE public.role OWNER TO dev_service_user;
+
+--
+-- Name: role_assignment_bridge; Type: TABLE; Schema: public; Owner: dev_service_user
+--
+
+CREATE TABLE public.role_assignment_bridge (
+    id integer NOT NULL,
+    role_id integer NOT NULL,
+    assignee_user_id integer,
+    assignee_company_id integer,
+    context_company_id integer
+);
+
+
+ALTER TABLE public.role_assignment_bridge OWNER TO dev_service_user;
+
+--
+-- Name: role_permission_bridge; Type: TABLE; Schema: public; Owner: dev_service_user
+--
+
+CREATE TABLE public.role_permission_bridge (
+    id integer NOT NULL,
+    role_id integer NOT NULL,
+    permission_id integer NOT NULL
+);
+
+
+ALTER TABLE public.role_permission_bridge OWNER TO dev_service_user;
+
+--
+-- Name: company_permission_view; Type: VIEW; Schema: public; Owner: dev_service_user
+--
+
+CREATE VIEW public.company_permission_view AS
+ SELECT co.id AS assignee_company_id,
+    rab.context_company_id,
+    NULL::integer AS context_course_id,
+    rpb.role_id,
+    rpb.permission_id
+   FROM (((public.company co
+     JOIN public.role_assignment_bridge rab ON ((rab.assignee_company_id = co.id)))
+     LEFT JOIN public.role r ON ((r.id = rab.role_id)))
+     LEFT JOIN public.role_permission_bridge rpb ON ((rpb.role_id = r.id)))
+UNION
+ SELECT co.id AS assignee_company_id,
+    pab.context_company_id,
+    pab.context_course_id,
+    NULL::integer AS role_id,
+    pab.permission_id
+   FROM (public.company co
+     JOIN public.permission_assignment_bridge pab ON ((pab.assignee_company_id = co.id)))
+  ORDER BY 1, 2, 5;
+
+
+ALTER TABLE public.company_permission_view OWNER TO dev_service_user;
+
+--
+-- Name: course_completion; Type: TABLE; Schema: public; Owner: dev_service_user
+--
+
+CREATE TABLE public.course_completion (
+    id integer NOT NULL,
+    course_version_id integer NOT NULL,
+    user_id integer NOT NULL
+);
+
+
+ALTER TABLE public.course_completion OWNER TO dev_service_user;
+
+--
+-- Name: course_completion_view; Type: VIEW; Schema: public; Owner: dev_service_user
+--
+
+CREATE VIEW public.course_completion_view AS
+ SELECT cv.course_id,
+    cc.user_id
+   FROM (public.course_completion cc
+     LEFT JOIN public.course_version cv ON ((cv.id = cc.course_version_id)))
+  GROUP BY cv.course_id, cc.user_id;
+
+
+ALTER TABLE public.course_completion_view OWNER TO dev_service_user;
+
+--
+-- Name: course_length_estimation_view; Type: VIEW; Schema: public; Owner: dev_service_user
+--
+
+CREATE VIEW public.course_length_estimation_view AS
+ SELECT sq.course_id,
+    sq.total_video_seconds,
+    sq.total_exam_seconds,
+    (sq.total_video_seconds + sq.total_exam_seconds) AS total_length_seconds
+   FROM ( SELECT cv.id AS course_id,
+            ( SELECT (COALESCE(sum(vd.video_file_length_seconds), (0)::double precision))::integer AS "coalesce"
+                   FROM ((public.video_version vv
+                     LEFT JOIN public.module_version mv ON (((mv.course_version_id = cv.id) AND (mv.id = vv.module_version_id))))
+                     LEFT JOIN public.video_data vd ON ((vd.id = vv.video_data_id)))
+                  WHERE (mv.course_version_id = cv.id)) AS total_video_seconds,
+            ( SELECT ((count(1))::integer * 20) AS total_exam_seconds
+                   FROM ((public.exam_version ev
+                     LEFT JOIN public.exam e ON ((e.id = ev.exam_id)))
+                     LEFT JOIN public.module_version mv ON (((mv.course_version_id = cv.id) AND (mv.id = ev.module_version_id))))
+                  WHERE ((e.is_pretest = false) AND (e.is_signup = false) AND (mv.course_version_id = cv.id))) AS total_exam_seconds
+           FROM public.course_version cv) sq;
+
+
+ALTER TABLE public.course_length_estimation_view OWNER TO dev_service_user;
+
+--
+-- Name: course_questions_success_view; Type: VIEW; Schema: public; Owner: dev_service_user
+--
+
+CREATE VIEW public.course_questions_success_view AS
+ SELECT sq.user_id,
+    sq.course_id,
+    (count(sq.latest_given_answer_id))::integer AS total_answer_count,
+    (sum((((ga.state)::text = 'CORRECT'::text))::integer))::integer AS correct_answer_count
+   FROM (( SELECT u.id AS user_id,
+            c.id AS course_id,
+            vv.id AS video_version_id,
+            qv.id AS question_version_id,
+            max(ga_1.id) AS latest_given_answer_id
+           FROM (((((((public.course c
+             LEFT JOIN public.course_version cv ON ((cv.course_id = c.id)))
+             LEFT JOIN public."user" u ON (true))
+             LEFT JOIN public.module_version mv ON ((mv.course_version_id = cv.id)))
+             LEFT JOIN public.video_version vv ON ((vv.module_version_id = mv.id)))
+             LEFT JOIN public.question_version qv ON ((qv.video_version_id = vv.id)))
+             LEFT JOIN public.answer_session ase ON (((ase.user_id = u.id) AND (ase.video_version_id = vv.id))))
+             LEFT JOIN public.given_answer ga_1 ON (((ga_1.question_version_id = qv.id) AND (ga_1.answer_session_id = ase.id))))
+          GROUP BY u.id, vv.id, qv.id, c.id) sq
+     LEFT JOIN public.given_answer ga ON ((ga.id = sq.latest_given_answer_id)))
+  GROUP BY sq.user_id, sq.course_id
+  ORDER BY sq.user_id, sq.course_id;
+
+
+ALTER TABLE public.course_questions_success_view OWNER TO dev_service_user;
 
 --
 -- Name: course_state_view; Type: VIEW; Schema: public; Owner: dev_service_user
@@ -2114,18 +2375,6 @@ CREATE VIEW public.signup_completed_view AS
 
 
 ALTER TABLE public.signup_completed_view OWNER TO dev_service_user;
-
---
--- Name: storage_file; Type: TABLE; Schema: public; Owner: dev_service_user
---
-
-CREATE TABLE public.storage_file (
-    id integer NOT NULL,
-    file_path character varying NOT NULL
-);
-
-
-ALTER TABLE public.storage_file OWNER TO dev_service_user;
 
 --
 -- Name: tempomat_adjustment_value; Type: TABLE; Schema: public; Owner: dev_service_user
@@ -2267,32 +2516,6 @@ CREATE VIEW public.user_course_completion_original_estimation_view AS
 ALTER TABLE public.user_course_completion_original_estimation_view OWNER TO dev_service_user;
 
 --
--- Name: user_course_progress_actual_view; Type: VIEW; Schema: public; Owner: dev_service_user
---
-
-CREATE VIEW public.user_course_progress_actual_view AS
- SELECT sq.user_id,
-    sq.course_id,
-    sq.days_elapsed_since_start,
-    sq.total_completed_item_count,
-    sq.total_item_count,
-    ((NULLIF(sq.total_completed_item_count, 0))::double precision / NULLIF((sq.days_elapsed_since_start)::double precision, (0)::double precision)) AS avg_completed_items_per_day,
-    round((((NULLIF(sq.total_completed_item_count, 0))::double precision / NULLIF((sq.total_item_count)::double precision, (0)::double precision)) * (100)::double precision)) AS completed_percentage,
-    (sq.total_item_count - sq.total_completed_item_count) AS remaining_item_count
-   FROM ( SELECT ucb.user_id,
-            ucb.course_id,
-            (((now())::date - (ucb.start_date)::date) + 1) AS days_elapsed_since_start,
-            (count(*))::integer AS total_completed_item_count,
-            coicv.item_count AS total_item_count
-           FROM ((public.user_course_bridge ucb
-             LEFT JOIN public.course_item_completion_view cicv ON (((cicv.user_id = ucb.user_id) AND (cicv.course_id = ucb.course_id))))
-             LEFT JOIN public.course_item_count_view coicv ON ((ucb.course_id = coicv.course_id)))
-          GROUP BY ucb.user_id, ucb.course_id, ucb.start_date, coicv.item_count) sq;
-
-
-ALTER TABLE public.user_course_progress_actual_view OWNER TO dev_service_user;
-
---
 -- Name: user_course_progress_view; Type: VIEW; Schema: public; Owner: dev_service_user
 --
 
@@ -2342,11 +2565,11 @@ CREATE VIEW public.tempomat_calculation_data_view AS
     ucpa.total_item_count,
     ucpa.total_completed_item_count,
         CASE
-            WHEN (ucb.tempomat_mode = 'light'::text) THEN (1)::numeric
+            WHEN (ucb.tempomat_mode = 'light'::text) THEN (1)::double precision
             ELSE
             CASE
-                WHEN (ucb.tempomat_mode = 'strict'::text) THEN (0)::numeric
-                ELSE (((tav.min_value + (((tav.max_value - tav.min_value) / 10) * upav.experience)))::numeric * 0.01)
+                WHEN (ucb.tempomat_mode = 'strict'::text) THEN (0)::double precision
+                ELSE ((((tav.min_value + (((tav.max_value - tav.min_value) / 10) * upav.experience)))::numeric * 0.01))::double precision
             END
         END AS tempomat_adjustment_value
    FROM (((((public.user_course_bridge ucb
@@ -3063,20 +3286,6 @@ CREATE TABLE public.course_category (
 ALTER TABLE public.course_category OWNER TO dev_service_user;
 
 --
--- Name: course_video_count_view; Type: VIEW; Schema: public; Owner: dev_service_user
---
-
-CREATE VIEW public.course_video_count_view AS
- SELECT (count(vv.id))::integer AS video_count,
-    mv.course_version_id
-   FROM (public.video_version vv
-     LEFT JOIN public.module_version mv ON ((mv.id = vv.module_version_id)))
-  GROUP BY mv.course_version_id;
-
-
-ALTER TABLE public.course_video_count_view OWNER TO dev_service_user;
-
---
 -- Name: course_video_length_view; Type: VIEW; Schema: public; Owner: dev_service_user
 --
 
@@ -3092,40 +3301,6 @@ CREATE VIEW public.course_video_length_view AS
 
 
 ALTER TABLE public.course_video_length_view OWNER TO dev_service_user;
-
---
--- Name: latest_answer_session_view; Type: VIEW; Schema: public; Owner: dev_service_user
---
-
-CREATE VIEW public.latest_answer_session_view AS
- SELECT ase.user_id,
-    ase.exam_version_id,
-    ase.video_version_id,
-    max(ase.id) AS answer_session_id
-   FROM public.answer_session ase
-  WHERE ((ase.exam_version_id IS NOT NULL) OR (ase.video_version_id IS NOT NULL))
-  GROUP BY ase.user_id, ase.exam_version_id, ase.video_version_id;
-
-
-ALTER TABLE public.latest_answer_session_view OWNER TO dev_service_user;
-
---
--- Name: latest_exam_view; Type: VIEW; Schema: public; Owner: dev_service_user
---
-
-CREATE VIEW public.latest_exam_view AS
- SELECT ev.exam_id,
-    max(ev.id) AS exam_version_id,
-    cv.course_id,
-    ex.is_pretest
-   FROM (((public.exam_version ev
-     LEFT JOIN public.exam ex ON ((ex.id = ev.exam_id)))
-     LEFT JOIN public.module_version mv ON ((mv.id = ev.module_version_id)))
-     LEFT JOIN public.course_version cv ON ((cv.id = mv.course_version_id)))
-  GROUP BY ev.exam_id, cv.course_id, ex.is_pretest;
-
-
-ALTER TABLE public.latest_exam_view OWNER TO dev_service_user;
 
 --
 -- Name: available_course_view; Type: VIEW; Schema: public; Owner: dev_service_user
@@ -3145,16 +3320,6 @@ CREATE VIEW public.available_course_view AS
            FROM public.course_item_completion_view cicv
           WHERE (cicv.video_version_id IS NOT NULL)
           GROUP BY cicv.course_version_id, cicv.user_id
-        ), final_exam_score_percentage AS (
-         SELECT lasv.user_id,
-            lev.course_id,
-            max(esv.exam_score) AS final_exam_score_percentage
-           FROM ((((public.latest_answer_session_view lasv
-             JOIN public.latest_exam_view lev ON ((lev.exam_version_id = lasv.exam_version_id)))
-             JOIN public.exam_version ev ON ((ev.id = lev.exam_version_id)))
-             JOIN public.exam_data ed ON (((ed.id = ev.exam_data_id) AND (ed.is_final = true))))
-             LEFT JOIN public.exam_score_view esv ON ((esv.exam_version_id = ev.id)))
-          GROUP BY lasv.user_id, lev.course_id
         )
  SELECT u.id AS user_id,
     co.id AS course_id,
@@ -3173,7 +3338,7 @@ CREATE VIEW public.available_course_view AS
     ucb.stage_name,
     ucb.required_completion_date,
     cov.completed_video_count,
-    fesp.final_exam_score_percentage,
+    fesv.final_exam_score_percentage,
     teacher.id AS teacher_id,
     teacher.first_name AS teacher_first_name,
     teacher.last_name AS teacher_last_name,
@@ -3188,7 +3353,7 @@ CREATE VIEW public.available_course_view AS
      LEFT JOIN public.course_data cd ON ((cd.id = cv.course_data_id)))
      LEFT JOIN public."user" u ON ((u.id = ac.user_id)))
      LEFT JOIN public.course_video_length_view cvlv ON ((cvlv.course_version_id = cv.id)))
-     LEFT JOIN public.course_video_count_view cvcv ON ((cvcv.course_version_id = cv.id)))
+     LEFT JOIN public.course_video_count_view cvcv ON ((cvcv.course_id = co.id)))
      LEFT JOIN public.course_state_view cosv ON (((cosv.course_id = co.id) AND (cosv.user_id = u.id))))
      LEFT JOIN public.storage_file sf ON ((sf.id = cd.cover_file_id)))
      LEFT JOIN public.user_course_bridge ucb ON (((ucb.user_id = u.id) AND (ucb.course_id = co.id))))
@@ -3196,7 +3361,7 @@ CREATE VIEW public.available_course_view AS
      LEFT JOIN public.course_category csc ON ((csc.id = cd.sub_category_id)))
      LEFT JOIN public."user" teacher ON ((teacher.id = cd.teacher_id)))
      LEFT JOIN completed_videos cov ON (((cov.user_id = u.id) AND (cov.course_version_id = cv.id))))
-     LEFT JOIN final_exam_score_percentage fesp ON (((fesp.user_id = u.id) AND (fesp.course_id = co.id))))
+     LEFT JOIN public.final_exam_score_view fesv ON (((fesv.user_id = u.id) AND (fesv.course_id = co.id))))
   WHERE (co.deletion_date IS NULL)
   ORDER BY u.id, co.id;
 
@@ -3608,6 +3773,36 @@ CREATE VIEW public.company_view AS
 ALTER TABLE public.company_view OWNER TO dev_service_user;
 
 --
+-- Name: completed_course_item_count_view; Type: VIEW; Schema: public; Owner: dev_service_user
+--
+
+CREATE VIEW public.completed_course_item_count_view AS
+ SELECT cicv.user_id,
+    cicv.course_id,
+    count(*) AS completed_course_item_count
+   FROM public.course_item_completion_view cicv
+  GROUP BY cicv.user_id, cicv.course_id;
+
+
+ALTER TABLE public.completed_course_item_count_view OWNER TO dev_service_user;
+
+--
+-- Name: completed_module_item_count_view; Type: VIEW; Schema: public; Owner: dev_service_user
+--
+
+CREATE VIEW public.completed_module_item_count_view AS
+ SELECT cicv.user_id,
+    cicv.course_id,
+    cicv.module_id,
+    count(*) AS completed_course_item_count
+   FROM public.course_item_completion_view cicv
+  GROUP BY cicv.user_id, cicv.course_id, cicv.module_id
+  ORDER BY cicv.user_id, cicv.course_id, cicv.module_id;
+
+
+ALTER TABLE public.completed_module_item_count_view OWNER TO dev_service_user;
+
+--
 -- Name: connection_test_table; Type: TABLE; Schema: public; Owner: dev_service_user
 --
 
@@ -3719,7 +3914,7 @@ CREATE VIEW public.course_admin_short_view AS
      LEFT JOIN public."user" u ON ((u.id = cd.teacher_id)))
      LEFT JOIN public.course_category cc ON ((cc.id = cd.category_id)))
      LEFT JOIN public.course_category scc ON ((scc.id = cd.sub_category_id)))
-     LEFT JOIN public.course_video_count_view cvcv ON ((cvcv.course_version_id = lcvv.version_id)))
+     LEFT JOIN public.course_video_count_view cvcv ON ((cvcv.course_id = co.id)))
      LEFT JOIN exam_count ec ON ((ec.course_version_id = lcvv.version_id)))
   ORDER BY lcvv.course_id;
 
@@ -4169,9 +4364,7 @@ CREATE VIEW public.course_details_view AS
     tinfo.badges AS teacher_badges,
     tavatarsf.file_path AS teacher_avatar_file_path,
     sf.file_path AS cover_file_path,
-    ( SELECT cvcv.video_count
-           FROM public.course_video_count_view cvcv
-          WHERE (cvcv.course_version_id = cv.id)) AS total_video_count,
+    cvcv.video_count AS total_video_count,
     ( SELECT cvlv.sum_length_seconds
            FROM public.course_video_length_view cvlv
           WHERE (cvlv.course_version_id = cv.id)) AS total_video_sum_length_seconds,
@@ -4190,7 +4383,7 @@ CREATE VIEW public.course_details_view AS
              LEFT JOIN public.question_version qv ON ((qv.video_version_id = vv.id)))
           WHERE (lco.id = co.id)) AS total_video_question_count,
     true AS can_start_course
-   FROM (((((((((((public.course co
+   FROM ((((((((((((public.course co
      LEFT JOIN public.latest_course_version_view lcvv ON ((lcvv.course_id = co.id)))
      LEFT JOIN public.course_version cv ON ((cv.id = lcvv.version_id)))
      LEFT JOIN public.course_data cd ON ((cd.id = cv.course_data_id)))
@@ -4202,6 +4395,7 @@ CREATE VIEW public.course_details_view AS
      LEFT JOIN public.course_category cc ON ((cc.id = cd.category_id)))
      LEFT JOIN public.user_course_bridge ucb ON (((ucb.user_id = u.id) AND (ucb.course_id = cv.course_id))))
      LEFT JOIN public.course_category scc ON ((scc.id = cd.sub_category_id)))
+     LEFT JOIN public.course_video_count_view cvcv ON ((cvcv.course_id = cv.course_id)))
   ORDER BY u.id, co.id;
 
 
@@ -4328,16 +4522,6 @@ CREATE VIEW public.course_learning_stats_view AS
              LEFT JOIN public.course_version cv_1 ON ((cv_1.id = mv.course_version_id)))
              LEFT JOIN public.exam_score_view esv ON ((esv.exam_version_id = ev.id)))
           GROUP BY ase.user_id, cv_1.course_id
-        ), final_exam_score_percentage AS (
-         SELECT lasv.user_id,
-            lev.course_id,
-            max(esv.exam_score) AS max_exam_score
-           FROM ((((public.latest_answer_session_view lasv
-             JOIN public.latest_exam_view lev ON ((lev.exam_version_id = lasv.exam_version_id)))
-             JOIN public.exam_version ev ON ((ev.id = lev.exam_version_id)))
-             JOIN public.exam_data ed ON (((ed.id = ev.exam_data_id) AND (ed.is_final = true))))
-             LEFT JOIN public.exam_score_view esv ON ((esv.exam_version_id = ev.id)))
-          GROUP BY lasv.user_id, lev.course_id
         ), answered_video_question AS (
          SELECT asv.user_id,
             cv_1.course_id,
@@ -4349,13 +4533,6 @@ CREATE VIEW public.course_learning_stats_view AS
              LEFT JOIN public.course_version cv_1 ON ((cv_1.id = mv.course_version_id)))
           WHERE (asv.answer_session_type = 'video'::text)
           GROUP BY asv.user_id, cv_1.course_id
-        ), completed_video_count AS (
-         SELECT cicv.user_id,
-            cicv.course_id,
-            count(*) AS completed_video_count
-           FROM public.course_item_completion_view cicv
-          WHERE (cicv.video_version_id IS NOT NULL)
-          GROUP BY cicv.user_id, cicv.course_id
         )
  SELECT u.id AS user_id,
     co.id AS course_id,
@@ -4375,38 +4552,39 @@ CREATE VIEW public.course_learning_stats_view AS
     teacher.first_name AS teacher_first_name,
     teacher.last_name AS teacher_last_name,
     cstv.total_spent_seconds,
-    ucpav.total_item_count AS total_course_item_count,
-    ucpav.total_completed_item_count AS completed_course_item_count,
-    COALESCE(cvc.completed_video_count, (0)::bigint) AS completed_video_count,
+    cicv.item_count AS total_course_item_count,
+    ccicv.completed_course_item_count,
+    COALESCE(ccvcv.completed_video_count, (0)::bigint) AS completed_video_count,
     cvcv.video_count AS total_video_count,
     vqc.video_question_count AS total_video_question_count,
     COALESCE(avq.answered_video_question_count, (0)::bigint) AS answered_video_question_count,
     easp.avg_exam_score_percentage,
-    fesp.max_exam_score AS final_exam_score_percentage,
+    fesv.final_exam_score_percentage,
         CASE
             WHEN (cqsv.total_answer_count > 0) THEN ((((cqsv.correct_answer_count)::double precision / (cqsv.total_answer_count)::double precision) * (100)::double precision))::integer
             ELSE 0
         END AS question_success_rate
-   FROM (((((((((((((((((((public."user" u
+   FROM ((((((((((((((((((((public."user" u
      JOIN public.user_course_bridge ucb ON ((ucb.user_id = u.id)))
      JOIN public.course co ON ((co.id = ucb.course_id)))
      LEFT JOIN public.latest_course_version_view lcvv ON ((lcvv.course_id = co.id)))
      LEFT JOIN public.course_version cv ON ((cv.id = lcvv.version_id)))
      LEFT JOIN public.course_data cd ON ((cd.id = cv.course_data_id)))
      LEFT JOIN public.course_completion cc ON (((cc.user_id = u.id) AND (cc.course_version_id = cv.id))))
-     LEFT JOIN public.course_video_count_view cvcv ON ((cvcv.course_version_id = cv.id)))
+     LEFT JOIN public.course_video_count_view cvcv ON ((cvcv.course_id = co.id)))
      LEFT JOIN public.storage_file sf ON ((sf.id = cd.cover_file_id)))
      LEFT JOIN public.course_category ccat ON ((cc.id = cd.category_id)))
      LEFT JOIN public.course_category csc ON ((csc.id = cd.sub_category_id)))
      LEFT JOIN public."user" teacher ON ((teacher.id = cd.teacher_id)))
      LEFT JOIN public.course_spent_time_view cstv ON (((cstv.user_id = u.id) AND (cstv.course_id = co.id))))
-     LEFT JOIN public.user_course_progress_actual_view ucpav ON (((ucpav.user_id = u.id) AND (ucpav.course_id = co.id))))
-     LEFT JOIN final_exam_score_percentage fesp ON (((fesp.user_id = u.id) AND (fesp.course_id = co.id))))
+     LEFT JOIN public.course_item_count_view cicv ON ((cicv.course_id = co.id)))
+     LEFT JOIN public.completed_course_item_count_view ccicv ON (((ccicv.user_id = u.id) AND (ccicv.course_id = co.id))))
+     LEFT JOIN public.final_exam_score_view fesv ON (((fesv.user_id = u.id) AND (fesv.course_id = co.id))))
      LEFT JOIN public.course_questions_success_view cqsv ON (((cqsv.user_id = u.id) AND (cqsv.course_id = co.id))))
      LEFT JOIN exam_avg_score_percentage easp ON (((easp.user_id = u.id) AND (easp.course_id = co.id))))
      LEFT JOIN answered_video_question avq ON (((avq.user_id = u.id) AND (avq.course_id = co.id))))
      LEFT JOIN video_question_count vqc ON ((vqc.course_version_id = cv.id)))
-     LEFT JOIN completed_video_count cvc ON (((cvc.user_id = u.id) AND (cvc.course_id = co.id))));
+     LEFT JOIN public.completed_course_video_count_view ccvcv ON (((ccvcv.user_id = u.id) AND (ccvcv.course_id = co.id))));
 
 
 ALTER TABLE public.course_learning_stats_view OWNER TO dev_service_user;
@@ -4453,10 +4631,11 @@ CREATE VIEW public.course_overview_view AS
     clsv.answered_video_question_count,
     clsv.question_success_rate,
     clsv.avg_exam_score_percentage AS exam_success_rate_average,
-    clsv.final_exam_score_percentage AS final_exam_success_rate,
+    fesv.final_exam_score_percentage AS final_exam_success_rate,
     COALESCE(ecsc.episto_coin_amount) AS coins_acquired
-   FROM (public.course_learning_stats_view clsv
-     LEFT JOIN episto_coin_sum_cte ecsc ON (((ecsc.course_id = clsv.course_id) AND (ecsc.user_id = clsv.user_id))));
+   FROM ((public.course_learning_stats_view clsv
+     LEFT JOIN episto_coin_sum_cte ecsc ON (((ecsc.course_id = clsv.course_id) AND (ecsc.user_id = clsv.user_id))))
+     LEFT JOIN public.final_exam_score_view fesv ON (((fesv.course_id = clsv.course_id) AND (fesv.user_id = clsv.user_id))));
 
 
 ALTER TABLE public.course_overview_view OWNER TO dev_service_user;
@@ -5635,6 +5814,21 @@ ALTER SEQUENCE public.module_id_seq OWNED BY public.module.id;
 
 
 --
+-- Name: module_item_count_view; Type: VIEW; Schema: public; Owner: dev_service_user
+--
+
+CREATE VIEW public.module_item_count_view AS
+ SELECT mv.module_id,
+    (count(*))::integer AS item_count
+   FROM ((public.latest_course_version_view lcvv
+     LEFT JOIN public.module_version mv ON ((mv.course_version_id = lcvv.version_id)))
+     LEFT JOIN public.course_item_view civ ON (((civ.module_id = mv.module_id) AND (civ.item_type <> 'pretest'::text))))
+  GROUP BY mv.module_id;
+
+
+ALTER TABLE public.module_item_count_view OWNER TO dev_service_user;
+
+--
 -- Name: module_player_view; Type: VIEW; Schema: public; Owner: dev_service_user
 --
 
@@ -6359,7 +6553,7 @@ ALTER SEQUENCE public.role_permission_bridge_id_seq OWNED BY public.role_permiss
 --
 
 CREATE VIEW public.schema_version_view AS
- SELECT '18:40:53 2022-10-23 CEDT'::text AS last_modification_date,
+ SELECT '14:29:34 2022-10-28 CEDT'::text AS last_modification_date,
     '0.01'::text AS version;
 
 
@@ -6975,25 +7169,26 @@ ALTER TABLE public.user_daily_progress_view OWNER TO dev_service_user;
 --
 
 CREATE VIEW public.user_inactive_course_view AS
- SELECT user_course_sessions.user_id,
-    count(user_course_sessions.course_id) AS inactive_course_count
-   FROM ( SELECT DISTINCT ON (cv.course_id) usv.user_id,
-            usv.end_date AS session_end_date,
+ WITH latest_user_sessions AS (
+         SELECT usv.user_id,
             cv.course_id,
-            EXTRACT(week FROM usv.start_date) AS week,
-            count((cv.course_id * '-10'::integer)) AS points
-           FROM (((((((public.user_session_view usv
-             LEFT JOIN public.user_session_activity usa ON ((usa.activity_session_id = usv.id)))
+            max(usa.creation_date) AS latest_course_activity
+           FROM (((((public.user_session_activity usa
+             LEFT JOIN public.user_session_view usv ON ((usv.id = usa.activity_session_id)))
              LEFT JOIN public.video_version vv ON ((vv.id = usa.video_version_id)))
              LEFT JOIN public.exam_version ev ON ((ev.id = usa.exam_version_id)))
              LEFT JOIN public.module_version mv ON (((mv.id = vv.module_version_id) OR (mv.id = ev.module_version_id))))
              LEFT JOIN public.course_version cv ON ((cv.id = mv.course_version_id)))
-             LEFT JOIN public.course_progress_view cpv ON (((cpv.user_id = usv.user_id) AND (cpv.course_id = cv.course_id))))
-             LEFT JOIN public.user_course_bridge ucb ON (((ucb.user_id = usv.user_id) AND (ucb.course_id = cv.course_id))))
-          WHERE ((usv.start_date > (CURRENT_DATE - 30)) AND (usv.end_date < (CURRENT_DATE - 14)) AND (ucb.creation_date > (CURRENT_DATE - 30)) AND (cpv.progress_percentage < 50) AND (usv.length_seconds <> 0) AND (usv.is_finalized = true))
-          GROUP BY usv.user_id, usv.start_date, usv.end_date, cv.course_id
-          ORDER BY cv.course_id, usv.end_date DESC) user_course_sessions
-  GROUP BY user_course_sessions.user_id;
+          WHERE ((cv.course_id IS NOT NULL) AND (usa.creation_date > (CURRENT_DATE - 30)) AND (usv.length_seconds <> 0) AND (usv.is_finalized = true))
+          GROUP BY usv.user_id, cv.course_id
+        )
+ SELECT lus.user_id,
+    count(lus.course_id) AS inactive_course_count
+   FROM ((latest_user_sessions lus
+     JOIN public.course_progress_view cpv ON (((cpv.user_id = lus.user_id) AND (cpv.course_id = lus.course_id) AND (cpv.progress_percentage < 50))))
+     JOIN public.user_course_bridge ucb ON (((ucb.user_id = lus.user_id) AND (ucb.course_id = lus.course_id) AND (ucb.creation_date > (CURRENT_DATE - 30)))))
+  WHERE (lus.latest_course_activity < (CURRENT_DATE - 14))
+  GROUP BY lus.user_id;
 
 
 ALTER TABLE public.user_inactive_course_view OWNER TO dev_service_user;
@@ -7025,22 +7220,24 @@ CREATE VIEW public.user_engagement_view AS
             sum(GREATEST((sg.is_shorter_than_five_minutes_count * '-3'::integer), ('-15'::integer)::bigint)) AS is_shorter_than_five_minutes_points
            FROM session_groups sg
           GROUP BY sg.user_id
+        ), user_session_lengths AS (
+         SELECT usv.user_id,
+            (sum(usv.length_seconds) / 60) AS length_minutes
+           FROM public.user_session_view usv
+          WHERE (usv.start_date > (CURRENT_DATE - 30))
+          GROUP BY usv.user_id
         ), total_session_length_points AS (
-         SELECT sq.user_id,
+         SELECT usl.user_id,
                 CASE
-                    WHEN (sq.length_minutes > 360) THEN 50
-                    WHEN (sq.length_minutes > 240) THEN 45
-                    WHEN (sq.length_minutes > 180) THEN 40
-                    WHEN (sq.length_minutes > 120) THEN 30
-                    WHEN (sq.length_minutes > 60) THEN 15
-                    WHEN (sq.length_minutes > 0) THEN 10
+                    WHEN (usl.length_minutes > 360) THEN 50
+                    WHEN (usl.length_minutes > 240) THEN 45
+                    WHEN (usl.length_minutes > 180) THEN 40
+                    WHEN (usl.length_minutes > 120) THEN 30
+                    WHEN (usl.length_minutes > 60) THEN 15
+                    WHEN (usl.length_minutes > 0) THEN 10
                     ELSE 0
                 END AS total_session_length_points
-           FROM ( SELECT usv.user_id,
-                    (sum(usv.length_seconds) / 60) AS length_minutes
-                   FROM public.user_session_view usv
-                  WHERE (usv.start_date > (CURRENT_DATE - 30))
-                  GROUP BY usv.user_id) sq
+           FROM user_session_lengths usl
         )
  SELECT u.id AS user_id,
     ((((((tslp.total_session_length_points)::numeric + sp.session_count_points) + sp.is_longer_than_fifteen_minutes_points) + sp.is_shorter_than_five_minutes_points) + ((COALESCE(uicv.inactive_course_count, (0)::bigint) * (- 10)))::numeric))::integer AS engagement_points
@@ -7497,46 +7694,7 @@ ALTER TABLE public.user_module_performance_view OWNER TO dev_service_user;
 --
 
 CREATE VIEW public.user_module_stats_view AS
- WITH module_item_count_cte AS (
-         SELECT mv_1.module_id,
-            (count(*))::integer AS total_item_count
-           FROM ((public.latest_course_version_view lcvv_1
-             LEFT JOIN public.module_version mv_1 ON ((mv_1.course_version_id = lcvv_1.version_id)))
-             LEFT JOIN public.course_item_view civ ON (((civ.module_id = mv_1.module_id) AND (civ.item_type <> 'pretest'::text))))
-          GROUP BY mv_1.module_id
-        ), course_item_completion_distinct AS (
-         SELECT DISTINCT cicv.user_id,
-            cicv.course_id,
-            cicv.module_id,
-            cicv.video_id,
-            cicv.exam_id
-           FROM public.course_item_completion_view cicv
-        ), module_progress_cte AS (
-         SELECT DISTINCT cicd.user_id,
-            cicd.course_id,
-            cicd.module_id,
-            count(*) AS completed_course_item_count
-           FROM course_item_completion_distinct cicd
-          GROUP BY cicd.user_id, cicd.course_id, cicd.module_id
-        ), module_last_exam AS (
-         SELECT mv_1.module_id,
-            ev.exam_id,
-            max(ed.order_index) AS item_order_index
-           FROM ((public.module_version mv_1
-             LEFT JOIN public.exam_version ev ON ((ev.module_version_id = mv_1.id)))
-             LEFT JOIN public.exam_data ed ON ((ed.id = ev.exam_data_id)))
-          WHERE (ed.order_index <> 0)
-          GROUP BY mv_1.module_id, ev.exam_id
-          ORDER BY mv_1.module_id, ev.exam_id
-        ), module_last_exam_score_cte AS (
-         SELECT lasv.user_id,
-            mle.module_id,
-            asv.answer_session_success_rate AS last_exam_score
-           FROM (((public.latest_answer_session_view lasv
-             LEFT JOIN public.exam_version ev ON ((ev.id = lasv.exam_version_id)))
-             JOIN module_last_exam mle ON ((mle.exam_id = ev.exam_id)))
-             LEFT JOIN public.answer_session_view asv ON ((asv.answer_session_id = lasv.answer_session_id)))
-        ), module_question_success_rate_cte AS (
+ WITH module_question_success_rate_cte AS (
          SELECT asv.user_id,
             mv_1.module_id,
             ((avg(ga.score) / (4)::numeric) * (100)::numeric) AS question_success_rate
@@ -7558,26 +7716,26 @@ CREATE VIEW public.user_module_stats_view AS
         )
  SELECT mpc.user_id,
     cv.course_id,
-    mpc.module_id,
+    mv.module_id,
     md.name AS module_name,
-    (((mpc.completed_course_item_count)::double precision / (micc.total_item_count)::double precision) * (100)::double precision) AS module_progress,
+    (((mpc.completed_course_item_count)::double precision / (micv.item_count)::double precision) * (100)::double precision) AS module_progress,
     umpv.performance_percentage,
-    mlesc.last_exam_score,
+    mlesv.exam_score AS last_exam_score,
     mqsrc.question_success_rate AS module_question_success_rate,
     mvtbrc.videos_to_be_repeated_count
-   FROM ((((((((((module_progress_cte mpc
+   FROM ((((((((((public.completed_module_item_count_view mpc
      LEFT JOIN public.latest_course_version_view lcvv ON ((lcvv.course_id = mpc.course_id)))
      LEFT JOIN public.course_version cv ON ((cv.id = lcvv.version_id)))
      LEFT JOIN public.course_data cd ON ((cd.id = cv.course_data_id)))
      LEFT JOIN public.module_version mv ON (((mv.course_version_id = cv.id) AND (mv.module_id = mpc.module_id))))
      LEFT JOIN public.module_data md ON ((md.id = mv.module_data_id)))
-     LEFT JOIN module_item_count_cte micc ON ((micc.module_id = mv.module_id)))
+     LEFT JOIN public.module_item_count_view micv ON ((micv.module_id = mv.module_id)))
      LEFT JOIN public.user_module_performance_view umpv ON (((umpv.module_id = mv.module_id) AND (umpv.user_id = mpc.user_id))))
-     LEFT JOIN module_last_exam_score_cte mlesc ON (((mlesc.user_id = mpc.user_id) AND (mlesc.module_id = mv.module_id))))
+     LEFT JOIN public.module_last_exam_score_view mlesv ON (((mlesv.user_id = mpc.user_id) AND (mlesv.module_id = mv.module_id))))
      LEFT JOIN module_question_success_rate_cte mqsrc ON (((mqsrc.user_id = mpc.user_id) AND (mqsrc.module_id = mv.module_id))))
      LEFT JOIN module_videos_to_be_repeated_cte mvtbrc ON (((mvtbrc.user_id = mpc.user_id) AND (mvtbrc.module_id = mv.module_id))))
-  WHERE ((mpc.module_id <> 1) AND (md.order_index <> 0))
-  ORDER BY mpc.user_id, cv.course_id, mpc.module_id;
+  WHERE ((mv.module_id <> 1) AND (md.order_index <> 0))
+  ORDER BY mpc.user_id, cv.course_id, mv.module_id;
 
 
 ALTER TABLE public.user_module_stats_view OWNER TO dev_service_user;
@@ -7639,7 +7797,7 @@ CREATE VIEW public.user_performance_comparison_stats_view AS
           GROUP BY u_1.id
         ), watched_videos AS (
          SELECT cic.user_id,
-            sum(((cic.video_version_id IS NOT NULL))::integer) AS watched_videos_count
+            (sum(((cic.video_version_id IS NOT NULL))::integer))::integer AS watched_videos_count
            FROM public.course_item_completion_view cic
           GROUP BY cic.user_id
         ), engagement_points AS (
@@ -7659,7 +7817,7 @@ CREATE VIEW public.user_performance_comparison_stats_view AS
     rosc.is_any_course_required_or_started,
     up.user_performance_average,
     COALESCE(ep.engagement_points, 0) AS engagement_points,
-    COALESCE(wv.watched_videos_count, (0)::bigint) AS watched_videos_count
+    COALESCE(wv.watched_videos_count, 0) AS watched_videos_count
    FROM ((((user_performances up
      LEFT JOIN watched_videos wv ON ((wv.user_id = up.user_id)))
      LEFT JOIN engagement_points ep ON ((ep.user_id = up.user_id)))
@@ -8993,7 +9151,6 @@ COPY public.activity_session (id, start_date, end_date, is_finalized, user_id, a
 119	2022-10-05 14:14:35.04+00	2022-10-05 14:14:39.39+00	t	8	\N
 116	2022-10-05 13:22:18.306+00	2022-10-05 13:25:22.188+00	t	8	\N
 117	2022-10-05 13:41:11.375+00	2022-10-05 13:41:11.375+00	t	8	\N
-123	2022-10-05 14:48:27.569+00	2022-10-05 14:48:27.569+00	f	13	\N
 118	2022-10-05 14:04:02.74+00	2022-10-05 14:05:06.116+00	t	8	\N
 120	2022-10-05 14:24:39.963+00	2022-10-05 14:24:39.963+00	t	8	\N
 121	2022-10-05 14:30:35.137+00	2022-10-05 14:30:35.137+00	t	8	\N
@@ -9550,7 +9707,14 @@ COPY public.activity_session (id, start_date, end_date, is_finalized, user_id, a
 709	2022-10-26 09:48:08.558+00	2022-10-26 09:48:08.928+00	t	1	\N
 710	2022-10-27 08:30:51.248+00	2022-10-27 08:30:51.616+00	t	1	\N
 711	2022-10-27 08:35:52.386+00	2022-10-27 08:35:52.75+00	t	1	\N
-712	2022-10-27 08:40:53.591+00	2022-10-27 08:40:53.942+00	f	1	\N
+712	2022-10-27 08:40:53.591+00	2022-10-27 08:40:53.942+00	t	1	\N
+713	2022-10-28 13:12:34.983+00	2022-10-28 13:12:35.331+00	t	1	\N
+123	2022-10-05 14:48:27.569+00	2022-10-05 14:48:27.569+00	t	13	\N
+715	2022-10-28 14:51:53.642+00	2022-10-28 14:53:04.551+00	t	13	\N
+714	2022-10-28 14:45:55.805+00	2022-10-28 14:48:02.314+00	t	1	\N
+717	2022-10-28 15:09:11.61+00	2022-10-28 15:14:13.28+00	t	13	\N
+716	2022-10-28 14:55:57.025+00	2022-10-28 14:55:57.369+00	f	1	\N
+718	2022-10-28 15:19:13.982+00	2022-10-28 15:19:14.433+00	f	13	\N
 \.
 
 
@@ -9567,7 +9731,6 @@ COPY public.activity_streak (id, start_date, end_date, is_finalized, user_id) FR
 11	2022-10-04 18:46:57.33+00	2022-10-04 19:39:58.215+00	f	16
 6	2022-10-04 15:42:13.04+00	2022-10-04 15:51:09.762+00	f	11
 12	2022-10-05 08:07:14.142+00	2022-10-05 09:57:54.297+00	f	17
-8	2022-10-04 17:05:57.014+00	2022-10-05 14:48:27.497+00	f	13
 15	2022-10-06 08:29:49.562+00	2022-10-06 16:10:52.384+00	f	21
 10	2022-10-04 18:33:17.973+00	2022-10-05 20:16:04.907+00	t	15
 14	2022-10-05 15:50:29.74+00	2022-10-06 05:52:46.977+00	f	20
@@ -9603,7 +9766,10 @@ COPY public.activity_streak (id, start_date, end_date, is_finalized, user_id) FR
 37	2022-10-16 18:04:10.007+00	2022-10-19 10:17:56.814+00	t	41
 17	2022-10-07 16:04:17.37+00	2022-10-14 13:31:46.803+00	t	1
 43	2022-10-21 06:54:25.505+00	2022-10-21 06:54:25.505+00	t	41
-45	2022-10-24 11:44:13.866+00	2022-10-27 08:40:53.894+00	f	1
+45	2022-10-24 11:44:13.866+00	2022-10-27 08:40:53.894+00	t	1
+8	2022-10-04 17:05:57.014+00	2022-10-05 14:48:27.497+00	t	13
+46	2022-10-28 13:12:34.856+00	2022-10-28 14:55:57.322+00	f	1
+47	2022-10-28 14:51:53.569+00	2022-10-28 15:19:14.386+00	f	13
 \.
 
 
@@ -15802,6 +15968,9 @@ COPY public.answer_session (id, start_date, is_practise, exam_version_id, video_
 421	2022-10-24 13:09:33.125+00	f	28	\N	41
 422	2022-10-24 13:09:38.603+00	f	\N	924	41
 423	2022-10-24 13:10:00.795+00	f	137	\N	41
+424	2022-10-28 14:52:52.621+00	f	\N	1336	13
+425	2022-10-28 14:53:06.059+00	f	\N	1336	13
+426	2022-10-28 15:09:15.54+00	f	\N	1336	13
 \.
 
 
@@ -27748,6 +27917,13 @@ COPY public.coin_transaction (id, creation_date, amount, is_gifted, user_id, act
 211	2022-10-27 08:30:51.348+00	10	f	1	710	\N	\N	\N	\N	\N
 212	2022-10-27 08:35:52.483+00	10	f	1	711	\N	\N	\N	\N	\N
 213	2022-10-27 08:40:53.69+00	10	f	1	712	\N	\N	\N	\N	\N
+214	2022-10-28 13:12:35.081+00	10	f	1	713	\N	\N	\N	\N	\N
+215	2022-10-28 14:45:55.902+00	10	f	1	714	\N	\N	\N	\N	\N
+216	2022-10-28 14:51:53.745+00	10	f	13	715	\N	\N	\N	\N	\N
+217	2022-10-28 14:53:04.753+00	1	f	13	\N	50	\N	\N	\N	\N
+218	2022-10-28 14:55:57.121+00	10	f	1	716	\N	\N	\N	\N	\N
+219	2022-10-28 15:09:11.705+00	10	f	13	717	\N	\N	\N	\N	\N
+220	2022-10-28 15:19:14.079+00	10	f	13	718	\N	\N	\N	\N	\N
 \.
 
 
@@ -27936,11 +28112,11 @@ COPY public.course_data (id, modification_date, title, short_description, descri
 4	2022-01-14 21:52:38.751+00	Google Ads Alapozó			1.5	3.5	0	magyar			f				private	8	12	1	471	t	t
 5	2022-01-14 21:52:50.323+00	Adatbányászat Pythonnal			1.5	3.5	0	magyar			f				private	1	12	1	473	t	t
 6	2022-01-14 21:54:26.151+00	LinkedIn vállalkozásoknak			1.5	3.5	0	magyar			f				private	8	12	1	472	t	t
-8	2022-01-14 21:55:20.139+00	OBS alapok			1.5	4	27	magyar			f				public	7	12	1	469	t	t
 11	2022-10-14 08:14:39.017+00	New course			0	0	0	magyar			f				private	1	1	1	\N	t	t
+8	2022-01-14 21:55:20.139+00	OBS alapok			1.5	4	27	magyar			f		: 0 | : 0 | : 0 | : 0 | : 0 | : 0 | : 0 | : 0 | : 0 | : 0		public	7	12	1	469	f	f
 7	2022-02-02 15:39:50.354+00	Microsoft Word Alapok	A Microsoft Word a maga nemében igazi svájci bicskának számít, amellyel produktív eszközök széles tárháza nyílik meg előtted.Használhatod akár to-do lista, borítékok, levelek, könyvek és kiadványok készítésére is ezáltal rengeteg időt spórolhatsz a hétköznapokban.	Word kurzusunk során először a program legalapvetőbb elrendezését és funkcióit ismerheted meg, majd megtanítunk hogyan formázd meg dokumentumaidat úgy ahogyan a profik.Ezután több és több gyakorlati tanáccsal fogunk ellátni, hogy megkönnyítsük a program használatát a mindennapok során és értékes időt spóroljunk számodra.Végül pedig részletesen bemutatjuk a Wordben található legtöbb vizuális eszközt és azok használatát, hogy ne csak szöveges formában legyen lehetőséged kifejezni a gondolataidat. 	5	4	19	magyar	Windows vagy macOS rendszerű számítógép (utóbbin némileg eltérhet a megjelenés), Legalább Microsoft Office 2016 vagy ennél magasabb verzió, * Ajánlott 2 monitorral követni a kurzust az optimális haladásért		t	Megtanulod hogyan formázz meg bármilyen szöveget akár újságcikkekhez, könyvekhez. | Megtanulod a Word vizuális eszközei által szemléltetni a mondandód és mindezt képes leszel nyomtatható és publikálható formába ölteni. | Képes leszel helyes, konzisztensen formázott dokumentumokat létrehozni.	Számítástechnikai ismeretek: 8 | Tervezési készségek: 2 | Kreativitás: 7 | Hatékony munkavégzés: 9 | Csapatmunka: 1	Feltöltés alatt...	public	4	12	1	475	t	t
 9	2022-02-11 14:18:39.393+00	Microsoft PowerPoint Alapok	Legyen szó akár előadásról, időzített tanulókártyákról vagy egy fotóalbum animált levetítéséről, a PowerPoint mindegyik feladatra kiváló eszköz.Széleskörű testreszabási lehetőségeinek köszönhetően kreatívan, könnyedén és elegánsan mutathatod be gondolataidat bárkinek. 	PowerPoint kurzusunk során törekedtünk az egyszerű érthetőségre, hogy már szinte minimális számítógépes ismeret is elegendő legyen a program elsajátításához.Nagy hangsúlyt fektettünk a PowerPoint legnagyobb részét alkotó vizuális eszközök bemutatására, legyen szó mindenféle szövegről, képről, álló vagy mozgó alakzatról, de akár videóról is, így prezentációdnak egész biztosan csak a képzeleted szabhat határt.Továbbá néhány hasznos praktikát is megtanítunk, melyek segítségével időt spórolhatsz és magabiztosságot szerezhetsz mind a készítés, mind az előadás során.	1.5	3.5	0	magyar	Windows vagy macOS rendszerű számítógép (utóbbin némileg eltérhet a megjelenés), Legalább Microsoft Office 2016 vagy ennél magasabb verzió, * Ajánlott 2 monitorral követni a kurzust az optimális haladásért		t	Megtanulod a PowerPoint alapvető elrendezését, prezentációk készítését és az ehhez szükséges számítógépes ismereteket is. | Megtanulod hogyan formázhatsz bármilyen szöveget vagy vizuális elemet | Megismerkedsz a diavetítés funkció részleteivel, az időzítéssel és az áttűnésekkel	Önkifejezés: 5 | Kreativitás: 9 | Számítógépes ismeretek: 5 | Hatékony munkavégzés: 2 | Tervezési készségek: 4	A PowerPoint egy új szintre helyezi a kreativitásod, merni fogsz bátran kísérletezni a rengeteg eszközzel és azok opcióival, hogy megalkothasd a legegyedibb prezentációkat.Ezáltal könnyebben kifejezheted magad és gyorsabban tervezheted meg egy előadás felépítését is.	public	4	12	1	468	t	t
-10	2022-02-02 11:45:50.036+00	Microsoft Excel Alapok	Formázások, képletek, függvények.Sokunk számára már rájuk gondolni is kellemetlen, dolgozni, pedig végképp nem szeretnénk velük.Office tanfolyamsorozatunk oszlopos tagjaként Excel kurzusunk sallangmentesen, és mindenki számára közérthetően segít megérteni, hogyan használhatjuk hatékonyan a Microsoft zöld táblázatkezelőjét.	Excel alapozó kurzusunk egészen az alapoktól mutatja be a program működését. Részletesen ismerheted meg a különböző menüpontokat, elrendezéseket, majd a munkaterület feltérképezése után az alapvető műveletek elvégzésének kezdhetsz neki.A formázások elsajátítása után a függvények tárházával ismerkedhetsz meg, melyek hatalmas segítséget jelentenek bonyolultnak tűnő feladatok szempillantás alatt való megoldásában, és a különböző képek, alakzatok beszúrását is elsajátíthatod.Az Excel rendkívül erős társad lehet egy - egy adat, kimutatás, riport prezentálásában is, elengedhetetlen tehát, hogy az ehhez illő diagramokat, grafikonokat is mesterien kezeld.	4.5	4	23	magyar	Windows vagy macOS rendszerű számítógép (utóbbin némileg eltérhet a megjelenés), | Legalább Microsoft Office 2016 vagy ennél magasabb verzió | Ajánlott 2 monitorral követni a kurzust az optimális haladásért		f	Megtanulod a cellák, oszlopok & sorok és munkalapok kezelését valamint szerkesztését, Megmutatjuk mi hol van Excelben - többé nem fogsz elveszni a beállításokban	Logika: 7 | Analitikus gondolkodás: 6 | Problémamegoldás: 4 | Számítástechnikai ismeretek: 3 | Rendszerező készség: 4 | Hatékony munkavégzés: 9	Az Excel segítségével megláthatod a számadatokban rejlő valódi értéket és képessé válsz akár komplex statisztikai elemzések készítésére, ezáltal fejlesztheted a logikád és az analitikus gondolkodásod.Kurzusunk segít továbbá abban, hogy megfelelő számítógépes ismeretet sajátíts el és ezáltal a hétköznapokban megtöbbszörözd a munkateljesítményed.	public	4	12	1	474	t	t
+10	2022-02-02 11:45:50.036+00	Microsoft Excel Alapok	Formázások, képletek, függvények.Sokunk számára már rájuk gondolni is kellemetlen, dolgozni, pedig végképp nem szeretnénk velük.Office tanfolyamsorozatunk oszlopos tagjaként Excel kurzusunk sallangmentesen, és mindenki számára közérthetően segít megérteni, hogyan használhatjuk hatékonyan a Microsoft zöld táblázatkezelőjét.	Excel alapozó kurzusunk egészen az alapoktól mutatja be a program működését. Részletesen ismerheted meg a különböző menüpontokat, elrendezéseket, majd a munkaterület feltérképezése után az alapvető műveletek elvégzésének kezdhetsz neki.A formázások elsajátítása után a függvények tárházával ismerkedhetsz meg, melyek hatalmas segítséget jelentenek bonyolultnak tűnő feladatok szempillantás alatt való megoldásában, és a különböző képek, alakzatok beszúrását is elsajátíthatod.Az Excel rendkívül erős társad lehet egy - egy adat, kimutatás, riport prezentálásában is, elengedhetetlen tehát, hogy az ehhez illő diagramokat, grafikonokat is mesterien kezeld.	4.5	4	23	magyar		Windows vagy macOS rendszerű számítógép (utóbbin némileg eltérhet a megjelenés), | Legalább Microsoft Office 2016 vagy ennél magasabb verzió | Ajánlott 2 monitorral követni a kurzust az optimális haladásért	f	Megtanulod a cellák, oszlopok & sorok és munkalapok kezelését valamint szerkesztését, Megmutatjuk mi hol van Excelben - többé nem fogsz elveszni a beállításokban	Logika: 7 | Analitikus gondolkodás: 6 | Problémamegoldás: 4 | Számítástechnikai ismeretek: 3 | Rendszerező készség: 4 | Hatékony munkavégzés: 9	Az Excel segítségével megláthatod a számadatokban rejlő valódi értéket és képessé válsz akár komplex statisztikai elemzések készítésére, ezáltal fejlesztheted a logikád és az analitikus gondolkodásod.Kurzusunk segít továbbá abban, hogy megfelelő számítógépes ismeretet sajátíts el és ezáltal a hétköznapokban megtöbbszörözd a munkateljesítményed.	public	4	12	1	474	f	f
 \.
 
 
@@ -30052,6 +30228,7 @@ migration9	2022-10-25 14:18:37.372615+00
 migration10	2022-10-25 15:38:31.886901+00
 migration11	2022-10-26 09:45:40.794962+00
 migration12	2022-10-28 09:10:47.224444+00
+migration13	2022-10-28 13:30:12.783209+00
 \.
 
 
@@ -34844,6 +35021,7 @@ COPY public.role_assignment_bridge (id, role_id, assignee_user_id, assignee_comp
 34	2	47	\N	4
 35	3	47	\N	4
 36	4	47	\N	4
+37	4	13	\N	2
 \.
 
 
@@ -35486,7 +35664,6 @@ COPY public."user" (id, deletion_date, creation_date, is_god, is_invitation_acce
 11	\N	2022-10-04 15:41:38.32+00	f	t	Invitation	t	info@mannimedia.hu		Manfréd	Spengler	\N	\N	\N	$2a$12$LIVbUc4gFsNaUtLEM0nDE.eHWsz70GlLxSUX7DDj3hWt9jaI.9YaO	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjExLCJpYXQiOjE2NjQ4OTg2MjgsImV4cCI6MTY2NTE1NzgyOH0.MnJC56KqZOlbw2prlQfmaXP2PEEoHTuYZcyJP-xVPR8	\N	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyRW1haWwiOiJpbmZvQG1hbm5pbWVkaWEuaHUiLCJpYXQiOjE2NjQ4OTgwOTgsImV4cCI6MTY2NTM1NTI5OH0.YJ9eTUNb9OIyL4mYQuUjrWhQhgqZvCw_hCm3nwQhyqc	\N	2	26	t
 16	\N	2022-10-04 18:45:32.013+00	f	t	Invitation	t	vuqawkcfdyrsdkpizf@tmmcv.net		Test	Dev	\N	\N	\N	$2a$12$PzUDNOXU9RxTJniIuxUaxOdIf720Yq2KOMF9SXSDHvcqR2Bc1XI.u	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjE2LCJpYXQiOjE2NjQ5MDkyNjgsImV4cCI6MTY2NTE2ODQ2OH0.WR76nol7gear-_TPJONxlDdm9DQg8fWhLTHGxvHqVjk	\N	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyRW1haWwiOiJ2dXFhd2tjZmR5cnNka3BpemZAdG1tY3YubmV0IiwiaWF0IjoxNjY0OTA5MTMyLCJleHAiOjE2NjUzNjYzMzJ9.WJLLhrw950I3XHlArXDjqRJN6SrTiWZEGIVUQGrL2Z4	\N	2	26	t
 17	\N	2022-10-05 08:06:46.366+00	f	t	Invitation	t	sakvnzcvoajrkusbda@tmmbt.com		Manfréd	Spengler	\N	\N	\N	$2a$12$F3T8WA8oAlf0YjPbcPVBg.PrTczPvFSFJgCAm/lSAMaTPAoZFG24y	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjE3LCJpYXQiOjE2NjQ5NTc1NzQsImV4cCI6MTY2NTIxNjc3NH0.N6IJoqB7a_B4V3t12rWiJCwRCJg_g5nGEQc0Zb1XC-U	\N	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyRW1haWwiOiJzYWt2bnpjdm9hanJrdXNiZGFAdG1tYnQuY29tIiwiaWF0IjoxNjY0OTU3MjA2LCJleHAiOjE2NjU0MTQ0MDZ9.K9m2aQB2FHGO8KMI7Oa9ACGsBMlv7cPzrBiz_bI-PW4	\N	2	26	t
-13	\N	2022-10-04 17:05:30.929+00	f	t	Invitation	t	szubally.bruno@epistogram.com		Brúnó	Szubally	\N	\N	\N	$2a$12$uB2/bGrLgiTCWW8qPUPWCed1ODSl7RTJGnGWzxW6pCVm8NvKvzxwW	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEzLCJpYXQiOjE2NjQ5MDkwMTMsImV4cCI6MTY2NTE2ODIxM30.bAUIDtlSJIL1eXQx0DOV8VM-SDNIOUBEzlVZ2b9sSH8	\N	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyRW1haWwiOiJ6dWdqb25kam54bWJxZWtlam9AdG1tYnQubmV0IiwiaWF0IjoxNjY0OTAzMTMwLCJleHAiOjE2NjUzNjAzMzB9.qxiPYsK-Hqw6rlG651OpNWu9OuoU5fp6X_pWJMNRfDs	\N	2	26	t
 20	\N	2022-10-05 15:50:13.495+00	f	t	Invitation	t	ijwnduqeandmkgebjk@tmmcv.com		Dezső	Kiss	\N	\N	\N	$2a$12$4nR82T8F/kI36kFhK6mze.SHVTEUbs7.VG/d8dUCvGMoZk/2LYw5u	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIwLCJpYXQiOjE2NjUwMzMwNzEsImV4cCI6MTY2NTI5MjI3MX0.P4Sj1hrt_yvwoM240ssRttzh9OmB4pbOgRhfdMoe6C8	\N	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyRW1haWwiOiJpanduZHVxZWFuZG1rZ2ViamtAdG1tY3YuY29tIiwiaWF0IjoxNjY0OTg1MDEzLCJleHAiOjE2NjU0NDIyMTN9.MusTNNL1ZMMYBsQDRBmXuf0qdYoKPeXEqGGbIo1-TM4	\N	2	26	t
 15	\N	2022-10-04 18:32:56.609+00	f	t	Invitation	t	spengler.manfred@epistogram.com		Manfréd	Spengler	\N	\N	\N	$2a$12$YpYqkz/bJ7hBvikti1gP4.YftE98QSOUsyfBCRc6Uj3bUYgZ7dmHi		\N	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyRW1haWwiOiJzcGVuZ2xlci5tYW5mcmVkQGVwaXN0b2dyYW0uY29tIiwiaWF0IjoxNjY0OTA4Mzc2LCJleHAiOjE2NjUzNjU1NzZ9.gdYBDTeZqTUpd5T8V56IjPfXxrVZ9_OvaVfY4W11xp0	\N	2	26	t
 24	\N	2022-10-10 12:06:08.836+00	f	f	Invitation	t	episto2@demoaccounts.epistogram.com		Teszt2	EpistoGram	\N	\N	\N	$2a$12$DHxYgOZCq7rFdSKYevsFl.1kaw9TBQVtW1iDkoLy3D3vkdkVfJQPa	\N	\N	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyRW1haWwiOiJlcGlzdG8yQGRlbW9hY2NvdW50cy5lcGlzdG9ncmFtLmNvbSIsImlhdCI6MTY2NTQwMzU2OCwiZXhwIjoxNjY1ODYwNzY4fQ.93N3orlGVMJ2yNbmHfzpX9Sotxeglsh3VtUz7JTGa6E	\N	2	26	t
@@ -35518,7 +35695,8 @@ COPY public."user" (id, deletion_date, creation_date, is_god, is_invitation_acce
 48	\N	2022-10-14 13:17:14.793+00	f	t	Invitation	t	ateceged4@demoaccounts.epistogram.com		Jenő	Nagy	\N	\N	\N	$2a$12$ARwyfEuOmTJ.NrY5WYfFtebnz2jxK04BK7mYRIHF7xmYlUV69bVDS	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQ4LCJpYXQiOjE2NjYxNzg4NjgsImV4cCI6MTY2NjQzODA2OH0.wi4H5pSdQk_bnqETSM8eGx7uhjj6QGs0XeQtitDYU1g	\N	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyRW1haWwiOiJ4bnd2ZGR2dmR6cXZwZXlzYm9AdG1td2oubmV0IiwiaWF0IjoxNjY1NzUzNDM0LCJleHAiOjE2NjYyMTA2MzR9.BezDec4HpF-Q84qzrwniFz5osOTlOj0agnEa1k_WBjo	\N	4	26	t
 46	\N	2022-10-14 09:34:38.8+00	f	t	Invitation	t	ateceged@epistogram.com		SimaUser	aTecéged	\N	\N	\N	$2a$12$IpEDXrXaLg0vsNf4zVMNBurcz.TVlnmubg7RMXeuGvQYLaduI5fc.	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQ2LCJpYXQiOjE2NjU3NTM2OTYsImV4cCI6MTY2NjAxMjg5Nn0.feK14I2_RtwaIyokXbHEdnVsskGkk_v_dXHGTzVhiuA	\N	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyRW1haWwiOiJhdGVjZWdlZEBlcGlzdG9ncmFtLmNvbSIsImlhdCI6MTY2NTc0MDA3OCwiZXhwIjoxNjY2MTk3Mjc4fQ.VBZzQuXJvoY_2P2lf7k372tmPnol7HCwDq6SkVOayrk	\N	4	8	t
 38	\N	2022-10-13 16:48:01.773+00	f	t	Invitation	t	atecegedadmin2@epistogram.com		Boglárka	Szegedi	\N	\N	\N	$2a$12$ABeAse47tghrfZmAUmxD8eNoSn45NRL8o11dSBA5FQlBG5yCNhnx2	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjM4LCJpYXQiOjE2NjU3NTUwMzEsImV4cCI6MTY2NjAxNDIzMX0.OxKCfhoM71nEID1lPpDbR9kHDsahw1gTWo_CktP-rX4	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjM4LCJpYXQiOjE2NjU2OTI4MDksImV4cCI6MTY2NTcyMTYwOX0.ginmmx1YOs6Ntmuj9Hy52gzdUEnRNFZET1yixNkGcsQ	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyRW1haWwiOiJhdGVjZWdlZGFkbWluQGVwaXN0b2dyYW0uY29tIiwiaWF0IjoxNjY1Njc5NjgxLCJleHAiOjE2NjYxMzY4ODF9.NVa3PkSDqL6IB8ntvzhfNcjSTXSO0NaY9PvCu1WB37g	\N	4	7	t
-1	\N	2022-10-04 10:02:36.025+00	t	t	Invitation	t	endre.marosi@epistogram.com	endremarosi	Endre	Marosi	\N	\N	\N	$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTY2Njg2MDA1NCwiZXhwIjoxNjY3MTE5MjU0fQ.vUb9_KDkaBkryOGchB-sicujNK2GCP7ilA8GpoXkuP4	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTY2NTE2NTI5MywiZXhwIjoxNjY1MTk0MDkzfQ.s36BTvYQ0YRKWKcmuvRp7FPBoY8nT9cQDk3aWfATdNc	\N	\N	2	26	t
+13	\N	2022-10-04 17:05:30.929+00	f	t	Invitation	t	szubally.bruno@epistogram.com		Brúnó	Szubally	\N	\N	\N	$2a$12$uB2/bGrLgiTCWW8qPUPWCed1ODSl7RTJGnGWzxW6pCVm8NvKvzxwW	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEzLCJpYXQiOjE2NjY5NzAzNTQsImV4cCI6MTY2NzIyOTU1NH0.E1RsiedE-3dYRum5a5ihUzYRoT6YIIF0dSDw-38PsSI	\N	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyRW1haWwiOiJ6dWdqb25kam54bWJxZWtlam9AdG1tYnQubmV0IiwiaWF0IjoxNjY0OTAzMTMwLCJleHAiOjE2NjUzNjAzMzB9.qxiPYsK-Hqw6rlG651OpNWu9OuoU5fp6X_pWJMNRfDs	\N	2	26	f
+1	\N	2022-10-04 10:02:36.025+00	t	t	Invitation	t	endre.marosi@epistogram.com	endremarosi	Endre	Marosi	\N	\N	\N	$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTY2Njk2ODk1NywiZXhwIjoxNjY3MjI4MTU3fQ.epIvT4zceeJeie3RwMpl5EpVwluNuWu8canIOVVZDcE	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTY2NTE2NTI5MywiZXhwIjoxNjY1MTk0MDkzfQ.s36BTvYQ0YRKWKcmuvRp7FPBoY8nT9cQDk3aWfATdNc	\N	\N	2	26	t
 \.
 
 
@@ -35592,7 +35770,6 @@ COPY public.user_course_bridge (id, creation_date, start_date, course_mode, is_c
 16	2022-10-04 15:43:30.319197+00	2022-10-04 15:45:58.613+00	advanced	t	\N	pretest	auto	\N	\N	11	10
 23	2022-10-04 18:33:22.286862+00	2022-10-04 18:33:35.063+00	advanced	t	OEB2aWRlbw==	watch	auto	\N	\N	14	10
 22	2022-10-04 17:10:21.851703+00	2022-10-04 17:10:37.204+00	advanced	f	OTlAdmlkZW8=	watch	auto	\N	\N	13	10
-20	2022-10-04 17:06:59.922575+00	2022-10-04 17:07:10.823+00	advanced	t	\N	pretest_results	auto	\N	\N	13	9
 18	2022-10-04 15:52:29.981257+00	2022-10-04 15:52:46.196+00	advanced	f	MTkzQHZpZGVv	watch	auto	\N	\N	12	7
 12	2022-10-04 15:38:58.049086+00	2022-10-04 15:39:15.696+00	advanced	f	MzM1QHZpZGVv	watch	auto	\N	\N	10	9
 28	2022-10-04 18:48:01.379207+00	2022-10-04 18:48:43.645+00	advanced	t	OEB2aWRlbw==	watch	auto	\N	\N	16	10
@@ -35619,6 +35796,8 @@ COPY public.user_course_bridge (id, creation_date, start_date, course_mode, is_c
 6	2022-10-04 10:45:01.397987+00	2022-10-04 15:08:50.128+00	advanced	f	NTBAdmlkZW8=	watch	auto	\N	\N	1	8
 2	2022-10-04 10:32:08.175322+00	2022-10-04 14:15:43.383+00	advanced	f	MzEzQHZpZGVv	watch	auto	\N	\N	1	9
 40	2022-10-24 11:44:00.570385+00	2022-10-24 11:44:12.624+00	advanced	f	NTBAdmlkZW8=	watch	auto	\N	\N	41	8
+20	2022-10-04 17:06:59.922575+00	2022-10-04 17:07:10.823+00	advanced	f	\N	pretest_results	auto	\N	\N	13	9
+41	2022-10-28 14:52:51.578+00	2022-10-28 14:52:51.509+00	beginner	t	NTBAdmlkZW8=	watch	auto	\N	\N	13	8
 \.
 
 
@@ -37675,6 +37854,36 @@ COPY public.user_session_activity (id, creation_date, type, video_version_id, ex
 2096	2022-10-27 08:35:52.774+00	login	\N	\N	711
 2097	2022-10-27 08:40:53.615+00	generic	\N	\N	712
 2098	2022-10-27 08:40:53.966+00	login	\N	\N	712
+2099	2022-10-28 13:12:35.008+00	generic	\N	\N	713
+2100	2022-10-28 13:12:35.354+00	login	\N	\N	713
+2101	2022-10-28 14:45:55.829+00	generic	\N	\N	714
+2102	2022-10-28 14:45:56.193+00	login	\N	\N	714
+2103	2022-10-28 14:48:02.007+00	generic	\N	\N	714
+2104	2022-10-28 14:48:02.338+00	login	\N	\N	714
+2105	2022-10-28 14:51:53.673+00	login	\N	\N	715
+2106	2022-10-28 14:51:54.338+00	generic	\N	\N	715
+2107	2022-10-28 14:51:54.749+00	login	\N	\N	715
+2108	2022-10-28 14:51:55.257+00	generic	\N	\N	715
+2109	2022-10-28 14:51:55.684+00	login	\N	\N	715
+2110	2022-10-28 14:52:00.859+00	generic	\N	\N	715
+2111	2022-10-28 14:52:01.271+00	login	\N	\N	715
+2112	2022-10-28 14:52:16.244+00	generic	\N	\N	715
+2113	2022-10-28 14:52:16.66+00	login	\N	\N	715
+2114	2022-10-28 14:52:19.425+00	generic	\N	\N	715
+2115	2022-10-28 14:52:19.843+00	login	\N	\N	715
+2116	2022-10-28 14:52:38.4+00	generic	\N	\N	715
+2117	2022-10-28 14:52:38.822+00	login	\N	\N	715
+2118	2022-10-28 14:52:59.586+00	video	1336	\N	715
+2119	2022-10-28 14:53:04.577+00	video	1336	\N	715
+2120	2022-10-28 14:55:57.049+00	generic	\N	\N	716
+2121	2022-10-28 14:55:57.393+00	login	\N	\N	716
+2122	2022-10-28 15:09:11.634+00	generic	\N	\N	717
+2123	2022-10-28 15:09:12.068+00	login	\N	\N	717
+2124	2022-10-28 15:09:20.447+00	video	1336	\N	717
+2125	2022-10-28 15:14:12.867+00	generic	\N	\N	717
+2126	2022-10-28 15:14:13.304+00	login	\N	\N	717
+2127	2022-10-28 15:19:14.006+00	generic	\N	\N	718
+2128	2022-10-28 15:19:14.486+00	login	\N	\N	718
 \.
 
 
@@ -37733,6 +37942,7 @@ COPY public.user_video_progress_bridge (id, cursor_seconds, completed_percentage
 33	5.700542	6	1	1336
 3	1.0869415000197478	1	1	924
 4	1.7778745830037515	1	1	192
+51	2.856335	3	13	1336
 \.
 
 
@@ -38185,6 +38395,7 @@ COPY public.video_completion (id, completion_date, video_version_id, user_id) FR
 27	2022-10-13 12:11:47.753+00	1671	36
 28	2022-10-13 13:34:31.221+00	1680	1
 29	2022-10-13 19:16:57.642+00	1672	38
+30	2022-10-28 14:53:04.451+00	1336	13
 \.
 
 
@@ -39149,6 +39360,7 @@ COPY public.video_playback_sample (id, creation_date, from_seconds, to_seconds, 
 500	2022-10-17 09:46:04.848+00	0	5.700542	1336	1	134
 501	2022-10-17 13:40:13.287+00	0	1.0869415000197478	924	1	135
 502	2022-10-17 14:52:11.84+00	0	1.7778745830037515	192	1	137
+505	2022-10-28 15:09:20.233+00	0	2.856335	1336	13	149
 \.
 
 
@@ -39304,6 +39516,8 @@ COPY public.video_playback_session (id, creation_date, last_usage_date, video_ve
 145	2022-10-24 13:02:34.256+00	2022-10-24 13:02:34.256+00	1336	41
 146	2022-10-24 13:09:26.011+00	2022-10-24 13:09:26.011+00	1336	41
 147	2022-10-24 13:09:38.555+00	2022-10-24 13:09:38.555+00	924	41
+148	2022-10-28 14:52:52.552+00	2022-10-28 14:52:52.552+00	1336	13
+149	2022-10-28 15:09:15.492+00	2022-10-28 15:09:15.492+00	1336	13
 \.
 
 
@@ -41580,14 +41794,14 @@ SELECT pg_catalog.setval('public.activity_id_seq', 6, true);
 -- Name: activity_session_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dev_service_user
 --
 
-SELECT pg_catalog.setval('public.activity_session_id_seq', 712, true);
+SELECT pg_catalog.setval('public.activity_session_id_seq', 718, true);
 
 
 --
 -- Name: activity_streak_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dev_service_user
 --
 
-SELECT pg_catalog.setval('public.activity_streak_id_seq', 45, true);
+SELECT pg_catalog.setval('public.activity_streak_id_seq', 47, true);
 
 
 --
@@ -41615,7 +41829,7 @@ SELECT pg_catalog.setval('public.answer_id_seq', 2123, true);
 -- Name: answer_session_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dev_service_user
 --
 
-SELECT pg_catalog.setval('public.answer_session_id_seq', 423, true);
+SELECT pg_catalog.setval('public.answer_session_id_seq', 426, true);
 
 
 --
@@ -41629,7 +41843,7 @@ SELECT pg_catalog.setval('public.answer_version_id_seq', 11717, true);
 -- Name: coin_transaction_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dev_service_user
 --
 
-SELECT pg_catalog.setval('public.coin_transaction_id_seq', 213, true);
+SELECT pg_catalog.setval('public.coin_transaction_id_seq', 220, true);
 
 
 --
@@ -41937,7 +42151,7 @@ SELECT pg_catalog.setval('public.role_activity_bridge_id_seq', 1, true);
 -- Name: role_assignment_bridge_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dev_service_user
 --
 
-SELECT pg_catalog.setval('public.role_assignment_bridge_id_seq', 36, true);
+SELECT pg_catalog.setval('public.role_assignment_bridge_id_seq', 37, true);
 
 
 --
@@ -42014,7 +42228,7 @@ SELECT pg_catalog.setval('public.user_course_access_bridge_id_seq', 1, false);
 -- Name: user_course_bridge_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dev_service_user
 --
 
-SELECT pg_catalog.setval('public.user_course_bridge_id_seq', 40, true);
+SELECT pg_catalog.setval('public.user_course_bridge_id_seq', 41, true);
 
 
 --
@@ -42035,21 +42249,21 @@ SELECT pg_catalog.setval('public.user_id_seq', 48, true);
 -- Name: user_session_activity_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dev_service_user
 --
 
-SELECT pg_catalog.setval('public.user_session_activity_id_seq', 2098, true);
+SELECT pg_catalog.setval('public.user_session_activity_id_seq', 2128, true);
 
 
 --
 -- Name: user_video_progress_bridge_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dev_service_user
 --
 
-SELECT pg_catalog.setval('public.user_video_progress_bridge_id_seq', 50, true);
+SELECT pg_catalog.setval('public.user_video_progress_bridge_id_seq', 51, true);
 
 
 --
 -- Name: video_completion_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dev_service_user
 --
 
-SELECT pg_catalog.setval('public.video_completion_id_seq', 29, true);
+SELECT pg_catalog.setval('public.video_completion_id_seq', 30, true);
 
 
 --
@@ -42070,14 +42284,14 @@ SELECT pg_catalog.setval('public.video_id_seq', 407, true);
 -- Name: video_playback_sample_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dev_service_user
 --
 
-SELECT pg_catalog.setval('public.video_playback_sample_id_seq', 502, true);
+SELECT pg_catalog.setval('public.video_playback_sample_id_seq', 505, true);
 
 
 --
 -- Name: video_playback_session_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dev_service_user
 --
 
-SELECT pg_catalog.setval('public.video_playback_session_id_seq', 147, true);
+SELECT pg_catalog.setval('public.video_playback_session_id_seq', 149, true);
 
 
 --

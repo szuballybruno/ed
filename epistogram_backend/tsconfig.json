@@ -20,7 +20,7 @@
     "src",
     "tests",
     "jest.config.ts"
-  ],
+, "../misc/scripts/scriptProducer/src/SoftSchemaScriptService.ts"  ],
   "exclude": [
     "node_modules"
   ]
