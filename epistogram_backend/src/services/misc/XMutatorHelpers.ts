@@ -1,6 +1,6 @@
 import { Mutation } from '../../shared/dtos/mutations/Mutation';
 
-const mapMutationToPartialObject = <TMutatee extends Object, TKey extends keyof TMutatee>(mut: Mutation<TMutatee, TKey>): Partial<TMutatee> => {
+const mapMutationToPartialObject = <TMutatee, TKey extends keyof TMutatee>(mut: Mutation<TMutatee, TKey>): Partial<TMutatee> => {
 
     const obj = {} as Partial<TMutatee>;
 
