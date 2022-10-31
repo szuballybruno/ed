@@ -1,5 +1,5 @@
 import './jsExtensions';
-import { getRootRelativePath, Polyfills, writeFileSync } from "./polyfills";
+import { Polyfills, writeFileSync } from "./polyfills";
 import { SoftSchemaScriptService } from "./SoftSchemaScriptService";
 
 const getMigrationScript = ({
@@ -74,16 +74,16 @@ const getMissingMigrations = (migrationsFolderFilePath: string, serverMigrationV
 
 const createScripts = () => {
 
-    const migrationsFolderFilePath = getRootRelativePath('/src/sql/migrations');
-    const deployFolderFilePath = getRootRelativePath('/deploy');
-
-    console.log(Polyfills.getAllFilePaths(migrationsFolderFilePath));
+    const backendPath = __dirname + `/../../../../epistogram_backend`;
+    const deployFolderFilePath = backendPath + '/deploy';
+    const sqlFolderFilePath = backendPath + '/sql';
+    const migrationsFolderFilePath = sqlFolderFilePath + '/migrations';
 
     const serverMigrationVersions = getMigrationVerisonsArgs();
 
     const missingMigraitonVersions = getMissingMigrations(migrationsFolderFilePath, serverMigrationVersions);
 
-    const softSchemaCreateScript = new SoftSchemaScriptService()
+    const softSchemaCreateScript = new SoftSchemaScriptService(sqlFolderFilePath)
         .getSoftSchemaScript();
 
     const createMigrationsTableScript = Polyfills
@@ -99,8 +99,8 @@ const createScripts = () => {
         migrationVersions: missingMigraitonVersions
     });
 
-    writeFileSync(getRootRelativePath('/sql/out/fullMigrationScript.sql'), fullMigrationScript);
-    writeFileSync(getRootRelativePath('/sql/out/softSchemaCreateScript.sql'), softSchemaCreateScript);
+    writeFileSync(deployFolderFilePath + '/out/fullMigrationScript.sql', fullMigrationScript);
+    writeFileSync(deployFolderFilePath + '/out/softSchemaCreateScript.sql', softSchemaCreateScript);
 };
 
 createScripts();

@@ -2,8 +2,6 @@ import * as fs from 'fs';
 
 export const writeFileSync = (filePath: string, data: string) => fs.writeFileSync(filePath, data);
 
-export const getRootRelativePath = (path: string) => `../../../epistogram_backend${path}`;
-
 export const logScoped = (scope: string, text: string) => console.log(`[${scope}] ${text}`);
 
 export const getAllFilePaths = (directoryPath: string) => {
@@ -18,7 +16,17 @@ export const regexMatchAll = (text: string, regex: RegExp): string[] => {
     return matches.map(x => '' + x);
 };
 
-export const readFileSync = (path: string) => fs.readFileSync(path, 'utf-8');
+export const readFileSync = (path: string) => {
+
+    try{
+
+        return fs.readFileSync(path, 'utf-8');
+    }
+    catch(e: any)
+    {
+        throw new Error(`Error reading path: ${path} Msg: ${e.message}`);
+    }
+};
 
 export const existsSync = (path: string) => fs.existsSync(path);
 

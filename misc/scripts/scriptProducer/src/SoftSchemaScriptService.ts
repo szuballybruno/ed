@@ -1,5 +1,5 @@
 
-import { getAllFilePaths, getRootRelativePath, Polyfills, readFileSync, regexMatchAll } from './polyfills';
+import { getAllFilePaths, Polyfills, readFileSync, regexMatchAll } from './polyfills';
 import { DepHierarchyItem, XDependency } from './XDInjection/XDInjector';
 
 type ViewFile = {
@@ -9,12 +9,10 @@ type ViewFile = {
 
 export class SoftSchemaScriptService {
 
-    private _sqlFolderPath: string;
     private _sqlFolderNames: string[];
 
-    constructor() {
+    constructor(private _sqlFolderPath: string) {
 
-        this._sqlFolderPath = getRootRelativePath('/src/sql');
         this._sqlFolderNames = ['views', 'constraints', 'functions', 'indices', 'triggers'];
     }
 
@@ -60,7 +58,7 @@ ${script}
     private _readSQLFolderFiles(folderName: string) {
 
         const path = `${this._sqlFolderPath}/${folderName}`;
-        const files = getAllFilePaths(path)
+        const files = Array.from(getAllFilePaths(path))
             .map(x => `${path}/${x}`);
 
         return files;
@@ -78,6 +76,7 @@ ${script}
                 return {
                     sqlFolderName: x,
                     files: this._readSQLFolderFiles(x)
+                        .filter(x => x.endsWith('.sql'))
                         .map(x => ({
                             name: Polyfills.getFileName(x).replace('.sql', ''),
                             path: x,

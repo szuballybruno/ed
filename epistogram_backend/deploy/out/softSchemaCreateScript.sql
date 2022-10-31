@@ -1,189 +1,7 @@
--- MIGRATION VERSION: migration13
 
--- BEGIN TRANSACTION
-BEGIN;
+-- CREATE views
 
--- STORE MIGRATION VERSION
-CREATE TABLE IF NOT EXISTS public.migration_version
-(
-	version_name varchar,
-	creation_date timestamptz
-);
-
-INSERT INTO public.migration_version
-VALUES ('migration13', now()); 
-
-ALTER TABLE public.migration_version 
-DROP CONSTRAINT IF EXISTS unique_mig_ver;
-
-ALTER TABLE public.migration_version
-ADD CONSTRAINT unique_mig_ver 
-UNIQUE (version_name);
-
--- DROP SOFT SCHEMA
-
--- DROP VIEWS
-DROP VIEW IF EXISTS admin_user_courses_view CASCADE;
-DROP VIEW IF EXISTS admin_course_user_stats_view CASCADE;
-DROP VIEW IF EXISTS course_overview_view CASCADE;
-DROP VIEW IF EXISTS course_learning_stats_view CASCADE;
-DROP VIEW IF EXISTS user_learning_overview_stats_view CASCADE;
-DROP VIEW IF EXISTS user_video_stats_view CASCADE;
-DROP VIEW IF EXISTS user_module_stats_view CASCADE;
-DROP VIEW IF EXISTS courses_progress_list_view CASCADE;
-DROP VIEW IF EXISTS available_course_view CASCADE;
-DROP VIEW IF EXISTS course_all_items_completed_view CASCADE;
-DROP VIEW IF EXISTS user_playlist_view CASCADE;
-DROP VIEW IF EXISTS user_overview_view CASCADE;
-DROP VIEW IF EXISTS tempomat_calculation_data_view CASCADE;
-DROP VIEW IF EXISTS exam_result_view CASCADE;
-DROP VIEW IF EXISTS user_performance_comparison_stats_view CASCADE;
-DROP VIEW IF EXISTS user_learning_page_stats_view CASCADE;
-DROP VIEW IF EXISTS home_page_stats_view CASCADE;
-DROP VIEW IF EXISTS exam_result_stats_view CASCADE;
-DROP VIEW IF EXISTS admin_home_page_overview_view CASCADE;
-DROP VIEW IF EXISTS assignable_role_view CASCADE;
-DROP VIEW IF EXISTS user_role_assign_company_view CASCADE;
-DROP VIEW IF EXISTS role_list_view CASCADE;
-DROP VIEW IF EXISTS company_view CASCADE;
-DROP VIEW IF EXISTS assignable_permission_view CASCADE;
-DROP VIEW IF EXISTS user_permission_view CASCADE;
-DROP VIEW IF EXISTS user_course_completion_original_estimation_view CASCADE;
-DROP VIEW IF EXISTS pretest_result_view CASCADE;
-DROP VIEW IF EXISTS module_last_exam_score_view CASCADE;
-DROP VIEW IF EXISTS final_exam_score_view CASCADE;
-DROP VIEW IF EXISTS exam_player_data_view CASCADE;
-DROP VIEW IF EXISTS course_details_view CASCADE;
-DROP VIEW IF EXISTS course_admin_content_view CASCADE;
-DROP VIEW IF EXISTS module_item_count_view CASCADE;
-DROP VIEW IF EXISTS user_engagement_view CASCADE;
-DROP VIEW IF EXISTS improve_yourself_page_stats_view CASCADE;
-DROP VIEW IF EXISTS user_reaction_time_view CASCADE;
-DROP VIEW IF EXISTS user_inactive_course_view CASCADE;
-DROP VIEW IF EXISTS user_weekly_course_item_progress_view CASCADE;
-DROP VIEW IF EXISTS user_daily_course_item_progress_view CASCADE;
-DROP VIEW IF EXISTS user_course_recommended_item_quota_view CASCADE;
-DROP VIEW IF EXISTS user_course_progress_view CASCADE;
-DROP VIEW IF EXISTS course_progress_view CASCADE;
-DROP VIEW IF EXISTS user_course_progress_actual_view CASCADE;
-DROP VIEW IF EXISTS user_course_completion_current_view CASCADE;
-DROP VIEW IF EXISTS user_active_course_view CASCADE;
-DROP VIEW IF EXISTS signup_completed_view CASCADE;
-DROP VIEW IF EXISTS playlist_view CASCADE;
-DROP VIEW IF EXISTS user_spent_time_ratio_view CASCADE;
-DROP VIEW IF EXISTS course_spent_time_view CASCADE;
-DROP VIEW IF EXISTS course_admin_short_view CASCADE;
-DROP VIEW IF EXISTS user_exam_stats_view CASCADE;
-DROP VIEW IF EXISTS user_performance_view CASCADE;
-DROP VIEW IF EXISTS user_performance_answer_group_view CASCADE;
-DROP VIEW IF EXISTS user_module_performance_view CASCADE;
-DROP VIEW IF EXISTS user_module_performance_answer_group_view CASCADE;
-DROP VIEW IF EXISTS user_daily_progress_view CASCADE;
-DROP VIEW IF EXISTS user_answer_view CASCADE;
-DROP VIEW IF EXISTS most_productive_time_range_view CASCADE;
-DROP VIEW IF EXISTS exam_completed_view CASCADE;
-DROP VIEW IF EXISTS correct_answer_rates_split_view CASCADE;
-DROP VIEW IF EXISTS answer_session_group_view CASCADE;
-DROP VIEW IF EXISTS answer_session_evaluation_view CASCADE;
-DROP VIEW IF EXISTS answer_session_view CASCADE;
-DROP VIEW IF EXISTS course_video_count_view CASCADE;
-DROP VIEW IF EXISTS course_item_count_view CASCADE;
-DROP VIEW IF EXISTS course_exam_count_view CASCADE;
-DROP VIEW IF EXISTS completed_module_item_count_view CASCADE;
-DROP VIEW IF EXISTS completed_course_video_count_view CASCADE;
-DROP VIEW IF EXISTS completed_course_item_count_view CASCADE;
-DROP VIEW IF EXISTS completed_course_exam_count_view CASCADE;
-DROP VIEW IF EXISTS user_video_practise_progress_view CASCADE;
-DROP VIEW IF EXISTS user_video_playback_seconds_view CASCADE;
-DROP VIEW IF EXISTS user_session_daily_view CASCADE;
-DROP VIEW IF EXISTS user_session_block_view CASCADE;
-DROP VIEW IF EXISTS user_latest_activity_view CASCADE;
-DROP VIEW IF EXISTS user_daily_activity_chart_view CASCADE;
-DROP VIEW IF EXISTS module_last_exam_view CASCADE;
-DROP VIEW IF EXISTS exam_highest_score_answer_session_view CASCADE;
-DROP VIEW IF EXISTS daily_tip_view CASCADE;
-DROP VIEW IF EXISTS course_state_view CASCADE;
-DROP VIEW IF EXISTS course_item_edit_view CASCADE;
-DROP VIEW IF EXISTS course_item_view CASCADE;
-DROP VIEW IF EXISTS course_admin_detailed_view CASCADE;
-DROP VIEW IF EXISTS company_associated_courses_view CASCADE;
-DROP VIEW IF EXISTS coin_transaction_view CASCADE;
-DROP VIEW IF EXISTS video_version_view CASCADE;
-DROP VIEW IF EXISTS video_player_data_view CASCADE;
-DROP VIEW IF EXISTS video_playback_sample_view CASCADE;
-DROP VIEW IF EXISTS video_cursor_seconds_view CASCADE;
-DROP VIEW IF EXISTS user_session_view CASCADE;
-DROP VIEW IF EXISTS user_role_view CASCADE;
-DROP VIEW IF EXISTS user_prequiz_answers_view CASCADE;
-DROP VIEW IF EXISTS user_practise_recommendation_view CASCADE;
-DROP VIEW IF EXISTS user_course_bridge_view CASCADE;
-DROP VIEW IF EXISTS user_assigned_auth_item_view CASCADE;
-DROP VIEW IF EXISTS signup_question_view CASCADE;
-DROP VIEW IF EXISTS shop_item_view CASCADE;
-DROP VIEW IF EXISTS shop_item_stateful_view CASCADE;
-DROP VIEW IF EXISTS schema_version_view CASCADE;
-DROP VIEW IF EXISTS question_data_view CASCADE;
-DROP VIEW IF EXISTS prequiz_question_view CASCADE;
-DROP VIEW IF EXISTS practise_question_view CASCADE;
-DROP VIEW IF EXISTS practise_question_info_view CASCADE;
-DROP VIEW IF EXISTS personality_trait_view CASCADE;
-DROP VIEW IF EXISTS personality_trait_category_view CASCADE;
-DROP VIEW IF EXISTS module_player_view CASCADE;
-DROP VIEW IF EXISTS module_edit_view CASCADE;
-DROP VIEW IF EXISTS latest_video_view CASCADE;
-DROP VIEW IF EXISTS latest_given_answer_view CASCADE;
-DROP VIEW IF EXISTS latest_exam_view CASCADE;
-DROP VIEW IF EXISTS latest_course_version_view CASCADE;
-DROP VIEW IF EXISTS latest_answer_session_view CASCADE;
-DROP VIEW IF EXISTS given_answer_view CASCADE;
-DROP VIEW IF EXISTS exam_version_view CASCADE;
-DROP VIEW IF EXISTS exam_score_view CASCADE;
-DROP VIEW IF EXISTS course_video_length_view CASCADE;
-DROP VIEW IF EXISTS course_shop_item_list_view CASCADE;
-DROP VIEW IF EXISTS course_rating_question_view CASCADE;
-DROP VIEW IF EXISTS course_questions_success_view CASCADE;
-DROP VIEW IF EXISTS course_module_overview_view CASCADE;
-DROP VIEW IF EXISTS course_length_estimation_view CASCADE;
-DROP VIEW IF EXISTS course_item_completion_view CASCADE;
-DROP VIEW IF EXISTS course_completion_view CASCADE;
-DROP VIEW IF EXISTS constant_values_view CASCADE;
-DROP VIEW IF EXISTS company_permission_view CASCADE;
-DROP VIEW IF EXISTS comment_list_view CASCADE;
-DROP VIEW IF EXISTS coin_balance_view CASCADE;
-DROP VIEW IF EXISTS coin_acquire_per_course_view CASCADE;
-DROP VIEW IF EXISTS activity_streak_view CASCADE;
-
-
--- DROP FUNCTIONS
-DROP FUNCTION IF EXISTS acquire_task_lock_fn;
-DROP FUNCTION IF EXISTS create_daily_tip_fn;
-DROP FUNCTION IF EXISTS get_user_session_first_activity_id;
-
-
--- DROP CONSTRAINTS
-ALTER TABLE public.coin_transaction DROP CONSTRAINT IF EXISTS coin_transaction_valid_relation_enforce_constraint;
-ALTER TABLE public.activation_code DROP CONSTRAINT IF EXISTS activation_code_uniqe_constraint;
-ALTER TABLE public.role_permission_bridge DROP CONSTRAINT IF EXISTS role_permission_bridge_constraint;
-ALTER TABLE public.role DROP CONSTRAINT IF EXISTS role_constraint;
-
-
--- DROP INDICES
-DROP INDEX IF EXISTS user_email_unique_index;
-DROP INDEX IF EXISTS single_current_course_bridge_unique_index;
-
-
--- DROP TRIGGERS
-
-
-
--- TRANSFORM TABLES / MIGRATE DATA
-
-
--- CREATE SOFT SCHEMA
-
--- CREATE VIEWS
-
---CREATE VIEW: activity_streak_view
+--activity_streak_view
 CREATE VIEW activity_streak_view
 AS
 SELECT 
@@ -191,7 +9,7 @@ SELECT
 	(EXTRACT (EPOCH FROM ast.end_date - ast.start_date) / 86400)::int AS length_days
 FROM activity_streak ast;
 
---CREATE VIEW: coin_acquire_per_course_view
+--coin_acquire_per_course_view
 CREATE VIEW coin_acquire_per_course_view
 AS
 SELECT
@@ -225,7 +43,7 @@ ON ct.given_answer_id = ga.id
 
 GROUP BY co.id, ct.user_id, ct.id;
 
---CREATE VIEW: coin_balance_view
+--coin_balance_view
 CREATE VIEW coin_balance_view
 AS
 SELECT 
@@ -239,7 +57,7 @@ ON ca.user_id = u.id
 GROUP BY 
 	u.id;
 
---CREATE VIEW: comment_list_view
+--comment_list_view
 CREATE VIEW comment_list_view
 AS
 SELECT
@@ -297,7 +115,7 @@ AND l.deletion_date IS NULL
 -- first order by threads then creation_date
 ORDER BY thread_id, creation_date, parent_comment_id desc;
 
---CREATE VIEW: company_permission_view
+--company_permission_view
 CREATE VIEW company_permission_view
 AS
 
@@ -339,14 +157,14 @@ ORDER BY
 	context_company_id,
 	permission_id;
 
---CREATE VIEW: constant_values_view
+--constant_values_view
 CREATE VIEW constant_values_view
 AS
 SELECT 
     2.0 incorrect_answer_value_multiplier,
     4.0 question_max_score;
 
---CREATE VIEW: course_completion_view
+--course_completion_view
 CREATE VIEW course_completion_view
 AS
 SELECT 
@@ -362,7 +180,7 @@ GROUP BY
 	cc.user_id
 ;
 
---CREATE VIEW: course_item_completion_view
+--course_item_completion_view
 CREATE VIEW course_item_completion_view
 AS
 
@@ -436,7 +254,7 @@ LEFT JOIN public.course_version cv
 ON cv.id = mv.course_version_id
 ;
 
---CREATE VIEW: course_length_estimation_view
+--course_length_estimation_view
 CREATE VIEW course_length_estimation_view
 AS
 SELECT 
@@ -477,7 +295,7 @@ FROM
 	FROM public.course_version cv
 ) sq;
 
---CREATE VIEW: course_module_overview_view
+--course_module_overview_view
 CREATE VIEW course_module_overview_view
 AS
 SELECT 
@@ -513,7 +331,7 @@ ORDER BY
 	md.order_index,
 	vd.order_index;
 
---CREATE VIEW: course_questions_success_view
+--course_questions_success_view
 CREATE VIEW course_questions_success_view
 AS
 SELECT 
@@ -564,7 +382,7 @@ GROUP BY sq.user_id, sq.course_id
 
 ORDER BY sq.user_id, sq.course_id;
 
---CREATE VIEW: course_rating_question_view
+--course_rating_question_view
 CREATE VIEW course_rating_question_view
 AS
 SELECT 
@@ -597,7 +415,7 @@ ORDER BY
 	crg.id,
 	crq.id;
 
---CREATE VIEW: course_shop_item_list_view
+--course_shop_item_list_view
 CREATE VIEW course_shop_item_list_view
 AS
 SELECT
@@ -614,7 +432,7 @@ ON sf.id = cd.cover_file_id
 
 WHERE cd.visibility = 'private';
 
---CREATE VIEW: course_video_length_view
+--course_video_length_view
 CREATE VIEW course_video_length_view
 AS
 SELECT 
@@ -637,7 +455,7 @@ WHERE mv.course_version_id IS NOT NULL
 GROUP BY
     mv.course_version_id;
 
---CREATE VIEW: exam_score_view
+--exam_score_view
 CREATE VIEW exam_score_view
 AS
 WITH
@@ -702,7 +520,7 @@ SELECT
 	ROUND(grouped.exam_score::numeric / grouped.exam_max_score::numeric * 100, 1)::int score_percentage
 FROM grouped_cte grouped;
 
---CREATE VIEW: exam_version_view
+--exam_version_view
 CREATE VIEW exam_version_view
 AS
 WITH 
@@ -733,7 +551,7 @@ LEFT JOIN public.module_version mv
 ON mv.id = vv.module_version_id
 ;
 
---CREATE VIEW: given_answer_view
+--given_answer_view
 CREATE VIEW given_answer_view
 AS
 SELECT 
@@ -763,7 +581,7 @@ ORDER BY
     qv.id,
 	av.id;
 
---CREATE VIEW: latest_answer_session_view
+--latest_answer_session_view
 CREATE VIEW latest_answer_session_view
 AS
 SELECT 
@@ -779,14 +597,14 @@ GROUP BY
     ase.exam_version_id,
     ase.video_version_id;
 
---CREATE VIEW: latest_course_version_view
+--latest_course_version_view
 CREATE VIEW latest_course_version_view
 AS
 SELECT MAX(cv.id) version_id, cv.course_id
 FROM public.course_version cv
 GROUP BY cv.course_id;
 
---CREATE VIEW: latest_exam_view
+--latest_exam_view
 CREATE VIEW latest_exam_view
 AS
 SELECT 
@@ -810,7 +628,7 @@ GROUP BY
 	cv.course_id,
 	ex.is_pretest;
 
---CREATE VIEW: latest_given_answer_view
+--latest_given_answer_view
 CREATE VIEW latest_given_answer_view
 AS
 SELECT 
@@ -826,7 +644,7 @@ GROUP BY
 	ase.user_id,
 	ga.question_version_id;
 
---CREATE VIEW: latest_video_view
+--latest_video_view
 CREATE VIEW latest_video_view
 AS
 SELECT 
@@ -848,7 +666,7 @@ GROUP BY
 	vv.video_id,
 	cv.course_id;
 
---CREATE VIEW: module_edit_view
+--module_edit_view
 CREATE VIEW module_edit_view
 AS
 SELECT 
@@ -874,7 +692,7 @@ ON sf.id = md.image_file_id
 ORDER BY
 	md.order_index;
 
---CREATE VIEW: module_player_view
+--module_player_view
 CREATE VIEW module_player_view
 AS
 WITH
@@ -910,7 +728,7 @@ WHERE md.order_index != 0
 
 ;
 
---CREATE VIEW: personality_trait_category_view
+--personality_trait_category_view
 CREATE VIEW personality_trait_category_view
 AS
 SELECT 
@@ -929,7 +747,7 @@ SELECT
 	) max_tips_count
 FROM public.personality_trait_category ptc;
 
---CREATE VIEW: personality_trait_view
+--personality_trait_view
 CREATE VIEW personality_trait_view
 AS
 WITH 
@@ -1020,7 +838,7 @@ ORDER BY
 	u.id
 ;
 
---CREATE VIEW: practise_question_info_view
+--practise_question_info_view
 CREATE VIEW practise_question_info_view
 AS
 WITH
@@ -1072,7 +890,7 @@ ON qv.id = latest_ga.question_version_id
 
 ;
 
---CREATE VIEW: practise_question_view
+--practise_question_view
 CREATE VIEW practise_question_view
 AS
 WITH
@@ -1213,7 +1031,7 @@ ON ad.id = av.answer_data_id
 
 ;
 
---CREATE VIEW: prequiz_question_view
+--prequiz_question_view
 CREATE VIEW prequiz_question_view
 AS
 SELECT 
@@ -1237,7 +1055,7 @@ ORDER BY
 	pq.id,
 	pa.id;
 
---CREATE VIEW: question_data_view
+--question_data_view
 CREATE VIEW question_data_view
 AS
 SELECT
@@ -1276,13 +1094,13 @@ ON av.question_version_id = qv.id
 LEFT JOIN public.answer_data ad
 ON ad.id = av.answer_data_id;
 
---CREATE VIEW: schema_version_view
+--schema_version_view
 CREATE VIEW schema_version_view
 AS
-SELECT '15:40:11 2022-10-28 CEDT' last_modification_date, '0.01' version
+SELECT '12:31:43 2022-10-31 CEST' last_modification_date, '0.01' version
 ;
 
---CREATE VIEW: shop_item_stateful_view
+--shop_item_stateful_view
 CREATE VIEW shop_item_stateful_view
 AS
 SELECT 
@@ -1338,7 +1156,7 @@ FROM
 	ORDER BY user_id, id
 ) sq;
 
---CREATE VIEW: shop_item_view
+--shop_item_view
 CREATE VIEW shop_item_view
 AS
 SELECT
@@ -1376,7 +1194,7 @@ ON cosf.id = cd.cover_file_id
 
 ORDER BY id;
 
---CREATE VIEW: signup_question_view
+--signup_question_view
 CREATE VIEW signup_question_view
 AS
 WITH 
@@ -1454,7 +1272,7 @@ ORDER BY
 	 
 	;
 
---CREATE VIEW: user_assigned_auth_item_view
+--user_assigned_auth_item_view
 CREATE VIEW user_assigned_auth_item_view
 AS
 SELECT * FROM 
@@ -1468,7 +1286,7 @@ SELECT * FROM
 
 WHERE sq.assignee_user_id IS NOT NULL ;
 
---CREATE VIEW: user_course_bridge_view
+--user_course_bridge_view
 CREATE VIEW user_course_bridge_view
 AS
 SELECT 
@@ -1488,7 +1306,7 @@ SELECT
 	ucb.required_completion_date::date - CURRENT_DATE required_length_days
 FROM public.user_course_bridge ucb;
 
---CREATE VIEW: user_practise_recommendation_view
+--user_practise_recommendation_view
 CREATE VIEW user_practise_recommendation_view
 AS
 WITH 
@@ -1581,7 +1399,7 @@ ON vir.video_version_id = vv.id
 LEFT JOIN answer_counts ac
 ON ac.video_version_id = vv.id;
 
---CREATE VIEW: user_prequiz_answers_view
+--user_prequiz_answers_view
 CREATE VIEW user_prequiz_answers_view
 AS
 WITH 
@@ -1634,7 +1452,7 @@ ORDER BY
 	ucb.user_id,
 	ucb.course_id;
 
---CREATE VIEW: user_role_view
+--user_role_view
 CREATE VIEW user_role_view
 AS
 WITH 
@@ -1722,7 +1540,7 @@ ORDER BY
 	
 	;
 
---CREATE VIEW: user_session_view
+--user_session_view
 CREATE VIEW user_session_view
 AS
 SELECT 
@@ -1731,7 +1549,7 @@ SELECT
 FROM public.activity_session AS acse
 ;
 
---CREATE VIEW: video_cursor_seconds_view
+--video_cursor_seconds_view
 CREATE VIEW video_cursor_seconds_view
 AS
 SELECT
@@ -1758,7 +1576,7 @@ ORDER BY
     u.id,
 	vv.id;
 
---CREATE VIEW: video_playback_sample_view
+--video_playback_sample_view
 CREATE VIEW video_playback_sample_view
 AS
 SELECT 
@@ -1772,7 +1590,7 @@ SELECT
 FROM public.video_playback_sample vps
 ;
 
---CREATE VIEW: video_player_data_view
+--video_player_data_view
 CREATE VIEW video_player_data_view
 AS
 SELECT 
@@ -1802,7 +1620,7 @@ ON mv.id = vv.module_version_id
 
 ;
 
---CREATE VIEW: video_version_view
+--video_version_view
 CREATE VIEW video_version_view
 AS
 WITH 
@@ -1833,7 +1651,7 @@ LEFT JOIN public.module_version mv
 ON mv.id = vv.module_version_id
 ;
 
---CREATE VIEW: coin_transaction_view
+--coin_transaction_view
 CREATE VIEW coin_transaction_view
 AS
 SELECT 
@@ -1885,7 +1703,7 @@ ORDER BY
 	creation_date DESC
 ;
 
---CREATE VIEW: company_associated_courses_view
+--company_associated_courses_view
 CREATE VIEW company_associated_courses_view
 AS
 SELECT 
@@ -1930,7 +1748,58 @@ ORDER BY
     cab.id IS NOT NULL DESC,
     co.id;
 
---CREATE VIEW: course_admin_detailed_view
+--completed_course_exam_count_view
+CREATE VIEW completed_course_exam_count_view
+AS
+SELECT
+    cicv.user_id,
+    cicv.course_id,
+    COUNT(*) completed_exam_count
+FROM public.course_item_completion_view cicv
+
+WHERE cicv.exam_version_id IS NOT NULL
+
+GROUP BY cicv.user_id, cicv.course_id;
+
+--completed_course_item_count_view
+CREATE VIEW completed_course_item_count_view
+AS
+SELECT
+    cicv.user_id,
+    cicv.course_id,
+    COUNT(*) completed_course_item_count
+FROM public.course_item_completion_view cicv
+
+GROUP BY cicv.user_id, cicv.course_id;
+
+--completed_course_video_count_view
+CREATE VIEW completed_course_video_count_view
+AS
+SELECT
+    cicv.user_id,
+    cicv.course_id,
+    COUNT(*) completed_video_count
+FROM public.course_item_completion_view cicv
+
+WHERE cicv.video_version_id IS NOT NULL
+
+GROUP BY cicv.user_id, cicv.course_id;
+
+--completed_module_item_count_view
+CREATE VIEW completed_module_item_count_view
+AS
+SELECT
+    cicv.user_id,
+    cicv.course_id,
+    cicv.module_id,
+    COUNT(*) completed_course_item_count
+FROM public.course_item_completion_view cicv
+
+GROUP BY cicv.user_id, cicv.course_id, cicv.module_id
+
+ORDER BY cicv.user_id, cicv.course_id, cicv.module_id;
+
+--course_admin_detailed_view
 CREATE VIEW course_admin_detailed_view
 AS
 SELECT 
@@ -1987,7 +1856,7 @@ ON scc.id = cd.sub_category_id
 ORDER BY
 	lcvv.course_id;
 
---CREATE VIEW: course_item_view
+--course_item_view
 CREATE VIEW course_item_view
 AS
 WITH
@@ -2091,7 +1960,49 @@ ORDER BY
 	ic.item_order_index
 ;
 
---CREATE VIEW: course_item_edit_view
+--course_exam_count_view
+CREATE VIEW course_exam_count_view
+AS
+SELECT 
+	co.id course_id,
+	COUNT(*)::int exam_count
+FROM public.course co 
+
+LEFT JOIN public.course_version cv
+ON cv.course_id = co.id
+
+LEFT JOIN public.course_item_view civ
+ON civ.course_version_id = cv.id 
+	AND civ.item_type = 'exam'
+
+GROUP BY
+	co.id
+	
+ORDER BY
+	co.id;
+
+--course_item_count_view
+CREATE VIEW course_item_count_view
+AS
+SELECT 
+	co.id course_id,
+	COUNT(*)::int item_count
+FROM public.course co 
+
+LEFT JOIN public.course_version cv
+ON cv.course_id = co.id
+
+LEFT JOIN public.course_item_view civ
+ON civ.course_version_id = cv.id 
+	AND civ.item_type != 'pretest'
+
+GROUP BY
+	co.id
+	
+ORDER BY
+	co.id;
+
+--course_item_edit_view
 CREATE VIEW course_item_edit_view
 AS
 SELECT 
@@ -2146,7 +2057,7 @@ ORDER BY
 	civ.exam_version_id,
 	qv.id;
 
---CREATE VIEW: course_state_view
+--course_state_view
 CREATE VIEW course_state_view
 AS
 WITH 
@@ -2178,7 +2089,28 @@ ORDER BY
     sq.user_id,
     sq.course_id;
 
---CREATE VIEW: daily_tip_view
+--course_video_count_view
+CREATE VIEW course_video_count_view
+AS
+SELECT 
+	co.id course_id,
+	COUNT(*)::int video_count
+FROM public.course co 
+
+LEFT JOIN public.course_version cv
+ON cv.course_id = co.id
+
+LEFT JOIN public.course_item_view civ
+ON civ.course_version_id = cv.id 
+	AND civ.item_type = 'video'
+
+GROUP BY
+	co.id
+	
+ORDER BY
+	co.id;
+
+--daily_tip_view
 CREATE VIEW daily_tip_view
 AS
 WITH user_trait_choices AS
@@ -2232,7 +2164,7 @@ ORDER BY
 	latest_occurance.latest_creation_date ASC NULLS FIRST,
 	dt.id;
 
---CREATE VIEW: exam_highest_score_answer_session_view
+--exam_highest_score_answer_session_view
 CREATE VIEW exam_highest_score_answer_session_view
 AS
 SELECT 
@@ -2265,7 +2197,7 @@ FROM
 
 WHERE rns.is_highest_score;
 
---CREATE VIEW: module_last_exam_view
+--module_last_exam_view
 CREATE VIEW module_last_exam_view
 AS
 
@@ -2299,7 +2231,7 @@ GROUP BY cv.course_id, mv.module_id, ev.exam_id, ev.id
 
 ORDER BY cv.course_id, mv.module_id, ev.exam_id, ev.id;
 
---CREATE VIEW: user_daily_activity_chart_view
+--user_daily_activity_chart_view
 CREATE VIEW user_daily_activity_chart_view
 AS
 -- This view only provides data for the
@@ -2342,7 +2274,7 @@ AND usag.user_id = gdwu.user_id
 
 ORDER BY gdwu.day_of_the_week;
 
---CREATE VIEW: user_latest_activity_view
+--user_latest_activity_view
 CREATE VIEW user_latest_activity_view
 AS
 WITH session_view_max AS (
@@ -2383,7 +2315,7 @@ WHERE u.deletion_date IS NULL
 
 ORDER BY svm.latest_activity_date DESC NULLS LAST;
 
---CREATE VIEW: user_session_block_view
+--user_session_block_view
 CREATE VIEW user_session_block_view
 AS
 WITH
@@ -2421,7 +2353,7 @@ FROM public.user u
 LEFT JOIN session_average sa
 ON sa.user_id = u.id;
 
---CREATE VIEW: user_session_daily_view
+--user_session_daily_view
 CREATE VIEW user_session_daily_view
 AS
 SELECT 
@@ -2445,7 +2377,7 @@ ORDER BY
 	sq.user_id
 ;
 
---CREATE VIEW: user_video_playback_seconds_view
+--user_video_playback_seconds_view
 CREATE VIEW user_video_playback_seconds_view
 AS
 SELECT 
@@ -2462,7 +2394,7 @@ GROUP BY
     vv.id
 ;
 
---CREATE VIEW: user_video_practise_progress_view
+--user_video_practise_progress_view
 CREATE VIEW user_video_practise_progress_view
 AS
 SELECT 
@@ -2522,121 +2454,7 @@ FROM
         sq.length_seconds
 ) sq2;
 
---CREATE VIEW: completed_course_exam_count_view
-CREATE VIEW completed_course_exam_count_view
-AS
-SELECT
-    cicv.user_id,
-    cicv.course_id,
-    COUNT(*) completed_exam_count
-FROM public.course_item_completion_view cicv
-
-WHERE cicv.exam_version_id IS NOT NULL
-
-GROUP BY cicv.user_id, cicv.course_id;
-
---CREATE VIEW: completed_course_item_count_view
-CREATE VIEW completed_course_item_count_view
-AS
-SELECT
-    cicv.user_id,
-    cicv.course_id,
-    COUNT(*) completed_course_item_count
-FROM public.course_item_completion_view cicv
-
-GROUP BY cicv.user_id, cicv.course_id;
-
---CREATE VIEW: completed_course_video_count_view
-CREATE VIEW completed_course_video_count_view
-AS
-SELECT
-    cicv.user_id,
-    cicv.course_id,
-    COUNT(*) completed_video_count
-FROM public.course_item_completion_view cicv
-
-WHERE cicv.video_version_id IS NOT NULL
-
-GROUP BY cicv.user_id, cicv.course_id;
-
---CREATE VIEW: completed_module_item_count_view
-CREATE VIEW completed_module_item_count_view
-AS
-SELECT
-    cicv.user_id,
-    cicv.course_id,
-    cicv.module_id,
-    COUNT(*) completed_course_item_count
-FROM public.course_item_completion_view cicv
-
-GROUP BY cicv.user_id, cicv.course_id, cicv.module_id
-
-ORDER BY cicv.user_id, cicv.course_id, cicv.module_id;
-
---CREATE VIEW: course_exam_count_view
-CREATE VIEW course_exam_count_view
-AS
-SELECT 
-	co.id course_id,
-	COUNT(*)::int exam_count
-FROM public.course co 
-
-LEFT JOIN public.course_version cv
-ON cv.course_id = co.id
-
-LEFT JOIN public.course_item_view civ
-ON civ.course_version_id = cv.id 
-	AND civ.item_type = 'exam'
-
-GROUP BY
-	co.id
-	
-ORDER BY
-	co.id;
-
---CREATE VIEW: course_item_count_view
-CREATE VIEW course_item_count_view
-AS
-SELECT 
-	co.id course_id,
-	COUNT(*)::int item_count
-FROM public.course co 
-
-LEFT JOIN public.course_version cv
-ON cv.course_id = co.id
-
-LEFT JOIN public.course_item_view civ
-ON civ.course_version_id = cv.id 
-	AND civ.item_type != 'pretest'
-
-GROUP BY
-	co.id
-	
-ORDER BY
-	co.id;
-
---CREATE VIEW: course_video_count_view
-CREATE VIEW course_video_count_view
-AS
-SELECT 
-	co.id course_id,
-	COUNT(*)::int video_count
-FROM public.course co 
-
-LEFT JOIN public.course_version cv
-ON cv.course_id = co.id
-
-LEFT JOIN public.course_item_view civ
-ON civ.course_version_id = cv.id 
-	AND civ.item_type = 'video'
-
-GROUP BY
-	co.id
-	
-ORDER BY
-	co.id;
-
---CREATE VIEW: answer_session_view
+--answer_session_view
 CREATE VIEW answer_session_view
 AS
 -- total and total correct given answer count,
@@ -2715,7 +2533,7 @@ LEFT JOIN public.course_item_completion_view cic
 ON cic.answer_session_id = ase.id
 ;
 
---CREATE VIEW: answer_session_evaluation_view
+--answer_session_evaluation_view
 CREATE VIEW answer_session_evaluation_view
 AS
 WITH 
@@ -2806,7 +2624,7 @@ OR tqc.video_version_id = ase.video_version_id
 LEFT JOIN ga_count gac
 ON gac.answer_session_id = ase.answer_session_id;
 
---CREATE VIEW: answer_session_group_view
+--answer_session_group_view
 CREATE VIEW answer_session_group_view
 AS
 -- Returns the average success rate of the
@@ -2843,7 +2661,7 @@ GROUP BY
     asv.answer_session_type,
     asv.start_date;
 
---CREATE VIEW: correct_answer_rates_split_view
+--correct_answer_rates_split_view
 CREATE VIEW correct_answer_rates_split_view
 AS
 SELECT
@@ -2880,7 +2698,7 @@ AND asgv.module_id = mv.module_id
 
 ORDER BY u.id;
 
---CREATE VIEW: exam_completed_view
+--exam_completed_view
 CREATE VIEW exam_completed_view
 AS
 SELECT 
@@ -2920,7 +2738,7 @@ ORDER BY
 	u.id,
 	ev.id;
 
---CREATE VIEW: most_productive_time_range_view
+--most_productive_time_range_view
 CREATE VIEW most_productive_time_range_view
 AS
 WITH generated_session_blocks (generated_session_block, block_end_time) AS 
@@ -2983,7 +2801,7 @@ AND upwsb.session_block = gsb.generated_session_block
 
 ORDER BY u.id, gsb.block_end_time;
 
---CREATE VIEW: user_answer_view
+--user_answer_view
 CREATE VIEW user_answer_view
 AS
 SELECT 
@@ -3014,7 +2832,7 @@ OR mv.id = vv.module_version_id
 LEFT JOIN public.course_version cv
 ON cv.id = mv.course_version_id;
 
---CREATE VIEW: user_daily_progress_view
+--user_daily_progress_view
 CREATE VIEW user_daily_progress_view
 AS
 WITH
@@ -3269,80 +3087,7 @@ ORDER BY
 	co.id
 ;
 
---CREATE VIEW: user_module_performance_answer_group_view
-CREATE VIEW user_module_performance_answer_group_view
-AS
-SELECT
-	carsv.user_id,
-	carsv.course_id,
-	carsv.module_id,
-	AVG(carsv.exam_correct_answer_rate)::double precision exam_correct_answer_rate,
-	AVG(carsv.practise_correct_answer_rate)::double precision practise_correct_answer_rate,
-	AVG(carsv.video_correct_answer_rate)::double precision video_correct_answer_rate
-FROM public.correct_answer_rates_split_view carsv
-
-GROUP BY carsv.user_id, carsv.course_id, carsv.module_id
-
-ORDER BY carsv.user_id, carsv.course_id, carsv.module_id;
-
---CREATE VIEW: user_module_performance_view
-CREATE VIEW user_module_performance_view
-AS
-
--- This view returns the performance per user per module
--- calculated from different answers.
--- Later it could replace the user_performance_view.
-
-SELECT
-    u.id user_id,
-    upagv.course_id,
-	upagv.module_id,
-	
-    -- one module avg per row
-    (
-        COALESCE(upagv.exam_correct_answer_rate * 2.5, 0) +
-        COALESCE(upagv.video_correct_answer_rate * 1.5, 0) +
-        COALESCE(upagv.practise_correct_answer_rate, 0)
-    )::double precision / 5 performance_percentage
-FROM public.user u
-
-LEFT JOIN public.user_module_performance_answer_group_view upagv
-ON upagv.user_id = u.id
-;
-
---CREATE VIEW: user_performance_answer_group_view
-CREATE VIEW user_performance_answer_group_view
-AS
-SELECT
-	carsv.user_id,
-	carsv.course_id,
-	AVG(carsv.exam_correct_answer_rate)::double precision exam_correct_answer_rate,
-	AVG(carsv.practise_correct_answer_rate)::double precision practise_correct_answer_rate,
-	AVG(carsv.video_correct_answer_rate)::double precision video_correct_answer_rate
-FROM public.correct_answer_rates_split_view carsv
-
-GROUP BY carsv.user_id, carsv.course_id;
-
---CREATE VIEW: user_performance_view
-CREATE VIEW user_performance_view
-AS
-SELECT
-    u.id user_id,
-    upagv.course_id,
-	
-    -- one course avg per row
-    (
-        COALESCE(upagv.exam_correct_answer_rate * 2.5, 0) +
-        COALESCE(upagv.video_correct_answer_rate * 1.5, 0) +
-        COALESCE(upagv.practise_correct_answer_rate, 0)
-    )::double precision / 5 performance_percentage
-FROM public.user u
-
-LEFT JOIN public.user_performance_answer_group_view upagv
-ON upagv.user_id = u.id
-;
-
---CREATE VIEW: user_exam_stats_view
+--user_exam_stats_view
 CREATE VIEW user_exam_stats_view
 AS
 SELECT DISTINCT ON (e.id)
@@ -3395,7 +3140,80 @@ AND e.is_signup IS FALSE
 
 ORDER BY e.id, asv.end_date desc;
 
---CREATE VIEW: course_admin_short_view
+--user_module_performance_answer_group_view
+CREATE VIEW user_module_performance_answer_group_view
+AS
+SELECT
+	carsv.user_id,
+	carsv.course_id,
+	carsv.module_id,
+	AVG(carsv.exam_correct_answer_rate)::double precision exam_correct_answer_rate,
+	AVG(carsv.practise_correct_answer_rate)::double precision practise_correct_answer_rate,
+	AVG(carsv.video_correct_answer_rate)::double precision video_correct_answer_rate
+FROM public.correct_answer_rates_split_view carsv
+
+GROUP BY carsv.user_id, carsv.course_id, carsv.module_id
+
+ORDER BY carsv.user_id, carsv.course_id, carsv.module_id;
+
+--user_module_performance_view
+CREATE VIEW user_module_performance_view
+AS
+
+-- This view returns the performance per user per module
+-- calculated from different answers.
+-- Later it could replace the user_performance_view.
+
+SELECT
+    u.id user_id,
+    upagv.course_id,
+	upagv.module_id,
+	
+    -- one module avg per row
+    (
+        COALESCE(upagv.exam_correct_answer_rate * 2.5, 0) +
+        COALESCE(upagv.video_correct_answer_rate * 1.5, 0) +
+        COALESCE(upagv.practise_correct_answer_rate, 0)
+    )::double precision / 5 performance_percentage
+FROM public.user u
+
+LEFT JOIN public.user_module_performance_answer_group_view upagv
+ON upagv.user_id = u.id
+;
+
+--user_performance_answer_group_view
+CREATE VIEW user_performance_answer_group_view
+AS
+SELECT
+	carsv.user_id,
+	carsv.course_id,
+	AVG(carsv.exam_correct_answer_rate)::double precision exam_correct_answer_rate,
+	AVG(carsv.practise_correct_answer_rate)::double precision practise_correct_answer_rate,
+	AVG(carsv.video_correct_answer_rate)::double precision video_correct_answer_rate
+FROM public.correct_answer_rates_split_view carsv
+
+GROUP BY carsv.user_id, carsv.course_id;
+
+--user_performance_view
+CREATE VIEW user_performance_view
+AS
+SELECT
+    u.id user_id,
+    upagv.course_id,
+	
+    -- one course avg per row
+    (
+        COALESCE(upagv.exam_correct_answer_rate * 2.5, 0) +
+        COALESCE(upagv.video_correct_answer_rate * 1.5, 0) +
+        COALESCE(upagv.practise_correct_answer_rate, 0)
+    )::double precision / 5 performance_percentage
+FROM public.user u
+
+LEFT JOIN public.user_performance_answer_group_view upagv
+ON upagv.user_id = u.id
+;
+
+--course_admin_short_view
 CREATE VIEW course_admin_short_view
 AS
 WITH 
@@ -3455,7 +3273,7 @@ ON ec.course_version_id = lcvv.version_id
 ORDER BY
 	lcvv.course_id;
 
---CREATE VIEW: course_spent_time_view
+--course_spent_time_view
 CREATE VIEW course_spent_time_view
 AS
 WITH 
@@ -3628,7 +3446,7 @@ ORDER BY
 	u.id,
 	co.id;
 
---CREATE VIEW: user_spent_time_ratio_view
+--user_spent_time_ratio_view
 CREATE VIEW user_spent_time_ratio_view
 AS
 SELECT
@@ -3648,7 +3466,55 @@ ON cstv.user_id = usv.user_id
 GROUP BY
     u.id;
 
---CREATE VIEW: playlist_view
+--improve_yourself_page_stats_view
+CREATE VIEW improve_yourself_page_stats_view
+AS
+SELECT
+    u.id user_id,
+
+    -- time range with the most performance
+    (
+        SELECT
+            (array_agg(mptrv.session_block ORDER BY mptrv.performance_percentage DESC))[1]
+        FROM public.most_productive_time_range_view mptrv
+        WHERE mptrv.user_id = u.id
+    ) most_productive_time_range,
+
+    -- day of the week with the most session time on avg
+    (
+		SELECT 
+			udacv.day_of_the_week
+		FROM public.user_daily_activity_chart_view udacv
+		WHERE udacv.user_id = u.id
+		AND udacv.total_session_length_seconds = 
+			(
+				SELECT 
+					MAX(udacv2.total_session_length_seconds) 
+				FROM public.user_daily_activity_chart_view udacv2
+				WHERE udacv2.user_id = u.id
+			)
+    ) most_active_day
+FROM public.user u;
+
+--module_item_count_view
+CREATE VIEW module_item_count_view
+AS
+SELECT 
+    mv.module_id,
+    COUNT(*)::int item_count
+FROM public.latest_course_version_view lcvv
+
+LEFT JOIN public.module_version mv
+ON mv.course_version_id = lcvv.version_id
+
+LEFT JOIN public.course_item_view civ
+ON civ.module_id = mv.module_id
+AND civ.item_type != 'pretest'
+
+GROUP BY
+    mv.module_id;
+
+--playlist_view
 CREATE VIEW playlist_view
 AS
 WITH 
@@ -3727,7 +3593,7 @@ ORDER BY
 	module_order_index,
 	item_order_index;
 
---CREATE VIEW: signup_completed_view
+--signup_completed_view
 CREATE VIEW signup_completed_view
 AS
 SELECT 
@@ -3745,7 +3611,7 @@ ON asev.answer_session_id = asv.answer_session_id
 ORDER BY
 	u.id;
 
---CREATE VIEW: user_active_course_view
+--user_active_course_view
 CREATE VIEW user_active_course_view
 AS
 SELECT
@@ -3773,7 +3639,7 @@ ON sf.id = cd.cover_file_id
 WHERE cosv.in_progress
 ;
 
---CREATE VIEW: user_course_completion_current_view
+--user_course_completion_current_view
 CREATE VIEW user_course_completion_current_view
 AS
 SELECT 
@@ -3812,7 +3678,7 @@ FROM
 		ucbv.course_id
 ) sq;
 
---CREATE VIEW: user_course_progress_actual_view
+--user_course_progress_actual_view
 CREATE VIEW user_course_progress_actual_view
 AS
 WITH
@@ -3856,7 +3722,7 @@ LEFT JOIN completed_course_item_counts ccic
 ON ccic.user_id = ucb.user_id
 AND ccic.course_id = ucb.course_id;
 
---CREATE VIEW: course_progress_view
+--course_progress_view
 CREATE VIEW course_progress_view
 AS
 SELECT
@@ -3897,7 +3763,7 @@ WHERE ucb.id IS NOT NULL
 AND cc.id IS NULL
 ;
 
---CREATE VIEW: user_course_progress_view
+--user_course_progress_view
 CREATE VIEW user_course_progress_view
 AS
 SELECT
@@ -3938,7 +3804,7 @@ LEFT JOIN public.user_course_bridge ucb
 ON ucb.course_id = sq.course_id AND ucb.user_id = sq.user_id
 ;
 
---CREATE VIEW: user_course_recommended_item_quota_view
+--user_course_recommended_item_quota_view
 CREATE VIEW user_course_recommended_item_quota_view
 AS
 SELECT 
@@ -3955,7 +3821,7 @@ LEFT JOIN public.user_course_completion_current_view ucccv
 ON ucccv.course_id = ucb.course_id 
 	AND ucccv.user_id = ucb.user_id ;
 
---CREATE VIEW: user_daily_course_item_progress_view
+--user_daily_course_item_progress_view
 CREATE VIEW user_daily_course_item_progress_view
 AS
 WITH completed_items AS
@@ -4011,7 +3877,7 @@ ON cicv.course_id = cig.course_id
 
 ORDER BY cig.completion_date;
 
---CREATE VIEW: user_weekly_course_item_progress_view
+--user_weekly_course_item_progress_view
 CREATE VIEW user_weekly_course_item_progress_view
 AS
 SELECT 
@@ -4033,7 +3899,7 @@ GROUP BY
 	sq.course_id,
 	sq.completion_date_trunc;
 
---CREATE VIEW: user_inactive_course_view
+--user_inactive_course_view
 CREATE VIEW user_inactive_course_view
 AS
 /*
@@ -4096,7 +3962,101 @@ GROUP BY lus.user_id
 
 ;
 
---CREATE VIEW: user_reaction_time_view
+--user_engagement_view
+CREATE VIEW user_engagement_view
+AS
+WITH
+sessions AS
+(
+	SELECT
+		usv.user_id user_id,
+		EXTRACT(WEEK FROM start_date) week_num,
+		usv.length_seconds > 60 * 15 is_longer_than_fifteen_minutes,
+		usv.length_seconds < 60 * 5 AND usv.length_seconds != 0 is_shorter_than_five_minutes
+	FROM public.user_session_view usv
+	WHERE usv.is_finalized = true
+),
+session_groups AS
+(
+	SELECT
+		s.user_id user_id,
+		s.week_num week_num,
+		COUNT(1) total_session_count,
+		SUM(s.is_longer_than_fifteen_minutes::int) is_longer_than_fifteen_minutes_count,
+		SUM(s.is_shorter_than_five_minutes::int) is_shorter_than_five_minutes_count
+	FROM sessions s
+	GROUP BY
+		s.week_num,
+		s.user_id
+),
+session_points AS
+(
+	SELECT
+		sg.user_id user_id,
+		SUM(LEAST (sg.total_session_count * 1, 10)) session_count_points,
+		SUM(LEAST (sg.is_longer_than_fifteen_minutes_count * 5, 40)) is_longer_than_fifteen_minutes_points,
+		SUM(GREATEST (sg.is_shorter_than_five_minutes_count * -3, -15)) is_shorter_than_five_minutes_points
+	FROM session_groups sg
+	GROUP BY
+		sg.user_id
+),
+user_session_lengths AS
+(
+	SELECT
+		usv.user_id,
+		SUM(usv.length_seconds) / 60 length_minutes
+	FROM public.user_session_view usv
+	WHERE usv.start_date > CURRENT_DATE - 30
+	GROUP BY usv.user_id
+),
+total_session_length_points AS
+(
+	SELECT
+		-- gets points for total session length
+		usl.user_id user_id,
+        CASE
+            -- if total length of sessions longer than 360 minutes then 50 points
+			WHEN usl.length_minutes > 360
+                THEN 50
+            -- if total length of sessions longer than 240 minutes then 45 points
+			WHEN usl.length_minutes > 240
+                THEN 45
+            -- if total length of sessions longer than 180 minutes then 40 points
+			WHEN usl.length_minutes > 180
+                THEN 40
+            -- if total length of sessions longer than 120 minutes then 30 points
+			WHEN usl.length_minutes > 120
+                THEN 30
+            -- if total length of sessions longer than 60 minutes then 15 points
+            WHEN usl.length_minutes > 60
+                THEN 15
+            -- if total length of sessions longer than 0 minutes then 10 points
+            WHEN usl.length_minutes > 0
+                THEN 10
+            ELSE 0
+        END total_session_length_points
+	FROM user_session_lengths usl
+)
+
+SELECT
+	u.id user_id,
+	(tslp.total_session_length_points
+	+ sp.session_count_points
+	+ sp.is_longer_than_fifteen_minutes_points
+	+ sp.is_shorter_than_five_minutes_points
+	+ COALESCE(uicv.inactive_course_count, 0) * -10::int)::int engagement_points
+FROM public.user u
+
+LEFT JOIN session_points sp
+ON sp.user_id = u.id
+
+LEFT JOIN total_session_length_points tslp
+ON tslp.user_id = u.id
+
+LEFT JOIN public.user_inactive_course_view uicv
+ON uicv.user_id = u.id;
+
+--user_reaction_time_view
 CREATE VIEW user_reaction_time_view
 AS
 -- user exams with correct answer rate and completion length seconds
@@ -4273,149 +4233,251 @@ GROUP BY
     urp.user_reaction_time_points,
     urp.reaction_time_percent_diff;
 
---CREATE VIEW: improve_yourself_page_stats_view
-CREATE VIEW improve_yourself_page_stats_view
-AS
-SELECT
-    u.id user_id,
-
-    -- time range with the most performance
-    (
-        SELECT
-            (array_agg(mptrv.session_block ORDER BY mptrv.performance_percentage DESC))[1]
-        FROM public.most_productive_time_range_view mptrv
-        WHERE mptrv.user_id = u.id
-    ) most_productive_time_range,
-
-    -- day of the week with the most session time on avg
-    (
-		SELECT 
-			udacv.day_of_the_week
-		FROM public.user_daily_activity_chart_view udacv
-		WHERE udacv.user_id = u.id
-		AND udacv.total_session_length_seconds = 
-			(
-				SELECT 
-					MAX(udacv2.total_session_length_seconds) 
-				FROM public.user_daily_activity_chart_view udacv2
-				WHERE udacv2.user_id = u.id
-			)
-    ) most_active_day
-FROM public.user u;
-
---CREATE VIEW: user_engagement_view
-CREATE VIEW user_engagement_view
+--admin_home_page_overview_view
+CREATE VIEW admin_home_page_overview_view
 AS
 WITH
-sessions AS
+-- When did the user made the last activity in
+-- the course
+latest_course_activity_cte AS
 (
-	SELECT
-		usv.user_id user_id,
-		EXTRACT(WEEK FROM start_date) week_num,
-		usv.length_seconds > 60 * 15 is_longer_than_fifteen_minutes,
-		usv.length_seconds < 60 * 5 AND usv.length_seconds != 0 is_shorter_than_five_minutes
-	FROM public.user_session_view usv
-	WHERE usv.is_finalized = true
+	SELECT 
+		cic.user_id,
+		cv.course_id,
+		MAX(cic.completion_date) latest_course_item_completion_date
+	FROM public.course_item_completion_view cic
+
+	LEFT JOIN public.video_version vv
+	ON vv.id = cic.video_version_id
+
+	LEFT JOIN public.exam_version ev
+	ON ev.id = cic.exam_version_id
+
+	LEFT JOIN public.module_version mv
+	ON mv.id = vv.module_version_id
+	OR mv.id = ev.module_version_id
+
+	LEFT JOIN public.course_version cv
+	ON cv.id = mv.course_version_id
+
+	GROUP BY cic.user_id, cv.course_id
 ),
-session_groups AS
+
+is_final_exam_completed_cte AS 
 (
-	SELECT
-		s.user_id user_id,
-		s.week_num week_num,
-		COUNT(1) total_session_count,
-		SUM(s.is_longer_than_fifteen_minutes::int) is_longer_than_fifteen_minutes_count,
-		SUM(s.is_shorter_than_five_minutes::int) is_shorter_than_five_minutes_count
-	FROM sessions s
-	GROUP BY
-		s.week_num,
-		s.user_id
+    SELECT
+        cv.course_id,
+        cic.user_id,
+        (COUNT(*) > 0) is_final_exam_completed
+    FROM public.course_item_completion_view cic
+
+    LEFT JOIN public.exam_version ev
+    ON ev.id = cic.exam_version_id
+
+    LEFT JOIN public.exam_data ed
+    ON ed.id = ev.exam_data_id
+
+    LEFT JOIN public.module_version mv
+    ON mv.id = ev.module_version_id
+
+    LEFT JOIN public.course_version cv
+    ON cv.id = mv.course_version_id
+
+    WHERE ed.is_final IS TRUE
+    
+    GROUP BY 
+        cv.course_id,
+        cic.user_id
 ),
-session_points AS
+active_user_count_cte AS
 (
 	SELECT
-		sg.user_id user_id,
-		SUM(LEAST (sg.total_session_count * 1, 10)) session_count_points,
-		SUM(LEAST (sg.is_longer_than_fifteen_minutes_count * 5, 40)) is_longer_than_fifteen_minutes_points,
-		SUM(GREATEST (sg.is_shorter_than_five_minutes_count * -3, -15)) is_shorter_than_five_minutes_points
-	FROM session_groups sg
-	GROUP BY
-		sg.user_id
+		lcac.course_id,
+		u.company_id,
+		COUNT(*) active_user_count
+	FROM latest_course_activity_cte lcac
+
+	LEFT JOIN is_final_exam_completed_cte ifecc
+	ON ifecc.user_id = lcac.user_id
+	AND ifecc.course_id = lcac.course_id
+	AND ifecc.is_final_exam_completed IS NOT TRUE
+	
+	LEFT JOIN public.user u
+	ON u.id = lcac.user_id
+	
+	WHERE lcac.latest_course_item_completion_date > CURRENT_DATE - 14	
+	
+	GROUP BY lcac.course_id, u.company_id
 ),
-user_session_lengths AS
+suspended_user_count_cte AS
 (
 	SELECT
-		usv.user_id,
-		SUM(usv.length_seconds) / 60 length_minutes
-	FROM public.user_session_view usv
-	WHERE usv.start_date > CURRENT_DATE - 30
-	GROUP BY usv.user_id
+		lcac.course_id,
+		u.company_id,
+		COUNT(*) suspended_user_count
+	FROM latest_course_activity_cte lcac
+
+	LEFT JOIN is_final_exam_completed_cte ifecc
+	ON ifecc.user_id = lcac.user_id
+	AND ifecc.course_id = lcac.course_id
+	AND ifecc.is_final_exam_completed IS NOT TRUE
+	
+	LEFT JOIN public.user u
+	ON u.id = lcac.user_id
+	
+	WHERE lcac.latest_course_item_completion_date < CURRENT_DATE - 14	
+	
+	GROUP BY lcac.course_id, u.company_id
 ),
-total_session_length_points AS
+completed_user_count_cte AS
 (
 	SELECT
-		-- gets points for total session length
-		usl.user_id user_id,
-        CASE
-            -- if total length of sessions longer than 360 minutes then 50 points
-			WHEN usl.length_minutes > 360
-                THEN 50
-            -- if total length of sessions longer than 240 minutes then 45 points
-			WHEN usl.length_minutes > 240
-                THEN 45
-            -- if total length of sessions longer than 180 minutes then 40 points
-			WHEN usl.length_minutes > 180
-                THEN 40
-            -- if total length of sessions longer than 120 minutes then 30 points
-			WHEN usl.length_minutes > 120
-                THEN 30
-            -- if total length of sessions longer than 60 minutes then 15 points
-            WHEN usl.length_minutes > 60
-                THEN 15
-            -- if total length of sessions longer than 0 minutes then 10 points
-            WHEN usl.length_minutes > 0
-                THEN 10
-            ELSE 0
-        END total_session_length_points
-	FROM user_session_lengths usl
+		lcac.course_id,
+		u.company_id,
+		COUNT(*) completed_user_count
+	FROM latest_course_activity_cte lcac
+
+	INNER JOIN is_final_exam_completed_cte ifecc
+	ON ifecc.user_id = lcac.user_id
+	AND ifecc.course_id = lcac.course_id
+	AND ifecc.is_final_exam_completed IS TRUE
+	
+	LEFT JOIN public.user u
+	ON u.id = lcac.user_id
+		
+	GROUP BY lcac.course_id, u.company_id
+),
+course_avg_performance_cte AS
+(
+	SELECT
+		upv.course_id,
+		u.company_id,
+		AVG(upv.performance_percentage) avg_performance_percentage
+	FROM public.user_performance_view upv
+	
+	LEFT JOIN public.user u
+	ON u.id = upv.user_id
+	
+	WHERE upv.performance_percentage != 0
+	
+	GROUP BY upv.course_id, u.company_id
+),
+course_difficulty_count_cte AS
+(
+	SELECT
+		cv.course_id,
+		u.company_id,
+		COUNT(*) difficult_videos_count
+	FROM public.video_rating vr
+	
+	LEFT JOIN public.video_version vv
+	ON vv.id = vr.video_version_id
+	
+	LEFT JOIN public.module_version mv
+	ON mv.id = vv.module_version_id
+	
+	LEFT JOIN public.course_version cv
+	ON cv.id = mv.course_version_id
+	
+	LEFT JOIN public.user u
+	ON vr.user_id = u.id
+	
+	WHERE vr.difficulty > 4
+	
+	GROUP BY cv.course_id, u.company_id
+),
+questions_to_be_answered_count_cte AS
+(
+	SELECT
+		u.company_id,
+		cv.course_id,
+		COUNT(*) questions_to_be_answered_count
+	FROM public.comment com
+	
+	LEFT JOIN public.user u
+	ON com.user_id = u.id
+	
+	LEFT JOIN public.video_version vv
+	ON vv.id = com.video_version_id
+	
+	LEFT JOIN public.module_version mv
+	ON mv.id = vv.module_version_id
+	
+	LEFT JOIN public.course_version cv
+	ON cv.id = mv.course_version_id
+	
+	WHERE 
+	com.id NOT IN 
+	(
+		SELECT
+			comp.id
+		FROM public.comment comp
+
+		INNER JOIN public.comment comc
+		ON comc.parent_comment_id = comp.id
+	)
+	AND com.parent_comment_id IS NULL
+	
+	GROUP BY u.company_id, cv.course_id
 )
 
 SELECT
-	u.id user_id,
-	(tslp.total_session_length_points
-	+ sp.session_count_points
-	+ sp.is_longer_than_fifteen_minutes_points
-	+ sp.is_shorter_than_five_minutes_points
-	+ COALESCE(uicv.inactive_course_count, 0) * -10::int)::int engagement_points
-FROM public.user u
+	co.id course_id,
+	comp.id company_id,
+	cd.title,
+	sf.file_path thumbnail_url,
+	COALESCE(aucc.active_user_count, 0) active_users_count,
+	COALESCE(succ.suspended_user_count, 0) suspended_users_count,
+	COALESCE(cucc.completed_user_count, 0) completed_users_count,
+	capc.avg_performance_percentage avg_course_performance_percentage,
+	COALESCE(cdcc.difficult_videos_count, 0) difficult_videos_count,
+	COALESCE(qtbacc.questions_to_be_answered_count, 0) questions_waiting_to_be_answered
+FROM public.company comp
 
-LEFT JOIN session_points sp
-ON sp.user_id = u.id
+LEFT JOIN public.course_access_bridge cab
+ON cab.company_id = comp.id
 
-LEFT JOIN total_session_length_points tslp
-ON tslp.user_id = u.id
+LEFT JOIN public.course co
+ON co.id = cab.course_id
 
-LEFT JOIN public.user_inactive_course_view uicv
-ON uicv.user_id = u.id;
+LEFT JOIN active_user_count_cte aucc
+ON aucc.course_id = co.id
+AND aucc.company_id = comp.id
 
---CREATE VIEW: module_item_count_view
-CREATE VIEW module_item_count_view
-AS
-SELECT 
-    mv.module_id,
-    COUNT(*)::int item_count
-FROM public.latest_course_version_view lcvv
+LEFT JOIN suspended_user_count_cte succ
+ON succ.course_id = co.id
+AND succ.company_id = comp.id
 
-LEFT JOIN public.module_version mv
-ON mv.course_version_id = lcvv.version_id
+LEFT JOIN completed_user_count_cte cucc
+ON cucc.course_id = co.id
+AND cucc.company_id = comp.id
 
-LEFT JOIN public.course_item_view civ
-ON civ.module_id = mv.module_id
-AND civ.item_type != 'pretest'
+LEFT JOIN course_avg_performance_cte capc
+ON capc.course_id = co.id
+AND capc.company_id = comp.id
 
-GROUP BY
-    mv.module_id;
+LEFT JOIN course_difficulty_count_cte cdcc
+ON cdcc.course_id = co.id
+AND cdcc.company_id = comp.id
 
---CREATE VIEW: course_admin_content_view
+LEFT JOIN questions_to_be_answered_count_cte qtbacc
+ON qtbacc.course_id = co.id
+AND qtbacc.company_id = comp.id
+
+LEFT JOIN public.latest_course_version_view lcvv
+ON lcvv.course_id = co.id
+
+LEFT JOIN public.course_version cv
+ON cv.id = lcvv.version_id
+
+LEFT JOIN public.course_data cd
+ON cd.id = cv.course_data_id
+
+LEFT JOIN public.storage_file sf
+ON sf.id = cd.cover_file_id
+;
+
+--course_admin_content_view
 CREATE VIEW course_admin_content_view
 AS
 WITH
@@ -4541,7 +4603,7 @@ ORDER BY
 	civ.item_order_index
 ;
 
---CREATE VIEW: course_details_view
+--course_details_view
 CREATE VIEW course_details_view
 AS
 SELECT 
@@ -4679,7 +4741,7 @@ ORDER BY
 	u.id,
 	co.id;
 
---CREATE VIEW: exam_player_data_view
+--exam_player_data_view
 CREATE VIEW exam_player_data_view
 AS
 WITH
@@ -4774,7 +4836,135 @@ ORDER BY
 	ex.id
 ;
 
---CREATE VIEW: final_exam_score_view
+--exam_result_stats_view
+CREATE VIEW exam_result_stats_view
+AS
+WITH
+question_correct_answer_rates AS
+(
+	SELECT
+		ase.id answer_session_id,
+		ase.user_id,
+		qv.id question_version_id,
+		AVG((ga.state = 'CORRECT')::int)::int * 100 correct_answer_rate
+	FROM public.given_answer ga
+
+	LEFT JOIN public.question_version qv
+	ON qv.id = ga.question_version_id
+
+	LEFT JOIN public.answer_session ase
+	ON ase.id = ga.answer_session_id
+
+	GROUP BY ase.id, ase.user_id, qv.id
+),
+fully_correctly_answered_questions AS
+(
+    SELECT
+        qcar.answer_session_id,
+        COUNT(qcar.correct_answer_rate = 100 OR NULL)::int fully_correctly_answered_questions_count
+    FROM question_correct_answer_rates qcar
+
+    GROUP BY qcar.answer_session_id
+),
+answer_session_lengths AS
+(
+	SELECT
+		asv.answer_session_id,
+		asv.start_date,
+		asv.end_date,
+		EXTRACT(EPOCH FROM (asv.end_date::time - asv.start_date::time))::double precision AS length_seconds
+	FROM public.answer_session_view asv
+
+	WHERE asv.start_date IS NOT NULL
+	AND asv.end_date IS NOT NULL
+),
+avg_exam_score_per_company_cte AS
+(
+	SELECT
+		u.company_id,
+		ev.exam_id,
+		AVG(esv.score_percentage)::int avg_score_percentage
+	FROM public.exam_score_view esv
+
+	LEFT JOIN public.exam_version ev
+	ON ev.id = esv.exam_version_id
+
+	LEFT JOIN public.answer_session ase
+	ON ase.id = esv.answer_session_id
+
+	LEFT JOIN public.user u
+	ON u.id = ase.user_id
+
+	GROUP BY
+		u.company_id,
+		ev.exam_id
+),
+question_count AS
+(
+	SELECT
+		ev.id exam_version_id,
+		COUNT(qv.id)::int question_count
+	FROM public.exam_version ev
+
+	LEFT JOIN public.question_version qv
+	ON qv.exam_version_id = ev.id
+
+	GROUP BY  ev.id
+)
+SELECT
+	u.id user_id,
+	ev.id exam_version_id,
+	ase.id answer_session_id,
+	fcaq.fully_correctly_answered_questions_count,
+    qc.question_count question_count,
+	asl.length_seconds::int exam_length_seconds,
+	esv.score_percentage,
+	esv.exam_score,
+	esv.exam_max_score,
+	esv.answered_question_count,
+	aespcc.avg_score_percentage,
+	esv.score_percentage - aespcc.avg_score_percentage score_percentage_diff_from_avg,
+    ehsasv.is_highest_score IS NOT DISTINCT FROM true is_highest_score_session
+FROM answer_session ase
+
+LEFT JOIN public.user u
+ON u.id = ase.user_id
+
+LEFT JOIN public.exam_highest_score_answer_session_view ehsasv
+ON ehsasv.answer_session_id = ase.id
+
+LEFT JOIN public.exam_version ev
+ON ev.id = ase.exam_version_id
+
+LEFT JOIN public.exam e
+ON e.id = ev.exam_id
+
+LEFT JOIN answer_session_lengths asl
+ON asl.answer_session_id = ase.id
+
+LEFT JOIN avg_exam_score_per_company_cte aespcc
+ON aespcc.company_id = u.company_id
+AND aespcc.exam_id = e.id
+
+LEFT JOIN fully_correctly_answered_questions fcaq
+ON fcaq.answer_session_id = ase.id
+
+LEFT JOIN question_count qc
+ON qc.exam_version_id = ase.id
+
+LEFT JOIN public.exam_score_view esv
+ON esv.answer_session_id = ase.id
+
+-- filter signup exam
+WHERE e.id != 1
+
+ORDER BY
+	u.id,
+	e.id,
+	ase.id
+;
+
+--final_exam_score_view
 CREATE VIEW final_exam_score_view
 AS
 SELECT 
@@ -4799,7 +4989,66 @@ ON esv.exam_version_id = ev.id
 GROUP BY lasv.user_id, lev.course_id
 ;
 
---CREATE VIEW: module_last_exam_score_view
+--home_page_stats_view
+CREATE VIEW home_page_stats_view
+AS
+SELECT 
+    u.id user_id,
+
+    -- videos to be repeated count
+	(
+		SELECT 
+			COALESCE(SUM(is_recommended_for_practise::int), 0)
+		FROM public.user_practise_recommendation_view uprv
+		WHERE uprv.user_id = u.id
+	) videos_to_be_repeated_count,
+    
+    -- completed video count in the last 30 days
+    (
+        SELECT 
+            COUNT(*)::int
+        FROM public.course_item_completion_view cicv
+        
+        WHERE cicv.user_id = u.id
+        AND cicv.completion_date > CURRENT_DATE - 30 
+        AND cicv.video_version_id IS NOT NULL
+        AND cicv.is_pretest IS NOT TRUE
+    ) completed_videos_last_month,
+
+    -- performance last month
+    (
+        SELECT
+            ROUND(AVG(upv.performance_percentage::int), 0)
+        FROM public.activity_session ase
+    
+        LEFT JOIN public.user_session_activity AS usa
+        ON usa.activity_session_id = ase.id
+
+        LEFT JOIN public.video_version vv
+        ON vv.id = usa.video_version_id
+
+        LEFT JOIN public.exam_version ev
+        ON ev.id = usa.exam_version_id
+
+        LEFT JOIN public.module_version mv
+        ON mv.id = vv.module_version_id
+        OR mv.id = ev.module_version_id
+        
+        LEFT JOIN public.course_version cv
+        ON cv.id = mv.course_version_id
+
+        LEFT JOIN public.user_performance_view upv
+        ON upv.course_id = cv.course_id
+        AND upv.user_id = ase.user_id
+
+        WHERE ase.start_date > CURRENT_DATE - 30
+		AND upv.course_id IS NOT NULL
+    ) performance_last_month
+FROM public.user u
+
+GROUP BY u.id;
+
+--module_last_exam_score_view
 CREATE VIEW module_last_exam_score_view
 AS
 
@@ -4819,7 +5068,7 @@ ON lasv.exam_version_id = mlev.exam_version_id
 LEFT JOIN public.answer_session_view asv
 ON asv.answer_session_id = lasv.answer_session_id;
 
---CREATE VIEW: pretest_result_view
+--pretest_result_view
 CREATE VIEW pretest_result_view
 AS
 SELECT  
@@ -4850,7 +5099,7 @@ ON mv.id = ev.module_version_id
 LEFT JOIN public.course_version cv
 ON cv.id = mv.course_version_id;
 
---CREATE VIEW: user_course_completion_original_estimation_view
+--user_course_completion_original_estimation_view
 CREATE VIEW user_course_completion_original_estimation_view
 AS
 
@@ -4885,7 +5134,228 @@ FROM
 		ucb.course_id
 ) sq;
 
---CREATE VIEW: user_permission_view
+--user_learning_page_stats_view
+CREATE VIEW user_learning_page_stats_view
+AS
+-- total and total correct given answer count
+WITH answer_stats AS 
+(
+	SELECT 
+		ase.user_id,
+		COUNT (ga.id)::int total_given_answer_count,
+		SUM ((ga.state = 'CORRECT')::int)::int total_correct_given_answer_count
+	FROM public.given_answer ga
+
+	LEFT JOIN public.answer_session ase
+	ON ase.id = ga.answer_session_id
+
+	LEFT JOIN public.question_version qv
+	ON qv.id = ga.question_version_id
+
+	AND qv.video_version_id IS NOT NULL
+	
+	GROUP BY ase.user_id
+), 
+-- avg epistocoins aquired per company
+company_avg_coins AS 
+(
+	SELECT 
+		u.company_id,
+		AVG(ct.amount) avg_coins_aquired_by_company
+	FROM public.user u
+
+	LEFT JOIN public.coin_transaction ct
+	ON ct.user_id = u.id
+
+	LEFT JOIN public.company 
+	ON company.id = u.company_id
+
+	GROUP BY u.company_id
+), 
+-- total amounts of epistocoin aquired per user
+user_coins AS
+(
+	SELECT
+		u.id user_id,
+		SUM(ct.amount) total_coins_aquired_per_user
+	FROM public.user u
+
+	LEFT JOIN public.coin_transaction ct
+	ON ct.user_id = u.id
+
+	GROUP BY u.id
+),
+-- users rank inside their company in percentage
+user_rank_inside_company AS
+(
+	SELECT 
+		u.id user_id,
+		ROUND((uc.total_coins_aquired_per_user / cac.avg_coins_aquired_by_company)::double precision * 100) user_rank_by_coin_percentage
+	FROM public.user u
+	
+	LEFT JOIN company_avg_coins cac
+	ON cac.company_id = u.company_id
+	
+	LEFT JOIN user_coins uc
+	ON uc.user_id = u.id
+)
+
+SELECT 
+	u.id user_id,
+	u.email user_email,
+
+	-- videos to be repeated count
+	(
+		SELECT 
+			COALESCE(SUM(is_recommended_for_practise::int), 0)
+		FROM public.user_practise_recommendation_view uprv
+		WHERE uprv.user_id = u.id
+	) videos_to_be_repeated_count,
+
+	-- questions to be repeated count
+	(
+		SELECT
+			COUNT(*)::int
+		FROM public.question qu
+
+		LEFT JOIN public.question_version qv
+		ON qv.id = qu.id
+
+		LEFT JOIN public.given_answer ga
+		ON ga.question_version_id = qv.id
+
+		LEFT JOIN public.answer_session ase
+		ON ase.id = ga.answer_session_id
+
+		WHERE ase.user_id = u.id
+		AND qv.video_version_id IS NOT NULL
+		AND ga.state = 'CORRECT'
+	) questions_to_be_repeated_count,
+
+	-- completed video count 
+	(
+		SELECT 
+			COUNT(*)::int
+		FROM public.course_item_completion_view cicv
+		WHERE cicv.user_id = u.id
+	) completed_video_count,
+
+	-- total watch time
+	(
+		SELECT 
+			SUM(usav.length_seconds)::int
+		FROM public.user_session_view usav
+
+		WHERE usav.user_id = u.id
+	) total_session_length_seconds,
+
+	-- answered questions count
+	(
+		SELECT
+			COUNT(*)::int
+		FROM public.question qu
+
+		LEFT JOIN public.question_version qv
+		ON qv.id = qu.id
+
+		LEFT JOIN public.given_answer ga
+		ON ga.question_version_id = qv.id
+
+		LEFT JOIN public.answer_session ase
+		ON ase.id = ga.answer_session_id
+
+		WHERE ase.user_id = u.id
+		AND qv.video_version_id IS NOT NULL
+	) answered_questions_count,
+
+	-- total correct answer rate
+	CASE WHEN ast.total_given_answer_count = 0
+		THEN 0
+		ELSE CAST(float8 (ast.total_correct_given_answer_count::double precision / ast.total_given_answer_count * 100) as numeric)
+	END total_correct_answer_rate,
+
+	-- rank inside company (top x percentage)
+	CASE 
+		WHEN uric.user_rank_by_coin_percentage > 90
+		THEN 10
+		ELSE 100 - uric.user_rank_by_coin_percentage
+	END rank_inside_company
+
+FROM public.user u
+
+LEFT JOIN answer_stats ast
+ON ast.user_id = u.id
+
+LEFT JOIN user_rank_inside_company uric
+ON uric.user_id = u.id
+
+WHERE u.deletion_date IS NULL -- AND u.is_invitation_accepted = true
+
+ORDER BY u.id;
+
+--user_performance_comparison_stats_view
+CREATE VIEW user_performance_comparison_stats_view
+AS
+WITH user_performances AS (
+    SELECT
+        u.id user_id,
+        AVG(upv.performance_percentage) user_performance_average
+    FROM public.user u
+
+             LEFT JOIN public.user_performance_view upv
+                       ON upv.user_id = u.id
+
+    GROUP BY u.id
+),
+ watched_videos AS (
+     SELECT
+         cic.user_id,
+         SUM((cic.video_version_id IS NOT NULL)::int)::int watched_videos_count
+     FROM public.course_item_completion_view cic
+     GROUP BY cic.user_id
+ ),
+ engagement_points AS (
+     SELECT
+         uev.user_id,
+         uev.engagement_points
+     FROM public.user_engagement_view uev
+ ),
+ required_or_started_courses AS (
+    SELECT
+        ucb.user_id,
+        COUNT(*)::int::boolean is_any_course_required_or_started
+    FROM user_course_bridge ucb
+
+    WHERE ucb.start_date IS NOT NULL
+    OR ucb.required_completion_date IS NOT NULL
+
+    GROUP BY ucb.user_id
+ )
+
+SELECT
+    up.user_id,
+    u.company_id,
+    u.creation_date,
+    rosc.is_any_course_required_or_started,
+    up.user_performance_average,
+    COALESCE(ep.engagement_points, 0) engagement_points,
+    COALESCE(wv.watched_videos_count, 0)::int watched_videos_count
+FROM user_performances up
+
+LEFT JOIN watched_videos wv
+ON wv.user_id = up.user_id
+
+LEFT JOIN engagement_points ep
+ON ep.user_id = up.user_id
+
+LEFT JOIN public.user u
+ON u.id = up.user_id
+
+LEFT JOIN required_or_started_courses rosc
+ON rosc.user_id = up.user_id
+;
+
+--user_permission_view
 CREATE VIEW user_permission_view
 AS
 WITH 
@@ -5137,7 +5607,7 @@ v AS
 SELECT * FROM v
 ;
 
---CREATE VIEW: assignable_permission_view
+--assignable_permission_view
 CREATE VIEW assignable_permission_view
 AS
 -- Assignable permission view for a user in a company
@@ -5168,7 +5638,7 @@ ORDER BY
 	context_company_id,
 	permission_id	;
 
---CREATE VIEW: company_view
+--company_view
 CREATE VIEW company_view
 AS
 SELECT 
@@ -5187,7 +5657,7 @@ ON upv.context_company_id = co.id
 	AND upv.assignee_user_id = u.id 
 	AND upv.permission_code = 'MANAGE_COMPANY';
 
---CREATE VIEW: role_list_view
+--role_list_view
 CREATE VIEW role_list_view
 AS
 WITH 
@@ -5236,7 +5706,7 @@ ORDER BY
 	pe.id
 ;
 
---CREATE VIEW: user_role_assign_company_view
+--user_role_assign_company_view
 CREATE VIEW user_role_assign_company_view
 AS
 SELECT 
@@ -5257,7 +5727,7 @@ ORDER BY
 	u.id,
 	co.id;
 
---CREATE VIEW: assignable_role_view
+--assignable_role_view
 CREATE VIEW assignable_role_view
 AS
 WITH 
@@ -5352,659 +5822,7 @@ SELECT * FROM perm_join
 
 ;
 
---CREATE VIEW: admin_home_page_overview_view
-CREATE VIEW admin_home_page_overview_view
-AS
-WITH
--- When did the user made the last activity in
--- the course
-latest_course_activity_cte AS
-(
-	SELECT 
-		cic.user_id,
-		cv.course_id,
-		MAX(cic.completion_date) latest_course_item_completion_date
-	FROM public.course_item_completion_view cic
-
-	LEFT JOIN public.video_version vv
-	ON vv.id = cic.video_version_id
-
-	LEFT JOIN public.exam_version ev
-	ON ev.id = cic.exam_version_id
-
-	LEFT JOIN public.module_version mv
-	ON mv.id = vv.module_version_id
-	OR mv.id = ev.module_version_id
-
-	LEFT JOIN public.course_version cv
-	ON cv.id = mv.course_version_id
-
-	GROUP BY cic.user_id, cv.course_id
-),
-
-is_final_exam_completed_cte AS 
-(
-    SELECT
-        cv.course_id,
-        cic.user_id,
-        (COUNT(*) > 0) is_final_exam_completed
-    FROM public.course_item_completion_view cic
-
-    LEFT JOIN public.exam_version ev
-    ON ev.id = cic.exam_version_id
-
-    LEFT JOIN public.exam_data ed
-    ON ed.id = ev.exam_data_id
-
-    LEFT JOIN public.module_version mv
-    ON mv.id = ev.module_version_id
-
-    LEFT JOIN public.course_version cv
-    ON cv.id = mv.course_version_id
-
-    WHERE ed.is_final IS TRUE
-    
-    GROUP BY 
-        cv.course_id,
-        cic.user_id
-),
-active_user_count_cte AS
-(
-	SELECT
-		lcac.course_id,
-		u.company_id,
-		COUNT(*) active_user_count
-	FROM latest_course_activity_cte lcac
-
-	LEFT JOIN is_final_exam_completed_cte ifecc
-	ON ifecc.user_id = lcac.user_id
-	AND ifecc.course_id = lcac.course_id
-	AND ifecc.is_final_exam_completed IS NOT TRUE
-	
-	LEFT JOIN public.user u
-	ON u.id = lcac.user_id
-	
-	WHERE lcac.latest_course_item_completion_date > CURRENT_DATE - 14	
-	
-	GROUP BY lcac.course_id, u.company_id
-),
-suspended_user_count_cte AS
-(
-	SELECT
-		lcac.course_id,
-		u.company_id,
-		COUNT(*) suspended_user_count
-	FROM latest_course_activity_cte lcac
-
-	LEFT JOIN is_final_exam_completed_cte ifecc
-	ON ifecc.user_id = lcac.user_id
-	AND ifecc.course_id = lcac.course_id
-	AND ifecc.is_final_exam_completed IS NOT TRUE
-	
-	LEFT JOIN public.user u
-	ON u.id = lcac.user_id
-	
-	WHERE lcac.latest_course_item_completion_date < CURRENT_DATE - 14	
-	
-	GROUP BY lcac.course_id, u.company_id
-),
-completed_user_count_cte AS
-(
-	SELECT
-		lcac.course_id,
-		u.company_id,
-		COUNT(*) completed_user_count
-	FROM latest_course_activity_cte lcac
-
-	INNER JOIN is_final_exam_completed_cte ifecc
-	ON ifecc.user_id = lcac.user_id
-	AND ifecc.course_id = lcac.course_id
-	AND ifecc.is_final_exam_completed IS TRUE
-	
-	LEFT JOIN public.user u
-	ON u.id = lcac.user_id
-		
-	GROUP BY lcac.course_id, u.company_id
-),
-course_avg_performance_cte AS
-(
-	SELECT
-		upv.course_id,
-		u.company_id,
-		AVG(upv.performance_percentage) avg_performance_percentage
-	FROM public.user_performance_view upv
-	
-	LEFT JOIN public.user u
-	ON u.id = upv.user_id
-	
-	WHERE upv.performance_percentage != 0
-	
-	GROUP BY upv.course_id, u.company_id
-),
-course_difficulty_count_cte AS
-(
-	SELECT
-		cv.course_id,
-		u.company_id,
-		COUNT(*) difficult_videos_count
-	FROM public.video_rating vr
-	
-	LEFT JOIN public.video_version vv
-	ON vv.id = vr.video_version_id
-	
-	LEFT JOIN public.module_version mv
-	ON mv.id = vv.module_version_id
-	
-	LEFT JOIN public.course_version cv
-	ON cv.id = mv.course_version_id
-	
-	LEFT JOIN public.user u
-	ON vr.user_id = u.id
-	
-	WHERE vr.difficulty > 4
-	
-	GROUP BY cv.course_id, u.company_id
-),
-questions_to_be_answered_count_cte AS
-(
-	SELECT
-		u.company_id,
-		cv.course_id,
-		COUNT(*) questions_to_be_answered_count
-	FROM public.comment com
-	
-	LEFT JOIN public.user u
-	ON com.user_id = u.id
-	
-	LEFT JOIN public.video_version vv
-	ON vv.id = com.video_version_id
-	
-	LEFT JOIN public.module_version mv
-	ON mv.id = vv.module_version_id
-	
-	LEFT JOIN public.course_version cv
-	ON cv.id = mv.course_version_id
-	
-	WHERE 
-	com.id NOT IN 
-	(
-		SELECT
-			comp.id
-		FROM public.comment comp
-
-		INNER JOIN public.comment comc
-		ON comc.parent_comment_id = comp.id
-	)
-	AND com.parent_comment_id IS NULL
-	
-	GROUP BY u.company_id, cv.course_id
-)
-
-SELECT
-	co.id course_id,
-	comp.id company_id,
-	cd.title,
-	sf.file_path thumbnail_url,
-	COALESCE(aucc.active_user_count, 0) active_users_count,
-	COALESCE(succ.suspended_user_count, 0) suspended_users_count,
-	COALESCE(cucc.completed_user_count, 0) completed_users_count,
-	capc.avg_performance_percentage avg_course_performance_percentage,
-	COALESCE(cdcc.difficult_videos_count, 0) difficult_videos_count,
-	COALESCE(qtbacc.questions_to_be_answered_count, 0) questions_waiting_to_be_answered
-FROM public.company comp
-
-LEFT JOIN public.course_access_bridge cab
-ON cab.company_id = comp.id
-
-LEFT JOIN public.course co
-ON co.id = cab.course_id
-
-LEFT JOIN active_user_count_cte aucc
-ON aucc.course_id = co.id
-AND aucc.company_id = comp.id
-
-LEFT JOIN suspended_user_count_cte succ
-ON succ.course_id = co.id
-AND succ.company_id = comp.id
-
-LEFT JOIN completed_user_count_cte cucc
-ON cucc.course_id = co.id
-AND cucc.company_id = comp.id
-
-LEFT JOIN course_avg_performance_cte capc
-ON capc.course_id = co.id
-AND capc.company_id = comp.id
-
-LEFT JOIN course_difficulty_count_cte cdcc
-ON cdcc.course_id = co.id
-AND cdcc.company_id = comp.id
-
-LEFT JOIN questions_to_be_answered_count_cte qtbacc
-ON qtbacc.course_id = co.id
-AND qtbacc.company_id = comp.id
-
-LEFT JOIN public.latest_course_version_view lcvv
-ON lcvv.course_id = co.id
-
-LEFT JOIN public.course_version cv
-ON cv.id = lcvv.version_id
-
-LEFT JOIN public.course_data cd
-ON cd.id = cv.course_data_id
-
-LEFT JOIN public.storage_file sf
-ON sf.id = cd.cover_file_id
-;
-
---CREATE VIEW: exam_result_stats_view
-CREATE VIEW exam_result_stats_view
-AS
-WITH
-question_correct_answer_rates AS
-(
-	SELECT
-		ase.id answer_session_id,
-		ase.user_id,
-		qv.id question_version_id,
-		AVG((ga.state = 'CORRECT')::int)::int * 100 correct_answer_rate
-	FROM public.given_answer ga
-
-	LEFT JOIN public.question_version qv
-	ON qv.id = ga.question_version_id
-
-	LEFT JOIN public.answer_session ase
-	ON ase.id = ga.answer_session_id
-
-	GROUP BY ase.id, ase.user_id, qv.id
-),
-fully_correctly_answered_questions AS
-(
-    SELECT
-        qcar.answer_session_id,
-        COUNT(qcar.correct_answer_rate = 100 OR NULL)::int fully_correctly_answered_questions_count
-    FROM question_correct_answer_rates qcar
-
-    GROUP BY qcar.answer_session_id
-),
-answer_session_lengths AS
-(
-	SELECT
-		asv.answer_session_id,
-		asv.start_date,
-		asv.end_date,
-		EXTRACT(EPOCH FROM (asv.end_date::time - asv.start_date::time))::double precision AS length_seconds
-	FROM public.answer_session_view asv
-
-	WHERE asv.start_date IS NOT NULL
-	AND asv.end_date IS NOT NULL
-),
-avg_exam_score_per_company_cte AS
-(
-	SELECT
-		u.company_id,
-		ev.exam_id,
-		AVG(esv.score_percentage)::int avg_score_percentage
-	FROM public.exam_score_view esv
-
-	LEFT JOIN public.exam_version ev
-	ON ev.id = esv.exam_version_id
-
-	LEFT JOIN public.answer_session ase
-	ON ase.id = esv.answer_session_id
-
-	LEFT JOIN public.user u
-	ON u.id = ase.user_id
-
-	GROUP BY
-		u.company_id,
-		ev.exam_id
-),
-question_count AS
-(
-	SELECT
-		ev.id exam_version_id,
-		COUNT(qv.id)::int question_count
-	FROM public.exam_version ev
-
-	LEFT JOIN public.question_version qv
-	ON qv.exam_version_id = ev.id
-
-	GROUP BY  ev.id
-)
-SELECT
-	u.id user_id,
-	ev.id exam_version_id,
-	ase.id answer_session_id,
-	fcaq.fully_correctly_answered_questions_count,
-    qc.question_count question_count,
-	asl.length_seconds::int exam_length_seconds,
-	esv.score_percentage,
-	esv.exam_score,
-	esv.exam_max_score,
-	esv.answered_question_count,
-	aespcc.avg_score_percentage,
-	esv.score_percentage - aespcc.avg_score_percentage score_percentage_diff_from_avg,
-    ehsasv.is_highest_score IS NOT DISTINCT FROM true is_highest_score_session
-FROM answer_session ase
-
-LEFT JOIN public.user u
-ON u.id = ase.user_id
-
-LEFT JOIN public.exam_highest_score_answer_session_view ehsasv
-ON ehsasv.answer_session_id = ase.id
-
-LEFT JOIN public.exam_version ev
-ON ev.id = ase.exam_version_id
-
-LEFT JOIN public.exam e
-ON e.id = ev.exam_id
-
-LEFT JOIN answer_session_lengths asl
-ON asl.answer_session_id = ase.id
-
-LEFT JOIN avg_exam_score_per_company_cte aespcc
-ON aespcc.company_id = u.company_id
-AND aespcc.exam_id = e.id
-
-LEFT JOIN fully_correctly_answered_questions fcaq
-ON fcaq.answer_session_id = ase.id
-
-LEFT JOIN question_count qc
-ON qc.exam_version_id = ase.id
-
-LEFT JOIN public.exam_score_view esv
-ON esv.answer_session_id = ase.id
-
--- filter signup exam
-WHERE e.id != 1
-
-ORDER BY
-	u.id,
-	e.id,
-	ase.id
-;
-
---CREATE VIEW: home_page_stats_view
-CREATE VIEW home_page_stats_view
-AS
-SELECT 
-    u.id user_id,
-
-    -- videos to be repeated count
-	(
-		SELECT 
-			COALESCE(SUM(is_recommended_for_practise::int), 0)
-		FROM public.user_practise_recommendation_view uprv
-		WHERE uprv.user_id = u.id
-	) videos_to_be_repeated_count,
-    
-    -- completed video count in the last 30 days
-    (
-        SELECT 
-            COUNT(*)::int
-        FROM public.course_item_completion_view cicv
-        
-        WHERE cicv.user_id = u.id
-        AND cicv.completion_date > CURRENT_DATE - 30 
-        AND cicv.video_version_id IS NOT NULL
-        AND cicv.is_pretest IS NOT TRUE
-    ) completed_videos_last_month,
-
-    -- performance last month
-    (
-        SELECT
-            ROUND(AVG(upv.performance_percentage::int), 0)
-        FROM public.activity_session ase
-    
-        LEFT JOIN public.user_session_activity AS usa
-        ON usa.activity_session_id = ase.id
-
-        LEFT JOIN public.video_version vv
-        ON vv.id = usa.video_version_id
-
-        LEFT JOIN public.exam_version ev
-        ON ev.id = usa.exam_version_id
-
-        LEFT JOIN public.module_version mv
-        ON mv.id = vv.module_version_id
-        OR mv.id = ev.module_version_id
-        
-        LEFT JOIN public.course_version cv
-        ON cv.id = mv.course_version_id
-
-        LEFT JOIN public.user_performance_view upv
-        ON upv.course_id = cv.course_id
-        AND upv.user_id = ase.user_id
-
-        WHERE ase.start_date > CURRENT_DATE - 30
-		AND upv.course_id IS NOT NULL
-    ) performance_last_month
-FROM public.user u
-
-GROUP BY u.id;
-
---CREATE VIEW: user_learning_page_stats_view
-CREATE VIEW user_learning_page_stats_view
-AS
--- total and total correct given answer count
-WITH answer_stats AS 
-(
-	SELECT 
-		ase.user_id,
-		COUNT (ga.id)::int total_given_answer_count,
-		SUM ((ga.state = 'CORRECT')::int)::int total_correct_given_answer_count
-	FROM public.given_answer ga
-
-	LEFT JOIN public.answer_session ase
-	ON ase.id = ga.answer_session_id
-
-	LEFT JOIN public.question_version qv
-	ON qv.id = ga.question_version_id
-
-	AND qv.video_version_id IS NOT NULL
-	
-	GROUP BY ase.user_id
-), 
--- avg epistocoins aquired per company
-company_avg_coins AS 
-(
-	SELECT 
-		u.company_id,
-		AVG(ct.amount) avg_coins_aquired_by_company
-	FROM public.user u
-
-	LEFT JOIN public.coin_transaction ct
-	ON ct.user_id = u.id
-
-	LEFT JOIN public.company 
-	ON company.id = u.company_id
-
-	GROUP BY u.company_id
-), 
--- total amounts of epistocoin aquired per user
-user_coins AS
-(
-	SELECT
-		u.id user_id,
-		SUM(ct.amount) total_coins_aquired_per_user
-	FROM public.user u
-
-	LEFT JOIN public.coin_transaction ct
-	ON ct.user_id = u.id
-
-	GROUP BY u.id
-),
--- users rank inside their company in percentage
-user_rank_inside_company AS
-(
-	SELECT 
-		u.id user_id,
-		ROUND((uc.total_coins_aquired_per_user / cac.avg_coins_aquired_by_company)::double precision * 100) user_rank_by_coin_percentage
-	FROM public.user u
-	
-	LEFT JOIN company_avg_coins cac
-	ON cac.company_id = u.company_id
-	
-	LEFT JOIN user_coins uc
-	ON uc.user_id = u.id
-)
-
-SELECT 
-	u.id user_id,
-	u.email user_email,
-
-	-- videos to be repeated count
-	(
-		SELECT 
-			COALESCE(SUM(is_recommended_for_practise::int), 0)
-		FROM public.user_practise_recommendation_view uprv
-		WHERE uprv.user_id = u.id
-	) videos_to_be_repeated_count,
-
-	-- questions to be repeated count
-	(
-		SELECT
-			COUNT(*)::int
-		FROM public.question qu
-
-		LEFT JOIN public.question_version qv
-		ON qv.id = qu.id
-
-		LEFT JOIN public.given_answer ga
-		ON ga.question_version_id = qv.id
-
-		LEFT JOIN public.answer_session ase
-		ON ase.id = ga.answer_session_id
-
-		WHERE ase.user_id = u.id
-		AND qv.video_version_id IS NOT NULL
-		AND ga.state = 'CORRECT'
-	) questions_to_be_repeated_count,
-
-	-- completed video count 
-	(
-		SELECT 
-			COUNT(*)::int
-		FROM public.course_item_completion_view cicv
-		WHERE cicv.user_id = u.id
-	) completed_video_count,
-
-	-- total watch time
-	(
-		SELECT 
-			SUM(usav.length_seconds)::int
-		FROM public.user_session_view usav
-
-		WHERE usav.user_id = u.id
-	) total_session_length_seconds,
-
-	-- answered questions count
-	(
-		SELECT
-			COUNT(*)::int
-		FROM public.question qu
-
-		LEFT JOIN public.question_version qv
-		ON qv.id = qu.id
-
-		LEFT JOIN public.given_answer ga
-		ON ga.question_version_id = qv.id
-
-		LEFT JOIN public.answer_session ase
-		ON ase.id = ga.answer_session_id
-
-		WHERE ase.user_id = u.id
-		AND qv.video_version_id IS NOT NULL
-	) answered_questions_count,
-
-	-- total correct answer rate
-	CASE WHEN ast.total_given_answer_count = 0
-		THEN 0
-		ELSE CAST(float8 (ast.total_correct_given_answer_count::double precision / ast.total_given_answer_count * 100) as numeric)
-	END total_correct_answer_rate,
-
-	-- rank inside company (top x percentage)
-	CASE 
-		WHEN uric.user_rank_by_coin_percentage > 90
-		THEN 10
-		ELSE 100 - uric.user_rank_by_coin_percentage
-	END rank_inside_company
-
-FROM public.user u
-
-LEFT JOIN answer_stats ast
-ON ast.user_id = u.id
-
-LEFT JOIN user_rank_inside_company uric
-ON uric.user_id = u.id
-
-WHERE u.deletion_date IS NULL -- AND u.is_invitation_accepted = true
-
-ORDER BY u.id;
-
---CREATE VIEW: user_performance_comparison_stats_view
-CREATE VIEW user_performance_comparison_stats_view
-AS
-WITH user_performances AS (
-    SELECT
-        u.id user_id,
-        AVG(upv.performance_percentage) user_performance_average
-    FROM public.user u
-
-             LEFT JOIN public.user_performance_view upv
-                       ON upv.user_id = u.id
-
-    GROUP BY u.id
-),
- watched_videos AS (
-     SELECT
-         cic.user_id,
-         SUM((cic.video_version_id IS NOT NULL)::int)::int watched_videos_count
-     FROM public.course_item_completion_view cic
-     GROUP BY cic.user_id
- ),
- engagement_points AS (
-     SELECT
-         uev.user_id,
-         uev.engagement_points
-     FROM public.user_engagement_view uev
- ),
- required_or_started_courses AS (
-    SELECT
-        ucb.user_id,
-        COUNT(*)::int::boolean is_any_course_required_or_started
-    FROM user_course_bridge ucb
-
-    WHERE ucb.start_date IS NOT NULL
-    OR ucb.required_completion_date IS NOT NULL
-
-    GROUP BY ucb.user_id
- )
-
-SELECT
-    up.user_id,
-    u.company_id,
-    u.creation_date,
-    rosc.is_any_course_required_or_started,
-    up.user_performance_average,
-    COALESCE(ep.engagement_points, 0) engagement_points,
-    COALESCE(wv.watched_videos_count, 0)::int watched_videos_count
-FROM user_performances up
-
-LEFT JOIN watched_videos wv
-ON wv.user_id = up.user_id
-
-LEFT JOIN engagement_points ep
-ON ep.user_id = up.user_id
-
-LEFT JOIN public.user u
-ON u.id = up.user_id
-
-LEFT JOIN required_or_started_courses rosc
-ON rosc.user_id = up.user_id
-;
-
---CREATE VIEW: exam_result_view
+--exam_result_view
 CREATE VIEW exam_result_view
 AS
 SELECT 
@@ -6088,7 +5906,7 @@ ORDER BY
 	av.id,
 	ase.id;
 
---CREATE VIEW: tempomat_calculation_data_view
+--tempomat_calculation_data_view
 CREATE VIEW tempomat_calculation_data_view
 AS
 SELECT 
@@ -6130,7 +5948,7 @@ ON tav.prequiz_answer_id = upav.planned_usage_answer_id
 	AND tav.tempomat_mode = ucb.tempomat_mode
 ;
 
---CREATE VIEW: user_overview_view
+--user_overview_view
 CREATE VIEW user_overview_view
 AS
 WITH 
@@ -6198,7 +6016,7 @@ ON uev.user_id = u.id
 WHERE u.deletion_date IS NULL
 ;
 
---CREATE VIEW: user_playlist_view
+--user_playlist_view
 CREATE VIEW user_playlist_view
 AS
 WITH 
@@ -6277,7 +6095,7 @@ ORDER BY
 	module_order_index,
 	item_order_index;
 
---CREATE VIEW: course_all_items_completed_view
+--course_all_items_completed_view
 CREATE VIEW course_all_items_completed_view
 AS
 SELECT 
@@ -6302,7 +6120,7 @@ FROM
 
 WHERE sq.completed_count = sq.all_item_count;
 
---CREATE VIEW: available_course_view
+--available_course_view
 CREATE VIEW available_course_view
 AS
 WITH
@@ -6419,7 +6237,7 @@ ORDER BY
 
 ;
 
---CREATE VIEW: courses_progress_list_view
+--courses_progress_list_view
 CREATE VIEW courses_progress_list_view
 AS
 SELECT acv.*
@@ -6427,7 +6245,7 @@ FROM public.available_course_view acv
 WHERE acv.is_completed = true
 OR acv.is_started = true;
 
---CREATE VIEW: user_module_stats_view
+--user_module_stats_view
 CREATE VIEW user_module_stats_view
 AS
 WITH 
@@ -6542,7 +6360,7 @@ ORDER BY
 	cv.course_id,
 	mv.module_id;
 
---CREATE VIEW: user_video_stats_view
+--user_video_stats_view
 CREATE VIEW user_video_stats_view
 AS
 WITH
@@ -6681,7 +6499,7 @@ LEFT JOIN latest_playback_date_cte lpdc
 ON lpdc.video_id = vv.video_id
 AND lpdc.user_id = u.id;
 
---CREATE VIEW: user_learning_overview_stats_view
+--user_learning_overview_stats_view
 CREATE VIEW user_learning_overview_stats_view
 AS
 WITH stats AS 
@@ -6838,7 +6656,7 @@ SELECT
 FROM stats st
 ;
 
---CREATE VIEW: course_learning_stats_view
+--course_learning_stats_view
 CREATE VIEW course_learning_stats_view
 AS
 WITH 
@@ -7016,7 +6834,7 @@ LEFT JOIN public.completed_course_video_count_view ccvcv
 ON ccvcv.user_id = u.id
 AND ccvcv.course_id = co.id;
 
---CREATE VIEW: course_overview_view
+--course_overview_view
 CREATE VIEW course_overview_view
 AS
 WITH
@@ -7051,7 +6869,7 @@ LEFT JOIN public.final_exam_score_view fesv
 ON fesv.course_id = clsv.course_id
 AND fesv.user_id = clsv.user_id;
 
---CREATE VIEW: admin_course_user_stats_view
+--admin_course_user_stats_view
 CREATE VIEW admin_course_user_stats_view
 AS
 -- Haladás
@@ -7187,7 +7005,7 @@ ON sf.id = u.avatar_file_id
 
 ORDER BY comp.id, u.id, co.id;
 
---CREATE VIEW: admin_user_courses_view
+--admin_user_courses_view
 CREATE VIEW admin_user_courses_view
 AS
 WITH
@@ -7447,9 +7265,132 @@ ORDER BY
 ;
 
 
--- CREATE FUNCTIONS
+-- CREATE constraints
+-- C:\GitRepositories\epistogram\misc\scripts\scriptProducer\src/../../../../epistogram_backend/sql/constraints/activation_code_uniqe_constraint.sql 
+ALTER TABLE activation_code
+ADD CONSTRAINT activation_code_uniqe_constraint
+UNIQUE (code);
+-- C:\GitRepositories\epistogram\misc\scripts\scriptProducer\src/../../../../epistogram_backend/sql/constraints/coin_transaction_valid_relation_enforce_constraint.sql 
+ALTER TABLE coin_transaction 
+ADD CONSTRAINT coin_transaction_valid_relation_enforce_constraint 
+CHECK 
+(
+	activity_session_id IS NOT NULL OR
+	video_id IS NOT NULL OR
+	given_answer_id IS NOT NULL OR
+	given_answer_streak_id IS NOT NULL OR
+	activity_streak_id IS NOT NULL OR
+	shop_item_id IS NOT NULL OR 
+	is_gifted
+);
+-- C:\GitRepositories\epistogram\misc\scripts\scriptProducer\src/../../../../epistogram_backend/sql/constraints/course_access_bridge_constraints.sql 
+-- UNIQUE COMPANY 
+ALTER TABLE public.course_access_bridge
+DROP CONSTRAINT IF EXISTS course_access_bridge_unique_by_company;
 
---CREATE FUNCTION: acquire_task_lock_fn
+ALTER TABLE public.course_access_bridge
+ADD CONSTRAINT course_access_bridge_unique_by_company
+UNIQUE (course_id, company_id);
+
+-- UNIQUE USER
+ALTER TABLE public.course_access_bridge
+DROP CONSTRAINT IF EXISTS course_access_bridge_unique_by_user;
+
+ALTER TABLE public.course_access_bridge
+ADD CONSTRAINT course_access_bridge_unique_by_user
+UNIQUE (course_id, user_id);
+-- C:\GitRepositories\epistogram\misc\scripts\scriptProducer\src/../../../../epistogram_backend/sql/constraints/course_completion_constraints.sql 
+
+-- UNIQUE
+ALTER TABLE public.course_completion 
+DROP CONSTRAINT IF EXISTS course_completion_unique;
+
+ALTER TABLE public.course_completion
+ADD CONSTRAINT course_completion_unique
+UNIQUE (course_version_id, user_id);
+-- C:\GitRepositories\epistogram\misc\scripts\scriptProducer\src/../../../../epistogram_backend/sql/constraints/exam_completion_constraints.sql 
+-- UNIQUE EXAM
+ALTER TABLE public.exam_completion
+DROP CONSTRAINT IF EXISTS exam_completion_unique;
+
+ALTER TABLE public.exam_completion
+ADD CONSTRAINT exam_completion_unique
+UNIQUE (answer_session_id);
+-- C:\GitRepositories\epistogram\misc\scripts\scriptProducer\src/../../../../epistogram_backend/sql/constraints/permission_assignment_bridge_constraints.sql 
+
+-- UNIQUE
+ALTER TABLE public.permission_assignment_bridge
+DROP CONSTRAINT IF EXISTS permission_assignment_bridge_check;
+
+ALTER TABLE public.permission_assignment_bridge
+ADD CONSTRAINT permission_assignment_bridge_check
+CHECK (
+    (context_company_id IS NULL AND context_course_id IS NOT NULL)
+    OR
+    (context_company_id IS NOT NULL AND context_course_id IS NULL)
+	OR 
+	(context_company_id IS NULL AND context_course_id IS NULL)
+);
+-- C:\GitRepositories\epistogram\misc\scripts\scriptProducer\src/../../../../epistogram_backend/sql/constraints/prequiz_completion_constraints.sql 
+
+-- UNIQUE
+ALTER TABLE public.prequiz_completion
+DROP CONSTRAINT IF EXISTS prequiz_completion_unique;
+
+ALTER TABLE public.prequiz_completion
+ADD CONSTRAINT prequiz_completion_unique
+UNIQUE (user_id, course_id);
+-- C:\GitRepositories\epistogram\misc\scripts\scriptProducer\src/../../../../epistogram_backend/sql/constraints/prequiz_constraints.sql 
+
+-- UNIQUE
+ALTER TABLE public.prequiz_user_answer
+DROP CONSTRAINT IF EXISTS prequiz_user_answer_unique;
+
+ALTER TABLE public.prequiz_user_answer
+ADD CONSTRAINT prequiz_user_answer_unique
+UNIQUE (user_id, course_id, question_id);
+-- C:\GitRepositories\epistogram\misc\scripts\scriptProducer\src/../../../../epistogram_backend/sql/constraints/role_constraint.sql 
+ALTER TABLE role
+ADD CONSTRAINT role_constraint
+CHECK (is_custom = false OR company_id IS NOT NULL);
+-- C:\GitRepositories\epistogram\misc\scripts\scriptProducer\src/../../../../epistogram_backend/sql/constraints/role_permission_bridge_constraint.sql 
+ALTER TABLE role_permission_bridge
+ADD CONSTRAINT role_permission_bridge_constraint
+UNIQUE (role_id, permission_id);
+-- C:\GitRepositories\epistogram\misc\scripts\scriptProducer\src/../../../../epistogram_backend/sql/constraints/single_current_course_bridge_constraint.sql 
+/* ALTER TABLE user_course_bridge
+ADD CONSTRAINT single_current_course_bridge_constraint
+UNIQUE (is_current, user_id); */
+
+/* ALTER TABLE user_course_bridge */
+/* CREATE UNIQUE INDEX single_current_course_bridge ON user_course_bridge (user_id)
+WHERE is_current = true */
+-- C:\GitRepositories\epistogram\misc\scripts\scriptProducer\src/../../../../epistogram_backend/sql/constraints/video_completion_constraints.sql 
+
+-- UNIQUE VIDEO
+ALTER TABLE public.video_completion
+DROP CONSTRAINT IF EXISTS video_completion_unique;
+
+ALTER TABLE public.video_completion
+ADD CONSTRAINT video_completion_unique
+UNIQUE (video_version_id, user_id);
+-- C:\GitRepositories\epistogram\misc\scripts\scriptProducer\src/../../../../epistogram_backend/sql/constraints/video_data_constraints.sql 
+
+-- UNIQUE
+ALTER TABLE public.video_data
+DROP CONSTRAINT IF EXISTS video_data_check;
+
+ALTER TABLE public.video_data
+ADD CONSTRAINT video_data_check
+CHECK (
+    (video_file_id IS NULL AND video_file_length_seconds IS NULL) 
+    OR
+    (video_file_id IS NOT NULL AND video_file_length_seconds IS NOT NULL) 
+);
+
+
+-- CREATE functions
+-- C:\GitRepositories\epistogram\misc\scripts\scriptProducer\src/../../../../epistogram_backend/sql/functions/acquire_task_lock_fn.sql 
 -- DROP FUNCTION IF EXISTS acquire_task_lock_fn;
 
 CREATE OR REPLACE FUNCTION acquire_task_lock_fn
@@ -7482,9 +7423,8 @@ BEGIN
 		RETURN false;	
 	END IF;
 END 
-$$ LANGUAGE 'plpgsql';;
-
---CREATE FUNCTION: create_daily_tip_fn
+$$ LANGUAGE 'plpgsql';
+-- C:\GitRepositories\epistogram\misc\scripts\scriptProducer\src/../../../../epistogram_backend/sql/functions/create_daily_tip_fn.sql 
 CREATE OR REPLACE FUNCTION "create_daily_tip_fn"
 (
 	"p_descriotion" text,
@@ -7526,9 +7466,8 @@ BEGIN
 	RETURN "v_new_daily_tip_id";
 	
 END 
-$$ LANGUAGE 'plpgsql';;
-
---CREATE FUNCTION: get_user_session_first_activity_id
+$$ LANGUAGE 'plpgsql';
+-- C:\GitRepositories\epistogram\misc\scripts\scriptProducer\src/../../../../epistogram_backend/sql/functions/get_user_session_first_activity_id.sql 
 CREATE OR REPLACE FUNCTION "get_user_session_first_activity_id"
 (
 	param_user_id integer,
@@ -7572,186 +7511,22 @@ BEGIN
 	RETURN var_session_first_activity_id;
 	
 END 
-$$ LANGUAGE 'plpgsql';;
+$$ LANGUAGE 'plpgsql';
 
 
--- CREATE CONSTRAINTS
-
---CREATE CONSTRAINT: coin_transaction_valid_relation_enforce_constraint
-ALTER TABLE coin_transaction 
-ADD CONSTRAINT coin_transaction_valid_relation_enforce_constraint 
-CHECK 
-(
-	activity_session_id IS NOT NULL OR
-	video_id IS NOT NULL OR
-	given_answer_id IS NOT NULL OR
-	given_answer_streak_id IS NOT NULL OR
-	activity_streak_id IS NOT NULL OR
-	shop_item_id IS NOT NULL OR 
-	is_gifted
-);;
-
---CREATE CONSTRAINT: activation_code_uniqe_constraint
-ALTER TABLE activation_code
-ADD CONSTRAINT activation_code_uniqe_constraint
-UNIQUE (code);;
-
---CREATE CONSTRAINT: role_permission_bridge_constraint
-ALTER TABLE role_permission_bridge
-ADD CONSTRAINT role_permission_bridge_constraint
-UNIQUE (role_id, permission_id);;
-
---CREATE CONSTRAINT: role_constraint
-ALTER TABLE role
-ADD CONSTRAINT role_constraint
-CHECK (is_custom = false OR company_id IS NOT NULL);;
-
---CREATE CONSTRAINT: video_completion_constraints
-
--- UNIQUE VIDEO
-ALTER TABLE public.video_completion
-DROP CONSTRAINT IF EXISTS video_completion_unique;
-
-ALTER TABLE public.video_completion
-ADD CONSTRAINT video_completion_unique
-UNIQUE (video_version_id, user_id);;
-
---CREATE CONSTRAINT: exam_completion_constraints
--- UNIQUE EXAM
-ALTER TABLE public.exam_completion
-DROP CONSTRAINT IF EXISTS exam_completion_unique;
-
-ALTER TABLE public.exam_completion
-ADD CONSTRAINT exam_completion_unique
-UNIQUE (answer_session_id);;
-
---CREATE CONSTRAINT: prequiz_completion_constraints
-
--- UNIQUE
-ALTER TABLE public.prequiz_completion
-DROP CONSTRAINT IF EXISTS prequiz_completion_unique;
-
-ALTER TABLE public.prequiz_completion
-ADD CONSTRAINT prequiz_completion_unique
-UNIQUE (user_id, course_id);;
-
---CREATE CONSTRAINT: course_completion_constraints
-
--- UNIQUE
-ALTER TABLE public.course_completion 
-DROP CONSTRAINT IF EXISTS course_completion_unique;
-
-ALTER TABLE public.course_completion
-ADD CONSTRAINT course_completion_unique
-UNIQUE (course_version_id, user_id);;
-
---CREATE CONSTRAINT: course_access_bridge_constraints
--- UNIQUE COMPANY 
-ALTER TABLE public.course_access_bridge
-DROP CONSTRAINT IF EXISTS course_access_bridge_unique_by_company;
-
-ALTER TABLE public.course_access_bridge
-ADD CONSTRAINT course_access_bridge_unique_by_company
-UNIQUE (course_id, company_id);
-
--- UNIQUE USER
-ALTER TABLE public.course_access_bridge
-DROP CONSTRAINT IF EXISTS course_access_bridge_unique_by_user;
-
-ALTER TABLE public.course_access_bridge
-ADD CONSTRAINT course_access_bridge_unique_by_user
-UNIQUE (course_id, user_id);;
-
---CREATE CONSTRAINT: prequiz_constraints
-
--- UNIQUE
-ALTER TABLE public.prequiz_user_answer
-DROP CONSTRAINT IF EXISTS prequiz_user_answer_unique;
-
-ALTER TABLE public.prequiz_user_answer
-ADD CONSTRAINT prequiz_user_answer_unique
-UNIQUE (user_id, course_id, question_id);;
-
---CREATE CONSTRAINT: permission_assignment_bridge_constraints
-
--- UNIQUE
-ALTER TABLE public.permission_assignment_bridge
-DROP CONSTRAINT IF EXISTS permission_assignment_bridge_check;
-
-ALTER TABLE public.permission_assignment_bridge
-ADD CONSTRAINT permission_assignment_bridge_check
-CHECK (
-    (context_company_id IS NULL AND context_course_id IS NOT NULL)
-    OR
-    (context_company_id IS NOT NULL AND context_course_id IS NULL)
-	OR 
-	(context_company_id IS NULL AND context_course_id IS NULL)
-);;
-
---CREATE CONSTRAINT: video_data_constraints
-
--- UNIQUE
-ALTER TABLE public.video_data
-DROP CONSTRAINT IF EXISTS video_data_check;
-
-ALTER TABLE public.video_data
-ADD CONSTRAINT video_data_check
-CHECK (
-    (video_file_id IS NULL AND video_file_length_seconds IS NULL) 
-    OR
-    (video_file_id IS NOT NULL AND video_file_length_seconds IS NOT NULL) 
-);;
-
-
--- CREATE INDICES
-
---CREATE INDEX: user_email_unique_index
-CREATE UNIQUE INDEX user_email_unique_index 
-ON public.user (email) 
-WHERE deletion_date IS NULL;;
-
---CREATE INDEX: single_current_course_bridge_unique_index
+-- CREATE indices
+-- C:\GitRepositories\epistogram\misc\scripts\scriptProducer\src/../../../../epistogram_backend/sql/indices/single_current_course_bridge_unique_index.sql 
 CREATE UNIQUE INDEX single_current_course_bridge_unique_index
 ON public.user_course_bridge (user_id)
-WHERE is_current = true;
+WHERE is_current = true
+-- C:\GitRepositories\epistogram\misc\scripts\scriptProducer\src/../../../../epistogram_backend/sql/indices/user_email_unique_index.sql 
+CREATE UNIQUE INDEX user_email_unique_index 
+ON public.user (email) 
+WHERE deletion_date IS NULL;
 
 
--- CREATE TRIGGERS
-
---CREATE TRIGGER: role_assignment_validity_check_trigger
-
------------------ CLEANUP
-DROP TRIGGER IF EXISTS role_assignment_validity_check_trigger 
-ON role_assignment_bridge;
-DROP FUNCTION IF EXISTS role_assignment_validity_check_trigger_function;
-
------------------ DEFINITION
-CREATE FUNCTION role_assignment_validity_check_trigger_function() 
-RETURNS TRIGGER 
-LANGUAGE plpgsql 
-AS $$
-DECLARE
-  var_role record;
-BEGIN
-	
-	SELECT *
-	FROM public.role r
-	WHERE r.id = NEW.role_id
-	INTO var_role;
-	
-	IF NEW.context_company_id IS NULL
-	THEN RAISE EXCEPTION 'Trying to assign a role without specifying a company context. This is not allowed.';
-	END IF;
-	
-	return NEW;
-END
-$$;
-
-CREATE TRIGGER role_assignment_validity_check_trigger
-BEFORE INSERT OR UPDATE ON role_assignment_bridge
-FOR EACH ROW EXECUTE PROCEDURE role_assignment_validity_check_trigger_function();;
-
---CREATE TRIGGER: exam_pretest_module_integrity_trigger
+-- CREATE triggers
+-- C:\GitRepositories\epistogram\misc\scripts\scriptProducer\src/../../../../epistogram_backend/sql/triggers/exam_pretest_module_integrity_trigger.sql 
 
 ----------------- CLEANUP
 DROP TRIGGER IF EXISTS exam_pretest_module_integrity_trigger 
@@ -7793,9 +7568,8 @@ $$;
 
 CREATE TRIGGER exam_pretest_module_integrity_trigger
 BEFORE INSERT OR UPDATE ON exam_version
-FOR EACH ROW EXECUTE PROCEDURE exam_pretest_module_integrity_trigger_function();;
-
---CREATE TRIGGER: permission_assignment_bridge_trigger
+FOR EACH ROW EXECUTE PROCEDURE exam_pretest_module_integrity_trigger_function();
+-- C:\GitRepositories\epistogram\misc\scripts\scriptProducer\src/../../../../epistogram_backend/sql/triggers/permission_assignment_bridge_trigger.sql 
 
 ----------------- CLEANUP
 DROP TRIGGER IF EXISTS permission_assignment_bridge_trigger 
@@ -7835,9 +7609,74 @@ $$;
 
 CREATE TRIGGER permission_assignment_bridge_trigger
 BEFORE INSERT OR UPDATE ON permission_assignment_bridge
-FOR EACH ROW EXECUTE PROCEDURE permission_assignment_bridge_trigger_function();;
+FOR EACH ROW EXECUTE PROCEDURE permission_assignment_bridge_trigger_function();
+-- C:\GitRepositories\epistogram\misc\scripts\scriptProducer\src/../../../../epistogram_backend/sql/triggers/prequiz_completion_trigger.sql 
 
---CREATE TRIGGER: role_permission_bridge_validity_trigger
+----------------- CLEANUP
+DROP TRIGGER IF EXISTS prequiz_completion_trigger 
+ON prequiz_completion;
+DROP FUNCTION IF EXISTS prequiz_completion_trigger_function;
+
+----------------- DEFINITION
+CREATE FUNCTION prequiz_completion_trigger_function() 
+RETURNS TRIGGER 
+LANGUAGE plpgsql 
+AS $$
+DECLARE
+  var_user_course_bridge record;
+BEGIN
+
+    -- check prequiz
+    SELECT *
+    FROM public.user_course_bridge ucb
+    WHERE ucb.user_id = NEW.user_id
+    AND ucb.course_id = NEW.course_id
+    INTO var_user_course_bridge;
+
+	IF (var_user_course_bridge.stage_name IN ('prequiz', 'assigned'))
+	    THEN RAISE EXCEPTION 'Trying to create a prequiz completion row, but user_course_bridge stage is still not set to the next one, set that first!';
+	END IF;
+	
+	return NEW;
+END
+$$;
+
+CREATE TRIGGER prequiz_completion_trigger
+BEFORE INSERT OR UPDATE ON prequiz_completion
+FOR EACH ROW EXECUTE PROCEDURE prequiz_completion_trigger_function();
+-- C:\GitRepositories\epistogram\misc\scripts\scriptProducer\src/../../../../epistogram_backend/sql/triggers/role_assignment_validity_check_trigger.sql 
+
+----------------- CLEANUP
+DROP TRIGGER IF EXISTS role_assignment_validity_check_trigger 
+ON role_assignment_bridge;
+DROP FUNCTION IF EXISTS role_assignment_validity_check_trigger_function;
+
+----------------- DEFINITION
+CREATE FUNCTION role_assignment_validity_check_trigger_function() 
+RETURNS TRIGGER 
+LANGUAGE plpgsql 
+AS $$
+DECLARE
+  var_role record;
+BEGIN
+	
+	SELECT *
+	FROM public.role r
+	WHERE r.id = NEW.role_id
+	INTO var_role;
+	
+	IF NEW.context_company_id IS NULL
+	THEN RAISE EXCEPTION 'Trying to assign a role without specifying a company context. This is not allowed.';
+	END IF;
+	
+	return NEW;
+END
+$$;
+
+CREATE TRIGGER role_assignment_validity_check_trigger
+BEFORE INSERT OR UPDATE ON role_assignment_bridge
+FOR EACH ROW EXECUTE PROCEDURE role_assignment_validity_check_trigger_function();
+-- C:\GitRepositories\epistogram\misc\scripts\scriptProducer\src/../../../../epistogram_backend/sql/triggers/role_permission_bridge_validity_trigger.sql 
 
 ----------------- CLEANUP
 DROP TRIGGER IF EXISTS role_permission_bridge_validity_trigger 
@@ -7876,9 +7715,8 @@ $$;
 
 CREATE TRIGGER role_permission_bridge_validity_trigger
 BEFORE INSERT OR UPDATE ON role_permission_bridge
-FOR EACH ROW EXECUTE PROCEDURE role_permission_bridge_validity_trigger_function();;
-
---CREATE TRIGGER: ucb_stage_trigger
+FOR EACH ROW EXECUTE PROCEDURE role_permission_bridge_validity_trigger_function();
+-- C:\GitRepositories\epistogram\misc\scripts\scriptProducer\src/../../../../epistogram_backend/sql/triggers/ucb_stage_trigger.sql 
 
 ----------------- CLEANUP
 DROP TRIGGER IF EXISTS ucb_stage_trigger 
@@ -7995,43 +7833,4 @@ $$;
 
 CREATE TRIGGER ucb_stage_trigger
 BEFORE INSERT OR UPDATE ON user_course_bridge
-FOR EACH ROW EXECUTE PROCEDURE ucb_stage_trigger_function();;
-
---CREATE TRIGGER: prequiz_completion_trigger
-
------------------ CLEANUP
-DROP TRIGGER IF EXISTS prequiz_completion_trigger 
-ON prequiz_completion;
-DROP FUNCTION IF EXISTS prequiz_completion_trigger_function;
-
------------------ DEFINITION
-CREATE FUNCTION prequiz_completion_trigger_function() 
-RETURNS TRIGGER 
-LANGUAGE plpgsql 
-AS $$
-DECLARE
-  var_user_course_bridge record;
-BEGIN
-
-    -- check prequiz
-    SELECT *
-    FROM public.user_course_bridge ucb
-    WHERE ucb.user_id = NEW.user_id
-    AND ucb.course_id = NEW.course_id
-    INTO var_user_course_bridge;
-
-	IF (var_user_course_bridge.stage_name IN ('prequiz', 'assigned'))
-	    THEN RAISE EXCEPTION 'Trying to create a prequiz completion row, but user_course_bridge stage is still not set to the next one, set that first!';
-	END IF;
-	
-	return NEW;
-END
-$$;
-
-CREATE TRIGGER prequiz_completion_trigger
-BEFORE INSERT OR UPDATE ON prequiz_completion
-FOR EACH ROW EXECUTE PROCEDURE prequiz_completion_trigger_function();;
-
-
--- COMMIT TRANSACTION
-COMMIT;
+FOR EACH ROW EXECUTE PROCEDURE ucb_stage_trigger_function();
