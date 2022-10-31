@@ -1,4 +1,4 @@
--- MIGRATION VERSION: migration13
+-- MIGRATION VERSION: migration14
 
 -- BEGIN TRANSACTION
 BEGIN;
@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS public.migration_version
 );
 
 INSERT INTO public.migration_version
-VALUES ('migration13', now()); 
+VALUES ('migration14', now()); 
 
 ALTER TABLE public.migration_version 
 DROP CONSTRAINT IF EXISTS unique_mig_ver;
@@ -103,6 +103,7 @@ DROP VIEW IF EXISTS module_last_exam_view CASCADE;
 DROP VIEW IF EXISTS exam_highest_score_answer_session_view CASCADE;
 DROP VIEW IF EXISTS daily_tip_view CASCADE;
 DROP VIEW IF EXISTS course_state_view CASCADE;
+DROP VIEW IF EXISTS course_length_estimation_view CASCADE;
 DROP VIEW IF EXISTS course_item_edit_view CASCADE;
 DROP VIEW IF EXISTS course_item_view CASCADE;
 DROP VIEW IF EXISTS course_admin_detailed_view CASCADE;
@@ -143,7 +144,6 @@ DROP VIEW IF EXISTS course_shop_item_list_view CASCADE;
 DROP VIEW IF EXISTS course_rating_question_view CASCADE;
 DROP VIEW IF EXISTS course_questions_success_view CASCADE;
 DROP VIEW IF EXISTS course_module_overview_view CASCADE;
-DROP VIEW IF EXISTS course_length_estimation_view CASCADE;
 DROP VIEW IF EXISTS course_item_completion_view CASCADE;
 DROP VIEW IF EXISTS course_completion_view CASCADE;
 DROP VIEW IF EXISTS constant_values_view CASCADE;
@@ -435,47 +435,6 @@ OR mv.id = ev.module_version_id
 LEFT JOIN public.course_version cv
 ON cv.id = mv.course_version_id
 ;
-
---CREATE VIEW: course_length_estimation_view
-CREATE VIEW course_length_estimation_view
-AS
-SELECT 
-	sq.*,
-	sq.total_video_seconds + sq.total_exam_seconds total_length_seconds
-FROM
-(
-	SELECT 
-		cv.id course_id,
-		(
-			SELECT 
-				COALESCE(SUM(vd.video_file_length_seconds), 0)::int
-			FROM public.video_version vv
-
-			LEFT JOIN public.module_version mv
-			ON mv.course_version_id = cv.id AND mv.id = vv.module_version_id
-			
-			LEFT JOIN public.video_data vd
-			ON vd.id = vv.video_data_id
-
-			WHERE mv.course_version_id = cv.id
-		) total_video_seconds,
-		(
-			SELECT 
-				COUNT(1)::int * 20 total_exam_seconds 
-			FROM public.exam_version ev
-			
-			LEFT JOIN public.exam e
-			ON e.id = ev.exam_id
-			
-			LEFT JOIN public.module_version mv
-			ON mv.course_version_id = cv.id AND mv.id = ev.module_version_id
-			
-			WHERE e.is_pretest = false
-			AND e.is_signup = false
-			AND mv.course_version_id = cv.id
-		)
-	FROM public.course_version cv
-) sq;
 
 --CREATE VIEW: course_module_overview_view
 CREATE VIEW course_module_overview_view
@@ -1279,7 +1238,7 @@ ON ad.id = av.answer_data_id;
 --CREATE VIEW: schema_version_view
 CREATE VIEW schema_version_view
 AS
-SELECT '15:40:11 2022-10-28 CEDT' last_modification_date, '0.01' version
+SELECT '12:31:43 2022-10-31 CEST' last_modification_date, '0.01' version
 ;
 
 --CREATE VIEW: shop_item_stateful_view
@@ -2145,6 +2104,66 @@ ORDER BY
 	civ.video_version_id,
 	civ.exam_version_id,
 	qv.id;
+
+--CREATE VIEW: course_length_estimation_view
+CREATE VIEW course_length_estimation_view
+AS
+WITH
+latest_course_video_seconds AS
+(
+	SELECT 
+		cv.course_id,
+		COALESCE(SUM(vd.video_file_length_seconds), 0)::int total_video_seconds
+	FROM public.latest_course_version_view lcvv
+	
+	LEFT JOIN public.course_version cv
+	ON cv.id = lcvv.version_id
+	
+	LEFT JOIN public.module_version mv
+	ON mv.course_version_id = cv.id
+	
+	LEFT JOIN public.video_version vv
+	ON vv.module_version_id = mv.id
+
+	LEFT JOIN public.video_data vd
+	ON vd.id = vv.video_data_id
+	
+	GROUP BY cv.course_id
+),
+latest_course_exam_seconds AS
+(
+	SELECT 
+		cv.course_id,
+		COUNT(1)::int * 20 total_exam_seconds 
+	FROM public.latest_course_version_view lcvv
+	
+	LEFT JOIN public.course_version cv
+	ON cv.id = lcvv.version_id
+	
+	LEFT JOIN public.module_version mv
+	ON mv.course_version_id = cv.id
+	
+	LEFT JOIN public.exam_version ev
+	ON ev.module_version_id = mv.id
+
+	LEFT JOIN public.exam e
+	ON e.id = ev.exam_id
+
+	WHERE e.is_pretest = false
+	AND e.is_signup = false
+	
+	GROUP BY cv.course_id
+)
+
+SELECT 
+	lcvs.course_id,
+	lcvs.total_video_seconds,
+	lces.total_exam_seconds,
+	lcvs.total_video_seconds + lces.total_exam_seconds total_length_seconds
+FROM latest_course_video_seconds lcvs
+
+LEFT JOIN latest_course_exam_seconds lces
+ON lces.course_id = lcvs.course_id;
 
 --CREATE VIEW: course_state_view
 CREATE VIEW course_state_view
@@ -4853,12 +4872,8 @@ ON cv.id = mv.course_version_id;
 --CREATE VIEW: user_course_completion_original_estimation_view
 CREATE VIEW user_course_completion_original_estimation_view
 AS
-
-SELECT 
-	sq.*,
-	DATE_TRUNC('days', sq.start_date) + (INTERVAL '1' day * sq.previsioned_duration_days) previsioned_completion_date,
-	CEIL(sq.total_item_count::double precision / sq.previsioned_duration_days) previsioned_items_per_day
-FROM 
+WITH 
+course_length_data_cte AS
 (
 	SELECT 
 		ucb.user_id user_id,
@@ -4872,7 +4887,7 @@ FROM
 
 	LEFT JOIN public.user_prequiz_answers_view upav
 	ON upav.user_id = ucb.user_id 
-		AND upav.course_id = ucb.course_id
+	AND upav.course_id = ucb.course_id
 
 	LEFT JOIN public.course_length_estimation_view clev
 	ON clev.course_id = ucb.course_id
@@ -4883,7 +4898,12 @@ FROM
 	ORDER BY
 		ucb.user_id,
 		ucb.course_id
-) sq;
+)
+SELECT 
+	cldc.*,
+	DATE_TRUNC('days', cldc.start_date) + (INTERVAL '1' day * cldc.previsioned_duration_days) previsioned_completion_date,
+	CEIL(cldc.total_item_count::double precision / cldc.previsioned_duration_days) previsioned_items_per_day
+FROM course_length_data_cte cldc;
 
 --CREATE VIEW: user_permission_view
 CREATE VIEW user_permission_view
@@ -6098,8 +6118,8 @@ SELECT
 	ucb.start_date start_date,
     ucb.tempomat_mode tempomat_mode,
 	uccoev.previsioned_completion_date original_previsioned_completion_date,
-	ucpa.total_item_count total_item_count,
-	ucpa.total_completed_item_count total_completed_item_count,
+	cicv.item_count total_item_count,
+	ccicv.completed_course_item_count total_completed_item_count,
 	CASE WHEN ucb.tempomat_mode = 'light'
 		THEN 1
 		ELSE CASE WHEN ucb.tempomat_mode = 'strict'
@@ -6109,13 +6129,12 @@ SELECT
 	END tempomat_adjustment_value
 FROM public.user_course_bridge ucb
 
-LEFT JOIN public.user_course_progress_view ucpv
-ON ucpv.course_id = ucb.course_id
-AND ucpv.user_id = ucb.user_id
+LEFT JOIN public.completed_course_item_count_view ccicv
+ON ccicv.user_id = ucb.user_id
+AND ccicv.course_id = ucb.course_id
 
-LEFT JOIN public.user_course_progress_actual_view ucpa
-ON ucpa.course_id = ucb.course_id
-AND ucpa.user_id = ucb.user_id
+LEFT JOIN public.course_item_count_view cicv
+ON cicv.course_id = ucb.course_id
 
 LEFT JOIN public.user_course_completion_original_estimation_view uccoev
 ON uccoev.course_id = ucb.course_id
@@ -7118,24 +7137,24 @@ SELECT
     cecv.exam_count,
     cstv.total_spent_seconds,
     fesv.final_exam_score_percentage,
-    ucb.required_completion_date,
+    tcdv.required_completion_date,
     sar.summerized_score,
 
     -- tempomat
-    ucb.start_date,
+    tcdv.start_date,
     tcdv.tempomat_adjustment_value,
     tcdv.tempomat_mode,
     tcdv.original_previsioned_completion_date,
     tcdv.total_item_count,
     tcdv.total_completed_item_count
-FROM public.company comp
+FROM public.course_access_bridge cab
+
+LEFT JOIN public.company comp
+ON comp.id = cab.company_id
 
 LEFT JOIN public.user u
-ON u.company_id = comp.id
-
-LEFT JOIN public.course_access_bridge cab
-ON cab.company_id = comp.id
-OR cab.user_id = u.id
+ON u.id = cab.user_id
+OR u.company_id = cab.company_id
 
 LEFT JOIN public.course co
 ON co.id = cab.course_id
@@ -7161,10 +7180,6 @@ ON cvcv.course_id = co.id
 
 LEFT JOIN public.course_exam_count_view cecv
 ON cecv.course_id = co.id
-
-LEFT JOIN public.user_course_bridge ucb
-ON ucb.user_id = u.id
-AND ucb.course_id = co.id
 
 LEFT JOIN public.course_spent_time_view cstv
 ON cstv.user_id = u.id

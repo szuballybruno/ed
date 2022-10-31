@@ -166,11 +166,12 @@ export class UserStatsService {
 
     async getCourseUserStatsAsync(principalId: PrincipalId, courseId: Id<'Course'>, preset: CourseUserPresetType) {
 
-
         const principalUser = await this._ormService
             .query(User, { userId: principalId })
             .where('id', '=', 'userId')
             .getSingle();
+
+        console.log(principalUser);
 
         const principalCompanyId = principalUser.companyId;
 
@@ -179,6 +180,8 @@ export class UserStatsService {
             .where('courseId', '=', 'courseId')
             .and('companyId', '=', 'companyId')
             .getMany();
+
+        console.log(stats);
 
         /* TODO: This lag behind days doesn't contain 
            adjustment correction like it should */
@@ -195,12 +198,13 @@ export class UserStatsService {
                 return {
                     userId: x.userId,
                     courseId: x.courseId,
-                    lagBehindDays: this._tempomatService.calculateLagBehindDays(
-                        x.originalPrevisionedCompletionDate,
-                        x.totalItemCount,
-                        x.totalCompletedItemCount,
-                        x.startDate
-                    )
+                    lagBehindDays: this._tempomatService
+                        .calculateLagBehindDays(
+                            x.originalPrevisionedCompletionDate,
+                            x.totalItemCount,
+                            x.totalCompletedItemCount,
+                            x.startDate
+                        )
                 };
             });
 
@@ -231,6 +235,8 @@ export class UserStatsService {
 
         const mergedStats = (() => {
 
+            console.log('mergedStats');
+
             return stats.map(x => {
 
                 const previsionedDate = userEstimatedCompletionDates
@@ -259,6 +265,8 @@ export class UserStatsService {
             .filter(x => x.finalExamScorePercentage);
 
         const filteredStats = (() => {
+
+            console.log('filteredStats');
 
             if (preset === 'inprogress')
                 return inProgressUsers;

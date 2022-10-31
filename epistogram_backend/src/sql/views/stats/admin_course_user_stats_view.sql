@@ -62,24 +62,24 @@ SELECT
     cecv.exam_count,
     cstv.total_spent_seconds,
     fesv.final_exam_score_percentage,
-    ucb.required_completion_date,
+    tcdv.required_completion_date,
     sar.summerized_score,
 
     -- tempomat
-    ucb.start_date,
+    tcdv.start_date,
     tcdv.tempomat_adjustment_value,
     tcdv.tempomat_mode,
     tcdv.original_previsioned_completion_date,
     tcdv.total_item_count,
     tcdv.total_completed_item_count
-FROM public.company comp
+FROM public.course_access_bridge cab
+
+LEFT JOIN public.company comp
+ON comp.id = cab.company_id
 
 LEFT JOIN public.user u
-ON u.company_id = comp.id
-
-LEFT JOIN public.course_access_bridge cab
-ON cab.company_id = comp.id
-OR cab.user_id = u.id
+ON u.id = cab.user_id
+OR u.company_id = cab.company_id
 
 LEFT JOIN public.course co
 ON co.id = cab.course_id
@@ -105,10 +105,6 @@ ON cvcv.course_id = co.id
 
 LEFT JOIN public.course_exam_count_view cecv
 ON cecv.course_id = co.id
-
-LEFT JOIN public.user_course_bridge ucb
-ON ucb.user_id = u.id
-AND ucb.course_id = co.id
 
 LEFT JOIN public.course_spent_time_view cstv
 ON cstv.user_id = u.id

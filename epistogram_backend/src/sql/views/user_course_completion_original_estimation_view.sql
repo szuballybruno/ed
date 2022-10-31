@@ -1,9 +1,5 @@
-
-SELECT 
-	sq.*,
-	DATE_TRUNC('days', sq.start_date) + (INTERVAL '1' day * sq.previsioned_duration_days) previsioned_completion_date,
-	CEIL(sq.total_item_count::double precision / sq.previsioned_duration_days) previsioned_items_per_day
-FROM 
+WITH 
+course_length_data_cte AS
 (
 	SELECT 
 		ucb.user_id user_id,
@@ -17,7 +13,7 @@ FROM
 
 	LEFT JOIN public.user_prequiz_answers_view upav
 	ON upav.user_id = ucb.user_id 
-		AND upav.course_id = ucb.course_id
+	AND upav.course_id = ucb.course_id
 
 	LEFT JOIN public.course_length_estimation_view clev
 	ON clev.course_id = ucb.course_id
@@ -28,4 +24,9 @@ FROM
 	ORDER BY
 		ucb.user_id,
 		ucb.course_id
-) sq
+)
+SELECT 
+	cldc.*,
+	DATE_TRUNC('days', cldc.start_date) + (INTERVAL '1' day * cldc.previsioned_duration_days) previsioned_completion_date,
+	CEIL(cldc.total_item_count::double precision / cldc.previsioned_duration_days) previsioned_items_per_day
+FROM course_length_data_cte cldc

@@ -17,20 +17,6 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- Name: amcheck; Type: EXTENSION; Schema: -; Owner: -
---
-
-CREATE EXTENSION IF NOT EXISTS amcheck WITH SCHEMA pg_catalog;
-
-
---
--- Name: EXTENSION amcheck; Type: COMMENT; Schema: -; Owner: 
---
-
-COMMENT ON EXTENSION amcheck IS 'functions for verifying relation integrity';
-
-
---
 -- Name: acquire_task_lock_fn(text); Type: FUNCTION; Schema: public; Owner: dev_service_user
 --
 
