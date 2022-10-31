@@ -7,7 +7,6 @@ import { ParametrizedConstructor } from '../services/misc/advancedTypes/Parametr
 import { createDBSchema } from '../services/misc/dbSchema';
 import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
 import { PlaylistService } from '../services/PlaylistService';
-import { SoftSchemaScriptService } from '../../../misc/scripts/scriptProducer/src/SoftSchemaScriptService';
 import { SQLPoolService } from '../services/sqlServices/SQLPoolService';
 import { TypeORMConnectionService } from '../services/sqlServices/TypeORMConnectionService';
 import { UserInvitationService } from '../services/UserInvitationService';
@@ -134,7 +133,6 @@ export const getTransientServiceContainer = (singletonProvider: ServiceProvider)
         .addClass(HashService, [GlobalConfiguration])
         .addClass(SQLConnectionService, [SQLPoolService, LoggerService])
         .addClass(TypeORMConnectionService, [GlobalConfiguration, XDBMSchemaService])
-        .addClass(SoftSchemaScriptService, [XDBMSchemaService, GlobalConfiguration, LoggerService])
         .addClass(ORMConnectionService, [GlobalConfiguration, SQLConnectionService, XDBMSchemaService])
         .addClass(PermissionService, [ORMConnectionService, MapperService])
         .addClass(AuthorizationService, [PermissionService, ORMConnectionService])
