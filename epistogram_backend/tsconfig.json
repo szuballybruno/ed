@@ -18,10 +18,11 @@
   },
   "include": [
     "src",
-    "tests",
-    "jest.config.ts"
-, "../misc/scripts/scriptProducer/src/SoftSchemaScriptService.ts"  ],
+    // "tests",
+    // "jest.config.ts"
+  ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "tests"
   ]
 }
