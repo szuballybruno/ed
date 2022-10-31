@@ -22,7 +22,7 @@ RUN npx tsc
 # folder by the compiler, since these are not source files. 
 COPY /config ./config
 COPY /src/emails ./build/emails
-COPY /src/sql ./build/sql
+# COPY /src/sql ./build/sql - WHY copy SQL files? 
 
 # expose port 5000
 EXPOSE 5000
