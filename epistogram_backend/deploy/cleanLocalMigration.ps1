@@ -10,9 +10,6 @@ $dest_port= '7014'
 $dest_user= 'dev_service_user'
 $dest_db_name= 'localhostDB'
 
-# gen lr script 
-.\runLr.ps1
-
 # sync from DEV
 .\pgtransfer.ps1 `
     -src_pass $src_pass `
@@ -26,8 +23,8 @@ $dest_db_name= 'localhostDB'
     -dest_user $dest_user `
     -dest_db_name $dest_db_name
 
-# migrate 
-.\migVersionCore.ps1 `
+# migrate database
+.\migrateDatabase.ps1 `
     -dbpass $dest_pass `
     -dbhost $dest_host `
     -dbport $dest_port `

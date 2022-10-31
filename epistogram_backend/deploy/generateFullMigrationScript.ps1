@@ -18,5 +18,3 @@ $version_result= psql `
 cd ../../misc/scripts/scriptProducer
 node ./dist/main.js
 cd ../../../epistogram_backend/deploy
-
-# npx ts-node ./src/main.ts

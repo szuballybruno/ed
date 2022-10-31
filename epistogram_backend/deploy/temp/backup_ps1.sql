@@ -17,20 +17,6 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- Name: amcheck; Type: EXTENSION; Schema: -; Owner: -
---
-
-CREATE EXTENSION IF NOT EXISTS amcheck WITH SCHEMA pg_catalog;
-
-
---
--- Name: EXTENSION amcheck; Type: COMMENT; Schema: -; Owner: 
---
-
-COMMENT ON EXTENSION amcheck IS 'functions for verifying relation integrity';
-
-
---
 -- Name: acquire_task_lock_fn(text); Type: FUNCTION; Schema: public; Owner: dev_service_user
 --
 
@@ -9714,15 +9700,11 @@ COPY public.activity_session (id, start_date, end_date, is_finalized, user_id, a
 714	2022-10-28 14:45:55.805+00	2022-10-28 14:48:02.314+00	t	1	\N
 717	2022-10-28 15:09:11.61+00	2022-10-28 15:14:13.28+00	t	13	\N
 716	2022-10-28 14:55:57.025+00	2022-10-28 14:55:57.369+00	f	1	\N
-<<<<<<< HEAD
-718	2022-10-28 15:19:13.982+00	2022-10-28 15:19:14.433+00	f	13	\N
-=======
 718	2022-10-28 15:19:13.982+00	2022-10-28 15:19:14.433+00	t	13	\N
 719	2022-10-28 20:43:12.554+00	2022-10-28 20:43:12.982+00	t	13	\N
 720	2022-10-28 20:48:13.71+00	2022-10-28 20:48:14.12+00	t	13	\N
 721	2022-10-29 09:36:52.971+00	2022-10-29 09:36:53.438+00	t	13	\N
 722	2022-10-29 09:41:54.17+00	2022-10-29 09:41:54.623+00	f	13	\N
->>>>>>> 658fd43e5c1d50bc1aa1694e0d978e81ee0e0d9e
 \.
 
 
@@ -9774,17 +9756,10 @@ COPY public.activity_streak (id, start_date, end_date, is_finalized, user_id) FR
 37	2022-10-16 18:04:10.007+00	2022-10-19 10:17:56.814+00	t	41
 17	2022-10-07 16:04:17.37+00	2022-10-14 13:31:46.803+00	t	1
 43	2022-10-21 06:54:25.505+00	2022-10-21 06:54:25.505+00	t	41
-<<<<<<< HEAD
-45	2022-10-24 11:44:13.866+00	2022-10-27 08:40:53.894+00	t	1
-8	2022-10-04 17:05:57.014+00	2022-10-05 14:48:27.497+00	t	13
-46	2022-10-28 13:12:34.856+00	2022-10-28 14:55:57.322+00	f	1
-47	2022-10-28 14:51:53.569+00	2022-10-28 15:19:14.386+00	f	13
-=======
 47	2022-10-28 14:51:53.569+00	2022-10-29 09:41:54.576+00	f	13
 45	2022-10-24 11:44:13.866+00	2022-10-27 08:40:53.894+00	t	1
 8	2022-10-04 17:05:57.014+00	2022-10-05 14:48:27.497+00	t	13
 46	2022-10-28 13:12:34.856+00	2022-10-28 14:55:57.322+00	f	1
->>>>>>> 658fd43e5c1d50bc1aa1694e0d978e81ee0e0d9e
 \.
 
 
@@ -27939,11 +27914,8 @@ COPY public.coin_transaction (id, creation_date, amount, is_gifted, user_id, act
 218	2022-10-28 14:55:57.121+00	10	f	1	716	\N	\N	\N	\N	\N
 219	2022-10-28 15:09:11.705+00	10	f	13	717	\N	\N	\N	\N	\N
 220	2022-10-28 15:19:14.079+00	10	f	13	718	\N	\N	\N	\N	\N
-<<<<<<< HEAD
-=======
 221	2022-10-29 09:36:53.069+00	10	f	13	721	\N	\N	\N	\N	\N
 222	2022-10-29 09:41:54.267+00	10	f	13	722	\N	\N	\N	\N	\N
->>>>>>> 658fd43e5c1d50bc1aa1694e0d978e81ee0e0d9e
 \.
 
 
@@ -35715,11 +35687,7 @@ COPY public."user" (id, deletion_date, creation_date, is_god, is_invitation_acce
 48	\N	2022-10-14 13:17:14.793+00	f	t	Invitation	t	ateceged4@demoaccounts.epistogram.com		Jenő	Nagy	\N	\N	\N	$2a$12$ARwyfEuOmTJ.NrY5WYfFtebnz2jxK04BK7mYRIHF7xmYlUV69bVDS	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQ4LCJpYXQiOjE2NjYxNzg4NjgsImV4cCI6MTY2NjQzODA2OH0.wi4H5pSdQk_bnqETSM8eGx7uhjj6QGs0XeQtitDYU1g	\N	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyRW1haWwiOiJ4bnd2ZGR2dmR6cXZwZXlzYm9AdG1td2oubmV0IiwiaWF0IjoxNjY1NzUzNDM0LCJleHAiOjE2NjYyMTA2MzR9.BezDec4HpF-Q84qzrwniFz5osOTlOj0agnEa1k_WBjo	\N	4	26	t
 46	\N	2022-10-14 09:34:38.8+00	f	t	Invitation	t	ateceged@epistogram.com		SimaUser	aTecéged	\N	\N	\N	$2a$12$IpEDXrXaLg0vsNf4zVMNBurcz.TVlnmubg7RMXeuGvQYLaduI5fc.	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQ2LCJpYXQiOjE2NjU3NTM2OTYsImV4cCI6MTY2NjAxMjg5Nn0.feK14I2_RtwaIyokXbHEdnVsskGkk_v_dXHGTzVhiuA	\N	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyRW1haWwiOiJhdGVjZWdlZEBlcGlzdG9ncmFtLmNvbSIsImlhdCI6MTY2NTc0MDA3OCwiZXhwIjoxNjY2MTk3Mjc4fQ.VBZzQuXJvoY_2P2lf7k372tmPnol7HCwDq6SkVOayrk	\N	4	8	t
 38	\N	2022-10-13 16:48:01.773+00	f	t	Invitation	t	atecegedadmin2@epistogram.com		Boglárka	Szegedi	\N	\N	\N	$2a$12$ABeAse47tghrfZmAUmxD8eNoSn45NRL8o11dSBA5FQlBG5yCNhnx2	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjM4LCJpYXQiOjE2NjU3NTUwMzEsImV4cCI6MTY2NjAxNDIzMX0.OxKCfhoM71nEID1lPpDbR9kHDsahw1gTWo_CktP-rX4	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjM4LCJpYXQiOjE2NjU2OTI4MDksImV4cCI6MTY2NTcyMTYwOX0.ginmmx1YOs6Ntmuj9Hy52gzdUEnRNFZET1yixNkGcsQ	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyRW1haWwiOiJhdGVjZWdlZGFkbWluQGVwaXN0b2dyYW0uY29tIiwiaWF0IjoxNjY1Njc5NjgxLCJleHAiOjE2NjYxMzY4ODF9.NVa3PkSDqL6IB8ntvzhfNcjSTXSO0NaY9PvCu1WB37g	\N	4	7	t
-<<<<<<< HEAD
-13	\N	2022-10-04 17:05:30.929+00	f	t	Invitation	t	szubally.bruno@epistogram.com		Brúnó	Szubally	\N	\N	\N	$2a$12$uB2/bGrLgiTCWW8qPUPWCed1ODSl7RTJGnGWzxW6pCVm8NvKvzxwW	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEzLCJpYXQiOjE2NjY5NzAzNTQsImV4cCI6MTY2NzIyOTU1NH0.E1RsiedE-3dYRum5a5ihUzYRoT6YIIF0dSDw-38PsSI	\N	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyRW1haWwiOiJ6dWdqb25kam54bWJxZWtlam9AdG1tYnQubmV0IiwiaWF0IjoxNjY0OTAzMTMwLCJleHAiOjE2NjUzNjAzMzB9.qxiPYsK-Hqw6rlG651OpNWu9OuoU5fp6X_pWJMNRfDs	\N	2	26	f
-=======
 13	\N	2022-10-04 17:05:30.929+00	f	t	Invitation	t	szubally.bruno@epistogram.com		Brúnó	Szubally	\N	\N	\N	$2a$12$uB2/bGrLgiTCWW8qPUPWCed1ODSl7RTJGnGWzxW6pCVm8NvKvzxwW	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEzLCJpYXQiOjE2NjcwMzY1MTQsImV4cCI6MTY2NzI5NTcxNH0.evzyTA0f4i5nStgFrktbQ8PFfNxv7lNbgKtNRO4Kol4	\N	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyRW1haWwiOiJ6dWdqb25kam54bWJxZWtlam9AdG1tYnQubmV0IiwiaWF0IjoxNjY0OTAzMTMwLCJleHAiOjE2NjUzNjAzMzB9.qxiPYsK-Hqw6rlG651OpNWu9OuoU5fp6X_pWJMNRfDs	\N	2	26	f
->>>>>>> 658fd43e5c1d50bc1aa1694e0d978e81ee0e0d9e
 1	\N	2022-10-04 10:02:36.025+00	t	t	Invitation	t	endre.marosi@epistogram.com	endremarosi	Endre	Marosi	\N	\N	\N	$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTY2Njk2ODk1NywiZXhwIjoxNjY3MjI4MTU3fQ.epIvT4zceeJeie3RwMpl5EpVwluNuWu8canIOVVZDcE	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTY2NTE2NTI5MywiZXhwIjoxNjY1MTk0MDkzfQ.s36BTvYQ0YRKWKcmuvRp7FPBoY8nT9cQDk3aWfATdNc	\N	\N	2	26	t
 \.
 
@@ -37908,8 +37876,6 @@ COPY public.user_session_activity (id, creation_date, type, video_version_id, ex
 2126	2022-10-28 15:14:13.304+00	login	\N	\N	717
 2127	2022-10-28 15:19:14.006+00	generic	\N	\N	718
 2128	2022-10-28 15:19:14.486+00	login	\N	\N	718
-<<<<<<< HEAD
-=======
 2129	2022-10-28 20:43:12.584+00	generic	\N	\N	719
 2130	2022-10-28 20:43:13.006+00	login	\N	\N	719
 2131	2022-10-28 20:48:13.734+00	generic	\N	\N	720
@@ -37918,7 +37884,6 @@ COPY public.user_session_activity (id, creation_date, type, video_version_id, ex
 2134	2022-10-29 09:36:53.462+00	login	\N	\N	721
 2135	2022-10-29 09:41:54.194+00	generic	\N	\N	722
 2136	2022-10-29 09:41:54.647+00	login	\N	\N	722
->>>>>>> 658fd43e5c1d50bc1aa1694e0d978e81ee0e0d9e
 \.
 
 
@@ -41829,11 +41794,7 @@ SELECT pg_catalog.setval('public.activity_id_seq', 6, true);
 -- Name: activity_session_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dev_service_user
 --
 
-<<<<<<< HEAD
-SELECT pg_catalog.setval('public.activity_session_id_seq', 718, true);
-=======
 SELECT pg_catalog.setval('public.activity_session_id_seq', 722, true);
->>>>>>> 658fd43e5c1d50bc1aa1694e0d978e81ee0e0d9e
 
 
 --
@@ -41882,11 +41843,7 @@ SELECT pg_catalog.setval('public.answer_version_id_seq', 11717, true);
 -- Name: coin_transaction_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dev_service_user
 --
 
-<<<<<<< HEAD
-SELECT pg_catalog.setval('public.coin_transaction_id_seq', 220, true);
-=======
 SELECT pg_catalog.setval('public.coin_transaction_id_seq', 222, true);
->>>>>>> 658fd43e5c1d50bc1aa1694e0d978e81ee0e0d9e
 
 
 --
@@ -42292,11 +42249,7 @@ SELECT pg_catalog.setval('public.user_id_seq', 48, true);
 -- Name: user_session_activity_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dev_service_user
 --
 
-<<<<<<< HEAD
-SELECT pg_catalog.setval('public.user_session_activity_id_seq', 2128, true);
-=======
 SELECT pg_catalog.setval('public.user_session_activity_id_seq', 2136, true);
->>>>>>> 658fd43e5c1d50bc1aa1694e0d978e81ee0e0d9e
 
 
 --
