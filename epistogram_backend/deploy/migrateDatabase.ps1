@@ -1,23 +1,23 @@
 param (
-    [string]$pass,
-    [string]$host,
-    [string]$port,
-    [string]$user,
-    [string]$dbname
+    [string]$dbpass,
+    [string]$dbhost,
+    [string]$dbport,
+    [string]$dbname,
+    [string]$dbuser
 )
 
 # gen full migration script 
 .\deployScriptGen.ps1 `
-    -dbpass $pass `
-    -dbhost $host `
-    -dbport $port `
+    -dbpass $dbpass `
+    -dbhost $dbhost `
+    -dbport $dbport `
     -dbname $dbname `
-    -dbuser $user
+    -dbuser $dbuser
 
 # migrate 
 .\runFullMigrationScript.ps1 `
-    -dbpass $pass `
-    -dbhost $host `
-    -dbport $port `
+    -dbpass $dbpass `
+    -dbhost $dbhost `
+    -dbport $dbport `
     -dbname $dbname `
-    -dbuser $user
+    -dbuser $dbuser

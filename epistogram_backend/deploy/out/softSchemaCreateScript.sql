@@ -7266,11 +7266,11 @@ ORDER BY
 
 
 -- CREATE constraints
--- C:\GitRepositories\epistogram\misc\scripts\scriptProducer\dist/../../../../epistogram_backend/sql/constraints/activation_code_uniqe_constraint.sql 
+-- activation_code_uniqe_constraint 
 ALTER TABLE activation_code
 ADD CONSTRAINT activation_code_uniqe_constraint
 UNIQUE (code);
--- C:\GitRepositories\epistogram\misc\scripts\scriptProducer\dist/../../../../epistogram_backend/sql/constraints/coin_transaction_valid_relation_enforce_constraint.sql 
+-- coin_transaction_valid_relation_enforce_constraint 
 ALTER TABLE coin_transaction 
 ADD CONSTRAINT coin_transaction_valid_relation_enforce_constraint 
 CHECK 
@@ -7283,7 +7283,7 @@ CHECK
 	shop_item_id IS NOT NULL OR 
 	is_gifted
 );
--- C:\GitRepositories\epistogram\misc\scripts\scriptProducer\dist/../../../../epistogram_backend/sql/constraints/course_access_bridge_constraints.sql 
+-- course_access_bridge_constraints 
 -- UNIQUE COMPANY 
 ALTER TABLE public.course_access_bridge
 DROP CONSTRAINT IF EXISTS course_access_bridge_unique_by_company;
@@ -7299,7 +7299,7 @@ DROP CONSTRAINT IF EXISTS course_access_bridge_unique_by_user;
 ALTER TABLE public.course_access_bridge
 ADD CONSTRAINT course_access_bridge_unique_by_user
 UNIQUE (course_id, user_id);
--- C:\GitRepositories\epistogram\misc\scripts\scriptProducer\dist/../../../../epistogram_backend/sql/constraints/course_completion_constraints.sql 
+-- course_completion_constraints 
 
 -- UNIQUE
 ALTER TABLE public.course_completion 
@@ -7308,7 +7308,7 @@ DROP CONSTRAINT IF EXISTS course_completion_unique;
 ALTER TABLE public.course_completion
 ADD CONSTRAINT course_completion_unique
 UNIQUE (course_version_id, user_id);
--- C:\GitRepositories\epistogram\misc\scripts\scriptProducer\dist/../../../../epistogram_backend/sql/constraints/exam_completion_constraints.sql 
+-- exam_completion_constraints 
 -- UNIQUE EXAM
 ALTER TABLE public.exam_completion
 DROP CONSTRAINT IF EXISTS exam_completion_unique;
@@ -7316,7 +7316,7 @@ DROP CONSTRAINT IF EXISTS exam_completion_unique;
 ALTER TABLE public.exam_completion
 ADD CONSTRAINT exam_completion_unique
 UNIQUE (answer_session_id);
--- C:\GitRepositories\epistogram\misc\scripts\scriptProducer\dist/../../../../epistogram_backend/sql/constraints/permission_assignment_bridge_constraints.sql 
+-- permission_assignment_bridge_constraints 
 
 -- UNIQUE
 ALTER TABLE public.permission_assignment_bridge
@@ -7331,7 +7331,7 @@ CHECK (
 	OR 
 	(context_company_id IS NULL AND context_course_id IS NULL)
 );
--- C:\GitRepositories\epistogram\misc\scripts\scriptProducer\dist/../../../../epistogram_backend/sql/constraints/prequiz_completion_constraints.sql 
+-- prequiz_completion_constraints 
 
 -- UNIQUE
 ALTER TABLE public.prequiz_completion
@@ -7340,7 +7340,7 @@ DROP CONSTRAINT IF EXISTS prequiz_completion_unique;
 ALTER TABLE public.prequiz_completion
 ADD CONSTRAINT prequiz_completion_unique
 UNIQUE (user_id, course_id);
--- C:\GitRepositories\epistogram\misc\scripts\scriptProducer\dist/../../../../epistogram_backend/sql/constraints/prequiz_constraints.sql 
+-- prequiz_constraints 
 
 -- UNIQUE
 ALTER TABLE public.prequiz_user_answer
@@ -7349,23 +7349,23 @@ DROP CONSTRAINT IF EXISTS prequiz_user_answer_unique;
 ALTER TABLE public.prequiz_user_answer
 ADD CONSTRAINT prequiz_user_answer_unique
 UNIQUE (user_id, course_id, question_id);
--- C:\GitRepositories\epistogram\misc\scripts\scriptProducer\dist/../../../../epistogram_backend/sql/constraints/role_constraint.sql 
+-- role_constraint 
 ALTER TABLE role
 ADD CONSTRAINT role_constraint
 CHECK (is_custom = false OR company_id IS NOT NULL);
--- C:\GitRepositories\epistogram\misc\scripts\scriptProducer\dist/../../../../epistogram_backend/sql/constraints/role_permission_bridge_constraint.sql 
+-- role_permission_bridge_constraint 
 ALTER TABLE role_permission_bridge
 ADD CONSTRAINT role_permission_bridge_constraint
 UNIQUE (role_id, permission_id);
--- C:\GitRepositories\epistogram\misc\scripts\scriptProducer\dist/../../../../epistogram_backend/sql/constraints/single_current_course_bridge_constraint.sql 
+-- single_current_course_bridge_constraint 
 /* ALTER TABLE user_course_bridge
 ADD CONSTRAINT single_current_course_bridge_constraint
 UNIQUE (is_current, user_id); */
 
 /* ALTER TABLE user_course_bridge */
 /* CREATE UNIQUE INDEX single_current_course_bridge ON user_course_bridge (user_id)
-WHERE is_current = true */
--- C:\GitRepositories\epistogram\misc\scripts\scriptProducer\dist/../../../../epistogram_backend/sql/constraints/video_completion_constraints.sql 
+WHERE is_current = true */;
+-- video_completion_constraints 
 
 -- UNIQUE VIDEO
 ALTER TABLE public.video_completion
@@ -7374,7 +7374,7 @@ DROP CONSTRAINT IF EXISTS video_completion_unique;
 ALTER TABLE public.video_completion
 ADD CONSTRAINT video_completion_unique
 UNIQUE (video_version_id, user_id);
--- C:\GitRepositories\epistogram\misc\scripts\scriptProducer\dist/../../../../epistogram_backend/sql/constraints/video_data_constraints.sql 
+-- video_data_constraints 
 
 -- UNIQUE
 ALTER TABLE public.video_data
@@ -7390,7 +7390,7 @@ CHECK (
 
 
 -- CREATE functions
--- C:\GitRepositories\epistogram\misc\scripts\scriptProducer\dist/../../../../epistogram_backend/sql/functions/acquire_task_lock_fn.sql 
+-- acquire_task_lock_fn 
 -- DROP FUNCTION IF EXISTS acquire_task_lock_fn;
 
 CREATE OR REPLACE FUNCTION acquire_task_lock_fn
@@ -7424,7 +7424,7 @@ BEGIN
 	END IF;
 END 
 $$ LANGUAGE 'plpgsql';
--- C:\GitRepositories\epistogram\misc\scripts\scriptProducer\dist/../../../../epistogram_backend/sql/functions/create_daily_tip_fn.sql 
+-- create_daily_tip_fn 
 CREATE OR REPLACE FUNCTION "create_daily_tip_fn"
 (
 	"p_descriotion" text,
@@ -7467,7 +7467,7 @@ BEGIN
 	
 END 
 $$ LANGUAGE 'plpgsql';
--- C:\GitRepositories\epistogram\misc\scripts\scriptProducer\dist/../../../../epistogram_backend/sql/functions/get_user_session_first_activity_id.sql 
+-- get_user_session_first_activity_id 
 CREATE OR REPLACE FUNCTION "get_user_session_first_activity_id"
 (
 	param_user_id integer,
@@ -7515,18 +7515,18 @@ $$ LANGUAGE 'plpgsql';
 
 
 -- CREATE indices
--- C:\GitRepositories\epistogram\misc\scripts\scriptProducer\dist/../../../../epistogram_backend/sql/indices/single_current_course_bridge_unique_index.sql 
+-- single_current_course_bridge_unique_index 
 CREATE UNIQUE INDEX single_current_course_bridge_unique_index
 ON public.user_course_bridge (user_id)
-WHERE is_current = true
--- C:\GitRepositories\epistogram\misc\scripts\scriptProducer\dist/../../../../epistogram_backend/sql/indices/user_email_unique_index.sql 
+WHERE is_current = true;
+-- user_email_unique_index 
 CREATE UNIQUE INDEX user_email_unique_index 
 ON public.user (email) 
 WHERE deletion_date IS NULL;
 
 
 -- CREATE triggers
--- C:\GitRepositories\epistogram\misc\scripts\scriptProducer\dist/../../../../epistogram_backend/sql/triggers/exam_pretest_module_integrity_trigger.sql 
+-- exam_pretest_module_integrity_trigger 
 
 ----------------- CLEANUP
 DROP TRIGGER IF EXISTS exam_pretest_module_integrity_trigger 
@@ -7569,7 +7569,7 @@ $$;
 CREATE TRIGGER exam_pretest_module_integrity_trigger
 BEFORE INSERT OR UPDATE ON exam_version
 FOR EACH ROW EXECUTE PROCEDURE exam_pretest_module_integrity_trigger_function();
--- C:\GitRepositories\epistogram\misc\scripts\scriptProducer\dist/../../../../epistogram_backend/sql/triggers/permission_assignment_bridge_trigger.sql 
+-- permission_assignment_bridge_trigger 
 
 ----------------- CLEANUP
 DROP TRIGGER IF EXISTS permission_assignment_bridge_trigger 
@@ -7610,7 +7610,7 @@ $$;
 CREATE TRIGGER permission_assignment_bridge_trigger
 BEFORE INSERT OR UPDATE ON permission_assignment_bridge
 FOR EACH ROW EXECUTE PROCEDURE permission_assignment_bridge_trigger_function();
--- C:\GitRepositories\epistogram\misc\scripts\scriptProducer\dist/../../../../epistogram_backend/sql/triggers/prequiz_completion_trigger.sql 
+-- prequiz_completion_trigger 
 
 ----------------- CLEANUP
 DROP TRIGGER IF EXISTS prequiz_completion_trigger 
@@ -7644,7 +7644,7 @@ $$;
 CREATE TRIGGER prequiz_completion_trigger
 BEFORE INSERT OR UPDATE ON prequiz_completion
 FOR EACH ROW EXECUTE PROCEDURE prequiz_completion_trigger_function();
--- C:\GitRepositories\epistogram\misc\scripts\scriptProducer\dist/../../../../epistogram_backend/sql/triggers/role_assignment_validity_check_trigger.sql 
+-- role_assignment_validity_check_trigger 
 
 ----------------- CLEANUP
 DROP TRIGGER IF EXISTS role_assignment_validity_check_trigger 
@@ -7676,7 +7676,7 @@ $$;
 CREATE TRIGGER role_assignment_validity_check_trigger
 BEFORE INSERT OR UPDATE ON role_assignment_bridge
 FOR EACH ROW EXECUTE PROCEDURE role_assignment_validity_check_trigger_function();
--- C:\GitRepositories\epistogram\misc\scripts\scriptProducer\dist/../../../../epistogram_backend/sql/triggers/role_permission_bridge_validity_trigger.sql 
+-- role_permission_bridge_validity_trigger 
 
 ----------------- CLEANUP
 DROP TRIGGER IF EXISTS role_permission_bridge_validity_trigger 
@@ -7716,7 +7716,7 @@ $$;
 CREATE TRIGGER role_permission_bridge_validity_trigger
 BEFORE INSERT OR UPDATE ON role_permission_bridge
 FOR EACH ROW EXECUTE PROCEDURE role_permission_bridge_validity_trigger_function();
--- C:\GitRepositories\epistogram\misc\scripts\scriptProducer\dist/../../../../epistogram_backend/sql/triggers/ucb_stage_trigger.sql 
+-- ucb_stage_trigger 
 
 ----------------- CLEANUP
 DROP TRIGGER IF EXISTS ucb_stage_trigger 

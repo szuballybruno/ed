@@ -6,7 +6,7 @@ param (
     [string]$dbuser
 )
 $env:PGPASSWORD= 'epistogram'
-$full_migration_path= '../out/fullMigrationScript.sql'
+$full_migration_path= './out/fullMigrationScript.sql'
 
 # migrate 
 echo "Running migration script..."

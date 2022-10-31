@@ -5,6 +5,7 @@ DECLARE
 	var_drop_triggers_script varchar;
 	var_drop_views_script varchar;
 	var_drop_functions_script varchar;
+	var_drop_indices_script varchar;
 BEGIN
 
 	-- drop constraints script 
@@ -72,6 +73,20 @@ BEGIN
 	) sq
 	INTO var_drop_functions_script;
 	
+	-- drop indices script 
+	SELECT 
+		string_agg(sq.script_line, CHR(10)) script
+	FROM 
+	(
+		SELECT 
+			'DROP INDEX IF EXISTS public.' || indexname || ';' script_line
+		FROM pg_indexes
+		WHERE tablename NOT LIKE 'pg%'
+		AND indexname NOT LIKE '%REL_%'
+		AND indexname NOT LIKE '%PK_%'
+	) sq
+	INTO var_drop_indices_script;
+	
 	-- execute scripts 
 	IF var_drop_constraints_script IS NOT NULL THEN 
 		EXECUTE var_drop_constraints_script;
@@ -87,6 +102,10 @@ BEGIN
 	
 	IF var_drop_functions_script IS NOT NULL THEN 
 		EXECUTE var_drop_functions_script;
+	END IF;
+	
+	IF var_drop_indices_script IS NOT NULL THEN 
+		EXECUTE var_drop_indices_script;
 	END IF;
 END 
 $$ LANGUAGE 'plpgsql';

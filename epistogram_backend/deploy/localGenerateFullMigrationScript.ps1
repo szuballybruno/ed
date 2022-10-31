@@ -8,7 +8,7 @@ cd ../../misc/scripts/scriptProducer
 tsc
 cd ../../../epistogram_backend/deploy
 
-./deployScriptGen.ps1 `
+./generateFullMigrationScript.ps1 `
     -dbpass $dest_pass `
     -dbhost $dest_host `
     -dbport $dest_port `

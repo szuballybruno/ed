@@ -28,7 +28,7 @@ export class SoftSchemaScriptService {
                     ? this._getViewCreationScript(x.files)
                     : x
                         .files
-                        .map(file => `-- ${file.path} \n${file.content}`)
+                        .map(file => `-- ${file.name} \n${file.content}${file.content.endsWith(';') ? '' : ';'}`)
                         .join('\n')
             }));
 
