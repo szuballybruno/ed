@@ -2,6 +2,7 @@ import { CompanyAssociatedCourseDTO } from '../dtos/company/CompanyAssociatedCou
 import { CourseStartDTO } from '../dtos/CourseStartDTO';
 import { Mutation } from '../dtos/mutations/Mutation';
 import { UserCourseStatsDTO } from '../dtos/UserCourseStatsDTO';
+import { CourseUserPresetType } from './sharedTypes';
 import { Id } from './versionId';
 
 export type RouteParameterType<TBody = any, TQuery = any> = { body?: TBody, query?: TQuery };
@@ -140,6 +141,7 @@ export const apiRoutes = {
         getUserLearningPageStats: '/userstats/get-user-learning-page-stats',
         getImproveYourselfPageStats: '/userstats/get-improve-yourself-page-stats',
         getAdminUserCourses: '/userstats/get-user-courses' as ParametrizedRouteType<{ query: { userId: Id<'User'>, loadAvailable: boolean } }>,
+        getAdminCourseUsers: '/userstats/get-course-users' as ParametrizedRouteType<{ query: { courseId: Id<'Course'>, preset: CourseUserPresetType } }>,
         getUserVideoStats: '/userstats/get-user-video-stats',
         getUserExamStats: '/userstats/get-user-exam-stats',
         getUserModuleStats: '/userstats/get-user-module-stats',

@@ -1,3 +1,4 @@
+import { AdminCourseUserStatsDTO } from '../../shared/dtos/admin/AdminCourseUserStatsDTO';
 import { AdminHomePageOverviewDTO } from '../../shared/dtos/admin/AdminHomePageOverviewDTO';
 import { HomePageStatsDTO } from '../../shared/dtos/HomePageStatsDTO';
 import { ImproveYourselfPageStatsDTO } from '../../shared/dtos/ImproveYourselfPageStatsDTO';
@@ -8,6 +9,7 @@ import { UserLearningPageStatsDTO } from '../../shared/dtos/UserLearningPageStat
 import { UserModuleStatsDTO } from '../../shared/dtos/UserModuleStatsDTO';
 import { UserVideoStatsDTO } from '../../shared/dtos/UserVideoStatsDTO';
 import { apiRoutes } from '../../shared/types/apiRoutes';
+import { CourseUserPresetType } from '../../shared/types/sharedTypes';
 import { Id } from '../../shared/types/versionId';
 import { QueryService } from '../../static/QueryService';
 
@@ -109,5 +111,17 @@ export const useUserCourseStatsOverviewData = (userId: Id<'User'>, courseId: Id<
         userCourseStatsOverviewData: queryRes.data,
         userCourseStatsOverviewDataStatus: queryRes.state,
         userCourseStatsOverviewDataError: queryRes.error
+    };
+};
+
+
+export const useCourseUserStatsData = (courseId: Id<'Course'>, preset: CourseUserPresetType) => {
+
+    const queryRes = QueryService.useXQuery<AdminCourseUserStatsDTO[]>(apiRoutes.userStats.getAdminCourseUsers, { courseId, preset });
+
+    return {
+        courseUserStatsData: queryRes.data,
+        courseUserStatsDataStatus: queryRes.state,
+        courseUserStatsDataError: queryRes.error
     };
 };

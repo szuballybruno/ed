@@ -33,6 +33,8 @@ export type CourseItemSimpleType = 'video' | 'exam';
 
 export type CourseItemStateType = 'completed' | 'locked' | 'current' | 'available';
 
+export type CourseUserPresetType = 'inprogress' | 'completed' | 'notstartedyet';
+
 export type SessionActivityType = 'login' | 'logout' | 'generic' | 'video' | 'exam';
 
 export type CourseModeType = 'beginner' | 'advanced';

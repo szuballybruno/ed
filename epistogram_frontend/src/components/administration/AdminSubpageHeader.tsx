@@ -21,7 +21,7 @@ export const AdminSubpageHeader = ({
     hidden,
     ...css
 }: {
-    tabMenuItems?: ApplicationRoute<any>[],
+    tabMenuItems?: ApplicationRoute<any, any>[],
     children?: ReactNode,
     onSave?: () => void,
     headerButtons?: ButtonType[],

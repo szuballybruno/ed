@@ -174,7 +174,7 @@ export class TempomatService {
             .map(x => {
 
                 const newPrevisionedCompletionDate = this
-                    ._calculatePrevisionedDate(
+                    .calculatePrevisionedDate(
                         x.originalPrevisionedCompletionDate,
                         x.totalItemCount,
                         x.totalCompletedItemCount,
@@ -253,7 +253,7 @@ export class TempomatService {
         try {
 
             const previsionedCompletionDate = this
-                ._calculatePrevisionedDate(
+                .calculatePrevisionedDate(
                     originalPrevisionedCompletionDate,
                     totalItemCount,
                     totalCompletedItemCount,
@@ -296,10 +296,6 @@ export class TempomatService {
     }
 
     /**
-     * ---------------------- PRIVATE FUNCTIONS
-     */
-
-    /**
      * Calculates the current previsioned date for every tempomat mode
      * * LIGHT MODE: Push the previsioned day by lag behind days
      *      1. First subtract the START DATE from the ORIGINAL ESTIMATION
@@ -323,7 +319,7 @@ export class TempomatService {
      *         comes from the PRETEST, so you push the NEW PREVISIONED COMPLETION DATE LESS
      *         than on LIGHT MODE and the PREVISIONED VIDEOS PER DAY will be a bit HIGHER
      */
-    private _calculatePrevisionedDate(
+    calculatePrevisionedDate(
         originalPrevisionedCompletionDate: Date | null,
         totalItemCount: number,
         totalCompletedItemCount: number,
@@ -370,6 +366,39 @@ export class TempomatService {
 
         return newPrevisionedDate;
     }
+
+    calculateLagBehindDays(
+        originalPrevisionedCompletionDate: Date | null,
+        totalItemCount: number,
+        totalCompletedItemCount: number,
+        startDate: Date
+    ) {
+        if (!originalPrevisionedCompletionDate)
+            throw new Error('Previsioned length is null, this could mean theres a problem with the prequiz or a view depending on it.');
+
+        const originalPrevisionedLength = this
+            ._calculateOriginalPrevisionedLength(originalPrevisionedCompletionDate, startDate);
+
+        const originalEstimatedVideosPerDay = totalItemCount / originalPrevisionedLength;
+
+        const daysSpentFromStartDate = this
+            ._calculateDaysSpentFromStartDate(startDate);
+
+        const howManyVideosShouldHaveWatchedByNow = this
+            ._calculateHowManyVideosShouldHaveWatchedByNow(originalEstimatedVideosPerDay, daysSpentFromStartDate);
+
+        const lagBehindVideos = this
+            ._calculateLagBehindVideos(howManyVideosShouldHaveWatchedByNow, totalCompletedItemCount);
+
+        const lagBehindDays = this
+            ._calculateLagBehindDays(lagBehindVideos, originalEstimatedVideosPerDay);
+
+        return lagBehindDays;
+    }
+
+    /**
+     * ---------------------- PRIVATE FUNCTIONS
+     */
 
     /**
      * Calculates the lag behind from three dates.

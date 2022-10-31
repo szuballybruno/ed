@@ -7,6 +7,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
 import { UserDataGridPresetType } from '../components/administration/users/AminUserGridView';
 import { ApplicationRoute, EpistoRoute } from '../models/types';
+import { CourseUserPresetType } from '../shared/types/sharedTypes';
 import { Id } from '../shared/types/versionId';
 import { Environment } from '../static/Environemnt';
 import { EpistoIcons } from '../static/EpistoIcons';
@@ -62,7 +63,7 @@ export type ApplicationRoutesType = {
             courseDetailsRoute: ApplicationRoute;
             courseContentRoute: ApplicationRoute;
             statisticsCourseRoute: ApplicationRoute;
-            courseUserProgressRoute: ApplicationRoute;
+            courseUserProgressRoute: ApplicationRoute<{ courseId: Id<'Course'> }, { preset?: CourseUserPresetType }>;
             interactiveCourseRoute: ApplicationRoute;
         };
         shopRoute: ApplicationRoute & {
