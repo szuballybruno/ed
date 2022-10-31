@@ -7,7 +7,7 @@ param (
 )
 
 # gen full migration script 
-.\deployScriptGen.ps1 `
+.\generateFullMigrationScript.ps1 `
     -dbpass $dbpass `
     -dbhost $dbhost `
     -dbport $dbport `
