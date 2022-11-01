@@ -1,5 +1,5 @@
 
--- MIGRATION VERSIONS: migration14
+-- MIGRATION VERSIONS: 
 
 -- BEGIN TRANSACTION
 BEGIN;
@@ -20,9 +20,6 @@ UNIQUE (version_name);
 
 -- STORE MIGRATION VERSION
 
--- MIGRATION: migration14
-INSERT INTO public.migration_version
-VALUES ('migration14', now()); 
 
 -- DROP SOFT SCHEMA
 CREATE OR REPLACE PROCEDURE drop_all_fn()
@@ -142,8 +139,7 @@ CALL drop_all_fn();
 DROP PROCEDURE drop_all_fn;
 
 -- EXECUTE MIGRATIONS 
---MIGRATION: migration14
--- migration 14 content.  
+
 
 -- CREATE SOFT SCHEMA
 

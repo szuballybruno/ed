@@ -16,5 +16,5 @@ $version_result= psql `
     -o "./temp/migrationVersionsOnServer.txt"
 
 cd ../../misc/scripts/scriptProducer
-node ./dist/main.js
+node ./out/deployScriptGen.js
 cd ../../../epistogram_backend/deploy

@@ -3,9 +3,9 @@
       "noImplicitAny": false,
       "noEmitOnError": true,
       "removeComments": false,
-      "sourceMap": true,
+      "sourceMap": false,
       "target": "es5",
-      "outDir": "dist",
+      "outDir": "out",
     },
     "include": [
       "src/**/*"
