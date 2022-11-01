@@ -17,7 +17,7 @@ $pgdump_exe= "C:\Program Files\PostgreSQL\14\bin\pg_dump.exe"
 $psql_exe= "C:\Program Files\PostgreSQL\14\bin\psql.exe"
 $src_nick= "$src_host/$src_db_name"
 $dest_nick= "$dest_host/$dest_db_name"
-$dump_path= ".\temp\backup_ps1.sql"
+$dump_path= ".\out\backup_ps1.sql"
 
 echo "PgTransfer started from $src_nick to $dest_nick"
 

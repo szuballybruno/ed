@@ -13,7 +13,7 @@ $version_result= psql `
     -d "$dbname" `
     -U "$dbuser" `
     -tc "SELECT version_name FROM public.migration_version;" `
-    -o "./temp/migrationVersionsOnServer.txt"
+    -o "./out/migrationVersionsOnServer.txt"
 
 cd ../../misc/scripts/scriptProducer
 node ./out/deployScriptGen.js
