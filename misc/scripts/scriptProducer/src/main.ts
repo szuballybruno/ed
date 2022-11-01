@@ -79,12 +79,17 @@ const getMigrationVerisonsArgs = () => {
     const versions = Polyfills
         .readFileAsText(deployFolderFilePath + '/out/migrationVersionsOnServer.txt');
 
-    return versions
+    const veList = versions
         .split('\n')
         .map(x => x
             .replace(' ', '')
             .replace('\r', ''))
         .filter(x => !!x);
+
+    if (!veList.any())
+        throw new Error('Server has no version migration history. Create it manually.');
+
+    return veList;
 }
 
 const getVersionNumber = (migver: string) => {
@@ -120,7 +125,8 @@ const getMissingMigrations = (migrationsFolderFilePath: string) => {
     const missingVersions = allMigrationVersions
         .filter(x => getVersionNumber(x) > latestVersionOnServer);
 
-    return missingVersions;
+    return missingVersions
+        .orderBy(x => getVersionNumber(x));
 };
 
 const createScripts = () => {
@@ -148,5 +154,12 @@ const createScripts = () => {
     writeFileSync(deployFolderFilePath + '/out/fullMigrationScript.sql', fullMigrationScript);
     writeFileSync(deployFolderFilePath + '/out/softSchemaCreateScript.sql', softSchemaCreateScript);
 };
+
+process
+    .on('uncaughtException', (err) => {
+
+        console.error('---- FATAL ERROR -----');
+        console.error(err);
+    });
 
 createScripts();

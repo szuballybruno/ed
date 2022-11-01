@@ -3,10 +3,15 @@ param (
     [string]$dbhost,
     [string]$dbport,
     [string]$dbname,
-    [string]$dbuser
+    [string]$dbuser,
+    [switch]$dev
 )
 
-mkdir ./out
+$path = "./out"
+If(!(test-path -PathType container $path))
+{
+      New-Item -ItemType Directory -Path $path
+}
 
 $env:PGPASSWORD= $dbpass
 $version_result= psql `
@@ -18,5 +23,12 @@ $version_result= psql `
     -o "./out/migrationVersionsOnServer.txt"
 
 cd ../../misc/scripts/scriptProducer
-node ./out/deployScriptGen.js
+If($dev)
+{
+    yarn start
+}
+else {
+
+    node ./out/deployScriptGen.js
+}
 cd ../../../epistogram_backend/deploy

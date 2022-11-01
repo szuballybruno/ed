@@ -11,4 +11,5 @@ $dest_db_name= 'localhostDB'
     -dbhost $dest_host `
     -dbport $dest_port `
     -dbname $dest_db_name `
-    -dbuser $dest_user
+    -dbuser $dest_user `
+    -dev
