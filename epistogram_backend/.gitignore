@@ -4,3 +4,4 @@ node_modules
 .history
 .vscode
 /deploy/temp
+/deploy/out
