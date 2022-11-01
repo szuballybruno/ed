@@ -6,6 +6,8 @@ param (
     [string]$dbuser
 )
 
+mkdir ./out
+
 $env:PGPASSWORD= $dbpass
 $version_result= psql `
     -h "$dbhost" `

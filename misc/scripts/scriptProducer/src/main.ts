@@ -77,7 +77,7 @@ COMMIT;
 const getMigrationVerisonsArgs = () => {
 
     const versions = Polyfills
-        .readFileAsText(deployFolderFilePath + '/temp/migrationVersionsOnServer.txt');
+        .readFileAsText(deployFolderFilePath + '/out/migrationVersionsOnServer.txt');
 
     return versions
         .split('\n')

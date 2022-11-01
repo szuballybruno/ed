@@ -1,6 +1,9 @@
 import * as fs from 'fs';
 
-export const writeFileSync = (filePath: string, data: string) => fs.writeFileSync(filePath, data);
+export const writeFileSync = (filePath: string, data: string) => {
+
+    fs.writeFileSync(filePath, data);
+}
 
 export const logScoped = (scope: string, text: string) => console.log(`[${scope}] ${text}`);
 
@@ -18,12 +21,11 @@ export const regexMatchAll = (text: string, regex: RegExp): string[] => {
 
 export const readFileSync = (path: string) => {
 
-    try{
+    try {
 
         return fs.readFileSync(path, 'utf-8');
     }
-    catch(e: any)
-    {
+    catch (e: any) {
         throw new Error(`Error reading path: ${path} Msg: ${e.message}`);
     }
 };
