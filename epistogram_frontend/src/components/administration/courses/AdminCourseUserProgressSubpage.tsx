@@ -5,7 +5,8 @@ import { useCourseUserStatsData } from '../../../services/api/userStatsApiServic
 import { AdminCourseUserStatsDTO } from '../../../shared/dtos/admin/AdminCourseUserStatsDTO';
 import { CourseUserPresetType } from '../../../shared/types/sharedTypes';
 import { Id } from '../../../shared/types/versionId';
-import { secondsToTime, usePaging } from '../../../static/frontendHelpers';
+import { Environment } from '../../../static/Environemnt';
+import { formatTimespan, usePaging } from '../../../static/frontendHelpers';
 import { useRouteParams, useRouteQuery, useSetQueryParams } from '../../../static/locationHelpers';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoDataGrid, EpistoDataGridColumnBuilder } from '../../controls/EpistoDataGrid';
@@ -14,11 +15,22 @@ import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { SegmentedButton } from '../../controls/SegmentedButton';
 import { segmentedButtonStyles } from '../../controls/segmentedButtonStyles';
+import { ProfileImage } from '../../ProfileImage';
 import { EmptyCell } from '../../universal/EmptyCell';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
+import { useAdminCourseContentDialogLogic } from '../users/adminCourseContentDialog/AdminCourseContentDialogLogic';
+import { AdminUserCourseContentDialog } from '../users/adminCourseContentDialog/AdminUserCourseContentDialog';
+import { AdminCourseUserOverviewDialog, useAdminCourseUserOverviewDialogLogic } from './AdminCourseUserOverviewDialog';
+import { ChipSmall } from './ChipSmall';
 import { CourseAdministartionFrame } from './CourseAdministartionFrame';
 
+
 export interface AdminCourseUserRowType extends AdminCourseUserStatsDTO {
+    avatar: {
+        avatarUrl: string,
+        firstName: string,
+        lastName: string
+    },
     fullName: string,
     moreDetails: number,
     courseReport: number
@@ -29,112 +41,197 @@ export const useCourseUsersColumns = ({
     handleOpenUserCourseStatsDialog,
     preset
 }: {
-    handleOpenCourseResultDetailsDialog: (courseId: Id<'Course'>) => void,
-    handleOpenUserCourseStatsDialog: (courseId: Id<'Course'>) => void,
+    handleOpenCourseResultDetailsDialog: (courseId: Id<'Course'>, userId: Id<'User'>, fullName: string) => void,
+    handleOpenUserCourseStatsDialog: (courseId: Id<'Course'>, userId: Id<'User'>) => void,
     preset: CourseUserPresetType
 }) => {
 
     const builder = new EpistoDataGridColumnBuilder<AdminCourseUserRowType, Id<'User'>>()
         .add({
-            field: 'avatarUrl',
+            field: 'avatar',
             headerName: 'Avatar',
-            width: 130
+            width: 80,
+            renderCell: ({ value, row }) => <EpistoFlex2
+                className="whall"
+                justify="center"
+                align='center'>
+                <ProfileImage
+                    className={'square50'}
+                    objectFit="contain"
+                    url={value.avatarUrl ? Environment.getAssetUrl(value.avatarUrl) : null}
+                    firstName={value.firstName}
+                    lastName={value.lastName} />
+            </EpistoFlex2>
         })
         .add({
             field: 'fullName',
             headerName: 'Név',
             width: 300,
             resizable: true
-        });
+        })
+        .addIf(preset !== 'notstartedyet', {
+            field: 'completedPercentage',
+            headerName: 'Haladás a kurzusban',
+            width: 150,
+            resizable: true,
+            renderCell: ({ value }) => value
+                ? <CircularProgressWithLabel
+                    value={Math.round(value)} />
+                : <EmptyCell />
 
-    // In progress preset (default)
-    if (preset === 'inprogress')
-        return builder
-            .add({
-                field: 'completedPercentage',
-                headerName: 'Haladás a kurzusban',
-                width: 150,
-                resizable: true,
-                renderCell: ({ value }) => value
-                    ? <CircularProgressWithLabel
-                        value={Math.round(value)} />
-                    : <EmptyCell />
+        })
+        .addIf(preset !== 'notstartedyet', {
+            field: 'performancePercentage',
+            headerName: 'Jelenlegi teljesítmény',
+            width: 150,
+            resizable: true,
+            renderCell: ({ value }) => value
+                ? <CircularProgressWithLabel
+                    value={value} />
+                : <EmptyCell />
+        })
+        .addIf(preset !== 'notstartedyet', {
+            field: 'completedVideoCount',
+            headerName: 'Megtekintett videók',
+            width: 150,
+            resizable: true,
+        })
+        .addIf(preset !== 'notstartedyet', {
+            field: 'completedExamCount',
+            headerName: 'Elvégzett vizsgák',
+            width: 150,
+            resizable: true,
+        })
+        .addIf(preset !== 'notstartedyet', {
+            field: 'totalSpentSeconds',
+            headerName: 'Eltöltött idő',
+            width: 150,
+            resizable: true,
+            renderCell: ({ value }) => value
+                ? <EpistoFont>
+                    {formatTimespan(value)}
+                </EpistoFont>
+                : <EmptyCell />
+        })
+        .addIf(preset !== 'notstartedyet', {
+            field: 'finalExamScorePercentage',
+            headerName: 'Kurzuszáró eredménye',
+            width: 150,
+            resizable: true,
+            renderCell: ({ value }) => value
+                ? <CircularProgressWithLabel
+                    value={Math.round(value)} />
+                : <EmptyCell />
+        })
+        .add({
+            field: 'requiredCompletionDate',
+            headerName: 'Határidő',
+            width: 150,
+            resizable: true,
+            renderCell: ({ value }) => value
+                ? <EpistoFont>
+                    {new Date(value)
+                        .toLocaleString('hu-hu', {
+                            month: '2-digit',
+                            day: '2-digit'
+                        })}
+                </EpistoFont>
+                : <EmptyCell />
+        })
+        .addIf(preset === 'inprogress', {
+            field: 'previsionedDate',
+            headerName: 'Várható befejezés',
+            width: 150,
+            resizable: true,
+            renderCell: ({ value }) => value
+                ? <EpistoFont>
+                    {new Date(value)
+                        .toLocaleString('hu-hu', {
+                            month: '2-digit',
+                            day: '2-digit'
+                        })}
+                </EpistoFont>
+                : <EmptyCell />
+        })
+        .addIf(preset === 'inprogress', {
+            field: 'lagBehindDays',
+            headerName: 'Lemaradás',
+            width: 150,
+            resizable: true,
+            renderCell: ({ value }) => value
+                ? <ChipSmall
+                    text={Math.ceil(value) + ' nap'}
+                    color={(() => {
+                        if (value < 3)
+                            return 'var(--mildGreen)';
 
-            })
-            .add({
-                field: 'performancePercentage',
-                headerName: 'Jelenlegi teljesítmény',
-                width: 150,
-                resizable: true,
-                renderCell: ({ value }) => value
-                    ? <CircularProgressWithLabel
-                        value={value} />
-                    : <EmptyCell />
-            })
-            .add({
-                field: 'completedVideoCount',
-                headerName: 'Megtekintett videók',
-                width: 150,
-                resizable: true,
-            })
-            .add({
-                field: 'completedExamCount',
-                headerName: 'Elvégzett vizsgák',
-                width: 150,
-                resizable: true,
-            })
-            .add({
-                field: 'totalSpentSeconds',
-                headerName: 'Eltöltött idő',
-                width: 150,
-                resizable: true,
-                renderCell: ({ value }) => value
-                    ? <EpistoFont>
-                        {secondsToTime(value)}
-                    </EpistoFont>
-                    : <EmptyCell />
-            })
-            .add({
-                field: 'finalExamScorePercentage',
-                headerName: 'Kurzuszáró eredménye',
-                width: 150,
-                resizable: true,
-            })
-            .add({
-                field: 'requiredCompletionDate',
-                headerName: 'Határidő',
-                width: 150,
-                resizable: true,
-            })
-            .add({
-                field: 'previsionedDate',
-                headerName: 'Várható befejezés',
-                width: 150,
-                resizable: true,
-            })
-            .add({
-                field: 'lagBehindDays',
-                headerName: 'Lemaradás',
-                width: 150,
-                resizable: true,
-            })
-            .add({
-                field: 'moreDetails',
-                headerName: 'Részletek',
-                width: 150,
-                renderCell: ({ row }) =>
+                        if (value < 10)
+                            return 'var(--mildOrange)';
 
-                    <EpistoButton
-                        variant='outlined'
-                        onClick={() => {
+                        return 'var(--mildRed)';
+                    })()} />
+                : <EmptyCell />
+        })
+        .addIf(preset === 'completed', {
+            field: 'completionDate',
+            headerName: 'Elvégezve',
+            width: 150,
+            resizable: true,
+            renderCell: ({ value }) => value
+                ? <EpistoFont>
+                    {new Date(value)
+                        .toLocaleString('hu-hu', {
+                            month: '2-digit',
+                            day: '2-digit'
+                        })}
+                </EpistoFont>
+                : <EmptyCell />
+        })
+        .addIf(preset === 'completed', {
+            field: 'summerizedScore',
+            headerName: 'Összesített eredmény',
+            width: 150,
+            resizable: true,
+            renderCell: ({ value }) => value
+                ? <CircularProgressWithLabel
+                    value={Math.round(value)} />
+                : <EmptyCell />
+        })
+        .addIf(preset === 'completed', {
+            field: 'courseReport',
+            headerName: 'Kurzus összegző report',
+            width: 220,
+            renderCell: ({ row }) =>
 
-                            handleOpenUserCourseStatsDialog(row.courseId);
-                        }}>
+                <EpistoButton
+                    variant='outlined'
+                    onClick={() => {
 
-                        Bővebben
-                    </EpistoButton>
-            })
-            .getColumns();
+                        handleOpenCourseResultDetailsDialog(row.courseId, row.userId, row.fullName);
+                    }}>
+
+                    Kurzus összegző report
+                </EpistoButton>
+        })
+        .addIf(preset !== 'notstartedyet', {
+            field: 'moreDetails',
+            headerName: 'Részletek',
+            width: 150,
+            renderCell: ({ row }) =>
+
+                <EpistoButton
+                    variant='outlined'
+                    onClick={() => {
+
+                        handleOpenUserCourseStatsDialog(row.courseId, row.userId);
+                    }}>
+
+                    Bővebben
+                </EpistoButton>
+        })
+        .getColumns();
+
+    return builder;
 
 };
 
@@ -214,19 +311,36 @@ export const AdminCourseUserProgressSubpage = () => {
         .getValue(x => x.courseId, 'int');
 
     const filterLogic = useCourseUserGridFilterSettingsLogic();
+    const { adminCourseContentDialogLogic } = useAdminCourseContentDialogLogic();
+    const adminCourseUserOverviewDialogLogic = useAdminCourseUserOverviewDialogLogic();
 
     const { courseUserStatsData, courseUserStatsDataError, courseUserStatsDataStatus } = useCourseUserStatsData(courseId, filterLogic.currentPreset);
 
     const columns = useCourseUsersColumns({
-        handleOpenCourseResultDetailsDialog: () => { console.log(''); },
-        handleOpenUserCourseStatsDialog: () => { console.log(''); },
-        preset: 'inprogress'
+        handleOpenCourseResultDetailsDialog: (courseId, userId, fullName) => {
+            adminCourseUserOverviewDialogLogic.openDialog({
+                courseId: courseId,
+                userId: userId,
+                fullName: fullName
+            });
+        },
+        handleOpenUserCourseStatsDialog: (courseId, userId) => {
+            adminCourseContentDialogLogic.openDialog({
+                courseId: courseId,
+                userId: userId
+            });
+        },
+        preset: filterLogic.currentPreset
     });
-
 
     const rows = courseUserStatsData ? courseUserStatsData
         .map((dto, index): AdminCourseUserRowType => ({
             ...dto,
+            avatar: {
+                avatarUrl: dto.avatarUrl,
+                firstName: dto.firstName,
+                lastName: dto.lastName
+            },
             fullName: dto.lastName + ' ' + dto.firstName,
             moreDetails: index,
             courseReport: index
@@ -235,29 +349,25 @@ export const AdminCourseUserProgressSubpage = () => {
     return <CourseAdministartionFrame
         isAnySelected={true}>
 
+        <AdminUserCourseContentDialog
+            dialogLogic={adminCourseContentDialogLogic} />
+
+        <AdminCourseUserOverviewDialog logic={adminCourseUserOverviewDialogLogic} />
+
         {/* Right side content */}
         <AdminSubpageHeader
-            tabMenuItems={[
-                applicationRoutes.administrationRoute.coursesRoute.courseDetailsRoute,
-                applicationRoutes.administrationRoute.coursesRoute.courseContentRoute,
-                applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute,
-                applicationRoutes.administrationRoute.coursesRoute.courseUserProgressRoute
-            ]}
-            //onSave={handleSaveCourseAsync}
-            direction="column">
+            headerContent={
+                <EpistoFlex2
+                    justify='flex-end'
+                    align='center'
+                    h='60px'>
 
-            {/* header */}
-            <EpistoFlex2
-                justify='flex-end'
-                align='center'
-                h='60px'>
+                    <SegmentedButton
+                        paging={filterLogic.presetPaging}
+                        getDisplayValue={x => x.title}
+                        stylePreset={segmentedButtonStyles.tab} />
 
-                <SegmentedButton
-                    paging={filterLogic.presetPaging}
-                    getDisplayValue={x => x.title}
-                    stylePreset={segmentedButtonStyles.tab} />
-
-                {/* <EpistoFlex2
+                    {/* <EpistoFlex2
                     flex={isSimpleView ? '1' : undefined}>
 
                     {/* search bar 
@@ -267,7 +377,16 @@ export const AdminCourseUserProgressSubpage = () => {
                         setOrderBy={filterLogic.setOrderBy} />
 
                 </EpistoFlex2> */}
-            </EpistoFlex2>
+                </EpistoFlex2>
+            }
+            tabMenuItems={[
+                applicationRoutes.administrationRoute.coursesRoute.courseDetailsRoute,
+                applicationRoutes.administrationRoute.coursesRoute.courseContentRoute,
+                applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute,
+                applicationRoutes.administrationRoute.coursesRoute.courseUserProgressRoute
+            ]}
+            //onSave={handleSaveCourseAsync}
+            direction="column">
 
             <EpistoDataGrid
                 getKey={x => x.userId}

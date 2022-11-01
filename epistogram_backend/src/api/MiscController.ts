@@ -34,8 +34,16 @@ export class MiscController implements XController<MiscController> {
     @XControllerAction(apiRoutes.misc.getCourseOverviewData)
     getCourseOverviewDataAction(params: ActionParams) {
 
+        const query = params
+            .getFromParameterized(apiRoutes.misc.getCourseOverviewData)
+            .query;
+
         return this._miscService
-            .getCourseOverviewDataAsync(params.principalId);
+            .getCourseOverviewDataAsync(
+                params.principalId,
+                query.data.userId,
+                query.data.courseId
+            );
     }
 
     @XControllerAction(apiRoutes.misc.getActivationCodeLinks)

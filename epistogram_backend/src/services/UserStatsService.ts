@@ -199,7 +199,7 @@ export class UserStatsService {
                     userId: x.userId,
                     courseId: x.courseId,
                     lagBehindDays: this._tempomatService
-                        .calculateLagBehindDays(
+                        .calculateLagBehindDaysWithPretest(
                             x.originalPrevisionedCompletionDate,
                             x.totalItemCount,
                             x.totalCompletedItemCount,

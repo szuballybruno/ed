@@ -45,7 +45,35 @@ summerized_answer_result AS
     LEFT JOIN public.user_performance_answer_group_view upagv
     ON upagv.user_id = mlea.user_id
     AND upagv.course_id = mlea.course_id
-) 
+),
+first_final_exam_completion_cte AS 
+(
+	SELECT 
+		cic.user_id,
+		cv.course_id,
+		MIN(cic.completion_date) course_completion_date
+	FROM public.course_item_completion_view cic
+
+	LEFT JOIN public.video_version vv
+	ON vv.id = cic.video_version_id
+
+	LEFT JOIN public.exam_version ev
+	ON ev.id = cic.exam_version_id
+
+    LEFT JOIN public.exam_data ed
+    ON ed.id = ev.exam_data_id
+
+	LEFT JOIN public.module_version mv
+	ON mv.id = vv.module_version_id
+	OR mv.id = ev.module_version_id
+
+	LEFT JOIN public.course_version cv
+	ON cv.id = mv.course_version_id
+
+    WHERE ed.is_final IS TRUE
+
+	GROUP BY cic.user_id, cv.course_id
+)
 
 SELECT 
     comp.id company_id,
@@ -64,6 +92,7 @@ SELECT
     fesv.final_exam_score_percentage,
     tcdv.required_completion_date,
     sar.summerized_score,
+    ffecc.course_completion_date completion_date,
 
     -- tempomat
     tcdv.start_date,
@@ -121,6 +150,10 @@ AND sar.course_id = co.id
 LEFT JOIN public.tempomat_calculation_data_view tcdv
 ON tcdv.user_id = u.id
 AND tcdv.course_id = co.id
+
+LEFT JOIN first_final_exam_completion_cte ffecc
+ON ffecc.user_id = u.id
+AND ffecc.course_id = co.id
 
 LEFT JOIN public.storage_file sf
 ON sf.id = u.avatar_file_id

@@ -254,47 +254,6 @@ LEFT JOIN public.course_version cv
 ON cv.id = mv.course_version_id
 ;
 
---course_length_estimation_view
-CREATE VIEW course_length_estimation_view
-AS
-SELECT 
-	sq.*,
-	sq.total_video_seconds + sq.total_exam_seconds total_length_seconds
-FROM
-(
-	SELECT 
-		cv.id course_id,
-		(
-			SELECT 
-				COALESCE(SUM(vd.video_file_length_seconds), 0)::int
-			FROM public.video_version vv
-
-			LEFT JOIN public.module_version mv
-			ON mv.course_version_id = cv.id AND mv.id = vv.module_version_id
-			
-			LEFT JOIN public.video_data vd
-			ON vd.id = vv.video_data_id
-
-			WHERE mv.course_version_id = cv.id
-		) total_video_seconds,
-		(
-			SELECT 
-				COUNT(1)::int * 20 total_exam_seconds 
-			FROM public.exam_version ev
-			
-			LEFT JOIN public.exam e
-			ON e.id = ev.exam_id
-			
-			LEFT JOIN public.module_version mv
-			ON mv.course_version_id = cv.id AND mv.id = ev.module_version_id
-			
-			WHERE e.is_pretest = false
-			AND e.is_signup = false
-			AND mv.course_version_id = cv.id
-		)
-	FROM public.course_version cv
-) sq;
-
 --course_module_overview_view
 CREATE VIEW course_module_overview_view
 AS
@@ -1097,7 +1056,7 @@ ON ad.id = av.answer_data_id;
 --schema_version_view
 CREATE VIEW schema_version_view
 AS
-SELECT '12:31:43 2022-10-31 CEST' last_modification_date, '0.01' version
+SELECT '17:26:57 2022-10-31 CEST' last_modification_date, '0.01' version
 ;
 
 --shop_item_stateful_view
@@ -2056,6 +2015,66 @@ ORDER BY
 	civ.video_version_id,
 	civ.exam_version_id,
 	qv.id;
+
+--course_length_estimation_view
+CREATE VIEW course_length_estimation_view
+AS
+WITH
+latest_course_video_seconds AS
+(
+	SELECT 
+		cv.course_id,
+		COALESCE(SUM(vd.video_file_length_seconds), 0)::int total_video_seconds
+	FROM public.latest_course_version_view lcvv
+	
+	LEFT JOIN public.course_version cv
+	ON cv.id = lcvv.version_id
+	
+	LEFT JOIN public.module_version mv
+	ON mv.course_version_id = cv.id
+	
+	LEFT JOIN public.video_version vv
+	ON vv.module_version_id = mv.id
+
+	LEFT JOIN public.video_data vd
+	ON vd.id = vv.video_data_id
+	
+	GROUP BY cv.course_id
+),
+latest_course_exam_seconds AS
+(
+	SELECT 
+		cv.course_id,
+		COUNT(1)::int * 20 total_exam_seconds 
+	FROM public.latest_course_version_view lcvv
+	
+	LEFT JOIN public.course_version cv
+	ON cv.id = lcvv.version_id
+	
+	LEFT JOIN public.module_version mv
+	ON mv.course_version_id = cv.id
+	
+	LEFT JOIN public.exam_version ev
+	ON ev.module_version_id = mv.id
+
+	LEFT JOIN public.exam e
+	ON e.id = ev.exam_id
+
+	WHERE e.is_pretest = false
+	AND e.is_signup = false
+	
+	GROUP BY cv.course_id
+)
+
+SELECT 
+	lcvs.course_id,
+	lcvs.total_video_seconds,
+	lces.total_exam_seconds,
+	lcvs.total_video_seconds + lces.total_exam_seconds total_length_seconds
+FROM latest_course_video_seconds lcvs
+
+LEFT JOIN latest_course_exam_seconds lces
+ON lces.course_id = lcvs.course_id;
 
 --course_state_view
 CREATE VIEW course_state_view
@@ -5102,12 +5121,8 @@ ON cv.id = mv.course_version_id;
 --user_course_completion_original_estimation_view
 CREATE VIEW user_course_completion_original_estimation_view
 AS
-
-SELECT 
-	sq.*,
-	DATE_TRUNC('days', sq.start_date) + (INTERVAL '1' day * sq.previsioned_duration_days) previsioned_completion_date,
-	CEIL(sq.total_item_count::double precision / sq.previsioned_duration_days) previsioned_items_per_day
-FROM 
+WITH 
+course_length_data_cte AS
 (
 	SELECT 
 		ucb.user_id user_id,
@@ -5121,7 +5136,7 @@ FROM
 
 	LEFT JOIN public.user_prequiz_answers_view upav
 	ON upav.user_id = ucb.user_id 
-		AND upav.course_id = ucb.course_id
+	AND upav.course_id = ucb.course_id
 
 	LEFT JOIN public.course_length_estimation_view clev
 	ON clev.course_id = ucb.course_id
@@ -5132,7 +5147,12 @@ FROM
 	ORDER BY
 		ucb.user_id,
 		ucb.course_id
-) sq;
+)
+SELECT 
+	cldc.*,
+	DATE_TRUNC('days', cldc.start_date) + (INTERVAL '1' day * cldc.previsioned_duration_days) previsioned_completion_date,
+	CEIL(cldc.total_item_count::double precision / cldc.previsioned_duration_days) previsioned_items_per_day
+FROM course_length_data_cte cldc;
 
 --user_learning_page_stats_view
 CREATE VIEW user_learning_page_stats_view
@@ -5916,8 +5936,8 @@ SELECT
 	ucb.start_date start_date,
     ucb.tempomat_mode tempomat_mode,
 	uccoev.previsioned_completion_date original_previsioned_completion_date,
-	ucpa.total_item_count total_item_count,
-	ucpa.total_completed_item_count total_completed_item_count,
+	cicv.item_count total_item_count,
+	ccicv.completed_course_item_count total_completed_item_count,
 	CASE WHEN ucb.tempomat_mode = 'light'
 		THEN 1
 		ELSE CASE WHEN ucb.tempomat_mode = 'strict'
@@ -5927,13 +5947,12 @@ SELECT
 	END tempomat_adjustment_value
 FROM public.user_course_bridge ucb
 
-LEFT JOIN public.user_course_progress_view ucpv
-ON ucpv.course_id = ucb.course_id
-AND ucpv.user_id = ucb.user_id
+LEFT JOIN public.completed_course_item_count_view ccicv
+ON ccicv.user_id = ucb.user_id
+AND ccicv.course_id = ucb.course_id
 
-LEFT JOIN public.user_course_progress_actual_view ucpa
-ON ucpa.course_id = ucb.course_id
-AND ucpa.user_id = ucb.user_id
+LEFT JOIN public.course_item_count_view cicv
+ON cicv.course_id = ucb.course_id
 
 LEFT JOIN public.user_course_completion_original_estimation_view uccoev
 ON uccoev.course_id = ucb.course_id
@@ -6869,142 +6888,6 @@ LEFT JOIN public.final_exam_score_view fesv
 ON fesv.course_id = clsv.course_id
 AND fesv.user_id = clsv.user_id;
 
---admin_course_user_stats_view
-CREATE VIEW admin_course_user_stats_view
-AS
--- Haladás
--- Teljesítmény
--- Megtekintett videók (x/y)
--- Elvégzett vizsgák (x/y)
--- Eltöltött idő
--- Kurzuszáró eredménye
--- Határidő
---/ Várható befejezés vagy 'elvégezve'
---/ Lemaradás - itt % helyett lehet érdemes lenne minden ilyen lemaradást napban megadni, mert úgy lesz értelmezhető a HR számára, 30% lehet 10 nap meg 2 is
---/ Bővebben - itt azt a modalt hozza fel, mint mikor egyenként nézzük a haladást a usereknél az adott kurzusnál
---+Összesített eredmény 
---    Összes NMI kérdésre adott válasza az adott tanfolyamban a kurzuszáró vizsgáig % x1
---    Összes modulzáró vizsgája % x 2
---    Kurzuszáró vizsga %  x3
--- Majd ezt leosztjuk 6-al
---+Kurzus összegző report
-
-WITH 
-module_last_exam_averages AS
-(
-    SELECT 
-        mlesv.user_id,
-        mlesv.course_id,
-        AVG(mlesv.exam_score) avg_module_last_exam_score
-    FROM public.module_last_exam_score_view mlesv
-
-    GROUP BY mlesv.user_id, mlesv.course_id
-),
-summerized_answer_result AS
-(
-    SELECT
-        mlea.user_id,
-        mlea.course_id,
-        (
-            (COALESCE(upagv.practise_correct_answer_rate, 0)) + 
-            (COALESCE(mlea.avg_module_last_exam_score, 0) * 2) +
-            (COALESCE(fesv.final_exam_score_percentage, 0) * 3)
-        ) / 6 summerized_score
-    FROM module_last_exam_averages mlea
-
-    LEFT JOIN public.final_exam_score_view fesv
-    ON fesv.user_id = mlea.user_id
-	AND fesv.course_id = mlea.course_id
-
-    LEFT JOIN public.user_performance_answer_group_view upagv
-    ON upagv.user_id = mlea.user_id
-    AND upagv.course_id = mlea.course_id
-) 
-
-SELECT 
-    comp.id company_id,
-    u.id user_id,
-    co.id course_id,
-    u.first_name,
-    u.last_name,
-    sf.file_path avatar_url,
-    ucpav.completed_percentage,
-    upv.performance_percentage,
-    ccvcv.completed_video_count,
-    ccecv.completed_exam_count,
-    cvcv.video_count,
-    cecv.exam_count,
-    cstv.total_spent_seconds,
-    fesv.final_exam_score_percentage,
-    ucb.required_completion_date,
-    sar.summerized_score,
-
-    -- tempomat
-    ucb.start_date,
-    tcdv.tempomat_adjustment_value,
-    tcdv.tempomat_mode,
-    tcdv.original_previsioned_completion_date,
-    tcdv.total_item_count,
-    tcdv.total_completed_item_count
-FROM public.company comp
-
-LEFT JOIN public.user u
-ON u.company_id = comp.id
-
-LEFT JOIN public.course_access_bridge cab
-ON cab.company_id = comp.id
-OR cab.user_id = u.id
-
-LEFT JOIN public.course co
-ON co.id = cab.course_id
-
-LEFT JOIN public.user_course_progress_actual_view ucpav
-ON ucpav.user_id = u.id
-AND ucpav.course_id = co.id
-
-LEFT JOIN public.user_performance_view upv
-ON upv.user_id = u.id
-AND upv.course_id = co.id
-
-LEFT JOIN public.completed_course_video_count_view ccvcv
-ON ccvcv.user_id = u.id
-AND ccvcv.course_id = co.id
-
-LEFT JOIN public.completed_course_exam_count_view ccecv
-ON ccecv.user_id = u.id
-AND ccecv.course_id = co.id
-
-LEFT JOIN public.course_video_count_view cvcv
-ON cvcv.course_id = co.id
-
-LEFT JOIN public.course_exam_count_view cecv
-ON cecv.course_id = co.id
-
-LEFT JOIN public.user_course_bridge ucb
-ON ucb.user_id = u.id
-AND ucb.course_id = co.id
-
-LEFT JOIN public.course_spent_time_view cstv
-ON cstv.user_id = u.id
-AND cstv.course_id = co.id
-
-LEFT JOIN public.final_exam_score_view fesv
-ON fesv.user_id = u.id
-AND fesv.course_id = co.id
-
-LEFT JOIN summerized_answer_result sar
-ON sar.user_id = u.id
-AND sar.course_id = co.id
-
-LEFT JOIN public.tempomat_calculation_data_view tcdv
-ON tcdv.user_id = u.id
-AND tcdv.course_id = co.id
-
-LEFT JOIN public.storage_file sf
-ON sf.id = u.avatar_file_id
-
-ORDER BY comp.id, u.id, co.id;
-
 --admin_user_courses_view
 CREATE VIEW admin_user_courses_view
 AS
@@ -7263,6 +7146,171 @@ ORDER BY
     ucb.id IS NULL,
     co.id
 ;
+
+--admin_course_user_stats_view
+CREATE VIEW admin_course_user_stats_view
+AS
+-- Haladás
+-- Teljesítmény
+-- Megtekintett videók (x/y)
+-- Elvégzett vizsgák (x/y)
+-- Eltöltött idő
+-- Kurzuszáró eredménye
+-- Határidő
+--/ Várható befejezés vagy 'elvégezve'
+--/ Lemaradás - itt % helyett lehet érdemes lenne minden ilyen lemaradást napban megadni, mert úgy lesz értelmezhető a HR számára, 30% lehet 10 nap meg 2 is
+--/ Bővebben - itt azt a modalt hozza fel, mint mikor egyenként nézzük a haladást a usereknél az adott kurzusnál
+--+Összesített eredmény 
+--    Összes NMI kérdésre adott válasza az adott tanfolyamban a kurzuszáró vizsgáig % x1
+--    Összes modulzáró vizsgája % x 2
+--    Kurzuszáró vizsga %  x3
+-- Majd ezt leosztjuk 6-al
+--+Kurzus összegző report
+
+WITH 
+module_last_exam_averages AS
+(
+    SELECT 
+        mlesv.user_id,
+        mlesv.course_id,
+        AVG(mlesv.exam_score) avg_module_last_exam_score
+    FROM public.module_last_exam_score_view mlesv
+
+    GROUP BY mlesv.user_id, mlesv.course_id
+),
+summerized_answer_result AS
+(
+    SELECT
+        mlea.user_id,
+        mlea.course_id,
+        (
+            (COALESCE(upagv.practise_correct_answer_rate, 0)) + 
+            (COALESCE(mlea.avg_module_last_exam_score, 0) * 2) +
+            (COALESCE(fesv.final_exam_score_percentage, 0) * 3)
+        ) / 6 summerized_score
+    FROM module_last_exam_averages mlea
+
+    LEFT JOIN public.final_exam_score_view fesv
+    ON fesv.user_id = mlea.user_id
+	AND fesv.course_id = mlea.course_id
+
+    LEFT JOIN public.user_performance_answer_group_view upagv
+    ON upagv.user_id = mlea.user_id
+    AND upagv.course_id = mlea.course_id
+),
+first_final_exam_completion_cte AS 
+(
+	SELECT 
+		cic.user_id,
+		cv.course_id,
+		MIN(cic.completion_date) course_completion_date
+	FROM public.course_item_completion_view cic
+
+	LEFT JOIN public.video_version vv
+	ON vv.id = cic.video_version_id
+
+	LEFT JOIN public.exam_version ev
+	ON ev.id = cic.exam_version_id
+
+    LEFT JOIN public.exam_data ed
+    ON ed.id = ev.exam_data_id
+
+	LEFT JOIN public.module_version mv
+	ON mv.id = vv.module_version_id
+	OR mv.id = ev.module_version_id
+
+	LEFT JOIN public.course_version cv
+	ON cv.id = mv.course_version_id
+
+    WHERE ed.is_final IS TRUE
+
+	GROUP BY cic.user_id, cv.course_id
+)
+
+SELECT 
+    comp.id company_id,
+    u.id user_id,
+    co.id course_id,
+    u.first_name,
+    u.last_name,
+    sf.file_path avatar_url,
+    ucpav.completed_percentage,
+    upv.performance_percentage,
+    ccvcv.completed_video_count,
+    ccecv.completed_exam_count,
+    cvcv.video_count,
+    cecv.exam_count,
+    cstv.total_spent_seconds,
+    fesv.final_exam_score_percentage,
+    tcdv.required_completion_date,
+    sar.summerized_score,
+    ffecc.course_completion_date completion_date,
+
+    -- tempomat
+    tcdv.start_date,
+    tcdv.tempomat_adjustment_value,
+    tcdv.tempomat_mode,
+    tcdv.original_previsioned_completion_date,
+    tcdv.total_item_count,
+    tcdv.total_completed_item_count
+FROM public.course_access_bridge cab
+
+LEFT JOIN public.company comp
+ON comp.id = cab.company_id
+
+LEFT JOIN public.user u
+ON u.id = cab.user_id
+OR u.company_id = cab.company_id
+
+LEFT JOIN public.course co
+ON co.id = cab.course_id
+
+LEFT JOIN public.user_course_progress_actual_view ucpav
+ON ucpav.user_id = u.id
+AND ucpav.course_id = co.id
+
+LEFT JOIN public.user_performance_view upv
+ON upv.user_id = u.id
+AND upv.course_id = co.id 
+
+LEFT JOIN public.completed_course_video_count_view ccvcv
+ON ccvcv.user_id = u.id
+AND ccvcv.course_id = co.id
+
+LEFT JOIN public.completed_course_exam_count_view ccecv
+ON ccecv.user_id = u.id
+AND ccecv.course_id = co.id
+
+LEFT JOIN public.course_video_count_view cvcv
+ON cvcv.course_id = co.id
+
+LEFT JOIN public.course_exam_count_view cecv
+ON cecv.course_id = co.id
+
+LEFT JOIN public.course_spent_time_view cstv
+ON cstv.user_id = u.id
+AND cstv.course_id = co.id
+
+LEFT JOIN public.final_exam_score_view fesv
+ON fesv.user_id = u.id
+AND fesv.course_id = co.id
+
+LEFT JOIN summerized_answer_result sar
+ON sar.user_id = u.id
+AND sar.course_id = co.id
+
+LEFT JOIN public.tempomat_calculation_data_view tcdv
+ON tcdv.user_id = u.id
+AND tcdv.course_id = co.id
+
+LEFT JOIN first_final_exam_completion_cte ffecc
+ON ffecc.user_id = u.id
+AND ffecc.course_id = co.id
+
+LEFT JOIN public.storage_file sf
+ON sf.id = u.avatar_file_id
+
+ORDER BY comp.id, u.id, co.id;
 
 
 -- CREATE constraints

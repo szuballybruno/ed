@@ -22,16 +22,23 @@ export class MiscService {
         private _domainProvider: DomainProviderService) {
     }
 
-    async getCourseOverviewDataAsync(principalId: PrincipalId) {
+    async getCourseOverviewDataAsync(
+        principalId: PrincipalId,
+        userId?: Id<'User'>,
+        courseId?: Id<'Course'>
+    ) {
 
-        const userId = Id
-            .create<'User'>(principalId.toSQLValue());
+        const uId = userId
+            ? userId
+            : Id.create<'User'>(principalId.toSQLValue());
 
-        const courseId = await this._userCourseBridgeService
-            .getCurrentCourseIdOrFail(userId);
+        const cId = courseId
+            ? courseId
+            : await this._userCourseBridgeService
+                .getCurrentCourseIdOrFail(uId);
 
         const view = await this._ormService
-            .query(CourseOverviewView, { courseId, userId })
+            .query(CourseOverviewView, { courseId: cId, userId: uId })
             .where('courseId', '=', 'courseId')
             .and('userId', '=', 'userId')
             .getSingle();

@@ -7,9 +7,9 @@ import { GlobalEventManagerType } from '../../static/EventBus';
 import { useGetCurrentAppRoute } from '../../static/frontendHelpers';
 import { QueryService } from '../../static/QueryService';
 
-export const useCourseOverviewData = () => {
+export const useCourseOverviewData = (userId?: Id<'User'>, courseId?: Id<'Course'>) => {
 
-    const qr = QueryService.useXQuery<CourseOverviewDataDTO>(apiRoutes.misc.getCourseOverviewData);
+    const qr = QueryService.useXQuery<CourseOverviewDataDTO>(apiRoutes.misc.getCourseOverviewData, { userId, courseId });
 
     return {
         courseOverviewData: qr.data

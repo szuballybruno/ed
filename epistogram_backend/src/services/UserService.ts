@@ -34,6 +34,8 @@ import { TempomatService } from './TempomatService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { UserStatsService } from './UserStatsService';
 import { RegistrationType } from '../models/Types';
+import { LatestCourseVersionView } from '../models/views/LatestCourseVersionView';
+import { CourseVersion } from '../models/entity/course/CourseVersion';
 
 export class UserService {
 
@@ -735,11 +737,41 @@ export class UserService {
                     .value
             }));
 
+        const coursesWithIsPretestRequired = await this
+            ._ormService
+            .withResType<{
+                courseId: Id<'Course'>,
+                isPretestRequired: Boolean
+            }>()
+            .query(LatestCourseVersionView)
+            .selectFrom(x => x
+                .columns(CourseVersion, {
+                    courseId: 'courseId'
+                })
+                .columns(CourseData, {
+                    isPretestRequired: 'isPretestRequired'
+                }))
+            .leftJoin(CourseVersion, x => x
+                .on('id', '=', 'versionId', LatestCourseVersionView))
+            .leftJoin(CourseData, x => x
+                .on('id', '=', 'courseDataId', CourseVersion))
+            .getMany();
+
         // new bridges
         const newBridges = assignMutations
             .filter(x => x.isAssigned)
             .filter(x => !existingBridges
                 .some(b => b.courseId === x.key))
+            .map(x => {
+                const isPretestRequired = coursesWithIsPretestRequired
+                    .find(co => co.courseId === x.key)
+                    ?.isPretestRequired;
+
+                return {
+                    ...x,
+                    isPretestRequired: !!isPretestRequired
+                };
+            })
             .map(x => instantiate<InsertEntity<UserCourseBridge>>({
                 courseId: x.key,
                 userId,
@@ -751,7 +783,7 @@ export class UserService {
                 requiredCompletionDate: null,
                 stageName: 'assigned',
                 startDate: null,
-                tempomatMode: 'balanced'
+                tempomatMode: x.isPretestRequired ? 'balanced' : 'strict'
             }));
 
         // insert new course acccess bridges

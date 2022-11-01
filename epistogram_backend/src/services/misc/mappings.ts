@@ -167,6 +167,7 @@ const marray = [
                 finalExamScorePercentage: x.finalExamScorePercentage,
                 summerizedScore: x.summerizedScore,
                 requiredCompletionDate: x.requiredCompletionDate,
+                completionDate: x.completionDate,
                 previsionedDate: x.previsionedDate,
                 lagBehindDays: x.lagBehindDays,
             }));
