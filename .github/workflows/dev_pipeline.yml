@@ -47,7 +47,7 @@ jobs:
           restore-keys: ${{ runner.os }}-single-buildx
 
       - name: Copy proper .env file
-        run: cp -fr ./config/dev.env ./.env 
+        run: cp -fr ./configurations/dev.env ./.env 
         working-directory: ./epistogram_frontend
 
       - name: Append additional values to .env file 
