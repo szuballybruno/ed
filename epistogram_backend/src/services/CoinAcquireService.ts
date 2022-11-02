@@ -68,7 +68,7 @@ export class CoinAcquireService {
             .filter(x => nonRewardedQuestionVersionIds
                 .some(y => y === x.questionVersionId));
 
-        const newTransactions = nonRewardedGivenAnswers
+        const newTransactions = givenAnswers
             .map(givenAnswer => instantiate<InsertEntity<CoinTransaction>>({
                 userId,
                 amount: this._config.coinRewardAmounts.questionCorrectAnswer,
