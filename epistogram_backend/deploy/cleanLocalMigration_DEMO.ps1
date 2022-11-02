@@ -2,7 +2,7 @@ $src_pass= 'epistogram'
 $src_host= '34.118.107.79'
 $src_port= '5432'
 $src_user= 'dev_service_user'
-$src_db_name= 'epistogram_DEV'
+$src_db_name= 'epistogram_DEMO'
 
 $dest_pass= 'epistogram'
 $dest_host= 'localhost'

@@ -130,12 +130,36 @@ jobs:
           --builder ${{ steps.buildx.outputs.name }} \
           --tag $BACKEND_IMAGE_NAME \
           --push
+
+  # DEPLOY DATABASE
+  deploy_database: 
+    name: Deploy database
+    runs-on: ubuntu-latest
+    needs: [build_backend, build_frontend]
+
+    steps:
+
+      - name: Checkout branch
+        uses: actions/checkout@v2
+        with:
+          ref: demo
+    
+      - name: Migrate schema
+        working-directory: epistogram_backend/deploy
+        shell: pwsh
+        run: |
+          ./migrateDatabase.ps1 `
+            -dbpass '${{secrets.DB_SERVICE_USER_PASSWORD}}' `
+            -dbhost '${{secrets.DB_HOST_ADDRESS}}' `
+            -dbport '${{secrets.DB_PORT}}' `
+            -dbname 'epistogram_DEMO' `
+            -dbuser '${{secrets.DB_SERVICE_USER_NAME}}'
   
   # DEPLOY FRONTEND
   deploy_frontend:
     name: Deploy frontend
     runs-on: ubuntu-latest
-    needs: [build_backend, build_frontend]
+    needs: [deploy_database]
     
     steps:  
       - name: Login to GCP
@@ -162,7 +186,7 @@ jobs:
   deploy_backend:
     name: Deploy backend
     runs-on: ubuntu-latest
-    needs: [build_backend, build_frontend]
+    needs: [deploy_database]
 
     steps:
       - name: Login to GCP
@@ -189,34 +213,3 @@ jobs:
           --memory 4Gi \
           --cpu 2 \
           --concurrency 200
-
-  # DEPLOY JOB SCHEDULER
-  deploy_job_scheduler: 
-    name: Deploy job scheduler
-    runs-on: ubuntu-latest
-    needs: [build_backend, build_frontend]
-
-    steps:
-    
-      - name: Login to GCP
-        uses: google-github-actions/setup-gcloud@v0
-        with:
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
-          service_account_email: ${{ secrets.GCP_EMAIL }}
-          service_account_key: ${{ secrets.GCP_CREDENTIALS }}
-
-      - name: delete prev job 
-        run: |
-          gcloud scheduler jobs delete user-progress-eval-job-demo \
-          --location=europe-west1 \
-          --project $GCP_PROJECT_NAME \
-          --quiet
-
-      - name: schedule job
-        if: always()
-        run: |
-          gcloud scheduler jobs create http user-progress-eval-job-demo \
-          --schedule="0 0 * * *" \
-          --uri="https://api.demo.epistogram.com/scheduledjobs/evaluate-user-progress" \
-          --http-method=GET --location=europe-west1 \
-          --project $GCP_PROJECT_NAME
