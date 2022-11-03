@@ -26,6 +26,8 @@ const ForkTsCheckerWebpackPlugin =
     : require('react-dev-utils/ForkTsCheckerWebpackPlugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 
+const { srcFolderPath } = paths;
+
 const createEnvironmentHash = require('./webpack/persistentCache/createEnvironmentHash');
 
 // Source maps are resource heavy and can cause out of memory issue for large source files.
@@ -696,14 +698,14 @@ module.exports = function (webpackEnv) {
           // '../cra-template-typescript/template/src/App.tsx'
           // otherwise.
           include: [
-            { file: '../**/src/**/*.{ts,tsx}' },
-            { file: '**/src/**/*.{ts,tsx}' },
+            { file: `../**/${srcFolderPath}/**/*.{ts,tsx}` },
+            { file: `**/${srcFolderPath}/**/*.{ts,tsx}` },
           ],
           exclude: [
-            { file: '**/src/**/__tests__/**' },
-            { file: '**/src/**/?(*.){spec|test}.*' },
-            { file: '**/src/setupProxy.*' },
-            { file: '**/src/setupTests.*' },
+            { file: `**/${srcFolderPath}/**/__tests__/**` },
+            { file: `**/${srcFolderPath}/**/?(*.){spec|test}.*` },
+            { file: `**/${srcFolderPath}/setupProxy.*` },
+            { file: `**/${srcFolderPath}/setupTests.*` },
           ],
         },
         logger: {

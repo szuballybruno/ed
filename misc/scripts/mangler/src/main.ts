@@ -82,7 +82,7 @@ const script = (
 
     const replaceBoundle = (boundleFilePath: string, mangleMap: NameMangleType[]) => {
 
-        const getRegex = (varName: string) => `(?<=[\.\n, {}(])${varName}(?=[= \n\.,:)])`;
+        const getRegex = (varName: string) => `(?<=[\.\n, {}(])${varName}(?=[= \n\.,:)?])`;
         let replaced = Polyfills.readFileAsText(boundleFilePath);
 
         mangleMap

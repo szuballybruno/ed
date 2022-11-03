@@ -6,6 +6,7 @@
       "dom.iterable",
       "esnext"
     ],
+    "outDir": "transpiled",
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -23,8 +24,8 @@
     "noImplicitAny": false
   },
   "include": [
-    "src"
-, "../epistogram_backend/src/shared/dtos/company/CompanyAssociatedCourseDTO.ts"  ],
+    "src",
+  ],
   "exclude": [
     "node_modules",
   ]
