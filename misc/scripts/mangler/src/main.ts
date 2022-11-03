@@ -82,7 +82,7 @@ const script = (
 
     const replaceBoundle = (boundleFilePath: string, mangleMap: NameMangleType[]) => {
 
-        const getRegex = (varName: string) => `(?<=[\.\n])${varName}(?=[= \n\.,])`;
+        const getRegex = (varName: string) => `(?<=[\.\n, {}(])${varName}(?=[= \n\.,:)])`;
         let replaced = Polyfills.readFileAsText(boundleFilePath);
 
         mangleMap
@@ -141,7 +141,8 @@ const boundleWriteFolderPath = `${frontendPath}/build/static/js`;
 const includedRoot = `${frontendPath}/src`;
 
 const includedFiles = [
-    '/shared/dtos'
+    '/shared/dtos',
+    '/shared/types/apiRoutes.ts'
 ];
 
 const excludedNames = [
@@ -162,7 +163,12 @@ const excludedNames = [
     'field',
     'date',
     'state',
-    'action'
+    'action',
+    'query',
+    'body',
+    'event',
+    'file',
+    'comment'
 ];
 
 const args = process.argv.filter((_, index) => index > 1);

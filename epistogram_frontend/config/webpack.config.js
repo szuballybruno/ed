@@ -255,26 +255,26 @@ module.exports = function (webpackEnv) {
     optimization: {
       minimize: isEnvProduction,
       minimizer: [
-        // new TerserPlugin({
-        //   terserOptions: {
+        new TerserPlugin({
+          terserOptions: {
 
-        //     // compress optsions 
-        //     compress: {
-        //       drop_console: isEnvProduction,
-        //       ecma: 5,
-        //       warnings: false,
-        //       comparisons: false,
-        //       inline: 2
-        //     },
+            // compress optsions 
+            compress: {
+              drop_console: isEnvProduction,
+              ecma: 5,
+              warnings: false,
+              comparisons: false,
+              inline: 2
+            },
 
-        //     // output optsions 
-        //     output: {
-        //       ecma: 5,
-        //       comments: false,
-        //       ascii_only: true,
-        //     },
-        //   }
-        // }),
+            // output optsions 
+            output: {
+              ecma: 5,
+              comments: false,
+              ascii_only: true,
+            },
+          }
+        }),
 
         // This is only used in production mode
         new CssMinimizerPlugin()
