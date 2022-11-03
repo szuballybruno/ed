@@ -74,9 +74,10 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
                 .on('id', '=', 'versionId', LatestCourseVersionView))
             .leftJoin(CourseData, x => x
                 .on('id', '=', 'courseDataId', CourseVersion))
-            .getSingle();
+            .where('courseId', '=', 'courseId')
+            .getOneOrNull();
 
-        const isPretestRequired = courseWithIsPretestRequired.isPretestRequired;
+        const isPretestRequired = !!courseWithIsPretestRequired?.isPretestRequired;
 
         /**
          * Create new 

@@ -273,9 +273,16 @@ export class TempomatService {
             const lagBehindPercentage = this
                 ._calculateLagBehindPercentage(
                     startDate,
-                    requiredCompletionDate
-                        ? requiredCompletionDate
-                        : originalPrevisionedCompletionDate,
+                    (() => {
+
+                        if (requiredCompletionDate)
+                            return requiredCompletionDate;
+
+                        if (!requiredCompletionDate && originalPrevisionedCompletionDate)
+                            return originalPrevisionedCompletionDate;
+
+                        return addDays(startDate, totalItemCount / 6);
+                    })(),
                     previsionedCompletionDate
                 );
 
