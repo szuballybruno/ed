@@ -30,6 +30,10 @@
     },
     "ignorePatterns": [
         "/config",
+        "/loaders/*",
+        "/loaders/**",
+        "/loaders/*/*",
+        "/loaders",
         "/transpiled",
         "/build",
         "/build/**",
