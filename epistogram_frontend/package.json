@@ -98,7 +98,7 @@
     "test": "node scripts/test.js",
     "lint": "eslint . --ext .ts --ext .tsx",
     "lintfix": "eslint . --ext .ts --ext .tsx --fix",
-    "serveBuild": "npx serve -s build",
+    "serve": "npx serve -s build",
     "start-prod": "yarn build && npx serve -s build"
   },
   "browserslist": {

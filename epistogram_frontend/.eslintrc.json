@@ -29,7 +29,11 @@
         }
     },
     "ignorePatterns": [
-        "/config"
+        "/config",
+        "/build",
+        "/build/**",
+        "/build/*",
+        "/build/*/*"
     ],
     "rules": {
         "unused-imports/no-unused-imports": "error",

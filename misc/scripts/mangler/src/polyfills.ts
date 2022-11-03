@@ -9,7 +9,7 @@ export const logScoped = (scope: string, text: string) => console.log(`[${scope}
 
 export const getAllFilePaths = (directoryPath: string) => {
 
-    return fs.readdirSync(directoryPath);
+    return fs.readdirSync(directoryPath).map(x => `${directoryPath}/${x}`);
 }
 
 export const regexMatchAll = (text: string, regex: RegExp): string[] => {
@@ -54,9 +54,23 @@ const getFileName = (path: string): string => {
 };
 
 const replaceAllByRegex = (text: string, regexStr: string, replacement: string) => {
-    
+
     return text
         .replace(new RegExp(regexStr, "g"), replacement);
+}
+
+const isDirectory = (path: string) => {
+
+    return fs.lstatSync(path).isDirectory();
+}
+
+const regexGetAllMatches = (text: string, regex: string) => {
+
+    const rg = new RegExp(regex, 'g');
+    const array = [...text.matchAll(rg)];
+
+    return array
+        .map(x => x[0]);
 }
 
 export const Polyfills = {
@@ -65,5 +79,7 @@ export const Polyfills = {
     parseIntOrFail,
     getFileName,
     replaceAllByRegex,
-    writeFileSync
+    writeFileSync,
+    isDirectory,
+    regexGetAllMatches
 };
