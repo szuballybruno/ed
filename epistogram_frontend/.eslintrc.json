@@ -30,6 +30,7 @@
     },
     "ignorePatterns": [
         "/config",
+        "/transpiled",
         "/build",
         "/build/**",
         "/build/*",

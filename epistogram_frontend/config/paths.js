@@ -50,7 +50,7 @@ const resolveModule = (resolveFn, filePath) => {
   return resolveFn(`${filePath}.js`);
 };
 
-const srcFolderPath = 'src2';
+const srcFolderPath = 'transpiled';
 
 // config after eject: we're in ./config/
 module.exports = {
@@ -74,7 +74,5 @@ module.exports = {
   publicUrlOrPath,
   srcFolderPath
 };
-
-
 
 module.exports.moduleFileExtensions = moduleFileExtensions;
