@@ -18,10 +18,23 @@ import './styles/index.css';
     LicenseInfo.setLicenseKey(LICENSE_KEY);
 })();
 
+const testobj = {
+    testprop: {
+        testprop2: {
+            testprop3: 'noice',
+            asd: 1234
+        }
+    }
+};
 
 const App: FC = () => {
 
     console.log('rendering root');
+    const asd = testobj['testprop'];
+    window['fmama'] = asd;
+    window['fmama'] = asd.testprop2;
+    window['fmama'] = asd.testprop2.asd;
+    window['fmama'] = asd.testprop2.testprop3;
 
     return (
         <FrameRendererRoot>

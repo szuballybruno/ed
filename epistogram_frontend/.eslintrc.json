@@ -28,6 +28,9 @@
             "version": "18.2.0"
         }
     },
+    "ignorePatterns": [
+        "/config"
+    ],
     "rules": {
         "unused-imports/no-unused-imports": "error",
         "@typescript-eslint/no-explicit-any": "off",
