@@ -273,9 +273,16 @@ export class TempomatService {
             const lagBehindPercentage = this
                 ._calculateLagBehindPercentage(
                     startDate,
-                    requiredCompletionDate
-                        ? requiredCompletionDate
-                        : originalPrevisionedCompletionDate,
+                    (() => {
+
+                        if (requiredCompletionDate)
+                            return requiredCompletionDate;
+
+                        if (!requiredCompletionDate && originalPrevisionedCompletionDate)
+                            return originalPrevisionedCompletionDate;
+
+                        return addDays(startDate, totalItemCount / 6);
+                    })(),
                     previsionedCompletionDate
                 );
 
@@ -327,13 +334,17 @@ export class TempomatService {
         tempomatMode: TempomatModeType,
         adjustmentCorrection: number
     ) {
-        if (!originalPrevisionedCompletionDate)
-            throw new Error('Previsioned length is null, this could mean theres a problem with the prequiz or a view depending on it.');
+        const originalPrevisionedLength = originalPrevisionedCompletionDate
+            ? this._calculateOriginalPrevisionedLength(
+                originalPrevisionedCompletionDate,
+                startDate)
+            : null;
 
-        const originalPrevisionedLength = this
-            ._calculateOriginalPrevisionedLength(originalPrevisionedCompletionDate, startDate);
-
-        const originalEstimatedVideosPerDay = totalItemCount / originalPrevisionedLength;
+        // If there is no pretest so no original previsioned length
+        // use 6 items per day as fallback value
+        const originalEstimatedVideosPerDay = originalPrevisionedLength
+            ? totalItemCount / originalPrevisionedLength
+            : 6;
 
         const daysSpentFromStartDate = this
             ._calculateDaysSpentFromStartDate(startDate);
@@ -347,8 +358,11 @@ export class TempomatService {
         const lagBehindDays = this
             ._calculateLagBehindDays(lagBehindVideos, originalEstimatedVideosPerDay);
 
-        const newPrevisionedDate = this
-            ._calculateNewPrevisionedDateByTempomatMode(tempomatMode, originalPrevisionedCompletionDate, lagBehindDays, adjustmentCorrection);
+        // if there is no pretest so no original previsioned completion date
+        // return a rough estimation with 6 videos a day
+        const newPrevisionedDate = originalPrevisionedCompletionDate
+            ? this._calculateNewPrevisionedDateByTempomatMode(tempomatMode, originalPrevisionedCompletionDate, lagBehindDays, adjustmentCorrection)
+            : addDays(startDate, totalItemCount / 6);
 
         this._loggerService.logScoped('TEMPOMAT', 'CURRENT TEMPOMAT CALCULATION: ');
         this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', `Start date: ${startDate}`);
@@ -367,7 +381,7 @@ export class TempomatService {
         return newPrevisionedDate;
     }
 
-    calculateLagBehindDays(
+    calculateLagBehindDaysWithPretest(
         originalPrevisionedCompletionDate: Date | null,
         totalItemCount: number,
         totalCompletedItemCount: number,
@@ -376,10 +390,16 @@ export class TempomatService {
         if (!originalPrevisionedCompletionDate)
             throw new Error('Previsioned length is null, this could mean theres a problem with the prequiz or a view depending on it.');
 
-        const originalPrevisionedLength = this
-            ._calculateOriginalPrevisionedLength(originalPrevisionedCompletionDate, startDate);
+        const originalPrevisionedLength = originalPrevisionedCompletionDate
+            ? this._calculateOriginalPrevisionedLength(
+                originalPrevisionedCompletionDate,
+                startDate
+            )
+            : null;
 
-        const originalEstimatedVideosPerDay = totalItemCount / originalPrevisionedLength;
+        const originalEstimatedVideosPerDay = originalPrevisionedLength
+            ? totalItemCount / originalPrevisionedLength
+            : 6;
 
         const daysSpentFromStartDate = this
             ._calculateDaysSpentFromStartDate(startDate);
@@ -429,23 +449,39 @@ export class TempomatService {
         totalItemsCount: number
     ) {
 
-        let recommendedItemsPerDay = 0;
-
         // If there is required completion date, calculate
         // recommended items per day from that
         if (requiredCompletionDate) {
 
             const daysFromStartToRequired = dateDiffInDays(startDate, requiredCompletionDate);
-            recommendedItemsPerDay = Math.ceil(totalItemsCount / daysFromStartToRequired);
-        } else {
+            const recommendedItemsPerDay = Math.ceil(totalItemsCount / daysFromStartToRequired);
+            const recommendedItemsPerWeek = recommendedItemsPerDay * 7;
 
-            const daysFromStartToCurrentPrevisioned = dateDiffInDays(startDate, currentPrevisionedCompletionDate);
-            recommendedItemsPerDay = Math.ceil(totalItemsCount / daysFromStartToCurrentPrevisioned);
+            return {
+                recommendedItemsPerDay,
+                recommendedItemsPerWeek
+            };
         }
 
-        const recommendedItemsPerWeek = recommendedItemsPerDay * 7;
+        // If there is no required completion date, calculate
+        // recommended items per day from previsioned completion date
+        if (!requiredCompletionDate && currentPrevisionedCompletionDate) {
 
-        return { recommendedItemsPerDay, recommendedItemsPerWeek };
+            const daysFromStartToCurrentPrevisioned = dateDiffInDays(startDate, currentPrevisionedCompletionDate);
+            const recommendedItemsPerDay = Math.ceil(totalItemsCount / daysFromStartToCurrentPrevisioned);
+            const recommendedItemsPerWeek = recommendedItemsPerDay * 7;
+
+            return {
+                recommendedItemsPerDay,
+                recommendedItemsPerWeek
+            };
+        }
+
+        // fallback value if there is no pretest
+        return {
+            recommendedItemsPerDay: 6,
+            recommendedItemsPerWeek: 41
+        };
     }
 
     private _calculateOriginalPrevisionedLength(originalPrevisionedCompletionDate: Date, startDate: Date) {

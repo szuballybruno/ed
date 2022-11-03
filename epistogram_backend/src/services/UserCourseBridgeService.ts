@@ -1,5 +1,8 @@
+import { CourseData } from '../models/entity/course/CourseData';
+import { CourseVersion } from '../models/entity/course/CourseVersion';
 import { UserCourseBridge } from '../models/entity/misc/UserCourseBridge';
 import { CourseStateView } from '../models/views/CourseStateView';
+import { LatestCourseVersionView } from '../models/views/LatestCourseVersionView';
 import { CourseModeType, CourseStageNameType } from '../shared/types/sharedTypes';
 import { Id } from '../shared/types/versionId';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
@@ -53,6 +56,29 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
                     isCurrent: false
                 });
 
+        const courseWithIsPretestRequired = await this
+            ._ormService
+            .withResType<{
+                courseId: Id<'Course'>,
+                isPretestRequired: Boolean
+            }>()
+            .query(LatestCourseVersionView, { courseId })
+            .selectFrom(x => x
+                .columns(CourseVersion, {
+                    courseId: 'courseId'
+                })
+                .columns(CourseData, {
+                    isPretestRequired: 'isPretestRequired'
+                }))
+            .leftJoin(CourseVersion, x => x
+                .on('id', '=', 'versionId', LatestCourseVersionView))
+            .leftJoin(CourseData, x => x
+                .on('id', '=', 'courseDataId', CourseVersion))
+            .where('courseId', '=', 'courseId')
+            .getOneOrNull();
+
+        const isPretestRequired = !!courseWithIsPretestRequired?.isPretestRequired;
+
         /**
          * Create new 
          */
@@ -61,7 +87,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
             .createAsync(UserCourseBridge, {
                 userId,
                 courseId,
-                courseMode: 'beginner',
+                courseMode: isPretestRequired ? 'beginner' : 'advanced',
                 creationDate: new Date(),
                 currentItemCode,
                 isCurrent: true,

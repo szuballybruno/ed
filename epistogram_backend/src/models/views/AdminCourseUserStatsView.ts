@@ -54,6 +54,9 @@ export class AdminCourseUserStatsView {
     requiredCompletionDate: Date;
 
     @XViewColumn()
+    completionDate: Date;
+
+    @XViewColumn()
     startDate: Date;
 
     @XViewColumn()

@@ -6,18 +6,19 @@ import { StorageFile } from '../models/entity/misc/StorageFile';
 import { TeacherInfo } from '../models/entity/misc/TeacherInfo';
 import { User } from '../models/entity/misc/User';
 import { UserCourseBridge } from '../models/entity/misc/UserCourseBridge';
+import { RegistrationType } from '../models/Types';
 import { TempomatCalculationDataView } from '../models/views/TempomatCalculationDataView';
 import { UserOverviewView } from '../models/views/UserOverviewView';
 import { BriefUserDataDTO } from '../shared/dtos/BriefUserDataDTO';
 import { DepartmentDTO } from '../shared/dtos/DepartmentDTO';
 import { Mutation } from '../shared/dtos/mutations/Mutation';
+import { UserAdminListDTO } from '../shared/dtos/UserAdminListDTO';
 import { UserControlDropdownDataDTO } from '../shared/dtos/UserControlDropdownDataDTO';
 import { UserCourseStatsDTO } from '../shared/dtos/UserCourseStatsDTO';
 import { UserDTO } from '../shared/dtos/UserDTO';
 import { UserEditReadDTO } from '../shared/dtos/UserEditReadDTO';
 import { UserEditSaveDTO } from '../shared/dtos/UserEditSaveDTO';
 import { UserEditSimpleDTO } from '../shared/dtos/UserEditSimpleDTO';
-import { UserAdminListDTO } from '../shared/dtos/UserAdminListDTO';
 import { instantiate } from '../shared/logic/sharedLogic';
 import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 import { Id } from '../shared/types/versionId';
@@ -33,7 +34,6 @@ import { TeacherInfoService } from './TeacherInfoService';
 import { TempomatService } from './TempomatService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { UserStatsService } from './UserStatsService';
-import { RegistrationType } from '../models/Types';
 
 export class UserService {
 

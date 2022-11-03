@@ -17,6 +17,7 @@ export class AdminCourseUserStatsDTO {
     finalExamScorePercentage: number;
     summerizedScore: number;
     requiredCompletionDate: Date | null;
+    completionDate: Date | null;
     previsionedDate: Date | null;
     lagBehindDays: number | null;
 }
