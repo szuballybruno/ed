@@ -775,7 +775,7 @@ export class UserService {
             .map(x => instantiate<InsertEntity<UserCourseBridge>>({
                 courseId: x.key,
                 userId,
-                courseMode: 'beginner',
+                courseMode: x.isPretestRequired ? 'advanced' : 'beginner',
                 creationDate: new Date(),
                 currentItemCode: null,
                 isCurrent: false,
@@ -783,7 +783,7 @@ export class UserService {
                 requiredCompletionDate: null,
                 stageName: 'assigned',
                 startDate: null,
-                tempomatMode: x.isPretestRequired ? 'balanced' : 'strict'
+                tempomatMode: 'balanced'
             }));
 
         // insert new course acccess bridges
