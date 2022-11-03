@@ -6,18 +6,19 @@ import { StorageFile } from '../models/entity/misc/StorageFile';
 import { TeacherInfo } from '../models/entity/misc/TeacherInfo';
 import { User } from '../models/entity/misc/User';
 import { UserCourseBridge } from '../models/entity/misc/UserCourseBridge';
+import { RegistrationType } from '../models/Types';
 import { TempomatCalculationDataView } from '../models/views/TempomatCalculationDataView';
 import { UserOverviewView } from '../models/views/UserOverviewView';
 import { BriefUserDataDTO } from '../shared/dtos/BriefUserDataDTO';
 import { DepartmentDTO } from '../shared/dtos/DepartmentDTO';
 import { Mutation } from '../shared/dtos/mutations/Mutation';
+import { UserAdminListDTO } from '../shared/dtos/UserAdminListDTO';
 import { UserControlDropdownDataDTO } from '../shared/dtos/UserControlDropdownDataDTO';
 import { UserCourseStatsDTO } from '../shared/dtos/UserCourseStatsDTO';
 import { UserDTO } from '../shared/dtos/UserDTO';
 import { UserEditReadDTO } from '../shared/dtos/UserEditReadDTO';
 import { UserEditSaveDTO } from '../shared/dtos/UserEditSaveDTO';
 import { UserEditSimpleDTO } from '../shared/dtos/UserEditSimpleDTO';
-import { UserAdminListDTO } from '../shared/dtos/UserAdminListDTO';
 import { instantiate } from '../shared/logic/sharedLogic';
 import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 import { Id } from '../shared/types/versionId';
@@ -33,9 +34,6 @@ import { TeacherInfoService } from './TeacherInfoService';
 import { TempomatService } from './TempomatService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { UserStatsService } from './UserStatsService';
-import { RegistrationType } from '../models/Types';
-import { LatestCourseVersionView } from '../models/views/LatestCourseVersionView';
-import { CourseVersion } from '../models/entity/course/CourseVersion';
 
 export class UserService {
 
@@ -737,45 +735,17 @@ export class UserService {
                     .value
             }));
 
-        const coursesWithIsPretestRequired = await this
-            ._ormService
-            .withResType<{
-                courseId: Id<'Course'>,
-                isPretestRequired: Boolean
-            }>()
-            .query(LatestCourseVersionView)
-            .selectFrom(x => x
-                .columns(CourseVersion, {
-                    courseId: 'courseId'
-                })
-                .columns(CourseData, {
-                    isPretestRequired: 'isPretestRequired'
-                }))
-            .leftJoin(CourseVersion, x => x
-                .on('id', '=', 'versionId', LatestCourseVersionView))
-            .leftJoin(CourseData, x => x
-                .on('id', '=', 'courseDataId', CourseVersion))
-            .getMany();
+
 
         // new bridges
         const newBridges = assignMutations
             .filter(x => x.isAssigned)
             .filter(x => !existingBridges
                 .some(b => b.courseId === x.key))
-            .map(x => {
-                const isPretestRequired = coursesWithIsPretestRequired
-                    .find(co => co.courseId === x.key)
-                    ?.isPretestRequired;
-
-                return {
-                    ...x,
-                    isPretestRequired: !!isPretestRequired
-                };
-            })
             .map(x => instantiate<InsertEntity<UserCourseBridge>>({
                 courseId: x.key,
                 userId,
-                courseMode: x.isPretestRequired ? 'advanced' : 'beginner',
+                courseMode: 'beginner',
                 creationDate: new Date(),
                 currentItemCode: null,
                 isCurrent: false,
