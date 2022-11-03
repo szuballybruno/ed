@@ -87,7 +87,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
             .createAsync(UserCourseBridge, {
                 userId,
                 courseId,
-                courseMode: isPretestRequired ? 'advanced' : 'beginner',
+                courseMode: isPretestRequired ? 'beginner' : 'advanced',
                 creationDate: new Date(),
                 currentItemCode,
                 isCurrent: true,

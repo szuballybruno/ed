@@ -735,8 +735,6 @@ export class UserService {
                     .value
             }));
 
-
-
         // new bridges
         const newBridges = assignMutations
             .filter(x => x.isAssigned)
