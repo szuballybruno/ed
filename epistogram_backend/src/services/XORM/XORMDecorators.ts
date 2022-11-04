@@ -1,5 +1,4 @@
-import { JoinColumn, ManyToOne, OneToMany, Relation } from 'typeorm';
-import { toSQLSnakeCasing } from '../../utilities/helpers';
+import { MyRelation } from '../../models/MyORM';
 import { XMetadataHandler } from '../../utilities/XMetadata/XMetadataHandler';
 import { ClassType } from '../misc/advancedTypes/ClassType';
 
@@ -47,9 +46,10 @@ export const XOneToMany = <TCurrentEntity = never>() => {
 
     return <TRelationEntity>(
         getRelationEntity: RelationInputType<TRelationEntity>,
-        getRelationProp: (relationEntity: TRelationEntity) => Relation<TCurrentEntity> | TCurrentEntity | null): PropertyDecorator => {
+        getRelationProp: (relationEntity: TRelationEntity) => MyRelation<TCurrentEntity> | TCurrentEntity | null): PropertyDecorator => {
 
-        return OneToMany((getRelationEntity) as any, getRelationProp);
+        return (target: Object, propertyKey: string | symbol) => { };
+        // return OneToMany((getRelationEntity) as any, getRelationProp);
     };
 };
 
@@ -63,13 +63,15 @@ export const XManyToOne = <TCurrentEntity = never>() => {
         getRelationEntity: RelationInputType<TRelationEntity>,
         getRelationProp?: (relationEntity: TRelationEntity) => TCurrentEntity[]): PropertyDecorator => {
 
-        return ManyToOne((getRelationEntity) as any, getRelationProp);
+        return (target: Object, propertyKey: string | symbol) => { };
+        // return ManyToOne((getRelationEntity) as any, getRelationProp);
     };
 };
 
-export const XJoinColumn = <TCurrentEntity = never>(key: keyof TCurrentEntity) => {
+export const XJoinColumn = <TCurrentEntity = never>(key: keyof TCurrentEntity): PropertyDecorator => {
 
-    return JoinColumn({ name: toSQLSnakeCasing(key as string) });
+    return (target: Object, propertyKey: string | symbol) => { };
+    // return JoinColumn({ name: toSQLSnakeCasing(key as string) });
 };
 
 export const getXViewColumnNames = <T>(classType: ClassType<T>) => {

@@ -1,5 +1,5 @@
-import { Edit } from '@mui/icons-material';
 import { useRef, useState } from 'react';
+import { EpistoIcons } from '../../static/EpistoIcons';
 import { EpistoDiv, EpistoDivProps } from '../controls/EpistoDiv';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoImage } from '../controls/EpistoImage';
@@ -9,12 +9,14 @@ export const EpistoImageSelector = ({
     children,
     setImageFile,
     setImageSource,
+    setData,
     isInteractionBlocked,
     src,
     ...css
 }: {
-    setImageSource: (src: string) => void,
-    setImageFile: (file: File) => void,
+    setImageSource?: (src: string) => void,
+    setImageFile?: (file: File) => void,
+    setData?: (file: File, src: string) => void,
     src?: string,
     isInteractionBlocked?: boolean
 } & EpistoDivProps) => {
@@ -37,8 +39,15 @@ export const EpistoImageSelector = ({
             ref={fileBrowseInputRef}
             type="image"
             onFileSelected={(file, src) => {
-                setImageSource(src);
-                setImageFile(file);
+
+                if (setImageSource)
+                    setImageSource(src);
+
+                if (setImageFile)
+                    setImageFile(file);
+
+                if (setData)
+                    setData(file, src);
             }} />
 
         {(!children && src)
@@ -52,17 +61,16 @@ export const EpistoImageSelector = ({
             position="absolute"
             display={isInteractionBlocked ? 'none' : undefined}
             className="whall"
-            height="50%"
             transition="0.4s"
             top={0}
             bg="#ffffffcc"
             direction="column"
             align="center"
             justify="center"
-            transform={isHovered ? 'translateY(100%)' : 'translateY(125%)'}
+            transform={isHovered ? 'translateY(0%)' : 'translateY(10%)'}
             opacity={isHovered ? 1 : 0}>
 
-            <Edit />
+            <EpistoIcons.Upload />
         </EpistoFlex2>
     </EpistoDiv>;
 };

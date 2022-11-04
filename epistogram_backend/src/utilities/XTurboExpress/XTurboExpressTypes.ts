@@ -94,7 +94,6 @@ export type ApiActionType<TActionParams> = (params: TActionParams) => Controller
 export class EndpointOptionsType implements IRouteOptions {
     isPublic?: boolean;
     isPost?: boolean;
-    isMultipart?: boolean;
     isUnauthorized?: boolean;
     checkPermission?: PermissionCodeType;
 }

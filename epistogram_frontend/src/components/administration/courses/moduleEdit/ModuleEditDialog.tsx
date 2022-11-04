@@ -67,7 +67,9 @@ export const ModuleEditDialog = ({
                     onRowOrderChange={(opts) => {
 
                         const moved = moveItemInArray(rows, opts.sourceIndex, opts.targetIndex);
-                        moved.forEach((x, i) => x.orderIndex = i);
+
+                        moved
+                            .forEach((x, i) => x.orderIndex = i);
 
                         moved
                             .forEach(({ moduleVersionId, orderIndex }) => mutatorFunctions

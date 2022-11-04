@@ -1,6 +1,6 @@
 import { useXDialogHosterContext } from './XDialoContext';
 
-export const useXDialogLogic = (key: string) => {
+export const useXDialogLogic = (key: string, onlyRenderIfOpen: boolean) => {
 
     const xDialogHoster = useXDialogHosterContext(key);
 
@@ -23,7 +23,8 @@ export const useXDialogLogic = (key: string) => {
         closeDialog,
         mountContent,
         unmountContent,
-        getHostElement
+        getHostElement,
+        onlyRenderIfOpen
     };
 
     return bundle;

@@ -6,31 +6,19 @@ import { Id } from '../shared/types/versionId';
 import { fileCodes, FileCodesType } from '../static/FileCodes';
 import { StringKeyof } from '../utilities/misc';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
-import { AuthorizationService } from './AuthorizationService';
 import { ClassType } from './misc/advancedTypes/ClassType';
 import { log } from './misc/logger';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { StorageService } from './StorageService';
-import { UserService } from './UserService';
 import { EntityType } from './XORM/XORMTypes';
+
+export type UploadFileRelatedEntityIdType = { id: Id<any>, file: UploadedFile };
 
 export class FileService {
 
-    private _userService: UserService;
-    private _storageService: StorageService;
-    private _ormService: ORMConnectionService;
-    private _authorizationService: AuthorizationService;
-
     constructor(
-        userService: UserService,
-        storageService: StorageService,
-        ormService: ORMConnectionService,
-        authorizationService: AuthorizationService) {
-
-        this._userService = userService;
-        this._storageService = storageService;
-        this._ormService = ormService;
-        this._authorizationService = authorizationService;
+        private _storageService: StorageService,
+        private _ormService: ORMConnectionService) {
     }
 
     async uploadAvatarFileAsync(principalId: PrincipalId, file: UploadedFile) {
@@ -51,6 +39,141 @@ export class FileService {
             });
     }
 
+    /**
+     * Upload multiple assigned files 
+     */
+    async uploadMultipleAssignedFilesAsync({
+        entitySignature,
+        fileCode,
+        files,
+        relationField
+    }: {
+        entitySignature: ClassType<any>,
+        relationField: string,
+        fileCode: FileCodesType,
+        files: UploadFileRelatedEntityIdType[]
+    }) {
+
+        const { uploadResult, deleteUploadedFilesAsync } = await this
+            ._uploadFilesBatchAsync(fileCode, files.map(x => x.file));
+
+        /**
+         * Try inserting things to db
+         */
+        try {
+
+            const insertResult = await this
+                ._insertStorageFileEntitesBatchAsync(uploadResult);
+
+            await this
+                ._attachStorageFilesToEntities(
+                    entitySignature,
+                    relationField,
+                    files.map(x => x.id),
+                    insertResult.map(x => x.id));
+        }
+
+        /**
+         * Delete CDN files in case of faliure 
+         */
+        catch (e) {
+
+            await deleteUploadedFilesAsync();
+            throw e;
+        }
+    }
+
+    /**
+     * Attach storage files to entities
+     */
+    private async _attachStorageFilesToEntities(
+        signature: ClassType<any>,
+        relationField: string,
+        entityIds: Id<any>[],
+        storageFileIds: Id<any>[]) {
+
+        const updates = entityIds
+            .map((id, index) => ({
+                id,
+                [relationField]: storageFileIds[index]
+            }));
+
+        await this
+            ._ormService
+            .save(signature, updates);
+    }
+
+    /**
+     * Insert file entities 
+     */
+    private async _insertStorageFileEntitesBatchAsync(uploadResult: ({ cdnPath: string })[]) {
+
+        const fileEntiteis = uploadResult
+            .map(({ cdnPath }) => ({
+                filePath: cdnPath
+            } as StorageFile));
+
+        const insertedFileEntities = await this
+            ._ormService
+            .createManyAsync(StorageFile, fileEntiteis);
+
+        return insertedFileEntities;
+    }
+
+    /**
+     * Batch upload files 
+     */
+    private async _uploadFilesBatchAsync(fileCode: FileCodesType, files: UploadedFile[]) {
+
+        const filesWithPaths = files
+            .map((file, index) => ({ file, cdnPath: this._getCDNFilePath(fileCode, index.toString()) }));
+
+        /**
+         * Create rollback function
+         */
+        const deleteUploadedFilesAsync = async () => {
+
+            const deletePromises = filesWithPaths
+                .map(({ cdnPath }) => this
+                    ._storageService
+                    .deleteStorageFileAsync(cdnPath));
+
+            await Promise
+                .all(deletePromises);
+        }
+
+        /**
+         * Upload to CDN
+         */
+        try {
+
+            const uploadPromises = filesWithPaths
+                .map(({ file, cdnPath }) => this
+                    ._storageService
+                    .uploadBufferToStorageAsync(file.data, cdnPath));
+
+            await Promise
+                .all(uploadPromises);
+        }
+
+        /**
+         * Failure, delete all files in transaction
+         */
+        catch (e) {
+
+            await deleteUploadedFilesAsync();
+            throw e;
+        }
+
+        return {
+            uploadResult: filesWithPaths,
+            deleteUploadedFilesAsync
+        };
+    }
+
+    /**
+     * Upload assigned file
+     */
     async uploadAssigendFileAsync<TField extends StringKeyof<TEntity>, TEntity extends EntityType & { [K in TField]: Id<'StorageFile'> | null }>({
         entitySignature,
         fileBuffer,
@@ -66,7 +189,7 @@ export class FileService {
     }) {
 
         // path
-        const newCDNFilePath = this.getFilePath(fileCode, entityId);
+        const newCDNFilePath = this._getCDNFilePath(fileCode, '0');
 
         // upload to storage
         await this._storageService
@@ -129,13 +252,13 @@ export class FileService {
             /**
              * In case of any failure, 
              * delete file from storage bucket
-        */
+             */
             await this._storageService
                 .deleteStorageFileAsync(newCDNFilePath);
 
             /**
              * Than throw the error.
-        */
+             */
             throw e;
         }
     }
@@ -155,7 +278,7 @@ export class FileService {
     }) {
 
         // path
-        const newCDNFilePath = this.getFilePath(fileCode, entityId);
+        const newCDNFilePath = this._getCDNFilePath(fileCode, '0');
 
         // upload to storage
         await this._storageService
@@ -222,12 +345,14 @@ export class FileService {
         }
     }
 
-    getFilePath = (fileType: FileCodesType, entityId: Id<any>) => {
+    /**
+     * Get CDN file path 
+     */
+    private _getCDNFilePath(fileType: FileCodesType, uniqueIndex: string) {
 
         const extension = fileCodes[fileType][0];
-
-        return `${fileType}_container/${fileType}_${entityId}_${Date.now()}.${extension}`;
-    };
+        return `${fileType}_container/${fileType}_${uniqueIndex}_${Date.now()}.${extension}`;
+    }
 
     deleteFileEntityAsync = async (id: Id<'any'>) => {
 
@@ -235,6 +360,15 @@ export class FileService {
             .hardDelete(StorageFile, [id]);
     };
 
+    getFileEntityAsync = (id: Id<any>) => {
+
+        return this._ormService
+            .getSingleById(StorageFile, id);
+    };
+
+    /**
+     * Insert file to DB
+     */
     private async _insertFileEntityAsync(path: string) {
 
         return await this._ormService
@@ -242,10 +376,4 @@ export class FileService {
                 filePath: path
             });
     }
-
-    getFileEntityAsync = (id: Id<any>) => {
-
-        return this._ormService
-            .getSingleById(StorageFile, id);
-    };
 }

@@ -159,7 +159,7 @@ export const usePostMultipartDataUnsafe = <TData>(url: string | ParametrizedRout
 
     const [state, setState] = useState<LoadingStateType>('idle');
 
-    const postMultipartDataAsync = useCallback(async (data?: TData, files?: FilesObject) => {
+    const postMultipartDataAsync = useCallback(async ({ data, files }: { data?: TData, files?: FilesObject }) => {
 
         try {
 

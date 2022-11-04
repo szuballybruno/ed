@@ -58,7 +58,7 @@ const useSaveCompany = () => {
     const { postMultipartDataAsync, state } = usePostMultipartDataUnsafe<CompanyEditDataDTO>(apiRoutes.companies.saveCompany);
     const saveCompanyAsync = useCallback(({ logoFile, coverFile, ...dto }: CompanyEditDataDTO & { logoFile: File | null, coverFile: File | null }) => {
 
-        return postMultipartDataAsync(dto, { logoFile, coverFile });
+        return postMultipartDataAsync({ data: dto, files: { logoFile, coverFile } });
     }, [postMultipartDataAsync]);
 
     return {

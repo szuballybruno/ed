@@ -14,7 +14,7 @@ export class VideoController implements XController<VideoController> {
         this._videoService = serviceProvider.getService(VideoService);
     }
 
-    @XControllerAction(apiRoutes.video.uploadVideoFileChunks, { isPost: true, isMultipart: true })
+    @XControllerAction(apiRoutes.video.uploadVideoFileChunks, { isPost: true })
     uploadVideoFileChunksAction(params: ActionParams) {
 
         const getFile = () => params

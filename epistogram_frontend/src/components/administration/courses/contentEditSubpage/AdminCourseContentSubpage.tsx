@@ -291,19 +291,38 @@ export const AdminCourseContentSubpage = () => {
 
         try {
 
+            /**
+             * Save
+             */
+            const files = moduleEditDialogLogic
+                .mutatorFunctions
+                .getFiles();
+
             await saveCourseDataAsync({
-                courseId,
-                itemMutations: itemsMutatorState
-                    .mutations,
-                moduleMutations: moduleEditDialogLogic
-                    .mutations
+                data: {
+                    courseId,
+                    itemMutations: itemsMutatorState
+                        .mutations,
+                    moduleMutations: moduleEditDialogLogic
+                        .mutations
+                },
+                files: files
             });
 
+            /**
+             * Reset mutations 
+             */
             itemsMutatorFunctions
                 .resetMutations('NO CALLBACK');
 
-            await refetchCourseContentAdminData();
+            moduleEditDialogLogic
+                .mutatorFunctions
+                .resetMutations('NO CALLBACK');
 
+            /**
+             * Refetch data and notify
+             */
+            await refetchCourseContentAdminData();
             showNotification('Mentve', { autoCloseMs: 1000 });
         }
         catch (e) {

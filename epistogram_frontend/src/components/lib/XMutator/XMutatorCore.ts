@@ -24,6 +24,8 @@ export type MutateFnType<TMutatee, TKey> = <TField extends StringKeyof<TMutatee>
     newValue: TMutatee[TField];
 }) => void;
 
+type FileStoreType = { [K: string]: File };
+
 export interface IXMutatorState<TMutatee extends Object, TKeyField extends StringKeyof<TMutatee>> {
     mutatedItems: TMutatee[];
     mutations: Mutation<TMutatee, TKeyField>[];
@@ -43,6 +45,9 @@ export interface IXMutatorFunctions<TMutatee extends Object, TKeyField extends S
     resetMutations(callback?: 'NO CALLBACK'): void;
     getMutatedItems: () => TMutatee[];
     getMutations: () => Mutation<TMutatee, TKeyField>[];
+    storeFile: (key: string, file: File) => void;
+    getFile: (key: string) => File;
+    getFiles: () => FileStoreType;
 }
 
 export interface IXMutator<TMutatee extends Object, TKeyField extends StringKeyof<TMutatee>, TKey extends TMutatee[TKeyField]>
@@ -62,6 +67,7 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
     private _originalItems: TMutatee[] = [];
     private _onMutationsChanged: OnMutationHandlerType<TKey> = () => 1;
     private _onPostMutationsChanged: OnMutationHandlerType<TKey> = () => 1;
+    private _fileStorage: FileStoreType = {};
 
     // constructor input
     private _keyPropertyName: TKeyField;
@@ -128,7 +134,7 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
 
         this._originalItems = originalItems;
         this.mutatedItems = originalItems;
-        this.setMutations([]);
+        this.resetMutations();
     }
 
     // 
@@ -380,7 +386,35 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
     resetMutations(callback?: 'NO CALLBACK') {
 
         this.setMutations([], undefined, callback);
+        this._fileStorage = {};
     };
+
+    /**
+     * Store file 
+     */
+    storeFile(key: string, file: File) {
+
+        this._fileStorage[key] = file;
+    }
+
+    /**
+     * Get files
+     */
+    getFiles() {
+        return this._fileStorage;
+    }
+
+    /**
+     * Get file
+     */
+    getFile(key: string): File {
+        
+        const file = this._fileStorage[key];
+        if (!file)
+            throw new Error(`Invalid file key: ${key}`);
+
+        return file;
+    }
 
     // --------------- PRIVATE ------------------------
 
