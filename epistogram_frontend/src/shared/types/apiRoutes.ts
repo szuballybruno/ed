@@ -1,3 +1,4 @@
+import { SaveCourseContentDTO } from '../dtos/admin/SaveCourseContentDTO';
 import { CompanyAssociatedCourseDTO } from '../dtos/company/CompanyAssociatedCourseDTO';
 import { CourseStartDTO } from '../dtos/CourseStartDTO';
 import { Mutation } from '../dtos/mutations/Mutation';
@@ -206,7 +207,7 @@ export const apiRoutes = {
         getCourseBriefData: '/course/get-course-brief-data',
         saveCourseDetails: '/course/save-course-details-data',
         getGreetingsData: '/courses/get-greetings-data' as ParametrizedRouteType<{ query: { courseId: Id<'Course'> } }>,
-        saveCourseContent: '/course/save-course-content-data',
+        saveCourseContent: '/course/save-course-content-data' as ParametrizedRouteType<{ body: SaveCourseContentDTO }>,
         saveCourseThumbnail: '/course/save-course-thumbnail',
         getAvailableCourses: '/course/get-available-courses',
         deleteCourse: '/course/delete-course',
