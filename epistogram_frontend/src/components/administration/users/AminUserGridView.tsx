@@ -26,6 +26,7 @@ import { UsersSearchFilters } from './UsersSearchFilters';
 
 const useColumns = (
     isSimpleView: boolean,
+    preset: UserDataGridPresetType,
     userId: Id<'User'> | null,
     showDeleteUserDialog: (user: RowType) => void,
     openUser: (userId: Id<'User'>) => void) => {
@@ -93,7 +94,7 @@ const useColumns = (
             headerName: 'Regisztráció ideje',
         })
         .add({
-            field: 'averagePerformancePercentage',
+            field: 'summerizedScoreAvg',
             headerName: 'Átlagos teljesítmény',
         })
         .add({
@@ -106,7 +107,7 @@ const useColumns = (
             renderCell: (value) => value ? formatTimespan(value.value) : '-'
         })
         .add({
-            field: 'completedCourseItemCount',
+            field: 'completedVideoCount',
             headerName: 'Megtekintett videók száma',
         })
         .add({
@@ -156,10 +157,10 @@ class RowType {
     nameSimple: string;
     email: string;
     signupDate: string;
-    averagePerformancePercentage: number;
+    summerizedScoreAvg: number;
     invertedLagBehind: number;
     totalSessionLengthSeconds: number;
-    completedCourseItemCount: number;
+    completedVideoCount: number;
     engagementPoints: number;
     productivityPercentage: number;
     detailsButton: Id<'User'>;
@@ -187,10 +188,10 @@ const mapToRow = (user: UserAdminListDTO): RowType => {
                 month: '2-digit',
                 day: '2-digit'
             }) + '',
-        averagePerformancePercentage: user.averagePerformancePercentage,
+        summerizedScoreAvg: user.summerizedScoreAvg,
         invertedLagBehind: user.invertedLagBehind!,
         totalSessionLengthSeconds: user.totalSessionLengthSeconds,
-        completedCourseItemCount: user.completedCourseItemCount,
+        completedVideoCount: user.completedVideoCount,
         engagementPoints: user.engagementPoints,
         productivityPercentage: user.productivityPercentage!,
         detailsButton: user.userId
@@ -323,7 +324,7 @@ export const AminUserGridView = ({
             .openDialog(user);
     };
 
-    const columns = useColumns(isSimpleView, userId, showDeleteUserDialog, userId => {
+    const columns = useColumns(isSimpleView, filterLogic.currentPreset, userId, showDeleteUserDialog, userId => {
 
         getSubroutes(userRoute)
             .forEach(appRoute => {

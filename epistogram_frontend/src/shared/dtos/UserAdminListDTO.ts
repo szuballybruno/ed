@@ -8,10 +8,10 @@ export class UserAdminListDTO {
     firstName: string;
     lastName: string;
     avatarFilePath: string;
-    averagePerformancePercentage: number;
+    summerizedScoreAvg: number;
     totalSessionLengthSeconds: number;
     engagementPoints: number;
-    completedCourseItemCount: number;
+    completedVideoCount: number;
     productivityPercentage: number | null;
     invertedLagBehind: number | null;
 }

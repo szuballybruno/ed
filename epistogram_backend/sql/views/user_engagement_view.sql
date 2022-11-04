@@ -69,22 +69,36 @@ total_session_length_points AS
             ELSE 0
         END total_session_length_points
 	FROM user_session_lengths usl
+),
+engagement_points AS
+(
+	SELECT
+		u.id user_id,
+		(tslp.total_session_length_points
+		+ sp.session_count_points
+		+ sp.is_longer_than_fifteen_minutes_points
+		+ sp.is_shorter_than_five_minutes_points
+		+ COALESCE(uicv.inactive_course_count, 0) * -10::int)::int engagement_points
+	FROM public.user u
+
+	LEFT JOIN session_points sp
+	ON sp.user_id = u.id
+
+	LEFT JOIN total_session_length_points tslp
+	ON tslp.user_id = u.id
+
+	LEFT JOIN public.user_inactive_course_view uicv
+	ON uicv.user_id = u.id
 )
 
 SELECT
-	u.id user_id,
-	(tslp.total_session_length_points
-	+ sp.session_count_points
-	+ sp.is_longer_than_fifteen_minutes_points
-	+ sp.is_shorter_than_five_minutes_points
-	+ COALESCE(uicv.inactive_course_count, 0) * -10::int)::int engagement_points
-FROM public.user u
+	ep.user_id,
+    CASE
+		WHEN ep.engagement_points < 0
+		THEN 0
+		WHEN ep.engagement_points >= 0
+		THEN ep.engagement_points
+	END engagement_points
+FROM engagement_points ep
 
-LEFT JOIN session_points sp
-ON sp.user_id = u.id
 
-LEFT JOIN total_session_length_points tslp
-ON tslp.user_id = u.id
-
-LEFT JOIN public.user_inactive_course_view uicv
-ON uicv.user_id = u.id

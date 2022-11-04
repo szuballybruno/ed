@@ -24,18 +24,31 @@ module_last_exam_averages AS
         AVG(mlesv.exam_score) avg_module_last_exam_score
     FROM public.module_last_exam_score_view mlesv
 
+	WHERE mlesv.exam_score IS NOT NULL
+
     GROUP BY mlesv.user_id, mlesv.course_id
 ),
-summerized_answer_result AS
-(
+summerized_answer_result AS (
     SELECT
         mlea.user_id,
         mlea.course_id,
-        (
-            (COALESCE(upagv.practise_correct_answer_rate, 0)) + 
-            (COALESCE(mlea.avg_module_last_exam_score, 0) * 2) +
-            (COALESCE(fesv.final_exam_score_percentage, 0) * 3)
-        ) / 6 summerized_score
+        CASE
+			WHEN fesv.final_exam_score_percentage IS NULL
+			THEN (
+				(
+					(COALESCE(upagv.practise_correct_answer_rate, 0)) + 
+					(COALESCE(mlea.avg_module_last_exam_score, 0) * 2)
+				) / 3
+			)
+			WHEN fesv.final_exam_score_percentage > 0
+			THEN (
+				(
+					(COALESCE(upagv.practise_correct_answer_rate, 0)) + 
+					(COALESCE(mlea.avg_module_last_exam_score, 0) * 2) +
+					(COALESCE(fesv.final_exam_score_percentage, 0) * 3)
+				) / 6 
+			)
+		END summerized_score
     FROM module_last_exam_averages mlea
 
     LEFT JOIN public.final_exam_score_view fesv
