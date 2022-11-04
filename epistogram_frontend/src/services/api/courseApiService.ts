@@ -1,6 +1,6 @@
 import { CourseAdminListItemDTO } from '../../shared/dtos/admin/CourseAdminListItemDTO';
 import { CourseContentAdminDTO } from '../../shared/dtos/admin/CourseContentAdminDTO';
-import { CourseContentItemAdminDTO } from '../../shared/dtos/admin/CourseContentItemAdminDTO';
+import { SaveCourseContentDTO } from '../../shared/dtos/admin/SaveCourseContentDTO';
 import { AvailableCourseDTO } from '../../shared/dtos/AvailableCourseDTO';
 import { CourseBriefData } from '../../shared/dtos/CourseBriefData';
 import { CourseCategoryDTO } from '../../shared/dtos/CourseCategoryDTO';
@@ -10,8 +10,6 @@ import { CoursePermissionAssignDTO } from '../../shared/dtos/CoursePermissionAss
 import { CourseStartDTO } from '../../shared/dtos/CourseStartDTO';
 import { CreateCourseDTO } from '../../shared/dtos/CreateCourseDTO';
 import { IdResultDTO } from '../../shared/dtos/IdResultDTO';
-import { ModuleEditDTO } from '../../shared/dtos/ModuleEditDTO';
-import { Mutation } from '../../shared/dtos/mutations/Mutation';
 import { apiRoutes } from '../../shared/types/apiRoutes';
 import { CourseModeType } from '../../shared/types/sharedTypes';
 import { Id } from '../../shared/types/versionId';
@@ -105,14 +103,10 @@ const useSaveCourseDetailsData = () => {
 
 const useSaveCourseContentData = () => {
 
-    const qr = usePostDataUnsafe<{
-        courseId: Id<'Course'>,
-        itemMutations: Mutation<CourseContentItemAdminDTO, 'versionCode'>[],
-        moduleMutations: Mutation<ModuleEditDTO, 'moduleVersionId'>[]
-    }, void>(apiRoutes.course.saveCourseContent);
+    const qr = usePostMultipartDataUnsafe<SaveCourseContentDTO>(apiRoutes.course.saveCourseContent);
 
     return {
-        saveCourseDataAsync: qr.postDataAsync,
+        saveCourseDataAsync: qr.postMultipartDataAsync,
         saveCourseDataState: qr.state,
     };
 };
@@ -132,7 +126,7 @@ const useUploadCourseThumbnailAsync = () => {
     const qr = usePostMultipartDataUnsafe<{ courseId: Id<'Course'> }>(apiRoutes.course.saveCourseThumbnail);
 
     return {
-        saveCourseThumbnailAsync: (courseId: Id<'Course'>, file: File) => qr.postMultipartDataAsync({ courseId }, { file }),
+        saveCourseThumbnailAsync: (courseId: Id<'Course'>, file: File) => qr.postMultipartDataAsync({ data: { courseId }, files: { file } }),
         saveCourseThumbnailState: qr.state,
     };
 };

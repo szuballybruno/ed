@@ -1,6 +1,8 @@
 import { Mutation } from '../shared/dtos/mutations/Mutation';
 import { Id } from '../shared/types/versionId';
+import { FileCodesType } from '../static/FileCodes';
 import { InsertEntity, VersionMigrationContainer } from '../utilities/misc';
+import { FileService, UploadFileRelatedEntityIdType } from './FileService';
 import { LoggerService } from './LoggerService';
 import { ClassType } from './misc/advancedTypes/ClassType';
 import { OldData } from './misc/types';
@@ -14,11 +16,14 @@ type SaveActionType = {
     action: 'ADD' | 'UPDATE' | 'INCREMENT';
 }
 
+type IdMutationPair<TMutation> = { id: Id<any>, mut: TMutation };
+
 export class VersionSaveService {
 
     constructor(
         private _ormService: ORMConnectionService,
-        private _loggerService: LoggerService) {
+        private _loggerService: LoggerService,
+        private _fileUploadService: FileService) {
     }
 
     /**
@@ -47,7 +52,8 @@ export class VersionSaveService {
         getNewEntity,
         getNewVersion,
         overrideDataProps,
-        getDataDisplayNameArg
+        getDataDisplayNameArg,
+        fileUploadOptions
     }: {
         dtoSignature: ClassType<TDTO>,
         versionSignature: ClassType<TVersion>,
@@ -64,7 +70,12 @@ export class VersionSaveService {
         overrideDataProps: (data: InsertEntity<TData>, mutation: Mutation<TDTO, TMutationKey>) => InsertEntity<TData>,
         getNewEntity: (mutation: Mutation<TDTO, TMutationKey>) => InsertEntity<TEntity>,
         getNewVersion: (opts: { newDataId: TData['id'], entityId: TEntity['id'], newParentVersionId: Id<TParentName> }) => InsertEntity<TVersion>,
-        getDataDisplayNameArg?: (data: TData) => string
+        getDataDisplayNameArg?: (data: TData) => string,
+        fileUploadOptions?: {
+            fileCode: FileCodesType,
+            relationField: keyof TData,
+            getFiles: (idMutationPairs: IdMutationPair<Mutation<TDTO, TMutationKey>>[]) => UploadFileRelatedEntityIdType[]
+        },
     }) {
 
         // override getDataDisplayName with a fn 
@@ -139,7 +150,7 @@ export class VersionSaveService {
                 } as SaveActionType)));
 
         //
-        // CREATE VIDEO DATAS
+        // CREATE DATAS
         const newDatas = mutaitonsOrdered
             .map((mutation) => {
 
@@ -159,9 +170,34 @@ export class VersionSaveService {
                 };
             });
 
-        const dataIds = (await this._ormService
-            .createManyAsync(dataSignature, newDatas.map(x => x.newData)))
-            .map(x => x.id);
+        const insertedDatas = (await this._ormService
+            .createManyAsync(dataSignature, newDatas.map(x => x.newData)));
+
+        //
+        // DATA attached FILES UPLOAD
+        if (fileUploadOptions) {
+
+            const {
+                fileCode,
+                relationField,
+                getFiles
+            } = fileUploadOptions;
+
+            const idMutationPairs = insertedDatas
+                .map(({ id }, index) => ({
+                    id,
+                    mut: newDatas[index].mutation
+                } as IdMutationPair<Mutation<TDTO, TMutationKey>>))
+
+            await this
+                ._fileUploadService
+                .uploadMultipleAssignedFilesAsync({
+                    entitySignature: dataSignature,
+                    fileCode,
+                    files: getFiles(idMutationPairs),
+                    relationField: relationField as string
+                });
+        }
 
         //
         // CREATE ENTITES (FROM ADD MUTATIONS ONLY)
@@ -181,7 +217,7 @@ export class VersionSaveService {
                 // if no mutation (increment) use old
                 // ELSE use new
                 const newDataId: Id<any> = mutation
-                    ? dataIds[i]
+                    ? insertedDatas[i].id
                     : getOldData(oldVersionId).oldData.id;
 
                 // if no mutation (increment) OR mutation is update, 

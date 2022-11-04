@@ -23,5 +23,8 @@ export const XDialog = (props: {
     if (!hostElement)
         return <></>;
 
+    if (!logic.isOpen && logic.onlyRenderIfOpen)
+        return <></>;
+
     return createPortal(children as any, hostElement);
 };

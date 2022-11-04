@@ -1,39 +1,30 @@
-import { AnswerService } from '../services/AnswerService';
-import { CourseCompletionService } from '../services/CourseCompletionService';
-import { CourseProgressService } from '../services/CourseProgressService';
-import { DomainProviderService } from '../services/DomainProviderService';
-import { FileSystemService } from '../services/FileSystemService';
-import { ParametrizedConstructor } from '../services/misc/advancedTypes/ParametrizedConstructor';
-import { createDBSchema } from '../services/misc/dbSchema';
-import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
-import { PlaylistService } from '../services/PlaylistService';
-import { SQLPoolService } from '../services/sqlServices/SQLPoolService';
-import { TypeORMConnectionService } from '../services/sqlServices/TypeORMConnectionService';
-import { UserInvitationService } from '../services/UserInvitationService';
-import { UserRegistrationService } from '../services/UserRegistrationService';
-import { VersionCreateService } from '../services/VersionCreateService';
-import { VersionSaveService } from '../services/VersionSaveService';
-import { XDBMSchemaService } from '../services/XDBManager/XDBManagerTypes';
-import { DependencyContainer, DepHierarchyFunction, XDependency } from '../utilities/XDInjection/XDInjector';
 import { ActivationCodeService } from '../services/ActivationCodeService';
+import { AnswerService } from '../services/AnswerService';
 import { AuthenticationService } from '../services/AuthenticationService';
 import { AuthorizationService } from '../services/AuthorizationService';
 import { CoinAcquireService } from '../services/CoinAcquireService';
 import { CoinTransactionService } from '../services/CoinTransactionService';
 import { CommentService } from '../services/CommentService';
 import { CompanyService } from '../services/CompanyService';
+import { CourseCompletionService } from '../services/CourseCompletionService';
 import { CourseItemService } from '../services/CourseItemService';
+import { CourseProgressService } from '../services/CourseProgressService';
 import { CourseRatingService } from '../services/CourseRatingService';
 import { CourseService } from '../services/CourseService';
 import { DailyTipService } from '../services/DailyTipService';
+import { DomainProviderService } from '../services/DomainProviderService';
 import { EmailService } from '../services/EmailService';
 import { EventService } from '../services/EventService';
 import { ExamService } from '../services/ExamService';
 import { FileService } from '../services/FileService';
+import { FileSystemService } from '../services/FileSystemService';
 import { HashService } from '../services/HashService';
 import { LikeService } from '../services/LikeService';
 import { LoggerService } from '../services/LoggerService';
 import { MapperService } from '../services/MapperService';
+import { ParametrizedConstructor } from '../services/misc/advancedTypes/ParametrizedConstructor';
+import { createDBSchema } from '../services/misc/dbSchema';
+import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
 import { MiscService } from '../services/MiscService';
 import { ModuleService } from '../services/ModuleService';
 import { ORMConnectionService } from '../services/ORMConnectionService/ORMConnectionService';
@@ -42,6 +33,7 @@ import { PermissionService } from '../services/PermissionService';
 import { PersonalityAssessmentService } from '../services/PersonalityAssessmentService';
 import { PlaybackService } from '../services/PlaybackService';
 import { PlayerService } from '../services/PlayerService';
+import { PlaylistService } from '../services/PlaylistService';
 import { PractiseQuestionService } from '../services/PractiseQuestionService';
 import { PrequizService } from '../services/PrequizService';
 import { PretestService } from '../services/PretestService';
@@ -53,18 +45,25 @@ import { ShopService } from '../services/ShopService';
 import { SignupService } from '../services/SignupService';
 import { SQLFunctionsService } from '../services/sqlServices/FunctionsService';
 import { SQLConnectionService } from '../services/sqlServices/SQLConnectionService';
+import { SQLPoolService } from '../services/sqlServices/SQLPoolService';
 import { StorageService } from '../services/StorageService';
 import { TeacherInfoService } from '../services/TeacherInfoService';
 import { TempomatService } from '../services/TempomatService';
 import { TokenService } from '../services/TokenService';
 import { UrlService } from '../services/UrlService';
 import { UserCourseBridgeService } from '../services/UserCourseBridgeService';
+import { UserInvitationService } from '../services/UserInvitationService';
 import { UserProgressService } from '../services/UserProgressService';
+import { UserRegistrationService } from '../services/UserRegistrationService';
 import { UserService } from '../services/UserService';
 import { UserSessionActivityService } from '../services/UserSessionActivityService';
 import { UserStatsService } from '../services/UserStatsService';
+import { VersionCreateService } from '../services/VersionCreateService';
+import { VersionSaveService } from '../services/VersionSaveService';
 import { VideoRatingService } from '../services/VideoRatingService';
 import { VideoService } from '../services/VideoService';
+import { XDBMSchemaService } from '../services/XDBManager/XDBManagerTypes';
+import { DependencyContainer, DepHierarchyFunction, XDependency } from '../utilities/XDInjection/XDInjector';
 
 type CTAnyArgs<T> = { new(...args: any[]): T };
 
@@ -132,7 +131,6 @@ export const getTransientServiceContainer = (singletonProvider: ServiceProvider)
         .addClass(MapperService, [UrlService])
         .addClass(HashService, [GlobalConfiguration])
         .addClass(SQLConnectionService, [SQLPoolService, LoggerService])
-        .addClass(TypeORMConnectionService, [GlobalConfiguration, XDBMSchemaService])
         .addClass(ORMConnectionService, [GlobalConfiguration, SQLConnectionService, XDBMSchemaService])
         .addClass(PermissionService, [ORMConnectionService, MapperService])
         .addClass(AuthorizationService, [PermissionService, ORMConnectionService])
@@ -144,7 +142,7 @@ export const getTransientServiceContainer = (singletonProvider: ServiceProvider)
         .addClass(ActivationCodeService, [ORMConnectionService])
         .addClass(DomainProviderService, [ORMConnectionService, GlobalConfiguration])
         .addClass(EmailService, [GlobalConfiguration, UrlService, DomainProviderService])
-        .addClass(VersionSaveService, [ORMConnectionService, LoggerService])
+        .addClass(VersionSaveService, [ORMConnectionService, LoggerService, FileService])
         .addClass(SignupService, [EmailService, SQLFunctionsService, ORMConnectionService, MapperService, AuthorizationService, QuestionAnswerService, PermissionService, CompanyService])
         .addClass(QuestionAnswerService, [ORMConnectionService, CoinAcquireService, LoggerService, GlobalConfiguration])
         .addClass(TeacherInfoService, [ORMConnectionService, MapperService, AuthorizationService])
@@ -162,7 +160,7 @@ export const getTransientServiceContainer = (singletonProvider: ServiceProvider)
         .addClass(ExamService, [UserCourseBridgeService, ORMConnectionService, UserSessionActivityService, QuestionAnswerService, QuestionService, MapperService, AuthorizationService, LoggerService, CourseCompletionService])
         .addClass(StorageService, [GlobalConfiguration])
         .addClass(FileSystemService, [])
-        .addClass(FileService, [UserService, StorageService, ORMConnectionService, AuthorizationService])
+        .addClass(FileService, [StorageService, ORMConnectionService])
         .addClass(VideoService, [ORMConnectionService, QuestionAnswerService, FileService, UrlService, GlobalConfiguration, AuthorizationService, LoggerService, FileSystemService])
         .addClass(ModuleService, [ORMConnectionService, MapperService, CourseItemService, VersionSaveService, FileService, AuthorizationService])
         .addClass(PlaylistService, [UserCourseBridgeService, ORMConnectionService, MapperService])

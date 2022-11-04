@@ -567,9 +567,6 @@ export class UserStatsService {
         calculationData: (UserFlagCalculationType | null)[]
     ): ({ userId: Id<'User'>, flag: UserFlagType } | null)[] {
 
-        console.log('Calculation data');
-        console.log(calculationData);
-
         return calculationData
             .map(x => {
 

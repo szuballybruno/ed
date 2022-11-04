@@ -41,6 +41,7 @@ import { AuthorizationResult } from '../utilities/XTurboExpress/XTurboExpressTyp
 import { AuthorizationService } from './AuthorizationService';
 import { FileService } from './FileService';
 import { MapperService } from './MapperService';
+import { FilesObjectType } from './misc/FilesObjectType';
 import { createCharSeparatedList } from './misc/mappings';
 import { ModuleService } from './ModuleService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
@@ -445,7 +446,8 @@ export class CourseService {
         userId: PrincipalId,
         courseId: Id<'Course'>,
         itemMutations: Mutation<CourseContentItemAdminDTO, 'versionCode'>[],
-        moduleMutations: Mutation<ModuleEditDTO, 'moduleVersionId'>[]
+        moduleMutations: Mutation<ModuleEditDTO, 'moduleVersionId'>[],
+        files: FilesObjectType
     ) {
 
         if (itemMutations.length === 0 && moduleMutations.length === 0)
@@ -461,7 +463,8 @@ export class CourseService {
             .saveModulesAsync({
                 courseVersionMigrations,
                 moduleMutations,
-                itemMutations
+                itemMutations,
+                files
             });
     }
 

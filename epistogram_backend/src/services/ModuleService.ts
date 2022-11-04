@@ -20,6 +20,7 @@ import { MapperService } from './MapperService';
 import { XMutatorHelpers } from './misc/XMutatorHelpers';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { VersionSaveService } from './VersionSaveService';
+import { FilesObjectType } from './misc/FilesObjectType';
 
 export class ModuleService {
 
@@ -120,11 +121,13 @@ export class ModuleService {
     async saveModulesAsync({
         courseVersionMigrations,
         itemMutations,
-        moduleMutations
+        moduleMutations,
+        files
     }: {
         courseVersionMigrations: VersionMigrationContainer<'CourseVersion'>,
         itemMutations: Mutation<CourseContentItemAdminDTO, 'versionCode'>[],
-        moduleMutations: Mutation<ModuleEditDTO, 'moduleVersionId'>[]
+        moduleMutations: Mutation<ModuleEditDTO, 'moduleVersionId'>[],
+        files: FilesObjectType
     }) {
 
         // get old course version id
@@ -176,7 +179,27 @@ export class ModuleService {
                 parentVersionIdField: 'courseVersionId',
                 getParentOldVersionId: _ => oldCoruseVersionId,
                 parentVersionIdMigrations: courseVersionMigrations,
-                getDataDisplayNameArg: x => x.name
+                getDataDisplayNameArg: x => x.name,
+                fileUploadOptions: {
+                    fileCode: 'module_thumbnail',
+                    relationField: 'imageFileId',
+                    getFiles: (datas) => datas
+                        .map(({ id, mut }) => {
+
+                            const srcMutationValue = XMutatorHelpers
+                                .getFieldValue(mut)('imageFilePath');
+
+                            const file = srcMutationValue
+                                ? files[srcMutationValue]
+                                : null;
+
+                            return ({
+                                file: file!,
+                                id
+                            })
+                        })
+                        .filter(x => !!x.file)
+                }
             });
 
         // save items

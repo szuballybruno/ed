@@ -13,7 +13,7 @@ export const useModuleEditDialogLogic = ({
     canDelete: (moduleVersionId: Id<'ModuleVersion'>) => boolean,
 }) => {
 
-    const dialogLogic = useEpistoDialogLogic(useModuleEditDialogLogic.name);
+    const dialogLogic = useEpistoDialogLogic(useModuleEditDialogLogic.name, true);
 
     // mut
     const [{ mutatedItems, mutations, isAnyItemsMutated }, mutatorFunctions] = useXMutatorNew(ModuleEditDTO, 'moduleVersionId', useModuleEditDialogLogic.name);

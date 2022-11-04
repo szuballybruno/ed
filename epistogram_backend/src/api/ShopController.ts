@@ -79,7 +79,7 @@ export class ShopController implements XController<ShopController> {
             .getPrivateCourseListAsync(params.principalId);
     }
 
-    @XControllerAction(apiRoutes.shop.saveShopItem, { isPost: true, isMultipart: true })
+    @XControllerAction(apiRoutes.shop.saveShopItem, { isPost: true })
     saveShopItemAction(params: ActionParams) {
 
         const dto = params

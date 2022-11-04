@@ -150,28 +150,34 @@ export class CourseController implements XController<CourseController> {
     @XControllerAction(apiRoutes.course.saveCourseContent, { isPost: true })
     saveCourseContentAction = (params: ActionParams) => {
 
-        const bod = params
-            .getBody();
+        const body = params
+            .getFromParameterized(apiRoutes.course.saveCourseContent)
+            .body;
 
-        const itemMutations = bod
+        const itemMutations = body
             .getValue<Mutation<CourseContentItemAdminDTO, 'versionCode'>>(x => x.itemMutations, 'any[]');
 
-        const moduleMutations = bod
+        const moduleMutations = body
             .getValue<Mutation<ModuleEditDTO, 'moduleVersionId'>>(x => x.moduleMutations, 'any[]');
 
-        const courseId = Id.create<'Course'>(bod
-            .getValue(x => x.courseId, 'int'));
+        const courseId = body
+            .getValue(x => x.courseId, 'int');
+
+        const files = params
+            .files
+            .data;
 
         return this._courseService
             .saveCourseContentAsync(
                 params.principalId,
                 courseId,
                 itemMutations,
-                moduleMutations
+                moduleMutations,
+                files
             );
     };
 
-    @XControllerAction(apiRoutes.course.saveCourseThumbnail, { isPost: true, isMultipart: true })
+    @XControllerAction(apiRoutes.course.saveCourseThumbnail, { isPost: true })
     saveCourseThumbnailAction = (params: ActionParams) => {
 
         const file = params
