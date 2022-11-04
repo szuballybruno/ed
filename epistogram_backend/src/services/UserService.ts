@@ -22,7 +22,7 @@ import { UserEditSimpleDTO } from '../shared/dtos/UserEditSimpleDTO';
 import { instantiate } from '../shared/logic/sharedLogic';
 import { ErrorWithCode } from '../shared/types/ErrorWithCode';
 import { Id } from '../shared/types/versionId';
-import { getFullName, mergeArraysByKey } from '../utilities/helpers';
+import { getFullName } from '../utilities/helpers';
 import { InsertEntity } from '../utilities/misc';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { AuthorizationService } from './AuthorizationService';
@@ -64,56 +64,43 @@ export class UserService {
             await this._authorizationService
                 .checkPermissionAsync(principalId, 'ADMINISTRATE_COMPANY', { companyId: companyId });
 
+        const isCompanyFiltered = companyId
+            ? '='
+            : '!=';
+
         // TODO: CHECK FOR PERMISSIONS IN VIEW
-        const availableUserOverviewViews = await this._ormService
-            .query(UserOverviewView)
-            .getMany();
 
         const companyUserOverviewViews = await this._ormService
             .query(UserOverviewView, { companyId })
-            .where('companyId', '=', 'companyId')
+            .where('companyId', isCompanyFiltered, 'companyId')
             .getMany();
 
         // TODO: CHECK FOR PERMISSIONS IN VIEW
-        const availableTempomatCalculationViews = await this._ormService
-            .query(TempomatCalculationDataView)
-            .innerJoin(User, x => x
-                .on('id', '=', 'userId', TempomatCalculationDataView))
-            .where('startDate', '!=', 'NULL')
-            .and('originalPrevisionedCompletionDate', '!=', 'NULL')
-            .getMany();
-
         const companyTempomatCalculationViews = await this._ormService
             .query(TempomatCalculationDataView, { companyId })
             .innerJoin(User, x => x
-                .on('companyId', '=', 'companyId')
+                .on('companyId', isCompanyFiltered, 'companyId')
                 .and('id', '=', 'userId', TempomatCalculationDataView))
-            .where('startDate', '!=', 'NULL')
-            .and('originalPrevisionedCompletionDate', '!=', 'NULL')
+            .where('startDate', 'IS NOT', 'NULL')
+            .and('originalPrevisionedCompletionDate', 'IS NOT', 'NULL')
             .getMany();
 
-        const selectedUserOverviewViews = companyId
-            ? companyUserOverviewViews
-            : availableUserOverviewViews;
+        const userIdsWithLagBehindAvgs = this._tempomatService
+            .getAvgLagBehindPercentage(companyTempomatCalculationViews);
 
-        const selectedTempomatCalculationViews = companyId
-            ? companyTempomatCalculationViews
-            : availableTempomatCalculationViews;
-
-        const userIdsWithLagBehindAvgs = selectedTempomatCalculationViews
-            .groupBy(x => x.userId)
+        const userOverviewViewsWithLagBehind = companyUserOverviewViews
             .map(x => {
 
-                const lagBehindAvg = this._tempomatService
-                    .getAvgLagBehindPercentage(x.items);
+                const lagBehindAvg = userIdsWithLagBehindAvgs
+                    .find(lba => lba.userId === x.userId);
 
                 return {
-                    userId: x.first.userId,
-                    lagBehindAvg
+                    ...x,
+                    lagBehindAvg: lagBehindAvg?.lagBehindAvg
+                        ? lagBehindAvg.lagBehindAvg
+                        : 0
                 };
             });
-
-        const userOverviewViewsWithLagBehind = mergeArraysByKey(selectedUserOverviewViews, userIdsWithLagBehindAvgs, 'userId');
 
         const userOverviewWithProductivity = userOverviewViewsWithLagBehind
             .groupBy(x => x.userId)
@@ -143,11 +130,17 @@ export class UserService {
 
         const flaggedUsersOnly = userOverviewWithProductivity
             .filter(x => allFlaggedUsers
-                .filter(x => x?.flag === 'low')
-                .some(y => y?.userId === x.userId));
+                .some(y => y?.userId === x.userId))
+            .filter(x => allFlaggedUsers
+                .some(y => y?.flag === 'low'));
 
         return this._mapperService
-            .mapTo(UserAdminListDTO, [isToBeReviewed ? flaggedUsersOnly : userOverviewWithProductivity]);
+            .mapTo(
+                UserAdminListDTO,
+                [isToBeReviewed
+                    ? flaggedUsersOnly
+                    : userOverviewWithProductivity]
+            );
     }
 
     /**

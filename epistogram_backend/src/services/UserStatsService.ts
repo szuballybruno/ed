@@ -259,7 +259,7 @@ export class UserStatsService {
             .filter(x => x.startDate && !x.finalExamScorePercentage);
 
         const notStartedUsers = mergedStats
-            .filter(x => !x.startDate);
+            .filter(x => !x.startDate && x.requiredCompletionDate);
 
         const completedUsers = mergedStats
             .filter(x => x.finalExamScorePercentage);
@@ -566,9 +566,6 @@ export class UserStatsService {
     private _flagUsers(
         calculationData: (UserFlagCalculationType | null)[]
     ): ({ userId: Id<'User'>, flag: UserFlagType } | null)[] {
-
-        console.log('Calculation data');
-        console.log(calculationData);
 
         return calculationData
             .map(x => {

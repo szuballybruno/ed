@@ -14,4 +14,5 @@ export class UserAdminListDTO {
     completedVideoCount: number;
     productivityPercentage: number | null;
     invertedLagBehind: number | null;
+    reactionTime: number | null;
 }

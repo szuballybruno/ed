@@ -173,6 +173,7 @@ export class TempomatService {
         return tempomatCalculationDataViews
             .map(x => {
 
+                console.log(x);
                 const newPrevisionedCompletionDate = this
                     .calculatePrevisionedDate(
                         x.originalPrevisionedCompletionDate,
@@ -201,11 +202,27 @@ export class TempomatService {
     */
     getAvgLagBehindPercentage(tempomatCalculationDatas: TempomatCalculationDataView[]) {
 
-        const lagBehindPercentages = this.getLagBehindPercentageFromTempomatCalculationData(tempomatCalculationDatas);
+        console.log('Basz hattyúk tava' + tempomatCalculationDatas);
 
-        const avgLagBehindPercentage = getArrayAverage(lagBehindPercentages);
+        return tempomatCalculationDatas
+            .groupBy(x => x.userId)
+            .map(x => {
 
-        return avgLagBehindPercentage;
+                const lagBehindAvg = this
+                    .getLagBehindPercentageFromTempomatCalculationData(x.items);
+
+                console.log('lagBehindAvg');
+                console.log(lagBehindAvg);
+
+                const filteredLagBehindAvgs = lagBehindAvg
+                    .filter(x => x)
+                    .filter(x => x !== 0);
+
+                return {
+                    userId: x.first.userId,
+                    lagBehindAvg: getArrayAverage(lagBehindAvg)
+                };
+            });
     }
 
     /**

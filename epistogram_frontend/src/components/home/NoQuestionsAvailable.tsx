@@ -1,4 +1,5 @@
 import { useContext } from 'react';
+import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { useNavigation } from '../../services/core/navigatior';
 import { Environment } from '../../static/Environemnt';
 import { useIsMobileView } from '../../static/frontendHelpers';
@@ -57,6 +58,7 @@ export const NoQuestionsAvailable = () => {
 
                 <EpistoButton
                     variant='light'
+                    onClick={() => navigate2(applicationRoutes.availableCoursesRoute)}
                     style={{
                         margin: '20px 0 0 0',
                         maxWidth: '300px'

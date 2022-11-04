@@ -89,34 +89,39 @@ const useColumns = (
             field: 'email',
             headerName: 'E-mail',
         })
-        .add({
+        .addIf(preset === 'all', {
             field: 'signupDate',
             headerName: 'Regisztráció ideje',
         })
         .add({
             field: 'summerizedScoreAvg',
             headerName: 'Átlagos teljesítmény',
+            renderCell: (value) => value ? Math.round(value.value) + '%' : '-'
         })
-        .add({
+        .addIf(preset === 'all', {
             field: 'invertedLagBehind',
             headerName: 'Haladás',
         })
-        .add({
+        .addIf(preset === 'all', {
             field: 'totalSessionLengthSeconds',
             headerName: 'Platformon eltöltött idő',
             renderCell: (value) => value ? formatTimespan(value.value) : '-'
         })
-        .add({
+        .addIf(preset === 'all', {
             field: 'completedVideoCount',
             headerName: 'Megtekintett videók száma',
         })
-        .add({
+        .addIf(preset === 'reviewRequired', {
             field: 'productivityPercentage',
             headerName: 'Produktivitás',
         })
-        .add({
+        .addIf(preset === 'reviewRequired', {
             field: 'engagementPoints',
             headerName: 'Elköteleződés',
+        })
+        .addIf(preset === 'reviewRequired', {
+            field: 'reactionTime',
+            headerName: 'Reakcióidő',
         })
         .add({
             field: 'detailsButton',
@@ -163,6 +168,7 @@ class RowType {
     completedVideoCount: number;
     engagementPoints: number;
     productivityPercentage: number;
+    reactionTime: number | null;
     detailsButton: Id<'User'>;
 };
 
@@ -194,6 +200,7 @@ const mapToRow = (user: UserAdminListDTO): RowType => {
         completedVideoCount: user.completedVideoCount,
         engagementPoints: user.engagementPoints,
         productivityPercentage: user.productivityPercentage!,
+        reactionTime: user.reactionTime,
         detailsButton: user.userId
     });
 };

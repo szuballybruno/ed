@@ -95,7 +95,8 @@ SELECT
 	upa.average_performance_percentage,
 	tus.total_session_length_seconds,
 	cvca.completed_video_count,
-	uev.engagement_points
+	uev.engagement_points,
+	urtv.total_user_reaction_time_points reaction_time
 FROM public.user u
 
 LEFT JOIN public.storage_file sf
@@ -115,5 +116,8 @@ ON cvca.user_id = u.id
 
 LEFT JOIN public.user_engagement_view uev
 ON uev.user_id = u.id
+
+LEFT JOIN public.user_reaction_time_view urtv
+ON urtv.user_id = u.id
 
 WHERE u.deletion_date IS NULL

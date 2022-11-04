@@ -70,13 +70,13 @@ latest_playback_date_cte AS
 )
 SELECT
     u.id user_id,
-    cisv.video_id,
-    cisv.course_id,
+    vv.video_id,
+    cv.course_id,
     vd.video_file_length_seconds length_seconds,
     vd.title video_title,
     
     -- How much time the user spent with the video
-    uvpsv.total_playback_seconds total_spent_time_seconds,
+    svpc.total_playback_seconds total_spent_time_seconds,
     
     -- How many times the user replayed the video, 
     -- when the video is at least 20% watched
@@ -96,20 +96,22 @@ SELECT
     -- When was the last time the user watched the video
     lpdc.latest_playback_date last_watch_time
     
-FROM summed_video_playbacks_cte uvpsv
+FROM public.latest_course_version_view lcvv 
+
+LEFT JOIN public.course_version cv
+ON cv.id = lcvv.version_id
+
+LEFT JOIN public.module_version mv
+ON mv.course_version_id = cv.id
+
+LEFT JOIN public.video_version vv
+ON vv.module_version_id = mv.id
+
+INNER JOIN summed_video_playbacks_cte svpc
+ON vv.video_id = svpc.video_id
 
 LEFT JOIN public.user u
-ON u.id = uvpsv.user_id
-
-INNER JOIN public.user_playlist_view cisv
-ON cisv.user_id = u.id 
-AND cisv.video_id = uvpsv.video_id
--- TODO at this point the video completion is
--- inconsistent, so showing all started
---AND cisv.item_state = 'completed'
-
-INNER JOIN public.video_version vv
-ON vv.id = cisv.video_version_id
+ON u.id = svpc.user_id
 
 LEFT JOIN public.video_data vd
 ON vd.id = vv.video_data_id
@@ -119,7 +121,7 @@ ON vrc.user_id = u.id
 AND vrc.video_id = vv.video_id
 
 LEFT JOIN public.user_practise_recommendation_view uprv
-ON uprv.video_id = vv.video_id
+ON uprv.video_version_id = vv.id
 AND uprv.user_id = u.id
 
 LEFT JOIN last_3_quiz_answer_avg_cte l3qaac
@@ -133,3 +135,5 @@ AND artc.user_id = u.id
 LEFT JOIN latest_playback_date_cte lpdc
 ON lpdc.video_id = vv.video_id
 AND lpdc.user_id = u.id
+
+ORDER BY u.id, vv.video_id

@@ -39,4 +39,7 @@ export class UserOverviewView {
 
     @XViewColumn()
     completedVideoCount: number;
+
+    @XViewColumn()
+    reactionTime: number;
 }
