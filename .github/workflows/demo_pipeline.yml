@@ -130,7 +130,7 @@ jobs:
           --builder ${{ steps.buildx.outputs.name }} \
           --tag $BACKEND_IMAGE_NAME \
           --push
-
+          
   # DEPLOY DATABASE
   deploy_database: 
     name: Deploy database

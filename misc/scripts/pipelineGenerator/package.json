@@ -5,7 +5,7 @@
   "main": "src/main.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "generatePipelines": "tsc & node dist/main.js",
+    "start": "tsc & node dist/main.js",
     "generateLocalConfig": "tsc & node dist/main.js --genc & out/configGen.bat"
   },
   "keywords": [],
