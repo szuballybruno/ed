@@ -153,6 +153,7 @@ import { VideoVersionView } from '../../models/views/VideoVersionView';
 import { XDBMSchemaService } from '../XDBManager/XDBManagerTypes';
 import { PlaylistView } from '../../models/views/PlaylistView';
 import { AdminCourseUserStatsView } from '../../models/views/AdminCourseUserStatsView';
+import { LatestExamResultView } from '../../models/views/LatestExamResultView';
 
 export const createDBSchema = (): XDBMSchemaService => {
 
@@ -195,6 +196,7 @@ export const createDBSchema = (): XDBMSchemaService => {
             CourseDetailsView,
             AvailableCourseView,
             ExamResultView,
+            LatestExamResultView,
             CourseAdminShortView,
             QuestionDataView,
             UserCourseCompletionOriginalEstimationView,

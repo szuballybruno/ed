@@ -8,6 +8,7 @@ import { ExamPlayerDataView } from '../models/views/ExamPlayerDataView';
 import { ExamResultStatsView } from '../models/views/ExamResultStatsView';
 import { ExamResultView } from '../models/views/ExamResultView';
 import { ExamVersionView } from '../models/views/ExamVersionView';
+import { LatestExamResultView } from '../models/views/LatestExamResultView';
 import { LatestExamView } from '../models/views/LatestExamView';
 import { QuestionDataView } from '../models/views/QuestionDataView';
 import { AnswerQuestionsDTO } from '../shared/dtos/AnswerQuestionsDTO';
@@ -25,6 +26,7 @@ import { QuestionAnswerService } from './QuestionAnswerService';
 import { QuestionService } from './QuestionService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { UserSessionActivityService } from './UserSessionActivityService';
+
 
 export class ExamService {
 
@@ -228,7 +230,7 @@ export class ExamService {
         const latestExamVersionId = latestExam.examVersionId;
 
         const examResultViews = await this._ormService
-            .query(ExamResultView, {
+            .query(LatestExamResultView, {
                 examVersionId: latestExamVersionId,
                 userId: userId,
                 answerSessionId
@@ -250,6 +252,40 @@ export class ExamService {
             .where('answerSessionId', '=', 'answerSessionId')
             .and('userId', '=', 'userId')
             .getSingle();
+
+        return this
+            ._mapperService
+            .mapTo(ExamResultsDTO, [examResultViews, examResultStatsView]);
+    }
+
+    /**
+     * Get the results of the particular exam.
+     */
+    async getLatestExamResultsAsync(
+        principalId: PrincipalId,
+        answerSessionId: Id<'AnswerSession'>
+    ) {
+        console.log(answerSessionId);
+
+        const examResultViews = await this._ormService
+            .query(ExamResultView, {
+                answerSessionId
+            })
+            .where('answerSessionId', '=', 'answerSessionId')
+            .getMany();
+
+        console.log('erv');
+        console.log(examResultViews);
+
+        const examResultStatsView = await this._ormService
+            .query(ExamResultStatsView, {
+                answerSessionId
+            })
+            .where('answerSessionId', '=', 'answerSessionId')
+            .getSingle();
+
+        console.log('ersv');
+        console.log(examResultStatsView);
 
         return this
             ._mapperService

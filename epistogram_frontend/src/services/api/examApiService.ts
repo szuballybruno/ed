@@ -47,6 +47,17 @@ export const useExamResults = (answerSessionId: Id<'AnswerSession'>) => {
     };
 };
 
+export const useLatestExamResults = (answerSessionId: Id<'AnswerSession'>) => {
+
+    const qr = QueryService.useXQuery<ExamResultsDTO>(apiRoutes.exam.getLatestExamResults, { answerSessionId });
+
+    return {
+        examResults: qr.data,
+        examResultsError: qr.error,
+        examResultsState: qr.state
+    };
+};
+
 export const ExamApiService = {
     useSaveExamAnswers,
 };
