@@ -241,7 +241,8 @@ export const apiRoutes = {
 
     exam: {
         answerExamQuestion: '/exam/answer-exam-question',
-        getExamResults: '/exam/get-exam-results',
+        getExamResults: '/exam/get-exam-results' as ParametrizedRouteType<{ query: { answerSessionId: Id<'AnswerSession'> } }>,
+        getLatestExamResults: '/exam/get-latest-exam-results' as ParametrizedRouteType<{ query: { answerSessionId: Id<'AnswerSession'> } }>,
         startExam: '/exam/start-exam',
         completeExam: '/exam/complete-exam'
     },

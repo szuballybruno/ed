@@ -5,6 +5,7 @@ export class UserExamStatsDTO {
     examId: Id<'Exam'>;
     examTitle: string;
     courseId: Id<'Course'>;
+    answerSessionId: Id<'AnswerSession'>;
     correctAnswerRate: number;
     shouldPractiseExam: boolean;
     correctAnswerCount: string;

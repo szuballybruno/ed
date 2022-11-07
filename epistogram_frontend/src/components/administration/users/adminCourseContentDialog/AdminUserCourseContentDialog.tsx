@@ -1,7 +1,9 @@
+import { ArrowBack } from '@mui/icons-material';
 import { useState } from 'react';
 import { CourseApiService } from '../../../../services/api/courseApiService';
 import { UserApiService } from '../../../../services/api/UserApiService1';
 import { Id } from '../../../../shared/types/versionId';
+import { EpistoButton } from '../../../controls/EpistoButton';
 import { EpistoFlex2 } from '../../../controls/EpistoFlex';
 import { EpistoFont } from '../../../controls/EpistoFont';
 import { EpistoTabs } from '../../../controls/EpistoTabs';
@@ -12,6 +14,7 @@ import { AdminUserCourseStatsOverview } from '../AdminUserCourseStatsOverview';
 import { AdminUserExamsDataGridControl } from '../dataGrids/AdminUserExamsDataGridControl';
 import { AdminUserModulesDataGridControl } from '../dataGrids/AdminUserModulesDataGridControl';
 import { AdminUserVideosDataGridControl } from '../dataGrids/AdminUserVideosDataGridControl';
+import { AdminUserExamsMoreInfoControl } from './AdminUserExamsMoreInfoControl';
 
 export const AdminUserCourseContentDialog = (props: {
     dialogLogic: EpistoDialogLogicType<{
@@ -24,6 +27,8 @@ export const AdminUserCourseContentDialog = (props: {
     const dialogParams = dialogLogic.params;
 
     const [currentTab, setCurrentTab] = useState(0);
+    const [currentAnswerSession, setCurrentAnswerSession] = useState<Id<'AnswerSession'> | undefined>();
+    const [currentExamTitle, setCurrentExamTitle] = useState<string>('');
 
     // http 
     const { courseBriefData } = CourseApiService
@@ -46,6 +51,7 @@ export const AdminUserCourseContentDialog = (props: {
             {
                 title: 'Videók',
                 component: <AdminUserVideosDataGridControl
+                    userId={dialogParams.userId}
                     courseId={dialogParams.courseId}
                     handleMoreButton={
                         function (): void {
@@ -55,11 +61,13 @@ export const AdminUserCourseContentDialog = (props: {
             {
                 title: 'Vizsgák',
                 component: <AdminUserExamsDataGridControl
+                    userId={dialogParams.userId}
                     courseId={dialogParams.courseId}
-                    handleMoreButton={
-                        function (): void {
-                            throw new Error('Function not implemented.');
-                        }} />
+                    handleMoreButton={(title: string, answerSessionId?: Id<'AnswerSession'>) => {
+                        setCurrentAnswerSession(answerSessionId);
+                        setCurrentExamTitle(title);
+                        setCurrentTab(4);
+                    }} />
             },
             {
                 title: 'Modulok',
@@ -69,11 +77,17 @@ export const AdminUserCourseContentDialog = (props: {
                         function (): void {
                             throw new Error('Function not implemented.');
                         }} />
-            }
+            },
+            {
+                title: '',
+                component: <AdminUserExamsMoreInfoControl
+                    answerSessionId={currentAnswerSession} />
+            },
         ]
         : [];
 
     return <EpistoDialog
+
         closeButtonType="top"
         fullScreenX
         fullScreenY
@@ -104,21 +118,47 @@ export const AdminUserCourseContentDialog = (props: {
                     <EpistoFlex2
                         h="50px"
                         direction="column"
+                        justify='center'
                         mr="20px">
 
-                        <EpistoFont
-                            fontSize={'fontLarge'}
-                            style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                flexDirection: 'row',
-                                fontWeight: 600
-                            }}>
-                            {courseTitle}
-                        </EpistoFont>
-                        <EpistoFont fontSize={'fontMid'}>
-                            {userFullName}
-                        </EpistoFont>
+                        {currentTab === 4
+                            ? <EpistoFlex2
+                                height='100%'
+                                align='center'>
+
+                                <EpistoButton
+                                    variant='outlined'
+                                    height='stretch'
+                                    onClick={() => setCurrentTab(2)}>
+
+                                    <ArrowBack />
+                                </EpistoButton>
+
+                                <EpistoFont
+                                    style={{
+                                        marginLeft: '10px'
+                                    }}>
+
+                                    {currentExamTitle}
+                                </EpistoFont>
+                            </EpistoFlex2>
+                            : <>
+                                <EpistoFont
+                                    fontSize={'fontLarge'}
+                                    style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        flexDirection: 'row',
+                                        fontWeight: 600
+                                    }}>
+                                    {courseTitle}
+                                </EpistoFont>
+                                <EpistoFont fontSize={'fontMid'}>
+                                    {userFullName}
+                                </EpistoFont>
+                            </>
+                        }
+
                     </EpistoFlex2>
                 </EpistoFlex2>
 
@@ -126,6 +166,7 @@ export const AdminUserCourseContentDialog = (props: {
                     selectedTabKey={currentTab}
                     onChange={key => setCurrentTab(key)}
                     tabItems={moreInfoDialogTabs
+                        .filter(x => x.title !== '')
                         .map((x, index) => ({
                             key: index,
                             label: x.title

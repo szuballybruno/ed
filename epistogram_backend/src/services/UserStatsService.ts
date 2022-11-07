@@ -171,8 +171,6 @@ export class UserStatsService {
             .where('id', '=', 'userId')
             .getSingle();
 
-        console.log(principalUser);
-
         const principalCompanyId = principalUser.companyId;
 
         const stats = await this._ormService
@@ -180,8 +178,6 @@ export class UserStatsService {
             .where('courseId', '=', 'courseId')
             .and('companyId', '=', 'companyId')
             .getMany();
-
-        console.log(stats);
 
         /* TODO: This lag behind days doesn't contain 
            adjustment correction like it should */
@@ -235,8 +231,6 @@ export class UserStatsService {
 
         const mergedStats = (() => {
 
-            console.log('mergedStats');
-
             return stats.map(x => {
 
                 const previsionedDate = userEstimatedCompletionDates
@@ -266,8 +260,6 @@ export class UserStatsService {
 
         const filteredStats = (() => {
 
-            console.log('filteredStats');
-
             if (preset === 'inprogress')
                 return inProgressUsers;
 
@@ -287,10 +279,19 @@ export class UserStatsService {
     /**
      * Gets the statistics for the users every watched video
      */
-    async getUserVideoStatsAsync(principalId: PrincipalId, courseId: Id<'Course'>, userId: Id<'User'> | null) {
+    async getUserVideoStatsAsync(
+        principalId: PrincipalId,
+        courseId: Id<'Course'>,
+        userId: Id<'User'> | null
+    ) {
 
         const stats = await this._ormService
-            .query(UserVideoStatsView, { userId: userId ? userId : principalId, courseId })
+            .query(UserVideoStatsView, {
+                userId: userId
+                    ? userId
+                    : principalId,
+                courseId
+            })
             .where('userId', '=', 'userId')
             .and('courseId', '=', 'courseId')
             .getMany();

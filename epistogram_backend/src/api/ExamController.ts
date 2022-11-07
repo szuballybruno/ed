@@ -55,12 +55,25 @@ export class ExamController implements XController<ExamController> {
     @XControllerAction(apiRoutes.exam.getExamResults)
     getExamResultsAction(params: ActionParams) {
 
-        const answerSessionId = Id
-            .create<'AnswerSession'>(params
-                .getQuery()
-                .getValue(x => x.answerSessionId, 'int'));
+        const answerSessionId = params
+            .getFromParameterized(apiRoutes.exam.getExamResults)
+            .query
+            .data
+            .answerSessionId;
 
         return this._examService
             .getExamResultsAsync(params.principalId, answerSessionId);
+    }
+
+    @XControllerAction(apiRoutes.exam.getLatestExamResults)
+    getLatestExamResultsAction(params: ActionParams) {
+
+        const { answerSessionId } = params
+            .getFromParameterized(apiRoutes.exam.getLatestExamResults)
+            .query
+            .data;
+
+        return this._examService
+            .getLatestExamResultsAsync(params.principalId, answerSessionId);
     }
 }

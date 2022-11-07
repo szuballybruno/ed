@@ -4,7 +4,6 @@ import { UserExamStatsDTO } from '../../../../shared/dtos/UserExamStatsDTO';
 import { OmitProperty } from '../../../../shared/types/advancedTypes';
 import { Id } from '../../../../shared/types/versionId';
 import { secondsToTime } from '../../../../static/frontendHelpers';
-import { useIntParam } from '../../../../static/locationHelpers';
 import { EpistoButton } from '../../../controls/EpistoButton';
 import { EpistoDataGrid, GridColumnType } from '../../../controls/EpistoDataGrid';
 import { EpistoFlex2 } from '../../../controls/EpistoFlex';
@@ -12,16 +11,13 @@ import { EpistoFont } from '../../../controls/EpistoFont';
 import { LoadingFrame } from '../../../system/LoadingFrame';
 import { EmptyCell } from '../../../universal/EmptyCell';
 import { ChipSmall } from '../../courses/ChipSmall';
-
 export const AdminUserExamsDataGridControl = (props: {
+    userId: Id<'User'>,
     courseId: Id<'Course'> | null
-    handleMoreButton: () => void
+    handleMoreButton: (title: string, answerSessionId?: Id<'AnswerSession'>) => void
 }) => {
 
-    const { handleMoreButton, courseId } = props;
-
-    const userId = Id
-        .create<'User'>(useIntParam('userId')!);
+    const { handleMoreButton, courseId, userId } = props;
 
     const { userExamStats, userExamStatsStatus, userExamStatsError } = useUserExamStats(courseId!, userId);
 
@@ -35,6 +31,7 @@ export const AdminUserExamsDataGridControl = (props: {
             examId: exam.examId,
             examTitle: exam.examTitle,
             courseId: exam.courseId,
+            answerSessionId: exam.answerSessionId,
             correctAnswerRate: exam.correctAnswerRate,
             shouldPractiseExam: exam.shouldPractiseExam,
             correctAnswerCount: exam.correctAnswerCount,
@@ -144,12 +141,12 @@ export const AdminUserExamsDataGridControl = (props: {
         columnDefGen('moreDetails', {
             headerName: 'Részletek',
             width: 150,
-            renderCell: (params) =>
+            renderCell: ({ row }) =>
 
                 <EpistoButton
                     variant="outlined"
                     onClick={() => {
-                        handleMoreButton();
+                        handleMoreButton(row.examTitle + '', row.answerSessionId);
                     }} >
 
                     Bővebben

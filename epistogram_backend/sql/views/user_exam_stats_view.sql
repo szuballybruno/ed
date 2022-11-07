@@ -3,6 +3,7 @@ SELECT DISTINCT ON (e.id)
 	ed.title exam_title,
 	u.id user_id,
 	cv.course_id,
+	asv.answer_session_id,
 	asv.answer_session_success_rate correct_answer_rate,
 	CASE 
 		WHEN asv.is_successful
@@ -41,8 +42,7 @@ ON mv.id = ev.module_version_id
 LEFT JOIN public.course_version cv
 ON cv.id = mv.course_version_id
 
-WHERE /*asv.end_date IS NOT NULL
-AND*/ u.id IS NOT NULL
+WHERE u.id IS NOT NULL
 AND e.is_pretest IS FALSE
 AND e.is_signup IS FALSE
 

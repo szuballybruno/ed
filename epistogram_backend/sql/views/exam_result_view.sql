@@ -23,16 +23,13 @@ SELECT
 	ad.is_correct IS NOT DISTINCT FROM true is_answer_correct,
 	ad.text answer_text,
 	av.answer_id
-FROM public.exam_version ev
+FROM public.answer_session ase
 
-CROSS JOIN public.user u
+INNER JOIN public.exam_version ev
+ON ev.id = ase.exam_version_id
 
-INNER JOIN public.latest_answer_session_view lasv
-ON lasv.user_id = u.id 
-AND lasv.exam_version_id = ev.id
-
-LEFT JOIN public.answer_session ase
-ON ase.id = lasv.answer_session_id
+LEFT JOIN public.user u
+ON u.id = ase.user_id
 
 INNER JOIN public.exam e
 ON e.id = ev.exam_id

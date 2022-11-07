@@ -685,6 +685,7 @@ const marray = [
                         examId: x.examId,
                         examTitle: x.examTitle,
                         courseId: x.courseId,
+                        answerSessionId: x.answerSessionId,
                         correctAnswerRate: x.correctAnswerRate,
                         shouldPractiseExam: x.shouldPractiseExam,
                         correctAnswerCount: x.correctAnswerCount,
