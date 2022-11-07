@@ -1,30 +1,32 @@
-import { Flex } from "@chakra-ui/react";
-import React, { ReactNode } from "react";
-import { Typography } from "@mui/material";
-import { isString } from "../../static/frontendHelpers";
-import { EpistoFont } from "../controls/EpistoFont";
+import React, {ReactNode} from 'react';
+import {isString} from '../../static/frontendHelpers';
+import {EpistoFlex2, EpistoFlex2Props} from '../controls/EpistoFlex';
+import {EpistoFont} from '../controls/EpistoFont';
 
 export const CourseDetailsBriefingInfoItem = (props: {
     icon?: string | ReactNode,
     title: string,
     subTitle?: string
-}) => {
+} & EpistoFlex2Props) => {
 
-    const { title, icon, subTitle } = props;
+    const { title, icon, subTitle, ...css } = props;
 
-    return <Flex
-        direction={"row"}
-        width={200}
-        height={60}
-        bg={"white"}
-        borderWidth={1}
-        borderRadius={5}
-        shadow={"#00000024 0px 0px 3px 0px"}>
+    return <EpistoFlex2
+        direction={'row'}
+        minWidth='200px'
+        flex='1'
+        height='60px'
+        background="var(--transparentWhite70)"
+        backdropFilter="blur(7px)"
+        borderWidth='1px'
+        borderRadius='5px'
+        shadow={'#00000024 0px 0px 3px 0px'}
+        {...css}>
 
-        <Flex
-            width={60}
-            align={"center"}
-            justify={"center"}>
+        <EpistoFlex2
+            width='60px'
+            align={'center'}
+            justify={'center'}>
 
             {/* compontnt icon */}
             {!isString(icon) && icon}
@@ -32,31 +34,31 @@ export const CourseDetailsBriefingInfoItem = (props: {
             {/* icon path */}
             {isString(icon) && <img
                 src={icon as any}
-                alt={""}
+                alt={''}
                 className="square50" />}
-        </Flex>
+        </EpistoFlex2>
 
-        <Flex
-            ml={5}
-            width={135}
-            direction={"column"}
-            justify={"center"}
-            align={"flex-start"}>
+        <EpistoFlex2
+            ml='5px'
+            width='135px'
+            direction={'column'}
+            justify={'center'}
+            align={'flex-start'}>
 
             <EpistoFont
-                fontSize={"fontExtraSmall"}
+                fontSize={'fontExtraSmall'}
                 style={{
-                    fontWeight: "bold"
+                    fontWeight: 'bold'
                 }}>
 
                 {title}
             </EpistoFont>
 
             <EpistoFont
-                fontSize={"fontExtraSmall"}>
+                fontSize={'fontExtraSmall'}>
 
                 {subTitle}
             </EpistoFont>
-        </Flex>
-    </Flex>
-}
+        </EpistoFlex2>
+    </EpistoFlex2>;
+};

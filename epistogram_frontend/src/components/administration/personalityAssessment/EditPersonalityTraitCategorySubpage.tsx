@@ -1,26 +1,29 @@
-import { Flex } from "@chakra-ui/react";
-import { Delete } from "@mui/icons-material";
-import Edit from "@mui/icons-material/Edit";
-import { applicationRoutes } from "../../../configuration/applicationRoutes";
-import { DailyTipDTO } from "../../../models/shared_models/DailyTipDTO";
-import { useCreateDailyTip, useDeleteDailyTip } from "../../../services/api/dailyTipApiService";
-import { usePersonalityTraitCategoryDetails } from "../../../services/api/personalityAssessmentApiService";
-import { useNavigation } from "../../../services/core/navigatior";
-import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
-import { useBoolParam, useIntParam } from "../../../static/frontendHelpers";
-import { EpistoButton } from "../../controls/EpistoButton";
-import { LoadingFrame } from "../../system/LoadingFrame";
-import { FlexListItem } from "../../universal/FlexListItem";
-import { FlexListTitleSubtitle } from "../../universal/FlexListTitleSubtitle";
-import { AdminSubpageHeader } from "../AdminSubpageHeader";
+import { Delete } from '@mui/icons-material';
+import Edit from '@mui/icons-material/Edit';
+import { applicationRoutes } from '../../../configuration/applicationRoutes';
+import { DailyTipDTO } from '../../../shared/dtos/DailyTipDTO';
+import { useCreateDailyTip, useDeleteDailyTip } from '../../../services/api/dailyTipApiService';
+import { usePersonalityTraitCategoryDetails } from '../../../services/api/personalityAssessmentApiService';
+import { useNavigation } from '../../../services/core/navigatior';
+import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
+import { useBoolParam, useIntParam } from '../../../static/locationHelpers';
+import { EpistoButton } from '../../controls/EpistoButton';
+import { LoadingFrame } from '../../system/LoadingFrame';
+import { FlexListItem } from '../../universal/FlexListItem';
+import { FlexListTitleSubtitle } from '../../universal/FlexListTitleSubtitle';
+import { AdminSubpageHeader } from '../AdminSubpageHeader';
+import { Id } from '../../../shared/types/versionId';
+import { EpistoFlex2 } from '../../controls/EpistoFlex';
 
 export const EditPersonalityTraitCategorySubpage = () => {
 
     //util
-    const { navigate } = useNavigation();
+    const { navigate2 } = useNavigation();
     const showError = useShowErrorDialog();
-    const traitCategoryId = useIntParam("traitCategoryId")!;
-    const isMax = useBoolParam("isMax");
+
+    const traitCategoryId = Id
+        .create<'PersonalityTraitCategory'>(useIntParam('traitCategoryId')!);
+    const isMax = useBoolParam('isMax');
 
     // http 
     const {
@@ -39,38 +42,38 @@ export const EditPersonalityTraitCategorySubpage = () => {
 
     const tips = personalityTraitCategoryDetails?.tips ?? [];
 
-    const handleEdit = (dailyTipId: number) => {
+    const handleEdit = (dailyTipId: Id<'DailyTip'>) => {
 
-        navigate(applicationRoutes.administrationRoute.personalityAssessmentRoute.editTips.editTip, { traitCategoryId, isMax, dailyTipId })
-    }
+        navigate2(applicationRoutes.administrationRoute.personalityAssessmentRoute.editTipsRoute.editTipRoute, { traitCategoryId, isMax, dailyTipId });
+    };
 
     const handleAddTip = async () => {
 
         try {
 
             await createDailyTipAsync({ personalityTraitCategoryId: traitCategoryId, isMax });
-            showNotification("Napi tipp sikeresen hozzaadva.");
+            showNotification('Napi tipp sikeresen hozzaadva.');
             await refetchPersonalityTraitCategoryDetails();
         }
         catch (e) {
 
             showError(e);
         }
-    }
+    };
 
-    const handleDelete = async (dailyTipId: number) => {
+    const handleDelete = async (dailyTipId: Id<'DailyTip'>) => {
 
         try {
 
             await deleteDailyTipAsync({ dailyTipId });
-            showNotification("Napi tipp sikeresen torolve.");
+            showNotification('Napi tipp sikeresen torolve.');
             await refetchPersonalityTraitCategoryDetails();
         }
         catch (e) {
 
             showError(e);
         }
-    }
+    };
 
     const rowButtons = [
         {
@@ -95,12 +98,13 @@ export const EditPersonalityTraitCategorySubpage = () => {
 
             {/* admin header */}
             <AdminSubpageHeader
+                direction="column"
                 tabMenuItems={[
-                    applicationRoutes.administrationRoute.personalityAssessmentRoute.editTips
+                    applicationRoutes.administrationRoute.personalityAssessmentRoute.editTipsRoute
                 ]}
-                subRouteLabel={pageLabel ?? ""}>
+                subRouteLabel={pageLabel ?? ''}>
 
-                <Flex
+                <EpistoFlex2
                     bg="var(--deepBlue)"
                     align="center"
                     justify="flex-end"
@@ -110,12 +114,12 @@ export const EditPersonalityTraitCategorySubpage = () => {
                         variant="light"
                         onClick={handleAddTip}
                         style={{
-                            margin: "10px"
+                            margin: '10px'
                         }}>
 
                         Add tip
                     </EpistoButton>
-                </Flex>
+                </EpistoFlex2>
 
                 {tips
                     .map((tip, index) => (
@@ -128,27 +132,28 @@ export const EditPersonalityTraitCategorySubpage = () => {
                                     title={`Tipp ${tip.id}`}
                                     subTitle={tip.description.substring(0, 30)} />
                             )}
-                            endContent={<Flex
+                            endContent={<EpistoFlex2
                                 align="center">
 
                                 {/* go to edit */}
                                 {rowButtons
-                                    .map(x => (
+                                    .map((x, index) => (
                                         <EpistoButton
-                                            variant={"colored"}
+                                            key={index}
+                                            variant={'colored'}
                                             onClick={() => x.action(tip)}
                                             className="square30"
                                             style={{
-                                                margin: "3px"
+                                                margin: '3px'
                                             }}>
 
                                             {x.icon}
                                         </EpistoButton>
                                     ))}
-                            </Flex>} />
+                            </EpistoFlex2>} />
                     ))}
 
             </AdminSubpageHeader>
         </LoadingFrame>
     );
-}
+};

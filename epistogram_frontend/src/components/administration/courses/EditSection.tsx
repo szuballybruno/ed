@@ -1,28 +1,39 @@
-import { Flex, FlexProps } from "@chakra-ui/react";
-import { ReactNode } from "react";
-import { EpistoHeader } from "../../EpistoHeader";
+import { ReactNode } from 'react';
+import { EpistoFlex2, EpistoFlex2Props } from '../../controls/EpistoFlex';
+import { EpistoFont } from '../../controls/EpistoFont';
 
 export const EditSection = (props: {
     title: string,
-    children: ReactNode
-} & FlexProps) => {
+    children: ReactNode,
+    hidden?: boolean,
+    rightSideComponent?: ReactNode
+} & EpistoFlex2Props) => {
 
-    const { children, title, ...css } = props;
+    const { children, title, rightSideComponent, ...css } = props;
 
-    return <Flex
+    return <EpistoFlex2
         direction="column"
-        bg="white"
         p="20px"
-        mt="10px"
-        border="1px solid var(--mildGrey)"
+        mb="10px"
+        bg="white"
         {...css}>
 
-        <EpistoHeader
-            text={title}
-            showDivider
-            variant="strongSub"
-            m="5px 10px 0px 0" />
+        <EpistoFlex2
+            align="flex-start"
+            justify="space-between">
+
+            <EpistoFont
+                style={{
+                    fontWeight: 600,
+                    fontSize: '1.2rem'
+                }}>
+
+                {title}
+            </EpistoFont>
+
+            {rightSideComponent}
+        </EpistoFlex2>
 
         {children}
-    </Flex>
-}
+    </EpistoFlex2>;
+};

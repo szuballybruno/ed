@@ -1,11 +1,12 @@
-import { PersonalityTraitCategoryDTO } from "../../models/shared_models/PersonalityTraitCategoryDTO";
-import { PersonalityTraitCategoryShortDTO } from "../../models/shared_models/PersonalityTraitCategoryShortDTO";
-import { apiRoutes } from "../../models/shared_models/types/apiRoutes";
-import { useReactQuery2 } from "../../static/frontendHelpers";
+import { PersonalityTraitCategoryDTO } from '../../shared/dtos/PersonalityTraitCategoryDTO';
+import { PersonalityTraitCategoryShortDTO } from '../../shared/dtos/PersonalityTraitCategoryShortDTO';
+import { apiRoutes } from '../../shared/types/apiRoutes';
+import { Id } from '../../shared/types/versionId';
+import { QueryService } from '../../static/QueryService';
 
 export const usePersonalityTraitCategories = () => {
 
-    const qr = useReactQuery2<PersonalityTraitCategoryShortDTO[]>(apiRoutes.personalityAssessment.getPersonalityTraitCategories);
+    const qr = QueryService.useXQuery<PersonalityTraitCategoryShortDTO[]>(apiRoutes.personalityAssessment.getPersonalityTraitCategories);
 
     return {
         personalityTraitCategories: qr.data ?? [],
@@ -13,11 +14,11 @@ export const usePersonalityTraitCategories = () => {
         personalityTraitCategoriesError: qr.error,
         refetchPersonalityTraitCategories: qr.refetch
     };
-}
+};
 
-export const usePersonalityTraitCategoryDetails = (personalityTraitCategoryId: number, isMax: boolean) => {
+export const usePersonalityTraitCategoryDetails = (personalityTraitCategoryId: Id<'PersonalityTraitCategory'>, isMax: boolean) => {
 
-    const qr = useReactQuery2<PersonalityTraitCategoryDTO>(
+    const qr = QueryService.useXQuery<PersonalityTraitCategoryDTO>(
         apiRoutes.personalityAssessment.getPersonalityTraitCategoryDetails,
         { personalityTraitCategoryId, isMax });
 
@@ -27,4 +28,4 @@ export const usePersonalityTraitCategoryDetails = (personalityTraitCategoryId: n
         personalityTraitCategoryDetailsError: qr.error,
         refetchPersonalityTraitCategoryDetails: qr.refetch
     };
-}
+};

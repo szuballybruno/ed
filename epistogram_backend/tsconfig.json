@@ -1,22 +1,28 @@
 {
   "compilerOptions": {
-    "target": "es6",
-    "module": "commonjs",
+    "target": "ES2017",
+    "module": "ES2022",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
     "sourceMap": true,
     "outDir": "./build",
     "strict": true,
-    "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    // for TypeORM
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "strictPropertyInitialization": false,
     "lib": [
-      "ES2021"
+      "ESNext"
     ]
   },
+  "include": [
+    "src",
+    // "tests",
+    // "jest.config.ts"
+  ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "tests"
   ]
 }

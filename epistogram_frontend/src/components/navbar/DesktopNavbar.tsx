@@ -1,401 +1,187 @@
-import { Box, Divider, Flex, useMediaQuery } from "@chakra-ui/react";
-import { Home, LocalMallOutlined, NotificationsNone } from "@mui/icons-material";
-import LogoutIcon from '@mui/icons-material/Logout';
-import { Typography } from "@mui/material";
-import React, { useContext, useRef, useState } from 'react';
-import { applicationRoutes } from "../../configuration/applicationRoutes";
-import { getAssetUrl, getUrl } from "../../static/frontendHelpers";
-import { mockNotifications } from "../../static/mockData";
-import { ApplicationRoute } from "../../models/types";
-import { useNavigation } from "../../services/core/navigatior";
-import { useShowErrorDialog } from "../../services/core/notifications";
-import { EpistoConinInfo } from "../EpistoCoinInfo";
-import { CurrentUserContext, RefetchUserAsyncContext } from "../system/AuthenticationFrame";
-import { ProfileImage } from "../ProfileImage";
-import NavbarButton from "../universal/NavbarButton";
-import { useLogout } from "../../services/api/authenticationApiService";
-import { currentVersion } from "../../static/Environemnt";
-import { EpistoButton } from "../controls/EpistoButton";
-import { EpistoPopper } from "../controls/EpistoPopper";
-import { EpistoFont } from "../controls/EpistoFont";
-import { translatableTexts } from "../../static/translatableTexts";
+import { useMediaQuery } from '@chakra-ui/react';
+import { ReactNode } from 'react';
+import { applicationRoutes } from '../../configuration/applicationRoutes';
+import { ApplicationRoute } from '../../models/types';
+import { useNavigation } from '../../services/core/navigatior';
+import { Environment } from '../../static/Environemnt';
+import { ArrayBuilder } from '../../static/frontendHelpers';
+import { Logger } from '../../static/Logger';
+import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { useAuthorizationContext } from '../system/AuthorizationContext';
+import { NavbarButton } from '../universal/NavbarButton';
+import { ContinueCourseButton } from './ContinueCourseButton';
+import { ShopAndNotifications } from './ShopAndNotifications';
 
-const menuItems = [
-    applicationRoutes.homeRoute,
-    applicationRoutes.availableCoursesRoute,
-    applicationRoutes.learningRoute
-] as ApplicationRoute[];
-
-const DesktopNavbar = (props: {
-    currentCourseItemCode: string | null,
-    hideLinks: boolean,
-    showLogo?: boolean,
+export const DesktopNavbar = ({
+    backgroundContent,
+    showLogo,
+    currentCourseItemCode,
+    isLowHeight: _isLowHeight,
+    isMinimalMode: _isMinimalMode,
+    hideLinks1
+}: {
+    currentCourseItemCode: string | null
+    hideLinks1: boolean
+    isLowHeight?: boolean
+    showLogo?: boolean
+    isMinimalMode?: boolean
     backgroundContent?: any
 }) => {
 
-    const { backgroundContent, showLogo, currentCourseItemCode } = props;
-    const { navigateToPlayer, navigate } = useNavigation();
-    const continueCourse = () => navigateToPlayer(currentCourseItemCode!);
+    const isLowHeight = !!_isLowHeight;
+    const isMinimalMode = !!_isMinimalMode;
 
-    const homeUrl = applicationRoutes.rootHomeRoute.route;
+    const { hasPermission } = useAuthorizationContext();
 
-    const user = useContext(CurrentUserContext);
-    const fetchUserAsync = useContext(RefetchUserAsyncContext);
+    const menuItems = new ArrayBuilder<Omit<ApplicationRoute, 'icon'> & { icon: ReactNode }>()
+        .addIf(hasPermission('ADMINISTRATE_COMPANY'), {
+            title: applicationRoutes.administrationRoute.title,
+            route: applicationRoutes.administrationRoute.usersRoute.route,
+            icon: applicationRoutes.administrationRoute.icon
+        })
+        .add({
+            title: applicationRoutes.homeRoute.title,
+            route: applicationRoutes.homeRoute.route,
+            icon: applicationRoutes.homeRoute.icon
+        })
+        .add({
+            title: applicationRoutes.availableCoursesRoute.title,
+            route: applicationRoutes.availableCoursesRoute.route,
+            icon: applicationRoutes.availableCoursesRoute.icon
+        })
+        .add({
+            title: applicationRoutes.learningRoute.title,
+            route: applicationRoutes.learningRoute.route,
+            icon: applicationRoutes.learningRoute.icon
+        })
+        .getArray() as ApplicationRoute[];
 
-    const ref = useRef<HTMLDivElement>(null);
-    const [notificationsPopperOpen, setNotificationsPopperOpen] = useState(false);
-    const [settingsPopperOpen, setSettingsPopperOpen] = useState(false);
-    const hideLinks = props.hideLinks || !user;
-    const { logoutUserAsync } = useLogout();
-    const showError = useShowErrorDialog();
+    const { navigate2 } = useNavigation();
 
+    // context
+    const { isAuthenticated } = useAuthorizationContext();
+
+    // media
     const [isSmallerThan1180] = useMediaQuery('(min-width: 1180px)');
     const [isSmallerThan1000] = useMediaQuery('(min-width: 1000px)');
 
-    const handleLogout = async () => {
+    // util
+    const hideLinks = hideLinks1 || !isAuthenticated;
+    const isMidMode = (isSmallerThan1180 && !showLogo) || (isSmallerThan1000 && showLogo);
 
-        try {
+    // funcs
+    const MinimalRender = () => {
 
-            await logoutUserAsync();
-            await fetchUserAsync();
-        } catch (e) {
+        return <EpistoFlex2>
+            {menuItems
+                .map((route, index) => {
+                    return (
+                        <EpistoButton
+                            variant="plain"
+                            key={index}
+                            onClick={() => navigate2(route)}>
 
-            showError(e);
-        }
-    }
+                            {route.icon}
+                        </EpistoButton>
+                    );
+                })}
+        </EpistoFlex2>;
+    };
 
-    const userMenuItems = [
-        {
-            name: applicationRoutes.settingsRoute.title,
-            icon: applicationRoutes.settingsRoute.icon,
-            onClick: () => navigate(applicationRoutes.settingsRoute.preferencesRoute.route)
-        },
-        {
-            name: applicationRoutes.settingsRoute.featurePreviewRoute.title,
-            icon: applicationRoutes.settingsRoute.featurePreviewRoute.icon,
-            onClick: () => navigate(applicationRoutes.settingsRoute.featurePreviewRoute.route)
-        },
-        {
-            name: applicationRoutes.settingsRoute.developmentNotes.title,
-            icon: applicationRoutes.settingsRoute.developmentNotes.icon,
-            onClick: () => navigate(applicationRoutes.settingsRoute.developmentNotes.route)
-        },
-        {
-            name: translatableTexts.navbar.signout,
-            icon: <LogoutIcon></LogoutIcon>,
-            color: "var(--mildRed)",
-            onClick: handleLogout
-        }
-    ];
+    const MidRender = () => {
 
-    const handleNavToCoinTransactions = () => {
+        return (
+            <EpistoFlex2
+                height="50px"
+                flex="1 0 600px">
 
-        navigate(applicationRoutes.settingsRoute.coinTransactionsRoute.route);
-    }
+                {/* menu items */}
+                {menuItems
+                    .map((route, index) => (
+                        <NavbarButton
+                            key={index}
+                            menuName={route.title}
+                            onClick={() => navigate2(route)} />
+                    ))}
+
+                {/* continue course button */}
+                <ContinueCourseButton
+                    currentCourseItemCode={currentCourseItemCode} />
+            </EpistoFlex2>
+        );
+    };
+
+    const LargeRender = () => {
+
+        return (
+            <EpistoFlex2>
+                {menuItems
+                    .map((route, index) => {
+                        return (
+                            <EpistoButton
+                                variant="plain"
+                                key={index}
+                                onClick={() => {
+                                    navigate2(route);
+                                }}>
+
+                                {route.icon}
+                            </EpistoButton>
+                        );
+                    })}
+
+                {/* continue watching  */}
+                <ContinueCourseButton
+                    currentCourseItemCode={currentCourseItemCode} />
+            </EpistoFlex2>
+        );
+    };
+
+    Logger.logScoped('RENDER', 'Rendering navbar');
 
     return (
-        <Flex
+        <EpistoFlex2
             align="center"
             width="100%"
             flex="1"
-            height="60px"
-            mt="10px"
-            mb="10px"
+            height={isMinimalMode ? '30px' : isLowHeight ? '40px' : '60px'}
+            mt={isLowHeight || isMinimalMode ? undefined : '10px'}
+            mb={isLowHeight || isMinimalMode ? undefined : '10px'}
             bg={backgroundContent}
-            justify={hideLinks ? "center" : "space-between"}>
+            justify={hideLinks ? 'center' : 'space-between'}>
 
             {/* logo link */}
-
-            {showLogo && <img
-                src={getAssetUrl("/images/logo.svg")}
-                style={{
-                    width: "150px",
-                    height: "50px",
-                    objectFit: "contain",
-                    cursor: "pointer",
-                }}
-                alt=""
-                onClick={() => {
-                    if (user?.userActivity?.canAccessApplication)
-                        navigate(homeUrl);
-                }} />}
-
+            {showLogo && (
+                <img
+                    src={Environment.getAssetUrl('/images/logo.svg')}
+                    style={{
+                        width: isMinimalMode ? '80px' : '150px',
+                        height: isMinimalMode ? '50px' : '50px',
+                        objectFit: 'contain',
+                        cursor: 'pointer',
+                    }}
+                    alt=""
+                    onClick={() => navigate2(applicationRoutes.homeRoute)} />
+            )}
 
             {/* menu items */}
-            {
-                !hideLinks && <>
-                    {(isSmallerThan1180 && !showLogo) || (isSmallerThan1000 && showLogo) ?
-                        <Flex height="50px" flex="1 0 600px">
+            {!hideLinks && <>
 
-                            {menuItems
-                                .map((item, index) => {
-                                    return <NavbarButton
-                                        key={index}
-                                        menuName={item.title}
-                                        menuPath={item.route} />
-                                })}
+                {/* minimal */}
+                {isMinimalMode && <MinimalRender />}
 
-                            {/* continue watching with or without text  */}
-                            {currentCourseItemCode &&
-                                <NavbarButton
-                                    menuPath={getUrl(applicationRoutes.playerRoute.route, { itemCode: currentCourseItemCode })}>
+                {/* mid  */}
+                {!isMinimalMode && isMidMode && <MidRender />}
 
-                                    <EpistoButton
-                                        className="mildShadow"
-                                        style={{
-                                            flex: "1",
-                                            color: "--epistoTeal",
-                                            background: "var(--transparentWhite70)",
-                                            border: "none"
-                                        }}
-                                        variant="outlined"
-                                        onClick={() => continueCourse()}
-                                        icon={
-                                            <img
-                                                alt=""
-                                                src={getAssetUrl("/icons/play2.svg")}
-                                                style={{
-                                                    width: "25px",
-                                                    height: "25px",
-                                                    marginRight: "5px"
-                                                }} />
-                                        }>
-                                        {translatableTexts.navbar.currentCourse}
-                                    </EpistoButton>
-                                </NavbarButton>}
-                        </Flex> : <Flex>
+                {/* large */}
+                {!isMinimalMode && !isMidMode && <LargeRender />}
 
-                            {menuItems
-                                .map((item, index) => {
-
-                                    return <EpistoButton
-                                        variant="plain"
-                                        key={index}
-                                        onClick={() => {
-                                            navigate(item.route)
-                                        }}>
-                                        {item.icon}
-                                    </EpistoButton>
-                                })}
-
-                            {/* continue watching  */}
-                            {currentCourseItemCode &&
-                                <NavbarButton
-                                    menuPath={getUrl(applicationRoutes.playerRoute.route, { itemCode: currentCourseItemCode })}>
-
-                                    <EpistoButton
-                                        className="mildShadow"
-                                        style={{
-                                            color: "--epistoTeal",
-                                            background: "var(--transparentWhite70)",
-                                            border: "none"
-                                        }}
-                                        variant="outlined"
-                                        onClick={() => continueCourse()}
-                                        icon={
-                                            <img
-                                                alt=""
-                                                src={getAssetUrl("/icons/play2.svg")}
-                                                style={{
-                                                    width: "25px",
-                                                    height: "25px",
-                                                }} />
-                                        } />
-                                </NavbarButton>}
-                        </Flex>}
-
-                    {/* shop and notification buttons */}
-                    <Flex pr="10px" align="center" mr="15px">
-
-                        {/* shop button */}
-                        <EpistoButton
-                            style={{
-                                height: 40,
-                                fontStyle: "normal"
-                            }}
-                            onClick={() => {
-                                navigate("/shop")
-                            }}
-                            variant={"plain"}>
-
-                            <EpistoFont
-                                fontSize={"fontSmallPlus"}
-                                isUppercase
-                                style={{
-                                    margin: "0 7px",
-                                    fontWeight: 500
-                                }}>
-
-                                {translatableTexts.navbar.shop}
-                            </EpistoFont>
-
-                            <img
-                                className="square50"
-                                src={getAssetUrl("/images/shop3D.png")}
-                                alt=""
-                                style={{
-                                    objectFit: "contain"
-                                }} />
-                        </EpistoButton>
-
-                        {/* notification bell 
-                        <EpistoButton
-                            className="roundBorders square50"
-                            variant={"plain"}
-                            onClick={() => {
-                                setNotificationsPopperOpen(true)
-                            }}>
-
-                            <img
-                                className="square50"
-                                src={getAssetUrl("/images/bell3D.png")}
-                                alt=""
-                                style={{
-                                    objectFit: "cover"
-                                }} />
-                        </EpistoButton>*/}
-
-                        {/* vertical divider */}
-                        <Box
-                            width="1px"
-                            height="40px"
-                            margin="0 10px 0 10px"
-                            bg="var(--mildGrey)">
-
-                        </Box>
-
-                        {!!user && <ProfileImage
-                            url={user?.avatarUrl ?? null}
-                            onClick={() => setSettingsPopperOpen(true)}
-                            cursor="pointer"
-                            className="square50"
-                            ref={ref}></ProfileImage>}
-                    </Flex>
-                </>
-            }
-
-            {/* notifications menu */}
-            <EpistoPopper
-                isOpen={notificationsPopperOpen}
-                target={ref?.current}
-                placementX="left"
-                handleClose={() => setNotificationsPopperOpen(false)}>
-
-                {mockNotifications
-                    .map((x, index) => {
-
-                        return <Flex width={200} flexDirection={"column"}>
-
-                            <Flex
-                                width={200}
-                                alignItems={"center"}
-                                justifyContent={"center"}
-                                my={10}>
-
-                                <div
-                                    style={{
-                                        width: 3,
-                                        height: 3,
-                                        backgroundColor: "blue",
-                                        borderRadius: "50%"
-                                    }} />
-
-                                <EpistoFont
-                                    fontSize="fontSmallPlus"
-                                    style={{
-                                        marginLeft: "14px",
-                                        textAlign: "left"
-                                    }}>
-
-                                    {x.title}
-                                </EpistoFont>
-                            </Flex>
-
-                            {index + 1 < mockNotifications.length && <Divider height={1} width="100%" bgColor={"grey"} />}
-                        </Flex>
-                    })}
-            </EpistoPopper>
-
-            {/* user menu */}
-            <EpistoPopper
-                isOpen={settingsPopperOpen}
-                target={ref?.current}
-                placementX="left"
-                handleClose={() => setSettingsPopperOpen(false)}>
-
-                {/* episto coins */}
-                <EpistoButton onClick={handleNavToCoinTransactions}>
-                    <EpistoConinInfo height="45px" />
-                </EpistoButton>
-
-                <Divider height={1} width="100%" bgColor={"black"} />
-
-                {user?.userActivity?.canAccessAdministration && <EpistoButton
-                    variant={undefined}
-                    onClick={() => {
-                        navigate(applicationRoutes.administrationRoute.usersRoute.route)
-                    }}>
-
-                    <Flex className="whall" m="5px" align="center">
-
-                        {applicationRoutes.administrationRoute.icon}
-
-                        <EpistoFont
-                            fontSize="fontSmallPlus"
-                            isUppercase
-                            style={{
-                                marginLeft: "14px",
-                                textAlign: "left",
-                                fontWeight: 400
-                            }}>
-
-                            {applicationRoutes.administrationRoute.title}
-                        </EpistoFont>
-                    </Flex>
-                </EpistoButton>}
-
-                {userMenuItems
-                    .map(x => {
-
-                        return <EpistoButton
-                            variant={x.color ? "colored" : undefined}
-                            style={{ background: x.color }}
-                            onClick={x.onClick}>
-
-                            <Flex className="whall" m="5px" align="center">
-
-                                {x.icon}
-
-                                <EpistoFont
-                                    fontSize="fontSmallPlus"
-                                    isUppercase
-                                    style={{
-                                        marginLeft: "14px",
-                                        textAlign: "left",
-                                        fontWeight: 400
-                                    }}>
-
-                                    {x.name}
-                                </EpistoFont>
-                            </Flex>
-                        </EpistoButton>
-                    })}
-                {/* version */}
-                <EpistoFont
-                    style={{
-                        zIndex: 3,
-                        color: "gray",
-                        background: "white",
-                        padding: "5px",
-                        marginTop: "20px"
-                    }}
-                    fontSize="fontSmallPlus">
-
-                    {translatableTexts.navbar.version}{currentVersion ?? "1999.01.01.01:01"}
-                </EpistoFont>
-            </EpistoPopper>
-        </Flex >
+                {/* shop and notification buttons */}
+                <ShopAndNotifications
+                    isLowHeight={isLowHeight}
+                    isMinimalMode={isMinimalMode} />
+            </>}
+        </EpistoFlex2 >
     );
 };
-
-export default DesktopNavbar;

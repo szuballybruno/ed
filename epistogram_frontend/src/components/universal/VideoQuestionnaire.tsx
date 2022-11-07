@@ -1,41 +1,49 @@
-import { Flex, FlexProps } from "@chakra-ui/react";
-import { Typography } from "@mui/material";
-import React, { useEffect, useState } from 'react';
-import { useReactTimer } from "../../helpers/reactTimer";
-import { QuestionDTO } from '../../models/shared_models/QuestionDTO';
-import { useAnswerQuestion } from "../../services/api/playerApiService";
-import { epochDates } from "../../static/frontendHelpers";
-import { QuesitionView } from "../QuestionView";
-import { EpistoButton } from "../controls/EpistoButton";
-import { TimeoutFrame } from "./TimeoutFrame";
-import { EpistoFont } from "../controls/EpistoFont";
-import { translatableTexts } from "../../static/translatableTexts";
+import { useEffect, useState } from 'react';
+import { useReactTimer } from '../../helpers/reactTimer';
+import { PlayerApiService } from '../../services/api/PlayerApiService';
+import { QuestionDTO } from '../../shared/dtos/QuestionDTO';
+import { Id } from '../../shared/types/versionId';
+import { epochDates, useIsMobileView } from '../../static/frontendHelpers';
+import { translatableTexts } from '../../static/translatableTexts';
+import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
+import { EpistoFont } from '../controls/EpistoFont';
+import { QuesitionView } from '../QuestionView';
+import { TimeoutFrame } from './TimeoutFrame';
 
 export const VideoQuestionnaire = (props: {
     question: QuestionDTO,
-    answerSessionId: number,
+    answerSessionId: Id<'AnswerSession'>,
     isShowing: boolean,
     onAnswered: () => void,
     onClosed: () => void
-} & FlexProps) => {
+} & EpistoFlex2Props) => {
 
     const { question, isShowing, onAnswered, answerSessionId, onClosed, ...css } = props;
-    const { answerQuestionAsync, answerResult, answerQuestionError, answerQuestionState } = useAnswerQuestion();
+    const { answerQuestionAsync, answerResult, answerQuestionState } = PlayerApiService.useAnswerQuestion();
     const isAnswered = !!answerResult;
     const autoCloseSecs = 8;
     const [showUpTime, setShowUpTime] = useState<Date>(new Date());
+    const isMobile = useIsMobileView();
 
-    const handleAnswerQuestionAsync = async (answerId) => {
+    const handleAnswerQuestionAsync = async (answerVersionIds: Id<'AnswerVersion'>[]) => {
 
         const timeElapsed = epochDates(new Date(), showUpTime);
-        await answerQuestionAsync(answerSessionId, answerId, question.questionId, timeElapsed);
+        await answerQuestionAsync({
+            answerSessionId,
+            givenAnswer: {
+                answerVersionIds,
+                questionVersionId: question.questionVersionId,
+                elapsedSeconds: timeElapsed
+            }
+        });
         onAnswered();
-    }
+    };
 
     const handleCloseDialog = () => {
 
         onClosed();
-    }
+    };
 
     const reactTimer = useReactTimer(handleCloseDialog, autoCloseSecs * 1000);
 
@@ -55,37 +63,43 @@ export const VideoQuestionnaire = (props: {
         setShowUpTime(new Date());
     }, [isShowing]);
 
-    return <Flex direction="column">
+    return <EpistoFlex2
+        width={isMobile ? '100vw' : undefined}
+        height={isMobile ? '100vh' : undefined}
+        direction="column">
 
         <QuesitionView
             answerQuesitonAsync={handleAnswerQuestionAsync}
-            correctAnswerIds={answerResult?.correctAnswerIds ?? []}
-            loadingProps={{ loadingState: answerQuestionState, error: answerQuestionError }}
+            loadingProps={{ loadingState: answerQuestionState }}
             question={question}
-            coinsAcquired={answerResult?.coinAcquires?.normal?.amount ?? null}
-            bonusCoinsAcquired={answerResult?.coinAcquires?.bonus ?? null}
+            answerResult={answerResult}
+            isPractise={false}
             {...css} />
 
-        <Flex display={isAnswered ? undefined : "none"} justify="flex-end">
+        <EpistoFlex2
+            padding={isMobile ? '30px' : undefined}
+            display={isAnswered ? undefined : 'none'}
+            justify="flex-end">
 
             <EpistoButton
                 variant="colored"
-                style={{ padding: "0" }}
+                style={{ padding: '0' }}
                 onClick={() => handleCloseDialog()}>
 
                 <TimeoutFrame reactTimer={reactTimer}>
                     <EpistoFont
                         isUppercase
-                        fontSize="fontSmallPlus"
+                        fontSize="fontNormal14"
                         style={{
-                            position: "relative",
-                            margin: "10px"
+                            position: 'relative',
+                            zIndex: '8',
+                            margin: '10px'
                         }}>
 
                         {translatableTexts.videoQuestionnaire.close}
                     </EpistoFont>
                 </TimeoutFrame>
             </EpistoButton>
-        </Flex>
-    </Flex>
-}
+        </EpistoFlex2>
+    </EpistoFlex2>;
+};

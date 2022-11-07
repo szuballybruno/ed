@@ -1,21 +1,28 @@
-import { Flex, FlexProps } from '@chakra-ui/react';
-import { Typography } from '@mui/material';
-import React, { useContext } from 'react';
 import { applicationRoutes } from '../configuration/applicationRoutes';
+import { CompanyApiService } from '../services/api/CompanyApiService1';
 import { useNavigation } from '../services/core/navigatior';
-import { startUserGuideHelp } from '../services/core/userGuidingService';
-import { getAssetUrl } from '../static/frontendHelpers';
-import { CurrentUserContext } from './system/AuthenticationFrame';
-import { EpistoButton } from './controls/EpistoButton';
+import { Environment } from '../static/Environemnt';
+import { PropsWithChildren } from '../static/frontendHelpers';
+import { EpistoFlex2 } from './controls/EpistoFlex';
+import { EpistoImage } from './controls/EpistoImage';
 import { FlexFloat } from './controls/FlexFloat';
-import { EpistoFont } from './controls/EpistoFont';
-import { translatableTexts } from '../static/translatableTexts';
+import { useAuthorizationContext } from './system/AuthorizationContext';
+import { useTawkApi } from './system/TawkToFrame';
+export const LeftPane = ({
+    padding,
+    basis,
+    children
+}: {
+    padding?: string,
+    basis?: string
+} & PropsWithChildren) => {
 
-export const LeftPane = (props: FlexProps) => {
-
-    const homeUrl = applicationRoutes.rootHomeRoute.route;
-    const user = useContext(CurrentUserContext);
-    const { navigate } = useNavigation();
+    const homeRoute = applicationRoutes.rootHomeRoute;
+    const { hasPermission } = useAuthorizationContext();
+    const { navigate2 } = useNavigation();
+    const { toggle } = useTawkApi();
+    const { companyDetails } = CompanyApiService
+        .useCompanyDetailsByDomain(window.location.origin);
 
     return (
         <FlexFloat
@@ -27,66 +34,52 @@ export const LeftPane = (props: FlexProps) => {
             maxW="320px"
             direction="column"
             align="stretch"
-            padding="25px 15px 0 15px"
+            padding={padding ? padding : '25px 15px 0 15px'}
+            basis={basis ?? undefined}
             className="dividerBorderRight"
             position="relative"
-            //borderLeft="2px solid #e2e2e2"
-            boxShadow="3px 0px 15px 5px rgba(0,0,0,0.1)"
-            {...props}>
+            boxShadow="3px 0px 15px 5px rgba(0,0,0,0.1)">
 
             {/* logo link */}
-            <Flex width="100%" alignItems={"center"} justifyContent="flex-start" mb="20px">
+            <EpistoFlex2
+                width="100%"
+                alignItems={'center'}
+                justifyContent="flex-start"
+                mb="20px">
+
                 <img
-                    src={getAssetUrl("/images/logo.svg")}
+                    src={Environment.getAssetUrl('/images/logo.svg')}
                     style={{
-                        height: "50px",
-                        objectFit: "cover",
-                        cursor: "pointer",
-                        margin: "10px 10px",
+                        height: '50px',
+                        objectFit: 'cover',
+                        cursor: 'pointer',
+                        margin: '10px 10px',
                         padding: 0
                     }}
                     alt=""
                     onClick={() => {
 
-                        if (user?.userActivity?.canAccessApplication)
-                            navigate(homeUrl);
+                        if (hasPermission('BYPASS_SURVEY'))
+                            navigate2(homeRoute);
                     }} />
-            </Flex>
+            </EpistoFlex2>
 
-            {/* magic powder top right */}
-            <img
-                style={{
-                    position: "absolute",
-                    right: 23,
-                    top: -30,
-                    width: 120,
-                    transform: "rotate(270deg)",
-                    objectFit: "contain",
-                    zIndex: -1,
-                }}
-                src={getAssetUrl("/images/bg-art-6.png")} alt="" />
+            {children}
 
-            {props.children}
+            <EpistoImage
+                position='absolute'
+                bottom='20px'
+                left='0'
+                width='100%'
+                padding='20px'
+                src={companyDetails?.logoUrl + ''} />
 
-            {/* magic powder top right */}
-            <img
-                style={{
-                    position: "absolute",
-                    left: -10,
-                    bottom: 0,
-                    width: 170,
-                    transform: "rotate(0deg) scale(-1,1)",
-                    objectFit: "contain",
-                    zIndex: -1,
-                }}
-                src={getAssetUrl("/images/bela3D.png")} alt="" />
-
-            {/* tina image */}
-            <Flex
+            {/* tina image 
+            <EpistoFlex2
                 direction="column"
                 position="absolute"
-                bottom="160"
-                right="25"
+                bottom="160px"
+                right="25px"
                 width="170px">
 
                 <EpistoFont
@@ -97,23 +90,23 @@ export const LeftPane = (props: FlexProps) => {
 
                     {translatableTexts.leftPane.assistantDescription}
                 </EpistoFont>
-            </Flex>
+            </EpistoFlex2>
 
-            {/* tina button */}
-            <Flex
+            {/* tina button 
+            <EpistoFlex2
                 direction="column"
                 position="absolute"
-                bottom="100"
-                right="20"
+                bottom="100px"
+                right="20px"
                 width="130px">
 
                 <EpistoButton
                     variant='colored'
-                    onClick={() => startUserGuideHelp()}>
+                    onClick={() => toggle()}>
 
                     {translatableTexts.leftPane.assistantButtonTitle}
                 </EpistoButton>
-            </Flex>
+            </EpistoFlex2>*/}
         </FlexFloat>
     );
 };

@@ -1,50 +1,44 @@
-import { Flex } from '@chakra-ui/layout';
-import React from 'react';
-import { Switch } from 'react-router';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
-import { getRoute } from '../../MainRouting';
+import { useIsMobileView } from '../../static/frontendHelpers';
 import { ContentPane } from '../ContentPane';
 import { LeftPane } from '../LeftPane';
 import { NavigationLinkList } from '../NavigationLinkList';
 import { PageRootContainer } from '../PageRootContainer';
+import { EpistoRoutes } from '../universal/EpistoRoutes';
 import { CoinTransactions } from './CoinTransactions';
 import { Preferences } from './Preferences';
 
-const FeaturePreview = () => {
-
-    return <Flex className="whall">
-        <iframe src="https://epistogram.com/upcoming-features" className="whall"></iframe>
-    </Flex>
-}
-
-const DevelopmentNotes = () => {
-
-    return <Flex className="whall">
-        <iframe src="https://epistogram.com/release-notes" className="whall"></iframe>
-    </Flex>
-}
-
 export const UserSettingsPage = () => {
+
+    const isMobile = useIsMobileView();
 
     return <PageRootContainer>
 
-        <LeftPane p="20px" flexBasis="300px" >
+        {!isMobile && <LeftPane
+            padding="20px"
+            basis="300px" >
+
             <NavigationLinkList
-                items={[
-                    applicationRoutes.settingsRoute.preferencesRoute,
-                    applicationRoutes.settingsRoute.featurePreviewRoute,
-                    applicationRoutes.settingsRoute.developmentNotes
-                ]}></NavigationLinkList>
-        </LeftPane>
+                routes={[
+                    applicationRoutes.settingsRoute.preferencesRoute
+                ]} />
+        </LeftPane>}
 
-        <ContentPane>
+        <ContentPane
+            noPadding={isMobile}
+            noMaxWidth={!isMobile}>
 
-            <Switch>
-                {getRoute(applicationRoutes.settingsRoute.preferencesRoute, <Preferences />)}
-                {getRoute(applicationRoutes.settingsRoute.coinTransactionsRoute, <CoinTransactions />)}
-                {getRoute(applicationRoutes.settingsRoute.featurePreviewRoute, <FeaturePreview />)}
-                {getRoute(applicationRoutes.settingsRoute.developmentNotes, <DevelopmentNotes />)}
-            </Switch>
+            <EpistoRoutes
+                renderRoutes={[
+                    {
+                        route: applicationRoutes.settingsRoute.preferencesRoute,
+                        element: <Preferences />,
+                    },
+                    {
+                        route: applicationRoutes.settingsRoute.coinTransactionsRoute,
+                        element: <CoinTransactions />,
+                    }
+                ]} />
         </ContentPane>
-    </PageRootContainer>
-}
+    </PageRootContainer>;
+};

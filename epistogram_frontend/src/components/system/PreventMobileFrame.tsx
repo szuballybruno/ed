@@ -1,12 +1,11 @@
-import { Flex, useMediaQuery } from "@chakra-ui/react";
-import { isLocalhost } from "../../static/Environemnt";
-import { getAssetUrl } from "../../static/frontendHelpers";
-import { translatableTexts } from "../../static/translatableTexts";
-import { EpistoFont } from "../controls/EpistoFont";
+import { ReactNode } from 'react';
+import { translatableTexts } from '../../static/translatableTexts';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { EpistoFont } from '../controls/EpistoFont';
 
 const MobileBlock = () => {
 
-    return <Flex
+    return <EpistoFlex2
         background="var(--gradientBlueBackground)"
         align="center"
         justify="center"
@@ -14,7 +13,7 @@ const MobileBlock = () => {
         height="100vh"
         width="100vw">
 
-        <Flex
+        <EpistoFlex2
             className="roundBorders"
             background="var(--transparentWhite70)"
             direction="column"
@@ -22,106 +21,66 @@ const MobileBlock = () => {
             p="20px"
             maxW="400px">
 
-            {/* epistogram logo */}
-            <img
-                src={getAssetUrl("/images/logo.svg")}
-                style={{
-                    width: "250px",
-                    maxHeight: "50px",
-                    objectFit: "contain",
-                    cursor: "pointer",
-                    marginBottom: "20px"
-                }}
-                alt="" />
-
-            {/* descriptions */}
             <EpistoFont
                 fontSize="fontSmall"
                 style={{
-                    width: "100%",
-                    padding: "5px 0"
-                }}>
-
-                {translatableTexts.preventMobileFrame.descriptions[0]}
-            </EpistoFont>
-
-            <EpistoFont
-                fontSize="fontSmall"
-                style={{
-                    width: "100%",
-                    padding: "5px 0"
-                }}>
-
-                {translatableTexts.preventMobileFrame.descriptions[1]}
-            </EpistoFont>
-
-            <EpistoFont
-                fontSize="fontSmall"
-                style={{
-                    width: "100%",
-                    padding: "5px 0"
+                    width: '100%',
+                    padding: '5px 0'
                 }}>
 
                 {translatableTexts.preventMobileFrame.descriptions[2]}
             </EpistoFont>
+        </EpistoFlex2>
+    </EpistoFlex2>;
+};
 
-            {/* signup for news 
-        <EpistoEntry
-            label="E-mail"
-            labelVariant="top"
-            style={{
-                width: "100%"
-            }} />
+export const PreventMobileFrame = (props: { children: ReactNode }) => {
 
-        <Flex my="10">
+    // const [isNarrowerThan1024] = useMediaQuery("(max-width: 1124px)");
+    // const [isLowerThan600] = useMediaQuery("(max-height: 600px)");
 
-            <Checkbox />
-
-            <EpistoFont
-                fontSize="fontSmall"
-                style={{
-                    userSelect: "none"
-                }}>
-
-                {"Elfogadom az "}
-                <a
-                    target="_blank"
-                    rel="noreferrer"
-                    style={{ color: "#0055CC" }}
-                    href={"https://epistogram.com/adatkezelesi-tajekoztato"}>
-
-                    Adatkezelési Nyilatkozat
-                </a>
-                {"ban foglaltakat"}
-            </EpistoFont>
-        </Flex>
-
-        <EpistoButton
-            variant="colored"
-            style={{
-                width: "100%"
-            }}>
-
-            Küldés
-        </EpistoButton>*/}
-        </Flex>
-    </Flex>
-}
-
-export const PreventMobileFrame = (props) => {
-
-    const [isNarrowerThan1024] = useMediaQuery('(max-width: 1124px)');
-    const [isLowerThan600] = useMediaQuery('(max-height: 600px)')
-
-    const isScreenTooSmall = isNarrowerThan1024 || isLowerThan600;
-    const showMobileBlock = isScreenTooSmall && !isLocalhost;
+    // const isScreenTooSmall = isNarrowerThan1024 || isLowerThan600;
+    // const showMobileBlock = isScreenTooSmall && !isLocalhost;
 
     return <>
 
         {/* block */}
-        {showMobileBlock && <MobileBlock></MobileBlock>}
+        {/* {showMobileBlock && <MobileBlock></MobileBlock>} */}
 
         {/* application content */}
         {props.children}
-    </>
-}
+    </>;
+};
+
+// {/* epistogram logo */}
+// <img
+// src={Environment.getAssetUrl("/images/logo.svg")}
+// style={{
+//     width: "250px",
+//     maxHeight: "50px",
+//     objectFit: "contain",
+//     cursor: "pointer",
+//     marginBottom: "20px"
+// }}
+// alt="" />
+
+// {/* descriptions */}
+// <EpistoFont
+// fontSize="fontSmall"
+// style={{
+//     width: "100%",
+//     padding: "5px 0"
+// }}>
+
+// {translatableTexts.preventMobileFrame.descriptions[0]}
+// </EpistoFont>
+
+// <EpistoFont
+// fontSize="fontSmall"
+// style={{
+//     width: "100%",
+//     padding: "5px 0"
+// }}>
+
+// {translatableTexts.preventMobileFrame.descriptions[1]}
+// </EpistoFont>

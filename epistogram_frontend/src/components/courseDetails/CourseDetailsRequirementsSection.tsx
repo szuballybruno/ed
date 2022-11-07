@@ -1,54 +1,47 @@
-import { Flex } from "@chakra-ui/react";
 import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
-import { Typography } from "@mui/material";
-import React from "react";
-import { CourseDetailsDTO } from "../../models/shared_models/CourseDetailsDTO";
-import { mockCourseDetails } from "../../static/mockData";
-import { translatableTexts } from "../../static/translatableTexts";
-import { EpistoFont } from "../controls/EpistoFont";
-import { EpistoHeader } from "../EpistoHeader";
+import React from 'react';
+import {CourseDetailsDTO} from '../../shared/dtos/CourseDetailsDTO';
+import {translatableTexts} from '../../static/translatableTexts';
+import {EpistoFlex2} from '../controls/EpistoFlex';
+import {EpistoFont} from '../controls/EpistoFont';
+import {EpistoHeader} from '../EpistoHeader';
 
 export const CourseDetailsRequirementsSection = (props: { courseDetails: CourseDetailsDTO }) => {
 
     const { courseDetails } = props;
 
-    return <Flex
-        mt={10}
+    return <EpistoFlex2
+        mt='10px'
         width="100%"
-        height={500}
+        height='500px'
         direction="column"
         align="flex-start">
-
-        {/* course requirements description title 
-        <EpistoHeader
-            type="strong"
-            text={translatableTexts.courseDetails.requirementsSection.whenTheCourseGoodForYou}
-            my={10} />
-
-         course requirements description 
-        <EpistoFont>
-            {mockCourseDetails.lorem}
-        </EpistoFont>*/}
 
         {/* technical requirements title */}
         <EpistoHeader
             text={translatableTexts.courseDetails.requirementsSection.technicalRequirementsForCourse}
             type="strong"
-            my={10}
-            mt={40} />
+            my='10px'
+            mt='40px' />
 
         {/* technical requirements */}
-        <Flex direction="column">
+        <EpistoFlex2 direction="column">
             {courseDetails
                 .technicalRequirements
-                .map(x => (
-                    <Flex align="center">
-                        <SettingsSuggestIcon style={{ color: "var(--deepBlue)", marginRight: "10px" }} className="square35" />
+                .map((x, index) => (
+                    <EpistoFlex2
+                        key={index}
+                        align="center">
+
+                        <SettingsSuggestIcon
+                            style={{ color: 'var(--deepBlue)', marginRight: '10px' }}
+                            className="square35" />
+
                         <EpistoFont>
                             {x}
                         </EpistoFont>
-                    </Flex>
+                    </EpistoFlex2>
                 ))}
-        </Flex>
-    </Flex>
-}
+        </EpistoFlex2>
+    </EpistoFlex2>;
+};

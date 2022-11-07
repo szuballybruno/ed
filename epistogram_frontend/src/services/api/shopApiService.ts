@@ -1,18 +1,18 @@
-import { CourseBriefData } from "../../models/shared_models/CourseBriefData";
-import { CourseShopItemListDTO } from "../../models/shared_models/CourseShopItemListDTO";
-import { IdResultDTO } from "../../models/shared_models/IdResultDTO";
-import { ShopItemAdminShortDTO } from "../../models/shared_models/ShopItemAdminShortDTO";
-import { ShopItemBriefData } from "../../models/shared_models/ShopItemBriefData";
-import { ShopItemCategoryDTO } from "../../models/shared_models/ShopItemCategoryDTO";
-import { ShopItemDTO } from "../../models/shared_models/ShopItemDTO";
-import { ShopItemEditDTO } from "../../models/shared_models/ShopItemEditDTO";
-import { apiRoutes } from "../../models/shared_models/types/apiRoutes";
-import { useReactQuery2 } from "../../static/frontendHelpers";
-import { usePostDataUnsafe, usePostMultipartDataUnsafe } from "../core/httpClient";
+import { CourseShopItemListDTO } from '../../shared/dtos/CourseShopItemListDTO';
+import { IdResultDTO } from '../../shared/dtos/IdResultDTO';
+import { ShopItemAdminShortDTO } from '../../shared/dtos/ShopItemAdminShortDTO';
+import { ShopItemBriefData } from '../../shared/dtos/ShopItemBriefData';
+import { ShopItemCategoryDTO } from '../../shared/dtos/ShopItemCategoryDTO';
+import { ShopItemDTO } from '../../shared/dtos/ShopItemDTO';
+import { ShopItemEditDTO } from '../../shared/dtos/ShopItemEditDTO';
+import { apiRoutes } from '../../shared/types/apiRoutes';
+import { Id } from '../../shared/types/versionId';
+import { QueryService } from '../../static/QueryService';
+import { usePostDataUnsafe, usePostMultipartDataUnsafe } from '../core/httpClient';
 
 export const useShopItems = () => {
 
-    const qr = useReactQuery2<ShopItemDTO[]>(apiRoutes.shop.getShopItems);
+    const qr = QueryService.useXQuery<ShopItemDTO[]>(apiRoutes.shop.getShopItems);
 
     return {
         shopItems: qr.data ?? [],
@@ -20,33 +20,33 @@ export const useShopItems = () => {
         shopItemsError: qr.error,
         refetchShopItems: qr.refetch
     };
-}
+};
 
 export const useShopItemCategories = () => {
 
-    const qr = useReactQuery2<ShopItemCategoryDTO[]>(apiRoutes.shop.getShopItemCategories);
+    const qr = QueryService.useXQuery<ShopItemCategoryDTO[]>(apiRoutes.shop.getShopItemCategories);
 
     return {
         shopItemCategories: qr.data ?? [],
         shopItemCategoriesState: qr.state,
         shopItemCategoriesError: qr.error
     };
-}
+};
 
 export const useAdminShopItems = () => {
 
-    const qr = useReactQuery2<ShopItemAdminShortDTO[]>(apiRoutes.shop.getAdminShopItems);
+    const qr = QueryService.useXQuery<ShopItemAdminShortDTO[]>(apiRoutes.shop.getAdminShopItems);
 
     return {
         adminShopItems: qr.data ?? [],
         adminShopItemsState: qr.state,
         adminShopItemsError: qr.error
     };
-}
+};
 
-export const useShopItemEditData = (shopItemId: number) => {
+export const useShopItemEditData = (shopItemId: Id<'ShopItem'>) => {
 
-    const qr = useReactQuery2<ShopItemEditDTO>(apiRoutes.shop.getShopItemEditData, { shopItemId });
+    const qr = QueryService.useXQuery<ShopItemEditDTO>(apiRoutes.shop.getShopItemEditData, { shopItemId });
 
     return {
         shopItemEditData: qr.data,
@@ -54,29 +54,29 @@ export const useShopItemEditData = (shopItemId: number) => {
         shopItemEditDataError: qr.error,
         refetchItemEditData: qr.refetch
     };
-}
+};
 
-export const useShopItemBriefData = (shopItemId: number | null) => {
+export const useShopItemBriefData = (shopItemId: Id<'ShopItem'> | null) => {
 
-    const qr = useReactQuery2<ShopItemBriefData>(apiRoutes.shop.getShopItemBriefData, { shopItemId }, !!shopItemId);
+    const qr = QueryService.useXQuery<ShopItemBriefData>(apiRoutes.shop.getShopItemBriefData, { shopItemId }, !!shopItemId);
 
     return {
         shopItemBriefData: qr.data,
         shopItemBriefDataError: qr.error,
         shopItemBriefDataState: qr.state
-    }
-}
+    };
+};
 
 export const usePrivateCourses = () => {
 
-    const qr = useReactQuery2<CourseShopItemListDTO[]>(apiRoutes.shop.getPrivateCourseList);
+    const qr = QueryService.useXQuery<CourseShopItemListDTO[]>(apiRoutes.shop.getPrivateCourseList);
 
     return {
         privateCourses: qr.data ?? [],
         privateCoursesError: qr.error,
         privateCoursesState: qr.state
-    }
-}
+    };
+};
 
 export const usePurchaseShopItem = () => {
 
@@ -85,24 +85,30 @@ export const usePurchaseShopItem = () => {
         firstItemCode: string | null
     };
 
-    const qr = usePostDataUnsafe<{ shopItemId: number }, PurhcaseResultType>(apiRoutes.shop.purchaseShopItem);
+    const qr = usePostDataUnsafe<{ shopItemId: Id<'ShopItem'> }, PurhcaseResultType>(apiRoutes.shop.purchaseShopItem);
 
     return {
         purchaseShopItemAsync: qr.postDataAsync,
         purchaseShopItemState: qr.state,
         purchaseShopItemResult: qr.result
     };
-}
+};
 
 export const useSaveShopItem = () => {
 
     const qr = usePostMultipartDataUnsafe<ShopItemEditDTO>(apiRoutes.shop.saveShopItem);
 
     return {
-        saveShopItemAsync: qr.postMultipartDataAsync,
+        saveShopItemAsync: (dto: ShopItemEditDTO, file?: File) => qr
+            .postMultipartDataAsync({
+                data: dto,
+                files: file
+                    ? { file }
+                    : undefined
+            }),
         saveShopItemState: qr.state
     };
-}
+};
 
 export const useCreateShopItem = () => {
 
@@ -115,4 +121,4 @@ export const useCreateShopItem = () => {
         },
         createShopItemState: qr.state
     };
-}
+};

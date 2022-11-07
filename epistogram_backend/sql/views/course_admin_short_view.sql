@@ -1,39 +1,56 @@
+WITH 
+exam_count AS 
+(
+	SELECT COUNT(ev.id) exam_count, mv.course_version_id
+	FROM public.exam_version ev
+	
+	LEFT JOIN public.module_version mv
+	ON mv.id = ev.module_version_id
+	
+	GROUP BY mv.course_version_id
+)
 SELECT 
-	"c"."id" AS "id",
-	"c"."title" AS "title",
-	"cc"."id" AS "category_id",
-	"cc"."name" AS "category_name",
-	"scc"."id" AS "sub_category_id",
-	"scc"."name" AS "sub_category_name",
-	"t"."id" AS "teacher_id",
-	"t"."first_name" AS "teacher_first_name",
-	"t"."last_name" AS "teacher_last_name",
-	"sf"."file_path" AS "cover_file_path",
-	(SELECT COUNT("sq".*)::int
-		FROM (SELECT 
-			  DISTINCT "video"."id" 
-			  FROM public."video" 
-			  WHERE "video"."course_id" = "c"."id") AS "sq") 
-		AS "video_count",
-	(SELECT COUNT("sq".*)::int
-		FROM (SELECT 
-			  DISTINCT "exam"."id" 
-			  FROM public."exam" 
-			  WHERE "exam"."course_id" = "c"."id") AS "sq") 
-		AS "exam_count"
-FROM public."course" AS "c"
+	lcvv.course_id,
+	cd.title title,
+	co.deletion_date IS NOT NULL is_deleted,
+	cc.id category_id,
+	cc.name category_name,
+	scc.id sub_category_id,
+	scc.name sub_category_name,
+	u.id teacher_id,
+	u.first_name teacher_first_name,
+	u.last_name teacher_last_name,
+	sf.file_path cover_file_path,
+	cvcv.video_count,
+	ec.exam_count
+FROM public.latest_course_version_view lcvv
 
-LEFT JOIN public."storage_file" AS "sf"
-ON "sf"."id" = "c"."cover_file_id"
+LEFT JOIN public.course_version cv 
+ON cv.id = lcvv.version_id
 
-LEFT JOIN public."user" AS "t"
-ON "t"."id" = "c"."teacher_id"
+LEFT JOIN public.course co
+ON co.id = cv.course_id
 
-LEFT JOIN public."course_category" AS "cc"
-ON "cc"."id" = "c"."category_id"
+LEFT JOIN public.course_data cd 
+ON cd.id = cv.course_data_id 
 
-LEFT JOIN public."course_category" AS "scc"
-ON "scc"."id" = "c"."sub_category_id"
+LEFT JOIN public.storage_file sf
+ON sf.id = cd.cover_file_id
+
+LEFT JOIN public.user u
+ON u.id = cd.teacher_id
+
+LEFT JOIN public.course_category cc
+ON cc.id = cd.category_id
+
+LEFT JOIN public.course_category scc
+ON scc.id = cd.sub_category_id
+
+LEFT JOIN public.course_video_count_view cvcv
+ON cvcv.course_id = co.id
+
+LEFT JOIN exam_count ec
+ON ec.course_version_id = lcvv.version_id
 	
 ORDER BY
-	"c"."id"
+	lcvv.course_id

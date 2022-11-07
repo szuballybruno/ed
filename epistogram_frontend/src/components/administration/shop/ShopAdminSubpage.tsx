@@ -1,31 +1,35 @@
-import { Flex } from "@chakra-ui/react";
-import { Delete } from "@mui/icons-material";
-import Edit from "@mui/icons-material/Edit";
-import { useState } from "react";
-import { applicationRoutes } from "../../../configuration/applicationRoutes";
-import { ShopItemAdminShortDTO } from "../../../models/shared_models/ShopItemAdminShortDTO";
-import { useAdminShopItems, useCreateShopItem } from "../../../services/api/shopApiService";
-import { useNavigation } from "../../../services/core/navigatior";
-import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
-import { EpistoButton } from "../../controls/EpistoButton";
-import { LoadingFrame } from "../../system/LoadingFrame";
-import { FlexListItem } from "../../universal/FlexListItem";
-import { FlexListTitleSubtitle } from "../../universal/FlexListTitleSubtitle";
-import { AdminListEditHeader } from "../AdminListEditHeader";
-import { AdminSubpageHeader } from "../AdminSubpageHeader";
+import {Delete} from '@mui/icons-material';
+import Edit from '@mui/icons-material/Edit';
+import {useState} from 'react';
+import {applicationRoutes} from '../../../configuration/applicationRoutes';
+import {ShopItemAdminShortDTO} from '../../../shared/dtos/ShopItemAdminShortDTO';
+import {useAdminShopItems, useCreateShopItem} from '../../../services/api/shopApiService';
+import {useNavigation} from '../../../services/core/navigatior';
+import {showNotification, useShowErrorDialog} from '../../../services/core/notifications';
+import {EpistoButton} from '../../controls/EpistoButton';
+import {LoadingFrame} from '../../system/LoadingFrame';
+import {FlexListItem} from '../../universal/FlexListItem';
+import {FlexListTitleSubtitle} from '../../universal/FlexListTitleSubtitle';
+import {AdminListEditHeader} from '../AdminListEditHeader';
+import {AdminSubpageHeader} from '../AdminSubpageHeader';
+import {EpistoRoutes} from '../../universal/EpistoRoutes';
+import {ShopAdminEditSubpage} from './ShopAdminEditSubpage';
+import {useRedirectOnExactMatch} from '../../../static/frontendHelpers';
+import {Id} from '../../../shared/types/versionId';
+import {EpistoFlex2} from '../../controls/EpistoFlex';
 
 export const ShopAdminSubpage = () => {
 
-    // http 
+    // http
     const { adminShopItems, adminShopItemsError, adminShopItemsState } = useAdminShopItems();
     const { createShopItemAsync, createShopItemState } = useCreateShopItem();
 
     //util
-    const { navigate } = useNavigation();
+    const { navigate2 } = useNavigation();
     const showError = useShowErrorDialog();
 
-    // state 
-    const [selectedIds, setSelectedIds] = useState<number[]>([]);
+    // state
+    const [selectedIds, setSelectedIds] = useState<Id<'ShopItem'>[]>([]);
     const isAllSelected = !adminShopItems.some(si => !selectedIds.some(id => id === si.id));
 
     // func
@@ -38,56 +42,56 @@ export const ShopAdminSubpage = () => {
 
             setSelectedIds([]);
         }
-    }
+    };
 
-    const handleEdit = (id: number) => {
+    const handleEdit = (id: Id<'ShopItem'>) => {
 
-        navigate(applicationRoutes.administrationRoute.shopRoute.editRoute, { shopItemId: id })
-    }
+        navigate2(applicationRoutes.administrationRoute.shopRoute.editRoute, { shopItemId: id });
+    };
 
-    const handleDelete = (id: number) => {
+    const handleDelete = (id: Id<'ShopItem'>) => {
 
-
-    }
+        throw new Error('Not implemented!');
+    };
 
     const handleAddNewAsync = async () => {
 
         try {
 
             const shopItemId = await createShopItemAsync();
-            showNotification("Uj shop item hozzaadva");
+            showNotification('Uj shop item hozzaadva');
             handleEdit(shopItemId);
         }
         catch (e) {
 
             showError(e);
         }
-    }
+    };
 
     const headerButtons = [
         {
-            name: "editButton",
-            text: "Szerkesztés",
+            name: 'editButton',
+            text: 'Szerkesztés',
             onClick: () => handleEdit(selectedIds[0])
         },
         {
-            name: "deleteButton",
-            text: "Törlés",
+            name: 'deleteButton',
+            text: 'Törlés',
             onClick: () => handleDelete(selectedIds[0])
         }
     ];
 
-    const setSelected = (userId: number, isSelected: boolean) => {
+    const setSelected = (shopItemId: Id<'ShopItem'>, isSelected: boolean) => {
 
         if (isSelected) {
 
-            setSelectedIds([...selectedIds, userId]);
+            setSelectedIds([...selectedIds, shopItemId]);
         }
         else {
 
-            setSelectedIds(selectedIds.filter(x => x !== userId));
+            setSelectedIds(selectedIds.filter(x => x !== shopItemId));
         }
-    }
+    };
 
     const rowButtons = [
         {
@@ -100,70 +104,92 @@ export const ShopAdminSubpage = () => {
         }
     ];
 
+    useRedirectOnExactMatch({
+        route: applicationRoutes.administrationRoute.shopRoute,
+        redirectRoute: applicationRoutes.administrationRoute.shopRoute.overviewRoute,
+    });
+
     return (
-        <LoadingFrame
-            loadingState={[adminShopItemsState, createShopItemState]}
-            error={adminShopItemsError}
-            className="whall">
+        <EpistoRoutes
+            renderRoutes={[
+                {
+                    route: applicationRoutes.administrationRoute.shopRoute.overviewRoute,
+                    element: <LoadingFrame
+                        loadingState={[adminShopItemsState, createShopItemState]}
+                        error={adminShopItemsError}
+                        className="whall">
 
-            {/* admin header */}
-            <AdminSubpageHeader>
-                <AdminListEditHeader
-                    headerButtons={headerButtons}
-                    isAllSelected={isAllSelected}
-                    selectAllOrNone={selectAllOrNone}
-                    selectedIds={selectedIds}
-                    itemLabel="shop item"
-                    buttons={[
-                        {
-                            title: "Add new",
-                            action: () => handleAddNewAsync()
-                        }
-                    ]} />
+                        {/* admin header */}
+                        <AdminSubpageHeader direction="column">
+                            <AdminListEditHeader
+                                headerButtons={headerButtons}
+                                isAllSelected={isAllSelected}
+                                selectAllOrNone={selectAllOrNone}
+                                selectedIds={selectedIds}
+                                itemLabel="shop item"
+                                buttons={[
+                                    {
+                                        title: 'Hozzáadás',
+                                        action: () => handleAddNewAsync()
+                                    }
+                                ]} />
+                            <EpistoFlex2
+                                mt="5px"
+                                borderRadius="5px"
+                                background="var(--transparentWhite70)"
+                                direction="column">
 
-                {adminShopItems
-                    .map((shopItem, index) => (
-                        <FlexListItem
-                            key={index}
-                            thumbnailContent={(
-                                <img
-                                    style={{
-                                        objectFit: "cover"
-                                    }}
-                                    src={shopItem.coverFilePath}
-                                    className="square70"
-                                    alt="shop item cover" />
-                            )}
-                            background="white"
-                            setIsChecked={x => setSelected(shopItem.id, x)}
-                            isChecked={selectedIds.some(x => x === shopItem.id)}
-                            midContent={(
-                                <FlexListTitleSubtitle
-                                    title={shopItem.name}
-                                    subTitle={shopItem.shopItemCategoryId + ""} />
-                            )}
-                            endContent={<Flex
-                                align="center"
-                                justifyContent={"flex-end"}
-                                height="100%"
-                                width={165}
-                                px={10}>
+                                {adminShopItems
+                                    .map((shopItem, index) => (
+                                        <FlexListItem
+                                            key={index}
+                                            thumbnailContent={(
+                                                <img
+                                                    style={{
+                                                        objectFit: 'cover'
+                                                    }}
+                                                    src={shopItem.coverFilePath}
+                                                    className="square70"
+                                                    alt="shop item cover" />
+                                            )}
+                                            setIsChecked={x => setSelected(shopItem.id, x)}
+                                            isChecked={selectedIds.some(x => x === shopItem.id)}
+                                            midContent={(
+                                                <FlexListTitleSubtitle
+                                                    title={shopItem.name}
+                                                    subTitle={shopItem.shopItemCategoryId + ''} />
+                                            )}
+                                            endContent={<EpistoFlex2
+                                                align="center"
+                                                justifyContent={'flex-end'}
+                                                height="100%"
+                                                width='165px'
+                                                px='10px'>
 
-                                {/* go to edit */}
-                                {rowButtons
-                                    .map(x => (
-                                        <EpistoButton
-                                            variant={"colored"}
-                                            onClick={() => x.action(shopItem)}
-                                            style={{ width: 20, margin: "3px" }}>
+                                                {/* go to edit */}
+                                                {rowButtons
+                                                    .map((x, i) => (
+                                                        <EpistoButton
+                                                            key={i}
+                                                            variant={'colored'}
+                                                            onClick={() => x.action(shopItem)}
+                                                            style={{ width: 20, margin: '3px' }}>
 
-                                            {x.icon}
-                                        </EpistoButton>
+                                                            {x.icon}
+                                                        </EpistoButton>
+                                                    ))}
+                                            </EpistoFlex2>} />
                                     ))}
-                            </Flex>} />
-                    ))}
+                            </EpistoFlex2>
 
-            </AdminSubpageHeader>
-        </LoadingFrame>
+
+                        </AdminSubpageHeader>
+                    </LoadingFrame>
+                },
+                {
+                    route: applicationRoutes.administrationRoute.shopRoute.editRoute,
+                    element: <ShopAdminEditSubpage />
+                }
+            ]} />
     );
-}
+};

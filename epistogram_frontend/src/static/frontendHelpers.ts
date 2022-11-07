@@ -1,18 +1,21 @@
-import { useMediaQuery } from "@chakra-ui/react";
-import queryString from "query-string";
-import { useEffect, useState } from "react";
-import { useQuery } from "react-query";
-import { matchPath, useLocation, useParams } from "react-router-dom";
-import { validatePassowrd } from "../models/shared_models/logic/sharedLogic";
-import { ErrorCodeType, RoleIdEnum } from "../models/shared_models/types/sharedTypes";
-import { ApplicationRoute, LoadingStateType } from "../models/types";
-import { httpGetAsync } from "../services/core/httpClient";
-import { assetStorageUrl } from "./Environemnt";
-import { translatableTexts } from "./translatableTexts";
+import { useMediaQuery } from '@chakra-ui/react';
+import quantize from 'quantize';
+import React, { ComponentType, MutableRefObject, ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import { rootRoute } from '../configuration/applicationRoutes';
+import { ApplicationRoute } from '../models/types';
+import { useNavigation } from '../services/core/navigatior';
+import { useShowErrorDialog } from '../services/core/notifications';
+import { ErrorWithCode } from '../shared/types/ErrorWithCode';
+import { ErrorCodeType, RoleIdEnum } from '../shared/types/sharedTypes';
+import { Id } from '../shared/types/versionId';
+import { CSSOptionsType, getCSSClassKeyFromOptions } from '../styles/globalCssTypes';
+import { stringifyQueryObject } from './locationHelpers';
+import { translatableTexts } from './translatableTexts';
 
 export const iterate = <T>(n: number, fn: (index) => T) => {
 
-    let results = [] as T[];
+    const results = [] as T[];
 
     for (let index = 0; index < n; index++) {
 
@@ -20,7 +23,138 @@ export const iterate = <T>(n: number, fn: (index) => T) => {
     }
 
     return results;
-}
+};
+
+type SetterFnType<TState> = (state: TState) => void;
+type SetStateFnType<TState> = (setterFnOrState: SetterFnType<TState> | Partial<TState>) => void;
+
+export const useTryCatchWrapper = (getMessageFromCode: (code: ErrorCodeType) => string | undefined | void | 'PREVENT MSG') => {
+
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+    const getWrappedAction = (action: () => Promise<void>) => {
+
+        return async () => {
+
+            try {
+
+                await action();
+                setErrorMessage(null);
+            }
+            catch (e: any) {
+
+                const defaultMessage = 'Ismeretlen hiba tortent!';
+                const errorWithCode = (e as ErrorWithCode);
+                const customMessage = errorWithCode.code
+                    ? getMessageFromCode(errorWithCode.code)
+                    : null;
+
+                if (customMessage !== 'PREVENT MSG')
+                    setErrorMessage(customMessage ?? defaultMessage);
+            }
+        };
+    };
+
+    return {
+        getWrappedAction,
+        errorMessage
+    };
+};
+
+export const useStateObject = <TState extends {}>(obj: TState): [TState, SetStateFnType<TState>, TState] => {
+
+    const forceUpdate = useForceUpdate();
+    const state = useRef(obj).current;
+
+    const setState = useCallback<SetStateFnType<TState>>((setterFnOrState) => {
+
+        if (typeof setterFnOrState === 'function') {
+
+            (setterFnOrState as any)(state);
+        }
+        else {
+
+            Object.assign(state, setterFnOrState);
+        }
+
+        forceUpdate();
+    }, [state, forceUpdate]);
+
+    return [state, setState, state];
+};
+
+export const useStateAndRef = <T>(defaultValue: T): [MutableRefObject<T>, T, (state: T) => void] => {
+
+    const [stateValue, stateSetter] = useState(defaultValue);
+    const ref = useRef(stateValue);
+    ref.current = stateValue;
+
+    return [ref, stateValue, stateSetter];
+};
+
+export const useCSSOptionClasses = (cssOptions: CSSOptionsType) => {
+
+    const cssOptionClasses = useMemo(() => {
+
+        const classNameList = getCSSClassKeyFromOptions(cssOptions);
+
+        return classNameList
+            .join(' ');
+
+    }, [cssOptions]);
+
+    return {
+        cssOptionClasses: cssOptionClasses
+    };
+};
+
+export const useHandleAddRemoveItems = <TItem, TKey>(
+    items: TItem[],
+    setItems: (items: TItem[]) => void,
+    opts?: {
+        getKey?: (item: TItem) => TKey,
+        sideEffects: ((newValue: TItem[]) => void)[]
+    }): [
+        (item: TItem | TItem[]) => void,
+        (key: TKey) => void
+    ] => {
+
+    const getKeyInternal: (item: TItem) => TKey = useMemo(() => {
+
+        if (opts?.getKey)
+            return opts.getKey;
+
+        return (x: TItem): TKey => x as any;
+    }, [opts?.getKey]);
+
+    const addItem = useCallback((item: TItem | TItem[]) => {
+
+        const newItems = [...items, ...(Array.isArray(item) ? item : [item])];
+
+        setItems(newItems);
+
+        if (opts?.sideEffects)
+            opts.sideEffects
+                .forEach(x => x(items));
+    }, [items, setItems, opts?.sideEffects]);
+
+    const removeItem = useCallback((key: TKey): void => {
+
+        const newItems = items
+            .filter(item => getKeyInternal(item) !== key);
+
+        setItems(newItems);
+
+        if (opts?.sideEffects)
+            opts.sideEffects
+                .forEach(x => x(items));
+    }, [items, setItems, getKeyInternal, opts?.sideEffects]);
+
+    return [
+        addItem,
+        removeItem
+    ];
+};
 
 export const formatTimespan = (seconds: number) => {
 
@@ -29,10 +163,32 @@ export const formatTimespan = (seconds: number) => {
     const roundHours = Math.floor(totalHours);
     const minutes = (totalHours - roundHours) * 60;
     const roundMinutes = Math.floor(minutes);
-    const formattedSpentTime = `${roundHours > 0 ? roundHours + "h " : ""}${roundMinutes}m`;
+    const formattedSpentTime = `${roundHours > 0 ? roundHours + 'h ' : ''}${roundMinutes}m`;
 
     return formattedSpentTime;
-}
+};
+
+export const formatSeconds = (seconds: number) => {
+
+    const minutes = Math.floor(seconds / 60);
+    const subseconds = seconds - (minutes * 60);
+
+    return `${minutes === 0 ? '' : minutes + 'm '}${subseconds}s`;
+};
+
+export const areArraysEqual = <T>(arrA: T[], arrB: T[]) => {
+
+    if (arrA.length !== arrB.length)
+        return false;
+
+    for (let index = 0; index < arrA.length; index++) {
+
+        if (arrA[index] !== arrB[index])
+            return false;
+    }
+
+    return true;
+};
 
 export const formatTime = (seconds: number) => {
 
@@ -40,41 +196,22 @@ export const formatTime = (seconds: number) => {
         .toLocaleTimeString('en-GB', {
             timeZone: 'Etc/UTC',
             hour12: false,
-            minute: '2-digit',
-            second: '2-digit'
+            minute: 'numeric',
+            second: 'numeric'
         });
-}
+};
 
 export const dateTimeToString = (date: Date | string) => {
 
     if (!date)
-        return "";
+        return '';
 
     if (isString(date))
-        return new Date(date).toLocaleString();
+        return new Date(date)
+            .toLocaleString();
 
     return date.toLocaleString();
-}
-
-export const useIntParam = (name: string) => {
-
-    const param = useParams()[name];
-    if (!param)
-        return null;
-        
-    return parseInt(param);
-}
-
-export const useBoolParam = (name: string) => {
-
-    const params = useParams();
-    const value = params[name];
-
-    if (value !== "true" && value !== "false")
-        throw new Error("Failed to parse boolean url param!");
-
-    return value === "true";
-}
+};
 
 export const getUrl = (path: string, params?: any, query?: any) => {
 
@@ -85,7 +222,7 @@ export const getUrl = (path: string, params?: any, query?: any) => {
             if (Object.prototype.hasOwnProperty.call(params, key)) {
 
                 const element = params[key];
-                const token = ":" + key;
+                const token = ':' + key;
 
                 replacedPath = replacedPath.replace(token, element);
             }
@@ -98,9 +235,9 @@ export const getUrl = (path: string, params?: any, query?: any) => {
     }
 
     return replacedPath;
-}
+};
 
-export const getRoleName = (roleId: number) => {
+export const getRoleName = (roleId: Id<'Role'>) => {
 
     if (roleId === RoleIdEnum.administrator)
         return translatableTexts.roleNames.administrator;
@@ -109,7 +246,7 @@ export const getRoleName = (roleId: number) => {
         return translatableTexts.roleNames.supervisor;
 
     return translatableTexts.roleNames.user;
-}
+};
 
 export const roundNumber = (num: number, decimalPlaces?: number) => {
 
@@ -119,14 +256,14 @@ export const roundNumber = (num: number, decimalPlaces?: number) => {
     const multiplier = (decimalPlaces * 10);
 
     return Math.round(num * multiplier) / multiplier;
-}
+};
 
 export const parseIntOrNull = (str: string) => {
 
     try {
 
-        if (str === "" || str === null || str === undefined)
-            str = "0";
+        if (str === '' || str === null || str === undefined)
+            str = '0';
 
         return parseInt(str);
     }
@@ -134,7 +271,7 @@ export const parseIntOrNull = (str: string) => {
 
         return null;
     }
-}
+};
 
 export const toDateStringFormatted = (date: Date) => {
 
@@ -144,7 +281,7 @@ export const toDateStringFormatted = (date: Date) => {
     const dayIndex = date.getDate();
 
     return `${getMonthName(monthIndex)}. ${dayIndex}`;
-}
+};
 
 export const daysUntil = (firstDate: Date, secondDate: Date) => {
 
@@ -152,7 +289,7 @@ export const daysUntil = (firstDate: Date, secondDate: Date) => {
     const diffDays = Math.round(Math.abs(((firstDate as any) - (secondDate as any)) / oneDay));
 
     return diffDays;
-}
+};
 
 
 /**
@@ -162,20 +299,20 @@ export const daysUntil = (firstDate: Date, secondDate: Date) => {
 export const getMonthName = (index: number) => {
 
     return [
-        "Jan",
-        "Febr",
-        "Márc",
-        "Ápr",
-        "Máj",
-        "Jún",
-        "Júl",
-        "Aug",
-        "Szept",
-        "Okt",
-        "Nov",
-        "Dec"
+        'Jan',
+        'Febr',
+        'Márc',
+        'Ápr',
+        'Máj',
+        'Jún',
+        'Júl',
+        'Aug',
+        'Szept',
+        'Okt',
+        'Nov',
+        'Dec'
     ][index];
-}
+};
 
 export const disallowWindowNavigation = () => {
     window.onbeforeunload = (event) => {
@@ -187,29 +324,239 @@ export const disallowWindowNavigation = () => {
         }
         return ''; // Legacy method for cross browser support
     };
-}
+};
+
+export const useCurrentUrlPathname = () => {
+
+    const location = useLocation();
+    return location.pathname;
+};
+
+type MemoFnType = <T extends ComponentType<any>>(
+    c: T,
+    areEqual?: (
+        prev: React.ComponentProps<T>,
+        next: React.ComponentProps<T>
+    ) => boolean
+) => T;
+
+type MemoFnType2 = <TProps>(
+    c: (props: TProps) => JSX.Element,
+    areEqual?: (
+        prev: TProps,
+        next: TProps
+    ) => boolean
+) => (props: TProps) => JSX.Element;
+
+export const typedMemo: MemoFnType2 = React.memo as any;
+
+export const valueCompareTest = (val: any, name: string) => {
+
+    const prevValName = `prev_val_${name}`;
+    const prevVal = window[prevValName];
+
+    if (val !== prevVal)
+        console.log(`*** ${name} Changed!!!`);
+
+    window[prevValName] = val;
+};
+
+export const valuesCompareTest = (valNames: string[]) => {
+
+    valNames
+        .forEach(name => {
+
+            const val = eval(name);
+            valueCompareTest(val, name);
+        });
+};
+
+/**
+ * Value ref compare test, using react's useEffect hook.
+ * Logs the label on every ref change - and react refresh trigger of course.
+ */
+export const useValueCompareTest = (value: any, label: string) => {
+
+    useEffect(() => {
+
+        console.log(`*** ${label} CHANGED!`);
+    }, [value]);
+};
 
 export const useIsMatchingCurrentRoute = () => {
 
-    const currentPath = useLocation().pathname;
+    const currentUrl = useCurrentUrlPathname();
 
-    const isMatchingCurrentRoute = (route: ApplicationRoute, exactOverride?: boolean) => {
+    return (appRoute: ApplicationRoute<any>) => {
 
-        const match = matchPath(
-            currentPath,
-            {
-                path: route.route,
-                exact: exactOverride !== undefined ? exactOverride : !!route.exact,
-                strict: false
+        if (!appRoute)
+            throw new Error('Route is null or undefined!');
+
+        if (!appRoute.route)
+            throw new Error(`Application route (${JSON.stringify(appRoute.title)}) /route property is null or undefined!`);
+
+        const compareRoute = appRoute.route.getAbsolutePath();
+        const currentUrlSegments = currentUrl.split('/');
+        const compareRouteSegments = compareRoute.split('/');
+        const segmentsLengthMatch = currentUrlSegments.length === compareRouteSegments.length;
+
+        const isSegmentsMismatch = compareRouteSegments
+            .some((routeSegment, index) => {
+
+                // url param
+                if (routeSegment.startsWith(':'))
+                    return false;
+
+                if (routeSegment === currentUrlSegments[index])
+                    return false;
+
+                return true;
             });
 
-        return !!match;
+        return {
+            isMatchingRoute: !isSegmentsMismatch,
+            isMatchingRouteExactly: !isSegmentsMismatch && segmentsLengthMatch,
+            currentUrl
+        };
+    };
+};
+
+export const getSubroutes = (route: ApplicationRoute<any, any>): ApplicationRoute<any, any>[] => {
+
+    return Object
+        .values(route)
+        .filter(x => !!x.route);
+};
+
+// export const useGetCurrentAppRoute2 = (): ApplicationRoute<any, any> => {
+
+//     const currentUrl = useCurrentUrlPathname();
+//     const isMatchingCurrent = useIsMatchingCurrentRoute();
+
+//     const traverse = (appRoute: ApplicationRoute<any, any>): { depth: number, route: ApplicationRoute<any, any> | null } => {
+
+//         /**
+//          * If not matching this route, 
+//          * return null
+//     */
+//         if (!isMatchingCurrent(appRoute))
+//             return { depth: 0, route: null };
+
+//         /**
+//          * If matching route, and route is exact,
+//          * that's the result 
+//     */
+//         if (appRoute.route.isExact())
+//             return { depth: 0, route: appRoute };
+
+//         /**
+//          * If matching route but it's not exact, 
+//          * result could be a child route 
+//     */
+//         const result = getSubroutes(appRoute)
+//             .map(traverse)
+//             .firstOrNull();
+
+//         if (result)
+//             return result;
+
+//         /**
+//          * If no subroute is matching,
+//          * use this as the result 
+//     */
+//         return appRoute;
+//     };
+
+//     const result = traverse(rootRoute);
+//     if (!result)
+//         throw new Error(`Current route (${currentUrl}) did not match any of the application routes!`);
+
+//     return result;
+// };
+
+export const useGetCurrentAppRoute = () => {
+
+    const currentUrl = useCurrentUrlPathname();
+    const isMatching = useIsMatchingCurrentRoute();
+    const isRouteProp = (x: any) => !!x.route;
+
+    const isMatchingRoute = (route: ApplicationRoute<any>) => {
+
+        const match = route.route.getAbsolutePath() === '/'
+            ? {
+                isMatchingRouteExactly: true,
+                isMatchingRoute: true
+            }
+            : isMatching(route);
+
+        const didmatch = route.route.isExact()
+            ? match.isMatchingRouteExactly
+            : match.isMatchingRoute;
+
+        // console.log(`Checking route "${route.route.getAbsolutePath()}" isMatching: ${didmatch}`);
+
+        return didmatch;
     };
 
-    return isMatchingCurrentRoute;
-}
+    const getMatchingRoute = (appRoute: ApplicationRoute<any>): ApplicationRoute<any> | null => {
+
+        /**
+         * If not matching route, return
+         */
+        if (!isMatchingRoute(appRoute))
+            return null;
+
+        /**
+         * Matching route, and it's not an exact route, 
+         * return the matched route 
+         */
+        if (appRoute.route.isExact())
+            return appRoute;
+
+        /**
+         * get matching subroute
+         */
+        const subRoutes = Object
+            .values(appRoute)
+            .filter(x => isRouteProp(x)) as ApplicationRoute<any>[];
+
+        const matchingSubRoute = subRoutes
+            .map(x => getMatchingRoute(x))
+            .firstOrNull(x => !!x);
+
+        return matchingSubRoute;
+    };
+
+    const matchingRoute = getMatchingRoute(rootRoute);
+    if (!matchingRoute)
+        throw new Error(`No route matched "${currentUrl}"`);
+
+    return matchingRoute;
+};
+
+export const useRedirectOnExactMatch = (opts: {
+    route: ApplicationRoute,
+    redirectRoute: ApplicationRoute,
+    params?: any
+}) => {
+
+    const { redirectRoute, route, params } = opts;
+
+    const isMatching = useIsMatchingCurrentRoute();
+    const { isMatchingRouteExactly } = isMatching(route);
+    const { navigate2 } = useNavigation();
+
+    useEffect(() => {
+
+        if (!isMatchingRouteExactly)
+            return;
+
+        navigate2(redirectRoute, params);
+    }, [isMatchingRouteExactly]);
+};
 
 export const isString = (obj: any) => typeof obj === 'string' || obj instanceof String;
+export const isNumber = (obj: any) => typeof obj === 'number' || obj instanceof Number;
 
 export function distinct<T>(array: T[]) {
 
@@ -217,48 +564,80 @@ export function distinct<T>(array: T[]) {
         return self.indexOf(value) === index;
     }
 
-    var unique = array.filter(onlyUnique);
+    const unique = array.filter(onlyUnique);
 
     return unique;
+}
+
+export function distinctByAllKeys<T extends Object, TKeyField extends keyof T>(array: T[], keys: TKeyField[]) {
+
+    const isPropValuesEqual = (subject: T, target: T, propNames: TKeyField[]) => {
+
+        return propNames.every(propName => subject[propName] === target[propName]);
+    };
+
+    const getUniqueItemsByProperties = (items: T[], keys: TKeyField[]) => {
+        return items.filter((item, index, array) =>
+            index === array.findIndex(foundItem => isPropValuesEqual(foundItem, item, keys))
+        );
+    };
+
+    return getUniqueItemsByProperties(array, keys);
 }
 
 export const swapItems = (newList: any[], srcIndex: number, destIndex: number) => {
 
     newList.splice(destIndex, 0, newList.splice(srcIndex, 1)[0]);
     return newList;
-}
+};
 
 export const insertAtIndex = <T>(arr: T[], index: number, item: T) => {
 
     arr.splice(index, 0, item);
     return arr;
-}
+};
 
 export const isNullOrUndefined = (o: any) => {
 
     return o === undefined || o === null;
-}
+};
 
 export const epochDates = (dateA: Date, dateB: Date) => {
 
     return Math.abs((dateA.getTime() - dateB.getTime()) / 1000);
-}
+};
 
-export const usePaging = <T>(
-    items: T[],
+export const usePaging = <T>({
+    items,
+    onNextOverNavigation,
+    onPrevious,
+    onPreviousOverNavigation,
+    onItemSet
+}: {
+    items: T[] | number,
     onPreviousOverNavigation?: () => void,
-    onNextOverNavigation?: () => void) => {
+    onNextOverNavigation?: () => void,
+    onPrevious?: () => void,
+    onItemSet?: (opts: { item: T, index: number }) => void
+}) => {
 
     if (!hasValue(items))
-        throw new Error("Cannot page a null or undefined items collection!");
+        throw new Error('Cannot page a null or undefined items collection!');
 
-    const [currentItemIndex, setCurrentItemIndex] = useState(0);
+    const [currentIndex, setCurrentItemIndex] = useState(0);
 
-    const isLast = currentItemIndex === items.length - 1;
-    const isFirst = currentItemIndex === 0;
-    const currentItem = items[currentItemIndex] as T | null;
+    const max = useMemo(() => isNumber(items)
+        ? items as number
+        : (items as any[]).length, [items]);
 
-    const next = () => {
+    const isLast = useMemo(() => currentIndex === max - 1, [max, currentIndex]);
+    const isFirst = useMemo(() => currentIndex === 0, [currentIndex]);
+    const currentItem = useMemo(() => items[currentIndex] as T | null, [items, currentIndex]);
+    const progressPercentage = useMemo(() => max > 0
+        ? currentIndex / max * 100
+        : 0, [max, currentIndex]);
+
+    const next = useCallback(() => {
 
         if (isLast) {
 
@@ -266,11 +645,11 @@ export const usePaging = <T>(
                 onNextOverNavigation();
         } else {
 
-            setCurrentItemIndex(currentItemIndex + 1);
+            setCurrentItemIndex(currentIndex + 1);
         }
-    }
+    }, [onNextOverNavigation, setCurrentItemIndex, currentIndex, isLast]);
 
-    const previous = () => {
+    const previous = useCallback(() => {
 
         if (isFirst) {
 
@@ -278,38 +657,68 @@ export const usePaging = <T>(
                 onPreviousOverNavigation();
         } else {
 
-            setCurrentItemIndex(currentItemIndex - 1);
-        }
-    }
+            setCurrentItemIndex(currentIndex - 1);
 
-    const setItem = (itemIndex: number) => {
+            if (onPrevious)
+                onPrevious();
+        }
+    }, [onPreviousOverNavigation, setCurrentItemIndex, isFirst, currentIndex, onPrevious]);
+
+    const setItem = useCallback((itemIndex: number) => {
 
         if (itemIndex < 0)
-            throw new Error("Item index is less than 0!");
+            throw new Error('Item index is less than 0!');
 
-        if (itemIndex > items.length - 1)
-            throw new Error("Item index is more than the length of the items collection!");
+        if (itemIndex > max - 1)
+            throw new Error('Item index is more than the length of the items collection!');
 
         setCurrentItemIndex(itemIndex);
-    }
 
-    const jumpToLast = () => {
+        if (onItemSet)
+            onItemSet({ item: items[itemIndex], index: itemIndex });
+    }, [setCurrentItemIndex]);
 
-        setItem(items.length - 1);
-    }
+    const jumpToLast = useCallback(() => {
 
-    return {
+        setItem(max - 1);
+    }, [setItem, max]);
+
+    return useMemo(() => ({
         items,
         next,
         previous,
         isLast,
         isFirst,
-        currentIndex: currentItemIndex,
+        currentIndex,
         currentItem,
+        progressPercentage,
         setItem,
         jumpToLast
-    } as PagingType<T>;
-}
+    } as PagingType<T>), [
+        items,
+        next,
+        previous,
+        isLast,
+        isFirst,
+        currentIndex,
+        currentItem,
+        progressPercentage,
+        setItem,
+        jumpToLast
+    ]);
+};
+
+export const moveItemInArray = <T,>(workArray: T[], oldIndex: number, newIndex: number): T[] => {
+
+    const copiedArr = [...workArray];
+    const length = copiedArr.length;
+
+    if (oldIndex !== newIndex && length > oldIndex && length > newIndex) {
+        copiedArr.splice(newIndex, 0, copiedArr.splice(oldIndex, 1)[0]);
+    }
+
+    return copiedArr;
+};
 
 export type PagingType<T> = {
 
@@ -324,19 +733,14 @@ export type PagingType<T> = {
     isLast: boolean;
     isFirst: boolean;
     currentIndex: number;
+    progressPercentage: number;
 };
 
-export const getQueryParam = (name: string) => {
+export const useIsMobileView = () => {
 
-    const params = queryString.parse(window.location.search);
-    return params[name] as string;
+    const [isMobileView] = useMediaQuery('(max-width: 980px)');
+    return isMobileView;
 };
-
-export const useIsDesktopView = () => {
-
-    const [isDesktopView] = useMediaQuery("(min-width: 980px)")
-    return isDesktopView;
-}
 
 export const useIsScreenWiderThan = (minimumPixels: number) => {
 
@@ -344,138 +748,33 @@ export const useIsScreenWiderThan = (minimumPixels: number) => {
     const isTrue = queryRes[0];
 
     return isTrue;
-}
+};
 
-export const usePasswordEntryState = () => {
+export type PropsWithChildren = { children: ReactNode };
 
-    const [password, setPassword] = useState("");
-    const [passwordCompare, setPasswordCompare] = useState("");
-    const [passwordError, setPasswordError] = useState<string | null>(null);
-    const [passwordCompareError, setPasswordCompareError] = useState<string | null>(null);
+export const useEventTrigger = () => {
 
-    const validate = () => {
+    const [state, setState] = useState(1);
 
-        const error = validatePassowrd(password, passwordCompare);
+    const fireEvent = useCallback(() => setState(state + 1), [setState, state]);
 
-        switch (error) {
+    return {
+        subscriptionValue: state,
+        fireEvent
+    };
+};
 
-            case "passwordIsEmpty":
-                setPasswordError(null);
-                setPasswordCompareError(null);
-                return false;
+export type DictionaryOfT<T> = { [K: string]: T };
 
-            case "tooShort":
-                setPasswordError("A jelszó túl rövid!");
-                setPasswordCompareError(null);
-                return false;
+export type EventTriggerType = ReturnType<typeof useEventTrigger>;
 
-            case "tooLong":
-                setPasswordError("A jelszó túl hosszú!");
-                setPasswordCompareError(null);
-                return false;
-
-            case "doesNotMatchControlPassword":
-                setPasswordError("A jelszavak nem egyeznek!");
-                setPasswordCompareError("A jelszavak nem egyeznek!");
-                return false;
-
-            case "hasNoNumber":
-                setPasswordError("A jelszó nem tartalmaz számot!");
-                setPasswordCompareError(null);
-                return false;
-
-            default:
-                setPasswordError(null);
-                setPasswordCompareError(null);
-                return true;
-        }
-    }
+export const useSubscribeEventTrigger = (trigger: EventTriggerType, callback: () => void) => {
 
     useEffect(() => {
 
-        validate();
-    }, [passwordCompare, password]);
-
-    return {
-        password,
-        passwordCompare,
-        passwordError,
-        passwordCompareError,
-        hasCredentialError: !!passwordError || !!passwordCompareError,
-        setPassword,
-        setPasswordCompare,
-        validate
-    }
-}
-
-export const useReactQuery = <T>(
-    queryKey: any[],
-    queryFunc: () => Promise<T>,
-    enabled?: boolean) => {
-
-    const isEnabled = enabled === true || enabled === undefined;
-
-    const queryResult = useQuery(
-        queryKey,
-        queryFunc, {
-        retry: false,
-        refetchOnWindowFocus: false,
-        enabled: isEnabled
-    });
-
-    const { status, refetch, isFetching, data, ...queryResult2 } = queryResult;
-    const advancedStatus = isFetching ? "loading" : status as LoadingStateType
-
-    return {
-        status: advancedStatus,
-        refetch: async () => {
-
-            await refetch();
-        },
-        data: data ?? null,
-        ...queryResult2
-    }
-}
-
-export const useReactQuery2 = <T>(url: string, queryParams?: any, isEnabled?: boolean) => {
-
-    var queryValues = queryParams ? Object.values(queryParams) : [];
-
-    const queryResult = useQuery(
-        [url, ...queryValues],
-        () => httpGetAsync(url, queryParams), {
-        retry: false,
-        refetchOnWindowFocus: false,
-        keepPreviousData: true,
-        enabled: isEnabled === false ? false : true
-    });
-
-    const state = (queryResult.isIdle
-        ? "idle"
-        : queryResult.isFetching
-            ? "loading"
-            : queryResult.isError
-                ? "error"
-                : "success") as LoadingStateType;
-
-    const refetch = async () => {
-
-        await queryResult.refetch();
-    };
-
-    const dataAsT = queryResult.data as T;
-
-    const result = {
-        state,
-        refetch,
-        data: dataAsT === undefined ? null : dataAsT,
-        error: queryResult.error
-    };
-
-    return result;
-}
-
-export const getAssetUrl = (path: string) => assetStorageUrl + ("/" + path).replace("//", "/");
+        callback();
+    }, [trigger.subscriptionValue]);
+};
 
 export const hasValue = (obj: any) => {
 
@@ -485,13 +784,38 @@ export const hasValue = (obj: any) => {
     if (obj === null)
         return false;
 
-    if (obj === "")
+    if (obj === '')
         return false;
 
     return true;
-}
+};
 
-export class ArrayBuilder<T> {
+export const usePostCallback = <T>(fn: (data?: T) => Promise<void>, afterEffects: (() => void | Promise<void>)[]) => {
+
+    const showError = useShowErrorDialog();
+
+    const execSafeAsync = useCallback(async (data?: T) => {
+
+        try {
+
+            await fn(data);
+
+            for (let index = 0; index < afterEffects.length; index++) {
+
+                const element = afterEffects[index];
+                await element();
+            }
+        }
+        catch (e) {
+
+            showError(e);
+        }
+    }, [fn, ...afterEffects, showError]);
+
+    return execSafeAsync;
+};
+
+export class ArrayBuilder<T = any> {
 
     private _array: T[];
 
@@ -506,10 +830,24 @@ export class ArrayBuilder<T> {
         return this;
     }
 
+    addMany(items: T[]) {
+
+        this._array = this._array.concat(items);
+        return this;
+    }
+
     addIf(cond: boolean, item: T) {
 
         if (cond)
             this.add(item);
+
+        return this;
+    }
+
+    addIfMany(cond: boolean, items: T[]) {
+
+        if (cond)
+            this.addMany(items);
 
         return this;
     }
@@ -525,109 +863,238 @@ export const reloadPage = () => window.location.reload();
 export const isBetweenThreshold = (valueA: number, valueB: number, threshold: number) => {
 
     return (valueA - threshold) < valueB && valueB < (valueA + threshold);
-}
+};
 
 export const getRandomInteger = (min: number, max: number) => {
 
     return Math.floor(Math.random() * (max - min)) + min;
-}
+};
 
 export const secondsToTime = (e: any) => {
-    let h = Math.floor(e / 3600).toString().padStart(2, '0'),
-        m = Math.floor(e % 3600 / 60).toString().padStart(2, '0'),
-        s = Math.floor(e % 60).toString().padStart(2, '0');
+    const h = Math.floor(e / 3600)
+        .toString()
+        .padStart(2, '0'),
+        m = Math.floor(e % 3600 / 60)
+            .toString()
+            .padStart(2, '0'),
+        s = Math.floor(e % 60)
+            .toString()
+            .padStart(2, '0');
 
     return h !== '00' ? h + ':' + m + ':' + s : m + ':' + s;
-}
+};
 
 export const isArray = (obj: any) => {
 
     return Array.isArray(obj);
-}
+};
 
-export const objToArray = (obj: any) => {
+// export const objToArray = (obj: any) => {
 
-    const properties = [] as any[];
+//     const properties = [] as any[];
 
-    for (const key in obj) {
-        if (Object.prototype.hasOwnProperty.call(obj, key)) {
+//     for (const key in obj) {
+//         if (Object.prototype.hasOwnProperty.call(obj, key)) {
 
-            const element = obj[key];
-            properties.push(element);
-        }
-    }
+//             const element = obj[key];
+//             properties.push(element);
+//         }
+//     }
 
-    return properties;
-}
-
-export const stringifyQueryObject = (queryObj: any) => {
-
-    let qs = "?";
-
-    for (const key in queryObj) {
-        if (Object.prototype.hasOwnProperty.call(queryObj, key)) {
-
-            const element = queryObj[key];
-            const andMark = qs === "?"
-                ? ""
-                : "&";
-
-            if (element !== undefined && element !== null)
-                qs += andMark + key + "=" + element;
-        }
-    }
-
-    return qs;
-}
+//     return properties;
+// };
 
 export const isCurrentRoute = (route: string) => window.location.pathname === route;
 
-export class ErrorCode extends Error {
+export const isCurrentAppRoute = (route: ApplicationRoute) => {
 
-    code: ErrorCodeType;
-
-    constructor(message: string, code: ErrorCodeType) {
-
-        super(message);
-        this.code = code;
-    }
-}
+    return false;
+};
 
 export const getEventValueCallback = (callback: (value: any) => void) => {
 
     const inputChangeHandler = (e: React.ChangeEvent<{ value: unknown, name?: string }>) => {
 
         callback(e.currentTarget.value);
-    }
+    };
 
     return inputChangeHandler;
-}
+};
 
 export const getEventFileCallback = (callback: (value: any) => void) => {
 
     const inputChangeHandler = (e: React.ChangeEvent<{ files: unknown, name?: string }>) => {
 
         callback(e.currentTarget.files);
-    }
+    };
 
     return inputChangeHandler;
-}
+};
 
 export const getErrorTypeByHTTPCode = (code: number): ErrorCodeType => {
 
     if (code === 400)
-        return "bad request";
+        return 'bad request';
 
     if (code === 500)
-        return "internal server error";
+        return 'internal server error';
 
     if (code === 403)
-        return "forbidden";
+        return 'forbidden';
 
-    return "http error";
-}
+    return 'http error';
+};
 
 export const useForceUpdate = () => {
-    const [value, setValue] = useState(0); // integer state
-    return () => setValue(value => value + 1); // update the state to force render
+
+    // integer state
+    const [, setValue] = useState({});
+
+    // update the state to force render
+    const forceUpdate = useCallback(() => {
+
+        setValue({});
+    }, []);
+
+    return forceUpdate;
+};
+
+export const clone = <T>(item: T) => {
+
+    return JSON.parse(JSON.stringify(item)) as T;
+};
+
+export const setPageTitle = (title: string) => {
+
+    document.title = title;
+};
+
+export const useSetPageTitle = (title: string) => {
+
+    useEffect(() => {
+
+        setPageTitle(title);
+    }, []);
+};
+
+/**
+ * Gets the difference between two dates in days
+ * @param date1 First date
+ * @param date2 Second date
+ */
+export const dateDiffInDays = (date1: Date, date2: Date) => {
+
+    // Discard the time and time-zone information.
+    const utc1 = Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate());
+    const utc2 = Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate());
+
+    const timeDiff = Math.floor(utc2 - utc1);
+    const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+
+    return daysDiff;
+};
+
+
+export type ImageColorSettingsType = {
+    colors?: number,
+    cors?: boolean,
+    windowSize?: number,
+    format?: {
+        rgb?: 'rgb',
+        hex?: 'hex'
+    }
 }
+
+export const useImageColor = (src: string, settings?: ImageColorSettingsType) => {
+
+    const CHANNELS = 4;
+
+    const [colors, setColors] = useState<number[][]>();
+
+    const windowSize = settings?.windowSize || 50;
+    const isCorsEnabled = settings?.cors || true;
+    const colorsCount = settings?.colors || 2;
+    const format = settings?.format || 'rgb';
+
+    const getArrayOfPixels = useCallback((
+        original: Uint8ClampedArray,
+        chunkSize = 4
+    ) => {
+
+        const arrayOfPixels: Uint8ClampedArray[] = [];
+
+        for (let i = 0; i < original.length; i += chunkSize * windowSize) {
+            arrayOfPixels.push(original.slice(i, i + chunkSize));
+        }
+
+        return arrayOfPixels;
+    }, [windowSize]);
+
+    const mapToHex = useCallback(
+        (values) => `#${values.map((i) => {
+            const h = i.toString('16');
+            return h.length < 2 ? `0${h}` : h;
+        })
+            .join('')}`,
+        [],
+    );
+
+    useEffect(() => {
+        const canvas = document.createElement('canvas');
+        const img = document.createElement('img');
+
+        const context = canvas.getContext('2d');
+
+        if (isCorsEnabled) {
+            img.setAttribute('crossOrigin', '');
+        }
+
+        if (!context)
+            return;
+
+        img.onload = () => {
+            canvas.width = img.naturalWidth;
+            canvas.height = img.naturalHeight;
+            context.drawImage(img, 0, 0);
+            const { data } = context.getImageData(0, 0, img.naturalWidth, img.naturalHeight);
+            const colorMap = quantize(getArrayOfPixels(data, CHANNELS), colorsCount);
+
+            const pallete = colorMap.palette();
+            setColors(format === 'rgb'
+                ? pallete
+                : pallete.map(mapToHex));
+        };
+
+        img.src = src;
+    }, [src, isCorsEnabled, colorsCount, format, getArrayOfPixels, mapToHex]);
+
+    return { colors };
+};
+
+
+const getOrientation = () =>
+    window.orientation;
+
+export const useScreenOrientation = () => {
+    const [orientation, setOrientation] =
+        useState(getOrientation());
+
+    const updateOrientation = () => {
+        setOrientation(getOrientation());
+    };
+
+    useEffect(() => {
+        window.addEventListener(
+            'orientationchange',
+            updateOrientation
+        );
+        return () => {
+            window.removeEventListener(
+                'orientationchange',
+                updateOrientation
+            );
+        };
+    }, []);
+
+    return orientation;
+};

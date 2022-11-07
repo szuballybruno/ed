@@ -1,40 +1,42 @@
-import { Flex } from "@chakra-ui/react";
-import { getAssetUrl } from "../static/frontendHelpers";
+import { Environment } from '../static/Environemnt';
+import { EpistoFlex2 } from './controls/EpistoFlex';
 
 export const Badges = () => {
 
     {/* dummy badges */ }
     const badges = [
-        getAssetUrl("/badges/001-badge.svg"),
-        getAssetUrl("/badges/002-rating.svg"),
-        getAssetUrl("/badges/003-flag.svg"),
-        getAssetUrl("/badges/004-certificate.svg"),
-        getAssetUrl("/badges/005-trophy.svg")
-    ]
+        Environment.getAssetUrl('/badges/001-badge.svg'),
+        Environment.getAssetUrl('/badges/002-rating.svg'),
+        Environment.getAssetUrl('/badges/003-flag.svg'),
+        Environment.getAssetUrl('/badges/004-certificate.svg'),
+        Environment.getAssetUrl('/badges/005-trophy.svg')
+    ];
 
     return (
 
-        <Flex
+        <EpistoFlex2
             direction="row"
             justify="flex-start"
             padding="10px">
 
-            {badges.map(badge => <Flex
-                className="roundBorders"
-                background="orange"
-                width="120px"
-                height="120px"
-                ml="10px"
-                justify="center"
-                align="center">
+            {badges
+                .map((badge, index) => <EpistoFlex2
+                    key={index}
+                    className="roundBorders"
+                    background="orange"
+                    width="120px"
+                    height="120px"
+                    ml="10px"
+                    justify="center"
+                    align="center">
 
-                <img
-                    style={{
-                        width: 100
-                    }}
-                    src={badge}
-                    alt="" />
-            </Flex>)}
-        </Flex>
+                    <img
+                        style={{
+                            width: 100
+                        }}
+                        src={badge}
+                        alt="" />
+                </EpistoFlex2>)}
+        </EpistoFlex2>
     );
 };

@@ -1,7 +1,8 @@
-import { apiRoutes } from "../../models/shared_models/types/apiRoutes"
-import { VideoRatingDTO } from "../../models/shared_models/VideoRatingDTO";
-import { useReactQuery2 } from "../../static/frontendHelpers";
-import { usePostDataUnsafe } from "../core/httpClient"
+import { apiRoutes } from '../../shared/types/apiRoutes';
+import { VideoRatingDTO } from '../../shared/dtos/VideoRatingDTO';
+import { QueryService } from '../../static/QueryService';
+import { usePostDataUnsafe } from '../core/httpClient';
+import { Id } from '../../shared/types/versionId';
 
 export const useRateVideoDifficulty = () => {
 
@@ -9,8 +10,8 @@ export const useRateVideoDifficulty = () => {
 
     return {
         rateVideoDifficultyAsync: qr.postDataAsync
-    }
-}
+    };
+};
 
 export const useRateVideoExperience = () => {
 
@@ -18,15 +19,15 @@ export const useRateVideoExperience = () => {
 
     return {
         rateVideoExperienceAsync: qr.postDataAsync
-    }
-}
+    };
+};
 
-export const useVideoRating = (videoId: number) => {
+export const useVideoRating = (videoVersionId: Id<'VideoVersion'>) => {
 
-    const qr = useReactQuery2<VideoRatingDTO>(apiRoutes.videoRating.getVideoRating, { videoId });
+    const qr = QueryService.useXQuery<VideoRatingDTO>(apiRoutes.videoRating.getVideoRating, { videoVersionId });
 
     return {
         videoRating: qr.data,
         refetchVideoRating: qr.refetch
-    }
-}
+    };
+};

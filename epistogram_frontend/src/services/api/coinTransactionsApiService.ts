@@ -1,49 +1,50 @@
-import { useReactQuery2 } from "../../static/frontendHelpers";
-import { CoinTransactionDTO } from "../../models/shared_models/CoinTransactionDTO";
-import { apiRoutes } from "../../models/shared_models/types/apiRoutes";
-import { usePostDataUnsafe } from "../core/httpClient";
+import { QueryService } from '../../static/QueryService';
+import { CoinTransactionDTO } from '../../shared/dtos/CoinTransactionDTO';
+import { apiRoutes } from '../../shared/types/apiRoutes';
+import { usePostDataUnsafe } from '../core/httpClient';
+import { Id } from '../../shared/types/versionId';
 
 export const useCoinTransactions = () => {
 
-    const qr = useReactQuery2<CoinTransactionDTO[]>(apiRoutes.coinTransactions.getCoinTransactions);
+    const qr = QueryService.useXQuery<CoinTransactionDTO[]>(apiRoutes.coinTransactions.getCoinTransactions);
 
     return {
         coinTransactions: qr.data ?? [],
         coinTransactionsError: qr.error,
         coinTransactionsStatus: qr.state
-    }
-}
+    };
+};
 
 export const useCoinBalance = () => {
 
-    const qr = useReactQuery2<number>(apiRoutes.coinTransactions.getCoinBalance);
+    const qr = QueryService.useXQuery<number>(apiRoutes.coinTransactions.getCoinBalance);
 
     return {
         coinBalance: qr.data ?? 0,
         coinBalanceError: qr.error,
         coinBalanceStatus: qr.state,
         refetchCoinBalance: qr.refetch
-    }
-}
+    };
+};
 
-export const useCoinBalanceOfUser = (userId: number) => {
+export const useCoinBalanceOfUser = (userId: Id<'User'> | null) => {
 
-    const qr = useReactQuery2<number>(apiRoutes.coinTransactions.getCoinBalanceOfUser, { userId });
+    const qr = QueryService.useXQuery<number>(apiRoutes.coinTransactions.getCoinBalanceOfUser, { userId }, !!userId);
 
     return {
         coinBalance: qr.data ?? 0,
         coinBalanceError: qr.error,
         coinBalanceStatus: qr.state,
         refetchCoinBalance: qr.refetch
-    }
-}
+    };
+};
 
 export const useGiftCoinsToUser = () => {
 
-    const qr = usePostDataUnsafe<{ amount: number, userId: number }, void>(apiRoutes.coinTransactions.giftCoinsToUser);
+    const qr = usePostDataUnsafe<{ amount: number, userId: Id<'User'> }, void>(apiRoutes.coinTransactions.giftCoinsToUser);
 
     return {
         giftCoinsToUserAsync: qr.postDataAsync,
         giftCoinsToUserState: qr.state
-    }
-}
+    };
+};

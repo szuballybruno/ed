@@ -1,87 +1,92 @@
-import React, { ReactNode } from "react";
-import { Route, Switch } from "react-router-dom";
-import AdminPage from "./components/administration/AdminPage";
-import AvailableCoursesPage from "./components/AvailableCoursesPage";
-import CourseDetailsPage from "./components/courseDetails/CourseDetailsPage";
-import HomePage from "./components/HomePage";
-import LearningInsightsPage from "./components/learningInsights/LearningInsightsPage";
-import LoginScreen from "./components/login/LoginScreen";
-import NotFound from "./components/notFound/NotFound";
-import { PlayerPage } from "./components/player/PlayerPage";
-import { RegisterViaActivationCodePage } from "./components/RegisterViaActivationCodePage";
-import { RegistrationPage } from "./components/RegistrationPage";
-import { SetNewPasswordPage } from "./components/SetNewPasswordPage";
-import { ShopPage } from "./components/epistoShop/ShopPage";
-import { SignupPage } from "./components/signup/SignupPage";
-import { ProtectedRoute } from "./components/universal/ProtectedRoute";
-import { UserSettingsPage } from "./components/userSettings/UserSettingsPage";
-import { applicationRoutes } from "./configuration/applicationRoutes";
-import { ApplicationRoute } from "./models/types";
-
-export const getRoute = (route: ApplicationRoute, renderRoute: ReactNode) => {
-
-    return <Route exact={route.exact} path={route.route}>
-        {renderRoute}
-    </Route>
-}
+import React from 'react';
+import { AdminPage } from './components/administration/AdminPage';
+import AvailableCoursesPage from './components/availableCourses/AvailableCoursesPage';
+import CourseDetailsPage from './components/courseDetails/CourseDetailsPage';
+import { ShopPage } from './components/epistoShop/ShopPage';
+import HomePage from './components/home/HomePage';
+import LearningInsightsPage from './components/learningInsights/LearningInsightsPage';
+import LoginScreen from './components/login/LoginScreen';
+import NotFound from './components/notFound/NotFound';
+import { PlayerPage } from './components/player/PlayerPage';
+import { RegisterViaActivationCodePage } from './components/RegisterViaActivationCodePage';
+import { RegistrationPage } from './components/RegistrationPage';
+import { SetNewPasswordPage } from './components/SetNewPasswordPage';
+import { SurveyPage } from './components/survey/SurveyPage';
+import { EpistoRoutes } from './components/universal/EpistoRoutes';
+import { UserSettingsPage } from './components/userSettings/UserSettingsPage';
+import { applicationRoutes } from './configuration/applicationRoutes';
 
 export const MainRouting = () => {
 
-    return <Switch>
+    return <>
 
         {/* unprotected paths  */}
-        <Route path={applicationRoutes.loginRoute.route} component={LoginScreen} />
-        <Route path={applicationRoutes.setNewPasswordRoute.route} component={SetNewPasswordPage} />
-        <Route path={applicationRoutes.registrationRoute.route} component={RegistrationPage} />
-        <Route path={applicationRoutes.registerViaActivationCodeRoute.route} component={RegisterViaActivationCodePage} />
+        <EpistoRoutes
+            renderRoutes={[
 
-        {/* protected paths */}
-        <ProtectedRoute
-            path="/watch/:descriptorCode"
-            render={() => <PlayerPage />} />
+                // open routes 
+                {
+                    route: applicationRoutes.loginRoute,
+                    element: <LoginScreen />,
+                },
+                {
+                    route: applicationRoutes.setNewPasswordRoute,
+                    element: <SetNewPasswordPage />,
+                },
+                {
+                    route: applicationRoutes.registrationRoute,
+                    element: <RegistrationPage />,
+                },
+                {
+                    route: applicationRoutes.registerViaActivationCodeRoute,
+                    element: <RegisterViaActivationCodePage />,
+                },
 
-        <ProtectedRoute
-            path={applicationRoutes.signupRoute.route}
-            render={() => <SignupPage />}
-            ignoreAppAccessProtection={true} />
-
-        <ProtectedRoute
-            path={applicationRoutes.administrationRoute.route}
-            isAuthorizedToView={x => x.canAccessAdministration}
-            render={() => <AdminPage />} />
-
-        <ProtectedRoute
-            path={applicationRoutes.homeRoute.route}
-            render={() => <HomePage />} />
-
-        <ProtectedRoute
-            path={applicationRoutes.shopRoute.route}
-            render={() => <ShopPage />} />
-
-        <ProtectedRoute
-            path={applicationRoutes.availableCoursesRoute.route}
-            render={() => <AvailableCoursesPage />} />
-
-        <ProtectedRoute
-            path={applicationRoutes.courseDetailsRoute.route}
-            render={() => <CourseDetailsPage />} />
-
-        <ProtectedRoute
-            path={applicationRoutes.settingsRoute.route}
-            render={() => <UserSettingsPage />} />
-
-        <ProtectedRoute
-            path={applicationRoutes.learningRoute.route}
-            render={() => <LearningInsightsPage />} />
-
-        <ProtectedRoute
-            path={applicationRoutes.rootHomeRoute.route}
-            render={() => <HomePage />} exact />
-
-        {/* wrong path */}
-        <Route path="*">
-            <NotFound />
-        </Route>
-
-    </Switch>
-}
+                // protected routes 
+                {
+                    route: applicationRoutes.surveyRoute,
+                    element: <SurveyPage />,
+                },
+                {
+                    route: applicationRoutes.playerRoute,
+                    element: <PlayerPage />,
+                },
+                {
+                    route: applicationRoutes.administrationRoute,
+                    element: <AdminPage />
+                },
+                {
+                    route: applicationRoutes.homeRoute,
+                    element: <HomePage />,
+                },
+                {
+                    route: applicationRoutes.shopRoute,
+                    element: <ShopPage />,
+                },
+                {
+                    route: applicationRoutes.availableCoursesRoute,
+                    element: <AvailableCoursesPage />,
+                },
+                {
+                    route: applicationRoutes.courseDetailsRoute,
+                    element: <CourseDetailsPage />,
+                },
+                {
+                    route: applicationRoutes.settingsRoute,
+                    element: <UserSettingsPage />,
+                },
+                {
+                    route: applicationRoutes.learningRoute,
+                    element: <LearningInsightsPage />,
+                },
+                {
+                    route: applicationRoutes.rootHomeRoute,
+                    element: <HomePage />,
+                },
+                {
+                    route: applicationRoutes.matchAll,
+                    element: <NotFound />,
+                }
+            ]} />
+    </>;
+};

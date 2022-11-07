@@ -27,13 +27,13 @@ export class AdvancedTimer {
     setEndCallback = (callback: () => void) => {
 
         this._endCallback = callback;
-    }
+    };
 
     getTotalElapsedMiliseconds = () => {
 
         const currentRemainingMilisecs = this.currentRemainingMiliseconds - (this.isRunning ? this.getCurrentElapsedMiliseconds() : 0);
         return this.maxMiliseconds - currentRemainingMilisecs;
-    }
+    };
 
     pause = () => {
 
@@ -44,7 +44,7 @@ export class AdvancedTimer {
 
         this.currentRemainingMiliseconds = this.currentRemainingMiliseconds - this.getCurrentElapsedMiliseconds();
         this.isRunning = false;
-    }
+    };
 
     start = () => {
 
@@ -66,7 +66,7 @@ export class AdvancedTimer {
         this._timeoutRef = timeout;
 
         return this;
-    }
+    };
 
     reset = () => {
 
@@ -79,7 +79,7 @@ export class AdvancedTimer {
         this.isEnded = false;
         this.isIdle = true;
         this.currentRemainingMiliseconds = this.maxMiliseconds;
-    }
+    };
 
     restart = () => {
 
@@ -88,13 +88,14 @@ export class AdvancedTimer {
 
         this.reset();
         this.start();
-    }
+    };
 
     private getCurrentElapsedMiliseconds = () => {
 
         if (!this._startTime)
             return 0;
 
-        return Math.abs(new Date().getTime() - this._startTime.getTime());
-    }
+        return Math.abs(new Date()
+.getTime() - this._startTime.getTime());
+    };
 }

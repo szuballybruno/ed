@@ -1,0 +1,6 @@
+#!/bin/sh
+now=$(date '+%H:%M:%S %Y-%m-%d %Z')
+echo "SELECT '$now' last_modification_date, '0.01' version" > epistogram_backend/src/sql/views/schema_version_view.sql
+git add .
+# git commit --amend -C HEAD --no-verify
+exit 0

@@ -1,0 +1,1 @@
+export type ArrayElement<TArray extends Array<unknown>> = TArray extends Array<infer TItem> ? TItem : never;

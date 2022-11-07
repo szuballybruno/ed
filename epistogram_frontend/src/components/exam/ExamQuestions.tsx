@@ -1,169 +1,281 @@
-import { Grid } from "@chakra-ui/layout";
-import { Flex, Text } from "@chakra-ui/react";
-import { Typography } from "@mui/material";
-import React, { useState } from "react";
-import { getAssetUrl, PagingType, usePaging } from "../../static/frontendHelpers";
-import { QuestionDTO } from "../../models/shared_models/QuestionDTO";
-import { QuestionTypeEnum } from "../../models/shared_models/types/sharedTypes";
-import { useShowErrorDialog } from "../../services/core/notifications";
-import { translatableTexts } from "../../static/translatableTexts";
-import { LoadingFrame } from "../system/LoadingFrame";
-import { ExamLayout } from "./ExamLayout";
-import { QuestionAnswer } from "./QuestionAnswer";
-import { useSaveExamAnswer } from "../../services/api/examApiService";
-import { ExamPlayerDataDTO } from "../../models/shared_models/ExamPlayerDataDTO";
-import { EpistoButton } from "../controls/EpistoButton";
-import { EpistoFont } from "../controls/EpistoFont";
+import { Grid } from '@chakra-ui/layout';
+import { useState } from 'react';
+import { ExamApiService } from '../../services/api/examApiService';
+import browser from '../../services/core/browserSniffingService';
+import { useShowErrorDialog } from '../../services/core/notifications';
+import { AnswerDTO } from '../../shared/dtos/AnswerDTO';
+import { ExamPlayerDataDTO } from '../../shared/dtos/ExamPlayerDataDTO';
+import { GivenAnswerDTO } from '../../shared/dtos/questionAnswer/GivenAnswerDTO';
+import { Id } from '../../shared/types/versionId';
+import { Environment } from '../../static/Environemnt';
+import { epochDates, useIsMobileView, usePaging } from '../../static/frontendHelpers';
+import { translatableTexts } from '../../static/translatableTexts';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { EpistoFont } from '../controls/EpistoFont';
+import { LoadingFrame } from '../system/LoadingFrame';
+import { useEpistoDialogLogic } from '../universal/epistoDialog/EpistoDialogLogic';
+import { ExamAbortDialog } from './ExamAbortDialog';
+import { ExamLayout } from './ExamLayout';
+import { ExamLayoutContent } from './ExamLayoutContent';
+import { QuestionAnswer } from './QuestionAnswer';
 
-export const ExamQuestions = (props: {
+export const ExamQuestions = ({
+    answerSessionId,
+    onExamFinished,
+    handleAbortExam,
+    exam: { questions, title: examTitle },
+    hideLoading,
+    isExamInProgress
+}: {
     exam: ExamPlayerDataDTO,
-    slidesState: PagingType<number>
-    questions: QuestionDTO[],
-    answerSessionId: number,
-    onExamFinished: () => void
+    answerSessionId: Id<'AnswerSession'>,
+    onExamFinished: () => void,
+    handleAbortExam: () => void
+    isExamInProgress: boolean
+    hideLoading?: boolean
+
 }) => {
 
-    const {
-        questions,
-        answerSessionId,
-        onExamFinished,
-        exam
-    } = props;
+    // paging
+    const questionPaging = usePaging({
+        items: questions,
+        onNextOverNavigation: onExamFinished
+    });
 
+    // dialogs 
     const showError = useShowErrorDialog();
-    const { saveExamAnswer, saveExamAnswerState } = useSaveExamAnswer();
-    const questionPaging = usePaging(questions, undefined, onExamFinished);
-    const currentQuestion = questionPaging.currentItem!;
-    const [selectedAnswerIds, setSelectedAnswerIds] = useState<number[]>([]);
-    const progressPercentage = (100 / questions.length) * questionPaging.currentIndex;
-    const isSingleAnswerMode = currentQuestion.typeId === QuestionTypeEnum.singleAnswer;
-    const hasSelectedAnswer = selectedAnswerIds.length > 0;
+    const abortDialog = useEpistoDialogLogic(ExamAbortDialog);
 
-    const handleNextAsync = async () => {
+    // http
+    const { saveExamAnswers, saveExamAnswersState } = ExamApiService
+        .useSaveExamAnswers();
+
+    // state 
+    const [showUpTime, setShowUpTime] = useState<Date>(new Date());
+    const [givenAnswers, setGivenAnswers] = useState<{ [K: string]: GivenAnswerDTO }>({});
+
+    // calc 
+    const currentQuestion = questionPaging.currentItem!;
+    const isLastQuestion = questionPaging.isLast;
+
+    const currentGivenAnswer = (givenAnswers[currentQuestion.questionVersionId + ''] ?? null) as GivenAnswerDTO | null;
+    const isMobile = useIsMobileView();
+    const isIPhone = browser.isIPhone;
+
+    /**
+     * Open abort dialog 
+     */
+    const handleOpenAbortDialog = () => {
+
+        abortDialog.openDialog();
+    };
+
+    /**
+     * Handle go to prev question
+     */
+    const handleGoToPreviousQuestion = () => {
+
+        questionPaging.previous();
+    };
+
+    /**
+     * Handle finish exam
+     */
+    const handleFinishExam = async () => {
 
         try {
-
-            await saveExamAnswer({
+            await saveExamAnswers({
                 answerSessionId: answerSessionId,
-                answerIds: selectedAnswerIds!,
-                questionId: currentQuestion.questionId
+                givenAnswers: Object
+                    .values(givenAnswers)
             });
-
-            setSelectedAnswerIds([]);
-            questionPaging.next();
-        } catch (e) {
+            onExamFinished();
+        }
+        catch (e) {
 
             showError(e);
         }
-    }
+    };
 
-    const setAnswerSelectedState = (answerId: number, isSelected: boolean) => {
+    /**
+     * Handle go to next question 
+     */
+    const handleNextAsync = async () => {
 
-        if (isSelected) {
+        if (!isExamInProgress)
+            return;
 
-            if (isSingleAnswerMode) {
+        isLastQuestion
+            ? handleOpenAbortDialog()
+            : questionPaging.next();
+    };
 
-                setSelectedAnswerIds([answerId]);
-            }
-            else {
+    /**
+     * Handle abort
+     */
+    const handleAbortAsync = async () => {
 
-                setSelectedAnswerIds([...selectedAnswerIds, answerId]);
-            }
+        if (!isExamInProgress)
+            return;
+
+        handleOpenAbortDialog();
+    };
+
+    /**
+     * Sets the selected state for a specific answer 
+     */
+    const handleSetAnswerSelectedState = (answer: AnswerDTO, isSelected: boolean) => {
+
+        const currentSelectedAnswers = currentGivenAnswer?.answerVersionIds ?? [];
+
+        const newSelectedAnswerIds = isSelected
+            ? [...currentSelectedAnswers.filter(x => x !== answer.answerVersionId), answer.answerVersionId]
+            : currentSelectedAnswers.filter(x => x !== answer.answerVersionId);
+
+        const elapsedSeconds = epochDates(new Date(), showUpTime);
+
+        const newGivenAnswers = { ...givenAnswers };
+
+        // set given answer 
+        if (newSelectedAnswerIds.length > 0) {
+
+            newGivenAnswers[currentQuestion.questionVersionId + ''] = {
+                answerVersionIds: newSelectedAnswerIds,
+                elapsedSeconds,
+                questionVersionId: currentQuestion.questionVersionId
+            };
         }
+
+        // delete given answer
         else {
 
-            setSelectedAnswerIds(selectedAnswerIds
-                .filter(x => x !== answerId));
+            delete newGivenAnswers[currentQuestion.questionVersionId + ''];
         }
-    }
+
+        setGivenAnswers(newGivenAnswers);
+    };
+
+    /**
+     * Gets the is selected state for a specific answer  
+     */
+    const getAnswerIsSelectedState = (answer: AnswerDTO) => {
+
+        return currentGivenAnswer
+            ? currentGivenAnswer
+                .answerVersionIds
+                .some(answerVersionId => answerVersionId === answer.answerVersionId)
+            : false;
+    };
 
     return <LoadingFrame
-        className="whall"
-        loadingState={saveExamAnswerState}
         flex="1"
-        direction={"column"}
-        alignItems={"center"}
-        width="100%"
-        px={40}>
+        direction={'column'}
+        alignItems={'center'}
+        width="100%">
+
+        {/* abort dialog */}
+        <ExamAbortDialog
+            dialogLogic={abortDialog}
+            answeredQuestionsCount={Object.keys(givenAnswers).length}
+            handleAbortExam={handleAbortExam}
+            handleExamFinished={handleFinishExam}
+            questions={questions} />
 
         <ExamLayout
-            headerLeftItem={<Flex align="center">
+            maxH={(() => {
 
-                <img
-                    alt=""
-                    src={getAssetUrl("course_page_icons/curriculum_test.svg")}
-                    className="square35" />
+                if (isIPhone) {
+                    return 'calc(100vh - 150px)';
+                }
 
-                <EpistoFont style={{ marginLeft: "10px" }}>
-                    {questions.length}/{questionPaging.currentIndex + 1}
-                </EpistoFont>
-            </Flex>}
-            headerCenterText={exam.title}
-            exitExamAction={() => { }}
-            handleNext={handleNextAsync}
-            showNextButton={hasSelectedAnswer}
-            nextButtonTitle={translatableTexts.exam.nextQuestion}
-            progressValue={progressPercentage}>
-
-            <Flex
-                direction={"column"}
-                alignItems={"center"}
-                justifyContent={"center"}
-                width={"80%"}
-                flex={1}>
-
-                <Flex
-                    p="20px"
-                    align="center">
-
+                if (isMobile) {
+                    return 'calc(100vh - 120px)';
+                }
+            })()}
+            height={isMobile ? 'calc(100% - 120px)' : undefined}
+            headerLeftItem={(
+                <EpistoFlex2 align="center">
                     <img
-                        style={{
-                            borderRadius: "50%",
-                            padding: "8px",
-                            width: "50px",
-                            height: "50px",
-                            marginRight: "30px"
-                        }}
                         alt=""
-                        src="https://static.thenounproject.com/png/92068-200.png"
-                        className="tinyShadow" />
+                        src={Environment.getAssetUrl('course_page_icons/curriculum_test.svg')}
+                        className="square35" />
 
-                    <Text
-                        as="text"
-                        fontSize={"1.3rem"}>
-                        {currentQuestion.questionText}
-                    </Text>
-                </Flex>
+                    <EpistoFont style={{ marginLeft: '10px' }}>
+                        {questions.length}/{questionPaging.currentIndex + 1}
+                    </EpistoFont>
+                </EpistoFlex2>
+            )}
+            stepperParams={{
+                getIsCompleted: question => !!givenAnswers[question.questionVersionId + ''],
+                logic: questionPaging
+            }}
+            headerCenterText={examTitle}
+            headerButtons={[
+                {
+                    title: 'Vizsga befejezése',
+                    action: handleAbortAsync
+                }
+            ]}
+            handleBack={handleGoToPreviousQuestion}
+            footerButtons={[
+                {
+                    title: isLastQuestion
+                        ? 'Vizsga befejezése'
+                        : translatableTexts.exam.nextQuestion,
+                    action: handleNextAsync
+                }
+            ]}
+            isFirst={questionPaging.currentIndex === 0}>
+
+            <ExamLayoutContent
+                style={{
+                    maxHeight: 'calc(100% - 10px)'
+                }}
+                title={currentQuestion.questionText}>
 
                 {/* answers */}
-                <Flex
-                    direction={"row"}
-                    justifyContent={"center"}
-                    pt={10}
-                    width="100%"
-                    mx={200}>
+                <EpistoFlex2
+                    direction={'row'}
+                    justifyContent={'center'}
+                    pt='10px'
+                    width="100%">
 
-                    <Grid
-                        templateColumns="repeat(2, 1fr)"
-                        gridAutoRows="minmax(0,1fr)"
-                        gridGap="10px"
-                        flex="1">
+                    {isMobile
+                        ? <EpistoFlex2
+                            px='5px'
+                            direction='column'>
 
-                        {currentQuestion
-                            .answers
-                            .map((answer, index) => {
+                            {currentQuestion
+                                .answers
+                                .map((answer, index) => {
 
-                                const isAnswerSelected = selectedAnswerIds
-                                    .some(x => x === answer.answerId);
+                                    return <QuestionAnswer
+                                        mb='10px'
+                                        key={index}
+                                        onClick={isSelected => handleSetAnswerSelectedState(answer, isSelected)}
+                                        answerText={answer.answerText}
+                                        isSelected={getAnswerIsSelectedState(answer)} />;
+                                })}
+                        </EpistoFlex2>
+                        : <Grid
+                            templateColumns="repeat(2, 1fr)"
+                            gridAutoRows="minmax(0,1fr)"
+                            gridGap="10px">
 
-                                return <QuestionAnswer
-                                    onClick={(isSelected) => setAnswerSelectedState(answer.answerId, isSelected)}
-                                    answerText={answer.answerText}
-                                    isSelected={isAnswerSelected} />
-                            })}
-                    </Grid>
-                </Flex>
-            </Flex>
+                            {currentQuestion
+                                .answers
+                                .map((answer, index) => {
+
+                                    return <QuestionAnswer
+                                        key={index}
+                                        minWidth={400}
+                                        onClick={isSelected => handleSetAnswerSelectedState(answer, isSelected)}
+                                        answerText={answer.answerText}
+                                        isSelected={getAnswerIsSelectedState(answer)} />;
+                                })}
+                        </Grid>}
+                </EpistoFlex2>
+            </ExamLayoutContent>
         </ExamLayout>
-    </LoadingFrame>
-}
+    </LoadingFrame >;
+};

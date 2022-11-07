@@ -1,56 +1,82 @@
-import { useReactQuery2 } from "../../static/frontendHelpers";
-import { DailyTipDTO } from "../../models/shared_models/DailyTipDTO";
-import { JobTitleDTO } from "../../models/shared_models/JobTitleDTO";
-import { OrganizationDTO } from "../../models/shared_models/OrganizationDTO";
-import { OverviewPageDTO } from "../../models/shared_models/OverviewPageDTO";
-import { apiRoutes } from "../../models/shared_models/types/apiRoutes";
+import { applicationRoutes } from '../../configuration/applicationRoutes';
+import { CourseOverviewDataDTO } from '../../shared/dtos/CourseOverviewDataDTO';
+import { OverviewPageDTO } from '../../shared/dtos/OverviewPageDTO';
+import { apiRoutes } from '../../shared/types/apiRoutes';
+import { Id } from '../../shared/types/versionId';
+import { GlobalEventManagerType } from '../../static/EventBus';
+import { useGetCurrentAppRoute } from '../../static/frontendHelpers';
+import { QueryService } from '../../static/QueryService';
 
-export const useCurrentCourseItemCode = () => {
+export const useCourseOverviewData = (userId?: Id<'User'>, courseId?: Id<'Course'>) => {
 
-    const qr = useReactQuery2<string>(apiRoutes.misc.getCurrentCourseItemCode);
-
-    return {
-        currentCourseItemCode: qr.data
-    };
-}
-
-export const useCourseOverviewData = () => {
-
-    const qr = useReactQuery2<string>(apiRoutes.misc.getCourseOverviewData);
+    const qr = QueryService.useXQuery<CourseOverviewDataDTO>(apiRoutes.misc.getCourseOverviewData, { userId, courseId });
 
     return {
         courseOverviewData: qr.data
     };
-}
-
-export const useJobTitles = () => {
-
-    const queryRes = useReactQuery2<JobTitleDTO[]>(apiRoutes.misc.getJobTitles);
-
-    return {
-        jobTitles: queryRes.data ?? [],
-        jobTitlesStatus: queryRes.state,
-        jobTitlesError: queryRes.error
-    }
-}
+};
 
 export const useOverviewPageDTO = () => {
 
-    const queryRes = useReactQuery2<OverviewPageDTO>(apiRoutes.misc.getHomePageDTO);
+    const queryRes = QueryService.useXQuery<OverviewPageDTO>(apiRoutes.misc.getHomePageDTO);
 
     return {
         pageDTO: queryRes.data,
         status: queryRes.state,
         error: queryRes.error
-    }
-}
+    };
+};
 
-export const useOrganizations = () => {
+export const useMiscApiService = (globalEventManager: GlobalEventManagerType) => {
 
-    const qr = useReactQuery2<OrganizationDTO[]>(apiRoutes.misc.getOrganizations);
+    const useCurrentCourseItemCode = () => {
+
+        const currentRoute = useGetCurrentAppRoute();
+        const isEnabled = !currentRoute.isUnauthorized;
+        const qr = QueryService.useXQuery<string>(apiRoutes.misc.getCurrentCourseItemCode, undefined, isEnabled);
+
+        return {
+            refetchCurrentCourseItemCode: qr.refetch,
+            currentCourseItemCode: qr.data
+        };
+    };
+
+    const useActivationCodeLinks = (companyId: Id<'Company'>) => {
+
+        const regViaActivationCodeRoute = applicationRoutes
+            .registerViaActivationCodeRoute;
+
+        const tokens = {
+            code: '%CODE%',
+            domain: '%DOMAIN%'
+        };
+
+        const query: typeof regViaActivationCodeRoute.queryType = { activationCode: tokens.code };
+
+        const queryKey = Object
+            .keys(query)
+            .single();
+
+        const path = regViaActivationCodeRoute
+            .route
+            .getAbsolutePath();
+
+        const urlTemplate = `${tokens.domain}${path}?${queryKey}=${query[queryKey]}`;
+
+        const qr = QueryService
+            .useXQueryArrayParametrized(String, apiRoutes.misc.getActivationCodeLinks, { companyId, urlTemplate });
+
+        return {
+            activationCodeLinks: qr.data,
+            activationCodeLinksState: qr.state,
+            activationCodeLinksError: qr.error,
+        };
+    };
 
     return {
-        organizations: qr.data ?? [],
-        organizationsState: qr.state
-    }
-}
+        useCurrentCourseItemCode,
+        useActivationCodeLinks
+    };
+};
+
+export type MiscApiService = ReturnType<typeof useMiscApiService>;

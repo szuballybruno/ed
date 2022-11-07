@@ -1,46 +1,49 @@
-import React, { useContext } from "react";
-import { Route, Switch } from 'react-router-dom';
-import { applicationRoutes } from "../../configuration/applicationRoutes";
-import { LearningInsightsOverview } from "../LearningInsightsOverview";
-import { NavigationLinkList } from "../NavigationLinkList";
-import { CurrentUserContext } from "../system/AuthenticationFrame";
-import { PageRootContainer } from "../PageRootContainer";
-import { LearningCourseStats } from "./LearningCourseStats";
-import { LearningStatistics } from "./LearningStatistics";
-import { LeftPane } from "../LeftPane";
-import { ContentPane } from "../ContentPane";
+import React, { useContext } from 'react';
+import { applicationRoutes } from '../../configuration/applicationRoutes';
+import { useRedirectOnExactMatch } from '../../static/frontendHelpers';
+import { ContentPane } from '../ContentPane';
+import { LearningInsightsOverview } from '../LearningInsightsOverview';
+import { LeftPane } from '../LeftPane';
+import { NavigationLinkList } from '../NavigationLinkList';
+import { PageRootContainer } from '../PageRootContainer';
+import { CurrentUserContext } from '../system/AuthenticationFrame';
+import { EpistoRoutes } from '../universal/EpistoRoutes';
+import { LearningCourseStats } from './LearningCourseStats';
 
 const LearningInsightsPage = () => {
 
-    const user = useContext(CurrentUserContext)!;
+    const { id } = useContext(CurrentUserContext);
+
+    useRedirectOnExactMatch({
+        route: applicationRoutes.learningRoute,
+        redirectRoute: applicationRoutes.learningRoute.overviewRoute
+    });
 
     return <PageRootContainer>
 
         <LeftPane>
 
             <NavigationLinkList
-                items={[
-                    applicationRoutes.learningRoute.learningOverviewRoute,
-                    applicationRoutes.learningRoute.myStatisticsRoute,
+                routes={[
+                    applicationRoutes.learningRoute.overviewRoute,
                     applicationRoutes.learningRoute.myCoursesRoute
                 ]} />
         </LeftPane>
 
-        <ContentPane>
+        <ContentPane noMaxWidth>
 
-            <Switch>
-
-                <Route path={applicationRoutes.learningRoute.route} exact>
-                    <LearningInsightsOverview />
-                </Route>
-                <Route path={applicationRoutes.learningRoute.myStatisticsRoute.route}>
-                    <LearningStatistics userId={user.id} />
-                </Route>
-                <Route path={applicationRoutes.learningRoute.myCoursesRoute.route}>
-                    <LearningCourseStats />
-                </Route>
-            </Switch>
+            <EpistoRoutes
+                renderRoutes={[
+                    {
+                        route: applicationRoutes.learningRoute.overviewRoute,
+                        element: <LearningInsightsOverview />
+                    },
+                    {
+                        route: applicationRoutes.learningRoute.myCoursesRoute,
+                        element: <LearningCourseStats />
+                    }
+                ]} />
         </ContentPane>
-    </PageRootContainer>
+    </PageRootContainer>;
 };
-export default LearningInsightsPage
+export default LearningInsightsPage;

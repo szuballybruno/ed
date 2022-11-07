@@ -1,99 +1,35 @@
-import { ChakraProvider, ColorModeScript, extendTheme, ThemeConfig } from "@chakra-ui/react";
-import { createTheme } from "@mui/material";
-import { ThemeProvider } from "@mui/system";
-import React from "react";
-import ReactDOM from 'react-dom';
-import { QueryClient, QueryClientProvider } from 'react-query';
-import { BrowserRouter, Route, Switch } from "react-router-dom";
-import { AuthenticationFrame } from "./components/system/AuthenticationFrame";
-import { ErrorDialogFrame } from "./components/system/DialogFrame";
-import { EventListener } from "./components/system/EventListener";
-import { NotificationsFrame } from "./components/system/NotificationsFrame";
-import { UnderMaintanence } from "./components/UnderMaintanence";
-import { applicationRoutes } from "./configuration/applicationRoutes";
-import { isUnderMaintenance } from "./static/Environemnt";
-import './index.css';
-import './static/jsExtensions.ts'; // extensions, important
-import { MainRouting } from "./MainRouting";
-import { PreventMobileFrame } from "./components/system/PreventMobileFrame";
+import { LicenseInfo } from '@mui/x-license-pro';
+import { FC } from 'react';
+import { createRoot } from 'react-dom/client';
+import { FrameRendererRoot } from './components/system/FrameRendererRoot';
+import { MainRouting } from './MainRouting';
+import './shared/logic/jsExtensions.ts'; // extensions, important
+import './styles/globalCssClasses.css';
+import './styles/globalCssTypes';
+import './styles/index.css';
 
-// react query 
-const queryClient = new QueryClient();
+/**
+ * Initialize app
+ */
+(() => {
+    LicenseInfo.setLicenseKey('YOUR_LICENSE_KEY');
+    // set MUI license key
+    const LICENSE_KEY = '692967e82163b6d3d8887b2f05b06718Tz00OTM0OSxFPTE2OTI0NDQ2MDU1MzcsUz1wcm8sTE09c3Vic2NyaXB0aW9uLEtWPTI=';
+    LicenseInfo.setLicenseKey(LICENSE_KEY);
+})();
 
-// chakra theme
-const config: ThemeConfig = {
-    initialColorMode: "light",
-    useSystemColorMode: false,
-}
-const chakraTheme = extendTheme({
-    config,
-    fonts: {
-        heading: 'Raleway',
-        body: 'Raleway',
-    },
-})
 
-// mui theme
-const muiTheme = createTheme({
-    typography: {
-        // Use the system font instead of the default Roboto font.
-        fontFamily: [
-            'Raleway',
-            'sans-serif'
-        ].join(',')
-    },
+const App: FC = () => {
 
-    palette: {
-        mode: "light",
-        primary: {
-            light: '#c8e8ff',
-            main: '#97c9cc',
-            dark: '#c8e8ff',
-            contrastText: '#000000',
-        },
-        secondary: {
-            light: '#5495b4',
-            main: "#1d6784",
-            dark: '#5495b4',
-            contrastText: '#fff',
-        }
-    }
-});
+    console.log('rendering root');
 
-ReactDOM.render(
-    <BrowserRouter getUserConfirmation={(msg, callback) => { console.log("What??") }}>
-        <QueryClientProvider client={queryClient}>
-            <>
-                <ColorModeScript initialColorMode={"light"} />
-                <ChakraProvider theme={chakraTheme}>
-                    <ThemeProvider theme={muiTheme}>
-                        <PreventMobileFrame>
-                            <Switch>
+    return (
+        <FrameRendererRoot>
+            <MainRouting />
+        </FrameRendererRoot>
+    );
+};
 
-                                {/* under maintanence */}
-                                {isUnderMaintenance && <Route path="/" component={UnderMaintanence} />}
+const root = createRoot(document.getElementById('root')!);
 
-                                {/* under maintanence */}
-                                <Route path={applicationRoutes.underMaintanenceRoute.route} component={UnderMaintanence} />
-
-                                {/* app */}
-                                <Route path="/">
-                                    <AuthenticationFrame>
-                                        <ErrorDialogFrame>
-                                            <NotificationsFrame>
-                                                <EventListener>
-                                                    <MainRouting />
-                                                </EventListener>
-                                            </NotificationsFrame>
-                                        </ErrorDialogFrame>
-                                    </AuthenticationFrame>
-                                </Route>
-                            </Switch>
-                        </PreventMobileFrame>
-                    </ThemeProvider>
-                </ChakraProvider>
-            </>
-        </QueryClientProvider>
-    </BrowserRouter>,
-    document.getElementById('root')
-);
+root.render(<App></App>);

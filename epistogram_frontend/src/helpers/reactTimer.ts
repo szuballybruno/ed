@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useRef } from "react";
-import { useForceUpdate } from "../static/frontendHelpers";
-import { AdvancedTimer } from "./advancedTimer";
+import { useMemo, useRef } from 'react';
+import { useForceUpdate } from '../static/frontendHelpers';
+import { AdvancedTimer } from './advancedTimer';
 
 export const useReactTimer = (endCallback: () => void, delayMiliseconds: number, updateIntervalMiliseconds?: number) => {
 
@@ -43,25 +43,25 @@ export const useReactTimer = (endCallback: () => void, delayMiliseconds: number,
 
         timer.start();
         forceUpdate();
-    }
+    };
 
     const pause = () => {
 
         timer.pause();
         forceUpdate();
-    }
+    };
 
     const reset = () => {
 
         timer.reset();
         forceUpdate();
-    }
+    };
 
     const restart = () => {
 
         timer.restart();
         forceUpdate();
-    }
+    };
 
     return {
         isEnded: timer.isEnded,
@@ -74,7 +74,7 @@ export const useReactTimer = (endCallback: () => void, delayMiliseconds: number,
         pause,
         reset,
         restart
-    }
-}
+    };
+};
 
 export type ReactTimerType = ReturnType<typeof useReactTimer>;

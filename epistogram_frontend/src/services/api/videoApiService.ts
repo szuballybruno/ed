@@ -1,93 +1,47 @@
-import { useState } from "react";
-import { CreateVideoDTO } from "../../models/shared_models/CreateVideoDTO";
-import { IdBodyDTO } from "../../models/shared_models/IdBodyDTO";
-import { IdResultDTO } from "../../models/shared_models/IdResultDTO";
-import { apiRoutes } from "../../models/shared_models/types/apiRoutes";
-import { VideoEditDTO } from "../../models/shared_models/VideoEditDTO";
-import { LoadingStateType } from "../../models/types";
-import { useReactQuery2 } from "../../static/frontendHelpers";
-import { uploadeFileChunksAsync } from "../core/fileUploadClient";
-import { usePostDataUnsafe } from "../core/httpClient";
+import { useCallback, useState } from 'react';
+import { LoadingStateType } from '../../models/types';
+import { apiRoutes } from '../../shared/types/apiRoutes';
+import { Id } from '../../shared/types/versionId';
+import { FileUploadCallbackParams, uploadeFileChunksAsync } from '../core/fileUploadClient';
 
-export const useCreateVideo = () => {
+export type VideoFileUploadCallbackParams = FileUploadCallbackParams & { videoVersionId: Id<'VideoVersion'> };
+export type VideoFileUploadErrorParams = { error: any, videoVersionId: Id<'VideoVersion'> };
+export type VideoFileUploadDoneParams = { videoVersionId: Id<'VideoVersion'> };
 
-    const qr = usePostDataUnsafe<CreateVideoDTO, IdResultDTO>(apiRoutes.video.createVideo);
+export const useUploadVideoFileAsync = (
+    callback: (params: VideoFileUploadCallbackParams) => void,
+    onError: (params: VideoFileUploadErrorParams) => void,
+    onDone: (params: VideoFileUploadDoneParams) => void) => {
 
-    return {
-        createVideoAsync: async (moduleId: number) => {
+    const [uploadState, setUploadState] = useState<LoadingStateType>('idle');
 
-            return qr.postDataAsync({
-                moduleId,
-                title: "",
-                description: "",
-                subtitle: ""
-            });
-        },
-        createVideoState: qr.state,
-        createVideoResult: qr.result
-    }
-}
+    const saveVideoFileAsync = useCallback(async (videoVersionId: Id<'VideoVersion'>, file: File) => {
 
-export const useDeleteVideo = () => {
-
-    const qr = usePostDataUnsafe<IdBodyDTO, void>(apiRoutes.video.deleteVideo);
-
-    return {
-        deleteVideoAsync: async (videoId: number) => {
-
-            return qr.postDataAsync({
-                id: videoId
-            });
-        },
-        deleteVideoState: qr.state
-    }
-}
-
-export const useSaveVideo = () => {
-
-    const qr = usePostDataUnsafe<VideoEditDTO, void>(apiRoutes.video.saveVideo);
-
-    return {
-        saveVideoAsync: qr.postDataAsync,
-        saveVideoState: qr.state
-    }
-}
-
-export const useVideoEditData = (videoId: number) => {
-
-    const qr = useReactQuery2<VideoEditDTO>(apiRoutes.video.getVideoEditData, { videoId });
-
-    return {
-        videoEditData: qr.data,
-        videoEditDataState: qr.state,
-        videoEditDataError: qr.error,
-        refetchVideoEditDataAsync: qr.refetch
-    }
-}
-
-export const useUploadVideoFileAsync = () => {
-
-    const [uploadState, setUploadState] = useState<LoadingStateType>("idle");
-
-    const saveVideoFileAsync = async (videoId: number, file: File) => {
-
-        setUploadState("loading");
+        setUploadState('loading');
 
         try {
 
-            await uploadeFileChunksAsync(apiRoutes.video.uploadVideoFileChunks, file, { videoId });
+            await uploadeFileChunksAsync({
+                urlEnding: apiRoutes.video.uploadVideoFileChunks,
+                file,
+                data: { videoVersionId },
+                callback: params => callback({ ...params, videoVersionId })
+            });
+
+            onDone({ videoVersionId });
         }
         catch (e) {
 
-            setUploadState("idle");
+            setUploadState('idle');
+            onError({ error: e, videoVersionId });
             throw e;
         }
 
-        setUploadState("success");
-    }
+        setUploadState('success');
+    }, []);
 
     return {
         saveVideoFileAsync: saveVideoFileAsync,
         saveVideoFileState: uploadState
-    }
-}
+    };
+};

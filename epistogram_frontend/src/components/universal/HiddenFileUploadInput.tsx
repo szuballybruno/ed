@@ -1,22 +1,22 @@
-import { forwardRef } from "react";
+import { forwardRef } from 'react';
 
 export type HiddenFileUploadInputPropsType = {
-    type: "image" | "video",
+    type: 'image' | 'video',
     onFileSelected: (file: File, src: string) => void
 }
 
 export const HiddenFileUploadInput = forwardRef<HTMLInputElement, HiddenFileUploadInputPropsType>((props, ref) => {
 
     const { onFileSelected, type } = props;
-    const acceptImage = ".jpg, .png, .jpeg";
-    const acceptVideo = ".mp4";
+    const acceptImage = '.jpg, .png, .jpeg';
+    const acceptVideo = '.mp4';
 
     return <input
         ref={ref}
         type="file"
-        accept={type === "image" ? acceptImage : acceptVideo}
+        accept={type === 'image' ? acceptImage : acceptVideo}
         id="imgupload"
-        style={{ display: "none" }}
+        style={{ display: 'none' }}
         onChange={x => {
 
             const input = x.currentTarget;
@@ -27,18 +27,18 @@ export const HiddenFileUploadInput = forwardRef<HTMLInputElement, HiddenFileUplo
                 return;
 
             const file = input.files[0] as File;
-            input.value = "";
+            input.value = '';
 
             // image
-            if (type === "image") {
-                var reader = new FileReader();
+            if (type === 'image') {
+                const reader = new FileReader();
 
                 reader.onloadend = () => {
 
                     const src = reader.result as any;
 
                     onFileSelected(file, src);
-                }
+                };
 
                 reader.readAsDataURL(file);
             }
@@ -46,7 +46,7 @@ export const HiddenFileUploadInput = forwardRef<HTMLInputElement, HiddenFileUplo
             // video
             else {
 
-                onFileSelected(file, "");
+                onFileSelected(file, '');
             }
-        }} />
+        }} />;
 });

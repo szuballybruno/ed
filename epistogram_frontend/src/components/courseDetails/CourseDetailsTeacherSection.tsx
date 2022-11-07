@@ -1,12 +1,11 @@
-import { Flex } from "@chakra-ui/react";
-import { EpistoHeader } from "../EpistoHeader";
-import React from "react";
-import { Typography } from "@mui/material";
-import { getAssetUrl } from "../../static/frontendHelpers";
-import { EpistoButton } from "../controls/EpistoButton";
-import { CourseDetailsDTO } from "../../models/shared_models/CourseDetailsDTO";
-import { ProfileImage } from "../ProfileImage";
-import { EpistoFont } from "../controls/EpistoFont";
+import React from 'react';
+import {CourseDetailsDTO} from '../../shared/dtos/CourseDetailsDTO';
+import {Environment} from '../../static/Environemnt';
+import {EpistoFlex2} from '../controls/EpistoFlex';
+
+import {EpistoFont} from '../controls/EpistoFont';
+import {EpistoHeader} from '../EpistoHeader';
+import {ProfileImage} from '../ProfileImage';
 
 export const CourseDetailsTeacherSection = (props: {
     courseDetails: CourseDetailsDTO
@@ -16,32 +15,32 @@ export const CourseDetailsTeacherSection = (props: {
 
     const infoCards = [
         {
-            icon: getAssetUrl("/course_page_icons/teacher_courses.svg"),
+            icon: Environment.getAssetUrl('/course_page_icons/teacher_courses.svg'),
             title: `${courseDetails.teacherData.teacherCourseCount} kurzus`
         },
         {
-            icon: getAssetUrl("/course_page_icons/teacher_videos.svg"),
+            icon: Environment.getAssetUrl('/course_page_icons/teacher_videos.svg'),
             title: `${courseDetails.teacherData.teacherVideoCount} videó`
         },
         {
-            icon: getAssetUrl("/course_page_icons/teacher_enrolled.svg"),
+            icon: Environment.getAssetUrl('/course_page_icons/teacher_enrolled.svg'),
             title: `${courseDetails.teacherData.teacherStudentCount} hallgató`
         },
         {
-            icon: getAssetUrl("/course_page_icons/teacher_review.svg"),
+            icon: Environment.getAssetUrl('/course_page_icons/teacher_review.svg'),
             title: `${courseDetails.teacherData.teacherRating} értékelés`
         }
     ];
 
-    return <Flex
-        direction={"column"}>
+    return <EpistoFlex2
+        direction={'column'}>
 
         <EpistoHeader
-            text={"Az oktatóról"}
-            my={10} />
+            text={'Az oktatóról'}
+            my='10px' />
 
         {/* header  */}
-        <Flex
+        <EpistoFlex2
             bg="white"
             className="mildShadow"
             borderRadius="15px"
@@ -50,7 +49,7 @@ export const CourseDetailsTeacherSection = (props: {
             align="center">
 
             {/* basics */}
-            <Flex align="center">
+            <EpistoFlex2 align="center">
 
                 {/* profile picture */}
                 <ProfileImage
@@ -60,13 +59,14 @@ export const CourseDetailsTeacherSection = (props: {
                     className="square50" />
 
                 {/* details */}
-                <Flex flexDir={"column"} marginLeft="10px">
+                <EpistoFlex2 flexDir={'column'}
+                    marginLeft="10px">
 
                     {/* full name */}
                     <EpistoFont
-                        fontSize={"fontSmallPlus"}
+                        fontSize={'fontNormal14'}
                         style={{
-                            fontWeight: "bold"
+                            fontWeight: 'bold'
                         }}>
 
                         {courseDetails.teacherData.teacherFullName}
@@ -78,17 +78,18 @@ export const CourseDetailsTeacherSection = (props: {
 
                         {courseDetails.teacherData.teacherSkills}
                     </EpistoFont>
-                </Flex>
-            </Flex>
+                </EpistoFlex2>
+            </EpistoFlex2>
 
             {/* badges */}
-            <Flex>
+            <EpistoFlex2>
                 {courseDetails
                     .teacherData
                     .teacherBadges
-                    .map(badge => {
+                    .map((badge, index) => {
 
-                        return <Flex
+                        return <EpistoFlex2
+                            key={index}
                             direction="column"
                             align="center"
                             p="10px"
@@ -99,30 +100,31 @@ export const CourseDetailsTeacherSection = (props: {
                             <img
                                 className="square35"
                                 style={{
-                                    filter: "invert(1)"
+                                    filter: 'invert(1)'
                                 }}
-                                src={getAssetUrl("/course_page_icons/teacher_award.svg")} />
+                                src={Environment.getAssetUrl('/course_page_icons/teacher_award.svg')} />
 
                             <EpistoFont
-                                classes={["fontLight"]}>
+                                color='fontLight'>
 
                                 {badge}
                             </EpistoFont>
-                        </Flex>
+                        </EpistoFlex2>;
                     })}
-            </Flex>
-        </Flex>
+            </EpistoFlex2>
+        </EpistoFlex2>
 
         {/* info cards */}
-        <Flex
-            height={70}
-            justifyContent={"space-between"}>
+        <EpistoFlex2
+            height='70px'
+            justifyContent={'space-between'}>
 
             {infoCards
-                .map(infoCard => <Flex
-                    width={160}
-                    mx={20}
-                    alignItems={"center"}>
+                .map((infoCard, index) => <EpistoFlex2
+                    key={index}
+                    width='160px'
+                    mx='20px'
+                    alignItems={'center'}>
 
                     {/* icon */}
                     <img
@@ -130,7 +132,7 @@ export const CourseDetailsTeacherSection = (props: {
                             width: 30
                         }}
                         src={infoCard.icon}
-                        alt={""} />
+                        alt={''} />
 
                     {/* text */}
                     <EpistoFont
@@ -140,19 +142,19 @@ export const CourseDetailsTeacherSection = (props: {
 
                         {infoCard.title}
                     </EpistoFont>
-                </Flex>)}
-        </Flex>
+                </EpistoFlex2>)}
+        </EpistoFlex2>
 
         {/* description */}
         <EpistoFont>
             {courseDetails.teacherData.teacherDescription}
         </EpistoFont>
 
-        {/* more courses 
-        <Flex height={70} width="100%" alignItems={"center"} justifyContent={"center"}>
+        {/* more courses
+        <EpistoFlex2 height={70} width="100%" alignItems={"center"} justifyContent={"center"}>
             <EpistoButton variant={"outlined"}>
                 {courseDetails.teacherData.teacherFullName} további kurzusai
             </EpistoButton>
-        </Flex>*/}
-    </Flex>
-}
+        </EpistoFlex2>*/}
+    </EpistoFlex2>;
+};

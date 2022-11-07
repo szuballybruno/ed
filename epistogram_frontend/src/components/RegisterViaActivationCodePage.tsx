@@ -1,19 +1,20 @@
-import { Text } from "@chakra-ui/layout";
-import { Flex } from "@chakra-ui/react";
-import { Typography } from "@mui/material";
-import React, { useState } from "react";
-import { ErrorCodeType } from "../models/shared_models/types/sharedTypes";
-import { useRegisterUserViaActivationCode } from "../services/api/registrationApiService";
-import { useNavigation } from "../services/core/navigatior";
-import { showNotification, useShowErrorDialog } from "../services/core/notifications";
-import { getAssetUrl } from "../static/frontendHelpers";
-import { translatableTexts } from "../static/translatableTexts";
-import { EpistoButton } from "./controls/EpistoButton";
-import { EpistoEntryNew, useEpistoEntryState } from "./controls/EpistoEntryNew";
-import { EpistoFont } from "./controls/EpistoFont";
-import { validateAllEntries } from "./controls/logic/controlsLogic";
-import { PageRootContainer } from "./PageRootContainer";
-import { LoadingFrame } from "./system/LoadingFrame";
+import { useEffect, useMemo } from 'react';
+import { applicationRoutes } from '../configuration/applicationRoutes';
+import { useRegisterUserViaActivationCode } from '../services/api/registrationApiService';
+import { useNavigation } from '../services/core/navigatior';
+import { showNotification } from '../services/core/notifications';
+import { Environment } from '../static/Environemnt';
+import { useIsMobileView, useTryCatchWrapper } from '../static/frontendHelpers';
+import { LocationHelpers } from '../static/locationHelpers';
+import { translatableTexts } from '../static/translatableTexts';
+import { EpistoButton } from './controls/EpistoButton';
+import { EpistoEntryNew, useEpistoEntryState } from './controls/EpistoEntryNew';
+import { EpistoFlex2 } from './controls/EpistoFlex';
+import { EpistoFont } from './controls/EpistoFont';
+import { validateAllEntries } from './controls/logic/controlsLogic';
+import { PageRootContainer } from './PageRootContainer';
+import { LoadingFrame } from './system/LoadingFrame';
+import { PasswordEntry, usePasswordEntryState } from './universal/PasswordEntry';
 
 export const RegisterViaActivationCodePage = () => {
 
@@ -22,132 +23,169 @@ export const RegisterViaActivationCodePage = () => {
         registerUserViaActivationCodeState
     } = useRegisterUserViaActivationCode();
 
-    const showError = useShowErrorDialog();
-    const { navigate } = useNavigation();
+    const { navigate2 } = useNavigation();
+    const isMobile = useIsMobileView();
+    const query = LocationHelpers
+        .useQueryParams<{ activationCode: string }>();
 
-    // state 
-    const [registrationSuccessful, setRegistrationSuccessful] = useState(false);
+    const activationCode = query
+        .getValueOrNull(x => x.activationCode, 'string');
 
+    // state
     const emailEntryState = useEpistoEntryState({ isMandatory: true });
     const firstNameEntryState = useEpistoEntryState({ isMandatory: true });
     const lastNameEntryState = useEpistoEntryState({ isMandatory: true });
     const activationCodeEntryState = useEpistoEntryState({ isMandatory: true });
+    const passwordState = usePasswordEntryState();
 
-    // func
+    /**
+     * Set activation code
+     */
+    useEffect(() => {
 
-    const validateAll = () => validateAllEntries([
-        emailEntryState,
-        firstNameEntryState,
-        lastNameEntryState,
+        if (!activationCode)
+            return;
+
+        if (activationCodeEntryState.value)
+            return;
+
         activationCodeEntryState
-    ]);
+            .setValue(activationCode);
+    }, [activationCode, activationCodeEntryState]);
 
-    const handleRegisterAsync = async () => {
+    /**
+     * Prepare error handler wrapper 
+     * for register function
+     */
+    const { errorMessage, getWrappedAction } = useTryCatchWrapper(code => {
 
-        try {
+        if (code === 'activation_code_issue') {
 
-            if (!validateAll())
-                return;
+            activationCodeEntryState
+                .setErrorMsg(translatableTexts.registerViaActivationCodePage.wrongActivationCode);
 
-            await registerUserViaActivationCodeAsync(
-                activationCodeEntryState.value,
-                emailEntryState.value,
-                firstNameEntryState.value,
-                lastNameEntryState.value);
-
-            setRegistrationSuccessful(true);
-            showNotification(translatableTexts.registerViaActivationCodePage.successfulSignup);
+            return 'PREVENT MSG';
         }
-        catch (e: any) {
 
-            const errorCode = e.code as ErrorCodeType;
+        if (code === 'email_taken') {
 
-            if (errorCode === "activation_code_issue") {
+            emailEntryState
+                .setErrorMsg(translatableTexts.registerViaActivationCodePage.wrongEmailAddress);
 
-                activationCodeEntryState
-                    .setError(translatableTexts.registerViaActivationCodePage.wrongActivationCode);
-            }
-            else if (errorCode === "email_taken") {
-
-                emailEntryState
-                    .setError(translatableTexts.registerViaActivationCodePage.wrongEmailAddress);
-            }
-            else {
-
-                showError(e);
-            }
+            return 'PREVENT MSG';
         }
-    }
+    });
+
+    /**
+     * Is validation ok
+     */
+    const isAllValid = useMemo(() => {
+
+        const entriesValid = validateAllEntries([
+            emailEntryState,
+            firstNameEntryState,
+            lastNameEntryState,
+            activationCodeEntryState
+        ]);
+
+        const pwStateValid = !passwordState
+            .hasCredentialError;
+
+        return entriesValid && pwStateValid;
+    }, [emailEntryState, firstNameEntryState, lastNameEntryState, activationCodeEntryState, passwordState]);
+
+    /**
+     * Register async 
+     */
+    const handleRegisterAsync = getWrappedAction(async () => {
+
+        if (!isAllValid)
+            return;
+
+        await registerUserViaActivationCodeAsync({
+            activationCode: activationCodeEntryState.value,
+            emailAddress: emailEntryState.value,
+            firstName: firstNameEntryState.value,
+            lastName: lastNameEntryState.value,
+            password: passwordState.password,
+            passwordCompare: passwordState.passwordCompare
+        });
+
+        showNotification(translatableTexts.registerViaActivationCodePage.successfulSignup);
+        navigate2(applicationRoutes.homeRoute);
+    });
 
     return <PageRootContainer>
 
-        <Flex
-            justify={"center"}
+        <EpistoFlex2
+            justify={'center'}
             background="gradientBlueBackground"
-            py="60px"
-            overflowY={"scroll"}
+            py={isMobile ? undefined : '60px'}
+            pt={isMobile ? '10px' : undefined}
+            overflowY={'scroll'}
             height="100%"
             width="100%">
 
             {/* content */}
-            <Flex
-                wrap={"wrap"}
+            <EpistoFlex2
+                wrap={'wrap'}
                 background="var(--transparentWhite70)"
                 zIndex="6"
                 width="100%"
                 maxW="1700px"
                 height="fit-content"
-                mx="100px"
-                p="50px 150px"
+                mx={isMobile ? undefined : '100px'}
+                p={isMobile ? '10px' : '50px 150px'}
                 overflow="hidden"
-                position={"relative"}>
+                position={'relative'}>
 
-                <Flex
+                <EpistoFlex2
                     direction="column"
                     align="center"
                     justify="center"
                     //bgColor="green"
                     zIndex="7"
+                    width={isMobile ? '100%' : undefined}
                     minWidth="300px"
                     flex="5">
 
                     {/* epi logo */}
                     <img
-                        src={getAssetUrl("/images/logo.svg")}
+                        src={Environment.getAssetUrl('/images/logo.svg')}
                         style={{
-                            width: "250px",
-                            maxHeight: "100px",
-                            objectFit: "contain",
-                            marginLeft: "15px",
-                            cursor: "pointer",
+                            width: isMobile ? '120px' : '250px',
+                            maxHeight: '100px',
+                            objectFit: 'contain',
+                            marginLeft: '15px',
+                            cursor: 'pointer',
                         }}
                         alt="" />
 
                     {/* 3d redeem image */}
                     <img
-                        src={getAssetUrl("/images/redeem3D.png")}
+                        src={Environment.getAssetUrl('/images/redeem3D.png')}
                         style={{
-                            width: "100%",
-                            maxHeight: "350px",
-                            objectFit: "contain",
-                            marginLeft: "15px",
-                            cursor: "pointer",
+                            width: '100%',
+                            maxHeight: isMobile ? '200px' : '350px',
+                            objectFit: 'contain',
+                            marginLeft: isMobile ? undefined : '15px',
+                            cursor: 'pointer',
                         }}
                         alt="" />
 
-                </Flex>
+                </EpistoFlex2>
 
                 {/* form */}
                 <LoadingFrame
                     id="form"
-                    minWidth="400px"
+                    minWidth={isMobile ? undefined : '400px'}
                     loadingState={registerUserViaActivationCodeState}
                     direction="column"
                     zIndex="7"
                     flex="5">
 
                     {/* Redeem title */}
-                    <Flex
+                    <EpistoFlex2
                         minH="80px"
                         direction="column"
                         justify="center"
@@ -156,16 +194,16 @@ export const RegisterViaActivationCodePage = () => {
 
                         <EpistoFont
                             style={{
-                                textAlign: "left"
+                                textAlign: 'left'
                             }}
                             fontSize={20}>
 
                             {translatableTexts.registerViaActivationCodePage.redeemYourCode}
                         </EpistoFont>
-                    </Flex>
+                    </EpistoFlex2>
 
-                    {/* Redeem info input fields */}
-                    <Flex
+                    {/* Entry fields */}
+                    <EpistoFlex2
                         direction="column">
 
                         <EpistoEntryNew
@@ -174,7 +212,7 @@ export const RegisterViaActivationCodePage = () => {
                             label="E-mail"
                             placeholder="te@email.com"
                             name="email"
-                            height="30px" />
+                            height={isMobile ? '40px' : '30px'} />
 
                         <EpistoEntryNew
                             state={lastNameEntryState}
@@ -182,7 +220,7 @@ export const RegisterViaActivationCodePage = () => {
                             label={translatableTexts.misc.lastName}
                             placeholder={translatableTexts.misc.lastName}
                             name="lastName"
-                            height="30px" />
+                            height={isMobile ? '40px' : '30px'} />
 
                         <EpistoEntryNew
                             state={firstNameEntryState}
@@ -190,7 +228,7 @@ export const RegisterViaActivationCodePage = () => {
                             label={translatableTexts.misc.firstName}
                             placeholder={translatableTexts.misc.firstName}
                             name="firstName"
-                            height="30px" />
+                            height={isMobile ? '40px' : '30px'} />
 
                         <EpistoEntryNew
                             state={activationCodeEntryState}
@@ -198,123 +236,61 @@ export const RegisterViaActivationCodePage = () => {
                             label={translatableTexts.registerViaActivationCodePage.activationCode.label}
                             placeholder={translatableTexts.registerViaActivationCodePage.activationCode.placeholder}
                             name="activationCode"
-                            height="30px" />
-                    </Flex>
+                            height={isMobile ? '40px' : '30px'} />
+
+                        <PasswordEntry
+                            state={passwordState}
+                            display={'EPISTO'} />
+                    </EpistoFlex2>
 
                     {/* registration button */}
-                    <Flex
+                    <EpistoFlex2
                         align="center"
                         justify="center"
-                        minH={80}>
+                        minH='80px'>
 
                         <EpistoButton
                             style={{
-                                width: "100%",
-                                backgroundColor: "#324658",
+                                width: '100%',
+                                backgroundColor: isAllValid ? '#324658' : undefined,
                                 height: 60
                             }}
+                            isDisabled={!isAllValid}
                             onClick={handleRegisterAsync}
                             variant="colored">
 
-                            {translatableTexts.registerViaActivationCodePage.signup}
+                            {translatableTexts.registerViaActivationCodePage.register}
                         </EpistoButton>
-                    </Flex>
+                    </EpistoFlex2>
 
-                    <Flex
+                    <EpistoFlex2
                         justify="space-between"
                         align="center"
-                        height={80}>
+                        height='80px'>
 
                         <EpistoFont
-                            classes={["fontGrey"]}>
+                            color="fontGray">
 
                             {translatableTexts.registerViaActivationCodePage.dontHaveAccount}
                         </EpistoFont>
 
                         <EpistoFont
                             style={{
-                                maxWidth: "250px",
-                                textAlign: "right",
-                                color: "var(--epistoTeal)"
+                                maxWidth: '250px',
+                                textAlign: 'right',
+                                color: 'var(--epistoTeal)'
                             }}>
 
-                            <a href="https://pcworld.hu/elofizetes" target="_blank">
+                            <a href="https://pcworld.hu/elofizetes"
+                                target="_blank"
+                                rel="noreferrer">
 
                                 {translatableTexts.registerViaActivationCodePage.buySubscription}
                             </a>
                         </EpistoFont>
-                    </Flex>
-
-
-                    <Flex
-                        position="fixed"
-                        align="center"
-                        justify="center"
-                        width="100vw"
-                        height="100vh"
-                        background="var(--transparentWhite70)"
-                        top="0"
-                        left="0"
-                        display={registrationSuccessful ? undefined : "none"}>
-
-                        <Flex
-                            className="roundBorders mildShadow"
-                            background="white"
-                            align="center"
-                            justify="center"
-                            padding="50px"
-                            width="500px"
-                            height="250px">
-
-                            <EpistoFont style={{ textAlign: "center" }}>
-                                {translatableTexts.registerViaActivationCodePage.signupSuccessfulDescriptions[0]}
-                                {emailEntryState.value}
-                                {translatableTexts.registerViaActivationCodePage.signupSuccessfulDescriptions[1]}
-                            </EpistoFont>
-                        </Flex>
-
-                    </Flex>
-
+                    </EpistoFlex2>
                 </LoadingFrame>
-
-                {/* Magic powder top-left */}
-                <img
-                    style={{
-                        position: "absolute",
-                        left: 50,
-                        top: -80,
-                        width: 300,
-                        transform: "rotate(270deg)",
-                        objectFit: "contain",
-                        zIndex: 0,
-                    }}
-                    src={getAssetUrl("/images/bg-art-2.png")}
-                    alt="" />
-
-                {/* Magic powder bottom-left */}
-                <img
-                    style={{
-                        position: "absolute",
-                        left: -55,
-                        bottom: -150,
-                        transform: "rotate(-90deg) scale(50%)",
-                        zIndex: 0,
-                    }}
-                    src={getAssetUrl("/images/bg-art-5.png")}
-                    alt="" />
-
-                {/* Magic powder top-left */}
-                <img
-                    style={{
-                        position: "absolute",
-                        right: -20,
-                        top: -120,
-                        transform: "rotate(270deg) scale(70%)",
-                        zIndex: 0,
-                    }}
-                    src={getAssetUrl("/images/bg-art-6.png")}
-                    alt="" />
-            </Flex>
-        </Flex >
-    </PageRootContainer >
-}
+            </EpistoFlex2>
+        </EpistoFlex2>
+    </PageRootContainer>;
+};

@@ -14,9 +14,9 @@ FROM
 			WHERE ct.shop_item_id = si.id AND ct.user_id = u.id
 		) AS purchase_count,
 		si.course_id,
-		CASE WHEN co.id IS NULL 
+		CASE WHEN cv.id IS NULL 
 			THEN si.name 
-			ELSE co.title
+			ELSE cd.title
 		END AS name,
 		si.purchase_limit,
 		si.coin_price,
@@ -24,7 +24,7 @@ FROM
 		sic.id AS shop_item_category_id,
 		sic.name AS shop_item_category_name,
 		si.details_url AS details_url,
-		CASE WHEN co.id IS NULL 
+		CASE WHEN cv.id IS NULL 
 			THEN sisf.file_path
 			ELSE cosf.file_path
 		END AS cover_file_path
@@ -33,8 +33,11 @@ FROM
 	LEFT JOIN public.user u
 	ON 1 = 1
 
-	LEFT JOIN public.course co
-	ON co.id = si.course_id
+	LEFT JOIN public.course_version cv
+	ON cv.id = si.course_id
+	
+	LEFT JOIN public.course_data cd
+	ON cd.id = cv.course_data_id
 
 	LEFT JOIN public.shop_item_category sic
 	ON sic.id = si.shop_item_category_id
@@ -43,7 +46,7 @@ FROM
 	ON sisf.id = si.cover_file_id
 
 	LEFT JOIN public.storage_file cosf
-	ON cosf.id = co.cover_file_id
+	ON cosf.id = cd.cover_file_id
 
 	ORDER BY user_id, id
 ) sq

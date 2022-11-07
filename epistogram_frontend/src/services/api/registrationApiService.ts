@@ -1,13 +1,13 @@
-import { CreateInvitedUserDTO } from "../../models/shared_models/CreateInvitedUserDTO";
-import { RegisterUserViaActivationCodeDTO } from "../../models/shared_models/RegisterUserViaActivationCodeDTO";
-import { RegisterUserViaInvitationTokenDTO } from "../../models/shared_models/RegisterUserViaInvitationTokenDTO";
-import { RegisterUserViaPublicTokenDTO } from "../../models/shared_models/RegisterUserViaPublicTokenDTO";
-import { apiRoutes } from "../../models/shared_models/types/apiRoutes";
-import { httpPostAsync, usePostDataUnsafe } from "../core/httpClient";
+import { RegisterUserViaActivationCodeDTO } from '../../shared/dtos/RegisterUserViaActivationCodeDTO';
+import { RegisterUserViaInvitationTokenDTO } from '../../shared/dtos/RegisterUserViaInvitationTokenDTO';
+import { RegisterUserViaPublicTokenDTO } from '../../shared/dtos/RegisterUserViaPublicTokenDTO';
+import { UserEditSaveDTO } from '../../shared/dtos/UserEditSaveDTO';
+import { apiRoutes } from '../../shared/types/apiRoutes';
+import { usePostDataUnsafe } from '../core/httpClient';
 
 export const useRegisterUser = () => {
 
-    const postDataResult = usePostDataUnsafe(apiRoutes.registration.registerUserViaPublicToken);
+    const postDataResult = usePostDataUnsafe(apiRoutes.registration.registerViaPublicToken);
 
     const registerUserAsync = (
         regToken: string,
@@ -22,17 +22,17 @@ export const useRegisterUser = () => {
                 lastName,
                 emailAddress
             } as RegisterUserViaPublicTokenDTO);
-    }
+    };
 
     return {
         registerUserState: postDataResult.state,
         registerUserAsync
-    }
-}
+    };
+};
 
 export const useRegisterInvitedUser = () => {
 
-    const postDataResult = usePostDataUnsafe(apiRoutes.registration.registerUserViaInvitationToken);
+    const postDataResult = usePostDataUnsafe(apiRoutes.registration.registerViaInvitationToken);
 
     const registerInvitedUserAsync = (
         invitationToken: string,
@@ -45,40 +45,30 @@ export const useRegisterInvitedUser = () => {
                 password,
                 passwordCompare
             } as RegisterUserViaInvitationTokenDTO);
-    }
+    };
 
     return {
         registerInvitedUserState: postDataResult.state,
         registerInvitedUserAsync
-    }
-}
+    };
+};
 
 export const useRegisterUserViaActivationCode = () => {
 
-    const postDataResult = usePostDataUnsafe(apiRoutes.registration.registerUserViaActivationCode);
-
-    const registerUserViaActivationCodeAsync = (
-        activationCode: string,
-        emailAddress: string,
-        firstName: string,
-        lastName: string) => {
-
-        return postDataResult
-            .postDataAsync({
-                activationCode,
-                emailAddress,
-                firstName,
-                lastName
-            } as RegisterUserViaActivationCodeDTO);
-    }
+    const postDataResult = usePostDataUnsafe<RegisterUserViaActivationCodeDTO>(apiRoutes.registration.registerViaActivationCode);
 
     return {
         registerUserViaActivationCodeState: postDataResult.state,
-        registerUserViaActivationCodeAsync
-    }
-}
+        registerUserViaActivationCodeAsync: postDataResult.postDataAsync
+    };
+};
 
-export const inviteUserAsync = (dto: CreateInvitedUserDTO) => {
+export const useCreateInviteUserAsync = () => {
 
-    return httpPostAsync(apiRoutes.registration.inviteUser, dto);
-}
+    const qr = usePostDataUnsafe<UserEditSaveDTO>(apiRoutes.invitation.inviteUser);
+
+    return {
+        createInvitedUser: qr.postDataAsync,
+        createInvitedUserState: qr.state
+    };
+};

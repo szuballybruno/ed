@@ -1,8 +1,9 @@
-import { Box, Flex } from "@chakra-ui/layout"
-import { CSSProperties, ReactNode } from "react"
-import { EpistoButton } from "../controls/EpistoButton";
+import { CSSProperties, ReactNode } from 'react';
+import { EpistoButton } from '../controls/EpistoButton';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { EpistoDiv } from '../controls/EpistoDiv';
 
 export const CollapseItem = (props: {
     isOpen: boolean,
@@ -24,16 +25,19 @@ export const CollapseItem = (props: {
         </EpistoButton>
         : null;
 
-    return <Flex id="collapseItemRoot" direction="column" justifyContent={"flex-start"} style={style}>
+    return <EpistoFlex2
+        id="collapseItemRoot"
+        direction="column"
+        justifyContent={'flex-start'}
+        style={style}>
 
         {header(defaultExpandCollapseButton)}
 
-        <Box
+        <EpistoDiv
             transition="0.3s"
-            pl="20px"
-        >
+            pl="20px">
 
             {isOpen ? children : null}
-        </Box>
-    </Flex>
-}
+        </EpistoDiv>
+    </EpistoFlex2>;
+};

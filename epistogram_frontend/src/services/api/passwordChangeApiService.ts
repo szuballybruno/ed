@@ -1,5 +1,5 @@
-import { apiRoutes } from "../../models/shared_models/types/apiRoutes";
-import { usePostDataUnsafe } from "../core/httpClient";
+import { apiRoutes } from '../../shared/types/apiRoutes';
+import { usePostDataUnsafe } from '../core/httpClient';
 
 export const useRequestPasswordChange = () => {
 
@@ -8,8 +8,8 @@ export const useRequestPasswordChange = () => {
     return {
         requestPasswordChangeAsync: qr.postDataAsync,
         requestPasswordChangeState: qr.state
-    }
-}
+    };
+};
 
 export const useRequestPasswordChangeAuthenticated = () => {
 
@@ -19,13 +19,13 @@ export const useRequestPasswordChangeAuthenticated = () => {
 
         return postDataResult
             .postDataAsync({ oldPassword: oldPassword });
-    }
+    };
 
     return {
         requestChangePasswordState: postDataResult.state,
         requestChangePasswordAsync
-    }
-}
+    };
+};
 
 export const useSetNewPassword = () => {
 
@@ -39,10 +39,10 @@ export const useSetNewPassword = () => {
                 passwordCompare,
                 passwordResetToken
             });
-    }
+    };
 
     return {
         setNewPasswordState: postDataResult.state,
         setNewPassword
-    }
-}
+    };
+};

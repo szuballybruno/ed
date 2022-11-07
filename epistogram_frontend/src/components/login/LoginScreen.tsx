@@ -1,44 +1,54 @@
-import { Box, Flex } from "@chakra-ui/layout";
-import { Typography } from "@mui/material";
-import React, { useContext, useEffect, useState } from 'react';
-import { applicationRoutes } from "../../configuration/applicationRoutes";
-import { useLogInUser } from "../../services/api/authenticationApiService";
-import { useNavigation } from "../../services/core/navigatior";
-import { useShowErrorDialog } from "../../services/core/notifications";
-import { getAssetUrl, useIsScreenWiderThan } from "../../static/frontendHelpers";
-import { EpistoButton } from "../controls/EpistoButton";
-import { EpistoEntry } from "../controls/EpistoEntry";
-import { EpistoFont } from "../controls/EpistoFont";
-import { useEpistoDialogLogic } from "../EpistoDialog";
-import { PageRootContainer } from "../PageRootContainer";
-import { AuthenticationStateContext, CurrentUserContext, RefetchUserAsyncContext } from "../system/AuthenticationFrame";
-import { LoadingFrame } from "../system/LoadingFrame";
-import { LoginPasswordResetDialog } from "./LoginPasswordResetDialog";
+import React, { useCallback, useContext, useEffect, useState } from 'react';
+import { applicationRoutes } from '../../configuration/applicationRoutes';
+import { AuthenticationStateType, useLogInUser } from '../../services/api/authenticationApiService';
+import { CompanyApiService } from '../../services/api/CompanyApiService1';
+import { gradientBackgroundGenerator } from '../../services/core/gradientBackgroundGenerator';
+import { useNavigation } from '../../services/core/navigatior';
+import { useShowErrorDialog } from '../../services/core/notifications';
+import { ErrorWithCode } from '../../shared/types/ErrorWithCode';
+import { useIsMobileView } from '../../static/frontendHelpers';
+import { useQueryVal } from '../../static/locationHelpers';
+import { Logger } from '../../static/Logger';
+import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoDiv } from '../controls/EpistoDiv';
+import { EpistoEntry } from '../controls/EpistoEntry';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { EpistoFont } from '../controls/EpistoFont';
+import { EpistoGrid } from '../controls/EpistoGrid';
+import { PageRootContainer } from '../PageRootContainer';
+import { AuthenticationStateContext, useRefetchUserAsync } from '../system/AuthenticationFrame';
+import { useAuthorizationContext } from '../system/AuthorizationContext';
+import { LoadingFrame } from '../system/LoadingFrame';
+import { useEpistoDialogLogic } from '../universal/epistoDialog/EpistoDialogLogic';
+import { LoginPasswordResetDialog } from './LoginPasswordResetDialog';
 
 const LoginScreen = () => {
 
     // util
-    const { navigate } = useNavigation();
+    const { navigate2, navigateToHref } = useNavigation();
     const showErrorDialog = useShowErrorDialog();
     const authState = useContext(AuthenticationStateContext);
-    const refetchUser = useContext(RefetchUserAsyncContext);
-    const user = useContext(CurrentUserContext);
+    const { refetchAuthHandshake } = useRefetchUserAsync();
+    const { hasPermission } = useAuthorizationContext();
+    const dest = useQueryVal('dest');
+    const [isUpToDate, setIsUpToDate] = useState(false);
 
     // state
-    const [errorMessage, setErrorMessage] = useState("");
+    const [errorMessage, setErrorMessage] = useState('');
 
     // refs
     const emailRef = React.useRef<HTMLInputElement>(null);
     const pwRef = React.useRef<HTMLInputElement>(null);
 
-    const passwordResetDialogLogic = useEpistoDialogLogic({
-        defaultCloseButtonType: "top"
-    });
+    const passwordResetDialogLogic = useEpistoDialogLogic('pwreset');
 
-    const isDesktopView = useIsScreenWiderThan(1200);
+    const isMobile = useIsMobileView();
 
     // http 
     const { loginUserAsync, loginUserState } = useLogInUser();
+    const { companyDetails } = CompanyApiService.useCompanyDetailsByDomain(window.location.origin);
+
+    const gradients = gradientBackgroundGenerator(companyDetails?.backdropColor!);
 
     // func
     const handleLoginUserAsync = async () => {
@@ -52,48 +62,75 @@ const LoginScreen = () => {
         try {
 
             await loginUserAsync(emailRef.current?.value, pwRef.current?.value);
-            refetchUser();
+            await refetchAuthHandshake();
         }
-        catch (e: any) {
+        catch (error: any) {
 
-            if (!e)
+            console.log(error);
+
+            if (!error)
                 return;
 
-            if (e.errorType === "bad request") {
+            if ((error as ErrorWithCode).code === 'corrupt_credentials') {
 
-                setErrorMessage("Hibás adatok!");
+                setErrorMessage('Hibás adatok!');
+                return;
             }
-            else if (e.errorType) {
 
-                showErrorDialog(e.message);
-            }
-            else {
-
-                showErrorDialog("" + e);
-            }
+            showErrorDialog(error);
         }
     };
 
     const handleValidation = () => {
 
         // TODO
-    }
+    };
+
+    /**
+     * Navigate to app function
+     */
+    const navigateToApp = useCallback(() => {
+
+        /**
+         * Survey can't be bypassed, navigating to survey
+         */
+        if (!hasPermission('BYPASS_SURVEY')) {
+
+            navigate2(applicationRoutes.surveyRoute);
+            return;
+        }
+
+        /**
+         * Survey can be bypassed and there's a des prop, going to dest
+         */
+        if (dest) {
+
+            navigateToHref(dest);
+            return;
+        }
+
+        /**
+         * Survey can be bypassed, going to home
+         */
+        navigate2(applicationRoutes.homeRoute);
+    }, [dest, hasPermission, navigate2, navigateToHref]);
+
+    console.log(authState);
 
     // watch for auth state change
     // and navigate to home page if athenticated
     useEffect(() => {
 
-        if (authState === "authenticated") {
+        /**
+         * Unauthenticated is not allowed to be navigated 
+         * to either survey or home page
+         */
+        if (authState !== 'authenticated')
+            return;
 
-            if (user!.userActivity.canAccessApplication) {
+        Logger.logScoped('AUTH', `Auth state is ${'authenticated' as AuthenticationStateType}, navigating...`);
 
-                navigate(applicationRoutes.homeRoute.route);
-            }
-            else {
-
-                navigate(applicationRoutes.signupRoute.route);
-            }
-        }
+        navigateToApp();
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [authState]);
@@ -103,29 +140,26 @@ const LoginScreen = () => {
 
         const onKeydown = (event) => {
 
-            if (event.code !== "Enter" && event.code !== "NumpadEnter")
+            if (event.code !== 'Enter' && event.code !== 'NumpadEnter')
                 return;
 
             event.preventDefault();
             handleLoginUserAsync();
         };
 
-        document.addEventListener("keydown", onKeydown);
+        document.addEventListener('keydown', onKeydown);
 
         return () => {
-            document.removeEventListener("keydown", onKeydown);
+            document.removeEventListener('keydown', onKeydown);
         };
     }, []);
 
-    return <PageRootContainer>
+    return <PageRootContainer noBackground>
 
-        <Flex
-            justify={"center"}
-            background="gradientBlueBackground"
-            py="60px"
-            overflowY={"scroll"}
-            height="100%"
-            width="100%">
+        <EpistoFlex2
+            justify={'center'}
+            height="100vh"
+            width="100vw">
 
             {/* pw reset dialog */}
             <LoginPasswordResetDialog
@@ -133,78 +167,83 @@ const LoginScreen = () => {
 
             {/* content pane */}
             <LoadingFrame
-                className="roundBorders mildShadow"
                 loadingState={loginUserState}
-                background="var(--transparentWhite70)"
                 zIndex="6"
-                mx="100px"
-                p="50px 150px"
+                flex='1'
                 overflow="hidden"
-                position={"relative"}>
+                position={'relative'}>
 
-                <Flex
-                    wrap={"wrap"}
+                {!isMobile && <EpistoFlex2
+                    flex='1'
+                    direction='column'
+                    align='center'
+                    position='relative'
+                    justify='center'>
+
+                    {/* Company background */}
+                    <img
+                        src={companyDetails?.coverUrl!}
+                        style={{
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'cover',
+                            position: 'absolute',
+                            top: '0',
+                            zIndex: -1
+                        }}
+                        alt="" />
+                </EpistoFlex2>}
+
+                <EpistoFlex2
+                    flex='1'
                     className="whall"
-                    maxW="700px">
+                    justify='center'
+                    align='center'>
 
-                    <Flex
-                        direction="column"
-                        align="center"
-                        justify="center"
-                        //bgColor="green"
-                        zIndex="7"
-                        flex="1">
-
-                        {/* epi logo */}
-                        <img
-                            src={getAssetUrl("/images/logo.png")}
-                            style={{
-                                width: "250px",
-                                maxHeight: "100px",
-                                objectFit: "contain",
-                                marginLeft: "15px",
-                                cursor: "pointer",
-                            }}
-                            alt="" />
-
-                        {/* 3d redeem image */}
-                        <img
-                            src={getAssetUrl("/images/redeem3D.png")}
-                            style={{
-                                width: "100%",
-                                maxHeight: "350px",
-                                objectFit: "contain",
-                                marginLeft: "15px",
-                                cursor: "pointer",
-                            }}
-                            alt="" />
-
-                    </Flex>
-
-                    <Flex
+                    <EpistoFlex2
+                        className='roundBorders mildShadow'
                         id="form"
                         direction="column"
+                        align='center'
                         justify="center"
-                        zIndex="7"
-                        flex="1">
+                        width={isMobile ? '100%' : undefined}
+                        height={isMobile ? '100%' : undefined}
+                        p={isMobile ? '20px' : '80px 100px'}
+                        maxH={isMobile ? undefined : 'calc(100% - 100px)'}
+                        background="var(--transparentWhite70)"
+                        zIndex="7">
 
 
-                        <Flex
+                        {/* company logo */}
+                        <img
+                            src={companyDetails?.logoUrl!}
+                            style={{
+                                width: '250px',
+                                maxHeight: '115px',
+                                objectFit: 'contain',
+                                marginLeft: '15px',
+                                marginBottom: '20px',
+                                cursor: 'pointer',
+                            }}
+                            alt="" />
+
+
+                        <EpistoFlex2
                             direction="column"
                             width="100%"
                             alignItems="flex-start">
 
-                            <EpistoFont fontSize={"fontLargePlus"}>
+                            <EpistoFont fontSize={'fontLargePlus'}>
 
                                 Örülünk, hogy ismét itt vagy velünk!
                             </EpistoFont>
 
-                        </Flex>
+                        </EpistoFlex2>
 
-                        <Box width="100%">
+                        <EpistoDiv width="100%">
 
                             <EpistoEntry
-                                ref={emailRef}
+                                inputRef={emailRef}
                                 labelVariant="top"
                                 label="E-mail"
                                 placeholder="E-mail"
@@ -212,7 +251,7 @@ const LoginScreen = () => {
                                 setValue={handleValidation} />
 
                             <EpistoEntry
-                                ref={pwRef}
+                                inputRef={pwRef}
                                 labelVariant="top"
                                 label="Jelszó"
                                 placeholder="Jelszó"
@@ -227,10 +266,10 @@ const LoginScreen = () => {
 
                                 <EpistoFont
                                     fontSize="fontSmall"
-                                    classes={["fontGrey"]}
+                                    color="fontGray"
                                     style={{
-                                        textTransform: "none",
-                                        marginTop: "5px",
+                                        textTransform: 'none',
+                                        marginTop: '5px',
                                         fontWeight: 400
                                     }}>
 
@@ -239,10 +278,10 @@ const LoginScreen = () => {
                             </EpistoButton>
 
                             {/* error msg */}
-                            <EpistoFont style={{ color: "var(--mildRed)" }}>
+                            <EpistoFont style={{ color: 'var(--mildRed)' }}>
                                 {errorMessage}
                             </EpistoFont>
-                        </Box>
+                        </EpistoDiv>
 
                         <EpistoButton
                             variant="colored"
@@ -251,17 +290,17 @@ const LoginScreen = () => {
                             style={{
                                 marginTop: 15,
                                 marginBottom: 15,
-                                width: "100%",
-                                backgroundColor: "var(--deepBlue)"
+                                width: '100%',
+                                backgroundColor: companyDetails?.primaryColor!
                             }}
                             onClick={handleLoginUserAsync}>
 
                             Bejelentkezés
                         </EpistoButton>
 
-                        <Flex
-                            direction={"row"}
-                            justifyContent={"space-between"}
+                        <EpistoFlex2
+                            direction={'row'}
+                            justifyContent={'space-between'}
                             width="100%">
 
                             <EpistoFont fontSize="fontSmall">
@@ -269,59 +308,52 @@ const LoginScreen = () => {
                             </EpistoFont>
 
                             <EpistoFont
-                                onClick={() => navigate("/register-via-activation-code")}
+                                onClick={() => navigate2(applicationRoutes.registerViaActivationCodeRoute, {})}
                                 fontSize="fontSmall"
                                 style={{
-                                    color: "--deepBlue",
-                                    textAlign: "right"
+                                    color: companyDetails?.secondaryColor!,
+                                    fontWeight: 600,
+                                    textAlign: 'right',
+                                    marginLeft: 20
                                 }}>
 
-                                Aktiváld a PCWorld Ultimate kódodat az alábbi oldalon
+                                Váltsd be itt aktivációs kódodat!
                             </EpistoFont>
-                        </Flex>
-                    </Flex>
-                </Flex>
+                        </EpistoFlex2>
+                    </EpistoFlex2>
+                </EpistoFlex2>
 
-                {/* Magic powder top-left */}
-                <img
-                    style={{
-                        position: "absolute",
-                        left: 50,
-                        top: -80,
-                        width: 300,
-                        transform: "rotate(270deg)",
-                        objectFit: "contain",
-                        zIndex: 0,
-                    }}
-                    src={getAssetUrl("/images/bg-art-2.png")}
-                    alt="" />
 
-                {/* Magic powder bottom-left */}
-                <img
-                    style={{
-                        position: "absolute",
-                        left: -55,
-                        bottom: -150,
-                        transform: "rotate(-90deg) scale(50%)",
-                        zIndex: 0,
-                    }}
-                    src={getAssetUrl("/images/bg-art-5.png")}
-                    alt="" />
 
-                {/* Magic powder top-left */}
-                <img
-                    style={{
-                        position: "absolute",
-                        right: -20,
-                        top: -120,
-                        transform: "rotate(270deg) scale(70%)",
-                        zIndex: 0,
-                    }}
-                    src={getAssetUrl("/images/bg-art-6.png")}
-                    alt="" />
             </LoadingFrame>
-        </Flex>
-    </PageRootContainer>
+        </EpistoFlex2>
+
+        <EpistoGrid
+            bgColor={'white'}
+            position="fixed"
+            top={'0'}
+            left={'0'}
+            w="100vw"
+            h="100vh"
+            zIndex="-1"
+            filter="blur(50px)"
+            minColumnWidth={'33%'}
+            gap='0px'
+            gridTemplateColumns="repeat(3, 1fr)"
+            auto={'fill'}>
+
+            {gradients
+                .map((gradient, index) => {
+                    return <EpistoFlex2
+                        key={index}
+                        padding="20px"
+                        filter="blur(8px)"
+                        background={gradient}>
+
+                    </EpistoFlex2>;
+                })}
+        </EpistoGrid>
+    </PageRootContainer>;
 };
 
-export default LoginScreen
+export default LoginScreen;

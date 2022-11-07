@@ -1,0 +1,72 @@
+{
+    "root": true,
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "extends": [
+        "eslint:recommended",
+        "plugin:react/recommended",
+        "plugin:@typescript-eslint/recommended"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": "latest",
+        "sourceType": "module"
+    },
+    "plugins": [
+        "react",
+        "@typescript-eslint",
+        "react-hooks",
+        "unused-imports"
+    ],
+    "settings": {
+        "react": {
+            "version": "18.2.0"
+        }
+    },
+    "rules": {
+        "unused-imports/no-unused-imports": "error",
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-unused-vars": "off",
+        "@typescript-eslint/no-non-null-assertion": "off",
+        "@typescript-eslint/ban-types": "off",
+        "react/react-in-jsx-scope": "off",
+        "@typescript-eslint/no-non-null-asserted-optional-chain": "off",
+        "react/display-name": "off",
+        "@typescript-eslint/ban-ts-comment": "off",
+        "@typescript-eslint/no-inferrable-types": "off",
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "warn",
+        "react/prop-types": [
+            0
+        ],
+        "newline-per-chained-call": [
+            "error",
+            {
+                "ignoreChainWithDepth": 1
+            }
+        ],
+        "react/jsx-max-props-per-line": [
+            "error",
+            {
+                "maximum": 1,
+                "when": "always"
+            }
+        ],
+        "linebreak-style": "off",
+        "quotes": [
+            "error",
+            "single"
+        ],
+        "no-extra-semi": "off",
+        "@typescript-eslint/no-extra-semi": "off",
+        "semi": [
+            "error",
+            "always"
+        ]
+    }
+}

@@ -1,57 +1,99 @@
-SELECT 
-	cm.course_id course_id,
-	cm.name module_name,
-	cm.order_index module_order_index,
-	cm.id module_id,
-	(SELECT encode((cm.id || '@module')::bytea, 'base64')) module_code,
-	sq.video_id,
-	sq.exam_id,
-	sq.item_is_video,
-	sq.item_id,
-	sq.item_order_index,
-	sq.item_title,
-	sq.item_subtitle,
-	sq.item_is_final_exam,
-	sq.item_code
-FROM public.course_module cm
-
-LEFT JOIN 
+WITH
+exam_item AS
 (
-	-- video
 	SELECT
-		v.id video_id,
-		NULL exam_id,
-		true item_is_video,
-		v.id item_id,
-		v.module_id module_id,
-		v.order_index item_order_index,
-		v.title item_title,
-		v.subtitle item_subtitle,
-		NULL item_is_final_exam,
-		(SELECT encode((v.id || '@video')::bytea, 'base64')) item_code
-	FROM public.video v
-
-	UNION ALL
-
-	-- exam
-	SELECT 
-		NULL video_id,
+		mv.course_version_id,
+		NULL::int video_version_id,
+		NULL::int video_id,
+		ev.id exam_version_id,
 		e.id exam_id,
-		false item_is_video,
-		e.id item_id,
-		e.module_id module_id,
-		e.order_index item_order_index,
-		e.title item_title,
-		e.subtitle item_subtitle,
-		e.is_final_exam item_is_final_exam,
-		(SELECT encode((e.id || '@exam')::bytea, 'base64')) item_code
-	FROM public.exam e
-) sq
-ON sq.module_id = cm.id
+		mv.id module_version_id,
+		ed.order_index item_order_index,
+		ed.title item_title,
+		ed.subtitle item_subtitle,
+		CASE 
+			WHEN e.is_signup THEN 'signup'
+			WHEN e.is_pretest THEN 'pretest'
+			WHEN ed.is_final THEN 'final'
+			ELSE 'exam'
+		END item_type,
+		'exam_version@' || ev.id version_code
+	FROM public.exam_version ev
 
-WHERE cm.course_id IS NOT NULL
+	LEFT JOIN public.module_version mv
+	ON mv.id = ev.module_version_id
 
-ORDER BY 
-	cm.course_id, 
-	cm.order_index,
-	item_order_index
+	LEFT JOIN public.exam e
+	ON e.id = ev.exam_id
+
+	LEFT JOIN public.exam_data ed
+	ON ed.id = ev.exam_data_id
+),
+video_item AS
+(
+	SELECT
+		mv.course_version_id,
+		vv.id video_version_id,
+		v.id video_id,
+		NULL::int exam_version_id,
+		NULL::int exam_id,
+		mv.id module_version_id,
+		vd.order_index item_order_index,
+		vd.title item_title,
+		vd.subtitle item_subtitle,
+		'video' item_type,
+		'video_version@' || vv.id version_code
+	FROM public.video_version vv
+
+	LEFT JOIN public.module_version mv
+	ON mv.id = vv.module_version_id
+
+	LEFT JOIN public.video_data vd
+	ON vd.id = vv.video_data_id
+
+	LEFT JOIN public.video v
+	ON v.id = vv.video_id
+),
+items_combined AS
+(
+	SELECT * FROM video_item
+	UNION ALL
+	SELECT * FROM exam_item
+)
+SELECT
+	cv.id course_version_id,
+	md.name module_name,
+	md.order_index module_order_index,
+	mv.id module_version_id,
+	mo.id module_id,
+	ic.video_version_id,
+	ic.video_id,
+	ic.exam_version_id,
+	ic.exam_id,
+	ic.item_order_index,
+	ic.item_title,
+	ic.item_subtitle,
+	ic.item_type,
+	ic.version_code
+FROM public.latest_course_version_view lcvv
+
+LEFT JOIN public.course_version cv
+ON cv.id = lcvv.version_id
+
+LEFT JOIN public.module_version mv
+ON mv.course_version_id = cv.id
+
+LEFT JOIN public.module_data md
+ON md.id = mv.module_data_id
+
+LEFT JOIN public.module mo
+ON mo.id = mv.module_id
+
+INNER JOIN items_combined ic
+ON ic.course_version_id = cv.id
+AND ic.module_version_id = mv.id
+
+ORDER BY
+	cv.id,
+	md.order_index,
+	ic.item_order_index

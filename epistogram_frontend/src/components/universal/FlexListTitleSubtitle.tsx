@@ -1,27 +1,31 @@
-import { Flex } from "@chakra-ui/layout";
-import { Typography } from "@mui/material";
-import { ReactNode } from "react";
-import { isString } from "../../static/frontendHelpers";
-import { EpistoFont } from "../controls/EpistoFont";
+import { ReactNode } from 'react';
+import { isString } from '../../static/frontendHelpers';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { EpistoFont } from '../controls/EpistoFont';
 
-export const FlexListTitleSubtitle = (props: { title: string, subTitle: string | ReactNode }) => {
+export const FlexListTitleSubtitle = ({ title, subTitle, isSelected }: {
+    isSelected?: boolean,
+    title: string,
+    subTitle: string | ReactNode
+}) => {
 
-    return <Flex direction="column">
+    return <EpistoFlex2 direction="column">
 
         <EpistoFont
-            fontSize="fontSmallPlus"
+            fontSize2='normal'
             isUppercase
-            style={{
-                fontWeight: 500
-            }}>
+            fontWeight={isSelected ? 'heavy' : undefined}>
 
-            {props.title}
+            {title}
         </EpistoFont>
 
-        {isString(props.subTitle)
-            ? <EpistoFont fontSize={"fontExtraSmall"}>
-                {props.subTitle}
+        {isString(subTitle)
+            ? <EpistoFont
+                fontWeight={isSelected ? 'heavy' : undefined}
+                fontSize2='small'>
+
+                {subTitle}
             </EpistoFont>
-            : props.subTitle}
-    </Flex>;
-}
+            : subTitle}
+    </EpistoFlex2 >;
+};

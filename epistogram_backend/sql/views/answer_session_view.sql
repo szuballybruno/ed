@@ -1,36 +1,74 @@
-SELECT 
-	u.id user_id,
-	e.id exam_id,
-	e.course_id course_id,
+-- total and total correct given answer count,
+-- and answered question count
+WITH
+answer_stats AS
+(
+	SELECT
+		ase.user_id,
+		ase.id answer_session_id,
+		COUNT (ga.id)::int given_answer_count,
+		SUM ((ga.state = 'CORRECT')::int)::int correct_given_answer_count,
+		(
+			SELECT
+				COUNT(*)
+			FROM public.question_version qv
+
+			LEFT JOIN public.given_answer ga
+			ON ga.question_version_id = qv.id
+
+			WHERE ga.answer_session_id = ase.id
+		) answered_question_count
+	FROM public.given_answer ga
+
+	LEFT JOIN public.answer_session ase
+	ON ase.id = ga.answer_session_id
+
+	GROUP BY ase.user_id, ase.id
+)
+SELECT
 	ase.id answer_session_id,
-	COUNT(q.id) = COUNT(ga.id) AND ase.id IS NOT NULL is_completed,
-	COUNT(q.id)::int total_question_count,
-	COUNT(ga.id)::int answered_question_count,
-	SUM((ga.is_correct IS NOT DISTINCT FROM true)::int)::int correct_answer_count,
-	COUNT(q.id) = SUM((ga.is_correct IS NOT DISTINCT FROM true)::int) AND COUNT(q.id) > 0 is_successful,
-	CASE WHEN COUNT(q.id) > 0 THEN (SUM((ga.is_correct IS NOT DISTINCT FROM true)::int) / COUNT(q.id) * 100)::int ELSE 0 END correct_answer_rate
-FROM public.exam e
+	ase.user_id,
+	ase.exam_version_id,
+	ase.video_version_id,
+    ase.start_date,
+	esv.exam_score answer_session_acquired_points,
+	esv.score_percentage answer_session_success_rate,
+	esv.score_percentage > COALESCE(ed.acceptance_threshold, 60) is_successful,
+	ast.answered_question_count,
+	ast.correct_given_answer_count,
+	ast.given_answer_count,
+	cic.completion_date IS NOT NULL is_completed,
+	cic.completion_date end_date,
+	CASE
+		WHEN ase.is_practise
+			THEN 'practise'
+		WHEN e.id = 0
+			THEN 'signup'
+		WHEN e.is_pretest
+			THEN 'pretest'
+		WHEN ase.video_version_id IS NOT NULL
+			THEN 'video'
+		WHEN ase.exam_version_id IS NOT NULL
+			THEN 'exam'
+		ELSE NULL
+	END answer_session_type
+FROM public.answer_session ase
 
-LEFT JOIN public.user u 
-ON 1 = 1
+LEFT JOIN answer_stats ast
+ON ast.user_id = ase.user_id
+AND ast.answer_session_id = ase.id
 
-LEFT JOIN public.question q
-ON q.exam_id = e.id
+LEFT JOIN public.exam_score_view esv
+ON esv.answer_session_id = ase.id
 
-LEFT JOIN public.answer_session ase 
-ON ase.exam_id = e.id
-	AND ase.user_id = u.id
-	
-LEFT JOIN public.given_answer ga
-ON ga.answer_session_id = ase.id
-	AND ga.question_id = q.id
+LEFT JOIN public.exam_version ev
+ON ev.id = ase.exam_version_id
 
-GROUP BY 
-	u.id,
-	e.id,
-	e.course_id,
-	ase.id
-	
-ORDER BY
-	u.id,
-	e.id
+LEFT JOIN public.exam_data ed
+ON ed.id = ev.exam_data_id
+
+LEFT JOIN public.exam e
+ON ev.exam_id = e.id
+
+LEFT JOIN public.course_item_completion_view cic
+ON cic.answer_session_id = ase.id

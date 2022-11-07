@@ -1,33 +1,37 @@
-import { FlexProps, Flex } from "@chakra-ui/react";
-import Navbar from "./navbar/Navbar";
+import { EpistoFlex2, EpistoFlex2Props } from './controls/EpistoFlex';
+import Navbar from './navbar/Navbar';
 
 export const ContentPane = (props: {
     noPadding?: boolean,
     navbarBg?: any,
     hideNavbar?: boolean,
+    isNavbarLowHeight?: boolean,
     noMaxWidth?: boolean,
-    showLogo?: boolean
-} & FlexProps) => {
+    showLogo?: boolean,
+    isMinimalMode?: boolean,
+    noOverflow?: boolean
+} & EpistoFlex2Props) => {
 
-    const { noPadding, showLogo, noMaxWidth, navbarBg, hideNavbar, ...css } = props;
+    const { children, noPadding, showLogo, noMaxWidth, isNavbarLowHeight, navbarBg, isMinimalMode, hideNavbar, noOverflow, ...css } = props;
 
     return (
-        <Flex
+        <EpistoFlex2
             id="contentPane"
-            p={props.noPadding ? undefined : "0 30px 40px 30px"}
+            padding={noPadding ? undefined : '0 30px 0px 30px'}
             flex="1"
-            maxWidth={noMaxWidth ? undefined : "1400px"}
+            maxWidth={noMaxWidth ? undefined : '1400px'}
             direction="column"
-            margin="auto"
-            overflowY="scroll"
-            className="whall"
+            overflowY={noOverflow ? 'hidden' : 'scroll'}
+            overflowX="hidden"
             {...css}>
 
             {!hideNavbar && <Navbar
+                isLowHeight={isNavbarLowHeight}
                 showLogo={showLogo}
+                isMinimalMode={isMinimalMode}
                 backgroundContent={navbarBg} />}
 
-            {props.children}
-        </Flex>
+            {children}
+        </EpistoFlex2>
     );
 };

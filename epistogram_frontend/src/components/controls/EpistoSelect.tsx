@@ -1,68 +1,97 @@
-import { Box, BoxProps } from "@chakra-ui/layout";
-import React from "react";
-import { translatableTexts } from "../../static/translatableTexts";
+import { ArrowDropDown } from '@mui/icons-material';
+import { translatableTexts } from '../../static/translatableTexts';
+import { EpistoFlex2, EpistoFlex2Props } from './EpistoFlex';
 
-const defaultKey = "___default___";
+const defaultKey = '___default___';
 
-export const EpistoSelect = <T,>(props: {
-    items: T[],
-    selectedValue: T,
-    onSelected: (value: T) => void,
-    getCompareKey: (item: T) => string,
-    getDisplayValue?: (item: T) => string,
+export type EpistoSelectPropsType<TItem> = {
+    items: TItem[],
+    onSelected: (value: TItem) => void,
+    getCompareKey: (item: TItem) => string,
+    getDisplayValue: (item: TItem) => string,
+    selectedValue?: TItem | null,
+    currentKey?: string,
     defaultValue?: string,
-    isDisabled?: boolean,
-} & BoxProps) => {
+    isDisabled?: boolean
+};
 
-    const {
-        items,
-        getCompareKey,
-        selectedValue,
-        onSelected,
-        getDisplayValue,
-        defaultValue,
-        isDisabled,
-        ...css
-    } = props;
+export const EpistoSelect = <TItem,>({
+    items,
+    getCompareKey,
+    selectedValue,
+    currentKey,
+    onSelected,
+    getDisplayValue,
+    defaultValue,
+    isDisabled,
+    ...css
+}: EpistoSelectPropsType<TItem> & EpistoFlex2Props) => {
 
     const onSelectedValue = (key: string) => {
 
-        const currentItem = items.filter(x => getCompareKey(x) === key)[0];
+        const currentItem = items
+            .filter(x => getCompareKey(x) === key)[0];
 
         onSelected(currentItem);
-    }
+    };
 
-    const currentSelectedKey = selectedValue ? getCompareKey(selectedValue) : defaultKey;
+    const isSelectedSomething = selectedValue || currentKey;
 
-    return <Box
-        className="controlPadding simpleBorder roundBorders" {...css} >
+    const currentSelectedKey = isSelectedSomething
+        ? selectedValue
+            ? getCompareKey(selectedValue)
+            : currentKey
+        : defaultKey;
+
+    return <EpistoFlex2
+        position='relative'
+        {...css}>
 
         <select
-            className="whall"
+            className="roundBorders tinyShadow"
             onChange={(x) => onSelectedValue(x.target.value)}
             value={currentSelectedKey}
             disabled={isDisabled}
             style={{
-                width: "fit-content",
-                outline: "none",
-                cursor: "pointer",
-                pointerEvents: isDisabled ? "none" : undefined
+                appearance: 'none',
+                background: 'white',
+                outline: 'none',
+                margin: '10px 0',
+                height: '40px',
+                padding: '5px 10px',
+                width: '100%',
+                cursor: 'pointer',
+                pointerEvents: isDisabled ? 'none' : undefined
             }}>
 
-            {!selectedValue && <option value={defaultKey}>
+            <option value={defaultKey}>
                 {defaultValue ?? translatableTexts.misc.selectOption}
-            </option>}
+            </option>
 
             {items
-                .map((item) => {
+                .map((item, index) => {
 
                     return <option
+                        key={index}
                         value={getCompareKey(item)}>
                         {getDisplayValue
-                            ? getDisplayValue(item)
-                            : "" + item}
-                    </option>
+                            ? item !== undefined && item !== null
+                                ? getDisplayValue(item)
+                                : ''
+                            : '' + item}
+                    </option>;
                 })}
+
+
         </select>
-    </Box>
+
+        <ArrowDropDown
+            style={{
+                pointerEvents: 'none',
+                position: 'absolute',
+                right: '10px',
+                height: '20px',
+                top: '20px'
+            }} />
+    </EpistoFlex2>;
 };

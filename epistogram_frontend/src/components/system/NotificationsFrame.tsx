@@ -16,7 +16,7 @@ export const NotificationsFrame = (props: { children: ReactNode }) => {
             pauseOnFocusLoss
             draggable
             pauseOnHover />
-    </>
+    </>;
 
     // function SlideTransition(props: TransitionProps) {
     //     return <Slide {...props} direction="right" />;
@@ -51,4 +51,4 @@ export const NotificationsFrame = (props: { children: ReactNode }) => {
     //         {props.children}
     //     </div>
     // );
-}
+};

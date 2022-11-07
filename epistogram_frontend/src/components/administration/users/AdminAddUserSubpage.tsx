@@ -1,50 +1,54 @@
-import React from 'react';
-import { applicationRoutes } from "../../../configuration/applicationRoutes";
-import { CreateInvitedUserDTO } from "../../../models/shared_models/CreateInvitedUserDTO";
-import { UserEditDTO } from '../../../models/shared_models/UserEditDTO';
-import { inviteUserAsync } from '../../../services/api/registrationApiService';
-import { useNavigation } from "../../../services/core/navigatior";
-import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
+import { useCallback } from 'react';
+import { ButtonType } from '../../../models/types';
+import { useCreateInviteUserAsync } from '../../../services/api/registrationApiService';
+import { UserApiService } from '../../../services/api/UserApiService1';
+import { showNotification } from '../../../services/core/notifications';
+import { CompanyDTO } from '../../../shared/dtos/company/CompanyDTO';
+import { Id } from '../../../shared/types/versionId';
+import { useEventTrigger, usePostCallback } from '../../../static/frontendHelpers';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
-import { EditUserControl } from "./EditUserControl";
+import { AdminEditUserControl } from './AdminEditUserControl';
 
-const AdminAddUserSubpage = () => {
+export const AdminAddUserSubpage = ({
+    refetchUsersFunction,
+    activeCompany,
+    headerButtons,
+    tabMenuItems,
+    companies
+}: {
+    refetchUsersFunction: () => void,
+    activeCompany: CompanyDTO | null,
+    tabMenuItems: any[],
+    headerButtons: ButtonType[],
+    companies: CompanyDTO[]
+}) => {
 
-    const { navigate } = useNavigation();
-    const showError = useShowErrorDialog();
+    const { userEditData } = UserApiService.useEditUserData(null);
 
-    const submitAddUserRequestAsync = async (userEditDTO: UserEditDTO) => {
+    // http 
+    const { createInvitedUser } = useCreateInviteUserAsync();
 
-        const createInvitedUserDTO = {
-            firstName: userEditDTO.firstName,
-            lastName: userEditDTO.lastName,
-            email: userEditDTO.email,
-            jobTitleId: userEditDTO.jobTitle?.id ?? null,
-            roleId: userEditDTO.role?.id ?? null,
-            organizationId: userEditDTO.organization?.id ?? null
-        } as CreateInvitedUserDTO;
+    const refetchTrigger = useEventTrigger();
 
-        try {
+    const postCreateInvitedUser = useCallback(async () => {
 
-            await inviteUserAsync(createInvitedUserDTO);
+        showNotification('Felhasználó sikeresen hozzáadva');
+        await refetchUsersFunction();
+    }, [refetchUsersFunction]);
 
-            showNotification("Felhasználó sikeresen hozzáadva");
-            navigate(applicationRoutes.administrationRoute.usersRoute.route);
-        } catch (error) {
+    const handleCreateInvitedUser = usePostCallback(createInvitedUser, [postCreateInvitedUser]);
 
-            // TODO
-            // if field error 
-            // show error without dialog
+    return (
+        <AdminSubpageHeader
+            headerButtons={headerButtons}
+            tabMenuItems={tabMenuItems}>
 
-            showError(error);
-        }
-    }
-
-    return <AdminSubpageHeader>
-        <EditUserControl
-            editDTO={null}
-            saveUserAsync={submitAddUserRequestAsync}></EditUserControl>
-    </AdminSubpageHeader>
+            <AdminEditUserControl
+                companies={companies}
+                editedUserId={Id.create(-1)}
+                editDTO={userEditData}
+                activeCompany={activeCompany}
+                saveUserAsync={handleCreateInvitedUser} />
+        </AdminSubpageHeader>
+    );
 };
-
-export default AdminAddUserSubpage;

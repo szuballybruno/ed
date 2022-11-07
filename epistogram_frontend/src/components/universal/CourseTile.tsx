@@ -1,168 +1,165 @@
-import { Box, Flex, FlexProps, Text } from "@chakra-ui/react";
-import { LinearProgress, Rating } from "@mui/material";
-import React, { ReactNode } from 'react';
-import { formatTimespan, getAssetUrl } from "../../static/frontendHelpers";
-import { CourseShortDTO } from "../../models/shared_models/CourseShortDTO";
-import { FlexFloat } from "../controls/FlexFloat";
-import { Star, StarBorderOutlined, StarOutline } from "@mui/icons-material";
-import { useCourseDetails } from "../../services/api/courseApiService";
-import { translatableTexts } from "../../static/translatableTexts";
+import { Text } from '@chakra-ui/react';
+import { AvailableCourseDTO } from '../../shared/dtos/AvailableCourseDTO';
+import { Environment } from '../../static/Environemnt';
+import { formatTimespan } from '../../static/frontendHelpers';
+import { translatableTexts } from '../../static/translatableTexts';
+import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
+import { SmallStat } from './SmallStat';
+import { VerticalTile } from './verticalTile/VerticalTile';
+import { VerticalTileImage } from './verticalTile/VerticalTileImage';
 
-const SmallStat = (props: { iconUrl: string, text: string }) => {
+export const CourseTileIsCompletedBadge = () => {
 
-    return <Flex
-        title="Kurzus adatok"
-        align="center"
-        mr={5}>
+    return <EpistoFlex2
+        position="absolute"
+        top={10}
+        right={0}
+        justify="flex-end">
 
-        {/* icon */}
-        <img
-            src={props.iconUrl}
-            alt={""}
-            style={{
-                width: 22,
-                height: 22,
-                margin: "0 2px 0 2px"
-            }} />
+        <EpistoFlex2
+            direction="row"
+            justifyContent="space-around"
+            alignItems="center"
+            padding="4px"
+            width='130px'
+            bg="#97CC9B"
+            borderRadius="7px 0 0 7px">
 
-        {/* spent time stat */}
-        <Text
-            fontSize="13px"
-            as={"text"}
-            color={"grey"}>
-
-            {props.text}
-        </Text>
-    </Flex>
-}
-
-const CourseTile = (props: {
-    course: CourseShortDTO
-} & FlexProps) => {
-
-    const { course, children, ...css } = props;
-    const courseTitle = course.title;
-    const courseTeacherName = course.teacherName;
-    const courseSubCategory = course.subCategoryName;
-    const thumbnailImageUrl = course.thumbnailImageURL;
-    const isComplete = course.isComplete;
-
-    const { courseDetails } = useCourseDetails(course.courseId);
-
-    return <FlexFloat
-        className="whall roundBorders"
-        direction="column"
-        position="relative"
-        overflow="hidden"
-        shadow="0 0 10px 1px #CCC"
-        background="var(--transparentWhite70)"
-        justifyContent="space-between"
-        p="5px"
-        {...css}>
-
-        {/* cover image box  */}
-        <Box flex="1" position="relative" minH={150} maxH={150}>
-
-            {/* cover image */}
             <img
-                className="whall roundBorders"
+                src={Environment.getAssetUrl('course_exam_tile_icons/tile_badge_completed.svg')}
+                alt={''}
                 style={{
-                    objectFit: "cover",
+                    width: 20,
+                    height: 20
                 }}
-                src={thumbnailImageUrl}
-                alt="" />
+            />
+            <Text
+                textTransform={'uppercase'}
+                color="white">
 
-            {/* is complete overlay */}
-            {isComplete && <Flex
-                position="absolute"
-                top={10}
-                right={0}
-                justify="flex-end">
-
-                <Flex
-                    direction="row"
-                    justifyContent="space-around"
-                    alignItems="center"
-                    padding="4px"
-                    width={130}
-                    bg="#97CC9B"
-                    borderRadius="7px 0 0 7px">
-
-                    <img
-                        src={getAssetUrl("course_exam_tile_icons/tile_badge_completed.svg")}
-                        alt={""}
-                        style={{
-                            width: 20,
-                            height: 20
-                        }}
-                    />
-                    <Text
-                        textTransform={"uppercase"}
-                        color="white">
-
-                        {translatableTexts.availableCourses.courseDone}
-                    </Text>
-                </Flex>
-            </Flex>}
-        </Box>
-
-        {/* content  */}
-        <Flex p="10px" direction={"column"} flex="1">
-
-            <Flex direction="column" flex="5">
-
-                {/* category  */}
-                <Text as="text" fontSize="13px" color="grey">
-                    {courseSubCategory}
-                </Text>
-
-                {/* title */}
-                <Flex direction="column">
-                    <Text fontWeight={"600"} fontSize="15px">{courseTitle}</Text>
-                </Flex>
-            </Flex>
-
-            {/* small stats  */}
-            <Flex mt={7} mb="3px" justify="space-between">
-
-                {/* length */}
-                <SmallStat
-                    iconUrl={getAssetUrl("images/time3D.png")}
-                    text={formatTimespan(courseDetails?.totalVideoSumLengthSeconds || 0)} />
-
-                {/* videos count */}
-                <SmallStat
-                    iconUrl={getAssetUrl("images/videos3D.png")}
-                    text={courseDetails?.totalVideoCount + "" || "0"} />
-
-                {/* difficulty */}
-                <SmallStat
-                    iconUrl={getAssetUrl("images/difficulty3D.png")}
-                    text={courseDetails?.difficulty + ""} />
-
-                {/* rating */}
-                <SmallStat
-                    iconUrl={getAssetUrl("images/star3D.png")}
-                    text={courseDetails?.benchmark + ""} />
-            </Flex>
-
-            {/* rating */}
-            <Flex
-                alignItems={"center"}
-                mt={7}>
-
-                {/* teacher name */}
-                <SmallStat
-                    iconUrl={getAssetUrl("images/flag3D.png")}
-                    text={courseTeacherName} />
-
-            </Flex>
-
-        </Flex>
-
-        {/* buttons */}
-        {props.children}
-    </FlexFloat>
+                {translatableTexts.availableCourses.courseDone}
+            </Text>
+        </EpistoFlex2>
+    </EpistoFlex2>;
 };
 
-export default CourseTile;
+export const CourseTileStats = (props: {
+    course: AvailableCourseDTO
+}) => {
+
+    const { course } = props;
+
+    {/* content  */ }
+    return <>
+
+        {/* small stats  */}
+        <EpistoFlex2 mt='7px'
+            mb="3px"
+            justify="space-between">
+
+            {/* length */}
+            <SmallStat
+                title="Ennyi idő alatt tudod elvégezni a kurzust"
+                iconUrl={Environment.getAssetUrl('images/time3D.png')}
+                text={formatTimespan(course.totalVideoSumLengthSeconds)} />
+
+            {/* videos count */}
+            <SmallStat
+                title="Ennyi videót tartalmaz a kurzus"
+                iconUrl={Environment.getAssetUrl('images/videos3D.png')}
+                text={course.totalVideoCount + ''} />
+
+            {/* difficulty */}
+            <SmallStat
+                title="A kurzus nehézsége 1-5-ig értékelve"
+                iconUrl={Environment.getAssetUrl('images/difficulty3D.png')}
+                text={course.difficulty + ''} />
+
+            {/* rating */}
+            <SmallStat
+                title="1-5-ig ennyire érékelték a hallgatók a tanfolyamot"
+                iconUrl={Environment.getAssetUrl('images/star3D.png')}
+                text={course.benchmark + ''} />
+        </EpistoFlex2>
+
+        {/* rating */}
+        <EpistoFlex2
+            alignItems={'center'}
+            mt='7px'>
+
+            {/* teacher name */}
+            <SmallStat
+                title="A kurzus nyelve"
+                iconUrl={Environment.getAssetUrl('images/flag3D.png')}
+                text={course.teacherName} />
+
+        </EpistoFlex2>
+
+    </>;
+};
+
+export const CourseTileButtons = (props: {
+    onDetails: () => void,
+    onPlay: () => void,
+    isStartedCourse: boolean | string
+}) => {
+
+    const {
+        onDetails,
+        onPlay,
+        isStartedCourse
+    } = props;
+
+    return <EpistoFlex2 mb="10px">
+
+        {/* details */}
+        <EpistoButton
+            onClick={onDetails}
+            style={{ flex: '1' }}>
+            {translatableTexts.availableCourses.courseDataSheet}
+        </EpistoButton>
+
+        {/* start course */}
+        <EpistoButton
+            onClick={onPlay}
+            variant="colored"
+            style={{ flex: '1' }}>
+
+            {isStartedCourse
+                ? translatableTexts.availableCourses.continueCourse
+                : translatableTexts.availableCourses.startCourse}
+        </EpistoButton>
+    </EpistoFlex2>;
+};
+
+export const CourseTile = ({
+    course,
+    children,
+    onDetails,
+    onPlay,
+    ...css
+}: {
+    course: AvailableCourseDTO,
+    onPlay: () => void,
+    onDetails: () => void
+} & EpistoFlex2Props) => {
+
+    const thumbnailImageUrl = course.thumbnailImageURL;
+    const isComplete = course.isComplete;
+    const isStartedCourse = course.currentItemCode || (course.stageName !== null && course.stageName !== 'assigned');
+
+    return <VerticalTile
+        title={course.title}
+        subTitle={course.categoryName}
+        imageComponent={<VerticalTileImage
+            imageUrl={thumbnailImageUrl}
+            badgeComponent={isComplete && <CourseTileIsCompletedBadge />} />
+        }
+        infoComponent={<CourseTileStats course={course} />}
+        buttonsComponent={<CourseTileButtons
+            onPlay={onPlay}
+            onDetails={onDetails}
+            isStartedCourse={isStartedCourse} />
+        } />;
+};

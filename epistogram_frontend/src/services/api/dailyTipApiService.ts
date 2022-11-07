@@ -1,30 +1,31 @@
-import { DailyTipDTO } from "../../models/shared_models/DailyTipDTO";
-import { DailyTipEditDataDTO } from "../../models/shared_models/DailyTipEditDataDTO";
-import { apiRoutes } from "../../models/shared_models/types/apiRoutes";
-import { useReactQuery2 } from "../../static/frontendHelpers";
-import { usePostDataUnsafe } from "../core/httpClient";
+import { DailyTipDTO } from '../../shared/dtos/DailyTipDTO';
+import { DailyTipEditDataDTO } from '../../shared/dtos/DailyTipEditDataDTO';
+import { apiRoutes } from '../../shared/types/apiRoutes';
+import { Id } from '../../shared/types/versionId';
+import { QueryService } from '../../static/QueryService';
+import { usePostDataUnsafe } from '../core/httpClient';
 
 export const useDailyTip = () => {
 
-    const qr = useReactQuery2<DailyTipDTO>(apiRoutes.dailyTip.getDailyTip);
+    const qr = QueryService.useXQuery<DailyTipDTO>(apiRoutes.dailyTip.getDailyTip);
 
     return {
         dailyTipData: qr.data,
         dailyTipError: qr.error,
         dailyTipState: qr.state
-    }
-}
+    };
+};
 
-export const useDailyTipEditData = (dailyTipId: number) => {
+export const useDailyTipEditData = (dailyTipId: Id<'DailyTip'>) => {
 
-    const qr = useReactQuery2<DailyTipEditDataDTO>(apiRoutes.dailyTip.getDailyTipEditData, { dailyTipId });
+    const qr = QueryService.useXQuery<DailyTipEditDataDTO>(apiRoutes.dailyTip.getDailyTipEditData, { dailyTipId });
 
     return {
         dailyTipEditData: qr.data,
         dailyTipEditError: qr.error,
         dailyTipEditState: qr.state
-    }
-}
+    };
+};
 
 export const useSaveDailyTip = () => {
 
@@ -33,25 +34,25 @@ export const useSaveDailyTip = () => {
     return {
         saveDailyTipAsync: qr.postDataAsync,
         saveDailyTipState: qr.state,
-    }
-}
+    };
+};
 
 export const useCreateDailyTip = () => {
 
-    const qr = usePostDataUnsafe<{ personalityTraitCategoryId: number, isMax: boolean }, void>(apiRoutes.dailyTip.createDailyTip);
+    const qr = usePostDataUnsafe<{ personalityTraitCategoryId: Id<'PersonalityTraitCategory'>, isMax: boolean }, void>(apiRoutes.dailyTip.createDailyTip);
 
     return {
         createDailyTipAsync: qr.postDataAsync,
         createDailyTipState: qr.state
-    }
-}
+    };
+};
 
 export const useDeleteDailyTip = () => {
 
-    const qr = usePostDataUnsafe<{ dailyTipId: number }, void>(apiRoutes.dailyTip.deleteDailyTip);
+    const qr = usePostDataUnsafe<{ dailyTipId: Id<'DailyTip'> }, void>(apiRoutes.dailyTip.deleteDailyTip);
 
     return {
         deleteDailyTipAsync: qr.postDataAsync,
         deleteDailyTipState: qr.state
-    }
-}
+    };
+};

@@ -1,8 +1,8 @@
-import { Flex, FlexProps } from "@chakra-ui/layout";
-import { Checkbox } from "@mui/material";
-import { ReactNode } from "react";
+import { Checkbox } from '@mui/material';
+import { forwardRef, ReactNode } from 'react';
+import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 
-export const FlexListItem = (props: FlexProps & {
+type FlexListItemProps = EpistoFlex2Props & {
     onClick?: () => void,
     isLocked?: boolean,
     thumbnailContent?: ReactNode,
@@ -10,7 +10,9 @@ export const FlexListItem = (props: FlexProps & {
     midContent?: ReactNode,
     isChecked?: boolean,
     setIsChecked?: (isChecked: boolean) => void
-}) => {
+};
+
+export const FlexListItem = forwardRef<HTMLDivElement, FlexListItemProps>((props, ref) => {
 
     const {
         onClick,
@@ -22,43 +24,44 @@ export const FlexListItem = (props: FlexProps & {
         setIsChecked,
         ...css } = props;
 
-    return <Flex
+    return <EpistoFlex2
+        ref={ref}
         id="flexListItem"
-        className="shadowOnHover"
-        cursor={onClick ? "pointer" : undefined}
+        //className="shadowOnHover"
+        cursor={onClick ? 'pointer' : undefined}
         align="center"
-        pointerEvents={isLocked ? "none" : "all"}
+        pointerEvents={isLocked ? 'none' : 'all'}
         color="#3F3F3F"
         padding="5px"
         onClick={onClick}
         {...css}>
 
-        {setIsChecked && <Flex
-            alignItems={"center"}
-            justifyContent={"center"}>
+        {setIsChecked && <EpistoFlex2
+            alignItems={'center'}
+            justifyContent={'center'}>
 
             <Checkbox
                 checked={isChecked}
                 onChange={x => setIsChecked(x.currentTarget.checked)}
-                style={{ alignSelf: "center" }} />
-        </Flex>}
+                style={{ alignSelf: 'center' }} />
+        </EpistoFlex2>}
 
-        {thumbnailContent && <Flex
-            alignItems={"center"}
-            justifyContent={"center"}>
+        {thumbnailContent && <EpistoFlex2
+            alignItems={'center'}
+            justifyContent={'center'}>
 
             {thumbnailContent}
-        </Flex>}
+        </EpistoFlex2>}
 
-        <Flex
+        <EpistoFlex2
             flex="1"
             px="10px"
-            alignItems={"center"}
-            justifyContent={"flex-start"}>
+            alignItems={'center'}
+            justifyContent={'flex-start'}>
 
             {midContent}
-        </Flex>
+        </EpistoFlex2>
 
         {endContent}
-    </Flex>
-}
+    </EpistoFlex2>;
+});

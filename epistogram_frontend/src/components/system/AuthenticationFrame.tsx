@@ -1,66 +1,161 @@
-import { createContext, useEffect } from "react";
-import { hotjar } from "react-hotjar";
-import { isLocalhost, oneSignalAppId, verboseLogging } from "../../static/Environemnt";
-import { UserDTO } from "../../models/shared_models/UserDTO";
-import setTheme from "../../services/core/setTheme";
-import OneSignal from 'react-onesignal';
-import { useLocation } from "react-router-dom";
-import { AuthenticationStateType, useRenewUserSessionPooling, useUserFetching } from "../../services/api/authenticationApiService";
+import { createContext, useContext, useEffect } from 'react';
+import { applicationRoutes } from '../../configuration/applicationRoutes';
+import { AuthenticationStateType, useAuthHandshake } from '../../services/api/authenticationApiService';
+import { useNavigation } from '../../services/core/navigatior';
+import { AuthDataDTO } from '../../shared/dtos/AuthDataDTO';
+import { UserDTO } from '../../shared/dtos/UserDTO';
+import { Id } from '../../shared/types/versionId';
+import { PropsWithChildren, useCurrentUrlPathname, useGetCurrentAppRoute } from '../../static/frontendHelpers';
+import { Logger } from '../../static/Logger';
+import { AuthorizationContext, getAuthorizationContextLogic, useAuthorizationContext } from './AuthorizationContext';
 
-export const CurrentUserContext = createContext<UserDTO | null>(null);
-export const RefetchUserAsyncContext = createContext<() => Promise<void>>(() => Promise.resolve());
-export const AuthenticationStateContext = createContext<AuthenticationStateType>("loading");
+const userDefaults: UserDTO = {
+    avatarUrl: '',
+    companyId: Id.create<'Company'>(-1),
+    email: '',
+    firstName: '',
+    id: Id.create<'User'>(-1),
+    isInvitationAccepted: true,
+    isTrusted: true,
+    department: {
+        id: Id.create<'Department'>(-1),
+        name: ''
+    },
+    lastName: '',
+    name: '',
+    phoneNumber: ''
+};
+
+export const CurrentUserContext = createContext<UserDTO>(userDefaults);
+const RefetchUserAsyncContext = createContext<() => Promise<AuthDataDTO>>(null as any);
+export const AuthenticationStateContext = createContext<AuthenticationStateType>('loading');
+
+export const useCurrentUserId = () => {
+
+    const ct = useContext(CurrentUserContext);
+    return { userId: ct.id };
+};
+
+export const useCurrentUserContext = () => {
+
+    return useContext(CurrentUserContext);
+};
+
+export const useRefetchUserAsync = () => {
+
+    const refetchAuthHandshake = useContext(RefetchUserAsyncContext);
+    return { refetchAuthHandshake };
+};
+
+const AuthFirewall = (props: PropsWithChildren & {
+    authState: AuthenticationStateType
+}): JSX.Element => {
+
+    const { authState, children } = props;
+    const dest = useCurrentUrlPathname();
+    const { loginRoute, surveyRoute } = applicationRoutes;
+    const { navigate2 } = useNavigation();
+    const currentRoute = useGetCurrentAppRoute();
+    const { hasPermission } = useAuthorizationContext();
+    const isUnauthorized = !!currentRoute.isUnauthorized;
+
+    // check for error before render, 
+    // redirect to login if necessary
+    useEffect(() => {
+
+        const isCurrentRouteLogin = currentRoute.route.getAbsolutePath() === applicationRoutes.loginRoute.route.getAbsolutePath();
+
+        // error
+        if (authState === 'error' && !isCurrentRouteLogin) {
+
+            Logger.logScoped('AUTH', `Auth state: ${authState}. Redirecting to login.`);
+
+            navigate2(loginRoute);
+        }
+    }, [authState, navigate2, loginRoute, currentRoute]);
+
+    Logger.logScoped('AUTH', `Current route: ${currentRoute.route.getAbsolutePath()} IsUnrestricted: ${isUnauthorized}`);
+
+    // if loading return blank page
+    if (authState === 'loading') {
+
+        Logger.logScoped('AUTH', `Auth state: ${authState}. Rendering empty div until loaded.`);
+
+        return <div></div>;
+    }
+
+    // check authentication 
+    if (authState === 'forbidden' && !isUnauthorized) {
+
+        Logger.logScoped('AUTH', `Auth state: ${authState}. Redirecting...`);
+
+        navigate2(loginRoute, {}, { dest });
+
+        return <div></div>;
+    }
+
+    // check authorization
+    const authCheckResult = (() => {
+
+        // if skip survey is enabled, let execution continue
+        const bypassSurvey = hasPermission('BYPASS_SURVEY');
+        if (bypassSurvey)
+            return;
+
+        // access app restriction is ignored, 
+        // for example on the survey route itself, 
+        // let execution continue
+        const ignoreAccessAppRestriction = !!currentRoute.ignoreAccessAppRestriction;
+        if (ignoreAccessAppRestriction)
+            return;
+
+        // if route is unauthorized, 
+        // for example on register routes, 
+        // let execution continue
+        if (isUnauthorized)
+            return;
+
+        /**
+         * No conditions matched, nothing left to do 
+         * but to navigate user back to survey
+         */
+        Logger.logScoped('AUTH', 'Redirecting to survey...');
+        navigate2(surveyRoute);
+
+        return <div></div>;
+    })();
+
+    if (authCheckResult)
+        return authCheckResult;
+
+    Logger.logScoped('AUTH', `Auth state: ${authState}. Rendering content...`);
+
+    return <>
+        {children}
+    </>;
+};
 
 export const AuthenticationFrame = (props) => {
 
-    //SET THEME
-    setTheme("nextGenTheme");
-
-    // initialize hotjar
-    if (!isLocalhost) {
-
-        console.log("Initing hotjar");
-        hotjar.initialize(2675412, 6)
-    }
-
-    // initialzie OneSignal
-    // This appId only work on dev
-    useEffect(() => {
-
-        if (!oneSignalAppId)
-            return;
-
-        OneSignal
-            .init({
-                appId: oneSignalAppId
-            });
-    }, []);
-
     // start auth pooling
-    const { isSuccess } = useRenewUserSessionPooling();
+    const { authData, authState, refetchAuthHandshake } = useAuthHandshake();
 
-    if (verboseLogging)
-        console.log("Renewing token: " + isSuccess);
+    Logger.logScoped('AUTH', `Auth state is: '${authState}'...`);
 
-    // fetch current user
-    const { currentUser, refetchUserAsync, authState } = useUserFetching(isSuccess);
+    // authorization context 
+    const authContextData = getAuthorizationContextLogic(authData?.permissions ?? []);
 
-    if (verboseLogging)
-        console.log("Authentication state: " + authState);
-
-    // refetch user on route change
-    const location = useLocation();
-
-    useEffect(() => {
-
-        refetchUserAsync();
-    }, [location.pathname]);
-
-    return <AuthenticationStateContext.Provider value={authState}>
-        <RefetchUserAsyncContext.Provider value={refetchUserAsync}>
-            <CurrentUserContext.Provider value={currentUser}>
-                {props.children}
-            </CurrentUserContext.Provider>
-        </RefetchUserAsyncContext.Provider>
-    </AuthenticationStateContext.Provider> as JSX.Element
-}
+    return (
+        <AuthenticationStateContext.Provider value={authState}>
+            <RefetchUserAsyncContext.Provider value={refetchAuthHandshake}>
+                <CurrentUserContext.Provider value={authData?.currentUser ?? userDefaults}>
+                    <AuthorizationContext.Provider value={authContextData}>
+                        <AuthFirewall authState={authState}>
+                            {props.children}
+                        </AuthFirewall>
+                    </AuthorizationContext.Provider>
+                </CurrentUserContext.Provider>
+            </RefetchUserAsyncContext.Provider>
+        </AuthenticationStateContext.Provider>
+    );
+};

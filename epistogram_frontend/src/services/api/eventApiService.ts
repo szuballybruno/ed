@@ -1,27 +1,30 @@
-import { useContext } from "react";
-import { useQuery } from "react-query";
-import { AuthenticationStateContext } from "../../components/system/AuthenticationFrame";
-import { eventPoolingIntervalInMs } from "../../static/Environemnt";
-import { EventDTO } from "../../models/shared_models/EventDTO";
-import { apiRoutes } from "../../models/shared_models/types/apiRoutes";
-import { httpGetAsync } from "../core/httpClient";
+import { useContext } from 'react';
+import { useQuery } from 'react-query';
+import { AuthenticationStateContext } from '../../components/system/AuthenticationFrame';
+import { Environment } from '../../static/Environemnt';
+import { EventDTO } from '../../shared/dtos/EventDTO';
+import { apiRoutes } from '../../shared/types/apiRoutes';
+import { httpGetAsync } from '../core/httpClient';
+import { useGetCurrentAppRoute } from '../../static/frontendHelpers';
 
 export const useEventListener = () => {
 
     const authState = useContext(AuthenticationStateContext);
+    const currentRoute = useGetCurrentAppRoute();
+    const isEnabled = !currentRoute.isUnauthorized;
 
     const { data } = useQuery(
         ['eventListenerQuery'],
         () => httpGetAsync(apiRoutes.event.getUnfulfilledEvent), {
         retry: false,
         refetchOnWindowFocus: false,
-        refetchInterval: eventPoolingIntervalInMs,
+        refetchInterval: Environment.eventPoolingIntervalInMs,
         refetchIntervalInBackground: true,
-        notifyOnChangeProps: ["data"],
-        enabled: authState === "authenticated"
+        notifyOnChangeProps: ['data'],
+        enabled: isEnabled && authState === 'authenticated'
     });
 
     return {
         event: data as null | EventDTO
     };
-}
+};

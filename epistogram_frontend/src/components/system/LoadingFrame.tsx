@@ -1,20 +1,21 @@
-import { Box, Flex, FlexProps, Heading, Text } from "@chakra-ui/react";
+import { Text } from '@chakra-ui/react';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import CircularProgress from "@mui/material/CircularProgress";
-import Typography from "@mui/material/Typography";
-import React, { useEffect, useState } from 'react';
-import { isArray } from "../../static/frontendHelpers";
-import { LoadingStateType } from "../../models/types";
-import { EpistoFont } from "../controls/EpistoFont";
-import { translatableTexts } from "../../static/translatableTexts";
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { LoadingStateType } from '../../models/types';
+import { isArray } from '../../static/frontendHelpers';
+import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
+import { EpistoProgressBar } from '../controls/EpistoProgressBar';
+import { EpistoHeader } from '../EpistoHeader';
+
+type ErrorType = any | any[];
 
 export type LoadingFramePropsType = {
     loadingState?: LoadingStateType | LoadingStateType[],
-    error?: any | any[],
+    error?: ErrorType,
     onlyRenderIfLoaded?: boolean
 };
 
-export const LoadingFrame = (props: FlexProps & LoadingFramePropsType) => {
+export const LoadingFrame = (props: EpistoFlex2Props & LoadingFramePropsType) => {
 
     const {
         loadingState,
@@ -23,46 +24,92 @@ export const LoadingFrame = (props: FlexProps & LoadingFramePropsType) => {
         ...rootProps
     } = props;
 
-    const singleError = getError(error);
-    const state = getLoadingState(loadingState, singleError);
+    const [currentLoadingState, setCurrentLoadingState] = useState<LoadingStateType>('idle');
+    const showOverlay = currentLoadingState === 'error' || currentLoadingState === 'loading';
+    const renderContent = true;//onlyRenderIfLoaded ? !showOverlay : true;
+    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-    const [prevState, setPrevState] = useState<LoadingStateType>("idle");
-    const showOverlay = prevState === "error" || prevState === "loading";
-    const renderContent = onlyRenderIfLoaded ? !showOverlay : true;
-    const [trigger, setTrigger] = useState(0);
+    // func
+    const cancelTimeout = useCallback(() => {
 
-    useEffect(() => {
+        if (timeoutRef.current)
+            clearTimeout(timeoutRef.current);
+    }, []);
 
-        if (prevState === state)
-            return;
+    const setNewTimeout = useCallback((fn: () => void) => {
 
-        if (state !== "loading") {
+        cancelTimeout();
+        timeoutRef.current = setTimeout(fn, 1); // temp set to 1
+    }, [cancelTimeout]);
 
-            setPrevState(state);
-            return;
+    // error
+    const getError = useCallback((): ErrorType => {
+
+        if (!error)
+            return error;
+
+        if (isArray(error))
+            return (error as any[])[0];
+
+        return error;
+    }, [error]);
+
+    const singleError = useMemo(() => getError(), [getError]);
+
+    // state
+    const getLoadingState = useCallback((): LoadingStateType => {
+
+        if (singleError)
+            return 'error';
+
+        if (!loadingState)
+            return 'idle';
+
+        if (isArray(loadingState)) {
+
+            const loadingStates = loadingState as LoadingStateType[];
+
+            if (loadingStates.some(x => x === 'error'))
+                return 'error';
+
+            if (loadingStates.some(x => x === 'loading'))
+                return 'loading';
+
+            if (loadingStates.some(x => x === 'success'))
+                return 'success';
+
+            return 'idle';
         }
+        else {
 
-        setTimeout(() => {
+            return loadingState as LoadingStateType;
+        }
+    }, [loadingState, singleError]);
 
-            setTrigger(x => x + 1);
-        }, 200);
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [state]);
+    const targetLoadingState = useMemo(() => getLoadingState(), [getLoadingState]);
 
     useEffect(() => {
 
-        if (prevState === state)
-            return;
+        if (targetLoadingState !== 'loading') {
 
-        setPrevState(state);
+            cancelTimeout();
+            setCurrentLoadingState(targetLoadingState);
+        }
+        else {
 
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [trigger]);
+            setNewTimeout(() => {
 
-    const finalState = prevState;
+                setCurrentLoadingState(targetLoadingState);
+            });
+        }
+    }, [targetLoadingState, setCurrentLoadingState, cancelTimeout, setNewTimeout]);
 
-    return <Flex
+    useEffect(() => {
+
+        return () => cancelTimeout();
+    }, [cancelTimeout]);
+
+    return <EpistoFlex2
         id="loadigFrameRoot"
         position="relative"
         {...rootProps}>
@@ -71,82 +118,45 @@ export const LoadingFrame = (props: FlexProps & LoadingFramePropsType) => {
         {renderContent && props.children}
 
         {/* overlay */}
-        {showOverlay && <Flex
+        {showOverlay && <EpistoFlex2
             id="loadingFrameCenterFlex"
             flex="1"
             justify="center"
             align="center"
             overflow="hidden"
-            position="absolute"
+            position="fixed"
+            zIndex='1000'
             width="100%"
-            height="100%"
             top="0"
             left="0"
-            bg="var(--gradientBlueBackground)"
             p="30px">
 
             {/* error */}
-            {finalState === "error" && <Flex align="center" direction="column">
-                <ErrorOutlineIcon style={{ width: "100px", height: "100px" }}></ErrorOutlineIcon>
-                <Heading as="h1">Az alkalmazás betöltése sikertelen</Heading>
+            {currentLoadingState === 'error' && <EpistoFlex2
+                align="center"
+                direction="column">
+
+                <ErrorOutlineIcon style={{ width: '100px', height: '100px' }}></ErrorOutlineIcon>
+                <EpistoHeader text='Az alkalmazás betöltése sikertelen'></EpistoHeader>
                 <Text maxWidth="300px">{singleError?.message}</Text>
-            </Flex>}
+            </EpistoFlex2>}
 
             {/* loading */}
-            {finalState === "loading" && <Flex
+            {currentLoadingState === 'loading' && <EpistoFlex2
                 id="loadingDisplayContainer"
-                direction="column"
-                justify="center"
-                align="center">
+                position='fixed'
+                top='0'
+                width='100%'
+                height='3px'>
 
-                <CircularProgress style={{ 'color': 'black' }} size={50} />
+                <EpistoProgressBar
+                    style={{
+                        color: 'black',
+                        height: 3,
+                        width: '100%'
+                    }} />
+            </EpistoFlex2>}
+        </EpistoFlex2>}
+    </EpistoFlex2>;
+};
 
-                <Box pt="20px">
-                    <EpistoFont>
-                        {translatableTexts.misc.loading}
-                    </EpistoFont>
-                </Box>
-            </Flex>}
-        </Flex>}
-    </Flex>
-}
-
-const getLoadingState = (loadingState?: LoadingStateType | LoadingStateType[], error?: any): LoadingStateType => {
-
-    if (error)
-        return "error";
-
-    if (!loadingState)
-        return "idle";
-
-    if (isArray(loadingState)) {
-
-        const loadingStates = loadingState as LoadingStateType[];
-
-        if (loadingStates.some(x => x === "error"))
-            return "error";
-
-        if (loadingStates.some(x => x === "loading"))
-            return "loading";
-
-        if (loadingStates.some(x => x === "success"))
-            return "success";
-
-        return "idle";
-    }
-    else {
-
-        return loadingState as LoadingStateType;
-    }
-}
-
-const getError = (error?: any | any[]) => {
-
-    if (!error)
-        return error;
-
-    if (isArray(error))
-        return (error as any[])[0];
-
-    return error;
-}

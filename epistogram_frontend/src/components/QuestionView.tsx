@@ -1,122 +1,143 @@
-import { Flex, FlexProps } from "@chakra-ui/react";
-import { Typography } from "@mui/material";
-import React, { useEffect, useState } from 'react';
-import { CoinAcquireResultDTO } from "../models/shared_models/CoinAcquireResultDTO";
-import { QuestionDTO } from "../models/shared_models/QuestionDTO";
-import { showNotification } from "../services/core/notifications";
-import { getAssetUrl } from "../static/frontendHelpers";
-import { EpistoFont } from "./controls/EpistoFont";
-import { EpistoText } from "./controls/EpistoText";
-import { LoadingFramePropsType } from "./system/LoadingFrame";
-import { QuestionnaierAnswer } from "./universal/QuestionnaireAnswer";
-import { QuestionnaireLayout } from "./universal/QuestionnaireLayout";
+import { useEffect, useState } from 'react';
+import { showNotification } from '../services/core/notifications';
+import { AnswerResultDTO } from '../shared/dtos/AnswerResultDTO';
+import { QuestionDTO } from '../shared/dtos/QuestionDTO';
+import { Id } from '../shared/types/versionId';
+import { Environment } from '../static/Environemnt';
+import { useIsMobileView } from '../static/frontendHelpers';
+import { EpistoFlex2, EpistoFlex2Props } from './controls/EpistoFlex';
+import { EpistoFont } from './controls/EpistoFont';
+import { LoadingFramePropsType } from './system/LoadingFrame';
+import { QuestionnaierAnswer } from './universal/QuestionnaireAnswer';
+import { QuestionnaireLayout } from './universal/QuestionnaireLayout';
 
-export const QuesitionView = (props: {
-    answerQuesitonAsync: (answerId: number[]) => Promise<void>,
-    correctAnswerIds: number[],
+export const QuesitionView = ({
+    answerQuesitonAsync,
+    question,
+    loadingProps,
+    onlyShowAnswers,
+    answerResult,
+    isPractise,
+    ...css
+}: {
+    answerQuesitonAsync: (answerVersionId: Id<'AnswerVersion'>[]) => Promise<void>,
     question: QuestionDTO,
     loadingProps: LoadingFramePropsType,
     onlyShowAnswers?: boolean,
-    coinsAcquired: number | null,
-    bonusCoinsAcquired: CoinAcquireResultDTO | null
-} & FlexProps) => {
+    answerResult: AnswerResultDTO | null,
+    isPractise: boolean
+} & EpistoFlex2Props) => {
 
     const {
-        answerQuesitonAsync,
-        correctAnswerIds,
-        question,
-        loadingProps,
-        onlyShowAnswers,
-        coinsAcquired,
-        bonusCoinsAcquired,
-        ...css
-    } = props;
+        coinAcquires,
+        correctAnswerVersionIds,
+        givenAnswerVersionIds,
+        isCorrect
+    } = answerResult ?? {
+        coinAcquires: [],
+        correctAnswerVersionIds: [],
+        givenAnswerVersionIds: [],
+        isCorrect: false
+    };
 
-    const isAnswered = correctAnswerIds.length > 0;
+    const isAnswered = !!answerResult;
+    const bonusCoinsAcquireData = coinAcquires
+        .firstOrNull(x => x.reason === 'answer_streak_10' || x.reason === 'answer_streak_5');
+    const showCoinsAcquired = true;
+    const coinsAcquired = coinAcquires
+        .firstOrNull(x => x.reason === 'correct_answer');
+    const isMobile = useIsMobileView();
 
-    const [selectedAnswerId, setSelectedAnswerId] = useState<number | null>(null);
+    const [selectedAnswerVersionId, setSelectedAnswerVersionId] = useState<Id<'AnswerVersion'> | null>(null);
 
-    const handleSelectedAnswerAsync = async (answerId: number) => {
+    const handleSelectedAnswerVersionAsync = async (answerVersionId: Id<'AnswerVersion'>) => {
 
-        setSelectedAnswerId(answerId);
-        await answerQuesitonAsync([answerId]);
-    }
+        setSelectedAnswerVersionId(answerVersionId);
+        await answerQuesitonAsync([answerVersionId]);
+    };
 
-    // reset when question id changed 
+    // reset when question id changed
     useEffect(() => {
 
-        setSelectedAnswerId(null);
-    }, [question.questionId]);
+        setSelectedAnswerVersionId(null);
+    }, [question]);
 
-    // bonus coin 
+    // bonus coin
     useEffect(() => {
 
-        if (!bonusCoinsAcquired)
+        if (!bonusCoinsAcquireData)
             return;
 
-        const streakLength = bonusCoinsAcquired.reason === "answer_streak_5" ? 5 : 10;
+        const streakLength = bonusCoinsAcquireData.reason === 'answer_streak_5' ? 5 : 10;
 
         showNotification(
-            `Sikeresen megszereztél ${bonusCoinsAcquired.amount} bónusz EpistoCoin-t ${streakLength} egymást követő helyes válaszért!`,
-            "warning",
+            `Sikeresen megszereztél ${bonusCoinsAcquireData.amount} bónusz EpistoCoin-t ${streakLength} egymást követő helyes válaszért!`,
             {
-                style: {
-                    border: "solid 2px gold",
-                },
-                icon: () => <img
-                    src={getAssetUrl("images/epistoCoin.png")} />
+                type: 'warning',
+                options: {
+                    style: {
+                        border: 'solid 2px gold',
+                    },
+                    icon: <img
+                        src={Environment.getAssetUrl('images/epistoCoin.png')} />
+                }
             });
-    }, [bonusCoinsAcquired]);
+    }, [bonusCoinsAcquireData]);
 
     return <QuestionnaireLayout
         contentClickable={!isAnswered}
         title={question.questionText}
         loadingProps={loadingProps}
         onlyShowAnswers={onlyShowAnswers}
+        width={(isMobile && !isPractise) ? '100vw' : undefined}
+        height={(isMobile && !isPractise) ? '100vh' : undefined}
+        justify={(isMobile && !isPractise) ? 'center' : undefined}
         {...css}>
+
         {question
             .answers
             .map((answer, index) => {
 
-                const answerId = answer.answerId;
-                const isSelected = selectedAnswerId === answerId;
-                const isCorrect = isAnswered && correctAnswerIds.some(x => x === answerId);
+                const answerVersionId = answer.answerVersionId;
+                const isSelected = selectedAnswerVersionId === answerVersionId;
+                const isCorrect = isAnswered && correctAnswerVersionIds.some(x => x === answerVersionId);
                 const isIncorrect = isAnswered && isSelected && !isCorrect;
 
                 return <QuestionnaierAnswer
                     key={index}
+                    disabled={isAnswered}
                     isCorrect={isCorrect}
                     isIncorrect={isIncorrect}
                     isSelected={isSelected}
                     mb="8px"
-                    onClick={() => handleSelectedAnswerAsync(answer.answerId)} >
+                    onClick={() => handleSelectedAnswerVersionAsync(answer.answerVersionId)} >
 
                     <EpistoFont
                         isAutoFontSize
                         maxFontSize={15}
                         style={{
                             fontWeight: 400,
-                            width: "100%"
+                            width: '100%'
                         }}>
                         {answer.answerText}
                     </EpistoFont>
                 </QuestionnaierAnswer>;
             })}
 
-        {!!coinsAcquired && <Flex
+        {(!!coinsAcquired && showCoinsAcquired) && <EpistoFlex2
             mt="10px"
             borderRadius="5px"
             p="7px"
             align="center">
 
             <EpistoFont>
-                +1 EpistoCoin megszerezve!
+                +1 EpistoCoinnal gazdagodtál!
             </EpistoFont>
 
             <img
-                src={getAssetUrl("images/epistoCoin.png")}
+                src={Environment.getAssetUrl('images/epistoCoin.png')}
                 className="square25"
-                style={{ margin: "0px 0px 4px 4px" }} />
-        </Flex>}
-    </QuestionnaireLayout>
-}
+                style={{ margin: '0px 0px 4px 4px' }} />
+        </EpistoFlex2>}
+    </QuestionnaireLayout>;
+};

@@ -1,23 +1,29 @@
-import { Flex, FlexProps, Image } from '@chakra-ui/react';
-import React, { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { gradientBackgroundGenerator } from '../services/core/gradientBackgroundGenerator';
-import { getRandomInteger, iterate } from '../static/frontendHelpers';
+import { useIsMobileView } from '../static/frontendHelpers';
+import { EpistoFlex2, EpistoFlex2Props } from './controls/EpistoFlex';
 import { EpistoGrid } from './controls/EpistoGrid';
-
+import { EpistoImage } from './controls/EpistoImage';
 export const PageRootContainer = (props: {
     children: ReactNode,
     backgoundImageSrc?: string,
     noBackground?: boolean,
     noMaxWidth?: boolean
-} & FlexProps) => {
+} & EpistoFlex2Props) => {
 
     const { children, noMaxWidth, noBackground, backgoundImageSrc, ...css } = props;
 
-    const gradients = gradientBackgroundGenerator()
+    useEffect(() => {
 
-    return <Flex
+        document.title = 'EpistoGram';
+    }, []);
+    const isMobile = useIsMobileView();
+
+    const gradients = gradientBackgroundGenerator(isMobile ? 'rgba(160, 200, 255, 0.1)' : 'rgba(0, 100, 255, 0.1)');
+
+    return <EpistoFlex2
         id="pageRootContainer"
-        maxWidth={noMaxWidth ? undefined : "1920px"}
+        maxWidth={noMaxWidth ? undefined : '1920px'}
         margin="0 auto"
         position="relative"
         overflow="hidden"
@@ -28,29 +34,32 @@ export const PageRootContainer = (props: {
         {backgoundImageSrc || noBackground
             ? undefined
             : <EpistoGrid
-                bgColor={"white"}
-                position="absolute"
-                top={0}
+                bgColor={'white'}
+                position="fixed"
+                top={'0'}
+                left={'0'}
                 w="100vw"
                 h="100vh"
                 zIndex="-1"
                 filter="blur(50px)"
                 minColumnWidth={'33%'}
-                gap={"0"}
+                gap='0px'
                 gridTemplateColumns="repeat(3, 1fr)"
                 auto={'fill'}>
 
-                {gradients.map((gradient) => {
-                    return <Flex
-                        padding="20px"
-                        filter="blur(8px)"
-                        background={gradient}>
+                {gradients
+                    .map((gradient, index) => {
+                        return <EpistoFlex2
+                            key={index}
+                            padding="20px"
+                            filter="blur(8px)"
+                            background={gradient}>
 
-                    </Flex>
-                })}
+                        </EpistoFlex2>;
+                    })}
             </EpistoGrid>}
 
-        {(!noBackground && backgoundImageSrc) && <Image
+        {(!noBackground && backgoundImageSrc) && <EpistoImage
             position="absolute"
             top="0"
             objectFit="cover"
@@ -59,5 +68,5 @@ export const PageRootContainer = (props: {
 
         {props.children}
 
-    </Flex>
+    </EpistoFlex2>;
 };

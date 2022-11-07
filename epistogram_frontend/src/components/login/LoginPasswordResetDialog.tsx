@@ -1,17 +1,17 @@
-import { Box, Flex } from "@chakra-ui/layout";
-import { Input } from "@chakra-ui/react";
+import { Input } from '@chakra-ui/react';
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
-import { Typography } from "@mui/material";
-import React, { useState } from 'react';
-import { useRequestPasswordChange } from "../../services/api/passwordChangeApiService";
-import { showNotification, useShowErrorDialog } from "../../services/core/notifications";
-import { getEventValueCallback } from "../../static/frontendHelpers";
-import { EpistoButton } from "../controls/EpistoButton";
-import { EpistoFont } from "../controls/EpistoFont";
-import { EpistoLabel } from "../controls/EpistoLabel";
-import { FlexFloat } from "../controls/FlexFloat";
-import { EpistoDialog, EpistoDialogLogicType } from "../EpistoDialog";
-import { EpistoHeader } from "../EpistoHeader";
+import { useState } from 'react';
+import { useRequestPasswordChange } from '../../services/api/passwordChangeApiService';
+import { showNotification } from '../../services/core/notifications';
+import { getEventValueCallback, useTryCatchWrapper } from '../../static/frontendHelpers';
+import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { EpistoFont } from '../controls/EpistoFont';
+import { EpistoLabel } from '../controls/EpistoLabel';
+import { FlexFloat } from '../controls/FlexFloat';
+import { EpistoHeader } from '../EpistoHeader';
+import { EpistoDialog } from '../universal/epistoDialog/EpistoDialog';
+import { EpistoDialogLogicType } from '../universal/epistoDialog/EpistoDialogTypes';
 
 export const LoginPasswordResetDialog = (params: {
     passwordResetDialogLogic: EpistoDialogLogicType
@@ -19,38 +19,35 @@ export const LoginPasswordResetDialog = (params: {
 
     const { passwordResetDialogLogic } = params;
 
-    const [email, setEmail] = useState("");
-
-    const showError = useShowErrorDialog();
+    const [email, setEmail] = useState('');
+    const { errorMessage, getWrappedAction } = useTryCatchWrapper(errorCode => {
+        if (errorCode === 'corrupt_credentials')
+            return 'A megadott email cim hibas!';
+    });
 
     // http
     const { requestPasswordChangeAsync, requestPasswordChangeState } = useRequestPasswordChange();
 
-    const handleResetPw = async () => {
+    const handleResetPw = getWrappedAction(async () => {
 
-        try {
-
-            await requestPasswordChangeAsync({ email });
-
-            showNotification("Kérelmed fogadtuk, az emailt nemsokára meg fogod kapni a visszaállító linkkel!");
-
-            passwordResetDialogLogic.closeDialog();
-        } catch (e) {
-
-            showError(e);
-        }
-    }
+        await requestPasswordChangeAsync({ email });
+        showNotification('Kérelmed fogadtuk, az emailt nemsokára meg fogod kapni a visszaállító linkkel!');
+        passwordResetDialogLogic.closeDialog();
+    });
 
     return (
-        <EpistoDialog logic={passwordResetDialogLogic}>
-            <Flex
+        <EpistoDialog
+            closeButtonType="top"
+            logic={passwordResetDialogLogic}>
+
+            <EpistoFlex2
                 id="dialogFlex"
                 width="500px"
                 direction="column"
                 align="center">
 
                 {/* head */}
-                <Flex
+                <EpistoFlex2
                     bg="var(--deepBlue)"
                     p="20px"
                     alignSelf="stretch"
@@ -61,13 +58,13 @@ export const LoginPasswordResetDialog = (params: {
                         className="fontLight"
                         text="Jelszó visszaállítása" />
 
-                </Flex>
+                </EpistoFlex2>
 
                 {/* desc */}
                 <EpistoFont
                     fontSize="fontSmall"
                     style={{
-                        padding: "15px 15px 0px 15px"
+                        padding: '15px 15px 0px 15px'
                     }}>
                     Nem kell aggódnod, ha jelszavad most esetleg nem jut eszedbe, másodpercek alatt segítünk azt visszaállítani!
                     Nincs más dolgod, mint megadni azt az e-mail címet, mellyel korábban regisztráltál, mi pedig küldeni fogunk neked egy linket, ahol új jelszót állíthatsz be.
@@ -77,7 +74,7 @@ export const LoginPasswordResetDialog = (params: {
                 <EpistoFont
                     fontSize="fontSmall"
                     style={{
-                        padding: "15px"
+                        padding: '15px'
                     }}>
                     Biztonsági okokból ez a link csak 8 óráig él, és új visszaállítási linket 24 óránként csak egyszer kérhetsz, így érdemes még most befejezned a visszaállítási folyamatot!
 
@@ -95,8 +92,8 @@ export const LoginPasswordResetDialog = (params: {
 
                         <AlternateEmailIcon
                             style={{
-                                color: "var(--epistoTeal)",
-                                margin: "10px"
+                                color: 'var(--epistoTeal)',
+                                margin: '10px'
                             }} />
 
                         <Input
@@ -108,27 +105,38 @@ export const LoginPasswordResetDialog = (params: {
                     </FlexFloat>
                 </EpistoLabel>
 
+                {/* error */}
+                {errorMessage && <EpistoFont
+                    fontSize="fontSmall"
+                    color="fontError"
+                    style={{
+                        padding: '5px',
+                    }}>
+
+                    {errorMessage}
+                </EpistoFont>}
+
                 {/* affirmation */}
                 <EpistoFont
                     fontSize="fontSmall"
-                    classes={["fontGrey"]}
+                    color="fontGray"
                     style={{
-                        marginTop: "20px",
-                        padding: "15px",
+                        marginTop: '20px',
+                        padding: '15px',
                     }}>
 
-                    Kattints a visszaállítás gombra, és küldjük is a linket! 
+                    Kattints a visszaállítás gombra, és küldjük is a linket!
                 </EpistoFont>
 
                 {/* buttons */}
                 <EpistoButton
-                    style={{ margin: "10px" }}
+                    style={{ margin: '10px' }}
                     onClick={handleResetPw}
                     variant="colored">
 
                     Mehet
                 </EpistoButton>
-            </Flex>
+            </EpistoFlex2>
         </EpistoDialog>
     );
-}
+};

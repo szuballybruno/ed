@@ -1,5 +1,5 @@
-import { Typography } from "@mui/material";
-import { CSSProperties, RefObject, useCallback, useEffect, useRef, useState } from "react";
+import { Typography } from '@mui/material';
+import { CSSProperties, RefObject, useCallback, useEffect, useRef, useState } from 'react';
 
 //TODO Remove. Replaced with EpistoFont
 export const EpistoText = (props: {
@@ -15,8 +15,8 @@ export const EpistoText = (props: {
     const fontSize = useAutoFontSize(ref, text, allowedLines ?? 2, maxFontSize ?? 20);
     const css = {
         fontSize: fontSize,
-        textTransform: "none",
-        whiteSpace: "normal",
+        textTransform: 'none',
+        whiteSpace: 'normal',
         ...style
     } as CSSProperties;
 
@@ -24,8 +24,8 @@ export const EpistoText = (props: {
         ref={ref}
         style={css}>
         {props.text}
-    </Typography>
-}
+    </Typography>;
+};
 
 export const useAutoFontSize = (
     ref: RefObject<HTMLSpanElement> | null,
@@ -62,7 +62,7 @@ export const useAutoFontSize = (
 
                 observer.disconnect();
             }
-        }
+        };
     }, [ref, resizeListener]);
 
     const characterCount = text.length;
@@ -77,4 +77,4 @@ export const useAutoFontSize = (
         return maxSize;
 
     return calculatedSize;
-}
+};

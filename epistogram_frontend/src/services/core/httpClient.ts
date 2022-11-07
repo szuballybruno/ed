@@ -1,10 +1,12 @@
-import axios, { AxiosRequestConfig } from "axios";
-import { useState } from "react";
-import { applicationRoutes } from "../../configuration/applicationRoutes";
-import { serverUrl } from "../../static/Environemnt";
-import { getErrorTypeByHTTPCode, getUrl, stringifyQueryObject, ErrorCode } from "../../static/frontendHelpers";
-import HttpErrorResponseDTO from "../../models/shared_models/HttpErrorResponseDTO";
-import { LoadingStateType } from "../../models/types";
+import axios, { AxiosRequestConfig } from 'axios';
+import { useCallback, useState } from 'react';
+import { applicationRoutes } from '../../configuration/applicationRoutes';
+import { LoadingStateType } from '../../models/types';
+import HttpErrorResponseDTO from '../../shared/dtos/HttpErrorResponseDTO';
+import { ParametrizedRouteType, RouteParameterType } from '../../shared/types/apiRoutes';
+import { ErrorWithCode } from '../../shared/types/ErrorWithCode';
+import { Environment } from '../../static/Environemnt';
+import { getErrorTypeByHTTPCode, getUrl } from '../../static/frontendHelpers';
 
 export class HTTPResponse {
     code: number;
@@ -18,40 +20,52 @@ export class HTTPResponse {
 
 const instance = (() => {
 
-    const axiosInst = axios.create({
-        // .. where we make our configurations
-        baseURL: serverUrl
-    });
+    const axiosInst = axios
+        .create({
+            baseURL: Environment.serverUrl,
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
 
-    axiosInst.defaults.withCredentials = true
+    axiosInst.defaults.withCredentials = true;
 
-    axiosInst.defaults.headers = {
-        'Content-Type': 'application/json'
-    }
+    // axiosInst.defaults.headers = {
+    //     post:
+    //         'Content-Type': 'application/json'
+    // };
 
     return axiosInst;
 })();
 
-export const httpPostAsync = async (
+export const httpPostAsync = async ({
+    urlEnding,
+    configure,
+    data,
+    queryObject
+}: {
     urlEnding: string,
     data?: any,
-    configure?: (config: AxiosRequestConfig) => void,
-    queryObject?: any) => {
+    configure?: (baseConfig: AxiosRequestConfig) => AxiosRequestConfig,
+    queryObject?: any
+}) => {
 
     try {
 
-        const config = {
-            withCredentials: true
-        } as AxiosRequestConfig;
+        const baseConfig: AxiosRequestConfig = {
+            withCredentials: true,
+            baseURL: Environment.serverUrl,
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        };
 
-        // set bearer token
-        if (configure) {
-
-            configure(config);
-        }
+        const config = configure
+            ? configure(baseConfig)
+            : baseConfig;
 
         const url = getUrl(urlEnding, undefined, queryObject);
-        const axiosResponse = await instance.post(url, data);
+        const axiosResponse = await axios.post(url, data, config);
         const response = new HTTPResponse(axiosResponse.status, axiosResponse.data);
 
         return response.data;
@@ -59,7 +73,7 @@ export const httpPostAsync = async (
 
         handleHttpError(error);
     }
-}
+};
 
 export const httpGetAsync = async (urlEnding: string, queryObject?: any) => {
 
@@ -76,7 +90,7 @@ export const httpGetAsync = async (urlEnding: string, queryObject?: any) => {
 
         handleHttpError(e);
     }
-}
+};
 
 export const httpDeleteAsync = async (urlEnding: string) => {
 
@@ -85,46 +99,48 @@ export const httpDeleteAsync = async (urlEnding: string) => {
     });
 
     return new HTTPResponse(axiosResponse.status, axiosResponse.data);
-}
+};
 
 /**
  * Post a json payload, without implicitly handling errors, 
  * meaning exceptions will bubble up, and must be handled by the caller funciton.
- * 
- * @param url 
- * @returns 
  */
-export const usePostDataUnsafe = <TData, TResult>(url: string) => {
+export const usePostDataUnsafe = <TData = any, TResult = void>(url: string | ParametrizedRouteType<RouteParameterType<TData, any>>) => {
 
-    const [state, setState] = useState<LoadingStateType>("idle");
+    const [state, setState] = useState<LoadingStateType>('idle');
     const [result, setResult] = useState<TResult | null>(null);
 
-    const postDataAsync = async (data?: TData) => {
+    const postDataAsync = useCallback(async (data?: TData) => {
 
         try {
 
-            setState("loading");
+            setState('loading');
 
             const postData = data ? data : undefined;
-            const postResult = await httpPostAsync(url, postData, undefined, undefined) as TResult
+            const postResult = await httpPostAsync({
+                urlEnding: url,
+                data: postData,
+                configure: undefined,
+                queryObject: undefined
+            }) as TResult;
 
-            setState("idle");
+            setState('idle');
             setResult(postResult);
 
             return postResult;
         }
         catch (e) {
 
-            setState("idle");
+            setState('idle');
             throw e;
         }
-    }
+    }, [setState, setResult]);
 
-    const clearCache = () => {
+    const clearCache = useCallback(() => {
 
         setResult(null);
-        setState("idle");
-    }
+        setState('idle');
+    }, [setState, setResult]);
 
     return {
         postDataAsync,
@@ -132,126 +148,96 @@ export const usePostDataUnsafe = <TData, TResult>(url: string) => {
         result,
         clearCache
     };
-}
+};
 
 /**
  * Post a multipart payload, containing a file, 
  * and or a data object as a json document.
  * This is also unsafe, as in errors are not handled implicitly.
- * 
- * @param url 
- * @returns 
  */
-export const usePostMultipartDataUnsafe = <TData>(url: string) => {
+export const usePostMultipartDataUnsafe = <TData>(url: string | ParametrizedRouteType<RouteParameterType<TData, any>>) => {
 
-    const [state, setState] = useState<LoadingStateType>("idle");
+    const [state, setState] = useState<LoadingStateType>('idle');
 
-    const postMultipartDataAsync = async (data?: TData, file?: File) => {
+    const postMultipartDataAsync = useCallback(async ({ data, files }: { data?: TData, files?: FilesObject }) => {
 
         try {
 
-            setState("loading");
+            setState('loading');
 
-            await postMultipartAsync(url, file, data);
+            await postMultipartAsync(url, files, data);
 
-            setState("idle");
+            setState('idle');
         }
         catch (e) {
 
-            setState("idle");
+            setState('error');
             throw e;
         }
-    }
+    }, [url]);
 
     return {
         postMultipartDataAsync,
         state
     };
-}
+};
 
-/**
- * Post a json payload, and implicitly handle errors, 
- * which will be set to the error output const. 
- * State is set accordingly. 
- * 
- * @param url 
- * @returns 
- */
-export const usePostData = <TData, TResult>(url: string) => {
-
-    const [state, setState] = useState<LoadingStateType>("success");
-    const [error, setError] = useState<ErrorCode | null>(null);
-    const [result, setResult] = useState<TResult | null>(null);
-
-    const postDataAsync = async (data: TData) => {
-
-        try {
-
-            setState("loading");
-
-            const postResult = await httpPostAsync(url, data);
-
-            setState("success");
-            setResult(postResult as TResult);
-        }
-        catch (e) {
-
-            setState("error");
-            setError(e as ErrorCode);
-        }
-    }
-
-    const clearCache = () => {
-
-        setResult(null);
-    }
-
-    return {
-        postDataAsync,
-        state,
-        error,
-        result,
-        clearCache
-    };
+type FilesObject = {
+    [K: string]: File | null;
 }
 
 /**
  * Post multipart form data. 
  * This allows sending files to the server, and also a data object as json.
- * 
- * @param url 
- * @param file 
- * @param data 
- * @returns 
  */
-export const postMultipartAsync = async (url: string, file?: File, data?: any) => {
+export const postMultipartAsync = async (url: string, files?: FilesObject, data?: any) => {
 
-    var formData = new FormData();
+    let formKeyDatas = [] as { key: string, data: any }[];
 
     // append file data
-    if (file) {
+    if (files) {
 
-        formData.append('file', file);
+        const fileKeyDatas = Object
+            .keys(files)
+            .map(key => ({ key, data: files[key] }))
+            .filter(kd => !!kd.data);
+
+        formKeyDatas = formKeyDatas
+            .concat(fileKeyDatas);
     }
 
     // append json data 
     if (data) {
 
         const jsonData = JSON.stringify(data);
-        formData.append("document", jsonData);
+        formKeyDatas = formKeyDatas
+            .concat([{ key: 'document', data: jsonData }]);
     }
 
-    return await httpPostAsync(
-        url,
-        formData,
-        x => x.headers = { ...x.headers, "Content-Type": 'multipart/form-data' });
-}
+    const formData = new FormData();
+
+    formKeyDatas
+        .forEach(kd => formData
+            .append(kd.key, kd.data));
+
+    return await httpPostAsync({
+        urlEnding: url,
+        data: formData,
+        configure: baseConfig => {
+
+            if (baseConfig.headers)
+                baseConfig.headers['Content-Type'] = 'multipart/form-data';
+
+            return baseConfig;
+        }
+    });
+};
 
 export const addBearerToken = (config: AxiosRequestConfig, bearerToken: string) => {
     config.headers = {
-        'Authorization': "Bearer " + bearerToken
+        'Authorization': 'Bearer ' + bearerToken
     };
-}
+};
 
 const handleHttpError = (error: any) => {
 
@@ -272,24 +258,24 @@ const handleHttpError = (error: any) => {
         // get & check error response data
         const error = response.data as HttpErrorResponseDTO;
         if (!error)
-            throw new ErrorCode(`Http response code (${responseCode}) did not indicate success.`, getErrorTypeByHTTPCode(responseCode));
+            throw new ErrorWithCode(`Http response code (${responseCode}) did not indicate success.`, getErrorTypeByHTTPCode(responseCode));
 
         // get & check error response data properties
         if (!error.message && !error.code)
-            throw new ErrorCode(`Http response code (${responseCode}) did not indicate success.`, getErrorTypeByHTTPCode(responseCode));
+            throw new ErrorWithCode(`Http response code (${responseCode}) did not indicate success.`, getErrorTypeByHTTPCode(responseCode));
 
         // message only
         // throw with a more informative message
         if (error.message && !error.code)
-            throw new ErrorCode(`Http response code (${responseCode}) did not indicate success. Message: ${error.message}`, getErrorTypeByHTTPCode(responseCode));
+            throw new ErrorWithCode(`Http response code (${responseCode}) did not indicate success. Message: ${error.message}`, getErrorTypeByHTTPCode(responseCode));
 
         // error type and maybe message as well
         const message = error.message
             ? `Http response code (${responseCode}) did not indicate success. Message: ${error.message}`
-            : `Http response code (${responseCode}) did not indicate success. Code: ${error.code}`
+            : `Http response code (${responseCode}) did not indicate success. Code: ${error.code}`;
 
         // throw with a more informative message
         // and error type
-        throw new ErrorCode(message, error.code);
+        throw new ErrorWithCode(message, error.code);
     }
-}
+};

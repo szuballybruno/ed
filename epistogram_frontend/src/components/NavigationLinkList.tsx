@@ -1,46 +1,52 @@
-import { Flex } from "@chakra-ui/layout";
-import { Typography } from "@mui/material";
-import { NavLink } from "react-router-dom";
-import { isCurrentRoute } from "../static/frontendHelpers";
-import { ApplicationRoute } from "../models/types";
-import { EpistoFont } from "./controls/EpistoFont";
+import { NavLink } from 'react-router-dom';
+import { ApplicationRoute } from '../models/types';
+import { useIsMatchingCurrentRoute } from '../static/frontendHelpers';
+import { EpistoFlex2 } from './controls/EpistoFlex';
+import { EpistoFont } from './controls/EpistoFont';
 
-export const NavigationLinkList = (props: { items: ApplicationRoute[] }) => {
+export const NavigationLinkList = (props: {
+    routes: ApplicationRoute[],
+    isNoText?: boolean
+}) => {
 
-    const { items } = props;
+    const { routes } = props;
+    const isMatchingCurrent = useIsMatchingCurrentRoute();
 
-    return <Flex direction="column">
-        {items
-            .map((menuItem, index) => {
+    return <EpistoFlex2 direction="column">
+        {routes
+            .map((route, index) => {
 
-                const isCurrent = isCurrentRoute(menuItem.route);
+                const { isMatchingRoute: isCurrent } = isMatchingCurrent(route);
 
                 return <NavLink
-                    exact
-                    to={menuItem.route}
+                    to={route.route.getAbsolutePath()}
                     key={index}>
-                    <Flex
+
+                    <EpistoFlex2
                         p="5px 15px"
-                        // background={isCurrent ? "var(--epistoTeal)" : undefined}
-                        align="center">
+                        bg={isCurrent ? 'white' : undefined}
+                        align="center"
+                        borderLeft={isCurrent ? 'solid 4px var(--mildDeepBlue)' : 'solid 4px transparent'}
+                        className={isCurrent ? 'mildShadow' : undefined}
+                        borderRadius="0px 5px 5px 0px">
 
                         {/* icon */}
-                        {menuItem.icon}
+                        {route.icon}
 
                         {/* text */}
-                        <EpistoFont
-                            fontSize="fontSmallPlus"
+                        {!props.isNoText && <EpistoFont
+                            fontSize="fontNormal14"
                             isUppercase
                             style={{
-                                marginLeft: "10px",
-                                color: "var(--mildDeepBlue)",
-                                fontWeight: isCurrent ? "bold" : 500
+                                marginLeft: '10px',
+                                color: 'var(--mildDeepBlue)',
+                                fontWeight: isCurrent ? 'bold' : 500,
                             }}>
-                            {menuItem.title}
-                        </EpistoFont>
+                            {route.title}
+                        </EpistoFont>}
 
-                    </Flex>
-                </NavLink>
+                    </EpistoFlex2>
+                </NavLink>;
             })}
-    </Flex >
-}
+    </EpistoFlex2 >;
+};

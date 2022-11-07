@@ -1,68 +1,81 @@
-import { Flex, FlexProps } from "@chakra-ui/react"
-import { Add, Delete } from "@mui/icons-material"
-import { ReactNode } from "react"
-import { EpistoButton } from "../controls/EpistoButton"
-import { EpistoEntry } from "../controls/EpistoEntry"
-import { FlexList } from "../universal/FlexList"
+import { Add, Delete } from '@mui/icons-material';
+import { ReactNode } from 'react';
+import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoEntry } from '../controls/EpistoEntry';
+import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
+import { EpistoLabel } from '../controls/EpistoLabel';
+import { FlexList } from '../universal/FlexList';
 
 export const SimpleEditList = <T,>(props: {
     items: T[],
+    title: string,
     initialValue: T,
     setItems: (items: T[]) => void,
     renderChild?: (item: T, onItemChanged: (modifiedItem: T) => void) => ReactNode
-} & FlexProps) => {
+} & EpistoFlex2Props) => {
 
-    const { items, setItems, initialValue, renderChild, ...css } = props;
+    const { items, title, setItems, initialValue, renderChild, ...css } = props;
 
     return (
-        <Flex direction="column" {...css}>
-            <FlexList pb="10px">
-                {items
-                    .map((item, index) => <Flex
-                        align="center"
-                        px="10px"
-                        py="5px">
+        <EpistoFlex2 direction="column"
+            mt="30px"
+            {...css}>
 
-                        {!renderChild && <EpistoEntry
-                            marginTop="0"
-                            value={item as any as string}
-                            flex="1"
-                            setValue={newval => {
+            <EpistoLabel isOverline
+                text={title}>
+
+                <FlexList pb="10px">
+                    {items
+                        .map((item, index) => <EpistoFlex2
+                            key={index}
+                            align="center"
+                            py="5px">
+
+                            {!renderChild && <EpistoEntry
+                                isMultiline
+                                marginTop="0"
+                                value={item as any as string}
+                                flex="1"
+                                setValue={newval => {
+
+                                    const newItems = [...items];
+                                    newItems[index] = newval as any as T;
+                                    setItems(newItems);
+                                }} />}
+
+                            {renderChild && renderChild(item, (modifiedItem) => {
 
                                 const newItems = [...items];
-                                newItems[index] = newval as any as T;
+                                newItems[index] = modifiedItem;
                                 setItems(newItems);
-                            }} />}
+                            })}
 
-                        {renderChild && renderChild(item, (modifiedItem) => {
+                            <EpistoButton
+                                onClick={() => {
 
-                            const newItems = [...items];
-                            newItems[index] = modifiedItem;
-                            setItems(newItems);
-                        })}
+                                    setItems(items.filter(x => x !== item));
+                                }}>
+                                <Delete />
+                            </EpistoButton>
+                        </EpistoFlex2>)}
+                </FlexList>
 
-                        <EpistoButton
-                            onClick={() => {
+                <EpistoButton
+                    variant={'colored'}
+                    style={{ alignSelf: 'center', width: '100%' }}
+                    onClick={() => {
 
-                                setItems(items.filter(x => x !== item));
-                            }}>
-                            <Delete />
-                        </EpistoButton>
-                    </Flex>)}
-            </FlexList>
+                        const newItems = [...items];
+                        newItems.push(initialValue);
+                        setItems(newItems);
+                    }}>
 
-            <EpistoButton
-                variant={"outlined"}
-                style={{ alignSelf: "center" }}
-                onClick={() => {
+                    <Add />
+                    Elem hozzáadása
+                </EpistoButton>
+            </EpistoLabel>
 
-                    const newItems = [...items];
-                    newItems.push(initialValue);
-                    setItems(newItems);
-                }}>
 
-                <Add />
-            </EpistoButton>
-        </Flex>
-    )
-}
+        </EpistoFlex2>
+    );
+};

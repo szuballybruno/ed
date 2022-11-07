@@ -11,11 +11,31 @@
 		},
 		{
 			"path": "misc"
+		},
+		{
+			"path": ".git"
+		},
+		{
+			"path": "git_hooks"
 		}
 	],
 	"settings": {
 		"search.exclude": {
 			"**/build": true
-		}
+		},
+		"sqltools.connections": [
+			{
+				"previewLimit": 50,
+				"server": "localhost",
+				"port": 7000,
+				"driver": "PostgreSQL",
+				"name": "local",
+				"database": "localhostDB",
+				"username": "postgres",
+				"password": "admin"
+			}
+		],
+		"task.allowAutomaticTasks": true,
+		"powershell.cwd": "c:\\GitRepositories\\epistogram\\epistogram_backend"
 	}
 }

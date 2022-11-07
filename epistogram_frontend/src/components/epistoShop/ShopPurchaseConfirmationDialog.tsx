@@ -1,17 +1,16 @@
-import { Flex } from "@chakra-ui/react";
-import { Close } from "@mui/icons-material";
-import { Typography } from "@mui/material";
-import { useEffect } from "react";
-import { ShopItemDTO } from "../../models/shared_models/ShopItemDTO";
-import { usePurchaseShopItem } from "../../services/api/shopApiService";
-import { useNavigation } from "../../services/core/navigatior";
-import { useShowErrorDialog } from "../../services/core/notifications";
-import { usePaging } from "../../static/frontendHelpers";
-import { translatableTexts } from "../../static/translatableTexts";
-import { EpistoButton } from "../controls/EpistoButton";
-import { EpistoFont } from "../controls/EpistoFont";
-import { EpistoDialog, EpistoDialogLogicType } from "../EpistoDialog";
-import { SlidesDisplay } from "../universal/SlidesDisplay";
+import { useEffect } from 'react';
+import { usePurchaseShopItem } from '../../services/api/shopApiService';
+import { useNavigation } from '../../services/core/navigatior';
+import { useShowErrorDialog } from '../../services/core/notifications';
+import { ShopItemDTO } from '../../shared/dtos/ShopItemDTO';
+import { usePaging } from '../../static/frontendHelpers';
+import { translatableTexts } from '../../static/translatableTexts';
+import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { EpistoFont } from '../controls/EpistoFont';
+import { EpistoDialog } from '../universal/epistoDialog/EpistoDialog';
+import { EpistoDialogLogicType } from '../universal/epistoDialog/EpistoDialogTypes';
+import { EpistoPaging } from '../universal/EpistoPaging';
 
 export const ShopPurchaseConfirmationDialog = (props: {
     dialogLogic: EpistoDialogLogicType,
@@ -20,7 +19,7 @@ export const ShopPurchaseConfirmationDialog = (props: {
 }) => {
 
     const { dialogLogic, shopItem, onSuccessfulPurchase } = props;
-    const paging = usePaging([1, 2]);
+    const paging = usePaging({ items: [1, 2] });
     const isCourse = !!shopItem?.courseId;
     const { navigateToPlayer } = useNavigation();
 
@@ -45,22 +44,24 @@ export const ShopPurchaseConfirmationDialog = (props: {
 
             showError(e);
         }
-    }
+    };
 
     // reset paging when dialog is closed 
     useEffect(() => {
 
         if (!dialogLogic.isOpen)
             paging.setItem(0);
-    }, [dialogLogic.isOpen])
+    }, [dialogLogic.isOpen]);
 
     const confirmationSlide = () => (
-        <Flex direction="column" align="center" w="500px">
+        <EpistoFlex2 direction="column"
+            align="center"
+            w="500px">
 
             <EpistoFont
-                classes={["dividerBorderBottom"]}
+                className="dividerBorderBottom"
                 style={{
-                    padding: "10px"
+                    padding: '10px'
                 }}>
 
                 {isCourse
@@ -70,18 +71,18 @@ export const ShopPurchaseConfirmationDialog = (props: {
 
             <img
                 style={{
-                    objectFit: "cover",
+                    objectFit: 'cover',
                     borderRadius: 10,
-                    margin: "10px",
-                    width: "400px"
+                    margin: '10px',
+                    width: '400px'
                 }}
                 src={shopItem?.coverFilePath}
                 alt="" />
 
             <EpistoFont
                 style={{
-                    fontWeight: "bold",
-                    maxWidth: "300px"
+                    fontWeight: 'bold',
+                    maxWidth: '300px'
                 }}>
 
                 {shopItem?.name}
@@ -89,18 +90,18 @@ export const ShopPurchaseConfirmationDialog = (props: {
 
             <EpistoButton
                 style={{
-                    margin: "15px 0"
+                    margin: '15px 0'
                 }}
                 variant="colored"
                 onClick={onConfirmPurchaseAsync}>
 
                 {translatableTexts.shop.purchaseConfirmationDialog.unlock}
             </EpistoButton>
-        </Flex>
+        </EpistoFlex2>
     );
 
     const feedbackSlide = () => (
-        <Flex
+        <EpistoFlex2
             direction="column"
             align="center"
             w="500px"
@@ -141,19 +142,21 @@ export const ShopPurchaseConfirmationDialog = (props: {
                 {translatableTexts.shop.purchaseConfirmationDialog.letsGoToCourse}
             </EpistoButton> : <EpistoButton
                 onClick={() => {
-                    //openNewTab(detailsUrl); //TODO: Details url should be here
+                    openNewTab(shopItem?.detailsUrl + ''); //TODO: Details url should be here
                 }}>
 
                 {translatableTexts.shop.purchaseConfirmationDialog.itemPage}
             </EpistoButton>}
-        </Flex>
+        </EpistoFlex2>
     );
 
-    return <EpistoDialog logic={dialogLogic}>
+    return <EpistoDialog
+        closeButtonType="top"
+        logic={dialogLogic}>
 
-        <SlidesDisplay
+        <EpistoPaging
             slides={[confirmationSlide, feedbackSlide]}
             index={paging.currentIndex}
             justify="center" />
-    </EpistoDialog>
-}
+    </EpistoDialog>;
+};

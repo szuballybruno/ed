@@ -1,123 +1,154 @@
-import { Flex, Text } from "@chakra-ui/react";
-import { ExpandMore } from "@mui/icons-material";
-import { Accordion, AccordionDetails, AccordionSummary, Typography } from "@mui/material";
-import React, { useEffect } from 'react';
-import { applicationRoutes } from "../../configuration/applicationRoutes";
-import { ExamPlayerDataDTO } from "../../models/shared_models/ExamPlayerDataDTO";
-import { useExamResults } from "../../services/api/examApiService";
-import { useNavigation } from "../../services/core/navigatior";
-import { ArrayBuilder } from "../../static/frontendHelpers";
-import { translatableTexts } from "../../static/translatableTexts";
-import { EpistoFont } from "../controls/EpistoFont";
+import { ExpandMore } from '@mui/icons-material';
+import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
+import { useEffect } from 'react';
+import { applicationRoutes } from '../../configuration/applicationRoutes';
+import { useExamResults } from '../../services/api/examApiService';
+import { useNavigation } from '../../services/core/navigatior';
+import { ExamPlayerDataDTO } from '../../shared/dtos/ExamPlayerDataDTO';
+import { Id } from '../../shared/types/versionId';
+import { ArrayBuilder, useIsMobileView } from '../../static/frontendHelpers';
+import { translatableTexts } from '../../static/translatableTexts';
+import { ChipSmall } from '../administration/courses/ChipSmall';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { EpistoFont } from '../controls/EpistoFont';
+import { useVideoPlayerFullscreenContext } from '../player/watch/videoPlayer/VideoPlayerFullscreenFrame';
+import { WatchSubpageState } from '../player/watch/WatchSubpage';
 import { ExamLayout } from './ExamLayout';
-import { ExamResultStats } from "./ExamResultStats";
-import { QuestionAnswer } from "./QuestionAnswer";
+import { ExamResultStats } from './ExamResultStats';
+import { QuestionAnswer } from './QuestionAnswer';
 
 export const ExamResultsSlide = (props: {
     exam: ExamPlayerDataDTO,
-    setIsExamInProgress: (isExamInProgress: boolean) => void,
+    setWatchSubpageState: React.Dispatch<React.SetStateAction<WatchSubpageState>>
     continueCourse: () => void,
-    answerSessionId: number,
-    goToCourseOverview: () => void
+    answerSessionId: Id<'AnswerSession'>,
+    goToCourseRating: () => void
 }) => {
 
-    const { answerSessionId, goToCourseOverview, continueCourse, setIsExamInProgress, exam } = props;
+    const { answerSessionId, goToCourseRating, continueCourse, setWatchSubpageState, exam } = props;
     const { examResults } = useExamResults(answerSessionId);
     const questionsAnswers = examResults?.questions ?? [];
-    const { navigate } = useNavigation();
+    const { navigate2 } = useNavigation();
+    const isMobile = useIsMobileView();
 
-    const correctPercentage = examResults && examResults
-        ? Math.round((examResults.correctAnswerCount / examResults.questionCount) * 100)
-        : 0;
+    const [isFullscreen, setIsFullscreen] = useVideoPlayerFullscreenContext();
+
+    const courseId = Id.create<'Course'>(1);
 
     // effects
     useEffect(() => {
 
         if (exam.isFinalExam)
-            setIsExamInProgress(false);
-    }, [exam])
+            setWatchSubpageState('watch');
+    }, [exam]);
 
     return <ExamLayout
+        justify='flex-start'
         headerCenterText={exam.title}
-        handleNext={continueCourse}
-        nextButtonTitle={translatableTexts.exam.continueCourse}
-        footerButtons={new ArrayBuilder<any>()
-            .addIf(exam.isFinalExam, {
-                text: "Kurzus osszegzo",
-                action: goToCourseOverview
+        showFooterButtonsOnTop
+        footerButtons={new ArrayBuilder()
+            .addIf(!exam.isFinalExam, {
+                title: translatableTexts.exam.continueCourse,
+                action: continueCourse
             })
-            .addIf(exam.isFinalExam, {
-                text: "Vissza a tanfolyamkeresobe",
+            .addIf(!!exam.isFinalExam, {
+                title: 'Kurzus értékelése',
+                action: goToCourseRating
+            })
+            .addIf(!!exam.isFinalExam, {
+                title: 'Kurzus összegzése',
                 action: () => {
 
-                    navigate(applicationRoutes.availableCoursesRoute);
+                    navigate2(applicationRoutes.playerRoute.courseOverviewRoute, { courseId });
                 }
             })
-            .getArray()}
-        showNextButton={!exam.isFinalExam}>
+            .addIf(!!exam.isFinalExam, {
+                title: 'Vissza a tanfolyamkeresőbe',
+                action: () => {
 
-        <Flex direction="column" className="whall" p="20px">
+                    if (isMobile) {
+                        setIsFullscreen(false);
+                    }
+
+                    navigate2(applicationRoutes.availableCoursesRoute);
+                }
+            })
+            .getArray()}>
+
+        <EpistoFlex2
+            direction="column"
+            className='roundBorders mildShadow'
+            width='100%'
+            height={isMobile ? undefined : '100%'}
+            flex='1'
+            background='var(--transparentWhite70)'
+            px={isMobile ? '10px' : '20px'}
+            justify='flex-start'>
 
             {/* title */}
-            <Text
-                as="text"
+            <EpistoFont
                 className="fontHuge"
                 style={{
-                    padding: "20px 0 20px 0"
+                    padding: '20px 0 20px 0'
                 }}>
                 {translatableTexts.exam.resultsTitle}
-            </Text>
+            </EpistoFont>
 
             {/* stats */}
             <ExamResultStats
-                correctAnswerCount={examResults?.correctAnswerCount ?? 0}
-                totalQuestionCount={examResults?.questionCount ?? 0}
-                correctAnswerRate={correctPercentage} />
+                stats={examResults?.examStats ?? null} />
 
             {/* results */}
-            <Flex id="resultsRoot" flex="1" overflow="hidden" direction="column">
+            <EpistoFlex2
+                id="resultsRoot"
+                flex="1"
+                direction="column">
 
                 {/* list header */}
-                <Flex
-                    alignItems={"center"}
+                <EpistoFlex2
+                    alignItems={'center'}
                     mt="20px"
-                    justifyContent={"space-between"}>
+                    justifyContent={'space-between'}>
 
-                    <Text
-                        as="text"
-                        className="fontHuge">
-                        {translatableTexts.exam.questionsLabel}
-                    </Text>
-
-                    <Flex width={"25%"}>
-                        <Text
-                            as="text"
+                    <EpistoFlex2 flex='1'>
+                        <EpistoFont
                             className="fontHuge">
-                            {translatableTexts.exam.answerLabel}
-                        </Text>
-                    </Flex>
-                </Flex>
+                            {translatableTexts.exam.questionsLabel}
+                        </EpistoFont>
+                    </EpistoFlex2>
+
+                </EpistoFlex2>
 
                 {/* answers */}
-                <Flex
+                <EpistoFlex2
                     id="answersRoot"
-                    direction={"column"}
+                    direction={'column'}
                     flex={1}
-                    mt={10}
-                    overflowY="scroll">
+                    m={isMobile ? '10px 0 5px 0' : '10px 5px 5px 5px'}
+                    pb='20px'
+                    h='100%'
+                    boxSizing='border-box'
+                    height='fit-content'>
 
                     {questionsAnswers
                         .map((question, index) => {
 
-                            const bgColor = (() => {
+                            const displayState = (() => {
 
-                                if (question.isCorrect)
-                                    return "var(--mildGreen)";
+                                if (question.state === 'CORRECT')
+                                    return { color: 'var(--mildGreen)', text: translatableTexts.exam.correctAnswer };
 
-                                return "var(--mildRed)";
+                                if (question.state === 'MIXED')
+                                    return { color: 'var(--deepOrange)', text: 'Részben helyes' };
+
+                                if (question.state === 'INCORRECT')
+                                    return { color: 'var(--mildRed)', text: translatableTexts.exam.incorrectAnswer };
+
+                                throw new Error('Incorrect state!');
                             })();
 
-                            return <Accordion>
+                            return <Accordion
+                                key={index}>
 
                                 {/* question */}
                                 <AccordionSummary
@@ -125,29 +156,36 @@ export const ExamResultsSlide = (props: {
                                     aria-controls="panel1a-content"
                                     id="panel1a-header">
 
-                                    <Flex width={"77%"}>
-                                        <EpistoFont>
+                                    <EpistoFlex2 flex={isMobile ? '2' : '1'}>
+                                        <EpistoFont margin={{ right: 'px5' }}>
                                             {question.text}
                                         </EpistoFont>
-                                    </Flex>
+                                    </EpistoFlex2>
 
-                                    <Flex width={"23%"}>
-                                        <EpistoFont
-                                            classes={["roundBorders"]}
-                                            style={{
-                                                padding: "2px 15px",
-                                                backgroundColor: bgColor
-                                            }}>
-                                            {question.isCorrect
-                                                ? translatableTexts.exam.correctAnswer
-                                                : translatableTexts.exam.incorrectAnswer}
+                                    <EpistoFlex2
+                                        align={isMobile ? 'center' : undefined}
+                                        justify={isMobile ? 'center' : undefined}
+                                        direction={isMobile ? 'column' : 'row'}
+                                        flexBasis={!isMobile ? '220px' : undefined}>
+
+                                        <EpistoFont>
+
+                                            ({question.score}/{question.maxScore} pont)
                                         </EpistoFont>
-                                    </Flex>
+
+                                        <ChipSmall
+                                            style={{
+                                                margin: isMobile ? '10px 10px 0 30px' : '0 10px 0 30px'
+                                            }}
+                                            text={displayState.text}
+                                            color={displayState.color} />
+
+                                    </EpistoFlex2>
                                 </AccordionSummary>
 
                                 {/* answers */}
                                 <AccordionDetails>
-                                    <Flex
+                                    <EpistoFlex2
                                         direction="column"
                                         flex={1}>
                                         {question
@@ -155,17 +193,18 @@ export const ExamResultsSlide = (props: {
                                             .map((answer, index) => {
 
                                                 return <QuestionAnswer
+                                                    key={index}
                                                     margin="5px"
                                                     answerText={answer.answerText}
                                                     isSelected={answer.isGiven}
-                                                    isCorrect={answer.isCorrect} />
+                                                    isCorrect={answer.isCorrect} />;
                                             })}
-                                    </Flex>
+                                    </EpistoFlex2>
                                 </AccordionDetails>
-                            </Accordion>
+                            </Accordion>;
                         })}
-                </Flex>
-            </Flex>
-        </Flex>
-    </ExamLayout>
+                </EpistoFlex2>
+            </EpistoFlex2>
+        </EpistoFlex2>
+    </ExamLayout>;
 };

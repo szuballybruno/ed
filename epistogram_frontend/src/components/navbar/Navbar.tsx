@@ -1,60 +1,52 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
-import { applicationRoutes } from "../../configuration/applicationRoutes";
-import { useCurrentCourseItemCode } from "../../services/api/miscApiService";
-import { getAssetUrl, useIsDesktopView } from "../../static/frontendHelpers";
-import { FlexFloat } from "../controls/FlexFloat";
-import DesktopNavbar from "./DesktopNavbar";
-import classes from "./navbar.module.scss";
+import { memo } from 'react';
+import { useIsMobileView } from '../../static/frontendHelpers';
+import { FlexFloat } from '../controls/FlexFloat';
+import { useCurrentCourseItemCodeContext } from '../system/CurrentCourseItemFrame';
+import { DesktopNavbar } from './DesktopNavbar';
+import { MobileNavigation } from './MobileNavigation';
 
-const Navbar = (props: {
+const Navbar = memo((props: {
     hideLinks?: boolean,
     showLogo?: boolean,
+    isLowHeight?: boolean,
+    isMinimalMode?: boolean,
     backgroundContent?: any
 }) => {
 
-    const { backgroundContent, hideLinks, showLogo } = props;
-    const isDesktop = useIsDesktopView();
-    const currentCourseItemCode = useCurrentCourseItemCode();
+    const { backgroundContent, hideLinks, isLowHeight, isMinimalMode, showLogo } = props;
+    const isMobile = useIsMobileView();
+
+    const { currentCourseItemCode } = useCurrentCourseItemCodeContext();
 
     // render desktop
     const renderDesktopNavbar = () => <DesktopNavbar
         backgroundContent={backgroundContent}
-        currentCourseItemCode={currentCourseItemCode?.currentCourseItemCode}
-        hideLinks={!!hideLinks}
+        currentCourseItemCode={currentCourseItemCode}
+        hideLinks1={!!hideLinks}
+        isLowHeight={isLowHeight}
+        isMinimalMode={isMinimalMode}
         showLogo={showLogo} />;
 
     // render mobile
-    const renderMobileNavbar = () => {
-        return <div className={classes.mobileNavbarOuterWrapperOut}>
+    const renderMobileNavbar = () => <MobileNavigation />;
 
-            {/* navbar */}
-            <div className={classes.mobileNavbarOuterWrapperIn}>
-                <NavLink to={applicationRoutes.homeRoute.route}>
-                    <div className={classes.mobileNavbarLogoWrapper}>
-                        <img
-                            alt="EpistoGram Logo"
-                            src={getAssetUrl("/images/logo.svg")} />
-                    </div>
-                </NavLink>
-            </div>
-        </div>
-    }
+    return isMobile
+        ? renderMobileNavbar()
+        : <FlexFloat
+            id="flexFloat-navbarRoot"
+            zIndex={3}
+            justify="center"
+            width="100%"
+            boxShadow="none"
+            borderRadius={0}
+            bgColor="unset"
+            padding={isLowHeight ? '20px 0' : '20px'}>
 
-    return <FlexFloat
-        id="flexFloat-navbarRoot"
-        zIndex={3}
-        justify="center"
-        width="100%"
-        boxShadow="none"
-        borderRadius={0}
-        bgColor="unset"
-        padding="20px 20px 20px 20px">
+            {renderDesktopNavbar()}
+        </FlexFloat>;
+}, (p, n) => {
 
-        {isDesktop
-            ? renderDesktopNavbar()
-            : renderMobileNavbar()}
-    </FlexFloat>
-}
+    return JSON.stringify(p) === JSON.stringify(n);
+});
 
 export default Navbar;

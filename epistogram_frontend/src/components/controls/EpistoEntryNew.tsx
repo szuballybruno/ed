@@ -1,9 +1,7 @@
-import { Flex } from "@chakra-ui/layout";
-import { InputAdornment, TextField, Typography } from "@mui/material";
-import { forwardRef, useEffect, useState } from "react";
-import { EpistoFont } from "./EpistoFont";
-
-// state
+import { InputAdornment, TextField } from '@mui/material';
+import { forwardRef, useCallback, useEffect, useMemo, useState } from 'react';
+import { EpistoFlex2 } from './EpistoFlex';
+import { EpistoFont } from './EpistoFont';
 
 export const useEpistoEntryState = (options?: {
     isMandatory?: boolean,
@@ -11,68 +9,55 @@ export const useEpistoEntryState = (options?: {
 }) => {
 
     // state 
+    const [value, setValue] = useState('');
+    const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-    const [value, setValue] = useState("");
-    const [error, setError] = useState<string | null>(null);
-    const [initialState, setInitialState] = useState(true);
+    const { isMandatory, validateFunction } = options ?? {};
 
     // funcs 
-
-    const validate = () => {
+    const validate = useCallback(() => {
 
         const error = ((): string | null => {
 
             // is mandatory validation 
-            if (options?.isMandatory && !value)
-                return "Ez a mező nem lehet üres!";
+            if (isMandatory && !value)
+                return 'Ez a mező nem lehet üres!';
 
             // external validation
-            if (options?.validateFunction) {
-
-                const extError = options?.validateFunction(value);
-                if (extError)
-                    return extError;
-            }
+            if (validateFunction)
+                return validateFunction(value);
 
             // no error 
             return null;
         })();
 
-        setError(error);
+        setErrorMsg(error);
 
         return !error;
-    };
-
-    const setValue2 = (value: string) => {
-
-        setValue(value);
-
-        if (initialState)
-            setInitialState(false);
-    }
+    }, [isMandatory, validateFunction, value]);
 
     // effects 
-
     useEffect(() => {
 
-        if (initialState)
-            return;
-
         validate();
-    }, [value]);
+    }, [value, validate]);
 
-    return {
+    return useMemo(() => ({
         value,
-        error,
+        errorMsg,
         validate,
-        setValue: setValue2,
-        setError
-    }
-}
+        setValue,
+        setErrorMsg
+    }), [
+        value,
+        errorMsg,
+        validate,
+        setValue,
+        setErrorMsg
+    ]);
+};
 
 export type EpistoEntryStateType = ReturnType<typeof useEpistoEntryState>;
-
-// component 
 
 export type EpistoEntryNewPropsType = {
     state: EpistoEntryStateType,
@@ -82,12 +67,12 @@ export type EpistoEntryNewPropsType = {
     isMultiline?: boolean,
     postfix?: string,
     placeholder?: string,
-    labelVariant?: "top" | "normal",
+    labelVariant?: 'top' | 'normal',
     height?: string,
     name?: string,
     marginTop?: string,
     flex?: string,
-    type?: "password" | "number" | "text",
+    type?: 'password' | 'number' | 'text',
     style?: React.CSSProperties
 }
 
@@ -111,18 +96,22 @@ export const EpistoEntryNew = forwardRef<HTMLInputElement, EpistoEntryNewPropsTy
     } = props;
 
     const {
-        error,
+        errorMsg: error,
         setValue,
         value
     } = state;
 
-    return <Flex direction="column" mt={marginTop ?? "10px"} flex={flex} style={style}>
+    return <EpistoFlex2
+        direction="column"
+        mt={marginTop ?? '10px'}
+        flex={flex}
+        style={style}>
 
-        {labelVariant === "top" && <EpistoFont
+        {labelVariant === 'top' && <EpistoFont
             isUppercase
             fontSize="fontExtraSmall"
             style={{
-                margin: "5px 0"
+                margin: '5px 0'
             }}>
 
             {label}
@@ -132,7 +121,7 @@ export const EpistoEntryNew = forwardRef<HTMLInputElement, EpistoEntryNewPropsTy
             inputRef={ref}
             disabled={disabled}
             size="small"
-            label={labelVariant !== "top" ? label : undefined}
+            label={labelVariant !== 'top' ? label : undefined}
             placeholder={placeholder}
             name={name}
             value={value}
@@ -143,10 +132,11 @@ export const EpistoEntryNew = forwardRef<HTMLInputElement, EpistoEntryNewPropsTy
             sx={{
                 '& .MuiOutlinedInput-root': {
                     height: height,
-                    background: "var(--transparentWhite90)"
+                    background: 'var(--transparentWhite90)',
+                    boxShadow: '0 0 4px #0000001f'
                 },
                 '& .MuiOutlinedInput-notchedOutline': {
-                    border: "none"
+                    border: 'none'
                 }
             }}
             InputProps={postfix
@@ -164,9 +154,9 @@ export const EpistoEntryNew = forwardRef<HTMLInputElement, EpistoEntryNewPropsTy
                 setValue(x.currentTarget.value);
             }}
             style={{
-                border: "none"
+                border: 'none'
                 // margin: "10px 0px 10px 0px",
                 // padding: "2px"
             }} />
-    </Flex>
+    </EpistoFlex2>;
 });

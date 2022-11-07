@@ -1,86 +1,87 @@
-import { Box, css, Flex, FlexProps, Text } from "@chakra-ui/react";
-import { LinearProgress } from "@mui/material";
-import React from "react";
-import { getAssetUrl } from "../../static/frontendHelpers";
-import { EpistoButton } from "../controls/EpistoButton";
+import {css, Text} from '@chakra-ui/react';
+import {Environment} from '../../static/Environemnt';
+import {EpistoButton} from '../controls/EpistoButton';
+import {EpistoDiv} from '../controls/EpistoDiv';
+import {EpistoFlex2, EpistoFlex2Props} from '../controls/EpistoFlex';
+import {EpistoFont} from '../controls/EpistoFont';
 
 export const ExamTile = (props: {
     className?: string,
-} & FlexProps) => {
+} & EpistoFlex2Props) => {
 
-    const ExamTileResultLabel = () => <Flex
+    const ExamTileResultLabel = () => <EpistoFlex2
         position="absolute"
         bottom={10}
         left={1}
         justify="flex-end">
 
-        <Flex
+        <EpistoFlex2
             direction="row"
             justifyContent="space-around"
             alignItems="center"
             padding="4px"
-            width={140}
+            width='140px'
             bg="white"
             borderRadius="0 7px 7px 0">
             <Text
                 fontSize="0.85em"
-                textTransform={"uppercase"}
+                textTransform={'uppercase'}
                 color="var(--epistoTeal)">
                 65%-os eredmény
             </Text>
-        </Flex>
-    </Flex>
+        </EpistoFlex2>
+    </EpistoFlex2>;
 
-    const ExamTileTopPercentLabel = () => <Flex
+    const ExamTileTopPercentLabel = () => <EpistoFlex2
         position="absolute"
         bottom={10}
         right={1}
         justify="flex-end">
 
-        <Flex
+        <EpistoFlex2
             direction="row"
             justifyContent="space-around"
             alignItems="center"
             padding="4px"
-            width={160}
+            width='160px'
             bg="var(--epistoTeal)"
             borderRadius="7px 0 0 7px">
             <Text
                 fontSize="0.85em"
-                textTransform={"uppercase"}
+                textTransform={'uppercase'}
                 color="white">
                 top 30% cégen belül
             </Text>
-        </Flex>
-    </Flex>
+        </EpistoFlex2>
+    </EpistoFlex2>;
 
-    return <Flex
+    return <EpistoFlex2
         className="whall"
         direction="column"
         borderRadius="10px"
         position="relative"
         overflow="hidden"
         background="var(--transparentWhite70)"
-        boxShadow={"1px 1px 5px 2px rgba(255,100,30,0.1)"}
+        boxShadow={'1px 1px 5px 2px rgba(255,100,30,0.1)'}
         p="5px"
         justifyContent="space-between"
         {...css}>
 
         {/* image  */}
-        <Flex direction={"column"}>
+        <EpistoFlex2 direction={'column'}>
 
-            <Box
+            <EpistoDiv
                 flex="1"
                 position="relative"
-                minH={200}
-                maxH={200}>
+                minH='250px'
+                maxH='250px'>
 
-                <Box
+                <EpistoDiv
                     position="relative"
                     className="whall"
                     minHeight="150px">
 
-                    <Box
+                    <EpistoDiv
                         position="absolute"
                         top="0"
                         height="100%"
@@ -89,149 +90,152 @@ export const ExamTile = (props: {
 
                         <img
                             style={{
-                                width: "100%",
-                                height: "100%",
-                                objectFit: "cover",
-                                backgroundColor: "white",
+                                width: '100%',
+                                height: '100%',
+                                objectFit: 'cover',
+                                backgroundColor: 'white',
                                 borderRadius: 10
                             }}
-                            src={getAssetUrl("/courseCoverImages/1.png")}
+                            src={Environment.getAssetUrl('/courseCoverImages/1.png')}
                             alt="" />
 
-                        <Flex position="relative">
+                        <EpistoFlex2 position="relative">
 
                             <ExamTileResultLabel />
                             <ExamTileTopPercentLabel />
-                        </Flex>
-                    </Box>
-                </Box>
-            </Box>
+                        </EpistoFlex2>
+                    </EpistoDiv>
+                </EpistoDiv>
+            </EpistoDiv>
 
             {/* title */}
-            <Box
+            <EpistoDiv
                 flexBasis="80px"
                 zIndex={1}>
 
-                <Flex
+                <EpistoFlex2
                     direction="column"
                     p="10px">
 
-                    <Text
-                        as="text"
-                        color="black">
+                    <EpistoFont>
 
-                        {"Irodai alkalmazások"}
-                    </Text>
+                        {'Irodai alkalmazások'}
+                    </EpistoFont>
 
-                    <Flex direction="column">
+                    <EpistoFlex2 direction="column">
 
-                        <Text
-                            as="h6"
-                            fontWeight={"bold"}
-                            fontSize="large">
+                        <EpistoFont
+                            style={{
+                                fontWeight: 'bold',
+                                fontSize: 'large'
+                            }}>
 
-                            {"Menüszalagok használata az Excelben"}
-                        </Text>
-                    </Flex>
+                            {'Menüszalagok használata az Excelben'}
+                        </EpistoFont>
+                    </EpistoFlex2>
 
-                    <Flex mt={7}>
+                    <EpistoFlex2 mt={7}>
 
-                        <Flex
-                            direction={"row"}
-                            alignItems={"center"}
-                            mr={5}
+                        <EpistoFlex2
+                            direction={'row'}
+                            alignItems={'center'}
+                            mr='5px'
                             flex="1">
 
                             <img
-                                src={getAssetUrl("course_exam_tile_icons/tile_lenght_left.svg")}
-                                alt={""}
+                                src={Environment.getAssetUrl('course_exam_tile_icons/tile_lenght_left.svg')}
+                                alt={''}
                                 style={{
                                     width: 15,
                                     height: 15,
-                                    margin: "0 2px 0 2px"
+                                    margin: '0 2px 0 2px'
                                 }}
                             />
 
-                            <Text as={"text"} color={"grey"}>{"52 perc"}</Text>
-                        </Flex>
+                            <EpistoFont
+                                style={{
+                                    color: 'gray'
+                                }}>
+                                {'52 perc'}
+                            </EpistoFont>
+                        </EpistoFlex2>
 
-                        <Flex
-                            direction={"row"}
-                            alignItems={"center"}
-                            mr={5}
+                        <EpistoFlex2
+                            direction={'row'}
+                            alignItems={'center'}
+                            mr='5px'
                             flex="1">
 
                             <img
-                                src={getAssetUrl("course_exam_tile_icons/tile_videos.svg")}
-                                alt={""}
+                                src={Environment.getAssetUrl('course_exam_tile_icons/tile_videos.svg')}
+                                alt={''}
                                 style={{
                                     width: 15,
                                     height: 15,
-                                    margin: "0 2px 0 4px"
+                                    margin: '0 2px 0 4px'
                                 }}
                             />
-                            <Text as={"text"} color={"grey"}>{"65%-os eredmény"}</Text>
-                        </Flex>
-                    </Flex>
+                            <EpistoFont
+                                style={{ color: 'grey' }}>
+                                {'65%-os eredmény'}
+                            </EpistoFont>
+                        </EpistoFlex2>
+                    </EpistoFlex2>
 
-                    <Flex
-                        direction={"row"}
-                        alignItems={"center"}
-                        mt={7}>
+                    <EpistoFlex2
+                        direction={'row'}
+                        alignItems={'center'}
+                        mt='7px'>
 
-                        <Flex
-                            direction={"row"}
-                            alignItems={"center"}
-                            mr={5}
+                        <EpistoFlex2
+                            direction={'row'}
+                            alignItems={'center'}
+                            mr='5px'
                             flex="1">
 
                             <img
-                                src={getAssetUrl("course_exam_tile_icons/tile_difficulty.svg")}
-                                alt={""}
+                                src={Environment.getAssetUrl('course_exam_tile_icons/tile_difficulty.svg')}
+                                alt={''}
                                 style={{
                                     width: 20,
                                     height: 20,
-                                    margin: "0 2px"
+                                    margin: '0 2px'
                                 }} />
 
-                            <Text
-                                as="text">
+                            <EpistoFont>
+                                {'8.9/10 nehézség'}
+                            </EpistoFont>
+                        </EpistoFlex2>
 
-                                {"8.9/10 nehézség"}
-                            </Text>
-                        </Flex>
-
-                        <Flex
-                            direction={"row"}
-                            alignItems={"center"}
-                            mr={5}
+                        <EpistoFlex2
+                            direction={'row'}
+                            alignItems={'center'}
+                            mr='5px'
                             flex="1">
 
                             <img
-                                src={getAssetUrl("course_exam_tile_icons/tile_questions.svg")}
-                                alt={""}
+                                src={Environment.getAssetUrl('course_exam_tile_icons/tile_questions.svg')}
+                                alt={''}
                                 style={{
                                     width: 20,
                                     height: 20,
-                                    margin: "0 2px"
+                                    margin: '0 2px'
                                 }} />
 
-                            <Text
-                                as="text">
+                            <EpistoFont>
+                                {'16/23 helyes válasz'}
+                            </EpistoFont>
+                        </EpistoFlex2>
+                    </EpistoFlex2>
+                </EpistoFlex2>
+            </EpistoDiv>
+        </EpistoFlex2>
 
-                                {"16/23 helyes válasz"}
-                            </Text>
-                        </Flex>
-                    </Flex>
-                </Flex>
-            </Box>
-        </Flex>
-
-        <Flex
+        <EpistoFlex2
             direction="column"
             minH="50px">
 
-            <Flex
+            <EpistoFlex2
                 width="100%"
                 justifyContent="space-between"
                 p="5">
@@ -243,13 +247,13 @@ export const ExamTile = (props: {
                 <EpistoButton
                     variant="colored"
                     style={{
-                        backgroundColor: "white",
-                        width: "100%",
-                        color: "#98A4CC"
+                        backgroundColor: 'white',
+                        width: '100%',
+                        color: '#98A4CC'
                     }}>
                     Újrapróbálom
                 </EpistoButton>
-            </Flex>
-        </Flex>
-    </Flex>
-}
+            </EpistoFlex2>
+        </EpistoFlex2>
+    </EpistoFlex2>;
+};

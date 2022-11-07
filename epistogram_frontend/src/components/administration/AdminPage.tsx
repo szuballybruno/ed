@@ -1,130 +1,106 @@
-import React, { useContext } from 'react';
-import { Route, Switch, withRouter } from "react-router-dom";
 import { applicationRoutes } from '../../configuration/applicationRoutes';
-import { getRoute } from "../../MainRouting";
-import { ApplicationRoute } from "../../models/types";
 import { ArrayBuilder } from '../../static/frontendHelpers';
 import { ContentPane } from '../ContentPane';
-import { LeftPane } from '../LeftPane';
-import { NavigationLinkList } from '../NavigationLinkList';
-import { PageRootContainer } from "../PageRootContainer";
-import { CurrentUserContext } from "../system/AuthenticationFrame";
-import { ProtectedRoute } from '../universal/ProtectedRoute';
-import { AdminCourseContentSubpage } from './courses/AdminCourseContentSubpage';
-import { AdminCourseListSubpage } from "./courses/AdminCourseListSubpage";
-import CourseStatisticsSubpage from "./courses/CourseStatisticsSubpage";
-import { AdminCourseDetailsSubpage } from "./courses/EditCourseDetailsSubpage";
-import { EditExamSubpage } from './courses/EditExamSubpage';
-import { EditModuleSubpage } from './courses/EditModuleSubpage';
-import { EditQuestionSubpage } from './courses/EditQuesttionSubpage';
-import { EditVideoSubpage } from './courses/EditVideoSubpage';
-import { PersonalityTraitCategoriesSubpage } from './personalityAssessment/PersonalityTraitCategoriesSubpage';
+import { PageRootContainer } from '../PageRootContainer';
+import { useAuthorizationContext } from '../system/AuthorizationContext';
+import { EpistoRoutes } from '../universal/EpistoRoutes';
+import { ActivationCodesAdminPage } from './activationCodes/ActivationCodesAdminPage';
+import { AdminLeftPane } from './AdminLeftPane';
+import { CompanyAdminPage } from './companies/CompanyAdminPage';
+import { CourseAdministartionSubpage } from './courses/CourseAdministartionSubpage';
+import { DebugPage } from './debug/DebugPage';
 import { EditDailyTipSubpage } from './personalityAssessment/EditDailyTipSubpage';
 import { EditPersonalityTraitCategorySubpage } from './personalityAssessment/EditPersonalityTraitCategorySubpage';
-import { ShopAdminEditSubpage } from './shop/ShopAdminEditSubpage';
+import { PersonalityTraitCategoriesSubpage } from './personalityAssessment/PersonalityTraitCategoriesSubpage';
+import { RoleAdminPage } from './roles/RoleAdminPage';
 import { ShopAdminSubpage } from './shop/ShopAdminSubpage';
-import AdminAddUserSubpage from "./users/AdminAddUserSubpage";
-import AdminEditUserSubpage from './users/AdminEditUserSubpage';
-import AdminStatistics from "./users/AdminStatisticsSubpage";
-import { AdminUserListSubpage } from "./users/AdminUserListSubpage";
-import { AdminUserStatisticsSubpage } from "./users/AdminUserStatisticsSubpage";
-import { AdminUserTeacherInfoSubpage } from "./users/AdminUserTeacherInfoSubpage";
+import { AdminStatsSubpage } from './stats/AdminStatsSubpage';
+import { UserAdminSubpage } from './users/UserAdminSubpage';
 
-const AdminPage = () => {
+export const AdminPage = () => {
 
-    // const user = useState(userDetailsState)
-
-    const user = useContext(CurrentUserContext)!;
-    const administrationRoutes = applicationRoutes.administrationRoute;
-
-    const menuItems = new ArrayBuilder<ApplicationRoute>()
-        .add(administrationRoutes.usersRoute)
-        .addIf(user.userActivity.canAccessCourseAdministration, administrationRoutes.coursesRoute)
-        .addIf(user.userActivity.canAccessShopAdministration, administrationRoutes.shopRoute)
-        .addIf(user.userActivity.canAccessShopAdministration, administrationRoutes.personalityAssessmentRoute)
-        .add(administrationRoutes.myCompanyRoute)
-        .getArray();
+    const adminRoute = applicationRoutes.administrationRoute;
+    const { hasPermission } = useAuthorizationContext();
 
     return <PageRootContainer>
 
-        <LeftPane>
-            <NavigationLinkList
-                items={menuItems} />
-        </LeftPane>
+        {/* admin left pane */}
+        <AdminLeftPane />
 
-        <ContentPane>
+        {/* admin content pane */}
+        <ContentPane
+            isNavbarLowHeight
+            noMaxWidth
+            padding="0 10px 10px 10px">
 
-            {/* admin subpages */}
-            <Switch>
+            <EpistoRoutes
+                renderRoutes={new ArrayBuilder()
 
-                {/* user administration */}
-                <Route path={administrationRoutes.usersRoute.route}>
+                    // administration home
+                    .add({
+                        route: adminRoute.statsRoute,
+                        element: <AdminStatsSubpage />
+                    })
 
-                    <Switch>
-                        <Route exact path={administrationRoutes.usersRoute.route}>
-                            <AdminUserListSubpage />
-                        </Route>
+                    // user administration
+                    .add({
+                        route: adminRoute.usersRoute,
+                        element: <UserAdminSubpage />
+                    })
 
-                        <Route path={administrationRoutes.usersRoute.addRoute.route}>
-                            <AdminAddUserSubpage />
-                        </Route>
+                    // course administartion
+                    .add({
+                        route: adminRoute.coursesRoute,
+                        element: <CourseAdministartionSubpage />
+                    })
 
-                        <Route exact path={administrationRoutes.usersRoute.editRoute.route}>
-                            <AdminEditUserSubpage />
-                        </Route>
+                    // shop administartion
+                    .addIf(hasPermission('CAN_VIEW_HIDDEN_MENUS'), {
+                        route: adminRoute.shopRoute,
+                        element: <ShopAdminSubpage />
+                    })
 
-                        <Route exact path={administrationRoutes.usersRoute.statsRoute.route}>
-                            <AdminUserStatisticsSubpage />
-                        </Route>
+                    // personality assessment administartion
+                    .addIf(hasPermission('CAN_VIEW_HIDDEN_MENUS'), {
+                        route: adminRoute.personalityAssessmentRoute,
+                        element: <EpistoRoutes
+                            renderRoutes={[
+                                {
+                                    route: adminRoute.personalityAssessmentRoute.indexRoute,
+                                    element: <PersonalityTraitCategoriesSubpage />
+                                },
+                                {
+                                    route: adminRoute.personalityAssessmentRoute.editTipsRoute,
+                                    element: <EditPersonalityTraitCategorySubpage />
+                                },
+                                {
+                                    route: adminRoute.personalityAssessmentRoute.editTipsRoute.editTipRoute,
+                                    element: <EditDailyTipSubpage />
+                                }
+                            ]} />,
+                    })
 
-                        <Route exact path={applicationRoutes.administrationRoute.usersRoute.teacherInfoRoute.route}>
-                            <AdminUserTeacherInfoSubpage />
-                        </Route>
-                    </Switch>
-                </Route>
+                    .addIf(hasPermission('CAN_VIEW_HIDDEN_MENUS'), {
+                        route: adminRoute.companiesRoute,
+                        element: <CompanyAdminPage />
+                    })
 
-                {/* course administartion */}
-                <ProtectedRoute
-                    path={administrationRoutes.coursesRoute.route}
-                    isAuthorizedToView={x => x.canAccessCourseAdministration}
-                    render={() => <Switch>
-                        {getRoute(administrationRoutes.coursesRoute, <AdminCourseListSubpage />)}
-                        {getRoute(administrationRoutes.coursesRoute.courseDetailsRoute, <AdminCourseDetailsSubpage />)}
-                        {getRoute(administrationRoutes.coursesRoute.courseContentRoute, <AdminCourseContentSubpage />)}
-                        {getRoute(administrationRoutes.coursesRoute.statisticsCourseRoute, <CourseStatisticsSubpage />)}
-                        {getRoute(administrationRoutes.coursesRoute.editVideoRoute, <EditVideoSubpage />)}
-                        {getRoute(administrationRoutes.coursesRoute.editVideoQuestionRoute, <EditQuestionSubpage />)}
-                        {getRoute(administrationRoutes.coursesRoute.editExamRoute, <EditExamSubpage />)}
-                        {getRoute(administrationRoutes.coursesRoute.editExamQuestionRoute, <EditQuestionSubpage />)}
-                        {getRoute(administrationRoutes.coursesRoute.editModuleRoute, <EditModuleSubpage />)}
-                    </Switch>} />
+                    .addIf(hasPermission('CAN_VIEW_HIDDEN_MENUS'), {
+                        route: adminRoute.rolesRoute,
+                        element: <RoleAdminPage />
+                    })
 
-                {/* shop administartion */}
-                <ProtectedRoute
-                    path={administrationRoutes.shopRoute.route}
-                    isAuthorizedToView={x => x.canAccessShopAdministration}
-                    render={() => <Switch>
-                        {getRoute(administrationRoutes.shopRoute, <ShopAdminSubpage />)}
-                        {getRoute(administrationRoutes.shopRoute.editRoute, <ShopAdminEditSubpage />)}
-                    </Switch>} />
+                    .addIf(hasPermission('CAN_VIEW_HIDDEN_MENUS'), {
+                        route: adminRoute.activationCodesRoute,
+                        element: <ActivationCodesAdminPage />
+                    })
 
-                {/* personality assessment administartion */}
-                <ProtectedRoute
-                    path={administrationRoutes.personalityAssessmentRoute.route}
-                    isAuthorizedToView={x => x.canAccessShopAdministration}
-                    render={() => <Switch>
-                        {getRoute(administrationRoutes.personalityAssessmentRoute, <PersonalityTraitCategoriesSubpage />)}
-                        {getRoute(administrationRoutes.personalityAssessmentRoute.editTips, <EditPersonalityTraitCategorySubpage />)}
-                        {getRoute(administrationRoutes.personalityAssessmentRoute.editTips.editTip, <EditDailyTipSubpage />)}
-                    </Switch>} />
+                    .addIf(hasPermission('CAN_VIEW_HIDDEN_MENUS'), {
+                        route: adminRoute.debugRoute,
+                        element: <DebugPage />
+                    })
 
-                {/* statistics */}
-                <Route exact path={administrationRoutes.myCompanyRoute.route}>
-                    <AdminStatistics />
-                </Route>
-            </Switch>
+                    .getArray()} />
         </ContentPane>
-    </PageRootContainer>
+    </PageRootContainer>;
 };
-
-export default withRouter(AdminPage);

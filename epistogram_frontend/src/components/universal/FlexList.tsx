@@ -1,11 +1,11 @@
-import { Flex, FlexProps } from "@chakra-ui/react";
+import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 
-export const FlexList = (props: FlexProps) => {
+export const FlexList = (props: EpistoFlex2Props) => {
 
-    return <Flex
+    return <EpistoFlex2
         id="courseItemListContainer"
         direction="column"
         {...props}>
         {props.children}
-    </Flex>;
-}
+    </EpistoFlex2>;
+};

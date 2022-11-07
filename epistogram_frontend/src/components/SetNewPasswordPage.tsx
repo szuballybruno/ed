@@ -1,109 +1,117 @@
-import { Image } from "@chakra-ui/react";
-import { TextField } from "@mui/material";
-import { applicationRoutes } from "../configuration/applicationRoutes";
-import { useSetNewPassword } from "../services/api/passwordChangeApiService";
-import { useNavigation } from "../services/core/navigatior";
-import { showNotification, useShowErrorDialog } from "../services/core/notifications";
-import { getAssetUrl, getQueryParam, usePasswordEntryState } from "../static/frontendHelpers";
-import { EpistoHeader } from "./EpistoHeader";
-import { LoadingFrame } from "./system/LoadingFrame";
-import { PageRootContainer } from "./PageRootContainer";
-import { EpistoButton } from "./controls/EpistoButton";
-import { ContentPane } from "./ContentPane";
+import React from 'react';
+import { applicationRoutes } from '../configuration/applicationRoutes';
+import { CompanyApiService } from '../services/api/CompanyApiService1';
+import { useSetNewPassword } from '../services/api/passwordChangeApiService';
+import { useNavigation } from '../services/core/navigatior';
+import { showNotification, useShowErrorDialog } from '../services/core/notifications';
+import { useIsMobileView } from '../static/frontendHelpers';
+import { useRouteQuery } from '../static/locationHelpers';
+import { ContentPane } from './ContentPane';
+import { EpistoButton } from './controls/EpistoButton';
+import { EpistoHeader } from './EpistoHeader';
+import { PageRootContainer } from './PageRootContainer';
+import { LoadingFrame } from './system/LoadingFrame';
+import { PasswordEntry, usePasswordEntryState } from './universal/PasswordEntry';
 
 export const SetNewPasswordPage = () => {
 
     const { setNewPassword, setNewPasswordState } = useSetNewPassword();
 
-    const {
-        password,
-        passwordCompare,
-        passwordCompareError,
-        passwordError,
-        setPassword,
-        setPasswordCompare,
-        validate
-    } = usePasswordEntryState();
+    const passwordEntryState = usePasswordEntryState();
 
-    const token = getQueryParam("token");
+    const token = useRouteQuery(applicationRoutes.setNewPasswordRoute)
+        .getValue(x => x.token, 'string');
+
+    const { companyDetails } = CompanyApiService.useCompanyDetailsByDomain(window.location.origin);
+
+    const isMobile = useIsMobileView();
 
     const showErrorDialog = useShowErrorDialog();
 
-    const { navigate } = useNavigation();
+    const { navigate2 } = useNavigation();
 
     const handleSetNewPassword = async () => {
-
-        if (!validate())
-            return;
-
-        if (!token) {
-
-            showErrorDialog("Helytelen url cím. Nincs token megadva. Próbáld újra egy másik linkkel.");
-            return;
-        }
-
         try {
 
-            await setNewPassword(password, passwordCompare, token);
+            if (!passwordEntryState.validate())
+                return;
 
-            showNotification("Új jelszó sikeresen beállítva!");
-            navigate(applicationRoutes.homeRoute.route);
+            await setNewPassword(passwordEntryState.password, passwordEntryState.passwordCompare, token);
+
+            showNotification('Új jelszó sikeresen beállítva!');
+            navigate2(applicationRoutes.homeRoute);
 
         }
         catch (e) {
 
             showErrorDialog(e);
         }
-    }
+    };
 
     return <PageRootContainer
         align="flex-start"
         justify="center"
-        backgoundImageSrc={getAssetUrl("loginScreen/surveybg.png")}
         position="relative">
 
-        <ContentPane navbarBg="white">
+        <ContentPane
+            hideNavbar
+            navbarBg="white"
+            flex='1'
+            className="whall"
+            justify='center'
+            align='center'>
 
             <LoadingFrame
+                className='roundBorders mildShadow'
+                id="form"
                 direction="column"
-                mt="20vh"
-                position="relative"
-                className="roundBorders"
-                bg="white"
-                p="30px"
-                loadingState={setNewPasswordState}
-                minWidth="400px">
+                align='center'
+                justify="center"
+                width={isMobile ? '100%' : undefined}
+                height={isMobile ? '100%' : undefined}
+                p={isMobile ? '10px' : '80px 100px'}
+                maxH={'calc(100% - 100px)'}
+                background="var(--transparentWhite70)"
+                zIndex="7"
+                loadingState={setNewPasswordState}>
 
-                <EpistoHeader text="Új jelszó megadása" mt="30px" alignSelf="center">
+                {/* company logo */}
+                <img
+                    src={companyDetails?.logoUrl!}
+                    style={{
+                        width: '250px',
+                        maxHeight: '115px',
+                        objectFit: 'contain',
+                        marginLeft: '15px',
+                        marginBottom: '20px',
+                        cursor: 'pointer',
+                    }}
+                    alt="" />
+
+                <EpistoHeader text="Új jelszó megadása"
+                    mt="30px"
+                    alignSelf="center">
 
                 </EpistoHeader>
 
-                <TextField
-                    style={{ margin: "20px" }}
-                    variant="standard"
-                    type="password"
-                    error={!!passwordError}
-                    helperText={passwordError}
-                    onChange={x => setPassword(x.currentTarget.value)}
-                    label="Jelszó"></TextField>
-
-                <TextField
-                    style={{ margin: "0 20px 20px 20px" }}
-                    variant="standard"
-                    type="password"
-                    error={!!passwordCompareError}
-                    helperText={passwordCompareError}
-                    onChange={x => setPasswordCompare(x.currentTarget.value)}
-                    label="Jelszó mégegyszer"></TextField>
+                <PasswordEntry
+                    display='EPISTO'
+                    state={passwordEntryState} />
 
                 <EpistoButton
-                    variant="outlined"
-                    onClick={handleSetNewPassword}
-                    style={{ alignSelf: "flex-end", margin: "20px" }}>
+                    variant="colored"
+                    padding="10px"
+                    type="submit"
+                    style={{
+                        marginTop: '20px',
+                        width: '100%',
+                        backgroundColor: companyDetails?.primaryColor!
+                    }}
+                    onClick={handleSetNewPassword}>
 
                     Elküldés
                 </EpistoButton>
             </LoadingFrame>
         </ContentPane>
-    </PageRootContainer>
-}
+    </PageRootContainer >;
+};

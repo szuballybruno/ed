@@ -1,5 +1,5 @@
 # Get the latest node image 
-FROM node:latest
+FROM node:18.7.0
 
 # set the working directory, in which every command will run
 WORKDIR /app
@@ -10,29 +10,22 @@ COPY package.json .
 # run npm install in the WD
 RUN npm install
 
-# copy application source files from the project root to the WD
-COPY /api ./api
-COPY /models ./models
-COPY /services ./services
-COPY /middleware ./middleware
-COPY /utilities ./utilities
-
-COPY server.ts .
+# copy files from the project root to the WD
+COPY /src ./src
 COPY tsconfig.json .
 
 # compile TypeScript to /build folder
-RUN npm run build
+RUN npx tsc
 
-# set /build as the WD
-WORKDIR /app/build
-
-# copy runtime misc dependnecy files
-COPY config.env ./config.env
-COPY /emails ./emails
-COPY /sql ./sql
+# copy runtime dependnecy files, 
+# note, these are not built and copied to the /build
+# folder by the compiler, since these are not source files. 
+COPY /config ./config
+COPY /src/emails ./build/emails
+# COPY /src/sql ./build/sql - WHY copy SQL files? 
 
 # expose port 5000
 EXPOSE 5000
 
 # start container 
-CMD node server.js
+CMD node --es-module-specifier-resolution=node ./build/server.js

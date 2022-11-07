@@ -1,32 +1,40 @@
-import { Box, FlexProps } from "@chakra-ui/layout";
-import { Flex } from "@chakra-ui/react";
-import { Tab, Tabs } from "@mui/material";
-import Breadcrumbs from '@mui/material/Breadcrumbs';
-import React, { ReactNode } from 'react';
-import { NavLink, useParams } from 'react-router-dom';
-import { applicationRoutes } from "../../configuration/applicationRoutes";
-import { ApplicationRoute, ButtonType } from "../../models/types";
-import { useCourseBriefData } from "../../services/api/courseApiService";
-import { useShopItemBriefData } from "../../services/api/shopApiService";
-import { useBriefUserData } from "../../services/api/userApiService";
-import { useNavigation } from "../../services/core/navigatior";
-import { objToArray, useIsMatchingCurrentRoute } from "../../static/frontendHelpers";
-import { translatableTexts } from "../../static/translatableTexts";
-import { EpistoButton } from "../controls/EpistoButton";
-import { EpistoFont } from "../controls/EpistoFont";
+import { ReactNode } from 'react';
+import { useParams } from 'react-router-dom';
+import { ApplicationRoute, ButtonType } from '../../models/types';
+import { useNavigation } from '../../services/core/navigatior';
+import { useIsMatchingCurrentRoute } from '../../static/frontendHelpers';
+import { LocationHelpers } from '../../static/locationHelpers';
+import { translatableTexts } from '../../static/translatableTexts';
+import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
+import { EpistoTabs } from '../controls/EpistoTabs';
 
-export const AdminSubpageHeader = (props: {
-    tabMenuItems?: ApplicationRoute[],
+export const AdminSubpageHeader = ({
+    children,
+    subRouteLabel,
+    headerButtons,
+    navigationQueryParams,
+    tabMenuItems,
+    headerContent,
+    onSave,
+    isInverseBackground,
+    hidden,
+    ...css
+}: {
+    tabMenuItems?: ApplicationRoute<any, any>[],
     children?: ReactNode,
     onSave?: () => void,
     headerButtons?: ButtonType[],
+    headerContent?: ReactNode,
     subRouteLabel?: string,
-    navigationQueryParams?: any
-} & FlexProps) => {
+    navigationQueryParams?: any,
+    isInverseBackground?: boolean,
+    hidden?: boolean
+} & EpistoFlex2Props) => {
 
-    const { children, subRouteLabel, headerButtons, navigationQueryParams, tabMenuItems, onSave, ...css } = props;
+    const tabMenuItemsList = (tabMenuItems ?? []);
     const isMatchingCurrentRoute = useIsMatchingCurrentRoute();
-    const { navigate } = useNavigation();
+    const { navigate2 } = useNavigation();
     const urlParams = useParams<{ userId: string, courseId: string, videoId: string, examId: string, shopItemId: string }>();
     const userId = urlParams.userId ? parseInt(urlParams.userId) : null;
     const courseId = urlParams.courseId ? parseInt(urlParams.courseId) : null;
@@ -34,135 +42,109 @@ export const AdminSubpageHeader = (props: {
     const examId = urlParams.examId ? parseInt(urlParams.examId) : null;
     const shopItemId = urlParams.shopItemId ? parseInt(urlParams.shopItemId) : null;
 
-    const currentRoute = objToArray(applicationRoutes.administrationRoute)
-        .filter(route => isMatchingCurrentRoute(route, false))[0];
+    const currentMatchingRoute = tabMenuItemsList
+        .firstOrNull(route => isMatchingCurrentRoute(route).isMatchingRouteExactly);
 
-    // const subRoute = objToArray(currentRoute)
-    //     .filter(x => isMatchingCurrentRoute(x.route, true))[0];
+    const { data: queryParams } = LocationHelpers.useQueryParams();
 
-    const { briefUserData } = useBriefUserData(userId);
-    const { courseBriefData } = useCourseBriefData(courseId);
-    const { shopItemBriefData } = useShopItemBriefData(shopItemId);
+    const handleNavigateToTab = (path: string) => {
 
-    const subRouteName = subRouteLabel
-        ? subRouteLabel
-        : (briefUserData?.fullName || courseBriefData?.title || shopItemBriefData?.name);
+        const targetRoute = tabMenuItemsList
+            .firstOrNull(x => x.route.getAbsolutePath() === path);
 
-    const subRoute = subRouteName
-        ? { title: subRouteName! }
-        : null;
+        if (!targetRoute)
+            return;
 
-    const BreadcrumbLink = (props: {
-        to?: string,
-        title: string,
-        iconComponent?: ReactNode,
-        isCurrent?: boolean
-    }) => {
+        if (targetRoute.navAction) {
 
-        const Content = () => <Flex>
-            {props.iconComponent && <Flex width={27} height="100%" p={2}>
-                {props.iconComponent}
-            </Flex>}
+            targetRoute.navAction();
+        }
+        else {
 
-            <EpistoFont
-                style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    fontWeight: props.isCurrent ? "bold" : undefined,
-                    alignItems: "center",
-                    padding: "0 2px 0 5px"
-                }}>
-                {props.title}
-            </EpistoFont>
-        </Flex>
+            const routeParms = {
+                userId,
+                courseId,
+                videoId,
+                examId,
+                shopItemId,
+                ...navigationQueryParams,
+            };
 
-        return <Box>
-
-            {/* current is not a link */}
-            {!!props.isCurrent && <Content></Content>}
-
-            {/* otherwise is a link */}
-            {!props.isCurrent && <NavLink to={props.to ?? ""}>
-                {<Content></Content>}
-            </NavLink>}
-        </Box>
-    }
-
-    const currentMatchingRoute = (tabMenuItems ?? [])
-        .filter(route => isMatchingCurrentRoute(route))[0];
-
-    const navigateToTab = (path: string) => {
-
-        navigate(path, { userId, courseId, videoId, examId, shopItemId, ...navigationQueryParams });
+            navigate2(targetRoute, routeParms, queryParams);
+        }
     };
 
-    return <Flex
-        direction={"column"}
-        className="whall"
+    const currentMatchingAbsUrl = currentMatchingRoute?.route?.getAbsolutePath();
+
+    const showHeaderSecion = (() => {
+
+        if (hidden)
+            return false;
+
+        if (tabMenuItems)
+            return true;
+
+        if (onSave)
+            return true;
+
+        return false;
+    })();
+
+    return <EpistoFlex2
+        id={AdminSubpageHeader.name}
+        direction={'column'}
+        className="whall roundBorders"
+        background={!isInverseBackground ? 'var(--transparentWhite70)' : undefined}
+        px="5px"
         position="relative">
 
-        {/* breadcrumbs */}
-        <Flex
-            direction={"row"}
-            height={60}
-            pl={20}
-            bg="white"
-            align={"center"}
-            className="dividerBorderBottom">
-
-            {/* breadcrumbds */}
-            <Breadcrumbs>
-                {currentRoute && <BreadcrumbLink
-                    isCurrent={!subRoute}
-                    to={currentRoute.route}
-                    title={currentRoute.title}
-                    iconComponent={currentRoute.icon} />}
-
-                {subRoute && <BreadcrumbLink
-                    isCurrent
-                    title={subRoute.title} />}
-            </Breadcrumbs>
-        </Flex>
-
-        {/* tabs */}
-        {(tabMenuItems || onSave) && (
-            <Flex
-                bg="white"
-                px="20px"
-                className="dividerBorderBottom"
+        {/* header section */}
+        {showHeaderSecion && (
+            <EpistoFlex2
+                className="roundBorders"
+                background={isInverseBackground ? 'var(--transparentWhite70)' : undefined}
                 flexDirection="row"
                 alignItems="center"
-                justify={"space-between"}
-                height={65}>
+                justify={'space-between'}
+                height='60px'>
 
                 {/* tabs */}
-                <Flex flex="1">
-                    {tabMenuItems && <Tabs
-                        value={currentMatchingRoute?.route}
-                        onChange={(x, path) => navigateToTab(path)} >
+                <EpistoFlex2
+                    p="10px"
+                    flex="1">
 
-                        {tabMenuItems
-                            .map(x => {
-
-                                return <Tab label={x.title} value={x.route} />
-                            })}
-                    </Tabs>}
-                </Flex>
+                    {(tabMenuItems && currentMatchingAbsUrl) && <EpistoTabs
+                        tabItems={tabMenuItems
+                            .map(x => ({
+                                key: x.route.getAbsolutePath(),
+                                label: x.title
+                            }))}
+                        selectedTabKey={currentMatchingAbsUrl}
+                        onChange={handleNavigateToTab} />}
+                </EpistoFlex2>
 
                 {/* header buttons */}
-                <Flex mr="20px">
+                <EpistoFlex2>
 
                     {/* header buttons */}
                     {headerButtons && headerButtons
-                        .map(x => <EpistoButton
+                        .map((button, index) => <EpistoButton
+                            key={index}
                             style={{
-                                marginRight: "10px"
+                                // color: '#555',
+                                marginRight: '10px',
+                                // fontWeight: 'bold',
+                                height: 41
                             }}
-                            variant="colored"
-                            onClick={x.action}>
-                            {x.icon}
-                            {x.title}
+                            variant={button.variant ?? 'plain'}
+                            isDisabled={button.disabled}
+                            onClick={button.action}>
+                            {button.icon}
+                            {button.title}
                         </EpistoButton>)}
+
+                    {/* header content */}
+                    {headerContent}
 
                     {/* save button */}
                     {onSave && <EpistoButton
@@ -171,17 +153,17 @@ export const AdminSubpageHeader = (props: {
 
                         {translatableTexts.misc.save}
                     </EpistoButton>}
-                </Flex>
-            </Flex>
+                </EpistoFlex2>
+            </EpistoFlex2>
         )}
 
         {/* children  */}
-        <Flex
-            direction="column"
+        <EpistoFlex2
+            direction="row"
             flex="1"
             {...css}>
 
             {children}
-        </Flex>
-    </Flex>
-}
+        </EpistoFlex2>
+    </EpistoFlex2 >;
+};

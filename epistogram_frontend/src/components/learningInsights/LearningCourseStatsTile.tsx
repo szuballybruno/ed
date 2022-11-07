@@ -1,46 +1,86 @@
-import { Box, Flex, FlexProps, Text } from "@chakra-ui/react";
-import { LinearProgress } from "@mui/material";
-import React from 'react';
-import { CourseLearningDTO } from "../../models/shared_models/CourseLearningDTO";
-import { useNavigation } from "../../services/core/navigatior";
-import { formatTimespan, getAssetUrl, roundNumber } from "../../static/frontendHelpers";
-import { EpistoButton } from "../controls/EpistoButton";
-import { FlexFloat } from "../controls/FlexFloat";
+import { CourseLearningDTO } from '../../shared/dtos/CourseLearningDTO';
+import { Environment } from '../../static/Environemnt';
+import { formatTimespan } from '../../static/frontendHelpers';
+import { EpistoButton, EpistoButtonPropsType } from '../controls/EpistoButton';
+import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
+import { EpistoProgressBar } from '../controls/EpistoProgressBar';
+import { CourseTileIsCompletedBadge } from '../universal/CourseTile';
+import { SmallStat } from '../universal/SmallStat';
+import { VerticalTile } from '../universal/verticalTile/VerticalTile';
+import { VerticalTileImage } from '../universal/verticalTile/VerticalTileImage';
 
-const SmallStat = (props: { iconUrl: string, text: string }) => {
+export const LearningCourseStatsTileInfo = (props: {
+    spentTime: string,
+    totalVideoCount: number,
+    completedVideoCount: number,
+    totalVideoQuestionCount: number,
+    answeredVideoQuestionCount: number,
+    progressPercentage: number
+}) => {
 
-    return <Flex
-        align="center"
-        mr={5}>
+    const {
+        spentTime,
+        totalVideoCount,
+        completedVideoCount,
+        totalVideoQuestionCount,
+        answeredVideoQuestionCount,
+        progressPercentage
+    } = props;
 
-        {/* icon */}
-        <img
-            src={props.iconUrl}
-            alt={""}
-            style={{
-                width: 15,
-                height: 15,
-                margin: "0 2px 0 2px"
-            }} />
+    return <>
 
-        {/* spent time stat */}
-        <Text
-            as={"text"}
-            color={"grey"}>
+        {/* small stats */}
+        <EpistoFlex2 mt={7}
+            justify="space-evenly">
 
-            {props.text}
-        </Text>
-    </Flex>
-}
+            {/* spent time  */}
+            <SmallStat
+                iconUrl={Environment.getAssetUrl('images/time3D.png')}
+                text={spentTime} />
+
+            {/* videos  */}
+            <SmallStat
+                iconUrl={Environment.getAssetUrl('images/videos3D.png')}
+                text={`${totalVideoCount}/${completedVideoCount}`} />
+
+            {/* video questions */}
+            <SmallStat
+                iconUrl={Environment.getAssetUrl('images/rightanswerontile3D.png')}
+                text={`${totalVideoQuestionCount}/${answeredVideoQuestionCount}`} />
+        </EpistoFlex2>
+
+        {/* course progress bar chart */}
+        <EpistoFlex2
+            direction={'row'}
+            alignItems={'center'}
+            mt='7px'
+            width="100%"
+            height="10px">
+
+            <EpistoProgressBar
+                variant="determinate"
+                style={{
+                    width: '100%',
+                }}
+                value={progressPercentage} />
+
+            <EpistoFlex2 m="0 5px 0 20px">
+
+                {`${progressPercentage}%`}
+            </EpistoFlex2>
+
+        </EpistoFlex2>
+    </>;
+};
 
 export const LearningCourseStatsTile = (props: {
-    course: CourseLearningDTO
-} & FlexProps) => {
+    course: CourseLearningDTO,
+    actionButtons: EpistoButtonPropsType[]
+} & EpistoFlex2Props) => {
 
-    const { course, children, ...css } = props;
+    const { course, children, actionButtons, ...css } = props;
     const {
         title,
-        teacherName,
         subCategoryName,
         thumbnailImageURL,
         isComplete,
@@ -48,175 +88,38 @@ export const LearningCourseStatsTile = (props: {
         completedVideoCount,
         totalVideoQuestionCount,
         answeredVideoQuestionCount,
-        totalSpentTime,
+        totalSpentSeconds,
         completedCourseItemCount,
         totalCourseItemCount,
-        examSuccessRateAverage,
-        questionSuccessRate,
-        finalExamSuccessRate,
-        currentItemCode,
-        firstItemCode
     } = course;
 
-    const { navigateToPlayer } = useNavigation();
+    const formattedSpentTime = formatTimespan(totalSpentSeconds);
+    const progressPercentage = Math.floor(completedCourseItemCount / totalCourseItemCount * 100);
 
-    const formattedSpentTime = formatTimespan(totalSpentTime);
-    const progressPercentage = roundNumber(completedCourseItemCount / totalCourseItemCount * 100);
+    return <VerticalTile
+        title={title}
+        subTitle={subCategoryName}
+        imageComponent={<VerticalTileImage
+            imageUrl={thumbnailImageURL}
+            badgeComponent={isComplete && <CourseTileIsCompletedBadge />} />}
+        infoComponent={<LearningCourseStatsTileInfo
+            spentTime={formattedSpentTime}
+            totalVideoCount={totalVideoCount}
+            answeredVideoQuestionCount={answeredVideoQuestionCount}
+            completedVideoCount={completedVideoCount}
+            progressPercentage={progressPercentage}
+            totalVideoQuestionCount={totalVideoQuestionCount} />}
+        buttonsComponent={<EpistoFlex2 mt="10px">
 
-    const handleStartCourse = () => {
+            {actionButtons.map((button, index) => {
+                return <EpistoButton
+                    key={index}
+                    style={{ flex: '1' }}
+                    {...button}>
 
-        if (isComplete) {
+                    {button.children}
+                </EpistoButton>;
+            })}
 
-            navigateToPlayer(firstItemCode);
-        }
-        else {
-
-            navigateToPlayer(currentItemCode);
-        }
-    }
-
-    return <FlexFloat
-        className="whall"
-        direction="column"
-        borderRadius="10px"
-        position="relative"
-        overflow="hidden"
-        shadow={"0 0 10px 1px #CCC"}
-        background="var(--transparentWhite70)"
-        p="5"
-        justifyContent="space-between"
-        {...css}>
-
-        {/* cover image box */}
-        <Box
-            flex="1"
-            position="relative"
-            minHeight={150}
-            maxHeight={150}>
-
-            {/* cover image */}
-            <img
-                className="whall"
-                style={{
-                    objectFit: "cover",
-                    borderRadius: 10,
-                    position: "absolute"
-                }}
-                src={thumbnailImageURL}
-                alt="" />
-
-            {/* is complete label */}
-            {isComplete && <Flex
-                position="absolute"
-                top={10}
-                right={0}
-                justify="flex-end">
-
-                <Flex
-                    direction="row"
-                    justifyContent="space-around"
-                    alignItems="center"
-                    padding="4px"
-                    width={130}
-                    bg="#97CC9B"
-                    borderRadius="7px 0 0 7px">
-                    <img
-                        src={getAssetUrl("course_exam_tile_icons/tile_badge_completed.svg")}
-                        alt={""}
-                        style={{
-                            width: 20,
-                            height: 20
-                        }}
-                    />
-                    <Text
-                        textTransform={"uppercase"}
-                        color="white">
-
-                        Teljesítve!
-                    </Text>
-                </Flex>
-            </Flex>}
-        </Box>
-
-        {/* content */}
-        <Flex p="10px" direction="column">
-
-            {/* category  */}
-            <Text
-                as="text"
-                color="grey">
-
-                {subCategoryName}
-            </Text>
-
-            {/* title */}
-            <Text
-                as="h6"
-                fontWeight={"bold"}
-                fontSize="large">
-
-                {title}
-            </Text>
-
-            {/* small stats */}
-            <Flex mt={7} justify="space-evenly">
-
-                {/* spent time  */}
-                <SmallStat
-                    iconUrl={getAssetUrl("images/time3D.png")}
-                    text={formattedSpentTime} />
-
-                {/* videos  */}
-                <SmallStat
-                    iconUrl={getAssetUrl("images/videos3D.png")}
-                    text={`${totalVideoCount}/${completedVideoCount}`} />
-
-                {/* video questions */}
-                <SmallStat
-                    iconUrl={getAssetUrl("images/rightanswerontile3D.png")}
-                    text={`${totalVideoQuestionCount}/${answeredVideoQuestionCount}`} />
-            </Flex>
-
-            {/* course progress bar chart */}
-            <Flex
-                direction={"row"}
-                alignItems={"center"}
-                mt={7}
-                width="100%"
-                height="10px">
-
-                <LinearProgress
-                    variant="determinate"
-                    style={{
-                        width: "100%",
-                    }}
-                    value={progressPercentage} />
-
-                <Flex m="0 5px 0 20px">
-                    {`${progressPercentage}%`}
-                </Flex>
-
-            </Flex>
-        </Flex>
-
-        {/* buttons */}
-        <Flex mt="10px">
-
-            {/* details */}
-            <EpistoButton
-                style={{ flex: "1" }}>
-
-                Statisztika
-            </EpistoButton>
-
-            {/* start course */}
-            <EpistoButton
-                variant="colored"
-                onClick={handleStartCourse}
-                style={{ flex: "1" }}>
-
-                {isComplete ? "Újrakezdem" : "Folytatom"}
-            </EpistoButton>
-        </Flex>
-    </FlexFloat>
+        </EpistoFlex2>} />;
 };

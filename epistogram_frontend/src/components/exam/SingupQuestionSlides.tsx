@@ -1,16 +1,16 @@
-import { Flex } from "@chakra-ui/react";
-import { FormControlLabel, Radio, RadioGroup, Typography } from "@mui/material";
-import { usePaging } from "../../static/frontendHelpers";
-import { SignupQuestionDTO } from "../../models/shared_models/SignupQuestionDTO";
-import { useShowErrorDialog } from "../../services/core/notifications";
-import { LinearProgressWithLabel } from "../signup/ProgressIndicator";
-import { SignupWrapper } from "../signup/SignupWrapper";
-import { borderRadius } from "@mui/system";
-import { EpistoFont } from "../controls/EpistoFont";
+import { FormControlLabel, Radio, RadioGroup } from '@mui/material';
+import { useShowErrorDialog } from '../../services/core/notifications';
+import { SignupQuestionDTO } from '../../shared/dtos/SignupQuestionDTO';
+import { Id } from '../../shared/types/versionId';
+import { usePaging } from '../../static/frontendHelpers';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { EpistoFont } from '../controls/EpistoFont';
+import { LinearProgressWithLabel } from '../survey/ProgressIndicator';
+import { SurveyWrapper } from '../survey/SurveyWrapper';
 
 export const useSignupQuestionsState = (options: {
     questions: SignupQuestionDTO[],
-    answerQuestionAsync: (answerId: number, questionId: number) => Promise<void>,
+    answerQuestionAsync: (answerVersionId: Id<'AnswerVersion'>, questionVersionId: Id<'QuestionVersion'>) => Promise<void>,
     upperTitle?: string,
     onPrevoiusOverNavigation?: () => void,
     onNextOverNavigation?: () => void,
@@ -29,7 +29,11 @@ export const useSignupQuestionsState = (options: {
     } = options;
 
     // questionnaire
-    const questionnaireState = usePaging(questions, onPrevoiusOverNavigation, onNextOverNavigation);
+    const questionnaireState = usePaging({
+        items: questions,
+        onPreviousOverNavigation: onPrevoiusOverNavigation,
+        onNextOverNavigation
+    });
     const currentQuestion = questionnaireState.currentItem;
     const questionnaireProgressbarValue = (questionnaireState.currentIndex / questions.length) * 100;
     const questionnaireProgressLabel = `${questionnaireState.currentIndex + 1}/${questions.length}`;
@@ -40,7 +44,7 @@ export const useSignupQuestionsState = (options: {
             clearAnswerCache();
 
         questionnaireState.next();
-    }
+    };
 
     return {
         currentQuestion,
@@ -51,8 +55,8 @@ export const useSignupQuestionsState = (options: {
         questionnaireProgressbarValue,
         answerQuestionAsync,
         allowQuickNext
-    }
-}
+    };
+};
 
 export type SignupQuestionsStateType = ReturnType<typeof useSignupQuestionsState>;
 
@@ -72,11 +76,11 @@ export const SingupQuestionSlides = (props: { state: SignupQuestionsStateType })
         allowQuickNext
     } = state;
 
-    const handleAnswerSelectedAsync = async (answerId: number) => {
+    const handleAnswerSelectedAsync = async (answerVersionId: Id<'AnswerVersion'>) => {
 
         try {
 
-            await answerQuestionAsync(answerId, currentQuestion!.questionId);
+            await answerQuestionAsync(answerVersionId, currentQuestion!.questionVersionId);
 
             if (allowQuickNext)
                 handleNext();
@@ -84,7 +88,7 @@ export const SingupQuestionSlides = (props: { state: SignupQuestionsStateType })
 
             showError(e);
         }
-    }
+    };
 
     {/*const Testasd = () => {
         return <FlexFloat
@@ -105,51 +109,53 @@ export const SingupQuestionSlides = (props: { state: SignupQuestionsStateType })
                 size="small"
                 value="advanced" />
 
-            <EpistoFont fontSize="fontSmallPlus">
+            <EpistoFont fontSize="fontNormal14">
                 {answerText}
             </EpistoFont>
         </FlexFloat>
     }*/}
 
-    const selectedAnswerId = (currentQuestion?.answers ?? [])
-        .filter(x => x.isGiven)[0]?.answerId as null | number;
+    const selectedAnswerVersionId = (currentQuestion?.answers ?? [])
+        .filter(x => x.isGiven)[0]?.answerVersionId as null | Id<'AnswerVersion'>;
 
     return <>
-        {currentQuestion && <SignupWrapper
+        {currentQuestion && <SurveyWrapper
             title={currentQuestion!.questionText}
             upperTitle={upperTitle}
             nextButtonTitle="Következő"
-            onNext={selectedAnswerId ? handleNext : undefined}
+            onNext={selectedAnswerVersionId ? handleNext : undefined}
             currentImage={currentQuestion!.imageUrl!}
             onNavPrevious={questionnaireState.previous}
             bottomComponent={<LinearProgressWithLabel value={questionnaireProgressbarValue} />}
-            upperComponent={<Flex alignItems={"center"} justifyContent={"flex-end"} width={"30%"}><EpistoFont>{questionnaireProgressLabel}</EpistoFont></Flex>}>
+            upperComponent={<EpistoFlex2 alignItems={'center'}
+                justifyContent={'flex-end'}
+                width={'30%'}><EpistoFont>{questionnaireProgressLabel}</EpistoFont></EpistoFlex2>}>
 
             <RadioGroup
                 id="answers"
-                style={{ marginBottom: "30px" }}
+                style={{ marginBottom: '30px' }}
                 name="radioGroup1"
                 onChange={(e) => {
 
-                    const selectedAnswerId = parseInt(e.currentTarget.value);
-                    handleAnswerSelectedAsync(selectedAnswerId);
+                    const selectedAnswerVersionId = Id.create<'AnswerVersion'>(parseInt(e.currentTarget.value));
+                    handleAnswerSelectedAsync(selectedAnswerVersionId);
                 }}>
                 {currentQuestion!
                     .answers
                     .map((answer) => <FormControlLabel
-                        key={answer.answerId}
-                        value={answer.answerId}
+                        key={Id.read(answer.answerVersionId)}
+                        value={answer.answerVersionId}
                         style={{
-                            margin: "5px 0px 0px 0px",
-                            backgroundColor: answer.answerId === selectedAnswerId ? "#7CC0C24F" : "white",
-                            padding: "5px 10px",
-                            border: "1px solid var(--mildGrey)",
-                            borderRadius: "6px"
-                           
+                            margin: '5px 0px 0px 0px',
+                            backgroundColor: answer.answerVersionId === selectedAnswerVersionId ? '#7CC0C24F' : 'white',
+                            padding: '5px 10px',
+                            border: '1px solid var(--mildGrey)',
+                            borderRadius: '6px'
+
                         }}
-                        control={<Radio checked={answer.answerId === selectedAnswerId} />}
+                        control={<Radio checked={answer.answerVersionId === selectedAnswerVersionId} />}
                         label={answer.answerText} />)}
             </RadioGroup>
-        </SignupWrapper>}
-    </>
-}
+        </SurveyWrapper>}
+    </>;
+};

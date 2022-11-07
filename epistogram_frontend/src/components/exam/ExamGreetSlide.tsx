@@ -1,12 +1,12 @@
-import { Flex } from "@chakra-ui/react";
-import { Typography } from "@mui/material";
-import React from "react";
-import { ExamPlayerDataDTO } from "../../models/shared_models/ExamPlayerDataDTO";
-import { getAssetUrl } from "../../static/frontendHelpers";
-import { translatableTexts } from "../../static/translatableTexts";
-import { EpistoFont } from "../controls/EpistoFont";
-import { ExamLayout } from "./ExamLayout";
-import { ExamResultStats } from "./ExamResultStats";
+import { ExamPlayerDataDTO } from '../../shared/dtos/ExamPlayerDataDTO';
+import { Environment } from '../../static/Environemnt';
+import { ArrayBuilder, useIsMobileView } from '../../static/frontendHelpers';
+
+import { translatableTexts } from '../../static/translatableTexts';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { EpistoFont } from '../controls/EpistoFont';
+import { ExamLayout } from './ExamLayout';
+import { ExamResultStats } from './ExamResultStats';
 
 export const ExamGreetSlide = (props: {
     exam: ExamPlayerDataDTO,
@@ -18,21 +18,36 @@ export const ExamGreetSlide = (props: {
         startExam
     } = props;
 
-    return <ExamLayout
-        headerLeftItem={translatableTexts.exam.hello}
-        headerCenterText={exam.title}
-        showNextButton={exam.canTakeAgain}
-        handleNext={startExam}
-        nextButtonTitle={translatableTexts.exam.startExam}>
+    const isMobile = useIsMobileView();
 
-        <Flex direction="column" align="center" flex="1" className="whall">
+    return <ExamLayout
+        className={!isMobile ? 'whall' : undefined}
+        justify='flex-start'
+        headerCenterText={exam.title}
+        footerButtons={new ArrayBuilder()
+            .addIf(exam.canTakeAgain, {
+                title: exam.examStats ? 'Újrakezdés' : translatableTexts.exam.startExam,
+                action: startExam
+            })
+            .getArray()}>
+
+        <EpistoFlex2
+            direction="column"
+            align="center"
+            //justify='center'
+            width={!isMobile ? '100%' : undefined}
+            height={!isMobile ? '100%' : undefined}
+            background='var(--transparentWhite70)'
+            p='20px'
+            className="roundBorders mildShadow">
+
             <img
-                src={getAssetUrl("/images/examCover.png")}
-                alt={""}
+                src={Environment.getAssetUrl('/images/examCover.png')}
+                alt={''}
                 style={{
-                    objectFit: "contain",
+                    objectFit: 'contain',
                     maxHeight: 200,
-                    margin: "30px 0"
+                    margin: '30px 0'
                 }} />
 
             <EpistoFont
@@ -43,15 +58,20 @@ export const ExamGreetSlide = (props: {
 
             <EpistoFont
                 style={{
-                    padding: "30px",
-                    maxWidth: "400px"
+                    padding: '30px',
+                    maxWidth: '500px'
                 }}>
 
-                {translatableTexts.exam.greetText}
+                {exam.examStats
+                    ? translatableTexts.exam.greetTextRetry
+                    : translatableTexts.exam.greetText}
             </EpistoFont>
 
             {/* if previously completed  */}
-            {exam.isCompletedPreviously && <>
+            {exam.examStats && <EpistoFlex2
+                direction='column'
+                width='100%'
+                height='100%'>
 
                 {/* stats label */}
                 <EpistoFont>
@@ -60,18 +80,16 @@ export const ExamGreetSlide = (props: {
                 </EpistoFont>
 
                 {/* stats */}
-                <Flex
+                <EpistoFlex2
                     mt="20px"
                     align="center"
                     justify="center"
                     width="100%">
 
                     <ExamResultStats
-                        correctAnswerRate={exam!.correctAnswerRate}
-                        totalQuestionCount={exam!.totalQuestionCount}
-                        correctAnswerCount={exam!.correctAnswerCount} />
-                </Flex>
-            </>}
-        </Flex>
-    </ExamLayout>
-}
+                        stats={exam.examStats} />
+                </EpistoFlex2>
+            </EpistoFlex2>}
+        </EpistoFlex2>
+    </ExamLayout>;
+};

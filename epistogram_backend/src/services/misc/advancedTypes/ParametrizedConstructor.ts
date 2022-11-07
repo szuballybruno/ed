@@ -1,0 +1,1 @@
+export type ParametrizedConstructor<T = any> = { new(...args: any[]): T };
