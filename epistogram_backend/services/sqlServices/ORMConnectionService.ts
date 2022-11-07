@@ -1,4 +1,4 @@
-import { Connection, ConnectionOptions, createConnection, Repository, SelectQueryBuilder } from "typeorm";
+import { Connection, ConnectionOptions, createConnection, ObjectLiteral, Repository, SelectQueryBuilder } from "typeorm";
 import { SnakeNamingStrategy } from "typeorm-naming-strategies";
 import { ClassType } from "../../models/Types";
 import { DeepOptionalEntity } from "../../utilities/helpers";
@@ -60,7 +60,7 @@ export class ORMConnectionService {
         return this._ormConnection.getRepository(classType);
     }
 
-    getRepository2<T>(classType: ClassType<T>) {
+    getRepository2<T extends ObjectLiteral>(classType: ClassType<T>) {
 
         return new MyRepository<T>(classType, this._ormConnection);
     }
@@ -89,7 +89,7 @@ export class ORMConnectionService {
     }
 }
 
-class MyRepository<T> {
+class MyRepository<T extends ObjectLiteral> {
 
     private _connection: Connection;
     private _classType: ClassType<T>;
