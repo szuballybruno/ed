@@ -1,6 +1,6 @@
 import { log, logError } from "./logger";
 
-type EnvironmentType = "development" | "production" | "demo" | "local";
+type EnvironmentType = "development" | "production" | "demo" | "local" | "legacy";
 
 export class GlobalConfiguration {
 
