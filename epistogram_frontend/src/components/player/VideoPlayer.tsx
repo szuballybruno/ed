@@ -11,6 +11,7 @@ import screenfull from "screenfull";
 import { SubtitleDTO } from "../../models/shared_models/SubtitleDTO";
 import { VideoDTO } from "../../models/shared_models/VideoDTO";
 import { readVolumeSettings, writeVolumeSettings } from "../../services/core/storageService";
+import { EpistoReactPlayer } from "../EpistoReactPlayer";
 import { AbsoluteFlexOverlay } from "./AbsoluteFlexOverlay";
 import { VideoControls } from "./VideoControls";
 
@@ -281,7 +282,7 @@ export const VideoPlayer = (props: {
                     position="relative">
 
                     {/* the player */}
-                    <ReactPlayer
+                    <EpistoReactPlayer
                         playbackRate={1}
                         ref={playerRef}
                         url={videoUrl}

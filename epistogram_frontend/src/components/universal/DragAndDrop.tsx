@@ -79,6 +79,6 @@ export const DragAndDropContext = (props: {
 
             props.onDragEnd(srcId, destId ?? null, srcIndex, destIndex ?? null)
         }}>
-        {props.children}
+        {props.children as any}
     </DragDropContext>
 }

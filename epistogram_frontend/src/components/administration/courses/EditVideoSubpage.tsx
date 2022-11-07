@@ -4,25 +4,25 @@ import EditIcon from '@mui/icons-material/Edit';
 import LiveHelpIcon from '@mui/icons-material/LiveHelp';
 import TimerIcon from '@mui/icons-material/Timer';
 import { Slider } from "@mui/material";
-import React, { useEffect, useRef, useState } from 'react';
-import ReactPlayer from "react-player";
+import { useEffect, useRef, useState } from 'react';
 import { useParams } from "react-router";
 import { applicationRoutes } from "../../../configuration/applicationRoutes";
-import { roundNumber } from "../../../static/frontendHelpers";
 import { QuestionDTO } from "../../../models/shared_models/QuestionDTO";
 import { VideoEditDTO } from "../../../models/shared_models/VideoEditDTO";
+import { useSaveVideo, useUploadVideoFileAsync, useVideoEditData } from "../../../services/api/videoApiService";
 import { getVirtualId } from "../../../services/core/idService";
 import { useNavigation } from "../../../services/core/navigatior";
 import { showNotification, useShowErrorDialog } from "../../../services/core/notifications";
-import { LoadingFrame } from "../../system/LoadingFrame";
+import { roundNumber } from "../../../static/frontendHelpers";
+import { EpistoButton } from "../../controls/EpistoButton";
 import { EpistoEntry } from "../../controls/EpistoEntry";
+import { EpistoReactPlayer } from "../../EpistoReactPlayer";
+import { LoadingFrame } from "../../system/LoadingFrame";
 import { FlexList } from "../../universal/FlexList";
 import { FlexListItem } from "../../universal/FlexListItem";
 import { HiddenFileUploadInput } from "../../universal/HiddenFileUploadInput";
 import { AdminSubpageHeader } from "../AdminSubpageHeader";
 import { EditSection } from "./EditSection";
-import { useSaveVideo, useVideoEditData, useUploadVideoFileAsync } from "../../../services/api/videoApiService";
-import { EpistoButton } from "../../controls/EpistoButton";
 
 const QuestionItem = (props: {
     currentSeconds: number,
@@ -255,7 +255,7 @@ export const EditVideoSubpage = () => {
                     </EpistoButton>
 
                     {/* player */}
-                    {(videoEditData?.videoFileUrl && !videoFile) && <ReactPlayer
+                    {(videoEditData?.videoFileUrl && !videoFile) && <EpistoReactPlayer
                         width="100%"
                         controls
                         onProgress={x => setPlayedSeconds(x.playedSeconds)}
