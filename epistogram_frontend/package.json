@@ -54,7 +54,8 @@
     "eject": "react-scripts eject",
     "lint": "eslint . --ext .ts --ext .tsx",
     "lintfix": "eslint . --ext .ts --ext .tsx --fix",
-    "serveBuild": "npx serve -s build"
+    "serveBuild": "npx serve -s build",
+    "cleaninstall": "yarn --force --no-lockfile"
   },
   "browserslist": {
     "production": [

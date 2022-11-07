@@ -17,7 +17,8 @@
     "test": "jest -i ",
     "integtest": "jest -i StartCourse.test.ts",
     "testesm": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
-    "confighooks": "git config core.hooksPath git_hooks"
+    "confighooks": "git config core.hooksPath git_hooks",
+    "cleaninstall": "yarn --force --no-lockfile"
   },
   "dependencies": {
     "@google-cloud/storage": "5.19.1",
