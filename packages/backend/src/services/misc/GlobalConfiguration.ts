@@ -220,12 +220,12 @@ export class GlobalConfiguration {
         log('Environemnt: ' + GlobalConfiguration.getCurrentEnvironmentName());
         log('Loading config.env...');
 
-        const envFilePath = 'config/config.env';
+        const envFilePath = `${rootDirectory}/config/config.env`;
         const envFilePathExists = FileSystemHelpers
             .checkFileExists(envFilePath);
 
         if (!envFilePathExists)
-            throw new Error('Env file not found!');
+            throw new Error(`Env file not found! Path: ${envFilePath}`);
 
         dotenv
             .config({ path: envFilePath });
