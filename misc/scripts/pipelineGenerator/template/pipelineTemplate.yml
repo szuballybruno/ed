@@ -119,7 +119,7 @@ $GEN_ENV_SCRIPT$
           ref: $BRANCH_NAME$
     
       - name: Migrate schema
-        working-directory: epistogram_backend/deploy
+        working-directory: ./packages/backend/deploy
         shell: pwsh
         run: |
           ./migrateDatabase.ps1 `
