@@ -22,7 +22,7 @@ $version_result= psql `
     -tc "SELECT version_name FROM public.migration_version;" `
     -o "./out/migrationVersionsOnServer.txt"
 
-cd ../../misc/scripts/scriptProducer
+cd ../../../misc/scripts/scriptProducer
 If($dev)
 {
     yarn start
