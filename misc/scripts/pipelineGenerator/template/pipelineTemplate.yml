@@ -15,95 +15,95 @@ env:
 jobs:
     
   # BUILD FRONTEND
-#   build_frontend:
-#     name: Build frontend
-#     runs-on: ubuntu-latest
+  build_frontend:
+    name: Build frontend
+    runs-on: ubuntu-latest
 
-#     steps:
-#       - name: Checkout branch
-#         uses: actions/checkout@v2
-#         with:
-#           ref: $BRANCH_NAME$
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v2
+        with:
+          ref: $BRANCH_NAME$
         
-#       - name: Login to GCP
-#         uses: google-github-actions/setup-gcloud@v0
-#         with:
-#           project_id: ${{ secrets.GCP_PROJECT_ID }}
-#           service_account_email: ${{ secrets.GCP_EMAIL }}
-#           service_account_key: ${{ secrets.GCP_CREDENTIALS }}
+      - name: Login to GCP
+        uses: google-github-actions/setup-gcloud@v0
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_email: ${{ secrets.GCP_EMAIL }}
+          service_account_key: ${{ secrets.GCP_CREDENTIALS }}
 
-#       - name: Configure GCP Docker
-#         run: gcloud auth configure-docker --quiet
+      - name: Configure GCP Docker
+        run: gcloud auth configure-docker --quiet
       
-#       - name: Set up Docker Buildx for layer caching
-#         id: buildx
-#         uses: docker/setup-buildx-action@master
+      - name: Set up Docker Buildx for layer caching
+        id: buildx
+        uses: docker/setup-buildx-action@master
 
-#       - name: Cache Docker layers
-#         uses: actions/cache@v2
-#         with:
-#           path: /tmp/.buildx-cache
-#           key: ${{ runner.os }}-single-buildx-${{ github.sha }}
-#           restore-keys: ${{ runner.os }}-single-buildx
+      - name: Cache Docker layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-single-buildx-${{ github.sha }}
+          restore-keys: ${{ runner.os }}-single-buildx
 
-#       - name: Copy proper .env file
-#         run: cp -fr ./config/$BRANCH_NAME$.env ./.env 
-#         working-directory: ./packages/frontend
+      - name: Copy proper .env file
+        run: cp -fr ./config/$BRANCH_NAME$.env ./.env 
+        working-directory: ./packages/frontend
 
-#       - name: Append additional values to .env file 
-#         run: |
-#           echo "" >> ./.env
-#           echo "REACT_APP_CURRENT_VERSION=`(date '+%Y.%m.%d.%H:%M')`" >> ./.env
-#           echo "REACT_APP_UNDER_MAINTENANCE=false" >> ./.env
-#         working-directory: ./packages/frontend
+      - name: Append additional values to .env file 
+        run: |
+          echo "" >> ./.env
+          echo "REACT_APP_CURRENT_VERSION=`(date '+%Y.%m.%d.%H:%M')`" >> ./.env
+          echo "REACT_APP_UNDER_MAINTENANCE=false" >> ./.env
+        working-directory: ./packages/frontend
 
-#       - name: Build frontend container
-#         run: |
-#           docker buildx build . \
-#           --file ./config/frontend.Dockerfile \
-#           --cache-from type=local,src=/tmp/.buildx-cache \
-#           --cache-to type=local,dest=/tmp/.buildx-cache,mode=max \
-#           --builder ${{ steps.buildx.outputs.name }} \
-#           --tag $FRONTEND_IMAGE_NAME \
-#           --push
+      - name: Build frontend container
+        run: |
+          docker buildx build . \
+          --file ./config/frontend.Dockerfile \
+          --cache-from type=local,src=/tmp/.buildx-cache \
+          --cache-to type=local,dest=/tmp/.buildx-cache,mode=max \
+          --builder ${{ steps.buildx.outputs.name }} \
+          --tag $FRONTEND_IMAGE_NAME \
+          --push
 
-#   # BUILD BACKEND
-#   build_backend: 
-#     name: Build backend
-#     runs-on: ubuntu-latest
+  # BUILD BACKEND
+  build_backend: 
+    name: Build backend
+    runs-on: ubuntu-latest
 
-#     steps:
-#       - name: Checkout branch
-#         uses: actions/checkout@v2
-#         with:
-#           ref: $BRANCH_NAME$ # references the target branch
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v2
+        with:
+          ref: $BRANCH_NAME$ # references the target branch
         
-#       - name: Login to GCP
-#         uses: google-github-actions/setup-gcloud@v0
-#         with:
-#           project_id: ${{ secrets.GCP_PROJECT_ID }}
-#           service_account_email: ${{ secrets.GCP_EMAIL }}
-#           service_account_key: ${{ secrets.GCP_CREDENTIALS }}
+      - name: Login to GCP
+        uses: google-github-actions/setup-gcloud@v0
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_email: ${{ secrets.GCP_EMAIL }}
+          service_account_key: ${{ secrets.GCP_CREDENTIALS }}
 
-#       - name: Configure GCP Docker
-#         run: gcloud auth configure-docker --quiet
+      - name: Configure GCP Docker
+        run: gcloud auth configure-docker --quiet
       
-#       - name: Set up Docker Buildx for layer caching
-#         id: buildx
-#         uses: docker/setup-buildx-action@master
+      - name: Set up Docker Buildx for layer caching
+        id: buildx
+        uses: docker/setup-buildx-action@master
 
-#       - name: Generate config.env file
-#         run: |
-# $GEN_ENV_SCRIPT$
-#         working-directory: ./packages/backend
+      - name: Generate config.env file
+        run: |
+$GEN_ENV_SCRIPT$
+        working-directory: ./packages/backend
 
-#       - name: Build backend container
-#         run: |
-#           docker buildx build . \
-#           --file ./config/backend.Dockerfile \
-#           --builder ${{ steps.buildx.outputs.name }} \
-#           --tag $BACKEND_IMAGE_NAME \
-#           --push
+      - name: Build backend container
+        run: |
+          docker buildx build . \
+          --file ./config/backend.Dockerfile \
+          --builder ${{ steps.buildx.outputs.name }} \
+          --tag $BACKEND_IMAGE_NAME \
+          --push
           
   # DEPLOY DATABASE
   deploy_database: 
