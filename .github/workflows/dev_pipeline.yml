@@ -126,10 +126,10 @@ jobs:
         working-directory: ./packages/backend
 
         - name: Generate config.env file
-        run: |
-          ls 
-          cd config
-          ls
+          run: |
+            ls 
+            cd config
+            ls
         working-directory: ./packages/backend
 
       - name: Build backend container
