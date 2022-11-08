@@ -1,6 +1,6 @@
 import { Avatar, Checkbox } from '@mui/material';
 import { useContext, useState } from 'react';
-import { Id } from '../../../shared/types/versionId';
+import { Id } from '@episto/commontypes';
 import { Environment } from '../../../static/Environemnt';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoEntry } from '../../controls/EpistoEntry';

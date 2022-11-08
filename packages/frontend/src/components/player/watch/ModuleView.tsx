@@ -1,5 +1,5 @@
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import { ModulePlayerDTO } from '../../../shared/dtos/ModulePlayerDTO';
+import { ModulePlayerDTO } from '@episto/communication';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';

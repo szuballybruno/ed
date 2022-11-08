@@ -1,10 +1,9 @@
+import { ErrorWithCode } from '@episto/commontypes';
+import { HttpErrorResponseDTO, ParametrizedRouteType, RouteParameterType } from '@episto/communication';
 import axios, { AxiosRequestConfig } from 'axios';
 import { useCallback, useState } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { LoadingStateType } from '../../models/types';
-import HttpErrorResponseDTO from '@episto/communication';
-import { ParametrizedRouteType, RouteParameterType } from '@episto/commontypes';
-import { ErrorWithCode } from '@episto/commontypes';
 import { Environment } from '../../static/Environemnt';
 import { getErrorTypeByHTTPCode, getUrl } from '../../static/frontendHelpers';
 

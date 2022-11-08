@@ -1,7 +1,7 @@
 import { ReplayCircleFilled } from '@mui/icons-material';
 import { useEffect } from 'react';
 import { useNavigation } from '../../services/core/navigatior';
-import { PlaylistItemDTO } from '../../shared/dtos/PlaylistItemDTO';
+import { PlaylistItemDTO } from '@episto/communication';
 import { Environment } from '../../static/Environemnt';
 import { Logger } from '../../static/Logger';
 import { ChipSmall } from '../administration/courses/ChipSmall';

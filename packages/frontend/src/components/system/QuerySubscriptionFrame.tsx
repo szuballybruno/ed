@@ -1,7 +1,7 @@
+import { apiRoutes } from '@episto/communication';
 import { useEffect, useRef } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { useNavigation } from '../../services/core/navigatior';
-import { apiRoutes } from '../../shared/types/apiRoutes';
 import { GlobalEventManagerType } from '../../static/EventBus';
 import { PropsWithChildren } from '../../static/frontendHelpers';
 import { Logger } from '../../static/Logger';

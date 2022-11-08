@@ -1,6 +1,6 @@
 import { Save } from '@mui/icons-material';
 import { useRoleEditData, useSaveRole } from '../../../services/api/rolesApiService';
-import { Id } from '../../../shared/types/versionId';
+import { Id } from '@episto/commontypes';
 import { usePostCallback } from '../../../static/frontendHelpers';
 import { } from '../../universal/epistoDialog/EpistoDialog';
 import { EpistoDialogLogicType } from '../../universal/epistoDialog/EpistoDialogTypes';

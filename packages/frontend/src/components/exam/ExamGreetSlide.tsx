@@ -1,4 +1,4 @@
-import { ExamPlayerDataDTO } from '../../shared/dtos/ExamPlayerDataDTO';
+import { ExamPlayerDataDTO } from '@episto/communication';
 import { Environment } from '../../static/Environemnt';
 import { ArrayBuilder, useIsMobileView } from '../../static/frontendHelpers';
 

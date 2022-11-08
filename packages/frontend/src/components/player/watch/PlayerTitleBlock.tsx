@@ -1,5 +1,5 @@
 import { useRecommendedItemQuota } from '../../../services/api/userProgressApiService';
-import { Id } from '../../../shared/types/versionId';
+import { Id } from '@episto/commontypes';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { RecommendedItemQuota } from '../../home/RecommendedItemQuota';
 import { PlayerTitleSubtitle } from './PlayerTitleSubtitle';

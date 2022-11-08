@@ -3,8 +3,8 @@
     "version": "1.0.0",
     "private": true,
     "license": "UNLICENSED",
-    "type": "module",
     "main": "./dist/index.js",
+    "module": "true",
     "typings": "./dist/index.d.ts",
     "scripts": {
         "build": "tsc"

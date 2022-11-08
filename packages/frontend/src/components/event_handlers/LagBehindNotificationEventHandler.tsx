@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { LagBehindNotificationDTO } from '../../shared/dtos/LagBehindNotificationDTO';
+import { LagBehindNotificationDTO } from '@episto/communication';
 import { EpistoDialog } from '../universal/epistoDialog/EpistoDialog';
 import { useEpistoDialogLogic } from '../universal/epistoDialog/EpistoDialogLogic';
 

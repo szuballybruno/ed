@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { showNotification } from '../services/core/notifications';
-import { AnswerResultDTO } from '../shared/dtos/AnswerResultDTO';
-import { QuestionDTO } from '../shared/dtos/QuestionDTO';
-import { Id } from '../shared/types/versionId';
+import { AnswerResultDTO } from '@episto/communication';
+import { QuestionDTO } from '@episto/communication';
+import { Id } from '@episto/commontypes';
 import { Environment } from '../static/Environemnt';
 import { useIsMobileView } from '../static/frontendHelpers';
 import { EpistoFlex2, EpistoFlex2Props } from './controls/EpistoFlex';

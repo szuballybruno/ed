@@ -1,3 +1,0 @@
-# Epistogram learning platform
-
-Detailed README coming soon...

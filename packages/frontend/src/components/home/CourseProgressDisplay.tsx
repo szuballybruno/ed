@@ -1,6 +1,6 @@
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { useNavigation } from '../../services/core/navigatior';
-import { CourseProgressDTO } from '../../shared/dtos/CourseProgressDTO';
+import { CourseProgressDTO } from '@episto/communication';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';

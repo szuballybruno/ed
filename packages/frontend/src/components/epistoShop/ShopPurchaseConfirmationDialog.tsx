@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { usePurchaseShopItem } from '../../services/api/shopApiService';
 import { useNavigation } from '../../services/core/navigatior';
 import { useShowErrorDialog } from '../../services/core/notifications';
-import { ShopItemDTO } from '../../shared/dtos/ShopItemDTO';
+import { ShopItemDTO } from '@episto/communication';
 import { usePaging } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';

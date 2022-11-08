@@ -1,7 +1,7 @@
 import { Divider, Avatar } from '@chakra-ui/react';
 import { ThumbUpAlt } from '@mui/icons-material';
-import { CommentListDTO } from '../../../shared/dtos/CommentListDTO';
-import { Id } from '../../../shared/types/versionId';
+import { CommentListDTO } from '@episto/communication';
+import { Id } from '@episto/commontypes';
 import { ChipSmall } from '../../administration/courses/ChipSmall';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';

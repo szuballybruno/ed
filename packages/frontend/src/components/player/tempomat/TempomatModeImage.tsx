@@ -1,6 +1,6 @@
 import { CSSProperties } from 'react';
 import { ClassBuilder, ClassBuilderCustomizationFnType } from '../../../helpers/classBuilder';
-import { TempomatModeType } from '../../../shared/types/sharedTypes';
+import { TempomatModeType } from '@episto/commontypes';
 import { Environment } from '../../../static/Environemnt';
 import { EpistoImage } from '../../controls/EpistoImage';
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import {CourseDetailsDTO} from '../../shared/dtos/CourseDetailsDTO';
+import {CourseDetailsDTO} from '@episto/communication';
 import {Environment} from '../../static/Environemnt';
 import {EpistoFlex2} from '../controls/EpistoFlex';
 

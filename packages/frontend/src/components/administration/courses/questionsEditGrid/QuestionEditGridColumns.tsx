@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { getVirtualId } from '../../../../services/core/idService';
-import { Id } from '../../../../shared/types/versionId';
+import { Id } from '@episto/commontypes';
 import { EpistoIcons } from '../../../../static/EpistoIcons';
 import { formatSeconds } from '../../../../static/frontendHelpers';
 import { EpistoButton } from '../../../controls/EpistoButton';

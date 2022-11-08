@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { SurveyApiService } from '../../services/api/SurveyApiService';
-import { AnswerSignupQuestionDTO } from '../../shared/dtos/AnswerSignupQuestionDTO';
-import { Id } from '../../shared/types/versionId';
+import { AnswerSignupQuestionDTO } from '@episto/communication';
+import { Id } from '@episto/commontypes';
 import { SingupQuestionSlides, useSignupQuestionsState } from '../exam/SingupQuestionSlides';
 
 export const SurveyQuestions = (props: {

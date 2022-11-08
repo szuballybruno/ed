@@ -3,7 +3,7 @@ import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { useDailyTipEditData, useSaveDailyTip } from '../../../services/api/dailyTipApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
-import { Id } from '../../../shared/types/versionId';
+import { Id } from '@episto/commontypes';
 import { useBoolParam, useIntParam } from '../../../static/locationHelpers';
 import { EpistoCheckbox } from '../../controls/EpistoCheckbox';
 import { EpistoEntryNew, useEpistoEntryState } from '../../controls/EpistoEntryNew';

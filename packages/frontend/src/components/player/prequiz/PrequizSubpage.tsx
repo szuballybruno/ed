@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { PrequizApiService } from '../../../services/api/prequizApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { useShowErrorDialog } from '../../../services/core/notifications';
-import { Id } from '../../../shared/types/versionId';
+import { Id } from '@episto/commontypes';
 import { Environment } from '../../../static/Environemnt';
 import { ArrayBuilder, useIsMobileView, usePaging } from '../../../static/frontendHelpers';
 import { useIntParam } from '../../../static/locationHelpers';

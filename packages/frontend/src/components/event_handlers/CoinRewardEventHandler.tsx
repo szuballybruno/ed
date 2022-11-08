@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { EventCoinAcquireNotificationDTO } from '../../shared/dtos/EventCoinAcquireNotificationDTO';
+import { EventCoinAcquireNotificationDTO } from '@episto/communication';
 import { translatableTexts } from '../../static/translatableTexts';
 import { CoinRewardDialog } from '../CoinRewardDialog';
 import { useEpistoDialogLogic } from '../universal/epistoDialog/EpistoDialogLogic';

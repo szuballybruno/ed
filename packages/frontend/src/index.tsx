@@ -1,12 +1,14 @@
+import { jsExtensions } from '@episto/commonlogic';
 import { LicenseInfo } from '@mui/x-license-pro';
 import { FC } from 'react';
 import { createRoot } from 'react-dom/client';
 import { FrameRendererRoot } from './components/system/FrameRendererRoot';
 import { MainRouting } from './MainRouting';
-import './shared/logic/jsExtensions.ts'; // extensions, important
 import './styles/globalCssClasses.css';
 import './styles/globalCssTypes';
 import './styles/index.css';
+
+jsExtensions.initJsExtensions();
 
 /**
  * Initialize app

@@ -2,7 +2,7 @@ import {Delete} from '@mui/icons-material';
 import Edit from '@mui/icons-material/Edit';
 import {useState} from 'react';
 import {applicationRoutes} from '../../../configuration/applicationRoutes';
-import {ShopItemAdminShortDTO} from '../../../shared/dtos/ShopItemAdminShortDTO';
+import {ShopItemAdminShortDTO} from '@episto/communication';
 import {useAdminShopItems, useCreateShopItem} from '../../../services/api/shopApiService';
 import {useNavigation} from '../../../services/core/navigatior';
 import {showNotification, useShowErrorDialog} from '../../../services/core/notifications';
@@ -15,7 +15,7 @@ import {AdminSubpageHeader} from '../AdminSubpageHeader';
 import {EpistoRoutes} from '../../universal/EpistoRoutes';
 import {ShopAdminEditSubpage} from './ShopAdminEditSubpage';
 import {useRedirectOnExactMatch} from '../../../static/frontendHelpers';
-import {Id} from '../../../shared/types/versionId';
+import {Id} from '@episto/commontypes';
 import {EpistoFlex2} from '../../controls/EpistoFlex';
 
 export const ShopAdminSubpage = () => {

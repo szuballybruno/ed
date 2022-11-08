@@ -1,6 +1,6 @@
+import { getPassowrdValidationError } from '@episto/commonlogic';
 import { TextField } from '@mui/material';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { getPassowrdValidationError } from '../../shared/logic/sharedLogic';
 import { EpistoEntryNew, EpistoEntryNewPropsType, useEpistoEntryState } from '../controls/EpistoEntryNew';
 
 export const usePasswordEntryState = () => {

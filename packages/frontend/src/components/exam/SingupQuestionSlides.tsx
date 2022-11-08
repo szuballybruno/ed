@@ -1,7 +1,7 @@
 import { FormControlLabel, Radio, RadioGroup } from '@mui/material';
 import { useShowErrorDialog } from '../../services/core/notifications';
-import { SignupQuestionDTO } from '../../shared/dtos/SignupQuestionDTO';
-import { Id } from '../../shared/types/versionId';
+import { SignupQuestionDTO } from '@episto/communication';
+import { Id } from '@episto/commontypes';
 import { usePaging } from '../../static/frontendHelpers';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';

@@ -2,11 +2,11 @@ import { useCallback, useMemo } from 'react';
 import { EMPTY_ARRAY } from '../helpers/emptyArray';
 import { LoadingStateType } from '../models/types';
 import { httpGetAsync } from '../services/core/httpClient';
-import { GetParametrizedRouteType, ParametrizedRouteType } from '@episto/commontypes';
 import { ErrorWithCode } from '@episto/commontypes';
 import { eventBus } from './EventBus';
 import { useForceUpdate } from './frontendHelpers';
 import { Logger } from './Logger';
+import { GetParametrizedRouteType, ParametrizedRouteType } from '@episto/communication';
 
 export type QueryState<T> = {
     state: LoadingStateType;

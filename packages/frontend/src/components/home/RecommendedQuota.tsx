@@ -1,6 +1,6 @@
 import { useDailyTip } from '../../services/api/dailyTipApiService';
 import { useRecommendedItemQuota } from '../../services/api/userProgressApiService';
-import { UserActiveCourseDTO } from '../../shared/dtos/UserActiveCourseDTO';
+import { UserActiveCourseDTO } from '@episto/communication';
 import { PagingType } from '../../static/frontendHelpers';
 import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 import { RecommendedItemQuota } from './RecommendedItemQuota';

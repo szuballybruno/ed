@@ -1,6 +1,6 @@
 import React from 'react';
 import wrap from 'word-wrap';
-import { PersonalityChartDataDTO } from '../../../shared/dtos/PersonalityChartDataDTO';
+import { PersonalityChartDataDTO } from '@episto/communication';
 import { defaultCharts } from '../../../static/defaultChartOptions';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoRadarChart } from './base_charts/EpistoRadarChart';

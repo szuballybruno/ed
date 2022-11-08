@@ -1,9 +1,9 @@
 import { Checkbox } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { CourseShopItemListDTO } from '../../../shared/dtos/CourseShopItemListDTO';
-import { DiscountCodeDTO } from '../../../shared/dtos/DiscountCodeDTO';
-import { ShopItemCategoryDTO } from '../../../shared/dtos/ShopItemCategoryDTO';
-import { ShopItemEditDTO } from '../../../shared/dtos/ShopItemEditDTO';
+import { CourseShopItemListDTO } from '@episto/communication';
+import { DiscountCodeDTO } from '@episto/communication';
+import { ShopItemCategoryDTO } from '@episto/communication';
+import { ShopItemEditDTO } from '@episto/communication';
 import { usePrivateCourses, useSaveShopItem, useShopItemCategories, useShopItemEditData } from '../../../services/api/shopApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
@@ -20,7 +20,7 @@ import { EpistoSelect } from '../../controls/EpistoSelect';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { useIntParam } from '../../../static/locationHelpers';
-import { Id } from '../../../shared/types/versionId';
+import { Id } from '@episto/commontypes';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoImage } from '../../controls/EpistoImage';
 

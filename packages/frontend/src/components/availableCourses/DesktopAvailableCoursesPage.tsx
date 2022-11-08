@@ -1,9 +1,9 @@
 import { GridItem } from '@chakra-ui/layout';
 import { useMediaQuery } from '@chakra-ui/react';
 import { Select, ToggleButton, ToggleButtonGroup } from '@mui/material';
-import { AvailableCourseDTO } from '../../shared/dtos/AvailableCourseDTO';
-import { CourseCategoryDTO } from '../../shared/dtos/CourseCategoryDTO';
-import { OrderType } from '../../shared/types/sharedTypes';
+import { AvailableCourseDTO } from '@episto/communication';
+import { CourseCategoryDTO } from '@episto/communication';
+import { OrderType } from '@episto/commontypes';
 import { translatableTexts } from '../../static/translatableTexts';
 import { ContentPane } from '../ContentPane';
 import { EpistoDiv } from '../controls/EpistoDiv';

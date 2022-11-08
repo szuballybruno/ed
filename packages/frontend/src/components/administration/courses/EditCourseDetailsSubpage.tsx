@@ -5,11 +5,10 @@ import { EMPTY_ARRAY } from '../../../helpers/emptyArray';
 import { CourseApiService } from '../../../services/api/courseApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
-import { CourseCategoryDTO } from '../../../shared/dtos/CourseCategoryDTO';
-import { CourseDetailsEditDataDTO } from '../../../shared/dtos/CourseDetailsEditDataDTO';
-import { instantiate, parseIntOrFail } from '../../../shared/logic/sharedLogic';
-import { CourseVisibilityType } from '../../../shared/types/sharedTypes';
-import { Id } from '../../../shared/types/versionId';
+import { CourseCategoryDTO } from '@episto/communication';
+import { CourseDetailsEditDataDTO } from '@episto/communication';
+import { CourseVisibilityType } from '@episto/commontypes';
+import { Id } from '@episto/commontypes';
 import { iterate, useStateObject } from '../../../static/frontendHelpers';
 import { useIntParam } from '../../../static/locationHelpers';
 import { EpistoCheckbox } from '../../controls/EpistoCheckbox';
@@ -25,6 +24,7 @@ import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { SimpleEditList } from '../SimpleEditList';
 import { CourseAdministartionFrame } from './CourseAdministartionFrame';
 import { EditSection } from './EditSection';
+import { instantiate, parseIntOrFail } from '@episto/commonlogic';
 
 export const EditCourseDetailsSubpage = () => {
 

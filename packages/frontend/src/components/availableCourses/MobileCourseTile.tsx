@@ -1,4 +1,4 @@
-import { AvailableCourseDTO } from '../../shared/dtos/AvailableCourseDTO';
+import { AvailableCourseDTO } from '@episto/communication';
 import { Environment } from '../../static/Environemnt';
 import { toDateStringFormatted } from '../../static/frontendHelpers';
 import { EpistoFlex2 } from '../controls/EpistoFlex';

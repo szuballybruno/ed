@@ -1,6 +1,6 @@
 import Edit from '@mui/icons-material/Edit';
 import {applicationRoutes} from '../../../configuration/applicationRoutes';
-import {PersonalityTraitCategoryShortDTO} from '../../../shared/dtos/PersonalityTraitCategoryShortDTO';
+import {PersonalityTraitCategoryShortDTO} from '@episto/communication';
 import {usePersonalityTraitCategories} from '../../../services/api/personalityAssessmentApiService';
 import {useNavigation} from '../../../services/core/navigatior';
 import {EpistoButton} from '../../controls/EpistoButton';
@@ -9,7 +9,7 @@ import {LoadingFrame} from '../../system/LoadingFrame';
 import {FlexListItem} from '../../universal/FlexListItem';
 import {FlexListTitleSubtitle} from '../../universal/FlexListTitleSubtitle';
 import {AdminSubpageHeader} from '../AdminSubpageHeader';
-import {Id} from '../../../shared/types/versionId';
+import {Id} from '@episto/commontypes';
 import {EpistoFlex2} from '../../controls/EpistoFlex';
 
 export const PersonalityTraitCategoriesSubpage = () => {

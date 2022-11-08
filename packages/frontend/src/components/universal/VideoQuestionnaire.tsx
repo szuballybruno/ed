@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useReactTimer } from '../../helpers/reactTimer';
 import { PlayerApiService } from '../../services/api/PlayerApiService';
-import { QuestionDTO } from '../../shared/dtos/QuestionDTO';
-import { Id } from '../../shared/types/versionId';
+import { QuestionDTO } from '@episto/communication';
+import { Id } from '@episto/commontypes';
 import { epochDates, useIsMobileView } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';

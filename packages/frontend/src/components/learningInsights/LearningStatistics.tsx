@@ -1,6 +1,6 @@
 import { useMediaQuery } from '@chakra-ui/react';
 import { useUserLearningPageStats } from '../../services/api/userStatsApiService';
-import { Id } from '../../shared/types/versionId';
+import { Id } from '@episto/commontypes';
 import { Environment } from '../../static/Environemnt';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoGrid } from '../controls/EpistoGrid';

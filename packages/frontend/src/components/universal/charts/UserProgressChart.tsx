@@ -1,4 +1,4 @@
-import { UserCourseProgressChartDTO } from '../../../shared/dtos/UserCourseProgressChartDTO';
+import { UserCourseProgressChartDTO } from '@episto/communication';
 import { EpistoLineChart } from './base_charts/EpistoLineChart';
 
 export const UserProgressChart = (props: {

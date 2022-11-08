@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react';
-import { PermissionCodeType } from '../../shared/types/sharedTypes';
+import { PermissionCodeType } from '@episto/commontypes';
 
 export const getAuthorizationContextLogic = (_permissionCodes: PermissionCodeType[]) => {
 

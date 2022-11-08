@@ -1,5 +1,5 @@
 import { useRecommendedItemQuota } from '../../services/api/userProgressApiService';
-import { UserActiveCourseDTO } from '../../shared/dtos/UserActiveCourseDTO';
+import { UserActiveCourseDTO } from '@episto/communication';
 import { Environment } from '../../static/Environemnt';
 import { PagingType } from '../../static/frontendHelpers';
 import { EpistoGrid } from '../controls/EpistoGrid';

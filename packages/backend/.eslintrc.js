@@ -1,4 +1,4 @@
-{
+module.exports = {
     "env": {
         "browser": true,
         "es2021": true
@@ -11,15 +11,14 @@
     "parserOptions": {
         "ecmaVersion": "latest",
         "sourceType": "module",
-        "tsconfigRootDir": "./",
-        "project": ["./tsconfig.json"]
+        "tsconfigRootDir": __dirname,
+        "project": "./tsconfig.json"
     },
     "plugins": [
         "@typescript-eslint",
         "unused-imports"
     ],
     "rules": {
-
         // TS
         "@typescript-eslint/explicit-module-boundary-types": "off",
         "@typescript-eslint/no-explicit-any": "off",
@@ -31,7 +30,6 @@
         "@typescript-eslint/no-inferrable-types": 0,
         "@typescript-eslint/no-floating-promises": "error",
         "@typescript-eslint/no-empty-function": "off",
-        
         // JS 
         "react/prop-types": "off",
         "unused-imports/no-unused-imports": "error",

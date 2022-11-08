@@ -5,7 +5,7 @@ import { CompanyApiService } from '../../services/api/CompanyApiService1';
 import { gradientBackgroundGenerator } from '../../services/core/gradientBackgroundGenerator';
 import { useNavigation } from '../../services/core/navigatior';
 import { useShowErrorDialog } from '../../services/core/notifications';
-import { ErrorWithCode } from '../../shared/types/ErrorWithCode';
+import { ErrorWithCode } from '@episto/commontypes';
 import { useIsMobileView } from '../../static/frontendHelpers';
 import { useQueryVal } from '../../static/locationHelpers';
 import { Logger } from '../../static/Logger';

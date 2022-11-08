@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { CourseApiService } from '../../services/api/courseApiService';
 import { useNavigation } from '../../services/core/navigatior';
 import { useShowErrorDialog } from '../../services/core/notifications';
-import { Id } from '../../shared/types/versionId';
+import { Id } from '@episto/commontypes';
 import { Environment } from '../../static/Environemnt';
 import { formatTimespan, useImageColor } from '../../static/frontendHelpers';
 import { useIntParam } from '../../static/locationHelpers';

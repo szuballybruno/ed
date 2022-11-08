@@ -1,8 +1,8 @@
 import { useCallback } from 'react';
 import { useUserVideoStats } from '../../../../services/api/userStatsApiService';
-import { UserVideoStatsDTO } from '../../../../shared/dtos/UserVideoStatsDTO';
-import { OmitProperty } from '../../../../shared/types/advancedTypes';
-import { Id } from '../../../../shared/types/versionId';
+import { UserVideoStatsDTO } from '@episto/communication';
+import { OmitProperty } from '@episto/commontypes';
+import { Id } from '@episto/commontypes';
 import { secondsToTime } from '../../../../static/frontendHelpers';
 import { EpistoButton } from '../../../controls/EpistoButton';
 import { EpistoDataGrid, GridColumnType } from '../../../controls/EpistoDataGrid';

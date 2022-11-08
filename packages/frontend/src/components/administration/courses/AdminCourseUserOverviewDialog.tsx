@@ -1,5 +1,5 @@
 import { useCourseOverviewData } from '../../../services/api/miscApiService';
-import { Id } from '../../../shared/types/versionId';
+import { Id } from '@episto/commontypes';
 import { Environment } from '../../../static/Environemnt';
 import { isNullOrUndefined } from '../../../static/frontendHelpers';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';

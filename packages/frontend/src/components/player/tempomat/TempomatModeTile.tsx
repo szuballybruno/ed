@@ -1,4 +1,4 @@
-import { TempomatModeType } from '../../../shared/types/sharedTypes';
+import { TempomatModeType } from '@episto/commontypes';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { TempomatModeImage } from './TempomatModeImage';

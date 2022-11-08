@@ -1,5 +1,5 @@
-import { AvailableCourseDTO } from '../../shared/dtos/AvailableCourseDTO';
-import { Id } from '../../shared/types/versionId';
+import { AvailableCourseDTO } from '@episto/communication';
+import { Id } from '@episto/commontypes';
 import { ContentPane } from '../ContentPane';
 import { PageRootContainer } from '../PageRootContainer';
 import { MobileHeader } from '../universal/MobileHeader';

@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Id } from '../../../../shared/types/versionId';
+import { Id } from '@episto/commontypes';
 import { EpistoIcons } from '../../../../static/EpistoIcons';
 import { useStateObject } from '../../../../static/frontendHelpers';
 import { XEventManager } from '../../../../static/XEventManager';

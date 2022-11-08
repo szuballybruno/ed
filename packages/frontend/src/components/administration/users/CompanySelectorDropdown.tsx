@@ -1,5 +1,5 @@
-import { CompanyDTO } from '../../../shared/dtos/company/CompanyDTO';
-import { Id } from '../../../shared/types/versionId';
+import { CompanyDTO } from '@episto/communication';
+import { Id } from '@episto/commontypes';
 import { LocationHelpers } from '../../../static/locationHelpers';
 import { EpistoSelect } from '../../controls/EpistoSelect';
 import { useCurrentUserContext } from '../../system/AuthenticationFrame';

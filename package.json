@@ -1,6 +1,11 @@
 {
   "private": "true",
-  "workspaces":[
+  "workspaces": [
     "packages/*"
-  ]
+  ],
+  "scripts": {
+    "builddeps": "cd ./packages/commontypes && yarn build && cd ../communication && yarn build && cd ../commonlogic && yarn build",
+    "buildfront": "cd ./packages/commontypes && yarn build && cd ../communication && yarn build && cd ../commonlogic && yarn build && cd ../frontend && yarn build",
+    "buildback": "cd ./packages/commontypes && yarn build && cd ../communication && yarn build && cd ../commonlogic && yarn build && cd ../backend && yarn build"
+  }
 }

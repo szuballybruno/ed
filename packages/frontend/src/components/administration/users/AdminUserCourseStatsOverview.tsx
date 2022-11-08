@@ -1,5 +1,5 @@
 import { useUserCourseStatsOverviewData } from '../../../services/api/userStatsApiService';
-import { Id } from '../../../shared/types/versionId';
+import { Id } from '@episto/commontypes';
 import { defaultCharts } from '../../../static/defaultChartOptions';
 import { Environment } from '../../../static/Environemnt';
 import { roundNumber } from '../../../static/frontendHelpers';

@@ -1,8 +1,8 @@
 import { useCallback } from 'react';
 import { useUserModuleStats } from '../../../../services/api/userStatsApiService';
-import { UserModuleStatsDTO } from '../../../../shared/dtos/UserModuleStatsDTO';
-import { OmitProperty } from '../../../../shared/types/advancedTypes';
-import { Id } from '../../../../shared/types/versionId';
+import { UserModuleStatsDTO } from '@episto/communication';
+import { OmitProperty } from '@episto/commontypes';
+import { Id } from '@episto/commontypes';
 import { useIntParam } from '../../../../static/locationHelpers';
 import { EpistoDataGrid, GridColumnType } from '../../../controls/EpistoDataGrid';
 import { EpistoFlex2 } from '../../../controls/EpistoFlex';

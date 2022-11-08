@@ -1,6 +1,6 @@
+import { XSafeObjectWrapper } from '@episto/commonlogic';
 import { useLocation, useParams, useSearchParams } from 'react-router-dom';
 import { ApplicationRoute } from '../models/types';
-import { XSafeObjectWrapper } from '../shared/logic/XSafeObjectWrapper';
 
 /**
  * @deprecated use "useRouteParams" 

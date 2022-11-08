@@ -1,5 +1,5 @@
 import { useMediaQuery } from '@chakra-ui/react';
-import { Id } from '../shared/types/versionId';
+import { Id } from '@episto/commontypes';
 import { EpistoFlex2 } from './controls/EpistoFlex';
 import { LearningStatistics } from './learningInsights/LearningStatistics';
 import { PersonalityAssessment } from './learningInsights/PersonalityAssessment';

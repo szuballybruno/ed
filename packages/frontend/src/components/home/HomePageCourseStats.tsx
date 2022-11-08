@@ -1,7 +1,7 @@
 import { Grid } from '@chakra-ui/react';
 import { useEffect } from 'react';
 import { useRecommendedItemQuota, useUserCourseProgressChartData } from '../../services/api/userProgressApiService';
-import { UserActiveCourseDTO } from '../../shared/dtos/UserActiveCourseDTO';
+import { UserActiveCourseDTO } from '@episto/communication';
 import { Environment } from '../../static/Environemnt';
 import { PagingType } from '../../static/frontendHelpers';
 import { EpistoFlex2 } from '../controls/EpistoFlex';

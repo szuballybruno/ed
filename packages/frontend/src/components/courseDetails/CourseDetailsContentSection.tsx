@@ -1,4 +1,4 @@
-import { CourseDetailsDTO } from '../../shared/dtos/CourseDetailsDTO';
+import { CourseDetailsDTO } from '@episto/communication';
 import { roundNumber } from '../../static/frontendHelpers';
 import { Playlist } from '../courseItemList/Playlist';
 

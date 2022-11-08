@@ -5,8 +5,8 @@ import { useSaveTeacherInfoData, useTeacherInfoEditData } from '../../../service
 import { UserApiService } from '../../../services/api/UserApiService1';
 import { useNavigation } from '../../../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
-import { TeacherBadgeNameType } from '../../../shared/types/sharedTypes';
-import { Id } from '../../../shared/types/versionId';
+import { TeacherBadgeNameType } from '@episto/commontypes';
+import { Id } from '@episto/commontypes';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoEntry } from '../../controls/EpistoEntry';

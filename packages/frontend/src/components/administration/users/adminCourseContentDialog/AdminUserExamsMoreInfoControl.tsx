@@ -1,7 +1,7 @@
 import { ExpandMore } from '@mui/icons-material';
 import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
 import { useLatestExamResults } from '../../../../services/api/examApiService';
-import { Id } from '../../../../shared/types/versionId';
+import { Id } from '@episto/commontypes';
 import { translatableTexts } from '../../../../static/translatableTexts';
 import { EpistoFlex2 } from '../../../controls/EpistoFlex';
 import { EpistoFont } from '../../../controls/EpistoFont';

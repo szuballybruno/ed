@@ -1,5 +1,5 @@
 import { Text } from '@chakra-ui/react';
-import { AvailableCourseDTO } from '../../shared/dtos/AvailableCourseDTO';
+import { AvailableCourseDTO } from '@episto/communication';
 import { Environment } from '../../static/Environemnt';
 import { formatTimespan } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';

@@ -1,4 +1,4 @@
-import { CourseLearningDTO } from '../../shared/dtos/CourseLearningDTO';
+import { CourseLearningDTO } from '@episto/communication';
 import { Environment } from '../../static/Environemnt';
 import { formatTimespan } from '../../static/frontendHelpers';
 import { EpistoButton, EpistoButtonPropsType } from '../controls/EpistoButton';

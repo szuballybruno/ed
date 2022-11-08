@@ -3,11 +3,11 @@ import { useCallback, useEffect, useState } from 'react';
 import { useReactTimer } from '../../../helpers/reactTimer';
 import { StillWatchingDialogMarker } from '../../../models/types';
 import { PlaybackApiService } from '../../../services/api/playbackApiService';
-import { PlaylistModuleDTO } from '../../../shared/dtos/PlaylistModuleDTO';
-import { QuestionDTO } from '../../../shared/dtos/QuestionDTO';
-import { VideoPlayerDataDTO } from '../../../shared/dtos/VideoDTO';
-import { CourseItemStateType, CourseModeType } from '../../../shared/types/sharedTypes';
-import { Id } from '../../../shared/types/versionId';
+import { PlaylistModuleDTO } from '@episto/communication';
+import { QuestionDTO } from '@episto/communication';
+import { VideoPlayerDataDTO } from '@episto/communication';
+import { CourseItemStateType, CourseModeType } from '@episto/commontypes';
+import { Id } from '@episto/commontypes';
 import {
     getRandomInteger,
     isBetweenThreshold,

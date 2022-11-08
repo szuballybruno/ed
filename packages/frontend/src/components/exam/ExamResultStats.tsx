@@ -1,4 +1,4 @@
-import { ExamStatsDTO } from '../../shared/dtos/ExamStatsDTO';
+import { ExamStatsDTO } from '@episto/communication';
 import { Environment } from '../../static/Environemnt';
 import { formatTime } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';

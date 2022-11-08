@@ -1,6 +1,6 @@
-import { UserCourseStatsDTO } from '../../../../shared/dtos/UserCourseStatsDTO';
-import { TempomatModeType } from '../../../../shared/types/sharedTypes';
-import { Id } from '../../../../shared/types/versionId';
+import { UserCourseStatsDTO } from '@episto/communication';
+import { TempomatModeType } from '@episto/commontypes';
+import { Id } from '@episto/commontypes';
 import { Environment } from '../../../../static/Environemnt';
 import { EpistoIcons } from '../../../../static/EpistoIcons';
 import { secondsToTime } from '../../../../static/frontendHelpers';

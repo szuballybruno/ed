@@ -1,6 +1,6 @@
 import { memo } from 'react';
-import { CourseAdminListItemDTO } from '../../../shared/dtos/admin/CourseAdminListItemDTO';
-import { Id } from '../../../shared/types/versionId';
+import { CourseAdminListItemDTO } from '@episto/communication';
+import { Id } from '@episto/commontypes';
 import { useIntParam } from '../../../static/locationHelpers';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoImage } from '../../controls/EpistoImage';

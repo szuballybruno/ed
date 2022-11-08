@@ -1,6 +1,6 @@
 import { CourseProgressApiService } from '../../services/api/CourseProgressApiService';
 import { useNavigation } from '../../services/core/navigatior';
-import { CourseLearningDTO } from '../../shared/dtos/CourseLearningDTO';
+import { CourseLearningDTO } from '@episto/communication';
 import { useAdminCourseContentDialogLogic } from '../administration/users/adminCourseContentDialog/AdminCourseContentDialogLogic';
 import { AdminUserCourseContentDialog } from '../administration/users/adminCourseContentDialog/AdminUserCourseContentDialog';
 import { EpistoFlex2 } from '../controls/EpistoFlex';

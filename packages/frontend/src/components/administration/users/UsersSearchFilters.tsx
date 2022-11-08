@@ -1,5 +1,5 @@
 import { Select } from '@mui/material';
-import { OrderType } from '../../../shared/types/sharedTypes';
+import { OrderType } from '@episto/commontypes';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoSearch } from '../../controls/EpistoSearch';

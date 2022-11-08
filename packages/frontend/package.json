@@ -3,7 +3,11 @@
   "version": "0.3.0",
   "private": true,
   "license": "UNLICENSED",
+  "type": "module",
   "dependencies": {
+    "@episto/commonlogic": "1.0.0",
+    "@episto/commontypes": "1.0.0",
+    "@episto/communication": "1.0.0",
     "@chakra-ui/image": "2.0.11",
     "@chakra-ui/input": "2.0.11",
     "@chakra-ui/layout": "2.1.8",

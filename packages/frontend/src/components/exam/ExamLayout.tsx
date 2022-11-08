@@ -1,7 +1,7 @@
 import { ArrowBack } from '@mui/icons-material';
 import { CSSProperties, ReactNode, useEffect } from 'react';
 import browser from '../../services/core/browserSniffingService';
-import { QuestionDTO } from '../../shared/dtos/QuestionDTO';
+import { QuestionDTO } from '@episto/communication';
 import { isString, useIsMobileView } from '../../static/frontendHelpers';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';

@@ -3,7 +3,7 @@ import { memo, useCallback, useEffect } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { CompanyApiService } from '../../../services/api/CompanyApiService1';
 import { showNotification } from '../../../services/core/notifications';
-import { CompanyEditDataDTO } from '../../../shared/dtos/company/CompanyEditDataDTO';
+import { CompanyEditDataDTO } from '@episto/communication';
 import { usePostCallback, useStateObject } from '../../../static/frontendHelpers';
 import { useRouteParams } from '../../../static/locationHelpers';
 import { EpistoCheckbox } from '../../controls/EpistoCheckbox';

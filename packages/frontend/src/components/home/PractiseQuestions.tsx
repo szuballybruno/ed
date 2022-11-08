@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useAnswerPractiseQuestion, usePractiseQuestion } from '../../services/api/questionApiService';
-import { Id } from '../../shared/types/versionId';
+import { Id } from '@episto/commontypes';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFlex2 } from '../controls/EpistoFlex';

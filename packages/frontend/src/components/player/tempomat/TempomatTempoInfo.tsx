@@ -1,5 +1,5 @@
 import { InfoOutlined } from '@mui/icons-material';
-import { TempomatModeType } from '../../../shared/types/sharedTypes';
+import { TempomatModeType } from '@episto/commontypes';
 import { Environment } from '../../../static/Environemnt';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';

@@ -1,6 +1,6 @@
 import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
 import React from 'react';
-import {CourseDetailsDTO} from '../../shared/dtos/CourseDetailsDTO';
+import {CourseDetailsDTO} from '@episto/communication';
 import {translatableTexts} from '../../static/translatableTexts';
 import {EpistoFlex2} from '../controls/EpistoFlex';
 import {EpistoFont} from '../controls/EpistoFont';

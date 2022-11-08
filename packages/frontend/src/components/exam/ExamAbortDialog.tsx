@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { QuestionDTO } from '../../shared/dtos/QuestionDTO';
+import { QuestionDTO } from '@episto/communication';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';

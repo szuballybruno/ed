@@ -1,5 +1,5 @@
-import { ModuleEditDTO } from '../../../../shared/dtos/ModuleEditDTO';
-import { Id } from '../../../../shared/types/versionId';
+import { ModuleEditDTO } from '@episto/communication';
+import { Id } from '@episto/commontypes';
 import { EpistoDataGridColumnBuilder } from '../../../controls/EpistoDataGrid';
 import { IXMutatorFunctions } from '../../../lib/XMutator/XMutatorCore';
 import { EpistoImageSelector } from '../../../universal/EpistoImageSelector';

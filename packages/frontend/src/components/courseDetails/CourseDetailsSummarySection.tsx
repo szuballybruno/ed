@@ -1,7 +1,7 @@
 import { Grid } from '@chakra-ui/react';
 import DoneIcon from '@mui/icons-material/Done';
 import React from 'react';
-import { CourseDetailsDTO } from '../../shared/dtos/CourseDetailsDTO';
+import { CourseDetailsDTO } from '@episto/communication';
 import { defaultCharts } from '../../static/defaultChartOptions';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoFlex2 } from '../controls/EpistoFlex';

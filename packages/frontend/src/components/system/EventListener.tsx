@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { useEventListener } from '../../services/api/eventApiService';
-import { EventCodeType } from '../../shared/types/sharedTypes';
+import { EventCodeType } from '@episto/commontypes';
 import { CoinRewardEventHandler } from '../event_handlers/CoinRewardEventHandler';
 import { LagBehindNotificationEventHandler } from '../event_handlers/LagBehindNotificationEventHandler';
 

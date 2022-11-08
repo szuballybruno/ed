@@ -6,13 +6,13 @@ import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { ApplicationRoute } from '../../models/types';
 import { CourseApiService } from '../../services/api/courseApiService';
 import { useShopItemBriefData } from '../../services/api/shopApiService';
-import { getKeys } from '../../shared/logic/sharedLogic';
-import { Id } from '../../shared/types/versionId';
+import { Id } from '@episto/commontypes';
 import { ArrayBuilder, useIsMatchingCurrentRoute } from '../../static/frontendHelpers';
 import { EpistoButton, EpistoButtonPropsType } from '../controls/EpistoButton';
 import { EpistoDiv } from '../controls/EpistoDiv';
 import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
+import { getKeys } from '@episto/commonlogic';
 
 const Content = (props: {
     isCurrent: boolean,

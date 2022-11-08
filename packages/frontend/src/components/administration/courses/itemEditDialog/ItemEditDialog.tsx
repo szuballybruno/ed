@@ -9,7 +9,7 @@ import { useCallback } from 'react';
 import { AnswerMutationsType, QuestionMutationsType } from '../questionsEditGrid/QuestionEditGridTypes';
 import { VideoEditor } from './VideoEditor';
 import { AdminVideoStatisticsModalPage } from './VideoStats';
-import { Id } from '../../../../shared/types/versionId';
+import { Id } from '@episto/commontypes';
 import { Logger } from '../../../../static/Logger';
 import { EMPTY_ARRAY } from '../../../../helpers/emptyArray';
 

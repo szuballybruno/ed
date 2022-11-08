@@ -3,7 +3,7 @@ import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { PlayerApiService } from '../../../services/api/PlayerApiService';
 import browser from '../../../services/core/browserSniffingService';
 import { useNavigation } from '../../../services/core/navigatior';
-import { PlayerDataDTO } from '../../../shared/dtos/PlayerDataDTO';
+import { PlayerDataDTO } from '@episto/communication';
 import { setPageTitle, useIsMobileView } from '../../../static/frontendHelpers';
 import { useStringParam } from '../../../static/locationHelpers';
 import { Logger } from '../../../static/Logger';

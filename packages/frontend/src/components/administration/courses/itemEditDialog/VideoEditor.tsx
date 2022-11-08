@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from 'react';
 import { CourseItemApiService } from '../../../../services/api/CourseItemApiService';
-import { ModuleEditDTO } from '../../../../shared/dtos/ModuleEditDTO';
-import { Id } from '../../../../shared/types/versionId';
+import { ModuleEditDTO } from '@episto/communication';
+import { Id } from '@episto/commontypes';
 import { useStateAndRef } from '../../../../static/frontendHelpers';
 import { translatableTexts } from '../../../../static/translatableTexts';
 import { EpistoButton } from '../../../controls/EpistoButton';

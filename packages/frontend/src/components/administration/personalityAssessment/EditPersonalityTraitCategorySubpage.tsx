@@ -1,7 +1,7 @@
 import { Delete } from '@mui/icons-material';
 import Edit from '@mui/icons-material/Edit';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
-import { DailyTipDTO } from '../../../shared/dtos/DailyTipDTO';
+import { DailyTipDTO } from '@episto/communication';
 import { useCreateDailyTip, useDeleteDailyTip } from '../../../services/api/dailyTipApiService';
 import { usePersonalityTraitCategoryDetails } from '../../../services/api/personalityAssessmentApiService';
 import { useNavigation } from '../../../services/core/navigatior';
@@ -12,7 +12,7 @@ import { LoadingFrame } from '../../system/LoadingFrame';
 import { FlexListItem } from '../../universal/FlexListItem';
 import { FlexListTitleSubtitle } from '../../universal/FlexListTitleSubtitle';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
-import { Id } from '../../../shared/types/versionId';
+import { Id } from '@episto/commontypes';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 
 export const EditPersonalityTraitCategorySubpage = () => {

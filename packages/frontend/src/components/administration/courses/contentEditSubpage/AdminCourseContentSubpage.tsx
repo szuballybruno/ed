@@ -7,9 +7,9 @@ import { useUploadVideoFileAsync, VideoFileUploadCallbackParams } from '../../..
 import { getVirtualId } from '../../../../services/core/idService';
 import { useNavigation } from '../../../../services/core/navigatior';
 import { killNotification, showNotification, showNotificationAdvanced, useShowErrorDialog2 } from '../../../../services/core/notifications';
-import { CourseContentItemAdminDTO } from '../../../../shared/dtos/admin/CourseContentItemAdminDTO';
-import { VersionCode } from '../../../../shared/types/VersionCode1';
-import { Id } from '../../../../shared/types/versionId';
+import { CourseContentItemAdminDTO } from '@episto/communication';
+import { VersionCode } from '@episto/commontypes';
+import { Id } from '@episto/commontypes';
 import { moveItemInArray } from '../../../../static/frontendHelpers';
 import { useIntParam } from '../../../../static/locationHelpers';
 import { translatableTexts } from '../../../../static/translatableTexts';

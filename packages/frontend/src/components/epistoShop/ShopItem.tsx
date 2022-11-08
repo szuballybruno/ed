@@ -1,5 +1,5 @@
 import { Done, LocalOffer } from '@mui/icons-material';
-import { ShopItemDTO } from '../../shared/dtos/ShopItemDTO';
+import { ShopItemDTO } from '@episto/communication';
 
 import { useNavigation } from '../../services/core/navigatior';
 import { Environment } from '../../static/Environemnt';

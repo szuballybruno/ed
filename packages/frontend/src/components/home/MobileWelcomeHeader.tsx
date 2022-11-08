@@ -1,4 +1,4 @@
-import { UserDTO } from '../../shared/dtos/UserDTO';
+import { UserDTO } from '@episto/communication';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { ProfileImage } from '../ProfileImage';

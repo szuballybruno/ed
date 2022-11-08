@@ -4,7 +4,7 @@ import { ApplicationRoute } from '../../../models/types';
 import { CourseApiService } from '../../../services/api/courseApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { showNotification } from '../../../services/core/notifications';
-import { Id } from '../../../shared/types/versionId';
+import { Id } from '@episto/commontypes';
 import { setPageTitle, useIsMatchingCurrentRoute } from '../../../static/frontendHelpers';
 import { useIntParam } from '../../../static/locationHelpers';
 import { EpistoButton } from '../../controls/EpistoButton';

@@ -1,6 +1,6 @@
 import {Close} from '@mui/icons-material';
 import {ButtonType} from '../../models/types';
-import {Id} from '../../shared/types/versionId';
+import {Id} from '@episto/commontypes';
 import {EpistoButton} from '../controls/EpistoButton';
 import {EpistoCheckbox} from '../controls/EpistoCheckbox';
 import {EpistoFlex2} from '../controls/EpistoFlex';

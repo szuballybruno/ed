@@ -2,7 +2,7 @@ import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { ButtonType } from '../../../models/types';
 import { UserApiService } from '../../../services/api/UserApiService1';
 import { useNavigation } from '../../../services/core/navigatior';
-import { CompanyDTO } from '../../../shared/dtos/company/CompanyDTO';
+import { CompanyDTO } from '@episto/communication';
 import { EpistoIcons } from '../../../static/EpistoIcons';
 import { ArrayBuilder } from '../../../static/frontendHelpers';
 import { useRouteParams2 } from '../../../static/locationHelpers';
