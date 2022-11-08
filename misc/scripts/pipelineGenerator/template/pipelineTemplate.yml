@@ -48,18 +48,19 @@ jobs:
 
       - name: Copy proper .env file
         run: cp -fr ./config/$BRANCH_NAME$.env ./.env 
-        working-directory: ./epistogram_frontend
+        working-directory: ./packages/frontend
 
       - name: Append additional values to .env file 
         run: |
           echo "" >> ./.env
           echo "REACT_APP_CURRENT_VERSION=`(date '+%Y.%m.%d.%H:%M')`" >> ./.env
           echo "REACT_APP_UNDER_MAINTENANCE=false" >> ./.env
-        working-directory: ./epistogram_frontend
+        working-directory: ./packages/frontend
 
       - name: Build frontend container
         run: |
-          docker buildx build ./epistogram_frontend \
+          docker buildx build . \
+          --file ./config/frontend.Dockerfile \
           --cache-from type=local,src=/tmp/.buildx-cache \
           --cache-to type=local,dest=/tmp/.buildx-cache,mode=max \
           --builder ${{ steps.buildx.outputs.name }} \
@@ -94,11 +95,12 @@ jobs:
       - name: Generate config.env file
         run: |
 $GEN_ENV_SCRIPT$
-        working-directory: ./epistogram_backend
+        working-directory: ./packages/backend
 
       - name: Build backend container
         run: |
-          docker buildx build ./epistogram_backend \
+          docker buildx build . \
+          --file ./config/backend.Dockerfile \
           --builder ${{ steps.buildx.outputs.name }} \
           --tag $BACKEND_IMAGE_NAME \
           --push
