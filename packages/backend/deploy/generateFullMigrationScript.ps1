@@ -31,4 +31,4 @@ else {
 
     node ./out/deployScriptGen.js
 }
-cd ../../../epistogram_backend/deploy
+cd ../../../packages/backend/deploy

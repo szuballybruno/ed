@@ -24,7 +24,7 @@
   },
   "include": [
     "src"
-, "../epistogram_backend/src/shared/dtos/company/CompanyAssociatedCourseDTO.ts"  ],
+  ],
   "exclude": [
     "node_modules",
   ]

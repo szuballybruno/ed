@@ -2,7 +2,7 @@ import './jsExtensions';
 import { Polyfills, writeFileSync } from "./polyfills";
 import { SoftSchemaScriptService } from "./SoftSchemaScriptService";
 
-const backendPath = __dirname + `/../../../../epistogram_backend`;
+const backendPath = __dirname + `/../../../../packages/backend`;
 const deployFolderFilePath = backendPath + '/deploy';
 const sqlFolderFilePath = backendPath + '/sql';
 const migrationsFolderFilePath = sqlFolderFilePath + '/migrations';
@@ -162,4 +162,5 @@ process
         console.error(err);
     });
 
+// console.log(Polyfills.getAllFilePaths(backendPath));
 createScripts();

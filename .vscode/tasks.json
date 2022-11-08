@@ -1,13 +1,62 @@
 {
-	"version": "2.0.0",
-	"tasks": [
-		{
-			"type": "npm",
-			"script": "nodenew",
-			"path": "epistogram_backend",
-			"problemMatcher": [],
-			"label": "npm: nodenew - epistogram_backend",
-			"detail": "nodemon -x node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm src/server.ts"
-		}
-	]
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "generate_pipelines",
+            "type": "shell",
+            "command": "cmd /c node scripts\\pipelineGenerator\\generatePipelines.js",
+            "problemMatcher": []
+        },
+        {
+            "label": "styleGen",
+            "type": "shell",
+            "command": "cmd /c node scripts\\styleGen\\styleGen.js",
+            "problemMatcher": []
+        },
+        {
+            "label": "getPermissionsType",
+            "type": "shell",
+            "command": "cmd /c start.bat",
+            "problemMatcher": [],
+            "options": {
+                "cwd": "${workspaceFolder}\\scripts\\permissionGen"
+            },
+        },
+        {
+            "label": "run test-misc",
+            "type": "shell",
+            "command": "npx jest -i misc.test.ts",
+            "problemMatcher": [],
+        },
+        // run
+        {
+            "type": "shell",
+            "label": "run frontend",
+            "command": "yarn --cwd ../epistogram_frontend start",
+            "problemMatcher": [],
+            "presentation": {
+                "group": "run"
+            }
+        },
+        {
+            "type": "shell",
+            "label": "run backend",
+            "command": "yarn --cwd ../packages/backend nodenew",
+            "problemMatcher": [],
+            "presentation": {
+                "group": "run"
+            }
+        },
+        // run-all
+        {
+            "label": "run-all",
+            "dependsOn": [
+                "run frontend",
+                "run backend",
+            ],
+            "problemMatcher": []
+        }
+    ]
 }
