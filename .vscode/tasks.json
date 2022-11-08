@@ -6,8 +6,11 @@
         {
             "label": "generate_pipelines",
             "type": "shell",
-            "command": "cmd /c node scripts\\pipelineGenerator\\generatePipelines.js",
-            "problemMatcher": []
+            "command": "yarn start",
+            "problemMatcher": [],
+            "options": {
+                "cwd": "${workspaceFolder}/misc/scripts/pipelineGenerator"
+            },
         },
         {
             "label": "styleGen",
