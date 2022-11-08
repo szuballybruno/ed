@@ -26,10 +26,10 @@ COPY ./packages/communication/tsconfig.json .
 COPY ./packages/communication/src .
 
 # run npm install in the WD
-RUN yarn --no-lockfile --force
+RUN npx yarn --no-lockfile --force
 
 # build backend
-RUN yarn buildback
+RUN npx yarn buildback
 
 # expose port 5000
 EXPOSE 5000
