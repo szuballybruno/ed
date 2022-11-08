@@ -1,4 +1,5 @@
 import dotenv from 'dotenv';
+import { FileSystemHelpers } from '../../static/FileSystemHelpers';
 import { ICookieOptions } from '../../utilities/XTurboExpress/XTurboExpressTypes';
 import { log } from './logger';
 
@@ -217,11 +218,17 @@ export class GlobalConfiguration {
     static initGlobalConfig = (rootDirectory: string) => {
 
         log('Environemnt: ' + GlobalConfiguration.getCurrentEnvironmentName());
-
         log('Loading config.env...');
 
+        const envFilePath = 'config/config.env';
+        const envFilePathExists = FileSystemHelpers
+            .checkFileExists(envFilePath);
+
+        if (!envFilePathExists)
+            throw new Error('Env file not found!');
+
         dotenv
-            .config({ path: 'config/config.env' });
+            .config({ path: envFilePath });
 
         const globalConfig = new GlobalConfiguration(rootDirectory);
 
