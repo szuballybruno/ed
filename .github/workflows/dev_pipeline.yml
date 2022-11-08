@@ -125,11 +125,11 @@ jobs:
           echo DB_IS_ORM_LOGGING_ENABLED = true >> config/config.env
         working-directory: ./packages/backend
 
-        - name: Generate config.env file
-          run: |
-            ls 
-            cd config
-            ls
+      - name: Generate config.env file
+        run: |
+          ls 
+          cd config
+          ls
         working-directory: ./packages/backend
 
       - name: Build backend container
