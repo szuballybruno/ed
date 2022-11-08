@@ -93,8 +93,7 @@ export const instansiateSingletonServices = (rootDir: string) => {
 
     //
     // INIT GLOBAL CONFIG
-    const globalConfiguration = GlobalConfiguration
-        .initGlobalConfig(rootDir);
+    const globalConfiguration = GlobalConfiguration.create(rootDir);
 
     //
     // INIT DB SCHEMA

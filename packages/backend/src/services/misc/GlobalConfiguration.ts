@@ -215,12 +215,15 @@ export class GlobalConfiguration {
         return value;
     }
 
-    static initGlobalConfig = (rootDirectory: string) => {
+    /**
+     * Static create funciton, to init .env before fields are initialized
+     */
+    static create(rootDirectory: string) {
 
         log('Environemnt: ' + GlobalConfiguration.getCurrentEnvironmentName());
         log('Loading config.env...');
 
-        const envFilePath = `${rootDirectory}/config/config.env`;
+        const envFilePath = `${rootDirectory}/../config/config.env`;
         const envFilePathExists = FileSystemHelpers
             .checkFileExists(envFilePath);
 
@@ -230,12 +233,8 @@ export class GlobalConfiguration {
         dotenv
             .config({ path: envFilePath });
 
-        const globalConfig = new GlobalConfiguration(rootDirectory);
-
-        log(`Started in '${globalConfig.misc.environmentName}' environment!`);
-
-        return globalConfig;
-    };
+        return new GlobalConfiguration(rootDirectory);
+    }
 
     static getCurrentEnvironmentName = () => {
 
