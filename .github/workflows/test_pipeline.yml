@@ -127,7 +127,7 @@ jobs:
       - name: Build backend container
         run: |
           docker buildx build . \
-          --file backend.Dockerfile \
+          --file ./config/backend.Dockerfile \
           --builder ${{ steps.buildx.outputs.name }} \
           --tag $BACKEND_IMAGE_NAME \
           --push
