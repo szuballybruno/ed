@@ -1,10 +1,10 @@
 import { PrequizCompletion } from '../models/entity/prequiz/PrequizCompletion';
 import { PrequizUserAnswer } from '../models/entity/prequiz/PrequizUserAnswer';
 import { PrequizQuestionView } from '../models/views/PrequizQuestionView';
-import { PrequizAnswerDTO } from '../shared/dtos/PrequizAnswerDTO';
-import { PrequizQuestionDTO } from '../shared/dtos/PrequizQuestionDTO';
-import { PrequizUserAnswerDTO } from '../shared/dtos/PrequizUserAnswerDTO';
-import { Id } from '../shared/types/versionId';
+import { PrequizAnswerDTO } from '@episto/communication';
+import { PrequizQuestionDTO } from '@episto/communication';
+import { PrequizUserAnswerDTO } from '@episto/communication';
+import { Id } from '@episto/commontypes';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { AuthorizationService } from './AuthorizationService';
 import { MapperService } from './MapperService';

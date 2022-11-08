@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from 'react';
 import { getVirtualId } from '../../../../services/core/idService';
-import { ModuleEditDTO } from '../../../../shared/dtos/ModuleEditDTO';
-import { Id } from '../../../../shared/types/versionId';
+import { ModuleEditDTO } from '@episto/communication';
+import { Id } from '@episto/commontypes';
 import { useXMutatorNew } from '../../../lib/XMutator/XMutatorReact';
 import { useEpistoDialogLogic } from '../../../universal/epistoDialog/EpistoDialogLogic';
 

@@ -1,5 +1,5 @@
-import { PermissionListDTO } from '../../shared/dtos/role/PermissionListDTO';
-import { apiRoutes } from '../../shared/types/apiRoutes';
+import { PermissionListDTO } from '@episto/communication';
+import { apiRoutes } from '@episto/communication';
 import { QueryService } from '../../static/QueryService';
 
 export const usePermissionsList = () => {

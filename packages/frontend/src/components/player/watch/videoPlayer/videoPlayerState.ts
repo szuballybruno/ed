@@ -3,7 +3,7 @@ import ReactPlayer from 'react-player';
 import screenfull from 'screenfull';
 import browser from '../../../../services/core/browserSniffingService';
 import { readVolumeSettings, writeVolumeSettings } from '../../../../services/core/storageService';
-import { VideoPlayerDataDTO } from '../../../../shared/dtos/VideoDTO';
+import { VideoPlayerDataDTO } from '@episto/communication';
 import { useIsMobileView, useScreenOrientation } from '../../../../static/frontendHelpers';
 import { Logger } from '../../../../static/Logger';
 import { useVideoPlayerFullscreenContext } from './VideoPlayerFullscreenFrame';

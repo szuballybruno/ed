@@ -1,6 +1,6 @@
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
-import { CourseRatingQuesitonType } from '../../shared/types/sharedTypes';
-import { Id } from '../../shared/types/versionId';
+import { CourseRatingQuesitonType } from '@episto/commontypes';
+import { Id } from '@episto/commontypes';
 
 
 export class CourseRatingQuestionView {

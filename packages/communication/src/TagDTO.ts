@@ -1,4 +1,4 @@
-export type TagView = {
+export type TagDTO = {
     id: string
     name: string
 }

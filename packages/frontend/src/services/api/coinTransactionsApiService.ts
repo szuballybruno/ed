@@ -1,8 +1,8 @@
 import { QueryService } from '../../static/QueryService';
-import { CoinTransactionDTO } from '../../shared/dtos/CoinTransactionDTO';
-import { apiRoutes } from '../../shared/types/apiRoutes';
+import { CoinTransactionDTO } from '@episto/communication';
+import { apiRoutes } from '@episto/communication';
 import { usePostDataUnsafe } from '../core/httpClient';
-import { Id } from '../../shared/types/versionId';
+import { Id } from '@episto/commontypes';
 
 export const useCoinTransactions = () => {
 

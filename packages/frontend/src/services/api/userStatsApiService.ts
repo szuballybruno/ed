@@ -1,16 +1,16 @@
-import { AdminCourseUserStatsDTO } from '../../shared/dtos/admin/AdminCourseUserStatsDTO';
-import { AdminHomePageOverviewDTO } from '../../shared/dtos/admin/AdminHomePageOverviewDTO';
-import { HomePageStatsDTO } from '../../shared/dtos/HomePageStatsDTO';
-import { ImproveYourselfPageStatsDTO } from '../../shared/dtos/ImproveYourselfPageStatsDTO';
-import { UserCourseStatsDTO } from '../../shared/dtos/UserCourseStatsDTO';
-import { UserCourseStatsOverviewDTO } from '../../shared/dtos/UserCourseStatsOverviewDTO';
-import { UserExamStatsDTO } from '../../shared/dtos/UserExamStatsDTO';
-import { UserLearningPageStatsDTO } from '../../shared/dtos/UserLearningPageStatsDTO';
-import { UserModuleStatsDTO } from '../../shared/dtos/UserModuleStatsDTO';
-import { UserVideoStatsDTO } from '../../shared/dtos/UserVideoStatsDTO';
-import { apiRoutes } from '../../shared/types/apiRoutes';
-import { CourseUserPresetType } from '../../shared/types/sharedTypes';
-import { Id } from '../../shared/types/versionId';
+import { AdminCourseUserStatsDTO } from '@episto/communication';
+import { AdminHomePageOverviewDTO } from '@episto/communication';
+import { HomePageStatsDTO } from '@episto/communication';
+import { ImproveYourselfPageStatsDTO } from '@episto/communication';
+import { UserCourseStatsDTO } from '@episto/communication';
+import { UserCourseStatsOverviewDTO } from '@episto/communication';
+import { UserExamStatsDTO } from '@episto/communication';
+import { UserLearningPageStatsDTO } from '@episto/communication';
+import { UserModuleStatsDTO } from '@episto/communication';
+import { UserVideoStatsDTO } from '@episto/communication';
+import { apiRoutes } from '@episto/communication';
+import { CourseUserPresetType } from '@episto/commontypes';
+import { Id } from '@episto/commontypes';
 import { QueryService } from '../../static/QueryService';
 
 export const useHomePageStats = () => {

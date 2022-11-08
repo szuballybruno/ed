@@ -1,13 +1,13 @@
-import { CompanyEditDataDTO } from '../../shared/dtos/company/CompanyEditDataDTO';
-import { CompanyDTO } from '../../shared/dtos/company/CompanyDTO';
-import { apiRoutes } from '../../shared/types/apiRoutes';
+import { CompanyEditDataDTO } from '@episto/communication';
+import { CompanyDTO } from '@episto/communication';
+import { apiRoutes } from '@episto/communication';
 import { QueryService } from '../../static/QueryService';
 import { usePostDataUnsafe, usePostMultipartDataUnsafe } from '../core/httpClient';
-import { RoleAssignCompanyDTO } from '../../shared/dtos/company/RoleAssignCompanyDTO';
-import { Id } from '../../shared/types/versionId';
+import { RoleAssignCompanyDTO } from '@episto/communication';
+import { Id } from '@episto/commontypes';
 import { useCallback } from 'react';
-import { CompanyPublicDTO } from '../../shared/dtos/company/CompanyPublicDTO';
-import { CompanyAssociatedCourseDTO } from '../../shared/dtos/company/CompanyAssociatedCourseDTO';
+import { CompanyPublicDTO } from '@episto/communication';
+import { CompanyAssociatedCourseDTO } from '@episto/communication';
 
 const useCompaniesAdmin = () => {
 

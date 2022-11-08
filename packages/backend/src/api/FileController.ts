@@ -1,5 +1,5 @@
 import { FileService } from '../services/FileService';
-import { apiRoutes } from '../shared/types/apiRoutes';
+import { apiRoutes } from '@episto/communication';
 import { ServiceProvider } from '../startup/serviceDependencyContainer';
 import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';

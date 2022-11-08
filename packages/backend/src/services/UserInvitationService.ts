@@ -1,7 +1,7 @@
 import { User } from '../models/entity/misc/User';
-import { UserEditSaveDTO } from '../shared/dtos/UserEditSaveDTO';
-import { ErrorWithCode } from '../shared/types/ErrorWithCode';
-import { Id } from '../shared/types/versionId';
+import { UserEditSaveDTO } from '@episto/communication';
+import { ErrorWithCode } from '@episto/commontypes';
+import { Id } from '@episto/commontypes';
 import { getFullName } from '../utilities/helpers';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { EmailService } from './EmailService';

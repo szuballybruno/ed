@@ -2,7 +2,7 @@ import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGenerat
 import { DeletionDateColumn, XJoinColumn, XViewColumn } from '../../../services/XORM/XORMDecorators';
 import { AnswerVersion } from '../answer/AnswerVersion';
 import { GivenAnswer } from './GivenAnswer';
-import { Id } from '../../../shared/types/versionId';
+import { Id } from '@episto/commontypes';
 
 @Entity()
 export class AnswerGivenAnswerBridge {

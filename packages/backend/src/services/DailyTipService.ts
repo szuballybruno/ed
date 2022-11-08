@@ -1,13 +1,13 @@
 import { DailyTip } from '../models/entity/misc/DailyTip';
 import { DailyTipOccurrence } from '../models/entity/misc/DailyTipOccurrence';
-import { DailyTipDTO } from '../shared/dtos/DailyTipDTO';
-import { DailyTipEditDataDTO } from '../shared/dtos/DailyTipEditDataDTO';
+import { DailyTipDTO } from '@episto/communication';
+import { DailyTipEditDataDTO } from '@episto/communication';
 import { DailyTipView } from '../models/views/DailyTipView';
 import { getRandomNumber } from '../utilities/helpers';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
-import { Id } from '../shared/types/versionId';
+import { Id } from '@episto/commontypes';
 import { AuthorizationService } from './AuthorizationService';
 
 export class DailyTipService {

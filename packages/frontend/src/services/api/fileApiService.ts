@@ -1,4 +1,4 @@
-import { apiRoutes } from '../../shared/types/apiRoutes';
+import { apiRoutes } from '@episto/communication';
 import { usePostMultipartDataUnsafe } from '../core/httpClient';
 
 export const useUploadAvatarFile = () => {

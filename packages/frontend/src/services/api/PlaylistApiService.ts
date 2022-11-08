@@ -1,5 +1,5 @@
-import { PlaylistItemDTO } from '../../shared/dtos/PlaylistItemDTO';
-import { apiRoutes } from '../../shared/types/apiRoutes';
+import { PlaylistItemDTO } from '@episto/communication';
+import { apiRoutes } from '@episto/communication';
 import { QueryService } from '../../static/QueryService';
 
 export const PlaylistApiService = {

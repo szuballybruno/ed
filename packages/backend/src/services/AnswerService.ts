@@ -1,8 +1,8 @@
 import { Answer } from '../models/entity/answer/Answer';
 import { AnswerData } from '../models/entity/answer/AnswerData';
 import { AnswerVersion } from '../models/entity/answer/AnswerVersion';
-import { AnswerEditDTO } from '../shared/dtos/AnswerEditDTO';
-import { Mutation } from '../shared/dtos/mutations/Mutation';
+import { AnswerEditDTO } from '@episto/communication';
+import { Mutation } from '@episto/communication';
 import { VersionMigrationContainer } from '../utilities/misc';
 import { LoggerService } from './LoggerService';
 import { XMutatorHelpers } from './misc/XMutatorHelpers';

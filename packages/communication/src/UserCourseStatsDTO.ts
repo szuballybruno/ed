@@ -1,5 +1,4 @@
-import { TempomatModeType } from '../types/sharedTypes';
-import { Id } from '@episto/commontypes';
+import { Id, TempomatModeType } from '@episto/commontypes';
 
 export class UserCourseStatsDTO {
     userId: Id<'User'>;

@@ -1,6 +1,6 @@
-import HttpErrorResponseDTO from '../shared/dtos/HttpErrorResponseDTO';
-import { ErrorWithCode } from '../shared/types/ErrorWithCode';
-import { ErrorCodeType } from '../shared/types/sharedTypes';
+import { HttpErrorResponseDTO } from '@episto/communication';
+import { ErrorWithCode } from '@episto/commontypes';
+import { ErrorCodeType } from '@episto/commontypes';
 import { ITurboResponse } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
 export const respondError = (res: ITurboResponse, error: Error) => {

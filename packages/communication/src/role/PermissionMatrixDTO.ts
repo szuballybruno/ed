@@ -1,4 +1,4 @@
-import { PermissionCodeType } from '../../types/sharedTypes';
+import { PermissionCodeType } from "@episto/commontypes";
 
 export class PermissionMatrixDTO {
     code: PermissionCodeType;

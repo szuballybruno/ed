@@ -1,6 +1,6 @@
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
-import { AnswerSessionType } from '../../shared/types/sharedTypes';
-import { Id } from '../../shared/types/versionId';
+import { AnswerSessionType } from '@episto/commontypes';
+import { Id } from '@episto/commontypes';
 
 
 export class AnswerSessionGroupView {

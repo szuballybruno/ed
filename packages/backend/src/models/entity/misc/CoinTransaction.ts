@@ -1,6 +1,6 @@
 import {Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation} from '../../MyORM';
 import {XViewColumn} from '../../../services/XORM/XORMDecorators';
-import {Id} from '../../../shared/types/versionId';
+import {Id} from '@episto/commontypes';
 import {ActivitySession} from './ActivitySession';
 import {ActivityStreak} from './ActivityStreak';
 import {GivenAnswer} from './GivenAnswer';

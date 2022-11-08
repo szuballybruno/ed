@@ -1,9 +1,9 @@
 import { UploadedFile } from 'express-fileupload';
 import { logSecondary } from '../../services/misc/logger';
-import { XSafeObjectWrapper } from '../../shared/logic/XSafeObjectWrapper';
-import { ParametrizedRouteType, RouteParameterType } from '../../shared/types/apiRoutes';
-import { ErrorWithCode } from '../../shared/types/ErrorWithCode';
-import { Id } from '../../shared/types/versionId';
+import { XSafeObjectWrapper } from '@episto/commonlogic';
+import { ParametrizedRouteType, RouteParameterType } from '@episto/communication';
+import { ErrorWithCode } from '@episto/commontypes';
+import { Id } from '@episto/commontypes';
 import { withValueOrBadRequest } from '../helpers';
 import { ITurboRequest, ITurboResponse } from './XTurboExpressTypes';
 

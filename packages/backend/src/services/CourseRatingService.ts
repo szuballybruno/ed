@@ -1,13 +1,13 @@
 import { CourseRatingQuestionUserAnswer } from '../models/entity/courseRating/CourseRatingQuestionUserAnswer';
-import { CourseRatingGroupDTO } from '../shared/dtos/CourseRatingGroupDTO';
-import { CourseRatingQuestionAnswersDTO } from '../shared/dtos/CourseRatingQuestionAnswersDTO';
-import { CourseRatingQuestionDTO } from '../shared/dtos/CourseRatingQuestionDTO';
+import { CourseRatingGroupDTO } from '@episto/communication';
+import { CourseRatingQuestionAnswersDTO } from '@episto/communication';
+import { CourseRatingQuestionDTO } from '@episto/communication';
 import { CourseRatingQuestionView } from '../models/views/CourseRatingQuestionView';
 import { MapperService } from './MapperService';
 import { ServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
-import { Id } from '../shared/types/versionId';
+import { Id } from '@episto/commontypes';
 import { AuthorizationService } from './AuthorizationService';
 import { CoinTransactionService } from './CoinTransactionService';
 

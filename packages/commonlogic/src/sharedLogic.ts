@@ -1,5 +1,5 @@
-import { UserPermissionDTO } from '../dtos/role/UserPermissionDTO';
-import { PasswordValidationIssueType } from '../types/sharedTypes';
+import { PasswordValidationIssueType } from '@episto/commontypes';
+import { UserPermissionDTO } from '@episto/communication';
 
 export const getPassowrdValidationError = (password: string, passwordControl: string): PasswordValidationIssueType | null => {
 

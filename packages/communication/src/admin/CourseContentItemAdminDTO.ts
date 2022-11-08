@@ -1,5 +1,4 @@
-import { CourseItemType } from '../../types/sharedTypes';
-import { VersionCode } from '../../types/VersionCode1';
+import { CourseItemType, VersionCode } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
 import { AnswerEditDTO } from '../AnswerEditDTO';
 import { Mutation } from '../mutations/Mutation';

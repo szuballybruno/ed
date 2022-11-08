@@ -1,6 +1,6 @@
-import { apiRoutes } from '../../shared/types/apiRoutes';
-import { TempomatModeType } from '../../shared/types/sharedTypes';
-import { Id } from '../../shared/types/versionId';
+import { apiRoutes } from '@episto/communication';
+import { TempomatModeType } from '@episto/commontypes';
+import { Id } from '@episto/commontypes';
 import { QueryService } from '../../static/QueryService';
 import { usePostDataUnsafe } from '../core/httpClient';
 

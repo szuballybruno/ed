@@ -1,6 +1,6 @@
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
-import { CourseItemType } from '../../shared/types/sharedTypes';
-import { Id } from '../../shared/types/versionId';
+import { CourseItemType } from '@episto/commontypes';
+import { Id } from '@episto/commontypes';
 
 export class PlaylistView {
 

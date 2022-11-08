@@ -1,10 +1,10 @@
-import { DailyTipEditDataDTO } from '../shared/dtos/DailyTipEditDataDTO';
+import { DailyTipEditDataDTO } from '@episto/communication';
 import { DailyTipService } from '../services/DailyTipService';
 import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
-import { apiRoutes } from '../shared/types/apiRoutes';
+import { apiRoutes } from '@episto/communication';
 import { ServiceProvider } from '../startup/serviceDependencyContainer';
-import { Id } from '../shared/types/versionId';
+import { Id } from '@episto/commontypes';
 
 export class DailyTipController {
 

@@ -1,6 +1,6 @@
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
-import { GivenAnswerStateType } from '../../shared/types/sharedTypes';
-import { Id } from '../../shared/types/versionId';
+import { GivenAnswerStateType } from '@episto/commontypes';
+import { Id } from '@episto/commontypes';
 
 
 export class LatestExamResultView {

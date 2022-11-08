@@ -1,5 +1,4 @@
-import { CourseItemStateType } from '../types/sharedTypes';
-import { Id } from '@episto/commontypes';
+import { CourseItemStateType, Id } from '@episto/commontypes';
 import { PlaylistItemDTO } from './PlaylistItemDTO';
 
 export class PlaylistModuleDTO {

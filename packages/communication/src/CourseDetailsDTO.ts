@@ -1,4 +1,4 @@
-import { CourseStageNameType, CourseVisibilityType, TeacherBadgeNameType } from '../types/sharedTypes';
+import { CourseStageNameType, CourseVisibilityType, TeacherBadgeNameType } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
 import { HumanSkillBenefitDTO } from './HumanSkillBenefitDTO';
 import { PlaylistModuleDTO } from './PlaylistModuleDTO';

@@ -1,4 +1,4 @@
-import { EpistoLineChartDataType } from '../types/epistoChartTypes';
+import { EpistoLineChartDataType } from "@episto/commontypes";
 
 export class UserCourseProgressChartDTO {
     dates: string[];

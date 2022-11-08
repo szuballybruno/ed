@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import { LoadingStateType } from '../../models/types';
-import { apiRoutes } from '../../shared/types/apiRoutes';
-import { Id } from '../../shared/types/versionId';
+import { apiRoutes } from '@episto/communication';
+import { Id } from '@episto/commontypes';
 import { FileUploadCallbackParams, uploadeFileChunksAsync } from '../core/fileUploadClient';
 
 export type VideoFileUploadCallbackParams = FileUploadCallbackParams & { videoVersionId: Id<'VideoVersion'> };

@@ -1,8 +1,8 @@
-import { PlaylistItemCode } from '../../shared/types/PlaylistItemCode';
-import { CourseItemType } from '../../shared/types/sharedTypes';
-import { Id } from '../../shared/types/versionId';
+import { PlaylistItemCode } from '@episto/commontypes';
+import { CourseItemType } from '@episto/commontypes';
+import { Id } from '@episto/commontypes';
 import { withValue } from '../../utilities/helpers';
-import { base64Decode } from '../../shared/logic/base64Service';
+import { base64Decode } from '@episto/commonlogic';
 
 export const getItemCode = PlaylistItemCode.getItemCode;
 

@@ -1,7 +1,7 @@
-import { AnswerEditDTO } from '../../../../shared/dtos/AnswerEditDTO';
-import { Mutation } from '../../../../shared/dtos/mutations/Mutation';
-import { QuestionEditDataReadDTO } from '../../../../shared/dtos/QuestionEditDataReadDTO';
-import { Id } from '../../../../shared/types/versionId';
+import { AnswerEditDTO } from '@episto/communication';
+import { Mutation } from '@episto/communication';
+import { QuestionEditDataReadDTO } from '@episto/communication';
+import { Id } from '@episto/commontypes';
 
 export type RowSchema = {
 

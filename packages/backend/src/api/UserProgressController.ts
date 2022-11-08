@@ -1,6 +1,6 @@
 import { UserProgressService } from '../services/UserProgressService';
-import { apiRoutes } from '../shared/types/apiRoutes';
-import { Id } from '../shared/types/versionId';
+import { apiRoutes } from '@episto/communication';
+import { Id } from '@episto/commontypes';
 import { ServiceProvider } from '../startup/serviceDependencyContainer';
 import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';

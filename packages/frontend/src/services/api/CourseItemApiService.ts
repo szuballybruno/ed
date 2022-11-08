@@ -1,6 +1,6 @@
-import { CourseItemEditDTO } from '../../shared/dtos/CourseItemEditDTO';
-import { apiRoutes } from '../../shared/types/apiRoutes';
-import { Id } from '../../shared/types/versionId';
+import { CourseItemEditDTO } from '@episto/communication';
+import { apiRoutes } from '@episto/communication';
+import { Id } from '@episto/commontypes';
 import { QueryService } from '../../static/QueryService';
 
 export const CourseItemApiService = {

@@ -1,8 +1,8 @@
-import { RoleCreateDTO } from '../../shared/dtos/role/RoleCreateDTO';
-import { RoleEditDTO } from '../../shared/dtos/role/RoleEditDTO';
-import { RoleAdminListDTO } from '../../shared/dtos/RoleAdminListDTO';
-import { apiRoutes } from '../../shared/types/apiRoutes';
-import { Id } from '../../shared/types/versionId';
+import { RoleCreateDTO } from '@episto/communication';
+import { RoleEditDTO } from '@episto/communication';
+import { RoleAdminListDTO } from '@episto/communication';
+import { apiRoutes } from '@episto/communication';
+import { Id } from '@episto/commontypes';
 import { QueryService } from '../../static/QueryService';
 import { usePostDataUnsafe } from '../core/httpClient';
 

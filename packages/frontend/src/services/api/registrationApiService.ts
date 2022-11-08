@@ -1,8 +1,8 @@
-import { RegisterUserViaActivationCodeDTO } from '../../shared/dtos/RegisterUserViaActivationCodeDTO';
-import { RegisterUserViaInvitationTokenDTO } from '../../shared/dtos/RegisterUserViaInvitationTokenDTO';
-import { RegisterUserViaPublicTokenDTO } from '../../shared/dtos/RegisterUserViaPublicTokenDTO';
-import { UserEditSaveDTO } from '../../shared/dtos/UserEditSaveDTO';
-import { apiRoutes } from '../../shared/types/apiRoutes';
+import { RegisterUserViaActivationCodeDTO } from '@episto/communication';
+import { RegisterUserViaInvitationTokenDTO } from '@episto/communication';
+import { RegisterUserViaPublicTokenDTO } from '@episto/communication';
+import { UserEditSaveDTO } from '@episto/communication';
+import { apiRoutes } from '@episto/communication';
 import { usePostDataUnsafe } from '../core/httpClient';
 
 export const useRegisterUser = () => {

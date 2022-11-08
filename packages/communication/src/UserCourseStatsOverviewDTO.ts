@@ -1,5 +1,4 @@
-import { UserActivityDistributionChartData } from '../types/epistoChartTypes';
-import { Id } from '@episto/commontypes';
+import { Id, UserActivityDistributionChartData } from '@episto/commontypes';
 import { UserCourseProgressChartDTO } from './UserCourseProgressChartDTO';
 
 export class UserCourseStatsOverviewDTO {

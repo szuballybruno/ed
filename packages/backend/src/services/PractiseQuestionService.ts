@@ -1,7 +1,7 @@
 import { AnswerSession } from '../models/entity/misc/AnswerSession';
 import { PractiseQuestionInfoView } from '../models/views/PractiseQuestionInfoView';
-import { AnswerQuestionDTO } from '../shared/dtos/AnswerQuestionDTO';
-import { Id } from '../shared/types/versionId';
+import { AnswerQuestionDTO } from '@episto/communication';
+import { Id } from '@episto/commontypes';
 import { isXMinutesAgo } from '../utilities/helpers';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { AuthorizationService } from './AuthorizationService';

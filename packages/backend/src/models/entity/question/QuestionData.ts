@@ -1,6 +1,6 @@
 import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from '../../MyORM';
 import { DeletionDateColumn, XOneToMany, XViewColumn } from '../../../services/XORM/XORMDecorators';
-import { Id } from '../../../shared/types/versionId';
+import { Id } from '@episto/commontypes';
 import { QuestionType } from '../misc/QuestionType';
 import { QuestionVersion } from './QuestionVersion';
 

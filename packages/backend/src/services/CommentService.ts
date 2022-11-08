@@ -1,9 +1,9 @@
 import { Comment } from '../models/entity/misc/Comment';
 import { CommentListView } from '../models/views/CommentListView';
 import { LatestVideoView } from '../models/views/LatestVideoView';
-import { CommentCreateDTO } from '../shared/dtos/CommentCreateDTO';
-import { CommentListDTO } from '../shared/dtos/CommentListDTO';
-import { instantiate } from '../shared/logic/sharedLogic';
+import { CommentCreateDTO } from '@episto/communication';
+import { CommentListDTO } from '@episto/communication';
+import { instantiate } from '@episto/commonlogic';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { InsertEntity } from '../utilities/misc';
 import { MapperService } from './MapperService';

@@ -1,10 +1,10 @@
-import { TeacherInfoEditDTO } from '../shared/dtos/TeacherInfoEditDTO';
+import { TeacherInfoEditDTO } from '@episto/communication';
 import { TeacherInfoService } from '../services/TeacherInfoService';
 import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
-import { apiRoutes } from '../shared/types/apiRoutes';
+import { apiRoutes } from '@episto/communication';
 import { ServiceProvider } from '../startup/serviceDependencyContainer';
-import { Id } from '../shared/types/versionId';
+import { Id } from '@episto/commontypes';
 import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
 export class TeacherInfoController implements XController<TeacherInfoController> {

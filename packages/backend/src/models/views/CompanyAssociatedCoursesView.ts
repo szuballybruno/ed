@@ -1,5 +1,5 @@
 import { DeletionDateColumn, IsDeletedColumn, XViewColumn } from '../../services/XORM/XORMDecorators';
-import { Id } from '../../shared/types/versionId';
+import { Id } from '@episto/commontypes';
 
 
 export class CompanyAssociatedCoursesView {

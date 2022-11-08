@@ -1,10 +1,10 @@
-import { SaveCourseContentDTO } from '../dtos/admin/SaveCourseContentDTO';
-import { CompanyAssociatedCourseDTO } from '../dtos/company/CompanyAssociatedCourseDTO';
-import { CourseStartDTO } from '../dtos/CourseStartDTO';
-import { Mutation } from '../dtos/mutations/Mutation';
-import { UserCourseStatsDTO } from '../dtos/UserCourseStatsDTO';
-import { CourseUserPresetType } from './sharedTypes';
-import { Id } from './versionId';
+import { CourseUserPresetType, Id } from "@episto/commontypes";
+import { SaveCourseContentDTO } from "../admin/SaveCourseContentDTO";
+import { CompanyAssociatedCourseDTO } from "../company/CompanyAssociatedCourseDTO";
+import { CourseStartDTO } from "../CourseStartDTO";
+import { Mutation } from "../mutations/Mutation";
+import { UserCourseStatsDTO } from "../UserCourseStatsDTO";
+
 
 export type RouteParameterType<TBody = any, TQuery = any> = { body?: TBody, query?: TQuery };
 export type ParametrizedRouteType<T extends RouteParameterType> = string & T;

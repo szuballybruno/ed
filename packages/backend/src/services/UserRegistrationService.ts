@@ -1,7 +1,7 @@
 import { Company } from '../models/entity/misc/Company';
 import { TokenPair } from '../models/TokenPair';
-import { getPassowrdValidationError } from '../shared/logic/sharedLogic';
-import { ErrorWithCode } from '../shared/types/ErrorWithCode';
+import { getPassowrdValidationError } from '@episto/commonlogic';
+import { ErrorWithCode } from '@episto/commontypes';
 import { throwNotImplemented } from '../utilities/helpers';
 import { ActivationCodeService } from './ActivationCodeService';
 import { AuthenticationService } from './AuthenticationService';

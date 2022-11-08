@@ -1,10 +1,10 @@
-import {PretestService} from '../services/PretestService';
-import {apiRoutes} from '../shared/types/apiRoutes';
-import {Id} from '../shared/types/versionId';
-import {ServiceProvider} from '../startup/serviceDependencyContainer';
-import {ActionParams} from '../utilities/XTurboExpress/ActionParams';
-import {XControllerAction} from '../utilities/XTurboExpress/XTurboExpressDecorators';
-import {XController} from '../utilities/XTurboExpress/XTurboExpressTypes';
+import { PretestService } from '../services/PretestService';
+import { apiRoutes } from '@episto/communication';
+import { Id } from '@episto/commontypes';
+import { ServiceProvider } from '../startup/serviceDependencyContainer';
+import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
+import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
+import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
 export class PretestController implements XController<PretestController> {
 
@@ -39,7 +39,7 @@ export class PretestController implements XController<PretestController> {
             .getPretestResultsAsync(params.principalId, courseId);
     }
 
-    @XControllerAction(apiRoutes.pretest.finishPretest, {isPost: true})
+    @XControllerAction(apiRoutes.pretest.finishPretest, { isPost: true })
     finishPretestAction(params: ActionParams) {
 
         const answerSessionId = params

@@ -1,7 +1,7 @@
-import { CommentCreateDTO } from '../../shared/dtos/CommentCreateDTO';
-import { CommentListDTO } from '../../shared/dtos/CommentListDTO';
-import { apiRoutes } from '../../shared/types/apiRoutes';
-import { Id } from '../../shared/types/versionId';
+import { CommentCreateDTO } from '@episto/communication';
+import { CommentListDTO } from '@episto/communication';
+import { apiRoutes } from '@episto/communication';
+import { Id } from '@episto/commontypes';
 import { QueryService } from '../../static/QueryService';
 import { usePostDataUnsafe } from '../core/httpClient';
 

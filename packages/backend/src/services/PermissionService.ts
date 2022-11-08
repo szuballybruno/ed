@@ -1,10 +1,10 @@
 import { Permission } from '../models/entity/authorization/Permission';
 import { PermissionAssignmentBridge } from '../models/entity/authorization/PermissionAssignmentBridge';
 import { UserPermissionView } from '../models/views/UserPermissionView';
-import { PermissionListDTO } from '../shared/dtos/role/PermissionListDTO';
-import { GetPermissionScope, GetParamByCodeType, PermissionScopeParamType } from '../shared/types/PermissionCodesType';
-import { PermissionCodeType } from '../shared/types/sharedTypes';
-import { Id } from '../shared/types/versionId';
+import { PermissionListDTO } from '@episto/communication';
+import { GetPermissionScope, GetParamByCodeType, PermissionScopeParamType } from '@episto/commontypes';
+import { PermissionCodeType } from '@episto/commontypes';
+import { Id } from '@episto/commontypes';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { AuthorizationResult } from '../utilities/XTurboExpress/XTurboExpressTypes';
 import { MapperService } from './MapperService';

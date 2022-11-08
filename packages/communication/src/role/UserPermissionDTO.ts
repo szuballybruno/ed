@@ -1,5 +1,4 @@
-import { PermissionCodeType } from '../../types/sharedTypes';
-import { Id } from '@episto/commontypes';
+import { Id, PermissionCodeType } from '@episto/commontypes';
 
 export class UserPermissionDTO {
     permissionAssignmentBridgeId: Id<'PermissionAssignmentBridge'> | null;

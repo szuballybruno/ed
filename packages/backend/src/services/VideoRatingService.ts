@@ -1,6 +1,6 @@
 import { VideoRating } from '../models/entity/misc/VideoRating';
-import { VideoRatingDTO } from '../shared/dtos/VideoRatingDTO';
-import { Id } from '../shared/types/versionId';
+import { VideoRatingDTO } from '@episto/communication';
+import { Id } from '@episto/commontypes';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { AuthorizationService } from './AuthorizationService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';

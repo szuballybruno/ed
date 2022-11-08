@@ -1,5 +1,4 @@
-import { TeacherBadgeNameType } from '../types/sharedTypes';
-import { Id } from '@episto/commontypes';
+import { Id, TeacherBadgeNameType } from '@episto/commontypes';
 
 export class TeacherInfoEditDTO {
     id: Id<'TeacherInfo'>;

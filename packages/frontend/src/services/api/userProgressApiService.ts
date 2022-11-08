@@ -1,8 +1,8 @@
-import { RecomendedItemQuotaDTO } from '../../shared/dtos/RecomendedItemQuotaDTO';
-import { UserActiveCourseDTO } from '../../shared/dtos/UserActiveCourseDTO';
-import { UserCourseProgressChartDTO } from '../../shared/dtos/UserCourseProgressChartDTO';
-import { apiRoutes } from '../../shared/types/apiRoutes';
-import { Id } from '../../shared/types/versionId';
+import { RecomendedItemQuotaDTO } from '@episto/communication';
+import { UserActiveCourseDTO } from '@episto/communication';
+import { UserCourseProgressChartDTO } from '@episto/communication';
+import { apiRoutes } from '@episto/communication';
+import { Id } from '@episto/commontypes';
 import { QueryService } from '../../static/QueryService';
 
 export const useUserCourseProgressChartData = (courseId: Id<'Course'> | null, enabled: boolean) => {

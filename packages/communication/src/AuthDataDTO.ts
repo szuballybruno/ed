@@ -1,4 +1,4 @@
-import { PermissionCodeType } from '../types/sharedTypes';
+import { PermissionCodeType } from '@episto/commontypes';
 import { UserDTO } from './UserDTO';
 
 export class AuthDataDTO {

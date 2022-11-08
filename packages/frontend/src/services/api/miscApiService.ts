@@ -1,8 +1,8 @@
 import { applicationRoutes } from '../../configuration/applicationRoutes';
-import { CourseOverviewDataDTO } from '../../shared/dtos/CourseOverviewDataDTO';
-import { OverviewPageDTO } from '../../shared/dtos/OverviewPageDTO';
-import { apiRoutes } from '../../shared/types/apiRoutes';
-import { Id } from '../../shared/types/versionId';
+import { CourseOverviewDataDTO } from '@episto/communication';
+import { OverviewPageDTO } from '@episto/communication';
+import { apiRoutes } from '@episto/communication';
+import { Id } from '@episto/commontypes';
 import { GlobalEventManagerType } from '../../static/EventBus';
 import { useGetCurrentAppRoute } from '../../static/frontendHelpers';
 import { QueryService } from '../../static/QueryService';

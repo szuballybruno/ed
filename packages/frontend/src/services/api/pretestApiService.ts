@@ -1,7 +1,7 @@
-import { PretestDataDTO } from '../../shared/dtos/PretestDataDTO';
-import { PretestResultDTO } from '../../shared/dtos/PretestResultDTO';
-import { apiRoutes } from '../../shared/types/apiRoutes';
-import { Id } from '../../shared/types/versionId';
+import { PretestDataDTO } from '@episto/communication';
+import { PretestResultDTO } from '@episto/communication';
+import { apiRoutes } from '@episto/communication';
+import { Id } from '@episto/commontypes';
 import { QueryService } from '../../static/QueryService';
 import { usePostDataUnsafe } from '../core/httpClient';
 

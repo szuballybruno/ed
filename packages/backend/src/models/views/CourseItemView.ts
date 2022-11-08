@@ -1,7 +1,7 @@
 import { ViewEntity } from '../MyORM';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
-import { VersionCode } from '../../shared/types/VersionCode1';
-import { Id } from '../../shared/types/versionId';
+import { VersionCode } from '@episto/commontypes';
+import { Id } from '@episto/commontypes';
 
 
 export class CourseItemView {

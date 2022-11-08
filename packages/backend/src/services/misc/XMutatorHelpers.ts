@@ -1,4 +1,4 @@
-import { Mutation } from '../../shared/dtos/mutations/Mutation';
+import { Mutation } from '@episto/communication';
 
 const mapMutationToPartialObject = <TMutatee, TKey extends keyof TMutatee>(mut: Mutation<TMutatee, TKey>): Partial<TMutatee> => {
 

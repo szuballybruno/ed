@@ -1,4 +1,4 @@
-import { CourseStageNameType } from '../types/sharedTypes';
+import { CourseStageNameType } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
 
 export class AvailableCourseDTO {

@@ -1,7 +1,7 @@
-import { ErrorWithCode } from '../shared/types/ErrorWithCode';
-import { GetParamByCodeType, GetPermissionScope, PermissionScopeParamType } from '../shared/types/PermissionCodesType';
-import { PermissionCodeType } from '../shared/types/sharedTypes';
-import { Id } from '../shared/types/versionId';
+import { ErrorWithCode } from '@episto/commontypes';
+import { GetParamByCodeType, GetPermissionScope, PermissionScopeParamType } from '@episto/commontypes';
+import { PermissionCodeType } from '@episto/commontypes';
+import { Id } from '@episto/commontypes';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { AuthorizationResult } from '../utilities/XTurboExpress/XTurboExpressTypes';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';

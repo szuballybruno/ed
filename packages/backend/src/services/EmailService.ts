@@ -2,7 +2,7 @@ import { readFileSync } from 'fs';
 import { createTransport } from 'nodemailer';
 import { User } from '../models/entity/misc/User';
 import { EpistoEmail } from '../models/EpistoEmail';
-import { Id } from '../shared/types/versionId';
+import { Id } from '@episto/commontypes';
 import { replaceAll } from '../utilities/helpers';
 import { DomainProviderService } from './DomainProviderService';
 import { GlobalConfiguration } from './misc/GlobalConfiguration';

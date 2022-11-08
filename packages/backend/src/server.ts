@@ -1,14 +1,15 @@
-import { AnswerEditDTO,Dtos } from '@episto/common';
+import { jsExtensions } from '@episto/commonlogic';
 import { dirname } from 'path';
 import 'reflect-metadata'; // needs to be imported for TypeORM
 import { fileURLToPath } from 'url';
 import { LoggerService } from './services/LoggerService';
 import { log } from './services/misc/logger';
 import { ORMConnectionService } from './services/ORMConnectionService/ORMConnectionService';
-import './shared/logic/jsExtensions';
 import { ServiceProviderInitializator } from './startup/initApp';
 import { initTurboExpress } from './startup/instatiateTurboExpress';
 import { XTurboExpressListener } from './turboImplementations/XTurboExpressListener';
+
+jsExtensions.initJsExtensions();
 
 const rootDir = dirname(fileURLToPath(import.meta.url));
 
@@ -20,8 +21,6 @@ const startServerAsync = async (initializator: ServiceProviderInitializator) => 
             .getService(LoggerService),
         initializator
     );
-
-    const asd: AnswerEditDTO = {};
 
     /**
      * Validate schema

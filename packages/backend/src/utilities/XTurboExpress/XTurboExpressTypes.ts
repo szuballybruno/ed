@@ -1,6 +1,6 @@
 import { CookieOptions } from 'express';
 import { UploadedFile } from 'express-fileupload';
-import { PermissionCodeType } from '../../shared/types/PermissionCodesType';
+import { PermissionCodeType } from '@episto/commontypes';
 import { ServiceProvider } from '../../startup/serviceDependencyContainer';
 import { ActionParams } from './ActionParams';
 import { ITurboExpressLayer } from './ITurboExpressLayer';

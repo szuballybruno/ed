@@ -1,7 +1,7 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from '../../MyORM';
 import { XViewColumn } from '../../../services/XORM/XORMDecorators';
-import { CourseModeType, CourseStageNameType, TempomatModeType } from '../../../shared/types/sharedTypes';
-import { Id } from '../../../shared/types/versionId';
+import { CourseModeType, CourseStageNameType, TempomatModeType } from '@episto/commontypes';
+import { Id } from '@episto/commontypes';
 import { Course } from '../course/Course';
 import { User } from './User';
 

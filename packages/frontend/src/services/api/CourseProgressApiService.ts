@@ -1,6 +1,6 @@
-import { CourseProgressShortDTO } from '../../shared/dtos/CourseProgressShortDTO';
-import { UserCoursesDataDTO } from '../../shared/dtos/UserCoursesDataDTO';
-import { apiRoutes } from '../../shared/types/apiRoutes';
+import { CourseProgressShortDTO } from '@episto/communication';
+import { UserCoursesDataDTO } from '@episto/communication';
+import { apiRoutes } from '@episto/communication';
 import { QueryService } from '../../static/QueryService';
 
 export const CourseProgressApiService = {

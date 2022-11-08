@@ -1,6 +1,6 @@
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
-import { CourseStageNameType, CourseVisibilityType } from '../../shared/types/sharedTypes';
-import { Id } from '../../shared/types/versionId';
+import { CourseStageNameType, CourseVisibilityType } from '@episto/commontypes';
+import { Id } from '@episto/commontypes';
 
 
 export class CourseDetailsView {

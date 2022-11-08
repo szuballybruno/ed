@@ -1,4 +1,4 @@
-import { EventCodeType } from '../types/sharedTypes';
+import { EventCodeType } from '@episto/commontypes';
 
 export class EventDTO {
     type: EventCodeType;

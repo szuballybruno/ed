@@ -1,7 +1,7 @@
-import { DailyTipDTO } from '../../shared/dtos/DailyTipDTO';
-import { DailyTipEditDataDTO } from '../../shared/dtos/DailyTipEditDataDTO';
-import { apiRoutes } from '../../shared/types/apiRoutes';
-import { Id } from '../../shared/types/versionId';
+import { DailyTipDTO } from '@episto/communication';
+import { DailyTipEditDataDTO } from '@episto/communication';
+import { apiRoutes } from '@episto/communication';
+import { Id } from '@episto/commontypes';
 import { QueryService } from '../../static/QueryService';
 import { usePostDataUnsafe } from '../core/httpClient';
 

@@ -1,6 +1,6 @@
-import { FieldMutation } from '../../../shared/dtos/mutations/FieldMutation';
-import { Mutation } from '../../../shared/dtos/mutations/Mutation';
-import { getKeys } from '../../../shared/logic/sharedLogic';
+import { FieldMutation } from '@episto/communication';
+import { Mutation } from '@episto/communication';
+import { getKeys } from '@episto/commonlogic';
 import { clone } from '../../../static/frontendHelpers';
 import { Logger } from '../../../static/Logger';
 

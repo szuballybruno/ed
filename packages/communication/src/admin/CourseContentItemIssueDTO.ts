@@ -1,4 +1,4 @@
-import { CourseContentItemIssueCodeType } from '../../types/sharedTypes';
+import { CourseContentItemIssueCodeType } from '@episto/commontypes';
 
 export class CourseContentItemIssueDTO {
     code: CourseContentItemIssueCodeType;

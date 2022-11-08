@@ -1,17 +1,17 @@
 import { DailyTip } from '../models/entity/misc/DailyTip';
 import { PersonalityTraitCategory } from '../models/entity/misc/PersonalityTraitCategory';
-import { PersonalityAssessmentDTO } from '../shared/dtos/PersonalityAssessmentDTO';
-import { PersonalityCategoryTraitDTO } from '../shared/dtos/PersonalityCategoryTraitDTO';
-import { PersonalityChartDataDTO } from '../shared/dtos/PersonalityChartDataDTO';
-import { PersonalityTraitCategoryDTO } from '../shared/dtos/PersonalityTraitCategoryDTO';
-import { PersonalityTraitCategoryShortDTO } from '../shared/dtos/PersonalityTraitCategoryShortDTO';
-import { PersonalityTraitDataDTO } from '../shared/dtos/PersonalityTraitDataDTO';
+import { PersonalityAssessmentDTO } from '@episto/communication';
+import { PersonalityCategoryTraitDTO } from '@episto/communication';
+import { PersonalityChartDataDTO } from '@episto/communication';
+import { PersonalityTraitCategoryDTO } from '@episto/communication';
+import { PersonalityTraitCategoryShortDTO } from '@episto/communication';
+import { PersonalityTraitDataDTO } from '@episto/communication';
 import { PersonalityTraitCategoryView } from '../models/views/PersonalityTraitCategoryView';
 import { PersonalityTraitView } from '../models/views/PersonalityTraitView';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
-import { Id } from '../shared/types/versionId';
+import { Id } from '@episto/commontypes';
 import { AuthorizationService } from './AuthorizationService';
 
 export class PersonalityAssessmentService {

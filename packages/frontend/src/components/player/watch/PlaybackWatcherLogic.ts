@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { PlaybackApiService } from '../../../services/api/playbackApiService';
-import { Id } from '../../../shared/types/versionId';
+import { Id } from '@episto/commontypes';
 import { isBetweenThreshold } from '../../../static/frontendHelpers';
 import { Logger } from '../../../static/Logger';
 

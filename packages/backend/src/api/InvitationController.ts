@@ -1,6 +1,6 @@
 import { UserInvitationService } from '../services/UserInvitationService';
-import { UserEditSaveDTO } from '../shared/dtos/UserEditSaveDTO';
-import { apiRoutes } from '../shared/types/apiRoutes';
+import { UserEditSaveDTO } from '@episto/communication';
+import { apiRoutes } from '@episto/communication';
 import { ServiceProvider } from '../startup/serviceDependencyContainer';
 import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';

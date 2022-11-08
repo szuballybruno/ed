@@ -1,6 +1,6 @@
-import { ModuleEditDTO } from '../../shared/dtos/ModuleEditDTO';
-import { apiRoutes } from '../../shared/types/apiRoutes';
-import { Id } from '../../shared/types/versionId';
+import { ModuleEditDTO } from '@episto/communication';
+import { apiRoutes } from '@episto/communication';
+import { Id } from '@episto/commontypes';
 import { QueryService } from '../../static/QueryService';
 import { usePostMultipartDataUnsafe } from '../core/httpClient';
 

@@ -2,8 +2,8 @@ import { useContext } from 'react';
 import { useQuery } from 'react-query';
 import { AuthenticationStateContext } from '../../components/system/AuthenticationFrame';
 import { Environment } from '../../static/Environemnt';
-import { EventDTO } from '../../shared/dtos/EventDTO';
-import { apiRoutes } from '../../shared/types/apiRoutes';
+import { EventDTO } from '@episto/communication';
+import { apiRoutes } from '@episto/communication';
 import { httpGetAsync } from '../core/httpClient';
 import { useGetCurrentAppRoute } from '../../static/frontendHelpers';
 

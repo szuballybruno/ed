@@ -1,8 +1,8 @@
-import { apiRoutes } from '../../shared/types/apiRoutes';
-import { VideoRatingDTO } from '../../shared/dtos/VideoRatingDTO';
+import { apiRoutes } from '@episto/communication';
+import { VideoRatingDTO } from '@episto/communication';
 import { QueryService } from '../../static/QueryService';
 import { usePostDataUnsafe } from '../core/httpClient';
-import { Id } from '../../shared/types/versionId';
+import { Id } from '@episto/commontypes';
 
 export const useRateVideoDifficulty = () => {
 

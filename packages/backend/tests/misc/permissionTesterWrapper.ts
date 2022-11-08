@@ -2,9 +2,9 @@ import { Permission } from '../../src/models/entity/authorization/Permission';
 import { RoleService } from '../../src/services/RoleService';
 import {
     permissionCodes
-} from '../../src/shared/types/PermissionCodesType';
-import { PermissionCodeType } from '../../src/shared/types/sharedTypes';
-import { Id } from '../../src/shared/types/versionId';
+} from '@episto/commontypes';
+import { PermissionCodeType } from '@episto/commontypes';
+import { Id } from '@episto/commontypes';
 import { ServiceProvider } from '../../src/startup/serviceDependencyContainer';
 import { throwNotImplemented } from '../../src/utilities/helpers';
 import { JestLogger } from './jestLogger';

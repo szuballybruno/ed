@@ -1,4 +1,4 @@
-import { Id } from '../shared/types/versionId';
+import { Id } from '@episto/commontypes';
 import { DomainProviderService } from './DomainProviderService';
 import { GlobalConfiguration } from './misc/GlobalConfiguration';
 

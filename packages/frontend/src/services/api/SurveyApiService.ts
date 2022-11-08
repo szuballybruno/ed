@@ -1,9 +1,9 @@
 import { QueryService } from '../../static/QueryService';
-import { AnswerDTO } from '../../shared/dtos/AnswerDTO';
-import { AnswerSignupQuestionDTO } from '../../shared/dtos/AnswerSignupQuestionDTO';
-import { PersonalityAssessmentDTO } from '../../shared/dtos/PersonalityAssessmentDTO';
-import { SurveyDataDTO } from '../../shared/dtos/SurveyDataDTO';
-import { apiRoutes } from '../../shared/types/apiRoutes';
+import { AnswerDTO } from '@episto/communication';
+import { AnswerSignupQuestionDTO } from '@episto/communication';
+import { PersonalityAssessmentDTO } from '@episto/communication';
+import { SurveyDataDTO } from '@episto/communication';
+import { apiRoutes } from '@episto/communication';
 import { usePostDataUnsafe } from '../core/httpClient';
 
 const usePersonalityData = () => {

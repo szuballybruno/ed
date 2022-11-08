@@ -1,4 +1,4 @@
-import { Id } from '../types/versionId';
+import { Id } from '@episto/commontypes';
 import { parseIntOrFail } from './sharedLogic';
 
 type SafeObjectValidatorFunctionType<TValue> = (value: TValue) => boolean;

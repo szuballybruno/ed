@@ -1,6 +1,6 @@
 import { Column, DeleteDateColumn, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from '../../MyORM';
 import { DeletionDateColumn, XJoinColumn, XManyToOne, XOneToMany, XViewColumn } from '../../../services/XORM/XORMDecorators';
-import { Id } from '../../../shared/types/versionId';
+import { Id } from '@episto/commontypes';
 import { ActivationCode } from './ActivationCode';
 import { CompanyOwnerBridge } from '../authorization/CompanyOwnerBridge';
 import { PermissionAssignmentBridge } from '../authorization/PermissionAssignmentBridge';

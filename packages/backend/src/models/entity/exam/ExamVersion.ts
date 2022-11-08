@@ -1,6 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn, Relation } from '../../MyORM';
 import { XJoinColumn, XManyToOne, XOneToMany, XViewColumn } from '../../../services/XORM/XORMDecorators';
-import { Id } from '../../../shared/types/versionId';
+import { Id } from '@episto/commontypes';
 import { AnswerSession } from '../misc/AnswerSession';
 import { ModuleVersion } from '../module/ModuleVersion';
 import { QuestionVersion } from '../question/QuestionVersion';

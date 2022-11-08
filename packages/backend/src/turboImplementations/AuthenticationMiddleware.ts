@@ -2,7 +2,7 @@ import { AuthenticationService } from '../services/AuthenticationService';
 import { CompanyService } from '../services/CompanyService';
 import { LoggerService } from '../services/LoggerService';
 import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
-import { ErrorWithCode } from '../shared/types/ErrorWithCode';
+import { ErrorWithCode } from '@episto/commontypes';
 import { ServiceProvider } from '../startup/serviceDependencyContainer';
 import { getAuthCookies } from '../utilities/helpers';
 import { ActionParams } from '../utilities/XTurboExpress/ActionParams';

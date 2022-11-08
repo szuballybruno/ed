@@ -2,8 +2,8 @@ import { useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { ApplicationRoute } from '../../models/types';
-import { CourseStageNameType } from '../../shared/types/sharedTypes';
-import { Id } from '../../shared/types/versionId';
+import { CourseStageNameType } from '@episto/commontypes';
+import { Id } from '@episto/commontypes';
 import { getUrl } from '../../static/frontendHelpers';
 import { Logger } from '../../static/Logger';
 

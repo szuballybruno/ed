@@ -1,10 +1,10 @@
-import { CourseContentItemAdminDTO } from '../../../../shared/dtos/admin/CourseContentItemAdminDTO';
-import { CourseContentItemIssueDTO } from '../../../../shared/dtos/admin/CourseContentItemIssueDTO';
-import { ModuleEditDTO } from '../../../../shared/dtos/ModuleEditDTO';
-import { instantiate } from '../../../../shared/logic/sharedLogic';
-import { CourseItemType } from '../../../../shared/types/sharedTypes';
-import { VersionCode } from '../../../../shared/types/VersionCode1';
-import { Id } from '../../../../shared/types/versionId';
+import { CourseContentItemAdminDTO } from '@episto/communication';
+import { CourseContentItemIssueDTO } from '@episto/communication';
+import { ModuleEditDTO } from '@episto/communication';
+import { instantiate } from '@episto/commonlogic';
+import { CourseItemType } from '@episto/commontypes';
+import { VersionCode } from '@episto/commontypes';
+import { Id } from '@episto/commontypes';
 import { formatTime } from '../../../../static/frontendHelpers';
 
 export type RowSchemaModule = {

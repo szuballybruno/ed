@@ -1,28 +1,13 @@
 {
-  "compilerOptions": {
-    "target": "ES2017",
-    "module": "ES2022",
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "sourceMap": true,
-    "outDir": "./build",
-    "strict": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "strictPropertyInitialization": false,
-    "lib": [
-      "ESNext"
-    ]
-  },
+  "extends": "./../../tsconfig.json",
   "include": [
-    "src",
-    // "tests",
-    // "jest.config.ts"
+    "src"
   ],
   "exclude": [
     "node_modules",
     "tests"
-  ]
+  ],
+  "compilerOptions": {
+    "outDir": "./build",
+  }
 }

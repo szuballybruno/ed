@@ -1,7 +1,7 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from '../../MyORM';
 import { XViewColumn } from '../../../services/XORM/XORMDecorators';
-import { EventCodeType } from '../../../shared/types/sharedTypes';
-import { Id } from '../../../shared/types/versionId';
+import { EventCodeType } from '@episto/commontypes';
+import { Id } from '@episto/commontypes';
 import { User } from './User';
 
 @Entity()

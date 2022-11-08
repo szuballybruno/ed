@@ -1,12 +1,12 @@
-import { BriefUserDataDTO } from '../../shared/dtos/BriefUserDataDTO';
-import { UserAdminListDTO } from '../../shared/dtos/UserAdminListDTO';
-import { UserControlDropdownDataDTO } from '../../shared/dtos/UserControlDropdownDataDTO';
-import { UserEditReadDTO } from '../../shared/dtos/UserEditReadDTO';
-import { UserEditSaveDTO } from '../../shared/dtos/UserEditSaveDTO';
-import { UserEditSimpleDTO } from '../../shared/dtos/UserEditSimpleDTO';
-import { UserLearningOverviewDataDTO } from '../../shared/dtos/UserLearningOverviewDataDTO';
-import { apiRoutes } from '../../shared/types/apiRoutes';
-import { Id } from '../../shared/types/versionId';
+import { BriefUserDataDTO } from '@episto/communication';
+import { UserAdminListDTO } from '@episto/communication';
+import { UserControlDropdownDataDTO } from '@episto/communication';
+import { UserEditReadDTO } from '@episto/communication';
+import { UserEditSaveDTO } from '@episto/communication';
+import { UserEditSimpleDTO } from '@episto/communication';
+import { UserLearningOverviewDataDTO } from '@episto/communication';
+import { apiRoutes } from '@episto/communication';
+import { Id } from '@episto/commontypes';
 import { QueryService } from '../../static/QueryService';
 import { usePostDataUnsafe } from '../core/httpClient';
 

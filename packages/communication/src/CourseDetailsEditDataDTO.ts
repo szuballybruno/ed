@@ -1,4 +1,4 @@
-import { CourseVisibilityType } from '../types/sharedTypes';
+import { CourseVisibilityType } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
 import { CourseCategoryDTO } from './CourseCategoryDTO';
 import { HumanSkillBenefitDTO } from './HumanSkillBenefitDTO';

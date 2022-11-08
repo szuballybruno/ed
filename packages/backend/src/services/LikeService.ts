@@ -1,6 +1,6 @@
 import { Comment } from '../models/entity/misc/Comment';
 import { Like } from '../models/entity/misc/Like';
-import { Id } from '../shared/types/versionId';
+import { Id } from '@episto/commontypes';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { AuthorizationService } from './AuthorizationService';
 import { MapperService } from './MapperService';

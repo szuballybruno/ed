@@ -1,9 +1,9 @@
 import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
 import { UserRegistrationService } from '../services/UserRegistrationService';
-import { RegisterUserViaActivationCodeDTO } from '../shared/dtos/RegisterUserViaActivationCodeDTO';
-import { RegisterUserViaInvitationTokenDTO } from '../shared/dtos/RegisterUserViaInvitationTokenDTO';
-import { RegisterUserViaPublicTokenDTO } from '../shared/dtos/RegisterUserViaPublicTokenDTO';
-import { apiRoutes } from '../shared/types/apiRoutes';
+import { RegisterUserViaActivationCodeDTO } from '@episto/communication';
+import { RegisterUserViaInvitationTokenDTO } from '@episto/communication';
+import { RegisterUserViaPublicTokenDTO } from '@episto/communication';
+import { apiRoutes } from '@episto/communication';
 import { ServiceProvider } from '../startup/serviceDependencyContainer';
 import { setAuthCookies } from '../utilities/cookieHelpers';
 import { ActionParams } from '../utilities/XTurboExpress/ActionParams';

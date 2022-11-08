@@ -1,4 +1,4 @@
-import { CurrentTasksDTO } from '../shared/dtos/CurrentTasksDTO';
+import { CurrentTasksDTO } from '@episto/communication';
 
 /**
  * Tasks

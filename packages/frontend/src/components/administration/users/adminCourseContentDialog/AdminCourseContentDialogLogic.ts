@@ -1,4 +1,4 @@
-import { Id } from '../../../../shared/types/versionId';
+import { Id } from '@episto/commontypes';
 import { useEpistoDialogLogic } from '../../../universal/epistoDialog/EpistoDialogLogic';
 import { AdminUserCourseContentDialog } from './AdminUserCourseContentDialog';
 

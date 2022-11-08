@@ -1,9 +1,9 @@
 import { Event } from '../models/entity/misc/Event';
-import { CoinAcquireResultDTO } from '../shared/dtos/CoinAcquireResultDTO';
-import { EventDTO } from '../shared/dtos/EventDTO';
-import { LagBehindNotificationDTO } from '../shared/dtos/LagBehindNotificationDTO';
-import { EventCodeType } from '../shared/types/sharedTypes';
-import { Id } from '../shared/types/versionId';
+import { CoinAcquireResultDTO } from '@episto/communication';
+import { EventDTO } from '@episto/communication';
+import { LagBehindNotificationDTO } from '@episto/communication';
+import { EventCodeType } from '@episto/commontypes';
+import { Id } from '@episto/commontypes';
 import { AuthorizationResult } from '../utilities/XTurboExpress/XTurboExpressTypes';
 import { AuthorizationService } from './AuthorizationService';
 import { LoggerService } from './LoggerService';

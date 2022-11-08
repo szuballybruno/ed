@@ -1,7 +1,7 @@
 import { User } from '../models/entity/misc/User';
-import { getPassowrdValidationError } from '../shared/logic/sharedLogic';
-import { ErrorWithCode } from '../shared/types/ErrorWithCode';
-import { Id } from '../shared/types/versionId';
+import { getPassowrdValidationError } from '@episto/commonlogic';
+import { ErrorWithCode } from '@episto/commontypes';
+import { Id } from '@episto/commontypes';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { AuthorizationService } from './AuthorizationService';
 import { DomainProviderService } from './DomainProviderService';

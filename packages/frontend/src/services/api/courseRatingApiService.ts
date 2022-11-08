@@ -1,7 +1,7 @@
-import { CourseRatingGroupDTO } from '../../shared/dtos/CourseRatingGroupDTO';
-import { CourseRatingQuestionAnswersDTO } from '../../shared/dtos/CourseRatingQuestionAnswersDTO';
-import { apiRoutes } from '../../shared/types/apiRoutes';
-import { Id } from '../../shared/types/versionId';
+import { CourseRatingGroupDTO } from '@episto/communication';
+import { CourseRatingQuestionAnswersDTO } from '@episto/communication';
+import { apiRoutes } from '@episto/communication';
+import { Id } from '@episto/commontypes';
 import { QueryService } from '../../static/QueryService';
 import { usePostDataUnsafe } from '../core/httpClient';
 

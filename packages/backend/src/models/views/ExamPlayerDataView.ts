@@ -1,6 +1,6 @@
 import {ViewColumn, ViewEntity} from '../MyORM';
 import {DeletionDateColumn, XViewColumn} from '../../services/XORM/XORMDecorators';
-import {Id} from '../../shared/types/versionId';
+import {Id} from '@episto/commontypes';
 
 
 export class ExamPlayerDataView {

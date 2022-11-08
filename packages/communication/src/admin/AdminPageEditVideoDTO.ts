@@ -1,12 +1,12 @@
-import { TagView } from '../TagDTO';
+import { TagDTO } from '../TagDTO';
 
-export type AdminPageEditVideoView = {
+export type AdminPageEditVideoDTO = {
     editedVideoId: string,
     editedVideoTitle: string,
     editedVideoSubTitle: string,
     editedVideoURL: string,
     editedVideoDescription: string,
     editedVideoThumbnailURL: string,
-    editedVideoTags: TagView[]
-    allTags: TagView[]
+    editedVideoTags: TagDTO[]
+    allTags: TagDTO[]
 }

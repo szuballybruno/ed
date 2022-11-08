@@ -1,6 +1,6 @@
 import generatePassword from 'password-generator';
 import { ActivationCode } from '../models/entity/misc/ActivationCode';
-import { Id } from '../shared/types/versionId';
+import { Id } from '@episto/commontypes';
 import { forN } from '../utilities/helpers';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 

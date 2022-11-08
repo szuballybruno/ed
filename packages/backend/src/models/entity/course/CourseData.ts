@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation, UpdateDateColumn } from '../../MyORM';
 import { XOneToMany, XViewColumn } from '../../../services/XORM/XORMDecorators';
-import { CourseVisibilityType } from '../../../shared/types/sharedTypes';
-import { Id } from '../../../shared/types/versionId';
+import { CourseVisibilityType } from '@episto/commontypes';
+import { Id } from '@episto/commontypes';
 import { CourseCategory } from '../misc/CourseCategory';
 import { StorageFile } from '../misc/StorageFile';
 import { User } from '../misc/User';

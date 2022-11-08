@@ -1,8 +1,8 @@
 import { useCallback } from 'react';
 import { useQuery } from 'react-query';
-import { AuthDataDTO } from '../../shared/dtos/AuthDataDTO';
-import { apiRoutes } from '../../shared/types/apiRoutes';
-import { ErrorWithCode } from '../../shared/types/ErrorWithCode';
+import { AuthDataDTO } from '@episto/communication';
+import { apiRoutes } from '@episto/communication';
+import { ErrorWithCode } from '@episto/commontypes';
 import { Environment } from '../../static/Environemnt';
 import { eventBus } from '../../static/EventBus';
 import { useGetCurrentAppRoute } from '../../static/frontendHelpers';

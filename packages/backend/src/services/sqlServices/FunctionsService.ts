@@ -1,5 +1,5 @@
 import { TaskCodeType } from '../../models/Types';
-import { Id } from '../../shared/types/versionId';
+import { Id } from '@episto/commontypes';
 import { GlobalConfiguration } from '../misc/GlobalConfiguration';
 import { logObject } from '../misc/logger';
 import { SQLConnectionService } from './SQLConnectionService';

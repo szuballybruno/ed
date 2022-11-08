@@ -1,7 +1,7 @@
 import { User } from '../models/entity/misc/User';
-import { AuthDataDTO } from '../shared/dtos/AuthDataDTO';
-import { ErrorWithCode } from '../shared/types/ErrorWithCode';
-import { Id } from '../shared/types/versionId';
+import { AuthDataDTO } from '@episto/communication';
+import { ErrorWithCode } from '@episto/commontypes';
+import { Id } from '@episto/commontypes';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { HashService } from './HashService';
 import { LoggerService } from './LoggerService';

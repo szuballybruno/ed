@@ -1,9 +1,9 @@
 import JsonWebToken from 'jsonwebtoken';
 import { AccessTokenPayload } from '../models/DTOs/AccessTokenPayload';
 import { User } from '../models/entity/misc/User';
-import { InvitationTokenPayload } from '../shared/types/sharedTypes';
-import { ErrorWithCode } from '../shared/types/ErrorWithCode';
-import { Id } from '../shared/types/versionId';
+import { InvitationTokenPayload } from '@episto/commontypes';
+import { ErrorWithCode } from '@episto/commontypes';
+import { Id } from '@episto/commontypes';
 import { GlobalConfiguration } from './misc/GlobalConfiguration';
 
 const { sign, verify } = JsonWebToken;

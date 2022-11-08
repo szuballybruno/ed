@@ -1,7 +1,7 @@
 import { QuestionController } from '../src/api/QuestionController';
 import { GlobalConfiguration } from '../src/services/misc/GlobalConfiguration';
 import { XDBMSchemaService } from '../src/services/XDBManager/XDBManagerTypes';
-import { QuestionDTO } from '../src/shared/dtos/QuestionDTO';
+import { QuestionDTO } from '@episto/communication';
 import { initJsExtensions } from '../src/shared/logic/jsExtensions';
 import { getQuestionVersionsSeedData } from '../src/sql/seed/seed_question_versions';
 import { testExamFlow, startCourse } from './common/courseFlow';

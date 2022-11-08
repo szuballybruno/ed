@@ -1,11 +1,11 @@
 import { ClassType } from '../misc/advancedTypes/ClassType';
-import { getKeys, getKeyValues } from '../../shared/logic/sharedLogic';
+import { getKeys, getKeyValues } from '@episto/commonlogic';
 import { toSQLSnakeCasing as snk, toSQLSnakeCasing } from '../../utilities/helpers';
 import { ConsoleColor, log } from '../misc/logger';
 import { SQLConnectionService } from '../sqlServices/SQLConnectionService';
 import { CheckExpression, CrossJoinCondition, EntityTokenValuePair, InnerJoinCondition, InsertTokenValuePair, LeftJoinCondition, OperationType, SaveEntityType, SelectColumnsType, SelectCondition, SimpleExpressionPart, SQLParamType, SQLStaticValueType, XOrmExpression } from './XORMTypes';
 import { getXViewColumnNames } from './XORMDecorators';
-import { Id } from '../../shared/types/versionId';
+import { Id } from '@episto/commontypes';
 
 const INDENT = '   ';
 

@@ -1,5 +1,5 @@
-import { Mutation } from '../shared/dtos/mutations/Mutation';
-import { Id } from '../shared/types/versionId';
+import { Mutation } from '@episto/communication';
+import { Id } from '@episto/commontypes';
 import { FileCodesType } from '../static/FileCodes';
 import { InsertEntity, VersionMigrationContainer } from '../utilities/misc';
 import { FileService, UploadFileRelatedEntityIdType } from './FileService';

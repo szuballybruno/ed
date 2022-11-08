@@ -1,4 +1,4 @@
-import { Id } from '../../shared/types/versionId';
+import { Id } from '@episto/commontypes';
 import { ClassType } from '../misc/advancedTypes/ClassType';
 
 export type SQLParamType<TParams, TParamName extends keyof TParams> = {

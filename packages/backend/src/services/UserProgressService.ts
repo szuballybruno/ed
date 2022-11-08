@@ -1,12 +1,12 @@
 import { UserActiveCourseView } from '../models/views/UserActiveCourseView';
 import { UserDailyCourseItemProgressView } from '../models/views/UserDailyCourseItemProgressView';
 import { UserWeeklyCourseItemProgressView } from '../models/views/UserWeeklyCourseItemProgressView';
-import { RecomendedItemQuotaDTO } from '../shared/dtos/RecomendedItemQuotaDTO';
-import { UserActiveCourseDTO } from '../shared/dtos/UserActiveCourseDTO';
-import { UserCourseProgressChartDTO } from '../shared/dtos/UserCourseProgressChartDTO';
-import { instantiate } from '../shared/logic/sharedLogic';
-import { EpistoLineChartDataType } from '../shared/types/epistoChartTypes';
-import { Id } from '../shared/types/versionId';
+import { RecomendedItemQuotaDTO } from '@episto/communication';
+import { UserActiveCourseDTO } from '@episto/communication';
+import { UserCourseProgressChartDTO } from '@episto/communication';
+import { instantiate } from '@episto/commonlogic';
+import { EpistoLineChartDataType } from '@episto/commontypes';
+import { Id } from '@episto/commontypes';
 import { dateDiffInDays, forN } from '../utilities/helpers';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { AuthorizationService } from './AuthorizationService';

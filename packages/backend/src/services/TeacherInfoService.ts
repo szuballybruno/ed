@@ -1,6 +1,6 @@
 import { TeacherInfo } from '../models/entity/misc/TeacherInfo';
-import { TeacherInfoEditDTO } from '../shared/dtos/TeacherInfoEditDTO';
-import { Id } from '../shared/types/versionId';
+import { TeacherInfoEditDTO } from '@episto/communication';
+import { Id } from '@episto/commontypes';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { AuthorizationService } from './AuthorizationService';
 import { MapperService } from './MapperService';

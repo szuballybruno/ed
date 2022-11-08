@@ -1,7 +1,7 @@
 import { AuthenticationService } from '../services/AuthenticationService';
 import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
-import { apiRoutes } from '../shared/types/apiRoutes';
-import { ErrorWithCode } from '../shared/types/ErrorWithCode';
+import { apiRoutes } from '@episto/communication';
+import { ErrorWithCode } from '@episto/commontypes';
 import { ServiceProvider } from '../startup/serviceDependencyContainer';
 import { setAuthCookies } from '../utilities/cookieHelpers';
 import { getAuthCookies } from '../utilities/helpers';

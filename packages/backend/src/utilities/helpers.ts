@@ -3,8 +3,8 @@ import { User } from '../models/entity/misc/User';
 import { ParsableValueType } from '../models/Types';
 import { ClassType } from '../services/misc/advancedTypes/ClassType';
 import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
-import { ErrorWithCode } from '../shared/types/ErrorWithCode';
-import { Id } from '../shared/types/versionId';
+import { ErrorWithCode } from '@episto/commontypes';
+import { Id } from '@episto/commontypes';
 import { KeyofConstrained } from './misc';
 import { ITurboRequest } from './XTurboExpress/XTurboExpressTypes';
 

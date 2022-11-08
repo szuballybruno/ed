@@ -1,9 +1,8 @@
-import { CourseItemStateType, CourseModeType } from '../types/sharedTypes';
-import { Id } from '@episto/commontypes';
+import { CourseItemStateType, CourseModeType, Id } from '@episto/commontypes';
 import { ExamPlayerDataDTO } from './ExamPlayerDataDTO';
 import { ModulePlayerDTO } from './ModulePlayerDTO';
 import { PlaylistModuleDTO } from './PlaylistModuleDTO';
-import { VideoPlayerDataDTO } from './VideoDTO';
+import { VideoPlayerDataDTO } from './VideoPlayerDataDTO';
 
 export class PlayerDataDTO {
     videoPlayerData: VideoPlayerDataDTO | null;

@@ -1,4 +1,4 @@
-import { PermissionCodeType, PermissionScopeType } from '../../types/sharedTypes';
+import { PermissionCodeType, PermissionScopeType } from "@episto/commontypes";
 
 export class PermissionListDTO {
     code: PermissionCodeType;

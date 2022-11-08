@@ -10,13 +10,13 @@ import {
     Relation
 } from '../../MyORM';
 import { DeletionDateColumn, XJoinColumn, XManyToOne, XViewColumn } from '../../../services/XORM/XORMDecorators';
-import { Id } from '../../../shared/types/versionId';
+import { Id } from '@episto/commontypes';
 import { AnswerGivenAnswerBridge } from './AnswerGivenAnswerBridge';
 import { AnswerSession } from './AnswerSession';
 import { GivenAnswerStreak } from './GivenAnswerStreak';
 import { QuestionVersion } from '../question/QuestionVersion';
 import { CoinTransaction } from './CoinTransaction';
-import { GivenAnswerStateType } from '../../../shared/types/sharedTypes';
+import { GivenAnswerStateType } from '@episto/commontypes';
 
 @Entity()
 export class GivenAnswer {

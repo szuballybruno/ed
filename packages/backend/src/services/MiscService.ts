@@ -1,10 +1,10 @@
 
 import { ActivationCode } from '../models/entity/misc/ActivationCode';
 import { CourseOverviewView } from '../models/views/CourseOverviewView';
-import { AvailableCourseDTO } from '../shared/dtos/AvailableCourseDTO';
-import { CourseOverviewDataDTO } from '../shared/dtos/CourseOverviewDataDTO';
-import { OverviewPageDTO } from '../shared/dtos/OverviewPageDTO';
-import { Id } from '../shared/types/versionId';
+import { AvailableCourseDTO } from '@episto/communication';
+import { CourseOverviewDataDTO } from '@episto/communication';
+import { OverviewPageDTO } from '@episto/communication';
+import { Id } from '@episto/commontypes';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { CourseProgressService } from './CourseProgressService';
 import { DomainProviderService } from './DomainProviderService';

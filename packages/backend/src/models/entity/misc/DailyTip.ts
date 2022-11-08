@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, Relation } from '../../MyORM';
 import { XViewColumn } from '../../../services/XORM/XORMDecorators';
-import { Id } from '../../../shared/types/versionId';
+import { Id } from '@episto/commontypes';
 import { DailyTipOccurrence } from './DailyTipOccurrence';
 import { PersonalityTraitCategory } from './PersonalityTraitCategory';
 import { StorageFile } from './StorageFile';

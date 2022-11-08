@@ -1,9 +1,9 @@
-import { AnswerSignupQuestionDTO } from '../shared/dtos/AnswerSignupQuestionDTO';
+import { AnswerSignupQuestionDTO } from '@episto/communication';
 import { PersonalityAssessmentService } from '../services/PersonalityAssessmentService';
 import { SignupService } from '../services/SignupService';
 import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
-import { apiRoutes } from '../shared/types/apiRoutes';
+import { apiRoutes } from '@episto/communication';
 import { ServiceProvider } from '../startup/serviceDependencyContainer';
 import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
 

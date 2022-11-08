@@ -1,6 +1,6 @@
-import { ModuleEditDTO } from '../../../../shared/dtos/ModuleEditDTO';
-import { VersionCode } from '../../../../shared/types/VersionCode1';
-import { Id } from '../../../../shared/types/versionId';
+import { ModuleEditDTO } from '@episto/communication';
+import { VersionCode } from '@episto/commontypes';
+import { Id } from '@episto/commontypes';
 import { AnswerMutationsType, QuestionMutationsType } from '../questionsEditGrid/QuestionEditGridTypes';
 
 export type ItemEditDialogParams = {

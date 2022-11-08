@@ -1,7 +1,7 @@
 import { PlaybackService } from '../services/PlaybackService';
-import { VideoPlaybackSampleDTO } from '../shared/dtos/playback/VideoPlaybackSampleDTO';
-import { VideoSeekEventDTO } from '../shared/dtos/playback/VideoSeekEventDTO';
-import { apiRoutes } from '../shared/types/apiRoutes';
+import { VideoPlaybackSampleDTO } from '@episto/communication';
+import { VideoSeekEventDTO } from '@episto/communication';
+import { apiRoutes } from '@episto/communication';
 import { ServiceProvider } from '../startup/serviceDependencyContainer';
 import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';

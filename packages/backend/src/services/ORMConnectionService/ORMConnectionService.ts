@@ -1,5 +1,5 @@
-import { instantiate } from '../../shared/logic/sharedLogic';
-import { Id } from '../../shared/types/versionId';
+import { instantiate } from '@episto/commonlogic';
+import { Id } from '@episto/commontypes';
 import { toSQLSnakeCasing } from '../../utilities/helpers';
 import { InsertEntity } from '../../utilities/misc';
 import { ClassType } from '../misc/advancedTypes/ClassType';

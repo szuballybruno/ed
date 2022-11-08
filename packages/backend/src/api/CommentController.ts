@@ -1,11 +1,11 @@
 import { CommentService } from '../services/CommentService';
 import { LikeService } from '../services/LikeService';
-import { CommentCreateDTO } from '../shared/dtos/CommentCreateDTO';
-import { apiRoutes } from '../shared/types/apiRoutes';
+import { CommentCreateDTO } from '@episto/communication';
+import { apiRoutes } from '@episto/communication';
 import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
 import { ServiceProvider } from '../startup/serviceDependencyContainer';
-import { Id } from '../shared/types/versionId';
+import { Id } from '@episto/commontypes';
 import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
 export class CommentController implements XController<CommentController> {

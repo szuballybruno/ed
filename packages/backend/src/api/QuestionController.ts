@@ -1,8 +1,8 @@
 import { AuthorizationService } from '../services/AuthorizationService';
 import { PractiseQuestionService } from '../services/PractiseQuestionService';
-import { AnswerQuestionDTO } from '../shared/dtos/AnswerQuestionDTO';
-import { AnswerResultDTO } from '../shared/dtos/AnswerResultDTO';
-import { apiRoutes } from '../shared/types/apiRoutes';
+import { AnswerQuestionDTO } from '@episto/communication';
+import { AnswerResultDTO } from '@episto/communication';
+import { apiRoutes } from '@episto/communication';
 import { ServiceProvider } from '../startup/serviceDependencyContainer';
 import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';

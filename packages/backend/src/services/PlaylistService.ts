@@ -1,6 +1,6 @@
 import { UserPlaylistView } from '../models/views/UserPlaylistView';
-import { PlaylistModuleDTO } from '../shared/dtos/PlaylistModuleDTO';
-import { Id } from '../shared/types/versionId';
+import { PlaylistModuleDTO } from '@episto/communication';
+import { Id } from '@episto/commontypes';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';

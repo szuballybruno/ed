@@ -1,4 +1,4 @@
-import { GivenAnswerStateType } from '../types/sharedTypes';
+import { GivenAnswerStateType } from '@episto/commontypes';
 import { ResultAnswerDTO } from './ResultAnswerDTO';
 
 export type ExamResultQuestionDTO = {

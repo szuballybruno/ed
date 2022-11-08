@@ -1,5 +1,5 @@
 import { LoggerService } from '../../services/LoggerService';
-import { ErrorWithCode } from '../../shared/types/ErrorWithCode';
+import { ErrorWithCode } from '@episto/commontypes';
 import { ServiceProvider } from '../../startup/serviceDependencyContainer';
 import { ITurboExpressLayer } from './ITurboExpressLayer';
 import { getControllerActionMetadatas } from './XTurboExpressDecorators';

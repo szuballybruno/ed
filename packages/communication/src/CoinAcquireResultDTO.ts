@@ -1,4 +1,4 @@
-import { CoinAcquireReasonType } from '../types/sharedTypes';
+import { CoinAcquireReasonType } from '@episto/commontypes';
 
 export type CoinAcquireResultDTO = {
     amount: number;

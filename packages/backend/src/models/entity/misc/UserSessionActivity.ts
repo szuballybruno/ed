@@ -1,7 +1,7 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from '../../MyORM';
 import { XJoinColumn, XManyToOne, XViewColumn } from '../../../services/XORM/XORMDecorators';
-import { SessionActivityType } from '../../../shared/types/sharedTypes';
-import { Id } from '../../../shared/types/versionId';
+import { SessionActivityType } from '@episto/commontypes';
+import { Id } from '@episto/commontypes';
 import { ActivitySession } from './ActivitySession';
 import { ExamVersion } from '../exam/ExamVersion';
 import { VideoVersion } from '../video/VideoVersion';

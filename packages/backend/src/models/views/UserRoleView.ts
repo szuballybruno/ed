@@ -1,6 +1,6 @@
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
-import { PermissionCodeType } from '../../shared/types/sharedTypes';
-import { Id } from '../../shared/types/versionId';
+import { PermissionCodeType } from '@episto/commontypes';
+import { Id } from '@episto/commontypes';
 
 
 export class UserRoleView {

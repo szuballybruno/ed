@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useMemo } from 'react';
 import { getVirtualId } from '../../../../services/core/idService';
-import { AnswerEditDTO } from '../../../../shared/dtos/AnswerEditDTO';
-import { ModuleEditDTO } from '../../../../shared/dtos/ModuleEditDTO';
-import { QuestionEditDataReadDTO } from '../../../../shared/dtos/QuestionEditDataReadDTO';
-import { Id } from '../../../../shared/types/versionId';
+import { AnswerEditDTO } from '@episto/communication';
+import { ModuleEditDTO } from '@episto/communication';
+import { QuestionEditDataReadDTO } from '@episto/communication';
+import { Id } from '@episto/commontypes';
 import { iterate } from '../../../../static/frontendHelpers';
 import { useXMutatorNew } from '../../../lib/XMutator/XMutatorReact';
 import { AnswerMutationsType, QuestionMutationsType, RowSchema } from './QuestionEditGridTypes';

@@ -1,11 +1,11 @@
 import { CourseLearningStatsView } from '../models/views/CourseLearningStatsView';
 import { CourseProgressView } from '../models/views/CourseProgressView';
-import { CourseLearningDTO } from '../shared/dtos/CourseLearningDTO';
-import { CourseProgressDTO } from '../shared/dtos/CourseProgressDTO';
-import { CourseProgressShortDTO } from '../shared/dtos/CourseProgressShortDTO';
-import { UserCoursesDataDTO } from '../shared/dtos/UserCoursesDataDTO';
-import { instantiate } from '../shared/logic/sharedLogic';
-import { Id } from '../shared/types/versionId';
+import { CourseLearningDTO } from '@episto/communication';
+import { CourseProgressDTO } from '@episto/communication';
+import { CourseProgressShortDTO } from '@episto/communication';
+import { UserCoursesDataDTO } from '@episto/communication';
+import { instantiate } from '@episto/commonlogic';
+import { Id } from '@episto/commontypes';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';

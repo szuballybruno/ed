@@ -1,4 +1,4 @@
-export default class FinalizeUserRegistrationDTO {
+export class FinalizeUserRegistrationDTO {
     phoneNumber: string;
     password: string;
     controlPassword: string;

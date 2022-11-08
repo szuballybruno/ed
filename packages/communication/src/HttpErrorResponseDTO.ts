@@ -1,6 +1,6 @@
-import { ErrorCodeType } from '../types/sharedTypes';
+import { ErrorCodeType } from "@episto/commontypes";
 
-export default class HttpErrorResponseDTO {
+export class HttpErrorResponseDTO {
 
     message: string;
     code: ErrorCodeType;

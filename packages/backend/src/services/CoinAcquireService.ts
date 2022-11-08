@@ -1,16 +1,16 @@
-import { CoinAcquireResultDTO } from '../shared/dtos/CoinAcquireResultDTO';
+import { CoinAcquireResultDTO } from '@episto/communication';
 import { ActivityStreakView } from '../models/views/ActivityStreakView';
 import { UserSessionDailyView } from '../models/views/UserSessionDailyView';
 import { CoinTransactionService } from './CoinTransactionService';
 import { EventService } from './EventService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
-import { Id } from '../shared/types/versionId';
+import { Id } from '@episto/commontypes';
 import { GlobalConfiguration } from './misc/GlobalConfiguration';
 import { LoggerService } from './LoggerService';
 import { CoinTransaction } from '../models/entity/misc/CoinTransaction';
-import { instantiate } from '../shared/logic/sharedLogic';
+import { instantiate } from '@episto/commonlogic';
 import { InsertEntity } from '../utilities/misc';
-import { CoinAcquireReasonType } from '../shared/types/sharedTypes';
+import { CoinAcquireReasonType } from '@episto/commontypes';
 import { GivenAnswer } from '../models/entity/misc/GivenAnswer';
 
 export class CoinAcquireService {

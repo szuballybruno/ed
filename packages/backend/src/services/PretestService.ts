@@ -1,9 +1,9 @@
 import { LatestExamView } from '../models/views/LatestExamView';
 import { PretestResultView } from '../models/views/PretestResultView';
-import { PretestDataDTO } from '../shared/dtos/PretestDataDTO';
-import { PretestResultDTO } from '../shared/dtos/PretestResultDTO';
-import { instantiate } from '../shared/logic/sharedLogic';
-import { Id } from '../shared/types/versionId';
+import { PretestDataDTO } from '@episto/communication';
+import { PretestResultDTO } from '@episto/communication';
+import { instantiate } from '@episto/commonlogic';
+import { Id } from '@episto/commontypes';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { AuthorizationService } from './AuthorizationService';
 import { ExamService } from './ExamService';

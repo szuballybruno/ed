@@ -1,6 +1,6 @@
 import { CourseCompletion } from '../models/entity/misc/CourseCompletion';
 import { CourseAllItemsCompletedView } from '../models/views/CourseAllItemsCompletedView';
-import { Id } from '../shared/types/versionId';
+import { Id } from '@episto/commontypes';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 

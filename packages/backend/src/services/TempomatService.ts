@@ -1,9 +1,9 @@
 import { UserCourseBridge } from '../models/entity/misc/UserCourseBridge';
 import { TempomatCalculationDataView } from '../models/views/TempomatCalculationDataView';
 import { UserCourseProgressView } from '../models/views/UserCourseProgressView';
-import { instantiate } from '../shared/logic/sharedLogic';
-import { TempomatModeType } from '../shared/types/sharedTypes';
-import { Id } from '../shared/types/versionId';
+import { instantiate } from '@episto/commonlogic';
+import { TempomatModeType } from '@episto/commontypes';
+import { Id } from '@episto/commontypes';
 import { addDays, dateDiffInDays, getArrayAverage, relativeDiffInPercentage } from '../utilities/helpers';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { AuthorizationService } from './AuthorizationService';

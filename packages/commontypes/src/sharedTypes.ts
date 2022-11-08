@@ -39,8 +39,6 @@ export type SessionActivityType = 'login' | 'logout' | 'generic' | 'video' | 'ex
 
 export type CourseModeType = 'beginner' | 'advanced';
 
-export type PermissionCodeType = PermissionCodeTypeNew;
-
 export type CoinAcquireReasonType =
     'activity_streak_3_days' |
     'activity_streak_5_days' |

@@ -1,5 +1,5 @@
 import { XJoinColumn, XManyToOne, XOneToMany, XViewColumn } from '../../../services/XORM/XORMDecorators';
-import { Id } from '../../../shared/types/versionId';
+import { Id } from '@episto/commontypes';
 import { Column, Entity, PrimaryGeneratedColumn, Relation } from '../../MyORM';
 import { StorageFile } from '../misc/StorageFile';
 import { VideoVersion } from './VideoVersion';

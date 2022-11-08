@@ -1,3 +1,4 @@
+import { Id } from "@episto/commontypes"
 
 export type BriefUserDataDTO = {
     id: Id<'User'>,

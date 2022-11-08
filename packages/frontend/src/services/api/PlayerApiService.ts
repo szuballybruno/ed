@@ -1,7 +1,7 @@
-import { AnswerQuestionDTO } from '../../shared/dtos/AnswerQuestionDTO';
-import { AnswerResultDTO } from '../../shared/dtos/AnswerResultDTO';
-import { PlayerDataDTO } from '../../shared/dtos/PlayerDataDTO';
-import { apiRoutes } from '../../shared/types/apiRoutes';
+import { AnswerQuestionDTO } from '@episto/communication';
+import { AnswerResultDTO } from '@episto/communication';
+import { PlayerDataDTO } from '@episto/communication';
+import { apiRoutes } from '@episto/communication';
 import { QueryService } from '../../static/QueryService';
 import { usePostDataUnsafe } from '../core/httpClient';
 

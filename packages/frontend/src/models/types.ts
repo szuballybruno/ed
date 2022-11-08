@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { EpistoButtonPropsType } from '../components/controls/EpistoButton';
 import { HasPermissionFnType } from '../components/system/AuthorizationContext';
-import { trimEndChar } from '../shared/logic/sharedLogic';
+import { trimEndChar } from '@episto/commonlogic';
 
 export type LoadingStateType = 'idle' | 'loading' | 'error' | 'success';
 
