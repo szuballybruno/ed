@@ -6,18 +6,8 @@
   "type": "module",
   "main": "./server.ts",
   "scripts": {
-    "lint": "eslint . --ext .ts",
-    "lintfix": "eslint . --ext .ts --fix",
     "build": "tsc",
-    "mon": "npx nodemon src/server.ts",
-    "tsdev": "tsnd --respawn server.ts",
-    "node": "node --async-stack-traces server.ts",
-    "nodenew": "nodemon -x node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm src/server.ts",
-    "lr": "npx ts-node --esm --experimentalSpecifierResolution node ./src/server.ts --lightRecreate",
-    "test": "jest -i ",
-    "integtest": "jest -i StartCourse.test.ts",
-    "testesm": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
-    "confighooks": "git config core.hooksPath git_hooks",
+    "start": "nodemon -x node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm src/server.ts",
     "cleaninstall": "yarn --force --no-lockfile"
   },
   "dependencies": {

@@ -3,11 +3,7 @@
   "version": "0.3.0",
   "private": true,
   "license": "UNLICENSED",
-  "type": "module",
   "dependencies": {
-    "@episto/commonlogic": "1.0.0",
-    "@episto/commontypes": "1.0.0",
-    "@episto/communication": "1.0.0",
     "@chakra-ui/image": "2.0.11",
     "@chakra-ui/input": "2.0.11",
     "@chakra-ui/layout": "2.1.8",
@@ -16,6 +12,9 @@
     "@chakra-ui/system": "2.2.12",
     "@emotion/react": "11.10.4",
     "@emotion/styled": "11.10.4",
+    "@episto/commonlogic": "1.0.0",
+    "@episto/commontypes": "1.0.0",
+    "@episto/communication": "1.0.0",
     "@lottiefiles/react-lottie-player": "3.4.7",
     "@mui/icons-material": "5.10.6",
     "@mui/material": "5.10.8",
@@ -52,8 +51,8 @@
     "word-wrap": "1.2.3"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "cross-env GENERATE_SOURCEMAP=false react-scripts build",
+    "start": "react-app-rewired start",
+    "build": "cross-env GENERATE_SOURCEMAP=false react-app-rewired build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint . --ext .ts --ext .tsx",
@@ -89,6 +88,7 @@
     "eslint-config-react-app": "7.0.1",
     "eslint-plugin-react": "7.31.10",
     "eslint-plugin-react-hooks": "4.6.0",
+    "react-app-rewired": "^2.2.1",
     "typescript": "4.8.4"
   }
 }
