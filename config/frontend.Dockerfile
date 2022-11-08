@@ -14,6 +14,7 @@ COPY ./tsconfig.json ./tsconfig.json
 RUN echo "Copying frontend files..."
 COPY ./packages/frontend/package.json ./packages/frontend/package.json
 COPY ./packages/frontend/tsconfig.json ./packages/frontend/tsconfig.json
+COPY ./packages/frontend/config-overrides.js ./packages/frontend/config-overrides.js
 COPY ./packages/frontend/.env ./packages/frontend/.env
 COPY ./packages/frontend/.eslintrc.json ./packages/frontend/.eslintrc.json
 COPY ./packages/frontend/src ./packages/frontend/src
