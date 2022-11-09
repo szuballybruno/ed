@@ -13,7 +13,7 @@ import { ContentPane } from '../ContentPane';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
-import { PlaylistItem } from '../courseItemList/PlaylistItem';
+import { PlaylistItem } from '../playlist/PlaylistItem';
 import { LeftPane } from '../LeftPane';
 import { PageRootContainer } from '../PageRootContainer';
 import { CurrentUserContext, useRefetchUserAsync } from '../system/AuthenticationFrame';

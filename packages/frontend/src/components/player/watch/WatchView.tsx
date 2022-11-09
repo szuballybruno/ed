@@ -1,13 +1,10 @@
+import { CourseItemStateType, CourseModeType, Id } from '@episto/commontypes';
+import { QuestionDTO, VideoPlayerDataDTO } from '@episto/communication';
 import { Divider } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import { useReactTimer } from '../../../helpers/reactTimer';
 import { StillWatchingDialogMarker } from '../../../models/types';
 import { PlaybackApiService } from '../../../services/api/playbackApiService';
-import { PlaylistModuleDTO } from '@episto/communication';
-import { QuestionDTO } from '@episto/communication';
-import { VideoPlayerDataDTO } from '@episto/communication';
-import { CourseItemStateType, CourseModeType } from '@episto/commontypes';
-import { Id } from '@episto/commontypes';
 import {
     getRandomInteger,
     isBetweenThreshold,
@@ -21,7 +18,8 @@ import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoDiv } from '../../controls/EpistoDiv';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
-import { NavigateToCourseItemActionType } from '../../courseItemList/Playlist';
+import { NavigateToCourseItemActionType } from '../../playlist/Playlist';
+import { PlaylistFilterLogicType } from '../../playlist/playlistFilterLogic';
 import { EpistoPaging } from '../../universal/EpistoPaging';
 import { TimeoutFrame } from '../../universal/TimeoutFrame';
 import { VideoQuestionnaire } from '../../universal/VideoQuestionnaire';
@@ -37,10 +35,21 @@ import { VideoPlayer } from './videoPlayer/VideoPlayer';
 import { useVideoPlayerState } from './videoPlayer/videoPlayerState';
 const autoplayTimeoutInS = 3;
 
-export const WatchView = (props: {
+export const WatchView = ({
+    nextItemState,
+    currentItemCode,
+    videoPlayerData,
+    playlistFilterLogic,
+    answerSessionId,
+    courseMode,
+    isPlayerLoaded,
+    courseId,
+    continueCourse,
+    refetchPlayerData
+}: {
     videoPlayerData: VideoPlayerDataDTO,
     answerSessionId: Id<'AnswerSession'>,
-    modules: PlaylistModuleDTO[],
+    playlistFilterLogic: PlaylistFilterLogicType,
     courseMode: CourseModeType,
     courseId: Id<'Course'>,
     continueCourse: () => void,
@@ -50,19 +59,6 @@ export const WatchView = (props: {
     nextItemState: CourseItemStateType | null,
     isPlayerLoaded: boolean
 }) => {
-
-    const {
-        nextItemState,
-        currentItemCode,
-        videoPlayerData,
-        modules,
-        answerSessionId,
-        courseMode,
-        isPlayerLoaded,
-        courseId,
-        continueCourse,
-        refetchPlayerData
-    } = props;
 
     const { questions } = videoPlayerData;
     const isMobile = useIsMobileView();
@@ -365,7 +361,7 @@ export const WatchView = (props: {
                 courseId={courseId}
                 mode={courseMode}
                 refetchPlayerData={refetchPlayerData}
-                modules={modules} />}
+                playlistFilterLogic={playlistFilterLogic} />}
 
             {!isMobile && <Divider
                 style={{

@@ -1,9 +1,9 @@
+import { PlayerDataDTO, PlaylistModuleDTO } from '@episto/communication';
 import { useEffect, useMemo, useState } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { PlayerApiService } from '../../../services/api/PlayerApiService';
 import browser from '../../../services/core/browserSniffingService';
 import { useNavigation } from '../../../services/core/navigatior';
-import { PlayerDataDTO } from '@episto/communication';
 import { setPageTitle, useIsMobileView } from '../../../static/frontendHelpers';
 import { useStringParam } from '../../../static/locationHelpers';
 import { Logger } from '../../../static/Logger';
@@ -11,6 +11,7 @@ import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoDiv } from '../../controls/EpistoDiv';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
+import { usePlaylistFilterLogic } from '../../playlist/playlistFilterLogic';
 import { useScrollIntoView } from '../../system/AutoScrollContext';
 import { LoadingFrame } from '../../system/LoadingFrame';
 import { Copyright } from '../../universal/Copyright';
@@ -47,15 +48,8 @@ export const WatchSubpage = () => {
         playerDataStatus,
         playerDataError,
         refetchPlayerData
-    } = PlayerApiService.usePlayerData(urlPlaylistItemCode);
-
-    const playerDataWithDefaults = useMemo(() => (playerData ?? ({
-        courseMode: 'beginner',
-        currentPlaylistItemCode: '',
-        nextPlaylistItemState: null,
-        modules: [] as any,
-        canChangeMode: false
-    } as PlayerDataDTO)), [playerData]);
+    } = PlayerApiService
+        .usePlayerData(urlPlaylistItemCode);
 
     const {
         examPlayerData,
@@ -65,10 +59,19 @@ export const WatchSubpage = () => {
         courseMode,
         courseId,
         modules,
+        canChangeMode,
         nextPlaylistItemCode,
         currentPlaylistItemCode,
         nextPlaylistItemState
-    } = playerDataWithDefaults;
+    } = useMemo(() => (playerData ?? ({
+        courseMode: 'beginner',
+        currentPlaylistItemCode: '',
+        nextPlaylistItemState: null,
+        canChangeMode: false,
+        modules: [] as PlaylistModuleDTO[]
+    } as PlayerDataDTO)), [playerData]);
+
+    const playlistFilterLogic = usePlaylistFilterLogic(modules);
 
     const title = videoPlayerData?.title || examPlayerData?.title || modulePlayerData?.name;
     const isPlayerLoaded = playerDataStatus === 'success';
@@ -204,7 +207,7 @@ export const WatchSubpage = () => {
                                 refetchPlayerData={refetchPlayerData}
                                 answerSessionId={answerSessionId!}
                                 videoPlayerData={videoPlayerData}
-                                modules={modules}
+                                playlistFilterLogic={playlistFilterLogic}
                                 continueCourse={handleContinueCourse}
                                 navigateToCourseItem={navigateToCourseItem} />}
 
@@ -247,9 +250,9 @@ export const WatchSubpage = () => {
                                     nextItemState={nextPlaylistItemState}
                                     courseId={courseId!}
                                     mode={courseMode}
-                                    modules={modules}
+                                    playlistFilterLogic={playlistFilterLogic}
                                     isScrolledFromTop={isScrolledFromTop}
-                                    canChangeMode={playerDataWithDefaults.canChangeMode}
+                                    canChangeMode={canChangeMode}
                                     isPlayerLoaded={isPlayerLoaded}
                                     refetchPlayerData={refetchPlayerData} />
                             </EpistoFlex2>}

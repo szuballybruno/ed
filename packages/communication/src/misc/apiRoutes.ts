@@ -5,7 +5,6 @@ import { CourseStartDTO } from "../CourseStartDTO";
 import { Mutation } from "../mutations/Mutation";
 import { UserCourseStatsDTO } from "../UserCourseStatsDTO";
 
-
 export type RouteParameterType<TBody = any, TQuery = any> = { body?: TBody, query?: TQuery };
 export type ParametrizedRouteType<T extends RouteParameterType> = string & T;
 export type GetParametrizedRouteType<T> = T extends ParametrizedRouteType<infer A> ? A : never;
@@ -188,11 +187,7 @@ export const apiRoutes = {
 
     player: {
         getPlayerData: '/player/get-player-data',
-        answerVideoQuestion: '/questions/answer-video-question'
-    },
-
-    playlist: {
-        getPlaylist: '/playlist/get-playlist',
+        answerVideoQuestion: '/questions/answer-video-question',
     },
 
     playback: {

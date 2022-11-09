@@ -17,7 +17,10 @@ import { PlaylistItem } from './PlaylistItem';
 
 export type NavigateToCourseItemActionType = (descriptorCode: string) => void;
 
-export const Playlist = (props: {
+export const Playlist = ({
+    modules,
+    isMobile
+}: {
     modules: PlaylistModuleDTO[],
     isMobile?: boolean
 }) => {
@@ -25,9 +28,6 @@ export const Playlist = (props: {
     // hooks
     const [expandedNodeIds, setExpandedNodeIds] = useState<Id<'Module'>[]>([]);
     const { navigateToPlayer } = useNavigation();
-
-    // data
-    const { modules, isMobile } = props;
 
     const isBeginnerMode = modules
         .flatMap(x => x.items)

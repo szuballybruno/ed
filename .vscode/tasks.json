@@ -19,15 +19,6 @@
             "problemMatcher": []
         },
         {
-            "label": "getPermissionsType",
-            "type": "shell",
-            "command": "cmd /c start.bat",
-            "problemMatcher": [],
-            "options": {
-                "cwd": "${workspaceFolder}\\scripts\\permissionGen"
-            },
-        },
-        {
             "label": "run test-misc",
             "type": "shell",
             "command": "npx jest -i misc.test.ts",
@@ -37,8 +28,11 @@
         {
             "type": "shell",
             "label": "run frontend",
-            "command": "yarn --cwd ../epistogram_frontend start",
+            "command": "yarn start",
             "problemMatcher": [],
+            "options": {
+                "cwd": "${workspaceFolder}/packages/frontend"
+            },
             "presentation": {
                 "group": "run"
             }
@@ -46,8 +40,11 @@
         {
             "type": "shell",
             "label": "run backend",
-            "command": "yarn --cwd ../packages/backend nodenew",
+            "command": "yarn start",
             "problemMatcher": [],
+            "options": {
+                "cwd": "${workspaceFolder}/packages/backend"
+            },
             "presentation": {
                 "group": "run"
             }
@@ -60,6 +57,16 @@
                 "run backend",
             ],
             "problemMatcher": []
+        },
+        // build deps
+        {
+            "label": "builddeps",
+            "type": "shell",
+            "command": "yarn builddeps",
+            "problemMatcher": [],
+            "presentation": {
+                "group": "deps"
+            }
         }
     ]
 }

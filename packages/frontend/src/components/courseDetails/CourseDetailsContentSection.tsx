@@ -1,6 +1,6 @@
 import { CourseDetailsDTO } from '@episto/communication';
 import { roundNumber } from '../../static/frontendHelpers';
-import { Playlist } from '../courseItemList/Playlist';
+import { Playlist } from '../playlist/Playlist';
 
 export const CourseDetailsContentSection = (props: { courseDetails: CourseDetailsDTO }) => {
 

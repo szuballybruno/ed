@@ -12,6 +12,7 @@
       "strictPropertyInitialization": false,
       "declaration": true,
       "noEmit": false,
+      "declarationMap": true,
       "lib": [
         "ESNext"
       ]
