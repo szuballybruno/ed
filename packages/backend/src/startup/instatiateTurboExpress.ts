@@ -2,7 +2,6 @@
 import { AuthenticationController } from '../api/AuthenticationController';
 import { CourseProgressController } from '../api/CourseProgressController';
 import { InvitationController } from '../api/InvitationController';
-import { PlaylistController } from '../api/PlaylistController';
 import { LoggerService } from '../services/LoggerService';
 import { GlobalConfiguration } from '../services/misc/GlobalConfiguration';
 import { ORMConnectionService } from '../services/ORMConnectionService/ORMConnectionService';
@@ -144,7 +143,6 @@ export const initTurboExpress = (
         .addController(PlayerController)
         .addController(PlaybackController)
         .addController(CourseController)
-        .addController(PlaylistController)
         .addController(CourseProgressController)
         .addController(ModuleController)
         .addController(VideoController)
