@@ -1,5 +1,5 @@
 import { Divider } from '@chakra-ui/layout';
-import { KeyboardArrowUp } from '@mui/icons-material';
+import { FilterAlt, HelpOutline, KeyboardArrowUp, Search } from '@mui/icons-material';
 import { useEffect, useRef, useState } from 'react';
 import { CourseApiService } from '../../../services/api/courseApiService';
 import { useTempomatMode } from '../../../services/api/tempomatApiService';
@@ -20,6 +20,7 @@ import { EpistoDialog } from '../../universal/epistoDialog/EpistoDialog';
 import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogLogic';
 import { TempomatSettingsDialog } from '../tempomat/TempomatSettingsDialog';
 import { TempomatTempoInfo } from '../tempomat/TempomatTempoInfo';
+import { RadioGroup } from '@mui/material';
 
 export const CourseItemSelector = (props: {
     mode: CourseModeType,
@@ -181,7 +182,7 @@ export const CourseItemSelector = (props: {
         </>}
 
         {/* learning type selector FOR ADMINS ONLY */}
-        {/* {canChangeMode && <RadioGroup
+        <RadioGroup
             value={mode}
             style={{
                 position: 'relative'
@@ -246,9 +247,9 @@ export const CourseItemSelector = (props: {
                     right: 10,
                     top: -20
                 }}
-                icon={<HelpOutlineIcon />}
+                icon={<HelpOutline />}
                 onClick={() => setIsInfoDialogOpen(true)} />
-        </RadioGroup>} */}
+        </RadioGroup>
 
         <EpistoPopper
             isOpen={isInfoDialogOpen}
