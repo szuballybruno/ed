@@ -7,6 +7,7 @@ import { replaceAll } from '../utilities/helpers';
 import { DomainProviderService } from './DomainProviderService';
 import { GlobalConfiguration } from './misc/GlobalConfiguration';
 import { UrlService } from './UrlService';
+import path from 'path';
 
 export class EmailService {
 
@@ -163,7 +164,9 @@ export class EmailService {
                 ? 'spengler.manfred@epistogram.com'
                 : email.to;
 
-            const templatePath = `${this._config.rootDirectory}/emails/${email.template.name}.html`;
+            const rootParentPath = path.resolve(this._config.rootDirectory, '../')
+
+            const templatePath = `${rootParentPath}/emails/${email.template.name}.html`;
             const templateHtml = readFileSync(templatePath, 'utf8');
             let replacedHtml = '' + templateHtml;
 
