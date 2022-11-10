@@ -15,6 +15,7 @@ import { PretestResultsSubpage } from './pretest/PretestResultsSubpage';
 import { PretestSubpage } from './pretest/PretestSubpage';
 import { useVideoPlayerFullscreenContext } from './watch/videoPlayer/VideoPlayerFullscreenFrame';
 import { WatchSubpage } from './watch/WatchSubpage';
+
 export const PlayerPage = () => {
 
     const isMobile = useIsMobileView();

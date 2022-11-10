@@ -83,9 +83,6 @@ export class PlayerService {
         // get course item dto
         const { itemId, itemType } = readItemCode(validItemCode);
 
-        console.log('itemId: ' + itemId);
-        console.log('itemType: ' + itemType);
-
         const videoPlayerDTO = itemType === 'video' ? await this
             ._getVideoPlayerDataDTOAsync(userId, itemId as Id<'Video'>) : null;
 
@@ -106,7 +103,8 @@ export class PlayerService {
 
         //
         // get next item 
-        const { nextPlaylistItemCode, nextItemState } = this._getNextPlaylistItem(modules, validItemCode);
+        const { nextPlaylistItemCode, nextItemState } = this
+            ._getNextPlaylistItem(modules, validItemCode);
 
         /**
          * Get SET_COURSE_MODE permission

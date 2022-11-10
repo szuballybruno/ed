@@ -1,9 +1,6 @@
-import { CourseService } from '../services/CourseService';
+import { AnswerQuestionDTO, AnswerResultDTO, apiRoutes } from '@episto/communication';
 import { PlayerService } from '../services/PlayerService';
 import { VideoService } from '../services/VideoService';
-import { AnswerQuestionDTO } from '@episto/communication';
-import { AnswerResultDTO } from '@episto/communication';
-import { apiRoutes } from '@episto/communication';
 import { ServiceProvider } from '../startup/serviceDependencyContainer';
 import { ActionParams } from '../utilities/XTurboExpress/ActionParams';
 import { XControllerAction } from '../utilities/XTurboExpress/XTurboExpressDecorators';
@@ -11,13 +8,11 @@ import { XController } from '../utilities/XTurboExpress/XTurboExpressTypes';
 
 export class PlayerController implements XController<PlayerController> {
 
-    private _courseService: CourseService;
     private _playerService: PlayerService;
     private _videoService: VideoService;
 
     constructor(serviceProvider: ServiceProvider) {
 
-        this._courseService = serviceProvider.getService(CourseService);
         this._playerService = serviceProvider.getService(PlayerService);
         this._videoService = serviceProvider.getService(VideoService);
     }

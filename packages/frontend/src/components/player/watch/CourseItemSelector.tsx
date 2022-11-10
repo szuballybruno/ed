@@ -1,20 +1,17 @@
 import { Divider } from '@chakra-ui/layout';
-import { FilterAlt, HelpOutline, KeyboardArrowUp, Search } from '@mui/icons-material';
+import { CourseItemStateType, CourseModeType, Id } from '@episto/commontypes';
 import { useEffect, useRef, useState } from 'react';
 import { CourseApiService } from '../../../services/api/courseApiService';
 import { useTempomatMode } from '../../../services/api/tempomatApiService';
 import { useRecommendedItemQuota } from '../../../services/api/userProgressApiService';
 import { useShowErrorDialog } from '../../../services/core/notifications';
-import { PlaylistModuleDTO } from '@episto/communication';
-import { CourseItemStateType, CourseModeType } from '@episto/commontypes';
-import { Id } from '@episto/commontypes';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
-import { EpistoFont } from '../../controls/EpistoFont';
-import { EpistoPopper } from '../../controls/EpistoPopper';
-import { Playlist } from '../../courseItemList/Playlist';
+import { EpistoSearch } from '../../controls/EpistoSearch';
 import { RecommendedItemQuota } from '../../home/RecommendedItemQuota';
+import { Playlist } from '../../playlist/Playlist';
+import { PlaylistFilterLogicType } from '../../playlist/playlistFilterLogic';
 import { useScrollIntoView } from '../../system/AutoScrollContext';
 import { EpistoDialog } from '../../universal/epistoDialog/EpistoDialog';
 import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogLogic';
@@ -22,9 +19,20 @@ import { TempomatSettingsDialog } from '../tempomat/TempomatSettingsDialog';
 import { TempomatTempoInfo } from '../tempomat/TempomatTempoInfo';
 import { RadioGroup } from '@mui/material';
 
-export const CourseItemSelector = (props: {
+export const CourseItemSelector = ({
+    currentItemCode,
+    nextItemState: itemState,
+    isPlayerLoaded,
+    mode,
+    refetchPlayerData,
+    courseId,
+    playlistFilterLogic,
+    canChangeMode,
+    isScrolledFromTop,
+    isMobile
+}: {
     mode: CourseModeType,
-    modules: PlaylistModuleDTO[],
+    playlistFilterLogic: PlaylistFilterLogicType,
     courseId: Id<'Course'>,
     refetchPlayerData: () => Promise<void>,
     currentItemCode: string,
@@ -34,19 +42,6 @@ export const CourseItemSelector = (props: {
     canChangeMode?: boolean,
     isMobile?: boolean
 }) => {
-
-    const {
-        currentItemCode,
-        nextItemState: itemState,
-        isPlayerLoaded,
-        mode,
-        refetchPlayerData,
-        courseId,
-        modules,
-        canChangeMode,
-        isScrolledFromTop,
-        isMobile
-    } = props;
 
     const showErrorDialog = useShowErrorDialog();
     const [isInfoDialogOpen, setIsInfoDialogOpen] = useState(false);
@@ -181,121 +176,16 @@ export const CourseItemSelector = (props: {
             </EpistoButton>
         </>}
 
-        {/* learning type selector FOR ADMINS ONLY */}
-        <RadioGroup
-            value={mode}
-            style={{
-                position: 'relative'
-            }}>
+        {/* search bar */}
+        <EpistoFlex2>
+            <EpistoSearch
+                value={playlistFilterLogic.playlistFilters.keyword}
+                onKeywordChanged={x => playlistFilterLogic.setFilterKeyword(x)} />
+        </EpistoFlex2>
 
-            <EpistoFlex2
-                height="50px"
-                padding="0 20px"
-                justify="center">
-
-                <EpistoButton
-                    variant="outlined"
-                    onClick={() => setCourseMode(mode === 'beginner' ? 'advanced' : 'beginner')}
-                    style={{
-                        margin: '5px',
-                        padding: '0 10px 0 10px',
-                        flex: '1',
-                        border: mode === 'beginner' ? '2px solid var(--epistoTeal)' : undefined
-                    }}>
-
-                    <EpistoFont
-                        isUppercase
-                        fontSize="fontNormal14">
-
-                        {mode === 'advanced'
-                            ? translatableTexts.player.courseItemSelector.beginner
-                            : translatableTexts.player.courseItemSelector.advanced}
-                    </EpistoFont>
-                </EpistoButton>
-                <EpistoButton
-                    variant="colored"
-                    style={{
-                        margin: '5px',
-                        padding: '0 10px 0 10px',
-                        width: '40px',
-                        border: '2px solid var(--epistoTeal)'
-                    }}>
-
-                    <Search />
-                </EpistoButton>
-                <EpistoButton
-                    variant="colored"
-                    style={{
-                        margin: '5px',
-                        padding: '0 10px 0 10px',
-                        width: '40px',
-                        border: '2px solid var(--epistoTeal)'
-                    }}>
-
-                    <FilterAlt />
-                </EpistoButton>
-            </EpistoFlex2>
-
-            <EpistoButton
-                ref={ref}
-                style={{
-                    padding: '0',
-                    alignSelf: 'flex-start',
-                    color: 'var(--epistoTeal)',
-                    position: 'absolute',
-                    zIndex: 3,
-                    right: 10,
-                    top: -20
-                }}
-                icon={<HelpOutline />}
-                onClick={() => setIsInfoDialogOpen(true)} />
-        </RadioGroup>
-
-        <EpistoPopper
-            isOpen={isInfoDialogOpen}
-            target={ref?.current}
-            style={{
-                width: 400
-            }}
-            placementX="left"
-            handleClose={() => setIsInfoDialogOpen(false)}>
-
-            <EpistoFont>
-                {translatableTexts.player.courseItemSelector.courseModeSwitchDescription}
-            </EpistoFont>
-        </EpistoPopper>
-
-
-        {isScrolledFromTop && <EpistoButton
-            onClick={() => scrollToTop()}
-            style={{
-                padding: '5px 10px',
-                minHeight: '30px',
-                width: '160px',
-                alignSelf: 'center',
-                background: 'var(--epistoTeal)',
-                color: 'white',
-                display: 'flex',
-                zIndex: 100000,
-                alignItems: 'center',
-                position: 'absolute',
-                top: 110,
-                border: '1px solid var(--mildGrey)',
-                borderRadius: '20px'
-            }}>
-
-            <KeyboardArrowUp />
-
-            <EpistoFont
-                fontSize='fontExtraSmall'
-                isUppercase>
-
-                Görgetés felülre
-            </EpistoFont>
-        </EpistoButton>}
-
+        {/* playlist */}
         <Playlist
             isMobile={isMobile}
-            modules={modules}></Playlist>
+            modules={playlistFilterLogic.playlistFiltered} />
     </>;
 };
