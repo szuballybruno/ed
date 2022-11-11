@@ -1,6 +1,5 @@
 import { applicationRoutes } from '../../configuration/applicationRoutes';
-import { CourseOverviewDataDTO, QuestionModuleCompareDTO } from '@episto/communication';
-import { ActivationCodeListDTO, CourseOverviewDataDTO } from '@episto/communication';
+import { CourseOverviewDataDTO, ActivationCodeListDTO, QuestionModuleCompareDTO } from '@episto/communication';
 import { OverviewPageDTO } from '@episto/communication';
 import { apiRoutes } from '@episto/communication';
 import { Id } from '@episto/commontypes';

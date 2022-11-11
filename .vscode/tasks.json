@@ -12,18 +12,6 @@
                 "cwd": "${workspaceFolder}/misc/scripts/pipelineGenerator"
             },
         },
-        {
-            "label": "styleGen",
-            "type": "shell",
-            "command": "cmd /c node scripts\\styleGen\\styleGen.js",
-            "problemMatcher": []
-        },
-        {
-            "label": "run test-misc",
-            "type": "shell",
-            "command": "npx jest -i misc.test.ts",
-            "problemMatcher": [],
-        },
         // run
         {
             "type": "shell",
@@ -66,6 +54,18 @@
             "problemMatcher": [],
             "presentation": {
                 "group": "deps"
+            }
+        },
+        {
+            "label": "cleanLocalMigration",
+            "type": "shell",
+            "command": "powershell.exe ./cleanLocalMigration.ps1",
+            "options": {
+                "cwd": "${workspaceFolder}/deploy"
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "group": "migarion"
             }
         }
     ]
