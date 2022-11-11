@@ -2,7 +2,7 @@ import './jsExtensions';
 import { Polyfills, writeFileSync } from "./polyfills";
 import { SoftSchemaScriptService } from "./SoftSchemaScriptService";
 
-const rootFolderPath = __dirname + '/../../../../';
+const rootFolderPath = __dirname + '/../../../';
 const deployFolderFilePath = `${rootFolderPath}deploy`;
 const sqlFolderFilePath = `${rootFolderPath}packages/backend/sql`;
 const migrationsFolderFilePath = sqlFolderFilePath + '/migrations';

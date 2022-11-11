@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "ts-node ./src/main.ts",
-    "build": "webpack --mode production"
+    "build": "webpack --mode production",
+    "tsc": "tsc"
   },
   "keywords": [],
   "author": "",

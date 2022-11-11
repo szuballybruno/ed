@@ -1,4 +1,4 @@
-cd ../misc/scripts/scriptProducer
-yarn --no-lockfile 
+cd ../packages/scriptProducer
+yarn
 yarn build
-cd ../../../deploy
+cd ../../deploy

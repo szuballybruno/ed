@@ -119,7 +119,7 @@ $GEN_ENV_SCRIPT$
           ref: $BRANCH_NAME$
     
       - name: Migrate schema
-        working-directory: ./packages/backend/deploy
+        working-directory: ./deploy
         shell: pwsh
         run: |
           ./migrateDatabase.ps1 `

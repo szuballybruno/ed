@@ -6,11 +6,11 @@ import { removeAllFilesInFolder, replaceAll, writeFile } from './helpers';
 
     const onlyLocalConfigGen = process.argv.some(x => x === '--genc');
 
-    const rootDir = __dirname;
-    const pipelineTemplateFilePath = rootDir + "/../template/pipelineTemplate.yml";
-    const outputDirectoryPath = rootDir + "/../../../../.github/workflows";
-    const backendConfigEnvPath = rootDir + "/../../../../packages/backend/config/config.env";
-    const localConfigGenOutDir = rootDir + "/../out/configGen.bat";
+    const rootFolderPath = __dirname + '/../../../';
+    const pipelineTemplateFilePath = __dirname + "/../template/pipelineTemplate.yml";
+    const outputDirectoryPath = rootFolderPath + ".github/workflows";
+    const backendConfigEnvPath = rootFolderPath + "packages/backend/config/config.env";
+    const localConfigGenOutDir = __dirname + "/../out/configGen.bat";
     const pipelineText = fs.readFileSync(pipelineTemplateFilePath, 'utf8');
 
     /**

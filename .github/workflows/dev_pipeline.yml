@@ -147,7 +147,7 @@ jobs:
           ref: dev
     
       - name: Migrate schema
-        working-directory: ./packages/backend/deploy
+        working-directory: ./deploy
         shell: pwsh
         run: |
           ./migrateDatabase.ps1 `
