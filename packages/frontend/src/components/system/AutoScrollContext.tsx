@@ -1,6 +1,6 @@
-import {createContext, useCallback, useContext, useState} from 'react';
-import {PropsWithChildren} from '../../static/frontendHelpers';
-import {Logger} from '../../static/Logger';
+import { createContext, useCallback, useContext, useState } from 'react';
+import { PropsWithChildren } from '../../static/frontendHelpers';
+import { Logger } from '../../static/Logger';
 
 const easeInOutQuad = (time, startPos, endPos, duration) => {
     time /= duration / 2;
@@ -61,8 +61,19 @@ const scrollIntoView = (parent, child) => {
 
 export const useScrollState = () => {
 
+    const [isAutoScrollDisabled, setIsAutoScrollDisabled] = useState(false);
     const [parentElement, setParentElement] = useState<HTMLDivElement>();
     const [childElement, setChildElement] = useState<HTMLDivElement>();
+
+    const disableAutoScroll = () => {
+
+        setIsAutoScrollDisabled(true);
+    };
+
+    const enableAutoScroll = () => {
+
+        setIsAutoScrollDisabled(false);
+    };
 
     const setParent = (element: HTMLDivElement) => {
 
@@ -76,27 +87,30 @@ export const useScrollState = () => {
 
     const scroll = useCallback(() => {
 
+        if (isAutoScrollDisabled)
+            return;
+
         Logger.logScoped('AUTO SCROLL', 'Scroll into view initiated...');
 
-        if(!parentElement)
+        if (!parentElement)
             return;
 
         Logger.logScoped('AUTO SCROLL', 'Parent element is present');
 
-        if(!childElement)
+        if (!childElement)
             return;
 
         Logger.logScoped('AUTO SCROLL', 'Child element is present');
         Logger.logScoped('AUTO SCROLL', 'Scrolling...');
 
         scrollIntoView(parentElement, childElement);
-    }, [childElement, parentElement]);
+    }, [childElement, parentElement, isAutoScrollDisabled]);
 
     const scrollToTop = () => {
 
         Logger.logScoped('AUTO SCROLL', 'Scrolling to top initiated...');
 
-        if(!parentElement)
+        if (!parentElement)
             return;
 
         Logger.logScoped('AUTO SCROLL', 'Parent element is present...');
@@ -108,6 +122,8 @@ export const useScrollState = () => {
     return {
         scroll,
         scrollToTop,
+        disableAutoScroll,
+        enableAutoScroll,
         parentElement,
         childElement,
         setParent,

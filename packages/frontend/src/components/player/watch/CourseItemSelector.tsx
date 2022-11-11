@@ -50,7 +50,7 @@ export const CourseItemSelector = ({
     const { recommendedItemQuota, refetchRecommendedItemQuota } = useRecommendedItemQuota(courseId);
     const { tempomatMode, refetchTempomatMode } = useTempomatMode(courseId, isPlayerLoaded);
     const { setCourseModeAsync } = CourseApiService.useSetCourseMode();
-    const { scrollToTop } = useScrollIntoView();
+    const { scrollToTop, scroll, disableAutoScroll, enableAutoScroll } = useScrollIntoView();
 
     // dialog state
     const dialogLogic = useEpistoDialogLogic('advModeChangWarnDialog');
@@ -91,7 +91,8 @@ export const CourseItemSelector = ({
         refetchRecommendedItemQuota();
     }, [currentItemCode, itemState]);
 
-    return <>
+    return <EpistoFlex2
+        direction='column'>
 
         {/* Tempomat info dialog */}
         {!isMobile && <TempomatSettingsDialog
@@ -176,15 +177,41 @@ export const CourseItemSelector = ({
         </>}
 
         {/* search bar */}
-        <EpistoFlex2>
+        {!isMobile && <EpistoFlex2
+            background='white'
+            width='100%'
+            zIndex={20}
+            position='sticky'
+            left='0'
+            pb='5px'
+            top='100px'>
+
             <EpistoSearch
+                boxShadow='none'
+                mx='5px'
                 value={playlistFilterLogic.playlistFilters.keyword}
-                onKeywordChanged={x => playlistFilterLogic.setFilterKeyword(x)} />
-        </EpistoFlex2>
+                onKeywordChanged={x => {
+
+                    if (typeof x === 'string' && x.length > 0) {
+
+                        disableAutoScroll();
+                    }
+
+                    if (typeof x === 'string' && x.length === 0) {
+
+                        enableAutoScroll();
+                    }
+
+                    scroll();
+
+                    return playlistFilterLogic.setFilterKeyword(x);
+                }} />
+        </EpistoFlex2>}
 
         {/* playlist */}
         <Playlist
+            isMinWidth
             isMobile={isMobile}
             modules={playlistFilterLogic.playlistFiltered} />
-    </>;
+    </EpistoFlex2>;
 };

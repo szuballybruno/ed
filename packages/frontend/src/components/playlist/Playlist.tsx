@@ -18,9 +18,11 @@ import { PlaylistItem } from './PlaylistItem';
 export type NavigateToCourseItemActionType = (descriptorCode: string) => void;
 
 export const Playlist = ({
+    isMinWidth,
     modules,
     isMobile
 }: {
+    isMinWidth?: boolean,
     modules: PlaylistModuleDTO[],
     isMobile?: boolean
 }) => {
@@ -91,6 +93,7 @@ export const Playlist = ({
 
     return (
         <EpistoFlex2
+            minWidth={isMinWidth ? '420px' : undefined}
             id="courseItemListRoot"
             direction="column"
             zIndex={0}
