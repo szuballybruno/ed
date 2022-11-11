@@ -6,7 +6,7 @@
   "scripts": {
     "builddeps": "cd ./packages/commontypes && yarn build && cd ../communication && yarn build && cd ../commonlogic && yarn build",
     "buildfront": "cd ./packages/commontypes && yarn build && cd ../communication && yarn build && cd ../commonlogic && yarn build && cd ../frontend && yarn build",
-    "bjuildback": "cd ./packages/commontypes && yarn build && cd ../communication && yarn build && cd ../commonlogic && yarn build && cd ../backend && yarn build",
+    "buildback": "cd ./packages/commontypes && yarn build && cd ../communication && yarn build && cd ../commonlogic && yarn build && cd ../backend && yarn build",
     "startback": "cd ./packages/commontypes && yarn build && cd ../communication && yarn build && cd ../commonlogic && yarn build && cd ../backend && yarn start"
   }
 }
