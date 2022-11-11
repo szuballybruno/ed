@@ -46,15 +46,15 @@ export class MiscController implements XController<MiscController> {
             );
     }
 
-    @XControllerAction(apiRoutes.misc.getActivationCodeLinks)
-    getActivationCodeLinksAction(params: ActionParams) {
+    @XControllerAction(apiRoutes.misc.getActivationCodeList)
+    getActivationCodeListAction(params: ActionParams) {
 
         const { query } = params
-            .getFromParameterized(apiRoutes.misc.getActivationCodeLinks);
+            .getFromParameterized(apiRoutes.misc.getActivationCodeList);
 
         return this
             ._miscService
-            .getActivationCodeLinks(
+            .getActivationCodeList(
                 query.getValue(x => x.urlTemplate, 'string'),
                 query.getValue(x => x.companyId, 'int'));
     }

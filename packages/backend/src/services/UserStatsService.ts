@@ -455,8 +455,6 @@ export class UserStatsService {
             .where('companyId', '=', 'companyId')
             .getMany();
 
-        console.log(companyCourseStats);
-
         return this._mapperService
             .mapTo(AdminHomePageOverviewDTO, [companyCourseStats, flaggedUsers, avgUsers, outstandingUsers]);
     }

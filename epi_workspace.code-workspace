@@ -6,5 +6,12 @@
         {
             "path": "packages"
         }
-    ]
+    ],
+    "settings": {
+        "files.exclude": {
+            "**/build": true,
+            "**/dist": true,
+            "**/out": true
+        }
+    }
 }

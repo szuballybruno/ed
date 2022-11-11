@@ -10,7 +10,9 @@ export const ActivationCodesAdminPage = () => {
     const { companies } = CompanyApiService.useCompanies();
     const companySelectorLogic = useCompanySelectorLogic({ companies });
     const { miscApiService } = useServiceContainerContext();
-    const { activationCodeLinks } = miscApiService.useActivationCodeLinks(companySelectorLogic.activeCompanyId);
+
+    const { activationCodeLinks } = miscApiService
+        .useActivationCodesList(companySelectorLogic.activeCompanyId);
 
     return (
         <AdminBreadcrumbsHeader

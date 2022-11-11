@@ -265,8 +265,6 @@ export class ExamService {
         principalId: PrincipalId,
         answerSessionId: Id<'AnswerSession'>
     ) {
-        console.log(answerSessionId);
-
         const examResultViews = await this._ormService
             .query(ExamResultView, {
                 answerSessionId
@@ -274,18 +272,12 @@ export class ExamService {
             .where('answerSessionId', '=', 'answerSessionId')
             .getMany();
 
-        console.log('erv');
-        console.log(examResultViews);
-
         const examResultStatsView = await this._ormService
             .query(ExamResultStatsView, {
                 answerSessionId
             })
             .where('answerSessionId', '=', 'answerSessionId')
             .getSingle();
-
-        console.log('ersv');
-        console.log(examResultStatsView);
 
         return this
             ._mapperService

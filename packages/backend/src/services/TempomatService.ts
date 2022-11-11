@@ -173,7 +173,6 @@ export class TempomatService {
         return tempomatCalculationDataViews
             .map(x => {
 
-                console.log(x);
                 const newPrevisionedCompletionDate = this
                     .calculatePrevisionedDate(
                         x.originalPrevisionedCompletionDate,
@@ -202,17 +201,12 @@ export class TempomatService {
     */
     getAvgLagBehindPercentage(tempomatCalculationDatas: TempomatCalculationDataView[]) {
 
-        console.log('Basz hattyúk tava' + tempomatCalculationDatas);
-
         return tempomatCalculationDatas
             .groupBy(x => x.userId)
             .map(x => {
 
                 const lagBehindAvg = this
                     .getLagBehindPercentageFromTempomatCalculationData(x.items);
-
-                console.log('lagBehindAvg');
-                console.log(lagBehindAvg);
 
                 const filteredLagBehindAvgs = lagBehindAvg
                     .filter(x => x)

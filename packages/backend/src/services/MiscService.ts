@@ -69,7 +69,7 @@ export class MiscService {
         return overviewPageDTO;
     }
 
-    async getActivationCodeLinks(
+    async getActivationCodeList(
         urlTemplate: string,
         companyId: Id<'Company'>) {
 
