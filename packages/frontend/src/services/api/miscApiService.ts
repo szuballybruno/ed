@@ -1,5 +1,5 @@
 import { applicationRoutes } from '../../configuration/applicationRoutes';
-import { CourseOverviewDataDTO } from '@episto/communication';
+import { ActivationCodeListDTO, CourseOverviewDataDTO } from '@episto/communication';
 import { OverviewPageDTO } from '@episto/communication';
 import { apiRoutes } from '@episto/communication';
 import { Id } from '@episto/commontypes';
@@ -75,7 +75,7 @@ export const useMiscApiService = (globalEventManager: GlobalEventManagerType) =>
         const urlTemplate = getUrlTemplate();
 
         const qr = QueryService
-            .useXQueryArrayParametrized(String, apiRoutes.misc.getActivationCodeList, { companyId, urlTemplate });
+            .useXQueryArrayParametrized(ActivationCodeListDTO, apiRoutes.misc.getActivationCodeList, { companyId, urlTemplate });
 
         return {
             activationCodeLinks: qr.data,

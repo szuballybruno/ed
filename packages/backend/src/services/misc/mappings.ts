@@ -54,7 +54,7 @@ import { UserOverviewView } from '../../models/views/UserOverviewView';
 import { UserSpentTimeRatioView } from '../../models/views/UserSpentTimeRatioView';
 import { UserVideoStatsView } from '../../models/views/UserVideoStatsView';
 import { VideoPlayerDataView } from '../../models/views/VideoPlayerDataView';
-import { CourseAdminListItemDTO } from '@episto/communication';
+import { ActivationCodeListDTO, CourseAdminListItemDTO } from '@episto/communication';
 import { CourseContentItemAdminDTO } from '@episto/communication';
 import { CourseContentItemIssueDTO } from '@episto/communication';
 import { AnswerDTO } from '@episto/communication';
@@ -137,6 +137,7 @@ import { AdminHomePageOverviewView } from '../../models/views/AdminHomePageOverv
 import { AdminHomePageOverviewDTO } from '@episto/communication';
 import { AdminCourseUserStatsView } from '../../models/views/AdminCourseUserStatsView';
 import { AdminCourseUserStatsDTO } from '@episto/communication';
+import { ActivationCodeListView } from '../../models/views/ActivationCodeListView';
 
 export const epistoMappingsBuilder = new XMappingsBuilder<[UrlService]>();
 
@@ -368,6 +369,31 @@ const marray = [
                                 scope: 'USER' // not used
                             }))
                     };
+                });
+        }),
+
+    epistoMappingsBuilder
+        .addArrayMapping(ActivationCodeListDTO, () => (codes: ActivationCodeListView[], domain: string, urlTemplate: string) => {
+
+            return codes
+                .map(ac => {
+
+                    const url = urlTemplate
+                        .replace('%DOMAIN%', domain)
+                        .replace('%CODE%', ac.code);
+
+                    return instantiate<ActivationCodeListDTO>({
+                        activationCodeId: ac.activationCodeId,
+                        code: ac.code,
+                        companyId: ac.companyId,
+                        daysElapsedFromTrial: ac.daysElapsedFromTrial,
+                        email: ac.email,
+                        isTrialOver: ac.isTrialOver,
+                        isUsed: ac.isUsed,
+                        trialLengthDays: ac.trialLengthDays,
+                        userId: ac.userId,
+                        url
+                    });
                 });
         }),
 

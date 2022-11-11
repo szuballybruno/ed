@@ -79,11 +79,6 @@ export class Company {
     @JoinColumn()
     users: User[];
 
-    // activation codes 
-    @JoinColumn()
-    @OneToMany(_ => ActivationCode, x => x.company)
-    activationCodes: ActivationCode[];
-
     // role assingments
     @JoinColumn()
     @OneToMany(_ => RoleAssignmentBridge, x => x.assigneeCompany)
