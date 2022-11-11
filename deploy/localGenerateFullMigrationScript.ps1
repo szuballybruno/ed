@@ -6,7 +6,7 @@ $dest_db_name= 'localhostDB'
 
 ./compileScriptProducer.ps1
 
-./generateFullMigrationScript.ps1 `
+./runScriptProducer.ps1 `
     -dbpass $dest_pass `
     -dbhost $dest_host `
     -dbport $dest_port `

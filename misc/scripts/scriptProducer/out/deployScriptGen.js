@@ -1,1 +1,765 @@
-(()=>{"use strict";var t={993:function(t,n,e){var r=this&&this.__assign||function(){return r=Object.assign||function(t){for(var n,e=1,r=arguments.length;e<r;e++)for(var o in n=arguments[e])Object.prototype.hasOwnProperty.call(n,o)&&(t[o]=n[o]);return t},r.apply(this,arguments)};Object.defineProperty(n,"__esModule",{value:!0}),n.SoftSchemaScriptService=void 0;var o=e(360),i=e(757),a=function(){function t(t){this._sqlFolderPath=t,this._sqlFolderNames=["views","constraints","functions","indices","triggers"]}return t.prototype.getSoftSchemaScript=function(){var t=this;return this._readAllSQLFolders().map((function(n){return r(r({},n),{script:"views"===n.sqlFolderName?t._getViewCreationScript(n.files):n.files.map((function(t){return"-- ".concat(t.name," \n").concat(t.content).concat(t.content.endsWith(";")?"":";")})).join("\n")})})).map((function(n){return t._mainScectionWrapper(n.sqlFolderName,n.script)})).join("\n")},t.prototype._mainScectionWrapper=function(t,n){return"\n-- CREATE ".concat(t,"\n").concat(n,"\n")},t.prototype._readSQLFolderFiles=function(t){var n="".concat(this._sqlFolderPath,"/").concat(t);return Array.from((0,o.getAllFilePaths)(n)).map((function(t){return"".concat(n,"/").concat(t)}))},t.prototype._readAllSQLFolders=function(){var t=this;return this._sqlFolderNames.map((function(n){return{sqlFolderName:n,files:t._readSQLFolderFiles(n).filter((function(t){return t.endsWith(".sql")})).map((function(t){return{name:o.Polyfills.getFileName(t).replace(".sql",""),path:t,content:(0,o.readFileSync)(t)}}))}}))},t.prototype._getViewCreationScript=function(t){var n=this._getDepsOfViews(t);return i.XDependency.orderDepHierarchy(n).map((function(n){return t.single((function(t){return t.name===n.getCompareKey()}))})).map((function(t){return"\n--".concat(t.name,"\nCREATE VIEW ").concat(t.name,"\nAS\n").concat(t.content,";")})).join("\n")},t.prototype._getDepsOfViews=function(t){var n=this;return t.map((function(t){return new i.DepHierarchyItem({key:t.name,deps:n._getDepsOfView(t.content)})}))},t.prototype._getDepsOfView=function(t){return(0,o.regexMatchAll)(t,new RegExp("public\\..*_view","g")).map((function(t){return t.replace("public.","")})).groupBy((function(t){return t})).map((function(t){return t.key}))},t}();n.SoftSchemaScriptService=a},757:function(t,n){var e=this&&this.__spreadArray||function(t,n,e){if(e||2===arguments.length)for(var r,o=0,i=n.length;o<i;o++)!r&&o in n||(r||(r=Array.prototype.slice.call(n,0,o)),r[o]=n[o]);return t.concat(r||Array.prototype.slice.call(n))};Object.defineProperty(n,"__esModule",{value:!0}),n.XDependency=n.DepHierarchyItem=void 0;var r=function(){function t(t){var n;this.key=t.key,this.deps=null!==(n=t.deps)&&void 0!==n?n:[],this.params=t.params,this.instance=t.instance}return t.prototype.getCompareKey=function(){return this._getCompareKeyFromValue(this.key)},t.prototype.getDepsCompareKeys=function(){var t=this;return this.deps.map((function(n){return t._getCompareKeyFromValue(n)}))},t.prototype._getCompareKeyFromValue=function(t){return"string"==typeof t?t:t.name},t}();n.DepHierarchyItem=r;var o=function(){function t(){this._items=[]}return t.prototype.addFunction=function(t,n,e){var o=new r({key:t,deps:n,params:e});return this._items.push(o),this},t.prototype.addClass=function(t,n){var e=new r({key:t,deps:n});return this._items.push(e),this},t.prototype.addClassInstance=function(t,n){var e=new r({key:t,instance:n});return this._items.push(e),this},t.prototype.getContainer=function(){return this._items},t}(),i=function(){function t(){}return t.getFunctionBuilder=function(){return new o},t.getClassBuilder=function(){return new o},t.instantiate=function(t){var n=this.orderDepHierarchy(t);return this.instatiateOnly(n)},t.instatiateOnly=function(t){var n={},r=function(t){var e;return null!==(e=n[t])&&void 0!==e?e:null},o=function(i){var a=i.getDepsCompareKeys().map((function(n){return r(n)?r(n):o(t.single((function(t){return t.getCompareKey()===n})))})),c=function(t,n){var r;if(t.instance)return t.instance;var o=t.key;return Object.getOwnPropertyNames(o).includes("prototype")?new((r=o).bind.apply(r,e([void 0],n,!1))):o.apply(void 0,n)}(i,a);!function(t,e){n[t.getCompareKey()]=e}(i,c)};t.forEach((function(t){return o(t)}));var i=t.map((function(t){return[t,r(t.getCompareKey())]}));return{getInstance:r,instances:n,itemInstancePairs:i}},t.orderDepHierarchy=function(t){var n=[],r=e([],t,!0).orderBy((function(t){return t.getDepsCompareKeys().length})),o=r.map((function(t){return t.getCompareKey()})),i=r.flatMap((function(t){return t.getDepsCompareKeys()})).groupBy((function(t){return t})).map((function(t){return t.key})).filter((function(t){return o.none((function(n){return n===t}))}));if(i.length>0)throw new Error("Missing deps: [".concat(i.join(", "),"]"));for(var a=function(t){n.push(t),r=r.filter((function(n){return n.getCompareKey()!==t.getCompareKey()}))};r.length>0;){for(var c=null,u=0;u<r.length;u++){var s=r[u],l=0===s.getDepsCompareKeys().length,p=s.getDepsCompareKeys().all((function(t){return n.any((function(n){return n.getCompareKey()===t}))}));if(l||p){c=s;break}}if(!c)throw new Error("Dep hierarchy ordering iteration failed.");a(c)}return n},t}();n.XDependency=i},578:function(t,n){var e=this&&this.__spreadArray||function(t,n,e){if(e||2===arguments.length)for(var r,o=0,i=n.length;o<i;o++)!r&&o in n||(r||(r=Array.prototype.slice.call(n,0,o)),r[o]=n[o]);return t.concat(r||Array.prototype.slice.call(n))};Object.defineProperty(n,"__esModule",{value:!0}),n.initJsExtensions=void 0,console.log("Extending prototypes..."),n.initJsExtensions=function(){return 1},String.prototype.trimChar=function(t){return this.replace(new RegExp("^".concat(t,"+|").concat(t,"+$"),"g"),"")},Date.prototype.addDays=function(t){var n=new Date(this.valueOf());return n.setDate(n.getDate()+t),n},Array.prototype.insert=function(t,n){return e(e(e([],this.slice(0,t),!0),[n],!1),this.slice(t),!0)},Array.prototype.groupBy=function(t){var n=[];return this.forEach((function(e){var r=t(e),o=n.filter((function(t){return t.key===r}))[0];o?o.items.push(e):n.push({key:r,items:[e],first:e})})),n},Array.prototype.isDistinctBy=function(t){return!this.groupBy(t).some((function(t){return t.items.length>1}))},Array.prototype.firstOrNull=function(t){t||(t=function(t){return!0});var n=this.filter(t)[0];return null==n?null:n},Array.prototype.lastOrNull=function(t){t||(t=function(t){return!0});var n=this.filter(t),e=n[n.length-1];return null==e?null:e},Array.prototype.last=function(t){var n=t||function(){return!0},e=this.filter(n);if(0===e.length)throw new Error("Last operaion found no matching elements!");return e[e.length-1]},Array.prototype.first=function(t){t||(t=function(t){return!0});var n=this.filter(t);if(0===n.length)throw new Error("First operaion found no matching elements!");return n[0]},Array.prototype.single=function(t){var n=this.filter(null!=t?t:function(){return!0});if(0===n.length)throw new Error("Single operaion found no matching elements!");if(n.length>1)throw new Error("Single operation found more than one matching element!");return n[0]},Array.prototype.singleIndex=function(t){for(var n=[],e=0;e<this.length;e++)t(this[e])&&n.push(e);if(0===n.length)throw new Error("Single operaion found no matching elements!");if(n.length>1)throw new Error("Single operation found more than one matching element!");return n[0]},Array.prototype.firstOrNullIndex=function(t){for(var n,e=[],r=0;r<this.length;r++)t(this[r])&&e.push(r);return null!==(n=e[0])&&void 0!==n?n:null},Array.prototype.byIndexOrNull=function(t){var n=this[t];return void 0===n?null:n},Array.prototype.byIndex=function(t){if(t>=this.length||t<0)throw new Error("Index (".concat(t,") is out of array bounds (0 - ").concat(this.length,")!"));var n=this[t];if(void 0===n)throw new Error("Item is undefined!");return n},Array.prototype.findLastIndex=function(t){var n=this.filter(t);return 0===n.length?null:n.length-1},Array.prototype.all=function(t){return!this.some((function(n){return!t(n)}))},Array.prototype.any=function(t){return t?"function"==typeof t?this.some(t):this.some((function(n){return n===t})):this.some((function(t){return!0}))},Array.prototype.none=function(t){return t?!this.some(t):0===this.length},Array.prototype.remove=function(t){return this.filter((function(n){return!t(n)}))},Array.prototype.orderBy=function(t){return e([],this,!0).sort((function(n,e){return t(n)<t(e)?-1:t(n)>t(e)?1:0}))},Array.prototype.count=function(t){for(var n=0,e=0;e<this.length;e++)t(this[e])&&n++;return n},Array.prototype.each=function(t){for(var n=0;n<this.length;n++)t(this[n]);return this}},360:(t,n,e)=>{Object.defineProperty(n,"__esModule",{value:!0}),n.Polyfills=n.readFileAsText=n.existsSync=n.readFileSync=n.regexMatchAll=n.getAllFilePaths=n.logScoped=n.writeFileSync=void 0;var r=e(147);n.writeFileSync=function(t,n){r.writeFileSync(t,n)},n.logScoped=function(t,n){return console.log("[".concat(t,"] ").concat(n))},n.getAllFilePaths=function(t){return r.readdirSync(t)},n.regexMatchAll=function(t,n){var e;return(null!==(e=t.match(n))&&void 0!==e?e:[]).map((function(t){return""+t}))},n.readFileSync=function(t){try{return r.readFileSync(t,"utf-8")}catch(n){throw new Error("Error reading path: ".concat(t," Msg: ").concat(n.message))}},n.existsSync=function(t){return r.existsSync(t)},n.readFileAsText=function(t){return r.readFileSync(t,"utf-8")},n.Polyfills={readFileAsText:n.readFileAsText,getAllFilePaths:n.getAllFilePaths,parseIntOrFail:function(t,n){var e=parseInt(t);if(Number.isNaN(e))throw new Error('Parsing int param "'.concat(null!=n?n:"-",'" failed.'));return e},getFileName:function(t){return t.split("\\").pop().split("/").pop()}}},147:t=>{t.exports=require("fs")}},n={};function e(r){var o=n[r];if(void 0!==o)return o.exports;var i=n[r]={exports:{}};return t[r].call(i.exports,i,i.exports,e),i.exports}(()=>{e(578);var t=e(360),n=e(993),r=__dirname+"/../../../../packages/backend",o=r+"/deploy",i=r+"/sql",a=i+"/migrations",c=function(n){return t.Polyfills.parseIntOrFail(n.replace("migration",""))};process.on("uncaughtException",(function(t){console.error("---- FATAL ERROR -----"),console.error(t)})),function(){var e=function(n){var e=function(){var n=function(){var n=t.Polyfills.readFileAsText(o+"/out/migrationVersionsOnServer.txt").split("\n").map((function(t){return t.replace(" ","").replace("\r","")})).filter((function(t){return!!t}));if(!n.any())throw new Error("Server has no version migration history. Create it manually.");return n}().orderBy((function(t){return c(t)})).last();return c(n)}();return console.log("Latest version on server: ".concat(e)),t.Polyfills.getAllFilePaths(n).map((function(n){return t.Polyfills.getFileName(n).replace(".sql","")})).filter((function(t){return c(t)>e})).orderBy((function(t){return c(t)}))}(a);console.log("Missing versions: ".concat(e.join(", ")));var r=new n.SoftSchemaScriptService(i).getSoftSchemaScript(),u=function(n){var e=n.createMigrationsTableScript,r=n.migrationVersions,o=n.dropSoftSchemaScript,a=n.softSchemaCreateScript,c=r.map((function(t){return"\n-- MIGRATION: ".concat(t,"\nINSERT INTO public.migration_version\nVALUES ('").concat(t,"', now()); ")})).join("\n"),u=r.map((function(n){return"--MIGRATION: ".concat(n,"\n").concat(t.Polyfills.readFileAsText("".concat(i,"/migrations/").concat(n,".sql")))})).join("\n\n");return"\n-- MIGRATION VERSIONS: ".concat(r.join(", "),"\n\n-- BEGIN TRANSACTION\nBEGIN;\n\n-- CREATE MIGARTION VERSION TABLE\n").concat(e,"\n\n-- STORE MIGRATION VERSION\n").concat(c,"\n\n-- DROP SOFT SCHEMA\n").concat(o,"\n\n-- EXECUTE MIGRATIONS \n").concat(u,"\n\n-- CREATE SOFT SCHEMA\n").concat(a,"\n\n-- COMMIT TRANSACTION\nCOMMIT;\n")}({createMigrationsTableScript:t.Polyfills.readFileAsText("".concat(o,"/sql/createMigrationVersionTable.sql")),softSchemaCreateScript:r,dropSoftSchemaScript:t.Polyfills.readFileAsText("".concat(o,"/sql/dropSoftSchema.sql")),migrationVersions:e});(0,t.writeFileSync)(o+"/out/fullMigrationScript.sql",u),(0,t.writeFileSync)(o+"/out/softSchemaCreateScript.sql",r)}()})()})();
+/******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
+/******/ 	var __webpack_modules__ = ({
+
+/***/ "./src/SoftSchemaScriptService.ts":
+/*!****************************************!*\
+  !*** ./src/SoftSchemaScriptService.ts ***!
+  \****************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.SoftSchemaScriptService = void 0;
+var polyfills_1 = __webpack_require__(/*! ./polyfills */ "./src/polyfills.ts");
+var XDInjector_1 = __webpack_require__(/*! ./XDInjection/XDInjector */ "./src/XDInjection/XDInjector.ts");
+var SoftSchemaScriptService = /** @class */ (function () {
+    function SoftSchemaScriptService(_sqlFolderPath) {
+        this._sqlFolderPath = _sqlFolderPath;
+        this._sqlFolderNames = ['views', 'constraints', 'functions', 'indices', 'triggers'];
+    }
+    SoftSchemaScriptService.prototype.getSoftSchemaScript = function () {
+        var _this = this;
+        var foldersAndFiles = this
+            ._readAllSQLFolders();
+        var scripts = foldersAndFiles
+            .map(function (x) { return (__assign(__assign({}, x), { script: x.sqlFolderName === 'views'
+                ? _this._getViewCreationScript(x.files)
+                : x
+                    .files
+                    .map(function (file) { return "-- ".concat(file.name, " \n").concat(file.content).concat(file.content.endsWith(';') ? '' : ';'); })
+                    .join('\n') })); });
+        var wrappedScripts = scripts
+            .map(function (script) { return _this._mainScectionWrapper(script.sqlFolderName, script.script); });
+        var script = wrappedScripts
+            .join('\n');
+        return script;
+    };
+    /**
+     * SQL section wrapper
+     */
+    SoftSchemaScriptService.prototype._mainScectionWrapper = function (schemaItemName, script) {
+        return "\n-- CREATE ".concat(schemaItemName, "\n").concat(script, "\n");
+    };
+    /**
+     * Reads sql folder file paths
+     */
+    SoftSchemaScriptService.prototype._readSQLFolderFiles = function (folderName) {
+        var path = "".concat(this._sqlFolderPath, "/").concat(folderName);
+        var files = Array.from((0, polyfills_1.getAllFilePaths)(path))
+            .map(function (x) { return "".concat(path, "/").concat(x); });
+        return files;
+    };
+    /**
+     * Read sql folders
+     */
+    SoftSchemaScriptService.prototype._readAllSQLFolders = function () {
+        var _this = this;
+        return this
+            ._sqlFolderNames
+            .map(function (x) {
+            return {
+                sqlFolderName: x,
+                files: _this._readSQLFolderFiles(x)
+                    .filter(function (x) { return x.endsWith('.sql'); })
+                    .map(function (x) { return ({
+                    name: polyfills_1.Polyfills.getFileName(x).replace('.sql', ''),
+                    path: x,
+                    content: (0, polyfills_1.readFileSync)(x),
+                }); })
+            };
+        });
+    };
+    /**
+     * Get view createion script
+     */
+    SoftSchemaScriptService.prototype._getViewCreationScript = function (viewFiles) {
+        var nameAndDeps = this
+            ._getDepsOfViews(viewFiles);
+        var ordered = XDInjector_1.XDependency
+            .orderDepHierarchy(nameAndDeps);
+        var viewFilesOrdered = ordered
+            .map(function (x) { return viewFiles
+            .single(function (y) { return y.name === x.getCompareKey(); }); });
+        var createScript = viewFilesOrdered
+            .map(function (x) { return "\n--".concat(x.name, "\nCREATE VIEW ").concat(x.name, "\nAS\n").concat(x.content, ";"); })
+            .join('\n');
+        return createScript;
+    };
+    /**
+     * Get deps of views
+     */
+    SoftSchemaScriptService.prototype._getDepsOfViews = function (namesAndContents) {
+        var _this = this;
+        return namesAndContents
+            .map(function (x) { return new XDInjector_1.DepHierarchyItem({
+            key: x.name,
+            deps: _this
+                ._getDepsOfView(x.content)
+        }); });
+    };
+    /**
+     * Get deps of view
+     */
+    SoftSchemaScriptService.prototype._getDepsOfView = function (viewSql) {
+        var matches = (0, polyfills_1.regexMatchAll)(viewSql, new RegExp('public\\..*_view', 'g'));
+        var filtered = matches
+            .map(function (x) { return x.replace('public.', ''); })
+            .groupBy(function (x) { return x; })
+            .map(function (x) { return x.key; });
+        return filtered;
+    };
+    return SoftSchemaScriptService;
+}());
+exports.SoftSchemaScriptService = SoftSchemaScriptService;
+
+
+/***/ }),
+
+/***/ "./src/XDInjection/XDInjector.ts":
+/*!***************************************!*\
+  !*** ./src/XDInjection/XDInjector.ts ***!
+  \***************************************/
+/***/ (function(__unused_webpack_module, exports) {
+
+
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.XDependency = exports.DepHierarchyItem = void 0;
+var DepHierarchyItem = /** @class */ (function () {
+    function DepHierarchyItem(opts) {
+        var _a;
+        this.key = opts.key;
+        this.deps = (_a = opts.deps) !== null && _a !== void 0 ? _a : [];
+        this.params = opts.params;
+        this.instance = opts.instance;
+    }
+    DepHierarchyItem.prototype.getCompareKey = function () {
+        return this
+            ._getCompareKeyFromValue(this.key);
+    };
+    DepHierarchyItem.prototype.getDepsCompareKeys = function () {
+        var _this = this;
+        return this
+            .deps
+            .map(function (x) { return _this
+            ._getCompareKeyFromValue(x); });
+    };
+    DepHierarchyItem.prototype._getCompareKeyFromValue = function (value) {
+        return typeof value === 'string'
+            ? value
+            : value.name;
+    };
+    return DepHierarchyItem;
+}());
+exports.DepHierarchyItem = DepHierarchyItem;
+var XDependencyHierarchyBuilder = /** @class */ (function () {
+    function XDependencyHierarchyBuilder() {
+        this._items = [];
+    }
+    XDependencyHierarchyBuilder.prototype.addFunction = function (fn, deps, params) {
+        var item = new DepHierarchyItem({
+            key: fn,
+            deps: deps,
+            params: params
+        });
+        this._items.push(item);
+        return this;
+    };
+    XDependencyHierarchyBuilder.prototype.addClass = function (classType, deps) {
+        var item = new DepHierarchyItem({
+            key: classType,
+            deps: deps
+        });
+        this._items.push(item);
+        return this;
+    };
+    XDependencyHierarchyBuilder.prototype.addClassInstance = function (classType, instance) {
+        var item = new DepHierarchyItem({
+            key: classType,
+            instance: instance
+        });
+        this._items.push(item);
+        return this;
+    };
+    XDependencyHierarchyBuilder.prototype.getContainer = function () {
+        return this._items;
+    };
+    return XDependencyHierarchyBuilder;
+}());
+var XDependency = /** @class */ (function () {
+    function XDependency() {
+    }
+    XDependency.getFunctionBuilder = function () {
+        return new XDependencyHierarchyBuilder();
+    };
+    XDependency.getClassBuilder = function () {
+        return new XDependencyHierarchyBuilder();
+    };
+    XDependency.instantiate = function (container) {
+        // order items 
+        var orderedContainer = this
+            .orderDepHierarchy(container);
+        // instantiate 
+        return this
+            .instatiateOnly(orderedContainer);
+    };
+    XDependency.instatiateOnly = function (orderedContainer) {
+        // instance container 
+        var instances = {};
+        // reg instance 
+        var regInstance = function (item, instance) { return instances[item.getCompareKey()] = instance; };
+        // execute function
+        var instantiateItem = function (item, args) {
+            var _a;
+            if (item.instance)
+                return item.instance;
+            var fn = item.key;
+            var isClass = Object
+                .getOwnPropertyNames(fn)
+                .includes('prototype');
+            return isClass
+                ? new ((_a = fn).bind.apply(_a, __spreadArray([void 0], args, false)))() : fn.apply(void 0, args);
+        };
+        // get instance 
+        var getInstance = function (key) { var _a; return (_a = instances[key]) !== null && _a !== void 0 ? _a : null; };
+        // has instance
+        var hasInstance = function (key) { return !!getInstance(key); };
+        // instatniate item
+        var instatiateItem = function (item) {
+            // get dep instances
+            var depInstances = item
+                .getDepsCompareKeys()
+                .map(function (dependencyKey) {
+                // existing instance 
+                if (hasInstance(dependencyKey))
+                    return getInstance(dependencyKey);
+                // new item
+                return instatiateItem(orderedContainer
+                    .single(function (x) { return x
+                    .getCompareKey() === dependencyKey; }));
+            });
+            // get instance 
+            var instance = instantiateItem(item, depInstances);
+            // reg instance 
+            regInstance(item, instance);
+        };
+        // instantiate items
+        orderedContainer
+            .forEach(function (item) { return instatiateItem(item); });
+        var itemInstancePairs = orderedContainer
+            .map(function (item) { return [item, getInstance(item.getCompareKey())]; });
+        return {
+            getInstance: getInstance,
+            instances: instances,
+            itemInstancePairs: itemInstancePairs
+        };
+    };
+    XDependency.orderDepHierarchy = function (container) {
+        /**
+         * State
+         */
+        var ordered = [];
+        var unordered = __spreadArray([], container, true).orderBy(function (x) { return x.getDepsCompareKeys().length; });
+        /**
+         * Check integrity
+         */
+        var allKeys = unordered
+            .map(function (w) { return w.getCompareKey(); });
+        var allDeps = unordered
+            .flatMap(function (x) { return x.getDepsCompareKeys(); })
+            .groupBy(function (x) { return x; })
+            .map(function (x) { return x.key; });
+        var missingDeps = allDeps
+            .filter(function (x) { return allKeys
+            .none(function (y) { return y === x; }); });
+        if (missingDeps.length > 0)
+            throw new Error("Missing deps: [".concat(missingDeps.join(', '), "]"));
+        /**
+         * Move function
+         */
+        var move = function (item) {
+            // add to ordered
+            ordered
+                .push(item);
+            // remove from unordered
+            unordered = unordered
+                .filter(function (x) { return x.getCompareKey() !== item.getCompareKey(); });
+        };
+        /**
+         * Begin ordering
+         */
+        while (unordered.length > 0) {
+            var itemToMove = null;
+            for (var index = 0; index < unordered.length; index++) {
+                var depHierarchyItem = unordered[index];
+                var hasZeroDeps = depHierarchyItem.getDepsCompareKeys().length === 0;
+                var allDepsInOrdered = depHierarchyItem
+                    .getDepsCompareKeys()
+                    .all(function (x) { return ordered
+                    .any(function (orderedItem) { return orderedItem.getCompareKey() === x; }); });
+                if (hasZeroDeps || allDepsInOrdered) {
+                    itemToMove = depHierarchyItem;
+                    break;
+                }
+            }
+            if (!itemToMove)
+                throw new Error('Dep hierarchy ordering iteration failed.');
+            move(itemToMove);
+        }
+        return ordered;
+    };
+    return XDependency;
+}());
+exports.XDependency = XDependency;
+
+
+/***/ }),
+
+/***/ "./src/jsExtensions.ts":
+/*!*****************************!*\
+  !*** ./src/jsExtensions.ts ***!
+  \*****************************/
+/***/ (function(__unused_webpack_module, exports) {
+
+
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.initJsExtensions = void 0;
+console.log('Extending prototypes...');
+var initJsExtensions = function () { return 1; };
+exports.initJsExtensions = initJsExtensions;
+String.prototype.trimChar = function (char) {
+    return this.replace(new RegExp("^".concat(char, "+|").concat(char, "+$"), 'g'), '');
+};
+// eslint-disable-next-line no-extend-native
+Date.prototype.addDays = function (days) {
+    var date = new Date(this.valueOf());
+    date.setDate(date.getDate() + days);
+    return date;
+};
+Array.prototype.insert = function (index, newItem) {
+    return __spreadArray(__spreadArray(__spreadArray([], this.slice(0, index), true), [
+        // inserted item
+        newItem
+    ], false), this.slice(index), true);
+};
+// eslint-disable-next-line no-extend-native
+Array.prototype.groupBy = function (func) {
+    var groups = [];
+    this
+        .forEach(function (item) {
+        var key = func(item);
+        var currentGroup = groups
+            .filter(function (x) { return x.key === key; })[0];
+        var existingKey = !!currentGroup;
+        if (existingKey) {
+            currentGroup.items.push(item);
+        }
+        else {
+            groups
+                .push({
+                key: key,
+                items: [item],
+                first: item
+            });
+        }
+    });
+    return groups;
+};
+// eslint-disable-next-line no-extend-native
+Array.prototype.isDistinctBy = function (func) {
+    return !this
+        .groupBy(func)
+        .some(function (x) { return x.items.length > 1; });
+};
+// eslint-disable-next-line no-extend-native
+Array.prototype.firstOrNull = function (func) {
+    if (!func)
+        func = function (x) { return true; };
+    var filtered = this.filter(func);
+    var first = filtered[0];
+    if (first === undefined)
+        return null;
+    if (first === null)
+        return null;
+    return first;
+};
+// eslint-disable-next-line no-extend-native
+Array.prototype.lastOrNull = function (func) {
+    if (!func)
+        func = function (x) { return true; };
+    var filtered = this.filter(func);
+    var last = filtered[filtered.length - 1];
+    if (last === undefined)
+        return null;
+    if (last === null)
+        return null;
+    return last;
+};
+// eslint-disable-next-line no-extend-native
+Array.prototype.last = function (fn) {
+    var func = fn ? fn : function () { return true; };
+    var filtered = this.filter(func);
+    if (filtered.length === 0)
+        throw new Error('Last operaion found no matching elements!');
+    return filtered[filtered.length - 1];
+};
+// eslint-disable-next-line no-extend-native
+Array.prototype.first = function (func) {
+    if (!func)
+        func = function (x) { return true; };
+    var filtered = this.filter(func);
+    if (filtered.length === 0)
+        throw new Error('First operaion found no matching elements!');
+    return filtered[0];
+};
+// eslint-disable-next-line no-extend-native
+Array.prototype.single = function (func) {
+    var filtered = this.filter(func !== null && func !== void 0 ? func : (function () { return true; }));
+    if (filtered.length === 0)
+        throw new Error('Single operaion found no matching elements!');
+    if (filtered.length > 1)
+        throw new Error('Single operation found more than one matching element!');
+    return filtered[0];
+};
+// eslint-disable-next-line no-extend-native
+Array.prototype.singleIndex = function (func) {
+    var indices = [];
+    for (var index = 0; index < this.length; index++) {
+        var element = this[index];
+        if (!func(element))
+            continue;
+        indices.push(index);
+    }
+    if (indices.length === 0)
+        throw new Error('Single operaion found no matching elements!');
+    if (indices.length > 1)
+        throw new Error('Single operation found more than one matching element!');
+    return indices[0];
+};
+// eslint-disable-next-line no-extend-native
+Array.prototype.firstOrNullIndex = function (func) {
+    var _a;
+    var indices = [];
+    for (var index = 0; index < this.length; index++) {
+        var element = this[index];
+        if (!func(element))
+            continue;
+        indices.push(index);
+    }
+    return (_a = indices[0]) !== null && _a !== void 0 ? _a : null;
+};
+// eslint-disable-next-line no-extend-native
+Array.prototype.byIndexOrNull = function (index) {
+    var item = this[index];
+    if (item === undefined)
+        return null;
+    return item;
+};
+// eslint-disable-next-line no-extend-native
+Array.prototype.byIndex = function (index) {
+    if (index >= this.length || index < 0)
+        throw new Error("Index (".concat(index, ") is out of array bounds (0 - ").concat(this.length, ")!"));
+    var item = this[index];
+    if (item === undefined)
+        throw new Error('Item is undefined!');
+    return item;
+};
+// eslint-disable-next-line no-extend-native
+Array.prototype.findLastIndex = function (func) {
+    var filtered = this.filter(func);
+    if (filtered.length === 0)
+        return null;
+    return filtered.length - 1;
+};
+// eslint-disable-next-line no-extend-native
+Array.prototype.all = function (func) {
+    return !this.some(function (x) { return !func(x); });
+};
+// eslint-disable-next-line no-extend-native
+Array.prototype.any = function (funcOrItem) {
+    if (!funcOrItem)
+        return this.some(function (x) { return true; });
+    if (typeof funcOrItem === 'function')
+        return this.some(funcOrItem);
+    return this.some(function (x) { return x === funcOrItem; });
+};
+// eslint-disable-next-line no-extend-native
+Array.prototype.none = function (func) {
+    if (!func)
+        return this.length === 0;
+    return !this.some(func);
+};
+// eslint-disable-next-line no-extend-native
+Array.prototype.remove = function (func) {
+    return this.filter(function (item) { return !func(item); });
+};
+// eslint-disable-next-line no-extend-native
+Array.prototype.orderBy = function (func) {
+    var sorted = __spreadArray([], this, true).sort(function (a, b) {
+        if (func(a) < func(b))
+            return -1;
+        if (func(a) > func(b))
+            return 1;
+        return 0;
+    });
+    return sorted;
+};
+// eslint-disable-next-line no-extend-native
+Array.prototype.count = function (func) {
+    var count = 0;
+    for (var index = 0; index < this.length; index++) {
+        var element = this[index];
+        var result = func(element);
+        if (result)
+            count++;
+    }
+    return count;
+};
+// eslint-disable-next-line no-extend-native
+Array.prototype.each = function (func) {
+    for (var index = 0; index < this.length; index++) {
+        var element = this[index];
+        func(element);
+    }
+    return this;
+};
+
+
+/***/ }),
+
+/***/ "./src/polyfills.ts":
+/*!**************************!*\
+  !*** ./src/polyfills.ts ***!
+  \**************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Polyfills = exports.readFileAsText = exports.existsSync = exports.readFileSync = exports.regexMatchAll = exports.getAllFilePaths = exports.logScoped = exports.writeFileSync = void 0;
+var fs = __webpack_require__(/*! fs */ "fs");
+var writeFileSync = function (filePath, data) {
+    fs.writeFileSync(filePath, data);
+};
+exports.writeFileSync = writeFileSync;
+var logScoped = function (scope, text) { return console.log("[".concat(scope, "] ").concat(text)); };
+exports.logScoped = logScoped;
+var getAllFilePaths = function (directoryPath) {
+    return fs.readdirSync(directoryPath);
+};
+exports.getAllFilePaths = getAllFilePaths;
+var regexMatchAll = function (text, regex) {
+    var _a;
+    var matches = (_a = text.match(regex)) !== null && _a !== void 0 ? _a : [];
+    return matches.map(function (x) { return '' + x; });
+};
+exports.regexMatchAll = regexMatchAll;
+var readFileSync = function (path) {
+    try {
+        return fs.readFileSync(path, 'utf-8');
+    }
+    catch (e) {
+        throw new Error("Error reading path: ".concat(path, " Msg: ").concat(e.message));
+    }
+};
+exports.readFileSync = readFileSync;
+var existsSync = function (path) { return fs.existsSync(path); };
+exports.existsSync = existsSync;
+var readFileAsText = function (path) { return fs.readFileSync(path, 'utf-8'); };
+exports.readFileAsText = readFileAsText;
+var parseIntOrFail = function (text, name) {
+    var parsed = parseInt(text);
+    if (Number.isNaN(parsed))
+        throw new Error("Parsing int param \"".concat(name !== null && name !== void 0 ? name : '-', "\" failed."));
+    return parsed;
+};
+var getFileName = function (path) {
+    var splitTest = function (str) {
+        return str.split('\\').pop().split('/').pop();
+    };
+    return splitTest(path);
+};
+exports.Polyfills = {
+    readFileAsText: exports.readFileAsText,
+    getAllFilePaths: exports.getAllFilePaths,
+    parseIntOrFail: parseIntOrFail,
+    getFileName: getFileName
+};
+
+
+/***/ }),
+
+/***/ "fs":
+/*!*********************!*\
+  !*** external "fs" ***!
+  \*********************/
+/***/ ((module) => {
+
+module.exports = require("fs");
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+(() => {
+var exports = __webpack_exports__;
+/*!*********************!*\
+  !*** ./src/main.ts ***!
+  \*********************/
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+__webpack_require__(/*! ./jsExtensions */ "./src/jsExtensions.ts");
+var polyfills_1 = __webpack_require__(/*! ./polyfills */ "./src/polyfills.ts");
+var SoftSchemaScriptService_1 = __webpack_require__(/*! ./SoftSchemaScriptService */ "./src/SoftSchemaScriptService.ts");
+var rootFolderPath = __dirname + '/../../../../';
+var deployFolderFilePath = "".concat(rootFolderPath, "deploy");
+var sqlFolderFilePath = "".concat(rootFolderPath, "packages/backend/sql");
+var migrationsFolderFilePath = sqlFolderFilePath + '/migrations';
+var getMigrationScript = function (_a) {
+    var createMigrationsTableScript = _a.createMigrationsTableScript, migrationVersions = _a.migrationVersions, dropSoftSchemaScript = _a.dropSoftSchemaScript, softSchemaCreateScript = _a.softSchemaCreateScript;
+    /**
+     * Insert migration verisons
+     */
+    var insertMigrationVersionsScript = migrationVersions
+        .map(function (ver) {
+        return "\n-- MIGRATION: ".concat(ver, "\nINSERT INTO public.migration_version\nVALUES ('").concat(ver, "', now()); ");
+    })
+        .join('\n');
+    /**
+     * Migration scripts
+     */
+    var migartionScripts = migrationVersions
+        .map(function (ver) {
+        var migrationScript = "--MIGRATION: ".concat(ver, "\n").concat(polyfills_1.Polyfills
+            .readFileAsText("".concat(migrationsFolderFilePath, "/").concat(ver, ".sql")));
+        return migrationScript;
+    })
+        .join('\n\n');
+    /**
+     * Assemble final script
+     */
+    return "\n-- MIGRATION VERSIONS: ".concat(migrationVersions.join(', '), "\n\n-- BEGIN TRANSACTION\nBEGIN;\n\n-- CREATE MIGARTION VERSION TABLE\n").concat(createMigrationsTableScript, "\n\n-- STORE MIGRATION VERSION\n").concat(insertMigrationVersionsScript, "\n\n-- DROP SOFT SCHEMA\n").concat(dropSoftSchemaScript, "\n\n-- EXECUTE MIGRATIONS \n").concat(migartionScripts, "\n\n-- CREATE SOFT SCHEMA\n").concat(softSchemaCreateScript, "\n\n-- COMMIT TRANSACTION\nCOMMIT;\n");
+};
+var getMigrationVerisonsArgs = function () {
+    var versions = polyfills_1.Polyfills
+        .readFileAsText(deployFolderFilePath + '/out/migrationVersionsOnServer.txt');
+    var veList = versions
+        .split('\n')
+        .map(function (x) { return x
+        .replace(' ', '')
+        .replace('\r', ''); })
+        .filter(function (x) { return !!x; });
+    if (!veList.any())
+        throw new Error('Server has no version migration history. Create it manually.');
+    return veList;
+};
+var getVersionNumber = function (migver) {
+    return polyfills_1.Polyfills.parseIntOrFail(migver.replace('migration', ''));
+};
+var getServerVersionNumber = function () {
+    var serverMigrationVersions = getMigrationVerisonsArgs();
+    var ordered = serverMigrationVersions
+        .orderBy(function (x) { return getVersionNumber(x); });
+    var latestVersionOnServer = ordered
+        .last();
+    return getVersionNumber(latestVersionOnServer);
+};
+var getMissingMigrations = function (migrationsFolderFilePath) {
+    var latestVersionOnServer = getServerVersionNumber();
+    console.log("Latest version on server: ".concat(latestVersionOnServer));
+    var allMigrationVersions = polyfills_1.Polyfills
+        .getAllFilePaths(migrationsFolderFilePath)
+        .map(function (x) { return polyfills_1.Polyfills
+        .getFileName(x)
+        .replace('.sql', ''); });
+    var missingVersions = allMigrationVersions
+        .filter(function (x) { return getVersionNumber(x) > latestVersionOnServer; });
+    return missingVersions
+        .orderBy(function (x) { return getVersionNumber(x); });
+};
+var createScripts = function () {
+    var missingMigraitonVersions = getMissingMigrations(migrationsFolderFilePath);
+    console.log("Missing versions: ".concat(missingMigraitonVersions.join(', ')));
+    var softSchemaCreateScript = new SoftSchemaScriptService_1.SoftSchemaScriptService(sqlFolderFilePath)
+        .getSoftSchemaScript();
+    var createMigrationsTableScript = polyfills_1.Polyfills
+        .readFileAsText("".concat(deployFolderFilePath, "/sql/createMigrationVersionTable.sql"));
+    var dropSoftSchemaScript = polyfills_1.Polyfills
+        .readFileAsText("".concat(deployFolderFilePath, "/sql/dropSoftSchema.sql"));
+    var fullMigrationScript = getMigrationScript({
+        createMigrationsTableScript: createMigrationsTableScript,
+        softSchemaCreateScript: softSchemaCreateScript,
+        dropSoftSchemaScript: dropSoftSchemaScript,
+        migrationVersions: missingMigraitonVersions
+    });
+    (0, polyfills_1.writeFileSync)(deployFolderFilePath + '/out/fullMigrationScript.sql', fullMigrationScript);
+    (0, polyfills_1.writeFileSync)(deployFolderFilePath + '/out/softSchemaCreateScript.sql', softSchemaCreateScript);
+};
+process
+    .on('uncaughtException', function (err) {
+    console.error('---- FATAL ERROR -----');
+    console.error(err);
+});
+// console.log(Polyfills.getAllFilePaths(backendPath));
+createScripts();
+
+})();
+
+/******/ })()
+;
+//# sourceMappingURL=deployScriptGen.js.map

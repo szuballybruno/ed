@@ -2,9 +2,9 @@ import './jsExtensions';
 import { Polyfills, writeFileSync } from "./polyfills";
 import { SoftSchemaScriptService } from "./SoftSchemaScriptService";
 
-const backendPath = __dirname + `/../../../../packages/backend`;
-const deployFolderFilePath = backendPath + '/deploy';
-const sqlFolderFilePath = backendPath + '/sql';
+const rootFolderPath = __dirname + '/../../../../';
+const deployFolderFilePath = `${rootFolderPath}deploy`;
+const sqlFolderFilePath = `${rootFolderPath}packages/backend/sql`;
 const migrationsFolderFilePath = sqlFolderFilePath + '/migrations';
 
 const getMigrationScript = ({
@@ -39,7 +39,7 @@ VALUES ('${ver}', now()); `;
         .map(ver => {
 
             const migrationScript = `--MIGRATION: ${ver}\n${Polyfills
-                .readFileAsText(`${sqlFolderFilePath}/migrations/${ver}.sql`)}`;
+                .readFileAsText(`${migrationsFolderFilePath}/${ver}.sql`)}`;
 
             return migrationScript;
         })
