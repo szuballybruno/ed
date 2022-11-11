@@ -1,13 +1,13 @@
-name: ci_cd_pipeline_dev
+name: ci_cd_pipeline_$BRANCH_NAME$
 on:
   push:
-    branches: [ dev ]
+    branches: [ $BRANCH_NAME$ ]
 env:
-  FRONTEND_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/epistogram-frontend-dev:latest
-  FRONTEND_CLOUD_RUN_SVC_NAME: epistogram-frontend-dev
+  FRONTEND_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/epistogram-frontend-$BRANCH_NAME$:latest
+  FRONTEND_CLOUD_RUN_SVC_NAME: epistogram-frontend-$BRANCH_NAME$
 
-  BACKEND_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/epistogram-backend-dev
-  BACKEND_CLOUD_RUN_SVC_NAME: epistogram-backend-dev
+  BACKEND_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/epistogram-backend-$BRANCH_NAME$
+  BACKEND_CLOUD_RUN_SVC_NAME: epistogram-backend-$BRANCH_NAME$
   
   CLOUD_SQL_CONNCETION_NAME: gifted-country-324010:europe-central2:epistogram
   GCP_PROJECT_NAME: gifted-country-324010
@@ -23,7 +23,7 @@ jobs:
       - name: Checkout branch
         uses: actions/checkout@v2
         with:
-          ref: dev
+          ref: $BRANCH_NAME$
         
       - name: Login to GCP
         uses: google-github-actions/setup-gcloud@v0
@@ -47,7 +47,7 @@ jobs:
           restore-keys: ${{ runner.os }}-single-buildx
 
       - name: Copy proper .env file
-        run: cp -fr ./config/dev.env ./.env 
+        run: cp -fr ./config/$BRANCH_NAME$.env ./.env 
         working-directory: ./packages/frontend
 
       - name: Append additional values to .env file 
@@ -76,7 +76,7 @@ jobs:
       - name: Checkout branch
         uses: actions/checkout@v2
         with:
-          ref: dev # references the target branch
+          ref: $BRANCH_NAME$ # references the target branch
         
       - name: Login to GCP
         uses: google-github-actions/setup-gcloud@v0
@@ -94,35 +94,7 @@ jobs:
 
       - name: Generate config.env file
         run: |
-          echo \# ---- CONFIG FILE --- > config/config.env
-          echo \# ---- gcp >> config/config.env
-          echo BRANCH_NAME = dev >> config/config.env
-          echo BACKEND_URL = api.dev.epistogram.com >> config/config.env
-          echo MIN_INSTANCE_COUNT = 0 >> config/config.env
-          echo IS_UNDER_MAINTENANCE = false >> config/config.env
-          echo \# ---- misc >> config/config.env
-          echo DOMAIN_TEMPLATE = https://dev.[DOMAIN] >> config/config.env
-          echo ENVIRONMENT_NAME = dev >> config/config.env
-          echo HOST_PORT = 5000 >> config/config.env
-          echo JWT_SIGN_SECRET = ${{secrets.JWT_SIGN_SECRET}} >> config/config.env
-          echo IS_HOSTED_ON_GCP = true >> config/config.env
-          echo IS_LOCALHOST = false >> config/config.env
-          echo VIDEO_COMPLETED_PERCENTAGE = 5 >> config/config.env
-          echo \# ---- fileStorage >> config/config.env
-          echo FILE_STORAGE_URL = https://storage.googleapis.com/epistogram_bucket_dev >> config/config.env
-          echo FILE_STORAGE_BUCKET_NAME = epistogram_bucket_dev >> config/config.env
-          echo \# ---- mail >> config/config.env
-          echo MAIL_TOKEN_SECRET = ${{secrets.MAIL_TOKEN_SECRET}} >> config/config.env
-          echo MAIL_HOST = smtp.sendgrid.net >> config/config.env
-          echo MAIL_SENDER_MAIL = ${{secrets.MAIL_SENDER_MAIL}} >> config/config.env
-          echo MAIL_SENDER_PASSWORD = ${{secrets.MAIL_SENDER_PASSWORD}} >> config/config.env
-          echo \# ---- database >> config/config.env
-          echo DB_NAME = epistogram_DEV >> config/config.env
-          echo DB_HOST_ADDRESS = ${{secrets.DB_HOST_ADDRESS}} >> config/config.env
-          echo DB_PORT = ${{secrets.DB_PORT}} >> config/config.env
-          echo DB_SERVICE_USER_NAME = ${{secrets.DB_SERVICE_USER_NAME}} >> config/config.env
-          echo DB_SERVICE_USER_PASSWORD = ${{secrets.DB_SERVICE_USER_PASSWORD}} >> config/config.env
-          echo DB_IS_ORM_LOGGING_ENABLED = true >> config/config.env
+$GEN_ENV_SCRIPT$
         working-directory: ./packages/backend
 
       - name: Build backend container
@@ -144,7 +116,7 @@ jobs:
       - name: Checkout branch
         uses: actions/checkout@v2
         with:
-          ref: dev
+          ref: $BRANCH_NAME$
     
       - name: Migrate schema
         working-directory: ./deploy
@@ -154,7 +126,7 @@ jobs:
             -dbpass '${{secrets.DB_SERVICE_USER_PASSWORD}}' `
             -dbhost '${{secrets.DB_HOST_ADDRESS}}' `
             -dbport '${{secrets.DB_PORT}}' `
-            -dbname 'epistogram_DEV' `
+            -dbname '$DB_NAME$' `
             -dbuser '${{secrets.DB_SERVICE_USER_NAME}}'
   
   # DEPLOY FRONTEND
@@ -209,7 +181,7 @@ jobs:
           --region europe-west1 \
           --platform managed \
           --max-instances 1 \
-          --min-instances 0 \
+          --min-instances $MIN_INSTANCE_COUNT$ \
           --port 5000 \
           --allow-unauthenticated \
           --memory 4Gi \

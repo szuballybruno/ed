@@ -1,5 +1,6 @@
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { CourseOverviewDataDTO, QuestionModuleCompareDTO } from '@episto/communication';
+import { ActivationCodeListDTO, CourseOverviewDataDTO } from '@episto/communication';
 import { OverviewPageDTO } from '@episto/communication';
 import { apiRoutes } from '@episto/communication';
 import { Id } from '@episto/commontypes';
@@ -50,30 +51,41 @@ export const useMiscApiService = (globalEventManager: GlobalEventManagerType) =>
         };
     };
 
-    const useActivationCodeLinks = (companyId: Id<'Company'>) => {
+    const useActivationCodesList = (companyId: Id<'Company'>) => {
 
         const regViaActivationCodeRoute = applicationRoutes
             .registerViaActivationCodeRoute;
 
-        const tokens = {
-            code: '%CODE%',
-            domain: '%DOMAIN%'
+        type QueryType = typeof regViaActivationCodeRoute.queryType;
+
+        const getUrlTemplate = () => {
+
+            const tokens = {
+                code: '%CODE%',
+                domain: '%DOMAIN%'
+            };
+
+            const query: QueryType = {
+                activationCode: tokens.code
+            };
+
+            const queryKey = Object
+                .keys(query)
+                .single();
+
+            const path = regViaActivationCodeRoute
+                .route
+                .getAbsolutePath();
+
+            const urlTemplate = `${tokens.domain}${path}?${queryKey}=${query[queryKey]}`;
+
+            return urlTemplate;
         };
 
-        const query: typeof regViaActivationCodeRoute.queryType = { activationCode: tokens.code };
-
-        const queryKey = Object
-            .keys(query)
-            .single();
-
-        const path = regViaActivationCodeRoute
-            .route
-            .getAbsolutePath();
-
-        const urlTemplate = `${tokens.domain}${path}?${queryKey}=${query[queryKey]}`;
+        const urlTemplate = getUrlTemplate();
 
         const qr = QueryService
-            .useXQueryArrayParametrized(String, apiRoutes.misc.getActivationCodeLinks, { companyId, urlTemplate });
+            .useXQueryArrayParametrized(ActivationCodeListDTO, apiRoutes.misc.getActivationCodeList, { companyId, urlTemplate });
 
         return {
             activationCodeLinks: qr.data,
@@ -84,7 +96,7 @@ export const useMiscApiService = (globalEventManager: GlobalEventManagerType) =>
 
     return {
         useCurrentCourseItemCode,
-        useActivationCodeLinks
+        useActivationCodesList
     };
 };
 

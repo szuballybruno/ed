@@ -3,5 +3,3 @@ node_modules
 /build
 .history
 .vscode
-/deploy/temp
-/deploy/out

@@ -3,6 +3,9 @@ import { ActivationCode } from '../models/entity/misc/ActivationCode';
 import { Id } from '@episto/commontypes';
 import { forN } from '../utilities/helpers';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ActivationCodeListView } from '../models/views/ActivationCodeListView';
+import { instantiate } from '@episto/commonlogic';
+import { InsertEntity } from '../utilities/misc';
 
 export class ActivationCodeService {
 
@@ -16,9 +19,7 @@ export class ActivationCodeService {
     async isValidCodeAsync(code: string) {
 
         const actCode = await this._ormService
-            .query(ActivationCode, {
-                code
-            })
+            .query(ActivationCodeListView, { code })
             .where('code', '=', 'code')
             .and('isUsed', 'IS', 'false')
             .getOneOrNull();
@@ -26,12 +27,12 @@ export class ActivationCodeService {
         return actCode;
     }
 
-    async invalidateCodeAsync(codeId: Id<'ActivationCode'>) {
+    async invalidateCodeAsync(codeId: Id<'ActivationCode'>, userId: Id<'User'>) {
 
         await this._ormService
             .save(ActivationCode, {
                 id: codeId,
-                isUsed: true
+                userId
             });
     }
 
@@ -41,11 +42,12 @@ export class ActivationCodeService {
 
         await this._ormService
             .createManyAsync(ActivationCode, codes
-                .map(x => ({
+                .map(x => instantiate<InsertEntity<ActivationCode>>({
                     code: x,
-                    isUsed: false,
-                    companyId: companyId
-                } as ActivationCode)));
+                    companyId: companyId,
+                    trialLengthDays: 30,
+                    userId: null
+                })));
     }
 
     private genCode = () => {

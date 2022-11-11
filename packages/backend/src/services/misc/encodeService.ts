@@ -9,7 +9,6 @@ export const getItemCode = PlaylistItemCode.getItemCode;
 export const readItemCode = (encoded: string) => {
 
     const decoded = base64Decode(encoded);
-    console.log('decoded: ' + decoded);
     const splitted = decoded.split('@');
     const type = withValue(splitted[1]) as CourseItemType;
     const id: Id<'Exam'> | Id<'Video'> | Id<'Module'> = (() => {

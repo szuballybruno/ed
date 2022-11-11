@@ -37,7 +37,9 @@ export class UserRegistrationService {
         passwordCompare: string) {
 
         // check code
-        const activationCodeEntity = await this._activationCodeService.isValidCodeAsync(activationCode);
+        const activationCodeEntity = await this
+            ._activationCodeService
+            .isValidCodeAsync(activationCode);
         if (!activationCodeEntity)
             throw new ErrorWithCode(`Activation code ${activationCode} not found in DB, or already used.`, 'activation_code_issue');
 
@@ -96,7 +98,7 @@ export class UserRegistrationService {
         // invalidate activation code
         await this
             ._activationCodeService
-            .invalidateCodeAsync(activationCodeEntity.id);
+            .invalidateCodeAsync(activationCodeEntity.activationCodeId, userId);
 
         // login user 
         const tokens = await this._authenticationService

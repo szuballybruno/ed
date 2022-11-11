@@ -1,1 +1,0 @@
-node ./permissionGen.js

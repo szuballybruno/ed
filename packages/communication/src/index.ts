@@ -1,3 +1,4 @@
+export { ActivationCodeListDTO } from "./ActivationCodeListDTO";
 export * from "./misc/apiRoutes";
 export { AnswerDTO } from "./AnswerDTO";
 export { AnswerEditDTO } from "./AnswerEditDTO";
