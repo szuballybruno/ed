@@ -5,6 +5,7 @@ base_query_cte AS
 		ac.id activation_code_id,
 		ac.code,
 		ac.company_id,
+		co.name company_name,
 		ac.trial_length_days,
 		u.id user_id,
 		u.email,
@@ -14,6 +15,9 @@ base_query_cte AS
 
 	LEFT JOIN public.user u
 	ON u.id = ac.user_id
+
+	LEFT JOIN public.company co
+	ON co.id = ac.company_id
 )
 SELECT 
 	bqc.*,

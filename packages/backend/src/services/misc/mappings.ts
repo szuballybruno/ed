@@ -316,25 +316,26 @@ const marray = [
         }),
 
     epistoMappingsBuilder
-        .addArrayMapping(ActivationCodeListDTO, () => (codes: ActivationCodeListView[], domain: string, urlTemplate: string) => {
+        .addArrayMapping(ActivationCodeListDTO, () => (views: ActivationCodeListView[], domain: string, urlTemplate: string) => {
 
-            return codes
-                .map(ac => {
+            return views
+                .map(view => {
 
                     const url = urlTemplate
                         .replace('%DOMAIN%', domain)
-                        .replace('%CODE%', ac.code);
+                        .replace('%CODE%', view.code);
 
                     return instantiate<ActivationCodeListDTO>({
-                        activationCodeId: ac.activationCodeId,
-                        code: ac.code,
-                        companyId: ac.companyId,
-                        daysElapsedFromTrial: ac.daysElapsedFromTrial,
-                        email: ac.email,
-                        isTrialOver: ac.isTrialOver,
-                        isUsed: ac.isUsed,
-                        trialLengthDays: ac.trialLengthDays,
-                        userId: ac.userId,
+                        activationCodeId: view.activationCodeId,
+                        companyName: view.companyName,
+                        code: view.code,
+                        companyId: view.companyId,
+                        daysElapsedFromTrial: view.daysElapsedFromTrial,
+                        email: view.email,
+                        isTrialOver: view.isTrialOver,
+                        isUsed: view.isUsed,
+                        trialLengthDays: view.trialLengthDays,
+                        userId: view.userId,
                         url
                     });
                 });

@@ -13,6 +13,9 @@ export class ActivationCodeListView {
     companyId: Id<'Company'>;
 
     @XViewColumn()
+    companyName: string;
+
+    @XViewColumn()
     trialLengthDays: number;
 
     @XViewColumn()

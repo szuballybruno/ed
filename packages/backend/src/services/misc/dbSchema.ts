@@ -67,6 +67,7 @@ import { QuestionVersion } from '../../models/entity/question/QuestionVersion';
 import { Video } from '../../models/entity/video/Video';
 import { VideoData } from '../../models/entity/video/VideoData';
 import { VideoVersion } from '../../models/entity/video/VideoVersion';
+import { ActivationCodeListView } from '../../models/views/ActivationCodeListView';
 import { ActivityStreakView } from '../../models/views/ActivityStreakView';
 import { AdminCourseUserStatsView } from '../../models/views/AdminCourseUserStatsView';
 import { AnswerSessionGroupView } from '../../models/views/AnswerSessionGroupView';
@@ -161,6 +162,7 @@ export const createDBSchema = (): XDBMSchemaService => {
     const schema: XDBMSchemaService = {
 
         views: [
+            ActivationCodeListView,
             PlaylistView,
             ActivityStreakView,
             AnswerSessionView,

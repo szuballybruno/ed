@@ -67,6 +67,18 @@
             "presentation": {
                 "group": "migarion"
             }
+        },
+        {
+            "label": "localMigration",
+            "type": "shell",
+            "command": "powershell.exe ./localMigration.ps1",
+            "options": {
+                "cwd": "${workspaceFolder}/deploy"
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "group": "migarion"
+            }
         }
     ]
 }

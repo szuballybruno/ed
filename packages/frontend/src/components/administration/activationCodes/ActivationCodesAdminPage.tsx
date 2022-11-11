@@ -21,12 +21,13 @@ export const ActivationCodesAdminPage = () => {
             headerName: 'Ac id'
         })
         .add({
-            field: 'companyId',
-            headerName: 'Company id'
+            field: 'companyName',
+            headerName: 'Company' 
         })
         .add({
             field: 'code',
-            headerName: 'Code'
+            headerName: 'Code',
+            width: 200
         })
         .add({
             field: 'trialLengthDays',
@@ -34,15 +35,23 @@ export const ActivationCodesAdminPage = () => {
         })
         .add({
             field: 'url',
-            headerName: 'Url'
-        })
-        .add({
-            field: 'email',
-            headerName: 'Email'
+            headerName: 'Url',
+            renderCell: ({ value }) => (
+                <a
+                    href={value}
+                    target="_blank"
+                    rel="noreferrer">
+                    {value}
+                </a>
+            )
         })
         .add({
             field: 'isUsed',
             headerName: 'Used'
+        })
+        .add({
+            field: 'email',
+            headerName: 'Email'
         })
         .add({
             field: 'daysElapsedFromTrial',
