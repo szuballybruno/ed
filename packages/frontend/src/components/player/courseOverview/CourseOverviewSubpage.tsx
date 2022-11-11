@@ -1,18 +1,69 @@
+import { instantiate } from '@episto/commonlogic';
+import { Id } from '@episto/commontypes';
+import { QuestionModuleCompareDTO } from '@episto/communication';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
-import { useCourseOverviewData } from '../../../services/api/miscApiService';
+import { useCourseOverviewData, useCourseOverviewModuleCompareData } from '../../../services/api/miscApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { Environment } from '../../../static/Environemnt';
 import { isNullOrUndefined } from '../../../static/frontendHelpers';
+import { EpistoDataGrid, EpistoDataGridColumnBuilder } from '../../controls/EpistoDataGrid';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoGrid } from '../../controls/EpistoGrid';
 import { ExamLayout } from '../../exam/ExamLayout';
 import StatisticsCard from '../../statisticsCard/StatisticsCard';
 
+class RowType {
+    moduleVersionId: Id<'ModuleVersion'>;
+    moduleName: string;
+    pretestExamScorePercentage: number;
+    finalExamScorePercentage: number;
+    scoreDifferencePercentage: number;
+};
+
 export const CourseOverviewSubpage = () => {
 
     const { courseOverviewData } = useCourseOverviewData();
+    const { courseOverviewModuleCompareData } = useCourseOverviewModuleCompareData();
 
     const { navigate2 } = useNavigation();
+
+    const mapToRow = (modules: QuestionModuleCompareDTO[]): RowType[] => {
+
+
+        return modules
+            .map(x => (instantiate<RowType>({
+                moduleVersionId: x.moduleVersionId,
+                moduleName: x.moduleName,
+                pretestExamScorePercentage: x.pretestExamScorePercentage,
+                finalExamScorePercentage: x.finalExamScorePercentage,
+                scoreDifferencePercentage: x.scoreDifferencePercentage
+            })));
+    };
+
+    const columns = new EpistoDataGridColumnBuilder<RowType, Id<'ModuleVersion'>>()
+        .add({
+            field: 'moduleName',
+            width: 300,
+            headerName: 'Modul',
+        })
+        .add({
+            field: 'pretestExamScorePercentage',
+            width: 250,
+            headerName: 'Előzetesen felmért eredmény',
+            renderCell: (value => value.value ? Math.round(value.value) + '%' : '-')
+        })
+        .add({
+            field: 'finalExamScorePercentage',
+            width: 250,
+            headerName: 'A kurzus elvégzését követően elért eredmény',
+            renderCell: (value => value.value ? Math.round(value.value) + '%' : '-')
+        })
+        .add({
+            field: 'scoreDifferencePercentage',
+            headerName: 'Különbség',
+            renderCell: (value => value.value ? Math.round(value.value) + '%' : '-')
+        })
+        .getColumns();
 
     /**
     * Összesen ennyi videót néztél meg
@@ -93,6 +144,7 @@ export const CourseOverviewSubpage = () => {
                     minColumnWidth={'250px'}
                     gap={'10px'}
                     auto={'fill'}
+                    marginBottom={'10px'}
                     w="100%">
 
                     {courseStatsOverviewData
@@ -107,6 +159,13 @@ export const CourseOverviewSubpage = () => {
                                 p="10px 10px 10px 30px" />;
                         })}
                 </EpistoGrid>
+
+
+                <EpistoDataGrid
+                    rows={mapToRow(courseOverviewModuleCompareData || [])}
+                    columns={columns}
+                    getKey={x => x.moduleVersionId} />
+
             </EpistoFlex2>
         </ExamLayout>
     );

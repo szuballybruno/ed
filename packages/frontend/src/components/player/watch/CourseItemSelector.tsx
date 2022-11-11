@@ -17,7 +17,6 @@ import { EpistoDialog } from '../../universal/epistoDialog/EpistoDialog';
 import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogLogic';
 import { TempomatSettingsDialog } from '../tempomat/TempomatSettingsDialog';
 import { TempomatTempoInfo } from '../tempomat/TempomatTempoInfo';
-import { RadioGroup } from '@mui/material';
 
 export const CourseItemSelector = ({
     currentItemCode,

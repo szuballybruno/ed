@@ -81,6 +81,7 @@ export { QuestionAnswerDTO } from "./QuestionAnswerDTO";
 export { QuestionDTO } from "./QuestionDTO";
 export { QuestionEditDataReadDTO } from "./QuestionEditDataReadDTO";
 export { QuestionModuleBridgeDTO } from "./QuestionModuleBridgeDTO";
+export { QuestionModuleCompareDTO } from "./QuestionModuleCompareDTO";
 export { RecomendedItemQuotaDTO } from "./RecomendedItemQuotaDTO";
 export { RegisterUserViaActivationCodeDTO } from "./RegisterUserViaActivationCodeDTO";
 export { RegisterUserViaInvitationTokenDTO } from "./RegisterUserViaInvitationTokenDTO";

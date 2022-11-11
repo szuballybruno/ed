@@ -1,5 +1,5 @@
 import { applicationRoutes } from '../../configuration/applicationRoutes';
-import { CourseOverviewDataDTO } from '@episto/communication';
+import { CourseOverviewDataDTO, QuestionModuleCompareDTO } from '@episto/communication';
 import { OverviewPageDTO } from '@episto/communication';
 import { apiRoutes } from '@episto/communication';
 import { Id } from '@episto/commontypes';
@@ -13,6 +13,15 @@ export const useCourseOverviewData = (userId?: Id<'User'>, courseId?: Id<'Course
 
     return {
         courseOverviewData: qr.data
+    };
+};
+
+export const useCourseOverviewModuleCompareData = (userId?: Id<'User'>, courseId?: Id<'Course'>) => {
+
+    const qr = QueryService.useXQuery<QuestionModuleCompareDTO[]>(apiRoutes.misc.getCourseOverviewModuleCompareData, { userId, courseId });
+
+    return {
+        courseOverviewModuleCompareData: qr.data
     };
 };
 

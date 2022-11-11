@@ -68,6 +68,7 @@ import { Video } from '../../models/entity/video/Video';
 import { VideoData } from '../../models/entity/video/VideoData';
 import { VideoVersion } from '../../models/entity/video/VideoVersion';
 import { ActivityStreakView } from '../../models/views/ActivityStreakView';
+import { AdminCourseUserStatsView } from '../../models/views/AdminCourseUserStatsView';
 import { AnswerSessionGroupView } from '../../models/views/AnswerSessionGroupView';
 import { AnswerSessionView } from '../../models/views/AnswerSessionView';
 import { AvailableCourseView } from '../../models/views/AvailableCourseView';
@@ -99,6 +100,7 @@ import { GivenAnswerView } from '../../models/views/GivenAnswerView';
 import { HomePageStatsView } from '../../models/views/HomePageStatsView';
 import { ImproveYourselfPageStatsView } from '../../models/views/ImproveYourselfPageStatsView';
 import { LatestCourseVersionView } from '../../models/views/LatestCourseVersionView';
+import { LatestExamResultView } from '../../models/views/LatestExamResultView';
 import { LatestExamView } from '../../models/views/LatestExamView';
 import { LatestVideoView } from '../../models/views/LatestVideoView';
 import { ModuleEditView } from '../../models/views/ModuleEditView';
@@ -106,11 +108,12 @@ import { ModulePlayerView } from '../../models/views/ModulePlayerView';
 import { MostProductiveTimeRangeView } from '../../models/views/MostProductiveTimeRangeView';
 import { PersonalityTraitCategoryView } from '../../models/views/PersonalityTraitCategoryView';
 import { PersonalityTraitView } from '../../models/views/PersonalityTraitView';
-import { UserPlaylistView } from '../../models/views/UserPlaylistView';
+import { PlaylistView } from '../../models/views/PlaylistView';
 import { PractiseQuestionView } from '../../models/views/PractiseQuestionView';
 import { PrequizQuestionView } from '../../models/views/PrequizQuestionView';
 import { PretestResultView } from '../../models/views/PretestResultView';
 import { QuestionDataView } from '../../models/views/QuestionDataView';
+import { QuestionModuleCompareView } from '../../models/views/QuestionModuleCompareView';
 import { ShopItemStatefulView } from '../../models/views/ShopItemStatefulView';
 import { ShopItemView } from '../../models/views/ShopItemView';
 import { SignupCompletedView } from '../../models/views/SignupCompletedView';
@@ -137,6 +140,7 @@ import { UserModuleStatsView } from '../../models/views/UserModuleStatsView';
 import { UserPerformanceAnswerGroupView } from '../../models/views/UserPerformanceAnswerGroupView';
 import { UserPerformanceComparisonStatsView } from '../../models/views/UserPerformanceComparisonStatsView';
 import { UserPerformanceView } from '../../models/views/UserPerformanceView';
+import { UserPlaylistView } from '../../models/views/UserPlaylistView';
 import { UserPractiseRecommendationView } from '../../models/views/UserPractiseRecommendationView';
 import { UserReactionTimeView } from '../../models/views/UserReactionTimeView';
 import { UserRoleAssignCompanyView } from '../../models/views/UserRoleAssignCompanyView';
@@ -151,9 +155,6 @@ import { VideoCursorSecondsView } from '../../models/views/VideoCursorSecondsVie
 import { VideoPlayerDataView } from '../../models/views/VideoPlayerDataView';
 import { VideoVersionView } from '../../models/views/VideoVersionView';
 import { XDBMSchemaService } from '../XDBManager/XDBManagerTypes';
-import { PlaylistView } from '../../models/views/PlaylistView';
-import { AdminCourseUserStatsView } from '../../models/views/AdminCourseUserStatsView';
-import { LatestExamResultView } from '../../models/views/LatestExamResultView';
 
 export const createDBSchema = (): XDBMSchemaService => {
 
@@ -245,7 +246,8 @@ export const createDBSchema = (): XDBMSchemaService => {
             UserLearningPageStatsView,
             ImproveYourselfPageStatsView,
             GivenAnswerView,
-            AdminCourseUserStatsView
+            AdminCourseUserStatsView,
+            QuestionModuleCompareView
         ],
 
         functionScripts: [

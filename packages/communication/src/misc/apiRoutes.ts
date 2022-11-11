@@ -25,6 +25,7 @@ export const apiRoutes = {
         getHomePageDTO: '/misc/get-overview-page-dto',
         getCurrentCourseItemCode: '/misc/get-current-course-item-code',
         getCourseOverviewData: '/misc/get-course-overview-data' as ParametrizedRouteType<{ query: { userId?: Id<'User'>, courseId?: Id<'Course'> } }>,
+        getCourseOverviewModuleCompareData: '/misc/get-course-overview-module-compare-data' as ParametrizedRouteType<{ query: { userId?: Id<'User'>, courseId?: Id<'Course'> } }>,
         getActivationCodeLinks: '/misc/get-activation-code-links' as ParametrizedRouteType<{ query: { urlTemplate: string, companyId: Id<'Company'> } }>
     },
 

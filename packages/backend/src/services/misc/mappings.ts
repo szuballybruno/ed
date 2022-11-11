@@ -54,7 +54,7 @@ import { UserOverviewView } from '../../models/views/UserOverviewView';
 import { UserSpentTimeRatioView } from '../../models/views/UserSpentTimeRatioView';
 import { UserVideoStatsView } from '../../models/views/UserVideoStatsView';
 import { VideoPlayerDataView } from '../../models/views/VideoPlayerDataView';
-import { CourseAdminListItemDTO } from '@episto/communication';
+import { CourseAdminListItemDTO, QuestionModuleCompareDTO } from '@episto/communication';
 import { CourseContentItemAdminDTO } from '@episto/communication';
 import { CourseContentItemIssueDTO } from '@episto/communication';
 import { AnswerDTO } from '@episto/communication';
@@ -126,7 +126,7 @@ import { instantiate } from '@episto/commonlogic';
 import { UserActivityDistributionChartData } from '@episto/commontypes';
 import { TeacherBadgeNameType } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
-import { toFullName } from '../../utilities/helpers';
+import { relativeDiffInPercentage, toFullName } from '../../utilities/helpers';
 import { CalculatedTempomatValueType } from '../TempomatService';
 import { UrlService } from '../UrlService';
 import { XMappingsBuilder } from './XMapperService/XMapperService';
@@ -137,10 +137,25 @@ import { AdminHomePageOverviewView } from '../../models/views/AdminHomePageOverv
 import { AdminHomePageOverviewDTO } from '@episto/communication';
 import { AdminCourseUserStatsView } from '../../models/views/AdminCourseUserStatsView';
 import { AdminCourseUserStatsDTO } from '@episto/communication';
+import { QuestionModuleCompareView } from '../../models/views/QuestionModuleCompareView';
 
 export const epistoMappingsBuilder = new XMappingsBuilder<[UrlService]>();
 
 const marray = [
+
+    epistoMappingsBuilder
+        .addArrayMapping(QuestionModuleCompareDTO, () => (
+            views: QuestionModuleCompareView[],
+        ) => {
+
+            return views.map(x => instantiate<QuestionModuleCompareDTO>({
+                moduleVersionId: x.moduleVersionId,
+                moduleName: x.moduleName,
+                pretestExamScorePercentage: x.pretestExamScorePercentage,
+                finalExamScorePercentage: x.finalExamScorePercentage,
+                scoreDifferencePercentage: relativeDiffInPercentage(x.pretestExamScorePercentage, x.finalExamScorePercentage)
+            }));
+        }),
 
     epistoMappingsBuilder
         .addArrayMapping(AdminCourseUserStatsDTO, () => (

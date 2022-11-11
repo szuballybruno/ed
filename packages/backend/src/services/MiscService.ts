@@ -1,7 +1,7 @@
 
 import { ActivationCode } from '../models/entity/misc/ActivationCode';
 import { CourseOverviewView } from '../models/views/CourseOverviewView';
-import { AvailableCourseDTO } from '@episto/communication';
+import { AvailableCourseDTO, QuestionModuleCompareDTO } from '@episto/communication';
 import { CourseOverviewDataDTO } from '@episto/communication';
 import { OverviewPageDTO } from '@episto/communication';
 import { Id } from '@episto/commontypes';
@@ -11,6 +11,7 @@ import { DomainProviderService } from './DomainProviderService';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
+import { QuestionModuleCompareView } from '../models/views/QuestionModuleCompareView';
 
 export class MiscService {
 
@@ -45,6 +46,32 @@ export class MiscService {
 
         return this._mapperService
             .mapTo(CourseOverviewDataDTO, [view]);
+    }
+
+
+    async getCourseOverviewModuleCompareDataAsync(
+        principalId: PrincipalId,
+        userId?: Id<'User'>,
+        courseId?: Id<'Course'>
+    ) {
+
+        const uId = userId
+            ? userId
+            : Id.create<'User'>(principalId.toSQLValue());
+
+        const cId = courseId
+            ? courseId
+            : await this._userCourseBridgeService
+                .getCurrentCourseIdOrFail(uId);
+
+        const view = await this._ormService
+            .query(QuestionModuleCompareView, { courseId: cId, userId: uId })
+            .where('courseId', '=', 'courseId')
+            .and('userId', '=', 'userId')
+            .getMany();
+
+        return this._mapperService
+            .mapTo(QuestionModuleCompareDTO, [view]);
     }
 
     async getOverviewPageDTOAsync(principalId: PrincipalId) {
