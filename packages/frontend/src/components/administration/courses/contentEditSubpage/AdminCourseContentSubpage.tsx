@@ -408,6 +408,7 @@ export const AdminCourseContentSubpage = () => {
                     overflow="hidden">
 
                     <EpistoDataGrid
+                        dragEnabled
                         columns={gridColumns}
                         rows={gridRowItems}
                         getKey={getRowKey}

@@ -93,7 +93,7 @@ export const Playlist = ({
 
     return (
         <EpistoFlex2
-            minWidth={isMinWidth ? '420px' : undefined}
+            minWidth={(isMinWidth && !isMobile) ? '420px' : undefined}
             id="courseItemListRoot"
             direction="column"
             zIndex={0}
