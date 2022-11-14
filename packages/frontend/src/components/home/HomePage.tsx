@@ -106,7 +106,8 @@ const HomePage = () => {
     return <>
 
         {/* sidebar / left pane */}
-        {!isMobile && <LeftPane>
+        <LeftPane
+            hidden={isMobile}>
 
             {/* current course items and progress */}
             {currentCourseProgress && <EpistoFlex2
@@ -149,7 +150,7 @@ const HomePage = () => {
                         title={translatableTexts.homePage.availableCoursesLinkTitle}
                         subTitle={translatableTexts.homePage.availableCoursesText} />
                 </EpistoFlex2>} />}
-        </LeftPane>}
+        </LeftPane>
 
         {/* content */}
         <ContentPane

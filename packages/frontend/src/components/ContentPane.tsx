@@ -1,18 +1,9 @@
-import { EpistoFlex2, EpistoFlex2Props } from './controls/EpistoFlex';
-import Navbar from './navbar/Navbar';
+import { useContext, useEffect } from 'react';
+import { createPortal } from 'react-dom';
+import { EpistoFlex2Props } from './controls/EpistoFlex';
+import { LeftSidebarElementRefContext } from './PageRootContainer';
 
-export const ContentPane = ({
-    children,
-    noPadding,
-    showLogo,
-    noMaxWidth,
-    isNavbarLowHeight,
-    navbarBg,
-    isMinimalMode,
-    hideNavbar,
-    noOverflow,
-    ...css
-}: {
+type ContentPanePropsType = {
     noPadding?: boolean,
     navbarBg?: any,
     hideNavbar?: boolean,
@@ -21,26 +12,23 @@ export const ContentPane = ({
     showLogo?: boolean,
     isMinimalMode?: boolean,
     noOverflow?: boolean
-} & EpistoFlex2Props) => {
+} & EpistoFlex2Props;
 
-    return (
-        <EpistoFlex2
-            id={ContentPane.name}
-            padding={noPadding ? undefined : '0 30px 0px 30px'}
-            flex="1"
-            maxWidth={noMaxWidth ? undefined : '1400px'}
-            direction="column"
-            overflowY={noOverflow ? 'hidden' : 'scroll'}
-            overflowX="hidden"
-            {...css}>
+export const ContentPane = (props: ContentPanePropsType) => {
 
-            {!hideNavbar && <Navbar
-                isLowHeight={isNavbarLowHeight}
-                showLogo={showLogo}
-                isMinimalMode={isMinimalMode}
-                backgroundContent={navbarBg} />}
+    const context = useContext(LeftSidebarElementRefContext);
 
-            {children}
-        </EpistoFlex2>
-    );
+    useEffect(() => {
+
+        if (!context)
+            return;
+
+        context
+            .setContentPaneProps(props);
+    }, [context, props]);
+
+    if (!context?.contentElementRef?.current)
+        return <></>;
+
+    return createPortal(props.children, context.contentElementRef.current);
 };

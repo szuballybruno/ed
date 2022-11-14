@@ -13,15 +13,14 @@ export const UserSettingsPage = () => {
 
     return <>
 
-        {!isMobile && <LeftPane
-            padding="20px"
-            basis="300px" >
+        <LeftPane
+            hidden={isMobile}>
 
             <NavigationLinkList
                 routes={[
                     applicationRoutes.settingsRoute.preferencesRoute
                 ]} />
-        </LeftPane>}
+        </LeftPane>
 
         <ContentPane
             noPadding={isMobile}

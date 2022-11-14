@@ -12,14 +12,12 @@ import { LeftSidebarElementRefContext } from './PageRootContainer';
 import { useAuthorizationContext } from './system/AuthorizationContext';
 
 export const LeftPane = ({
-    padding,
-    basis,
     children,
-    collapsed
+    collapsed,
+    hidden
 }: {
-    padding?: string,
-    basis?: string,
-    collapsed?: boolean
+    collapsed?: boolean,
+    hidden?: boolean
 } & PropsWithChildren) => {
 
     const homeRoute = applicationRoutes.rootHomeRoute;
@@ -62,14 +60,14 @@ export const LeftPane = ({
 
     const LeftPaneComponent = (
         <FlexFloat
-            borderRadius="none"
             id="leftPane"
+            display={hidden ? 'none' : undefined}
+            borderRadius="none"
             bg="white"
             zIndex={2}
             direction="column"
             align="stretch"
-            padding={padding ? padding : '25px 15px 0 15px'}
-            basis={basis ?? undefined}
+            padding={'25px 15px 0 15px'}
             className="whall dividerBorderRight"
             position="relative"
             boxShadow="3px 0px 15px 5px rgba(0,0,0,0.1)">

@@ -2,14 +2,91 @@ import { createContext, ReactNode, RefObject, useEffect, useMemo, useRef, useSta
 import { HelperHooks } from '../helpers/hooks';
 import { gradientBackgroundGenerator } from '../services/core/gradientBackgroundGenerator';
 import { useIsMobileView } from '../static/frontendHelpers';
-import { EpistoFlex2 } from './controls/EpistoFlex';
+import { EpistoFlex2, EpistoFlex2Props } from './controls/EpistoFlex';
 import { EpistoGrid } from './controls/EpistoGrid';
+import Navbar from './navbar/Navbar';
 
 type LeftSidebarContextType = {
     leftPaneElementRef: RefObject<HTMLDivElement>,
+    contentElementRef: RefObject<HTMLDivElement>,
     leftPaneShowing: boolean,
     setLeftPaneShowing: (isShowing: boolean) => void,
     setCollapsed: (isCollapsed: boolean) => void
+    isCollapsed: boolean;
+    contentPaneProps: ContentPanePropsType,
+    setContentPaneProps: (props: ContentPanePropsType) => void
+};
+
+type ContentPanePropsType = {
+    noPadding?: boolean,
+    navbarBg?: any,
+    hideNavbar?: boolean,
+    isNavbarLowHeight?: boolean,
+    noMaxWidth?: boolean,
+    showLogo?: boolean,
+    isMinimalMode?: boolean,
+    noOverflow?: boolean
+} & EpistoFlex2Props;
+
+export const ContentPaneRoot = ({
+    contentElementRef,
+    noPadding,
+    showLogo,
+    noMaxWidth,
+    isNavbarLowHeight,
+    navbarBg,
+    isMinimalMode,
+    hideNavbar,
+    noOverflow,
+    padding,
+    ...css
+}: ContentPanePropsType & { contentElementRef }) => {
+
+    return (
+        <EpistoFlex2
+            id={ContentPaneRoot.name}
+            ref={contentElementRef}
+            direction="column"
+            flex="1"
+            overflow="hidden"
+            overflowY={noOverflow ? 'hidden' : 'scroll'}
+            overflowX="hidden"
+            padding={noPadding
+                ? undefined
+                : padding
+                    ? padding
+                    : '0 30px 0px 30px'}
+            maxWidth={noMaxWidth ? undefined : '1400px'}
+        // {...css}
+        >
+
+            {!hideNavbar && <Navbar
+                isLowHeight={isNavbarLowHeight}
+                showLogo={showLogo}
+                isMinimalMode={isMinimalMode}
+                backgroundContent={navbarBg} />}
+        </EpistoFlex2>
+    );
+};
+
+const LeftPaneHost = ({ contextValue }: { contextValue: LeftSidebarContextType }) => {
+
+    const { leftPaneElementRef, isCollapsed, leftPaneShowing } = contextValue;
+
+    return (
+        <EpistoFlex2
+            ref={leftPaneElementRef}
+            id="rootPortal"
+            transition="0.1s"
+            bg="blue"
+            height="100%"
+            overflow="hidden"
+            flexBasis={leftPaneShowing
+                ? isCollapsed
+                    ? '100px'
+                    : '320px'
+                : '0px'} />
+    );
 };
 
 export const LeftSidebarElementRefContext = createContext<LeftSidebarContextType | null>(null);
@@ -32,18 +109,22 @@ export const PageRootContainer = ({
     const { isIPhone } = HelperHooks
         .useIsIPhone();
 
-    const ref = useRef<HTMLDivElement>(null);
+    const leftPaneElementRef = useRef<HTMLDivElement>(null);
+    const contentElementRef = useRef<HTMLDivElement>(null);
     const [leftPaneShowing, setLeftPaneShowing] = useState(false);
     const [isCollapsed, setCollapsed] = useState(false);
+    const [contentPaneProps, setContentPaneProps] = useState<ContentPanePropsType>({});
 
     const contextValue: LeftSidebarContextType = useMemo(() => ({
-        leftPaneElementRef: ref,
+        leftPaneElementRef,
+        contentElementRef,
         leftPaneShowing,
+        isCollapsed,
         setLeftPaneShowing,
-        setCollapsed
-    }), [ref, leftPaneShowing]);
-
-    console.log(leftPaneShowing);
+        setCollapsed,
+        contentPaneProps,
+        setContentPaneProps
+    }), [isCollapsed, leftPaneElementRef, contentElementRef, leftPaneShowing, contentPaneProps]);
 
     return <EpistoFlex2
         maxH={isIPhone ? '100vh' : undefined}
@@ -83,14 +164,15 @@ export const PageRootContainer = ({
         </EpistoGrid>
 
         {/* left pane host */}
-        <EpistoFlex2
-            ref={ref}
-            id="rootPortal"
-            height="100%"
-            flexBasis={isCollapsed ? '60px' : '320px'}
-            maxW={leftPaneShowing ? '320px' : '0px'} />
+        <LeftPaneHost
+            contextValue={contextValue} />
 
-        {/* children */}
+        {/* content */}
+        <ContentPaneRoot
+            contentElementRef={contentElementRef}
+            {...contentPaneProps}>
+        </ContentPaneRoot>
+
         <LeftSidebarElementRefContext.Provider
             value={contextValue}>
 
