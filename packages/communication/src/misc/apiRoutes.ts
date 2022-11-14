@@ -26,7 +26,9 @@ export const apiRoutes = {
         getCurrentCourseItemCode: '/misc/get-current-course-item-code',
         getCourseOverviewData: '/misc/get-course-overview-data' as ParametrizedRouteType<{ query: { userId?: Id<'User'>, courseId?: Id<'Course'> } }>,
         getCourseOverviewModuleCompareData: '/misc/get-course-overview-module-compare-data' as ParametrizedRouteType<{ query: { userId?: Id<'User'>, courseId?: Id<'Course'> } }>,
-        getActivationCodeList: '/misc/get-activation-code-list' as ParametrizedRouteType<{ query: { urlTemplate: string, companyId: Id<'Company'> } }>
+        getActivationCodeList: '/misc/get-activation-code-list' as ParametrizedRouteType<{ query: { urlTemplate: string, companyId: Id<'Company'> } }>,
+        generateActivationCodesPreview: '/misc/generate-activation-codes-preview' as ParametrizedRouteType<{ body: { count: number, prefix: string, companyId: Id<'Company'> } }>,
+        generateActivationCodes: '/misc/generate-activation-codes' as ParametrizedRouteType<{ body: { count: number, prefix: string, companyId: Id<'Company'> } }>
     },
 
     roles: {

@@ -28,6 +28,7 @@ import { MapperService } from './MapperService';
 import { ClassType } from './misc/advancedTypes/ClassType';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { XDBMSchemaService } from './XDBManager/XDBManagerTypes';
+import { throwNotImplemented } from '../utilities/helpers';
 
 export class CompanyService {
 
@@ -499,8 +500,6 @@ export class CompanyService {
     }
     async createCompanyActivationCodesAsync(activationCodeCount: number, companyId: Id<'Company'>) {
 
-        await this
-            ._activationCodeService
-            .generateActivationCodesAsync(activationCodeCount, companyId);
+        throw throwNotImplemented();
     }
 }

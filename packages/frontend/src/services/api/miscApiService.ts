@@ -6,6 +6,7 @@ import { Id } from '@episto/commontypes';
 import { GlobalEventManagerType } from '../../static/EventBus';
 import { useGetCurrentAppRoute } from '../../static/frontendHelpers';
 import { QueryService } from '../../static/QueryService';
+import { usePostDataUnsafe } from '../core/httpClient';
 
 export const useCourseOverviewData = (userId?: Id<'User'>, courseId?: Id<'Course'>) => {
 
@@ -90,12 +91,34 @@ export const useMiscApiService = (globalEventManager: GlobalEventManagerType) =>
             activationCodeLinks: qr.data,
             activationCodeLinksState: qr.state,
             activationCodeLinksError: qr.error,
+            refetchActivationCodeLinks: qr.refetch
+        };
+    };
+
+    const useGenerateActivationCodesPreview = () => {
+
+        const qr = usePostDataUnsafe(apiRoutes.misc.generateActivationCodesPreview);
+
+        return {
+            generateActivationCodesPreviewAsync: qr.postDataAsync,
+            activationCodesPreviewList: qr.result ?? [] as any as string[]
+        };
+    };
+
+    const useGenerateActivationCodes = () => {
+
+        const qr = usePostDataUnsafe(apiRoutes.misc.generateActivationCodes);
+
+        return {
+            generateActivationCodesAsync: qr.postDataAsync,
         };
     };
 
     return {
         useCurrentCourseItemCode,
-        useActivationCodesList
+        useActivationCodesList,
+        useGenerateActivationCodesPreview,
+        useGenerateActivationCodes
     };
 };
 

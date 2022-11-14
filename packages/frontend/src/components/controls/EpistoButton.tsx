@@ -121,7 +121,9 @@ export const EpistoButton = forwardRef<HTMLButtonElement, EpistoButtonPropsType>
 
         {icon && <div
             style={{
-                marginRight: '5px'
+                marginRight: '5px',
+                display: 'flex',
+                alignItems: 'center'
             }}>
             {icon}
         </div>}

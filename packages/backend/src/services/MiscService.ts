@@ -46,7 +46,6 @@ export class MiscService {
             .mapTo(CourseOverviewDataDTO, [view]);
     }
 
-
     async getCourseOverviewModuleCompareDataAsync(
         principalId: PrincipalId,
         userId?: Id<'User'>,

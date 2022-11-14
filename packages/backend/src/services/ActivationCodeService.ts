@@ -36,23 +36,31 @@ export class ActivationCodeService {
             });
     }
 
-    async generateActivationCodesAsync(amount: number, companyId: Id<'Company'>) {
+    async generateActivationCodesAsync(prefix: string, amount: number, companyId: Id<'Company'>) {
 
-        const codes = forN(amount, x => this.genCode());
+        const activationCodes = await this
+            .previewActivationCodesAsync(prefix, amount);
 
         await this._ormService
-            .createManyAsync(ActivationCode, codes
-                .map(x => instantiate<InsertEntity<ActivationCode>>({
-                    code: x,
+            .createManyAsync(ActivationCode, activationCodes
+                .map(activationCode => instantiate<InsertEntity<ActivationCode>>({
+                    code: activationCode,
                     companyId: companyId,
                     trialLengthDays: 30,
                     userId: null
                 })));
     }
 
-    private genCode = () => {
+    async previewActivationCodesAsync(prefix: string, amount: number) {
 
-        return 'MELO' + generatePassword(8)
-            .toUpperCase();
+        const prefixUpper = prefix.toUpperCase();
+        const activationCodes = forN(amount, () => this
+            ._generateActivationCode(prefixUpper));
+        return activationCodes;
+    }
+
+    private _generateActivationCode = (prefix: string) => {
+
+        return `${prefix}-${generatePassword(8).toUpperCase()}`;
     };
 }
