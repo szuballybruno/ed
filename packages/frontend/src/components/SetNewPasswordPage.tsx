@@ -1,4 +1,3 @@
-import React from 'react';
 import { applicationRoutes } from '../configuration/applicationRoutes';
 import { CompanyApiService } from '../services/api/CompanyApiService1';
 import { useSetNewPassword } from '../services/api/passwordChangeApiService';
@@ -9,7 +8,6 @@ import { useRouteQuery } from '../static/locationHelpers';
 import { ContentPane } from './ContentPane';
 import { EpistoButton } from './controls/EpistoButton';
 import { EpistoHeader } from './EpistoHeader';
-import { PageRootContainer } from './PageRootContainer';
 import { LoadingFrame } from './system/LoadingFrame';
 import { PasswordEntry, usePasswordEntryState } from './universal/PasswordEntry';
 
@@ -48,10 +46,7 @@ export const SetNewPasswordPage = () => {
         }
     };
 
-    return <PageRootContainer
-        align="flex-start"
-        justify="center"
-        position="relative">
+    return <>
 
         <ContentPane
             hideNavbar
@@ -113,5 +108,5 @@ export const SetNewPasswordPage = () => {
                 </EpistoButton>
             </LoadingFrame>
         </ContentPane>
-    </PageRootContainer >;
+    </ >;
 };

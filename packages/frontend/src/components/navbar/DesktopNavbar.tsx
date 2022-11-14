@@ -34,7 +34,7 @@ export const DesktopNavbar = ({
 
     const { hasPermission } = useAuthorizationContext();
 
-    const menuItems = new ArrayBuilder<Omit<ApplicationRoute, 'icon'> & { icon: ReactNode }>()
+    const menuItems: ApplicationRoute[] = new ArrayBuilder<Omit<ApplicationRoute, 'icon'> & { icon: ReactNode }>()
         .addIf(hasPermission('ADMINISTRATE_COMPANY'), {
             title: applicationRoutes.administrationRoute.title,
             route: applicationRoutes.administrationRoute.usersRoute.route,
@@ -55,7 +55,12 @@ export const DesktopNavbar = ({
             route: applicationRoutes.learningRoute.route,
             icon: applicationRoutes.learningRoute.icon
         })
-        .getArray() as ApplicationRoute[];
+        .add({
+            title: applicationRoutes.leaderboardRoute.title,
+            route: applicationRoutes.leaderboardRoute.route,
+            icon: applicationRoutes.leaderboardRoute.icon
+        })
+        .getArray() as any;
 
     const { navigate2 } = useNavigation();
 

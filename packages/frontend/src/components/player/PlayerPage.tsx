@@ -3,7 +3,6 @@ import browser from '../../services/core/browserSniffingService';
 import { useIsMobileView } from '../../static/frontendHelpers';
 import { CoinRewardDialog } from '../CoinRewardDialog';
 import { ContentPane } from '../ContentPane';
-import { PageRootContainer } from '../PageRootContainer';
 import { useEpistoDialogLogic } from '../universal/epistoDialog/EpistoDialogLogic';
 import { EpistoRoutes } from '../universal/EpistoRoutes';
 import { CourseOverviewSubpage } from './courseOverview/CourseOverviewSubpage';
@@ -27,11 +26,7 @@ export const PlayerPage = () => {
     const coinAcquiredDialogLogic = useEpistoDialogLogic('courseRatingCoinAcquired');
 
     return (
-        <PageRootContainer
-            style={{
-                '--playerWidth': 'min(min(100vw, 180vh), 1700px)',
-                background: 'var(--gradientBlueBackground)'
-            } as any}>
+        <>
 
             <CoinRewardDialog
                 lottiePath={'lottie_json/session_streak_3.json'}
@@ -48,7 +43,7 @@ export const PlayerPage = () => {
                 top={isIphoneFullscreenMode ? '0' : undefined}
                 minWidth='100%'
                 height={isIphoneFullscreenMode ? '100vh' : undefined}
-                width={isIphoneFullscreenMode ? '100vw' : 'var(--playerWidth)'}
+                width={isIphoneFullscreenMode ? '100vw' : 'min(min(100vw, 180vh), 1700px)'}
                 noOverflow
                 hideNavbar={isIphoneFullscreenMode}
                 isMinimalMode
@@ -90,6 +85,6 @@ export const PlayerPage = () => {
                         }
                     ]} />
             </ContentPane>
-        </PageRootContainer >
+        </ >
     );
 };

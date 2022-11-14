@@ -1,3 +1,4 @@
+import { CourseUserPresetType, Id } from '@episto/commontypes';
 import { AdminPanelSettings, Build, Business, Equalizer, Home, Person, School, Search, Settings, Subscriptions } from '@mui/icons-material';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
@@ -7,11 +8,10 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
 import { UserDataGridPresetType } from '../components/administration/users/AminUserGridView';
 import { ApplicationRoute, EpistoRoute } from '../models/types';
-import { CourseUserPresetType } from '@episto/commontypes';
-import { Id } from '@episto/commontypes';
 import { Environment } from '../static/Environemnt';
 import { EpistoIcons } from '../static/EpistoIcons';
 import { translatableTexts } from '../static/translatableTexts';
+import SortIcon from '@mui/icons-material/Sort';
 
 export type ApplicationRoutesType = {
     matchAll: ApplicationRoute;
@@ -36,6 +36,7 @@ export type ApplicationRoutesType = {
         courseRatingRoute: ApplicationRoute<{ courseId: Id<'Course'> }>;
         courseOverviewRoute: ApplicationRoute<{ courseId: Id<'Course'> }>;
     };
+    leaderboardRoute: ApplicationRoute;
     learningRoute: ApplicationRoute & {
         overviewRoute: ApplicationRoute;
         myStatisticsRoute: ApplicationRoute;
@@ -214,6 +215,12 @@ export const getApplicationRoutes = () => {
                 title: translatableTexts.routeTitles.courseOverview,
                 route: new EpistoRoute('/watch', 'course-overview/:courseId'),
             },
+        },
+
+        leaderboardRoute: {
+            title: translatableTexts.routeTitles.leaderboard,
+            route: new EpistoRoute('/', 'leaderboard'),
+            icon: <SortIcon />
         },
 
         learningRoute: {

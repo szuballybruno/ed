@@ -6,7 +6,6 @@ import { Environment } from '../../static/Environemnt';
 import { useIsMobileView, usePaging } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { ContentPane } from '../ContentPane';
-import { PageRootContainer } from '../PageRootContainer';
 import { useRefetchUserAsync } from '../system/AuthenticationFrame';
 import { EpistoPaging } from '../universal/EpistoPaging';
 import { SurveyQuestions } from './SurveyQuestions';
@@ -83,8 +82,7 @@ export const SurveyPage = () => {
     ];
 
     return (
-        <PageRootContainer
-            noMaxWidth>
+        <>
 
             <ContentPane
                 align="center"
@@ -109,6 +107,6 @@ export const SurveyPage = () => {
                     index={slidesState.currentIndex} />
 
             </ContentPane>
-        </PageRootContainer>
+        </>
     );
 };

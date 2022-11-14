@@ -1,3 +1,4 @@
+import { ErrorWithCode } from '@episto/commontypes';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { AuthenticationStateType, useLogInUser } from '../../services/api/authenticationApiService';
@@ -5,7 +6,6 @@ import { CompanyApiService } from '../../services/api/CompanyApiService1';
 import { gradientBackgroundGenerator } from '../../services/core/gradientBackgroundGenerator';
 import { useNavigation } from '../../services/core/navigatior';
 import { useShowErrorDialog } from '../../services/core/notifications';
-import { ErrorWithCode } from '@episto/commontypes';
 import { useIsMobileView } from '../../static/frontendHelpers';
 import { useQueryVal } from '../../static/locationHelpers';
 import { Logger } from '../../static/Logger';
@@ -15,7 +15,6 @@ import { EpistoEntry } from '../controls/EpistoEntry';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoGrid } from '../controls/EpistoGrid';
-import { PageRootContainer } from '../PageRootContainer';
 import { AuthenticationStateContext, useRefetchUserAsync } from '../system/AuthenticationFrame';
 import { useAuthorizationContext } from '../system/AuthorizationContext';
 import { LoadingFrame } from '../system/LoadingFrame';
@@ -154,7 +153,7 @@ const LoginScreen = () => {
         };
     }, []);
 
-    return <PageRootContainer noBackground>
+    return <>
 
         <EpistoFlex2
             justify={'center'}
@@ -353,7 +352,7 @@ const LoginScreen = () => {
                     </EpistoFlex2>;
                 })}
         </EpistoGrid>
-    </PageRootContainer>;
+    </>;
 };
 
 export default LoginScreen;

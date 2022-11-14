@@ -7,6 +7,7 @@ import HomePage from './components/home/HomePage';
 import LearningInsightsPage from './components/learningInsights/LearningInsightsPage';
 import LoginScreen from './components/login/LoginScreen';
 import NotFound from './components/notFound/NotFound';
+import { LeaderboardPage } from './components/pages/leaderboard/LeaderboardPage';
 import { PlayerPage } from './components/player/PlayerPage';
 import { RegisterViaActivationCodePage } from './components/RegisterViaActivationCodePage';
 import { RegistrationPage } from './components/RegistrationPage';
@@ -74,6 +75,10 @@ export const MainRouting = () => {
                 {
                     route: applicationRoutes.settingsRoute,
                     element: <UserSettingsPage />,
+                },
+                {
+                    route: applicationRoutes.leaderboardRoute,
+                    element: <LeaderboardPage />,
                 },
                 {
                     route: applicationRoutes.learningRoute,

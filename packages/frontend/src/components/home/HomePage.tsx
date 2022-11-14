@@ -3,7 +3,6 @@ import { useContext, useState } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { useOverviewPageDTO } from '../../services/api/miscApiService';
 import { useActiveCourses } from '../../services/api/userProgressApiService';
-import browser from '../../services/core/browserSniffingService';
 import { useNavigation } from '../../services/core/navigatior';
 import { Environment } from '../../static/Environemnt';
 import { EpistoIcons } from '../../static/EpistoIcons';
@@ -13,9 +12,8 @@ import { ContentPane } from '../ContentPane';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
-import { PlaylistItem } from '../playlist/PlaylistItem';
 import { LeftPane } from '../LeftPane';
-import { PageRootContainer } from '../PageRootContainer';
+import { PlaylistItem } from '../playlist/PlaylistItem';
 import { CurrentUserContext, useRefetchUserAsync } from '../system/AuthenticationFrame';
 import { useCurrentCourseItemCodeContext } from '../system/CurrentCourseItemFrame';
 import { useSetBusy } from '../system/LoadingFrame/BusyBarContext';
@@ -98,7 +96,6 @@ const HomePage = () => {
 
     const [isSmallerThan1320] = useMediaQuery('(max-width: 1320px)');
     const isMobile = useIsMobileView();
-    const isIPhone = browser.isIPhone;
     const [coinsAcquired, setCoinsAcquired] = useState(false);
 
     const { activeCourses } = useActiveCourses();
@@ -106,10 +103,7 @@ const HomePage = () => {
     const { currentCourseItemCode } = useCurrentCourseItemCodeContext();
     const isAnyCourseInProgess = !!currentCourseItemCode;
 
-    return <PageRootContainer
-        maxH={isIPhone ? '100vh' : undefined}
-        maxW={isIPhone ? '100vw' : undefined}
-        overflow={isIPhone ? 'hidden' : undefined}>
+    return <>
 
         {/* sidebar / left pane */}
         {!isMobile && <LeftPane>
@@ -231,7 +225,7 @@ const HomePage = () => {
                     activeCoursesPaging={activeCoursesPaging} />
             </DashboardSection>}
         </ContentPane>
-    </PageRootContainer >;
+    </ >;
 };
 
 export default HomePage;

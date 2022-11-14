@@ -3,7 +3,6 @@ import { useIsMobileView } from '../../static/frontendHelpers';
 import { ContentPane } from '../ContentPane';
 import { LeftPane } from '../LeftPane';
 import { NavigationLinkList } from '../NavigationLinkList';
-import { PageRootContainer } from '../PageRootContainer';
 import { EpistoRoutes } from '../universal/EpistoRoutes';
 import { CoinTransactions } from './CoinTransactions';
 import { Preferences } from './Preferences';
@@ -12,7 +11,7 @@ export const UserSettingsPage = () => {
 
     const isMobile = useIsMobileView();
 
-    return <PageRootContainer>
+    return <>
 
         {!isMobile && <LeftPane
             padding="20px"
@@ -40,5 +39,5 @@ export const UserSettingsPage = () => {
                     }
                 ]} />
         </ContentPane>
-    </PageRootContainer>;
+    </>;
 };

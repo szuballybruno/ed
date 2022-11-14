@@ -1,8 +1,8 @@
+import { Id } from '@episto/commontypes';
 import { useEffect, useState } from 'react';
 import { CourseApiService } from '../../services/api/courseApiService';
 import { useNavigation } from '../../services/core/navigatior';
 import { useShowErrorDialog } from '../../services/core/notifications';
-import { Id } from '@episto/commontypes';
 import { Environment } from '../../static/Environemnt';
 import { formatTimespan, useImageColor } from '../../static/frontendHelpers';
 import { useIntParam } from '../../static/locationHelpers';
@@ -19,7 +19,6 @@ import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoTabs } from '../controls/EpistoTabs';
 import { EpistoHeader } from '../EpistoHeader';
-import { PageRootContainer } from '../PageRootContainer';
 import { ProfileImage } from '../ProfileImage';
 import { useCurrentUserId } from '../system/AuthenticationFrame';
 import { FlexListItem } from '../universal/FlexListItem';
@@ -133,10 +132,8 @@ const CourseDetailsPage = () => {
         ]
         : [];
 
-    return <PageRootContainer
-        noBackground
-        background={`linear-gradient(160deg, ${color}, white)`}>
-
+    return <>
+        
         <AdminUserCourseContentDialog
             dialogLogic={adminCourseContentDialogLogic} />
 
@@ -416,7 +413,7 @@ const CourseDetailsPage = () => {
             </EpistoFlex2>
 
         </ContentPane>
-    </PageRootContainer>;
+    </>;
 };
 
 export default CourseDetailsPage;

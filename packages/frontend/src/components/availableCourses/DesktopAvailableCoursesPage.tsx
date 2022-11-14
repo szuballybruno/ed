@@ -1,9 +1,8 @@
 import { GridItem } from '@chakra-ui/layout';
 import { useMediaQuery } from '@chakra-ui/react';
-import { Select, ToggleButton, ToggleButtonGroup } from '@mui/material';
-import { AvailableCourseDTO } from '@episto/communication';
-import { CourseCategoryDTO } from '@episto/communication';
 import { OrderType } from '@episto/commontypes';
+import { AvailableCourseDTO, CourseCategoryDTO } from '@episto/communication';
+import { Select, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { translatableTexts } from '../../static/translatableTexts';
 import { ContentPane } from '../ContentPane';
 import { EpistoDiv } from '../controls/EpistoDiv';
@@ -12,7 +11,6 @@ import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoGrid } from '../controls/EpistoGrid';
 import { EpistoSearch } from '../controls/EpistoSearch';
 import { LeftPane } from '../LeftPane';
-import { PageRootContainer } from '../PageRootContainer';
 import { CourseTile } from '../universal/CourseTile';
 import { AvailableCoursesPageFilterType } from './AvailableCoursesPage';
 
@@ -39,7 +37,7 @@ export const DesktopAvailableCoursesPage = ({
 
     const [isSmallerThan1400] = useMediaQuery('(min-width: 1400px)');
 
-    return <PageRootContainer>
+    return <>
 
         <LeftPane>
 
@@ -232,5 +230,5 @@ export const DesktopAvailableCoursesPage = ({
                 </EpistoDiv>
             </EpistoFlex2>
         </ContentPane>
-    </PageRootContainer >;
+    </ >;
 };

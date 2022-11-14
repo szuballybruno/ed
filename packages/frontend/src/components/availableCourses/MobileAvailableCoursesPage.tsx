@@ -1,10 +1,8 @@
-import { AvailableCourseDTO } from '@episto/communication';
 import { Id } from '@episto/commontypes';
+import { AvailableCourseDTO } from '@episto/communication';
 import { ContentPane } from '../ContentPane';
-import { PageRootContainer } from '../PageRootContainer';
 import { MobileHeader } from '../universal/MobileHeader';
 import { MobileCourseTile } from './MobileCourseTile';
-
 
 export const MobileAvailableCoursesPage = (props: {
     courses: AvailableCourseDTO[],
@@ -14,7 +12,7 @@ export const MobileAvailableCoursesPage = (props: {
 
     const { courses, handlePlayCourse, navigateToDetailsPage } = props;
 
-    return <PageRootContainer>
+    return <>
 
         <ContentPane
             px='20px'
@@ -34,5 +32,5 @@ export const MobileAvailableCoursesPage = (props: {
                         navigateToDetailsPage={navigateToDetailsPage} />;
                 })}
         </ContentPane>
-    </PageRootContainer>;
+    </>;
 };

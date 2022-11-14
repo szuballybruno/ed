@@ -1,7 +1,18 @@
 import { EpistoFlex2, EpistoFlex2Props } from './controls/EpistoFlex';
 import Navbar from './navbar/Navbar';
 
-export const ContentPane = (props: {
+export const ContentPane = ({
+    children,
+    noPadding,
+    showLogo,
+    noMaxWidth,
+    isNavbarLowHeight,
+    navbarBg,
+    isMinimalMode,
+    hideNavbar,
+    noOverflow,
+    ...css
+}: {
     noPadding?: boolean,
     navbarBg?: any,
     hideNavbar?: boolean,
@@ -12,11 +23,9 @@ export const ContentPane = (props: {
     noOverflow?: boolean
 } & EpistoFlex2Props) => {
 
-    const { children, noPadding, showLogo, noMaxWidth, isNavbarLowHeight, navbarBg, isMinimalMode, hideNavbar, noOverflow, ...css } = props;
-
     return (
         <EpistoFlex2
-            id="contentPane"
+            id={ContentPane.name}
             padding={noPadding ? undefined : '0 30px 0px 30px'}
             flex="1"
             maxWidth={noMaxWidth ? undefined : '1400px'}

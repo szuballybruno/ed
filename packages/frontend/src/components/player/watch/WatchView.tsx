@@ -249,7 +249,6 @@ export const WatchView = ({
             align="center">
 
             <VideoPlayer
-                //height="calc((var(--playerWidth) - 420px) / 1.80)"
                 className="largeSoftShadow"
                 videoItem={videoPlayerData}
                 videoPlayerState={videoPlayerState}>

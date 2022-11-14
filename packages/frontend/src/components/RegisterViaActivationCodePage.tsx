@@ -12,7 +12,6 @@ import { EpistoEntryNew, useEpistoEntryState } from './controls/EpistoEntryNew';
 import { EpistoFlex2 } from './controls/EpistoFlex';
 import { EpistoFont } from './controls/EpistoFont';
 import { validateAllEntries } from './controls/logic/controlsLogic';
-import { PageRootContainer } from './PageRootContainer';
 import { LoadingFrame } from './system/LoadingFrame';
 import { PasswordEntry, usePasswordEntryState } from './universal/PasswordEntry';
 
@@ -115,7 +114,7 @@ export const RegisterViaActivationCodePage = () => {
         navigate2(applicationRoutes.homeRoute);
     });
 
-    return <PageRootContainer>
+    return <>
 
         <EpistoFlex2
             justify={'center'}
@@ -292,5 +291,5 @@ export const RegisterViaActivationCodePage = () => {
                 </LoadingFrame>
             </EpistoFlex2>
         </EpistoFlex2>
-    </PageRootContainer>;
+    </>;
 };
