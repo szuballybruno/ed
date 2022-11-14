@@ -139,9 +139,8 @@ const CourseDetailsPage = () => {
 
         <ContentPane
             noMaxWidth
-            direction="column"
             overflowY="scroll"
-            p="0 100px 0 100px">
+            padding="0 100px 0 100px">
 
             {/* Title */}
             <EpistoHeader

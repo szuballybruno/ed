@@ -51,8 +51,6 @@ export const SetNewPasswordPage = () => {
         <ContentPane
             hideNavbar
             navbarBg="white"
-            flex='1'
-            className="whall"
             justify='center'
             align='center'>
 

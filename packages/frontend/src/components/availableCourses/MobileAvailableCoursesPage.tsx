@@ -15,8 +15,7 @@ export const MobileAvailableCoursesPage = (props: {
     return <>
 
         <ContentPane
-            px='20px'
-            pb='80px'
+            padding='0 20px 80px 20px'
             noPadding
             noMaxWidth>
 

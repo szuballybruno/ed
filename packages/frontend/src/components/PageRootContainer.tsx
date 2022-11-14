@@ -28,24 +28,24 @@ type ContentPanePropsType = {
     noOverflow?: boolean
 } & EpistoFlex2Props;
 
-export const ContentPaneRoot = ({
-    contentElementRef,
-    noPadding,
-    showLogo,
-    noMaxWidth,
-    isNavbarLowHeight,
-    navbarBg,
-    isMinimalMode,
-    hideNavbar,
-    noOverflow,
-    padding,
-    ...css
-}: ContentPanePropsType & { contentElementRef }) => {
+export const ContentPaneRoot = ({ contextValue }: { contextValue: LeftSidebarContextType }) => {
+
+    const {
+        noPadding,
+        showLogo,
+        noMaxWidth,
+        isNavbarLowHeight,
+        navbarBg,
+        isMinimalMode,
+        hideNavbar,
+        noOverflow,
+        padding
+    } = contextValue.contentPaneProps;
 
     return (
         <EpistoFlex2
             id={ContentPaneRoot.name}
-            ref={contentElementRef}
+            ref={contextValue.contentElementRef}
             direction="column"
             flex="1"
             overflow="hidden"
@@ -56,9 +56,7 @@ export const ContentPaneRoot = ({
                 : padding
                     ? padding
                     : '0 30px 0px 30px'}
-            maxWidth={noMaxWidth ? undefined : '1400px'}
-        // {...css}
-        >
+            maxWidth={noMaxWidth ? undefined : '1400px'}>
 
             {!hideNavbar && <Navbar
                 isLowHeight={isNavbarLowHeight}
@@ -77,7 +75,6 @@ const LeftPaneHost = ({ contextValue }: { contextValue: LeftSidebarContextType }
         <EpistoFlex2
             ref={leftPaneElementRef}
             id="rootPortal"
-            transition="0.1s"
             bg="blue"
             height="100%"
             overflow="hidden"
@@ -113,7 +110,10 @@ export const PageRootContainer = ({
     const contentElementRef = useRef<HTMLDivElement>(null);
     const [leftPaneShowing, setLeftPaneShowing] = useState(false);
     const [isCollapsed, setCollapsed] = useState(false);
-    const [contentPaneProps, setContentPaneProps] = useState<ContentPanePropsType>({});
+    const [rawContentPaneProps, setContentPaneProps] = useState<ContentPanePropsType>({});
+
+    const contentPaneProps = HelperHooks
+        .useMemoize(rawContentPaneProps);
 
     const contextValue: LeftSidebarContextType = useMemo(() => ({
         leftPaneElementRef,
@@ -167,11 +167,9 @@ export const PageRootContainer = ({
         <LeftPaneHost
             contextValue={contextValue} />
 
-        {/* content */}
+        {/* content host */}
         <ContentPaneRoot
-            contentElementRef={contentElementRef}
-            {...contentPaneProps}>
-        </ContentPaneRoot>
+            contextValue={contextValue} />
 
         <LeftSidebarElementRefContext.Provider
             value={contextValue}>

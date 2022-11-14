@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { ReactNode, useContext, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { EpistoFlex2Props } from './controls/EpistoFlex';
 import { LeftSidebarElementRefContext } from './PageRootContainer';
@@ -12,9 +12,25 @@ type ContentPanePropsType = {
     showLogo?: boolean,
     isMinimalMode?: boolean,
     noOverflow?: boolean
-} & EpistoFlex2Props;
+    children: ReactNode;
+    align?: EpistoFlex2Props['align'];
+    justify?: EpistoFlex2Props['justify'];
+    padding?: EpistoFlex2Props['padding'];
+    margin?: EpistoFlex2Props['margin'];
+    maxHeight?: EpistoFlex2Props['maxHeight'];
+    minHeight?: EpistoFlex2Props['minHeight'];
+    position?: EpistoFlex2Props['position'];
+    top?: EpistoFlex2Props['top'];
+    minWidth?: EpistoFlex2Props['minWidth'];
+    height?: EpistoFlex2Props['height'];
+    width?: EpistoFlex2Props['width'];
+    overflowY?: EpistoFlex2Props['overflowY'];
+};
 
-export const ContentPane = (props: ContentPanePropsType) => {
+export const ContentPane = ({
+    children,
+    ...props
+}: ContentPanePropsType) => {
 
     const context = useContext(LeftSidebarElementRefContext);
 
@@ -30,5 +46,5 @@ export const ContentPane = (props: ContentPanePropsType) => {
     if (!context?.contentElementRef?.current)
         return <></>;
 
-    return createPortal(props.children, context.contentElementRef.current);
+    return createPortal(children, context.contentElementRef.current);
 };
