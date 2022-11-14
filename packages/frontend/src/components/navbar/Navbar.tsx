@@ -15,13 +15,12 @@ const Navbar = memo((props: {
 
     const { backgroundContent, hideLinks, isLowHeight, isMinimalMode, showLogo } = props;
     const isMobile = useIsMobileView();
-
-    const { currentCourseItemCode } = useCurrentCourseItemCodeContext();
-
+    const cc = useCurrentCourseItemCodeContext();
+    
     // render desktop
     const renderDesktopNavbar = () => <DesktopNavbar
         backgroundContent={backgroundContent}
-        currentCourseItemCode={currentCourseItemCode}
+        currentCourseItemCode={cc.currentCourseItemCode}
         hideLinks1={!!hideLinks}
         isLowHeight={isLowHeight}
         isMinimalMode={isMinimalMode}

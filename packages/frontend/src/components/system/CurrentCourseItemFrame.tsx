@@ -1,4 +1,4 @@
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useMemo } from 'react';
 import { PropsWithChildren } from '../../static/frontendHelpers';
 import { useServiceContainerContext } from '../../static/serviceContainer';
 
@@ -9,10 +9,13 @@ const useCurrentCourseItemContextLogic = () => {
     const { currentCourseItemCode, refetchCurrentCourseItemCode } = miscApiService
         .useCurrentCourseItemCode() ?? { currentCourseItemCode: null };
 
-    return {
+    return useMemo(() => ({
         refetchCurrentCourseItemCode,
         currentCourseItemCode
-    };
+    }), [
+        refetchCurrentCourseItemCode,
+        currentCourseItemCode
+    ]);
 };
 
 type CurrentCourseItemContextLogicType = ReturnType<typeof useCurrentCourseItemContextLogic>;
