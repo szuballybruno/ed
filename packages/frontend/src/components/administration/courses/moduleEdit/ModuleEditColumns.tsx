@@ -3,13 +3,17 @@ import { Id } from '@episto/commontypes';
 import { EpistoDataGridColumnBuilder } from '../../../controls/EpistoDataGrid';
 import { IXMutatorFunctions } from '../../../lib/XMutator/XMutatorCore';
 import { EpistoImageSelector } from '../../../universal/EpistoImageSelector';
+import { EpistoButton } from '../../../controls/EpistoButton';
+import { EpistoIcons } from '../../../../static/EpistoIcons';
 
 export type ModuleEditRowType = ModuleEditDTO;
 
 export const useModuleEditColumns = ({
-    mutatorFunctions
+    mutatorFunctions,
+    canDelete
 }: {
-    mutatorFunctions: IXMutatorFunctions<ModuleEditDTO, 'moduleVersionId', Id<'ModuleVersion'>>
+    mutatorFunctions: IXMutatorFunctions<ModuleEditDTO, 'moduleVersionId', Id<'ModuleVersion'>>,
+    canDelete: (moduleVersionId: Id<'ModuleVersion'>) => boolean
 }) => {
 
     const getImageSrc = (value: string | null): string => {
@@ -71,6 +75,18 @@ export const useModuleEditColumns = ({
                     field,
                     newValue: value
                 })
+        })
+        .add({
+            field: 'moduleVersionId',
+            headerName: '',
+            renderCell: ({ value }) => (
+                <EpistoButton
+                    isDisabled={!canDelete(value)}
+                    onClick={() => mutatorFunctions
+                        .remove(value)}>
+                    <EpistoIcons.Delete />
+                </EpistoButton>
+            )
         })
         .getColumns();
 };

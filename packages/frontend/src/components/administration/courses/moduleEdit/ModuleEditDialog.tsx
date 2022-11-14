@@ -20,16 +20,14 @@ export const ModuleEditDialog = ({
         handleOk,
         mutatorFunctions,
         dialogLogic,
-        mutatedItems,
-        mutations,
-        isAnyItemsMutated
+        mutatedItems
     } = logic;
 
     const rows = mutatedItems
         .filter(x => !x.isPretestModule)
         .orderBy(x => x.orderIndex);
 
-    const columns = useModuleEditColumns({ mutatorFunctions });
+    const columns = useModuleEditColumns({ mutatorFunctions, canDelete });
 
     return (
         <EpistoDialog
