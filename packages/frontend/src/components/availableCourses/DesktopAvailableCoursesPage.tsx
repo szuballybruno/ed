@@ -1,8 +1,8 @@
 import { GridItem } from '@chakra-ui/layout';
-import { useMediaQuery } from '@chakra-ui/react';
 import { OrderType } from '@episto/commontypes';
 import { AvailableCourseDTO, CourseCategoryDTO } from '@episto/communication';
 import { Select, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { Responsivity } from '../../helpers/responsivity';
 import { translatableTexts } from '../../static/translatableTexts';
 import { ContentPane } from '../ContentPane';
 import { EpistoDiv } from '../controls/EpistoDiv';
@@ -35,7 +35,8 @@ export const DesktopAvailableCoursesPage = ({
     handlePlayCourse: (course: AvailableCourseDTO) => void
 }) => {
 
-    const [isSmallerThan1400] = useMediaQuery('(min-width: 1400px)');
+    const isLargerThan1400 = Responsivity
+        .useIsLargerThan('1400px');
 
     return <>
 
@@ -106,7 +107,7 @@ export const DesktopAvailableCoursesPage = ({
                 direction="column"
                 align="stretch"
                 width="100%"
-                minWidth={isSmallerThan1400 ? '1060px' : undefined}>
+                minWidth={isLargerThan1400 ? '1060px' : undefined}>
 
                 {/* search */}
                 <EpistoFlex2

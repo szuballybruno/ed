@@ -1,6 +1,6 @@
-import { useMediaQuery } from '@chakra-ui/react';
 import { ReactNode } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
+import { Responsivity } from '../../helpers/responsivity';
 import { ApplicationRoute } from '../../models/types';
 import { useNavigation } from '../../services/core/navigatior';
 import { Environment } from '../../static/Environemnt';
@@ -68,12 +68,15 @@ export const DesktopNavbar = ({
     const { isAuthenticated } = useAuthorizationContext();
 
     // media
-    const [isSmallerThan1180] = useMediaQuery('(min-width: 1180px)');
-    const [isSmallerThan1000] = useMediaQuery('(min-width: 1000px)');
+    const isLargerThan1180 = Responsivity
+        .useIsLargerThan('1180px');
+
+    const isLargerThan1000 = Responsivity
+        .useIsLargerThan('1000px');
 
     // util
     const hideLinks = hideLinks1 || !isAuthenticated;
-    const isMidMode = (isSmallerThan1180 && !showLogo) || (isSmallerThan1000 && showLogo);
+    const isMidMode = (isLargerThan1180 && !showLogo) || (isLargerThan1000 && showLogo);
 
     // funcs
     const MinimalRender = () => {

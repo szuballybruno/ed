@@ -1,6 +1,7 @@
-import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, useMediaQuery } from '@chakra-ui/react';
+import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel } from '@chakra-ui/react';
 import { InfoOutlined } from '@mui/icons-material';
 import { useRef, useState } from 'react';
+import { Responsivity } from '../../helpers/responsivity';
 import { SurveyApiService } from '../../services/api/SurveyApiService';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
@@ -25,7 +26,8 @@ export const PersonalityAssessment = (props: EpistoFlex2Props) => {
 
     const [isShowHelperPopper, setIsShowHelperPopper] = useState(false);
 
-    const [isSmallerThan1320] = useMediaQuery('(max-width: 1320px)');
+    const isSmallerThan1320 = Responsivity
+        .useIsSmallerThan('1320px');
 
     const personalityDescriptionAccordions = (personalityData?.personalityTraitCategories ?? [])
         .map(x => ({

@@ -1,4 +1,3 @@
-import { useMediaQuery } from '@chakra-ui/react';
 import { useContext, useState } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { Responsivity } from '../../helpers/responsivity';
@@ -95,7 +94,9 @@ const HomePage = () => {
     const user = useContext(CurrentUserContext);
     const { refetchAuthHandshake } = useRefetchUserAsync();
 
-    const [isSmallerThan1320] = useMediaQuery('(max-width: 1320px)');
+    const isSmallerThan1320 = Responsivity
+        .useIsSmallerThan('1320px');
+
     const { isMobile } = Responsivity
         .useIsMobileView();
     const [coinsAcquired, setCoinsAcquired] = useState(false);

@@ -1,8 +1,9 @@
-import { GridItem, useMediaQuery } from '@chakra-ui/react';
+import { GridItem } from '@chakra-ui/react';
 import { Id } from '@episto/commontypes';
 import { ShopItemDTO } from '@episto/communication';
 import { Select, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { useEffect, useState } from 'react';
+import { Responsivity } from '../../helpers/responsivity';
 import { useCoinBalance } from '../../services/api/coinTransactionsApiService';
 import { useShopItemCategories, useShopItems } from '../../services/api/shopApiService';
 import { translatableTexts } from '../../static/translatableTexts';
@@ -31,7 +32,8 @@ export const ShopPage = () => {
 
     const confirmationDilaogLogic = useEpistoDialogLogic('confirm');
 
-    const [isSmallerThan1400] = useMediaQuery('(min-width: 1400px)');
+    const isLargerThan1400 = Responsivity
+        .useIsLargerThan('1400px');
 
     const filteredItems = shopItems
         .filter(x => x.shopItemCategoryId === categoryFilterId || categoryFilterId === Id.create<'ShopItemCategory'>(-1));
@@ -128,7 +130,7 @@ export const ShopPage = () => {
                 pb="40px"
                 width="100%"
                 className="whall"
-                minWidth={isSmallerThan1400 ? '1060px' : undefined}>
+                minWidth={isLargerThan1400 ? '1060px' : undefined}>
 
                 {/* search */}
                 <EpistoFlex2

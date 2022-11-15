@@ -8,7 +8,8 @@
   "scripts": {
     "build": "tsc",
     "start": "nodemon -x node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm src/server.ts",
-    "cleaninstall": "yarn --force --no-lockfile"
+    "cleaninstall": "yarn --force --no-lockfile",
+    "lintfix": "eslint --fix"
   },
   "dependencies": {
     "@episto/commontypes": "1.0.0",

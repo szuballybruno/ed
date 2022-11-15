@@ -24,8 +24,6 @@ jsExtensions.initJsExtensions();
 
 const App: FC = () => {
 
-    console.log('rendering root');
-
     return (
         <FrameRendererRoot>
             <PageRootContainer>

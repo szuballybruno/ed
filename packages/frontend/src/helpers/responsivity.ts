@@ -56,10 +56,24 @@ const useIsLandscape = () => {
     return { isLandscape: useScreenOrientation() === 90 };
 };
 
+const useIsSmallerThan = (value: string) => {
+
+    const [isSmaller] = useMediaQuery(`(max-width: ${value})`);
+    return isSmaller;
+};
+
+const useIsLargerThan = (value: string) => {
+
+    const [isLarger] = useMediaQuery(`(min-width: ${value})`);
+    return isLarger;
+};
+
 export const Responsivity = {
     useIsIPhone,
     useIsMobileView,
     useIsScreenWiderThan,
     useScreenOrientation,
-    useIsLandscape
+    useIsLandscape,
+    useIsSmallerThan,
+    useIsLargerThan
 };
