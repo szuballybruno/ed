@@ -10,23 +10,57 @@ import { EpistoConinImage } from '../../universal/EpistoCoinImage';
 
 const Item = ({ item }: { item: LeaderboardListItemDTO }) => {
 
+    const bg = item.rank === 1
+        ? 'gold'
+        : item.rank === 2
+            ? '#ffe7a5'
+            : item.rank === 3
+                ? '#e9c4aa'
+                : undefined;
+
     return (
-        <EpistoFlex2>
+        <EpistoFlex2
+            padding="10px"
+            bg={bg}
+            flex="1">
+
+            {/* rank */}
+            <EpistoFont
+                style={{
+                    flex: '1'
+                }}>
+
+                {item.rank}
+            </EpistoFont>
 
             {/* name */}
-            <EpistoFont>
+            <EpistoFont
+                style={{
+                    flex: '4'
+                }}>
+
                 {item.name}
             </EpistoFont>
 
             {/* coins */}
-            <EpistoFlex2>
+            <EpistoFlex2
+                flex='1'>
 
                 <EpistoConinImage />
 
-                <EpistoFont>
+                <EpistoFont
+                    margin={{
+                        left: 'px10'
+                    }}>
                     {item.acquiredCoins}
                 </EpistoFont>
             </EpistoFlex2>
+
+            {/* etc */}
+            <EpistoFlex2
+                flex='20'>
+            </EpistoFlex2>
+
         </EpistoFlex2>
     );
 };
@@ -45,28 +79,34 @@ export const LeaderboardPage = () => {
             <ContentPane
                 noMaxWidth>
 
-                <EpistoSelect
-                    items={[
-                        'daily',
-                        'weekly',
-                        'monthly'
-                    ] as LeaderboardPeriodType[]}
-                    defaultValue={'weekly'}
-                    getCompareKey={x => x}
-                    getDisplayValue={x => x}
-                    onSelected={setPeriod} />
-
                 <EpistoFlex2
-                    className="whall"
-                    bg="white"
-                    direction="column">
+                    margin="0 auto 0 auto"
+                    direction="column"
+                    width="90%">
 
-                    {leaderboardList
-                        .map((leaderboardItem, index) => <Item
-                            key={index}
-                            item={leaderboardItem} />)}
+                    <EpistoSelect
+                        items={[
+                            'daily',
+                            'weekly',
+                            'monthly'
+                        ] as LeaderboardPeriodType[]}
+                        defaultValue={'weekly'}
+                        getCompareKey={x => x}
+                        getDisplayValue={x => x}
+                        onSelected={setPeriod} />
+
+                    <EpistoFlex2
+                        className="whall"
+                        bg="white"
+                        direction="column">
+
+                        {leaderboardList
+                            .map((leaderboardItem, index) => <Item
+                                key={index}
+                                item={leaderboardItem} />)}
+                    </EpistoFlex2>
+
                 </EpistoFlex2>
-
             </ContentPane>
         </>
     );

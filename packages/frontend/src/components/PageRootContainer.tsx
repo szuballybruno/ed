@@ -173,7 +173,7 @@ const LeftPaneHost = memo(({ contextValue }: { contextValue: PageRootContainerCo
 }, (prev, current) => {
 
     return ObjectComparer
-        .isEqual(prev, current, console.log);
+        .isEqual(prev, current);
 });
 
 export const LeftSidebarElementRefContext = createContext<PageRootContainerContextType | null>(null);

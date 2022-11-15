@@ -36,9 +36,9 @@ res_cte AS
 			THEN u.username
 			ELSE u.first_name
 		END username,
-		COALESCE(ac_pm.acquired_coins, 0) acquired_coins_past_month,
-		COALESCE(ac_pw.acquired_coins, 0) acquired_coins_past_week,
-		COALESCE(ac_pd.acquired_coins, 0) acquired_coins_past_day
+		COALESCE(ac_pm.acquired_coins, 0)::int acquired_coins_past_month,
+		COALESCE(ac_pw.acquired_coins, 0)::int acquired_coins_past_week,
+		COALESCE(ac_pd.acquired_coins, 0)::int acquired_coins_past_day
 	FROM public.user u 
 
 	LEFT JOIN acquired_coins_past_month_cte ac_pm
@@ -52,9 +52,9 @@ res_cte AS
 )
 SELECT
 	res_cte.*,
- 	ROW_NUMBER() OVER (PARTITION BY company_id ORDER BY acquired_coins_past_month DESC) rank_month,
- 	ROW_NUMBER() OVER (PARTITION BY company_id ORDER BY acquired_coins_past_week DESC) rank_week,
- 	ROW_NUMBER() OVER (PARTITION BY company_id ORDER BY acquired_coins_past_day DESC) rank_day
+ 	ROW_NUMBER() OVER (PARTITION BY company_id ORDER BY acquired_coins_past_month DESC)::int rank_month,
+ 	ROW_NUMBER() OVER (PARTITION BY company_id ORDER BY acquired_coins_past_week DESC)::int rank_week,
+ 	ROW_NUMBER() OVER (PARTITION BY company_id ORDER BY acquired_coins_past_day DESC)::int rank_day
 FROM res_cte 
 
 ORDER BY 
