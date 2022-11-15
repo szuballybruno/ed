@@ -49,6 +49,8 @@ res_cte AS
 	
 	LEFT JOIN acquired_coins_past_day_cte ac_pd
 	ON ac_pd.user_id = u.id
+	
+	WHERE u.deletion_date IS NULL
 )
 SELECT
 	res_cte.*,
