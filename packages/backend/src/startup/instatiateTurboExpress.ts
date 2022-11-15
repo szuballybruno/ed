@@ -44,6 +44,7 @@ import { TurboExpressBuilder } from './../utilities/XTurboExpress/TurboExpress';
 import { ServiceProviderInitializator } from './initApp';
 import { ServiceProvider } from './serviceDependencyContainer';
 import { TeacherInfoController } from '../api/TeacherInfoController';
+import { LeaderboardController } from '../api/LeaderboardController';
 
 export const actionWrapper: ActionWrapperFunctionType = async (serviceProvider: ServiceProvider, action: () => Promise<any>) => {
 
@@ -146,6 +147,7 @@ export const initTurboExpress = (
         .addController(CourseProgressController)
         .addController(ModuleController)
         .addController(VideoController)
+        .addController(LeaderboardController)
         .addController(QuestionController)
         .build();
 

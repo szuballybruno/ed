@@ -1,6 +1,6 @@
 SELECT 
-	u.id AS user_id, 
-	CASE WHEN SUM(amount) IS NULL THEN 0 ELSE SUM(amount) END AS coin_balance 
+	u.id user_id, 
+	COALESCE(SUM(amount), 0) coin_balance 
 FROM public.user u
 
 LEFT JOIN public.coin_transaction ca

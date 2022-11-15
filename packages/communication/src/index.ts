@@ -1,4 +1,5 @@
 export { ActivationCodeListDTO } from "./ActivationCodeListDTO";
+export { LeaderboardListItemDTO } from "./LeaderboardListItemDTO";
 export * from "./misc/apiRoutes";
 export { AnswerDTO } from "./AnswerDTO";
 export { AnswerEditDTO } from "./AnswerEditDTO";
