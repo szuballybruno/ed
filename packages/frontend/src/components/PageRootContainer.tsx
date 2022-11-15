@@ -1,21 +1,17 @@
-import { createContext, ReactNode, RefObject, useEffect, useMemo, useRef, useState } from 'react';
+import { createContext, memo, ReactNode, RefObject, useEffect, useMemo, useRef, useState } from 'react';
+import { applicationRoutes } from '../configuration/applicationRoutes';
 import { HelperHooks } from '../helpers/hooks';
+import { CompanyApiService } from '../services/api/CompanyApiService1';
 import { gradientBackgroundGenerator } from '../services/core/gradientBackgroundGenerator';
+import { useNavigation } from '../services/core/navigatior';
+import { Environment } from '../static/Environemnt';
 import { useIsMobileView } from '../static/frontendHelpers';
+import { ObjectComparer } from '../static/objectComparer';
 import { EpistoFlex2, EpistoFlex2Props } from './controls/EpistoFlex';
 import { EpistoGrid } from './controls/EpistoGrid';
+import { EpistoImage } from './controls/EpistoImage';
 import Navbar from './navbar/Navbar';
-
-type LeftSidebarContextType = {
-    leftPaneElementRef: RefObject<HTMLDivElement>,
-    contentElementRef: RefObject<HTMLDivElement>,
-    leftPaneShowing: boolean,
-    setLeftPaneShowing: (isShowing: boolean) => void,
-    setCollapsed: (isCollapsed: boolean) => void
-    isCollapsed: boolean;
-    contentPaneProps: ContentPanePropsType,
-    setContentPaneProps: (props: ContentPanePropsType) => void
-};
+import { useAuthorizationContext } from './system/AuthorizationContext';
 
 type ContentPanePropsType = {
     noPadding?: boolean,
@@ -28,7 +24,22 @@ type ContentPanePropsType = {
     noOverflow?: boolean
 } & EpistoFlex2Props;
 
-export const ContentPaneRoot = ({ contextValue }: { contextValue: LeftSidebarContextType }) => {
+type LeftPanePropsType = {
+    isShowing: boolean,
+    isCollapsed: boolean;
+    isHidden: boolean;
+};
+
+type PageRootContainerContextType = {
+    contentElementRef: RefObject<HTMLDivElement>,
+    leftPaneElementRef: RefObject<HTMLDivElement>,
+    leftPaneProps: LeftPanePropsType;
+    contentPaneProps: ContentPanePropsType,
+    setLeftPaneProps: (props: LeftPanePropsType) => void;
+    setContentPaneProps: (props: ContentPanePropsType) => void
+};
+
+export const ContentPaneRoot = ({ contextValue }: { contextValue: PageRootContainerContextType }) => {
 
     const {
         noPadding,
@@ -67,26 +78,105 @@ export const ContentPaneRoot = ({ contextValue }: { contextValue: LeftSidebarCon
     );
 };
 
-const LeftPaneHost = ({ contextValue }: { contextValue: LeftSidebarContextType }) => {
+const LeftPaneHost = memo(({ contextValue }: { contextValue: PageRootContainerContextType }) => {
 
-    const { leftPaneElementRef, isCollapsed, leftPaneShowing } = contextValue;
+    const { leftPaneElementRef, leftPaneProps: { isCollapsed, isHidden, isShowing } } = contextValue;
+
+    const { hasPermission } = useAuthorizationContext();
+    const { navigate2 } = useNavigation();
+    const { companyDetails } = CompanyApiService
+        .useCompanyDetailsByDomain(window.location.origin);
 
     return (
         <EpistoFlex2
-            ref={leftPaneElementRef}
             id="rootPortal"
             bg="blue"
             height="100%"
+            pos="relative"
+            zIndex={2}
             overflow="hidden"
-            flexBasis={leftPaneShowing
+            display={isHidden ? 'none' : undefined}
+            flexBasis={(isShowing && !isHidden)
                 ? isCollapsed
                     ? '100px'
                     : '320px'
-                : '0px'} />
-    );
-};
+                : '0px'} >
 
-export const LeftSidebarElementRefContext = createContext<LeftSidebarContextType | null>(null);
+            <EpistoFlex2
+                id="leftPane"
+                ref={leftPaneElementRef}
+                borderRadius="none"
+                bg="white"
+                direction="column"
+                align="stretch"
+                padding={'25px 15px 0 15px'}
+                className="whall dividerBorderRight"
+                position="relative"
+                boxShadow="3px 0px 15px 5px rgba(0,0,0,0.1)">
+
+                {/* logo link */}
+                {isCollapsed
+                    ? <EpistoFlex2 width="100%"
+                        alignItems={'center'}
+                        justifyContent="center"
+                        mt="10px"
+                        mb="20px">
+                        <img
+                            src={Environment.getAssetUrl('/images/logo_min.svg')}
+                            style={{
+                                height: '50px',
+                                objectFit: 'cover',
+                                cursor: 'pointer',
+                                padding: 0
+                            }}
+                            alt=""
+                            onClick={() => {
+
+                                navigate2(applicationRoutes.homeRoute);
+                            }} />
+                    </EpistoFlex2>
+                    : <EpistoFlex2
+                        width="100%"
+                        alignItems={'center'}
+                        justifyContent="flex-start"
+                        mb="20px">
+
+                        <img
+                            src={Environment.getAssetUrl('/images/logo.svg')}
+                            style={{
+                                height: '50px',
+                                objectFit: 'cover',
+                                cursor: 'pointer',
+                                margin: '10px 10px',
+                                padding: 0
+                            }}
+                            alt=""
+                            onClick={() => {
+
+                                if (hasPermission('BYPASS_SURVEY'))
+                                    navigate2(applicationRoutes.homeRoute);
+                            }} />
+                    </EpistoFlex2>}
+
+                {/* --- portal rendered here --- */}
+            </EpistoFlex2>
+
+            {!isCollapsed && <EpistoImage
+                position='absolute'
+                bottom='20px'
+                left='0'
+                width='100%'
+                padding='20px'
+                src={companyDetails?.logoUrl + ''} />}
+        </EpistoFlex2>
+    );
+}, (prev, current) => {
+
+    return ObjectComparer
+        .isEqual(prev, current, console.log);
+});
+
+export const LeftSidebarElementRefContext = createContext<PageRootContainerContextType | null>(null);
 
 export const PageRootContainer = ({
     children,
@@ -108,23 +198,27 @@ export const PageRootContainer = ({
 
     const leftPaneElementRef = useRef<HTMLDivElement>(null);
     const contentElementRef = useRef<HTMLDivElement>(null);
-    const [leftPaneShowing, setLeftPaneShowing] = useState(false);
-    const [isCollapsed, setCollapsed] = useState(false);
     const [rawContentPaneProps, setContentPaneProps] = useState<ContentPanePropsType>({});
+    const [rawLeftPaneProps, setLeftPaneProps] = useState<LeftPanePropsType>({
+        isCollapsed: false,
+        isShowing: false,
+        isHidden: false
+    });
 
     const contentPaneProps = HelperHooks
         .useMemoize(rawContentPaneProps);
 
-    const contextValue: LeftSidebarContextType = useMemo(() => ({
+    const leftPaneProps = HelperHooks
+        .useMemoize(rawLeftPaneProps);
+
+    const contextValue: PageRootContainerContextType = useMemo(() => ({
         leftPaneElementRef,
         contentElementRef,
-        leftPaneShowing,
-        isCollapsed,
-        setLeftPaneShowing,
-        setCollapsed,
         contentPaneProps,
-        setContentPaneProps
-    }), [isCollapsed, leftPaneElementRef, contentElementRef, leftPaneShowing, contentPaneProps]);
+        leftPaneProps,
+        setContentPaneProps,
+        setLeftPaneProps
+    }), [leftPaneElementRef, contentElementRef, leftPaneProps, contentPaneProps]);
 
     return <EpistoFlex2
         maxH={isIPhone ? '100vh' : undefined}

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef } from 'react';
 import browser from '../services/core/browserSniffingService';
+import { ObjectComparer } from '../static/objectComparer';
 
 const useIsIPhone = () => {
 
@@ -18,19 +19,8 @@ const useMemoize = <T>(obj: T, onChange?: (changedProps: string[]) => void): T =
 
         const refValue = ref.current;
 
-        const changedProps = Object
-            .keys(mem as any)
-            .concat(Object.keys(refValue as any))
-            .groupBy(x => x)
-            .map(x => x.key)
-            .filter(k => {
-
-                const newVal = mem[k];
-                const oldVal = refValue[k];
-                const equal = newVal === oldVal;
-
-                return !equal;
-            });
+        const changedProps = ObjectComparer
+            .compareObjects(refValue, mem);
 
         if (onChange)
             onChange(changedProps);

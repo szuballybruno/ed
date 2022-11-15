@@ -1,15 +1,7 @@
 import { useContext, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { applicationRoutes } from '../configuration/applicationRoutes';
-import { CompanyApiService } from '../services/api/CompanyApiService1';
-import { useNavigation } from '../services/core/navigatior';
-import { Environment } from '../static/Environemnt';
 import { PropsWithChildren } from '../static/frontendHelpers';
-import { EpistoFlex2 } from './controls/EpistoFlex';
-import { EpistoImage } from './controls/EpistoImage';
-import { FlexFloat } from './controls/FlexFloat';
 import { LeftSidebarElementRefContext } from './PageRootContainer';
-import { useAuthorizationContext } from './system/AuthorizationContext';
 
 export const LeftPane = ({
     children,
@@ -20,12 +12,6 @@ export const LeftPane = ({
     hidden?: boolean
 } & PropsWithChildren) => {
 
-    const homeRoute = applicationRoutes.rootHomeRoute;
-    const { hasPermission } = useAuthorizationContext();
-    const { navigate2 } = useNavigation();
-    const { companyDetails } = CompanyApiService
-        .useCompanyDetailsByDomain(window.location.origin);
-
     const contextValue = useContext(LeftSidebarElementRefContext);
 
     useEffect(() => {
@@ -34,10 +20,12 @@ export const LeftPane = ({
             return;
 
         contextValue
-            .setLeftPaneShowing(true);
-
-        contextValue
-            .setCollapsed(!!collapsed);
+            .setLeftPaneProps({
+                ...contextValue.leftPaneProps,
+                isShowing: true,
+                isCollapsed: collapsed === true,
+                isHidden: hidden === true
+            });
 
         /**
          * Important to destroy properly 
@@ -45,9 +33,12 @@ export const LeftPane = ({
         return () => {
 
             contextValue
-                .setLeftPaneShowing(false);
+                .setLeftPaneProps({
+                    ...contextValue.leftPaneProps,
+                    isShowing: false,
+                });
         };
-    }, [collapsed, contextValue]);
+    }, [collapsed, contextValue, hidden]);
 
     if (!contextValue)
         return <></>;
@@ -58,75 +49,75 @@ export const LeftPane = ({
     if (!contextValue.leftPaneElementRef.current)
         return <></>;
 
-    const LeftPaneComponent = (
-        <FlexFloat
-            id="leftPane"
-            display={hidden ? 'none' : undefined}
-            borderRadius="none"
-            bg="white"
-            zIndex={2}
-            direction="column"
-            align="stretch"
-            padding={'25px 15px 0 15px'}
-            className="whall dividerBorderRight"
-            position="relative"
-            boxShadow="3px 0px 15px 5px rgba(0,0,0,0.1)">
+    // const LeftPaneComponent = (
+    //     <FlexFloat
+    //         id="leftPane"
+    //         display={hidden ? 'none' : undefined}
+    //         borderRadius="none"
+    //         bg="white"
+    //         zIndex={2}
+    //         direction="column"
+    //         align="stretch"
+    //         padding={'25px 15px 0 15px'}
+    //         className="whall dividerBorderRight"
+    //         position="relative"
+    //         boxShadow="3px 0px 15px 5px rgba(0,0,0,0.1)">
 
-            {/* logo link */}
-            {collapsed
-                ? <EpistoFlex2 width="100%"
-                    alignItems={'center'}
-                    justifyContent="center"
-                    mt="10px"
-                    mb="20px">
-                    <img
-                        src={Environment.getAssetUrl('/images/logo_min.svg')}
-                        style={{
-                            height: '50px',
-                            objectFit: 'cover',
-                            cursor: 'pointer',
-                            padding: 0
-                        }}
-                        alt=""
-                        onClick={() => {
+    //         {/* logo link */}
+    //         {collapsed
+    //             ? <EpistoFlex2 width="100%"
+    //                 alignItems={'center'}
+    //                 justifyContent="center"
+    //                 mt="10px"
+    //                 mb="20px">
+    //                 <img
+    //                     src={Environment.getAssetUrl('/images/logo_min.svg')}
+    //                     style={{
+    //                         height: '50px',
+    //                         objectFit: 'cover',
+    //                         cursor: 'pointer',
+    //                         padding: 0
+    //                     }}
+    //                     alt=""
+    //                     onClick={() => {
 
-                            navigate2(applicationRoutes.homeRoute);
-                        }} />
-                </EpistoFlex2>
-                : <EpistoFlex2
-                    width="100%"
-                    alignItems={'center'}
-                    justifyContent="flex-start"
-                    mb="20px">
+    //                         navigate2(applicationRoutes.homeRoute);
+    //                     }} />
+    //             </EpistoFlex2>
+    //             : <EpistoFlex2
+    //                 width="100%"
+    //                 alignItems={'center'}
+    //                 justifyContent="flex-start"
+    //                 mb="20px">
 
-                    <img
-                        src={Environment.getAssetUrl('/images/logo.svg')}
-                        style={{
-                            height: '50px',
-                            objectFit: 'cover',
-                            cursor: 'pointer',
-                            margin: '10px 10px',
-                            padding: 0
-                        }}
-                        alt=""
-                        onClick={() => {
+    //                 <img
+    //                     src={Environment.getAssetUrl('/images/logo.svg')}
+    //                     style={{
+    //                         height: '50px',
+    //                         objectFit: 'cover',
+    //                         cursor: 'pointer',
+    //                         margin: '10px 10px',
+    //                         padding: 0
+    //                     }}
+    //                     alt=""
+    //                     onClick={() => {
 
-                            if (hasPermission('BYPASS_SURVEY'))
-                                navigate2(homeRoute);
-                        }} />
-                </EpistoFlex2>}
+    //                         if (hasPermission('BYPASS_SURVEY'))
+    //                             navigate2(homeRoute);
+    //                     }} />
+    //             </EpistoFlex2>}
 
-            {children}
+    //         {children}
 
-            {!collapsed && <EpistoImage
-                position='absolute'
-                bottom='20px'
-                left='0'
-                width='100%'
-                padding='20px'
-                src={companyDetails?.logoUrl + ''} />}
-        </FlexFloat>
-    );
+    //         {!collapsed && <EpistoImage
+    //             position='absolute'
+    //             bottom='20px'
+    //             left='0'
+    //             width='100%'
+    //             padding='20px'
+    //             src={companyDetails?.logoUrl + ''} />}
+    //     </FlexFloat>
+    // );
 
-    return createPortal(LeftPaneComponent, contextValue.leftPaneElementRef.current);
+    return createPortal(children, contextValue.leftPaneElementRef.current);
 };
