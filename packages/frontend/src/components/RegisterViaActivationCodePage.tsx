@@ -1,10 +1,11 @@
 import { useEffect, useMemo } from 'react';
 import { applicationRoutes } from '../configuration/applicationRoutes';
+import { Responsivity } from '../helpers/responsivity';
 import { useRegisterUserViaActivationCode } from '../services/api/registrationApiService';
 import { useNavigation } from '../services/core/navigatior';
 import { showNotification } from '../services/core/notifications';
 import { Environment } from '../static/Environemnt';
-import { useIsMobileView, useTryCatchWrapper } from '../static/frontendHelpers';
+import { useTryCatchWrapper } from '../static/frontendHelpers';
 import { LocationHelpers } from '../static/locationHelpers';
 import { translatableTexts } from '../static/translatableTexts';
 import { EpistoButton } from './controls/EpistoButton';
@@ -23,7 +24,8 @@ export const RegisterViaActivationCodePage = () => {
     } = useRegisterUserViaActivationCode();
 
     const { navigate2 } = useNavigation();
-    const isMobile = useIsMobileView();
+    const { isMobile } = Responsivity
+        .useIsMobileView();
     const query = LocationHelpers
         .useQueryParams<{ activationCode: string }>();
 

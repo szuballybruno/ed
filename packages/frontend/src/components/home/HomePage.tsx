@@ -1,12 +1,13 @@
 import { useMediaQuery } from '@chakra-ui/react';
 import { useContext, useState } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
+import { Responsivity } from '../../helpers/responsivity';
 import { useOverviewPageDTO } from '../../services/api/miscApiService';
 import { useActiveCourses } from '../../services/api/userProgressApiService';
 import { useNavigation } from '../../services/core/navigatior';
 import { Environment } from '../../static/Environemnt';
 import { EpistoIcons } from '../../static/EpistoIcons';
-import { useIsMobileView, usePaging } from '../../static/frontendHelpers';
+import { usePaging } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { ContentPane } from '../ContentPane';
 import { EpistoButton } from '../controls/EpistoButton';
@@ -95,7 +96,8 @@ const HomePage = () => {
     const { refetchAuthHandshake } = useRefetchUserAsync();
 
     const [isSmallerThan1320] = useMediaQuery('(max-width: 1320px)');
-    const isMobile = useIsMobileView();
+    const { isMobile } = Responsivity
+        .useIsMobileView();
     const [coinsAcquired, setCoinsAcquired] = useState(false);
 
     const { activeCourses } = useActiveCourses();

@@ -1,7 +1,7 @@
 import { ExamPlayerDataDTO } from '@episto/communication';
+import { Responsivity } from '../../helpers/responsivity';
 import { Environment } from '../../static/Environemnt';
-import { ArrayBuilder, useIsMobileView } from '../../static/frontendHelpers';
-
+import { ArrayBuilder } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
@@ -18,7 +18,8 @@ export const ExamGreetSlide = (props: {
         startExam
     } = props;
 
-    const isMobile = useIsMobileView();
+    const { isMobile } = Responsivity
+        .useIsMobileView();
 
     return <ExamLayout
         className={!isMobile ? 'whall' : undefined}

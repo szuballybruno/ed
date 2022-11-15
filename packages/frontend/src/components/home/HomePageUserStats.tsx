@@ -1,7 +1,7 @@
 import { ReactNode, useContext } from 'react';
+import { Responsivity } from '../../helpers/responsivity';
 import { useHomePageStats } from '../../services/api/userStatsApiService';
 import { Environment } from '../../static/Environemnt';
-import { useIsMobileView } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoGrid } from '../controls/EpistoGrid';
 import { getProgressFromLagBehind } from '../learningInsights/LearningStatistics';
@@ -46,7 +46,8 @@ export const HomePageUserStats = (props: {
     const { isSmallDesktop } = props;
     const { id } = useContext(CurrentUserContext);
     const { homePageStats } = useHomePageStats();
-    const isMobile = useIsMobileView();
+    const { isMobile } = Responsivity
+        .useIsMobileView();
 
     return <HomePageUserStatsWrapper
         isSmallDesktop={isSmallDesktop}

@@ -1,5 +1,4 @@
 import { ReactNode, useContext, useEffect } from 'react';
-import { createPortal } from 'react-dom';
 import { EpistoFlex2Props } from './controls/EpistoFlex';
 import { LeftSidebarElementRefContext } from './PageRootContainer';
 
@@ -43,8 +42,9 @@ export const ContentPane = ({
             .setContentPaneProps(props);
     }, [context, props]);
 
-    if (!context?.contentElementRef?.current)
-        return <></>;
-
-    return createPortal(children, context.contentElementRef.current);
+    return (
+        <>
+            {children}
+        </>
+    );
 };

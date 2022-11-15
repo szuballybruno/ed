@@ -1,10 +1,10 @@
 import { PlayerDataDTO, PlaylistModuleDTO } from '@episto/communication';
 import { useEffect, useMemo, useState } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
+import { Responsivity } from '../../../helpers/responsivity';
 import { PlayerApiService } from '../../../services/api/PlayerApiService';
-import browser from '../../../services/core/browserSniffingService';
 import { useNavigation } from '../../../services/core/navigatior';
-import { setPageTitle, useIsMobileView } from '../../../static/frontendHelpers';
+import { setPageTitle } from '../../../static/frontendHelpers';
 import { useStringParam } from '../../../static/locationHelpers';
 import { Logger } from '../../../static/Logger';
 import { translatableTexts } from '../../../static/translatableTexts';
@@ -35,7 +35,8 @@ export const WatchSubpage = () => {
     const { setParent, scroll, parentElement } = useScrollIntoView();
     const isShowSidebar = (watchSubpageState === 'watch' || watchSubpageState === 'examStart');
 
-    const isIPhone = browser.isIPhone;
+    const { isIPhone } = Responsivity
+        .useIsIPhone();
     const [isFullscreen] = useVideoPlayerFullscreenContext();
     const isLandscape = window.orientation === 90;
     const isIphoneFullscreenMode = (isFullscreen && isIPhone);
@@ -137,7 +138,8 @@ export const WatchSubpage = () => {
             .openDialog({ descriptorCode });
     };
 
-    const isMobile = useIsMobileView();
+    const { isMobile } = Responsivity
+        .useIsMobileView();
 
     const handleContinueCourse = () => {
 

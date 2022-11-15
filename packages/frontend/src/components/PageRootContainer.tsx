@@ -1,11 +1,12 @@
 import { createContext, memo, ReactNode, RefObject, useEffect, useMemo, useRef, useState } from 'react';
 import { applicationRoutes } from '../configuration/applicationRoutes';
 import { HelperHooks } from '../helpers/hooks';
+import { Responsivity } from '../helpers/responsivity';
 import { CompanyApiService } from '../services/api/CompanyApiService1';
 import { gradientBackgroundGenerator } from '../services/core/gradientBackgroundGenerator';
 import { useNavigation } from '../services/core/navigatior';
 import { Environment } from '../static/Environemnt';
-import { useIsMobileView } from '../static/frontendHelpers';
+import { PropsWithChildren } from '../static/frontendHelpers';
 import { ObjectComparer } from '../static/objectComparer';
 import { EpistoFlex2, EpistoFlex2Props } from './controls/EpistoFlex';
 import { EpistoGrid } from './controls/EpistoGrid';
@@ -39,7 +40,7 @@ type PageRootContainerContextType = {
     setContentPaneProps: (props: ContentPanePropsType) => void
 };
 
-export const ContentPaneRoot = ({ contextValue }: { contextValue: PageRootContainerContextType }) => {
+export const ContentPaneRoot = ({ contextValue, children }: { contextValue: PageRootContainerContextType } & PropsWithChildren) => {
 
     const {
         noPadding,
@@ -56,7 +57,6 @@ export const ContentPaneRoot = ({ contextValue }: { contextValue: PageRootContai
     return (
         <EpistoFlex2
             id={ContentPaneRoot.name}
-            ref={contextValue.contentElementRef}
             direction="column"
             flex="1"
             overflow="hidden"
@@ -74,18 +74,26 @@ export const ContentPaneRoot = ({ contextValue }: { contextValue: PageRootContai
                 showLogo={showLogo}
                 isMinimalMode={isMinimalMode}
                 backgroundContent={navbarBg} />}
+
+            {children}
         </EpistoFlex2>
     );
 };
 
 const LeftPaneHost = memo(({ contextValue }: { contextValue: PageRootContainerContextType }) => {
 
-    const { leftPaneElementRef, leftPaneProps: { isCollapsed, isHidden, isShowing } } = contextValue;
+    const { leftPaneElementRef, leftPaneProps } = contextValue;
+    const { isCollapsed, isShowing } = leftPaneProps;
 
     const { hasPermission } = useAuthorizationContext();
     const { navigate2 } = useNavigation();
     const { companyDetails } = CompanyApiService
         .useCompanyDetailsByDomain(window.location.origin);
+
+    const { isMobile } = Responsivity
+        .useIsMobileView();
+
+    const isHidden = leftPaneProps.isHidden || isMobile;
 
     return (
         <EpistoFlex2
@@ -189,11 +197,12 @@ export const PageRootContainer = ({
         document.title = 'EpistoGram';
     }, []);
 
-    const isMobile = useIsMobileView();
+    const { isMobile } = Responsivity
+        .useIsMobileView();
 
     const gradients = gradientBackgroundGenerator(isMobile ? 'rgba(160, 200, 255, 0.1)' : 'rgba(0, 100, 255, 0.1)');
 
-    const { isIPhone } = HelperHooks
+    const { isIPhone } = Responsivity
         .useIsIPhone();
 
     const leftPaneElementRef = useRef<HTMLDivElement>(null);
@@ -262,13 +271,16 @@ export const PageRootContainer = ({
             contextValue={contextValue} />
 
         {/* content host */}
-        <ContentPaneRoot
-            contextValue={contextValue} />
-
         <LeftSidebarElementRefContext.Provider
             value={contextValue}>
 
-            {children}
+            {/* content pane root */}
+            <ContentPaneRoot
+                contextValue={contextValue} >
+
+                {/* render children  */}
+                {children}
+            </ContentPaneRoot>
         </LeftSidebarElementRefContext.Provider>
     </EpistoFlex2>;
 };

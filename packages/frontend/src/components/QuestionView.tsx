@@ -1,10 +1,9 @@
-import { useEffect, useState } from 'react';
-import { showNotification } from '../services/core/notifications';
-import { AnswerResultDTO } from '@episto/communication';
-import { QuestionDTO } from '@episto/communication';
 import { Id } from '@episto/commontypes';
+import { AnswerResultDTO, QuestionDTO } from '@episto/communication';
+import { useEffect, useState } from 'react';
+import { Responsivity } from '../helpers/responsivity';
+import { showNotification } from '../services/core/notifications';
 import { Environment } from '../static/Environemnt';
-import { useIsMobileView } from '../static/frontendHelpers';
 import { EpistoFlex2, EpistoFlex2Props } from './controls/EpistoFlex';
 import { EpistoFont } from './controls/EpistoFont';
 import { LoadingFramePropsType } from './system/LoadingFrame';
@@ -46,7 +45,8 @@ export const QuesitionView = ({
     const showCoinsAcquired = true;
     const coinsAcquired = coinAcquires
         .firstOrNull(x => x.reason === 'correct_answer');
-    const isMobile = useIsMobileView();
+    const { isMobile } = Responsivity
+        .useIsMobileView();
 
     const [selectedAnswerVersionId, setSelectedAnswerVersionId] = useState<Id<'AnswerVersion'> | null>(null);
 

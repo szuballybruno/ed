@@ -1,9 +1,10 @@
 import { applicationRoutes } from '../../configuration/applicationRoutes';
+import { Responsivity } from '../../helpers/responsivity';
 import { SurveyApiService } from '../../services/api/SurveyApiService';
 import { useNavigation } from '../../services/core/navigatior';
 import { startUserGuide } from '../../services/core/userGuidingService';
 import { Environment } from '../../static/Environemnt';
-import { useIsMobileView, usePaging } from '../../static/frontendHelpers';
+import { usePaging } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { ContentPane } from '../ContentPane';
 import { useRefetchUserAsync } from '../system/AuthenticationFrame';
@@ -18,7 +19,8 @@ export const SurveyPage = () => {
     const { refetchAuthHandshake } = useRefetchUserAsync();
     const { completeSurveyAsync } = SurveyApiService.useCompleteSurvey();
     const isInvitedUser = true;
-    const isMobile = useIsMobileView();
+    const { isMobile } = Responsivity
+        .useIsMobileView();
 
     const { navigate2 } = useNavigation();
 

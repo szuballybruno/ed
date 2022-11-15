@@ -1,11 +1,10 @@
+import { Id, OrderType } from '@episto/commontypes';
+import { AvailableCourseDTO } from '@episto/communication';
 import { useState } from 'react';
+import { Responsivity } from '../../helpers/responsivity';
 import { CourseApiService } from '../../services/api/courseApiService';
 import { useNavigation } from '../../services/core/navigatior';
 import { useShowErrorDialog } from '../../services/core/notifications';
-import { AvailableCourseDTO } from '@episto/communication';
-import { OrderType } from '@episto/commontypes';
-import { Id } from '@episto/commontypes';
-import { useIsMobileView } from '../../static/frontendHelpers';
 import { useSetBusy } from '../system/LoadingFrame/BusyBarContext';
 import { DesktopAvailableCoursesPage } from './DesktopAvailableCoursesPage';
 import { MobileAvailableCoursesPage } from './MobileAvailableCoursesPage';
@@ -36,7 +35,8 @@ const AvailableCoursesPage = () => {
         orderBy
     } = filterProps;
 
-    const isMobile = useIsMobileView();
+    const { isMobile } = Responsivity
+        .useIsMobileView();
 
     const { courses, coursesState, coursesError } = CourseApiService
         .useUserCourses(searchText, filterCategoryId, isFeatured, isRecommended, orderBy);

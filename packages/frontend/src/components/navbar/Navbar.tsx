@@ -1,11 +1,17 @@
 import { memo } from 'react';
-import { useIsMobileView } from '../../static/frontendHelpers';
+import { Responsivity } from '../../helpers/responsivity';
 import { FlexFloat } from '../controls/FlexFloat';
 import { useCurrentCourseItemCodeContext } from '../system/CurrentCourseItemFrame';
 import { DesktopNavbar } from './DesktopNavbar';
 import { MobileNavigation } from './MobileNavigation';
 
-const Navbar = memo((props: {
+const Navbar = memo(({
+    backgroundContent,
+    hideLinks,
+    isLowHeight,
+    isMinimalMode,
+    showLogo
+}: {
     hideLinks?: boolean,
     showLogo?: boolean,
     isLowHeight?: boolean,
@@ -13,10 +19,11 @@ const Navbar = memo((props: {
     backgroundContent?: any
 }) => {
 
-    const { backgroundContent, hideLinks, isLowHeight, isMinimalMode, showLogo } = props;
-    const isMobile = useIsMobileView();
+    const { isMobile } = Responsivity
+        .useIsMobileView();
+
     const cc = useCurrentCourseItemCodeContext();
-    
+
     // render desktop
     const renderDesktopNavbar = () => <DesktopNavbar
         backgroundContent={backgroundContent}

@@ -1,8 +1,9 @@
 import { useMediaQuery } from '@chakra-ui/react';
 import { ArrowBack } from '@mui/icons-material';
 import { ReactNode } from 'react';
+import { Responsivity } from '../../helpers/responsivity';
 import { Environment } from '../../static/Environemnt';
-import { hasValue, isString, useIsMobileView } from '../../static/frontendHelpers';
+import { hasValue, isString } from '../../static/frontendHelpers';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoDiv } from '../controls/EpistoDiv';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
@@ -43,7 +44,10 @@ export const SurveyWrapper = (props: {
     const children = props.children;
     const onNext = props.onNext;
 
-    const isMobile = useIsMobileView();
+    const { isMobile } = Responsivity
+        .useIsMobileView();
+
+    // TODO clarivy
     const [isSmallerThan1400] = useMediaQuery('(min-width: 1350px)');
 
     return <EpistoFlex2

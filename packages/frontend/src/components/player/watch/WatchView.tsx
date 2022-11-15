@@ -3,15 +3,10 @@ import { QuestionDTO, VideoPlayerDataDTO } from '@episto/communication';
 import { Divider } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import { useReactTimer } from '../../../helpers/reactTimer';
+import { Responsivity } from '../../../helpers/responsivity';
 import { StillWatchingDialogMarker } from '../../../models/types';
 import { PlaybackApiService } from '../../../services/api/playbackApiService';
-import {
-    getRandomInteger,
-    isBetweenThreshold,
-    iterate,
-    useIsMobileView,
-    usePaging
-} from '../../../static/frontendHelpers';
+import { getRandomInteger, isBetweenThreshold, iterate, usePaging } from '../../../static/frontendHelpers';
 import { Logger } from '../../../static/Logger';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoButton } from '../../controls/EpistoButton';
@@ -61,7 +56,8 @@ export const WatchView = ({
 }) => {
 
     const { questions } = videoPlayerData;
-    const isMobile = useIsMobileView();
+    const { isMobile } = Responsivity
+        .useIsMobileView();
     const descCommentPaging = usePaging<string>({ items: ['Leírás', 'Hozzászólások'] });
     const [isShowNewDialogsEnabled, setShowNewDialogsEnabled] = useState(true);
     const dialogThresholdSecs = 1;

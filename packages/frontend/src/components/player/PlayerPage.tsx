@@ -1,6 +1,5 @@
 import { applicationRoutes } from '../../configuration/applicationRoutes';
-import browser from '../../services/core/browserSniffingService';
-import { useIsMobileView } from '../../static/frontendHelpers';
+import { Responsivity } from '../../helpers/responsivity';
 import { CoinRewardDialog } from '../CoinRewardDialog';
 import { ContentPane } from '../ContentPane';
 import { useEpistoDialogLogic } from '../universal/epistoDialog/EpistoDialogLogic';
@@ -17,10 +16,14 @@ import { WatchSubpage } from './watch/WatchSubpage';
 
 export const PlayerPage = () => {
 
-    const isMobile = useIsMobileView();
-    const isIPhone = browser.isIPhone;
+    const { isMobile } = Responsivity
+        .useIsMobileView();
+    const { isIPhone } = Responsivity
+        .useIsIPhone();
+    const { isLandscape } = Responsivity
+        .useIsLandscape();
+
     const [isFullscreen] = useVideoPlayerFullscreenContext();
-    const isLandscape = window.orientation === 90;
     const isIphoneFullscreenMode = (isFullscreen && isIPhone && isLandscape);
 
     const coinAcquiredDialogLogic = useEpistoDialogLogic('courseRatingCoinAcquired');

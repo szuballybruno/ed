@@ -1,5 +1,5 @@
 import { applicationRoutes } from '../../configuration/applicationRoutes';
-import { useIsMobileView } from '../../static/frontendHelpers';
+import { Responsivity } from '../../helpers/responsivity';
 import { ContentPane } from '../ContentPane';
 import { LeftPane } from '../LeftPane';
 import { NavigationLinkList } from '../NavigationLinkList';
@@ -9,7 +9,8 @@ import { Preferences } from './Preferences';
 
 export const UserSettingsPage = () => {
 
-    const isMobile = useIsMobileView();
+    const { isMobile } = Responsivity
+        .useIsMobileView();
 
     return <>
 

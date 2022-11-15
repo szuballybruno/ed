@@ -1,11 +1,5 @@
 import { useEffect, useMemo, useRef } from 'react';
-import browser from '../services/core/browserSniffingService';
 import { ObjectComparer } from '../static/objectComparer';
-
-const useIsIPhone = () => {
-
-    return { isIPhone: browser.isIPhone };
-};
 
 const useMemoize = <T>(obj: T, onChange?: (changedProps: string[]) => void): T => {
 
@@ -32,6 +26,5 @@ const useMemoize = <T>(obj: T, onChange?: (changedProps: string[]) => void): T =
 };
 
 export const HelperHooks = {
-    useIsIPhone,
     useMemoize
 };

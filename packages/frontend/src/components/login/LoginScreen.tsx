@@ -1,12 +1,12 @@
 import { ErrorWithCode } from '@episto/commontypes';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
+import { Responsivity } from '../../helpers/responsivity';
 import { AuthenticationStateType, useLogInUser } from '../../services/api/authenticationApiService';
 import { CompanyApiService } from '../../services/api/CompanyApiService1';
 import { gradientBackgroundGenerator } from '../../services/core/gradientBackgroundGenerator';
 import { useNavigation } from '../../services/core/navigatior';
 import { useShowErrorDialog } from '../../services/core/notifications';
-import { useIsMobileView } from '../../static/frontendHelpers';
 import { useQueryVal } from '../../static/locationHelpers';
 import { Logger } from '../../static/Logger';
 import { EpistoButton } from '../controls/EpistoButton';
@@ -41,7 +41,8 @@ const LoginScreen = () => {
 
     const passwordResetDialogLogic = useEpistoDialogLogic('pwreset');
 
-    const isMobile = useIsMobileView();
+    const { isMobile } = Responsivity
+        .useIsMobileView();
 
     // http 
     const { loginUserAsync, loginUserState } = useLogInUser();
