@@ -2,23 +2,19 @@ import { Id } from '@episto/commontypes';
 import { useEffect, useState } from 'react';
 import { CourseApiService } from '../../services/api/courseApiService';
 import { useNavigation } from '../../services/core/navigatior';
-import { useShowErrorDialog } from '../../services/core/notifications';
 import { Environment } from '../../static/Environemnt';
-import { formatTimespan, useImageColor } from '../../static/frontendHelpers';
+import { useImageColor } from '../../static/frontendHelpers';
 import { useIntParam } from '../../static/locationHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
-import {
-    useAdminCourseContentDialogLogic
-} from '../administration/users/adminCourseContentDialog/AdminCourseContentDialogLogic';
-import {
-    AdminUserCourseContentDialog
-} from '../administration/users/adminCourseContentDialog/AdminUserCourseContentDialog';
-import { ContentPane } from '../pageRootContainer/ContentPane';
+import { useAdminCourseContentDialogLogic } from '../administration/users/adminCourseContentDialog/AdminCourseContentDialogLogic';
+import { AdminUserCourseContentDialog } from '../administration/users/adminCourseContentDialog/AdminUserCourseContentDialog';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoTabs } from '../controls/EpistoTabs';
 import { EpistoHeader } from '../EpistoHeader';
+import { ContentPane } from '../pageRootContainer/ContentPane';
+import { RootContainerBackground } from '../pageRootContainer/RootContainerBackground';
 import { ProfileImage } from '../ProfileImage';
 import { useCurrentUserId } from '../system/AuthenticationFrame';
 import { FlexListItem } from '../universal/FlexListItem';
@@ -27,6 +23,7 @@ import { CourseDetailsContentSection } from './CourseDetailsContentSection';
 import { CourseDetailsRequirementsSection } from './CourseDetailsRequirementsSection';
 import { CourseDetailsSummarySection } from './CourseDetailsSummarySection';
 import { CourseDetailsTeacherSection } from './CourseDetailsTeacherSection';
+import { useSidebarInfos } from './SidebarInfos';
 import { TabPanel } from './TabPanel';
 
 const CourseDetailsPage = () => {
@@ -34,16 +31,11 @@ const CourseDetailsPage = () => {
     const courseId = Id
         .create<'Course'>(useIntParam('courseId')!);
     const { continueCourse: playCourse } = useNavigation();
-    const showError = useShowErrorDialog();
-
     const { userId } = useCurrentUserId();
-
     const { courseDetails } = CourseApiService.useCourseDetails(courseId);
     const { colors } = useImageColor(courseDetails?.thumbnailURL!);
-
     const [currentTab, setCurrentTab] = useState(0);
     const [color, setColor] = useState<string>('white');
-
     const { adminCourseContentDialogLogic } = useAdminCourseContentDialogLogic();
 
     useEffect(() => {
@@ -84,56 +76,19 @@ const CourseDetailsPage = () => {
         {
             title: translatableTexts.courseDetails.tabLabels.teacher,
             component: <CourseDetailsTeacherSection courseDetails={courseDetails!} />
-        }/* ,
-        {
-            title: translatableTexts.courseDetails.tabLabels.ratings,
-            component: <CourseDetailsRatingSection />
-        } */
+        }
     ];
 
-    const sidebarInfos = courseDetails
-        ? [
-            {
-                icon: Environment.getAssetUrl('/course_page_icons/right_panel_course_lenght.svg'),
-                name: 'Kurzus hossza',
-                value: formatTimespan(courseDetails!.totalVideoSumLengthSeconds)
-            },
-            {
-                icon: Environment.getAssetUrl('/course_page_icons/right_panel_sections.svg'),
-                name: 'Témakörök száma',
-                value: courseDetails!.totalModuleCount
-            },
-            {
-                icon: Environment.getAssetUrl('/course_page_icons/right_panel_videos.svg'),
-                name: 'Videók száma',
-                value: courseDetails!.totalVideoCount
-            },
-            {
-                icon: Environment.getAssetUrl('/course_page_icons/right_panel_questions.svg'),
-                name: 'Tudást felmérő kérdések',
-                value: courseDetails!.totalVideoQuestionCount
-            },
-            {
-                icon: Environment.getAssetUrl('/course_page_icons/right_panel_language.svg'),
-                name: 'Nyelv',
-                value: courseDetails!.language
-            },
-            {
-                icon: Environment.getAssetUrl('/course_page_icons/right_panel_enrolled.svg'),
-                name: 'Hányan végezték el eddig',
-                value: courseDetails!.previouslyCompletedCount
-            },
-            {
-                icon: Environment.getAssetUrl('/course_page_icons/right_panel_updated.svg'),
-                name: 'Frissítve',
-                value: new Date(courseDetails!.modificationDate)
-                    .toLocaleDateString()
-            }
-        ]
-        : [];
+    const sidebarInfos = useSidebarInfos(courseDetails);
 
     return <>
-        
+
+        <RootContainerBackground>
+            <EpistoFlex2
+                className="whall"
+                bg={`linear-gradient(160deg, ${color}, white)`} />
+        </RootContainerBackground>
+
         <AdminUserCourseContentDialog
             dialogLogic={adminCourseContentDialogLogic} />
 
@@ -228,47 +183,9 @@ const CourseDetailsPage = () => {
                                 selectedTabKey={currentTab}
                                 onChange={setCurrentTab} />
                         </EpistoFlex2>
-                        {/* // className="roundBorders"
-                                    // TabIndicatorProps={{
-                                    //     style: {
-                                    //         display: 'none',
-                                    //     },
-                                    // }}
-                                    // sx={{
-                                    //     '&.MuiTabs-root': {
-                                    //         //background: "var(--transparentIntenseBlue85)",
-                                    //         display: 'flex',
-                                    //         alignItems: 'center',
-                                    //         justifyContent: 'center',
-                                    //         height: 45,
-                                    //         minHeight: 0
-                                    //     }
-                                    // }}
-                                        // sx={{
-                                        //     '&.MuiTab-root': {
-                                        //         color: '#444',
-                                        //         cursor: 'pointer',
-                                        //         backgroundColor: 'transparent',
-                                        //         padding: '6px 16px',
-                                        //         border: 'none',
-                                        //         borderRadius: '5px',
-                                        //         display: 'flex',
-                                        //         justifyContent: 'center',
-                                        //         height: '41px',
-                                        //         minHeight: '0px'
-                                        //     },
-                                        //     '&.MuiTouchRipple-root': {
-                                        //         lineHeight: '0px'
-                                        //     },
-                                        //     '&.Mui-selected': {
-                                        //         color: '#444',
-                                        //         fontWeight: 'bold',
-                                        //         background: 'var(--transparentIntenseTeal)'
-                                        //     }
-                                        // }} */}
 
                         <EpistoFlex2 flex="1">
-                            { /* tab contents */}
+
                             {tabs
                                 .map((x, index) => <TabPanel
                                     style={{
@@ -285,9 +202,11 @@ const CourseDetailsPage = () => {
                 </EpistoFlex2>
 
                 {/* Right pane */}
-                <EpistoFlex2 direction={'column'}
+                <EpistoFlex2
+                    direction={'column'}
                     minWidth="400px"
                     flexBasis="400px">
+
                     <EpistoFlex2
                         direction={'column'}
                         alignItems={'center'}
@@ -298,10 +217,13 @@ const CourseDetailsPage = () => {
                         borderWidth='1px'
                         borderRadius='10px'
                         shadow={'#00000024 0px 0px 5px 0px'}>
-                        <EpistoFlex2 width="100%"
+
+                        <EpistoFlex2
+                            width="100%"
                             height='230px'
                             justifyContent={'center'}
                             p='10px'>
+
                             <img
                                 src={courseDetails?.thumbnailURL}
                                 style={{
@@ -352,6 +274,7 @@ const CourseDetailsPage = () => {
                             ))}
 
                         <EpistoFlex2>
+
                             {/* start coures */}
                             <EpistoButton
                                 style={{
@@ -379,6 +302,7 @@ const CourseDetailsPage = () => {
                                     : translatableTexts.courseDetails.startCourse}
                             </EpistoButton>
 
+                            {/* stats */}
                             {courseDetails?.currentItemCode && <EpistoButton
                                 style={{
                                     maxHeight: 40,
@@ -402,14 +326,12 @@ const CourseDetailsPage = () => {
 
                                 {translatableTexts.learningOverview.myStatisticsTitle}
                             </EpistoButton>}
+
                         </EpistoFlex2>
 
-
                     </EpistoFlex2>
-
                 </EpistoFlex2>
             </EpistoFlex2>
-
         </ContentPane>
     </>;
 };

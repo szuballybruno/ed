@@ -16,6 +16,7 @@ import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoGrid } from '../controls/EpistoGrid';
 import { ContentPane } from '../pageRootContainer/ContentPane';
+import { RootContainerBackground } from '../pageRootContainer/RootContainerBackground';
 import { AuthenticationStateContext, useRefetchUserAsync } from '../system/AuthenticationFrame';
 import { useAuthorizationContext } from '../system/AuthorizationContext';
 import { LoadingFrame } from '../system/LoadingFrame';
@@ -155,13 +156,16 @@ const LoginScreen = () => {
 
     return (
         <>
-            {/* <RootContainerBackground>
-                <EpistoFlex2
-                    className="whall"
-                    bg="red">
-
-                </EpistoFlex2>
-            </RootContainerBackground> */}
+            <RootContainerBackground>
+                <img
+                    src={companyDetails?.coverUrl!}
+                    style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover'
+                    }}
+                    alt="" />
+            </RootContainerBackground>
 
             <ContentPane
                 hideNavbar
