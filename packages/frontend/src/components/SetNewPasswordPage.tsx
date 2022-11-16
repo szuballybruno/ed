@@ -5,7 +5,7 @@ import { useSetNewPassword } from '../services/api/passwordChangeApiService';
 import { useNavigation } from '../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../services/core/notifications';
 import { useRouteQuery } from '../static/locationHelpers';
-import { ContentPane } from './ContentPane';
+import { ContentPane } from './pageRootContainer/ContentPane';
 import { EpistoButton } from './controls/EpistoButton';
 import { EpistoHeader } from './EpistoHeader';
 import { LoadingFrame } from './system/LoadingFrame';

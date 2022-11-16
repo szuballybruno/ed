@@ -13,7 +13,7 @@ import {
 import {
     AdminUserCourseContentDialog
 } from '../administration/users/adminCourseContentDialog/AdminUserCourseContentDialog';
-import { ContentPane } from '../ContentPane';
+import { ContentPane } from '../pageRootContainer/ContentPane';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';

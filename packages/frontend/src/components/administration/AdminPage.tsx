@@ -1,6 +1,6 @@
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { ArrayBuilder } from '../../static/frontendHelpers';
-import { ContentPane } from '../ContentPane';
+import { ContentPane } from '../pageRootContainer/ContentPane';
 import { useAuthorizationContext } from '../system/AuthorizationContext';
 import { EpistoRoutes } from '../universal/EpistoRoutes';
 import { ActivationCodesAdminPage } from './activationCodes/ActivationCodesAdminPage';

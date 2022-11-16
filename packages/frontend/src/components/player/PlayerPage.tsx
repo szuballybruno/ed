@@ -1,7 +1,7 @@
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { Responsivity } from '../../helpers/responsivity';
 import { CoinRewardDialog } from '../CoinRewardDialog';
-import { ContentPane } from '../ContentPane';
+import { ContentPane } from '../pageRootContainer/ContentPane';
 import { useEpistoDialogLogic } from '../universal/epistoDialog/EpistoDialogLogic';
 import { EpistoRoutes } from '../universal/EpistoRoutes';
 import { CourseOverviewSubpage } from './courseOverview/CourseOverviewSubpage';

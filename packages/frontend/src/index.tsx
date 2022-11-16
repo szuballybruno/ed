@@ -2,7 +2,7 @@ import { jsExtensions } from '@episto/commonlogic';
 import { LicenseInfo } from '@mui/x-license-pro';
 import { FC } from 'react';
 import { createRoot } from 'react-dom/client';
-import { PageRootContainer } from './components/PageRootContainer';
+import { PageRootContainer } from './components/pageRootContainer/PageRootContainer';
 import { FrameRendererRoot } from './components/system/FrameRendererRoot';
 import { MainRouting } from './MainRouting';
 import './styles/globalCssClasses.css';

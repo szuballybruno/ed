@@ -1,6 +1,6 @@
 import { Id } from '@episto/commontypes';
 import { AvailableCourseDTO } from '@episto/communication';
-import { ContentPane } from '../ContentPane';
+import { ContentPane } from '../pageRootContainer/ContentPane';
 import { MobileHeader } from '../universal/MobileHeader';
 import { MobileCourseTile } from './MobileCourseTile';
 

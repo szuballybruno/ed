@@ -6,7 +6,7 @@ import { startUserGuide } from '../../services/core/userGuidingService';
 import { Environment } from '../../static/Environemnt';
 import { usePaging } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
-import { ContentPane } from '../ContentPane';
+import { ContentPane } from '../pageRootContainer/ContentPane';
 import { useRefetchUserAsync } from '../system/AuthenticationFrame';
 import { EpistoPaging } from '../universal/EpistoPaging';
 import { SurveyQuestions } from './SurveyQuestions';

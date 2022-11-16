@@ -2,7 +2,7 @@ import { LeaderboardPeriodType } from '@episto/commontypes';
 import { LeaderboardListItemDTO } from '@episto/communication';
 import { useMemo, useState } from 'react';
 import { useServiceContainerContext } from '../../../static/serviceContainer';
-import { ContentPane } from '../../ContentPane';
+import { ContentPane } from '../../pageRootContainer/ContentPane';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { EpistoSelect } from '../../controls/EpistoSelect';

@@ -3,14 +3,14 @@ import { OrderType } from '@episto/commontypes';
 import { AvailableCourseDTO, CourseCategoryDTO } from '@episto/communication';
 import { Responsivity } from '../../helpers/responsivity';
 import { translatableTexts } from '../../static/translatableTexts';
-import { ContentPane } from '../ContentPane';
+import { ContentPane } from '../pageRootContainer/ContentPane';
 import { EpistoDiv } from '../controls/EpistoDiv';
 import { EpistoFlex, EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoGrid } from '../controls/EpistoGrid';
 import { EpistoSearch } from '../controls/EpistoSearch';
 import { MUI } from '../controls/MUIControls';
-import { LeftPane } from '../LeftPane';
+import { LeftPane } from '../pageRootContainer/LeftPane';
 import { CourseTile } from '../universal/CourseTile';
 import { AvailableCoursesPageFilterType } from './AvailableCoursesPage';
 
