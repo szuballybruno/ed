@@ -9,19 +9,18 @@ import { useNavigation } from '../../services/core/navigatior';
 import { useShowErrorDialog } from '../../services/core/notifications';
 import { useQueryVal } from '../../static/locationHelpers';
 import { Logger } from '../../static/Logger';
-import { ContentPane } from '../pageRootContainer/ContentPane';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoDiv } from '../controls/EpistoDiv';
 import { EpistoEntry } from '../controls/EpistoEntry';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoGrid } from '../controls/EpistoGrid';
+import { ContentPane } from '../pageRootContainer/ContentPane';
 import { AuthenticationStateContext, useRefetchUserAsync } from '../system/AuthenticationFrame';
 import { useAuthorizationContext } from '../system/AuthorizationContext';
 import { LoadingFrame } from '../system/LoadingFrame';
 import { useEpistoDialogLogic } from '../universal/epistoDialog/EpistoDialogLogic';
 import { LoginPasswordResetDialog } from './LoginPasswordResetDialog';
-import { RootContainerBackground } from '../pageRootContainer/RootContainerBackground';
 
 const LoginScreen = () => {
 
