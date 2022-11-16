@@ -2,7 +2,7 @@ import { ArrowDropDown } from '@mui/icons-material';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoFlex2, EpistoFlex2Props } from './EpistoFlex';
 
-const defaultKey = '___default___';
+const unselectedOptionKey = '___default___';
 
 export type EpistoSelectPropsType<TItem> = {
     items: TItem[],
@@ -11,8 +11,9 @@ export type EpistoSelectPropsType<TItem> = {
     getDisplayValue: (item: TItem) => string,
     selectedValue?: TItem | null,
     currentKey?: string,
-    defaultValue?: string,
-    isDisabled?: boolean
+    unselectedValue?: string,
+    isDisabled?: boolean,
+    noUnselected?: boolean
 };
 
 export const EpistoSelect = <TItem,>({
@@ -22,7 +23,8 @@ export const EpistoSelect = <TItem,>({
     currentKey,
     onSelected,
     getDisplayValue,
-    defaultValue,
+    unselectedValue,
+    noUnselected,
     isDisabled,
     ...css
 }: EpistoSelectPropsType<TItem> & EpistoFlex2Props) => {
@@ -41,7 +43,7 @@ export const EpistoSelect = <TItem,>({
         ? selectedValue
             ? getCompareKey(selectedValue)
             : currentKey
-        : defaultKey;
+        : unselectedOptionKey;
 
     return <EpistoFlex2
         position='relative'
@@ -64,10 +66,12 @@ export const EpistoSelect = <TItem,>({
                 pointerEvents: isDisabled ? 'none' : undefined
             }}>
 
-            <option value={defaultKey}>
-                {defaultValue ?? translatableTexts.misc.selectOption}
-            </option>
+            {/* render unselected option */}
+            {!noUnselected && <option value={unselectedOptionKey}>
+                {unselectedValue ?? translatableTexts.misc.selectOption}
+            </option>}
 
+            {/* render optiosn  */}
             {items
                 .map((item, index) => {
 
@@ -81,8 +85,6 @@ export const EpistoSelect = <TItem,>({
                             : '' + item}
                     </option>;
                 })}
-
-
         </select>
 
         <ArrowDropDown

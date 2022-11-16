@@ -1,6 +1,6 @@
 import { LeaderboardPeriodType } from '@episto/commontypes';
 import { LeaderboardListItemDTO } from '@episto/communication';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useServiceContainerContext } from '../../../static/serviceContainer';
 import { ContentPane } from '../../ContentPane';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
@@ -65,14 +65,34 @@ const Item = ({ item }: { item: LeaderboardListItemDTO }) => {
     );
 };
 
+type LeaderboardPeriodOptionType = {
+    name: string,
+    key: LeaderboardPeriodType
+}
+
 export const LeaderboardPage = () => {
 
     const { leaderboardService } = useServiceContainerContext();
 
-    const [period, setPeriod] = useState<LeaderboardPeriodType>('weekly');
+    const options = useMemo((): LeaderboardPeriodOptionType[] => [
+        {
+            name: 'Napi',
+            key: 'daily'
+        },
+        {
+            name: 'Heti',
+            key: 'weekly'
+        },
+        {
+            name: 'Havi',
+            key: 'monthly'
+        },
+    ], []);
+
+    const [period, setPeriod] = useState<LeaderboardPeriodOptionType>(options[2]);
 
     const { leaderboardList } = leaderboardService
-        .useLeaderboardList(period);
+        .useLeaderboardList(period.key);
 
     return (
         <>
@@ -84,14 +104,11 @@ export const LeaderboardPage = () => {
                     width="90%">
 
                     <EpistoSelect
-                        items={[
-                            'daily',
-                            'weekly',
-                            'monthly'
-                        ] as LeaderboardPeriodType[]}
-                        defaultValue={'weekly'}
-                        getCompareKey={x => x}
-                        getDisplayValue={x => x}
+                        items={options}
+                        getCompareKey={x => x.key}
+                        getDisplayValue={x => x.key}
+                        selectedValue={period}
+                        noUnselected
                         onSelected={setPeriod} />
 
                     <EpistoFlex2
