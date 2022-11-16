@@ -54,28 +54,43 @@ export const ContentPaneRoot = ({ contextValue, children }: { contextValue: Page
         padding
     } = contextValue.contentPaneProps;
 
+    const { isMobile } = Responsivity
+        .useIsMobileView();
+
     return (
         <EpistoFlex2
             id={ContentPaneRoot.name}
             direction="column"
             flex="1"
-            overflow="hidden"
-            overflowY={noOverflow ? 'hidden' : 'scroll'}
-            overflowX="hidden"
-            padding={noPadding
-                ? undefined
-                : padding
-                    ? padding
-                    : '0 30px 0px 30px'}
+            // overflow="hidden"
+            // overflowY={noOverflow ? 'hidden' : 'scroll'}
+            // overflowX="hidden"
             maxWidth={noMaxWidth ? undefined : '1400px'}>
 
-            {!hideNavbar && <Navbar
+            {(!hideNavbar && !isMobile) && <Navbar
                 isLowHeight={isNavbarLowHeight}
                 showLogo={showLogo}
                 isMinimalMode={isMinimalMode}
                 backgroundContent={navbarBg} />}
 
-            {children}
+            <EpistoFlex2
+                padding={noPadding
+                    ? undefined
+                    : padding
+                        ? padding
+                        : '0 30px 0px 30px'}
+                flex="1"
+                direction='column'
+                overflowY="scroll"
+                overflowX="hidden">
+                {children}
+            </EpistoFlex2>
+
+            {(!hideNavbar && isMobile) && <Navbar
+                isLowHeight={isNavbarLowHeight}
+                showLogo={showLogo}
+                isMinimalMode={isMinimalMode}
+                backgroundContent={navbarBg} />}
         </EpistoFlex2>
     );
 };
