@@ -79,8 +79,10 @@ const CourseDetailsPage = () => {
         {
             icon: Environment.getAssetUrl('/course_page_icons/right_panel_updated.svg'),
             name: 'Frissítve',
-            value: new Date(courseDetails!.modificationDate)
-                .toLocaleDateString()
+            value: courseDetails?.modificationDate
+                ? new Date(courseDetails.modificationDate)
+                    .toLocaleDateString()
+                : '-'
         }
     ];
 
