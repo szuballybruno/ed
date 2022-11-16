@@ -1,37 +1,50 @@
-import { EpistoFlex2, EpistoFlex2Props } from './controls/EpistoFlex';
-import Navbar from './navbar/Navbar';
+import { ReactNode, useContext, useEffect } from 'react';
+import { EpistoFlex2Props } from './controls/EpistoFlex';
+import { LeftSidebarElementRefContext } from './PageRootContainer';
 
-export const ContentPane = (props: {
+type ContentPanePropsType = {
     noPadding?: boolean,
     navbarBg?: any,
     hideNavbar?: boolean,
     isNavbarLowHeight?: boolean,
-    noMaxWidth?: boolean,
+    useMaxWidth?: boolean,
     showLogo?: boolean,
     isMinimalMode?: boolean,
     noOverflow?: boolean
-} & EpistoFlex2Props) => {
+    children: ReactNode;
+    align?: EpistoFlex2Props['align'];
+    justify?: EpistoFlex2Props['justify'];
+    padding?: EpistoFlex2Props['padding'];
+    margin?: EpistoFlex2Props['margin'];
+    maxHeight?: EpistoFlex2Props['maxHeight'];
+    minHeight?: EpistoFlex2Props['minHeight'];
+    position?: EpistoFlex2Props['position'];
+    top?: EpistoFlex2Props['top'];
+    minWidth?: EpistoFlex2Props['minWidth'];
+    height?: EpistoFlex2Props['height'];
+    width?: EpistoFlex2Props['width'];
+    overflowY?: EpistoFlex2Props['overflowY'];
+};
 
-    const { children, noPadding, showLogo, noMaxWidth, isNavbarLowHeight, navbarBg, isMinimalMode, hideNavbar, noOverflow, ...css } = props;
+export const ContentPane = ({
+    children,
+    ...props
+}: ContentPanePropsType) => {
+
+    const context = useContext(LeftSidebarElementRefContext);
+
+    useEffect(() => {
+
+        if (!context)
+            return;
+
+        context
+            .setContentPaneProps(props);
+    }, [context, props]);
 
     return (
-        <EpistoFlex2
-            id="contentPane"
-            padding={noPadding ? undefined : '0 30px 0px 30px'}
-            flex="1"
-            maxWidth={noMaxWidth ? undefined : '1400px'}
-            direction="column"
-            overflowY={noOverflow ? 'hidden' : 'scroll'}
-            overflowX="hidden"
-            {...css}>
-
-            {!hideNavbar && <Navbar
-                isLowHeight={isNavbarLowHeight}
-                showLogo={showLogo}
-                isMinimalMode={isMinimalMode}
-                backgroundContent={navbarBg} />}
-
+        <>
             {children}
-        </EpistoFlex2>
+        </>
     );
 };

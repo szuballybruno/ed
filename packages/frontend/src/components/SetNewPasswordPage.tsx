@@ -1,15 +1,13 @@
-import React from 'react';
 import { applicationRoutes } from '../configuration/applicationRoutes';
+import { Responsivity } from '../helpers/responsivity';
 import { CompanyApiService } from '../services/api/CompanyApiService1';
 import { useSetNewPassword } from '../services/api/passwordChangeApiService';
 import { useNavigation } from '../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../services/core/notifications';
-import { useIsMobileView } from '../static/frontendHelpers';
 import { useRouteQuery } from '../static/locationHelpers';
 import { ContentPane } from './ContentPane';
 import { EpistoButton } from './controls/EpistoButton';
 import { EpistoHeader } from './EpistoHeader';
-import { PageRootContainer } from './PageRootContainer';
 import { LoadingFrame } from './system/LoadingFrame';
 import { PasswordEntry, usePasswordEntryState } from './universal/PasswordEntry';
 
@@ -24,7 +22,8 @@ export const SetNewPasswordPage = () => {
 
     const { companyDetails } = CompanyApiService.useCompanyDetailsByDomain(window.location.origin);
 
-    const isMobile = useIsMobileView();
+    const { isMobile } = Responsivity
+        .useIsMobileView();
 
     const showErrorDialog = useShowErrorDialog();
 
@@ -48,16 +47,11 @@ export const SetNewPasswordPage = () => {
         }
     };
 
-    return <PageRootContainer
-        align="flex-start"
-        justify="center"
-        position="relative">
+    return <>
 
         <ContentPane
             hideNavbar
             navbarBg="white"
-            flex='1'
-            className="whall"
             justify='center'
             align='center'>
 
@@ -95,7 +89,6 @@ export const SetNewPasswordPage = () => {
                 </EpistoHeader>
 
                 <PasswordEntry
-                    display='EPISTO'
                     state={passwordEntryState} />
 
                 <EpistoButton
@@ -113,5 +106,5 @@ export const SetNewPasswordPage = () => {
                 </EpistoButton>
             </LoadingFrame>
         </ContentPane>
-    </PageRootContainer >;
+    </ >;
 };

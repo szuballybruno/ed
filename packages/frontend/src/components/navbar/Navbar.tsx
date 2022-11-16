@@ -1,11 +1,18 @@
 import { memo } from 'react';
-import { useIsMobileView } from '../../static/frontendHelpers';
+import { Responsivity } from '../../helpers/responsivity';
+import { ObjectComparer } from '../../static/objectComparer';
 import { FlexFloat } from '../controls/FlexFloat';
 import { useCurrentCourseItemCodeContext } from '../system/CurrentCourseItemFrame';
 import { DesktopNavbar } from './DesktopNavbar';
 import { MobileNavigation } from './MobileNavigation';
 
-const Navbar = memo((props: {
+const Navbar = memo(({
+    backgroundContent,
+    hideLinks,
+    isLowHeight,
+    isMinimalMode,
+    showLogo
+}: {
     hideLinks?: boolean,
     showLogo?: boolean,
     isLowHeight?: boolean,
@@ -13,26 +20,24 @@ const Navbar = memo((props: {
     backgroundContent?: any
 }) => {
 
-    const { backgroundContent, hideLinks, isLowHeight, isMinimalMode, showLogo } = props;
-    const isMobile = useIsMobileView();
+    const { isMobile } = Responsivity
+        .useIsMobileView();
 
-    const { currentCourseItemCode } = useCurrentCourseItemCodeContext();
+    const cc = useCurrentCourseItemCodeContext();
 
-    // render desktop
-    const renderDesktopNavbar = () => <DesktopNavbar
-        backgroundContent={backgroundContent}
-        currentCourseItemCode={currentCourseItemCode}
-        hideLinks1={!!hideLinks}
-        isLowHeight={isLowHeight}
-        isMinimalMode={isMinimalMode}
-        showLogo={showLogo} />;
+    /**
+     * Mobile navbar
+     */
+    if (isMobile)
+        return (
+            <MobileNavigation />
+        );
 
-    // render mobile
-    const renderMobileNavbar = () => <MobileNavigation />;
-
-    return isMobile
-        ? renderMobileNavbar()
-        : <FlexFloat
+    /**
+     * Desktop navbar
+     */
+    return (
+        <FlexFloat
             id="flexFloat-navbarRoot"
             zIndex={3}
             justify="center"
@@ -42,11 +47,15 @@ const Navbar = memo((props: {
             bgColor="unset"
             padding={isLowHeight ? '20px 0' : '20px'}>
 
-            {renderDesktopNavbar()}
-        </FlexFloat>;
-}, (p, n) => {
-
-    return JSON.stringify(p) === JSON.stringify(n);
-});
+            <DesktopNavbar
+                backgroundContent={backgroundContent}
+                currentCourseItemCode={cc.currentCourseItemCode}
+                hideLinks1={!!hideLinks}
+                isLowHeight={isLowHeight}
+                isMinimalMode={isMinimalMode}
+                showLogo={showLogo} />
+        </FlexFloat>
+    );
+}, ObjectComparer.isEqual);
 
 export default Navbar;

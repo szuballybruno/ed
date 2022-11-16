@@ -1,19 +1,20 @@
-import { GridItem, useMediaQuery } from '@chakra-ui/react';
-import { Select, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { GridItem } from '@chakra-ui/react';
+import { Id } from '@episto/commontypes';
+import { ShopItemDTO } from '@episto/communication';
+import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { useEffect, useState } from 'react';
+import { Responsivity } from '../../helpers/responsivity';
 import { useCoinBalance } from '../../services/api/coinTransactionsApiService';
 import { useShopItemCategories, useShopItems } from '../../services/api/shopApiService';
-import { ShopItemDTO } from '@episto/communication';
-import { Id } from '@episto/commontypes';
 import { translatableTexts } from '../../static/translatableTexts';
 import { ContentPane } from '../ContentPane';
 import { EpistoDiv } from '../controls/EpistoDiv';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoGrid } from '../controls/EpistoGrid';
+import { EpistoSelect } from '../controls/EpistoSelect';
 import { EpistoConinInfo } from '../EpistoCoinInfo';
 import { LeftPane } from '../LeftPane';
-import { PageRootContainer } from '../PageRootContainer';
 import { ProfileImage } from '../ProfileImage';
 import { useEpistoDialogLogic } from '../universal/epistoDialog/EpistoDialogLogic';
 import { EpistoSearch } from '../universal/EpistoSearch';
@@ -32,7 +33,8 @@ export const ShopPage = () => {
 
     const confirmationDilaogLogic = useEpistoDialogLogic('confirm');
 
-    const [isSmallerThan1400] = useMediaQuery('(min-width: 1400px)');
+    const isLargerThan1400 = Responsivity
+        .useIsLargerThan('1400px');
 
     const filteredItems = shopItems
         .filter(x => x.shopItemCategoryId === categoryFilterId || categoryFilterId === Id.create<'ShopItemCategory'>(-1));
@@ -51,7 +53,7 @@ export const ShopPage = () => {
         refetchCoinBalance();
     };
 
-    return <PageRootContainer>
+    return <>
 
         {/* confirmation dialog */}
         <ShopPurchaseConfirmationDialog
@@ -122,14 +124,14 @@ export const ShopPage = () => {
         </LeftPane>
 
         {/* content */}
-        <ContentPane noMaxWidth>
+        <ContentPane>
             <EpistoFlex2
                 id="coursesPanelRoot"
                 direction="column"
                 pb="40px"
                 width="100%"
                 className="whall"
-                minWidth={isSmallerThan1400 ? '1060px' : undefined}>
+                minWidth={isLargerThan1400 ? '1060px' : undefined}>
 
                 {/* search */}
                 <EpistoFlex2
@@ -167,31 +169,19 @@ export const ShopPage = () => {
                         flex="5" />
 
                     {/* order settings  */}
-                    <Select
-                        native
-                        onChange={() => { throw new Error('Not implemented'); }} // TODO
-                        className="roundBorders fontSmall mildShadow"
-                        inputProps={{
-                            name: 'A-Z',
-                            id: 'outlined-age-native-simple',
-                        }}
-                        sx={{
-                            '& .MuiOutlinedInput-notchedOutline': {
-                                border: 'none'
-                            }
-                        }}
-                        style={{
-                            background: 'var(--transparentWhite70)',
-                            border: 'none',
-                            height: '40px',
-                            color: '3F3F3F',
-                            flex: 1
-                        }}>
-                        <option value={10}>{translatableTexts.availableCourses.sortOptions.aToZ}</option>
-                        <option value={20}>{translatableTexts.availableCourses.sortOptions.zToA}</option>
-                        <option value={30}>{translatableTexts.availableCourses.sortOptions.newToOld}</option>
-                        <option value={30}>{translatableTexts.availableCourses.sortOptions.oldToNew}</option>
-                    </Select>
+                    <EpistoSelect
+                        selectedValue={translatableTexts.availableCourses.sortOptions.aToZ}
+                        noUnselected
+                        items={[
+                            translatableTexts.availableCourses.sortOptions.aToZ,
+                            translatableTexts.availableCourses.sortOptions.zToA,
+                            translatableTexts.availableCourses.sortOptions.newToOld,
+                            translatableTexts.availableCourses.sortOptions.oldToNew
+                        ]}
+                        background="var(--transparentWhite70)"
+                        getDisplayValue={x => x}
+                        getCompareKey={x => x}
+                        onSelected={console.log} />
                 </EpistoFlex2>
 
                 {/* shop items */}
@@ -225,5 +215,5 @@ export const ShopPage = () => {
                 </EpistoFlex2>}
             </EpistoFlex2>
         </ContentPane>
-    </PageRootContainer>;
+    </>;
 };

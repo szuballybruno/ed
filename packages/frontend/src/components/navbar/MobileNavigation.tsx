@@ -34,16 +34,18 @@ const MobileNavigationButton = (props: {
 
 export const MobileNavigation = () => {
 
-    const [isFullscreen, setIsFullscreen] = useVideoPlayerFullscreenContext();
+    const [isFullscreen] = useVideoPlayerFullscreenContext();
 
-    return !isFullscreen
-        ? <EpistoFlex2
-            position='fixed'
+    return (
+        <EpistoFlex2
+            // position='fixed'
+            display={isFullscreen ? 'none' : undefined}
             bottom='0'
             left='0'
             zIndex={1}
             width='100%'
             height='80px'
+            flexBasis="80px"
             pb='20px'
             justify='space-evenly'
             background='white'>
@@ -64,5 +66,5 @@ export const MobileNavigation = () => {
                 to={applicationRoutes.settingsRoute} />
 
         </EpistoFlex2>
-        : <></>;
+    );
 };

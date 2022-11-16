@@ -1,6 +1,6 @@
 import { CSSProperties, ReactNode } from 'react';
+import { Responsivity } from '../../helpers/responsivity';
 import { Environment } from '../../static/Environemnt';
-import { useIsMobileView } from '../../static/frontendHelpers';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 
@@ -133,7 +133,8 @@ export const ExamLayoutContent = (props: {
     style?: CSSProperties
 }) => {
 
-    const isMobile = useIsMobileView();
+    const { isMobile } = Responsivity
+        .useIsMobileView();
 
     return isMobile
         ? <MobileExamLayoutContent {...props} />

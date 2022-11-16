@@ -1,4 +1,5 @@
 import { createContext, useContext } from 'react';
+import { LeaderboardApiServiceType, useLeaderboardApiService } from '../services/api/LeaderboardApiService';
 import { useMiscApiService, MiscApiService } from '../services/api/miscApiService';
 import { GlobalEventManagerType } from './EventBus';
 
@@ -6,7 +7,8 @@ import { GlobalEventManagerType } from './EventBus';
  * New solution is brewin'
  */
 export const useServiceContainer = (globalEventManager: GlobalEventManagerType) => ({
-    miscApiService: useMiscApiService(globalEventManager) as MiscApiService
+    miscApiService: useMiscApiService(globalEventManager) as MiscApiService,
+    leaderboardService: useLeaderboardApiService(globalEventManager) as LeaderboardApiServiceType
 });
 
 type ServiceContainerContextType = ReturnType<typeof useServiceContainer>;

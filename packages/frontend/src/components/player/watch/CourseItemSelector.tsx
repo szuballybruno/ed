@@ -1,4 +1,3 @@
-import { Divider } from '@chakra-ui/layout';
 import { CourseItemStateType, CourseModeType, Id } from '@episto/commontypes';
 import { useEffect, useRef, useState } from 'react';
 import { CourseApiService } from '../../../services/api/courseApiService';
@@ -7,6 +6,7 @@ import { useRecommendedItemQuota } from '../../../services/api/userProgressApiSe
 import { useShowErrorDialog } from '../../../services/core/notifications';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoButton } from '../../controls/EpistoButton';
+import { EpistoDivider } from '../../controls/EpistoDivider';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoSearch } from '../../controls/EpistoSearch';
 import { RecommendedItemQuota } from '../../home/RecommendedItemQuota';
@@ -21,7 +21,7 @@ import { TempomatTempoInfo } from '../tempomat/TempomatTempoInfo';
 export const CourseItemSelector = ({
     currentItemCode,
     nextItemState: itemState,
-    isPlayerLoaded,
+    isVideoReady,
     mode,
     refetchPlayerData,
     courseId,
@@ -37,7 +37,7 @@ export const CourseItemSelector = ({
     currentItemCode: string,
     nextItemState: CourseItemStateType | null,
     isScrolledFromTop?: boolean,
-    isPlayerLoaded: boolean,
+    isVideoReady: boolean,
     canChangeMode?: boolean,
     isMobile?: boolean
 }) => {
@@ -48,7 +48,7 @@ export const CourseItemSelector = ({
 
     // http
     const { recommendedItemQuota, refetchRecommendedItemQuota } = useRecommendedItemQuota(courseId);
-    const { tempomatMode, refetchTempomatMode } = useTempomatMode(courseId, isPlayerLoaded);
+    const { tempomatMode, refetchTempomatMode } = useTempomatMode(courseId, isVideoReady);
     const { setCourseModeAsync } = CourseApiService.useSetCourseMode();
     const { scrollToTop, scroll, disableAutoScroll, enableAutoScroll } = useScrollIntoView();
 
@@ -142,7 +142,7 @@ export const CourseItemSelector = ({
                     onClick={() => tempomatDialogLogic.openDialog()} />
             </EpistoFlex2>}
 
-            {!recommendedItemQuota?.isDeadlineSet && <Divider
+            {!recommendedItemQuota?.isDeadlineSet && <EpistoDivider
                 flexBasis="1px"
                 mx="10px"
                 height="calc(100% - 20px)"

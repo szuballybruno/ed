@@ -1,8 +1,8 @@
+import { QuestionDTO } from '@episto/communication';
 import { ArrowBack } from '@mui/icons-material';
 import { CSSProperties, ReactNode, useEffect } from 'react';
-import browser from '../../services/core/browserSniffingService';
-import { QuestionDTO } from '@episto/communication';
-import { isString, useIsMobileView } from '../../static/frontendHelpers';
+import { Responsivity } from '../../helpers/responsivity';
+import { isString } from '../../static/frontendHelpers';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
@@ -104,8 +104,10 @@ export const MobileExamLayout = ({
 
     const [isFullscreen, setIsFullscreen] = useVideoPlayerFullscreenContext();
     const isLandscape = window.orientation === 90;
-    const isIPhone = browser.isIPhone;
-    const isMobile = useIsMobileView();
+    const { isIPhone } = Responsivity
+        .useIsIPhone();
+    const { isMobile } = Responsivity
+        .useIsMobileView();
 
     useEffect(() => {
         setIsFullscreen(true);
@@ -398,7 +400,8 @@ export const DesktopExamLayout = ({
 
 export const ExamLayout = (props: ExamLayoutProps) => {
 
-    const isMobile = useIsMobileView();
+    const { isMobile } = Responsivity
+        .useIsMobileView();
 
     return isMobile
         ? <MobileExamLayout

@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { useIsMobileView } from '../../static/frontendHelpers';
+import { Responsivity } from '../../helpers/responsivity';
 import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 import { EpistoText } from '../controls/EpistoText';
 import { LoadingFrame, LoadingFramePropsType } from '../system/LoadingFrame';
@@ -16,7 +16,8 @@ export const QuestionnaireLayout = (props: {
 
     const { title, answerAction, contentClickable, children, loadingProps, onlyShowAnswers, buttonWrapperStyles, ...css } = props;
 
-    const isMobile = useIsMobileView();
+    const { isMobile } = Responsivity
+        .useIsMobileView();
 
     return (
         <EpistoFlex2

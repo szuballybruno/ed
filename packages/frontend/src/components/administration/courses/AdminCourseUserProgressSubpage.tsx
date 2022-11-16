@@ -24,7 +24,6 @@ import { AdminCourseUserOverviewDialog, useAdminCourseUserOverviewDialogLogic } 
 import { ChipSmall } from './ChipSmall';
 import { CourseAdministartionFrame } from './CourseAdministartionFrame';
 
-
 export interface AdminCourseUserRowType extends AdminCourseUserStatsDTO {
     avatar: {
         avatarUrl: string,

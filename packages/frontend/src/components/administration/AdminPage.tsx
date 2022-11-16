@@ -1,7 +1,6 @@
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { ArrayBuilder } from '../../static/frontendHelpers';
 import { ContentPane } from '../ContentPane';
-import { PageRootContainer } from '../PageRootContainer';
 import { useAuthorizationContext } from '../system/AuthorizationContext';
 import { EpistoRoutes } from '../universal/EpistoRoutes';
 import { ActivationCodesAdminPage } from './activationCodes/ActivationCodesAdminPage';
@@ -22,7 +21,7 @@ export const AdminPage = () => {
     const adminRoute = applicationRoutes.administrationRoute;
     const { hasPermission } = useAuthorizationContext();
 
-    return <PageRootContainer>
+    return <>
 
         {/* admin left pane */}
         <AdminLeftPane />
@@ -30,7 +29,6 @@ export const AdminPage = () => {
         {/* admin content pane */}
         <ContentPane
             isNavbarLowHeight
-            noMaxWidth
             padding="0 10px 10px 10px">
 
             <EpistoRoutes
@@ -102,5 +100,5 @@ export const AdminPage = () => {
 
                     .getArray()} />
         </ContentPane>
-    </PageRootContainer>;
+    </>;
 };

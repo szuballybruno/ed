@@ -23,6 +23,8 @@ export type ErrorCodeType =
 
 export type GivenAnswerStateType = 'INCORRECT' | 'CORRECT' | 'MIXED';
 
+export type LeaderboardPeriodType = 'monthly' | 'weekly' | 'daily';
+
 // tasks
 export type TaskObjectiveType = 'video' | 'playlist' | 'course' | 'exam';
 export type TaskPriorityType = 'normal' | 'important' | 'urgent';

@@ -19,6 +19,7 @@ import { ExamService } from '../services/ExamService';
 import { FileService } from '../services/FileService';
 import { FileSystemService } from '../services/FileSystemService';
 import { HashService } from '../services/HashService';
+import { LeaderboardService } from '../services/LeaderboardService';
 import { LikeService } from '../services/LikeService';
 import { LoggerService } from '../services/LoggerService';
 import { MapperService } from '../services/MapperService';
@@ -184,6 +185,7 @@ export const getTransientServiceContainer = (singletonProvider: ServiceProvider)
         .addClass(UserProgressService, [MapperService, ORMConnectionService, TempomatService, AuthorizationService])
         .addClass(CommentService, [ORMConnectionService, MapperService, AuthorizationService])
         .addClass(LikeService, [ORMConnectionService, MapperService, AuthorizationService])
+        .addClass(LeaderboardService, [ORMConnectionService, CompanyService, MapperService])
         .addClass(CompanyService, [ORMConnectionService, MapperService, AuthorizationService, DomainProviderService, FileService, XDBMSchemaService, ActivationCodeService])
         .getContainer();
 

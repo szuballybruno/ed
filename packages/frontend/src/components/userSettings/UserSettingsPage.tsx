@@ -1,32 +1,30 @@
 import { applicationRoutes } from '../../configuration/applicationRoutes';
-import { useIsMobileView } from '../../static/frontendHelpers';
+import { Responsivity } from '../../helpers/responsivity';
 import { ContentPane } from '../ContentPane';
 import { LeftPane } from '../LeftPane';
 import { NavigationLinkList } from '../NavigationLinkList';
-import { PageRootContainer } from '../PageRootContainer';
 import { EpistoRoutes } from '../universal/EpistoRoutes';
 import { CoinTransactions } from './CoinTransactions';
 import { Preferences } from './Preferences';
 
 export const UserSettingsPage = () => {
 
-    const isMobile = useIsMobileView();
+    const { isMobile } = Responsivity
+        .useIsMobileView();
 
-    return <PageRootContainer>
+    return <>
 
-        {!isMobile && <LeftPane
-            padding="20px"
-            basis="300px" >
+        <LeftPane
+            hidden={isMobile}>
 
             <NavigationLinkList
                 routes={[
                     applicationRoutes.settingsRoute.preferencesRoute
                 ]} />
-        </LeftPane>}
+        </LeftPane>
 
         <ContentPane
-            noPadding={isMobile}
-            noMaxWidth={!isMobile}>
+            noPadding={isMobile}>
 
             <EpistoRoutes
                 renderRoutes={[
@@ -40,5 +38,5 @@ export const UserSettingsPage = () => {
                     }
                 ]} />
         </ContentPane>
-    </PageRootContainer>;
+    </>;
 };

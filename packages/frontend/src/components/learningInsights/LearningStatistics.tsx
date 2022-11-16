@@ -1,10 +1,10 @@
-import { useMediaQuery } from '@chakra-ui/react';
 import { useUserLearningPageStats } from '../../services/api/userStatsApiService';
 import { Id } from '@episto/commontypes';
 import { Environment } from '../../static/Environemnt';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoGrid } from '../controls/EpistoGrid';
 import StatisticsCard, { StatisticsCardProps } from '../statisticsCard/StatisticsCard';
+import { Responsivity } from '../../helpers/responsivity';
 
 export const getProgressFromLagBehind = (lagBehindPercentage?: number | null) => {
 
@@ -32,7 +32,9 @@ export const LearningStatistics = (props: {
 }) => {
 
     const { userId } = props;
-    const [isSmallerThan1400] = useMediaQuery('(min-width: 1400px)');
+
+    const isLargerThan1400 = Responsivity
+        .useIsLargerThan('1400px');
 
     // http
     const { userLearningPageStats } = useUserLearningPageStats(userId);
@@ -87,7 +89,7 @@ export const LearningStatistics = (props: {
 
     return <EpistoGrid
         width="100%"
-        minWidth={isSmallerThan1400 ? '1060px' : undefined}
+        minWidth={isLargerThan1400 ? '1060px' : undefined}
         pt='10px'
         minColumnWidth={'250px'}
         gap={'10px'}

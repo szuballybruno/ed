@@ -1,10 +1,9 @@
+import { VideoPlayerDataDTO } from '@episto/communication';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import ReactPlayer from 'react-player';
 import screenfull from 'screenfull';
-import browser from '../../../../services/core/browserSniffingService';
+import { Responsivity } from '../../../../helpers/responsivity';
 import { readVolumeSettings, writeVolumeSettings } from '../../../../services/core/storageService';
-import { VideoPlayerDataDTO } from '@episto/communication';
-import { useIsMobileView, useScreenOrientation } from '../../../../static/frontendHelpers';
 import { Logger } from '../../../../static/Logger';
 import { useVideoPlayerFullscreenContext } from './VideoPlayerFullscreenFrame';
 
@@ -36,11 +35,16 @@ export const useVideoPlayerState = (
     const [isFullscreen, setIsFullscreen] = useVideoPlayerFullscreenContext();
     const [showShouldRotatePhoneOverlay, setShowShouldRotatePhoneOverlay] = useState(false);
 
-    const isIPhone = browser.isIPhone;
-    const isMobile = useIsMobileView();
+    const { isIPhone } = Responsivity
+        .useIsIPhone();
+
+    const { isMobile } = Responsivity
+        .useIsMobileView();
+
+    const { isLandscape } = Responsivity
+        .useIsLandscape();
+
     const screenfullEnabled = screenfull.isFullscreen;
-    const screenOrientation = useScreenOrientation();
-    const isLandscape = screenOrientation === 90;
 
     const showMobilePlayButtonOverlay = (() => {
 

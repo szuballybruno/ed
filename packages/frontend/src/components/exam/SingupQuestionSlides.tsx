@@ -90,31 +90,6 @@ export const SingupQuestionSlides = (props: { state: SignupQuestionsStateType })
         }
     };
 
-    {/*const Testasd = () => {
-        return <FlexFloat
-            alignItems={"center"}
-            borderRadius={7}
-            minWidth={150}
-            cursor={onClick ? "pointer" : undefined}
-            onClick={onClick ? () => onClick(!isSelected) : undefined}
-            style={{
-                backgroundColor: getBgColor(),
-                padding: "10px",
-                border: "1px solid var(--mildGrey)"
-            }}
-            {...css}>
-
-            <Checkbox
-                checked={isSelected}
-                size="small"
-                value="advanced" />
-
-            <EpistoFont fontSize="fontNormal14">
-                {answerText}
-            </EpistoFont>
-        </FlexFloat>
-    }*/}
-
     const selectedAnswerVersionId = (currentQuestion?.answers ?? [])
         .filter(x => x.isGiven)[0]?.answerVersionId as null | Id<'AnswerVersion'>;
 

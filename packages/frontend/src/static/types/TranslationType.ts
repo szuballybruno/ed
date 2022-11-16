@@ -203,6 +203,7 @@ export type TranslationType = {
             homePage: string;
             shopPage: string;
             availableCourses: string;
+            leaderboard: string;
             learning: string;
             learningStatistics: string;
             learningOverview: string;

@@ -1,20 +1,28 @@
 import { useEffect, useMemo } from 'react';
 import { applicationRoutes } from '../configuration/applicationRoutes';
+import { Responsivity } from '../helpers/responsivity';
 import { useRegisterUserViaActivationCode } from '../services/api/registrationApiService';
 import { useNavigation } from '../services/core/navigatior';
 import { showNotification } from '../services/core/notifications';
 import { Environment } from '../static/Environemnt';
-import { useIsMobileView, useTryCatchWrapper } from '../static/frontendHelpers';
+import { useTryCatchWrapper } from '../static/frontendHelpers';
 import { LocationHelpers } from '../static/locationHelpers';
 import { translatableTexts } from '../static/translatableTexts';
 import { EpistoButton } from './controls/EpistoButton';
-import { EpistoEntryNew, useEpistoEntryState } from './controls/EpistoEntryNew';
+import { EpistoEntryNew, EpistoEntryStateType, useEpistoEntryState } from './controls/EpistoEntryNew';
 import { EpistoFlex2 } from './controls/EpistoFlex';
 import { EpistoFont } from './controls/EpistoFont';
-import { validateAllEntries } from './controls/logic/controlsLogic';
-import { PageRootContainer } from './PageRootContainer';
 import { LoadingFrame } from './system/LoadingFrame';
 import { PasswordEntry, usePasswordEntryState } from './universal/PasswordEntry';
+
+const validateAllEntries = (entryStates: EpistoEntryStateType[]) => {
+
+    const isValid = !entryStates
+        .map(x => x.validate())
+        .some(x => !x);
+
+    return isValid;
+};
 
 export const RegisterViaActivationCodePage = () => {
 
@@ -24,7 +32,8 @@ export const RegisterViaActivationCodePage = () => {
     } = useRegisterUserViaActivationCode();
 
     const { navigate2 } = useNavigation();
-    const isMobile = useIsMobileView();
+    const { isMobile } = Responsivity
+        .useIsMobileView();
     const query = LocationHelpers
         .useQueryParams<{ activationCode: string }>();
 
@@ -115,7 +124,7 @@ export const RegisterViaActivationCodePage = () => {
         navigate2(applicationRoutes.homeRoute);
     });
 
-    return <PageRootContainer>
+    return <>
 
         <EpistoFlex2
             justify={'center'}
@@ -239,8 +248,7 @@ export const RegisterViaActivationCodePage = () => {
                             height={isMobile ? '40px' : '30px'} />
 
                         <PasswordEntry
-                            state={passwordState}
-                            display={'EPISTO'} />
+                            state={passwordState}/>
                     </EpistoFlex2>
 
                     {/* registration button */}
@@ -292,5 +300,5 @@ export const RegisterViaActivationCodePage = () => {
                 </LoadingFrame>
             </EpistoFlex2>
         </EpistoFlex2>
-    </PageRootContainer>;
+    </>;
 };

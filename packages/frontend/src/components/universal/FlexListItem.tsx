@@ -1,4 +1,3 @@
-import { Checkbox } from '@mui/material';
 import { forwardRef, ReactNode } from 'react';
 import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 
@@ -9,7 +8,6 @@ type FlexListItemProps = EpistoFlex2Props & {
     endContent?: ReactNode,
     midContent?: ReactNode,
     isChecked?: boolean,
-    setIsChecked?: (isChecked: boolean) => void
 };
 
 export const FlexListItem = forwardRef<HTMLDivElement, FlexListItemProps>((props, ref) => {
@@ -21,7 +19,6 @@ export const FlexListItem = forwardRef<HTMLDivElement, FlexListItemProps>((props
         endContent,
         midContent,
         isChecked,
-        setIsChecked,
         ...css } = props;
 
     return <EpistoFlex2
@@ -35,16 +32,6 @@ export const FlexListItem = forwardRef<HTMLDivElement, FlexListItemProps>((props
         padding="5px"
         onClick={onClick}
         {...css}>
-
-        {setIsChecked && <EpistoFlex2
-            alignItems={'center'}
-            justifyContent={'center'}>
-
-            <Checkbox
-                checked={isChecked}
-                onChange={x => setIsChecked(x.currentTarget.checked)}
-                style={{ alignSelf: 'center' }} />
-        </EpistoFlex2>}
 
         {thumbnailContent && <EpistoFlex2
             alignItems={'center'}

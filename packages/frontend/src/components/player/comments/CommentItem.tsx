@@ -1,9 +1,10 @@
-import { Divider, Avatar } from '@chakra-ui/react';
-import { ThumbUpAlt } from '@mui/icons-material';
-import { CommentListDTO } from '@episto/communication';
+import { Avatar } from '@chakra-ui/react';
 import { Id } from '@episto/commontypes';
+import { CommentListDTO } from '@episto/communication';
+import { ThumbUpAlt } from '@mui/icons-material';
 import { ChipSmall } from '../../administration/courses/ChipSmall';
 import { EpistoButton } from '../../controls/EpistoButton';
+import { EpistoDivider } from '../../controls/EpistoDivider';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
 
@@ -45,7 +46,7 @@ export const CommentItem = (props: {
         pl={parentCommentId ? '20px' : undefined}>
 
         {parentCommentId &&
-            <Divider
+            <EpistoDivider
                 variant="fullWidth"
                 orientation="vertical" />}
 

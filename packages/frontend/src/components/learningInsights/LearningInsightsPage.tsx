@@ -1,11 +1,10 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { useRedirectOnExactMatch } from '../../static/frontendHelpers';
 import { ContentPane } from '../ContentPane';
 import { LearningInsightsOverview } from '../LearningInsightsOverview';
 import { LeftPane } from '../LeftPane';
 import { NavigationLinkList } from '../NavigationLinkList';
-import { PageRootContainer } from '../PageRootContainer';
 import { CurrentUserContext } from '../system/AuthenticationFrame';
 import { EpistoRoutes } from '../universal/EpistoRoutes';
 import { LearningCourseStats } from './LearningCourseStats';
@@ -19,7 +18,7 @@ const LearningInsightsPage = () => {
         redirectRoute: applicationRoutes.learningRoute.overviewRoute
     });
 
-    return <PageRootContainer>
+    return <>
 
         <LeftPane>
 
@@ -30,7 +29,7 @@ const LearningInsightsPage = () => {
                 ]} />
         </LeftPane>
 
-        <ContentPane noMaxWidth>
+        <ContentPane>
 
             <EpistoRoutes
                 renderRoutes={[
@@ -44,6 +43,6 @@ const LearningInsightsPage = () => {
                     }
                 ]} />
         </ContentPane>
-    </PageRootContainer>;
+    </>;
 };
 export default LearningInsightsPage;

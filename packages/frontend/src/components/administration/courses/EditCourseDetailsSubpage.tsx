@@ -1,4 +1,3 @@
-import { Slider } from '@mui/material';
 import { useEffect, useMemo } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { EMPTY_ARRAY } from '../../../helpers/emptyArray';
@@ -25,6 +24,7 @@ import { SimpleEditList } from '../SimpleEditList';
 import { CourseAdministartionFrame } from './CourseAdministartionFrame';
 import { EditSection } from './EditSection';
 import { instantiate, parseIntOrFail } from '@episto/commonlogic';
+import { EpistoSlider } from '../../controls/EpistoSlider';
 
 export const EditCourseDetailsSubpage = () => {
 
@@ -375,7 +375,7 @@ export const EditCourseDetailsSubpage = () => {
                                 isOverline
                                 text="Nehézség">
 
-                                <Slider
+                                <EpistoSlider
                                     aria-label="Nehézség"
                                     defaultValue={0}
                                     valueLabelDisplay="auto"
@@ -392,7 +392,7 @@ export const EditCourseDetailsSubpage = () => {
                                 isOverline
                                 text="Tanulási élmény">
 
-                                <Slider
+                                <EpistoSlider
                                     defaultValue={0}
                                     valueLabelDisplay="auto"
                                     value={benchmark}
@@ -488,7 +488,7 @@ export const EditCourseDetailsSubpage = () => {
                                             value={item.text}
                                             setValue={(value) => onItemChanged({ ...item, text: value })} />
 
-                                        <Slider
+                                        <EpistoSlider
                                             defaultValue={0}
                                             valueLabelDisplay="auto"
                                             value={item.value}

@@ -68,19 +68,6 @@ export const ShopAdminSubpage = () => {
         }
     };
 
-    const headerButtons = [
-        {
-            name: 'editButton',
-            text: 'Szerkesztés',
-            onClick: () => handleEdit(selectedIds[0])
-        },
-        {
-            name: 'deleteButton',
-            text: 'Törlés',
-            onClick: () => handleDelete(selectedIds[0])
-        }
-    ];
-
     const setSelected = (shopItemId: Id<'ShopItem'>, isSelected: boolean) => {
 
         if (isSelected) {
@@ -122,7 +109,6 @@ export const ShopAdminSubpage = () => {
                         {/* admin header */}
                         <AdminSubpageHeader direction="column">
                             <AdminListEditHeader
-                                headerButtons={headerButtons}
                                 isAllSelected={isAllSelected}
                                 selectAllOrNone={selectAllOrNone}
                                 selectedIds={selectedIds}
@@ -152,7 +138,6 @@ export const ShopAdminSubpage = () => {
                                                     className="square70"
                                                     alt="shop item cover" />
                                             )}
-                                            setIsChecked={x => setSelected(shopItem.id, x)}
                                             isChecked={selectedIds.some(x => x === shopItem.id)}
                                             midContent={(
                                                 <FlexListTitleSubtitle

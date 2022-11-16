@@ -1,21 +1,16 @@
 import { CourseItemStateType, CourseModeType, Id } from '@episto/commontypes';
 import { QuestionDTO, VideoPlayerDataDTO } from '@episto/communication';
-import { Divider } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import { useReactTimer } from '../../../helpers/reactTimer';
+import { Responsivity } from '../../../helpers/responsivity';
 import { StillWatchingDialogMarker } from '../../../models/types';
 import { PlaybackApiService } from '../../../services/api/playbackApiService';
-import {
-    getRandomInteger,
-    isBetweenThreshold,
-    iterate,
-    useIsMobileView,
-    usePaging
-} from '../../../static/frontendHelpers';
+import { getRandomInteger, isBetweenThreshold, iterate, usePaging } from '../../../static/frontendHelpers';
 import { Logger } from '../../../static/Logger';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoDiv } from '../../controls/EpistoDiv';
+import { EpistoDivider } from '../../controls/EpistoDivider';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { NavigateToCourseItemActionType } from '../../playlist/Playlist';
@@ -42,7 +37,7 @@ export const WatchView = ({
     playlistFilterLogic,
     answerSessionId,
     courseMode,
-    isPlayerLoaded,
+    isVideoReady,
     courseId,
     continueCourse,
     refetchPlayerData
@@ -57,11 +52,12 @@ export const WatchView = ({
     refetchPlayerData: () => Promise<void>,
     currentItemCode: string,
     nextItemState: CourseItemStateType | null,
-    isPlayerLoaded: boolean
+    isVideoReady: boolean
 }) => {
 
     const { questions } = videoPlayerData;
-    const isMobile = useIsMobileView();
+    const { isMobile } = Responsivity
+        .useIsMobileView();
     const descCommentPaging = usePaging<string>({ items: ['Leírás', 'Hozzászólások'] });
     const [isShowNewDialogsEnabled, setShowNewDialogsEnabled] = useState(true);
     const dialogThresholdSecs = 1;
@@ -249,10 +245,8 @@ export const WatchView = ({
             align="center">
 
             <VideoPlayer
-                //height="calc((var(--playerWidth) - 420px) / 1.80)"
-                className="largeSoftShadow"
-                videoItem={videoPlayerData}
-                videoPlayerState={videoPlayerState}>
+                videoPlayerState={videoPlayerState}
+                isVideoReady={isVideoReady}>
 
                 {/* next video */}
                 <AbsoluteFlexOverlay
@@ -355,7 +349,7 @@ export const WatchView = ({
 
             {isMobile && <CourseItemSelector
                 isMobile={isMobile}
-                isPlayerLoaded={isPlayerLoaded}
+                isVideoReady={isVideoReady}
                 currentItemCode={currentItemCode}
                 nextItemState={nextItemState}
                 courseId={courseId}
@@ -363,7 +357,7 @@ export const WatchView = ({
                 refetchPlayerData={refetchPlayerData}
                 playlistFilterLogic={playlistFilterLogic} />}
 
-            {!isMobile && <Divider
+            {!isMobile && <EpistoDivider
                 style={{
                     background: 'var(--epistoTeal)',
                     width: '100%',

@@ -1,22 +1,23 @@
 import { Grid } from '@chakra-ui/react';
-import { Slider } from '@mui/material';
+import { Id } from '@episto/commontypes';
 import { useEffect, useState } from 'react';
+import { applicationRoutes } from '../../../configuration/applicationRoutes';
+import { Responsivity } from '../../../helpers/responsivity';
+import { CourseApiService } from '../../../services/api/courseApiService';
 import { PrequizApiService } from '../../../services/api/prequizApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { useShowErrorDialog } from '../../../services/core/notifications';
-import { Id } from '@episto/commontypes';
 import { Environment } from '../../../static/Environemnt';
-import { ArrayBuilder, useIsMobileView, usePaging } from '../../../static/frontendHelpers';
+import { ArrayBuilder, usePaging } from '../../../static/frontendHelpers';
 import { useIntParam } from '../../../static/locationHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
+import { EpistoDiv } from '../../controls/EpistoDiv';
+import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
+import { EpistoSlider } from '../../controls/EpistoSlider';
 import { ExamLayout } from '../../exam/ExamLayout';
 import { ExamLayoutContent } from '../../exam/ExamLayoutContent';
 import { QuestionAnswer } from '../../exam/QuestionAnswer';
-import { CourseApiService } from '../../../services/api/courseApiService';
-import { applicationRoutes } from '../../../configuration/applicationRoutes';
-import { EpistoFlex2 } from '../../controls/EpistoFlex';
-import { EpistoDiv } from '../../controls/EpistoDiv';
 
 export const PrequizSubpage = () => {
 
@@ -54,7 +55,8 @@ export const PrequizSubpage = () => {
     const [selectedAnswerId, setSelectedAnswerId] = useState<Id<'Answer'> | null>();
     const canContinue = question?.isNumeric || !!selectedAnswerId;
     const progressPercentage = (currentQuestionIndex) / totalQuestionsCount * 100;
-    const isMobile = useIsMobileView();
+    const { isMobile } = Responsivity
+        .useIsMobileView();
     const isLandscape = window.orientation === 90;
 
     const [numericValue, setNumericValue] = useState(0);
@@ -166,7 +168,7 @@ export const PrequizSubpage = () => {
                                 {paging.currentIndex === 2 ? '1 óra' : '1'}
                             </EpistoFont>
 
-                            <Slider
+                            <EpistoSlider
                                 max={question.maxValue}
                                 min={question.minValue}
                                 step={question.stepValue}

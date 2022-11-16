@@ -1,11 +1,12 @@
 import { useContext, useEffect, useRef, useState } from 'react';
+import { Responsivity } from '../../helpers/responsivity';
 import { useLogout } from '../../services/api/authenticationApiService';
 import { useUploadAvatarFile } from '../../services/api/fileApiService';
 import { useRequestPasswordChangeAuthenticated } from '../../services/api/passwordChangeApiService';
 import { UserApiService } from '../../services/api/UserApiService1';
 import { showNotification, useShowErrorDialog } from '../../services/core/notifications';
 import { Environment } from '../../static/Environemnt';
-import { reloadPage, useIsMobileView } from '../../static/frontendHelpers';
+import { reloadPage } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoEntry } from '../controls/EpistoEntry';
@@ -29,7 +30,8 @@ export const Preferences = () => {
 
     const [avatarFile, setAvatarFile] = useState<File | null>(null);
 
-    const isMobile = useIsMobileView();
+    const { isMobile } = Responsivity
+        .useIsMobileView();
 
     const imageRef = useRef<HTMLImageElement>(null);
 

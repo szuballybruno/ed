@@ -1,5 +1,5 @@
-import Button from '@mui/material/Button';
 import { ReactNode } from 'react';
+import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoDiv } from '../../controls/EpistoDiv';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 
@@ -23,7 +23,7 @@ export const OverlayDialog = (props: {
         <EpistoFlex2 mt="20px"
             justify="flex-end"
             display={props.showCloseButton ? 'flex' : 'none'}>
-            <Button
+            <EpistoButton
                 variant="outlined"
                 onClick={() => {
 
@@ -31,7 +31,7 @@ export const OverlayDialog = (props: {
                         props.closeButtonAction();
                 }}>
                 Bezárás
-            </Button>
+            </EpistoButton>
         </EpistoFlex2>
     </EpistoDiv>;
 };

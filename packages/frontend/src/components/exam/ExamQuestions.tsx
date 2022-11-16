@@ -1,14 +1,12 @@
 import { Grid } from '@chakra-ui/layout';
-import { useState } from 'react';
-import { ExamApiService } from '../../services/api/examApiService';
-import browser from '../../services/core/browserSniffingService';
-import { useShowErrorDialog } from '../../services/core/notifications';
-import { AnswerDTO } from '@episto/communication';
-import { ExamPlayerDataDTO } from '@episto/communication';
-import { GivenAnswerDTO } from '@episto/communication';
 import { Id } from '@episto/commontypes';
+import { AnswerDTO, ExamPlayerDataDTO, GivenAnswerDTO } from '@episto/communication';
+import { useState } from 'react';
+import { Responsivity } from '../../helpers/responsivity';
+import { ExamApiService } from '../../services/api/examApiService';
+import { useShowErrorDialog } from '../../services/core/notifications';
 import { Environment } from '../../static/Environemnt';
-import { epochDates, useIsMobileView, usePaging } from '../../static/frontendHelpers';
+import { epochDates, usePaging } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
@@ -59,8 +57,10 @@ export const ExamQuestions = ({
     const isLastQuestion = questionPaging.isLast;
 
     const currentGivenAnswer = (givenAnswers[currentQuestion.questionVersionId + ''] ?? null) as GivenAnswerDTO | null;
-    const isMobile = useIsMobileView();
-    const isIPhone = browser.isIPhone;
+    const { isMobile } = Responsivity
+        .useIsMobileView();
+    const { isIPhone } = Responsivity
+        .useIsIPhone();
 
     /**
      * Open abort dialog 

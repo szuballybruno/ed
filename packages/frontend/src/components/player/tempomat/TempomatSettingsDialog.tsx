@@ -1,11 +1,10 @@
-import { Divider } from '@chakra-ui/react';
+import { Id, TempomatModeType } from '@episto/commontypes';
 import { useSetTempomatMode } from '../../../services/api/tempomatApiService';
 import { useRecommendedItemQuota } from '../../../services/api/userProgressApiService';
 import { useShowErrorDialog } from '../../../services/core/notifications';
-import { TempomatModeType } from '@episto/commontypes';
-import { Id } from '@episto/commontypes';
 import { toDateStringFormatted } from '../../../static/frontendHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
+import { EpistoDivider } from '../../controls/EpistoDivider';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { EpistoDialog } from '../../universal/epistoDialog/EpistoDialog';
@@ -60,7 +59,8 @@ export const TempomatSettingsDialog = (props: {
             <EpistoFlex2 direction="column"
                 align="center"
                 flex="1" >
-                <Divider
+                
+                <EpistoDivider
                     h="1px"
                     w="calc(100% - 20px)"
                     background="grey" />
@@ -98,7 +98,7 @@ export const TempomatSettingsDialog = (props: {
                         onClick={() => handleSetTempomatMode('strict')} />
                 </EpistoFlex2>
 
-                <Divider
+                <EpistoDivider
                     h="1px"
                     w="calc(100% - 20px)"
                     background="grey" />

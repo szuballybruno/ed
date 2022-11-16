@@ -8,10 +8,11 @@
     "typings": "./dist/index.d.ts",
     "type": "module",
     "scripts": {
-        "build": "tsc"
+        "build": "tsc -v && tsc"
     },
     "dependencies": {},
     "devDependencies": {
-        "@types/node": "^18.11.9"
+        "@types/node": "^18.11.9",
+        "typescript": "4.8.4"
     }
 }

@@ -1,8 +1,8 @@
-import { useMediaQuery } from '@chakra-ui/react';
 import { ArrowBack } from '@mui/icons-material';
 import { ReactNode } from 'react';
+import { Responsivity } from '../../helpers/responsivity';
 import { Environment } from '../../static/Environemnt';
-import { hasValue, isString, useIsMobileView } from '../../static/frontendHelpers';
+import { hasValue, isString } from '../../static/frontendHelpers';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoDiv } from '../controls/EpistoDiv';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
@@ -43,8 +43,12 @@ export const SurveyWrapper = (props: {
     const children = props.children;
     const onNext = props.onNext;
 
-    const isMobile = useIsMobileView();
-    const [isSmallerThan1400] = useMediaQuery('(min-width: 1350px)');
+    const { isMobile } = Responsivity
+        .useIsMobileView();
+
+    // TODO clarivy
+    const isLargerThan1350 = Responsivity
+        .useIsLargerThan('1350px');
 
     return <EpistoFlex2
         id="signupWrapperRoot"
@@ -52,7 +56,7 @@ export const SurveyWrapper = (props: {
         alignItems="center"
         width="100%"
         height="100%"
-        px={isSmallerThan1400 ? 125 : 0}
+        px={isLargerThan1350 ? 125 : 0}
         zIndex="3"
         maxH="100vh"
         position="relative">
@@ -115,7 +119,7 @@ export const SurveyWrapper = (props: {
                 wrap="nowrap"
                 justify="center"
                 align="center"
-                width={isSmallerThan1400 ? '100vw' : '90vw'}
+                width={isLargerThan1350 ? '100vw' : '90vw'}
                 height={'90%'}>
 
                 {/* image */}

@@ -1,0 +1,32 @@
+import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { Id } from '@episto/commontypes';
+
+export class LeaderboardView {
+
+    @XViewColumn()
+    companyId: Id<'Company'>;
+
+    @XViewColumn()
+    userId: Id<'User'>;
+
+    @XViewColumn()
+    username: string;
+
+    @XViewColumn()
+    acquiredCoinsPastMonth: number;
+
+    @XViewColumn()
+    acquiredCoinsPastWeek: number;
+
+    @XViewColumn()
+    acquiredCoinsPastDay: number;
+
+    @XViewColumn()
+    rankMonth: number;
+
+    @XViewColumn()
+    rankWeek: number;
+
+    @XViewColumn()
+    rankDay: number;
+}

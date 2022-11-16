@@ -104,6 +104,7 @@ import { LatestCourseVersionView } from '../../models/views/LatestCourseVersionV
 import { LatestExamResultView } from '../../models/views/LatestExamResultView';
 import { LatestExamView } from '../../models/views/LatestExamView';
 import { LatestVideoView } from '../../models/views/LatestVideoView';
+import { LeaderboardView } from '../../models/views/LeaderboardView';
 import { ModuleEditView } from '../../models/views/ModuleEditView';
 import { ModulePlayerView } from '../../models/views/ModulePlayerView';
 import { MostProductiveTimeRangeView } from '../../models/views/MostProductiveTimeRangeView';
@@ -249,7 +250,8 @@ export const createDBSchema = (): XDBMSchemaService => {
             ImproveYourselfPageStatsView,
             GivenAnswerView,
             AdminCourseUserStatsView,
-            QuestionModuleCompareView
+            QuestionModuleCompareView,
+            LeaderboardView
         ],
 
         functionScripts: [

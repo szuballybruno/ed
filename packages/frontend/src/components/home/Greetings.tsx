@@ -1,9 +1,9 @@
 import { Player } from '@lottiefiles/react-lottie-player';
 import { useContext } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
+import { Responsivity } from '../../helpers/responsivity';
 import { useNavigation } from '../../services/core/navigatior';
 import { Environment } from '../../static/Environemnt';
-import { useIsMobileView } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
@@ -14,7 +14,8 @@ export const Greetings = () => {
 
     const { navigate2 } = useNavigation();
     const { firstName } = useContext(CurrentUserContext);
-    const isMobile = useIsMobileView();
+    const { isMobile } = Responsivity
+        .useIsMobileView();
 
     return <EpistoFlex2
         direction="row"

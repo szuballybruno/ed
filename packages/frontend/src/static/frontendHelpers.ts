@@ -1,4 +1,4 @@
-import { useMediaQuery } from '@chakra-ui/react';
+import { ErrorCodeType, ErrorWithCode, Id, RoleIdEnum } from '@episto/commontypes';
 import quantize from 'quantize';
 import React, { ComponentType, MutableRefObject, ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -6,9 +6,6 @@ import { rootRoute } from '../configuration/applicationRoutes';
 import { ApplicationRoute } from '../models/types';
 import { useNavigation } from '../services/core/navigatior';
 import { useShowErrorDialog } from '../services/core/notifications';
-import { ErrorWithCode } from '@episto/commontypes';
-import { ErrorCodeType, RoleIdEnum } from '@episto/commontypes';
-import { Id } from '@episto/commontypes';
 import { CSSOptionsType, getCSSClassKeyFromOptions } from '../styles/globalCssTypes';
 import { stringifyQueryObject } from './locationHelpers';
 import { translatableTexts } from './translatableTexts';
@@ -736,20 +733,6 @@ export type PagingType<T> = {
     progressPercentage: number;
 };
 
-export const useIsMobileView = () => {
-
-    const [isMobileView] = useMediaQuery('(max-width: 980px)');
-    return isMobileView;
-};
-
-export const useIsScreenWiderThan = (minimumPixels: number) => {
-
-    const queryRes = useMediaQuery(`(min-width: ${minimumPixels}px)`);
-    const isTrue = queryRes[0];
-
-    return isTrue;
-};
-
 export type PropsWithChildren = { children: ReactNode };
 
 export const useEventTrigger = () => {
@@ -1069,32 +1052,4 @@ export const useImageColor = (src: string, settings?: ImageColorSettingsType) =>
     }, [src, isCorsEnabled, colorsCount, format, getArrayOfPixels, mapToHex]);
 
     return { colors };
-};
-
-
-const getOrientation = () =>
-    window.orientation;
-
-export const useScreenOrientation = () => {
-    const [orientation, setOrientation] =
-        useState(getOrientation());
-
-    const updateOrientation = () => {
-        setOrientation(getOrientation());
-    };
-
-    useEffect(() => {
-        window.addEventListener(
-            'orientationchange',
-            updateOrientation
-        );
-        return () => {
-            window.removeEventListener(
-                'orientationchange',
-                updateOrientation
-            );
-        };
-    }, []);
-
-    return orientation;
 };

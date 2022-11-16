@@ -1,5 +1,6 @@
 import { FC, PropsWithChildren, ReactNode, useEffect, useMemo } from 'react';
 import { eventBus, GlobalEventManagerType } from '../../static/EventBus';
+import { Logger } from '../../static/Logger';
 import { XDialogHost } from '../lib/XDialog/XDialogHost';
 import { VideoPlayerFullscreenContextFrame } from '../player/watch/videoPlayer/VideoPlayerFullscreenFrame';
 import { AuthenticationFrame } from './AuthenticationFrame';
@@ -66,15 +67,15 @@ const getFrameElements = (frames: FrameType[]) => {
 
             const FrameElement = ({ children }: PropsWithChildren) => {
 
-                console.log(`Rendering frame: ${CurrentFrameElement.name}`);
+                Logger.logScoped('RENDER', `Rendering frame: ${CurrentFrameElement.name}`);
 
                 useEffect(() => {
 
-                    console.log(`Mounting frame: ${CurrentFrameElement.name}`);
+                    Logger.logScoped('RENDER', `Mounting frame: ${CurrentFrameElement.name}`);
 
                     return () => {
 
-                        console.log(`Unmounting frame: ${CurrentFrameElement.name}`);
+                        Logger.logScoped('RENDER', `Unmounting frame: ${CurrentFrameElement.name}`);
                     };
                 }, []);
 
@@ -115,8 +116,6 @@ export const FrameRendererRoot = ({ children }: PropsWithChildren) => {
     //     globalEventManager={globalEventManager}>
     //     {children}
     // </ServiceContainerFrame>, [globalEventManager]);
-
-    console.log('rendering frames');
 
     /**
      * Get frames

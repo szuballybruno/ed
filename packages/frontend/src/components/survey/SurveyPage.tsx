@@ -1,12 +1,12 @@
 import { applicationRoutes } from '../../configuration/applicationRoutes';
+import { Responsivity } from '../../helpers/responsivity';
 import { SurveyApiService } from '../../services/api/SurveyApiService';
 import { useNavigation } from '../../services/core/navigatior';
 import { startUserGuide } from '../../services/core/userGuidingService';
 import { Environment } from '../../static/Environemnt';
-import { useIsMobileView, usePaging } from '../../static/frontendHelpers';
+import { usePaging } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { ContentPane } from '../ContentPane';
-import { PageRootContainer } from '../PageRootContainer';
 import { useRefetchUserAsync } from '../system/AuthenticationFrame';
 import { EpistoPaging } from '../universal/EpistoPaging';
 import { SurveyQuestions } from './SurveyQuestions';
@@ -19,7 +19,8 @@ export const SurveyPage = () => {
     const { refetchAuthHandshake } = useRefetchUserAsync();
     const { completeSurveyAsync } = SurveyApiService.useCompleteSurvey();
     const isInvitedUser = true;
-    const isMobile = useIsMobileView();
+    const { isMobile } = Responsivity
+        .useIsMobileView();
 
     const { navigate2 } = useNavigation();
 
@@ -83,15 +84,12 @@ export const SurveyPage = () => {
     ];
 
     return (
-        <PageRootContainer
-            noMaxWidth>
+        <>
 
             <ContentPane
                 align="center"
                 justify="center"
-                //background="radial-gradient(farthest-corner at 300px 100px, rgba(177,208,242,0.7) 33%, rgba(255,255,255,1) 100%)"
                 hideNavbar
-                noMaxWidth
                 padding='20px'>
 
                 <EpistoPaging
@@ -109,6 +107,6 @@ export const SurveyPage = () => {
                     index={slidesState.currentIndex} />
 
             </ContentPane>
-        </PageRootContainer>
+        </>
     );
 };

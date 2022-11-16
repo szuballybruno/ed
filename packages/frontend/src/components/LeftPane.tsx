@@ -1,112 +1,123 @@
-import { applicationRoutes } from '../configuration/applicationRoutes';
-import { CompanyApiService } from '../services/api/CompanyApiService1';
-import { useNavigation } from '../services/core/navigatior';
-import { Environment } from '../static/Environemnt';
+import { useContext, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { PropsWithChildren } from '../static/frontendHelpers';
-import { EpistoFlex2 } from './controls/EpistoFlex';
-import { EpistoImage } from './controls/EpistoImage';
-import { FlexFloat } from './controls/FlexFloat';
-import { useAuthorizationContext } from './system/AuthorizationContext';
-import { useTawkApi } from './system/TawkToFrame';
+import { LeftSidebarElementRefContext } from './PageRootContainer';
+
 export const LeftPane = ({
-    padding,
-    basis,
-    children
+    children,
+    collapsed,
+    hidden
 }: {
-    padding?: string,
-    basis?: string
+    collapsed?: boolean,
+    hidden?: boolean
 } & PropsWithChildren) => {
 
-    const homeRoute = applicationRoutes.rootHomeRoute;
-    const { hasPermission } = useAuthorizationContext();
-    const { navigate2 } = useNavigation();
-    const { toggle } = useTawkApi();
-    const { companyDetails } = CompanyApiService
-        .useCompanyDetailsByDomain(window.location.origin);
+    const contextValue = useContext(LeftSidebarElementRefContext);
 
-    return (
-        <FlexFloat
-            borderRadius="none"
-            id="leftPane"
-            bg="white"
-            zIndex={2}
-            flexBasis="320px"
-            maxW="320px"
-            direction="column"
-            align="stretch"
-            padding={padding ? padding : '25px 15px 0 15px'}
-            basis={basis ?? undefined}
-            className="dividerBorderRight"
-            position="relative"
-            boxShadow="3px 0px 15px 5px rgba(0,0,0,0.1)">
+    useEffect(() => {
 
-            {/* logo link */}
-            <EpistoFlex2
-                width="100%"
-                alignItems={'center'}
-                justifyContent="flex-start"
-                mb="20px">
+        if (!contextValue)
+            return;
 
-                <img
-                    src={Environment.getAssetUrl('/images/logo.svg')}
-                    style={{
-                        height: '50px',
-                        objectFit: 'cover',
-                        cursor: 'pointer',
-                        margin: '10px 10px',
-                        padding: 0
-                    }}
-                    alt=""
-                    onClick={() => {
+        contextValue
+            .setLeftPaneProps({
+                ...contextValue.leftPaneProps,
+                isShowing: true,
+                isCollapsed: collapsed === true,
+                isHidden: hidden === true
+            });
 
-                        if (hasPermission('BYPASS_SURVEY'))
-                            navigate2(homeRoute);
-                    }} />
-            </EpistoFlex2>
+        /**
+         * Important to destroy properly 
+         */
+        return () => {
 
-            {children}
+            contextValue
+                .setLeftPaneProps({
+                    ...contextValue.leftPaneProps,
+                    isShowing: false,
+                });
+        };
+    }, [collapsed, contextValue, hidden]);
 
-            <EpistoImage
-                position='absolute'
-                bottom='20px'
-                left='0'
-                width='100%'
-                padding='20px'
-                src={companyDetails?.logoUrl + ''} />
+    if (!contextValue)
+        return <></>;
 
-            {/* tina image 
-            <EpistoFlex2
-                direction="column"
-                position="absolute"
-                bottom="160px"
-                right="25px"
-                width="170px">
+    if (!contextValue.leftPaneElementRef)
+        return <></>;
 
-                <EpistoFont
-                    fontSize="fontSmall"
-                    style={{
-                        marginBottom: 5
-                    }}>
+    if (!contextValue.leftPaneElementRef.current)
+        return <></>;
 
-                    {translatableTexts.leftPane.assistantDescription}
-                </EpistoFont>
-            </EpistoFlex2>
+    // const LeftPaneComponent = (
+    //     <FlexFloat
+    //         id="leftPane"
+    //         display={hidden ? 'none' : undefined}
+    //         borderRadius="none"
+    //         bg="white"
+    //         zIndex={2}
+    //         direction="column"
+    //         align="stretch"
+    //         padding={'25px 15px 0 15px'}
+    //         className="whall dividerBorderRight"
+    //         position="relative"
+    //         boxShadow="3px 0px 15px 5px rgba(0,0,0,0.1)">
 
-            {/* tina button 
-            <EpistoFlex2
-                direction="column"
-                position="absolute"
-                bottom="100px"
-                right="20px"
-                width="130px">
+    //         {/* logo link */}
+    //         {collapsed
+    //             ? <EpistoFlex2 width="100%"
+    //                 alignItems={'center'}
+    //                 justifyContent="center"
+    //                 mt="10px"
+    //                 mb="20px">
+    //                 <img
+    //                     src={Environment.getAssetUrl('/images/logo_min.svg')}
+    //                     style={{
+    //                         height: '50px',
+    //                         objectFit: 'cover',
+    //                         cursor: 'pointer',
+    //                         padding: 0
+    //                     }}
+    //                     alt=""
+    //                     onClick={() => {
 
-                <EpistoButton
-                    variant='colored'
-                    onClick={() => toggle()}>
+    //                         navigate2(applicationRoutes.homeRoute);
+    //                     }} />
+    //             </EpistoFlex2>
+    //             : <EpistoFlex2
+    //                 width="100%"
+    //                 alignItems={'center'}
+    //                 justifyContent="flex-start"
+    //                 mb="20px">
 
-                    {translatableTexts.leftPane.assistantButtonTitle}
-                </EpistoButton>
-            </EpistoFlex2>*/}
-        </FlexFloat>
-    );
+    //                 <img
+    //                     src={Environment.getAssetUrl('/images/logo.svg')}
+    //                     style={{
+    //                         height: '50px',
+    //                         objectFit: 'cover',
+    //                         cursor: 'pointer',
+    //                         margin: '10px 10px',
+    //                         padding: 0
+    //                     }}
+    //                     alt=""
+    //                     onClick={() => {
+
+    //                         if (hasPermission('BYPASS_SURVEY'))
+    //                             navigate2(homeRoute);
+    //                     }} />
+    //             </EpistoFlex2>}
+
+    //         {children}
+
+    //         {!collapsed && <EpistoImage
+    //             position='absolute'
+    //             bottom='20px'
+    //             left='0'
+    //             width='100%'
+    //             padding='20px'
+    //             src={companyDetails?.logoUrl + ''} />}
+    //     </FlexFloat>
+    // );
+
+    return createPortal(children, contextValue.leftPaneElementRef.current);
 };

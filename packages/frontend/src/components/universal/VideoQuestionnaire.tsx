@@ -3,13 +3,14 @@ import { useReactTimer } from '../../helpers/reactTimer';
 import { PlayerApiService } from '../../services/api/PlayerApiService';
 import { QuestionDTO } from '@episto/communication';
 import { Id } from '@episto/commontypes';
-import { epochDates, useIsMobileView } from '../../static/frontendHelpers';
+import { epochDates } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { QuesitionView } from '../QuestionView';
 import { TimeoutFrame } from './TimeoutFrame';
+import { Responsivity } from '../../helpers/responsivity';
 
 export const VideoQuestionnaire = (props: {
     question: QuestionDTO,
@@ -24,7 +25,9 @@ export const VideoQuestionnaire = (props: {
     const isAnswered = !!answerResult;
     const autoCloseSecs = 8;
     const [showUpTime, setShowUpTime] = useState<Date>(new Date());
-    const isMobile = useIsMobileView();
+
+    const { isMobile } = Responsivity
+        .useIsMobileView();
 
     const handleAnswerQuestionAsync = async (answerVersionIds: Id<'AnswerVersion'>[]) => {
 

@@ -1,12 +1,13 @@
+import { Id } from '@episto/commontypes';
+import { ExamPlayerDataDTO } from '@episto/communication';
 import { ExpandMore } from '@mui/icons-material';
 import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
 import { useEffect } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
+import { Responsivity } from '../../helpers/responsivity';
 import { useExamResults } from '../../services/api/examApiService';
 import { useNavigation } from '../../services/core/navigatior';
-import { ExamPlayerDataDTO } from '@episto/communication';
-import { Id } from '@episto/commontypes';
-import { ArrayBuilder, useIsMobileView } from '../../static/frontendHelpers';
+import { ArrayBuilder } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { ChipSmall } from '../administration/courses/ChipSmall';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
@@ -29,7 +30,8 @@ export const ExamResultsSlide = (props: {
     const { examResults } = useExamResults(answerSessionId);
     const questionsAnswers = examResults?.questions ?? [];
     const { navigate2 } = useNavigation();
-    const isMobile = useIsMobileView();
+    const { isMobile } = Responsivity
+        .useIsMobileView();
 
     const [isFullscreen, setIsFullscreen] = useVideoPlayerFullscreenContext();
 

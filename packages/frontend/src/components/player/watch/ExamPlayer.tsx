@@ -4,13 +4,14 @@ import { useNavigation } from '../../../services/core/navigatior';
 import { useShowErrorDialog } from '../../../services/core/notifications';
 import { ExamPlayerDataDTO } from '@episto/communication';
 import { Id } from '@episto/commontypes';
-import { useIsMobileView, usePaging } from '../../../static/frontendHelpers';
+import { usePaging } from '../../../static/frontendHelpers';
 import { ExamGreetSlide } from '../../exam/ExamGreetSlide';
 import { ExamQuestions } from '../../exam/ExamQuestions';
 import { ExamResultsSlide } from '../../exam/ExamResultsSlide';
 import { EpistoPaging } from '../../universal/EpistoPaging';
 import { useVideoPlayerFullscreenContext } from './videoPlayer/VideoPlayerFullscreenFrame';
 import { WatchSubpageState } from './WatchSubpage';
+import { Responsivity } from '../../../helpers/responsivity';
 
 export const ExamPlayer = (props: {
     exam: ExamPlayerDataDTO,
@@ -33,7 +34,8 @@ export const ExamPlayer = (props: {
     const { startExamAsync, startExamState } = useStartExam();
     const showError = useShowErrorDialog();
     const { navigateToCourseRating } = useNavigation();
-    const isMobile = useIsMobileView();
+    const { isMobile } = Responsivity
+        .useIsMobileView();
     const [isFullscreen, setIsFullscreen] = useVideoPlayerFullscreenContext();
 
     const examWorkflowSlides = usePaging({ items: [1, 2, 3, 4] });

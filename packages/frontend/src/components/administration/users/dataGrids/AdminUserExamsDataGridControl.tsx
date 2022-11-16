@@ -11,6 +11,7 @@ import { EpistoFont } from '../../../controls/EpistoFont';
 import { LoadingFrame } from '../../../system/LoadingFrame';
 import { EmptyCell } from '../../../universal/EmptyCell';
 import { ChipSmall } from '../../courses/ChipSmall';
+
 export const AdminUserExamsDataGridControl = (props: {
     userId: Id<'User'>,
     courseId: Id<'Course'> | null

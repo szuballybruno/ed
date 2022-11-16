@@ -1,12 +1,11 @@
 import { Grid } from '@chakra-ui/react';
+import { CourseModeType, Id } from '@episto/commontypes';
+import { Responsivity } from '../../../helpers/responsivity';
 import { CourseApiService } from '../../../services/api/courseApiService';
 import { PretestApiService } from '../../../services/api/pretestApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { useShowErrorDialog } from '../../../services/core/notifications';
-import { CourseModeType } from '@episto/commontypes';
-import { Id } from '@episto/commontypes';
 import { Environment } from '../../../static/Environemnt';
-import { useIsMobileView } from '../../../static/frontendHelpers';
 import { useIntParam } from '../../../static/locationHelpers';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
@@ -70,7 +69,8 @@ export const PretestResultsSubpage = () => {
     const { pretestResults, pretestResultsError, pretestResultsState } = PretestApiService.usePretestResults(courseId);
     const correctAnswerRate = pretestResults?.correctAnswerRate ?? 0;
     const isBeginner = correctAnswerRate < 50;
-    const isMobile = useIsMobileView();
+    const { isMobile } = Responsivity
+        .useIsMobileView();
 
     const { setCourseModeAsync, setCourseModeState } = CourseApiService.useSetCourseMode();
     const showError = useShowErrorDialog();
