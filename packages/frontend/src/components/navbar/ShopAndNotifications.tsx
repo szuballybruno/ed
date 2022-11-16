@@ -54,7 +54,7 @@ export const ShopAndNotifications = (props: {
             <EpistoFlex2
                 paddingRight={isLowHeight ? 0 : '10px'}
                 align="center"
-                marginRight={isLowHeight ? 0 : '15px'}
+                //marginRight={isLowHeight ? 0 : '15px'}
                 shrink={0}>
 
                 {/* shop button */}

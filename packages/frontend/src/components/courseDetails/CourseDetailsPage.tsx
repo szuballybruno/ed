@@ -1,5 +1,6 @@
 import { Id } from '@episto/commontypes';
 import { useEffect, useState } from 'react';
+import { Responsivity } from '../../helpers/responsivity';
 import { CourseApiService } from '../../services/api/courseApiService';
 import { useNavigation } from '../../services/core/navigatior';
 import { Environment } from '../../static/Environemnt';
@@ -7,6 +8,7 @@ import { formatTimespan, useImageColor } from '../../static/frontendHelpers';
 import { useIntParam } from '../../static/locationHelpers';
 import { useCurrentUserId } from '../system/AuthenticationFrame';
 import { DesktopCourseDetailsPage } from './DesktopCourseDetailsPage';
+import { MobileCourseDetailsPage } from './MobileCourseDetailsPage';
 
 
 export type CourseDetailsSidebarInfoType = {
@@ -24,6 +26,7 @@ const CourseDetailsPage = () => {
     const { userId } = useCurrentUserId();
     const { courseDetails } = CourseApiService.useCourseDetails(courseId);
     const { colors } = useImageColor(courseDetails?.thumbnailURL!);
+    const isMobile = Responsivity.useIsMobileView();
 
     const [color, setColor] = useState<string>('white');
 
@@ -82,12 +85,19 @@ const CourseDetailsPage = () => {
         }
     ];
 
-    return <DesktopCourseDetailsPage
-        userId={userId}
-        courseDetails={courseDetails!}
-        currentColor={color}
-        handlePlayCourse={handlePlayCourse}
-        sidebarInfos={sidebarInfos} />;
+    return isMobile
+        ? <MobileCourseDetailsPage
+            userId={userId}
+            courseDetails={courseDetails!}
+            currentColor={color}
+            handlePlayCourse={handlePlayCourse}
+            sidebarInfos={sidebarInfos} />
+        : <DesktopCourseDetailsPage
+            userId={userId}
+            courseDetails={courseDetails!}
+            currentColor={color}
+            handlePlayCourse={handlePlayCourse}
+            sidebarInfos={sidebarInfos} />;
 };
 
 export default CourseDetailsPage;

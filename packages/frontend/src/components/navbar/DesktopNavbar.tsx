@@ -68,15 +68,15 @@ export const DesktopNavbar = ({
     const { isAuthenticated } = useAuthorizationContext();
 
     // media
-    const isLargerThan1180 = Responsivity
-        .useIsLargerThan('1180px');
+    const isLargerThan1300 = Responsivity
+        .useIsLargerThan('1300px');
 
     const isLargerThan1000 = Responsivity
         .useIsLargerThan('1000px');
 
     // util
     const hideLinks = hideLinks1 || !isAuthenticated;
-    const isMidMode = (isLargerThan1180 && !showLogo) || (isLargerThan1000 && showLogo);
+    const isMidMode = (isLargerThan1300 && !showLogo) || (isLargerThan1000 && showLogo);
 
     // funcs
     const MinimalRender = () => {

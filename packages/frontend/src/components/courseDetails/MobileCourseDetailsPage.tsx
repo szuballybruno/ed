@@ -5,13 +5,13 @@ import { Environment } from '../../static/Environemnt';
 import { translatableTexts } from '../../static/translatableTexts';
 import { useAdminCourseContentDialogLogic } from '../administration/users/adminCourseContentDialog/AdminCourseContentDialogLogic';
 import { AdminUserCourseContentDialog } from '../administration/users/adminCourseContentDialog/AdminUserCourseContentDialog';
-import { ContentPane } from '../ContentPane';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoTabs } from '../controls/EpistoTabs';
 import { EpistoHeader } from '../EpistoHeader';
-import { PageRootContainer } from '../PageRootContainer';
+import { ContentPane } from '../pageRootContainer/ContentPane';
+import { RootContainerBackground } from '../pageRootContainer/RootContainerBackground';
 import { ProfileImage } from '../ProfileImage';
 import { FlexListItem } from '../universal/FlexListItem';
 import { CourseDetailsBriefingInfoItem } from './CourseDetailsBriefingInfoItem';
@@ -72,18 +72,20 @@ export const MobileCourseDetailsPage = (props: {
         } */
     ];
 
-    return <PageRootContainer
-        noBackground
-        background={`linear-gradient(160deg, ${currentColor}, white)`}>
+    return <>
+
+        <RootContainerBackground>
+            <EpistoFlex2
+                className="whall"
+                bg={`linear-gradient(160deg, ${currentColor}, white)`} />
+        </RootContainerBackground>
 
         <AdminUserCourseContentDialog
             dialogLogic={adminCourseContentDialogLogic} />
 
         <ContentPane
-            noMaxWidth
-            direction="column"
             overflowY="scroll"
-            p="0 100px 0 100px">
+            padding="0 100px 0 100px">
 
             {/* Title */}
             <EpistoHeader
@@ -174,7 +176,7 @@ export const MobileCourseDetailsPage = (props: {
                         </EpistoFlex2>
 
                         <EpistoFlex2 flex="1">
-                            { /* tab contents */}
+
                             {desktopTabs
                                 .map((x, index) => <TabPanel
                                     style={{
@@ -191,9 +193,11 @@ export const MobileCourseDetailsPage = (props: {
                 </EpistoFlex2>
 
                 {/* Right pane */}
-                <EpistoFlex2 direction={'column'}
+                <EpistoFlex2
+                    direction={'column'}
                     minWidth="400px"
                     flexBasis="400px">
+
                     <EpistoFlex2
                         direction={'column'}
                         alignItems={'center'}
@@ -204,10 +208,13 @@ export const MobileCourseDetailsPage = (props: {
                         borderWidth='1px'
                         borderRadius='10px'
                         shadow={'#00000024 0px 0px 5px 0px'}>
-                        <EpistoFlex2 width="100%"
+
+                        <EpistoFlex2
+                            width="100%"
                             height='230px'
                             justifyContent={'center'}
                             p='10px'>
+
                             <img
                                 src={courseDetails?.thumbnailURL}
                                 style={{
@@ -258,6 +265,7 @@ export const MobileCourseDetailsPage = (props: {
                             ))}
 
                         <EpistoFlex2>
+
                             {/* start coures */}
                             <EpistoButton
                                 style={{
@@ -285,6 +293,7 @@ export const MobileCourseDetailsPage = (props: {
                                     : translatableTexts.courseDetails.startCourse}
                             </EpistoButton>
 
+                            {/* stats */}
                             {courseDetails?.currentItemCode && <EpistoButton
                                 style={{
                                     maxHeight: 40,
@@ -308,14 +317,12 @@ export const MobileCourseDetailsPage = (props: {
 
                                 {translatableTexts.learningOverview.myStatisticsTitle}
                             </EpistoButton>}
+
                         </EpistoFlex2>
 
-
                     </EpistoFlex2>
-
                 </EpistoFlex2>
             </EpistoFlex2>
-
         </ContentPane>
-    </PageRootContainer>;
+    </>;
 };
