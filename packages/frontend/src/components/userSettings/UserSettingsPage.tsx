@@ -1,7 +1,7 @@
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { Responsivity } from '../../helpers/responsivity';
-import { ContentPane } from '../ContentPane';
-import { LeftPane } from '../LeftPane';
+import { ContentPane } from '../pageRootContainer/ContentPane';
+import { LeftPane } from '../pageRootContainer/LeftPane';
 import { NavigationLinkList } from '../NavigationLinkList';
 import { EpistoRoutes } from '../universal/EpistoRoutes';
 import { CoinTransactions } from './CoinTransactions';

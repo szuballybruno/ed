@@ -2,7 +2,7 @@ import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { ApplicationRoute } from '../../models/types';
 import { useNavigation } from '../../services/core/navigatior';
 import { ArrayBuilder } from '../../static/frontendHelpers';
-import { LeftPane } from '../LeftPane';
+import { LeftPane } from '../pageRootContainer/LeftPane';
 import { NavigationLinkList } from '../NavigationLinkList';
 import { useAuthorizationContext } from '../system/AuthorizationContext';
 

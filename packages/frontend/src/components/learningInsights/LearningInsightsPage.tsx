@@ -1,9 +1,9 @@
 import { useContext } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { useRedirectOnExactMatch } from '../../static/frontendHelpers';
-import { ContentPane } from '../ContentPane';
+import { ContentPane } from '../pageRootContainer/ContentPane';
 import { LearningInsightsOverview } from '../LearningInsightsOverview';
-import { LeftPane } from '../LeftPane';
+import { LeftPane } from '../pageRootContainer/LeftPane';
 import { NavigationLinkList } from '../NavigationLinkList';
 import { CurrentUserContext } from '../system/AuthenticationFrame';
 import { EpistoRoutes } from '../universal/EpistoRoutes';
