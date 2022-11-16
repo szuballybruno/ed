@@ -9,6 +9,7 @@ import { useNavigation } from '../../services/core/navigatior';
 import { useShowErrorDialog } from '../../services/core/notifications';
 import { useQueryVal } from '../../static/locationHelpers';
 import { Logger } from '../../static/Logger';
+import { ContentPane } from '../ContentPane';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoDiv } from '../controls/EpistoDiv';
 import { EpistoEntry } from '../controls/EpistoEntry';
@@ -115,8 +116,6 @@ const LoginScreen = () => {
         navigate2(applicationRoutes.homeRoute);
     }, [dest, hasPermission, navigate2, navigateToHref]);
 
-    console.log(authState);
-
     // watch for auth state change
     // and navigate to home page if athenticated
     useEffect(() => {
@@ -154,7 +153,9 @@ const LoginScreen = () => {
         };
     }, []);
 
-    return <>
+    return <ContentPane
+        hideNavbar
+        noPadding>
 
         <EpistoFlex2
             justify={'center'}
@@ -353,7 +354,7 @@ const LoginScreen = () => {
                     </EpistoFlex2>;
                 })}
         </EpistoGrid>
-    </>;
+    </ContentPane>;
 };
 
 export default LoginScreen;
