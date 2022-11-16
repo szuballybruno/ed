@@ -1,28 +1,25 @@
-import { useEffect, useMemo, useRef } from 'react';
+import { useState } from 'react';
 import { ObjectComparer } from '../static/objectComparer';
 
-const useMemoize = <T>(obj: T, onChange?: (changedProps: string[]) => void): T => {
+const useMemoize = <T>(latestObject: T, onChange?: (changedProps: string[]) => void): T => {
 
-    const objPropsArray = Object
-        .values(obj as any);
+    const [memoizedObject, setMemoizedObject] = useState(latestObject);
 
-    const ref = useRef<T>(obj);
-    const mem = useMemo(() => obj, [objPropsArray.length, ...objPropsArray]);
+    const changedProps = ObjectComparer
+        .compareObjects(memoizedObject, latestObject);
 
-    useEffect(() => {
+    const isChanged = changedProps
+        .any();
 
-        const refValue = ref.current;
+    if (isChanged) {
 
-        const changedProps = ObjectComparer
-            .compareObjects(refValue, mem);
+        setMemoizedObject(latestObject);
 
         if (onChange)
             onChange(changedProps);
+    }
 
-        ref.current = mem;
-    }, [mem, ref, onChange]);
-
-    return mem;
+    return memoizedObject;
 };
 
 export const HelperHooks = {

@@ -1,7 +1,7 @@
 import { GridItem } from '@chakra-ui/react';
 import { Id } from '@episto/commontypes';
 import { ShopItemDTO } from '@episto/communication';
-import { Select, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { Responsivity } from '../../helpers/responsivity';
 import { useCoinBalance } from '../../services/api/coinTransactionsApiService';
@@ -12,6 +12,7 @@ import { EpistoDiv } from '../controls/EpistoDiv';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoGrid } from '../controls/EpistoGrid';
+import { EpistoSelect } from '../controls/EpistoSelect';
 import { EpistoConinInfo } from '../EpistoCoinInfo';
 import { LeftPane } from '../LeftPane';
 import { ProfileImage } from '../ProfileImage';
@@ -168,31 +169,19 @@ export const ShopPage = () => {
                         flex="5" />
 
                     {/* order settings  */}
-                    <Select
-                        native
-                        onChange={() => { throw new Error('Not implemented'); }} // TODO
-                        className="roundBorders fontSmall mildShadow"
-                        inputProps={{
-                            name: 'A-Z',
-                            id: 'outlined-age-native-simple',
-                        }}
-                        sx={{
-                            '& .MuiOutlinedInput-notchedOutline': {
-                                border: 'none'
-                            }
-                        }}
-                        style={{
-                            background: 'var(--transparentWhite70)',
-                            border: 'none',
-                            height: '40px',
-                            color: '3F3F3F',
-                            flex: 1
-                        }}>
-                        <option value={10}>{translatableTexts.availableCourses.sortOptions.aToZ}</option>
-                        <option value={20}>{translatableTexts.availableCourses.sortOptions.zToA}</option>
-                        <option value={30}>{translatableTexts.availableCourses.sortOptions.newToOld}</option>
-                        <option value={30}>{translatableTexts.availableCourses.sortOptions.oldToNew}</option>
-                    </Select>
+                    <EpistoSelect
+                        selectedValue={translatableTexts.availableCourses.sortOptions.aToZ}
+                        noUnselected
+                        items={[
+                            translatableTexts.availableCourses.sortOptions.aToZ,
+                            translatableTexts.availableCourses.sortOptions.zToA,
+                            translatableTexts.availableCourses.sortOptions.newToOld,
+                            translatableTexts.availableCourses.sortOptions.oldToNew
+                        ]}
+                        background="var(--transparentWhite70)"
+                        getDisplayValue={x => x}
+                        getCompareKey={x => x}
+                        onSelected={console.log} />
                 </EpistoFlex2>
 
                 {/* shop items */}

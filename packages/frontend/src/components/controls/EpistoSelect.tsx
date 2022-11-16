@@ -13,7 +13,8 @@ export type EpistoSelectPropsType<TItem> = {
     currentKey?: string,
     unselectedValue?: string,
     isDisabled?: boolean,
-    noUnselected?: boolean
+    noUnselected?: boolean,
+    background?: string
 };
 
 export const EpistoSelect = <TItem,>({
@@ -26,8 +27,9 @@ export const EpistoSelect = <TItem,>({
     unselectedValue,
     noUnselected,
     isDisabled,
+    background,
     ...css
-}: EpistoSelectPropsType<TItem> & EpistoFlex2Props) => {
+}: EpistoSelectPropsType<TItem> & Omit<EpistoFlex2Props, 'background'>) => {
 
     const onSelectedValue = (key: string) => {
 
@@ -56,7 +58,7 @@ export const EpistoSelect = <TItem,>({
             disabled={isDisabled}
             style={{
                 appearance: 'none',
-                background: 'white',
+                background: background ?? 'white',
                 outline: 'none',
                 margin: '10px 0',
                 height: '40px',

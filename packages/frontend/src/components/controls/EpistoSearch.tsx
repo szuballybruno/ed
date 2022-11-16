@@ -26,7 +26,7 @@ export const EpistoSearch = ({
         </InputLeftElement>
 
         <Input
-            className="largeSoftShadow"
+            // className="largeSoftShadow"
             outline="none"
             height='100%'
             padding="10px 10px 10px 35px"

@@ -1,6 +1,5 @@
 import { Grid, Tooltip } from '@chakra-ui/react';
 import { FiberManualRecord } from '@mui/icons-material';
-import { Slider } from '@mui/material';
 import React, { ReactNode, useState } from 'react';
 import { defaultCharts } from '../../../../static/defaultChartOptions';
 import { iterate } from '../../../../static/frontendHelpers';
@@ -9,6 +8,7 @@ import { EpistoFlex2 } from '../../../controls/EpistoFlex';
 import { EpistoFont } from '../../../controls/EpistoFont';
 import { EpistoReactPlayer } from '../../../controls/EpistoReactPlayer';
 import { EpistoSelect } from '../../../controls/EpistoSelect';
+import { EpistoSlider } from '../../../controls/EpistoSlider';
 import { StatisticsGroupType } from '../../../learningInsights/LearningStatistics';
 import StatisticsCard from '../../../statisticsCard/StatisticsCard';
 import { EpistoLineChart } from '../../../universal/charts/base_charts/EpistoLineChart';
@@ -21,7 +21,7 @@ export const HotspotsSlider = (props: {
 
     const { valueLabelComponent } = props;
 
-    return <Slider
+    return <EpistoSlider
         style={{
             overflow: 'hidden',
             height: '10px',
