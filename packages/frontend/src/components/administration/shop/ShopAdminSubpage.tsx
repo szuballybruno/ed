@@ -138,7 +138,6 @@ export const ShopAdminSubpage = () => {
                                                     className="square70"
                                                     alt="shop item cover" />
                                             )}
-                                            setIsChecked={x => setSelected(shopItem.id, x)}
                                             isChecked={selectedIds.some(x => x === shopItem.id)}
                                             midContent={(
                                                 <FlexListTitleSubtitle
