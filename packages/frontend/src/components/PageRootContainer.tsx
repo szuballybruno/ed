@@ -61,8 +61,13 @@ export const ContentPaneRoot = ({ contextValue, children }: { contextValue: Page
         <EpistoFlex2
             id={ContentPaneRoot.name}
             direction="column"
-            overflow="hidden"
-            flex="1">
+            flex="1"
+            overflowY={isMobile
+                ? undefined
+                : noOverflow
+                    ? 'hidden'
+                    : 'scroll'}
+            overflowX="hidden">
 
             {(!hideNavbar && !isMobile) && <Navbar
                 isLowHeight={isNavbarLowHeight}
@@ -77,10 +82,14 @@ export const ContentPaneRoot = ({ contextValue, children }: { contextValue: Page
                     : padding
                         ? padding
                         : '0 30px 0px 30px'}
+                overflowY={isMobile
+                    ? noOverflow
+                        ? 'hidden'
+                        : 'scroll'
+                    : undefined}
                 flex="1"
-                direction='column'
-                overflowY={noOverflow ? 'hidden' : 'scroll'}
-                overflowX="hidden">
+                direction='column'>
+
                 {children}
             </EpistoFlex2>
 
