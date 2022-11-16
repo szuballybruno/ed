@@ -147,7 +147,6 @@ export const RegistrationPage = () => {
 
             {/* invited */}
             {isInvited && <PasswordEntry
-                display='EPISTO'
                 state={passwordEntryState} />}
 
             <EpistoFlex2 direction={'row'}

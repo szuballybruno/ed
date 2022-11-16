@@ -1,4 +1,3 @@
-import { Divider } from '@chakra-ui/react';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { MutableRefObject } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
@@ -9,6 +8,7 @@ import { Environment } from '../../static/Environemnt';
 import { ArrayBuilder } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoDivider } from '../controls/EpistoDivider';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoPopper } from '../controls/EpistoPopper';
@@ -77,7 +77,8 @@ export const UserContextMenu = (props: {
                 <EpistoConinInfo height="45px" />
             </EpistoButton>
 
-            <Divider height={1}
+            <EpistoDivider
+                height={1}
                 width="100%"
                 bgColor={'black'} />
 

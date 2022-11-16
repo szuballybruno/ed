@@ -4,11 +4,11 @@ import VolumeDownIcon from '@mui/icons-material/VolumeDown';
 import VolumeMuteIcon from '@mui/icons-material/VolumeMute';
 import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
-import { Slider } from '@mui/material';
 import { secondsToTime } from '../../../../static/frontendHelpers';
 import { EpistoButton } from '../../../controls/EpistoButton';
 import { EpistoFlex2 } from '../../../controls/EpistoFlex';
 import { EpistoFont } from '../../../controls/EpistoFont';
+import { EpistoSlider } from '../../../controls/EpistoSlider';
 
 export const VideoControls = (props: {
     isFullscreen: boolean,
@@ -99,17 +99,12 @@ export const VideoControls = (props: {
         </EpistoFont>
 
         {/* slider */}
-        <Slider
+        <EpistoSlider
             size={isMobile ? 'medium' : 'small'}
             style={{
                 margin: '0 0px 0 15px',
                 color: 'white',
             }}
-            /*  sx={{
-                 '&.MuiSlider-thumb': {
-                     width: isMobile ? '30px' : undefined
-                 }
-             }} */
             defaultValue={0}
             aria-labelledby="discrete-slider"
             value={playedSeconds}
@@ -129,7 +124,7 @@ export const VideoControls = (props: {
             } />
 
         {/* volume slider  */}
-        <Slider
+        <EpistoSlider
             style={{
                 color: 'white',
                 width: '100px',

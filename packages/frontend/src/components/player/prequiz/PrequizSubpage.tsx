@@ -1,6 +1,5 @@
 import { Grid } from '@chakra-ui/react';
 import { Id } from '@episto/commontypes';
-import { Slider } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { Responsivity } from '../../../helpers/responsivity';
@@ -15,6 +14,7 @@ import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoDiv } from '../../controls/EpistoDiv';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
+import { EpistoSlider } from '../../controls/EpistoSlider';
 import { ExamLayout } from '../../exam/ExamLayout';
 import { ExamLayoutContent } from '../../exam/ExamLayoutContent';
 import { QuestionAnswer } from '../../exam/QuestionAnswer';
@@ -168,7 +168,7 @@ export const PrequizSubpage = () => {
                                 {paging.currentIndex === 2 ? '1 óra' : '1'}
                             </EpistoFont>
 
-                            <Slider
+                            <EpistoSlider
                                 max={question.maxValue}
                                 min={question.minValue}
                                 step={question.stepValue}

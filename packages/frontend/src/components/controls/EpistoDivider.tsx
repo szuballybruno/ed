@@ -1,0 +1,1 @@
+export { Divider as EpistoDivider } from '@chakra-ui/layout';

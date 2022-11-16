@@ -1,9 +1,9 @@
-import {Divider} from '@chakra-ui/react';
-import {MutableRefObject} from 'react';
-import {mockNotifications} from '../../static/mockData';
-import {EpistoFlex2} from '../controls/EpistoFlex';
-import {EpistoFont} from '../controls/EpistoFont';
-import {EpistoPopper} from '../controls/EpistoPopper';
+import { MutableRefObject } from 'react';
+import { mockNotifications } from '../../static/mockData';
+import { EpistoDivider } from '../controls/EpistoDivider';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { EpistoFont } from '../controls/EpistoFont';
+import { EpistoPopper } from '../controls/EpistoPopper';
 
 export const NotificationsPopper = (props: {
     isOpen: boolean,
@@ -54,7 +54,7 @@ export const NotificationsPopper = (props: {
                             </EpistoFlex2>
 
                             {index + 1 < mockNotifications.length && (
-                                <Divider
+                                <EpistoDivider
                                     height='1px'
                                     width="100%"
                                     bgColor={'grey'}

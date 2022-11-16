@@ -89,7 +89,6 @@ export const SetNewPasswordPage = () => {
                 </EpistoHeader>
 
                 <PasswordEntry
-                    display='EPISTO'
                     state={passwordEntryState} />
 
                 <EpistoButton

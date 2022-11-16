@@ -1,4 +1,3 @@
-import { Divider } from '@chakra-ui/layout';
 import { CourseItemStateType, CourseModeType, Id } from '@episto/commontypes';
 import { useEffect, useRef, useState } from 'react';
 import { CourseApiService } from '../../../services/api/courseApiService';
@@ -7,6 +6,7 @@ import { useRecommendedItemQuota } from '../../../services/api/userProgressApiSe
 import { useShowErrorDialog } from '../../../services/core/notifications';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoButton } from '../../controls/EpistoButton';
+import { EpistoDivider } from '../../controls/EpistoDivider';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoSearch } from '../../controls/EpistoSearch';
 import { RecommendedItemQuota } from '../../home/RecommendedItemQuota';
@@ -142,7 +142,7 @@ export const CourseItemSelector = ({
                     onClick={() => tempomatDialogLogic.openDialog()} />
             </EpistoFlex2>}
 
-            {!recommendedItemQuota?.isDeadlineSet && <Divider
+            {!recommendedItemQuota?.isDeadlineSet && <EpistoDivider
                 flexBasis="1px"
                 mx="10px"
                 height="calc(100% - 20px)"

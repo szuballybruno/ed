@@ -1,8 +1,8 @@
-import React, {useMemo, useState} from 'react';
-import {MoreVert} from '@mui/icons-material';
-import {IconButton, Menu, MenuItem} from '@mui/material';
+import React, { useMemo, useState } from 'react';
+import { MoreVert } from '@mui/icons-material';
+import { IconButton, Menu, MenuItem } from '@mui/material';
 import classes from './css/stylesheet.module.css';
-import {EpistoFlex2} from './controls/EpistoFlex';
+import { EpistoFlex2 } from './controls/EpistoFlex';
 
 export default function OverflowMenu(props: {
   children: any,
@@ -26,7 +26,7 @@ export default function OverflowMenu(props: {
   const shouldShowMenu = useMemo(() => {
 
     return Object.values(visibilityMap)
-.some((v) => v === false);
+      .some((v) => v === false);
   }, [visibilityMap]);
 
   if (!shouldShowMenu)

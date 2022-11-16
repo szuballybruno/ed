@@ -1,5 +1,4 @@
 import { getPassowrdValidationError } from '@episto/commonlogic';
-import { TextField } from '@mui/material';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { EpistoEntryNew, EpistoEntryNewPropsType, useEpistoEntryState } from '../controls/EpistoEntryNew';
 
@@ -151,11 +150,9 @@ export type PasswordEntryStateType = ReturnType<typeof usePasswordEntryState>;
 
 export const PasswordEntry = ({
     state,
-    display = 'MUI',
     epistoEntryProps
 }: {
     state: PasswordEntryStateType,
-    display?: 'MUI' | 'EPISTO',
     epistoEntryProps?: EpistoEntryNewPropsType
 }) => {
 
@@ -175,59 +172,36 @@ export const PasswordEntry = ({
     };
 
     return (
-        display === 'MUI'
-            ? <>
-                <TextField
-                    style={{ margin: '20px' }}
-                    variant="standard"
-                    type="password"
-                    autoComplete="new-password"
-                    error={!!passwordError}
-                    helperText={passwordError}
-                    onChange={x => setPassword(x.currentTarget.value)}
-                    label={labels.pw}></TextField>
+        <>
+            <EpistoEntryNew
+                labelVariant="top"
+                type="password"
+                label={labels.pw}
+                placeholder={labels.pw}
+                name="password"
+                style={{
+                    width: '100%'
+                }}
+                onFocusLost={setPassword}
+                {...{
+                    state: pwState,
+                    ...(epistoEntryProps ?? {})
+                }} />
 
-
-                <TextField
-                    style={{ margin: '0 20px 20px 20px' }}
-                    variant="standard"
-                    autoComplete="new-password"
-                    type="password"
-                    error={!!passwordCompareError}
-                    helperText={passwordCompareError}
-                    onChange={x => setPasswordCompare(x.currentTarget.value)}
-                    label={labels.pwCompare}></TextField>
-            </>
-            : <>
-                <EpistoEntryNew
-                    labelVariant="top"
-                    type="password"
-                    label={labels.pw}
-                    placeholder={labels.pw}
-                    name="password"
-                    style={{
-                        width: '100%'
-                    }}
-                    onFocusLost={setPassword}
-                    {...{
-                        state: pwState,
-                        ...(epistoEntryProps ?? {})
-                    }} />
-
-                <EpistoEntryNew
-                    type="password"
-                    labelVariant="top"
-                    label={labels.pwCompare}
-                    placeholder={labels.pwCompare}
-                    onFocusLost={setPasswordCompare}
-                    name="passwordCompare"
-                    style={{
-                        width: '100%'
-                    }}
-                    {...{
-                        state: pwCompareState,
-                        ...(epistoEntryProps ?? {})
-                    }} />
-            </>
+            <EpistoEntryNew
+                type="password"
+                labelVariant="top"
+                label={labels.pwCompare}
+                placeholder={labels.pwCompare}
+                onFocusLost={setPasswordCompare}
+                name="passwordCompare"
+                style={{
+                    width: '100%'
+                }}
+                {...{
+                    state: pwCompareState,
+                    ...(epistoEntryProps ?? {})
+                }} />
+        </>
     );
 };

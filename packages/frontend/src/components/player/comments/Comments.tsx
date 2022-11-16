@@ -1,12 +1,11 @@
-import { Divider } from '@mui/material';
-import React, { useContext, useState } from 'react';
+import { Id } from '@episto/commontypes';
+import { CommentCreateDTO, CommentListDTO } from '@episto/communication';
+import { useContext, useState } from 'react';
 import { useComments, useCreateComment, useCreateLike, useDeleteLike } from '../../../services/api/commentApiService';
 import { useShowErrorDialog } from '../../../services/core/notifications';
-import { CommentCreateDTO } from '@episto/communication';
-import { CommentListDTO } from '@episto/communication';
-import { Id } from '@episto/commontypes';
 import { PagingType } from '../../../static/frontendHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
+import { EpistoDivider } from '../../controls/EpistoDivider';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { CurrentUserContext } from '../../system/AuthenticationFrame';
 import { UnderVideoInfoFrame } from '../watch/UnderVideoInfoFrame';
@@ -109,7 +108,7 @@ const Comments = (props: {
             setCurrentReplyUserFullName={setCurrentReplyUserFullName} />
 
 
-        <Divider
+        <EpistoDivider
             variant="fullWidth"
             style={{
                 margin: '10px 0 20px 0'

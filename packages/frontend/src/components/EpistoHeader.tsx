@@ -1,5 +1,5 @@
-import { Divider } from '@mui/material';
 import { ReactNode } from 'react';
+import { EpistoDivider } from './controls/EpistoDivider';
 import { EpistoFlex2, EpistoFlex2Props } from './controls/EpistoFlex';
 import { EpistoFont } from './controls/EpistoFont';
 
@@ -52,6 +52,10 @@ export const EpistoHeader = (props: {
             {children}
         </EpistoFlex2>
 
-        {!!showDivider && <Divider style={{ background: 'var(--transparentWhite70)', marginTop: '10px' }} />}
+        {!!showDivider && <EpistoDivider
+            style={{
+                background: 'var(--transparentWhite70)',
+                marginTop: '10px'
+            }} />}
     </EpistoFlex2>;
 };

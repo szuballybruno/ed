@@ -1,6 +1,5 @@
 import { CourseItemStateType, CourseModeType, Id } from '@episto/commontypes';
 import { QuestionDTO, VideoPlayerDataDTO } from '@episto/communication';
-import { Divider } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import { useReactTimer } from '../../../helpers/reactTimer';
 import { Responsivity } from '../../../helpers/responsivity';
@@ -11,6 +10,7 @@ import { Logger } from '../../../static/Logger';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoDiv } from '../../controls/EpistoDiv';
+import { EpistoDivider } from '../../controls/EpistoDivider';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { NavigateToCourseItemActionType } from '../../playlist/Playlist';
@@ -357,7 +357,7 @@ export const WatchView = ({
                 refetchPlayerData={refetchPlayerData}
                 playlistFilterLogic={playlistFilterLogic} />}
 
-            {!isMobile && <Divider
+            {!isMobile && <EpistoDivider
                 style={{
                     background: 'var(--epistoTeal)',
                     width: '100%',

@@ -1,15 +1,15 @@
-import { Slider } from '@mui/material';
+import { Id } from '@episto/commontypes';
 import { useEffect, useState } from 'react';
 import { useCourseRatingGroups, useSaveCourseRatingGroupAnswers } from '../../../services/api/courseRatingApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { useShowErrorDialog } from '../../../services/core/notifications';
-import { Id } from '@episto/commontypes';
 import { ArrayBuilder, usePaging } from '../../../static/frontendHelpers';
 import { useIntParam } from '../../../static/locationHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoEntry } from '../../controls/EpistoEntry';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
+import { EpistoSlider } from '../../controls/EpistoSlider';
 import { ExamLayout } from '../../exam/ExamLayout';
 import { ExamLayoutContent } from '../../exam/ExamLayoutContent';
 import { LoadingFrame } from '../../system/LoadingFrame';
@@ -159,7 +159,7 @@ export const CourseRatingSubpage = (props: {
                                         </>}
 
                                         {question.type === 'range_1_10' && <>
-                                            <Slider
+                                            <EpistoSlider
                                                 max={10}
                                                 valueLabelDisplay="auto"
                                                 marks={true}
