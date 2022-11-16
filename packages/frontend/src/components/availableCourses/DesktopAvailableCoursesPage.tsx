@@ -1,7 +1,6 @@
 import { GridItem } from '@chakra-ui/layout';
 import { OrderType } from '@episto/commontypes';
 import { AvailableCourseDTO, CourseCategoryDTO } from '@episto/communication';
-import { Select, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { Responsivity } from '../../helpers/responsivity';
 import { translatableTexts } from '../../static/translatableTexts';
 import { ContentPane } from '../ContentPane';
@@ -10,6 +9,7 @@ import { EpistoFlex, EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoGrid } from '../controls/EpistoGrid';
 import { EpistoSearch } from '../controls/EpistoSearch';
+import { MUI } from '../controls/MUIControls';
 import { LeftPane } from '../LeftPane';
 import { CourseTile } from '../universal/CourseTile';
 import { AvailableCoursesPageFilterType } from './AvailableCoursesPage';
@@ -55,7 +55,7 @@ export const DesktopAvailableCoursesPage = ({
                 </EpistoFont>
 
                 {/* categories list */}
-                <ToggleButtonGroup
+                <MUI.ToggleButtonGroup
                     style={{
                         flex: 1,
                         textAlign: 'left'
@@ -69,7 +69,7 @@ export const DesktopAvailableCoursesPage = ({
                                 ? -1
                                 : 0)
                         .map((categoryOption, index) => {
-                            return <ToggleButton
+                            return <MUI.ToggleButton
                                 value={categoryOption}
                                 style={{
                                     textAlign: 'left',
@@ -94,9 +94,9 @@ export const DesktopAvailableCoursesPage = ({
                                         : 'var(--epistoTeal)'} />
 
                                 {categoryOption.name}
-                            </ToggleButton>;
+                            </MUI.ToggleButton>;
                         })}
-                </ToggleButtonGroup>
+                </MUI.ToggleButtonGroup>
             </EpistoFlex>
         </LeftPane>
 
@@ -119,7 +119,7 @@ export const DesktopAvailableCoursesPage = ({
                     p="0 0 20px 0">
 
                     {/* toggle buttons */}
-                    <ToggleButtonGroup
+                    <MUI.ToggleButtonGroup
                         className="mildShadow"
                         style={{
                             background: 'var(--transparentWhite70)',
@@ -135,34 +135,34 @@ export const DesktopAvailableCoursesPage = ({
                         size={'small'}>
 
                         {/* recommended */}
-                        <ToggleButton
+                        <MUI.ToggleButton
                             onClick={() => handleSetFilterProp('isRecommended', !filterProps.isRecommended)}
                             selected={filterProps.isRecommended}
                             value="recommended"
                             style={{ width: '100%', whiteSpace: 'nowrap', padding: '15px' }}>
 
                             {translatableTexts.availableCourses.recommendedForYou}
-                        </ToggleButton>
+                        </MUI.ToggleButton>
 
                         {/* featured */}
-                        <ToggleButton
+                        <MUI.ToggleButton
                             onClick={() => handleSetFilterProp('isFeatured', !filterProps.isFeatured)}
                             selected={filterProps.isFeatured}
                             value="featured"
                             style={{ width: '100%', whiteSpace: 'nowrap', padding: '15px' }}>
 
                             {translatableTexts.availableCourses.highlighted}
-                        </ToggleButton>
+                        </MUI.ToggleButton>
 
                         {/* show all */}
-                        <ToggleButton
+                        <MUI.ToggleButton
                             onClick={() => clearFilters()}
                             value="showAll"
                             style={{ width: '100%', whiteSpace: 'nowrap', padding: '15px' }}>
 
                             {translatableTexts.availableCourses.all}
-                        </ToggleButton>
-                    </ToggleButtonGroup>
+                        </MUI.ToggleButton>
+                    </MUI.ToggleButtonGroup>
 
                     <EpistoFlex2
                         flex='5'
@@ -176,8 +176,7 @@ export const DesktopAvailableCoursesPage = ({
                             flex="1" />
                     </EpistoFlex2>
 
-
-                    <Select
+                    <MUI.Select
                         native
                         onChange={(e) => {
                             handleSetFilterProp('orderBy', e.target.value as OrderType);
@@ -202,7 +201,7 @@ export const DesktopAvailableCoursesPage = ({
                         }}>
                         <option value={'nameASC'}>{translatableTexts.availableCourses.sortOptions.aToZ}</option>
                         <option value={'nameDESC'}>{translatableTexts.availableCourses.sortOptions.zToA}</option>
-                    </Select>
+                    </MUI.Select>
                 </EpistoFlex2>
 
                 <EpistoDiv id="scrollContainer"

@@ -1,8 +1,8 @@
-import { Paper, Rating } from '@mui/material';
 import React from 'react';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoProgressBar } from '../controls/EpistoProgressBar';
+import { MUI } from '../controls/MUIControls';
 
 export const CourseDetailsRatingSection = () => {
     const mockRatingProgresses = [60, 20, 10, 0, 0];
@@ -44,7 +44,7 @@ export const CourseDetailsRatingSection = () => {
                         </EpistoFont>
                     </EpistoFlex2>
                     <EpistoFlex2>
-                        <Rating value={5}
+                        <MUI.Rating value={5}
                             style={{ color: 'var(--epistoTeal)' }} />
                     </EpistoFlex2>
                 </EpistoFlex2>
@@ -66,7 +66,7 @@ export const CourseDetailsRatingSection = () => {
         alignItems={'flex-start'}>
         <EpistoFlex2 width="100%"
             height='170px'>
-            <Paper>
+            <MUI.Paper>
                 <EpistoFlex2 width='170px'
                     height='170px'
                     flexDir={'column'}
@@ -89,7 +89,7 @@ export const CourseDetailsRatingSection = () => {
                         Kurzus értékelése
                     </EpistoFont>
                 </EpistoFlex2>
-            </Paper>
+            </MUI.Paper>
             <EpistoFlex2 height='170px'
                 flex={1}
                 px='20px'
@@ -111,15 +111,15 @@ export const CourseDetailsRatingSection = () => {
                 flexDir={'column'}
                 alignItems={'center'}
                 justifyContent={'center'}>
-                <Rating value={5}
+                <MUI.Rating value={5}
                     style={{ color: 'var(--epistoTeal)' }} />
-                <Rating value={4}
+                <MUI.Rating value={4}
                     style={{ color: 'var(--epistoTeal)' }} />
-                <Rating value={3}
+                <MUI.Rating value={3}
                     style={{ color: 'var(--epistoTeal)' }} />
-                <Rating value={2}
+                <MUI.Rating value={2}
                     style={{ color: 'var(--epistoTeal)' }} />
-                <Rating value={1}
+                <MUI.Rating value={1}
                     style={{ color: 'var(--epistoTeal)' }} />
             </EpistoFlex2>
         </EpistoFlex2>

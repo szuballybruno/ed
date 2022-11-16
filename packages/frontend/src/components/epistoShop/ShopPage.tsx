@@ -1,7 +1,6 @@
 import { GridItem } from '@chakra-ui/react';
 import { Id } from '@episto/commontypes';
 import { ShopItemDTO } from '@episto/communication';
-import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { Responsivity } from '../../helpers/responsivity';
 import { useCoinBalance } from '../../services/api/coinTransactionsApiService';
@@ -13,6 +12,7 @@ import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoGrid } from '../controls/EpistoGrid';
 import { EpistoSelect } from '../controls/EpistoSelect';
+import { MUI } from '../controls/MUIControls';
 import { EpistoConinInfo } from '../EpistoCoinInfo';
 import { LeftPane } from '../LeftPane';
 import { ProfileImage } from '../ProfileImage';
@@ -80,7 +80,7 @@ export const ShopPage = () => {
             </EpistoFont>
 
             {/* categories list */}
-            <ToggleButtonGroup
+            <MUI.ToggleButtonGroup
                 style={{
                     flex: 1,
                     textAlign: 'left'
@@ -91,7 +91,7 @@ export const ShopPage = () => {
                     .concat(shopItemCategories)
                     .map((category, index) => {
 
-                        return <ToggleButton
+                        return <MUI.ToggleButton
                             selected={categoryFilterId === category.id}
                             value={category}
                             style={{
@@ -118,9 +118,9 @@ export const ShopPage = () => {
                                 bgColor="var(--epistoTeal)" />
 
                             {category.name}
-                        </ToggleButton>;
+                        </MUI.ToggleButton>;
                     })}
-            </ToggleButtonGroup>
+            </MUI.ToggleButtonGroup>
         </LeftPane>
 
         {/* content */}

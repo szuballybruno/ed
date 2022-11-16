@@ -2,7 +2,14 @@ import { PropsWithChildren } from '../../static/frontendHelpers';
 import { EpistoFlex2 } from './EpistoFlex';
 import { EpistoFont } from './EpistoFont';
 
-export const EpistoCheckboxLabel = ({ children, label }: { label: string } & PropsWithChildren) => {
+export const EpistoCheckboxLabel = ({
+    children,
+    label,
+    boxFirst
+}: {
+    label: string,
+    boxFirst?: boolean
+} & PropsWithChildren) => {
 
     return (
         <EpistoFlex2
@@ -10,13 +17,18 @@ export const EpistoCheckboxLabel = ({ children, label }: { label: string } & Pro
             direction='row'
             mx="10px"
             my="2px">
+
+            {boxFirst && children}
+
             <EpistoFont
                 margin={{
                     right: 'px5'
                 }}>
                 {label}
             </EpistoFont>
-            {children}
+
+            {!boxFirst && children}
+
         </EpistoFlex2>
     );
 };

@@ -1,4 +1,3 @@
-import { FormControlLabel, Radio, RadioGroup } from '@mui/material';
 import { useShowErrorDialog } from '../../services/core/notifications';
 import { SignupQuestionDTO } from '@episto/communication';
 import { Id } from '@episto/commontypes';
@@ -7,6 +6,7 @@ import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { LinearProgressWithLabel } from '../survey/ProgressIndicator';
 import { SurveyWrapper } from '../survey/SurveyWrapper';
+import { MUI } from '../controls/MUIControls';
 
 export const useSignupQuestionsState = (options: {
     questions: SignupQuestionDTO[],
@@ -106,7 +106,7 @@ export const SingupQuestionSlides = (props: { state: SignupQuestionsStateType })
                 justifyContent={'flex-end'}
                 width={'30%'}><EpistoFont>{questionnaireProgressLabel}</EpistoFont></EpistoFlex2>}>
 
-            <RadioGroup
+            <MUI.RadioGroup
                 id="answers"
                 style={{ marginBottom: '30px' }}
                 name="radioGroup1"
@@ -117,7 +117,7 @@ export const SingupQuestionSlides = (props: { state: SignupQuestionsStateType })
                 }}>
                 {currentQuestion!
                     .answers
-                    .map((answer) => <FormControlLabel
+                    .map((answer) => <MUI.FormControlLabel
                         key={Id.read(answer.answerVersionId)}
                         value={answer.answerVersionId}
                         style={{
@@ -128,9 +128,9 @@ export const SingupQuestionSlides = (props: { state: SignupQuestionsStateType })
                             borderRadius: '6px'
 
                         }}
-                        control={<Radio checked={answer.answerVersionId === selectedAnswerVersionId} />}
+                        control={<MUI.Radio checked={answer.answerVersionId === selectedAnswerVersionId} />}
                         label={answer.answerText} />)}
-            </RadioGroup>
+            </MUI.RadioGroup>
         </SurveyWrapper>}
     </>;
 };

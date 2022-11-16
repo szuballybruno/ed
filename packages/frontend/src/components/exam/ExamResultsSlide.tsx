@@ -1,7 +1,6 @@
 import { Id } from '@episto/commontypes';
 import { ExamPlayerDataDTO } from '@episto/communication';
 import { ExpandMore } from '@mui/icons-material';
-import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
 import { useEffect } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { Responsivity } from '../../helpers/responsivity';
@@ -12,6 +11,7 @@ import { translatableTexts } from '../../static/translatableTexts';
 import { ChipSmall } from '../administration/courses/ChipSmall';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
+import { MUI } from '../controls/MUIControls';
 import { useVideoPlayerFullscreenContext } from '../player/watch/videoPlayer/VideoPlayerFullscreenFrame';
 import { WatchSubpageState } from '../player/watch/WatchSubpage';
 import { ExamLayout } from './ExamLayout';
@@ -149,11 +149,11 @@ export const ExamResultsSlide = (props: {
                                 throw new Error('Incorrect state!');
                             })();
 
-                            return <Accordion
+                            return <MUI.Accordion
                                 key={index}>
 
                                 {/* question */}
-                                <AccordionSummary
+                                <MUI.AccordionSummary
                                     expandIcon={<ExpandMore />}
                                     aria-controls="panel1a-content"
                                     id="panel1a-header">
@@ -183,10 +183,10 @@ export const ExamResultsSlide = (props: {
                                             color={displayState.color} />
 
                                     </EpistoFlex2>
-                                </AccordionSummary>
+                                </MUI.AccordionSummary>
 
                                 {/* answers */}
-                                <AccordionDetails>
+                                <MUI.AccordionDetails>
                                     <EpistoFlex2
                                         direction="column"
                                         flex={1}>
@@ -202,8 +202,8 @@ export const ExamResultsSlide = (props: {
                                                     isCorrect={answer.isCorrect} />;
                                             })}
                                     </EpistoFlex2>
-                                </AccordionDetails>
-                            </Accordion>;
+                                </MUI.AccordionDetails>
+                            </MUI.Accordion>;
                         })}
                 </EpistoFlex2>
             </EpistoFlex2>

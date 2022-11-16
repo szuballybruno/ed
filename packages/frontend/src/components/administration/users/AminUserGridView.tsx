@@ -394,9 +394,7 @@ export const AminUserGridView = ({
 
                     {/* search bar */}
                     <UsersSearchFilters
-                        hideOrdering={true}
-                        setSearchKeyword={filterLogic.setSearchKeyword}
-                        setOrderBy={filterLogic.setOrderBy} />
+                        setSearchKeyword={filterLogic.setSearchKeyword} />
 
                     {/* add button */}
                     {!isSimpleView && <EpistoButton

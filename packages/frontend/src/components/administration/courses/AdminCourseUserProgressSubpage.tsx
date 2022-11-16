@@ -1,4 +1,3 @@
-import { CircularProgress, CircularProgressProps } from '@mui/material';
 import { useEffect, useMemo } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { useCourseUserStatsData } from '../../../services/api/userStatsApiService';
@@ -23,6 +22,7 @@ import { AdminUserCourseContentDialog } from '../users/adminCourseContentDialog/
 import { AdminCourseUserOverviewDialog, useAdminCourseUserOverviewDialogLogic } from './AdminCourseUserOverviewDialog';
 import { ChipSmall } from './ChipSmall';
 import { CourseAdministartionFrame } from './CourseAdministartionFrame';
+import { MUI, MUICircularProgressProps } from '../../controls/MUIControls';
 
 export interface AdminCourseUserRowType extends AdminCourseUserStatsDTO {
     avatar: {
@@ -235,11 +235,11 @@ export const useCourseUsersColumns = ({
 };
 
 export const CircularProgressWithLabel = (
-    props: CircularProgressProps & { value: number },
+    props: MUICircularProgressProps & { value: number },
 ) => {
     return (
         <EpistoDiv sx={{ position: 'relative', display: 'inline-flex' }}>
-            <CircularProgress variant="determinate"
+            <MUI.CircularProgress variant="determinate"
                 {...props} />
             <EpistoDiv
                 sx={{

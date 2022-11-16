@@ -1,11 +1,12 @@
-import { Avatar, Checkbox } from '@mui/material';
-import { useContext, useState } from 'react';
 import { Id } from '@episto/commontypes';
+import { useContext, useState } from 'react';
 import { Environment } from '../../../static/Environemnt';
 import { EpistoButton } from '../../controls/EpistoButton';
+import { EpistoCheckbox } from '../../controls/EpistoCheckbox';
+import { EpistoCheckboxLabel } from '../../controls/EpistoCheckboxLabel';
 import { EpistoEntry } from '../../controls/EpistoEntry';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
-import { EpistoFont } from '../../controls/EpistoFont';
+import { ProfileImage } from '../../ProfileImage';
 import { CurrentUserContext } from '../../system/AuthenticationFrame';
 
 export const CommentAnswerEntry = (props: {
@@ -57,13 +58,14 @@ export const CommentAnswerEntry = (props: {
             flex='1'
             align='center'>
 
-
-            <Avatar
-                alt={user.lastName + ' ' + user.firstName}
+            <ProfileImage
+                firstName={user.firstName}
+                lastName={user.lastName}
+                className="square40"
                 style={{
                     margin: '0 15px 0 0'
                 }}
-                src={Environment.getAssetUrl('userAvatars/user_avatar_7.png')} />
+                url={user.avatarUrl ? Environment.getAssetUrl(user.avatarUrl) : undefined} />
 
             <EpistoEntry
                 isMultiline
@@ -93,29 +95,25 @@ export const CommentAnswerEntry = (props: {
                 <EpistoFlex2 direction="column">
 
                     {!currentReplyCommentId &&
-                        <EpistoFlex2 align="center">
+                        <EpistoCheckboxLabel
+                            boxFirst
+                            label="Ez egy kérdés">
 
-                            <Checkbox
-                                onChange={() =>
-                                    setIsQuestion(p => !p)
-                                } />
+                            <EpistoCheckbox
+                                noBackground
+                                setValue={setIsQuestion}
+                                value={isQuestion} />
+                        </EpistoCheckboxLabel>}
 
-                            <EpistoFont>
-                                Ez egy kérdés
-                            </EpistoFont>
-                        </EpistoFlex2>}
+                    <EpistoCheckboxLabel
+                        boxFirst
+                        label="Közzététel névtelenül">
 
-                    <EpistoFlex2 align="center">
-
-                        <Checkbox
-                            onChange={() =>
-                                setIsAnonymous(p => !p)
-                            } />
-
-                        <EpistoFont>
-                            Közzététel névtelenül
-                        </EpistoFont>
-                    </EpistoFlex2>
+                        <EpistoCheckbox
+                            noBackground
+                            setValue={setIsAnonymous}
+                            value={isAnonymous} />
+                    </EpistoCheckboxLabel>
                 </EpistoFlex2>
 
                 <EpistoFlex2>
