@@ -21,7 +21,7 @@ import { TempomatTempoInfo } from '../tempomat/TempomatTempoInfo';
 export const CourseItemSelector = ({
     currentItemCode,
     nextItemState: itemState,
-    isPlayerLoaded,
+    isVideoReady,
     mode,
     refetchPlayerData,
     courseId,
@@ -37,7 +37,7 @@ export const CourseItemSelector = ({
     currentItemCode: string,
     nextItemState: CourseItemStateType | null,
     isScrolledFromTop?: boolean,
-    isPlayerLoaded: boolean,
+    isVideoReady: boolean,
     canChangeMode?: boolean,
     isMobile?: boolean
 }) => {
@@ -48,7 +48,7 @@ export const CourseItemSelector = ({
 
     // http
     const { recommendedItemQuota, refetchRecommendedItemQuota } = useRecommendedItemQuota(courseId);
-    const { tempomatMode, refetchTempomatMode } = useTempomatMode(courseId, isPlayerLoaded);
+    const { tempomatMode, refetchTempomatMode } = useTempomatMode(courseId, isVideoReady);
     const { setCourseModeAsync } = CourseApiService.useSetCourseMode();
     const { scrollToTop, scroll, disableAutoScroll, enableAutoScroll } = useScrollIntoView();
 

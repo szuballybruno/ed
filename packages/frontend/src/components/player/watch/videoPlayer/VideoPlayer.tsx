@@ -2,8 +2,8 @@ import FastForwardIcon from '@mui/icons-material/FastForward';
 import FastRewindIcon from '@mui/icons-material/FastRewind';
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import { VideoPlayerDataDTO } from '@episto/communication';
-import { EpistoDiv, EpistoDivProps } from '../../../controls/EpistoDiv';
+import { PropsWithChildren } from '../../../../static/frontendHelpers';
+import { EpistoDiv } from '../../../controls/EpistoDiv';
 import { EpistoReactPlayer } from '../../../controls/EpistoReactPlayer';
 import { AbsoluteFlexOverlay } from '../AbsoluteFlexOverlay';
 import { ShouldRotatePhoneOverlay } from '../ShouldRotatePhoneOverlay';
@@ -13,12 +13,15 @@ import { useVideoPlayerFullscreenContext } from './VideoPlayerFullscreenFrame';
 import { VideoPlayerStateType } from './videoPlayerState';
 import { videoPlayerStyles } from './videoPlayerStyles';
 
-export const VideoPlayer = (props: {
-    videoItem: VideoPlayerDataDTO,
-    videoPlayerState: VideoPlayerStateType
-} & EpistoDivProps) => {
+export const VideoPlayer = ({
+    videoPlayerState,
+    children,
+    isVideoReady
+}: {
+    videoPlayerState: VideoPlayerStateType,
+    isVideoReady: boolean
+} & PropsWithChildren) => {
 
-    const { videoPlayerState, children, videoItem, ...css } = props;
     const {
         playerContainerRef,
         playerRef,
@@ -77,8 +80,8 @@ export const VideoPlayer = (props: {
             id="fullScreenRoot"
             width='100%'
             ref={playerContainerRef}
-            {...fullScreenRootProps}
-            {...css}>
+            className="largeSoftShadow"
+            {...fullScreenRootProps}>
 
             {/* player debug info */}
             {/*       <PlayerDebugInfo
@@ -121,7 +124,7 @@ export const VideoPlayer = (props: {
                     <EpistoReactPlayer
                         playbackRate={1}
                         playerRef={playerRef}
-                        url={videoUrl}
+                        url={isVideoReady ? videoUrl : undefined}
                         style={{
                             borderRadius: 6,
                             overflow: 'hidden',
@@ -154,7 +157,7 @@ export const VideoPlayer = (props: {
                 </EpistoDiv>
 
                 {/* video controls */}
-                <VideoControls
+                {isVideoReady && <VideoControls
                     isFullscreen={isFullscreen}
                     controlsVisible={controlsVisible}
                     isPlaying={isPlaying}
@@ -171,7 +174,7 @@ export const VideoPlayer = (props: {
                     setIsSeeking={setIsSeeking}
                     toggleFullScreen={toggleFullScreen}
                     toggleIsPlaying={toggleIsPlaying}
-                    setVolume={setVolume} />
+                    setVolume={setVolume} />}
 
             </EpistoDiv>
 

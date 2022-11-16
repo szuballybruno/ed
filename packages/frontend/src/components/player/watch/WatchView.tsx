@@ -37,7 +37,7 @@ export const WatchView = ({
     playlistFilterLogic,
     answerSessionId,
     courseMode,
-    isPlayerLoaded,
+    isVideoReady,
     courseId,
     continueCourse,
     refetchPlayerData
@@ -52,7 +52,7 @@ export const WatchView = ({
     refetchPlayerData: () => Promise<void>,
     currentItemCode: string,
     nextItemState: CourseItemStateType | null,
-    isPlayerLoaded: boolean
+    isVideoReady: boolean
 }) => {
 
     const { questions } = videoPlayerData;
@@ -245,9 +245,8 @@ export const WatchView = ({
             align="center">
 
             <VideoPlayer
-                className="largeSoftShadow"
-                videoItem={videoPlayerData}
-                videoPlayerState={videoPlayerState}>
+                videoPlayerState={videoPlayerState}
+                isVideoReady={isVideoReady}>
 
                 {/* next video */}
                 <AbsoluteFlexOverlay
@@ -350,7 +349,7 @@ export const WatchView = ({
 
             {isMobile && <CourseItemSelector
                 isMobile={isMobile}
-                isPlayerLoaded={isPlayerLoaded}
+                isVideoReady={isVideoReady}
                 currentItemCode={currentItemCode}
                 nextItemState={nextItemState}
                 courseId={courseId}
