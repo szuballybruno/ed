@@ -1,5 +1,4 @@
 import { ExpandMore } from '@mui/icons-material';
-import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
 import { useLatestExamResults } from '../../../../services/api/examApiService';
 import { Id } from '@episto/commontypes';
 import { translatableTexts } from '../../../../static/translatableTexts';
@@ -8,6 +7,7 @@ import { EpistoFont } from '../../../controls/EpistoFont';
 import { ExamResultStats } from '../../../exam/ExamResultStats';
 import { QuestionAnswer } from '../../../exam/QuestionAnswer';
 import { ChipSmall } from '../../courses/ChipSmall';
+import { MUI } from '../../../controls/MUIControls';
 
 export const AdminUserExamsMoreInfoControl = (props: {
     answerSessionId?: Id<'AnswerSession'>
@@ -94,11 +94,11 @@ export const AdminUserExamsMoreInfoControl = (props: {
                                 throw new Error('Incorrect state!');
                             })();
 
-                            return <Accordion
+                            return <MUI.Accordion
                                 key={index}>
 
                                 {/* question */}
-                                <AccordionSummary
+                                <MUI.AccordionSummary
                                     expandIcon={<ExpandMore />}
                                     aria-controls="panel1a-content"
                                     id="panel1a-header">
@@ -125,10 +125,10 @@ export const AdminUserExamsMoreInfoControl = (props: {
                                             color={displayState.color} />
 
                                     </EpistoFlex2>
-                                </AccordionSummary>
+                                </MUI.AccordionSummary>
 
                                 {/* answers */}
-                                <AccordionDetails>
+                                <MUI.AccordionDetails>
                                     <EpistoFlex2
                                         direction="column"
                                         flex={1}>
@@ -144,8 +144,8 @@ export const AdminUserExamsMoreInfoControl = (props: {
                                                     isCorrect={answer.isCorrect} />;
                                             })}
                                     </EpistoFlex2>
-                                </AccordionDetails>
-                            </Accordion>;
+                                </MUI.AccordionDetails>
+                            </MUI.Accordion>;
                         })}
                 </EpistoFlex2>
             </EpistoFlex2>

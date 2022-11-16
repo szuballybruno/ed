@@ -1,18 +1,18 @@
-import { Checkbox, Slider } from '@mui/material';
+import { Id, TeacherBadgeNameType } from '@episto/commontypes';
 import { useEffect, useState } from 'react';
 import { ButtonType } from '../../../models/types';
 import { useSaveTeacherInfoData, useTeacherInfoEditData } from '../../../services/api/teacherInfoApiService';
 import { UserApiService } from '../../../services/api/UserApiService1';
 import { useNavigation } from '../../../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
-import { TeacherBadgeNameType } from '@episto/commontypes';
-import { Id } from '@episto/commontypes';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoEntry } from '../../controls/EpistoEntry';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { EpistoLabel } from '../../controls/EpistoLabel';
+import { EpistoSlider } from '../../controls/EpistoSlider';
+import { MUI } from '../../controls/MUIControls';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { EditSection } from '../courses/EditSection';
 
@@ -155,7 +155,7 @@ export const AdminUserTeacherInfoSubpage = ({
 
                     {/* Teacher rating */}
                     <EpistoLabel text={translatableTexts.administration.teacherInfoSubpage.teacherRating}>
-                        <Slider
+                        <EpistoSlider
                             defaultValue={0}
                             valueLabelDisplay="auto"
                             step={0.5}
@@ -189,7 +189,7 @@ export const AdminUserTeacherInfoSubpage = ({
                                         </EpistoFlex2>
 
                                         <EpistoFlex2>
-                                            <Checkbox
+                                            <MUI.Checkbox
                                                 checked={selectedBadges.some(x => x === badge.name)}
                                                 onChange={(_, y) => {
 

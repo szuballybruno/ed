@@ -1,5 +1,4 @@
 import { House } from '@mui/icons-material';
-import { Chip } from '@mui/material';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ButtonType, LoadingStateType } from '../../../models/types';
 import { CompanyApiService } from '../../../services/api/CompanyApiService1';
@@ -19,6 +18,7 @@ import { EpistoSelect } from '../../controls/EpistoSelect';
 import { LoadingFrame } from '../../system/LoadingFrame';
 import { EpistoDialog } from '../../universal/epistoDialog/EpistoDialog';
 import { EpistoDialogLogicType } from '../../universal/epistoDialog/EpistoDialogTypes';
+import { MUI } from '../../controls/MUIControls';
 
 type RowType = PermissionListDTO & {
     checkbox: number
@@ -156,7 +156,7 @@ export const EditRoleControl = (props: {
                     display="block">
 
                     {selectedPermissions
-                        .map((x, i) => <Chip
+                        .map((x, i) => <MUI.Chip
                             key={i}
                             label={x.code}
                             onDelete={() => deselectPermission(x.code)} />)}

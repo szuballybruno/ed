@@ -1,4 +1,3 @@
-import { Checkbox } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { CourseShopItemListDTO } from '@episto/communication';
 import { DiscountCodeDTO } from '@episto/communication';
@@ -23,6 +22,7 @@ import { useIntParam } from '../../../static/locationHelpers';
 import { Id } from '@episto/commontypes';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoImage } from '../../controls/EpistoImage';
+import { MUI } from '../../controls/MUIControls';
 
 export const ShopAdminEditSubpage = () => {
 
@@ -203,7 +203,7 @@ export const ShopAdminEditSubpage = () => {
 
                 <EpistoLabel text={translatableTexts.administration.shopAdminEditSubpage.courseOrItem}>
                     <EpistoFlex2 align="center">
-                        <Checkbox
+                        <MUI.Checkbox
                             checked={isCourse}
                             onChange={(x, y) => setIsCourse(y)}
                             className="square50" />
@@ -262,7 +262,7 @@ export const ShopAdminEditSubpage = () => {
                 <EpistoLabel text={translatableTexts.administration.shopAdminEditSubpage.purchaseLimit}>
                     <EpistoFlex2 align="center">
 
-                        <Checkbox
+                        <MUI.Checkbox
                             checked={isPurchaseLimited}
                             onChange={(x, y) => setIsPurchaseLimited(y)}
                             className="square50" />

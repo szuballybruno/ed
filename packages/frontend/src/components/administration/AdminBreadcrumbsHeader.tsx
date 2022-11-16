@@ -1,5 +1,4 @@
 import { ArrowBack } from '@mui/icons-material';
-import Breadcrumbs from '@mui/material/Breadcrumbs';
 import { ReactNode, useCallback } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
@@ -13,6 +12,7 @@ import { EpistoDiv } from '../controls/EpistoDiv';
 import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { getKeys } from '@episto/commonlogic';
+import { MUI } from '../controls/MUIControls';
 
 const Content = (props: {
     isCurrent: boolean,
@@ -189,7 +189,7 @@ export const AdminBreadcrumbsHeader = ({
                     </EpistoButton>}
 
                 {/* breadcrumbs */}
-                <Breadcrumbs>
+                <MUI.Breadcrumbs>
 
                     {new ArrayBuilder()
                         .addIf(!!currentRoute, <BreadcrumbLink
@@ -203,7 +203,7 @@ export const AdminBreadcrumbsHeader = ({
                             isCurrent
                             title={subRoute?.title ?? ''} />)
                         .getArray()}
-                </Breadcrumbs>
+                </MUI.Breadcrumbs>
             </EpistoFlex2>
 
 

@@ -1,4 +1,3 @@
-import { Checkbox, TextField } from '@mui/material';
 import { useState } from 'react';
 import { applicationRoutes } from '../configuration/applicationRoutes';
 import { useRegisterInvitedUser, useRegisterUser } from '../services/api/registrationApiService';
@@ -11,6 +10,7 @@ import { EpistoButton } from './controls/EpistoButton';
 import { EpistoFlex2 } from './controls/EpistoFlex';
 import { EpistoFont } from './controls/EpistoFont';
 import { EpistoImage } from './controls/EpistoImage';
+import { MUI } from './controls/MUIControls';
 import { useRefetchUserAsync } from './system/AuthenticationFrame';
 import { LoadingFrame } from './system/LoadingFrame';
 import { PasswordEntry, usePasswordEntryState } from './universal/PasswordEntry';
@@ -123,26 +123,26 @@ export const RegistrationPage = () => {
 
             {/* registration */}
             {!isInvited && <>
-                <TextField
+                <MUI.TextField
                     variant="standard"
                     label={translatableTexts.registrationPage.firstNameLabel}
                     value={firstName}
                     onChange={x => setFirstName(x.currentTarget.value)}
-                    style={{ margin: '10px' }}></TextField>
+                    style={{ margin: '10px' }}></MUI.TextField>
 
-                <TextField
+                <MUI.TextField
                     variant="standard"
                     label={translatableTexts.registrationPage.lastNameLabel}
                     value={lastName}
                     onChange={x => setLastName(x.currentTarget.value)}
-                    style={{ margin: '10px' }}></TextField>
+                    style={{ margin: '10px' }}></MUI.TextField>
 
-                <TextField
+                <MUI.TextField
                     variant="standard"
                     label={translatableTexts.registrationPage.emailLabel}
                     value={emailAddress}
                     onChange={x => setEmailAddress(x.currentTarget.value)}
-                    style={{ margin: '10px' }}></TextField>
+                    style={{ margin: '10px' }}></MUI.TextField>
             </>}
 
             {/* invited */}
@@ -152,7 +152,7 @@ export const RegistrationPage = () => {
             <EpistoFlex2 direction={'row'}
                 alignItems={'center'}>
 
-                <Checkbox
+                <MUI.Checkbox
                     checked={isPrivacyPolicyAccepted}
                     value={isPrivacyPolicyAccepted}
                     onClick={() => setIsPrivacyPolicyAccepted(p => !p)} />

@@ -4,6 +4,11 @@ import { EpistoFont } from './controls/EpistoFont';
 import { EpistoImage } from './controls/EpistoImage';
 import { CurrentUserContext } from './system/AuthenticationFrame';
 
+const getSignature = (firstName: string, lastName: string) => {
+
+    return (firstName ?? firstName).substr(0, 1) + (lastName ?? lastName).substr(0, 1);
+};
+
 type ProfileImageProps = {
     url?: string | null,
     firstName?: string,
@@ -11,20 +16,17 @@ type ProfileImageProps = {
     className?: string
 } & EpistoFlex2Props;
 
-const getSignature = (firstName: string, lastName: string) => {
+export const ProfileImage = forwardRef<HTMLDivElement, ProfileImageProps>(({
+    className,
+    firstName,
+    lastName,
+    url,
+    ...css
+}: ProfileImageProps, ref) => {
 
-    return (firstName ?? firstName).substr(0, 1) + (lastName ?? lastName).substr(0, 1);
-};
-
-export const ProfileImage = forwardRef<HTMLDivElement, ProfileImageProps>((props: ProfileImageProps, ref) => {
-
-    const { className, firstName: b, lastName: a, url: c, ...css } = props;
     const user = useContext(CurrentUserContext);
-    const firstName = props.firstName ?? user.firstName;
-    const lastName = props.lastName ?? user.lastName;
-    const url = props.url;
 
-    const signature = getSignature(firstName, lastName);
+    const signature = getSignature(firstName ?? user.firstName, lastName ?? user.lastName);
     const showSingature = !url;
     const showImage = !!url;
 

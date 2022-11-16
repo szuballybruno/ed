@@ -1,7 +1,7 @@
-import {Checkbox} from '@mui/material';
 import {EpistoFlex2Props} from '../controls/EpistoFlex';
 import {EpistoFont} from '../controls/EpistoFont';
 import {FlexFloat} from '../controls/FlexFloat';
+import { MUI } from '../controls/MUIControls';
 
 export const QuestionAnswer = (props: {
     onClick?: (selected: boolean) => void,
@@ -40,7 +40,7 @@ export const QuestionAnswer = (props: {
         }}
         {...css}>
 
-        <Checkbox
+        <MUI.Checkbox
             checked={isSelected}
             size="small"
             value="advanced" />
