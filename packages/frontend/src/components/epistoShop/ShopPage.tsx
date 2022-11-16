@@ -123,7 +123,7 @@ export const ShopPage = () => {
         </LeftPane>
 
         {/* content */}
-        <ContentPane noMaxWidth>
+        <ContentPane>
             <EpistoFlex2
                 id="coursesPanelRoot"
                 direction="column"

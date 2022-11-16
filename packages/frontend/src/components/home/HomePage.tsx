@@ -157,8 +157,7 @@ const HomePage = () => {
 
         {/* content */}
         <ContentPane
-            minWidth={!isSmallerThan1320 && !isMobile ? '1060px' : undefined}
-            noMaxWidth>
+            minWidth={!isSmallerThan1320 && !isMobile ? '1060px' : undefined}>
 
             {isMobile && <MobileWelcomeHeader user={user} />}
 

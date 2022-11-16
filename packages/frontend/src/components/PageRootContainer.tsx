@@ -19,7 +19,7 @@ type ContentPanePropsType = {
     navbarBg?: any,
     hideNavbar?: boolean,
     isNavbarLowHeight?: boolean,
-    noMaxWidth?: boolean,
+    useMaxWidth?: boolean,
     showLogo?: boolean,
     isMinimalMode?: boolean,
     noOverflow?: boolean
@@ -45,7 +45,7 @@ export const ContentPaneRoot = ({ contextValue, children }: { contextValue: Page
     const {
         noPadding,
         showLogo,
-        noMaxWidth,
+        useMaxWidth,
         isNavbarLowHeight,
         navbarBg,
         isMinimalMode,
@@ -61,11 +61,8 @@ export const ContentPaneRoot = ({ contextValue, children }: { contextValue: Page
         <EpistoFlex2
             id={ContentPaneRoot.name}
             direction="column"
-            flex="1"
-            // overflow="hidden"
-            // overflowY={noOverflow ? 'hidden' : 'scroll'}
-            // overflowX="hidden"
-            maxWidth={noMaxWidth ? undefined : '1400px'}>
+            overflow="hidden"
+            flex="1">
 
             {(!hideNavbar && !isMobile) && <Navbar
                 isLowHeight={isNavbarLowHeight}
@@ -74,6 +71,7 @@ export const ContentPaneRoot = ({ contextValue, children }: { contextValue: Page
                 backgroundContent={navbarBg} />}
 
             <EpistoFlex2
+                maxWidth={useMaxWidth ? '1400px' : undefined}
                 padding={noPadding
                     ? undefined
                     : padding
@@ -81,7 +79,7 @@ export const ContentPaneRoot = ({ contextValue, children }: { contextValue: Page
                         : '0 30px 0px 30px'}
                 flex="1"
                 direction='column'
-                overflowY="scroll"
+                overflowY={noOverflow ? 'hidden' : 'scroll'}
                 overflowX="hidden">
                 {children}
             </EpistoFlex2>

@@ -7,7 +7,7 @@ type ContentPanePropsType = {
     navbarBg?: any,
     hideNavbar?: boolean,
     isNavbarLowHeight?: boolean,
-    noMaxWidth?: boolean,
+    useMaxWidth?: boolean,
     showLogo?: boolean,
     isMinimalMode?: boolean,
     noOverflow?: boolean

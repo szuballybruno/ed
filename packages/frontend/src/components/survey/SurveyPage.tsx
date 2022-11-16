@@ -89,9 +89,7 @@ export const SurveyPage = () => {
             <ContentPane
                 align="center"
                 justify="center"
-                //background="radial-gradient(farthest-corner at 300px 100px, rgba(177,208,242,0.7) 33%, rgba(255,255,255,1) 100%)"
                 hideNavbar
-                noMaxWidth
                 padding='20px'>
 
                 <EpistoPaging

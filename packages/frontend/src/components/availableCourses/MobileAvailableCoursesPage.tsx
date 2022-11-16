@@ -16,8 +16,7 @@ export const MobileAvailableCoursesPage = (props: {
 
         <ContentPane
             padding='0 20px 80px 20px'
-            noPadding
-            noMaxWidth>
+            noPadding>
 
             <MobileHeader title={'Tanfolyamkereső'} />
 

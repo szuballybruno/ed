@@ -100,7 +100,7 @@ export const DesktopAvailableCoursesPage = ({
             </EpistoFlex>
         </LeftPane>
 
-        <ContentPane noMaxWidth>
+        <ContentPane>
 
             <EpistoFlex2
                 id="coursesPanelRoot"

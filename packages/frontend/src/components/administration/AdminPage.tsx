@@ -29,7 +29,6 @@ export const AdminPage = () => {
         {/* admin content pane */}
         <ContentPane
             isNavbarLowHeight
-            noMaxWidth
             padding="0 10px 10px 10px">
 
             <EpistoRoutes

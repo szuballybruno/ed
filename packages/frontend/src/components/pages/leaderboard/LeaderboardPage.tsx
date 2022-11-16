@@ -76,8 +76,7 @@ export const LeaderboardPage = () => {
 
     return (
         <>
-            <ContentPane
-                noMaxWidth>
+            <ContentPane>
 
                 <EpistoFlex2
                     margin="0 auto 0 auto"

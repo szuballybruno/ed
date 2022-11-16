@@ -24,8 +24,7 @@ export const UserSettingsPage = () => {
         </LeftPane>
 
         <ContentPane
-            noPadding={isMobile}
-            noMaxWidth={!isMobile}>
+            noPadding={isMobile}>
 
             <EpistoRoutes
                 renderRoutes={[

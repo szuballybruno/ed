@@ -138,7 +138,6 @@ const CourseDetailsPage = () => {
             dialogLogic={adminCourseContentDialogLogic} />
 
         <ContentPane
-            noMaxWidth
             overflowY="scroll"
             padding="0 100px 0 100px">
 
