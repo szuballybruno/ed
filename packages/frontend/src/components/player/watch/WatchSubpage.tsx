@@ -167,7 +167,7 @@ export const WatchSubpage = () => {
 
     return (
         <EpistoFlex2
-            height={isFullscreen ? '100vh' : 'calc(100% - 70px)'}>
+            height={isFullscreen ? '100vh' : '100%'}>
 
             <EpistoDialog
                 logic={warningDialogLogic}

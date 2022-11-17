@@ -337,7 +337,7 @@ export const WatchView = ({
             className="roundBorders largeSoftShadow"
             mt={isMobile ? '0' : '10px'}
             px="20px"
-            pb="200px"
+            pb="100px"
             background="var(--transparentWhite70)">
 
             {!isMobile && <PlayerTitleBlock
