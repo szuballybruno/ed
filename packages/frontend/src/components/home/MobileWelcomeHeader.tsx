@@ -1,4 +1,5 @@
 import { UserDTO } from '@episto/communication';
+import { Environment } from '../../static/Environemnt';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { ProfileImage } from '../ProfileImage';
@@ -32,7 +33,7 @@ export const MobileWelcomeHeader = (props: {
 
         <ProfileImage
             className='square50'
-            url={user.avatarUrl}
+            url={user.avatarUrl ? Environment.getAssetUrl(user.avatarUrl) : undefined}
             firstName={user.firstName}
             lastName={user.lastName} />
     </EpistoFlex2 >;

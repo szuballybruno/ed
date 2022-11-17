@@ -10,7 +10,8 @@ export type ContentPanePropsType = {
     useMaxWidth?: boolean,
     showLogo?: boolean,
     isMinimalMode?: boolean,
-    noOverflow?: boolean
+    noOverflow?: boolean;
+    isHeaderFixed?: boolean;
     align?: EpistoFlex2Props['align'];
     justify?: EpistoFlex2Props['justify'];
     padding?: EpistoFlex2Props['padding'];

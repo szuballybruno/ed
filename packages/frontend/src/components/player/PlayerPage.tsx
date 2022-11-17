@@ -47,9 +47,9 @@ export const PlayerPage = () => {
                 minWidth='100%'
                 height={isIphoneFullscreenMode ? '100vh' : undefined}
                 width={isIphoneFullscreenMode ? '100vw' : 'min(min(100vw, 180vh), 1700px)'}
-                noOverflow
                 hideNavbar={isIphoneFullscreenMode}
                 isMinimalMode
+                noOverflow
                 showLogo>
 
                 <EpistoRoutes

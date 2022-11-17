@@ -20,23 +20,26 @@ export const ContentPaneRoot = ({
         isMinimalMode,
         hideNavbar,
         noOverflow,
-        padding
+        padding,
+        isHeaderFixed: rawIsHeaderFixed
     } = contextValue.contentPaneProps;
 
     const { isMobile } = Responsivity
         .useIsMobileView();
+
+    const isHeaderFixed = isMobile || rawIsHeaderFixed;
 
     return (
         <EpistoFlex2
             id={ContentPaneRoot.name}
             direction="column"
             flex="1"
-            overflowY={isMobile
-                ? undefined
-                : noOverflow
-                    ? 'hidden'
+            overflowY={noOverflow
+                ? 'hidden'
+                : isHeaderFixed
+                    ? undefined
                     : 'scroll'}
-            overflowX="hidden">
+            overflowX="hidden" >
 
             {(!hideNavbar && !isMobile) && <Navbar
                 isLowHeight={isNavbarLowHeight}
@@ -45,28 +48,31 @@ export const ContentPaneRoot = ({
                 backgroundContent={navbarBg} />}
 
             <EpistoFlex2
+                id={`${ContentPaneRoot.name}-ContentContainer`}
                 maxWidth={useMaxWidth ? '1400px' : undefined}
                 padding={noPadding
                     ? undefined
                     : padding
                         ? padding
                         : '0 30px 0px 30px'}
-                overflowY={isMobile
-                    ? noOverflow
-                        ? 'hidden'
-                        : 'scroll'
-                    : undefined}
+                overflowY={noOverflow
+                    ? 'hidden'
+                    : isHeaderFixed
+                        ? 'scroll'
+                        : undefined}
                 flex="1"
                 direction='column'>
 
                 {children}
             </EpistoFlex2>
 
-            {(!hideNavbar && isMobile) && <Navbar
-                isLowHeight={isNavbarLowHeight}
-                showLogo={showLogo}
-                isMinimalMode={isMinimalMode}
-                backgroundContent={navbarBg} />}
-        </EpistoFlex2>
+            {
+                (!hideNavbar && isMobile) && <Navbar
+                    isLowHeight={isNavbarLowHeight}
+                    showLogo={showLogo}
+                    isMinimalMode={isMinimalMode}
+                    backgroundContent={navbarBg} />
+            }
+        </EpistoFlex2 >
     );
 };

@@ -38,7 +38,7 @@ const Navbar = memo(({
      */
     return (
         <FlexFloat
-            id="flexFloat-navbarRoot"
+            id={Navbar.name}
             zIndex={3}
             justify="center"
             width="100%"
