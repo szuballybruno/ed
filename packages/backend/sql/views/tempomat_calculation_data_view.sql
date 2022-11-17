@@ -34,3 +34,7 @@ ON upav.user_id = ucb.user_id
 LEFT JOIN public.tempomat_adjustment_value tav
 ON tav.prequiz_answer_id = upav.planned_usage_answer_id 
 	AND tav.tempomat_mode = ucb.tempomat_mode
+
+ORDER BY
+	ucb.user_id,
+	ucb.course_id
