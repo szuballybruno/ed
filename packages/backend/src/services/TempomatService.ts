@@ -116,7 +116,7 @@ export class TempomatService {
     /**
      * Get single tempomat calculation data
      */
-    async getTempomatCalculationData(userId: Id<'User'>, courseId: number) {
+    async getTempomatCalculationDataAsync(userId: Id<'User'>, courseId: number) {
 
         return await this
             ._ormService
@@ -136,6 +136,21 @@ export class TempomatService {
             .query(TempomatCalculationDataView, { userId })
             .where('userId', '=', 'userId')
             .getMany();
+    }
+
+    /**
+ * Calc tempomat values for one users one course
+ */
+    async calculateTempomatValuesAsync(userId: Id<'User'>, courseId: Id<'Course'>) {
+
+        const tempomatCalculationData = await this._ormService
+            .query(TempomatCalculationDataView, { userId, courseId })
+            .where('userId', '=', 'userId')
+            .and('courseId', '=', 'courseId')
+            .getSingle();
+
+        return this
+            .calculateTempomatValues(tempomatCalculationData);
     }
 
     /**
@@ -219,19 +234,7 @@ export class TempomatService {
             });
     }
 
-    /**
-     * Calc tempomat values for one users one course
-     */
-    async calculateTempomatValuesAsync(userId: Id<'User'>, courseId: Id<'Course'>) {
 
-        const tempomatCalculationData = await this._ormService
-            .query(TempomatCalculationDataView, { userId, courseId })
-            .where('userId', '=', 'userId')
-            .and('courseId', '=', 'courseId')
-            .getSingle();
-
-        return this.calculateTempomatValues(tempomatCalculationData);
-    }
 
     calculateCompanyTempomatValues(tempomatCalculationDataViews: TempomatCalculationDataView[]): CalculatedTempomatValueTypeWithUserId[] {
         return tempomatCalculationDataViews
@@ -520,12 +523,32 @@ export class TempomatService {
         watchedVideos: number
     ) {
 
-        return howManyVideosShouldHaveWatchedByNow - watchedVideos;
+        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', '-------------------------------------------------------');
+        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', 'Calculating new lagBehindVideos...');
+        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', 'Input howManyVideosShouldHaveWatchedByNow: ' + howManyVideosShouldHaveWatchedByNow);
+        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', 'Input watchedVideos: ' + watchedVideos);
+
+        const lagBehindVideos = howManyVideosShouldHaveWatchedByNow - watchedVideos
+
+        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', '-------------------------------------------------------');
+        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', 'Lag behind videos: ' + lagBehindVideos);
+
+        return lagBehindVideos;
     }
 
     private _calculateLagBehindDays(lagBehindVideos: number, originalEstimatedVideosPerDay: number) {
 
-        return lagBehindVideos / originalEstimatedVideosPerDay;
+        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', '-------------------------------------------------------');
+        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', 'Calculating new lagBehindDays...');
+        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', 'Input lagBehindVideos: ' + lagBehindVideos);
+        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', 'Input originalEstimatedVideosPerDay: ' + originalEstimatedVideosPerDay);
+
+        const lagBehindDays = lagBehindVideos / originalEstimatedVideosPerDay
+
+        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', '-------------------------------------------------------');
+        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', 'Lag behind days: ' + lagBehindDays);
+
+        return lagBehindDays;
     }
 
     private _calculateNewPrevisionedDateByTempomatMode(
@@ -535,7 +558,14 @@ export class TempomatService {
         adjustmentCorrection?: number
     ) {
 
-        const getNewPrevisionedDate = () => {
+        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', '-------------------------------------------------------');
+        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', 'Calculating new previsionedDate...');
+        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', 'Input tempomatMode: ' + tempomatMode);
+        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', 'Input originalPrevisionedCompletionDate: ' + originalPrevisionedCompletionDate);
+        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', 'Input lagBehindDays: ' + lagBehindDays);
+        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', 'Input adjustmentCorrection: ' + adjustmentCorrection);
+
+        const newPrevisionedDate = (() => {
             switch (tempomatMode as TempomatModeType) {
 
                 case 'light':
@@ -559,9 +589,10 @@ export class TempomatService {
                 default:
                     throw new Error('Tempomat mode doesn\'t exists');
             }
-        };
+        })();
 
-        const newPrevisionedDate = getNewPrevisionedDate();
+        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', '-------------------------------------------------------');
+        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', 'New previsioned date: ' + newPrevisionedDate);
 
         return newPrevisionedDate >= originalPrevisionedCompletionDate
             ? newPrevisionedDate

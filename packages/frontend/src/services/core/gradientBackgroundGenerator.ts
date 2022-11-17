@@ -135,7 +135,7 @@ export const gradientBackgroundGenerator = (color?: string, options?: GridGradie
         } = gradient;
 
         return isIPhone
-            ? `radial-gradient(${radius}px circle, ${rgbaToHex(`rgba(${centerColor},${getRandomInteger(minOpacity || 0.3, maxOpacity || 0.3)})`)}, ${rgbaToHex(backgroundColor + '')})`
+            ? 'red'
             : `radial-gradient(${radius}px circle at ${offsetX || 'center'} ${offsetY || ''}, ${rgbaToHex(`rgba(${centerColor},${getRandomInteger(minOpacity || 0.3, maxOpacity || 0.3)})`)}, ${rgbaToHex(backgroundColor + '')})`;
     };
 
