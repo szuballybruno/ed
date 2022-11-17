@@ -1,5 +1,5 @@
 import { Responsivity } from '../../helpers/responsivity';
-import { PropsWithChildren } from '../../static/frontendHelpers';
+import { PropsWithChildren, useGetCurrentAppRoute } from '../../static/frontendHelpers';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import Navbar from '../navbar/Navbar';
 import { PageRootContainerContextType } from './contentPaneRootLogic';
@@ -27,7 +27,11 @@ export const ContentPaneRoot = ({
     const { isMobile } = Responsivity
         .useIsMobileView();
 
+    const currentRoute = useGetCurrentAppRoute();
+    const { isUnauthorized } = currentRoute;
+
     const isHeaderFixed = isMobile || rawIsHeaderFixed;
+    const isNavbarShowing = !hideNavbar && !isUnauthorized;
 
     return (
         <EpistoFlex2
@@ -41,7 +45,7 @@ export const ContentPaneRoot = ({
                     : 'scroll'}
             overflowX="hidden" >
 
-            {(!hideNavbar && !isMobile) && <Navbar
+            {(isNavbarShowing && !isMobile) && <Navbar
                 isLowHeight={isNavbarLowHeight}
                 showLogo={showLogo}
                 isMinimalMode={isMinimalMode}
@@ -66,13 +70,11 @@ export const ContentPaneRoot = ({
                 {children}
             </EpistoFlex2>
 
-            {
-                (!hideNavbar && isMobile) && <Navbar
-                    isLowHeight={isNavbarLowHeight}
-                    showLogo={showLogo}
-                    isMinimalMode={isMinimalMode}
-                    backgroundContent={navbarBg} />
-            }
+            {(isNavbarShowing && isMobile) && <Navbar
+                isLowHeight={isNavbarLowHeight}
+                showLogo={showLogo}
+                isMinimalMode={isMinimalMode}
+                backgroundContent={navbarBg} />}
         </EpistoFlex2 >
     );
 };

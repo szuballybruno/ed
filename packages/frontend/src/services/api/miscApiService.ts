@@ -1,8 +1,7 @@
-import { applicationRoutes } from '../../configuration/applicationRoutes';
-import { CourseOverviewDataDTO, ActivationCodeListDTO, QuestionModuleCompareDTO } from '@episto/communication';
-import { OverviewPageDTO } from '@episto/communication';
-import { apiRoutes } from '@episto/communication';
 import { Id } from '@episto/commontypes';
+import { ActivationCodeListDTO, apiRoutes, CourseOverviewDataDTO, OverviewPageDTO, QuestionModuleCompareDTO } from '@episto/communication';
+import { useAuthStateContext } from '../../components/system/AuthenticationFrame';
+import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { GlobalEventManagerType } from '../../static/EventBus';
 import { useGetCurrentAppRoute } from '../../static/frontendHelpers';
 import { QueryService } from '../../static/QueryService';
@@ -42,8 +41,11 @@ export const useMiscApiService = (globalEventManager: GlobalEventManagerType) =>
     const useCurrentCourseItemCode = () => {
 
         const currentRoute = useGetCurrentAppRoute();
-        const isEnabled = !currentRoute.isUnauthorized;
-        const qr = QueryService.useXQuery<string>(apiRoutes.misc.getCurrentCourseItemCode, undefined, isEnabled);
+        const state = useAuthStateContext();
+        const isEnabled = !currentRoute.isUnauthorized && state === 'authenticated';
+
+        const qr = QueryService
+            .useXQuery<string>(apiRoutes.misc.getCurrentCourseItemCode, undefined, isEnabled);
 
         return {
             refetchCurrentCourseItemCode: qr.refetch,
