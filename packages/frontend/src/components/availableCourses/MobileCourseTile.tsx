@@ -56,6 +56,9 @@ export const MobileCourseTile = (props: {
             }
             midContent={
                 <EpistoFlex2
+                    onClick={() => {
+                        navigateToDetailsPage(course);
+                    }}
                     direction='column'>
 
                     <FlexListTitleSubtitle
