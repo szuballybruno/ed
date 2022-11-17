@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { applicationRoutes } from '../configuration/applicationRoutes';
 import { Responsivity } from '../helpers/responsivity';
 import { useRegisterUserViaActivationCode } from '../services/api/registrationApiService';
@@ -12,7 +12,6 @@ import { EpistoButton } from './controls/EpistoButton';
 import { EpistoEntryNew, EpistoEntryStateType, useEpistoEntryState } from './controls/EpistoEntryNew';
 import { EpistoFlex2 } from './controls/EpistoFlex';
 import { EpistoFont } from './controls/EpistoFont';
-import { LoadingFrame } from './system/LoadingFrame';
 import { PasswordEntry, usePasswordEntryState } from './universal/PasswordEntry';
 
 const validateAllEntries = (entryStates: EpistoEntryStateType[]) => {
@@ -22,6 +21,12 @@ const validateAllEntries = (entryStates: EpistoEntryStateType[]) => {
         .some(x => !x);
 
     return isValid;
+};
+
+const isAllEntriesFilled = (entryStates: EpistoEntryStateType[]) => {
+
+    return entryStates
+        .none(x => x.isMandatory && x.value === '');
 };
 
 export const RegisterViaActivationCodePage = () => {
@@ -88,7 +93,7 @@ export const RegisterViaActivationCodePage = () => {
     /**
      * Is validation ok
      */
-    const isAllValid = useMemo(() => {
+    const getIsAllValid = useCallback(() => {
 
         const entriesValid = validateAllEntries([
             emailEntryState,
@@ -103,12 +108,35 @@ export const RegisterViaActivationCodePage = () => {
         return entriesValid && pwStateValid;
     }, [emailEntryState, firstNameEntryState, lastNameEntryState, activationCodeEntryState, passwordState]);
 
+    const isAllFilled = useMemo(() => {
+
+        const entriesFilled = isAllEntriesFilled([
+            emailEntryState,
+            firstNameEntryState,
+            lastNameEntryState,
+            activationCodeEntryState
+        ]);
+
+        const pwStateValid = passwordState
+            .password !== '' && passwordState.passwordCompare !== '';
+
+        return entriesFilled && pwStateValid;
+    }, [emailEntryState, firstNameEntryState, lastNameEntryState, activationCodeEntryState, passwordState]);
+
+    const isAllValid = useMemo(() => {
+
+        if (!isAllFilled)
+            return;
+
+        return getIsAllValid();
+    }, [getIsAllValid, isAllFilled]);
+
     /**
      * Register async 
      */
     const handleRegisterAsync = getWrappedAction(async () => {
 
-        if (!isAllValid)
+        if (!getIsAllValid())
             return;
 
         await registerUserViaActivationCodeAsync({
@@ -128,7 +156,6 @@ export const RegisterViaActivationCodePage = () => {
 
         <EpistoFlex2
             justify={'center'}
-            background="gradientBlueBackground"
             py={isMobile ? undefined : '60px'}
             pt={isMobile ? '10px' : undefined}
             overflowY={'scroll'}
@@ -185,15 +212,14 @@ export const RegisterViaActivationCodePage = () => {
                 </EpistoFlex2>
 
                 {/* form */}
-                <LoadingFrame
+                <EpistoFlex2
                     id="form"
                     minWidth={isMobile ? undefined : '400px'}
-                    loadingState={registerUserViaActivationCodeState}
                     direction="column"
                     zIndex="7"
                     flex="5">
 
-                    {/* Redeem title */}
+                    {/* title */}
                     <EpistoFlex2
                         minH="80px"
                         direction="column"
@@ -248,7 +274,7 @@ export const RegisterViaActivationCodePage = () => {
                             height={isMobile ? '40px' : '30px'} />
 
                         <PasswordEntry
-                            state={passwordState}/>
+                            state={passwordState} />
                     </EpistoFlex2>
 
                     {/* registration button */}
@@ -271,6 +297,7 @@ export const RegisterViaActivationCodePage = () => {
                         </EpistoButton>
                     </EpistoFlex2>
 
+                    {/* buy access */}
                     <EpistoFlex2
                         justify="space-between"
                         align="center"
@@ -289,7 +316,8 @@ export const RegisterViaActivationCodePage = () => {
                                 color: 'var(--epistoTeal)'
                             }}>
 
-                            <a href="https://pcworld.hu/elofizetes"
+                            <a
+                                href="https://pcworld.hu/elofizetes"
                                 target="_blank"
                                 rel="noreferrer">
 
@@ -297,7 +325,7 @@ export const RegisterViaActivationCodePage = () => {
                             </a>
                         </EpistoFont>
                     </EpistoFlex2>
-                </LoadingFrame>
+                </EpistoFlex2>
             </EpistoFlex2>
         </EpistoFlex2>
     </>;

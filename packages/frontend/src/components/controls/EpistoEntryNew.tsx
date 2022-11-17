@@ -1,5 +1,5 @@
 import { InputAdornment, TextField } from '@mui/material';
-import { forwardRef, useCallback, useEffect, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { EpistoFlex2 } from './EpistoFlex';
 import { EpistoFont } from './EpistoFont';
 
@@ -10,6 +10,7 @@ export const useEpistoEntryState = (options?: {
 
     // state 
     const [value, setValue] = useState('');
+    const isDefaultValueRef = useRef(true);
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
     const { isMandatory, validateFunction } = options ?? {};
@@ -39,21 +40,27 @@ export const useEpistoEntryState = (options?: {
     // effects 
     useEffect(() => {
 
-        validate();
-    }, [value, validate]);
+        if (!isDefaultValueRef.current)
+            validate();
+
+        if (isDefaultValueRef.current)
+            isDefaultValueRef.current = false;
+    }, [value, validate, isDefaultValueRef]);
 
     return useMemo(() => ({
         value,
         errorMsg,
         validate,
         setValue,
-        setErrorMsg
+        setErrorMsg,
+        isMandatory: !!isMandatory
     }), [
         value,
         errorMsg,
         validate,
         setValue,
-        setErrorMsg
+        setErrorMsg,
+        isMandatory
     ]);
 };
 
@@ -73,7 +80,7 @@ export type EpistoEntryNewPropsType = {
     marginTop?: string,
     flex?: string,
     type?: 'password' | 'number' | 'text',
-    style?: React.CSSProperties
+    style?: React.CSSProperties;
 }
 
 export const EpistoEntryNew = forwardRef<HTMLInputElement, EpistoEntryNewPropsType>((props: EpistoEntryNewPropsType, ref) => {

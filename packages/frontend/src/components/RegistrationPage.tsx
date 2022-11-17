@@ -80,7 +80,6 @@ export const RegistrationPage = () => {
     };
 
     return <EpistoFlex2
-        background="var(--gradientBlueBackground)"
         height="100vh"
         width='100vw'
         direction="column"
