@@ -39,4 +39,7 @@ export class PlaylistView {
 
     @XViewColumn()
     playlistItemCode: string;
+
+    @XViewColumn()
+    videoAudioText: string | null;
 }

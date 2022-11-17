@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { CourseItemApiService } from '../../../../services/api/CourseItemApiService';
 import { ModuleEditDTO } from '@episto/communication';
 import { Id } from '@episto/commontypes';
@@ -10,6 +10,7 @@ import { EpistoReactPlayer } from '../../../controls/EpistoReactPlayer';
 import { useQuestionEditGridLogic } from '../questionsEditGrid/QuestionEditGridLogic';
 import { AnswerMutationsType, QuestionMutationsType } from '../questionsEditGrid/QuestionEditGridTypes';
 import { QuestionsEditGrid } from '../questionsEditGrid/QuestionsEditGrid';
+import { EpistoEntry } from '../../../controls/EpistoEntry';
 
 export const VideoEditor = ({
     videoVersionId,
@@ -22,7 +23,7 @@ export const VideoEditor = ({
 }: {
     enabled: boolean,
     videoVersionId: Id<'VideoVersion'>,
-    onClose: (questionMutations: QuestionMutationsType, answerMutations: AnswerMutationsType) => void,
+    onClose: (questionMutations: QuestionMutationsType, answerMutations: AnswerMutationsType, audioText: string) => void,
     questionMutations: QuestionMutationsType,
     answerMutations: AnswerMutationsType,
     defaultModuleId: Id<'Module'> | null,
@@ -43,6 +44,10 @@ export const VideoEditor = ({
 
     const [questionGridHasFocusRef, questionGridHasFocus, setQuestionGridHasFocus] = useStateAndRef(false);
 
+    const [audioText, setAudioText] = useState('');
+
+    useEffect(() => setAudioText(courseItemEditData?.videoAudioText ?? ''), [courseItemEditData?.videoAudioText]);
+
     const logic = useQuestionEditGridLogic({
         questions,
         questionMutations,
@@ -59,8 +64,8 @@ export const VideoEditor = ({
 
     const onCloseHandler = useCallback(() => {
 
-        onClose(logic.questionMutations, logic.answerMutations);
-    }, [onClose, logic]);
+        onClose(logic.questionMutations, logic.answerMutations, audioText);
+    }, [onClose, logic, audioText]);
 
     return <EpistoFlex2
         direction="column"
@@ -83,6 +88,19 @@ export const VideoEditor = ({
                     overflow: 'hidden'
                 }}
                 url={videoUrl} />
+        </EpistoFlex2>
+
+        {/* audio text */}
+        <EpistoFlex2
+            padding="10px"
+            bg="white"
+            borderRadius="5px"
+            mt="10px">
+
+            <EpistoEntry
+                isMultiline
+                value={audioText}
+                setValue={setAudioText} />
         </EpistoFlex2>
 
         {/* questions list */}

@@ -379,6 +379,7 @@ const marray = [
                 subtitle: viewAsItem.subtitle,
                 videoLengthSeconds: viewAsItem.videoLengthSeconds,
                 videoUrl: videoFileUrl,
+                videoAudioText: viewAsItem.videoAudioText,
 
                 // map questions
                 questions: views
@@ -437,7 +438,8 @@ const marray = [
                             type: viewAsItem.itemType === 'video' ? 'video' : 'exam',
                             shouldRepeatVideo: viewAsItem.isRecommendedForPractise,
                             thumbnailUrl: '',
-                            correctAnswerRate: viewAsItem.scorePercentage
+                            correctAnswerRate: viewAsItem.scorePercentage,
+                            videoAudioText: viewAsItem.videoAudioText
                         }));
 
                     const moduleState = isCurrentModule
@@ -833,6 +835,7 @@ const marray = [
                     errors,
                     warnings,
                     videoLength: view.videoLength,
+                    videoAudioText: view.videoAudioText,
                     itemType: view.itemType,
                     questionMutations: [],
                     answerMutations: [],

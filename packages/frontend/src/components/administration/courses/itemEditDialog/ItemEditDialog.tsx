@@ -1,24 +1,44 @@
+import { Id, VersionCode } from '@episto/commontypes';
+import { useCallback } from 'react';
+import { EMPTY_ARRAY } from '../../../../helpers/emptyArray';
 import { ArrayBuilder, usePaging } from '../../../../static/frontendHelpers';
-import { } from '../../../universal/epistoDialog/EpistoDialog';
-import { EpistoDialogLogicType } from '../../../universal/epistoDialog/EpistoDialogTypes';
+import { Logger } from '../../../../static/Logger';
+import { useEpistoDialogLogic } from '../../../universal/epistoDialog/EpistoDialogLogic';
+import { EditDialogBase, EditDialogSubpage } from '../EditDialogBase';
+import { AnswerMutationsType, QuestionMutationsType } from '../questionsEditGrid/QuestionEditGridTypes';
 import { ExamEditor } from './ExamEditor';
 import { AdminExamStatisticsModalPage } from './ExamStats';
-import { EditDialogBase, EditDialogSubpage } from '../EditDialogBase';
 import { ItemEditDialogParams } from './ItemEditDialogTypes';
-import { useCallback } from 'react';
-import { AnswerMutationsType, QuestionMutationsType } from '../questionsEditGrid/QuestionEditGridTypes';
 import { VideoEditor } from './VideoEditor';
 import { AdminVideoStatisticsModalPage } from './VideoStats';
-import { Id } from '@episto/commontypes';
-import { Logger } from '../../../../static/Logger';
-import { EMPTY_ARRAY } from '../../../../helpers/emptyArray';
+
+export type CallbackParamsType = {
+    versionCode: VersionCode;
+    questionMutations: QuestionMutationsType;
+    answerMutations: AnswerMutationsType;
+    videoAudioText?: string;
+};
+
+export const useItemEditDialogLogic = (callback: (params: CallbackParamsType) => void) => {
+
+    const dialogLogic = useEpistoDialogLogic<ItemEditDialogParams>(useItemEditDialogLogic.name);
+
+    return {
+        dialogLogic,
+        callback,
+        openDialog: dialogLogic.openDialog
+    };
+};
+
+export type ItemEditDialogLogicType = ReturnType<typeof useItemEditDialogLogic>;
 
 export const ItemEditDialog = ({
-    dialogLogic,
-    callback
+    logic: {
+        callback,
+        dialogLogic
+    }
 }: {
-    dialogLogic: EpistoDialogLogicType<ItemEditDialogParams>,
-    callback: (questionMutations: QuestionMutationsType, answerMutations: AnswerMutationsType) => void,
+    logic: ItemEditDialogLogicType,
 }) => {
 
     const {
@@ -30,7 +50,8 @@ export const ItemEditDialog = ({
         modules,
         courseTitle,
         itemTitle,
-        examType
+        examType,
+        versionCode
     } = dialogLogic.params ?? {
         isVideo: false,
         itemVersionId: null,
@@ -40,17 +61,25 @@ export const ItemEditDialog = ({
         questionMutations: EMPTY_ARRAY,
         itemTitle: '',
         courseTitle: '',
-        examType: 'normal'
+        examType: 'normal',
+        versionCode: null as any as VersionCode
     };
 
-    const handleCallback = useCallback((questionMutations: QuestionMutationsType, answerMutations: AnswerMutationsType) => {
+    const handleCallback = useCallback((questionMutations: QuestionMutationsType, answerMutations: AnswerMutationsType, videoAudioText?: string) => {
 
         Logger.logScoped('MUTATIONS', 'Finishing item edits. Question mutations: ', questionMutations);
         Logger.logScoped('MUTATIONS', 'Finishing item edits. Answer mutations: ', answerMutations);
 
-        dialogLogic.closeDialog();
-        callback(questionMutations, answerMutations);
-    }, [callback]);
+        dialogLogic
+            .closeDialog();
+
+        callback({
+            versionCode,
+            questionMutations,
+            answerMutations,
+            videoAudioText
+        });
+    }, [callback, versionCode, dialogLogic]);
 
     const pages = (itemVersionId && answerMutations && questionMutations)
         ? new ArrayBuilder()

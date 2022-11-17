@@ -1,3 +1,5 @@
+import { Id, VersionCode } from '@episto/commontypes';
+import { CourseContentItemAdminDTO } from '@episto/communication';
 import { Add, Edit } from '@mui/icons-material';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { applicationRoutes } from '../../../../configuration/applicationRoutes';
@@ -7,9 +9,6 @@ import { useUploadVideoFileAsync, VideoFileUploadCallbackParams } from '../../..
 import { getVirtualId } from '../../../../services/core/idService';
 import { useNavigation } from '../../../../services/core/navigatior';
 import { killNotification, showNotification, showNotificationAdvanced, useShowErrorDialog2 } from '../../../../services/core/notifications';
-import { CourseContentItemAdminDTO } from '@episto/communication';
-import { VersionCode } from '@episto/commontypes';
-import { Id } from '@episto/commontypes';
 import { moveItemInArray } from '../../../../static/frontendHelpers';
 import { useIntParam } from '../../../../static/locationHelpers';
 import { translatableTexts } from '../../../../static/translatableTexts';
@@ -24,8 +23,7 @@ import { FileSelector } from '../../../universal/fileSelector/FileSelector';
 import { SelectedFileDataType, useFileSelectorLogic } from '../../../universal/fileSelector/FileSelectorLogic';
 import { AdminSubpageHeader } from '../../AdminSubpageHeader';
 import { CourseAdministartionFrame } from '../CourseAdministartionFrame';
-import { ItemEditDialog } from '../itemEditDialog/ItemEditDialog';
-import { ItemEditDialogParams } from '../itemEditDialog/ItemEditDialogTypes';
+import { CallbackParamsType, ItemEditDialog, useItemEditDialogLogic } from '../itemEditDialog/ItemEditDialog';
 import { ModuleEditDialog } from '../moduleEdit/ModuleEditDialog';
 import { useModuleEditDialogLogic } from '../moduleEdit/ModuleEditDialogLogic';
 import { AddNewItemPopper } from './AddNewItemPopper';
@@ -43,8 +41,6 @@ export const AdminCourseContentSubpage = () => {
     const { navigate2 } = useNavigation();
     const { showErrorDialog } = useShowErrorDialog2();
     const deleteWarningDialogLogic = useEpistoDialogLogic('dvd');
-    const itemEditDialogLogic = useEpistoDialogLogic<ItemEditDialogParams>(ItemEditDialog);
-    const dialogParams = itemEditDialogLogic.params!;
     const isAnySelected = !!courseId && (courseId != Id.create<'Course'>(-1));
 
     const videoUploadProgressEventManager = useMemo(() => new XEventManager<'onProgressChanged' | 'onError' | 'onDone'>(), []);
@@ -106,6 +102,42 @@ export const AdminCourseContentSubpage = () => {
     // busy state
     useSetBusy(CourseApiService.useSaveCourseContentData, saveCourseDataState);
     useSetBusy(CourseApiService.useCourseContentAdminData, courseContentAdminDataState);
+
+    /**
+     * Item edit dialog's callback function 
+     * this is called when the dialog is closed
+     */
+    const callback = useCallback(({
+        versionCode,
+        questionMutations,
+        answerMutations,
+        videoAudioText
+    }: CallbackParamsType) => {
+
+        itemsMutatorFunctions
+            .mutate({
+                key: versionCode,
+                field: 'questionMutations',
+                newValue: questionMutations
+            });
+
+        itemsMutatorFunctions
+            .mutate({
+                key: versionCode,
+                field: 'answerMutations',
+                newValue: answerMutations
+            });
+
+        if (videoAudioText)
+            itemsMutatorFunctions
+                .mutate({
+                    key: versionCode,
+                    field: 'videoAudioText',
+                    newValue: videoAudioText
+                });
+    }, [itemsMutatorFunctions]);
+
+    const itemEditDialogLogic = useItemEditDialogLogic(callback);
 
     // module edit dialog logic
     const canDelete = useCallback((moduleVersionId: Id<'ModuleVersion'>) => !itemsMutatorState
@@ -230,7 +262,6 @@ export const AdminCourseContentSubpage = () => {
             moduleEditDialogLogic
                 .dialogLogic
                 .openDialog();
-
     };
 
     /**
@@ -276,7 +307,8 @@ export const AdminCourseContentSubpage = () => {
             moduleName: module.name,
             videoLength: 0,
             questionMutations: [],
-            answerMutations: []
+            answerMutations: [],
+            videoAudioText: ''
         };
 
         itemsMutatorFunctions
@@ -331,6 +363,9 @@ export const AdminCourseContentSubpage = () => {
         }
     }, [courseId, itemsMutatorFunctions, itemsMutatorState, moduleEditDialogLogic, refetchCourseContentAdminData, saveCourseDataAsync, showErrorDialog]);
 
+    /**
+     * Get grid columns
+     */
     const gridColumns = useGridColumns(modules, openItemEditDialog, itemsMutatorFunctions, handleSelectVideoFile, currentDropModuleId);
 
     return (
@@ -373,23 +408,7 @@ export const AdminCourseContentSubpage = () => {
                 <EpistoDialog logic={deleteWarningDialogLogic} />
 
                 <ItemEditDialog
-                    callback={(questionMutations, answerMutations) => {
-
-                        itemsMutatorFunctions
-                            .mutate({
-                                key: dialogParams.versionCode,
-                                field: 'questionMutations',
-                                newValue: questionMutations
-                            });
-
-                        itemsMutatorFunctions
-                            .mutate({
-                                key: dialogParams.versionCode,
-                                field: 'answerMutations',
-                                newValue: answerMutations
-                            });
-                    }}
-                    dialogLogic={itemEditDialogLogic} />
+                    logic={itemEditDialogLogic} />
 
                 <ModuleEditDialog
                     logic={moduleEditDialogLogic} />

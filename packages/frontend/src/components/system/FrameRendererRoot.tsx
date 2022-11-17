@@ -104,8 +104,6 @@ const getFrameElements = (frames: FrameType[]) => {
                     .filter((_, i) => i < currentFrameIndex)
                     .map(x => x.name);
 
-                console.log(CurrentFrameElement.name, prevFrameNames);
-
                 return <CurrentFrameElement
                     prevFrameNames={prevFrameNames}>
                     {children}

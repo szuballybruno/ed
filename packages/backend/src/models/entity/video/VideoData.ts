@@ -31,6 +31,9 @@ export class VideoData {
     @XViewColumn()
     videoFileLengthSeconds: number | null;
 
+    @XViewColumn()
+    audioText: string;
+
     //
     // TO ONE
     // 

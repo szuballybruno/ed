@@ -7,6 +7,7 @@ SELECT
 	END title,
     vd.subtitle,
 	vd.video_file_length_seconds video_length_seconds,
+	vd.audio_text video_audio_text,
 	sf.file_path video_file_path,
 	qv.id question_version_id,
     qd.question_text question_text,

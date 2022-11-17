@@ -1,12 +1,11 @@
+import { Id } from '@episto/commontypes';
+import { PlaylistModuleDTO } from '@episto/communication';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { useEffect, useState } from 'react';
 import { useNavigation } from '../../services/core/navigatior';
-import { PlaylistItemDTO } from '@episto/communication';
-import { PlaylistModuleDTO } from '@episto/communication';
-import { Id } from '@episto/commontypes';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoDiv } from '../controls/EpistoDiv';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
@@ -35,21 +34,6 @@ export const Playlist = ({
         .flatMap(x => x.items)
         .some(x => x.state === 'locked');
 
-    const currentModule = modules
-        .filter(module => module.moduleState === 'current')[0] as PlaylistModuleDTO | null;
-
-    const currentItem = modules
-        .flatMap(x => x.items)
-        .filter(x => x.state === 'current')[0] as PlaylistItemDTO | null;
-
-    const isCurrentExpanded = expandedNodeIds
-        .some(x => x === currentModule?.moduleId);
-
-    const isModuleSelected = !!modules
-        .filter(x => x.moduleState === 'current' && !x
-            .items
-            .some(x => x.state === 'current'))[0];
-
     useEffect(() => {
 
         // open all modules by default
@@ -75,21 +59,6 @@ export const Playlist = ({
 
         navigateToPlayer(code);
     };
-
-    // selection changed
-    useEffect(() => {
-
-        if (!currentModule)
-            return;
-
-        const expandedIds = isModuleSelected
-            ? isBeginnerMode
-                ? []
-                : [currentModule.moduleId]
-            : [currentModule.moduleId];
-
-        //setExpandedNodeIds(expandedIds);
-    }, [isModuleSelected, currentItem, currentModule]);
 
     return (
         <EpistoFlex2

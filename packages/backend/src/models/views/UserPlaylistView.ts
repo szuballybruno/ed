@@ -1,6 +1,5 @@
+import { CourseItemStateType, CourseItemType, Id } from '@episto/commontypes';
 import { XViewColumn } from '../../services/XORM/XORMDecorators';
-import { CourseItemStateType, CourseItemType } from '@episto/commontypes';
-import { Id } from '@episto/commontypes';
 
 export class UserPlaylistView {
 
@@ -54,4 +53,7 @@ export class UserPlaylistView {
 
     @XViewColumn()
     scorePercentage: number;
+
+    @XViewColumn()
+    videoAudioText: string | null;
 }

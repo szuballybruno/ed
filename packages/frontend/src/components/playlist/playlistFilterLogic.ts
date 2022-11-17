@@ -7,12 +7,17 @@ export const usePlaylistFilterLogic = (playlist: PlaylistModuleDTO[]) => {
         keyword: ''
     });
 
-    const normalize = (str: string) => {
+    const normalizeToClosestEnglishWord = (str: string) => {
 
         return str
-            .toLowerCase()
             .normalize('NFD')
             .replace(/[\u0300-\u036f]/g, '');
+    };
+
+    const normalize = (str: string) => {
+
+        return normalizeToClosestEnglishWord(str
+            .toLowerCase());
     };
 
     const playlistFiltered = useMemo(() => {
@@ -44,9 +49,10 @@ export const usePlaylistFilterLogic = (playlist: PlaylistModuleDTO[]) => {
                     items: foundInModuleTitle
                         ? moduleItems
                         : moduleItems
-                            .filter(({ title, subTitle }) => normalize(title)
+                            .filter(({ title, subTitle, videoAudioText }) => normalize(title)
                                 .includes(filterKeyword) || normalize(subTitle)
-                                    .includes(filterKeyword))
+                                    .includes(filterKeyword) || normalize(videoAudioText ?? '')
+                                        .includes(filterKeyword))
                 } as PlaylistModuleDTO;
             })
             .filter(x => x.items.any());

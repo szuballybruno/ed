@@ -96,7 +96,8 @@ SELECT
 		CHR(10), 
 		CASE WHEN civ.item_type = 'video' AND vd.video_file_length_seconds > 480 
 			THEN 'video_too_long' END) warnings,
-	vd.video_file_length_seconds video_length
+	vd.video_file_length_seconds video_length,
+	vd.audio_text video_audio_text
 FROM public.course_admin_short_view casv
 
 LEFT JOIN public.latest_course_version_view lcvv

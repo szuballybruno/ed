@@ -23,6 +23,9 @@ export class CourseItemEditView {
     videoLengthSeconds: number | null;
 
     @XViewColumn()
+    videoAudioText: string | null;
+
+    @XViewColumn()
     videoFilePath: string | null;
 
     @XViewColumn()

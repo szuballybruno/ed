@@ -44,24 +44,25 @@ export class CourseItemService {
      * subtitle etc fields of the item,
      * just the questions & answers  
      */
-    getCourseItemEditDataAsync(principalId: PrincipalId, videoVersionId: Id<'VideoVersion'> | null, examVersionId: Id<'ExamVersion'> | null) {
+    async getCourseItemEditDataAsync(
+        principalId: PrincipalId,
+        videoVersionId: Id<'VideoVersion'> | null,
+        examVersionId: Id<'ExamVersion'> | null) {
 
-        return {
-            action: async () => {
-                const views = await this._ormService
-                    .query(CourseItemEditView, { videoVersionId, examVersionId })
-                    .where('examVersionId', '=', 'examVersionId')
-                    .and('videoVersionId', '=', 'videoVersionId')
-                    .getMany();
+        await this
+            ._authorizationService
+            .checkPermissionAsync(principalId, 'EDIT_COURSES');
 
-                return this._mapperService
-                    .mapTo(CourseItemEditDTO, [views]);
-            },
-            auth: async () => {
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'EDIT_COURSES');
-            }
-        };
+        const views = await this
+            ._ormService
+            .query(CourseItemEditView, { videoVersionId, examVersionId })
+            .where('examVersionId', '=', 'examVersionId')
+            .and('videoVersionId', '=', 'videoVersionId')
+            .getMany();
+
+        return this
+            ._mapperService
+            .mapTo(CourseItemEditDTO, [views]);
     }
 
     /**
@@ -168,6 +169,7 @@ export class CourseItemService {
                     title: '',
                     subtitle: '',
                     description: '',
+                    audioText: '',
                     //TODO: Fix this properly. It crashes the app when adding video to new module
                     orderIndex: 0, //XMutatorHelpers.getFieldValueOrFail(mutation)('itemOrderIndex'),
                     thumbnailFileId: null,
@@ -176,7 +178,7 @@ export class CourseItemService {
                 }),
                 overrideDataProps: (data, mutation) => {
 
-                    const { itemOrderIndex, itemTitle, itemSubtitle } = XMutatorHelpers
+                    const { itemOrderIndex, itemTitle, itemSubtitle, videoAudioText } = XMutatorHelpers
                         .mapMutationToPartialObject(mutation);
 
                     if (itemOrderIndex !== undefined)
@@ -187,6 +189,9 @@ export class CourseItemService {
 
                     if (itemTitle)
                         data.title = itemTitle;
+
+                    if (videoAudioText)
+                        data.audioText = videoAudioText;
 
                     return data;
                 },
@@ -202,7 +207,8 @@ export class CourseItemService {
             });
 
         // SAVE QUESTIONS
-        await this._saveQuestionsAsync(videoMutations, videoVersionIdMigrations, true);
+        await this
+            ._saveQuestionsAsync(videoMutations, videoVersionIdMigrations, true);
     }
 
     /**

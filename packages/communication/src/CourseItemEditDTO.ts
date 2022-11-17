@@ -8,6 +8,7 @@ export class CourseItemEditDTO {
     subtitle: string;
     videoLengthSeconds: number | null;
     videoUrl: string | null;
+    videoAudioText: string | null;
 
     questions: QuestionEditDataReadDTO[];
 }

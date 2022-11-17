@@ -11,6 +11,7 @@ exam_item AS
 		ed.order_index item_order_index,
 		ed.title item_title,
 		ed.subtitle item_subtitle,
+		NULL::varchar video_audio_text,
 		CASE 
 			WHEN e.is_signup THEN 'signup'
 			WHEN e.is_pretest THEN 'pretest'
@@ -41,6 +42,7 @@ video_item AS
 		vd.order_index item_order_index,
 		vd.title item_title,
 		vd.subtitle item_subtitle,
+		vd.audio_text video_audio_text,
 		'video' item_type,
 		'video_version@' || vv.id version_code
 	FROM public.video_version vv
@@ -74,7 +76,8 @@ SELECT
 	ic.item_title,
 	ic.item_subtitle,
 	ic.item_type,
-	ic.version_code
+	ic.version_code,
+	ic.video_audio_text
 FROM public.latest_course_version_view lcvv
 
 LEFT JOIN public.course_version cv
