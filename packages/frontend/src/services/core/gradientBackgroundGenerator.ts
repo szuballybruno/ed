@@ -1,4 +1,5 @@
 import { getRandomInteger } from '../../static/frontendHelpers';
+import browser from './browserSniffingService';
 
 /**
  * @param centerColor The main color of each grid item
@@ -58,6 +59,7 @@ export const gradientBackgroundGenerator = (color?: string, options?: GridGradie
 
     const regex = /\(([^()]*)(,[^()]*)\)/gm;
     const plainColorValue = color ? regex.exec(color) : undefined;
+    const isIPhone = browser.isIPhone;
 
     const defaultCenterColor = color && plainColorValue ? plainColorValue[1] : '0,100,255';
     const defaultBackgroundColor = color && plainColorValue ? `rgba(${plainColorValue[1]}, 0.1)` : 'rgba(0, 100, 255, 0.1)';
@@ -132,7 +134,9 @@ export const gradientBackgroundGenerator = (color?: string, options?: GridGradie
             backgroundColor
         } = gradient;
 
-        return `radial-gradient(${radius}px circle at ${offsetX || 'center'} ${offsetY || ''}, ${rgbaToHex(`rgba(${centerColor},${getRandomInteger(minOpacity || 0.3, maxOpacity || 0.3)})`)}, ${rgbaToHex(backgroundColor + '')})`;
+        return isIPhone
+            ? `radial-gradient(${radius}px, ${rgbaToHex(`rgba(${centerColor},${getRandomInteger(minOpacity || 0.3, maxOpacity || 0.3)})`)}, ${rgbaToHex(backgroundColor + '')})`
+            : `radial-gradient(${radius}px circle at ${offsetX || 'center'} ${offsetY || ''}, ${rgbaToHex(`rgba(${centerColor},${getRandomInteger(minOpacity || 0.3, maxOpacity || 0.3)})`)}, ${rgbaToHex(backgroundColor + '')})`;
     };
 
     return gradientOptions.map(option => createRadialGradient(option));

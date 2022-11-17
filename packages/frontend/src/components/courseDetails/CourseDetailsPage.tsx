@@ -26,7 +26,7 @@ const CourseDetailsPage = () => {
     const { userId } = useCurrentUserId();
     const { courseDetails } = CourseApiService.useCourseDetails(courseId);
     const { colors } = useImageColor(courseDetails?.thumbnailURL!);
-    const isMobile = Responsivity.useIsMobileView();
+    const { isMobile } = Responsivity.useIsMobileView();
 
     const [color, setColor] = useState<string>('white');
 
