@@ -43,7 +43,6 @@ const getFrames = (globalEventManager: GlobalEventManagerType): FrameType[] => {
         XDialogHost,
         TitleSetterFrame,
         ServiceContainerFrameWrapper,
-        CurrentCourseItemFrame,
         QuerySubscriptionFrameWrapper,
         SessionWatcherFrame,
         ErrorDialogFrame,
@@ -54,6 +53,7 @@ const getFrames = (globalEventManager: GlobalEventManagerType): FrameType[] => {
         ProgressierFrame,
         VideoPlayerFullscreenContextFrame,
         AuthenticationFrame,
+        CurrentCourseItemFrame,
     ];
 };
 

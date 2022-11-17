@@ -41,6 +41,11 @@ export const useCurrentUserContext = () => {
     return useContext(CurrentUserContext);
 };
 
+export const useAuthStateContext = () => {
+
+    return useContext(AuthenticationStateContext);
+};
+
 export const useRefetchUserAsync = () => {
 
     const refetchAuthHandshake = useContext(RefetchUserAsyncContext);
