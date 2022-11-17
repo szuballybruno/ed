@@ -21,12 +21,33 @@ import { TawkToFrame } from './TawkToFrame';
 import { TitleSetterFrame } from './TitleSetterFrame';
 import { UserGuidingFrame } from './UserGuidingFrame';
 
-type FrameType = FC<{ children: ReactNode }>;
+type FrameType = FC<{ children: ReactNode, prevFrameNames: string[] }>;
+
+const checkFrameDeps = (currentFrame: FrameType, prevFrameNames: string[], deps: (string | FrameType)[]) => {
+
+    deps
+        .forEach(dep => {
+
+            const name = typeof dep === 'string' ? dep : dep.name;
+
+            if (!prevFrameNames.includes(name))
+                throw new Error(`${currentFrame.name} -> Dependency frame not found: ${name}!`);
+        });
+};
 
 const getFrames = (globalEventManager: GlobalEventManagerType): FrameType[] => {
 
-    const QuerySubscriptionFrameWrapper = ({ children }: PropsWithChildren) => <QuerySubscriptionFrame
-        globalEventManager={globalEventManager}>{children}</QuerySubscriptionFrame>;
+    const QuerySubscriptionFrameWrapper: FrameType = ({ children, prevFrameNames }) => {
+
+        checkFrameDeps(QuerySubscriptionFrameWrapper, prevFrameNames, [CurrentCourseItemFrame]);
+
+        return (
+            <QuerySubscriptionFrame
+                globalEventManager={globalEventManager}>
+                {children}
+            </QuerySubscriptionFrame>
+        );
+    };
 
     const ServiceContainerFrameWrapper = ({ children }: PropsWithChildren) => <ServiceContainerFrame
         globalEventManager={globalEventManager}>{children}</ServiceContainerFrame>;
@@ -43,7 +64,6 @@ const getFrames = (globalEventManager: GlobalEventManagerType): FrameType[] => {
         XDialogHost,
         TitleSetterFrame,
         ServiceContainerFrameWrapper,
-        QuerySubscriptionFrameWrapper,
         SessionWatcherFrame,
         ErrorDialogFrame,
         NotificationsFrame,
@@ -54,6 +74,7 @@ const getFrames = (globalEventManager: GlobalEventManagerType): FrameType[] => {
         VideoPlayerFullscreenContextFrame,
         AuthenticationFrame,
         CurrentCourseItemFrame,
+        QuerySubscriptionFrameWrapper,
     ];
 };
 
@@ -63,7 +84,7 @@ const getFrames = (globalEventManager: GlobalEventManagerType): FrameType[] => {
 const getFrameElements = (frames: FrameType[]) => {
 
     return frames
-        .map(CurrentFrameElement => {
+        .map((CurrentFrameElement, currentFrameIndex) => {
 
             const FrameElement = ({ children }: PropsWithChildren) => {
 
@@ -79,7 +100,14 @@ const getFrameElements = (frames: FrameType[]) => {
                     };
                 }, []);
 
-                return <CurrentFrameElement>
+                const prevFrameNames = frames
+                    .filter((_, i) => i < currentFrameIndex)
+                    .map(x => x.name);
+
+                console.log(CurrentFrameElement.name, prevFrameNames);
+
+                return <CurrentFrameElement
+                    prevFrameNames={prevFrameNames}>
                     {children}
                 </CurrentFrameElement>;
             };
@@ -105,18 +133,6 @@ const getNextFrame = (frameElements: any[], index: number, lastChild: ReactNode)
 
 export const FrameRendererRoot = ({ children }: PropsWithChildren) => {
 
-    // const globalEventManager = eventBus;
-
-    // const QuerySubscriptionFrameWrapper = useMemo(() => ({ children }: PropsWithChildren) => <QuerySubscriptionFrame
-    //     globalEventManager={globalEventManager}>
-    //     {children}
-    // </QuerySubscriptionFrame>, [globalEventManager]);
-
-    // const ServiceContainerFrameWrapper = useMemo(() => ({ children }: PropsWithChildren) => <ServiceContainerFrame
-    //     globalEventManager={globalEventManager}>
-    //     {children}
-    // </ServiceContainerFrame>, [globalEventManager]);
-
     /**
      * Get frames
      */
@@ -126,52 +142,4 @@ export const FrameRendererRoot = ({ children }: PropsWithChildren) => {
     return <>
         {getNextFrame(frameElements, 0, children)}
     </>;
-
-    // return <>
-    //     <MUISetupFrame>
-    //         <ChakraProviderFrame>
-    //             <InitFrame>
-    //                 <UserGuidingFrame>
-    //                     <LocalizationFrame>
-    //                         <QueryClienProviderFrame>
-    //                             <RoutingFrame>
-    //                                 <TawkToFrame>
-    //                                     <XDialogHost>
-    //                                         <TitleSetterFrame>
-    //                                             <ServiceContainerFrameWrapper>
-    //                                                 <CurrentCourseItemFrame>
-    //                                                     <QuerySubscriptionFrameWrapper>
-    //                                                         <SessionWatcherFrame>
-    //                                                             <ErrorDialogFrame>
-    //                                                                 <NotificationsFrame>
-    //                                                                     <BusyBarFrame>
-    //                                                                         <AutoScrollFrame>
-    //                                                                             <EventListener>
-    //                                                                                 <ProgressierFrame>
-    //                                                                                     <VideoPlayerFullscreenContextFrame>
-    //                                                                                         <AuthenticationFrame>
-    //                                                                                             {children}
-    //                                                                                         </AuthenticationFrame>
-    //                                                                                     </VideoPlayerFullscreenContextFrame>
-    //                                                                                 </ProgressierFrame>
-    //                                                                             </EventListener>
-    //                                                                         </AutoScrollFrame>
-    //                                                                     </BusyBarFrame>
-    //                                                                 </NotificationsFrame>
-    //                                                             </ErrorDialogFrame>
-    //                                                         </SessionWatcherFrame>
-    //                                                     </QuerySubscriptionFrameWrapper>
-    //                                                 </CurrentCourseItemFrame>
-    //                                             </ServiceContainerFrameWrapper>
-    //                                         </TitleSetterFrame>
-    //                                     </XDialogHost>
-    //                                 </TawkToFrame>
-    //                             </RoutingFrame>
-    //                         </QueryClienProviderFrame>
-    //                     </LocalizationFrame>
-    //                 </UserGuidingFrame>
-    //             </InitFrame>
-    //         </ChakraProviderFrame>
-    //     </MUISetupFrame>
-    // </>;
 };
