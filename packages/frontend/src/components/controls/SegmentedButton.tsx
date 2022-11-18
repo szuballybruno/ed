@@ -1,18 +1,27 @@
-import {ToggleButton, ToggleButtonGroup} from '@mui/material';
-import {CSSProperties, ReactNode} from 'react';
-import {PagingType} from '../../static/frontendHelpers';
-import {SegmentedButtonStyleType} from './segmentedButtonStyles';
+import { ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { ReactNode } from 'react';
+import { PagingType } from '../../static/frontendHelpers';
+import { segmentedButtonStyles } from './segmentedButtonStyles';
 
-export const SegmentedButton = <T,>(props: {
+export const SegmentedButton = <T,>({
+    paging,
+    getDisplayValue,
+    variant
+}: {
     paging: PagingType<T>,
-    stylePreset: SegmentedButtonStyleType,
+    variant: 'default' | 'tab',
     getDisplayValue?: (item: T) => string,
-    buttonStyle?: CSSProperties
 }) => {
 
-    const { paging, getDisplayValue, buttonStyle, stylePreset } = props;
-
     const disp = getDisplayValue ?? ((item: T) => item);
+
+    const stylePreset = variant === 'default'
+        ? segmentedButtonStyles.default
+        : segmentedButtonStyles.tab;
+
+    const buttonStyle = variant === 'default'
+        ? segmentedButtonStyles.default.toggleButtonStyle
+        : undefined;
 
     return <>
         <ToggleButtonGroup

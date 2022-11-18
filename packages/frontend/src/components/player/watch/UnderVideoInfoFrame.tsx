@@ -2,7 +2,6 @@ import { PagingType } from '../../../static/frontendHelpers';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { SegmentedButton } from '../../controls/SegmentedButton';
-import { segmentedButtonStyles } from '../../controls/segmentedButtonStyles';
 
 export const UnderVideoInfoFrame = (props: {
     children: React.ReactNode
@@ -39,7 +38,7 @@ export const UnderVideoInfoFrame = (props: {
 
             <SegmentedButton
                 paging={paging}
-                stylePreset={segmentedButtonStyles.default}/>
+                variant="default" />
         </EpistoFlex2>
 
         {children}

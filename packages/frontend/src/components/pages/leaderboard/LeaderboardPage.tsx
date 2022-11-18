@@ -1,5 +1,5 @@
 import { instantiate } from '@episto/commonlogic';
-import { Id, LeaderboardPeriodType } from '@episto/commontypes';
+import { Id, LeaderboardPeriodType, LeaderboardScopeType } from '@episto/commontypes';
 import { LeaderboardListItemDTO } from '@episto/communication';
 import { useContext, useEffect, useMemo } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
@@ -11,7 +11,6 @@ import { EpistoDataGrid, EpistoDataGridColumnBuilder } from '../../controls/Epis
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { SegmentedButton } from '../../controls/SegmentedButton';
-import { segmentedButtonStyles } from '../../controls/segmentedButtonStyles';
 import { EpistoHeader } from '../../EpistoHeader';
 import { ContentPane } from '../../pageRootContainer/ContentPane';
 import { ProfileImage } from '../../ProfileImage';
@@ -21,6 +20,10 @@ import { EpistoConinImage } from '../../universal/EpistoCoinImage';
 type LeaderboardPeriodOptionType = {
     name: string,
     key: LeaderboardPeriodType
+}
+type LeaderboardScopeOptionType = {
+    name: string,
+    key: LeaderboardScopeType
 }
 
 type LeaderboardGridRowType = {
@@ -87,28 +90,68 @@ export const LeaderboardPage = () => {
             }
         ]), []);
 
+    const scopes = useMemo<LeaderboardScopeOptionType[]>(() =>
+        instantiate([
+            {
+                name: 'Top 10',
+                key: 'top10'
+            },
+            {
+                name: 'Verseny',
+                key: 'competitive'
+            }
+        ]), []);
 
-    const leaderboardFilterPaging = usePaging<LeaderboardPeriodOptionType>({
+    const leaderboardPeriodPaging = usePaging<LeaderboardPeriodOptionType>({
         items: presets,
-        onItemSet: ({ item }) => setQueryParams('preset', item.key)
+        defaultValue: null,
+        onItemSet: ({ item }) => setQueryParams('period', item.key)
     });
 
-    const currentPreset = useRouteQuery(applicationRoutes.leaderboardRoute)
-        .getValueOrNull(x => x.preset, 'string') ?? 'daily';
+    const leaderboardScopePaging = usePaging<LeaderboardScopeOptionType>({
+        items: scopes,
+        defaultValue: null,
+        onItemSet: ({ item }) => setQueryParams('scope', item.key)
+    });
 
-    const currentPresetIndex = presets
-        .singleIndex(x => x.key === currentPreset);
+    const periodFromURL = useRouteQuery(applicationRoutes.leaderboardRoute)
+        .getValueOrNull(x => x.period, 'string') ?? 'daily';
+
+    const scopeFromURL = useRouteQuery(applicationRoutes.leaderboardRoute)
+        .getValueOrNull(x => x.scope, 'string') ?? 'top10';
 
     /**
      * sync paging selected item to url
      */
     useEffect(() => {
 
-        leaderboardFilterPaging.setItem(currentPresetIndex);
-    }, [currentPresetIndex]);
+        if (leaderboardPeriodPaging.currentItem !== null)
+            return;
+
+        const currentPresetIndex = leaderboardPeriodPaging.items
+            .singleIndex(x => x.key === periodFromURL);
+
+        leaderboardPeriodPaging
+            .setItem(currentPresetIndex);
+    }, [leaderboardPeriodPaging, periodFromURL]);
+
+    /**
+     * sync paging selected item to url
+     */
+    useEffect(() => {
+
+        if (leaderboardScopePaging.currentItem !== null)
+            return;
+
+        leaderboardScopePaging
+            .setItem(leaderboardScopePaging.items.singleIndex(x => x.key === scopeFromURL));
+    }, [leaderboardScopePaging, scopeFromURL]);
+
+    const selectedPeriod = leaderboardPeriodPaging.currentItem?.key ?? periodFromURL;
+    const selectedScope = leaderboardScopePaging.currentItem?.key ?? scopeFromURL;
 
     const { leaderboardList } = leaderboardService
-        .useLeaderboardList(leaderboardFilterPaging.currentItem?.key ?? 'daily');
+        .useLeaderboardList(selectedPeriod, selectedScope);
 
     const rows = ((users: LeaderboardListItemDTO[]): LeaderboardGridRowType[] => {
 
@@ -137,7 +180,6 @@ export const LeaderboardPage = () => {
                 <EpistoFlex2
                     className='whall'
                     cursor='pointer'
-                    //onClick={() => openUser(row.userId)}
                     direction="row"
                     align='center'
                     justify='flex-start'>
@@ -198,11 +240,21 @@ export const LeaderboardPage = () => {
                         variant='giant'
                         text='Ranglista' />
 
-                    <SegmentedButton
-                        paging={leaderboardFilterPaging}
-                        stylePreset={segmentedButtonStyles.default}
-                        buttonStyle={segmentedButtonStyles.default.toggleButtonStyle}
-                        getDisplayValue={x => x.name} />
+                    <EpistoFlex2>
+
+                        <SegmentedButton
+                            paging={leaderboardScopePaging}
+                            variant="default"
+                            getDisplayValue={x => x.name} />
+
+                        <EpistoFlex2
+                            margin="2px" />
+
+                        <SegmentedButton
+                            paging={leaderboardPeriodPaging}
+                            variant="default"
+                            getDisplayValue={x => x.name} />
+                    </EpistoFlex2>
                 </EpistoFlex2>
 
                 <EpistoFlex2

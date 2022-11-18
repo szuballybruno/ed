@@ -5,7 +5,6 @@ import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { SegmentedButton } from '../../controls/SegmentedButton';
-import { segmentedButtonStyles } from '../../controls/segmentedButtonStyles';
 import { EpistoDialog } from '../../universal/epistoDialog/EpistoDialog';
 import { EpistoDialogLogicType } from '../../universal/epistoDialog/EpistoDialogTypes';
 import { EpistoPaging } from '../../universal/EpistoPaging';
@@ -136,7 +135,7 @@ export const EditDialogBase = <TParams,>({
 
                     {/* tab selector */}
                     {!hideTabs && <SegmentedButton
-                        stylePreset={segmentedButtonStyles.default}
+                        variant="default"
                         paging={paging}
                         getDisplayValue={x => x.title} />}
 

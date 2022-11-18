@@ -23,8 +23,11 @@ export class LeaderboardController implements XController<LeaderboardController>
         const period = query
             .getValue(x => x.period);
 
+        const scope = query
+            .getValue(x => x.scope);
+
         return this
             ._leaderboardService
-            .getLeaderboardListAsync(params.principalId, period);
+            .getLeaderboardListAsync(params.principalId, period, scope);
     }
 }

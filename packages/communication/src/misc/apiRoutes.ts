@@ -1,4 +1,4 @@
-import { CourseUserPresetType, Id, LeaderboardPeriodType } from "@episto/commontypes";
+import { CourseUserPresetType, Id, LeaderboardPeriodType, LeaderboardScopeType } from "@episto/commontypes";
 import { SaveCourseContentDTO } from "../admin/SaveCourseContentDTO";
 import { CompanyAssociatedCourseDTO } from "../company/CompanyAssociatedCourseDTO";
 import { CourseStartDTO } from "../CourseStartDTO";
@@ -22,7 +22,7 @@ export const apiRoutes = {
     },
 
     leaderboard: {
-        getLeaderboard: '/leaderboard/get-leaderboard' as ParametrizedRouteType<{ query: { period: LeaderboardPeriodType } }>
+        getLeaderboard: '/leaderboard/get-leaderboard' as ParametrizedRouteType<{ query: { period: LeaderboardPeriodType, scope: LeaderboardScopeType } }>
     },
 
     misc: {

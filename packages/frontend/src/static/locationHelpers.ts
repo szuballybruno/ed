@@ -112,7 +112,8 @@ export const useSetQueryParams = <TParmas = any>() => {
         // append param 
         if (value !== null) {
 
-            setSearchParams({ ...searchParams, [key]: value });
+            const newParmas = { ...searchParams, [key]: value };
+            setSearchParams(newParmas);
         }
 
         // remove param 
@@ -120,7 +121,6 @@ export const useSetQueryParams = <TParmas = any>() => {
 
             const newParmas: any = { ...searchParams };
             delete newParmas[key];
-            console.log(newParmas);
             setSearchParams(newParmas);
         }
     };
@@ -143,7 +143,7 @@ const useQueryParams = <TParams = any>() => {
             const key = currentIter.value;
 
             // HACKY! TODO
-            if (key !== 'done' && key !== 'value'){
+            if (key !== 'done' && key !== 'value') {
 
                 query[key] = searchParams.get(key);
             }

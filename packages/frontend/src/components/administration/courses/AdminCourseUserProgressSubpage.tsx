@@ -1,9 +1,8 @@
+import { CourseUserPresetType, Id } from '@episto/commontypes';
+import { AdminCourseUserStatsDTO } from '@episto/communication';
 import { useEffect, useMemo } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { useCourseUserStatsData } from '../../../services/api/userStatsApiService';
-import { AdminCourseUserStatsDTO } from '@episto/communication';
-import { CourseUserPresetType } from '@episto/commontypes';
-import { Id } from '@episto/commontypes';
 import { Environment } from '../../../static/Environemnt';
 import { formatTimespan, usePaging } from '../../../static/frontendHelpers';
 import { useRouteParams, useRouteQuery, useSetQueryParams } from '../../../static/locationHelpers';
@@ -12,8 +11,8 @@ import { EpistoDataGrid, EpistoDataGridColumnBuilder } from '../../controls/Epis
 import { EpistoDiv } from '../../controls/EpistoDiv';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
+import { MUI, MUICircularProgressProps } from '../../controls/MUIControls';
 import { SegmentedButton } from '../../controls/SegmentedButton';
-import { segmentedButtonStyles } from '../../controls/segmentedButtonStyles';
 import { ProfileImage } from '../../ProfileImage';
 import { EmptyCell } from '../../universal/EmptyCell';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
@@ -22,7 +21,6 @@ import { AdminUserCourseContentDialog } from '../users/adminCourseContentDialog/
 import { AdminCourseUserOverviewDialog, useAdminCourseUserOverviewDialogLogic } from './AdminCourseUserOverviewDialog';
 import { ChipSmall } from './ChipSmall';
 import { CourseAdministartionFrame } from './CourseAdministartionFrame';
-import { MUI, MUICircularProgressProps } from '../../controls/MUIControls';
 
 export interface AdminCourseUserRowType extends AdminCourseUserStatsDTO {
     avatar: {
@@ -364,7 +362,7 @@ export const AdminCourseUserProgressSubpage = () => {
                     <SegmentedButton
                         paging={filterLogic.presetPaging}
                         getDisplayValue={x => x.title}
-                        stylePreset={segmentedButtonStyles.tab} />
+                        variant="tab" />
 
                     {/* <EpistoFlex2
                     flex={isSimpleView ? '1' : undefined}>

@@ -24,6 +24,7 @@ export type ErrorCodeType =
 export type GivenAnswerStateType = 'INCORRECT' | 'CORRECT' | 'MIXED';
 
 export type LeaderboardPeriodType = 'monthly' | 'weekly' | 'daily';
+export type LeaderboardScopeType = 'top10' | 'competitive';
 
 // tasks
 export type TaskObjectiveType = 'video' | 'playlist' | 'course' | 'exam';

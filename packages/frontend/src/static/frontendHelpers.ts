@@ -588,9 +588,11 @@ export const usePaging = <T>({
     onNextOverNavigation,
     onPrevious,
     onPreviousOverNavigation,
-    onItemSet
+    onItemSet,
+    defaultValue
 }: {
     items: T[] | number,
+    defaultValue?: T | null,
     onPreviousOverNavigation?: () => void,
     onNextOverNavigation?: () => void,
     onPrevious?: () => void,
@@ -601,6 +603,7 @@ export const usePaging = <T>({
         throw new Error('Cannot page a null or undefined items collection!');
 
     const [currentIndex, setCurrentItemIndex] = useState(0);
+    const [useDefaultValue, setUseDefaultValue] = useState(defaultValue !== undefined);
 
     const max = useMemo(() => isNumber(items)
         ? items as number
@@ -608,7 +611,15 @@ export const usePaging = <T>({
 
     const isLast = useMemo(() => currentIndex === max - 1, [max, currentIndex]);
     const isFirst = useMemo(() => currentIndex === 0, [currentIndex]);
-    const currentItem = useMemo(() => items[currentIndex] as T | null, [items, currentIndex]);
+
+    const currentItem = useMemo(() => {
+
+        if (useDefaultValue)
+            return defaultValue;
+
+        return items[currentIndex] as T | null;
+    }, [items, currentIndex, useDefaultValue, defaultValue]);
+
     const progressPercentage = useMemo(() => max > 0
         ? currentIndex / max * 100
         : 0, [max, currentIndex]);
@@ -649,10 +660,11 @@ export const usePaging = <T>({
             throw new Error('Item index is more than the length of the items collection!');
 
         setCurrentItemIndex(itemIndex);
+        setUseDefaultValue(false);
 
         if (onItemSet)
             onItemSet({ item: items[itemIndex], index: itemIndex });
-    }, [setCurrentItemIndex]);
+    }, [setCurrentItemIndex, setUseDefaultValue]);
 
     const jumpToLast = useCallback(() => {
 

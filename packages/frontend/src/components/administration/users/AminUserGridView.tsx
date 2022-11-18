@@ -1,13 +1,12 @@
 import { Flex } from '@chakra-ui/react';
+import { Id, OrderType } from '@episto/commontypes';
+import { UserAdminListDTO } from '@episto/communication';
 import { Add } from '@mui/icons-material';
 import { useEffect, useMemo, useState } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { UserApiService } from '../../../services/api/UserApiService1';
 import { useNavigation } from '../../../services/core/navigatior';
 import { useShowErrorDialog } from '../../../services/core/notifications';
-import { UserAdminListDTO } from '@episto/communication';
-import { OrderType } from '@episto/commontypes';
-import { Id } from '@episto/commontypes';
 import { Environment } from '../../../static/Environemnt';
 import { EpistoIcons } from '../../../static/EpistoIcons';
 import { formatTimespan, getSubroutes, useIsMatchingCurrentRoute, usePaging } from '../../../static/frontendHelpers';
@@ -17,7 +16,6 @@ import { EpistoDataGrid, EpistoDataGridColumnBuilder } from '../../controls/Epis
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { SegmentedButton } from '../../controls/SegmentedButton';
-import { segmentedButtonStyles } from '../../controls/segmentedButtonStyles';
 import { ProfileImage } from '../../ProfileImage';
 import { EpistoDialog } from '../../universal/epistoDialog/EpistoDialog';
 import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogLogic';
@@ -393,7 +391,7 @@ export const AminUserGridView = ({
                 {!isSimpleView && <SegmentedButton
                     paging={filterLogic.presetPaging}
                     getDisplayValue={x => x.title}
-                    stylePreset={segmentedButtonStyles.tab} />}
+                    variant="tab" />}
 
                 <EpistoFlex2
                     flex={isSimpleView ? '1' : undefined}>
