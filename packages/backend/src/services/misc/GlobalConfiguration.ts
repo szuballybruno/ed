@@ -89,7 +89,7 @@ export class GlobalConfiguration {
     };
 
     logging = {
-        enabledScopes: ['GENERIC', 'ERROR', 'TEMPOMAT'] as LogScopeType[],
+        enabledScopes: ['GENERIC', 'ERROR'] as LogScopeType[],
     };
 
     practiseQuestions = {

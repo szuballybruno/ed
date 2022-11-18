@@ -1,10 +1,11 @@
 import { Refresh } from '@mui/icons-material';
 import moment from 'moment';
-import { createContext, FC, useContext, useEffect, useState } from 'react';
+import { createContext, FC, useContext, useMemo, useState } from 'react';
 import { Environment } from '../../static/Environemnt';
-import { eventBus } from '../../static/EventBus';
 import { PropsWithChildren, reloadPage } from '../../static/frontendHelpers';
+import { GlobalEventManagerType, useEventManagerContext } from './EventManagerFrame';
 import { Logger } from '../../static/Logger';
+import { XEventManagerReact } from '../../static/XEventManager/XEventManagerReact';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
@@ -14,7 +15,7 @@ class SessionWatcher {
 
     private _lastHandshakeDate: Date;
 
-    constructor() {
+    constructor(private _globalEventManager: GlobalEventManagerType) {
 
         this._lastHandshakeDate = new Date();
 
@@ -28,7 +29,7 @@ class SessionWatcher {
          * Subscribe to query service
          * to get latest auth handshake date
          */
-        eventBus
+        this._globalEventManager
             .scubscribeEvent('onAuthHandshake', 'sessionWatcher', () => {
 
                 const handshakeTime = new Date();
@@ -51,28 +52,30 @@ class SessionWatcher {
             return;
 
         Logger.logScoped('SESSION', 'Activity gap!');
-        eventBus.fireEvent('onActivityGap', {});
+        this._globalEventManager.fireEvent('onActivityGap', {});
     };
 };
 
-export const sessionWatcherInstance = new SessionWatcher();
-
-export const SessionWatcherContext = createContext<SessionWatcher>(sessionWatcherInstance);
+export const SessionWatcherContext = createContext<SessionWatcher>({} as any);
 
 export const useSessionWatcherContext = () => useContext(SessionWatcherContext);
 
 export const SessionWatcherFrame: FC<PropsWithChildren> = ({ children }) => {
 
+    const globalEventManager = useEventManagerContext();
     const [showOverlay, setShowOverlay] = useState(false);
 
-    useEffect(() => {
+    const sessionWatcherInstance = useMemo(() => new SessionWatcher(globalEventManager), [globalEventManager]);
 
-        eventBus
-            .scubscribeEvent('onActivityGap', 'overlayOnActivityGap', () => {
+    XEventManagerReact
+        .useSubscribeEvent(
+            globalEventManager,
+            'onActivityGap',
+            'overlayOnActivityGap',
+            () => {
 
                 setShowOverlay(true);
             });
-    }, []);
 
     return <SessionWatcherContext.Provider value={sessionWatcherInstance}>
         <FullscreenOverlay

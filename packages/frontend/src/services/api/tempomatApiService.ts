@@ -1,7 +1,7 @@
 import { apiRoutes } from '@episto/communication';
 import { TempomatModeType } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
-import { QueryService } from '../../static/QueryService';
+import { QueryService } from '../../static/XQuery/XQueryReact';
 import { usePostDataUnsafe } from '../core/httpClient';
 
 export const useTempomatMode = (courseId: Id<'Course'>, enabled: boolean) => {

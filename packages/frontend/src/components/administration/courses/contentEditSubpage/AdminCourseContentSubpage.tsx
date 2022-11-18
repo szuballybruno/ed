@@ -12,7 +12,7 @@ import { killNotification, showNotification, showNotificationAdvanced, useShowEr
 import { moveItemInArray } from '../../../../static/frontendHelpers';
 import { useIntParam } from '../../../../static/locationHelpers';
 import { translatableTexts } from '../../../../static/translatableTexts';
-import { XEventManager } from '../../../../static/XEventManager';
+import { XEventManager } from '../../../../static/XEventManager/XEventManager';
 import { EpistoDataGrid } from '../../../controls/EpistoDataGrid';
 import { EpistoFlex2 } from '../../../controls/EpistoFlex';
 import { useXMutatorNew } from '../../../lib/XMutator/XMutatorReact';

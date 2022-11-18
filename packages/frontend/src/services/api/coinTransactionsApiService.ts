@@ -1,4 +1,4 @@
-import { QueryService } from '../../static/QueryService';
+import { QueryService } from '../../static/XQuery/XQueryReact';
 import { CoinTransactionDTO } from '@episto/communication';
 import { apiRoutes } from '@episto/communication';
 import { usePostDataUnsafe } from '../core/httpClient';

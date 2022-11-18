@@ -16,7 +16,7 @@ export const useXDialogHosterContext = (key: string) => {
 
         return () => xDialogHoster
             .removeUpdateListener(key);
-    }, []);
+    }, [xDialogHoster, forceUpdate, key]);
 
     return xDialogHoster;
 };

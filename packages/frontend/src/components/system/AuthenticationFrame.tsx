@@ -1,10 +1,10 @@
+import { Id } from '@episto/commontypes';
+import { AuthDataDTO, UserDTO } from '@episto/communication';
 import { createContext, useContext, useEffect } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { AuthenticationStateType, useAuthHandshake } from '../../services/api/authenticationApiService';
 import { useNavigation } from '../../services/core/navigatior';
-import { AuthDataDTO } from '@episto/communication';
-import { UserDTO } from '@episto/communication';
-import { Id } from '@episto/commontypes';
+import { useEventManagerContext } from './EventManagerFrame';
 import { PropsWithChildren, useCurrentUrlPathname, useGetCurrentAppRoute } from '../../static/frontendHelpers';
 import { Logger } from '../../static/Logger';
 import { AuthorizationContext, getAuthorizationContextLogic, useAuthorizationContext } from './AuthorizationContext';
@@ -141,10 +141,11 @@ const AuthFirewall = (props: PropsWithChildren & {
     </>;
 };
 
-export const AuthenticationFrame = (props) => {
+export const AuthenticationFrame = ({ children }: PropsWithChildren) => {
 
     // start auth pooling
-    const { authData, authState, refetchAuthHandshake } = useAuthHandshake();
+    const globalEventManager = useEventManagerContext();
+    const { authData, authState, refetchAuthHandshake } = useAuthHandshake(globalEventManager);
 
     Logger.logScoped('AUTH', `Auth state is: '${authState}'...`);
 
@@ -157,7 +158,7 @@ export const AuthenticationFrame = (props) => {
                 <CurrentUserContext.Provider value={authData?.currentUser ?? userDefaults}>
                     <AuthorizationContext.Provider value={authContextData}>
                         <AuthFirewall authState={authState}>
-                            {props.children}
+                            {children}
                         </AuthFirewall>
                     </AuthorizationContext.Provider>
                 </CurrentUserContext.Provider>

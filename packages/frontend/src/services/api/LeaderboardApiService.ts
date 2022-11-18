@@ -1,7 +1,7 @@
 import { LeaderboardPeriodType } from '@episto/commontypes';
 import { apiRoutes, LeaderboardListItemDTO } from '@episto/communication';
-import { GlobalEventManagerType } from '../../static/EventBus';
-import { QueryService } from '../../static/QueryService';
+import { GlobalEventManagerType } from '../../components/system/EventManagerFrame';
+import { QueryService } from '../../static/XQuery/XQueryReact';
 
 export const useLeaderboardApiService = (globalEventManager: GlobalEventManagerType) => {
 

@@ -1,7 +1,7 @@
 import { CompanyEditDataDTO } from '@episto/communication';
 import { CompanyDTO } from '@episto/communication';
 import { apiRoutes } from '@episto/communication';
-import { QueryService } from '../../static/QueryService';
+import { QueryService } from '../../static/XQuery/XQueryReact';
 import { usePostDataUnsafe, usePostMultipartDataUnsafe } from '../core/httpClient';
 import { RoleAssignCompanyDTO } from '@episto/communication';
 import { Id } from '@episto/commontypes';

@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { Id } from '@episto/commontypes';
 import { EpistoIcons } from '../../../../static/EpistoIcons';
 import { useStateObject } from '../../../../static/frontendHelpers';
-import { XEventManager } from '../../../../static/XEventManager';
+import { XEventManager } from '../../../../static/XEventManager/XEventManager';
 import { EpistoButton } from '../../../controls/EpistoButton';
 import { EpistoFlex2 } from '../../../controls/EpistoFlex';
 import { EpistoFont } from '../../../controls/EpistoFont';

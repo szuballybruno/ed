@@ -1,7 +1,7 @@
 import { CourseItemEditDTO } from '@episto/communication';
 import { apiRoutes } from '@episto/communication';
 import { Id } from '@episto/commontypes';
-import { QueryService } from '../../static/QueryService';
+import { QueryService } from '../../static/XQuery/XQueryReact';
 
 export const CourseItemApiService = {
 

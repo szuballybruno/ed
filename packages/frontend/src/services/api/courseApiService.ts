@@ -13,7 +13,7 @@ import { IdResultDTO } from '@episto/communication';
 import { apiRoutes } from '@episto/communication';
 import { CourseModeType } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
-import { QueryService } from '../../static/QueryService';
+import { QueryService } from '../../static/XQuery/XQueryReact';
 import { usePostDataUnsafe, usePostMultipartDataUnsafe } from '../core/httpClient';
 
 const usePermissionAssignCourses = (userId: Id<'User'>) => {

@@ -1,4 +1,4 @@
-import { QueryService } from '../../static/QueryService';
+import { QueryService } from '../../static/XQuery/XQueryReact';
 import { AnswerDTO } from '@episto/communication';
 import { AnswerSignupQuestionDTO } from '@episto/communication';
 import { PersonalityAssessmentDTO } from '@episto/communication';

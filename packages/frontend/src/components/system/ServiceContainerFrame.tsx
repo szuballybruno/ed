@@ -1,9 +1,10 @@
-import { GlobalEventManagerType } from '../../static/EventBus';
 import { PropsWithChildren } from '../../static/frontendHelpers';
 import { ServiceContainerContext, useServiceContainer } from '../../static/serviceContainer';
+import { useEventManagerContext } from './EventManagerFrame';
 
-export const ServiceContainerFrame = ({ children, globalEventManager }: { globalEventManager: GlobalEventManagerType } & PropsWithChildren) => {
+export const ServiceContainerFrame = ({ children }: PropsWithChildren) => {
 
+    const globalEventManager = useEventManagerContext();
     const contextValue = useServiceContainer(globalEventManager);
 
     return (

@@ -1,27 +1,31 @@
 import { apiRoutes } from '@episto/communication';
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { useNavigation } from '../../services/core/navigatior';
-import { GlobalEventManagerType } from '../../static/EventBus';
 import { PropsWithChildren } from '../../static/frontendHelpers';
 import { Logger } from '../../static/Logger';
-import { QueryEventData } from '../../static/QueryService';
+import { XEventManagerReact } from '../../static/XEventManager/XEventManagerReact';
+import { QueryEventData } from '../../static/XQuery/XQueryTypes';
 import { useCurrentCourseItemCodeContext } from './CurrentCourseItemFrame';
+import { useEventManagerContext } from './EventManagerFrame';
 
-export const QuerySubscriptionFrame = ({ globalEventManager, children }: { globalEventManager: GlobalEventManagerType } & PropsWithChildren) => {
+export const QuerySubscriptionFrame = ({ children }: PropsWithChildren) => {
 
     const { navigate2 } = useNavigation();
     const { refetchCurrentCourseItemCode } = useCurrentCourseItemCodeContext();
+    const globalEventManager = useEventManagerContext();
 
     const callbackParamsRef = useRef({
         navigate2,
         refetchCurrentCourseItemCode
     });
 
-    useEffect(() => {
-
-        globalEventManager
-            .scubscribeEvent('onquery', `${QuerySubscriptionFrame.name}-'noPermissionWatcher'`, (x: QueryEventData) => {
+    XEventManagerReact
+        .useSubscribeEvent(
+            globalEventManager,
+            'onquery',
+            `${QuerySubscriptionFrame.name}-'noPermissionWatcher'`,
+            (x: QueryEventData) => {
 
                 const { navigate2 } = callbackParamsRef.current;
 
@@ -32,8 +36,12 @@ export const QuerySubscriptionFrame = ({ globalEventManager, children }: { globa
                 }
             });
 
-        globalEventManager
-            .scubscribeEvent('onquery', `${QuerySubscriptionFrame.name}-'refetchCurrentCourseItemCode'`, (x: QueryEventData) => {
+    XEventManagerReact
+        .useSubscribeEvent(
+            globalEventManager,
+            'onquery',
+            `${QuerySubscriptionFrame.name}-'refetchCurrentCourseItemCode'`,
+            (x: QueryEventData) => {
 
                 const { refetchCurrentCourseItemCode } = callbackParamsRef.current;
 
@@ -43,7 +51,6 @@ export const QuerySubscriptionFrame = ({ globalEventManager, children }: { globa
                     refetchCurrentCourseItemCode();
                 }
             });
-    }, [globalEventManager]);
 
     return (
         <>

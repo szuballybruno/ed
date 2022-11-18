@@ -2,7 +2,7 @@ import { AnswerQuestionDTO } from '@episto/communication';
 import { AnswerResultDTO } from '@episto/communication';
 import { PlayerDataDTO } from '@episto/communication';
 import { apiRoutes } from '@episto/communication';
-import { QueryService } from '../../static/QueryService';
+import { QueryService } from '../../static/XQuery/XQueryReact';
 import { usePostDataUnsafe } from '../core/httpClient';
 
 export const PlayerApiService = {

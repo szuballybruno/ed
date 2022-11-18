@@ -2,7 +2,7 @@ import { PrequizQuestionDTO } from '@episto/communication';
 import { PrequizUserAnswerDTO } from '@episto/communication';
 import { apiRoutes } from '@episto/communication';
 import { Id } from '@episto/commontypes';
-import { QueryService } from '../../static/QueryService';
+import { QueryService } from '../../static/XQuery/XQueryReact';
 import { usePostDataUnsafe } from '../core/httpClient';
 
 export const PrequizApiService = {

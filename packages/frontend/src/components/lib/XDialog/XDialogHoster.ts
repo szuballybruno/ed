@@ -8,7 +8,7 @@ type ContentPoolItemType = {
 
 export class XDialogHoster {
 
-    static isCreatedAlready: boolean = false;
+    // static isCreatedAlready: boolean = false;
 
     private _dialogPool: ContentPoolItemType[] = [];
     private _update: () => void = () => 1;
@@ -28,10 +28,10 @@ export class XDialogHoster {
                 .forEach(x => x.fn());
         };
 
-        if (XDialogHoster.isCreatedAlready)
-            throw new Error('Trying to create multiple dialog hosters!');
+        // if (XDialogHoster.isCreatedAlready)
+        //     throw new Error('Trying to create multiple dialog hosters!');
 
-        XDialogHoster.isCreatedAlready = true;
+        // XDialogHoster.isCreatedAlready = true;
     }
 
     /**

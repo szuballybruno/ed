@@ -1,5 +1,4 @@
 import { FC, PropsWithChildren, ReactNode, useEffect, useMemo } from 'react';
-import { eventBus, GlobalEventManagerType } from '../../static/EventBus';
 import { Logger } from '../../static/Logger';
 import { XDialogHost } from '../lib/XDialog/XDialogHost';
 import { VideoPlayerFullscreenContextFrame } from '../player/watch/videoPlayer/VideoPlayerFullscreenFrame';
@@ -8,6 +7,7 @@ import { AutoScrollFrame } from './AutoScrollContext';
 import { CurrentCourseItemFrame } from './CurrentCourseItemFrame';
 import { ErrorDialogFrame } from './ErrorDialogFrame';
 import { EventListener } from './EventListener';
+import { EventManagerFrame } from './EventManagerFrame';
 import { InitFrame } from './InitFrame';
 import { BusyBarFrame } from './LoadingFrame/BusyBarFrame';
 import { ChakraProviderFrame, LocalizationFrame, QueryClienProviderFrame, RoutingFrame } from './MiscFrames';
@@ -21,42 +21,70 @@ import { TawkToFrame } from './TawkToFrame';
 import { TitleSetterFrame } from './TitleSetterFrame';
 import { UserGuidingFrame } from './UserGuidingFrame';
 
-type FrameType = FC<{ children: ReactNode, prevFrameNames: string[] }>;
+type FrameType = FC<{ children: ReactNode, prevFrameNames: FrameType[] }>;
 
-const checkFrameDeps = (currentFrame: FrameType, prevFrameNames: string[], deps: (string | FrameType)[]) => {
+const checkFrameDeps = (currentFrame: FrameType, prevFrameNames: FrameType[], deps: (string | FrameType)[]) => {
 
     deps
         .forEach(dep => {
 
             const name = typeof dep === 'string' ? dep : dep.name;
 
-            if (!prevFrameNames.includes(name))
+            if (!prevFrameNames
+                .map(x => x.name)
+                .includes(name))
                 throw new Error(`${currentFrame.name} -> Dependency frame not found: ${name}!`);
         });
 };
 
-const getFrames = (globalEventManager: GlobalEventManagerType): FrameType[] => {
+const getFrames = (): FrameType[] => {
 
-    const QuerySubscriptionFrameWrapper: FrameType = ({ children, prevFrameNames }) => {
+    const DepsWrapper = ({ children, frame, prevFrameNames, deps }: PropsWithChildren & { frame: FrameType, prevFrameNames: FrameType[], deps: FrameType[] }) => {
 
-        checkFrameDeps(QuerySubscriptionFrameWrapper, prevFrameNames, [CurrentCourseItemFrame]);
+        const Frame = frame;
+        checkFrameDeps(Frame, prevFrameNames, deps);
 
         return (
-            <QuerySubscriptionFrame
-                globalEventManager={globalEventManager}>
+            <Frame prevFrameNames={[]}>
                 {children}
-            </QuerySubscriptionFrame>
+            </Frame>
         );
     };
 
-    const ServiceContainerFrameWrapper = ({ children }: PropsWithChildren) => <ServiceContainerFrame
-        globalEventManager={globalEventManager}>{children}</ServiceContainerFrame>;
+    const QuerySubscriptionFrameWrapper: FrameType = ({ children, prevFrameNames }) => <DepsWrapper
+        prevFrameNames={prevFrameNames}
+        deps={[CurrentCourseItemFrame, EventManagerFrame]}
+        frame={QuerySubscriptionFrame}>
+        {children}
+    </DepsWrapper>;
+
+    const AuthenticationFrameWrapper: FrameType = ({ children, prevFrameNames }) => <DepsWrapper
+        prevFrameNames={prevFrameNames}
+        deps={[EventManagerFrame]}
+        frame={AuthenticationFrame}>
+        {children}
+    </DepsWrapper>;
+
+    const ServiceContainerFrameWrapper: FrameType = ({ children, prevFrameNames }) => <DepsWrapper
+        prevFrameNames={prevFrameNames}
+        deps={[EventManagerFrame]}
+        frame={ServiceContainerFrame}>
+        {children}
+    </DepsWrapper>;
+
+    const SessionWatcherFrameWrapper: FrameType = ({ children, prevFrameNames }) => <DepsWrapper
+        prevFrameNames={prevFrameNames}
+        deps={[EventManagerFrame]}
+        frame={SessionWatcherFrame}>
+        {children}
+    </DepsWrapper>;
 
     return [
         MUISetupFrame,
         ChakraProviderFrame,
         InitFrame,
         UserGuidingFrame,
+        EventManagerFrame,
         LocalizationFrame,
         QueryClienProviderFrame,
         RoutingFrame,
@@ -64,7 +92,7 @@ const getFrames = (globalEventManager: GlobalEventManagerType): FrameType[] => {
         XDialogHost,
         TitleSetterFrame,
         ServiceContainerFrameWrapper,
-        SessionWatcherFrame,
+        SessionWatcherFrameWrapper,
         ErrorDialogFrame,
         NotificationsFrame,
         BusyBarFrame,
@@ -72,7 +100,7 @@ const getFrames = (globalEventManager: GlobalEventManagerType): FrameType[] => {
         EventListener,
         ProgressierFrame,
         VideoPlayerFullscreenContextFrame,
-        AuthenticationFrame,
+        AuthenticationFrameWrapper,
         CurrentCourseItemFrame,
         QuerySubscriptionFrameWrapper,
     ];
@@ -101,8 +129,7 @@ const getFrameElements = (frames: FrameType[]) => {
                 }, []);
 
                 const prevFrameNames = frames
-                    .filter((_, i) => i < currentFrameIndex)
-                    .map(x => x.name);
+                    .filter((_, i) => i < currentFrameIndex);
 
                 return <CurrentFrameElement
                     prevFrameNames={prevFrameNames}>
@@ -134,7 +161,7 @@ export const FrameRendererRoot = ({ children }: PropsWithChildren) => {
     /**
      * Get frames
      */
-    const frames = useMemo(() => getFrames(eventBus), []);
+    const frames = useMemo(() => getFrames(), []);
     const frameElements = useMemo(() => getFrameElements(frames), []);
 
     return <>

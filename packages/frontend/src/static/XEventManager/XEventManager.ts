@@ -1,5 +1,5 @@
-import { DictionaryOfT } from './frontendHelpers';
-import { Logger } from './Logger';
+import { DictionaryOfT } from '../frontendHelpers';
+import { Logger } from '../Logger';
 
 export type EventCallbackType<T> = (data: T) => void;
 type EventStoreItemType<T> = DictionaryOfT<EventCallbackType<T>>;
@@ -21,6 +21,15 @@ export class XEventManager<TEventKey extends string> {
         this._store[eventKey] = {
             ...previousSubscriptions,
             [subscriberKey]: callback
+        };
+
+        /**
+         * Unsubscribe
+         */
+        return () => {
+
+            delete this
+                ._store[eventKey][subscriberKey];
         };
     }
 

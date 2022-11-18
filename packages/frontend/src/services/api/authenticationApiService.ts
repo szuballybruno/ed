@@ -4,9 +4,9 @@ import { AuthDataDTO } from '@episto/communication';
 import { apiRoutes } from '@episto/communication';
 import { ErrorWithCode } from '@episto/commontypes';
 import { Environment } from '../../static/Environemnt';
-import { eventBus } from '../../static/EventBus';
 import { useGetCurrentAppRoute } from '../../static/frontendHelpers';
 import { httpGetAsync, usePostDataUnsafe } from '../core/httpClient';
+import { GlobalEventManagerType } from '../../components/system/EventManagerFrame';
 
 export type AuthenticationStateType = 'idle' | 'loading' | 'authenticated' | 'forbidden' | 'error';
 
@@ -20,7 +20,7 @@ export const useLogout = () => {
     };
 };
 
-export const useAuthHandshake = () => {
+export const useAuthHandshake = (globalEventManager: GlobalEventManagerType) => {
 
     const currentRoute = useGetCurrentAppRoute();
     const isEnabled = !currentRoute.isUnauthorized;
@@ -28,7 +28,10 @@ export const useAuthHandshake = () => {
     const queryFn = useCallback(() => {
 
         const res = httpGetAsync(apiRoutes.authentication.establishAuthHandshake);
-        eventBus.fireEvent('onAuthHandshake', {});
+
+        globalEventManager
+            .fireEvent('onAuthHandshake', {});
+
         return res;
     }, []);
 

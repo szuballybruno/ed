@@ -1,7 +1,7 @@
 import { createContext, useContext } from 'react';
 import { LeaderboardApiServiceType, useLeaderboardApiService } from '../services/api/LeaderboardApiService';
 import { useMiscApiService, MiscApiService } from '../services/api/miscApiService';
-import { GlobalEventManagerType } from './EventBus';
+import { GlobalEventManagerType } from '../components/system/EventManagerFrame';
 
 /**
  * New solution is brewin'

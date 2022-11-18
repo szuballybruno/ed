@@ -1,6 +1,6 @@
 import { PermissionListDTO } from '@episto/communication';
 import { apiRoutes } from '@episto/communication';
-import { QueryService } from '../../static/QueryService';
+import { QueryService } from '../../static/XQuery/XQueryReact';
 
 export const usePermissionsList = () => {
 

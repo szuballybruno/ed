@@ -2,9 +2,9 @@ import { Id } from '@episto/commontypes';
 import { ActivationCodeListDTO, apiRoutes, CourseOverviewDataDTO, OverviewPageDTO, QuestionModuleCompareDTO } from '@episto/communication';
 import { useAuthStateContext } from '../../components/system/AuthenticationFrame';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
-import { GlobalEventManagerType } from '../../static/EventBus';
+import { GlobalEventManagerType } from '../../components/system/EventManagerFrame';
 import { useGetCurrentAppRoute } from '../../static/frontendHelpers';
-import { QueryService } from '../../static/QueryService';
+import { QueryService } from '../../static/XQuery/XQueryReact';
 import { usePostDataUnsafe } from '../core/httpClient';
 
 export const useCourseOverviewData = (userId?: Id<'User'>, courseId?: Id<'Course'>) => {

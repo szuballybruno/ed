@@ -3,7 +3,7 @@ import { UserActiveCourseDTO } from '@episto/communication';
 import { UserCourseProgressChartDTO } from '@episto/communication';
 import { apiRoutes } from '@episto/communication';
 import { Id } from '@episto/commontypes';
-import { QueryService } from '../../static/QueryService';
+import { QueryService } from '../../static/XQuery/XQueryReact';
 
 export const useUserCourseProgressChartData = (courseId: Id<'Course'> | null, enabled: boolean) => {
 

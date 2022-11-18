@@ -7,7 +7,7 @@ import { ShopItemDTO } from '@episto/communication';
 import { ShopItemEditDTO } from '@episto/communication';
 import { apiRoutes } from '@episto/communication';
 import { Id } from '@episto/commontypes';
-import { QueryService } from '../../static/QueryService';
+import { QueryService } from '../../static/XQuery/XQueryReact';
 import { usePostDataUnsafe, usePostMultipartDataUnsafe } from '../core/httpClient';
 
 export const useShopItems = () => {

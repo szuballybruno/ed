@@ -1,6 +1,6 @@
 import { apiRoutes } from '@episto/communication';
 import { VideoRatingDTO } from '@episto/communication';
-import { QueryService } from '../../static/QueryService';
+import { QueryService } from '../../static/XQuery/XQueryReact';
 import { usePostDataUnsafe } from '../core/httpClient';
 import { Id } from '@episto/commontypes';
 
