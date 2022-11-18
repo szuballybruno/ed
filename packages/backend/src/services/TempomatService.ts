@@ -364,7 +364,7 @@ export class TempomatService {
             ._calculateDaysSpentFromStartDate(startDate);
 
         const howManyVideosShouldHaveWatchedByNow = this
-            ._calculateHowManyVideosShouldHaveWatchedByNow(originalEstimatedVideosPerDay, daysSpentFromStartDate);
+            ._calculateHowManyVideosShouldHaveWatchedByNow(originalEstimatedVideosPerDay, daysSpentFromStartDate, totalItemCount);
 
         const lagBehindVideos = this
             ._calculateLagBehindVideos(howManyVideosShouldHaveWatchedByNow, totalCompletedItemCount);
@@ -419,7 +419,7 @@ export class TempomatService {
             ._calculateDaysSpentFromStartDate(startDate);
 
         const howManyVideosShouldHaveWatchedByNow = this
-            ._calculateHowManyVideosShouldHaveWatchedByNow(originalEstimatedVideosPerDay, daysSpentFromStartDate);
+            ._calculateHowManyVideosShouldHaveWatchedByNow(originalEstimatedVideosPerDay, daysSpentFromStartDate, totalItemCount);
 
         const lagBehindVideos = this
             ._calculateLagBehindVideos(howManyVideosShouldHaveWatchedByNow, totalCompletedItemCount);
@@ -507,15 +507,45 @@ export class TempomatService {
 
         const currentDate = new Date(Date.now());
 
-        return Math.abs(dateDiffInDays(currentDate, startDate));
+        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', '-------------------------------------------------------');
+        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', 'Calculating daysSpentFromStartDate...');
+        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', 'Input startDate: ' + startDate);
+        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', 'Current date: ' + currentDate);
+
+        const daysSpentFromStartDate = Math.abs(dateDiffInDays(currentDate, startDate))
+
+        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', '-------------------------------------------------------');
+        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', 'Days spent from start date: ' + daysSpentFromStartDate);
+
+        return daysSpentFromStartDate;
     }
 
     private _calculateHowManyVideosShouldHaveWatchedByNow(
         originalEstimatedVideosPerDay: number,
-        daysSpentFromStartDate: number
+        daysSpentFromStartDate: number,
+        totalCourseItemCount: number
     ) {
 
-        return originalEstimatedVideosPerDay * daysSpentFromStartDate;
+        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', '-------------------------------------------------------');
+        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', 'Calculating howManyVideosShouldHaveWatchedByNow...');
+        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', 'Input originalEstimatedVideosPerDay: ' + originalEstimatedVideosPerDay);
+        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', 'Input daysSpentFromStartDate: ' + daysSpentFromStartDate);
+
+        const howManyVideosShouldHaveWatchedByNow = (() => {
+
+            const videosShouldHaveWatchedByNow = originalEstimatedVideosPerDay * daysSpentFromStartDate
+
+            if (videosShouldHaveWatchedByNow > totalCourseItemCount) {
+                return totalCourseItemCount;
+            }
+
+            return videosShouldHaveWatchedByNow;
+        })();
+
+        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', '-------------------------------------------------------');
+        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', 'How many videos should have watched by now: ' + daysSpentFromStartDate);
+
+        return howManyVideosShouldHaveWatchedByNow;
     }
 
     private _calculateLagBehindVideos(
@@ -536,14 +566,25 @@ export class TempomatService {
         return lagBehindVideos;
     }
 
-    private _calculateLagBehindDays(lagBehindVideos: number, originalEstimatedVideosPerDay: number) {
+    private _calculateLagBehindDays(
+        lagBehindVideos: number,
+        originalEstimatedVideosPerDay: number
+    ) {
+
+        const currentDate = new Date(Date.now());
 
         this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', '-------------------------------------------------------');
         this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', 'Calculating new lagBehindDays...');
         this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', 'Input lagBehindVideos: ' + lagBehindVideos);
         this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', 'Input originalEstimatedVideosPerDay: ' + originalEstimatedVideosPerDay);
+        // this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', 'Input originalPrevisionedCompletionDate: ' + originalPrevisionedCompletionDate);
 
-        const lagBehindDays = lagBehindVideos / originalEstimatedVideosPerDay
+        // TODO: REFACTOR IN PROGRESS
+        const lagBehindDays = (() => {
+
+            return lagBehindVideos / originalEstimatedVideosPerDay
+
+        })()
 
         this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', '-------------------------------------------------------');
         this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', 'Lag behind days: ' + lagBehindDays);
@@ -579,6 +620,9 @@ export class TempomatService {
                     return addDays(originalPrevisionedCompletionDate, lagBehindDays * adjustmentCorrection);
                 case 'strict':
 
+                    // THIS IS BAD BECAUSE IT CAN BE SMALLER THAN THE CURRENT DATE
+                    // --> IF CURRENT DATE > ORIG.PREV.DATE --> NPV should be
+                    // CURRENT DATE + ACTUAL VIDEOS PER DAY -> THATS THE REAL VALUE
                     return originalPrevisionedCompletionDate;
                 case 'auto':
 

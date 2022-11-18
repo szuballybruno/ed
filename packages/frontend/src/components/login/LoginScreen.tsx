@@ -50,7 +50,9 @@ const LoginScreen = () => {
     const { loginUserAsync, loginUserState } = useLogInUser();
     const { companyDetails } = CompanyApiService.useCompanyDetailsByDomain(window.location.origin);
 
-    const gradients = gradientBackgroundGenerator(companyDetails?.backdropColor!);
+    const gradients = gradientBackgroundGenerator(companyDetails?.backdropColor
+        ? companyDetails.backdropColor
+        : 'rgba(160, 200, 255, 0.1)');
 
     // func
     const handleLoginUserAsync = async () => {

@@ -8,7 +8,10 @@ export const GenericBackground = () => {
     const { isMobile } = Responsivity
         .useIsMobileView();
 
-    const gradients = gradientBackgroundGenerator(isMobile ? 'rgba(160, 200, 255, 0.1)' : 'rgba(0, 100, 255, 0.1)');
+    const gradients = gradientBackgroundGenerator(isMobile
+        ? 'rgba(160, 200, 255, 0.1)'
+        : 'rgba(0, 100, 255, 0.1)');
+
 
     return (
         <EpistoGrid
