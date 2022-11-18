@@ -141,6 +141,7 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>({
     dragEnabled,
     isRowEditable,
     onRowOrderChange,
+    getRowClassName,
     onDragEnd,
     onDragStart
 }: {
@@ -167,6 +168,7 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>({
         sourceRow: TSchema,
         targetRow: TSchema
     }) => void,
+    getRowClassName?: (params: { row: TSchema }) => string,
     onDragStart?: (row: TSchema) => void,
     onDragEnd?: (row: TSchema) => void,
 }) => {
@@ -247,6 +249,7 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>({
             rows={rows}
             apiRef={apiRef}
             rowReordering={!!dragEnabled}
+            getRowClassName={x => getRowClassName ? getRowClassName({ row: x.row as TSchema }) : ''}
             components={{
                 NoRowsOverlay: () => (
                     <EpistoFlex2

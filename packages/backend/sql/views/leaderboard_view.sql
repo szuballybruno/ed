@@ -32,6 +32,7 @@ res_cte AS
 		u.company_id,
 		u.id user_id,
 		u.username,
+		sf.file_path avatar_file_path,
 		COALESCE(ac_pm.acquired_coins, 0)::int acquired_coins_past_month,
 		COALESCE(ac_pw.acquired_coins, 0)::int acquired_coins_past_week,
 		COALESCE(ac_pd.acquired_coins, 0)::int acquired_coins_past_day
@@ -45,6 +46,9 @@ res_cte AS
 	
 	LEFT JOIN acquired_coins_past_day_cte ac_pd
 	ON ac_pd.user_id = u.id
+
+	LEFT JOIN public.storage_file sf
+	ON sf.id = u.avatar_file_id
 	
 	WHERE u.deletion_date IS NULL
 )

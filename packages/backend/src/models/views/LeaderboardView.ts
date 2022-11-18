@@ -13,6 +13,9 @@ export class LeaderboardView {
     username: string;
 
     @XViewColumn()
+    avatarFilePath: string;
+
+    @XViewColumn()
     acquiredCoinsPastMonth: number;
 
     @XViewColumn()
