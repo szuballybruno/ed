@@ -25,7 +25,7 @@ export const iterate = <T>(n: number, fn: (index) => T) => {
 type SetterFnType<TState> = (state: TState) => void;
 type SetStateFnType<TState> = (setterFnOrState: SetterFnType<TState> | Partial<TState>) => void;
 
-export const useTryCatchWrapper = (getMessageFromCode: (code: ErrorCodeType) => string | undefined | void | 'PREVENT MSG') => {
+export const useTryCatchWrapper = (getMessageFromCode: (code: ErrorCodeType, defaultMessage: string) => string | undefined) => {
 
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -43,11 +43,11 @@ export const useTryCatchWrapper = (getMessageFromCode: (code: ErrorCodeType) => 
                 const defaultMessage = 'Ismeretlen hiba tortent!';
                 const errorWithCode = (e as ErrorWithCode);
                 const customMessage = errorWithCode.code
-                    ? getMessageFromCode(errorWithCode.code)
+                    ? getMessageFromCode(errorWithCode.code, defaultMessage) ?? null
                     : null;
 
-                if (customMessage !== 'PREVENT MSG')
-                    setErrorMessage(customMessage ?? defaultMessage);
+                if (customMessage)
+                    setErrorMessage(customMessage);
             }
         };
     };

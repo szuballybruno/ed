@@ -72,30 +72,26 @@ export const RegisterViaActivationCodePage = () => {
      * Prepare error handler wrapper 
      * for register function
      */
-    const { errorMessage, getWrappedAction } = useTryCatchWrapper(code => {
+    const { errorMessage, getWrappedAction } = useTryCatchWrapper((code, defaultMsg) => {
 
         if (code === 'activation_code_issue') {
 
             activationCodeEntryState
-                .setErrorMsg(translatableTexts.registerViaActivationCodePage.wrongActivationCode);
-
-            return 'PREVENT MSG';
+                .setErrorMsg(translatableTexts.misc.wrongActivationCode);
         }
-
-        if (code === 'email_taken') {
+        else if (code === 'email_taken') {
 
             emailEntryState
-                .setErrorMsg(translatableTexts.registerViaActivationCodePage.wrongEmailAddress);
-
-            return 'PREVENT MSG';
+                .setErrorMsg(translatableTexts.misc.wrongEmailAddress);
         }
-
-        if (code === 'username_invalid') {
+        else if (code === 'username_invalid') {
 
             usernameEntryState
-                .setErrorMsg(translatableTexts.registerViaActivationCodePage.wrongEmailAddress);
+                .setErrorMsg(translatableTexts.misc.wrongUsername);
+        }
+        else {
 
-            return 'PREVENT MSG';
+            return defaultMsg;
         }
     });
 

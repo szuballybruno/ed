@@ -5,11 +5,12 @@ import { EpistoFont } from './EpistoFont';
 
 export const useEpistoEntryState = (options?: {
     isMandatory?: boolean,
-    validateFunction?: (value: string) => string | null
+    validateFunction?: (value: string) => string | null,
+    defaultValue?: string
 }) => {
 
     // state 
-    const [value, setValue] = useState('');
+    const [value, setValue] = useState(options?.defaultValue ?? '');
     const isDefaultValueRef = useRef(true);
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
 

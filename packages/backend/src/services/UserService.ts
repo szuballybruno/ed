@@ -366,7 +366,7 @@ export class UserService {
             .getId();
 
         await this
-            ._checkIfUsernameTakenAsync(dto.username);
+            ._checkIfUsernameTakenAsync(dto.username, userId);
 
         // save user
         await this._ormService
@@ -858,12 +858,13 @@ export class UserService {
     /**
      * Check if username is taken or not 
      */
-    private async _checkIfUsernameTakenAsync(username: string) {
+    private async _checkIfUsernameTakenAsync(username: string, userId?: Id<'User'>) {
 
         const user = await this
             ._ormService
-            .query(User, { username })
+            .query(User, { username, userId: userId ?? -1 })
             .where('username', '=', 'username')
+            .and('id', '!=', 'userId')
             .getOneOrNull();
 
         if (user)
