@@ -1,8 +1,14 @@
-import { useEffect, useState } from 'react';
-import { PlaybackApiService } from '../../../services/api/playbackApiService';
 import { Id } from '@episto/commontypes';
-import { isBetweenThreshold } from '../../../static/frontendHelpers';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { HelperHooks } from '../../../helpers/hooks';
+import { PlaybackApiService } from '../../../services/api/playbackApiService';
 import { Logger } from '../../../static/Logger';
+
+// the rate in which new samples are taken
+const SAMPLE_RATE_SECONDS = 5;
+
+// the minimum seconds that count as a valid sample
+const MIN_SAMPLE_SIZE_SECONDS = 1;
 
 export const usePlaybackWatcher = (
     playedSeconds: number,
@@ -13,76 +19,111 @@ export const usePlaybackWatcher = (
     videoVersionId: Id<'VideoVersion'>,
     videoPlaybackSessionId: Id<'VideoPlaybackSession'>) => {
 
-    // the rate in which new samples are taken
-    const sampleRateSeconds = 5;
-
-    // the maximum time that can pass between samples 
-    // while the samples would still be considered valid 
-    const maxSampleSeconds = sampleRateSeconds + (sampleRateSeconds / 2);
-
-    // the minimum seconds that count as a valid sample
-    const minSampleSeconds = 1;
-
-    // the collection of taken samples
-    const [lastSampleSeconds, setLastSampleSeconds] = useState(0);
+    const [lastSamplePlayedSeconds, setLastSamplePlayedSeconds] = useState(0);
 
     // post funciton
-    const { postVideoPlaybackSample, videoSamplingResult } = PlaybackApiService.usePostVideoPlaybackSample();
+    const { postVideoPlaybackSample, videoSamplingResult } = PlaybackApiService
+        .usePostVideoPlaybackSample();
 
-    const samplePlayedSeconds = () => {
+    const {
+        isWatchedStateChanged,
+        maxWathcedSeconds
+    } = videoSamplingResult ?? {
+        isWatchedStateChanged: false,
+        maxWathcedSeconds: 0
+    };
+
+    /**
+     * Calc elapsed seconds 
+     */
+    const elapsedSecondsFromLastSample = useMemo(() => {
+
+        const elapsedSeconds = Math
+            .abs(lastSamplePlayedSeconds - playedSeconds);
+
+        const elapsedSecondsRound = Math
+            .round(elapsedSeconds * 10) / 10;
+
+        return elapsedSecondsRound;
+    }, [playedSeconds, lastSamplePlayedSeconds]);
+
+    /**
+     * Save a playback sample 
+     */
+    const samplePlayedSeconds = useCallback(() => {
 
         if (!isSamplingEnabled)
             return;
 
-        setLastSampleSeconds(playedSeconds);
+        if (elapsedSecondsFromLastSample < MIN_SAMPLE_SIZE_SECONDS) {
 
-        const elapsedSeconds = Math.round((playedSeconds - lastSampleSeconds) * 10) / 10;
-
-        if (elapsedSeconds < maxSampleSeconds
-            && elapsedSeconds > 0
-            && elapsedSeconds > minSampleSeconds) {
-
-            Logger.logScoped('PLAYBACK', `Watched ${elapsedSeconds}s`);
-
-            postVideoPlaybackSample({
-                fromSeconds: lastSampleSeconds,
-                toSeconds: playedSeconds,
-                videoVersionId,
-                videoPlaybackSessionId
-            });
+            Logger.logScoped('PLAYBACK', `Sampling cancelled, size too small: ${elapsedSecondsFromLastSample}s.`);
+            return;
         }
-    };
 
-    // force sample at playback changes
-    useEffect(() => {
+        setLastSamplePlayedSeconds(playedSeconds);
 
+        Logger.logScoped('PLAYBACK', `Sampling... Size ${elapsedSecondsFromLastSample}s.`);
+
+        postVideoPlaybackSample({
+            fromSeconds: lastSamplePlayedSeconds,
+            toSeconds: playedSeconds,
+            videoVersionId,
+            videoPlaybackSessionId
+        });
+    }, [
+        isSamplingEnabled,
+        lastSamplePlayedSeconds,
+        elapsedSecondsFromLastSample,
+        playedSeconds,
+        postVideoPlaybackSample,
+        videoPlaybackSessionId,
+        videoVersionId
+    ]);
+
+    const isPlayingChanged = HelperHooks
+        .useIsChanged(isPlaying);
+
+    /**
+     * force sample at playback changes
+     */
+    if (isPlayingChanged) {
+
+        Logger.logScoped('PLAYBACK', `Sampling triggered by Start/stop... elapsed: ${elapsedSecondsFromLastSample} current: ${playedSeconds} last: ${lastSamplePlayedSeconds}`);
         samplePlayedSeconds();
+    }
 
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isPlaying]);
-
-    // sample
+    /**
+     * Sample playback when played seconds 
+     * reaches a specific threshold from last sample  
+     */
     useEffect(() => {
 
-        // ordinary sample 
-        if (isBetweenThreshold(playedSeconds, lastSampleSeconds, sampleRateSeconds))
+        const isRedyToSample = elapsedSecondsFromLastSample > SAMPLE_RATE_SECONDS;
+        if (!isRedyToSample)
             return;
 
+        Logger.logScoped('PLAYBACK', 'Sampling triggered by playback auto sampling...');
+
         samplePlayedSeconds();
+    }, [lastSamplePlayedSeconds, samplePlayedSeconds, playedSeconds, elapsedSecondsFromLastSample]);
 
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [playedSeconds]);
+    /**
+     * Watch for max watched seconds 
+     */
+    useEffect(() => {
 
-    // watched state changed 
-    useEffect(
-        () => {
+        setMaxWatchedSeconds(maxWathcedSeconds);
+    }, [setMaxWatchedSeconds, maxWathcedSeconds]);
 
-            if (videoSamplingResult?.isWatchedStateChanged)
-                onVideoWatchedStateChanged();
+    /**
+     * Watch for video state changes
+     */
+    useEffect(() => {
 
-            if (videoSamplingResult?.maxWathcedSeconds)
-                setMaxWatchedSeconds(videoSamplingResult.maxWathcedSeconds);
+        if (!isWatchedStateChanged)
+            return;
 
-            // eslint-disable-next-line react-hooks/exhaustive-deps
-        }, [videoSamplingResult?.isWatchedStateChanged, videoSamplingResult?.maxWathcedSeconds]);
+        onVideoWatchedStateChanged();
+    }, [onVideoWatchedStateChanged, isWatchedStateChanged]);
 };

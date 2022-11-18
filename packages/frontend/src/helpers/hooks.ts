@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { ObjectComparer } from '../static/objectComparer';
 
 const useMemoize = <T>(latestObject: T, onChange?: (changedProps: string[]) => void): T => {
@@ -22,6 +22,16 @@ const useMemoize = <T>(latestObject: T, onChange?: (changedProps: string[]) => v
     return memoizedObject;
 };
 
+const useIsChanged = (value: any) => {
+
+    const valueRef = useRef(value);
+    const valueCahnged = valueRef.current !== value;
+    valueRef.current = value;
+
+    return valueCahnged;
+};
+
 export const HelperHooks = {
-    useMemoize
+    useMemoize,
+    useIsChanged
 };
