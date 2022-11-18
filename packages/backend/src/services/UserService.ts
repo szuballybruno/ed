@@ -404,9 +404,6 @@ export class UserService {
         const user = await this
             .getUserById(userId);
 
-        await this._authorizationService
-            .checkPermissionAsync(principalId, 'ADMINISTRATE_COMPANY', { companyId: user.companyId });
-
         return {
             id: user.id,
             firstName: user.firstName,
