@@ -103,6 +103,7 @@ export type TranslationType = {
             successfulSignup: string;
             wrongActivationCode: string;
             wrongEmailAddress: string;
+            wrongUsername: string;
             redeemYourCode: string;
             activationCode: {
                 label: string;

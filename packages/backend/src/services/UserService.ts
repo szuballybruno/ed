@@ -362,7 +362,11 @@ export class UserService {
         dto: UserEditSimpleDTO
     ) {
 
-        const userId = principalId.getId();
+        const userId = principalId
+            .getId();
+
+        await this
+            ._checkIfUsernameTakenAsync(dto.username);
 
         // save user
         await this._ormService
@@ -473,6 +477,10 @@ export class UserService {
         const existingUser = await this.getUserByEmailAsync(user.email);
         if (existingUser)
             throw new ErrorWithCode('User already exists. Email: ' + user.email, 'email_taken');
+
+        // check username 
+        await this
+            ._checkIfUsernameTakenAsync(user.username);
 
         // hash user password
         const hashedPassword = await this
@@ -845,5 +853,20 @@ export class UserService {
         await this
             ._userCourseBridgeService
             .setRequiredCompletionDatesAsync(updatedUserCourseBridges);
+    }
+
+    /**
+     * Check if username is taken or not 
+     */
+    private async _checkIfUsernameTakenAsync(username: string) {
+
+        const user = await this
+            ._ormService
+            .query(User, { username })
+            .where('username', '=', 'username')
+            .getOneOrNull();
+
+        if (user)
+            throw new ErrorWithCode('Username is taken!', 'username_invalid');
     }
 }

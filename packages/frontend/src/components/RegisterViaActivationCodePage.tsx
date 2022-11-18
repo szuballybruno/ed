@@ -89,6 +89,14 @@ export const RegisterViaActivationCodePage = () => {
 
             return 'PREVENT MSG';
         }
+
+        if (code === 'username_invalid') {
+
+            usernameEntryState
+                .setErrorMsg(translatableTexts.registerViaActivationCodePage.wrongEmailAddress);
+
+            return 'PREVENT MSG';
+        }
     });
 
     /**
@@ -108,7 +116,14 @@ export const RegisterViaActivationCodePage = () => {
             .hasCredentialError;
 
         return entriesValid && pwStateValid;
-    }, [emailEntryState, firstNameEntryState, lastNameEntryState, usernameEntryState, activationCodeEntryState, passwordState]);
+    }, [
+        emailEntryState.value,
+        firstNameEntryState.value,
+        lastNameEntryState.value,
+        usernameEntryState.value,
+        activationCodeEntryState.value,
+        passwordState
+    ]);
 
     const isAllFilled = useMemo(() => {
 
@@ -139,7 +154,7 @@ export const RegisterViaActivationCodePage = () => {
      */
     const handleRegisterAsync = getWrappedAction(async () => {
 
-        if (!getIsAllValid())
+        if (!isAllValid)
             return;
 
         await registerUserViaActivationCodeAsync({
@@ -155,6 +170,8 @@ export const RegisterViaActivationCodePage = () => {
         showNotification(translatableTexts.registerViaActivationCodePage.successfulSignup);
         navigate2(applicationRoutes.homeRoute);
     });
+
+    console.log(usernameEntryState.errorMsg);
 
     return <>
 

@@ -118,6 +118,7 @@ export const huTranslation: TranslationType = {
                 label: 'Aktivációs kódod',
                 placeholder: 'Kód'
             },
+            wrongUsername: 'A felhasználó név foglalt, vagy nem megengedett!',
             register: 'Regisztráció',
             dontHaveAccount: 'Nincs még hozzáférésed?',
             buySubscription: 'Vásárold meg kedvezményesen erre a linkre kattintva!',
