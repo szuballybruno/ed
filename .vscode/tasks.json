@@ -51,6 +51,9 @@
             "label": "startprod",
             "type": "shell",
             "command": "yarn startprod",
+            "options": {
+                "cwd": "${workspaceFolder}/packages/frontend"
+            },
             "problemMatcher": [],
             "presentation": {
                 "group": "run"
