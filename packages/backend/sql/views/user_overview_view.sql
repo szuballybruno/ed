@@ -90,6 +90,7 @@ SELECT
 	u.company_id,
 	u.email user_email,
 	u.creation_date signup_date,
+	u.username,
 	sf.file_path avatar_file_path,
     sara.summerized_score_avg,
 	upa.average_performance_percentage,

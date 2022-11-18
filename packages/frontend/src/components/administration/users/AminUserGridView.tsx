@@ -89,6 +89,10 @@ const useColumns = (
             field: 'email',
             headerName: 'E-mail',
         })
+        .add({
+            field: 'username',
+            headerName: 'Username',
+        })
         .addIf(preset === 'all', {
             field: 'signupDate',
             headerName: 'Regisztráció ideje',
@@ -170,6 +174,7 @@ class RowType {
     productivityPercentage: number;
     reactionTime: number | null;
     detailsButton: Id<'User'>;
+    username: string;
 };
 
 export type UserDataGridPresetType = 'reviewRequired' | 'all'
@@ -201,7 +206,8 @@ const mapToRow = (user: UserAdminListDTO): RowType => {
         engagementPoints: user.engagementPoints,
         productivityPercentage: user.productivityPercentage!,
         reactionTime: user.reactionTime,
-        detailsButton: user.userId
+        detailsButton: user.userId,
+        username: user.username
     });
 };
 

@@ -52,6 +52,11 @@ interface CompanyTempomatCalculationData extends TempomatCalculationDataView {
     companyId: Id<'Company'>
 }
 
+type FlaggedUserType = {
+    userId: Id<"User">;
+    flag: UserFlagType;
+};
+
 type UserFlagType = 'low' | 'avg' | 'high'
 
 export class UserStatsService {
@@ -459,7 +464,7 @@ export class UserStatsService {
             .mapTo(AdminHomePageOverviewDTO, [companyCourseStats, flaggedUsers, avgUsers, outstandingUsers]);
     }
 
-    async flagUsersAsync(companyId: Id<'Company'> | null) {
+    async flagUsersAsync(companyId: Id<'Company'> | null, allowedFlagType?: UserFlagType): Promise<FlaggedUserType[]> {
 
         const isCompanyFiltered = companyId
             ? '='
@@ -498,10 +503,6 @@ export class UserStatsService {
             .where('companyId', isCompanyFiltered, 'companyId')
             .getMany();
 
-        if (!userPerformanceViews) {
-            return;
-        }
-
         const companyAvgPerformancePercentages = this
             ._calculateCompanyAvgPerformance(userPerformanceViews);
 
@@ -521,8 +522,21 @@ export class UserStatsService {
                 companyAvgPerformancePercentages,
                 companyAvgProductivity);
 
-        return this
+        const flaggedUsers = this
             ._flagUsers(userFlagCalculationData);
+
+        if (!flaggedUsers)
+            throw new Error('No flagged users.');
+
+        const nonNullUsers = flaggedUsers
+            .filter(x => !!x)
+            .map(x => x!);
+
+        if (!allowedFlagType)
+            return nonNullUsers;
+
+        return nonNullUsers
+            .filter(x => x.flag === allowedFlagType);
     }
 
     calculateUserProductivityAsync = async (userId: Id<'User'>) => {

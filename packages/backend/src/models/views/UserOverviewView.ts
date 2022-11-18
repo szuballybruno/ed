@@ -42,4 +42,7 @@ export class UserOverviewView {
 
     @XViewColumn()
     reactionTime: number;
+
+    @XViewColumn()
+    username: string;
 }
