@@ -17,6 +17,7 @@ export const MobileCourseTile = (props: {
     const { course, navigateToDetailsPage, handlePlayCourse } = props;
 
     return <EpistoFlex2
+        background='var(--transparentWhite70)'
         direction='column'>
 
         <FlexListItem

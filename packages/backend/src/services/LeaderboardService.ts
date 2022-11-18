@@ -53,6 +53,16 @@ export class LeaderboardService {
         const clamped = rows
             .splice(startIndex, endIndex);
 
+        /*       console.log(clamped)
+      
+              const clampedExtended = (() => {
+      
+                  if (userIndex > 9) {
+                      return [...clamped, rows[userIndex]];
+                  }
+                  return clamped;
+              })()
+       */
         const mapped = this
             ._mapper
             .mapTo(LeaderboardListItemDTO, [clamped, period]);

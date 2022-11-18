@@ -145,8 +145,8 @@ export const LeaderboardPage = () => {
                     <ProfileImage
                         className={'square40'}
                         objectFit="contain"
-                        firstName={row.username[1] || ''}
-                        lastName={row.username[0] || ''}
+                        firstName={row.username[0] || ''}
+                        lastName={row.username[1] || ''}
                         url={row.avatarUrl
                             ? Environment.getAssetUrl(row.avatarUrl)
                             : null} />
