@@ -915,13 +915,13 @@ const marray = [
                 isTrusted: user.isTrusted,
                 isInvitationAccepted: user.isInvitationAccepted,
                 name: `${user.lastName} ${user.firstName}`,
+                username: user.username,
                 department: (departmentId && departmentName)
                     ? {
                         id: departmentId,
                         name: departmentName
                     }
                     : null,
-
                 avatarUrl: avatarPath
                     ? avatarPath
                     : null

@@ -1,4 +1,3 @@
-import { PermissionCodeType as PermissionCodeTypeNew } from './PermissionCodesType';
 import { Id } from './versionId';
 
 export type InvitationTokenPayload = { userEmail: string };
@@ -19,7 +18,8 @@ export type ErrorCodeType =
     'forbidden player stage' |
     'email_invalid' |
     'first_name_invalid' |
-    'last_name_invalid';
+    'last_name_invalid' |
+    'username_invalid';
 
 export type GivenAnswerStateType = 'INCORRECT' | 'CORRECT' | 'MIXED';
 

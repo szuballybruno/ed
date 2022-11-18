@@ -47,6 +47,7 @@ export const RegisterViaActivationCodePage = () => {
 
     // state
     const emailEntryState = useEpistoEntryState({ isMandatory: true });
+    const usernameEntryState = useEpistoEntryState({ isMandatory: true });
     const firstNameEntryState = useEpistoEntryState({ isMandatory: true });
     const lastNameEntryState = useEpistoEntryState({ isMandatory: true });
     const activationCodeEntryState = useEpistoEntryState({ isMandatory: true });
@@ -99,14 +100,15 @@ export const RegisterViaActivationCodePage = () => {
             emailEntryState,
             firstNameEntryState,
             lastNameEntryState,
-            activationCodeEntryState
+            activationCodeEntryState,
+            usernameEntryState
         ]);
 
         const pwStateValid = !passwordState
             .hasCredentialError;
 
         return entriesValid && pwStateValid;
-    }, [emailEntryState, firstNameEntryState, lastNameEntryState, activationCodeEntryState, passwordState]);
+    }, [emailEntryState, firstNameEntryState, lastNameEntryState, usernameEntryState, activationCodeEntryState, passwordState]);
 
     const isAllFilled = useMemo(() => {
 
@@ -114,6 +116,7 @@ export const RegisterViaActivationCodePage = () => {
             emailEntryState,
             firstNameEntryState,
             lastNameEntryState,
+            usernameEntryState,
             activationCodeEntryState
         ]);
 
@@ -121,7 +124,7 @@ export const RegisterViaActivationCodePage = () => {
             .password !== '' && passwordState.passwordCompare !== '';
 
         return entriesFilled && pwStateValid;
-    }, [emailEntryState, firstNameEntryState, lastNameEntryState, activationCodeEntryState, passwordState]);
+    }, [emailEntryState, firstNameEntryState, lastNameEntryState, usernameEntryState, activationCodeEntryState, passwordState]);
 
     const isAllValid = useMemo(() => {
 
@@ -144,6 +147,7 @@ export const RegisterViaActivationCodePage = () => {
             emailAddress: emailEntryState.value,
             firstName: firstNameEntryState.value,
             lastName: lastNameEntryState.value,
+            username: usernameEntryState.value,
             password: passwordState.password,
             passwordCompare: passwordState.passwordCompare
         });
@@ -247,6 +251,14 @@ export const RegisterViaActivationCodePage = () => {
                             label="E-mail"
                             placeholder="te@email.com"
                             name="email"
+                            height={isMobile ? '40px' : '30px'} />
+
+                        <EpistoEntryNew
+                            state={usernameEntryState}
+                            labelVariant="top"
+                            label="Felhasználó név"
+                            placeholder="te.felhasznalo"
+                            name="username"
                             height={isMobile ? '40px' : '30px'} />
 
                         <EpistoEntryNew

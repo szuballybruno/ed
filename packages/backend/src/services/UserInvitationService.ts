@@ -10,6 +10,7 @@ import { ORMConnectionService } from './ORMConnectionService/ORMConnectionServic
 import { RoleService } from './RoleService';
 import { TokenService } from './TokenService';
 import { UserService } from './UserService';
+import { normalizeToEnglishLowercase } from '@episto/commonlogic';
 
 export class UserInvitationService {
 
@@ -109,7 +110,8 @@ export class UserInvitationService {
                 registrationType: 'Invitation',
                 invitationToken,
                 isSurveyRequired,
-                unhashedPassword: 'guest'
+                unhashedPassword: 'guest',
+                username: normalizeToEnglishLowercase(`${lastName}${firstName}`)
             });
 
         // send email

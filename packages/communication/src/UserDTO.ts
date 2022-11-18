@@ -13,4 +13,5 @@ export class UserDTO {
     isInvitationAccepted: boolean;
     avatarUrl: string | null;
     department: DepartmentDTO | null;
+    username: string;
 }

@@ -71,7 +71,8 @@ export class RegistrationController implements XController<RegistrationControlle
                 body.getValue(x => x.firstName, 'string'),
                 body.getValue(x => x.lastName, 'string'),
                 body.getValue(x => x.password, 'string'),
-                body.getValue(x => x.passwordCompare, 'string'));
+                body.getValue(x => x.passwordCompare, 'string'),
+                body.getValue(x => x.username, 'string'));
 
         setAuthCookies(this._config, params.res, accessToken, refreshToken, this._config.cookieOptions);
     }

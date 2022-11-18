@@ -23,7 +23,8 @@ const userDefaults: UserDTO = {
     },
     lastName: '',
     name: '',
-    phoneNumber: ''
+    phoneNumber: '',
+    username: ''
 };
 
 export const CurrentUserContext = createContext<UserDTO>(userDefaults);

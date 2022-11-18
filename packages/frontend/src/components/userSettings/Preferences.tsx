@@ -11,21 +11,21 @@ import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoEntry } from '../controls/EpistoEntry';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
-import { EpistoFont } from '../controls/EpistoFont';
+import { EpistoLabel } from '../controls/EpistoLabel';
 import { EpistoConinInfo } from '../EpistoCoinInfo';
 import { ProfileImage } from '../ProfileImage';
 import { CurrentUserContext, useRefetchUserAsync } from '../system/AuthenticationFrame';
-import { LoadingFrame } from '../system/LoadingFrame';
 import { DashboardSection } from '../universal/DashboardSection';
 import { EpistoImageSelector } from '../universal/EpistoImageSelector';
 
-export const Preferences = () => {
+const usePreferencesLogic = () => {
 
     const user = useContext(CurrentUserContext);
 
     const [firstName, setFirstName] = useState(user.firstName);
     const [lastName, setLastName] = useState(user.lastName);
     const [phoneNumber, setPhoneNumber] = useState(user.phoneNumber);
+    const [username, setUsername] = useState(user.username);
     const [avatarSrc, setAvatarSrc] = useState(user.avatarUrl!);
 
     const [avatarFile, setAvatarFile] = useState<File | null>(null);
@@ -54,7 +54,8 @@ export const Preferences = () => {
         firstName !== user.firstName,
         lastName !== user.lastName,
         phoneNumber !== user.phoneNumber,
-        avatarFile !== null
+        avatarFile !== null,
+        username !== user.username
     ].some(x => x);
 
     const { logoutUserAsync } = useLogout();
@@ -80,7 +81,8 @@ export const Preferences = () => {
             await saveUserSimpleAsync({
                 firstName,
                 lastName,
-                phoneNumber
+                phoneNumber,
+                username
             });
 
             // notification
@@ -126,38 +128,160 @@ export const Preferences = () => {
         setCurrentPassword('');
     }, [isPasswordChangeOpen]);
 
-    return <LoadingFrame
-        direction="column"
-        justify="flex-start"
-        maxH={isMobile ? 'calc(100vh - 80px)' : undefined}
-        flex="1"
-        align="center"
-        loadingState={[saveUserSimpleState, postAvatarFileState, requestChangePasswordState]}>
+    return {
+        isMobile,
+        setAvatarSrc,
+        setAvatarFile,
+        imageRef,
+        user,
+        firstName,
+        lastName,
+        handleRequestChangePasswordAsync,
+        saveChangesAsync,
+        handleLogout,
+        isChanged,
+        setFirstName,
+        setLastName,
+        setPhoneNumber,
+        phoneNumber,
+        isPasswordChangeOpen,
+        currentPassword,
+        setCurrentPassword,
+        setIsPasswordChangeOpen,
+        username,
+        setUsername
+    };
+};
 
-        <DashboardSection
-            p={isMobile ? 0 : undefined}
-            flex='1'
-            title={isMobile ? '' : 'Beállítások'}
-            background="var(--transparentWhite70)"
-            borderRadius="6px"
-            showDivider={!isMobile}
-            width='100%'
-            className="largeSoftShadow"
-            marginBottom={isMobile ? undefined : '10px'}>
+const PasswordChangeSection = ({
+    isPasswordChangeOpen,
+    currentPassword,
+    setIsPasswordChangeOpen,
+    setCurrentPassword,
+    handleRequestChangePasswordAsync
+}: {
+    isPasswordChangeOpen: boolean,
+    currentPassword: string,
+    setIsPasswordChangeOpen: (isPasswordChangeOpen: boolean) => void,
+    setCurrentPassword: (currentPassword: string) => void,
+    handleRequestChangePasswordAsync: () => void
+}) => {
+
+    return (
+        <EpistoLabel
+            isOverline
+            text={translatableTexts.preferences.changePassword}>
 
             <EpistoFlex2
-                width={isMobile ? '100%' : undefined}
-                direction='column'
+                direction="column"
+                justify="flex-start"
+                align="center"
+                width="100%">
+
+                {!isPasswordChangeOpen && <EpistoButton
+                    style={{
+                        background: 'var(--transparentWhite70)',
+                        color: 'black',
+                        width: '100%'
+                    }}
+                    onClick={() => setIsPasswordChangeOpen(true)}
+                    variant="colored">
+
+                    {translatableTexts.preferences.changePassword}
+                </EpistoButton>}
+
+                {isPasswordChangeOpen && <EpistoFlex2
+                    width="100%"
+                    direction="column"
+                    flex="1">
+
+                    <EpistoEntry
+                        label={translatableTexts.preferences.currentPassword}
+                        value={currentPassword}
+                        type='password'
+                        labelVariant='top'
+                        setValue={setCurrentPassword} />
+
+                    <EpistoFlex2 mt="20px"
+                        width="100%">
+
+                        <EpistoButton
+                            variant="colored"
+                            style={{
+                                background: 'var(--transparentWhite70)',
+                                color: 'black',
+                                flex: '1'
+                            }}
+                            onClick={() => setIsPasswordChangeOpen(false)}>
+
+                            {translatableTexts.preferences.close}
+                        </EpistoButton>
+
+                        <EpistoButton
+                            variant="colored"
+                            onClick={handleRequestChangePasswordAsync}
+                            style={{
+                                marginLeft: '20px',
+                                background: 'var(--transparentWhite70)',
+                                color: 'black',
+                                flex: '1'
+                            }}>
+
+                            {translatableTexts.preferences.sendResetMail}
+                        </EpistoButton>
+                    </EpistoFlex2>
+                </EpistoFlex2>}
+            </EpistoFlex2>
+        </EpistoLabel>
+    );
+};
+
+export const Preferences = () => {
+
+    const {
+        isMobile,
+        setAvatarSrc,
+        imageRef,
+        setAvatarFile,
+        user,
+        firstName,
+        lastName,
+        handleRequestChangePasswordAsync,
+        saveChangesAsync,
+        handleLogout,
+        isChanged,
+        setFirstName,
+        setLastName,
+        setPhoneNumber,
+        phoneNumber,
+        isPasswordChangeOpen,
+        currentPassword,
+        setCurrentPassword,
+        setIsPasswordChangeOpen,
+        setUsername,
+        username
+    } = usePreferencesLogic();
+
+    return (
+        <DashboardSection
+            padding={isMobile ? 0 : undefined}
+            title={isMobile ? '' : 'Beállítások'}
+            showDivider={!isMobile}
+            marginBottom={isMobile ? undefined : '20px'}
+            flex='1'
+            background="var(--transparentWhite70)"
+            className="largeSoftShadow">
+
+            <EpistoFlex2
                 ml={isMobile ? undefined : '10px'}
-                maxW='500px'>
+                direction='column'
+                align="center"
+                flex="1">
 
                 {/* profile image selector */}
                 <EpistoFlex2
-                    justify="flex-start"
                     mt='20px'
-                    pl='5px'
-                    width="100%"
-                    maxW="500px">
+                    pl='5px'>
 
                     <EpistoImageSelector
                         className='circle'
@@ -185,149 +309,74 @@ export const Preferences = () => {
 
                 {/* inputs container */}
                 <EpistoFlex2
-                    px='10px'
+                    maxWidth="500px"
                     direction="column"
-                    justify="flex-start"
-                    flex="1">
+                    width="100%">
 
+                    {/* last name */}
                     <EpistoEntry
                         label={translatableTexts.preferences.lastName}
                         value={lastName}
                         labelVariant='top'
                         setValue={setLastName} />
 
+                    {/* first name */}
                     <EpistoEntry
                         label={translatableTexts.preferences.firstName}
                         value={firstName}
                         labelVariant='top'
                         setValue={setFirstName} />
 
+                    {/* phone number */}
                     <EpistoEntry
                         label={translatableTexts.preferences.phoneNumber}
                         value={phoneNumber ? phoneNumber : ''}
                         labelVariant='top'
                         setValue={setPhoneNumber} />
 
-                    {/* open password change options */}
-                    {!isPasswordChangeOpen && <EpistoFont
-                        isUppercase
-                        fontSize="fontExtraSmall"
-                        style={{
-                            margin: '13px 0 5px 0',
-                            letterSpacing: '1.2px'
-                        }}>
-
-                        {translatableTexts.preferences.changePassword}
-                    </EpistoFont>}
+                    {/* username */}
+                    <EpistoEntry
+                        label={translatableTexts.preferences.username}
+                        value={username}
+                        labelVariant='top'
+                        setValue={setUsername} />
 
                     {/* password change options */}
-                    <EpistoFlex2
-                        direction="column"
-                        justify="flex-start"
-                        align="center"
-                        width="100%">
+                    <PasswordChangeSection
+                        currentPassword={currentPassword}
+                        handleRequestChangePasswordAsync={handleRequestChangePasswordAsync}
+                        isPasswordChangeOpen={isPasswordChangeOpen}
+                        setCurrentPassword={setCurrentPassword}
+                        setIsPasswordChangeOpen={setIsPasswordChangeOpen} />
 
-                        {!isPasswordChangeOpen && <EpistoButton
+                    {/* save button */}
+                    <EpistoButton
+                        isDisabled={!isChanged}
+                        variant="colored"
+                        style={{
+                            marginTop: isMobile ? '20px' : '50px',
+                        }}
+                        onClick={saveChangesAsync}>
+
+                        {translatableTexts.preferences.saveChanges}
+                    </EpistoButton>
+
+                    {/* Logout */}
+                    {isMobile && (
+                        <EpistoButton
+                            variant='colored'
+                            onClick={handleLogout}
                             style={{
-                                background: 'var(--transparentWhite70)',
-                                color: 'black',
-                                width: '100%'
-                            }}
-                            onClick={() => setIsPasswordChangeOpen(true)}
-                            variant="colored">
+                                background: 'var(--mildRed)',
+                                marginBottom: '20px',
+                                marginTop: '20px'
+                            }}>
 
-                            {translatableTexts.preferences.changePassword}
-                        </EpistoButton>}
-
-                        {isPasswordChangeOpen && <EpistoFlex2
-                            width="100%"
-                            direction="column"
-                            flex="1">
-
-                            <EpistoEntry
-                                label={translatableTexts.preferences.currentPassword}
-                                value={currentPassword}
-                                type='password'
-                                labelVariant='top'
-                                setValue={setCurrentPassword} />
-
-                            <EpistoFlex2 mt="20px"
-                                width="100%">
-
-                                <EpistoButton
-                                    variant="colored"
-                                    style={{
-                                        background: 'var(--transparentWhite70)',
-                                        color: 'black',
-                                        flex: '1'
-                                    }}
-                                    onClick={() => setIsPasswordChangeOpen(false)}>
-
-                                    {translatableTexts.preferences.close}
-                                </EpistoButton>
-
-                                <EpistoButton
-                                    variant="colored"
-                                    onClick={handleRequestChangePasswordAsync}
-                                    style={{
-                                        marginLeft: '20px',
-                                        background: 'var(--transparentWhite70)',
-                                        color: 'black',
-                                        flex: '1'
-                                    }}>
-
-                                    {translatableTexts.preferences.sendResetMail}
-                                </EpistoButton>
-                            </EpistoFlex2>
-
-                        </EpistoFlex2>}
-
-                    </EpistoFlex2>
-
-                    {/* Logout on mobile */}
-                    {isMobile && <EpistoFont
-                        isUppercase
-                        fontSize="fontExtraSmall"
-                        style={{
-                            margin: '13px 0 5px 0',
-                            letterSpacing: '1.2px'
-                        }}>
-
-                        Kijelentkezés
-                    </EpistoFont>}
-
-                    {isMobile && <EpistoButton
-                        variant='colored'
-                        onClick={handleLogout}
-                        style={{
-                            background: 'var(--mildRed)',
-                            width: '100%'
-                        }}>
-
-                        Kijelentkezés
-                    </EpistoButton>}
-
+                            Kijelentkezés
+                        </EpistoButton>
+                    )}
                 </EpistoFlex2>
-
             </EpistoFlex2>
-
-            {!isPasswordChangeOpen && <EpistoButton
-                isDisabled={!isChanged}
-                variant="colored"
-                onClick={saveChangesAsync}
-                style={{
-                    alignSelf: 'center',
-                    position: 'absolute',
-                    bottom: '20px',
-                    width: 'calc(100% - 20px)',
-                    padding: '10px 0',
-                    background: 'var(--transparentWhite70)',
-                    color: 'black',
-                }}>
-
-                {translatableTexts.preferences.saveChanges}
-            </EpistoButton>}
-
         </DashboardSection>
-    </LoadingFrame>;
+    );
 };

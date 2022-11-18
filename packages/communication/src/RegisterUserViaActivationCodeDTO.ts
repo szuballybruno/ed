@@ -5,4 +5,5 @@ export class RegisterUserViaActivationCodeDTO {
     emailAddress: string;
     password: string;
     passwordCompare: string;
+    username: string;
 }

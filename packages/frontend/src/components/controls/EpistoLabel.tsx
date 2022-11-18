@@ -1,12 +1,15 @@
 import { EpistoFlex2, EpistoFlex2Props } from './EpistoFlex';
 import { EpistoFont } from './EpistoFont';
 
-export const EpistoLabel = (props: {
+export const EpistoLabel = ({
+    text,
+    isOverline,
+    children,
+    ...css
+}: {
     text: string
     isOverline?: boolean
 } & EpistoFlex2Props) => {
-
-    const { text, isOverline, ...css } = props;
 
     return <EpistoFlex2
         mt="10px"
@@ -17,6 +20,7 @@ export const EpistoLabel = (props: {
             isUppercase={isOverline}
             fontSize={isOverline ? 'fontExtraSmall' : undefined}
             style={{
+                marginBottom: '3px',
                 marginTop: isOverline ? '10px' : undefined,
                 letterSpacing: isOverline ? '1.2px' : undefined,
             }}>
@@ -24,6 +28,6 @@ export const EpistoLabel = (props: {
             {text}
         </EpistoFont>
 
-        {props.children}
+        {children}
     </EpistoFlex2>;
 };

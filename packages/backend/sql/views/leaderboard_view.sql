@@ -31,11 +31,7 @@ res_cte AS
 	SELECT 
 		u.company_id,
 		u.id user_id,
-		u.username != '' uses_username,
-		CASE WHEN u.username != ''
-			THEN u.username
-			ELSE u.first_name
-		END username,
+		u.username,
 		COALESCE(ac_pm.acquired_coins, 0)::int acquired_coins_past_month,
 		COALESCE(ac_pw.acquired_coins, 0)::int acquired_coins_past_week,
 		COALESCE(ac_pd.acquired_coins, 0)::int acquired_coins_past_day

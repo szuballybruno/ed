@@ -314,7 +314,8 @@ export class UserService {
                 id: userId,
                 lastName: dto.lastName,
                 firstName: dto.firstName,
-                phoneNumber: dto.phoneNumber
+                phoneNumber: dto.phoneNumber,
+                username: dto.username
             });
     }
 
@@ -366,7 +367,8 @@ export class UserService {
         invitationToken,
         isSurveyRequired,
         unhashedPassword,
-        registrationType
+        registrationType,
+        username
     }: {
         email: string,
         firstName: string,
@@ -376,7 +378,8 @@ export class UserService {
         invitationToken: string | null,
         isSurveyRequired: boolean,
         unhashedPassword: string,
-        registrationType: RegistrationType
+        registrationType: RegistrationType,
+        username: string
     }) {
 
         return await this
@@ -400,7 +403,7 @@ export class UserService {
                 refreshToken: null,
                 resetPasswordToken: null,
                 userDescription: null,
-                username: '',
+                username,
                 isSurveyRequired
             }, unhashedPassword);
     }

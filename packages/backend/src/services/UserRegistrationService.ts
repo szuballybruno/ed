@@ -1,26 +1,22 @@
-import { Company } from '../models/entity/misc/Company';
-import { TokenPair } from '../models/TokenPair';
 import { getPassowrdValidationError } from '@episto/commonlogic';
 import { ErrorWithCode } from '@episto/commontypes';
+import { Company } from '../models/entity/misc/Company';
+import { TokenPair } from '../models/TokenPair';
 import { throwNotImplemented } from '../utilities/helpers';
 import { ActivationCodeService } from './ActivationCodeService';
 import { AuthenticationService } from './AuthenticationService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
-import { PermissionService } from './PermissionService';
 import { TokenService } from './TokenService';
-import { UserInvitationService } from './UserInvitationService';
 import { UserService } from './UserService';
 
 export class UserRegistrationService {
 
     constructor(
-        private _userInvitationService: UserInvitationService,
         private _activationCodeService: ActivationCodeService,
         private _userService: UserService,
         private _tokenService: TokenService,
         private _ormService: ORMConnectionService,
-        private _authenticationService: AuthenticationService,
-        private _permissionService: PermissionService) {
+        private _authenticationService: AuthenticationService) {
     }
 
     /**
@@ -34,7 +30,8 @@ export class UserRegistrationService {
         firstName: string,
         lastName: string,
         password: string,
-        passwordCompare: string) {
+        passwordCompare: string,
+        username: string) {
 
         // check code
         const activationCodeEntity = await this
@@ -62,6 +59,11 @@ export class UserRegistrationService {
         const isLastNameValid = this._validateName(firstName);
         if (!isLastNameValid)
             throw new ErrorWithCode('Given last name is invalid.', 'last_name_invalid');
+
+        // check username
+        const isUsernameValid = this._validateName(username);
+        if (!isUsernameValid)
+            throw new ErrorWithCode('Given username is invalid.', 'username_invalid');
 
         const { companyId } = activationCodeEntity;
 
@@ -92,7 +94,8 @@ export class UserRegistrationService {
                 registrationType: 'Invitation',
                 invitationToken: null,
                 isSurveyRequired,
-                unhashedPassword: 'guest'
+                unhashedPassword: 'guest',
+                username
             });
 
         // invalidate activation code

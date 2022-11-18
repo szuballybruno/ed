@@ -1,6 +1,19 @@
 import { PasswordValidationIssueType } from '@episto/commontypes';
 import { UserPermissionDTO } from '@episto/communication';
 
+export const normalizeToEnglish = (str: string) => {
+
+    return str
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '');
+};
+
+export const normalizeToEnglishLowercase = (str: string) => {
+
+    return normalizeToEnglish(str
+        .toLowerCase());
+};
+
 export const getPassowrdValidationError = (password: string, passwordControl: string): PasswordValidationIssueType | null => {
 
     if (!password || password === '')

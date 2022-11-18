@@ -450,12 +450,12 @@ export type TranslationType = {
             firstName: string;
             lastName: string;
             phoneNumber: string;
+            username: string;
             changePassword: string;
             currentPassword: string;
             close: string;
             sendResetMail: string;
             saveChanges: string
-
         };
 
         administration: {

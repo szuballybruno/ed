@@ -493,8 +493,8 @@ export const huTranslation: TranslationType = {
             currentPassword: 'Jelenlegi jelszó',
             close: 'Bezárás',
             sendResetMail: 'Kérelem elküldése',
-            saveChanges: 'Változtatások mentése'
-
+            saveChanges: 'Változtatások mentése',
+            username: 'Felhasználó név'
         },
 
         administration: {

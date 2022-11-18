@@ -1,3 +1,4 @@
+import { normalizeToEnglishLowercase } from '@episto/commonlogic';
 import { PlaylistModuleDTO } from '@episto/communication';
 import { useMemo, useState } from 'react';
 
@@ -7,19 +8,6 @@ export const usePlaylistFilterLogic = (playlist: PlaylistModuleDTO[]) => {
         keyword: ''
     });
 
-    const normalizeToClosestEnglishWord = (str: string) => {
-
-        return str
-            .normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, '');
-    };
-
-    const normalize = (str: string) => {
-
-        return normalizeToClosestEnglishWord(str
-            .toLowerCase());
-    };
-
     const playlistFiltered = useMemo(() => {
 
         // if no filters are present, 
@@ -27,7 +15,7 @@ export const usePlaylistFilterLogic = (playlist: PlaylistModuleDTO[]) => {
         if (!playlistFilters)
             return playlist;
 
-        const filterKeyword = normalize(playlistFilters
+        const filterKeyword = normalizeToEnglishLowercase(playlistFilters
             .keyword);
 
         return playlist
@@ -41,7 +29,7 @@ export const usePlaylistFilterLogic = (playlist: PlaylistModuleDTO[]) => {
                 // filter module via keyword
                 const { items: moduleItems, moduleName } = playlistModule;
 
-                const foundInModuleTitle = normalize(moduleName)
+                const foundInModuleTitle = normalizeToEnglishLowercase(moduleName)
                     .includes(filterKeyword);
 
                 return {
@@ -49,9 +37,9 @@ export const usePlaylistFilterLogic = (playlist: PlaylistModuleDTO[]) => {
                     items: foundInModuleTitle
                         ? moduleItems
                         : moduleItems
-                            .filter(({ title, subTitle, videoAudioText }) => normalize(title)
-                                .includes(filterKeyword) || normalize(subTitle)
-                                    .includes(filterKeyword) || normalize(videoAudioText ?? '')
+                            .filter(({ title, subTitle, videoAudioText }) => normalizeToEnglishLowercase(title)
+                                .includes(filterKeyword) || normalizeToEnglishLowercase(subTitle)
+                                    .includes(filterKeyword) || normalizeToEnglishLowercase(videoAudioText ?? '')
                                         .includes(filterKeyword))
                 } as PlaylistModuleDTO;
             })
