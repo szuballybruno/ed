@@ -69,6 +69,7 @@ export const SurveyPage = () => {
     return (
         <>
             <ContentPane
+                noPadding
                 hideNavbar>
 
                 <EpistoFlex2
@@ -79,7 +80,7 @@ export const SurveyPage = () => {
                     <EpistoPaging
                         width={isMobile ? '100vw' : 'calc(100% - 150px)'}
                         height={isMobile ? '100vh' : 'calc(100vh - 100px)'}
-                        maxH={isMobile ? undefined : '800px'}
+                        maxHeight={isMobile ? undefined : '800px'}
                         className="roundBorders largeSoftShadow"
                         alwaysRender={true}
                         maxW="1400px"
