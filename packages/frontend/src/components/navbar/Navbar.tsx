@@ -45,7 +45,7 @@ const Navbar = memo(({
             boxShadow="none"
             borderRadius={0}
             bgColor="unset"
-            padding={isLowHeight ? '0 20px' : '20px 40px'}>
+            padding={isLowHeight ? '10px 20px' : '20px 40px'}>
 
             <DesktopNavbar
                 backgroundContent={backgroundContent}
