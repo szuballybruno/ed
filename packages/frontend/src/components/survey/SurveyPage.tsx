@@ -6,6 +6,7 @@ import { startUserGuide } from '../../services/core/userGuidingService';
 import { Environment } from '../../static/Environemnt';
 import { usePaging } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { ContentPane } from '../pageRootContainer/ContentPane';
 import { useRefetchUserAsync } from '../system/AuthenticationFrame';
 import { EpistoPaging } from '../universal/EpistoPaging';
@@ -53,24 +54,6 @@ export const SurveyPage = () => {
 
     const SummarySlide = (isCurrent: boolean) => <SurveyWrapper
         currentImage={Environment.getAssetUrl('/images/analysis3D.png')}
-        // description={<EpistoFont isMultiline>
-
-        //     {/* this part should be bolder */}
-        //     <EpistoFont
-        //         style={{ fontWeight: 500 }}>
-
-        //         {translatableTexts.signupPage.summarySlideDescriptionParts[0]}
-        //     </EpistoFont>
-
-        //     {translatableTexts.signupPage.summarySlideDescriptionParts[1]}
-
-        //     {/* this part should be bolder */}
-        //     <EpistoFont
-        //         style={{ fontWeight: 500 }}>
-
-        //         {translatableTexts.signupPage.summarySlideDescriptionParts[2]}
-        //     </EpistoFont>
-        // </EpistoFont>}
         onNext={isInvitedUser ? handleGoToHomePage : undefined}
         nextButtonTitle={isInvitedUser ? translatableTexts.signupPage.goToHomePage : undefined}
         onNavPrevious={() => slidesState.previous()}
@@ -85,27 +68,29 @@ export const SurveyPage = () => {
 
     return (
         <>
-
             <ContentPane
-                align="center"
-                justify="center"
-                hideNavbar
-                padding='20px'>
+                hideNavbar>
 
-                <EpistoPaging
-                    className="roundBorders largeSoftShadow"
-                    alwaysRender={true}
-                    width={isMobile ? '100vw' : 'calc(100% - 150px)'}
-                    maxW="1400px"
-                    height={isMobile ? '100vh' : 'calc(100vh - 100px)'}
-                    background="var(--transparentWhite70)"
-                    maxH={isMobile ? undefined : '800px'}
-                    p="10px"
-                    zIndex="1"
-                    flex="1"
-                    slides={slides}
-                    index={slidesState.currentIndex} />
+                <EpistoFlex2
+                    className="whall"
+                    align="center"
+                    justify="center">
 
+                    <EpistoPaging
+                        width={isMobile ? '100vw' : 'calc(100% - 150px)'}
+                        height={isMobile ? '100vh' : 'calc(100vh - 100px)'}
+                        maxH={isMobile ? undefined : '800px'}
+                        className="roundBorders largeSoftShadow"
+                        alwaysRender={true}
+                        maxW="1400px"
+                        background="var(--transparentWhite70)"
+                        p="10px"
+                        zIndex="1"
+                        flex="1"
+                        slides={slides}
+                        index={slidesState.currentIndex} />
+
+                </EpistoFlex2>
             </ContentPane>
         </>
     );
