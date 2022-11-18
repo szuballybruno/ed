@@ -1,31 +1,24 @@
-import { useXDialogHosterContext } from './XDialoContext';
+import { useCallback, useMemo, useState } from 'react';
 
 export const useXDialogLogic = (key: string, onlyRenderIfOpen: boolean) => {
 
-    const xDialogHoster = useXDialogHosterContext(key);
+    const [isOpen, setIsOpen] = useState(false);
+    const openDialog = useCallback(() => setIsOpen(true), []);
+    const closeDialog = useCallback(() => setIsOpen(false), []);
 
-    const isOpen = xDialogHoster.getOpenState(key);
-
-    const openDialog = () => xDialogHoster.openDialog(key);
-
-    const closeDialog = () => xDialogHoster.closeDialog(key);
-
-    const mountContent = () => xDialogHoster.mountContent(key);
-
-    const unmountContent = () => xDialogHoster.unmountContent(key);
-
-    const getHostElement = () => xDialogHoster.getHostElement(key);
-
-    const bundle = {
+    const bundle = useMemo(() => ({
         key,
         isOpen,
+        onlyRenderIfOpen,
         openDialog,
         closeDialog,
-        mountContent,
-        unmountContent,
-        getHostElement,
-        onlyRenderIfOpen
-    };
+    }), [
+        key,
+        isOpen,
+        onlyRenderIfOpen,
+        openDialog,
+        closeDialog
+    ]);
 
     return bundle;
 };

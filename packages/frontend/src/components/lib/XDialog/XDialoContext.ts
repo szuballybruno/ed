@@ -1,22 +1,9 @@
-import { createContext, useContext, useEffect } from 'react';
-import { useForceUpdate } from '../../../static/frontendHelpers';
-import { XDialogHoster } from './XDialogHoster';
+import { createContext, RefObject, useContext } from 'react';
 
-export const XDialogHosterContext = createContext<XDialogHoster>({} as any);
+export type XDialogContextType = {
+    hosterRef: RefObject<HTMLDivElement>
+}
 
-export const useXDialogHosterContext = (key: string) => {
+export const XDialogHosterContext = createContext<XDialogContextType>({} as any);
 
-    const xDialogHoster = useContext(XDialogHosterContext);
-    const forceUpdate = useForceUpdate();
-
-    useEffect(() => {
-
-        xDialogHoster
-            .addOnUpdateListener(key, forceUpdate);
-
-        return () => xDialogHoster
-            .removeUpdateListener(key);
-    }, [xDialogHoster, forceUpdate, key]);
-
-    return xDialogHoster;
-};
+export const useXDialogHosterContext = () => useContext(XDialogHosterContext);

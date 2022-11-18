@@ -46,6 +46,16 @@
             ],
             "problemMatcher": []
         },
+        // startprod
+        {
+            "label": "startprod",
+            "type": "shell",
+            "command": "yarn startprod",
+            "problemMatcher": [],
+            "presentation": {
+                "group": "run"
+            }
+        },
         // build deps
         {
             "label": "builddeps",

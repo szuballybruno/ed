@@ -1,6 +1,6 @@
 import { FC, PropsWithChildren, ReactNode, useEffect, useMemo } from 'react';
 import { Logger } from '../../static/Logger';
-import { XDialogHost } from '../lib/XDialog/XDialogHost';
+import { XDialogHosterFrame } from '../lib/XDialog/XDialogHosterFrame';
 import { VideoPlayerFullscreenContextFrame } from '../player/watch/videoPlayer/VideoPlayerFullscreenFrame';
 import { AuthenticationFrame } from './AuthenticationFrame';
 import { AutoScrollFrame } from './AutoScrollContext';
@@ -89,7 +89,7 @@ const getFrames = (): FrameType[] => {
         QueryClienProviderFrame,
         RoutingFrame,
         TawkToFrame,
-        XDialogHost,
+        XDialogHosterFrame,
         TitleSetterFrame,
         ServiceContainerFrameWrapper,
         SessionWatcherFrameWrapper,

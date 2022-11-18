@@ -1,30 +1,47 @@
-import { ReactNode, useEffect } from 'react';
+import { ReactNode } from 'react';
 import { createPortal } from 'react-dom';
+import { EpistoFlex2 } from '../../controls/EpistoFlex';
+import { useXDialogHosterContext } from './XDialoContext';
 import { XDialogLogicType } from './XDialogLogic';
 
-export const XDialog = (props: {
+export const XDialog = ({
+    children,
+    logic
+}: {
     children: ReactNode,
     logic: XDialogLogicType
 }) => {
 
-    const { children, logic } = props;
-    const { getHostElement, mountContent, unmountContent } = logic;
+    const hostElementRef = useXDialogHosterContext().hosterRef.current;
+    const renderContent = !logic.onlyRenderIfOpen || logic.isOpen;
+    const contentIsHidden = !logic.onlyRenderIfOpen && !logic.isOpen;
+    const handleClose = logic.closeDialog;
 
-    // mount / unmount from content pool
-    useEffect(() => {
-
-        mountContent();
-        return unmountContent;
-    }, []);
-
-    const hostElement = getHostElement();
-
-    // render 
-    if (!hostElement)
+    if (!hostElementRef || !renderContent)
         return <></>;
 
-    if (!logic.isOpen && logic.onlyRenderIfOpen)
-        return <></>;
+    const content = (
+        <EpistoFlex2
+            zIndex="1000"
+            position="absolute"
+            width='100vw'
+            height='100vh'
+            align='center'
+            justify='center'
+            background='rgb(0,0,0,0.3)'
+            display={contentIsHidden ? 'none' : undefined} >
 
-    return createPortal(children as any, hostElement);
+            <div
+                style={{
+                    position: 'absolute',
+                    width: '100%',
+                    height: '100%'
+                }}
+                onClick={handleClose} />
+
+            {children}
+        </EpistoFlex2 >
+    );
+
+    return createPortal(content, hostElementRef);
 };
