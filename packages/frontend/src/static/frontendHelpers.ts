@@ -347,27 +347,6 @@ type MemoFnType2 = <TProps>(
 
 export const typedMemo: MemoFnType2 = React.memo as any;
 
-export const valueCompareTest = (val: any, name: string) => {
-
-    const prevValName = `prev_val_${name}`;
-    const prevVal = window[prevValName];
-
-    if (val !== prevVal)
-        console.log(`*** ${name} Changed!!!`);
-
-    window[prevValName] = val;
-};
-
-export const valuesCompareTest = (valNames: string[]) => {
-
-    valNames
-        .forEach(name => {
-
-            const val = eval(name);
-            valueCompareTest(val, name);
-        });
-};
-
 /**
  * Value ref compare test, using react's useEffect hook.
  * Logs the label on every ref change - and react refresh trigger of course.

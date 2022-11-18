@@ -10,14 +10,25 @@ const SAMPLE_RATE_SECONDS = 5;
 // the minimum seconds that count as a valid sample
 const MIN_SAMPLE_SIZE_SECONDS = 1;
 
-export const usePlaybackWatcher = (
-    playedSeconds: number,
-    isPlaying: boolean,
+export const usePlaybackWatcher = (props: {
+    playedSeconds: number;
+    isPlaying: boolean;
     onVideoWatchedStateChanged: () => void,
     setMaxWatchedSeconds: (maxWatchedSeconds: number) => void,
     isSamplingEnabled: boolean,
     videoVersionId: Id<'VideoVersion'>,
-    videoPlaybackSessionId: Id<'VideoPlaybackSession'>) => {
+    videoPlaybackSessionId: Id<'VideoPlaybackSession'>
+}) => {
+
+    const {
+        playedSeconds,
+        isPlaying,
+        onVideoWatchedStateChanged,
+        setMaxWatchedSeconds,
+        isSamplingEnabled,
+        videoVersionId,
+        videoPlaybackSessionId
+    } = props;
 
     const [lastSamplePlayedSeconds, setLastSamplePlayedSeconds] = useState(0);
 
@@ -123,6 +134,8 @@ export const usePlaybackWatcher = (
 
         if (!isWatchedStateChanged)
             return;
+
+        Logger.logScoped('PLAYBACK', 'Triggering is watched state change...');
 
         onVideoWatchedStateChanged();
     }, [onVideoWatchedStateChanged, isWatchedStateChanged]);

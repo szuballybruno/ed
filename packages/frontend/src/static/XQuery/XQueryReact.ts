@@ -2,26 +2,30 @@ import { GetParametrizedRouteType, ParametrizedRouteType } from '@episto/communi
 import { useCallback, useMemo } from 'react';
 import { useEventManagerContext } from '../../components/system/EventManagerFrame';
 import { EMPTY_ARRAY } from '../../helpers/emptyArray';
+import { HelperHooks } from '../../helpers/hooks';
 import { useForceUpdate } from '../frontendHelpers';
 import { XQueryCore } from './XQueryCore';
-import { QueryResult, QueryEventData } from './XQueryTypes';
+import { QueryEventData, QueryResult } from './XQueryTypes';
 
 const useXQuery = <TData extends Object>(url: string, query?: any, isEnabled?: boolean): QueryResult<TData | null> => {
 
     const forceUpdate = useForceUpdate();
     const globalEventManager = useEventManagerContext();
 
-    const onQuery = (data: QueryEventData) => {
+    const memoizedQuery = HelperHooks
+        .useMemoize(query);
+
+    const onQuery = useCallback((data: QueryEventData) => {
 
         globalEventManager
             .fireEvent('onquery', data);
-    };
+    }, [globalEventManager]);
 
-    const xQuery = useMemo(() => new XQueryCore<TData>(url, forceUpdate, onQuery), [url, forceUpdate]);
+    const xQuery = useMemo(() => new XQueryCore<TData>(url, forceUpdate, onQuery), [url, onQuery, forceUpdate]);
 
-    const queryState = xQuery.tryQuery(query, isEnabled);
+    const queryState = xQuery.tryQuery(memoizedQuery, isEnabled);
 
-    const refetch = useCallback(() => xQuery.fetchAsync(query, isEnabled), [query, isEnabled, xQuery]);
+    const refetch = useCallback(() => xQuery.fetchAsync(memoizedQuery, isEnabled), [memoizedQuery, isEnabled, xQuery]);
 
     return { ...queryState, refetch };
 };

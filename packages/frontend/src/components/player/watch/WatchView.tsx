@@ -105,22 +105,15 @@ export const WatchView = ({
         paging={descCommentPaging}
         currentItemCode={currentItemCode} />;
 
-    /*   const VideoNotes = () => <PlayerNotes
-           paging={descCommentPaging} />;*/
-
-
-    // const currentQuestionAnswered = answeredQuestionIds
-    //     .some(qid => currentQuestion?.questionId === qid);
-
     const enableNewDialogPopups = () => {
 
         setTimeout(() => setShowNewDialogsEnabled(true), 2000);
     };
 
-    const handleVideoCompletedStateChanged = () => {
+    const handleVideoCompletedStateChanged = useCallback(() => {
 
         refetchPlayerData();
-    };
+    }, [refetchPlayerData]);
 
     // handle autoplay timeout if video ended
     useEffect(() => {
@@ -223,16 +216,16 @@ export const WatchView = ({
         setStillWatchingDilalogMarkers(dialogShowUpSeconds);
     }, [hasQuestions, videoLength]);
 
-
     // playback watcher
-    usePlaybackWatcher(
+    usePlaybackWatcher({
         playedSeconds,
         isPlaying,
-        handleVideoCompletedStateChanged,
         setMaxWatchedSeconds,
-        !isSeeking,
+        isSamplingEnabled: !isSeeking,
+        onVideoWatchedStateChanged: handleVideoCompletedStateChanged,
         videoVersionId,
-        videoPlaybackSessionId);
+        videoPlaybackSessionId
+    });
 
     return <>
 

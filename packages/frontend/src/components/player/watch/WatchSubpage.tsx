@@ -71,7 +71,13 @@ export const WatchSubpage = () => {
 
     const title = videoPlayerData?.title || examPlayerData?.title || modulePlayerData?.name;
     const isDeleted = playerDataError?.code === 'deleted';
-    const isVideoReady = useMemo(() => (playerDataStatus === 'success') && (urlPlaylistItemCode === currentPlaylistItemCode), [playerDataStatus, urlPlaylistItemCode, currentPlaylistItemCode]);
+    const isVideoReady = useMemo(() => {
+
+        if (urlPlaylistItemCode !== currentPlaylistItemCode)
+            return false;
+
+        return true;
+    }, [urlPlaylistItemCode, currentPlaylistItemCode]);
 
     const handleIsScrolledFromTop = () => {
 

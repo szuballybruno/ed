@@ -9,7 +9,8 @@ export const PlayerApiService = {
 
     usePlayerData: (descriptorCode: string) => {
 
-        const queryResult = QueryService.useXQuery<PlayerDataDTO>(apiRoutes.player.getPlayerData, { descriptorCode });
+        const queryResult = QueryService
+            .useXQuery<PlayerDataDTO>(apiRoutes.player.getPlayerData, { descriptorCode });
 
         return {
             playerData: queryResult.data,
