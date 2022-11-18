@@ -14,8 +14,8 @@ import { EpistoDiv } from '../controls/EpistoDiv';
 import { EpistoEntry } from '../controls/EpistoEntry';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
-import { EpistoGrid } from '../controls/EpistoGrid';
 import { ContentPane } from '../pageRootContainer/ContentPane';
+import { GenericBackground } from '../pageRootContainer/GenericBackground';
 import { RootContainerBackground } from '../pageRootContainer/RootContainerBackground';
 import { AuthenticationStateContext, useRefetchUserAsync } from '../system/AuthenticationFrame';
 import { useAuthorizationContext } from '../system/AuthorizationContext';
@@ -159,6 +159,7 @@ const LoginScreen = () => {
     return (
         <>
             <RootContainerBackground>
+
                 <img
                     src={companyDetails?.coverUrl!}
                     style={{
@@ -339,37 +340,13 @@ const LoginScreen = () => {
                                 </EpistoFlex2>
                             </EpistoFlex2>
                         </EpistoFlex2>
-
-
-
                     </LoadingFrame>
                 </EpistoFlex2>
 
-                <EpistoGrid
-                    bgColor={'white'}
-                    position="fixed"
-                    top={'0'}
-                    left={'0'}
-                    w="100vw"
-                    h="100vh"
-                    zIndex="-1"
-                    filter="blur(50px)"
-                    minColumnWidth={'33%'}
-                    gap='0px'
-                    gridTemplateColumns="repeat(3, 1fr)"
-                    auto={'fill'}>
 
-                    {gradients
-                        .map((gradient, index) => {
-                            return <EpistoFlex2
-                                key={index}
-                                padding="20px"
-                                filter="blur(8px)"
-                                background={gradient}>
-
-                            </EpistoFlex2>;
-                        })}
-                </EpistoGrid>
+                <GenericBackground
+                    isFixed
+                    isFullscreenSized />
             </ContentPane>
         </>
     );

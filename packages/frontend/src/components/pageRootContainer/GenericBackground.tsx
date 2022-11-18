@@ -1,21 +1,79 @@
 import { Responsivity } from '../../helpers/responsivity';
+import browser from '../../services/core/browserSniffingService';
 import { gradientBackgroundGenerator } from '../../services/core/gradientBackgroundGenerator';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoGrid } from '../controls/EpistoGrid';
 
-export const GenericBackground = () => {
+export const GenericBackground = (props: {
+    customBaseColor?: string,
+    isFixed?: boolean,
+    isFullscreenSized?: boolean
+}) => {
 
+    const { customBaseColor, isFixed, isFullscreenSized } = props;
     const { isMobile } = Responsivity
         .useIsMobileView();
+    const isIPhone = browser.isIPhone;
 
-    const gradients = gradientBackgroundGenerator(isMobile
-        ? 'rgba(160, 200, 255, 0.1)'
-        : 'rgba(0, 100, 255, 0.1)');
+    const defaultMobileColor = 'rgba(30, 150, 255, 0.1)';
+    const defaultDesktopColor = 'rgba(30, 150, 255, 0.1)';
 
+    /* Getting r,g,b values without the alpha */
+    const regex = /\(([^()]*)(,[^()]*)\)/gm;
+    const defaultMobileBaseColor = regex.exec(defaultMobileColor)![1];
+
+    const plainCustomBaseColor = (() => {
+
+        if (!customBaseColor)
+            return '30, 150, 255';
+
+        const color = regex.exec(customBaseColor);
+
+        if (color && color[1])
+            return color[1];
+
+        return '30, 150, 255';
+    })();
+
+    /* You can set a custom color e.g. for a company */
+    const currentColor = (() => {
+
+        if (isIPhone && !customBaseColor)
+            return 'rgb(' + defaultMobileBaseColor + ')';
+
+        if (isIPhone && customBaseColor)
+            return 'rgb(' + plainCustomBaseColor + ')';
+
+        if (customBaseColor)
+            return customBaseColor;
+
+        if (isMobile)
+            return defaultMobileColor;
+
+        return defaultDesktopColor;
+    })();
+
+    /* Gradient is generated from the current color */
+    const gradients = gradientBackgroundGenerator(currentColor);
+
+    /* iPhone hates every type of gradients */
+    if (isIPhone)
+        return <EpistoFlex2
+            backdropFilter="blur(5px)"
+            position={isFixed ? 'absolute' : undefined}
+            top={isFixed ? '0' : undefined}
+            width={isFullscreenSized ? '100vw' : '100%'}
+            height={isFullscreenSized ? '100vh' : '100%'}
+            opacity='40%'
+            background={'linear-gradient(49deg,' + currentColor + ', white)'} />;
 
     return (
         <EpistoGrid
             bgColor={'white'}
+            position={isFixed ? 'absolute' : undefined}
+            top={isFixed ? '0' : undefined}
+            width={isFullscreenSized ? '100vw' : '100%'}
+            height={isFullscreenSized ? '100vh' : '100%'}
             filter="blur(50px)"
             minColumnWidth={'33%'}
             gap='0px'
