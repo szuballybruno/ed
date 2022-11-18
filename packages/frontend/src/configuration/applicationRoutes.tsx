@@ -1,4 +1,4 @@
-import { CourseUserPresetType, Id } from '@episto/commontypes';
+import { CourseUserPresetType, Id, LeaderboardPeriodType } from '@episto/commontypes';
 import { AdminPanelSettings, Build, Business, Equalizer, Home, Person, School, Search, Settings, Subscriptions } from '@mui/icons-material';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
@@ -36,7 +36,7 @@ export type ApplicationRoutesType = {
         courseRatingRoute: ApplicationRoute<{ courseId: Id<'Course'> }>;
         courseOverviewRoute: ApplicationRoute<{ courseId: Id<'Course'> }>;
     };
-    leaderboardRoute: ApplicationRoute;
+    leaderboardRoute: ApplicationRoute<void, { preset?: LeaderboardPeriodType }>;
     learningRoute: ApplicationRoute & {
         overviewRoute: ApplicationRoute;
         myStatisticsRoute: ApplicationRoute;

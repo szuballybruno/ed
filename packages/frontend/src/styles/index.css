@@ -58,7 +58,8 @@ html {
 }
 
 /* Default style of text elements */
-p, button {
+p,
+button {
     font-size: 1rem;
     font-family: "Raleway", sans-serif !important;
 }
@@ -441,10 +442,6 @@ button {
     box-shadow: 0 0 15px #0000001f
 }
 
-.dataGridExamRow {
-    background: #fff0bd;
-}
-
-.dataGridVideoRow {
-    background: #aad6ff;
+.dataGridHighlightedRow {
+    background: #EEE;
 }

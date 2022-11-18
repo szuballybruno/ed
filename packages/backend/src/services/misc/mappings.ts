@@ -310,7 +310,7 @@ const marray = [
         ),
 
     epistoMappingsBuilder
-        .addArrayMapping(LeaderboardListItemDTO, () => (views: LeaderboardView[], period: LeaderboardPeriodType) => {
+        .addArrayMapping(LeaderboardListItemDTO, ([assetUrlService]) => (views: LeaderboardView[], period: LeaderboardPeriodType) => {
 
             return views
                 .map(x => instantiate<LeaderboardListItemDTO>({
@@ -324,7 +324,8 @@ const marray = [
                         : period === 'weekly'
                             ? x.rankWeek
                             : x.rankMonth,
-                    name: x.username,
+                    avatarUrl: x.avatarFilePath,
+                    username: x.username,
                     userId: x.userId
                 }));
         }),
