@@ -66,6 +66,7 @@ import { VideoPlayerDataView } from '../../models/views/VideoPlayerDataView';
 import { relativeDiffInPercentage, toFullName } from '../../utilities/helpers';
 import { CalculatedTempomatValueType } from '../TempomatService';
 import { UrlService } from '../UrlService';
+import { UserLagbehindStatType } from './types';
 import { XMappingsBuilder } from './XMapperService/XMapperService';
 import { Mutable } from './XMapperService/XMapperTypes';
 
@@ -153,15 +154,32 @@ const marray = [
             });
         }),
     epistoMappingsBuilder
-        .addArrayMapping(UserAdminListDTO, () => (
-            userOverviewViews: (UserOverviewView & {
-                productivityPercentage: number,
-                invertedLagBehind: number | null
-            })[]) => {
+        .addArrayMapping(UserAdminListDTO, () => (views: UserOverviewView[], lagBehindStats: UserLagbehindStatType[]) => {
 
-            return userOverviewViews.map(x => instantiate<UserAdminListDTO>({
-                ...x as UserAdminListDTO
-            }));
+            return views
+                .map(view => {
+
+                    const lagBehindStat = lagBehindStats
+                        .single(x => x.userId === view.userId);
+
+                    return instantiate<UserAdminListDTO>({
+                        userId: view.userId,
+                        companyId: view.companyId,
+                        userEmail: view.userEmail,
+                        signupDate: view.signupDate,
+                        firstName: view.firstName,
+                        lastName: view.lastName,
+                        avatarFilePath: view.avatarFilePath,
+                        summerizedScoreAvg: view.summerizedScoreAvg,
+                        totalSessionLengthSeconds: view.totalSessionLengthSeconds,
+                        engagementPoints: view.engagementPoints,
+                        completedVideoCount: view.completedVideoCount,
+                        reactionTime: view.reactionTime,
+                        username: view.username,
+                        productivityPercentage: lagBehindStat.productivityPercentage,
+                        invertedLagBehind: lagBehindStat.invertedLagBehind,
+                    });
+                });
         }),
     epistoMappingsBuilder
         .addArrayMapping(UserModuleStatsDTO, () => (

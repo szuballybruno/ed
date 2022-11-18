@@ -5,11 +5,12 @@ import { EpistoFont } from './EpistoFont';
 
 export const useEpistoEntryState = (options?: {
     isMandatory?: boolean,
-    validateFunction?: (value: string) => string | null
+    validateFunction?: (value: string) => string | null,
+    defaultValue?: string
 }) => {
 
     // state 
-    const [value, setValue] = useState('');
+    const [value, setValue] = useState(options?.defaultValue ?? '');
     const isDefaultValueRef = useRef(true);
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
@@ -83,27 +84,25 @@ export type EpistoEntryNewPropsType = {
     style?: React.CSSProperties;
 }
 
-export const EpistoEntryNew = forwardRef<HTMLInputElement, EpistoEntryNewPropsType>((props: EpistoEntryNewPropsType, ref) => {
+export const EpistoEntryNew = forwardRef<HTMLInputElement, EpistoEntryNewPropsType>(({
+    label,
+    height,
+    labelVariant,
+    placeholder,
+    disabled,
+    isMultiline,
+    onFocusLost,
+    name,
+    postfix,
+    type,
+    marginTop,
+    flex,
+    style,
+    state
+}: EpistoEntryNewPropsType, ref) => {
 
     const {
-        label,
-        height,
-        labelVariant,
-        placeholder,
-        disabled,
-        isMultiline,
-        onFocusLost,
-        name,
-        postfix,
-        type,
-        marginTop,
-        flex,
-        style,
-        state
-    } = props;
-
-    const {
-        errorMsg: error,
+        errorMsg,
         setValue,
         value
     } = state;
@@ -132,8 +131,8 @@ export const EpistoEntryNew = forwardRef<HTMLInputElement, EpistoEntryNewPropsTy
             placeholder={placeholder}
             name={name}
             value={value}
-            error={!!error}
-            helperText={error}
+            error={!!errorMsg}
+            helperText={errorMsg}
             multiline={isMultiline}
             type={type}
             sx={{

@@ -50,7 +50,11 @@ export const huTranslation: TranslationType = {
                 friday: 'Péntek',
                 saturday: 'Szombat',
                 sunday: 'Vasárnap'
-            }
+            },
+            
+            wrongActivationCode: 'Helytelen aktivációs kód.',
+            wrongEmailAddress: 'Nem megfelelő email cím, vagy már használatban van.',
+            wrongUsername: 'A felhasználó név foglalt, vagy nem megengedett!',
         },
 
         tempomat: {
@@ -111,8 +115,6 @@ export const huTranslation: TranslationType = {
 
         registerViaActivationCodePage: {
             successfulSignup: 'Sikeres regisztráció!',
-            wrongActivationCode: 'Helytelen aktivációs kód.',
-            wrongEmailAddress: 'Nem megfelelő email cím, vagy már használatban van.',
             redeemYourCode: 'Váltsd be egyedi kódodat, hogy belekezdhess a tanulásba',
             activationCode: {
                 label: 'Aktivációs kódod',

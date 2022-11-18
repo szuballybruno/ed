@@ -34,6 +34,7 @@ import { TeacherInfoService } from './TeacherInfoService';
 import { TempomatService } from './TempomatService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { UserStatsService } from './UserStatsService';
+import { UserLagbehindStatType } from './misc/types';
 
 export class UserService {
 
@@ -55,92 +56,147 @@ export class UserService {
      */
     async getUserAdminListAsync(
         principalId: PrincipalId,
-        isToBeReviewed: boolean,
+        showReviewRequiredUsersOnly: boolean,
         companyId: Id<'Company'> | null
     ) {
 
-        // check if user can administrate selected company
+        /**
+         * Check permission 
+         */
         if (companyId)
             await this._authorizationService
                 .checkPermissionAsync(principalId, 'ADMINISTRATE_COMPANY', { companyId: companyId });
 
-        const isCompanyFiltered = companyId
-            ? '='
-            : '!=';
-
-        // TODO: CHECK FOR PERMISSIONS IN VIEW
+        /**
+         * This is sort of a cheat way to filter by companyId, 
+         * since if the company is is null, the equasion will be: != null,
+         * meaning all rows will be returned, regardless of their companyId  
+         */
+        const companyFilterOperator = companyId === null
+            ? '!='
+            : '=';
 
         const companyUserOverviewViews = await this._ormService
             .query(UserOverviewView, { companyId })
-            .where('companyId', isCompanyFiltered, 'companyId')
+            .where('companyId', companyFilterOperator, 'companyId')
             .getMany();
+
+        const userIds = companyUserOverviewViews
+            .map(x => x.userId);
+
+        const userProductivityAndLagBehindStats = await this
+            ._getUserLagBehindStatsAsync(companyUserOverviewViews, companyId);
+
+        const lowFlaggedUserIds = await this
+            ._getLowFlaggedUserIdsAsync(userIds, companyId);
+
+        const filterdViews = showReviewRequiredUsersOnly
+            ? companyUserOverviewViews
+                .filter(x => lowFlaggedUserIds
+                    .any(y => y === x.userId))
+            : companyUserOverviewViews;
+
+        return this
+            ._mapperService
+            .mapTo(UserAdminListDTO, [filterdViews, userProductivityAndLagBehindStats]);
+    }
+
+    /**
+     * getUserLagBehindStatsAsync
+     */
+    private async _getUserLagBehindStatsAsync(
+        companyUserOverviewViews: UserOverviewView[],
+        companyId: Id<'Company'> | null) {
+
+        const userIds = companyUserOverviewViews
+            .map(x => x.userId);
+
+        const userIdLagBehindAvgRows = await this
+            ._getAvgUserLagBehinds(userIds, companyId);
+
+        const userProductivityAndLagBehindStats = companyUserOverviewViews
+            .map(({ userId, averagePerformancePercentage }) => {
+
+                const lagBehindAvg = userIdLagBehindAvgRows
+                    .single(x => x.userId === userId)
+                    .lagBehindAvg;
+
+                const productivityPercentage = this
+                    ._userStatsService
+                    .calculateProductivity(averagePerformancePercentage, lagBehindAvg);
+
+                const invertedLagBehind = lagBehindAvg
+                    ? 100 - lagBehindAvg
+                    : null;
+
+                return instantiate<UserLagbehindStatType>({
+                    userId,
+                    invertedLagBehind,
+                    productivityPercentage
+                });
+            });
+
+        return userProductivityAndLagBehindStats;
+    }
+
+    /**
+     * getLowFlaggedUserIdsAsync
+     */
+    private async _getLowFlaggedUserIdsAsync(userIds: Id<'User'>[], companyId: Id<'Company'> | null) {
+
+        const lowUserFlags = await this
+            ._userStatsService
+            .flagUsersAsync(companyId, 'low');
+
+        const lowFlaggedUserIds = userIds
+            .filter(userId => lowUserFlags
+                .some(userFlag => userFlag.userId === userId));
+
+        return lowFlaggedUserIds;
+    }
+
+    /**
+     * getAvgUserLagBehinds
+     */
+    private async _getAvgUserLagBehinds(userIds: Id<'User'>[], companyId: Id<'Company'> | null) {
+
+        /**
+         * This is sort of a cheat way to filter by companyId, 
+         * since if the company is is null, the equasion will be: != null,
+         * meaning all rows will be returned, regardless of their companyId  
+         */
+        const companyFilterOperator = companyId === null
+            ? '!='
+            : '=';
 
         // TODO: CHECK FOR PERMISSIONS IN VIEW
         const companyTempomatCalculationViews = await this._ormService
             .query(TempomatCalculationDataView, { companyId })
             .innerJoin(User, x => x
-                .on('companyId', isCompanyFiltered, 'companyId')
+                .on('companyId', companyFilterOperator, 'companyId')
                 .and('id', '=', 'userId', TempomatCalculationDataView))
             .where('startDate', 'IS NOT', 'NULL')
             .and('originalPrevisionedCompletionDate', 'IS NOT', 'NULL')
             .getMany();
 
-        const userIdsWithLagBehindAvgs = this._tempomatService
+        const userIdLagBehindAvgRows = this._tempomatService
             .getAvgLagBehindPercentage(companyTempomatCalculationViews);
 
-        const userOverviewViewsWithLagBehind = companyUserOverviewViews
-            .map(x => {
+        const userOverviewViewsWithLagBehind = userIds
+            .map(userId => {
 
-                const lagBehindAvg = userIdsWithLagBehindAvgs
-                    .find(lba => lba.userId === x.userId);
+                const lagBehindAvgRow = userIdLagBehindAvgRows
+                    .firstOrNull(userIdLagBehindAvgRow => userIdLagBehindAvgRow.userId === userId);
+
+                const lagBehindAvg = lagBehindAvgRow?.lagBehindAvg ?? 0;
 
                 return {
-                    ...x,
-                    lagBehindAvg: lagBehindAvg?.lagBehindAvg
-                        ? lagBehindAvg.lagBehindAvg
-                        : 0
+                    userId,
+                    lagBehindAvg
                 };
             });
 
-        const userOverviewWithProductivity = userOverviewViewsWithLagBehind
-            .groupBy(x => x.userId)
-            .map(x => {
-
-                const first = x.first;
-
-                const productivityPercentage = this
-                    ._userStatsService
-                    .calculateProductivity(first.averagePerformancePercentage, first.lagBehindAvg);
-
-                return {
-                    ...first,
-                    productivityPercentage,
-                    invertedLagBehind: first.lagBehindAvg
-                        ? 100 - first.lagBehindAvg
-                        : null
-                };
-            });
-
-        const allFlaggedUsers = await this
-            ._userStatsService
-            .flagUsersAsync(companyId);
-
-        if (!allFlaggedUsers)
-            return;
-
-        const flaggedUsersOnly = userOverviewWithProductivity
-            .filter(x => allFlaggedUsers
-                .some(y => y?.userId === x.userId))
-            .filter(x => allFlaggedUsers
-                .some(y => y?.flag === 'low'));
-
-        return this._mapperService
-            .mapTo(
-                UserAdminListDTO,
-                [isToBeReviewed
-                    ? flaggedUsersOnly
-                    : userOverviewWithProductivity]
-            );
+        return userOverviewViewsWithLagBehind;
     }
 
     /**
@@ -306,7 +362,11 @@ export class UserService {
         dto: UserEditSimpleDTO
     ) {
 
-        const userId = principalId.getId();
+        const userId = principalId
+            .getId();
+
+        await this
+            ._checkIfUsernameTakenAsync(dto.username, userId);
 
         // save user
         await this._ormService
@@ -417,6 +477,10 @@ export class UserService {
         const existingUser = await this.getUserByEmailAsync(user.email);
         if (existingUser)
             throw new ErrorWithCode('User already exists. Email: ' + user.email, 'email_taken');
+
+        // check username 
+        await this
+            ._checkIfUsernameTakenAsync(user.username);
 
         // hash user password
         const hashedPassword = await this
@@ -789,5 +853,21 @@ export class UserService {
         await this
             ._userCourseBridgeService
             .setRequiredCompletionDatesAsync(updatedUserCourseBridges);
+    }
+
+    /**
+     * Check if username is taken or not 
+     */
+    private async _checkIfUsernameTakenAsync(username: string, userId?: Id<'User'>) {
+
+        const user = await this
+            ._ormService
+            .query(User, { username, userId: userId ?? -1 })
+            .where('username', '=', 'username')
+            .and('id', '!=', 'userId')
+            .getOneOrNull();
+
+        if (user)
+            throw new ErrorWithCode('Username is taken!', 'username_invalid');
     }
 }

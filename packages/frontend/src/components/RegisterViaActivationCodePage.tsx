@@ -72,22 +72,26 @@ export const RegisterViaActivationCodePage = () => {
      * Prepare error handler wrapper 
      * for register function
      */
-    const { errorMessage, getWrappedAction } = useTryCatchWrapper(code => {
+    const { errorMessage, getWrappedAction } = useTryCatchWrapper((code, defaultMsg) => {
 
         if (code === 'activation_code_issue') {
 
             activationCodeEntryState
-                .setErrorMsg(translatableTexts.registerViaActivationCodePage.wrongActivationCode);
-
-            return 'PREVENT MSG';
+                .setErrorMsg(translatableTexts.misc.wrongActivationCode);
         }
-
-        if (code === 'email_taken') {
+        else if (code === 'email_taken') {
 
             emailEntryState
-                .setErrorMsg(translatableTexts.registerViaActivationCodePage.wrongEmailAddress);
+                .setErrorMsg(translatableTexts.misc.wrongEmailAddress);
+        }
+        else if (code === 'username_invalid') {
 
-            return 'PREVENT MSG';
+            usernameEntryState
+                .setErrorMsg(translatableTexts.misc.wrongUsername);
+        }
+        else {
+
+            return defaultMsg;
         }
     });
 
@@ -108,7 +112,14 @@ export const RegisterViaActivationCodePage = () => {
             .hasCredentialError;
 
         return entriesValid && pwStateValid;
-    }, [emailEntryState, firstNameEntryState, lastNameEntryState, usernameEntryState, activationCodeEntryState, passwordState]);
+    }, [
+        emailEntryState.value,
+        firstNameEntryState.value,
+        lastNameEntryState.value,
+        usernameEntryState.value,
+        activationCodeEntryState.value,
+        passwordState
+    ]);
 
     const isAllFilled = useMemo(() => {
 
@@ -139,7 +150,7 @@ export const RegisterViaActivationCodePage = () => {
      */
     const handleRegisterAsync = getWrappedAction(async () => {
 
-        if (!getIsAllValid())
+        if (!isAllValid)
             return;
 
         await registerUserViaActivationCodeAsync({
@@ -155,6 +166,8 @@ export const RegisterViaActivationCodePage = () => {
         showNotification(translatableTexts.registerViaActivationCodePage.successfulSignup);
         navigate2(applicationRoutes.homeRoute);
     });
+
+    console.log(usernameEntryState.errorMsg);
 
     return <>
 

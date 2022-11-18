@@ -15,4 +15,5 @@ export class UserAdminListDTO {
     productivityPercentage: number | null;
     invertedLagBehind: number | null;
     reactionTime: number | null;
+    username: string;
 }

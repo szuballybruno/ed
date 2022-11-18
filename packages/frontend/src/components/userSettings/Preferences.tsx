@@ -6,11 +6,13 @@ import { useRequestPasswordChangeAuthenticated } from '../../services/api/passwo
 import { UserApiService } from '../../services/api/UserApiService1';
 import { showNotification, useShowErrorDialog } from '../../services/core/notifications';
 import { Environment } from '../../static/Environemnt';
-import { reloadPage } from '../../static/frontendHelpers';
+import { reloadPage, useTryCatchWrapper } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoEntry } from '../controls/EpistoEntry';
+import { EpistoEntryNew, useEpistoEntryState } from '../controls/EpistoEntryNew';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoLabel } from '../controls/EpistoLabel';
 import { EpistoConinInfo } from '../EpistoCoinInfo';
 import { ProfileImage } from '../ProfileImage';
@@ -25,9 +27,9 @@ const usePreferencesLogic = () => {
     const [firstName, setFirstName] = useState(user.firstName);
     const [lastName, setLastName] = useState(user.lastName);
     const [phoneNumber, setPhoneNumber] = useState(user.phoneNumber);
-    const [username, setUsername] = useState(user.username);
+    // const [username, setUsername] = useState(user.username);
+    const usernameEntryState = useEpistoEntryState({ defaultValue: user.username });
     const [avatarSrc, setAvatarSrc] = useState(user.avatarUrl!);
-
     const [avatarFile, setAvatarFile] = useState<File | null>(null);
 
     const { isMobile } = Responsivity
@@ -47,15 +49,27 @@ const usePreferencesLogic = () => {
     const { refetchAuthHandshake } = useRefetchUserAsync();
 
     const [isPasswordChangeOpen, setIsPasswordChangeOpen] = useState(false);
-
     const [currentPassword, setCurrentPassword] = useState('');
+
+    const { getWrappedAction, errorMessage } = useTryCatchWrapper((code, defaultMsg) => {
+
+        if (code === 'username_invalid') {
+
+            usernameEntryState
+                .setErrorMsg(translatableTexts.misc.wrongUsername);
+        }
+        else {
+
+            return defaultMsg;
+        }
+    });
 
     const isChanged = [
         firstName !== user.firstName,
         lastName !== user.lastName,
         phoneNumber !== user.phoneNumber,
         avatarFile !== null,
-        username !== user.username
+        usernameEntryState.value !== user.username
     ].some(x => x);
 
     const { logoutUserAsync } = useLogout();
@@ -72,37 +86,31 @@ const usePreferencesLogic = () => {
         }
     };
 
-    const saveChangesAsync = async () => {
+    const saveChangesAsync = getWrappedAction(async () => {
 
-        try {
-            if (avatarFile)
-                await postAvatarFileAsync(avatarFile);
+        if (avatarFile)
+            await postAvatarFileAsync(avatarFile);
 
-            await saveUserSimpleAsync({
-                firstName,
-                lastName,
-                phoneNumber,
-                username
-            });
+        await saveUserSimpleAsync({
+            firstName,
+            lastName,
+            phoneNumber,
+            username: usernameEntryState.value
+        });
 
-            // notification
-            showNotification(translatableTexts.preferences.changesHasBeenSaved);
+        // notification
+        showNotification(translatableTexts.preferences.changesHasBeenSaved);
 
-            // reload
-            if (avatarFile) {
+        // reload
+        if (avatarFile) {
 
-                reloadPage();
-            }
-            else {
-
-                refetchAuthHandshake();
-            }
+            reloadPage();
         }
-        catch (e: any) {
+        else {
 
-            showErrorDialog(e);
+            refetchAuthHandshake();
         }
-    };
+    });
 
     const handleRequestChangePasswordAsync = async () => {
 
@@ -148,8 +156,10 @@ const usePreferencesLogic = () => {
         currentPassword,
         setCurrentPassword,
         setIsPasswordChangeOpen,
-        username,
-        setUsername
+        usernameEntryState,
+        // username: usernameEntryState.value,
+        // setUsername: usernameEntryState.setValue,
+        errorMessage
     };
 };
 
@@ -258,8 +268,10 @@ export const Preferences = () => {
         currentPassword,
         setCurrentPassword,
         setIsPasswordChangeOpen,
-        setUsername,
-        username
+        // setUsername,
+        // username,
+        usernameEntryState,
+        errorMessage
     } = usePreferencesLogic();
 
     return (
@@ -335,11 +347,11 @@ export const Preferences = () => {
                         setValue={setPhoneNumber} />
 
                     {/* username */}
-                    <EpistoEntry
+                    <EpistoEntryNew
+                        state={usernameEntryState}
+                        name="username"
                         label={translatableTexts.preferences.username}
-                        value={username}
-                        labelVariant='top'
-                        setValue={setUsername} />
+                        labelVariant='top' />
 
                     {/* password change options */}
                     <PasswordChangeSection
@@ -360,6 +372,12 @@ export const Preferences = () => {
 
                         {translatableTexts.preferences.saveChanges}
                     </EpistoButton>
+
+                    {/* error display */}
+                    {errorMessage && <EpistoFont
+                        color="mildRed">
+                        {errorMessage}
+                    </EpistoFont>}
 
                     {/* Logout */}
                     {isMobile && (

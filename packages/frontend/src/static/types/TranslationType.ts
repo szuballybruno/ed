@@ -39,7 +39,6 @@ export type TranslationType = {
                 countPerDay: string
             };
 
-
             daysOfWeekFromMonday: {
                 monday: string;
                 tuesday: string;
@@ -48,7 +47,11 @@ export type TranslationType = {
                 friday: string;
                 saturday: string;
                 sunday: string;
-            }
+            },
+            
+            wrongActivationCode: string;
+            wrongEmailAddress: string;
+            wrongUsername: string;
         };
 
         tempomat: {
@@ -101,8 +104,6 @@ export type TranslationType = {
 
         registerViaActivationCodePage: {
             successfulSignup: string;
-            wrongActivationCode: string;
-            wrongEmailAddress: string;
             redeemYourCode: string;
             activationCode: {
                 label: string;
