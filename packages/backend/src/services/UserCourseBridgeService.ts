@@ -41,20 +41,56 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
         /**
          * Unset prev current 
          */
-        const prevCurrent = await this
+        await this
+            ._unsetPreviouslyCurrentCourse(userId);
+
+        /**
+         * get isPretestRequired
+         */
+        const isPretestRequired = await this
+            ._getIsPretestRequired(courseId);
+
+        /**
+         * Create new 
+         */
+        await this
+            ._ormService
+            .createAsync(UserCourseBridge, {
+                userId,
+                courseId,
+                courseMode: isPretestRequired ? 'beginner' : 'advanced',
+                creationDate: new Date(),
+                currentItemCode,
+                isCurrent: true,
+                previsionedCompletionDate: null,
+                requiredCompletionDate: null,
+                stageName,
+                startDate,
+                tempomatMode: 'auto'
+            });
+    }
+
+    private async _unsetPreviouslyCurrentCourse(userId: Id<'User'>) {
+
+        const bridgeToPreviouslyCurrentCourse = await this
             ._ormService
             .query(UserCourseBridge, { userId })
             .where('userId', '=', 'userId')
             .and('isCurrent', '=', 'true')
             .getOneOrNull();
 
-        if (prevCurrent)
-            await this
-                ._ormService
-                .save(UserCourseBridge, {
-                    id: prevCurrent.id,
-                    isCurrent: false
-                });
+        if (!bridgeToPreviouslyCurrentCourse)
+            return;
+
+        await this
+            ._ormService
+            .save(UserCourseBridge, {
+                id: bridgeToPreviouslyCurrentCourse.id,
+                isCurrent: false
+            });
+    }
+
+    private async _getIsPretestRequired(courseId: Id<'Course'>) {
 
         const courseWithIsPretestRequired = await this
             ._ormService
@@ -79,24 +115,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
 
         const isPretestRequired = !!courseWithIsPretestRequired?.isPretestRequired;
 
-        /**
-         * Create new 
-         */
-        await this
-            ._ormService
-            .createAsync(UserCourseBridge, {
-                userId,
-                courseId,
-                courseMode: isPretestRequired ? 'beginner' : 'advanced',
-                creationDate: new Date(),
-                currentItemCode,
-                isCurrent: true,
-                previsionedCompletionDate: null,
-                requiredCompletionDate: null,
-                stageName,
-                startDate,
-                tempomatMode: 'auto'
-            });
+        return isPretestRequired;
     }
 
     /**
