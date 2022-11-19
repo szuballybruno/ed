@@ -286,12 +286,15 @@ export const Preferences = () => {
 
             <EpistoFlex2
                 ml={isMobile ? undefined : '10px'}
-                direction='column'
+                direction={'column'}
+                justify={isMobile ? 'space-between' : undefined}
                 align="center"
                 flex="1">
 
                 {/* profile image selector */}
                 <EpistoFlex2
+                    width={isMobile ? '100%' : undefined}
+                    maxWidth={isMobile ? '500px' : undefined}
                     mt='20px'
                     pl='5px'>
 
