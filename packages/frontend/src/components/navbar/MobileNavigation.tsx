@@ -38,7 +38,7 @@ export const MobileNavigation = () => {
 
     return (
         <EpistoFlex2
-            // position='fixed'
+            position='fixed'
             display={isFullscreen ? 'none' : undefined}
             bottom='0'
             left='0'

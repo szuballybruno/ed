@@ -37,7 +37,9 @@ export const ContentPaneRoot = ({
         <EpistoFlex2
             id={ContentPaneRoot.name}
             direction="column"
+            height={isMobile ? 'calc(100vh - 80px)' : undefined}
             flex="1"
+
             overflowY={noOverflow
                 ? 'hidden'
                 : isHeaderFixed
