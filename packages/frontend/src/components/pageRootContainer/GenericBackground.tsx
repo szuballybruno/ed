@@ -5,7 +5,7 @@ import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoGrid } from '../controls/EpistoGrid';
 
 export const GenericBackground = (props: {
-    customBaseColor?: string,
+    customBaseColor?: string | null,
     isFixed?: boolean,
     isFullscreenSized?: boolean
 }) => {
@@ -15,8 +15,8 @@ export const GenericBackground = (props: {
         .useIsMobileView();
     const isIPhone = browser.isIPhone;
 
-    const defaultMobileColor = 'rgba(30, 150, 255, 0.1)';
-    const defaultDesktopColor = 'rgba(30, 150, 255, 0.1)';
+    const defaultMobileColor = 'rgba(80, 150, 255, 0.1)';
+    const defaultDesktopColor = 'rgba(0, 100, 255, 0.1)';
 
     /* Getting r,g,b values without the alpha */
     const regex = /\(([^()]*)(,[^()]*)\)/gm;
@@ -25,14 +25,14 @@ export const GenericBackground = (props: {
     const plainCustomBaseColor = (() => {
 
         if (!customBaseColor)
-            return '30, 150, 255';
+            return '0, 100, 255';
 
         const color = regex.exec(customBaseColor);
 
         if (color && color[1])
             return color[1];
 
-        return '30, 150, 255';
+        return '0, 100, 255';
     })();
 
     /* You can set a custom color e.g. for a company */
@@ -69,11 +69,11 @@ export const GenericBackground = (props: {
 
     return (
         <EpistoGrid
-            bgColor={'white'}
-            position={isFixed ? 'absolute' : undefined}
-            top={isFixed ? '0' : undefined}
-            width={isFullscreenSized ? '100vw' : '100%'}
-            height={isFullscreenSized ? '100vh' : '100%'}
+            bgColor={isMobile ? 'var(--transparentWhite10)' : 'white'}
+            position={'absolute'}
+            top={'0'}
+            width={'100vw'}
+            height={'100vh'}
             filter="blur(50px)"
             minColumnWidth={'33%'}
             gap='0px'

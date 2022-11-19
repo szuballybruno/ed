@@ -17,7 +17,10 @@ export const MobileCourseTile = (props: {
     const { course, navigateToDetailsPage, handlePlayCourse } = props;
 
     return <EpistoFlex2
+        className='roundBorders tinyShadow'
         background='var(--transparentWhite70)'
+        p='5px'
+        mb='5px'
         direction='column'>
 
         <FlexListItem

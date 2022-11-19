@@ -16,7 +16,6 @@ import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { ContentPane } from '../pageRootContainer/ContentPane';
 import { GenericBackground } from '../pageRootContainer/GenericBackground';
-import { RootContainerBackground } from '../pageRootContainer/RootContainerBackground';
 import { AuthenticationStateContext, useRefetchUserAsync } from '../system/AuthenticationFrame';
 import { useAuthorizationContext } from '../system/AuthorizationContext';
 import { LoadingFrame } from '../system/LoadingFrame';
@@ -158,7 +157,7 @@ const LoginScreen = () => {
 
     return (
         <>
-            <RootContainerBackground>
+            {/*           <RootContainerBackground>
 
                 <img
                     src={companyDetails?.coverUrl!}
@@ -168,13 +167,14 @@ const LoginScreen = () => {
                         objectFit: 'cover'
                     }}
                     alt="" />
-            </RootContainerBackground>
+            </RootContainerBackground> */}
 
             <ContentPane
                 hideNavbar
                 noPadding>
 
                 <EpistoFlex2
+                    align='center'
                     justify={'center'}
                     height="100vh"
                     width="100vw">
@@ -188,6 +188,7 @@ const LoginScreen = () => {
                         loadingState={loginUserState}
                         zIndex="6"
                         flex='1'
+                        height='100%'
                         overflow="hidden"
                         position={'relative'}>
 
@@ -224,10 +225,11 @@ const LoginScreen = () => {
                                 direction="column"
                                 align='center'
                                 justify="center"
-                                width={isMobile ? '100%' : undefined}
-                                height={isMobile ? '100%' : undefined}
+                                width={isMobile ? 'calc(100% - 20px)' : undefined}
+                                //height={isMobile ? '100%' : undefined}
                                 p={isMobile ? '20px' : '80px 100px'}
                                 maxH={isMobile ? undefined : 'calc(100% - 100px)'}
+                                maxW={isMobile ? undefined : 'calc(100% - 20px)'}
                                 background="var(--transparentWhite70)"
                                 zIndex="7">
 
@@ -345,6 +347,7 @@ const LoginScreen = () => {
 
 
                 <GenericBackground
+                    customBaseColor={companyDetails?.backdropColor}
                     isFixed
                     isFullscreenSized />
             </ContentPane>
