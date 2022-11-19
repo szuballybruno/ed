@@ -32,7 +32,7 @@ export const SetNewPasswordPage = () => {
     const handleSetNewPassword = async () => {
         try {
 
-            if (!passwordEntryState.validate())
+            if (passwordEntryState.validate())
                 return;
 
             await setNewPassword(passwordEntryState.password, passwordEntryState.passwordCompare, token);
