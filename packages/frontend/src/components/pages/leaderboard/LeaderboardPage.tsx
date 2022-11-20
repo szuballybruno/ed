@@ -210,7 +210,7 @@ export const LeaderboardPage = () => {
         })
         .add({
             field: 'acquiredCoins',
-            headerName: 'Megszerzett EpistoCoin-ok',
+            headerName: isMobile ? 'EpistoCoinok' : 'Megszerzett EpistoCoin-ok',
             width: isMobile ? 180 : 250,
             renderCell: ({ row }) => (
                 <EpistoFlex2

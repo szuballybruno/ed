@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { applicationRoutes } from '../configuration/applicationRoutes';
+import { Responsivity } from '../helpers/responsivity';
 import { useRegisterInvitedUser, useRegisterUser } from '../services/api/registrationApiService';
 import { useNavigation } from '../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../services/core/notifications';
@@ -23,6 +24,7 @@ export const RegistrationPage = () => {
     const token = queryParams.getValue(x => x.token, 'string');
     const isInvitedString = queryParams.getValue(x => x.isInvited, 'string');
     const isInvited = isInvitedString === 'true' ? true : false;
+    const { isMobile } = Responsivity.useIsMobileView();
 
     // state 
     const [isPrivacyPolicyAccepted, setIsPrivacyPolicyAccepted] = useState(false);
@@ -80,7 +82,7 @@ export const RegistrationPage = () => {
     };
 
     return <EpistoFlex2
-        height="100vh"
+        height={isMobile ? 'calc(100vh - 80px)' : '100vh'}
         width='100vw'
         direction="column"
         align="center"

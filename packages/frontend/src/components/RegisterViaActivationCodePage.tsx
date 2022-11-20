@@ -173,6 +173,7 @@ export const RegisterViaActivationCodePage = () => {
 
         <EpistoFlex2
             justify={'center'}
+            align='center'
             py={isMobile ? undefined : '60px'}
             pt={isMobile ? '10px' : undefined}
             overflowY={'scroll'}
@@ -186,7 +187,7 @@ export const RegisterViaActivationCodePage = () => {
                 zIndex="6"
                 width="100%"
                 maxW="1700px"
-                height="fit-content"
+                //height="fit-content"
                 mx={isMobile ? undefined : '100px'}
                 p={isMobile ? '10px' : '50px 150px'}
                 overflow="hidden"
@@ -342,7 +343,7 @@ export const RegisterViaActivationCodePage = () => {
                             }}>
 
                             <a
-                                href="https://pcworld.hu/elofizetes"
+                                href="https://epistogram.com/officekupa"
                                 target="_blank"
                                 rel="noreferrer">
 
