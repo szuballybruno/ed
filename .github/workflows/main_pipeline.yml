@@ -107,7 +107,7 @@ jobs:
           echo JWT_SIGN_SECRET = ${{secrets.JWT_SIGN_SECRET}} >> config/config.env
           echo IS_HOSTED_ON_GCP = true >> config/config.env
           echo IS_LOCALHOST = false >> config/config.env
-          echo VIDEO_COMPLETED_PERCENTAGE = 5 >> config/config.env
+          echo VIDEO_COMPLETED_PERCENTAGE = 80 >> config/config.env
           echo \# ---- fileStorage >> config/config.env
           echo FILE_STORAGE_URL = https://storage.googleapis.com/epistogram_bucket_prod >> config/config.env
           echo FILE_STORAGE_BUCKET_NAME = epistogram_bucket_prod >> config/config.env

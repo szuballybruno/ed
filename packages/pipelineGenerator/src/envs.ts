@@ -125,6 +125,7 @@ export const environemntConfigs: EnvConfigBaseType[] = [
 
         config.misc.DOMAIN_TEMPLATE = 'https://[DOMAIN]';
         config.gcp.MIN_INSTANCE_COUNT = 1;
+        config.misc.VIDEO_COMPLETED_PERCENTAGE = 80;
     }),
 
     // demo
