@@ -236,7 +236,7 @@ const LoginScreen = () => {
 
                                 {/* company logo */}
                                 <img
-                                    src={companyDetails?.logoUrl!}
+                                    src={companyDetails?.logoUrl ? companyDetails.logoUrl : ''}
                                     style={{
                                         width: '250px',
                                         maxHeight: '115px',

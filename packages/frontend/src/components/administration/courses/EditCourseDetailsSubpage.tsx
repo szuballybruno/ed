@@ -25,6 +25,7 @@ import { CourseAdministartionFrame } from './CourseAdministartionFrame';
 import { EditSection } from './EditSection';
 import { instantiate, parseIntOrFail } from '@episto/commonlogic';
 import { EpistoSlider } from '../../controls/EpistoSlider';
+import { translatableTexts } from '../../../static/translatableTexts';
 
 export const EditCourseDetailsSubpage = () => {
 
@@ -222,11 +223,11 @@ export const EditCourseDetailsSubpage = () => {
                 headerButtons={[
                     {
                         action: handleDeleteCourseAsync,
-                        title: 'Torles'
+                        title: translatableTexts.misc.remove
                     },
                     {
                         action: handleSaveCourseAsync,
-                        title: 'Mentés',
+                        title: translatableTexts.misc.save,
                         variant: 'colored'
                     }
                 ]}>
@@ -317,23 +318,26 @@ export const EditCourseDetailsSubpage = () => {
                             {/* is prequiz required  */}
                             <EpistoLabel
                                 isOverline
-                                text='Elozetes tesztek'>
+                                text='Előzetes tesztek'>
 
                                 <EpistoCheckboxLabel
-                                    label="Is pretest required?">
+                                    label="Prequiz és Pretest kitöltendő">
 
                                     <EpistoCheckbox
                                         value={isPretestRequired}
-                                        setValue={x => setState(s => s.isPretestRequired = x)} />
+                                        setValue={x => {
+                                            setState(s => s.isPretestRequired = x);
+                                            setState(s => s.isPrequizRequired = x);
+                                        }} />
                                 </EpistoCheckboxLabel>
 
-                                <EpistoCheckboxLabel
+                                {/* <EpistoCheckboxLabel
                                     label="Is prequiz required?">
 
                                     <EpistoCheckbox
                                         value={isPrequizRequired}
                                         setValue={x => setState(s => s.isPrequizRequired = x)} />
-                                </EpistoCheckboxLabel>
+                                </EpistoCheckboxLabel> */}
                             </EpistoLabel>
                         </EditSection>
 

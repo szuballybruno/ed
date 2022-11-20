@@ -1,4 +1,4 @@
-import { Home, Person, Search } from '@mui/icons-material';
+import { Home, Person, Search, Sort } from '@mui/icons-material';
 import { ReactNode } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { ApplicationRoute } from '../../models/types';
@@ -11,7 +11,7 @@ import { useVideoPlayerFullscreenContext } from '../player/watch/videoPlayer/Vid
 const MobileNavigationButton = (props: {
     title: string,
     icon: ReactNode,
-    to: ApplicationRoute
+    to: ApplicationRoute<any, any>
 }) => {
 
     const isSelected = isCurrentRoute(props.to.route.getAbsolutePath());
@@ -59,6 +59,11 @@ export const MobileNavigation = () => {
                 title='Tanfolyamaim'
                 icon={<Search className='square30' />}
                 to={applicationRoutes.availableCoursesRoute} />
+
+            <MobileNavigationButton
+                title='Top 10 helyezés'
+                icon={<Sort className='square30' />}
+                to={applicationRoutes.leaderboardRoute} />
 
             <MobileNavigationButton
                 title='Profilom'

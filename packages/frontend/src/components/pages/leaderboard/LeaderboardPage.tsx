@@ -3,8 +3,9 @@ import { Id, LeaderboardPeriodType, LeaderboardScopeType } from '@episto/commont
 import { LeaderboardListItemDTO } from '@episto/communication';
 import { useContext, useEffect, useMemo } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
+import { Responsivity } from '../../../helpers/responsivity';
 import { Environment } from '../../../static/Environemnt';
-import { usePaging } from '../../../static/frontendHelpers';
+import { ArrayBuilder, usePaging } from '../../../static/frontendHelpers';
 import { useRouteQuery, useSetQueryParams } from '../../../static/locationHelpers';
 import { useServiceContainerContext } from '../../../static/serviceContainer';
 import { EpistoDataGrid, EpistoDataGridColumnBuilder } from '../../controls/EpistoDataGrid';
@@ -16,7 +17,7 @@ import { ContentPane } from '../../pageRootContainer/ContentPane';
 import { ProfileImage } from '../../ProfileImage';
 import { CurrentUserContext } from '../../system/AuthenticationFrame';
 import { EpistoConinImage } from '../../universal/EpistoCoinImage';
-
+import { MobileHeader } from '../../universal/MobileHeader';
 type LeaderboardPeriodOptionType = {
     name: string,
     key: LeaderboardPeriodType
@@ -71,24 +72,28 @@ export const LeaderboardPage = () => {
 
     const { leaderboardService } = useServiceContainerContext();
     const currentUser = useContext(CurrentUserContext);
+    const { isMobile } = Responsivity.useIsMobileView();
 
     const { setQueryParams } = useSetQueryParams();
 
     const presets = useMemo(() =>
-        instantiate<LeaderboardPeriodOptionType[]>([
-            {
+        instantiate<LeaderboardPeriodOptionType[]>(new ArrayBuilder()
+            .add({
                 name: 'Napi',
                 key: 'daily' as LeaderboardPeriodType
-            },
-            {
+            })
+            .add({
                 name: 'Heti',
                 key: 'weekly' as LeaderboardPeriodType
-            },
-            {
-                name: 'Havi',
-                key: 'monthly' as LeaderboardPeriodType
-            }
-        ]), []);
+            })
+            .addIf(
+                !isMobile,
+                {
+                    name: 'Havi',
+                    key: 'monthly' as LeaderboardPeriodType
+                })
+            .getArray()
+        ), []);
 
     const scopes = useMemo<LeaderboardScopeOptionType[]>(() =>
         instantiate([
@@ -168,14 +173,14 @@ export const LeaderboardPage = () => {
     const columns = new EpistoDataGridColumnBuilder<LeaderboardGridRowType, Id<'User'>>()
         .add({
             field: 'rank',
-            headerName: 'Elért helyezés',
-            width: 120,
+            headerName: isMobile ? '#' : 'Elért helyezés',
+            width: isMobile ? 60 : 120,
             renderCell: ({ value }) => <RankLabelCircle rank={value} />
         })
         .add({
             field: 'username',
             headerName: 'Felhasználó',
-            width: 250,
+            width: isMobile ? 180 : 250,
             renderCell: ({ row }) => (
                 <EpistoFlex2
                     className='whall'
@@ -206,7 +211,7 @@ export const LeaderboardPage = () => {
         .add({
             field: 'acquiredCoins',
             headerName: 'Megszerzett EpistoCoin-ok',
-            width: 250,
+            width: isMobile ? 180 : 250,
             renderCell: ({ row }) => (
                 <EpistoFlex2
                     flex='1'>
@@ -231,24 +236,27 @@ export const LeaderboardPage = () => {
 
                 {/* Header */}
                 <EpistoFlex2
-                    px='20px'
+                    px={isMobile ? undefined : '20px'}
                     mb='10px'
                     align='center'
                     justify='space-between'>
 
-                    <EpistoHeader
-                        variant='giant'
-                        text='Ranglista' />
+                    {isMobile
+                        ? <MobileHeader
+                            title='Ranglista' />
+                        : <EpistoHeader
+                            variant='giant'
+                            text='Ranglista' />}
 
                     <EpistoFlex2>
 
-                        <SegmentedButton
+                        {/*                <SegmentedButton
                             paging={leaderboardScopePaging}
                             variant="default"
                             getDisplayValue={x => x.name} />
 
                         <EpistoFlex2
-                            margin="2px" />
+                            margin="2px" /> */}
 
                         <SegmentedButton
                             paging={leaderboardPeriodPaging}
@@ -262,7 +270,7 @@ export const LeaderboardPage = () => {
                     margin="0 auto 0 auto"
                     direction="column"
                     pb='50px'
-                    px='20px'>
+                    px={isMobile ? undefined : '20px'}>
 
                     <EpistoDataGrid
                         getRowClassName={({ row }) => row.userId === currentUser.id

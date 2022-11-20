@@ -276,7 +276,7 @@ export const Preferences = () => {
 
     return (
         <DashboardSection
-            padding={isMobile ? 0 : undefined}
+            padding={isMobile ? '10px' : undefined}
             title={isMobile ? '' : 'Beállítások'}
             showDivider={!isMobile}
             marginBottom={isMobile ? undefined : '20px'}
@@ -287,7 +287,7 @@ export const Preferences = () => {
             <EpistoFlex2
                 ml={isMobile ? undefined : '10px'}
                 direction={'column'}
-                justify={isMobile ? 'space-between' : undefined}
+                justify={isMobile ? 'center' : undefined}
                 align="center"
                 flex="1">
 
