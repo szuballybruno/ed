@@ -114,25 +114,29 @@ export class CompanyService {
     /**
      * Returns a comapny by domain
      */
-    async getCompanyByDomainAsync(domain: string) {
+    async getCompanyByDomainAsync(requestDomain: string): Promise<Company> {
 
         const companies = await this
             ._ormService
             .query(Company)
             .getMany();
 
-        const mapped = companies
-            .filter(x => x.domain && this
-                ._domainProviderService
-                .applyTemplate(x.domain) === domain);
+        const possibleDomains = companies
+            .filter(comp => !!comp.domain)
+            .map(comp => ({
+                fullDomain: this
+                    ._domainProviderService
+                    .applyTemplate(comp.productionDomainPrefix, comp.domain),
+                comp
+            }));
 
-        const result = mapped
-            .firstOrNull();
+        const result = possibleDomains
+            .firstOrNull(x => x.fullDomain === requestDomain);
 
         if (!result)
-            throw new Error('Domain is unrecognised, no company found pointing to it.');
+            throw new Error(`Domain "${requestDomain}" is unrecognised, no company found pointing to it. Possible domains: ${possibleDomains.map(x => x.fullDomain).join('; ')}`);
 
-        return result;
+        return result.comp;
     }
 
     /**
@@ -236,7 +240,8 @@ export class CompanyService {
                 logoFileId: null,
                 primaryColor: null,
                 secondaryColor: null,
-                isSurveyRequired: true
+                isSurveyRequired: true,
+                productionDomainPrefix: ''
             });
     }
 
@@ -338,7 +343,7 @@ export class CompanyService {
         const comp = comps
             .firstOrNull(x => this
                 ._domainProviderService
-                .applyTemplate(x.domain) === domain);
+                .applyTemplate(x.productionDomainPrefix, x.domain) === domain);
 
         if (!comp)
             return null;

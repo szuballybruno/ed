@@ -30,7 +30,7 @@ export class DomainProviderService {
             .where('id', '=', 'companyId')
             .getSingle();
 
-        return this.applyTemplate(company.domain);
+        return this.applyTemplate(company.productionDomainPrefix, company.domain);
     }
 
     async getAllDomainsAsync(): Promise<string[]> {
@@ -41,19 +41,26 @@ export class DomainProviderService {
             .getMany();
 
         const domains = companies
-            .map(x => this.applyTemplate(x.domain));
+            .map(x => this.applyTemplate(x.productionDomainPrefix, x.domain));
 
         return domains;
     }
 
-    applyTemplate(domain: string) {
+    applyTemplate(productionDomainPrefix: string, domain: string) {
 
-        const token = '[DOMAIN]';
-        const template = this._globalConfig.misc.domainTemplate;
+        const domainToken = '[DOMAIN]';
+        const { domainTemplate, environmentName } = this._globalConfig.misc;
+        const isProduction = environmentName === 'prod';
 
-        const res = template.includes(token)
-            ? template.replace(token, domain)
-            : template;
+        if (!domainTemplate.includes(domainToken))
+            throw new Error(`Invalid domain template: "${domainTemplate}"`);
+
+        const withProductionPrefix = isProduction
+            ? `${productionDomainPrefix}${domain}`
+            : domain;
+
+        const res = domainTemplate
+            .replace(domainToken, withProductionPrefix);
 
         return res;
     }

@@ -32,6 +32,10 @@ export class Company {
 
     @Column()
     @XViewColumn()
+    productionDomainPrefix: string;
+
+    @Column()
+    @XViewColumn()
     isSurveyRequired: boolean;
 
     @Column({ type: 'varchar', nullable: true })
