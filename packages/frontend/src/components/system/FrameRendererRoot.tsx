@@ -17,7 +17,6 @@ import { ProgressierFrame } from './ProgressierFrame';
 import { QuerySubscriptionFrame } from './QuerySubscriptionFrame';
 import { ServiceContainerFrame } from './ServiceContainerFrame';
 import { SessionWatcherFrame } from './SessionWatcher';
-import { TawkToFrame } from './TawkToFrame';
 import { TitleSetterFrame } from './TitleSetterFrame';
 import { UserGuidingFrame } from './UserGuidingFrame';
 
@@ -88,7 +87,7 @@ const getFrames = (): FrameType[] => {
         LocalizationFrame,
         QueryClienProviderFrame,
         RoutingFrame,
-        TawkToFrame,
+        // TawkToFrame,
         XDialogHosterFrame,
         TitleSetterFrame,
         ServiceContainerFrameWrapper,

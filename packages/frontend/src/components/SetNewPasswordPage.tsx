@@ -1,6 +1,6 @@
 import { applicationRoutes } from '../configuration/applicationRoutes';
 import { Responsivity } from '../helpers/responsivity';
-import { CompanyApiService } from '../services/api/CompanyApiService1';
+import { CompanyApiService } from '../services/api/CompanyApiService';
 import { useSetNewPassword } from '../services/api/passwordChangeApiService';
 import { useNavigation } from '../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../services/core/notifications';
@@ -20,6 +20,7 @@ export const SetNewPasswordPage = () => {
     const token = useRouteQuery(applicationRoutes.setNewPasswordRoute)
         .getValue(x => x.token, 'string');
 
+    console.log('asd');
     const { companyDetails } = CompanyApiService
         .useCompanyDetailsByDomain();
 

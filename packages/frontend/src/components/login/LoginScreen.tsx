@@ -3,7 +3,7 @@ import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { Responsivity } from '../../helpers/responsivity';
 import { AuthenticationStateType, useLogInUser } from '../../services/api/authenticationApiService';
-import { CompanyApiService } from '../../services/api/CompanyApiService1';
+import { CompanyApiService } from '../../services/api/CompanyApiService';
 import { useNavigation } from '../../services/core/navigatior';
 import { useShowErrorDialog } from '../../services/core/notifications';
 import { useQueryVal } from '../../static/locationHelpers';
@@ -22,7 +22,7 @@ import { LoadingFrame } from '../system/LoadingFrame';
 import { useEpistoDialogLogic } from '../universal/epistoDialog/EpistoDialogLogic';
 import { LoginPasswordResetDialog } from './LoginPasswordResetDialog';
 
-const LoginScreen = () => {
+export const LoginScreen = () => {
 
     // util
     const { navigate2, navigateToHref } = useNavigation();
@@ -47,13 +47,15 @@ const LoginScreen = () => {
 
     // http 
     const { loginUserAsync, loginUserState } = useLogInUser();
-    const { companyDetails: cdres } = CompanyApiService.useCompanyDetailsByDomain();
 
-    const backdropColor = cdres?.backdropColor ?? 'white';
-    const primaryColor = cdres?.primaryColor ?? 'white';
-    const secondaryColor = cdres?.secondaryColor ?? 'white';
-    const logoUrl = cdres?.logoUrl ?? '';
-    const coverUrl = cdres?.coverUrl ?? '';
+    const qres = CompanyApiService
+        .useCompanyDetailsByDomain();
+
+    const backdropColor = qres.companyDetails?.backdropColor ?? 'white';
+    const primaryColor = qres.companyDetails?.primaryColor ?? 'white';
+    const secondaryColor = qres.companyDetails?.secondaryColor ?? 'white';
+    const logoUrl = qres.companyDetails?.logoUrl ?? '';
+    const coverUrl = qres.companyDetails?.coverUrl ?? '';
 
     // func
     const handleLoginUserAsync = async () => {
@@ -70,8 +72,6 @@ const LoginScreen = () => {
             await refetchAuthHandshake();
         }
         catch (error: any) {
-
-            console.log(error);
 
             if (!error)
                 return;
@@ -156,8 +156,6 @@ const LoginScreen = () => {
             document.removeEventListener('keydown', onKeydown);
         };
     }, []);
-
-    console.log(coverUrl);
 
     return (
         <>
@@ -348,5 +346,3 @@ const LoginScreen = () => {
         </>
     );
 };
-
-export default LoginScreen;

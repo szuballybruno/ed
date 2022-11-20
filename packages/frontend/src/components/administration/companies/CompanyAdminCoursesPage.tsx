@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
-import { CompanyApiService } from '../../../services/api/CompanyApiService1';
+import { CompanyApiService } from '../../../services/api/CompanyApiService';
 import { showNotification } from '../../../services/core/notifications';
 import { CompanyAssociatedCourseDTO } from '@episto/communication';
 import { Id } from '@episto/commontypes';

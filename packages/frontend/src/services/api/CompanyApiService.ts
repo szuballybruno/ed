@@ -1,13 +1,8 @@
-import { CompanyEditDataDTO } from '@episto/communication';
-import { CompanyDTO } from '@episto/communication';
-import { apiRoutes } from '@episto/communication';
+import { Id } from '@episto/commontypes';
+import { apiRoutes, CompanyAssociatedCourseDTO, CompanyDTO, CompanyEditDataDTO, CompanyPublicDTO, RoleAssignCompanyDTO } from '@episto/communication';
+import { useCallback } from 'react';
 import { QueryService } from '../../static/XQuery/XQueryReact';
 import { usePostDataUnsafe, usePostMultipartDataUnsafe } from '../core/httpClient';
-import { RoleAssignCompanyDTO } from '@episto/communication';
-import { Id } from '@episto/commontypes';
-import { useCallback } from 'react';
-import { CompanyPublicDTO } from '@episto/communication';
-import { CompanyAssociatedCourseDTO } from '@episto/communication';
 
 const useCompaniesAdmin = () => {
 
@@ -97,15 +92,16 @@ const useAvailableCompaniesForRoleCreation = () => {
     };
 };
 
-const useCompanyDetailsByDomain = () => {
+const useCompanyDetailsByDomain = (isEnabled?: boolean) => {
 
     const domain = window.location.origin;
-    const { data, state, error } = QueryService.useXQuery<CompanyPublicDTO>(apiRoutes.companies.getCompanyDetailsByDomain, { domain });
-    
+    const qr = QueryService
+        .useXQuery<CompanyPublicDTO>(apiRoutes.companies.getCompanyDetailsByDomain, { domain }, isEnabled);
+
     return {
-        companyDetails: data,
-        companyDetailsError: error,
-        companyDetailsState: state
+        companyDetails: qr.data,
+        companyDetailsError: qr.error,
+        companyDetailsState: qr.state
     };
 };
 

@@ -1,7 +1,7 @@
 import { House } from '@mui/icons-material';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ButtonType, LoadingStateType } from '../../../models/types';
-import { CompanyApiService } from '../../../services/api/CompanyApiService1';
+import { CompanyApiService } from '../../../services/api/CompanyApiService';
 import { usePermissionsList } from '../../../services/api/permissionsApiService';
 import { CompanyDTO } from '@episto/communication';
 import { PermissionListDTO } from '@episto/communication';

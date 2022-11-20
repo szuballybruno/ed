@@ -922,13 +922,15 @@ export const getErrorTypeByHTTPCode = (code: number): ErrorCodeType => {
 export const useForceUpdate = () => {
 
     // integer state
-    const [, setValue] = useState({});
+    const [value, setValue] = useState(0);
 
     // update the state to force render
     const forceUpdate = useCallback(() => {
 
-        setValue({});
+        setValue(x => x + 1);
     }, []);
+
+    (window as any)._rand_value_lol_hmm = value;
 
     return forceUpdate;
 };

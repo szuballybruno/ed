@@ -1,33 +1,75 @@
 import { GetParametrizedRouteType, ParametrizedRouteType } from '@episto/communication';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useEventManagerContext } from '../../components/system/EventManagerFrame';
 import { EMPTY_ARRAY } from '../../helpers/emptyArray';
 import { HelperHooks } from '../../helpers/hooks';
-import { useForceUpdate } from '../frontendHelpers';
 import { XQueryCore } from './XQueryCore';
-import { QueryEventData, QueryResult } from './XQueryTypes';
+import { GlobalQueryStateType, QueryEventType, QueryHookResultType, QueryStateType } from './XQueryTypes';
 
-const useXQuery = <TData extends Object>(url: string, query?: any, isEnabled?: boolean): QueryResult<TData | null> => {
+const useXQuery = <TData extends Object>(url: string, query?: any, isEnabled?: boolean): QueryHookResultType<TData | null> => {
 
-    const forceUpdate = useForceUpdate();
+    const defState = useMemo(() => XQueryCore.getState(url), [url]);
+    const [result, setResult] = useState<QueryStateType>(defState.qr);
+
     const globalEventManager = useEventManagerContext();
 
     const memoizedQuery = HelperHooks
         .useMemoize(query);
 
-    const onQuery = useCallback((data: QueryEventData) => {
+    const onQuery = useCallback((data: QueryEventType) => {
 
         globalEventManager
             .fireEvent('onquery', data);
     }, [globalEventManager]);
 
-    const xQuery = useMemo(() => new XQueryCore<TData>(url, forceUpdate, onQuery), [url, onQuery, forceUpdate]);
+    const handleChange = useCallback((state: GlobalQueryStateType) => {
 
-    const queryState = xQuery.tryQuery(memoizedQuery, isEnabled);
+        const res = {
+            ...state.qr
+        };
 
-    const refetch = useCallback(() => xQuery.fetchAsync(memoizedQuery, isEnabled), [memoizedQuery, isEnabled, xQuery]);
+        console.log('Settings result to: ', res);
 
-    return { ...queryState, refetch };
+        setResult(res);
+
+        onQuery({
+            ...state.qr,
+            url: state.url
+        });
+    }, [setResult, onQuery]);
+
+    const xQueryCore = useMemo(() => new XQueryCore<TData>(url), [url]);
+
+    useEffect(() => {
+
+        return () => {
+
+            xQueryCore.destroy();
+        };
+    }, [xQueryCore]);
+
+    useEffect(() => {
+
+        xQueryCore
+            .setOnChangeCallback(handleChange);
+    }, [xQueryCore, handleChange]);
+
+    // ping xquery core on every render 
+    xQueryCore
+        .tryQuery(url, memoizedQuery, isEnabled);
+
+    const refetch = useCallback(async () => {
+
+        await xQueryCore
+            .refetchAsync(url, memoizedQuery, isEnabled);
+    }, [url, memoizedQuery, isEnabled, xQueryCore]);
+
+    const finalResult = useMemo<QueryHookResultType<TData | null>>(() => ({
+        ...result,
+        refetch
+    }), [result, refetch]);
+
+    return finalResult;
 };
 
 const useXQueryParametrized = <
@@ -35,12 +77,12 @@ const useXQueryParametrized = <
     TRoute extends ParametrizedRouteType<any>>(
         route: TRoute,
         query?: GetParametrizedRouteType<TRoute>['query'],
-        isEnabled?: boolean): QueryResult<TData | null> => {
+        isEnabled?: boolean): QueryHookResultType<TData | null> => {
 
     return useXQuery(route as string, query, isEnabled);
 };
 
-const useXQueryArray = <TData>(url: string, queryParams?: any, isEnabled?: boolean): QueryResult<TData[]> => {
+const useXQueryArray = <TData>(url: string, queryParams?: any, isEnabled?: boolean): QueryHookResultType<TData[]> => {
 
     const { data, ...qr } = useXQuery<TData[]>(url, queryParams, isEnabled);
 
@@ -56,7 +98,7 @@ const useXQueryArrayParametrized = <
         data: { new(): TData },
         route: TRoute,
         query?: GetParametrizedRouteType<TRoute>['query'],
-        isEnabled?: boolean): QueryResult<TData[]> => {
+        isEnabled?: boolean): QueryHookResultType<TData[]> => {
 
     return useXQueryArray(route as string, query, isEnabled);
 };

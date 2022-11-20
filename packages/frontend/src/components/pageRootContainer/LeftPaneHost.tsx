@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { Responsivity } from '../../helpers/responsivity';
-import { CompanyApiService } from '../../services/api/CompanyApiService1';
+import { CompanyApiService } from '../../services/api/CompanyApiService';
 import { useNavigation } from '../../services/core/navigatior';
 import { Environment } from '../../static/Environemnt';
 import { ObjectComparer } from '../../static/objectComparer';

@@ -1,96 +1,172 @@
 import { httpGetAsync } from '../../services/core/httpClient';
 import { Logger } from '../Logger';
-import { XQueryGlobalState } from './XQueryGlobalState';
-import { GlobalQueryStateType, QueryEventData, QueryState } from './XQueryTypes';
+import { GlobalQueryStateType, OnChangeListenerType, QueryStateType } from './XQueryTypes';
 
+const idleState: QueryStateType = {
+    data: null,
+    error: null,
+    state: 'idle'
+};
 
 export class XQueryCore<T> {
 
-    private _idleState: QueryState<T | null> = {
-        data: null,
-        error: null,
-        state: 'idle'
-    };
+    static globalStates: { [K: string]: GlobalQueryStateType } = {};
+    static onChangeListeners: [string, OnChangeListenerType][] = [];
 
-    constructor(
-        private _url,
-        private _onChange: () => void,
-        private _execOnQueryEvent: (data: QueryEventData) => void) {
+    static setState(state: GlobalQueryStateType) {
+
+        Logger.logScoped('QUERY', `-- state changed to: ${state.qr.state}!`);
+
+        XQueryCore
+            .globalStates[state.url] = state;
+
+        XQueryCore
+            .onChangeListeners
+            .filter(x => x[0] === state.url)
+            .forEach(x => x[1](state));
     }
 
-    tryQuery(query: any, isEnabled?: boolean): QueryState<T | null> {
+    static getState(url: string) {
 
-        const url = this._url;
-
-        const queryRes = (() => {
-
-            Logger.logScoped('QUERY', `[${url}] Querying begin...`);
-
-            // get state from global store 
-            const cachedState = XQueryGlobalState
-                .getState(url);
-
-            // process query object 
-            const newQueryParams = this
-                ._processQueryObj(query);
-
-            /**
-             * If querying is disabled 
-             * return last state or idle 
-             */
-            const queryingEnabled = isEnabled === false ? false : true;
-            if (!queryingEnabled) {
-
-                Logger.logScoped('QUERY', `-- [${url}] Query is not enabled.`);
-
-                return this._idleState;
-            }
-
-            /**
-             * Never set cache - meaning query is still in IDLE state
-             */
-            if (!cachedState) {
-
-                this.fetchAsync(newQueryParams, queryingEnabled);
-                return this._idleState;
-            }
-
-            /**
-             * If has been queried before, but querying again, 
-             * and is currently loading, 
-             * return last cahced state
-             */
-            if (cachedState?.qr?.state === 'loading') {
-
-                Logger.logScoped('QUERY', `-- [${url}] Query is already in loading state.`);
-                return cachedState.qr;
-            }
-
-            /**
-             * Check if old cache is still valid 
-             */
-            if (!this._isCacheValid(url, newQueryParams, cachedState.params)) {
-
-                // fetch data
-                this.fetchAsync(newQueryParams, isEnabled);
-            }
-
-            /**
-             * No exceptional state has been found, 
-             * returning last cached data
-             */
-            Logger.logScoped('QUERY', `-- [${url}] Old data is still valid. `);
-            return cachedState.qr;
-        })();
-
-        Logger.logScoped('QUERY', `-- [${url}] Result: ${queryRes.data === null ? 'null' : ''}`, queryRes.data);
-
-        return queryRes;
+        return XQueryCore
+            .globalStates[url] ?? idleState;
     }
 
-    async fetchAsync(queryObject: any, isEnabled?: boolean) {
+    private _onChangeCallback: OnChangeListenerType | null = null;
+    private _subscriptionFn: OnChangeListenerType | null = null;
 
-        const url = this._url;
+    constructor(url) {
+
+        this._subscriptionFn = this
+            ._executeOnChange
+            .bind(this);
+
+        XQueryCore
+            .onChangeListeners
+            .push([url, this._subscriptionFn]);
+    }
+
+    tryQuery(
+        url: string,
+        query: any,
+        isEnabled?: boolean): void {
+
+        const setState = (newState: GlobalQueryStateType) => XQueryCore
+            .setState(newState);
+
+        const state = XQueryCore
+            .getState(url);
+
+        // process query object 
+        const newQueryParams = this
+            ._processQueryObj(query);
+
+        /**
+         * If querying is disabled 
+         * return last state or idle 
+         */
+        const queryingEnabled = isEnabled === false ? false : true;
+        if (!queryingEnabled) {
+
+            // Logger.logScoped('QUERY', `-- [${url}] Query is not enabled.`);
+            return;
+        }
+
+        /**
+         * Never set cache - meaning query is still in IDLE state
+         */
+        if (!state) {
+
+            Logger.logScoped('QUERY', `-- [${url}] Cache not found, fetching...`);
+            this._fetchAsync({
+                state,
+                setState,
+                url,
+                isEnabled,
+                queryObject: newQueryParams
+            });
+            return;
+        }
+
+        /**
+         * If has been queried before, but querying again, 
+         * and is currently loading, 
+         * return last cached state
+         * -- if tying to query multiple times at once, do nothing 
+         */
+        if (state?.qr?.state === 'loading') {
+
+            // Logger.logScoped('QUERY', `-- [${url}] Query is already in loading state.`);
+            return;
+        }
+
+        /**
+         * Check if old cache is still valid 
+         * -- if old cache is not valid, fetch!
+         */
+        if (!this._isCacheValid(url, newQueryParams, state.params)) {
+
+            Logger.logScoped('QUERY', `-- [${url}] Cache is invalid, fetching...`);
+            this._fetchAsync({
+                state,
+                setState,
+                url,
+                isEnabled,
+                queryObject: newQueryParams
+            });
+            return;
+        }
+    }
+
+    async refetchAsync(
+        url: string,
+        queryObject: any,
+        isEnabled?: boolean) {
+
+        const setState = (newState: GlobalQueryStateType) => XQueryCore
+            .setState(newState);
+
+        const state = XQueryCore
+            .getState(url);
+
+        await this
+            ._fetchAsync({
+                state,
+                setState,
+                url,
+                queryObject,
+                isEnabled
+            });
+    }
+
+    setOnChangeCallback(onChange: (state: GlobalQueryStateType) => void) {
+
+        this._onChangeCallback = onChange;
+    }
+
+    destroy() {
+
+        this._onChangeCallback = null;
+
+        XQueryCore
+            .onChangeListeners = XQueryCore
+                .onChangeListeners
+                .filter(x => x[1] !== this._subscriptionFn);
+    }
+
+    private async _fetchAsync({
+        queryObject,
+        setState,
+        state,
+        url,
+        isEnabled
+    }: {
+        state: GlobalQueryStateType,
+        setState: (state: GlobalQueryStateType) => void,
+        url: string,
+        queryObject: any,
+        isEnabled?: boolean
+    }) {
 
         // check if querying is enabled 
         const queryingEnabled = isEnabled === false ? false : true;
@@ -100,13 +176,8 @@ export class XQueryCore<T> {
             return;
         }
 
-        // get state from global store 
-        const state = XQueryGlobalState
-            .getState(url);
-
-        Logger.logScoped('QUERY', `-- [${url}] Fetching...`);
-
-        this._setGlobalState(url, {
+        setState({
+            url,
             params: queryObject,
             qr: {
                 state: 'loading',
@@ -120,7 +191,8 @@ export class XQueryCore<T> {
             // fetch data
             const data = await httpGetAsync(url, queryObject);
 
-            this._setGlobalState(url, {
+            setState({
+                url,
                 params: queryObject,
                 qr: {
                     state: 'success',
@@ -131,7 +203,8 @@ export class XQueryCore<T> {
         }
         catch (e: any) {
 
-            this._setGlobalState(url, {
+            setState({
+                url,
                 params: queryObject,
                 qr: {
                     state: 'error',
@@ -142,9 +215,13 @@ export class XQueryCore<T> {
         }
     }
 
-    private _isCacheValid(url: string, newQueryParams: any, cachedQueryParams: any): boolean {
+    private _executeOnChange(state: GlobalQueryStateType) {
 
-        // Logger.logScoped('QUERY', `-- Comparing new/cahced query params: ${JSON.stringify(newQueryParams)} - ${JSON.stringify(cachedQueryParams)}`);
+        if (this._onChangeCallback)
+            this._onChangeCallback(state);
+    }
+
+    private _isCacheValid(url: string, newQueryParams: any, cachedQueryParams: any): boolean {
 
         if (!cachedQueryParams)
             return false;
@@ -179,16 +256,5 @@ export class XQueryCore<T> {
             .filter(key => query[key] !== undefined)
             .forEach(key => obj[key] = query[key]);
         return obj;
-    }
-
-    private _setGlobalState(url: string, newState: GlobalQueryStateType) {
-
-        // set new state
-        XQueryGlobalState
-            .setState(url, newState);
-
-        // call events
-        this._onChange();
-        this._execOnQueryEvent({ ...newState.qr, route: url });
     }
 }

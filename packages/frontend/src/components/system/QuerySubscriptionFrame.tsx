@@ -5,7 +5,7 @@ import { useNavigation } from '../../services/core/navigatior';
 import { PropsWithChildren } from '../../static/frontendHelpers';
 import { Logger } from '../../static/Logger';
 import { XEventManagerReact } from '../../static/XEventManager/XEventManagerReact';
-import { QueryEventData } from '../../static/XQuery/XQueryTypes';
+import { QueryEventType } from '../../static/XQuery/XQueryTypes';
 import { useCurrentCourseItemCodeContext } from './CurrentCourseItemFrame';
 import { useEventManagerContext } from './EventManagerFrame';
 
@@ -25,7 +25,7 @@ export const QuerySubscriptionFrame = ({ children }: PropsWithChildren) => {
             globalEventManager,
             'onquery',
             `${QuerySubscriptionFrame.name}-'noPermissionWatcher'`,
-            (x: QueryEventData) => {
+            (x: QueryEventType) => {
 
                 const { navigate2 } = callbackParamsRef.current;
 
@@ -41,11 +41,11 @@ export const QuerySubscriptionFrame = ({ children }: PropsWithChildren) => {
             globalEventManager,
             'onquery',
             `${QuerySubscriptionFrame.name}-'refetchCurrentCourseItemCode'`,
-            (x: QueryEventData) => {
+            (x: QueryEventType) => {
 
                 const { refetchCurrentCourseItemCode } = callbackParamsRef.current;
 
-                if (x.route === apiRoutes.player.getPlayerData && x.state === 'success') {
+                if (x.url === apiRoutes.player.getPlayerData && x.state === 'success') {
 
                     Logger.logScoped('EVENTS', 'Player data successfully retrieved, updating current item code...');
                     refetchCurrentCourseItemCode();

@@ -5,7 +5,7 @@ import CourseDetailsPage from './components/courseDetails/CourseDetailsPage';
 import { ShopPage } from './components/epistoShop/ShopPage';
 import HomePage from './components/home/HomePage';
 import LearningInsightsPage from './components/learningInsights/LearningInsightsPage';
-import LoginScreen from './components/login/LoginScreen';
+import { LoginScreen } from './components/login/LoginScreen';
 import NotFound from './components/notFound/NotFound';
 import { LeaderboardPage } from './components/pages/leaderboard/LeaderboardPage';
 import { PlayerPage } from './components/player/PlayerPage';

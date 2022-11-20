@@ -1,5 +1,5 @@
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
-import { CompanyApiService } from '../../../services/api/CompanyApiService1';
+import { CompanyApiService } from '../../../services/api/CompanyApiService';
 import { parseIntOrNull } from '../../../static/frontendHelpers';
 import { useRouteParams } from '../../../static/locationHelpers';
 import { EpistoButton } from '../../controls/EpistoButton';

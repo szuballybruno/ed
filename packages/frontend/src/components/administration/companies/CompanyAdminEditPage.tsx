@@ -1,7 +1,7 @@
 import { Save } from '@mui/icons-material';
 import { memo, useCallback, useEffect } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
-import { CompanyApiService } from '../../../services/api/CompanyApiService1';
+import { CompanyApiService } from '../../../services/api/CompanyApiService';
 import { showNotification } from '../../../services/core/notifications';
 import { CompanyEditDataDTO } from '@episto/communication';
 import { usePostCallback, useStateObject } from '../../../static/frontendHelpers';

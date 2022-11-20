@@ -1,6 +1,6 @@
 import { Id } from '@episto/commontypes';
 import { ActivationCodeListDTO } from '@episto/communication';
-import { CompanyApiService } from '../../../services/api/CompanyApiService1';
+import { CompanyApiService } from '../../../services/api/CompanyApiService';
 import { EpistoIcons } from '../../../static/EpistoIcons';
 import { useServiceContainerContext } from '../../../static/serviceContainer';
 import { EpistoButton } from '../../controls/EpistoButton';
