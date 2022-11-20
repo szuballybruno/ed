@@ -2,13 +2,13 @@ $src_pass= 'epistogram'
 $src_host= '34.118.107.79'
 $src_port= '5432'
 $src_user= 'dev_service_user'
-$src_db_name= 'epistogram_DEV'
+$src_db_name= 'epistogram_PROD'
 
 $dest_pass= 'epistogram'
 $dest_host= '34.118.107.79'
 $dest_port= '5432'
 $dest_user= 'dev_service_user'
-$dest_db_name= 'epistogram_PROD'
+$dest_db_name= 'epistogram_DEMO'
 
 .\pgtransfer.ps1 `
     -src_pass $src_pass `
