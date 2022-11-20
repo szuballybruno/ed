@@ -185,11 +185,10 @@ export const RegisterViaActivationCodePage = () => {
                 zIndex="6"
                 width="100%"
                 maxW="1700px"
-                //height="fit-content"
                 mx={isMobile ? undefined : '100px'}
                 my={'20px'}
                 p={isMobile ? '10px' : '50px 150px'}
-                overflow={isMobile ? undefined : 'hidden'}
+                overflow={isMobile ? 'visible' : 'hidden'}
                 position={'relative'}>
 
                 <EpistoFlex2

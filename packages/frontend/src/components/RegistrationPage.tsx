@@ -101,7 +101,6 @@ export const RegistrationPage = () => {
             padding="30px"
             alignItems="center"
             justifyContent={'center'}
-            pb={isIPhone ? '40px' : 0}
             className="roundBorders"
             boxShadow="#00000024 10px 30px 50px 0px">
 
