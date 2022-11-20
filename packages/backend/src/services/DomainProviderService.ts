@@ -49,13 +49,12 @@ export class DomainProviderService {
     applyTemplate(productionDomainPrefix: string, domain: string) {
 
         const domainToken = '[DOMAIN]';
-        const { domainTemplate, environmentName } = this._globalConfig.misc;
-        const isProduction = environmentName === 'prod';
+        const { domainTemplate, isProd } = this._globalConfig.misc;
 
         if (!domainTemplate.includes(domainToken))
             throw new Error(`Invalid domain template: "${domainTemplate}"`);
 
-        const withProductionPrefix = isProduction
+        const withProductionPrefix = isProd
             ? `${productionDomainPrefix}${domain}`
             : domain;
 

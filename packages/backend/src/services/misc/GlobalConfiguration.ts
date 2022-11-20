@@ -58,6 +58,7 @@ export class GlobalConfiguration {
     misc = {
         hostPort: GlobalConfiguration.getEnvConfigEntry('HOST_PORT'),
         environmentName: GlobalConfiguration.getEnvConfigEntry('ENVIRONMENT_NAME'),
+        isProd: GlobalConfiguration.getEnvConfigEntry('ENVIRONMENT_NAME') === 'prod',
         isLocalhost: GlobalConfiguration.getEnvConfigEntry('IS_LOCALHOST', 'bool'),
         domainTemplate: GlobalConfiguration.getEnvConfigEntry('DOMAIN_TEMPLATE'),
         accessTokenCookieName: `epi_access_token_${GlobalConfiguration.getEnvConfigEntry('ENVIRONMENT_NAME')}`,
@@ -220,7 +221,6 @@ export class GlobalConfiguration {
      */
     static create(rootDirectory: string) {
 
-        log('Environemnt: ' + GlobalConfiguration.getCurrentEnvironmentName());
         log('Loading config.env...');
 
         const envFilePath = `${rootDirectory}/../config/config.env`;
@@ -233,7 +233,12 @@ export class GlobalConfiguration {
         dotenv
             .config({ path: envFilePath });
 
-        return new GlobalConfiguration(rootDirectory);
+        const config = new GlobalConfiguration(rootDirectory);
+
+        log(`Environemnt: ${config.misc.environmentName}`);
+        log(`IsProd: ${config.misc.isProd}`);
+
+        return config;
     }
 
     static getCurrentEnvironmentName = () => {
