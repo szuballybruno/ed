@@ -1,5 +1,4 @@
 import { Responsivity } from '../../helpers/responsivity';
-import browser from '../../services/core/browserSniffingService';
 import { gradientBackgroundGenerator } from '../../services/core/gradientBackgroundGenerator';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoGrid } from '../controls/EpistoGrid';
@@ -11,9 +10,12 @@ export const GenericBackground = (props: {
 }) => {
 
     const { customBaseColor, isFixed, isFullscreenSized } = props;
+
     const { isMobile } = Responsivity
         .useIsMobileView();
-    const isIPhone = browser.isIPhone;
+
+    const isIPhone = Responsivity
+        .useIsIPhone();
 
     const defaultMobileColor = 'rgba(80, 150, 255, 0.1)';
     const defaultDesktopColor = 'rgba(0, 100, 255, 0.1)';

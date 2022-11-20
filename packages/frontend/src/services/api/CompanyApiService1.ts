@@ -97,9 +97,11 @@ const useAvailableCompaniesForRoleCreation = () => {
     };
 };
 
-const useCompanyDetailsByDomain = (domain: string) => {
+const useCompanyDetailsByDomain = () => {
 
+    const domain = window.location.origin;
     const { data, state, error } = QueryService.useXQuery<CompanyPublicDTO>(apiRoutes.companies.getCompanyDetailsByDomain, { domain });
+    
     return {
         companyDetails: data,
         companyDetailsError: error,

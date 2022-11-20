@@ -4,7 +4,6 @@ import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { Responsivity } from '../../helpers/responsivity';
 import { AuthenticationStateType, useLogInUser } from '../../services/api/authenticationApiService';
 import { CompanyApiService } from '../../services/api/CompanyApiService1';
-import { gradientBackgroundGenerator } from '../../services/core/gradientBackgroundGenerator';
 import { useNavigation } from '../../services/core/navigatior';
 import { useShowErrorDialog } from '../../services/core/notifications';
 import { useQueryVal } from '../../static/locationHelpers';
@@ -16,6 +15,7 @@ import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { ContentPane } from '../pageRootContainer/ContentPane';
 import { GenericBackground } from '../pageRootContainer/GenericBackground';
+import { RootContainerBackground } from '../pageRootContainer/RootContainerBackground';
 import { AuthenticationStateContext, useRefetchUserAsync } from '../system/AuthenticationFrame';
 import { useAuthorizationContext } from '../system/AuthorizationContext';
 import { LoadingFrame } from '../system/LoadingFrame';
@@ -47,11 +47,13 @@ const LoginScreen = () => {
 
     // http 
     const { loginUserAsync, loginUserState } = useLogInUser();
-    const { companyDetails } = CompanyApiService.useCompanyDetailsByDomain(window.location.origin);
+    const { companyDetails: cdres } = CompanyApiService.useCompanyDetailsByDomain();
 
-    const gradients = gradientBackgroundGenerator(companyDetails?.backdropColor
-        ? companyDetails.backdropColor
-        : 'rgba(160, 200, 255, 0.1)');
+    const backdropColor = cdres?.backdropColor ?? 'white';
+    const primaryColor = cdres?.primaryColor ?? 'white';
+    const secondaryColor = cdres?.secondaryColor ?? 'white';
+    const logoUrl = cdres?.logoUrl ?? '';
+    const coverUrl = cdres?.coverUrl ?? '';
 
     // func
     const handleLoginUserAsync = async () => {
@@ -155,19 +157,17 @@ const LoginScreen = () => {
         };
     }, []);
 
+    console.log(coverUrl);
+
     return (
         <>
-            {/*           <RootContainerBackground>
+            <RootContainerBackground>
 
-                <img
-                    src={companyDetails?.coverUrl!}
-                    style={{
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover'
-                    }}
-                    alt="" />
-            </RootContainerBackground> */}
+                <GenericBackground
+                    customBaseColor={backdropColor}
+                    isFixed
+                    isFullscreenSized />
+            </RootContainerBackground>
 
             <ContentPane
                 hideNavbar
@@ -201,7 +201,7 @@ const LoginScreen = () => {
 
                             {/* Company background */}
                             <img
-                                src={companyDetails?.coverUrl!}
+                                src={coverUrl}
                                 style={{
                                     width: '100%',
                                     height: '100%',
@@ -236,7 +236,7 @@ const LoginScreen = () => {
 
                                 {/* company logo */}
                                 <img
-                                    src={companyDetails?.logoUrl ? companyDetails.logoUrl : ''}
+                                    src={logoUrl}
                                     style={{
                                         width: '250px',
                                         maxHeight: '115px',
@@ -311,7 +311,7 @@ const LoginScreen = () => {
                                         marginTop: 15,
                                         marginBottom: 15,
                                         width: '100%',
-                                        backgroundColor: companyDetails?.primaryColor!
+                                        backgroundColor: primaryColor
                                     }}
                                     onClick={handleLoginUserAsync}>
 
@@ -331,7 +331,7 @@ const LoginScreen = () => {
                                         onClick={() => navigate2(applicationRoutes.registerViaActivationCodeRoute, {})}
                                         fontSize="fontSmall"
                                         style={{
-                                            color: companyDetails?.secondaryColor!,
+                                            color: secondaryColor,
                                             fontWeight: 600,
                                             textAlign: 'right',
                                             marginLeft: 20
@@ -344,12 +344,6 @@ const LoginScreen = () => {
                         </EpistoFlex2>
                     </LoadingFrame>
                 </EpistoFlex2>
-
-
-                <GenericBackground
-                    customBaseColor={companyDetails?.backdropColor}
-                    isFixed
-                    isFullscreenSized />
             </ContentPane>
         </>
     );

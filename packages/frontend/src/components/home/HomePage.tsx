@@ -4,7 +4,7 @@ import { Responsivity } from '../../helpers/responsivity';
 import { useOverviewPageDTO } from '../../services/api/miscApiService';
 import { useActiveCourses } from '../../services/api/userProgressApiService';
 import { useNavigation } from '../../services/core/navigatior';
-import { Environment } from '../../static/Environemnt';
+import { Assets } from '../../static/Assets';
 import { EpistoIcons } from '../../static/EpistoIcons';
 import { usePaging } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
@@ -75,7 +75,7 @@ const CoinsAcquiredHeaderContent = ({ coinsAcquired }: { coinsAcquired }) => {
             </EpistoFont>
 
             <img
-                src={Environment.getAssetUrl('images/epistoCoin.png')}
+                src={Assets.epistoCoinImage}
                 className="square25"
                 style={{ margin: '0px 0px 4px 4px' }} />
 

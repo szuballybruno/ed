@@ -22,7 +22,7 @@ export const LeftPaneHost = memo(({
     const { hasPermission } = useAuthorizationContext();
     const { navigate2 } = useNavigation();
     const { companyDetails } = CompanyApiService
-        .useCompanyDetailsByDomain(window.location.origin);
+        .useCompanyDetailsByDomain();
 
     const { isMobile } = Responsivity
         .useIsMobileView();

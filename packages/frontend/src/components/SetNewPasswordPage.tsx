@@ -20,7 +20,8 @@ export const SetNewPasswordPage = () => {
     const token = useRouteQuery(applicationRoutes.setNewPasswordRoute)
         .getValue(x => x.token, 'string');
 
-    const { companyDetails } = CompanyApiService.useCompanyDetailsByDomain(window.location.origin);
+    const { companyDetails } = CompanyApiService
+        .useCompanyDetailsByDomain();
 
     const { isMobile } = Responsivity
         .useIsMobileView();
