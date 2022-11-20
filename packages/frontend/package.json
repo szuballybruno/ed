@@ -51,7 +51,7 @@
     "word-wrap": "1.2.3"
   },
   "scripts": {
-    "start": "react-app-rewired start",
+    "start": "cross-env DISABLE_ESLINT_PLUGIN=true react-app-rewired start",
     "build": "tsc -v && cross-env DISABLE_ESLINT_PLUGIN=true GENERATE_SOURCEMAP=false react-app-rewired build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
