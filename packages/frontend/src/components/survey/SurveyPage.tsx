@@ -7,7 +7,6 @@ import { startUserGuide } from '../../services/core/userGuidingService';
 import { Environment } from '../../static/Environemnt';
 import { usePaging } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
-import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { ContentPane } from '../pageRootContainer/ContentPane';
 import { useRefetchUserAsync } from '../system/AuthenticationFrame';
@@ -75,30 +74,37 @@ export const SurveyPage = () => {
     return (
         <>
             <ContentPane
-                noPadding
+                height={isIPhone ? 'calc(100vh - 60px)' : '100vh'}
+                align={isMobile ? 'flex-start' : 'center'}
+                justify={isMobile ? 'flex-start' : 'center'}
+                noOverflow
                 hideNavbar>
 
-                <EpistoFlex2
-                    className="whall"
-                    align="center"
-                    justify="center">
+                <EpistoPaging
+                    width={isMobile ? 'calc(100vw - 40px)' : 'calc(100% - 150px)'}
+                    //height={isMobile ? 'calc(100vh - 100px)' : 'calc(100vh - 100px)'}
+                    maxHeight={(() => {
+                        if (isIPhone)
+                            return 'calc(100vh - 60px)';
 
-                    <EpistoPaging
-                        width={isMobile ? '100vw' : 'calc(100% - 150px)'}
-                        height={isMobile ? '100vh' : 'calc(100vh - 100px)'}
-                        maxHeight={isMobile ? undefined : '800px'}
-                        className="roundBorders largeSoftShadow"
-                        alwaysRender={true}
-                        maxW="1400px"
-                        background="var(--transparentWhite70)"
-                        p="10px"
-                        pb={isIPhone ? '40px' : 0}
-                        zIndex="1"
-                        flex="1"
-                        slides={slides}
-                        index={slidesState.currentIndex} />
+                        if (isMobile)
+                            return '100vh';
 
-                </EpistoFlex2>
+                        return '800px';
+                    })()}
+                    className="roundBorders largeSoftShadow"
+                    alwaysRender={true}
+                    maxW='1400px'
+                    background="var(--transparentWhite70)"
+                    p="10px"
+                    my={isMobile ? '10px' : undefined}
+                    pb={isIPhone ? '40px' : '10px'}
+                    m={isMobile ? undefined : '10px'}
+                    zIndex="1"
+                    //flex="1"
+                    slides={slides}
+                    index={slidesState.currentIndex} />
+
             </ContentPane>
         </>
     );

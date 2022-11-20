@@ -119,7 +119,16 @@ export const SurveyWrapper = (props: {
                 wrap="nowrap"
                 justify="center"
                 align="center"
-                width={isLargerThan1350 ? '100vw' : '90vw'}
+                width={(() => {
+
+                    if (isMobile)
+                        return '100%';
+
+                    if (isLargerThan1350)
+                        return '100vw';
+
+                    return '90vw';
+                })()}
                 height={'90%'}>
 
                 {/* image */}
@@ -149,6 +158,7 @@ export const SurveyWrapper = (props: {
                 <EpistoFlex2
                     id="content"
                     flex="5"
+                    maxWidth='100%'
                     minWidth={isMobile ? undefined : '400px'}//window.innerWidth > 500 ? 300 : "calc(100% - 200px)"}
                     direction="column">
 
@@ -157,14 +167,15 @@ export const SurveyWrapper = (props: {
                         textHeight={isMobile ? '100%' : undefined}
                         variant="strongSub"
                         type="strong"
-                        m={isMobile ? '10px 10px 10px 0' : '10px 10px 30px 0px'}
+                        m={isMobile ? undefined : '10px 10px 30px 0px'}
                         alignSelf={hasImage ? 'flex-start' : 'center'}
                         text={title!}
                         maxW={isMobile ? '100%' : '400px'}>
                     </EpistoHeader>}
 
                     {/* description */}
-                    {hasDescription && <EpistoDiv maxWidth="400px">
+                    {hasDescription && <EpistoDiv
+                        maxWidth="400px">
                         {
                             isString(description!)
                                 ? <EpistoFont
@@ -243,5 +254,5 @@ export const SurveyWrapper = (props: {
             </EpistoButton>}
 
         </EpistoFlex2>
-    </EpistoFlex2>;
+    </EpistoFlex2 >;
 };
