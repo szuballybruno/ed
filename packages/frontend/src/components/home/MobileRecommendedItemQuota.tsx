@@ -23,7 +23,7 @@ export const MobileRecommendedItemQuota = (props: {
         <StatisticsCard
             isMobile
             title={'Napi videó teljesítve'}
-            value={`${recommendedItemQuota?.completedToday}/${recommendedItemQuota?.recommendedItemsPerDay}` ?? '0'}
+            value={`${recommendedItemQuota?.completedToday || '-'}/${recommendedItemQuota?.recommendedItemsPerDay || '-'}` ?? '0'}
             suffix={''}
             iconPath={Environment.getAssetUrl('/images/dailyquota.png')}
             isOpenByDefault={false} />
@@ -31,7 +31,7 @@ export const MobileRecommendedItemQuota = (props: {
         <StatisticsCard
             isMobile
             title={'Heti videó teljesítve'}
-            value={`${recommendedItemQuota?.completedThisWeek}/${recommendedItemQuota?.recommendedItemsPerWeek}` ?? '0'}
+            value={`${recommendedItemQuota?.completedThisWeek || '-'}/${recommendedItemQuota?.recommendedItemsPerWeek || '-'}` ?? '0'}
             suffix={''}
             iconPath={Environment.getAssetUrl('/images/weeklyquota.png')}
             isOpenByDefault={false} />
