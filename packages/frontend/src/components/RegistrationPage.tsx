@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { applicationRoutes } from '../configuration/applicationRoutes';
 import { Responsivity } from '../helpers/responsivity';
 import { useRegisterInvitedUser, useRegisterUser } from '../services/api/registrationApiService';
+import browser from '../services/core/browserSniffingService';
 import { useNavigation } from '../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../services/core/notifications';
 import { Environment } from '../static/Environemnt';
@@ -12,6 +13,7 @@ import { EpistoFlex2 } from './controls/EpistoFlex';
 import { EpistoFont } from './controls/EpistoFont';
 import { EpistoImage } from './controls/EpistoImage';
 import { MUI } from './controls/MUIControls';
+import { ContentPane } from './pageRootContainer/ContentPane';
 import { useRefetchUserAsync } from './system/AuthenticationFrame';
 import { LoadingFrame } from './system/LoadingFrame';
 import { PasswordEntry, usePasswordEntryState } from './universal/PasswordEntry';
@@ -25,6 +27,7 @@ export const RegistrationPage = () => {
     const isInvitedString = queryParams.getValue(x => x.isInvited, 'string');
     const isInvited = isInvitedString === 'true' ? true : false;
     const { isMobile } = Responsivity.useIsMobileView();
+    const isIPhone = browser.isIPhone;
 
     // state 
     const [isPrivacyPolicyAccepted, setIsPrivacyPolicyAccepted] = useState(false);
@@ -81,24 +84,24 @@ export const RegistrationPage = () => {
         }
     };
 
-    return <EpistoFlex2
+    return <ContentPane
+        hideNavbar
         height={isMobile ? 'calc(100vh - 80px)' : '100vh'}
         width='100vw'
-        direction="column"
         align="center"
-        justify="center"
-        position="relative">
+        justify="center">
 
         <LoadingFrame
             loadingState={[registerUserState, registerInvitedUserState]}
             direction="column"
-            width='500px'
+            width={isMobile ? '100%' : '500px'}
             maxWidth="95%"
             position="relative"
             bg="white"
             padding="30px"
             alignItems="center"
             justifyContent={'center'}
+            pb={isIPhone ? '40px' : 0}
             className="roundBorders"
             boxShadow="#00000024 10px 30px 50px 0px">
 
@@ -192,5 +195,5 @@ export const RegistrationPage = () => {
                 {translatableTexts.registrationPage.letsStart}
             </EpistoButton>
         </LoadingFrame>
-    </EpistoFlex2>;
+    </ContentPane>;
 };

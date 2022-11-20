@@ -200,7 +200,8 @@ export const LeaderboardPage = () => {
 
                     <EpistoFont
                         style={{
-                            marginLeft: '10px'
+                            marginLeft: '10px',
+                            maxWidth: isMobile ? '100px' : undefined
                         }}>
 
                         {row.username}

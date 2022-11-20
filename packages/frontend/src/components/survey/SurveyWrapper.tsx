@@ -78,7 +78,7 @@ export const SurveyWrapper = (props: {
                 justify={'center'}
                 align={'center'}>
 
-                <EpistoImage maxH='50px'
+                <EpistoImage maxH='60px'
                     src={Environment.getAssetUrl('/images/logo.svg')} />
             </EpistoFlex2>
 

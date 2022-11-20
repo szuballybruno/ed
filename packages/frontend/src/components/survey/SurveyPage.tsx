@@ -1,12 +1,14 @@
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { Responsivity } from '../../helpers/responsivity';
 import { SurveyApiService } from '../../services/api/SurveyApiService';
+import browser from '../../services/core/browserSniffingService';
 import { useNavigation } from '../../services/core/navigatior';
 import { startUserGuide } from '../../services/core/userGuidingService';
 import { Environment } from '../../static/Environemnt';
 import { usePaging } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { EpistoFont } from '../controls/EpistoFont';
 import { ContentPane } from '../pageRootContainer/ContentPane';
 import { useRefetchUserAsync } from '../system/AuthenticationFrame';
 import { EpistoPaging } from '../universal/EpistoPaging';
@@ -22,6 +24,7 @@ export const SurveyPage = () => {
     const isInvitedUser = true;
     const { isMobile } = Responsivity
         .useIsMobileView();
+    const isIPhone = browser.isIPhone;
 
     const { navigate2 } = useNavigation();
 
@@ -57,6 +60,9 @@ export const SurveyPage = () => {
         onNext={isInvitedUser ? handleGoToHomePage : undefined}
         nextButtonTitle={isInvitedUser ? translatableTexts.signupPage.goToHomePage : undefined}
         onNavPrevious={() => slidesState.previous()}
+        description={translatableTexts.signupPage.summarySlideDescriptionParts
+            .map(x => <><EpistoFont>{x}</EpistoFont><br /></>)
+        }
         headerRightButton={isInvitedUser ? { name: translatableTexts.signupPage.goToHomePage, action: handleGoToHomePage } : undefined}>
     </SurveyWrapper >;
 
@@ -86,6 +92,7 @@ export const SurveyPage = () => {
                         maxW="1400px"
                         background="var(--transparentWhite70)"
                         p="10px"
+                        pb={isIPhone ? '40px' : 0}
                         zIndex="1"
                         flex="1"
                         slides={slides}

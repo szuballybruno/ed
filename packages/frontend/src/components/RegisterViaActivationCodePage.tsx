@@ -12,6 +12,7 @@ import { EpistoButton } from './controls/EpistoButton';
 import { EpistoEntryNew, EpistoEntryStateType, useEpistoEntryState } from './controls/EpistoEntryNew';
 import { EpistoFlex2 } from './controls/EpistoFlex';
 import { EpistoFont } from './controls/EpistoFont';
+import { ContentPane } from './pageRootContainer/ContentPane';
 import { PasswordEntry, usePasswordEntryState } from './universal/PasswordEntry';
 
 const validateAllEntries = (entryStates: EpistoEntryStateType[]) => {
@@ -171,14 +172,11 @@ export const RegisterViaActivationCodePage = () => {
 
     return <>
 
-        <EpistoFlex2
-            justify={'center'}
-            align='center'
-            py={isMobile ? undefined : '60px'}
-            pt={isMobile ? '10px' : undefined}
-            overflowY={'scroll'}
-            height="100%"
-            width="100%">
+        <ContentPane
+            hideNavbar
+            overflowY='scroll'
+            justify={isMobile ? 'flex-start' : 'center'}
+            align='center'>
 
             {/* content */}
             <EpistoFlex2
@@ -189,8 +187,9 @@ export const RegisterViaActivationCodePage = () => {
                 maxW="1700px"
                 //height="fit-content"
                 mx={isMobile ? undefined : '100px'}
+                my={'20px'}
                 p={isMobile ? '10px' : '50px 150px'}
-                overflow="hidden"
+                overflow={isMobile ? undefined : 'hidden'}
                 position={'relative'}>
 
                 <EpistoFlex2
@@ -353,6 +352,6 @@ export const RegisterViaActivationCodePage = () => {
                     </EpistoFlex2>
                 </EpistoFlex2>
             </EpistoFlex2>
-        </EpistoFlex2>
+        </ContentPane>
     </>;
 };
