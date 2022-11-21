@@ -191,7 +191,8 @@ const useGreetingData = (courseId: Id<'Course'>) => {
         .useXQuery<{
             isPrequizRequired: boolean,
             isPretestRequired: boolean,
-            firstItemPlaylistCode: string
+            firstItemPlaylistCode: string,
+            courseName: string
         }>(apiRoutes.course.getGreetingsData, { courseId });
 
     return {

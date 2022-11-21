@@ -175,17 +175,6 @@ export const MobileExamLayout = ({
                 }
             </EpistoFlex2 >
 
-            {/* header center 
-            <EpistoFlex2
-                flex="1"
-                align="center"
-                justify="center">
-
-                <EpistoFont>
-                    {headerCenterText}
-                </EpistoFont>
-            </EpistoFlex2>*/}
-
             {/* header buttons right */}
             <EpistoFlex2 minWidth="200"
                 justify="flex-end"
@@ -208,6 +197,7 @@ export const MobileExamLayout = ({
             id='ExamLayout-content'
             my={'5px'}
             width="100%"
+            flex='1'
             align="center"
             justify="center"
             direction="column"
@@ -240,17 +230,6 @@ export const MobileExamLayout = ({
                     iconPosition: 'start'
                 })
             }
-
-            {/* progress line 
-            <EpistoFlex2
-                flex={1}
-                px='10px'
-                justify='center'
-                alignItems={'center'}>
-
-                {stepperParams && <EpistoStepper {...stepperParams} />}
-
-            </EpistoFlex2>*/}
 
             {/* render footer buttons */}
             {

@@ -21,7 +21,20 @@ export const ExamGreetSlide = (props: {
     const { isMobile } = Responsivity
         .useIsMobileView();
 
+    const { isIPhone } = Responsivity
+        .useIsIPhone();
+
     return <ExamLayout
+        maxH={(() => {
+
+            if (isIPhone) {
+                return 'calc(100vh - 160px)';
+            }
+
+            if (isMobile) {
+                return 'calc(100vh - 120px)';
+            }
+        })()}
         className={!isMobile ? 'whall' : undefined}
         justify='flex-start'
         headerCenterText={exam.title}
@@ -35,6 +48,8 @@ export const ExamGreetSlide = (props: {
         <EpistoFlex2
             direction="column"
             align="center"
+            flex='1'
+            justify={exam.examStats ? undefined : 'center'}
             //justify='center'
             width={!isMobile ? '100%' : undefined}
             height={!isMobile ? '100%' : undefined}

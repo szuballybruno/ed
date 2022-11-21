@@ -329,7 +329,7 @@ export class CourseService {
      */
     async getGreetingDataAsync(principalId: PrincipalId, courseId: Id<'Course'>) {
 
-        const { isPrequizRequired, isPretestRequired } = await this
+        const { isPrequizRequired, isPretestRequired, title } = await this
             ._ormService
             .withResType<CourseData>()
             .query(LatestCourseVersionView, { courseId })
@@ -351,7 +351,8 @@ export class CourseService {
         return {
             isPrequizRequired,
             isPretestRequired,
-            firstItemPlaylistCode
+            firstItemPlaylistCode,
+            courseName: title
         };
     }
 
