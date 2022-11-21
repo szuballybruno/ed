@@ -19,7 +19,7 @@ import { CourseAdminShortView } from '../models/views/CourseAdminShortView';
 import { CourseDetailsView } from '../models/views/CourseDetailsView';
 import { LatestCourseVersionView } from '../models/views/LatestCourseVersionView';
 import { UserPlaylistView } from '../models/views/UserPlaylistView';
-import { CourseAdminListItemDTO } from '@episto/communication';
+import { CourseAdminListItemDTO, GreetingsDataDTO } from '@episto/communication';
 import { CourseContentAdminDTO } from '@episto/communication';
 import { CourseContentItemAdminDTO } from '@episto/communication';
 import { AvailableCourseDTO } from '@episto/communication';
@@ -49,6 +49,7 @@ import { PlayerService } from './PlayerService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { VersionCreateService } from './VersionCreateService';
 import { UserCourseBridge } from '../models/entity/misc/UserCourseBridge';
+import { instantiate } from '@episto/commonlogic';
 
 export class CourseService {
 
@@ -187,8 +188,7 @@ export class CourseService {
                     coverFileId: null,
                     isFeatured: false,
                     modificationDate: new Date(),
-                    isPrequizRequired: true,
-                    isPretestRequired: true
+                    isPrecourseSurveyRequired: true
                 }),
                 createVersion: ({ entityId, dataId }) => ({
                     courseDataId: dataId,
@@ -347,7 +347,7 @@ export class CourseService {
      */
     async getGreetingDataAsync(principalId: PrincipalId, courseId: Id<'Course'>) {
 
-        const { isPrequizRequired, isPretestRequired, title } = await this
+        const { isPrecourseSurveyRequired, title } = await this
             ._ormService
             .withResType<CourseData>()
             .query(LatestCourseVersionView, { courseId })
@@ -366,12 +366,11 @@ export class CourseService {
             ._playerService
             .getFirstPlaylistItemCodeAsync(courseId);
 
-        return {
-            isPrequizRequired,
-            isPretestRequired,
+        return instantiate<GreetingsDataDTO>({
+            isPrecourseSurveyRequired,
             firstItemPlaylistCode,
             courseName: title
-        };
+        });
     }
 
     /**
@@ -420,8 +419,7 @@ export class CourseService {
                     .humanSkillBenefits
                     .map(x => `${x.text}: ${x.value}`)),
                 visibility: dto.visibility,
-                isPrequizRequired: dto.isPrequizRequired,
-                isPretestRequired: dto.isPretestRequired
+                isPrecourseSurveyRequired: dto.isPrecourseSurveyRequired
             });
     }
 

@@ -18,8 +18,7 @@ export class CourseDetailsEditDataDTO {
     teacherId: Id<'User'>;
     humanSkillBenefitsDescription: string;
     technicalRequirementsDescription: string;
-    isPrequizRequired: boolean;
-    isPretestRequired: boolean;
+    isPrecourseSurveyRequired: boolean;
 
     technicalRequirements: string[];
     skillBenefits: string[];

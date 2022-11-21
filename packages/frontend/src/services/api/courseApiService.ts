@@ -1,4 +1,4 @@
-import { CourseAdminListItemDTO } from '@episto/communication';
+import { CourseAdminListItemDTO, GreetingsDataDTO } from '@episto/communication';
 import { CourseContentAdminDTO } from '@episto/communication';
 import { SaveCourseContentDTO } from '@episto/communication';
 import { AvailableCourseDTO } from '@episto/communication';
@@ -188,12 +188,7 @@ const useAvailableCourseCategories = () => {
 const useGreetingData = (courseId: Id<'Course'>) => {
 
     const qr = QueryService
-        .useXQuery<{
-            isPrequizRequired: boolean,
-            isPretestRequired: boolean,
-            firstItemPlaylistCode: string,
-            courseName: string
-        }>(apiRoutes.course.getGreetingsData, { courseId });
+        .useXQuery<GreetingsDataDTO>(apiRoutes.course.getGreetingsData, { courseId });
 
     return {
         greetingsData: qr.data,

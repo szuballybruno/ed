@@ -1,16 +1,12 @@
-import { CourseData } from '../models/entity/course/CourseData';
-import { CourseVersion } from '../models/entity/course/CourseVersion';
+import { CourseModeType, CourseStageNameType, Id } from '@episto/commontypes';
 import { UserCourseBridge } from '../models/entity/misc/UserCourseBridge';
 import { CourseStateView } from '../models/views/CourseStateView';
-import { LatestCourseVersionView } from '../models/views/LatestCourseVersionView';
-import { CourseModeType, CourseStageNameType } from '@episto/commontypes';
-import { Id } from '@episto/commontypes';
+import { CurrentUserCourseBridgeView } from '../models/views/CurrentUserCourseBridgeView';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { MapperService } from './MapperService';
 import { QueryServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { PermissionService } from './PermissionService';
-import { CurrentUserCourseBridgeView } from '../models/views/CurrentUserCourseBridgeView';
 
 export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> {
 
@@ -40,12 +36,6 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
     }) {
 
         /**
-         * get isPretestRequired
-         */
-        const isPretestRequired = await this
-            ._getIsPretestRequired(courseId);
-
-        /**
          * Create new 
          */
         await this
@@ -53,7 +43,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
             .createAsync(UserCourseBridge, {
                 userId,
                 courseId,
-                courseMode: isPretestRequired ? 'beginner' : 'advanced',
+                courseMode: 'advanced',
                 creationDate: new Date(),
                 currentItemCode,
                 lastInteractionDate: new Date(),
@@ -255,34 +245,6 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
                     requiredCompletionDate: x.requiredCompletionDate,
                     tempomatMode: 'strict'
                 } as UserCourseBridge)));
-    }
-
-    private async _getIsPretestRequired(courseId: Id<'Course'>) {
-
-        const courseWithIsPretestRequired = await this
-            ._ormService
-            .withResType<{
-                courseId: Id<'Course'>,
-                isPretestRequired: Boolean
-            }>()
-            .query(LatestCourseVersionView, { courseId })
-            .selectFrom(x => x
-                .columns(CourseVersion, {
-                    courseId: 'courseId'
-                })
-                .columns(CourseData, {
-                    isPretestRequired: 'isPretestRequired'
-                }))
-            .leftJoin(CourseVersion, x => x
-                .on('id', '=', 'versionId', LatestCourseVersionView))
-            .leftJoin(CourseData, x => x
-                .on('id', '=', 'courseDataId', CourseVersion))
-            .where('courseId', '=', 'courseId')
-            .getOneOrNull();
-
-        const isPretestRequired = !!courseWithIsPretestRequired?.isPretestRequired;
-
-        return isPretestRequired;
     }
 
     private async _updateBridge(userId: Id<'User'>, courseId: Id<'Course'>, bridge: Partial<UserCourseBridge>) {

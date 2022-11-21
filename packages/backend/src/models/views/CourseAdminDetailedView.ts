@@ -23,10 +23,7 @@ export class CourseAdminDetailedView {
     benchmark: number;
 
     @XViewColumn()
-    isPrequizRequired: boolean;
-
-    @XViewColumn()
-    isPretestRequired: boolean;
+    isPrecourseSurveyRequired: boolean;
 
     @XViewColumn()
     previouslyCompletedCount: number;

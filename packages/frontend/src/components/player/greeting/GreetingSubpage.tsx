@@ -27,18 +27,20 @@ export const GreetingSubpage = () => {
     const { startCourse, startCourseState } = CourseApiService
         .useStartCourse();
 
-    const { isPrequizRequired, isPretestRequired } = greetingsData ?? {
-        isPrequizRequired: true,
-        isPretestRequired: true
+    const { isPrecourseSurveyRequired, courseName } = greetingsData ?? {
+        isPrecourseSurveyRequired: true,
+        courseName: ''
     };
 
     useEffect(() => {
         setIsFullscreen(true);
     }, []);
 
-    const { nextTitle, navigate } = (() => {
+    const { nextTitle, description, navigate } = (() => {
 
-        if (isPrequizRequired)
+        // prequiz
+        if (isPrecourseSurveyRequired) {
+
             return {
                 nextTitle: 'Tanfolyami kérdőív',
                 description: 'A tanfolyam előtt feltennénk neked pár kérdést, így pontosan tudni fogjuk, mennyi időt tudsz rászánni a tanulásra!',
@@ -52,35 +54,26 @@ export const GreetingSubpage = () => {
                     navigate2(applicationRoutes.playerRoute.prequizRoute, { courseId });
                 }
             };
+        }
 
-        if (isPretestRequired)
+        // pretest
+        else {
+
             return {
-                nextTitle: 'Tudasfelmero kerdoiv',
+                nextTitle: courseName,
+                description: 'A Kezdés gombra kattintva azonnal elindul a tanfolyam, és bele is vághatsz a tanulásba!',
                 navigate: async () => {
+
+                    const code = greetingsData?.firstItemPlaylistCode!;
 
                     await startCourse({
                         courseId,
-                        currentItemCode: null,
-                        stageName: 'pretest'
+                        currentItemCode: code,
+                        stageName: 'watch'
                     });
-                    navigate2(applicationRoutes.playerRoute.pretestRoute, { courseId });
+                    navigate2(applicationRoutes.playerRoute.watchRoute, { descriptorCode: code });
                 }
             };
-
-        return {
-            nextTitle: 'Kurzus elso videoja',
-            description: 'A Kezdés gombra kattintva azonnal elindul a tanfolyam, és bele is vághatsz a tanulásba!',
-            navigate: async () => {
-
-                const code = greetingsData?.firstItemPlaylistCode!;
-
-                await startCourse({
-                    courseId,
-                    currentItemCode: code,
-                    stageName: 'watch'
-                });
-                navigate2(applicationRoutes.playerRoute.watchRoute, { descriptorCode: code });
-            }
         };
     })();
 

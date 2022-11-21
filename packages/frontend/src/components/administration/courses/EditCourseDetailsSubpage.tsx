@@ -77,11 +77,11 @@ export const EditCourseDetailsSubpage = () => {
         technicalRequirements,
         humanSkillBenefitsDescription,
         humanSkillBenefits,
-        isPrequizRequired,
-        isPretestRequired
+        isPrecourseSurveyRequired
     }, setState, stateObj] = useStateObject({
         title: '',
         thumbnailSrc: '',
+        isPrecourseSurveyRequired: false,
         thumbnailImageFile: null as File | null,
         category: null as CourseCategoryDTO | null,
         subCategory: null as CourseCategoryDTO | null,
@@ -97,9 +97,7 @@ export const EditCourseDetailsSubpage = () => {
         skillBenefits: defaultSkillBenefits,
         technicalRequirements: [] as any[],
         humanSkillBenefitsDescription: '',
-        humanSkillBenefits: defaultHumanSkillBenefits,
-        isPrequizRequired: true,
-        isPretestRequired: true
+        humanSkillBenefits: defaultHumanSkillBenefits
     });
 
     // func
@@ -125,8 +123,7 @@ export const EditCourseDetailsSubpage = () => {
             teacherId: teacherId,
             previouslyCompletedCount: parseIntOrFail(prevCompletedCount),
             technicalRequirementsDescription: technicalRequirementsDescription,
-            isPrequizRequired,
-            isPretestRequired,
+            isPrecourseSurveyRequired,
             categories: [],
             teachers: [],
 
@@ -324,11 +321,8 @@ export const EditCourseDetailsSubpage = () => {
                                     label="Prequiz és Pretest kitöltendő">
 
                                     <EpistoCheckbox
-                                        value={isPretestRequired}
-                                        setValue={x => {
-                                            setState(s => s.isPretestRequired = x);
-                                            setState(s => s.isPrequizRequired = x);
-                                        }} />
+                                        value={isPrecourseSurveyRequired}
+                                        setValue={x => setState(s => s.isPrecourseSurveyRequired = x)} />
                                 </EpistoCheckboxLabel>
 
                                 {/* <EpistoCheckboxLabel
