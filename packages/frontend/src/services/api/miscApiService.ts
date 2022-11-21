@@ -1,5 +1,5 @@
 import { Id } from '@episto/commontypes';
-import { ActivationCodeListDTO, apiRoutes, CourseOverviewDataDTO, OverviewPageDTO, QuestionModuleCompareDTO } from '@episto/communication';
+import { ActivationCodeListDTO, apiRoutes, CourseOverviewDataDTO, CurrentCourseDataDTO, OverviewPageDTO, QuestionModuleCompareDTO } from '@episto/communication';
 import { useAuthStateContext } from '../../components/system/AuthenticationFrame';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { GlobalEventManagerType } from '../../components/system/EventManagerFrame';
@@ -48,11 +48,11 @@ export const useMiscApiService = (globalEventManager: GlobalEventManagerType) =>
         const isEnabled = !currentRoute.isUnauthorized && state === 'authenticated';
 
         const qr = QueryService
-            .useXQueryNew<string>(apiRoutes.misc.getCurrentCourseItemCode, { isEnabled });
+            .useXQueryNew<CurrentCourseDataDTO>(apiRoutes.misc.getCurrentCourseData, { isEnabled });
 
         return {
             refetchCurrentCourseItemCode: qr.refetch,
-            currentCourseItemCode: qr.data
+            currentCourseData: qr.data
         };
     };
 

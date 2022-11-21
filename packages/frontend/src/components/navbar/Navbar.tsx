@@ -23,8 +23,6 @@ const Navbar = memo(({
     const { isMobile } = Responsivity
         .useIsMobileView();
 
-    const cc = useCurrentCourseItemCodeContext();
-
     /**
      * Mobile navbar
      */
@@ -49,7 +47,6 @@ const Navbar = memo(({
 
             <DesktopNavbar
                 backgroundContent={backgroundContent}
-                currentCourseItemCode={cc.currentCourseItemCode}
                 hideLinks1={!!hideLinks}
                 isLowHeight={isLowHeight}
                 isMinimalMode={isMinimalMode}

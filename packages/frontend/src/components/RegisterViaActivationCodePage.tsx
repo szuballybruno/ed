@@ -168,8 +168,6 @@ export const RegisterViaActivationCodePage = () => {
         navigate2(applicationRoutes.homeRoute);
     });
 
-    console.log(usernameEntryState.errorMsg);
-
     return <>
 
         <ContentPane

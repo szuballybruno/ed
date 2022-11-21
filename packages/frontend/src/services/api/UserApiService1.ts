@@ -60,7 +60,8 @@ const useUserControlDropdownData = () => {
 
 export const useUserAdminList = (isToBeReviewed: boolean, companyId: Id<'Company'> | null) => {
 
-    const queryRes = QueryService.useXQueryArray<UserAdminListDTO>(apiRoutes.user.getAdminUsersList, { isToBeReviewed, companyId });
+    const queryRes = QueryService
+        .useXQueryArray<UserAdminListDTO>(apiRoutes.user.getAdminUsersList, { isToBeReviewed, companyId });
 
     return {
         userOverviewStats: queryRes.data,
@@ -71,7 +72,6 @@ export const useUserAdminList = (isToBeReviewed: boolean, companyId: Id<'Company
 };
 
 export const UserApiService = {
-
     useSaveUserAssignedCourses,
     useUserControlDropdownData,
     useUserAdminList,

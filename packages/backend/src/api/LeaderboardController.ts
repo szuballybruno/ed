@@ -15,7 +15,7 @@ export class LeaderboardController implements XController<LeaderboardController>
     }
 
     @XControllerAction(apiRoutes.leaderboard.getLeaderboard)
-    getCurrentCourseItemCodeAction(params: ActionParams) {
+    getCurrentCourseDataAction(params: ActionParams) {
 
         const { query } = params
             .getFromParameterized(apiRoutes.leaderboard.getLeaderboard);

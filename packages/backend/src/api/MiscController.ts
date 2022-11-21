@@ -20,11 +20,11 @@ export class MiscController implements XController<MiscController> {
         this._activationCodeService = serviceProvider.getService(ActivationCodeService);
     }
 
-    @XControllerAction(apiRoutes.misc.getCurrentCourseItemCode)
-    getCurrentCourseItemCodeAction(params: ActionParams) {
+    @XControllerAction(apiRoutes.misc.getCurrentCourseData)
+    getCurrentCourseDataAsync(params: ActionParams) {
 
         return this._courseBridgeService
-            .getPrincipalCurrentItemCodeAsync(params.principalId);
+            .getCurrentCourseDataAsync(params.principalId);
     }
 
     @XControllerAction(apiRoutes.misc.getHomePageDTO)

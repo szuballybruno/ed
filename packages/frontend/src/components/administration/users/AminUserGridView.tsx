@@ -275,7 +275,8 @@ export const useAdminUserGridLogic = ({
     const {
         userOverviewStats,
         refetchOverviewStats
-    } = UserApiService.useUserAdminList(isReviewPreset, selectedCompanyId);
+    } = UserApiService
+        .useUserAdminList(isReviewPreset, selectedCompanyId);
 
     const searchIn = (text: string) => {
 

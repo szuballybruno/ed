@@ -103,10 +103,8 @@ const HomePage = () => {
 
     const { activeCourses } = useActiveCourses();
     const activeCoursesPaging = usePaging({ items: activeCourses });
-    const { currentCourseItemCode } = useCurrentCourseItemCodeContext();
-    const isAnyCourseInProgess = !!currentCourseItemCode;
-
-    console.log(currentCourseItemCode);
+    const { currentCourseData } = useCurrentCourseItemCodeContext();
+    const isAnyCourseInProgess = !!currentCourseData;
 
     return <>
 

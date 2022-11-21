@@ -1,4 +1,5 @@
-export{ GreetingsDataDTO } from "./GreetingsDataDTO";
+export { CurrentCourseDataDTO } from "./CurrentCourseDataDTO";
+export { GreetingsDataDTO } from "./GreetingsDataDTO";
 export { ActivationCodeListDTO } from "./ActivationCodeListDTO";
 export { LeaderboardListItemDTO } from "./LeaderboardListItemDTO";
 export * from "./misc/apiRoutes";

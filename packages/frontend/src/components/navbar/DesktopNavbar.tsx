@@ -16,12 +16,10 @@ import { ShopAndNotifications } from './ShopAndNotifications';
 export const DesktopNavbar = ({
     backgroundContent,
     showLogo,
-    currentCourseItemCode,
     isLowHeight: _isLowHeight,
     isMinimalMode: _isMinimalMode,
     hideLinks1
 }: {
-    currentCourseItemCode: string | null
     hideLinks1: boolean
     isLowHeight?: boolean
     showLogo?: boolean
@@ -114,8 +112,7 @@ export const DesktopNavbar = ({
                     ))}
 
                 {/* continue course button */}
-                <ContinueCourseButton
-                    currentCourseItemCode={currentCourseItemCode} />
+                <ContinueCourseButton />
             </EpistoFlex2>
         );
     };
@@ -140,8 +137,7 @@ export const DesktopNavbar = ({
                     })}
 
                 {/* continue watching  */}
-                <ContinueCourseButton
-                    currentCourseItemCode={currentCourseItemCode} />
+                <ContinueCourseButton />
             </EpistoFlex2>
         );
     };

@@ -1,4 +1,6 @@
+import { instantiate } from '@episto/commonlogic';
 import { CourseModeType, CourseStageNameType, Id } from '@episto/commontypes';
+import { CurrentCourseDataDTO } from '@episto/communication';
 import { UserCourseBridge } from '../models/entity/misc/UserCourseBridge';
 import { CourseStateView } from '../models/views/CourseStateView';
 import { CurrentUserCourseBridgeView } from '../models/views/CurrentUserCourseBridgeView';
@@ -162,11 +164,19 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
     /**
      * Get current course item code 
      */
-    async getPrincipalCurrentItemCodeAsync(
-        principalId: PrincipalId
-    ) {
-        return this
+    async getCurrentCourseDataAsync(principalId: PrincipalId): Promise<CurrentCourseDataDTO | null> {
+
+        const currentCourse = await this
             .getCurrentItemCodeAsync(principalId);
+
+        if (!currentCourse)
+            return null;
+
+        return instantiate<CurrentCourseDataDTO>({
+            courseId: currentCourse.courseId,
+            currentItemCode: currentCourse.currentItemCode,
+            stageName: currentCourse.stageName
+        });
     }
 
     /**
@@ -207,8 +217,8 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
      */
     async getCurrentItemCodeOrFailAsync(principalId: PrincipalId) {
 
-        const currentItemCode = await this
-            .getCurrentItemCodeAsync(principalId);
+        const { currentItemCode } = (await this
+            .getCurrentItemCodeAsync(principalId)) ?? {};
 
         if (!currentItemCode)
             throw new Error('Course has no current item!');
@@ -220,15 +230,15 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
     /**
      * Returns the current playlist item code
      */
-    async getCurrentItemCodeAsync(principalId: PrincipalId) {
+    async getCurrentItemCodeAsync(principalId: PrincipalId): Promise<CurrentUserCourseBridgeView | null> {
 
-        const { currentItemCode } = await this
+        const currentBridge = await this
             ._ormService
             .query(CurrentUserCourseBridgeView, { principalId })
             .where('userId', '=', 'principalId')
-            .getOneOrNull() ?? { currentItemCode: null };
+            .getOneOrNull();
 
-        return currentItemCode;
+        return currentBridge;
     }
 
     /**

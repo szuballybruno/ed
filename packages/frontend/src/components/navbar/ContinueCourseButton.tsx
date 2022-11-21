@@ -3,21 +3,16 @@ import { Environment } from '../../static/Environemnt';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFont } from '../controls/EpistoFont';
+import { useCurrentCourseItemCodeContext } from '../system/CurrentCourseItemFrame';
 
-export const ContinueCourseButton = ({
-    currentCourseItemCode,
-}: {
-    currentCourseItemCode: string | null,
-}) => {
+export const ContinueCourseButton = () => {
 
-    const { navigateToPlayer } = useNavigation();
-    const continueCourse = () => navigateToPlayer(currentCourseItemCode!);
+    const { continueCourse } = useNavigation();
 
-    if (!currentCourseItemCode)
-        return <></>;
+    const { currentCourseData } = useCurrentCourseItemCodeContext();
 
     return <>
-        {currentCourseItemCode && (
+        {currentCourseData && (
 
             <EpistoButton
                 className="mildShadow"
@@ -28,7 +23,10 @@ export const ContinueCourseButton = ({
                     border: 'none',
                 }}
                 variant="outlined"
-                onClick={() => continueCourse()}
+                onClick={() => continueCourse(
+                    currentCourseData.courseId,
+                    currentCourseData.stageName,
+                    currentCourseData.currentItemCode as any)}
                 icon={
                     <img
                         alt=""
