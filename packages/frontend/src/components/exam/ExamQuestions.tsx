@@ -185,7 +185,7 @@ export const ExamQuestions = ({
             maxH={(() => {
 
                 if (isIPhone) {
-                    return 'calc(100vh - 150px)';
+                    return 'calc(100vh - 160px)';
                 }
 
                 if (isMobile) {

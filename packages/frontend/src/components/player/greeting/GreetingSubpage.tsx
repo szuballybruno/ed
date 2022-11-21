@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
+import { Responsivity } from '../../../helpers/responsivity';
 import { CourseApiService } from '../../../services/api/courseApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { Environment } from '../../../static/Environemnt';
@@ -16,6 +17,9 @@ export const GreetingSubpage = () => {
 
     const courseId = useRouteParams(applicationRoutes.playerRoute.greetingRoute)
         .getValue(x => x.courseId, 'int');
+
+    const { isMobile } = Responsivity.useIsMobileView();
+    const { isIPhone } = Responsivity.useIsIPhone();
 
     const { greetingsData } = CourseApiService
         .useGreetingData(courseId);
@@ -37,6 +41,7 @@ export const GreetingSubpage = () => {
         if (isPrequizRequired)
             return {
                 nextTitle: 'Tanfolyami kérdőív',
+                description: 'A tanfolyam előtt feltennénk neked pár kérdést, így pontosan tudni fogjuk, mennyi időt tudsz rászánni a tanulásra!',
                 navigate: async () => {
 
                     await startCourse({
@@ -64,6 +69,7 @@ export const GreetingSubpage = () => {
 
         return {
             nextTitle: 'Kurzus elso videoja',
+            description: 'A Kezdés gombra kattintva azonnal elindul a tanfolyam, és bele is vághatsz a tanulásba!',
             navigate: async () => {
 
                 const code = greetingsData?.firstItemPlaylistCode!;
@@ -80,6 +86,16 @@ export const GreetingSubpage = () => {
 
     return (
         <ExamLayout
+            maxH={(() => {
+
+                if (isIPhone) {
+                    return 'calc(100vh - 160px)';
+                }
+
+                if (isMobile) {
+                    return 'calc(100vh - 120px)';
+                }
+            })()}
             headerCenterText={nextTitle}
             footerButtons={[{
                 title: 'Kezdés',
@@ -115,7 +131,7 @@ export const GreetingSubpage = () => {
                         textAlign: 'center'
                     }}>
 
-                    {'A tanfolyam előtt feltennénk neked pár kérdést, így pontosan tudni fogjuk, mennyi időt tudsz rászánni a tanulásra!'}
+                    {description}
                 </EpistoFont>
             </EpistoFlex2>
         </ExamLayout>

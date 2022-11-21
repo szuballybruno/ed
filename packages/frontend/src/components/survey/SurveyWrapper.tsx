@@ -137,8 +137,10 @@ export const SurveyWrapper = (props: {
                     align="center"
                     flexShrink={1}
                     minWidth={isMobile ? undefined : '300px'}
+                    width={isMobile ? '100%' : undefined}
                     minH={isMobile ? undefined : '400px'}
-                    height={isMobile ? '250px' : '400px'}
+                    height={isMobile ? undefined : '400px'}
+                    maxHeight={isMobile ? '250px' : undefined}
                     margin={isMobile ? '0 0 20px 0' : undefined}
                     justifyContent={!isMobile ? 'flex-end' : 'center'}>
 

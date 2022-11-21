@@ -1,5 +1,6 @@
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { ModulePlayerDTO } from '@episto/communication';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import { Responsivity } from '../../../helpers/responsivity';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
@@ -13,17 +14,18 @@ export const ModuleView = (params: {
 
     const { module, startModule } = params;
     const isVisible = !!module;
+    const { isMobile } = Responsivity.useIsMobileView();
 
     return <EpistoFlex2
         className="whall roundBorders mildShadow"
-        maxH="calc(100vh - 120px)"
+        maxH={isMobile ? '100vh' : 'calc(100vh - 120px)'}
         display={isVisible ? undefined : 'none'}
         direction="column"
         background="var(--transparentWhite70)">
 
         <EpistoFlex2
             flex='1'
-            maxH="calc(100vh - 120px)"
+            maxH={isMobile ? '100vh' : 'calc(100vh - 120px)'}
             align="center"
             justify="center">
 

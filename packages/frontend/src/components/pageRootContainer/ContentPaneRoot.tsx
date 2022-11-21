@@ -2,6 +2,7 @@ import { Responsivity } from '../../helpers/responsivity';
 import { PropsWithChildren, useGetCurrentAppRoute } from '../../static/frontendHelpers';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import Navbar from '../navbar/Navbar';
+import { useVideoPlayerFullscreenContext } from '../player/watch/videoPlayer/VideoPlayerFullscreenFrame';
 import { PageRootContainerContextType } from './contentPaneRootLogic';
 
 export const ContentPaneRoot = ({
@@ -28,6 +29,7 @@ export const ContentPaneRoot = ({
 
     const { isMobile } = Responsivity
         .useIsMobileView();
+    const [isFullscreen] = useVideoPlayerFullscreenContext();
 
     const currentRoute = useGetCurrentAppRoute();
     const { isUnauthorized } = currentRoute;
@@ -40,6 +42,9 @@ export const ContentPaneRoot = ({
             id={ContentPaneRoot.name}
             direction="column"
             height={(() => {
+
+                if (isMobile && isFullscreen)
+                    return '100vh';
 
                 if (isMobile && hideNavbar)
                     return '100vh';
