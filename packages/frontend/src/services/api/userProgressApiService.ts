@@ -31,7 +31,8 @@ export const useRecommendedItemQuota = (courseId?: Id<'Course'>) => {
 
 export const useActiveCourses = () => {
 
-    const qr = QueryService.useXQuery<UserActiveCourseDTO[]>(apiRoutes.userProgress.getActiveCourses);
+    const qr = QueryService
+        .useXQuery<UserActiveCourseDTO[]>(apiRoutes.userProgress.getActiveCourses);
 
     return {
         activeCourses: qr.data ?? [],

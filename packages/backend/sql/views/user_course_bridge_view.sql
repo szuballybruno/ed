@@ -4,7 +4,7 @@ SELECT
 	ucb.course_id,
 	ucb.creation_date,
 	ucb.course_mode,
-	ucb.is_current,
+	ucb.last_interaction_date,
 	ucb.current_item_code,
 	ucb.stage_name current_stage_name,
 	ucb.tempomat_mode,

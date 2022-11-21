@@ -3,6 +3,7 @@ sq as
 (
     SELECT 
         ucb.*,
+        cucbv.id IS NOT NULL is_current,
         ucb.id IS NOT NULL has_bridge,
         ccv.user_id IS NOT NULL is_completed
     FROM public.course co
@@ -16,10 +17,12 @@ sq as
     INNER JOIN public.user_course_bridge ucb
     ON ucb.user_id = u.id
     AND ucb.course_id = co.id
+
+    LEFT JOIN public.current_user_course_bridge_view cucbv
+    ON cucbv.id = ucb.id
 )
 SELECT 
     sq.*,
-    --COALESCE(sq.is_current, false) is_current,
     sq.has_bridge = true AND sq.is_completed = false in_progress
 FROM sq
     

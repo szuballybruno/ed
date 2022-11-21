@@ -23,16 +23,18 @@ export const GreetingSubpage = () => {
     const { startCourse, startCourseState } = CourseApiService
         .useStartCourse();
 
+    const { isPrequizRequired, isPretestRequired } = greetingsData ?? {
+        isPrequizRequired: true,
+        isPretestRequired: true
+    };
+
     useEffect(() => {
         setIsFullscreen(true);
     }, []);
 
-    const {
-        nextTitle,
-        navigate
-    } = (() => {
+    const { nextTitle, navigate } = (() => {
 
-        if (greetingsData?.isPrequizRequired)
+        if (isPrequizRequired)
             return {
                 nextTitle: 'Tanfolyami kérdőív',
                 navigate: async () => {
@@ -46,7 +48,7 @@ export const GreetingSubpage = () => {
                 }
             };
 
-        if (greetingsData?.isPretestRequired)
+        if (isPretestRequired)
             return {
                 nextTitle: 'Tudasfelmero kerdoiv',
                 navigate: async () => {

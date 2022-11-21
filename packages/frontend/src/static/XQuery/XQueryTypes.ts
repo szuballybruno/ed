@@ -16,7 +16,7 @@ export type QueryHookResultType<T> = QueryStateType<T> & {
 }
 
 export class GlobalQueryStateType {
-    params: any[];
+    params: { [K: string]: any } | null;
     qr: QueryStateType<any>;
     url: string;
 };

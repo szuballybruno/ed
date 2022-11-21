@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { ObjectComparer } from '../static/objectComparer';
 
 /**
@@ -9,23 +9,26 @@ import { ObjectComparer } from '../static/objectComparer';
 const useMemoize = <T>(latestObject: T, onChange?: (changedProps: string[]) => void): T => {
 
     const latestObjectSafe = latestObject ?? {} as T;
-    const [memoizedObject, setMemoizedObject] = useState(latestObjectSafe);
+    const ref = useRef(latestObjectSafe);
 
+    // compare props
     const changedProps = ObjectComparer
-        .compareObjects(memoizedObject, latestObjectSafe);
+        .compareObjects(ref.current, latestObjectSafe);
 
-    const isChanged = changedProps
-        .any();
+    // return old ref which won't 
+    // cause rerenders down the line
+    if (!changedProps.any())
+        return ref.current;
 
-    if (isChanged) {
+    // update old ref 
+    ref.current = latestObjectSafe;
 
-        setMemoizedObject(latestObjectSafe);
+    // call on change
+    if (onChange)
+        onChange(changedProps);
 
-        if (onChange)
-            onChange(changedProps);
-    }
-
-    return memoizedObject;
+    // return new obejct's value
+    return ref.current;
 };
 
 const useIsChanged = (value: any) => {

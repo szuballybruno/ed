@@ -15,8 +15,15 @@ export const Logger = {
         if (!Environment.loggingEnabledKeys.some(x => x === key))
             return;
 
-        console.log(`[${key}] ${text}`);
-        if (data)
-            console.log(data);
+        const msg = `[${key}] ${text}`;
+
+        if (data === undefined) {
+
+            console.log(msg);
+        }
+        else {
+
+            console.log(msg, data);
+        }
     }
 };

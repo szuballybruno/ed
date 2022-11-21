@@ -24,9 +24,8 @@ export class UserCourseBridge {
     @XViewColumn()
     courseMode: CourseModeType;
 
-    @Column({ type: 'boolean' })
     @XViewColumn()
-    isCurrent: boolean;
+    lastInteractionDate: Date | null;
 
     @Column({ type: 'text', nullable: true })
     @XViewColumn()

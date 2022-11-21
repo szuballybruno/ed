@@ -4,6 +4,8 @@ import { apiRoutes } from '@episto/communication';
 import { Id } from '@episto/commontypes';
 import { QueryService } from '../../static/XQuery/XQueryReact';
 import { usePostDataUnsafe } from '../core/httpClient';
+import { isNullOrUndefined } from '../../static/frontendHelpers';
+import { useMemo } from 'react';
 
 export const PrequizApiService = {
 
@@ -20,7 +22,12 @@ export const PrequizApiService = {
 
     usePrequizUserAnswer: (courseId: Id<'Course'>, questionId: Id<'Question'> | null) => {
 
-        const qr = QueryService.useXQuery<PrequizUserAnswerDTO>(apiRoutes.prequiz.getUserAnswer, { questionId, courseId }, !!questionId);
+        const isEnabled = useMemo(() => !isNullOrUndefined(questionId), [questionId]);
+
+        const query = { questionId, courseId };
+
+        const qr = QueryService
+            .useXQuery<PrequizUserAnswerDTO>(apiRoutes.prequiz.getUserAnswer, query, isEnabled);
 
         return {
             userAnswer: qr.data,

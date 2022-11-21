@@ -48,6 +48,7 @@ import { ORMConnectionService } from './ORMConnectionService/ORMConnectionServic
 import { PlayerService } from './PlayerService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { VersionCreateService } from './VersionCreateService';
+import { UserCourseBridge } from '../models/entity/misc/UserCourseBridge';
 
 export class CourseService {
 
@@ -311,7 +312,24 @@ export class CourseService {
     /**
      * Start course 
      */
-    async startCourseAsync({ principalId, courseId, currentItemCode, stageName }: { principalId: PrincipalId } & CourseStartDTO) {
+    async startCourseAsync({
+        principalId,
+        courseId,
+        currentItemCode,
+        stageName
+    }: {
+        principalId: PrincipalId
+    } & CourseStartDTO) {
+
+        const alreadyCreated = await this
+            ._ormService
+            .query(UserCourseBridge, { principalId, courseId })
+            .where('userId', '=', 'principalId')
+            .and('courseId', '=', 'courseId')
+            .getOneOrNull();
+
+        if (alreadyCreated)
+            return;
 
         await this
             ._userCourseBridgeService

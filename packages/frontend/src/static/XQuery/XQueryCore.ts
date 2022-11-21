@@ -1,12 +1,17 @@
 import { httpGetAsync } from '../../services/core/httpClient';
 import { Logger } from '../Logger';
-import { GlobalQueryStateType, OnChangeListenerType, QueryStateType } from './XQueryTypes';
+import { ObjectComparer } from '../objectComparer';
+import { GlobalQueryStateType, OnChangeListenerType } from './XQueryTypes';
 
-const idleState: QueryStateType = {
-    data: null,
-    error: null,
-    state: 'idle'
-};
+const getIdleState = (url: string): GlobalQueryStateType => ({
+    qr: {
+        data: null,
+        error: null,
+        state: 'idle'
+    },
+    params: null,
+    url
+});
 
 export class XQueryCore<T> {
 
@@ -29,7 +34,7 @@ export class XQueryCore<T> {
     static getState(url: string) {
 
         return XQueryCore
-            .globalStates[url] ?? idleState;
+            .globalStates[url] ?? getIdleState(url);
     }
 
     private _onChangeCallback: OnChangeListenerType | null = null;
@@ -51,6 +56,10 @@ export class XQueryCore<T> {
         query: any,
         isEnabled?: boolean): void {
 
+        const queryingEnabled = isEnabled === false
+            ? false
+            : true;
+
         const setState = (newState: GlobalQueryStateType) => XQueryCore
             .setState(newState);
 
@@ -65,10 +74,9 @@ export class XQueryCore<T> {
          * If querying is disabled 
          * return last state or idle 
          */
-        const queryingEnabled = isEnabled === false ? false : true;
         if (!queryingEnabled) {
 
-            // Logger.logScoped('QUERY', `-- [${url}] Query is not enabled.`);
+            Logger.logScoped('QUERY', `-- [${url}] Query is not enabled.`);
             return;
         }
 
@@ -168,6 +176,8 @@ export class XQueryCore<T> {
         isEnabled?: boolean
     }) {
 
+        Logger.logScoped('QUERY', `Fetching ${url}...`, queryObject);
+
         // check if querying is enabled 
         const queryingEnabled = isEnabled === false ? false : true;
         if (!queryingEnabled) {
@@ -221,21 +231,27 @@ export class XQueryCore<T> {
             this._onChangeCallback(state);
     }
 
-    private _isCacheValid(url: string, newQueryParams: any, cachedQueryParams: any): boolean {
+    private _isCacheValid(url: string, newQueryParams: any, cachedQueryParams: {} | null): boolean {
 
-        if (!cachedQueryParams)
+        if (cachedQueryParams === null) {
+            
+            Logger.logScoped('QUERY', 'Cache invalid, not yet set.');
             return false;
+        }
+        
+        const changedProps = ObjectComparer
+            .compareObjects(cachedQueryParams, newQueryParams);
 
-        const unequalKeys = Object
-            .keys(newQueryParams)
-            .filter(key => {
+        // const unequalKeys = Object
+        //     .keys(newQueryParams)
+        //     .filter(key => {
 
-                return cachedQueryParams[key] !== newQueryParams[key];
-            });
+        //         return cachedQueryParamsArray[key] !== newQueryParams[key];
+        //     });
 
-        if (unequalKeys.length > 0) {
+        if (changedProps.length > 0) {
 
-            Logger.logScoped('QUERY', `-- [${url}] ` + unequalKeys
+            Logger.logScoped('QUERY', `-- [${url}] ` + changedProps
                 .map(key => `Cache key (${key}) value mismatch: ${JSON.stringify(cachedQueryParams[key])} <> ${JSON.stringify(newQueryParams[key])}`)
                 .join('\n'));
 
@@ -255,6 +271,7 @@ export class XQueryCore<T> {
             .keys(query)
             .filter(key => query[key] !== undefined)
             .forEach(key => obj[key] = query[key]);
+
         return obj;
     }
 }

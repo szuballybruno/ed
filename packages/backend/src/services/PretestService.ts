@@ -46,6 +46,10 @@ export class PretestService {
         const answerSessionId = await this._questionAnswerService
             .createAnswerSessionAsync(userId, pretestExam.examVersionId, null);
 
+        await this
+            ._courseBridgeService
+            .setLastInteractionDateAsync(principalId.getId(), courseId);
+
         return instantiate<PretestDataDTO>({
             answerSessionId,
             exam: pretestExam

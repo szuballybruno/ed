@@ -10,6 +10,7 @@ import { MapperService } from './MapperService';
 import { QueryServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { PermissionService } from './PermissionService';
+import { CurrentUserCourseBridgeView } from '../models/views/CurrentUserCourseBridgeView';
 
 export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> {
 
@@ -39,12 +40,6 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
     }) {
 
         /**
-         * Unset prev current 
-         */
-        await this
-            ._unsetPreviouslyCurrentCourse(userId);
-
-        /**
          * get isPretestRequired
          */
         const isPretestRequired = await this
@@ -61,61 +56,13 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
                 courseMode: isPretestRequired ? 'beginner' : 'advanced',
                 creationDate: new Date(),
                 currentItemCode,
-                isCurrent: true,
+                lastInteractionDate: new Date(),
                 previsionedCompletionDate: null,
                 requiredCompletionDate: null,
                 stageName,
                 startDate,
                 tempomatMode: 'auto'
             });
-    }
-
-    private async _unsetPreviouslyCurrentCourse(userId: Id<'User'>) {
-
-        const bridgeToPreviouslyCurrentCourse = await this
-            ._ormService
-            .query(UserCourseBridge, { userId })
-            .where('userId', '=', 'userId')
-            .and('isCurrent', '=', 'true')
-            .getOneOrNull();
-
-        if (!bridgeToPreviouslyCurrentCourse)
-            return;
-
-        await this
-            ._ormService
-            .save(UserCourseBridge, {
-                id: bridgeToPreviouslyCurrentCourse.id,
-                isCurrent: false
-            });
-    }
-
-    private async _getIsPretestRequired(courseId: Id<'Course'>) {
-
-        const courseWithIsPretestRequired = await this
-            ._ormService
-            .withResType<{
-                courseId: Id<'Course'>,
-                isPretestRequired: Boolean
-            }>()
-            .query(LatestCourseVersionView, { courseId })
-            .selectFrom(x => x
-                .columns(CourseVersion, {
-                    courseId: 'courseId'
-                })
-                .columns(CourseData, {
-                    isPretestRequired: 'isPretestRequired'
-                }))
-            .leftJoin(CourseVersion, x => x
-                .on('id', '=', 'versionId', LatestCourseVersionView))
-            .leftJoin(CourseData, x => x
-                .on('id', '=', 'courseDataId', CourseVersion))
-            .where('courseId', '=', 'courseId')
-            .getOneOrNull();
-
-        const isPretestRequired = !!courseWithIsPretestRequired?.isPretestRequired;
-
-        return isPretestRequired;
     }
 
     /**
@@ -127,20 +74,22 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
         stageName: CourseStageNameType,
         itemCode: string | null) {
 
-        // get appropriate bridge 
-        const courseBridge = await this
-            ._ormService
-            .query(UserCourseBridge, { userId, courseId })
-            .where('userId', '=', 'userId')
-            .and('courseId', '=', 'courseId')
-            .getSingle();
-
-        // set stage 
-        await this._ormService
-            .save(UserCourseBridge, {
-                id: courseBridge.id,
+        await this
+            ._updateBridge(userId, courseId, {
                 stageName,
-                currentItemCode: itemCode
+                currentItemCode: itemCode,
+                lastInteractionDate: new Date()
+            });
+    }
+
+    /**
+     * Set current course 
+     */
+    async setLastInteractionDateAsync(userId: Id<'User'>, courseId: Id<'Course'>) {
+
+        await this
+            ._updateBridge(userId, courseId, {
+                lastInteractionDate: new Date()
             });
     }
 
@@ -152,19 +101,15 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
         courseId: Id<'Course'>,
         mode: CourseModeType
     ) {
+        const userId = principalId
+            .getId();
 
-        const userId = principalId.getId();
-
-        const userCourseBridge = await this
-            .getUserCourseBridgeOrFailAsync(userId, courseId);
-
-        await this._ormService
-            .save(UserCourseBridge, {
+        await this
+            ._updateBridge(userId, courseId, {
                 courseId: courseId,
                 userId: userId,
-                id: userCourseBridge.id,
                 courseMode: mode
-            } as UserCourseBridge);
+            });
 
         /**
          * If advanced mode is set,
@@ -186,18 +131,10 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
      */
     async setCourseStartDateAsync(principalId: PrincipalId, courseId: Id<'Course'>) {
 
-        const userId = principalId.getId();
-
-        const userCourseBridge = await this.getUserCourseBridgeAsync(userId, courseId);
-        if (!userCourseBridge)
-            throw new Error('User course bridge not found!');
-
-        await this._ormService
-            .save(UserCourseBridge, {
-                courseId: courseId,
-                userId: userId,
-                id: userCourseBridge.id,
-                startDate: new Date()
+        await this
+            ._updateBridge(principalId.getId(), courseId, {
+                startDate: new Date(),
+                lastInteractionDate: new Date()
             });
     }
 
@@ -297,9 +234,8 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
 
         const { currentItemCode } = await this
             ._ormService
-            .query(UserCourseBridge, { principalId })
+            .query(CurrentUserCourseBridgeView, { principalId })
             .where('userId', '=', 'principalId')
-            .and('isCurrent', '=', 'true')
             .getOneOrNull() ?? { currentItemCode: null };
 
         return currentItemCode;
@@ -319,5 +255,46 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
                     requiredCompletionDate: x.requiredCompletionDate,
                     tempomatMode: 'strict'
                 } as UserCourseBridge)));
+    }
+
+    private async _getIsPretestRequired(courseId: Id<'Course'>) {
+
+        const courseWithIsPretestRequired = await this
+            ._ormService
+            .withResType<{
+                courseId: Id<'Course'>,
+                isPretestRequired: Boolean
+            }>()
+            .query(LatestCourseVersionView, { courseId })
+            .selectFrom(x => x
+                .columns(CourseVersion, {
+                    courseId: 'courseId'
+                })
+                .columns(CourseData, {
+                    isPretestRequired: 'isPretestRequired'
+                }))
+            .leftJoin(CourseVersion, x => x
+                .on('id', '=', 'versionId', LatestCourseVersionView))
+            .leftJoin(CourseData, x => x
+                .on('id', '=', 'courseDataId', CourseVersion))
+            .where('courseId', '=', 'courseId')
+            .getOneOrNull();
+
+        const isPretestRequired = !!courseWithIsPretestRequired?.isPretestRequired;
+
+        return isPretestRequired;
+    }
+
+    private async _updateBridge(userId: Id<'User'>, courseId: Id<'Course'>, bridge: Partial<UserCourseBridge>) {
+
+        const courseBridge = await this
+            .getUserCourseBridgeOrFailAsync(userId, courseId);
+
+        await this
+            ._ormService
+            .save(UserCourseBridge, {
+                id: courseBridge.id,
+                ...bridge
+            });
     }
 }

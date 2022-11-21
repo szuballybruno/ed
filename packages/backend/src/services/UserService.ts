@@ -1,3 +1,6 @@
+import { instantiate } from '@episto/commonlogic';
+import { ErrorWithCode, Id } from '@episto/commontypes';
+import { BriefUserDataDTO, DepartmentDTO, Mutation, UserAdminListDTO, UserControlDropdownDataDTO, UserCourseStatsDTO, UserDTO, UserEditReadDTO, UserEditSaveDTO, UserEditSimpleDTO } from '@episto/communication';
 import { CourseData } from '../models/entity/course/CourseData';
 import { AnswerSession } from '../models/entity/misc/AnswerSession';
 import { CourseAccessBridge } from '../models/entity/misc/CourseAccessBridge';
@@ -9,32 +12,19 @@ import { UserCourseBridge } from '../models/entity/misc/UserCourseBridge';
 import { RegistrationType } from '../models/Types';
 import { TempomatCalculationDataView } from '../models/views/TempomatCalculationDataView';
 import { UserOverviewView } from '../models/views/UserOverviewView';
-import { BriefUserDataDTO } from '@episto/communication';
-import { DepartmentDTO } from '@episto/communication';
-import { Mutation } from '@episto/communication';
-import { UserAdminListDTO } from '@episto/communication';
-import { UserControlDropdownDataDTO } from '@episto/communication';
-import { UserCourseStatsDTO } from '@episto/communication';
-import { UserDTO } from '@episto/communication';
-import { UserEditReadDTO } from '@episto/communication';
-import { UserEditSaveDTO } from '@episto/communication';
-import { UserEditSimpleDTO } from '@episto/communication';
-import { instantiate } from '@episto/commonlogic';
-import { ErrorWithCode } from '@episto/commontypes';
-import { Id } from '@episto/commontypes';
 import { getFullName } from '../utilities/helpers';
 import { InsertEntity } from '../utilities/misc';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
 import { AuthorizationService } from './AuthorizationService';
 import { HashService } from './HashService';
 import { MapperService } from './MapperService';
+import { UserLagbehindStatType } from './misc/types';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { RoleService } from './RoleService';
 import { TeacherInfoService } from './TeacherInfoService';
 import { TempomatService } from './TempomatService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { UserStatsService } from './UserStatsService';
-import { UserLagbehindStatType } from './misc/types';
 
 export class UserService {
 
@@ -803,7 +793,7 @@ export class UserService {
                 courseMode: 'beginner',
                 creationDate: new Date(),
                 currentItemCode: null,
-                isCurrent: false,
+                lastInteractionDate: null,
                 previsionedCompletionDate: null,
                 requiredCompletionDate: null,
                 stageName: 'assigned',

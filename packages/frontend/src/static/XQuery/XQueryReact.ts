@@ -28,8 +28,6 @@ const useXQuery = <TData extends Object>(url: string, query?: any, isEnabled?: b
             ...state.qr
         };
 
-        console.log('Settings result to: ', res);
-
         setResult(res);
 
         onQuery({
