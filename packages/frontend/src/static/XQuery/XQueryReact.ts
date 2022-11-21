@@ -3,13 +3,32 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useEventManagerContext } from '../../components/system/EventManagerFrame';
 import { EMPTY_ARRAY } from '../../helpers/emptyArray';
 import { HelperHooks } from '../../helpers/hooks';
+import { Logger } from '../Logger';
 import { XQueryCore } from './XQueryCore';
 import { GlobalQueryStateType, QueryEventType, QueryHookResultType, QueryStateType } from './XQueryTypes';
 
+/**
+ * @deprecated Use: useXQueryNew
+ */
 const useXQuery = <TData extends Object>(url: string, query?: any, isEnabled?: boolean): QueryHookResultType<TData | null> => {
 
-    const defState = useMemo(() => XQueryCore.getState(url), [url]);
-    const [result, setResult] = useState<QueryStateType>(defState.qr);
+    return useXQueryNew(url, { query, isEnabled });
+};
+
+const useXQueryNew = <TData extends Object>(
+    url: string,
+    options?: {
+        query?: any,
+        isEnabled?: boolean,
+        refetchOnMount?: boolean
+    }): QueryHookResultType<TData | null> => {
+
+    const { isEnabled, query, refetchOnMount } = options ?? {};
+
+    const initalStateOnMount = useMemo(() => XQueryCore
+        .getState(url), [url]);
+
+    const [result, setResult] = useState<QueryStateType>(initalStateOnMount.qr);
 
     const globalEventManager = useEventManagerContext();
 
@@ -28,6 +47,8 @@ const useXQuery = <TData extends Object>(url: string, query?: any, isEnabled?: b
             ...state.qr
         };
 
+        Logger.logScoped('QUERY', `${state.url} Setting result: `, state.qr.data);
+
         setResult(res);
 
         onQuery({
@@ -36,8 +57,11 @@ const useXQuery = <TData extends Object>(url: string, query?: any, isEnabled?: b
         });
     }, [setResult, onQuery]);
 
-    const xQueryCore = useMemo(() => new XQueryCore<TData>(url), [url]);
+    const xQueryCore = useMemo(() => new XQueryCore<TData>(url, handleChange), [handleChange, url]);
 
+    /**
+     * Lifecycle 
+     */
     useEffect(() => {
 
         return () => {
@@ -46,26 +70,39 @@ const useXQuery = <TData extends Object>(url: string, query?: any, isEnabled?: b
         };
     }, [xQueryCore]);
 
-    useEffect(() => {
-
-        xQueryCore
-            .setOnChangeCallback(handleChange);
-    }, [xQueryCore, handleChange]);
-
     // ping xquery core on every render 
     xQueryCore
-        .tryQuery(url, memoizedQuery, isEnabled);
+        .tryQuery(memoizedQuery, isEnabled);
 
     const refetch = useCallback(async () => {
 
         await xQueryCore
-            .refetchAsync(url, memoizedQuery, isEnabled);
-    }, [url, memoizedQuery, isEnabled, xQueryCore]);
+            .refetchAsync(memoizedQuery, isEnabled);
+    }, [memoizedQuery, isEnabled, xQueryCore]);
+
+    /**
+     * Refetch on mount 
+     */
+    useEffect(() => {
+
+        if (!refetchOnMount)
+            return;
+
+        // if state is idle, 
+        // meaning this has never been fetched before,
+        // do not refetch
+        if (initalStateOnMount.qr.state === 'idle')
+            return;
+
+        refetch();
+    }, [refetch, refetchOnMount, initalStateOnMount]);
 
     const finalResult = useMemo<QueryHookResultType<TData | null>>(() => ({
         ...result,
         refetch
     }), [result, refetch]);
+
+    Logger.logScoped('QUERY', `${url} fr data `, finalResult.data);
 
     return finalResult;
 };
@@ -103,6 +140,7 @@ const useXQueryArrayParametrized = <
 
 export const QueryService = {
     useXQuery,
+    useXQueryNew,
     useXQueryParametrized,
     useXQueryArray,
     useXQueryArrayParametrized

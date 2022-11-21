@@ -27,7 +27,10 @@ export const useCourseOverviewModuleCompareData = (userId?: Id<'User'>, courseId
 
 export const useOverviewPageDTO = () => {
 
-    const queryRes = QueryService.useXQuery<OverviewPageDTO>(apiRoutes.misc.getHomePageDTO);
+    const queryRes = QueryService
+        .useXQueryNew<OverviewPageDTO>(apiRoutes.misc.getHomePageDTO, {
+            refetchOnMount: true
+        });
 
     return {
         pageDTO: queryRes.data,
@@ -45,7 +48,7 @@ export const useMiscApiService = (globalEventManager: GlobalEventManagerType) =>
         const isEnabled = !currentRoute.isUnauthorized && state === 'authenticated';
 
         const qr = QueryService
-            .useXQuery<string>(apiRoutes.misc.getCurrentCourseItemCode, undefined, isEnabled);
+            .useXQueryNew<string>(apiRoutes.misc.getCurrentCourseItemCode, { isEnabled });
 
         return {
             refetchCurrentCourseItemCode: qr.refetch,

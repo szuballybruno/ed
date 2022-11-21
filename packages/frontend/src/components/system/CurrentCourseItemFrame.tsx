@@ -7,7 +7,7 @@ const useCurrentCourseItemContextLogic = () => {
     const { miscApiService } = useServiceContainerContext();
 
     const { currentCourseItemCode, refetchCurrentCourseItemCode } = miscApiService
-        .useCurrentCourseItemCode() ?? { currentCourseItemCode: null };
+        .useCurrentCourseItemCode();
 
     return useMemo(() => ({
         refetchCurrentCourseItemCode,
@@ -27,6 +27,8 @@ export const useCurrentCourseItemCodeContext = () => useContext(CurrentCourseIte
 export const CurrentCourseItemFrame = ({ children }: PropsWithChildren) => {
 
     const context = useCurrentCourseItemContextLogic();
+
+    console.log(context);
 
     return (
         <CurrentCourseItemContext.Provider value={context}>

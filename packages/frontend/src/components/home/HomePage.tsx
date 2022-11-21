@@ -106,6 +106,8 @@ const HomePage = () => {
     const { currentCourseItemCode } = useCurrentCourseItemCodeContext();
     const isAnyCourseInProgess = !!currentCourseItemCode;
 
+    console.log(currentCourseItemCode);
+
     return <>
 
         {/* sidebar / left pane */}
@@ -159,9 +161,16 @@ const HomePage = () => {
         <ContentPane
             minWidth={!isSmallerThan1320 && !isMobile ? '1060px' : undefined}>
 
-            {isMobile && <MobileWelcomeHeader user={user} />}
+            {/* mobile panels */}
+            {isMobile && (
+                <>
+                    <MobileWelcomeHeader
+                        user={user} />
 
-            {isMobile && <MobileRecommendedItemQuota activeCoursesPaging={activeCoursesPaging} />}
+                    <MobileRecommendedItemQuota
+                        activeCoursesPaging={activeCoursesPaging} />
+                </>
+            )}
 
             {/* main content */}
             <EpistoFlex2

@@ -20,7 +20,7 @@ export class XQueryCore<T> {
 
     static setState(state: GlobalQueryStateType) {
 
-        Logger.logScoped('QUERY', `-- state changed to: ${state.qr.state}!`);
+        Logger.logScoped('QUERY', `[${state.url}] State changed to: ${state.qr.state}!`, state.qr.data);
 
         XQueryCore
             .globalStates[state.url] = state;
@@ -37,10 +37,9 @@ export class XQueryCore<T> {
             .globalStates[url] ?? getIdleState(url);
     }
 
-    private _onChangeCallback: OnChangeListenerType | null = null;
     private _subscriptionFn: OnChangeListenerType | null = null;
 
-    constructor(url) {
+    constructor(private _url, private _onChangeCallback: OnChangeListenerType) {
 
         this._subscriptionFn = this
             ._executeOnChange
@@ -48,13 +47,14 @@ export class XQueryCore<T> {
 
         XQueryCore
             .onChangeListeners
-            .push([url, this._subscriptionFn]);
+            .push([this._url, this._subscriptionFn]);
     }
 
     tryQuery(
-        url: string,
         query: any,
         isEnabled?: boolean): void {
+
+        const url = this._url;
 
         const queryingEnabled = isEnabled === false
             ? false
@@ -76,7 +76,7 @@ export class XQueryCore<T> {
          */
         if (!queryingEnabled) {
 
-            Logger.logScoped('QUERY', `-- [${url}] Query is not enabled.`);
+            Logger.logScoped('QUERY', `[${url}] Query is not enabled.`);
             return;
         }
 
@@ -85,7 +85,7 @@ export class XQueryCore<T> {
          */
         if (!state) {
 
-            Logger.logScoped('QUERY', `-- [${url}] Cache not found, fetching...`);
+            Logger.logScoped('QUERY', `[${url}] Cache not found, fetching...`);
             this._fetchAsync({
                 state,
                 setState,
@@ -114,7 +114,7 @@ export class XQueryCore<T> {
          */
         if (!this._isCacheValid(url, newQueryParams, state.params)) {
 
-            Logger.logScoped('QUERY', `-- [${url}] Cache is invalid, fetching...`);
+            Logger.logScoped('QUERY', `[${url}] Cache is invalid, fetching...`);
             this._fetchAsync({
                 state,
                 setState,
@@ -127,7 +127,6 @@ export class XQueryCore<T> {
     }
 
     async refetchAsync(
-        url: string,
         queryObject: any,
         isEnabled?: boolean) {
 
@@ -135,26 +134,19 @@ export class XQueryCore<T> {
             .setState(newState);
 
         const state = XQueryCore
-            .getState(url);
+            .getState(this._url);
 
         await this
             ._fetchAsync({
                 state,
                 setState,
-                url,
+                url: this._url,
                 queryObject,
                 isEnabled
             });
     }
 
-    setOnChangeCallback(onChange: (state: GlobalQueryStateType) => void) {
-
-        this._onChangeCallback = onChange;
-    }
-
     destroy() {
-
-        this._onChangeCallback = null;
 
         XQueryCore
             .onChangeListeners = XQueryCore
@@ -182,7 +174,7 @@ export class XQueryCore<T> {
         const queryingEnabled = isEnabled === false ? false : true;
         if (!queryingEnabled) {
 
-            Logger.logScoped('QUERY', `-- [${url}] Query is not enabled.`);
+            Logger.logScoped('QUERY', `[${url}] Query is not enabled.`);
             return;
         }
 
@@ -227,18 +219,20 @@ export class XQueryCore<T> {
 
     private _executeOnChange(state: GlobalQueryStateType) {
 
-        if (this._onChangeCallback)
-            this._onChangeCallback(state);
+        if (!this._onChangeCallback)
+            throw new Error(`On changed callback is not yet set! Url: ${state.url}`);
+
+        this._onChangeCallback(state);
     }
 
     private _isCacheValid(url: string, newQueryParams: any, cachedQueryParams: {} | null): boolean {
 
         if (cachedQueryParams === null) {
-            
+
             Logger.logScoped('QUERY', 'Cache invalid, not yet set.');
             return false;
         }
-        
+
         const changedProps = ObjectComparer
             .compareObjects(cachedQueryParams, newQueryParams);
 
@@ -251,7 +245,7 @@ export class XQueryCore<T> {
 
         if (changedProps.length > 0) {
 
-            Logger.logScoped('QUERY', `-- [${url}] ` + changedProps
+            Logger.logScoped('QUERY', `[${url}] ` + changedProps
                 .map(key => `Cache key (${key}) value mismatch: ${JSON.stringify(cachedQueryParams[key])} <> ${JSON.stringify(newQueryParams[key])}`)
                 .join('\n'));
 
