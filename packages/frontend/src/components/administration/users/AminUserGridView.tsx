@@ -103,6 +103,7 @@ const useColumns = (
         .addIf(preset === 'all', {
             field: 'invertedLagBehind',
             headerName: 'Haladás',
+            renderCell: (value) => value ? Math.round(value.value) : '-'
         })
         .addIf(preset === 'all', {
             field: 'totalSessionLengthSeconds',

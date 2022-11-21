@@ -23,8 +23,7 @@ summerized_answer_result AS (
 					(COALESCE(mlea.avg_module_last_exam_score, 0) * 2)
 				) / 3
 			)
-			WHEN fesv.final_exam_score_percentage > 0
-			THEN (
+			ELSE (
 				(
 					(COALESCE(upagv.practise_correct_answer_rate, 0)) + 
 					(COALESCE(mlea.avg_module_last_exam_score, 0) * 2) +

@@ -61,6 +61,8 @@ export const ExamQuestions = ({
         .useIsMobileView();
     const { isIPhone } = Responsivity
         .useIsIPhone();
+    const { isLandscape } = Responsivity
+        .useIsLandscape();
 
     /**
      * Open abort dialog 
@@ -229,7 +231,8 @@ export const ExamQuestions = ({
 
             <ExamLayoutContent
                 style={{
-                    maxHeight: 'calc(100% - 10px)'
+                    maxHeight: (isMobile && isLandscape) ? undefined : 'calc(100% - 10px)',
+                    justifyContent: isMobile ? 'flex-start' : 'center'
                 }}
                 title={currentQuestion.questionText}>
 

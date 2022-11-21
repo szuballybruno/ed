@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { Responsivity } from '../../../helpers/responsivity';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoDiv } from '../../controls/EpistoDiv';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
@@ -9,10 +10,14 @@ export const OverlayDialog = (props: {
     closeButtonAction?: () => void
 }) => {
 
+    const { isMobile } = Responsivity.useIsMobileView();
+
     return <EpistoDiv
         id="questionnaireDialog"
         bg="white"
         p="20px"
+        maxWidth={isMobile ? '100vw' : undefined}
+        maxHeight={isMobile ? '100vh' : undefined}
         borderRadius="20px"
         boxShadow="0 0 20px #0000004a">
 
@@ -20,7 +25,8 @@ export const OverlayDialog = (props: {
         {props.children}
 
         {/* close button */}
-        <EpistoFlex2 mt="20px"
+        <EpistoFlex2
+            mt="20px"
             justify="flex-end"
             display={props.showCloseButton ? 'flex' : 'none'}>
             <EpistoButton

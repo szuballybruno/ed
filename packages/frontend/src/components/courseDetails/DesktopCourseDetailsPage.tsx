@@ -1,6 +1,7 @@
 import { Id } from '@episto/commontypes';
 import { CourseDetailsDTO } from '@episto/communication';
 import { useEffect, useState } from 'react';
+import { Responsivity } from '../../helpers/responsivity';
 import { Environment } from '../../static/Environemnt';
 import { translatableTexts } from '../../static/translatableTexts';
 import { useAdminCourseContentDialogLogic } from '../administration/users/adminCourseContentDialog/AdminCourseContentDialogLogic';
@@ -8,6 +9,7 @@ import { AdminUserCourseContentDialog } from '../administration/users/adminCours
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
+import { EpistoGrid } from '../controls/EpistoGrid';
 import { EpistoTabs } from '../controls/EpistoTabs';
 import { EpistoHeader } from '../EpistoHeader';
 import { ContentPane } from '../pageRootContainer/ContentPane';
@@ -33,6 +35,7 @@ export const DesktopCourseDetailsPage = (props: {
     const { userId, courseDetails, currentColor, handlePlayCourse, sidebarInfos } = props;
     const { adminCourseContentDialogLogic } = useAdminCourseContentDialogLogic();
     const [currentTab, setCurrentTab] = useState(0);
+    const isSmallerThan1320 = Responsivity.useIsSmallerThan('1320px');
 
     useEffect(() => {
 
@@ -85,7 +88,7 @@ export const DesktopCourseDetailsPage = (props: {
 
         <ContentPane
             overflowY="scroll"
-            padding="0 100px 0 100px">
+            /* padding="0 100px 0 100px" */>
 
             {/* Title */}
             <EpistoHeader
@@ -116,14 +119,17 @@ export const DesktopCourseDetailsPage = (props: {
                     </EpistoFlex2>
 
                     {/* briefing info items */}
-                    <EpistoFlex2 mt="20px"
-                        justify="space-evenly">
+                    <EpistoGrid
+                        mt="20px"
+                        auto='fill'
+                        minColumnWidth='100px'
+                        gridTemplateColumns={isSmallerThan1320 ? 'repeat(2, minmax(0, 1fr))' : 'repeat(4, minmax(0, 1fr))'}
+                        gap='10px'>
 
                         <CourseDetailsBriefingInfoItem
                             icon={Environment.getAssetUrl('/course_page_icons/about_category.svg')}
                             title={translatableTexts.courseDetails.briefingInfoItems.category}
-                            subTitle={courseDetails?.subCategoryName}
-                            mr='10px' />
+                            subTitle={courseDetails?.subCategoryName} />
 
                         {courseDetails && <CourseDetailsBriefingInfoItem
                             icon={<ProfileImage
@@ -132,26 +138,23 @@ export const DesktopCourseDetailsPage = (props: {
                                 firstName={courseDetails!.teacherData.teacherFirstName}
                                 lastName={courseDetails!.teacherData.teacherLastName} />}
                             title={translatableTexts!.courseDetails.briefingInfoItems.teacher}
-                            subTitle={courseDetails!.teacherData.teacherFullName}
-                            mr='10px' />}
+                            subTitle={courseDetails!.teacherData.teacherFullName} />}
 
                         <CourseDetailsBriefingInfoItem
                             icon={Environment.getAssetUrl('/course_page_icons/about_difficulty.svg')}
                             title={translatableTexts.courseDetails.briefingInfoItems.difficulty}
-                            subTitle={courseDetails?.difficulty + ' / 10 pont'}
-                            mr='10px' />
+                            subTitle={courseDetails?.difficulty + ' / 10 pont'} />
 
                         <CourseDetailsBriefingInfoItem
                             icon={Environment.getAssetUrl('/course_page_icons/about_learning_experience.svg')}
                             title={translatableTexts.courseDetails.briefingInfoItems.learningExperience}
                             subTitle={courseDetails?.benchmark + ' / 5 pont'} />
-                    </EpistoFlex2>
+                    </EpistoGrid>
 
                     {/* tabs */}
                     <EpistoFlex2
                         direction="column"
                         flex="1"
-                        width="100%"
                         mt='30px'
                         mb='50px'
                         background="var(--transparentWhite70)"

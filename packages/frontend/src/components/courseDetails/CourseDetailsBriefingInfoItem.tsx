@@ -1,7 +1,7 @@
-import React, {ReactNode} from 'react';
-import {isString} from '../../static/frontendHelpers';
-import {EpistoFlex2, EpistoFlex2Props} from '../controls/EpistoFlex';
-import {EpistoFont} from '../controls/EpistoFont';
+import React, { ReactNode } from 'react';
+import { isString } from '../../static/frontendHelpers';
+import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
+import { EpistoFont } from '../controls/EpistoFont';
 
 export const CourseDetailsBriefingInfoItem = (props: {
     icon?: string | ReactNode,
@@ -13,7 +13,7 @@ export const CourseDetailsBriefingInfoItem = (props: {
 
     return <EpistoFlex2
         direction={'row'}
-        minWidth='200px'
+        minWidth='150px'
         flex='1'
         height='60px'
         background="var(--transparentWhite70)"
