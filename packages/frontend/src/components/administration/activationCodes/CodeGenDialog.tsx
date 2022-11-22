@@ -1,5 +1,6 @@
 import { parseIntOrFail } from '@episto/commonlogic';
 import { useEffect, useState } from 'react';
+import { AdminActiveCompanyType } from '../../../models/types';
 import { showNotification } from '../../../services/core/notifications';
 import { useServiceContainerContext } from '../../../static/serviceContainer';
 import { EpistoButton } from '../../controls/EpistoButton';
@@ -9,10 +10,12 @@ import { EpistoFont } from '../../controls/EpistoFont';
 import { EpistoLabel } from '../../controls/EpistoLabel';
 import { EpistoDialog } from '../../universal/epistoDialog/EpistoDialog';
 import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogLogic';
-import { CompanySelectorDropdown, CompanySelectorLogicType } from '../users/CompanySelectorDropdown';
+import { useAdminBreadcrumbsContext } from '../breadcrumbsHeader/AdminBreadcrumbsContext';
+import { CompanySelectorDropdown } from '../users/CompanySelectorDropdown';
 
-export const useCodeGenDialogLogic = (companySelector: CompanySelectorLogicType, refreshList: () => void) => {
+export const useCodeGenDialogLogic = (activeCompany: AdminActiveCompanyType, refreshList: () => void) => {
 
+    const activeCompanyId = activeCompany?.id ?? null;
     const [prefix, setPrefix] = useState('');
     const [count, setCount] = useState('10');
     const [isLatest, setIsLatest] = useState(false);
@@ -23,6 +26,8 @@ export const useCodeGenDialogLogic = (companySelector: CompanySelectorLogicType,
 
     const { generateActivationCodesPreviewAsync, activationCodesPreviewList } = miscApiService
         .useGenerateActivationCodesPreview();
+
+    const { companySelectorLogic } = useAdminBreadcrumbsContext();
 
     const isPreviewGenerated = activationCodesPreviewList.length > 0;
 
@@ -46,7 +51,7 @@ export const useCodeGenDialogLogic = (companySelector: CompanySelectorLogicType,
     const handleGenerateActivationCodesPreviewAsync = async () => {
 
         await generateActivationCodesPreviewAsync({
-            companyId: companySelector.activeCompanyId,
+            companyId: activeCompanyId!,
             count: parseIntOrFail(count),
             prefix
         });
@@ -55,18 +60,17 @@ export const useCodeGenDialogLogic = (companySelector: CompanySelectorLogicType,
     const handleGenerateActivationCodesAsync = async () => {
 
         await generateActivationCodesAsync({
-            companyId: companySelector.activeCompanyId,
+            companyId: activeCompanyId!,
             count: parseIntOrFail(count),
             prefix
         });
 
-        showNotification(`Generated ${count} activation codes for company '${companySelector.activeCompany?.name}'`);
+        showNotification(`Generated ${count} activation codes for company '${activeCompany?.name ?? ''}'`);
         refreshList();
     };
 
     return {
         dialogLogic: useEpistoDialogLogic(useCodeGenDialogLogic.name),
-        compoanySelector: companySelector,
         prefix,
         setPrefix,
         activationCodesPreviewList,
@@ -75,7 +79,8 @@ export const useCodeGenDialogLogic = (companySelector: CompanySelectorLogicType,
         isPreviewGenerated,
         count,
         handleGenerateActivationCodesAsync,
-        handleGenerateActivationCodesPreviewAsync
+        handleGenerateActivationCodesPreviewAsync,
+        companySelectorLogic
     };
 };
 
@@ -83,7 +88,6 @@ export type CodeGenDialogLogicType = ReturnType<typeof useCodeGenDialogLogic>;
 
 export const CodeGenDialog = ({
     logic: {
-        compoanySelector,
         dialogLogic,
         prefix,
         setPrefix,
@@ -93,7 +97,8 @@ export const CodeGenDialog = ({
         isLatest: isPreviewingLatest,
         isPreviewGenerated,
         handleGenerateActivationCodesAsync,
-        handleGenerateActivationCodesPreviewAsync
+        handleGenerateActivationCodesPreviewAsync,
+        companySelectorLogic
     }
 }: { logic: CodeGenDialogLogicType }) => {
 
@@ -113,7 +118,7 @@ export const CodeGenDialog = ({
                     text="Company">
 
                     <CompanySelectorDropdown
-                        logic={compoanySelector} />
+                        logic={companySelectorLogic} />
                 </EpistoLabel>
 
                 <EpistoLabel

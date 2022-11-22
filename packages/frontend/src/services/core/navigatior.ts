@@ -53,8 +53,8 @@ export const useNavigation = () => {
             ? []
             : [{ query: TQuery }]
             : TQuery extends void
-            ? [{ params: TParams, query: TQuery }]
-            : []) => {
+            ? [{ params: TParams }]
+            : [{ params: TParams, query: TQuery }]) => {
 
         const [opts] = args;
         const optsOrEmpty = opts ?? {};
@@ -130,8 +130,6 @@ export const useNavigation = () => {
         navigate2(applicationRoutes.playerRoute.greetingRoute, { courseId });
     };
 
-    const navigateToAdminCourseList = () => navigate2(applicationRoutes.administrationRoute.coursesRoute);
-
     return {
         history,
         navigate2,
@@ -144,8 +142,12 @@ export const useNavigation = () => {
         navigateToCourseRating,
         navigateToCourseOverview,
         continueCourse,
-        navigateToAdminCourseList,
         navigateToHref,
         navigate3
     };
+};
+
+export const Navigator = {
+    useNavigation,
+    useHrefNav
 };

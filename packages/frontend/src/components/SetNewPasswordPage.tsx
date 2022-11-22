@@ -20,7 +20,6 @@ export const SetNewPasswordPage = () => {
     const token = useRouteQuery(applicationRoutes.setNewPasswordRoute)
         .getValue(x => x.token, 'string');
 
-    console.log('asd');
     const { companyDetails } = CompanyApiService
         .useCompanyDetailsByDomain();
 

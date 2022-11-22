@@ -1,14 +1,14 @@
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { EpistoRoutes } from '../../universal/EpistoRoutes';
-import { AdminBreadcrumbsHeader } from '../AdminBreadcrumbsHeader';
+import { AdminBreadcrumbsHeader } from '../breadcrumbsHeader/AdminBreadcrumbsHeader';
 import { RoleAdminIndexPage } from './RoleAdminIndexPage';
 
 export const RoleAdminPage = () => {
 
     return (
-        <AdminBreadcrumbsHeader
-            background='white'
-            direction='column'>
+        <>
+            <AdminBreadcrumbsHeader>
+            </AdminBreadcrumbsHeader >
 
             <EpistoRoutes
                 renderRoutes={[
@@ -17,6 +17,6 @@ export const RoleAdminPage = () => {
                         element: <RoleAdminIndexPage />
                     }
                 ]} />
-        </AdminBreadcrumbsHeader >
+        </>
     );
 };

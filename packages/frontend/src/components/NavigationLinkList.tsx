@@ -1,15 +1,18 @@
-import { NavLink } from 'react-router-dom';
 import { ApplicationRoute } from '../models/types';
 import { useIsMatchingCurrentRoute } from '../static/frontendHelpers';
 import { EpistoFlex2 } from './controls/EpistoFlex';
 import { EpistoFont } from './controls/EpistoFont';
 
-export const NavigationLinkList = (props: {
-    routes: ApplicationRoute[],
-    isNoText?: boolean
+export const NavigationLinkList = <TRoute extends ApplicationRoute<any, any>>({
+    onNav,
+    routes,
+    isNoText
+}: {
+    routes: TRoute[],
+    isNoText?: boolean,
+    onNav: (route: TRoute) => void
 }) => {
 
-    const { routes } = props;
     const isMatchingCurrent = useIsMatchingCurrentRoute();
 
     return <EpistoFlex2 direction="column">
@@ -18,8 +21,9 @@ export const NavigationLinkList = (props: {
 
                 const { isMatchingRoute: isCurrent } = isMatchingCurrent(route);
 
-                return <NavLink
-                    to={route.route.getAbsolutePath()}
+                return <EpistoFlex2
+                    cursor="pointer"
+                    onClick={() => onNav(route)}
                     key={index}>
 
                     <EpistoFlex2
@@ -34,7 +38,7 @@ export const NavigationLinkList = (props: {
                         {route.icon}
 
                         {/* text */}
-                        {!props.isNoText && <EpistoFont
+                        {!isNoText && <EpistoFont
                             fontSize="fontNormal14"
                             isUppercase
                             style={{
@@ -46,7 +50,7 @@ export const NavigationLinkList = (props: {
                         </EpistoFont>}
 
                     </EpistoFlex2>
-                </NavLink>;
+                </EpistoFlex2>;
             })}
-    </EpistoFlex2 >;
+    </EpistoFlex2>;
 };

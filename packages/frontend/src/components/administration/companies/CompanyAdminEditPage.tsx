@@ -5,7 +5,7 @@ import { CompanyApiService } from '../../../services/api/CompanyApiService';
 import { showNotification } from '../../../services/core/notifications';
 import { CompanyEditDataDTO } from '@episto/communication';
 import { usePostCallback, useStateObject } from '../../../static/frontendHelpers';
-import { useRouteParams } from '../../../static/locationHelpers';
+import { useRouteParams_OLD } from '../../../static/locationHelpers';
 import { EpistoCheckbox } from '../../controls/EpistoCheckbox';
 import { EpistoCheckboxLabel } from '../../controls/EpistoCheckboxLabel';
 import { EpistoColorPicker } from '../../controls/EpistoColorPicker';
@@ -18,9 +18,9 @@ type CompanyAdminEditPagePropsType = { onNameLoaded: (name: string) => void };
 
 export const CompanyAdminEditPage = memo(({ onNameLoaded }: CompanyAdminEditPagePropsType) => {
 
-    const { indexRoute, editRoute, coursesRoute, activationCodesRoute } = applicationRoutes.administrationRoute.companiesRoute;
+    const { indexRoute, editRoute, coursesRoute } = applicationRoutes.administrationRoute.companiesRoute;
 
-    const companyId = useRouteParams(editRoute)
+    const companyId = useRouteParams_OLD(editRoute)
         .getValue(x => x.companyId, 'int');
 
     const [{
@@ -109,8 +109,7 @@ export const CompanyAdminEditPage = memo(({ onNameLoaded }: CompanyAdminEditPage
             tabMenuItems={[
                 indexRoute,
                 editRoute,
-                coursesRoute,
-                activationCodesRoute
+                coursesRoute
             ]}
             navigationQueryParams={{
                 companyId

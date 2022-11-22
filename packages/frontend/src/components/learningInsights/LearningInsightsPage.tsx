@@ -1,28 +1,29 @@
-import { useContext } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
+import { Navigator } from '../../services/core/navigatior';
 import { useRedirectOnExactMatch } from '../../static/frontendHelpers';
-import { ContentPane } from '../pageRootContainer/ContentPane';
 import { LearningInsightsOverview } from '../LearningInsightsOverview';
-import { LeftPane } from '../pageRootContainer/LeftPane';
 import { NavigationLinkList } from '../NavigationLinkList';
-import { CurrentUserContext } from '../system/AuthenticationFrame';
+import { ContentPane } from '../pageRootContainer/ContentPane';
+import { LeftPane } from '../pageRootContainer/LeftPane';
 import { EpistoRoutes } from '../universal/EpistoRoutes';
 import { LearningCourseStats } from './LearningCourseStats';
 
 const LearningInsightsPage = () => {
-
-    const { id } = useContext(CurrentUserContext);
 
     useRedirectOnExactMatch({
         route: applicationRoutes.learningRoute,
         redirectRoute: applicationRoutes.learningRoute.overviewRoute
     });
 
+    const { navigate3 } = Navigator
+        .useNavigation();
+
     return <>
 
         <LeftPane>
 
             <NavigationLinkList
+                onNav={route => navigate3(route)}
                 routes={[
                     applicationRoutes.learningRoute.overviewRoute,
                     applicationRoutes.learningRoute.myCoursesRoute
