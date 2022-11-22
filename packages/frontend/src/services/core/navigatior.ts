@@ -19,17 +19,7 @@ export const useNavigation = () => {
 
     const { hrefNavigate } = useHrefNav();
 
-    const navigate2 = useCallback(<TParams, TQuery>(
-        route: (ApplicationRoute<TParams, TQuery>),
-        ...args: TParams extends void
-            ? TQuery extends void
-                ? []
-                : [TQuery]
-            : TQuery extends void
-                ? [TParams]
-                : [TParams, TQuery]) => {
-
-        const [params, query] = args;
+    const _nav = useCallback(({ params, query, route }: { route: ApplicationRoute<any, any>, params?: any, query?: any }) => {
 
         if (!route.route)
             return;
@@ -40,6 +30,39 @@ export const useNavigation = () => {
 
         hrefNavigate(replacedPath);
     }, [hrefNavigate]);
+
+    const navigate2 = useCallback(<TParams, TQuery>(
+        route: (ApplicationRoute<TParams, TQuery>),
+        ...args: TParams extends void
+            ? TQuery extends void
+            ? []
+            : [TQuery]
+            : TQuery extends void
+            ? [TParams]
+            : [TParams, TQuery]) => {
+
+        const [params, query] = args;
+
+        _nav({ route, params, query });
+    }, [_nav]);
+
+    const navigate3 = useCallback(<TParams, TQuery>(
+        route: ApplicationRoute<TParams, TQuery>,
+        ...args: TParams extends void
+            ? TQuery extends void
+            ? []
+            : [{ query: TQuery }]
+            : TQuery extends void
+            ? [{ params: TParams, query: TQuery }]
+            : []) => {
+
+        const [opts] = args;
+        const optsOrEmpty = opts ?? {};
+        const query = optsOrEmpty['query'] as TQuery | undefined;
+        const params = optsOrEmpty['params'] as TParams | undefined;
+
+        _nav({ route, params, query });
+    }, [_nav]);
 
     const navigateToHref = useCallback((href: string) => {
 
@@ -122,6 +145,7 @@ export const useNavigation = () => {
         navigateToCourseOverview,
         continueCourse,
         navigateToAdminCourseList,
-        navigateToHref
+        navigateToHref,
+        navigate3
     };
 };

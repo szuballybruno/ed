@@ -63,8 +63,6 @@ export const AdminEditUserControl = ({
     const availableRoles = userControlDropdownData?.availableRoles ?? [];
     const defaultCompany = activeCompany ?? companies.firstOrNull();
 
-    console.log(activeCompany);
-
     const company = companies
         .firstOrNull(x => x.id === selectedCompanyId) ?? defaultCompany;
 

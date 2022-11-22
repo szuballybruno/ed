@@ -1,10 +1,8 @@
+import { Id } from '@episto/commontypes';
 import { useState } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
-import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { ButtonType } from '../../../models/types';
 import { UserApiService } from '../../../services/api/UserApiService1';
-import { useNavigation } from '../../../services/core/navigatior';
-import { Id } from '@episto/commontypes';
 import { defaultCharts } from '../../../static/defaultChartOptions';
 import { Environment } from '../../../static/Environemnt';
 import { usePaging } from '../../../static/frontendHelpers';
@@ -89,16 +87,8 @@ export const AdminUserStatisticsSubpage = ({
     userId: Id<'User'>
 }) => {
 
-    const { addRoute, userRoute: { teacherInfoRoute, editRoute, statsRoute, courseContentRoute } } = applicationRoutes.administrationRoute.usersRoute;
-
-    const { navigate2 } = useNavigation();
-    const navigateToAddUser = () => navigate2(addRoute);
-
     const { adminCourseContentDialogLogic } = useAdminCourseContentDialogLogic();
     const paging = usePaging({ items: ['a', 'b', 'c', 'd'] });
-
-    const { userEditData } = UserApiService
-        .useEditUserData(userId);
 
     const { userLearningOverviewData, userLearningOverviewDataError, userLearningOverviewDataStatus } = UserApiService
         .useUserLearningOverviewData(userId);

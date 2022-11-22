@@ -363,7 +363,7 @@ export const useIsMatchingCurrentRoute = () => {
 
     const currentUrl = useCurrentUrlPathname();
 
-    return (appRoute: ApplicationRoute<any>) => {
+    return (appRoute: ApplicationRoute<any, any>) => {
 
         if (!appRoute)
             throw new Error('Route is null or undefined!');

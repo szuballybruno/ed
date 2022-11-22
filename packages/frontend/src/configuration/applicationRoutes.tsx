@@ -50,7 +50,7 @@ export type ApplicationRoutesType = {
         };
         usersRoute: ApplicationRoute<void, { preset?: UserDataGridPresetType }> & {
             indexRoute: ApplicationRoute;
-            addRoute: ApplicationRoute;
+            addRoute: ApplicationRoute<void, { companyId: Id<'Company'> }>;
             userRoute: ApplicationRoute<{ userId: Id<'User'> }> & {
                 editRoute: ApplicationRoute<{ userId: Id<'User'> }>;
                 statsRoute: ApplicationRoute<{ userId: Id<'User'> }>;

@@ -1,10 +1,7 @@
-import { applicationRoutes } from '../../../configuration/applicationRoutes';
-import { UserApiService } from '../../../services/api/UserApiService1';
-import { useNavigation } from '../../../services/core/navigatior';
-import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
-import { CompanyDTO } from '@episto/communication';
-import { UserEditSaveDTO } from '@episto/communication';
 import { Id } from '@episto/commontypes';
+import { CompanyDTO, UserEditSaveDTO } from '@episto/communication';
+import { UserApiService } from '../../../services/api/UserApiService1';
+import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
 import { useEventTrigger, useSubscribeEventTrigger } from '../../../static/frontendHelpers';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { AdminEditUserControl } from './AdminEditUserControl';
@@ -28,8 +25,6 @@ export const AdminEditUserSubpage = ({
     const { userEditData, refetchEditUserData } = UserApiService.useEditUserData(userId);
     const { saveUserAsync } = UserApiService.useSaveUser();
     const showError = useShowErrorDialog();
-    const { navigate2 } = useNavigation();
-    const navigateToAddUser = () => navigate2(applicationRoutes.administrationRoute.usersRoute.addRoute);
     const refetchTrigger = useEventTrigger();
 
     const handleSaveUserAsync = async (dto: UserEditSaveDTO) => {

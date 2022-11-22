@@ -322,7 +322,7 @@ export const AminUserGridView = ({
     const userRows = users
         .map(mapToRow);
 
-    const { navigate2 } = useNavigation();
+    const { navigate3 } = useNavigation();
     const { usersRoute } = applicationRoutes.administrationRoute;
     const { userRoute } = usersRoute;
     const isMatchingCurrentAppRoute = useIsMatchingCurrentRoute();
@@ -337,6 +337,8 @@ export const AminUserGridView = ({
             .openDialog(user);
     };
 
+    const companyId = companySelectorLogic.activeCompanyId;
+
     const columns = useColumns(isSimpleView, filterLogic.currentPreset, userId, showDeleteUserDialog, userId => {
 
         getSubroutes(userRoute)
@@ -345,10 +347,13 @@ export const AminUserGridView = ({
                 if (isMatchingCurrentAppRoute(appRoute).isMatchingRouteExactly) {
 
                     const query = companySelectorLogic.activeCompanyId
-                        ? { companyId: companySelectorLogic.activeCompanyId }
+                        ? { companyId }
                         : undefined;
 
-                    navigate2(appRoute, { userId }, query);
+                    navigate3(appRoute, {
+                        query,
+                        params: { userId }
+                    });
                 }
             });
     });
@@ -408,7 +413,10 @@ export const AminUserGridView = ({
                             alignItems: 'center',
                             margin: '0 5px'
                         }}
-                        onClick={() => navigate2(usersRoute.addRoute)}>
+                        onClick={() => {
+
+                            navigate3(usersRoute.addRoute, { query: { companyId } });
+                        }}>
 
                         <Add
                             style={{
