@@ -5,7 +5,7 @@ import { useAuthorizationContext } from '../system/AuthorizationContext';
 import { EpistoRoutes } from '../universal/EpistoRoutes';
 import { ActivationCodesAdminPage } from './activationCodes/ActivationCodesAdminPage';
 import { AdminLeftPane } from './AdminLeftPane';
-import { AdminBreadcrumbsHeaderRoot } from './breadcrumbsHeader/AdminBreadcrumbsHeaderRoot';
+import { AdminBreadcrumbsHeaderRoot, useAdminBreadcrumbsRootLogic } from './breadcrumbsHeader/AdminBreadcrumbsHeaderRoot';
 import { CompanyAdminPage } from './companies/CompanyAdminPage';
 import { CourseAdministartionSubpage } from './courses/CourseAdministartionSubpage';
 import { DebugPage } from './debug/DebugPage';
@@ -21,19 +21,23 @@ export const AdminPage = () => {
 
     const adminRoute = applicationRoutes.administrationRoute;
     const { hasPermission } = useAuthorizationContext();
+    const logic = useAdminBreadcrumbsRootLogic();
+    const { activeCompany } = logic;
+    const activeCompanyId = activeCompany?.id ?? null;
 
     return <>
 
         {/* admin left pane */}
         <AdminLeftPane
-            companyId={2 as any} />
+            activeCompanyId={activeCompanyId} />
 
         {/* admin content pane */}
         <ContentPane
             isNavbarLowHeight
             padding="0 10px 10px 10px">
 
-            <AdminBreadcrumbsHeaderRoot>
+            <AdminBreadcrumbsHeaderRoot
+                logic={logic}>
 
                 <EpistoRoutes
                     renderRoutes={new ArrayBuilder()
@@ -47,13 +51,15 @@ export const AdminPage = () => {
                         // user administration
                         .add({
                             route: adminRoute.usersRoute,
-                            element: <UserAdminSubpage />
+                            element: <UserAdminSubpage
+                                activeCompany={activeCompany} />
                         })
 
                         // course administartion
                         .add({
                             route: adminRoute.coursesRoute,
-                            element: <CourseAdministartionSubpage />
+                            element: <CourseAdministartionSubpage
+                                activeCompanyId={activeCompanyId} />
                         })
 
                         // shop administartion
@@ -94,7 +100,8 @@ export const AdminPage = () => {
 
                         .addIf(hasPermission('CAN_VIEW_HIDDEN_MENUS'), {
                             route: adminRoute.activationCodesRoute,
-                            element: <ActivationCodesAdminPage />
+                            element: <ActivationCodesAdminPage
+                                activeCompany={activeCompany} />
                         })
 
                         .addIf(hasPermission('CAN_VIEW_HIDDEN_MENUS'), {

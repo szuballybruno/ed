@@ -6,7 +6,9 @@ import { RoleAdminIndexPage } from './RoleAdminIndexPage';
 export const RoleAdminPage = () => {
 
     return (
-        <AdminBreadcrumbsHeader>
+        <>
+            <AdminBreadcrumbsHeader>
+            </AdminBreadcrumbsHeader >
 
             <EpistoRoutes
                 renderRoutes={[
@@ -15,6 +17,6 @@ export const RoleAdminPage = () => {
                         element: <RoleAdminIndexPage />
                     }
                 ]} />
-        </AdminBreadcrumbsHeader >
+        </>
     );
 };

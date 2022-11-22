@@ -30,8 +30,10 @@ export const CompanyAdminPage = memo(() => {
     })();
 
     return (
-        <AdminBreadcrumbsHeader
-            subRouteLabel={subRouteLabel}>
+        <>
+            <AdminBreadcrumbsHeader
+                subRouteLabel={subRouteLabel}>
+            </AdminBreadcrumbsHeader >
 
             <EpistoRoutes
                 renderRoutes={[
@@ -52,6 +54,6 @@ export const CompanyAdminPage = memo(() => {
                         element: <CompanyAdminActivationCodesPage />
                     }
                 ]} />
-        </AdminBreadcrumbsHeader >
+        </>
     );
 });

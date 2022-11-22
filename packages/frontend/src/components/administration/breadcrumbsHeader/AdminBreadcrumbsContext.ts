@@ -1,26 +1,30 @@
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useRef } from 'react';
+import { CompanyApiService } from '../../../services/api/CompanyApiService';
 import { useStateObject } from '../../../static/frontendHelpers';
+import { useCompanySelectorLogic } from '../users/CompanySelectorDropdown';
 
 export type AdminBreadcrumbsStateType = {
     subRouteLabel?: string;
     backButtonProps?: any;
-    headerComponent?: any;
 };
 
 export const useAdminBreadcrumbsState = () => {
 
     const [state, setState] = useStateObject<AdminBreadcrumbsStateType>({});
+    const headerContentRef = useRef<HTMLDivElement>(null);
 
-    // children?: ReactNode,
-    // subRouteLabel?: string,
-    // backButtonProps?: EpistoButtonPropsType,
-    // viewSwitchChecked?: boolean,
-    // viewSwitchFunction?: (checked: boolean) => void,
-    // headerComponent?: ReactNode
+    const { companies } = CompanyApiService
+        .useCompanies();
+
+    const companySelectorLogic = useCompanySelectorLogic({ companies });
+    const activeCompany = companySelectorLogic.activeCompany;
 
     return {
         setState,
-        ...state
+        ...state,
+        headerContentRef,
+        activeCompany,
+        companySelectorLogic
     };
 };
 

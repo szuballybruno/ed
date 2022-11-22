@@ -1,7 +1,7 @@
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { CompanyApiService } from '../../../services/api/CompanyApiService';
 import { parseIntOrNull } from '../../../static/frontendHelpers';
-import { useRouteParams } from '../../../static/locationHelpers';
+import { useRouteParams_OLD } from '../../../static/locationHelpers';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoEntryNew, useEpistoEntryState } from '../../controls/EpistoEntryNew';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
@@ -24,7 +24,7 @@ export const CompanyAdminActivationCodesPage = () => {
     });
     const { createCompanyActivationCodesAsync } = CompanyApiService.useCreateCompanyActivationCodes();
 
-    const companyId = useRouteParams(editRoute)
+    const companyId = useRouteParams_OLD(editRoute)
         .getValue(x => x.companyId, 'int');
 
     const handleCreateActivationCodes = () => {

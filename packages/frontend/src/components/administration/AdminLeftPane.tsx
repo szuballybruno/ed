@@ -1,5 +1,5 @@
 import { applicationRoutes } from '../../configuration/applicationRoutes';
-import { AdminCourseRouteParamType, ApplicationRoute } from '../../models/types';
+import { AdminActiveCompanyIdType, AdminActiveCompanyRouteParamType, ApplicationRoute } from '../../models/types';
 import { Navigator } from '../../services/core/navigatior';
 import { ArrayBuilder } from '../../static/frontendHelpers';
 import { NavigationLinkList } from '../NavigationLinkList';
@@ -7,9 +7,9 @@ import { LeftPane } from '../pageRootContainer/LeftPane';
 import { useAuthorizationContext } from '../system/AuthorizationContext';
 
 export const AdminLeftPane = ({
-    companyId
+    activeCompanyId
 }: {
-    companyId: AdminCourseRouteParamType['companyId']
+    activeCompanyId: AdminActiveCompanyIdType
 }) => {
 
     const { hasPermission } = useAuthorizationContext();
@@ -17,7 +17,7 @@ export const AdminLeftPane = ({
     const { navigate3 } = Navigator
         .useNavigation();
 
-    const menuItems = new ArrayBuilder<ApplicationRoute<AdminCourseRouteParamType, any>>()
+    const menuItems = new ArrayBuilder<ApplicationRoute<AdminActiveCompanyRouteParamType, any>>()
         .addIf(hasPermission('ADMINISTRATE_COMPANY'), administrationRoutes.usersRoute)
         .addIf(hasPermission('ADMINISTRATE_COMPANY'), administrationRoutes.statsRoute)
         .addIf(hasPermission('ADMINISTRATE_COMPANY'), administrationRoutes.coursesRoute)
@@ -35,7 +35,7 @@ export const AdminLeftPane = ({
 
             <NavigationLinkList
                 isNoText
-                onNav={route => navigate3(route, { params: { companyId } })}
+                onNav={route => navigate3(route, { params: { activeCompanyId } })}
                 routes={menuItems} />
         </LeftPane>
     );

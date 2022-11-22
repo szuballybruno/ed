@@ -4,7 +4,7 @@ import { CourseCategoryDTO, CourseDetailsEditDataDTO } from '@episto/communicati
 import { useEffect, useMemo } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { EMPTY_ARRAY } from '../../../helpers/emptyArray';
-import { AdminCourseRouteParamType } from '../../../models/types';
+import { AdminActiveCompanyIdType } from '../../../models/types';
 import { CourseApiService } from '../../../services/api/courseApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
@@ -26,7 +26,7 @@ import { SimpleEditList } from '../SimpleEditList';
 import { CourseAdministartionFrame } from './CourseAdministartionFrame';
 import { EditSection } from './EditSection';
 
-export const EditCourseDetailsSubpage = ({ companyId }: { companyId: AdminCourseRouteParamType['companyId'] }) => {
+export const EditCourseDetailsSubpage = ({ activeCompanyId }: { activeCompanyId: AdminActiveCompanyIdType }) => {
 
     // util
     const params = useRouteParams2(applicationRoutes.administrationRoute.coursesRoute.courseDetailsRoute);
@@ -160,7 +160,7 @@ export const EditCourseDetailsSubpage = ({ companyId }: { companyId: AdminCourse
             await deleteCourseAsync({ id: courseId });
             showNotification('Kurzus torolve.');
             navigate3(applicationRoutes.administrationRoute.coursesRoute, {
-                params: { companyId }
+                params: { activeCompanyId }
             });
         } catch (e) {
 

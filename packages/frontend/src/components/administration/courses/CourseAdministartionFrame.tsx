@@ -75,36 +75,35 @@ export const CourseAdministartionFrame = (params: {
             overflowY="scroll">
 
             {/* header */}
-            <AdminBreadcrumbsHeader
-                headerComponent={<EpistoButton
+            <AdminBreadcrumbsHeader>
+                <EpistoButton
                     onClick={handleCreateCourse}>
 
                     Kurzus hozzáadása
-                </EpistoButton>}>
-
-                {/* course list */}
-                <AdminCourseList
-                    noOverflow={noHeightOverflow}
-                    onCourseClick={navToCourse}
-                    courses={courses} />
-
-                {/* content pane */}
-                {isAnySelected
-                    ? children
-                    : <EpistoFlex2
-                        justify="center"
-                        className="whall"
-                        bg="white">
-
-                        <EpistoFont
-                            style={{
-                                marginTop: '50px'
-                            }}>
-                            Kérlek válassz ki egy kurzust
-                        </EpistoFont>
-                    </EpistoFlex2>}
-
+                </EpistoButton>
             </AdminBreadcrumbsHeader>
+
+            {/* course list */}
+            <AdminCourseList
+                noOverflow={noHeightOverflow}
+                onCourseClick={navToCourse}
+                courses={courses} />
+
+            {/* content pane */}
+            {isAnySelected
+                ? children
+                : <EpistoFlex2
+                    justify="center"
+                    className="whall"
+                    bg="white">
+
+                    <EpistoFont
+                        style={{
+                            marginTop: '50px'
+                        }}>
+                        Kérlek válassz ki egy kurzust
+                    </EpistoFont>
+                </EpistoFlex2>}
         </EpistoFlex2>
     );
 };

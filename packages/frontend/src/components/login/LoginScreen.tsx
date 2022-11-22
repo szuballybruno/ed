@@ -6,7 +6,7 @@ import { AuthenticationStateType, useLogInUser } from '../../services/api/authen
 import { CompanyApiService } from '../../services/api/CompanyApiService';
 import { useNavigation } from '../../services/core/navigatior';
 import { useShowErrorDialog } from '../../services/core/notifications';
-import { useQueryVal } from '../../static/locationHelpers';
+import { useQueryParams } from '../../static/locationHelpers';
 import { Logger } from '../../static/Logger';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoDiv } from '../controls/EpistoDiv';
@@ -30,7 +30,8 @@ export const LoginScreen = () => {
     const authState = useContext(AuthenticationStateContext);
     const { refetchAuthHandshake } = useRefetchUserAsync();
     const { hasPermission } = useAuthorizationContext();
-    const dest = useQueryVal('dest');
+    const dest = useQueryParams<{ dest: string }>()
+        .getValue(x => x.dest, 'string');
     const [isUpToDate, setIsUpToDate] = useState(false);
 
     // state

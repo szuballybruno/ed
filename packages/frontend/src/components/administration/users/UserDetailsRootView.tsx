@@ -1,6 +1,6 @@
 import { CompanyDTO } from '@episto/communication';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
-import { AdminCourseRouteParamType, ButtonType } from '../../../models/types';
+import { AdminActiveCompanyIdType, ButtonType } from '../../../models/types';
 import { UserApiService } from '../../../services/api/UserApiService1';
 import { Navigator } from '../../../services/core/navigatior';
 import { EpistoIcons } from '../../../static/EpistoIcons';
@@ -17,12 +17,12 @@ export const UserDetailsRootView = ({
     refetchUsers,
     activeCompany,
     companies,
-    companyId
+    activeCompanyId
 }: {
     refetchUsers: () => void,
     activeCompany: CompanyDTO | null,
     companies: CompanyDTO[],
-    companyId: AdminCourseRouteParamType['companyId']
+    activeCompanyId: AdminActiveCompanyIdType
 }) => {
 
     const params = useRouteParams2(applicationRoutes.administrationRoute.usersRoute.userRoute);
@@ -49,7 +49,7 @@ export const UserDetailsRootView = ({
             icon: <EpistoIcons.Close />,
             action: () => navigate3(
                 applicationRoutes.administrationRoute.usersRoute, {
-                params: { companyId },
+                params: { activeCompanyId },
                 query: { preset: undefined }
             })
         }

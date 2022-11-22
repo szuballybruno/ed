@@ -1,13 +1,11 @@
 import { Id } from '@episto/commontypes';
 import { ActivationCodeListDTO } from '@episto/communication';
-import { CompanyApiService } from '../../../services/api/CompanyApiService';
+import { AdminActiveCompanyType } from '../../../models/types';
 import { EpistoIcons } from '../../../static/EpistoIcons';
 import { useServiceContainerContext } from '../../../static/serviceContainer';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoDataGrid, EpistoDataGridColumnBuilder } from '../../controls/EpistoDataGrid';
-import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { AdminBreadcrumbsHeader } from '../breadcrumbsHeader/AdminBreadcrumbsHeader';
-import { CompanySelectorDropdown, useCompanySelectorLogic } from '../users/CompanySelectorDropdown';
 import { CodeGenDialog, useCodeGenDialogLogic } from './CodeGenDialog';
 
 const useColumns = () => new EpistoDataGridColumnBuilder<ActivationCodeListDTO, Id<'ActivationCode'>>()
@@ -58,18 +56,16 @@ const useColumns = () => new EpistoDataGridColumnBuilder<ActivationCodeListDTO, 
     })
     .getColumns();
 
-export const ActivationCodesAdminPage = () => {
+export const ActivationCodesAdminPage = ({ activeCompany }: { activeCompany: AdminActiveCompanyType }) => {
 
-    const { companies } = CompanyApiService.useCompanies();
-    const companySelectorLogic = useCompanySelectorLogic({ companies });
     const { miscApiService } = useServiceContainerContext();
 
     const { activationCodeLinks, refetchActivationCodeLinks } = miscApiService
-        .useActivationCodesList(companySelectorLogic.activeCompanyId);
+        .useActivationCodesList(activeCompany?.id ?? null);
 
     const columns = useColumns();
 
-    const codegGenDialogLogic = useCodeGenDialogLogic(companySelectorLogic, refetchActivationCodeLinks);
+    const codegGenDialogLogic = useCodeGenDialogLogic(activeCompany, refetchActivationCodeLinks);
 
     const openAddDialog = () => {
 
@@ -79,8 +75,8 @@ export const ActivationCodesAdminPage = () => {
     };
 
     return (
-        <AdminBreadcrumbsHeader
-            headerComponent={<EpistoFlex2>
+        <>
+            <AdminBreadcrumbsHeader>
                 <EpistoButton
                     margin={{
                         right: 'px10'
@@ -89,10 +85,7 @@ export const ActivationCodesAdminPage = () => {
                     icon={<EpistoIcons.Add />}>
                     Generate codes
                 </EpistoButton>
-
-                <CompanySelectorDropdown
-                    logic={companySelectorLogic} />
-            </EpistoFlex2>}>
+            </AdminBreadcrumbsHeader>
 
             <CodeGenDialog
                 logic={codegGenDialogLogic} />
@@ -101,6 +94,6 @@ export const ActivationCodesAdminPage = () => {
                 columns={columns}
                 getKey={x => x.activationCodeId}
                 rows={activationCodeLinks} />
-        </AdminBreadcrumbsHeader>
+        </>
     );
 };

@@ -8,6 +8,8 @@ import { ArrayBuilder, PropsWithChildren, useIsMatchingCurrentRoute } from '../.
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { MUI } from '../../controls/MUIControls';
+import { useAuthorizationContext } from '../../system/AuthorizationContext';
+import { CompanySelectorDropdown } from '../users/CompanySelectorDropdown';
 import { AdminBreadcrumbLink } from './AdminBreadcrumbLink';
 import { AdminBreadcrumbsContext, useAdminBreadcrumbsState } from './AdminBreadcrumbsContext';
 
@@ -16,10 +18,11 @@ export type CompanySelectorDropdownType = {
     name: string
 }
 
-export const AdminBreadcrumbsHeaderRoot = ({ children }: PropsWithChildren) => {
+export const useAdminBreadcrumbsRootLogic = () => {
 
     const contextValue = useAdminBreadcrumbsState();
-    const { backButtonProps, headerComponent, subRouteLabel } = contextValue;
+    const { backButtonProps, subRouteLabel, headerContentRef, activeCompany, companySelectorLogic } = contextValue;
+    const { hasPermission } = useAuthorizationContext();
 
     // util
     const isMatchingCurrentRoute = useIsMatchingCurrentRoute();
@@ -41,21 +44,52 @@ export const AdminBreadcrumbsHeaderRoot = ({ children }: PropsWithChildren) => {
         ? { title: subRouteLabel }
         : null;
 
+    return {
+        companySelectorLogic,
+        subRoute,
+        currentRoute,
+        hasPermission,
+        headerContentRef,
+        contextValue,
+        backButtonProps,
+        activeCompany
+    };
+};
+
+export type AdminBreadcrumbsRootLogicType = ReturnType<typeof useAdminBreadcrumbsRootLogic>;
+
+export const AdminBreadcrumbsHeaderRoot = ({ children, logic }: PropsWithChildren & { logic: AdminBreadcrumbsRootLogicType }) => {
+
+    const {
+        companySelectorLogic,
+        currentRoute,
+        subRoute,
+        hasPermission,
+        headerContentRef,
+        contextValue,
+        backButtonProps
+    } = logic;
+
     return <EpistoFlex2
         id={AdminBreadcrumbsHeaderRoot.name}
         flex="1"
         direction={'column'}>
 
+        {/* header part */}
         <EpistoFlex2
+            id={'BreadcrumbsHeader'}
             justify="space-between"
             align='center'
             minH="38px">
 
+            {/* breadcrumbs */}
             <EpistoFlex2
+                id={'HeaderLeftSide'}
                 align='center'>
 
                 {backButtonProps &&
                     <EpistoButton
+                        id={'BackButton'}
                         style={{
                             color: 'var(--mildDeepBlue)',
                             cursor: 'pointer',
@@ -97,14 +131,25 @@ export const AdminBreadcrumbsHeaderRoot = ({ children }: PropsWithChildren) => {
                 </MUI.Breadcrumbs>
             </EpistoFlex2>
 
+            {/* spacer */}
+            <EpistoFlex2
+                flex='1'></EpistoFlex2>
 
-            <EpistoFlex2 align='center'>
+            {/* header component host element */}
+            <EpistoFlex2
+                id={'HeaderComponentHostElement'}
+                ref={headerContentRef}
+                align='center'>
 
-                {headerComponent}
+                {/* -- headerComponent portal render -- */}
             </EpistoFlex2>
+
+            {/* company selector */}
+            {hasPermission('CAN_VIEW_HIDDEN_MENUS') && <CompanySelectorDropdown
+                logic={companySelectorLogic} />}
         </EpistoFlex2>
 
-        {/* children  */}
+        {/* content  */}
         <AdminBreadcrumbsContext.Provider
             value={contextValue}>
 

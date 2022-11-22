@@ -56,7 +56,7 @@ export const useMiscApiService = (globalEventManager: GlobalEventManagerType) =>
         };
     };
 
-    const useActivationCodesList = (companyId: Id<'Company'>) => {
+    const useActivationCodesList = (companyId: Id<'Company'> | null) => {
 
         const regViaActivationCodeRoute = applicationRoutes
             .registerViaActivationCodeRoute;
@@ -90,7 +90,7 @@ export const useMiscApiService = (globalEventManager: GlobalEventManagerType) =>
         const urlTemplate = getUrlTemplate();
 
         const qr = QueryService
-            .useXQueryArrayParametrized(ActivationCodeListDTO, apiRoutes.misc.getActivationCodeList, { companyId, urlTemplate });
+            .useXQueryArrayParametrized(ActivationCodeListDTO, apiRoutes.misc.getActivationCodeList, { companyId: companyId!, urlTemplate }, !!companyId);
 
         return {
             activationCodeLinks: qr.data,

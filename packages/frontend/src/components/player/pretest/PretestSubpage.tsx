@@ -1,13 +1,13 @@
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { PretestApiService } from '../../../services/api/pretestApiService';
 import { useNavigation } from '../../../services/core/navigatior';
-import { useRouteParams } from '../../../static/locationHelpers';
+import { useRouteParams_OLD } from '../../../static/locationHelpers';
 import { ExamQuestions } from '../../exam/ExamQuestions';
 import { LoadingFrame } from '../../system/LoadingFrame';
 
 export const PretestSubpage = () => {
 
-    const courseId = useRouteParams(applicationRoutes.playerRoute.pretestRoute)
+    const courseId = useRouteParams_OLD(applicationRoutes.playerRoute.pretestRoute)
         .getValue(x => x.courseId, 'int');
 
     const { navigate2 } = useNavigation();

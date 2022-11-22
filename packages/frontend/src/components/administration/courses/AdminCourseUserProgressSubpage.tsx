@@ -5,7 +5,7 @@ import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { useCourseUserStatsData } from '../../../services/api/userStatsApiService';
 import { Environment } from '../../../static/Environemnt';
 import { formatTimespan, usePaging } from '../../../static/frontendHelpers';
-import { useRouteParams, useRouteQuery, useSetQueryParams } from '../../../static/locationHelpers';
+import { useRouteParams_OLD, useRouteQuery, useSetQueryParams } from '../../../static/locationHelpers';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoDataGrid, EpistoDataGridColumnBuilder } from '../../controls/EpistoDataGrid';
 import { EpistoDiv } from '../../controls/EpistoDiv';
@@ -304,7 +304,7 @@ export const useCourseUserGridFilterSettingsLogic = () => {
 
 export const AdminCourseUserProgressSubpage = () => {
 
-    const courseId = useRouteParams(applicationRoutes.administrationRoute.coursesRoute.courseUserProgressRoute)
+    const courseId = useRouteParams_OLD(applicationRoutes.administrationRoute.coursesRoute.courseUserProgressRoute)
         .getValue(x => x.courseId, 'int');
 
     const filterLogic = useCourseUserGridFilterSettingsLogic();

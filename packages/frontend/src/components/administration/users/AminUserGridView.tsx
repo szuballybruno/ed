@@ -4,6 +4,7 @@ import { UserAdminListDTO } from '@episto/communication';
 import { Add } from '@mui/icons-material';
 import { useEffect, useMemo, useState } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
+import { AdminActiveCompanyIdType } from '../../../models/types';
 import { UserApiService } from '../../../services/api/UserApiService1';
 import { useNavigation } from '../../../services/core/navigatior';
 import { useShowErrorDialog } from '../../../services/core/notifications';
@@ -19,7 +20,6 @@ import { SegmentedButton } from '../../controls/SegmentedButton';
 import { ProfileImage } from '../../ProfileImage';
 import { EpistoDialog } from '../../universal/epistoDialog/EpistoDialog';
 import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogLogic';
-import { CompanySelectorLogicType } from './CompanySelectorDropdown';
 import { UsersSearchFilters } from './UsersSearchFilters';
 
 const useColumns = (
@@ -316,10 +316,10 @@ export const AminUserGridView = ({
         userId,
         refetchUsers
     },
-    companySelectorLogic
+    activeCompanyId
 }: {
     logic: AdminUserGridLogicType,
-    companySelectorLogic: CompanySelectorLogicType
+    activeCompanyId: AdminActiveCompanyIdType
 }) => {
 
     const userRows = users
@@ -340,8 +340,6 @@ export const AminUserGridView = ({
             .openDialog(user);
     };
 
-    const companyId = companySelectorLogic.activeCompanyId;
-
     const columns = useColumns(isSimpleView, filterLogic.currentPreset, userId, showDeleteUserDialog, userId => {
 
         getSubroutes(userRoute)
@@ -349,8 +347,8 @@ export const AminUserGridView = ({
 
                 if (isMatchingCurrentAppRoute(appRoute).isMatchingRouteExactly) {
 
-                    const query = companySelectorLogic.activeCompanyId
-                        ? { companyId }
+                    const query = activeCompanyId
+                        ? { companyId: activeCompanyId }
                         : undefined;
 
                     navigate3(appRoute, {
@@ -418,7 +416,7 @@ export const AminUserGridView = ({
                         }}
                         onClick={() => {
 
-                            navigate3(usersRoute.addRoute, { query: { companyId } });
+                            navigate3(usersRoute.addRoute, { query: { companyId: activeCompanyId } });
                         }}>
 
                         <Add

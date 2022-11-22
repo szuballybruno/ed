@@ -469,8 +469,6 @@ export const useGetCurrentAppRoute = () => {
             ? match.isMatchingRouteExactly
             : match.isMatchingRoute;
 
-        // console.log(`Checking route "${route.route.getAbsolutePath()}" isMatching: ${didmatch}`);
-
         return didmatch;
     };
 

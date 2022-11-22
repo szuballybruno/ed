@@ -148,5 +148,6 @@ export const useNavigation = () => {
 };
 
 export const Navigator = {
-    useNavigation
+    useNavigation,
+    useHrefNav
 };

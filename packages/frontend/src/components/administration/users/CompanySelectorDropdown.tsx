@@ -1,8 +1,8 @@
-import { CompanyDTO } from '@episto/communication';
 import { Id } from '@episto/commontypes';
+import { CompanyDTO } from '@episto/communication';
+import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { LocationHelpers } from '../../../static/locationHelpers';
 import { EpistoSelect } from '../../controls/EpistoSelect';
-import { useCurrentUserContext } from '../../system/AuthenticationFrame';
 
 export const useCompanySelectorLogic = ({
     companies
@@ -10,24 +10,23 @@ export const useCompanySelectorLogic = ({
     companies: CompanyDTO[]
 }) => {
 
-    const queryParams = LocationHelpers
-        .useQueryParams<{ companyId: Id<'Company'> }>();
+    const { administrationRoute } = applicationRoutes;
 
-    const { companyId: currentUserCompanyId } = useCurrentUserContext();
+    const params = LocationHelpers
+        .useRouteParams2(administrationRoute);
 
-    const { setQueryParams } = LocationHelpers
-        .useSetQueryParams<{ companyId: string }>();
+    const { setRouteParam } = LocationHelpers
+        .useSetRouteParam(administrationRoute, 'activeCompanyId');
 
-    const activeCompanyId = queryParams
-        .getValueOrNull(x => x.companyId, 'int') ?? currentUserCompanyId;
+    const activeCompanyId = params
+        .getValue(x => x.activeCompanyId as any, 'int') as any as Id<'Company'>;
 
     const activeCompany = companies
         .firstOrNull(x => x.id === activeCompanyId);
 
-    const handleSelectCompany = (companyId: Id<'Company'> | null) => {
+    const handleSelectCompany = (companyId: Id<'Company'>) => {
 
-        const queryValue = companyId === -1 as any ? null : companyId + '';
-        setQueryParams('companyId', queryValue);
+        setRouteParam(companyId.toString());
     };
 
     return {

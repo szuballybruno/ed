@@ -1,7 +1,7 @@
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { useNavigation } from '../../../services/core/navigatior';
 import { Environment } from '../../../static/Environemnt';
-import { useRouteParams } from '../../../static/locationHelpers';
+import { useRouteParams_OLD } from '../../../static/locationHelpers';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { ExamLayout } from '../../exam/ExamLayout';
@@ -10,7 +10,7 @@ export const PretestGreetingSubpage = () => {
 
     const { navigate2 } = useNavigation();
 
-    const courseId = useRouteParams(applicationRoutes.playerRoute.pretestGreetingRoute)
+    const courseId = useRouteParams_OLD(applicationRoutes.playerRoute.pretestGreetingRoute)
         .getValue(x => x.courseId, 'int');
 
     const gotToPretest = () => {
