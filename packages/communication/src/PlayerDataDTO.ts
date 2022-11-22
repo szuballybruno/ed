@@ -13,6 +13,8 @@ export class PlayerDataDTO {
     courseId: Id<'Course'>;
     modules: PlaylistModuleDTO[];
     currentPlaylistItemCode: string;
+    previousPlaylistItemCode: string | null;
+    previousPlaylistItemState: CourseItemStateType | null;
     nextPlaylistItemCode: string | null;
     nextPlaylistItemState: CourseItemStateType | null;
     canChangeMode: boolean;

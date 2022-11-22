@@ -219,20 +219,18 @@ export const ExamQuestions = ({
                 }
             ]}
             handleBack={handleGoToPreviousQuestion}
-            footerButtons={[
-                {
-                    title: isLastQuestion
-                        ? 'Vizsga befejezése'
-                        : translatableTexts.exam.nextQuestion,
-                    action: handleNextAsync
-                }
-            ]}
+            footerButtons={[{
+                title: isLastQuestion
+                    ? 'Vizsga befejezése'
+                    : translatableTexts.exam.nextQuestion,
+                action: handleNextAsync
+            }]}
             isFirst={questionPaging.currentIndex === 0}>
 
             <ExamLayoutContent
                 style={{
                     maxHeight: (isMobile && isLandscape) ? undefined : 'calc(100% - 10px)',
-                    justifyContent: isMobile ? 'flex-start' : 'center'
+                    justifyContent: (isMobile && isLandscape) ? 'flex-start' : 'center'
                 }}
                 title={currentQuestion.questionText}>
 
@@ -243,7 +241,7 @@ export const ExamQuestions = ({
                     pt='10px'
                     width="100%">
 
-                    {isMobile
+                    {isMobile && !isLandscape
                         ? <EpistoFlex2
                             px='5px'
                             direction='column'>

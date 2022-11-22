@@ -47,8 +47,7 @@ export const ExamResultsSlide = (props: {
     return <ExamLayout
         justify='flex-start'
         headerCenterText={exam.title}
-        showFooterButtonsOnTop
-        footerButtons={new ArrayBuilder()
+        headerButtons={new ArrayBuilder()
             .addIf(!exam.isFinalExam, {
                 title: translatableTexts.exam.continueCourse,
                 action: continueCourse
@@ -58,6 +57,34 @@ export const ExamResultsSlide = (props: {
                 action: goToCourseRating
             })
             .addIf(!!exam.isFinalExam, {
+                title: 'Kurzus összegzése',
+                action: () => {
+
+                    navigate2(applicationRoutes.playerRoute.courseOverviewRoute, { courseId });
+                }
+            })
+            .addIf(!!exam.isFinalExam && !isMobile, {
+                title: 'Vissza a tanfolyamkeresőbe',
+                action: () => {
+
+                    if (isMobile) {
+                        setIsFullscreen(false);
+                    }
+
+                    navigate2(applicationRoutes.availableCoursesRoute);
+                }
+            })
+            .getArray()}
+        footerButtons={new ArrayBuilder()
+            .addIf(!exam.isFinalExam, {
+                title: translatableTexts.exam.continueCourse,
+                action: continueCourse
+            })
+            .addIf(!!exam.isFinalExam && !isMobile, {
+                title: 'Kurzus értékelése',
+                action: goToCourseRating
+            })
+            .addIf(!!exam.isFinalExam && !isMobile, {
                 title: 'Kurzus összegzése',
                 action: () => {
 

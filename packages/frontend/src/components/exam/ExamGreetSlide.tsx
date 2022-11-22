@@ -10,11 +10,13 @@ import { ExamResultStats } from './ExamResultStats';
 
 export const ExamGreetSlide = (props: {
     exam: ExamPlayerDataDTO,
+    handleBackToPlayer: () => void,
     startExam: () => void
 }) => {
 
     const {
         exam,
+        handleBackToPlayer,
         startExam
     } = props;
 
@@ -39,6 +41,10 @@ export const ExamGreetSlide = (props: {
         justify='flex-start'
         headerCenterText={exam.title}
         footerButtons={new ArrayBuilder()
+            .addIf(isMobile, {
+                title: 'Vissza a videókhoz',
+                action: handleBackToPlayer
+            })
             .addIf(exam.canTakeAgain, {
                 title: exam.examStats ? 'Újrakezdés' : translatableTexts.exam.startExam,
                 action: startExam

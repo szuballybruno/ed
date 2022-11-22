@@ -101,7 +101,11 @@ export class PlayerService {
             : await this._questionAnswerService
                 .createAnswerSessionAsync(userId, examPlayerDTO?.examVersionId ?? null, videoPlayerDTO?.videoVersionId ?? null);
 
-        //
+        // get previous item, because on mobile it's needed
+        // to abort the exam before it's started
+        const { previousPlaylistItemCode, previousPlaylistItemState } = this
+            ._getPreviousPlaylistItem(modules, validItemCode);
+
         // get next item 
         const { nextPlaylistItemCode, nextItemState } = this
             ._getNextPlaylistItem(modules, validItemCode);
@@ -122,6 +126,8 @@ export class PlayerService {
             courseId: courseId,
             currentPlaylistItemCode: requestedItemCode,
             modules: modules,
+            previousPlaylistItemCode,
+            previousPlaylistItemState,
             nextPlaylistItemCode,
             nextPlaylistItemState: nextItemState,
             canChangeMode: !!hasPermission
@@ -155,6 +161,27 @@ export class PlayerService {
             return playlistViewByModuleCode.courseId;
 
         throw new Error(`Playlist code (${playlistItemCode}) is corrupt: not found in playlist view!`);
+    }
+
+    /**
+    * Gets the previous item in modules list 
+    */
+    private _getPreviousPlaylistItem(modules: PlaylistModuleDTO[], validItemCode: string) {
+
+        const flat = this
+            ._getPlaylistItemsFlatList(modules);
+
+        const currentItemIndexInFlatList = flat
+            .findIndex(x => x.playlistItemCode === validItemCode);
+
+        const previousItem = flat[currentItemIndexInFlatList + -1];
+        const previousPlaylistItemCode = previousItem?.playlistItemCode ?? null;
+        const previousPlaylistItemState = previousItem?.playlistItemState ?? null;
+
+        return {
+            previousPlaylistItemCode,
+            previousPlaylistItemState
+        };
     }
 
     /**

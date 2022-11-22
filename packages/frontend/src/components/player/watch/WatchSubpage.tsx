@@ -56,6 +56,7 @@ export const WatchSubpage = () => {
         courseId,
         modules,
         canChangeMode,
+        previousPlaylistItemCode,
         nextPlaylistItemCode,
         currentPlaylistItemCode,
         nextPlaylistItemState
@@ -152,6 +153,16 @@ export const WatchSubpage = () => {
         scroll();
     };
 
+    const handlePlayPreviousItem = () => {
+
+        Logger.logScoped('PLAYBACK', 'Playing previous item. Item code: ' + nextPlaylistItemCode);
+
+        if (previousPlaylistItemCode)
+            navigateToPlayer(previousPlaylistItemCode);
+
+        scroll();
+    };
+
     if (isDeleted)
         return (
             <EpistoFlex2
@@ -214,6 +225,7 @@ export const WatchSubpage = () => {
                 {/* EXAM */}
                 {examPlayerData && <ExamPlayer
                     continueCourse={handleContinueCourse}
+                    handleBackToPlayer={handlePlayPreviousItem}
                     answerSessionId={answerSessionId!}
                     setWatchSubpageState={setWatchSubpageState}
                     watchSubpageState={watchSubpageState}

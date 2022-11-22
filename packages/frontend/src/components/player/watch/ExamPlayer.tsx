@@ -18,6 +18,7 @@ export const ExamPlayer = (props: {
     answerSessionId: Id<'AnswerSession'>,
     courseId: Id<'Course'>,
     continueCourse: () => void,
+    handleBackToPlayer: () => void,
     watchSubpageState: WatchSubpageState,
     setWatchSubpageState: React.Dispatch<React.SetStateAction<WatchSubpageState>>
 }) => {
@@ -27,6 +28,7 @@ export const ExamPlayer = (props: {
         setWatchSubpageState,
         answerSessionId,
         continueCourse,
+        handleBackToPlayer,
         courseId,
         watchSubpageState
     } = props;
@@ -94,6 +96,7 @@ export const ExamPlayer = (props: {
     const examWorkflowPages = [
         () => <ExamGreetSlide
             exam={exam}
+            handleBackToPlayer={handleBackToPlayer}
             startExam={handleStartExamAsync} />,
 
         () => <ExamQuestions

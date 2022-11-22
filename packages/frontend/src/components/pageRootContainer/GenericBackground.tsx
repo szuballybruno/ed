@@ -4,7 +4,7 @@ import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoGrid } from '../controls/EpistoGrid';
 
 export const GenericBackground = (props: {
-    customBaseColor?: string | null,
+    customBaseColor?: string,
     isFixed?: boolean,
     isFullscreenSized?: boolean
 }) => {
@@ -20,34 +20,28 @@ export const GenericBackground = (props: {
     const defaultMobileColor = 'rgba(80, 150, 255, 0.1)';
     const defaultDesktopColor = 'rgba(0, 100, 255, 0.1)';
 
+    const getRgbFromRgba = (rgb: string) => {
+
+        const regex = /\(([^()]*)(,[^()]*)\)/gm;
+        const regexColor = regex.exec(rgb);
+        return regexColor ? regexColor[1] : undefined;
+    };
+
     /* Getting r,g,b values without the alpha */
-    const regex = /\(([^()]*)(,[^()]*)\)/gm;
-    const defaultMobileBaseColor = regex.exec(defaultMobileColor)![1];
-
-    const plainCustomBaseColor = (() => {
-
-        if (!customBaseColor)
-            return '0, 100, 255';
-
-        const color = regex.exec(customBaseColor);
-
-        if (color && color[1])
-            return color[1];
-
-        return '0, 100, 255';
-    })();
+    const defaultMobileBaseColor = getRgbFromRgba(defaultMobileColor);
+    const plainCustomBaseColor = customBaseColor ? getRgbFromRgba(customBaseColor) : '0,100,255';
 
     /* You can set a custom color e.g. for a company */
     const currentColor = (() => {
-
-        if (isIPhone && !customBaseColor)
-            return 'rgb(' + defaultMobileBaseColor + ')';
 
         if (isIPhone && customBaseColor)
             return 'rgb(' + plainCustomBaseColor + ')';
 
         if (customBaseColor)
-            return customBaseColor;
+            return 'rgb(' + plainCustomBaseColor + ')';
+
+        if (isIPhone && !customBaseColor)
+            return 'rgb(' + defaultMobileBaseColor + ')';
 
         if (isMobile)
             return defaultMobileColor;
