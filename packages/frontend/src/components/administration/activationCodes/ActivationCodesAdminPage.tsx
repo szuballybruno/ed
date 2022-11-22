@@ -6,7 +6,7 @@ import { useServiceContainerContext } from '../../../static/serviceContainer';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoDataGrid, EpistoDataGridColumnBuilder } from '../../controls/EpistoDataGrid';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
-import { AdminBreadcrumbsHeader } from '../AdminBreadcrumbsHeader';
+import { AdminBreadcrumbsHeader } from '../breadcrumbsHeader/AdminBreadcrumbsHeader';
 import { CompanySelectorDropdown, useCompanySelectorLogic } from '../users/CompanySelectorDropdown';
 import { CodeGenDialog, useCodeGenDialogLogic } from './CodeGenDialog';
 

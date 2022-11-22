@@ -8,7 +8,7 @@ import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoGrid } from '../../controls/EpistoGrid';
 import { LoadingFrame } from '../../system/LoadingFrame';
 import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogLogic';
-import { AdminBreadcrumbsHeader } from '../AdminBreadcrumbsHeader';
+import { AdminBreadcrumbsHeader } from '../breadcrumbsHeader/AdminBreadcrumbsHeader';
 
 export const DebugPage = () => {
 
@@ -41,9 +41,7 @@ export const DebugPage = () => {
     const dialogLogic = useEpistoDialogLogic('reward');
 
     return <LoadingFrame loadingState={loadingState}>
-        <AdminBreadcrumbsHeader
-            flex='0'
-            direction='row'>
+        <AdminBreadcrumbsHeader>
 
             <EpistoGrid
                 width="100%"

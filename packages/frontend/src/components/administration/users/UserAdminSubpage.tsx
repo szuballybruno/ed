@@ -8,7 +8,7 @@ import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { CurrentUserContext } from '../../system/AuthenticationFrame';
 import { useAuthorizationContext } from '../../system/AuthorizationContext';
 import { EpistoRoutes } from '../../universal/EpistoRoutes';
-import { AdminBreadcrumbsHeader } from '../AdminBreadcrumbsHeader';
+import { AdminBreadcrumbsHeader } from '../breadcrumbsHeader/AdminBreadcrumbsHeader';
 import { AdminAddUserSubpage } from './AdminAddUserSubpage';
 import { AminUserGridView, useAdminUserGridLogic, useGridFilterSettingsLogic } from './AminUserGridView';
 import { CompanySelectorDropdown, useCompanySelectorLogic } from './CompanySelectorDropdown';

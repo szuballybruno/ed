@@ -2,7 +2,7 @@ import { memo, useState } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { useIsMatchingCurrentRoute } from '../../../static/frontendHelpers';
 import { EpistoRoutes } from '../../universal/EpistoRoutes';
-import { AdminBreadcrumbsHeader } from '../AdminBreadcrumbsHeader';
+import { AdminBreadcrumbsHeader } from '../breadcrumbsHeader/AdminBreadcrumbsHeader';
 import { CompanyAdminActivationCodesPage } from './CompanyAdminActivationCodesPage';
 import { CompanyAdminCoursesPage } from './CompanyAdminCoursesPage';
 import { CompanyAdminEditPage } from './CompanyAdminEditPage';
@@ -31,8 +31,6 @@ export const CompanyAdminPage = memo(() => {
 
     return (
         <AdminBreadcrumbsHeader
-            background='white'
-            direction='column'
             subRouteLabel={subRouteLabel}>
 
             <EpistoRoutes
