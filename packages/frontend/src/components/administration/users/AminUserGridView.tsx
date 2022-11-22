@@ -103,7 +103,7 @@ const useColumns = (
         .addIf(preset === 'all', {
             field: 'invertedLagBehind',
             headerName: 'Haladás',
-            renderCell: (value) => value ? Math.round(value.value) : '-'
+            renderCell: (value) => value ? Math.round(value.value) + '%' : '-'
         })
         .addIf(preset === 'all', {
             field: 'totalSessionLengthSeconds',
@@ -113,18 +113,21 @@ const useColumns = (
         .addIf(preset === 'all', {
             field: 'completedVideoCount',
             headerName: 'Megtekintett videók száma',
+            renderCell: (value) => value ? value.value + 'db' : '-'
         })
         .addIf(preset === 'reviewRequired', {
             field: 'productivityPercentage',
             headerName: 'Produktivitás',
+            renderCell: (value) => value ? Math.round(value.value) + '%' : '-'
         })
         .addIf(preset === 'reviewRequired', {
             field: 'engagementPoints',
             headerName: 'Elköteleződés',
+            renderCell: (value) => value ? Math.round(value.value) + '%' : '-'
         })
         .addIf(preset === 'reviewRequired', {
             field: 'reactionTime',
-            headerName: 'Reakcióidő',
+            headerName: 'Reakcióidő'
         })
         .add({
             field: 'detailsButton',
