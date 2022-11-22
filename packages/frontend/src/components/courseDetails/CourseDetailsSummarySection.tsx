@@ -81,18 +81,23 @@ export const CourseDetailsSummarySection = (props: {
             mt='40px' />
 
         {/* humam skill benefits */}
-        <EpistoFlex2 width="100%"
+        <EpistoFlex2
+            flexWrap='wrap'
+            width="100%"
             mb='100px'>
 
             {/* human skill benefits description */}
-            <EpistoFlex2 direction={'column'}
-                minWidth={'50%'} >
+            <EpistoFlex2
+                minWidth='200px'
+                flex='1' >
                 {courseDetails.humanSkillBenefitsDescription}
             </EpistoFlex2>
 
             {/* human skill benefits chart  */}
-            <EpistoFlex2 direction={'column'}
-                minWidth={'50%'}>
+            <EpistoFlex2
+                direction={'column'}
+                width='50%'
+                minWidth={'500px'}>
                 {courseDetails?.humanSkillBenefits.length > 0 && <EpistoRadarChart
                     title=""
                     areas={[{
@@ -106,7 +111,8 @@ export const CourseDetailsSummarySection = (props: {
                     }))}
                     options={defaultCharts.radar}
                     style={{
-                        width: '400px',
+                        width: '100%',
+                        minWidth: '500px',
                         height: '300px'
                     }} />}
             </EpistoFlex2>
