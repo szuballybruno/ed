@@ -27,7 +27,8 @@ const useColumns = (
     preset: UserDataGridPresetType,
     userId: Id<'User'> | null,
     showDeleteUserDialog: (user: RowType) => void,
-    openUser: (userId: Id<'User'>) => void) => {
+    openUser: (userId: Id<'User'>) => void,
+    activeCompanyId: AdminActiveCompanyIdType) => {
 
     const { navigate2 } = useNavigation();
 
@@ -137,7 +138,7 @@ const useColumns = (
                 align="center">
                 <EpistoButton
                     variant="outlined"
-                    onClick={() => navigate2(applicationRoutes.administrationRoute.usersRoute.userRoute.editRoute, { userId: value })}>
+                    onClick={() => navigate2(applicationRoutes.administrationRoute.usersRoute.userRoute.editRoute, { activeCompanyId, userId: value })}>
 
                     Bővebben
                 </EpistoButton>
@@ -357,7 +358,7 @@ export const AminUserGridView = ({
                     });
                 }
             });
-    });
+    }, activeCompanyId);
 
     return (
         <Flex
@@ -416,7 +417,7 @@ export const AminUserGridView = ({
                         }}
                         onClick={() => {
 
-                            navigate3(usersRoute.addRoute, { query: { companyId: activeCompanyId } });
+                            navigate3(usersRoute.addRoute, { params: { activeCompanyId } });
                         }}>
 
                         <Add

@@ -49,13 +49,13 @@ export type ApplicationRoutesType = {
             detailsRoute: ApplicationRoute<AdminActiveCompanyRouteParamType>;
         };
         usersRoute: ApplicationRoute<AdminActiveCompanyRouteParamType, { preset?: UserDataGridPresetType }> & {
-            indexRoute: ApplicationRoute;
-            addRoute: ApplicationRoute<void, { companyId: Id<'Company'> }>;
-            userRoute: ApplicationRoute<{ userId: Id<'User'> }> & {
-                editRoute: ApplicationRoute<{ userId: Id<'User'> }>;
-                statsRoute: ApplicationRoute<{ userId: Id<'User'> }>;
-                teacherInfoRoute: ApplicationRoute<{ userId: Id<'User'> }>;
-                courseContentRoute: ApplicationRoute<{ userId: Id<'User'> }>;
+            indexRoute: ApplicationRoute<AdminActiveCompanyRouteParamType>;
+            addRoute: ApplicationRoute<AdminActiveCompanyRouteParamType>;
+            userRoute: ApplicationRoute<AdminActiveCompanyRouteParamType & { userId: Id<'User'> }> & {
+                editRoute: ApplicationRoute<AdminActiveCompanyRouteParamType & { userId: Id<'User'> }>;
+                statsRoute: ApplicationRoute<AdminActiveCompanyRouteParamType & { userId: Id<'User'> }>;
+                teacherInfoRoute: ApplicationRoute<AdminActiveCompanyRouteParamType & { userId: Id<'User'> }>;
+                courseContentRoute: ApplicationRoute<AdminActiveCompanyRouteParamType & { userId: Id<'User'> }>;
             };
         };
         coursesRoute: ApplicationRoute<AdminActiveCompanyRouteParamType, void> & {
@@ -305,181 +305,181 @@ export const getApplicationRoutes = () => {
 
             usersRoute: {
                 title: translatableTexts.routeTitles.administrationUserAdmin,
-                route: new EpistoRoute('/administration', 'users', '*'),
+                route: new EpistoRoute('/administration/:activeCompanyId', 'users', '*'),
                 icon: <Person className="fontXXL"
                     color={'secondary'} />,
 
                 indexRoute: {
                     title: translatableTexts.routeTitles.administrationUserIndex,
-                    route: new EpistoRoute('/administration/users', ''),
+                    route: new EpistoRoute('/administration/:activeCompanyId/users', ''),
                 },
                 addRoute: {
                     title: translatableTexts.routeTitles.administrationAddUser,
-                    route: new EpistoRoute('/administration/users', 'add'),
+                    route: new EpistoRoute('/administration/:activeCompanyId/users', 'add'),
                 },
                 userRoute: {
                     title: translatableTexts.routeTitles.administrationEditUser,
-                    route: new EpistoRoute('/administration/users', ':userId', '*'),
+                    route: new EpistoRoute('/administration/:activeCompanyId/users', ':userId', '*'),
                     icon: <Person className="fontXXL"
                         color={'secondary'} />,
 
                     editRoute: {
                         title: translatableTexts.routeTitles.administrationEditUser,
-                        route: new EpistoRoute('/administration/users/:userId', ''),
+                        route: new EpistoRoute('/administration/:activeCompanyId/users/:userId', ''),
                         icon: <Person className="fontXXL"
                             color={'secondary'} />,
                     },
                     statsRoute: {
                         title: translatableTexts.routeTitles.administrationUserStatistics,
-                        route: new EpistoRoute('/administration/users/:userId', 'statistics'),
+                        route: new EpistoRoute('/administration/:activeCompanyId/users/:userId', 'statistics'),
                     },
                     teacherInfoRoute: {
                         title: translatableTexts.routeTitles.administrationEditTeacherInfo,
-                        route: new EpistoRoute('/administration/users/:userId', 'teacherinfo'),
+                        route: new EpistoRoute('/administration/:activeCompanyId/users/:userId', 'teacherinfo'),
                     },
                     courseContentRoute: {
                         title: translatableTexts.routeTitles.administrationUserCourses,
-                        route: new EpistoRoute('/administration/users/:userId', 'courses'),
+                        route: new EpistoRoute('/administration/:activeCompanyId/users/:userId', 'courses'),
                     },
                 },
             },
 
             coursesRoute: {
                 title: translatableTexts.routeTitles.administrationCourseAdmin,
-                route: new EpistoRoute('/administration', 'courses', '*'),
+                route: new EpistoRoute('/administration/:activeCompanyId', 'courses', '*'),
                 icon: <Subscriptions
                     className="fontXXL"
                     color={'secondary'} />,
 
                 landingRoute: {
                     title: translatableTexts.routeTitles.administrationCourseAdmin,
-                    route: new EpistoRoute('/administration/courses', '/')
+                    route: new EpistoRoute('/administration/:activeCompanyId/courses', '/')
                 },
                 addRoute: {
                     title: translatableTexts.routeTitles.administrationAddCourse,
-                    route: new EpistoRoute('/administration/courses', 'add'),
+                    route: new EpistoRoute('/administration/:activeCompanyId/courses', 'add'),
                 },
                 courseDetailsRoute: {
                     title: translatableTexts.routeTitles.administrationCourseDetails,
-                    route: new EpistoRoute('/administration/courses', ':courseId/details'),
+                    route: new EpistoRoute('/administration/:activeCompanyId/courses', ':courseId/details'),
                     icon: <Subscriptions className="fontXXL"
                         color={'secondary'} />,
                 },
                 courseContentRoute: {
                     title: translatableTexts.routeTitles.administrationCourseContent,
-                    route: new EpistoRoute('/administration/courses', ':courseId/content'),
+                    route: new EpistoRoute('/administration/:activeCompanyId/courses', ':courseId/content'),
                 },
                 statisticsCourseRoute: {
                     title: translatableTexts.routeTitles.administrationCourseStatistics,
-                    route: new EpistoRoute('/administration/courses', ':courseId/statistics'),
+                    route: new EpistoRoute('/administration/:activeCompanyId/courses', ':courseId/statistics'),
                 },
                 courseUserProgressRoute: {
                     title: translatableTexts.routeTitles.administrationCourseUserProgress,
-                    route: new EpistoRoute('/administration/courses', ':courseId/userprogress'),
+                    route: new EpistoRoute('/administration/:activeCompanyId/courses', ':courseId/userprogress'),
                 },
                 interactiveCourseRoute: {
                     title: translatableTexts.routeTitles.administrationInteractiveCourse,
-                    route: new EpistoRoute('/administration/courses', ':courseId/editinteractive'),
+                    route: new EpistoRoute('/administration/:activeCompanyId/courses', ':courseId/editinteractive'),
                 }
             },
 
             shopRoute: {
                 title: translatableTexts.routeTitles.administrationShopMain,
-                route: new EpistoRoute('/administration', 'shop', '*'),
+                route: new EpistoRoute('/administration/:activeCompanyId', 'shop', '*'),
                 icon: <ShoppingCartIcon className="fontXXL"
                     color={'secondary'} />,
 
                 overviewRoute: {
                     title: translatableTexts.routeTitles.administrationShopAdd,
-                    route: new EpistoRoute('/administration/shop', '/'),
+                    route: new EpistoRoute('/administration/:activeCompanyId/shop', '/'),
                 },
 
                 addRoute: {
                     title: translatableTexts.routeTitles.administrationShopAdd,
-                    route: new EpistoRoute('/administration/shop', 'add'),
+                    route: new EpistoRoute('/administration/:activeCompanyId/shop', 'add'),
                 },
 
                 editRoute: {
                     title: translatableTexts.routeTitles.administrationShopEdit,
-                    route: new EpistoRoute('/administration/shop', 'edit/:shopItemId'),
+                    route: new EpistoRoute('/administration/:activeCompanyId/shop', 'edit/:shopItemId'),
                 }
             },
 
             personalityAssessmentRoute: {
                 title: translatableTexts.routeTitles.administrationPersonalityAssessmentMain,
-                route: new EpistoRoute('/administration', 'personality-assessment', '*'),
+                route: new EpistoRoute('/administration/:activeCompanyId', 'personality-assessment', '*'),
                 icon: <SupervisedUserCircleIcon
                     className="fontXXL"
                     color={'secondary'} />,
 
                 indexRoute: {
                     title: translatableTexts.routeTitles.administrationPersonalityAssessmentMain,
-                    route: new EpistoRoute('/administration/personality-assessment', ''),
+                    route: new EpistoRoute('/administration/:activeCompanyId/personality-assessment', ''),
                 },
 
                 editTipsRoute: {
                     title: translatableTexts.routeTitles.administrationPersonalityAssessmentTips,
-                    route: new EpistoRoute('/administration/personality-assessment', ':traitCategoryId/:isMax'),
+                    route: new EpistoRoute('/administration/:activeCompanyId/personality-assessment', ':traitCategoryId/:isMax'),
 
                     editTipRoute: {
                         title: translatableTexts.routeTitles.administrationPersonalityAssessmentTip,
-                        route: new EpistoRoute('/administration/personality-assessment/:traitCategoryId/:isMax', 'tip/:dailyTipId'),
+                        route: new EpistoRoute('/administration/:activeCompanyId/personality-assessment/:traitCategoryId/:isMax', 'tip/:dailyTipId'),
                     }
                 },
             },
 
             myCompanyRoute: {
                 title: 'Céges statisztika',
-                route: new EpistoRoute('/administration', 'mycompany'),
+                route: new EpistoRoute('/administration/:activeCompanyId', 'mycompany'),
                 icon: <Business className="fontXXL"
                     color={'secondary'} />
             },
 
             companiesRoute: {
                 title: 'Cégek',
-                route: new EpistoRoute('/administration', 'companies', '*'),
+                route: new EpistoRoute('/administration/:activeCompanyId', 'companies', '*'),
                 icon: <LocationCityIcon
                     className="fontXXL"
                     color={'secondary'} />,
 
                 indexRoute: {
                     title: 'Cégek',
-                    route: new EpistoRoute('/administration/companies', '/')
+                    route: new EpistoRoute('/administration/:activeCompanyId/companies', '/')
                 },
                 editRoute: {
                     title: 'Cég szerkesztese',
-                    route: new EpistoRoute('/administration/companies', '/:companyId/edit')
+                    route: new EpistoRoute('/administration/:activeCompanyId/companies', '/:companyId/edit')
                 },
                 coursesRoute: {
                     title: 'Ceg kurzusai',
-                    route: new EpistoRoute('/administration/companies', '/:companyId/company-associated-courses')
+                    route: new EpistoRoute('/administration/:activeCompanyId/companies', '/:companyId/company-associated-courses')
                 },
                 activationCodesRoute: {
                     title: 'Aktivációs kódok',
-                    route: new EpistoRoute('/administration/companies', '/:companyId/activation-codes')
+                    route: new EpistoRoute('/administration/:activeCompanyId/companies', '/:companyId/activation-codes')
                 }
             },
 
             rolesRoute: {
                 title: 'Roles',
-                route: new EpistoRoute('/administration', 'roles'),
+                route: new EpistoRoute('/administration/:activeCompanyId', 'roles'),
                 icon: <LocalPoliceIcon
                     className="fontXXL"
                     color={'secondary'} />,
 
                 indexRoute: {
                     title: 'Roles',
-                    route: new EpistoRoute('/administration/roles', '/')
+                    route: new EpistoRoute('/administration/:activeCompanyId/roles', '/')
                 },
                 editRoute: {
                     title: 'Role edit',
-                    route: new EpistoRoute('/administration/roles', '/:roleId/edit')
+                    route: new EpistoRoute('/administration/:activeCompanyId/roles', '/:roleId/edit')
                 },
             },
 
             activationCodesRoute: {
                 title: 'Activation Codes',
-                route: new EpistoRoute('/administration', 'activation-codes'),
+                route: new EpistoRoute('/administration/:activeCompanyId', 'activation-codes'),
                 icon: <EpistoIcons.Link
                     className="fontXXL"
                     color={'secondary'} />
@@ -487,13 +487,13 @@ export const getApplicationRoutes = () => {
 
             debugRoute: {
                 title: 'Debug',
-                route: new EpistoRoute('/administration', 'debug'),
+                route: new EpistoRoute('/administration/:activeCompanyId', 'debug'),
                 icon: <Build
                     className='fontXXL'
                     color='secondary' />,
                 indexRoute: {
                     title: 'Debug',
-                    route: new EpistoRoute('/administration/roles', '/')
+                    route: new EpistoRoute('/administration/:activeCompanyId/roles', '/')
                 },
             }
         },
