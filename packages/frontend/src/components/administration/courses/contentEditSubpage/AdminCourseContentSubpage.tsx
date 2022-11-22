@@ -23,7 +23,7 @@ import { FileSelector } from '../../../universal/fileSelector/FileSelector';
 import { SelectedFileDataType, useFileSelectorLogic } from '../../../universal/fileSelector/FileSelectorLogic';
 import { AdminSubpageHeader } from '../../AdminSubpageHeader';
 import { CourseAdministartionFrame } from '../CourseAdministartionFrame';
-import { CallbackParamsType, ItemEditDialog, useItemEditDialogLogic } from '../itemEditDialog/ItemEditDialog';
+import { CallbackParamsType, ItemEditDialog, ItemEditDialogPageType, useItemEditDialogLogic } from '../itemEditDialog/ItemEditDialog';
 import { ModuleEditDialog } from '../moduleEdit/ModuleEditDialog';
 import { useModuleEditDialogLogic } from '../moduleEdit/ModuleEditDialogLogic';
 import { AddNewItemPopper } from './AddNewItemPopper';
@@ -233,7 +233,7 @@ export const AdminCourseContentSubpage = () => {
     /**
      * Open item edit dialog  
      */
-    const openItemEditDialog = (type: 'video' | 'exam' | 'module', row?: RowSchema) => {
+    const openItemEditDialog = (type: 'video' | 'exam' | 'module', page?: ItemEditDialogPageType, row?: RowSchema) => {
 
         const data = row?.data!;
         const isVideo = !!data?.videoVersionId;
@@ -251,6 +251,7 @@ export const AdminCourseContentSubpage = () => {
                     defaultModuleId: modules
                         .firstOrNull(x => x.moduleVersionId === data.moduleVersionId)?.moduleId ?? null,
                     modules,
+                    page: page,
                     examType: data.itemType === 'pretest'
                         ? 'pretest'
                         : data.itemType === 'final'

@@ -84,9 +84,9 @@ export const VideoPlayer = ({
             {...fullScreenRootProps}>
 
             {/* player debug info */}
-            {/*       <PlayerDebugInfo
+            {/* <PlayerDebugInfo
                 videoPlayerState={videoPlayerState}
-                videoTitle={videoItem.title} /> */}
+                videoTitle={''} /> */}
 
             {/* MOBILE ONLY: warning to rotate the mobile, the video
                 should only starts in landscape */}

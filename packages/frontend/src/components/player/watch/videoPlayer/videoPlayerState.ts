@@ -205,6 +205,7 @@ export const useVideoPlayerState = (
             return;
         }
 
+        Logger.logScoped('PLAYBACK', 'Setting isPlaying to true.');
         setIsPlaying(true);
         showControlOverlay();
         flashVisualOverlay('start');
@@ -320,6 +321,7 @@ export const useVideoPlayerState = (
         Logger.logScoped('PLAYBACK', 'Screenfull trigger effect runs...');
         if (!screenfullEnabled) {
 
+            Logger.logScoped('PLAYBACK', 'Disabling fullscreen mode...');
             disableFullscreenMode();
         }
     }, [disableFullscreenMode, screenfullEnabled]);
@@ -341,6 +343,8 @@ export const useVideoPlayerState = (
         if (isIPhone) {
             setIsPlaying(true);
         }
+        setIsPlaying(true);
+        setIsPlaying(false);
     }, [isIPhone]);
 
     /**

@@ -17,6 +17,7 @@ export const QuesitionView = ({
     onlyShowAnswers,
     answerResult,
     isPractise,
+    isShowingAcquiredCoins,
     ...css
 }: {
     answerQuesitonAsync: (answerVersionId: Id<'AnswerVersion'>[]) => Promise<void>,
@@ -24,6 +25,7 @@ export const QuesitionView = ({
     loadingProps: LoadingFramePropsType,
     onlyShowAnswers?: boolean,
     answerResult: AnswerResultDTO | null,
+    isShowingAcquiredCoins?: boolean,
     isPractise: boolean
 } & EpistoFlex2Props) => {
 
@@ -42,7 +44,6 @@ export const QuesitionView = ({
     const isAnswered = !!answerResult;
     const bonusCoinsAcquireData = coinAcquires
         .firstOrNull(x => x.reason === 'answer_streak_10' || x.reason === 'answer_streak_5');
-    const showCoinsAcquired = true;
     const coinsAcquired = coinAcquires
         .firstOrNull(x => x.reason === 'correct_answer');
     const { isMobile } = Responsivity
@@ -89,8 +90,9 @@ export const QuesitionView = ({
         title={question.questionText}
         loadingProps={loadingProps}
         onlyShowAnswers={onlyShowAnswers}
-        width={(isMobile && !isPractise) ? '100vw' : undefined}
-        height={(isMobile && !isPractise) ? '100vh' : undefined}
+        width={(isMobile && !isPractise) ? '100%' : undefined}
+        borderRadius={isMobile ? '0' : undefined}
+        minHeight={(isMobile && !isPractise) ? '100vh' : undefined}
         justify={(isMobile && !isPractise) ? 'center' : undefined}
         {...css}>
 
@@ -124,7 +126,7 @@ export const QuesitionView = ({
                 </QuestionnaierAnswer>;
             })}
 
-        {(!!coinsAcquired && showCoinsAcquired) && <EpistoFlex2
+        {(!!coinsAcquired && isShowingAcquiredCoins) && <EpistoFlex2
             mt="10px"
             borderRadius="5px"
             p="7px"

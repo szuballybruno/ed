@@ -178,7 +178,7 @@ const HomePage = () => {
                 {/* practise questions */}
                 <DashboardSection
                     title={translatableTexts.homePage.practiseTitle}
-                    headerContent={<CoinsAcquiredHeaderContent
+                    headerContent={!isMobile && <CoinsAcquiredHeaderContent
                         coinsAcquired={coinsAcquired} />}
                     background={isMobile ? '#1d6784' : '#1d6784'} //#7CC0C2
                     className="largeSoftShadow roundBorders"

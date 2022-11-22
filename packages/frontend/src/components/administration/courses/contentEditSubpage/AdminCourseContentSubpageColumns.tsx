@@ -14,6 +14,7 @@ import { IXMutatorFunctions } from '../../../lib/XMutator/XMutatorCore';
 import { ChipSmall } from '../ChipSmall';
 import { RowSchema } from './AdminCourseContentSubpageLogic';
 import classses from './css/AdminCourseContentSubpage.module.css';
+import { ItemEditDialogPageType } from '../itemEditDialog/ItemEditDialog';
 
 const useSetAndCommitCellValue = <TRow, TKey, TField extends keyof TRow,>() => {
 
@@ -40,7 +41,7 @@ const useSetAndCommitCellValue = <TRow, TKey, TField extends keyof TRow,>() => {
 
 export const useGridColumns = (
     modules: ModuleEditDTO[],
-    openDialog: (type: 'video' | 'exam', data?: RowSchema) => void,
+    openDialog: (type: 'video' | 'exam', page: ItemEditDialogPageType, data?: RowSchema) => void,
     itemsMutatorFunctions: IXMutatorFunctions<CourseContentItemAdminDTO, 'versionCode', VersionCode>,
     onSelectVideoFile: (row: RowSchema) => void,
     currentDropModuleId: Id<'ModuleVersion'> | null) => {
@@ -292,13 +293,13 @@ export const useGridColumns = (
                 return (
                     <div className="h-flex">
                         <EpistoButton
-                            onClick={() => openDialog(row.itemType?.type === 'video' ? 'video' : 'exam', row)}>
+                            onClick={() => openDialog(row.itemType?.type === 'video' ? 'video' : 'exam', 'videoQuestion', row)}>
 
                             <Quiz />
                         </EpistoButton>
 
                         <EpistoButton
-                            onClick={() => { throw new Error('Not implemented!'); }}>
+                            onClick={() => openDialog(row.itemType?.type === 'video' ? 'video' : 'exam', 'videoStats', row)}>
 
                             <Equalizer />
                         </EpistoButton>

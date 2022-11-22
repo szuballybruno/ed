@@ -1,5 +1,5 @@
 import { Id, VersionCode } from '@episto/commontypes';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { EMPTY_ARRAY } from '../../../../helpers/emptyArray';
 import { ArrayBuilder, usePaging } from '../../../../static/frontendHelpers';
 import { Logger } from '../../../../static/Logger';
@@ -32,6 +32,8 @@ export const useItemEditDialogLogic = (callback: (params: CallbackParamsType) =>
 
 export type ItemEditDialogLogicType = ReturnType<typeof useItemEditDialogLogic>;
 
+export type ItemEditDialogPageType = 'videoQuestion' | 'examQuestion' | 'videoStats' | 'examStats'
+
 export const ItemEditDialog = ({
     logic: {
         callback,
@@ -51,6 +53,7 @@ export const ItemEditDialog = ({
         courseTitle,
         itemTitle,
         examType,
+        page,
         versionCode
     } = dialogLogic.params ?? {
         isVideo: false,
@@ -62,6 +65,7 @@ export const ItemEditDialog = ({
         itemTitle: '',
         courseTitle: '',
         examType: 'normal',
+        page: 'videoStats',
         versionCode: null as any as VersionCode
     };
 
@@ -118,6 +122,16 @@ export const ItemEditDialog = ({
         : [];
 
     const paging = usePaging<EditDialogSubpage>({ items: pages });
+
+    useEffect(() => {
+
+        if (page === 'videoQuestion' && isVideo)
+            return paging.setItem(0);
+
+        if (page === 'videoStats' && isVideo)
+            return paging.setItem(1);
+
+    }, [isVideo, paging, page]);
 
     return <EditDialogBase
         logic={dialogLogic}

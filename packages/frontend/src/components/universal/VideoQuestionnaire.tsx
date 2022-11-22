@@ -67,11 +67,12 @@ export const VideoQuestionnaire = (props: {
     }, [isShowing]);
 
     return <EpistoFlex2
-        width={isMobile ? '100vw' : undefined}
-        height={isMobile ? '100vh' : undefined}
+        maxWidth={isMobile ? '100vw' : undefined}
+        // maxHeight={isMobile ? '100vh' : undefined}
         direction="column">
 
         <QuesitionView
+            isShowingAcquiredCoins={isMobile}
             answerQuesitonAsync={handleAnswerQuestionAsync}
             loadingProps={{ loadingState: answerQuestionState }}
             question={question}
@@ -80,22 +81,29 @@ export const VideoQuestionnaire = (props: {
             {...css} />
 
         <EpistoFlex2
-            padding={isMobile ? '30px' : undefined}
+            id='closeButtonOverlay'
             display={isAnswered ? undefined : 'none'}
+            position={isMobile ? 'fixed' : 'relative'}
+            bottom={isMobile ? '20px' : undefined}
+            right={isMobile ? '20px' : undefined}
+            zIndex={'30'}
             justify="flex-end">
 
             <EpistoButton
                 variant="colored"
-                style={{ padding: '0' }}
+                style={{
+                    padding: '0'
+                }}
                 onClick={() => handleCloseDialog()}>
 
-                <TimeoutFrame reactTimer={reactTimer}>
+                <TimeoutFrame
+                    zIndex='31'
+                    reactTimer={reactTimer}>
+
                     <EpistoFont
                         isUppercase
                         fontSize="fontNormal14"
                         style={{
-                            position: 'relative',
-                            zIndex: '8',
                             margin: '10px'
                         }}>
 

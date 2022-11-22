@@ -8,6 +8,7 @@ import { EpistoFont } from '../controls/EpistoFont';
 import { QuesitionView } from '../QuestionView';
 import { EpistoConinImage } from '../universal/EpistoCoinImage';
 import { NoQuestionsAvailable } from './NoQuestionsAvailable';
+import { Responsivity } from '../../helpers/responsivity';
 
 export const PractiseQuestions = (props: {
     setCoinsAcquired: (isCoinsAcquired: boolean) => void
@@ -30,6 +31,7 @@ export const PractiseQuestions = (props: {
 
     const { coinAcquires } = answerResults ?? { coinAcquires: [] };
     const coinsAcquired = coinAcquires.length > 0;
+    const { isMobile } = Responsivity.useIsMobileView();
 
     const handleAnswerQuestionAsync = async (answerVersionId: Id<'AnswerVersion'>[]) => {
 
@@ -118,6 +120,7 @@ export const PractiseQuestions = (props: {
 
             <QuesitionView
                 isPractise
+                isShowingAcquiredCoins={isMobile}
                 answerQuesitonAsync={handleAnswerQuestionAsync}
                 loadingProps={{ loadingState: answerQuestionState }}
                 question={practiseQuestion}
@@ -126,12 +129,13 @@ export const PractiseQuestions = (props: {
 
             <EpistoFlex2
                 justifyContent="center"
+                p={isMobile ? '10px' : undefined}
                 display={isAnswered ? undefined : 'none'}>
 
-                <EpistoFont
+                {!isMobile && <EpistoFont
                     style={{
                         display: isAnswered ? undefined : 'none',
-                        fontSize: 16,
+                        fontSize: isMobile ? undefined : 16,
                         marginRight: 15,
                         alignSelf: 'center'
                     }}>
@@ -139,12 +143,12 @@ export const PractiseQuestions = (props: {
                     {isCorrectAnswer
                         ? translatableTexts.practiseQuestions.answerIsCorrect
                         : translatableTexts.practiseQuestions.answerIsIncorrect}
-                </EpistoFont>
+                </EpistoFont>}
 
                 <EpistoButton
                     variant="colored"
                     style={{
-                        fontSize: 15
+                        fontSize: isMobile ? undefined : 15
                     }}
                     onClick={handleNextQuestion}>
 
