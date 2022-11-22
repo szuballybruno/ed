@@ -7,7 +7,7 @@ import LocationCityIcon from '@mui/icons-material/LocationCity';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
 import { UserDataGridPresetType } from '../components/administration/users/AminUserGridView';
-import { ApplicationRoute, EpistoRoute } from '../models/types';
+import { AdminCourseRouteParamType, ApplicationRoute, EpistoRoute } from '../models/types';
 import { Environment } from '../static/Environemnt';
 import { EpistoIcons } from '../static/EpistoIcons';
 import { translatableTexts } from '../static/translatableTexts';
@@ -44,11 +44,11 @@ export type ApplicationRoutesType = {
         myExamsRoute: ApplicationRoute;
     };
     administrationRoute: ApplicationRoute & {
-        statsRoute: ApplicationRoute & {
+        statsRoute: ApplicationRoute<AdminCourseRouteParamType, void> & {
             overviewRoute: ApplicationRoute;
             detailsRoute: ApplicationRoute;
         };
-        usersRoute: ApplicationRoute<void, { preset?: UserDataGridPresetType }> & {
+        usersRoute: ApplicationRoute<AdminCourseRouteParamType, { preset?: UserDataGridPresetType }> & {
             indexRoute: ApplicationRoute;
             addRoute: ApplicationRoute<void, { companyId: Id<'Company'> }>;
             userRoute: ApplicationRoute<{ userId: Id<'User'> }> & {
@@ -58,39 +58,39 @@ export type ApplicationRoutesType = {
                 courseContentRoute: ApplicationRoute<{ userId: Id<'User'> }>;
             };
         };
-        coursesRoute: ApplicationRoute & {
+        coursesRoute: ApplicationRoute<AdminCourseRouteParamType, void> & {
             landingRoute: ApplicationRoute;
             addRoute: ApplicationRoute;
-            courseDetailsRoute: ApplicationRoute;
+            courseDetailsRoute: ApplicationRoute<{ courseId: Id<'Course'> }>;
             courseContentRoute: ApplicationRoute;
             statisticsCourseRoute: ApplicationRoute;
             courseUserProgressRoute: ApplicationRoute<{ courseId: Id<'Course'> }, { preset?: CourseUserPresetType }>;
             interactiveCourseRoute: ApplicationRoute;
         };
-        shopRoute: ApplicationRoute & {
+        shopRoute: ApplicationRoute<AdminCourseRouteParamType, void> & {
             overviewRoute: ApplicationRoute;
             addRoute: ApplicationRoute;
             editRoute: ApplicationRoute<{ shopItemId: Id<'ShopItem'> }>;
         };
-        personalityAssessmentRoute: ApplicationRoute & {
+        personalityAssessmentRoute: ApplicationRoute<AdminCourseRouteParamType, void> & {
             indexRoute: ApplicationRoute,
             editTipsRoute: ApplicationRoute<{ traitCategoryId: Id<'PersonalityTraitCategory'>, isMax: boolean }> & {
                 editTipRoute: ApplicationRoute<{ traitCategoryId: Id<'PersonalityTraitCategory'>, isMax: boolean, dailyTipId: Id<'DailyTip'> }>;
             };
         };
-        myCompanyRoute: ApplicationRoute;
-        companiesRoute: ApplicationRoute & {
+        myCompanyRoute: ApplicationRoute<AdminCourseRouteParamType, void>;
+        companiesRoute: ApplicationRoute<AdminCourseRouteParamType, void> & {
             indexRoute: ApplicationRoute;
             editRoute: ApplicationRoute<{ companyId: Id<'Company'> }>;
             coursesRoute: ApplicationRoute<{ companyId: Id<'Company'> }>;
             activationCodesRoute: ApplicationRoute<{ companyId: Id<'Company'> }>;
         };
-        rolesRoute: ApplicationRoute & {
+        rolesRoute: ApplicationRoute<AdminCourseRouteParamType, void> & {
             indexRoute: ApplicationRoute;
             editRoute: ApplicationRoute<{ roleId: Id<'Role'> }>;
         };
-        activationCodesRoute: ApplicationRoute;
-        debugRoute: ApplicationRoute & {
+        activationCodesRoute: ApplicationRoute<AdminCourseRouteParamType, void>;
+        debugRoute: ApplicationRoute<AdminCourseRouteParamType, void> & {
             indexRoute: ApplicationRoute;
         };
     };
@@ -391,7 +391,7 @@ export const getApplicationRoutes = () => {
 
                 overviewRoute: {
                     title: translatableTexts.routeTitles.administrationShopAdd,
-                    route: new EpistoRoute('/administration/shop', 'overview'),
+                    route: new EpistoRoute('/administration/shop', '/'),
                 },
 
                 addRoute: {

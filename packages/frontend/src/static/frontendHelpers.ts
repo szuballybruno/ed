@@ -510,6 +510,9 @@ export const useGetCurrentAppRoute = () => {
     return matchingRoute;
 };
 
+/**
+ * @deprecated BIG BIG NONON
+ */
 export const useRedirectOnExactMatch = (opts: {
     route: ApplicationRoute,
     redirectRoute: ApplicationRoute,

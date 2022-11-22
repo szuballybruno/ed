@@ -1,15 +1,16 @@
+import { instantiate, parseIntOrFail } from '@episto/commonlogic';
+import { CourseVisibilityType, Id } from '@episto/commontypes';
+import { CourseCategoryDTO, CourseDetailsEditDataDTO } from '@episto/communication';
 import { useEffect, useMemo } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { EMPTY_ARRAY } from '../../../helpers/emptyArray';
+import { AdminCourseRouteParamType } from '../../../models/types';
 import { CourseApiService } from '../../../services/api/courseApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
-import { CourseCategoryDTO } from '@episto/communication';
-import { CourseDetailsEditDataDTO } from '@episto/communication';
-import { CourseVisibilityType } from '@episto/commontypes';
-import { Id } from '@episto/commontypes';
 import { iterate, useStateObject } from '../../../static/frontendHelpers';
-import { useIntParam } from '../../../static/locationHelpers';
+import { useRouteParams2 } from '../../../static/locationHelpers';
+import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoCheckbox } from '../../controls/EpistoCheckbox';
 import { EpistoCheckboxLabel } from '../../controls/EpistoCheckboxLabel';
 import { EpistoEntry } from '../../controls/EpistoEntry';
@@ -17,24 +18,25 @@ import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoImage } from '../../controls/EpistoImage';
 import { EpistoLabel } from '../../controls/EpistoLabel';
 import { EpistoSelect } from '../../controls/EpistoSelect';
+import { EpistoSlider } from '../../controls/EpistoSlider';
 import { LoadingFrame } from '../../system/LoadingFrame';
 import { EpistoImageSelector } from '../../universal/EpistoImageSelector';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { SimpleEditList } from '../SimpleEditList';
 import { CourseAdministartionFrame } from './CourseAdministartionFrame';
 import { EditSection } from './EditSection';
-import { instantiate, parseIntOrFail } from '@episto/commonlogic';
-import { EpistoSlider } from '../../controls/EpistoSlider';
-import { translatableTexts } from '../../../static/translatableTexts';
 
-export const EditCourseDetailsSubpage = () => {
+export const EditCourseDetailsSubpage = ({ companyId }: { companyId: AdminCourseRouteParamType['companyId'] }) => {
 
     // util
-    const courseId = Id
-        .create<'Course'>(useIntParam('courseId')!);
+    const params = useRouteParams2(applicationRoutes.administrationRoute.coursesRoute.courseDetailsRoute);
+
+    const courseId = params
+        .getValue(x => x.courseId);
+
     const isAnySelected = Id.read(courseId) != -1;
     const showError = useShowErrorDialog();
-    const { navigate2 } = useNavigation();
+    const { navigate3 } = useNavigation();
 
     // http
     const { courseDetailsEditData, courseDetailsEditDataError, courseDetailsEditDataState } = CourseApiService.useCourseDetailsEditData(courseId);
@@ -157,7 +159,9 @@ export const EditCourseDetailsSubpage = () => {
 
             await deleteCourseAsync({ id: courseId });
             showNotification('Kurzus torolve.');
-            navigate2(applicationRoutes.administrationRoute.coursesRoute);
+            navigate3(applicationRoutes.administrationRoute.coursesRoute, {
+                params: { companyId }
+            });
         } catch (e) {
 
             showError(e);

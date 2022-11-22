@@ -50,20 +50,12 @@ export const CompanySelectorDropdown = ({
     logic: CompanySelectorLogicType
 }) => {
 
-    const companyItems: CompanyDTO[] = [
-        {
-            id: -1 as any,
-            name: 'Összes elérhető cég',
-            isSurveyRequired: true
-        },
-        ...companies
-    ];
-
     return <EpistoSelect
         currentKey={activeCompanyId + ''}
         width='180px'
         mr='10px'
-        items={companyItems}
+        items={companies}
+        noUnselected
         onSelected={item => handleSelectCompany(item.id)}
         getCompareKey={item => item.id + ''}
         getDisplayValue={item => item.name} />;

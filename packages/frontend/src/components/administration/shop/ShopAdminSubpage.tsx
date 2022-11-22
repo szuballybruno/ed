@@ -1,22 +1,21 @@
-import {Delete} from '@mui/icons-material';
+import { Id } from '@episto/commontypes';
+import { ShopItemAdminShortDTO } from '@episto/communication';
+import { Delete } from '@mui/icons-material';
 import Edit from '@mui/icons-material/Edit';
-import {useState} from 'react';
-import {applicationRoutes} from '../../../configuration/applicationRoutes';
-import {ShopItemAdminShortDTO} from '@episto/communication';
-import {useAdminShopItems, useCreateShopItem} from '../../../services/api/shopApiService';
-import {useNavigation} from '../../../services/core/navigatior';
-import {showNotification, useShowErrorDialog} from '../../../services/core/notifications';
-import {EpistoButton} from '../../controls/EpistoButton';
-import {LoadingFrame} from '../../system/LoadingFrame';
-import {FlexListItem} from '../../universal/FlexListItem';
-import {FlexListTitleSubtitle} from '../../universal/FlexListTitleSubtitle';
-import {AdminListEditHeader} from '../AdminListEditHeader';
-import {AdminSubpageHeader} from '../AdminSubpageHeader';
-import {EpistoRoutes} from '../../universal/EpistoRoutes';
-import {ShopAdminEditSubpage} from './ShopAdminEditSubpage';
-import {useRedirectOnExactMatch} from '../../../static/frontendHelpers';
-import {Id} from '@episto/commontypes';
-import {EpistoFlex2} from '../../controls/EpistoFlex';
+import { useState } from 'react';
+import { applicationRoutes } from '../../../configuration/applicationRoutes';
+import { useAdminShopItems, useCreateShopItem } from '../../../services/api/shopApiService';
+import { useNavigation } from '../../../services/core/navigatior';
+import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
+import { EpistoButton } from '../../controls/EpistoButton';
+import { EpistoFlex2 } from '../../controls/EpistoFlex';
+import { LoadingFrame } from '../../system/LoadingFrame';
+import { EpistoRoutes } from '../../universal/EpistoRoutes';
+import { FlexListItem } from '../../universal/FlexListItem';
+import { FlexListTitleSubtitle } from '../../universal/FlexListTitleSubtitle';
+import { AdminListEditHeader } from '../AdminListEditHeader';
+import { AdminSubpageHeader } from '../AdminSubpageHeader';
+import { ShopAdminEditSubpage } from './ShopAdminEditSubpage';
 
 export const ShopAdminSubpage = () => {
 
@@ -90,11 +89,6 @@ export const ShopAdminSubpage = () => {
             icon: <Delete></Delete>
         }
     ];
-
-    useRedirectOnExactMatch({
-        route: applicationRoutes.administrationRoute.shopRoute,
-        redirectRoute: applicationRoutes.administrationRoute.shopRoute.overviewRoute,
-    });
 
     return (
         <EpistoRoutes

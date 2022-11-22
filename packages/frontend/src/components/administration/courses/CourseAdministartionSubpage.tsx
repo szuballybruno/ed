@@ -16,7 +16,8 @@ export const CourseAdministartionSubpage = () => {
                 },
                 {
                     route: applicationRoutes.administrationRoute.coursesRoute.courseDetailsRoute,
-                    element: <EditCourseDetailsSubpage />
+                    element: <EditCourseDetailsSubpage
+                        companyId={2 as any} />
                 },
                 {
                     route: applicationRoutes.administrationRoute.coursesRoute.courseContentRoute,

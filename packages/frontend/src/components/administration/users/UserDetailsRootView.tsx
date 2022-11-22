@@ -1,8 +1,8 @@
-import { applicationRoutes } from '../../../configuration/applicationRoutes';
-import { ButtonType } from '../../../models/types';
-import { UserApiService } from '../../../services/api/UserApiService1';
-import { useNavigation } from '../../../services/core/navigatior';
 import { CompanyDTO } from '@episto/communication';
+import { applicationRoutes } from '../../../configuration/applicationRoutes';
+import { AdminCourseRouteParamType, ButtonType } from '../../../models/types';
+import { UserApiService } from '../../../services/api/UserApiService1';
+import { Navigator } from '../../../services/core/navigatior';
 import { EpistoIcons } from '../../../static/EpistoIcons';
 import { ArrayBuilder } from '../../../static/frontendHelpers';
 import { useRouteParams2 } from '../../../static/locationHelpers';
@@ -16,11 +16,13 @@ import { AdminUserTeacherInfoSubpage } from './AdminUserTeacherInfoSubpage';
 export const UserDetailsRootView = ({
     refetchUsers,
     activeCompany,
-    companies
+    companies,
+    companyId
 }: {
     refetchUsers: () => void,
     activeCompany: CompanyDTO | null,
-    companies: CompanyDTO[]
+    companies: CompanyDTO[],
+    companyId: AdminCourseRouteParamType['companyId']
 }) => {
 
     const params = useRouteParams2(applicationRoutes.administrationRoute.usersRoute.userRoute);
@@ -29,7 +31,8 @@ export const UserDetailsRootView = ({
     const usersAdminRoute = applicationRoutes.administrationRoute.usersRoute;
     const { userIsTeacher } = UserApiService.useUserIsTeacher(userId);
 
-    const { navigate2 } = useNavigation();
+    const { navigate3 } = Navigator
+        .useNavigation();
 
     const menuRoutes = new ArrayBuilder()
         .addMany([
@@ -44,7 +47,11 @@ export const UserDetailsRootView = ({
         {
             title: 'Vissza az Áttekintés nézetbe',
             icon: <EpistoIcons.Close />,
-            action: () => navigate2(applicationRoutes.administrationRoute.usersRoute, { preset: undefined })
+            action: () => navigate3(
+                applicationRoutes.administrationRoute.usersRoute, {
+                params: { companyId },
+                query: { preset: undefined }
+            })
         }
     ];
 

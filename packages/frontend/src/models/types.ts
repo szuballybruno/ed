@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 import { EpistoButtonPropsType } from '../components/controls/EpistoButton';
 import { HasPermissionFnType } from '../components/system/AuthorizationContext';
 import { trimEndChar } from '@episto/commonlogic';
+import { Id } from '@episto/commontypes';
 
 export type LoadingStateType = 'idle' | 'loading' | 'error' | 'success';
 
@@ -45,6 +46,8 @@ export class EpistoRoute {
         return path.replaceAll('//', '/');
     }
 }
+
+export type AdminCourseRouteParamType = { companyId: Id<'Company'> | 'all' };
 
 export type ApplicationRoute<TParams = void, TQuery = void> = {
     name?: string;

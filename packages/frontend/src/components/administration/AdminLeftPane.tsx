@@ -1,18 +1,23 @@
 import { applicationRoutes } from '../../configuration/applicationRoutes';
-import { ApplicationRoute } from '../../models/types';
-import { useNavigation } from '../../services/core/navigatior';
+import { AdminCourseRouteParamType, ApplicationRoute } from '../../models/types';
+import { Navigator } from '../../services/core/navigatior';
 import { ArrayBuilder } from '../../static/frontendHelpers';
-import { LeftPane } from '../pageRootContainer/LeftPane';
 import { NavigationLinkList } from '../NavigationLinkList';
+import { LeftPane } from '../pageRootContainer/LeftPane';
 import { useAuthorizationContext } from '../system/AuthorizationContext';
 
-export const AdminLeftPane = () => {
+export const AdminLeftPane = ({
+    companyId
+}: {
+    companyId: AdminCourseRouteParamType['companyId']
+}) => {
 
-    const { navigate2 } = useNavigation();
     const { hasPermission } = useAuthorizationContext();
     const administrationRoutes = applicationRoutes.administrationRoute;
+    const { navigate3 } = Navigator
+        .useNavigation();
 
-    const menuItems = new ArrayBuilder<ApplicationRoute<any, any>>()
+    const menuItems = new ArrayBuilder<ApplicationRoute<AdminCourseRouteParamType, any>>()
         .addIf(hasPermission('ADMINISTRATE_COMPANY'), administrationRoutes.usersRoute)
         .addIf(hasPermission('ADMINISTRATE_COMPANY'), administrationRoutes.statsRoute)
         .addIf(hasPermission('ADMINISTRATE_COMPANY'), administrationRoutes.coursesRoute)
@@ -28,9 +33,10 @@ export const AdminLeftPane = () => {
         <LeftPane
             collapsed>
 
-                <NavigationLinkList
-                    isNoText
-                    routes={menuItems} />
+            <NavigationLinkList
+                isNoText
+                onNav={route => navigate3(route, { params: { companyId } })}
+                routes={menuItems} />
         </LeftPane>
     );
 };

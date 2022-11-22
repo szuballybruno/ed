@@ -24,7 +24,8 @@ export const AdminPage = () => {
     return <>
 
         {/* admin left pane */}
-        <AdminLeftPane />
+        <AdminLeftPane
+            companyId={2 as any} />
 
         {/* admin content pane */}
         <ContentPane

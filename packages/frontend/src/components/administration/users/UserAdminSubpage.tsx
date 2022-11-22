@@ -36,6 +36,8 @@ export const UserAdminSubpage = () => {
 
     const companySelectorLogic = useCompanySelectorLogic({ companies });
 
+    const companyId = companySelectorLogic.activeCompanyId;
+
     const gridLogic = useAdminUserGridLogic({
         isSimpleView,
         filterLogic,
@@ -82,7 +84,8 @@ export const UserAdminSubpage = () => {
                             element: <UserDetailsRootView
                                 refetchUsers={gridLogic.refetchUsers.bind(gridLogic)}
                                 activeCompany={companySelectorLogic.activeCompany}
-                                companies={companies} />
+                                companies={companies}
+                                companyId={companyId} />
                         }
                     ]} />
             </EpistoFlex2>
