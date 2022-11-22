@@ -3,7 +3,6 @@ import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { useIsMatchingCurrentRoute } from '../../../static/frontendHelpers';
 import { EpistoRoutes } from '../../universal/EpistoRoutes';
 import { AdminBreadcrumbsHeader } from '../breadcrumbsHeader/AdminBreadcrumbsHeader';
-import { CompanyAdminActivationCodesPage } from './CompanyAdminActivationCodesPage';
 import { CompanyAdminCoursesPage } from './CompanyAdminCoursesPage';
 import { CompanyAdminEditPage } from './CompanyAdminEditPage';
 import { CompanyAdminIndexPage } from './CompanyAdminIndexPage';
@@ -12,7 +11,7 @@ export const CompanyAdminPage = memo(() => {
 
     const isMatchingCurrentRoute = useIsMatchingCurrentRoute();
     const { companiesRoute } = applicationRoutes.administrationRoute;
-    const { indexRoute, editRoute, coursesRoute, activationCodesRoute } = companiesRoute;
+    const { indexRoute, editRoute, coursesRoute } = companiesRoute;
     const [companyName, setCompanyName] = useState<string | null>(null);
 
     const subRouteLabel = (() => {
@@ -48,10 +47,6 @@ export const CompanyAdminPage = memo(() => {
                     {
                         route: coursesRoute,
                         element: <CompanyAdminCoursesPage />
-                    },
-                    {
-                        route: activationCodesRoute,
-                        element: <CompanyAdminActivationCodesPage />
                     }
                 ]} />
         </>

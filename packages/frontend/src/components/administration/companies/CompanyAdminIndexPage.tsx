@@ -1,7 +1,7 @@
 import { Add } from '@mui/icons-material';
 import { memo } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
-import {CompanyApiService } from '../../../services/api/CompanyApiService';
+import { CompanyApiService } from '../../../services/api/CompanyApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { EpistoIcons } from '../../../static/EpistoIcons';
 import { usePostCallback } from '../../../static/frontendHelpers';
@@ -10,11 +10,13 @@ import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { LoadingFrame } from '../../system/LoadingFrame';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
+import { useAdminBreadcrumbsContext } from '../breadcrumbsHeader/AdminBreadcrumbsContext';
 
 export const CompanyAdminIndexPage = memo(() => {
 
     const { navigate2 } = useNavigation();
     const { indexRoute, editRoute, coursesRoute } = applicationRoutes.administrationRoute.companiesRoute;
+    const { activeCompanyId } = useAdminBreadcrumbsContext();
 
     // http
     const { companies, companiesState, companiesError, refetchCompanies } = CompanyApiService.useCompaniesAdmin();
@@ -56,12 +58,12 @@ export const CompanyAdminIndexPage = memo(() => {
                             </EpistoFont>
 
                             <EpistoButton
-                                onClick={() => navigate2(editRoute, { companyId: company.id })}>
+                                onClick={() => navigate2(editRoute, { activeCompanyId, companyId: company.id })}>
                                 <EpistoIcons.Edit />
                             </EpistoButton>
 
                             <EpistoButton
-                                onClick={() => navigate2(coursesRoute, { companyId: company.id })}>
+                                onClick={() => navigate2(coursesRoute, { activeCompanyId, companyId: company.id })}>
                                 <EpistoIcons.Courses />
                             </EpistoButton>
 

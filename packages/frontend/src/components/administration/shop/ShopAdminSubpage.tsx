@@ -15,6 +15,7 @@ import { FlexListItem } from '../../universal/FlexListItem';
 import { FlexListTitleSubtitle } from '../../universal/FlexListTitleSubtitle';
 import { AdminListEditHeader } from '../AdminListEditHeader';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
+import { useAdminBreadcrumbsContext } from '../breadcrumbsHeader/AdminBreadcrumbsContext';
 import { ShopAdminEditSubpage } from './ShopAdminEditSubpage';
 
 export const ShopAdminSubpage = () => {
@@ -24,8 +25,9 @@ export const ShopAdminSubpage = () => {
     const { createShopItemAsync, createShopItemState } = useCreateShopItem();
 
     //util
-    const { navigate2 } = useNavigation();
+    const { navigate3 } = useNavigation();
     const showError = useShowErrorDialog();
+    const { activeCompanyId } = useAdminBreadcrumbsContext();
 
     // state
     const [selectedIds, setSelectedIds] = useState<Id<'ShopItem'>[]>([]);
@@ -45,7 +47,7 @@ export const ShopAdminSubpage = () => {
 
     const handleEdit = (id: Id<'ShopItem'>) => {
 
-        navigate2(applicationRoutes.administrationRoute.shopRoute.editRoute, { shopItemId: id });
+        navigate3(applicationRoutes.administrationRoute.shopRoute.editRoute, { params: { activeCompanyId, shopItemId: id } });
     };
 
     const handleDelete = (id: Id<'ShopItem'>) => {

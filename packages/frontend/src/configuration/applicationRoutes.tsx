@@ -1,17 +1,17 @@
 import { CourseUserPresetType, Id, LeaderboardPeriodType, LeaderboardScopeType } from '@episto/commontypes';
-import { AdminPanelSettings, Build, Business, Equalizer, Home, Person, School, Search, Settings, Subscriptions } from '@mui/icons-material';
+import { AdminPanelSettings, Build, Equalizer, Home, Person, School, Search, Settings, Subscriptions } from '@mui/icons-material';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import LocalPoliceIcon from '@mui/icons-material/LocalPolice';
 import LocationCityIcon from '@mui/icons-material/LocationCity';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import SortIcon from '@mui/icons-material/Sort';
 import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
 import { UserDataGridPresetType } from '../components/administration/users/AminUserGridView';
 import { AdminActiveCompanyRouteParamType, ApplicationRoute, EpistoRoute } from '../models/types';
 import { Environment } from '../static/Environemnt';
 import { EpistoIcons } from '../static/EpistoIcons';
 import { translatableTexts } from '../static/translatableTexts';
-import SortIcon from '@mui/icons-material/Sort';
 
 export type ApplicationRoutesType = {
     matchAll: ApplicationRoute;
@@ -68,30 +68,28 @@ export type ApplicationRoutesType = {
             interactiveCourseRoute: ApplicationRoute<AdminActiveCompanyRouteParamType>;
         };
         shopRoute: ApplicationRoute<AdminActiveCompanyRouteParamType, void> & {
-            overviewRoute: ApplicationRoute;
-            addRoute: ApplicationRoute;
-            editRoute: ApplicationRoute<{ shopItemId: Id<'ShopItem'> }>;
+            overviewRoute: ApplicationRoute<AdminActiveCompanyRouteParamType>;
+            addRoute: ApplicationRoute<AdminActiveCompanyRouteParamType>;
+            editRoute: ApplicationRoute<AdminActiveCompanyRouteParamType & { shopItemId: Id<'ShopItem'> }>;
         };
         personalityAssessmentRoute: ApplicationRoute<AdminActiveCompanyRouteParamType, void> & {
-            indexRoute: ApplicationRoute,
-            editTipsRoute: ApplicationRoute<{ traitCategoryId: Id<'PersonalityTraitCategory'>, isMax: boolean }> & {
-                editTipRoute: ApplicationRoute<{ traitCategoryId: Id<'PersonalityTraitCategory'>, isMax: boolean, dailyTipId: Id<'DailyTip'> }>;
+            indexRoute: ApplicationRoute<AdminActiveCompanyRouteParamType>,
+            editTipsRoute: ApplicationRoute<AdminActiveCompanyRouteParamType & { traitCategoryId: Id<'PersonalityTraitCategory'>, isMax: boolean }> & {
+                editTipRoute: ApplicationRoute<AdminActiveCompanyRouteParamType & { traitCategoryId: Id<'PersonalityTraitCategory'>, isMax: boolean, dailyTipId: Id<'DailyTip'> }>;
             };
         };
-        myCompanyRoute: ApplicationRoute<AdminActiveCompanyRouteParamType, void>;
         companiesRoute: ApplicationRoute<AdminActiveCompanyRouteParamType, void> & {
-            indexRoute: ApplicationRoute;
-            editRoute: ApplicationRoute<{ companyId: Id<'Company'> }>;
-            coursesRoute: ApplicationRoute<{ companyId: Id<'Company'> }>;
-            activationCodesRoute: ApplicationRoute<{ companyId: Id<'Company'> }>;
+            indexRoute: ApplicationRoute<AdminActiveCompanyRouteParamType>;
+            editRoute: ApplicationRoute<AdminActiveCompanyRouteParamType & { companyId: Id<'Company'> }>;
+            coursesRoute: ApplicationRoute<AdminActiveCompanyRouteParamType & { companyId: Id<'Company'> }>;
         };
         rolesRoute: ApplicationRoute<AdminActiveCompanyRouteParamType, void> & {
-            indexRoute: ApplicationRoute;
-            editRoute: ApplicationRoute<{ roleId: Id<'Role'> }>;
+            indexRoute: ApplicationRoute<AdminActiveCompanyRouteParamType>;
+            editRoute: ApplicationRoute<AdminActiveCompanyRouteParamType & { roleId: Id<'Role'> }>;
         };
         activationCodesRoute: ApplicationRoute<AdminActiveCompanyRouteParamType, void>;
         debugRoute: ApplicationRoute<AdminActiveCompanyRouteParamType, void> & {
-            indexRoute: ApplicationRoute;
+            indexRoute: ApplicationRoute<AdminActiveCompanyRouteParamType>;
         };
     };
     settingsRoute: ApplicationRoute & {
@@ -428,13 +426,6 @@ export const getApplicationRoutes = () => {
                 },
             },
 
-            myCompanyRoute: {
-                title: 'Céges statisztika',
-                route: new EpistoRoute('/administration/:activeCompanyId', 'mycompany'),
-                icon: <Business className="fontXXL"
-                    color={'secondary'} />
-            },
-
             companiesRoute: {
                 title: 'Cégek',
                 route: new EpistoRoute('/administration/:activeCompanyId', 'companies', '*'),
@@ -453,10 +444,6 @@ export const getApplicationRoutes = () => {
                 coursesRoute: {
                     title: 'Ceg kurzusai',
                     route: new EpistoRoute('/administration/:activeCompanyId/companies', '/:companyId/company-associated-courses')
-                },
-                activationCodesRoute: {
-                    title: 'Aktivációs kódok',
-                    route: new EpistoRoute('/administration/:activeCompanyId/companies', '/:companyId/activation-codes')
                 }
             },
 

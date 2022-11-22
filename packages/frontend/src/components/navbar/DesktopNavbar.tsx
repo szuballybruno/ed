@@ -81,7 +81,6 @@ export const DesktopNavbar = ({
 
     const handleNavigation = (route: ApplicationRoute) => {
 
-        console.log(activeCompanyId);
         navigate3(route as ApplicationRoute<AdminActiveCompanyRouteParamType>, { params: { activeCompanyId } });
     };
 

@@ -1,16 +1,17 @@
 import Edit from '@mui/icons-material/Edit';
-import {applicationRoutes} from '../../../configuration/applicationRoutes';
-import {PersonalityTraitCategoryShortDTO} from '@episto/communication';
-import {usePersonalityTraitCategories} from '../../../services/api/personalityAssessmentApiService';
-import {useNavigation} from '../../../services/core/navigatior';
-import {EpistoButton} from '../../controls/EpistoButton';
-import {EpistoFont} from '../../controls/EpistoFont';
-import {LoadingFrame} from '../../system/LoadingFrame';
-import {FlexListItem} from '../../universal/FlexListItem';
-import {FlexListTitleSubtitle} from '../../universal/FlexListTitleSubtitle';
-import {AdminSubpageHeader} from '../AdminSubpageHeader';
-import {Id} from '@episto/commontypes';
-import {EpistoFlex2} from '../../controls/EpistoFlex';
+import { applicationRoutes } from '../../../configuration/applicationRoutes';
+import { PersonalityTraitCategoryShortDTO } from '@episto/communication';
+import { usePersonalityTraitCategories } from '../../../services/api/personalityAssessmentApiService';
+import { useNavigation } from '../../../services/core/navigatior';
+import { EpistoButton } from '../../controls/EpistoButton';
+import { EpistoFont } from '../../controls/EpistoFont';
+import { LoadingFrame } from '../../system/LoadingFrame';
+import { FlexListItem } from '../../universal/FlexListItem';
+import { FlexListTitleSubtitle } from '../../universal/FlexListTitleSubtitle';
+import { AdminSubpageHeader } from '../AdminSubpageHeader';
+import { Id } from '@episto/commontypes';
+import { EpistoFlex2 } from '../../controls/EpistoFlex';
+import { useAdminBreadcrumbsContext } from '../breadcrumbsHeader/AdminBreadcrumbsContext';
 
 export const PersonalityTraitCategoriesSubpage = () => {
 
@@ -19,6 +20,7 @@ export const PersonalityTraitCategoriesSubpage = () => {
 
     //util
     const { navigate2 } = useNavigation();
+    const { activeCompanyId } = useAdminBreadcrumbsContext();
 
     // state
 
@@ -26,7 +28,7 @@ export const PersonalityTraitCategoriesSubpage = () => {
 
     const handleEdit = (traitCategoryId: Id<'PersonalityTraitCategory'>, isMax: boolean) => {
 
-        navigate2(applicationRoutes.administrationRoute.personalityAssessmentRoute.editTipsRoute, { traitCategoryId, isMax });
+        navigate2(applicationRoutes.administrationRoute.personalityAssessmentRoute.editTipsRoute, { activeCompanyId, traitCategoryId, isMax });
     };
 
     const rowButtons = [
