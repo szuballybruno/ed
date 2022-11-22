@@ -664,7 +664,7 @@ export const usePaging = <T>({
 
         if (onItemSet)
             onItemSet({ item: items[itemIndex], index: itemIndex });
-    }, [setCurrentItemIndex, setUseDefaultValue]);
+    }, [setCurrentItemIndex, setUseDefaultValue, max, onItemSet, items]);
 
     const jumpToLast = useCallback(() => {
 
