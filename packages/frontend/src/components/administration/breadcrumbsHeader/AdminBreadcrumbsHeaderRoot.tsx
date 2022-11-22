@@ -21,7 +21,7 @@ export type CompanySelectorDropdownType = {
 export const useAdminBreadcrumbsRootLogic = () => {
 
     const contextValue = useAdminBreadcrumbsState();
-    const { backButtonProps, subRouteLabel, headerContentRef, activeCompany, companySelectorLogic } = contextValue;
+    const { backButtonProps, subRouteLabel, headerContentRef, activeCompany, companySelectorLogic, activeCompanyId } = contextValue;
     const { hasPermission } = useAuthorizationContext();
 
     // util
@@ -52,7 +52,8 @@ export const useAdminBreadcrumbsRootLogic = () => {
         headerContentRef,
         contextValue,
         backButtonProps,
-        activeCompany
+        activeCompany,
+        activeCompanyId
     };
 };
 
@@ -67,7 +68,8 @@ export const AdminBreadcrumbsHeaderRoot = ({ children, logic }: PropsWithChildre
         hasPermission,
         headerContentRef,
         contextValue,
-        backButtonProps
+        backButtonProps,
+        activeCompanyId
     } = logic;
 
     return <EpistoFlex2
@@ -119,11 +121,13 @@ export const AdminBreadcrumbsHeaderRoot = ({ children, logic }: PropsWithChildre
                     {new ArrayBuilder()
                         .addIf(!!currentRoute, <AdminBreadcrumbLink
                             key={1}
+                            activeCompanyId={activeCompanyId}
                             isCurrent={!subRoute}
                             route={currentRoute}
                             title={currentRoute.title}
                             iconComponent={currentRoute.icon} />)
                         .addIf(!!subRoute, <AdminBreadcrumbLink
+                            activeCompanyId={activeCompanyId}
                             key={2}
                             isCurrent
                             title={subRoute?.title ?? ''} />)

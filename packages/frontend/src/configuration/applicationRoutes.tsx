@@ -59,13 +59,13 @@ export type ApplicationRoutesType = {
             };
         };
         coursesRoute: ApplicationRoute<AdminActiveCompanyRouteParamType, void> & {
-            landingRoute: ApplicationRoute;
-            addRoute: ApplicationRoute;
-            courseDetailsRoute: ApplicationRoute<{ courseId: Id<'Course'> }>;
-            courseContentRoute: ApplicationRoute;
-            statisticsCourseRoute: ApplicationRoute;
-            courseUserProgressRoute: ApplicationRoute<{ courseId: Id<'Course'> }, { preset?: CourseUserPresetType }>;
-            interactiveCourseRoute: ApplicationRoute;
+            landingRoute: ApplicationRoute<AdminActiveCompanyRouteParamType>;
+            addRoute: ApplicationRoute<AdminActiveCompanyRouteParamType>;
+            courseDetailsRoute: ApplicationRoute<AdminActiveCompanyRouteParamType & { courseId: Id<'Course'> }>;
+            courseContentRoute: ApplicationRoute<AdminActiveCompanyRouteParamType & { courseId: Id<'Course'> }>;
+            statisticsCourseRoute: ApplicationRoute<AdminActiveCompanyRouteParamType & { courseId: Id<'Course'> }>;
+            courseUserProgressRoute: ApplicationRoute<AdminActiveCompanyRouteParamType & { courseId: Id<'Course'> }, { preset?: CourseUserPresetType }>;
+            interactiveCourseRoute: ApplicationRoute<AdminActiveCompanyRouteParamType>;
         };
         shopRoute: ApplicationRoute<AdminActiveCompanyRouteParamType, void> & {
             overviewRoute: ApplicationRoute;

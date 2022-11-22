@@ -1,13 +1,14 @@
 import { ReactNode } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { Responsivity } from '../../helpers/responsivity';
-import { ApplicationRoute } from '../../models/types';
+import { AdminActiveCompanyIdType, AdminActiveCompanyRouteParamType, ApplicationRoute } from '../../models/types';
 import { useNavigation } from '../../services/core/navigatior';
 import { Environment } from '../../static/Environemnt';
 import { ArrayBuilder } from '../../static/frontendHelpers';
 import { Logger } from '../../static/Logger';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { useCurrentUserContext } from '../system/AuthenticationFrame';
 import { useAuthorizationContext } from '../system/AuthorizationContext';
 import { NavbarButton } from '../universal/NavbarButton';
 import { ContinueCourseButton } from './ContinueCourseButton';
@@ -31,6 +32,8 @@ export const DesktopNavbar = ({
     const isMinimalMode = !!_isMinimalMode;
 
     const { hasPermission } = useAuthorizationContext();
+    const { companyId } = useCurrentUserContext();
+    const activeCompanyId: AdminActiveCompanyIdType = companyId;
 
     const menuItems: ApplicationRoute[] = new ArrayBuilder<Omit<ApplicationRoute, 'icon'> & { icon: ReactNode }>()
         .addIf(hasPermission('ADMINISTRATE_COMPANY'), {
@@ -60,7 +63,7 @@ export const DesktopNavbar = ({
         })
         .getArray() as any;
 
-    const { navigate2 } = useNavigation();
+    const { navigate3 } = useNavigation();
 
     // context
     const { isAuthenticated } = useAuthorizationContext();
@@ -76,6 +79,12 @@ export const DesktopNavbar = ({
     const hideLinks = hideLinks1 || !isAuthenticated;
     const isMidMode = (isLargerThan1300 && !showLogo) || (isLargerThan1000 && showLogo);
 
+    const handleNavigation = (route: ApplicationRoute) => {
+
+        console.log(activeCompanyId);
+        navigate3(route as ApplicationRoute<AdminActiveCompanyRouteParamType>, { params: { activeCompanyId } });
+    };
+
     // funcs
     const MinimalRender = () => {
 
@@ -86,7 +95,7 @@ export const DesktopNavbar = ({
                         <EpistoButton
                             variant="plain"
                             key={index}
-                            onClick={() => navigate2(route)}>
+                            onClick={() => handleNavigation(route)}>
 
                             {route.icon}
                         </EpistoButton>
@@ -108,7 +117,7 @@ export const DesktopNavbar = ({
                         <NavbarButton
                             key={index}
                             menuName={route.title}
-                            onClick={() => navigate2(route)} />
+                            onClick={() => handleNavigation(route)} />
                     ))}
 
                 {/* continue course button */}
@@ -128,7 +137,7 @@ export const DesktopNavbar = ({
                                 variant="plain"
                                 key={index}
                                 onClick={() => {
-                                    navigate2(route);
+                                    handleNavigation(route);
                                 }}>
 
                                 {route.icon}
@@ -166,7 +175,7 @@ export const DesktopNavbar = ({
                         cursor: 'pointer',
                     }}
                     alt=""
-                    onClick={() => navigate2(applicationRoutes.homeRoute)} />
+                    onClick={() => handleNavigation(applicationRoutes.homeRoute)} />
             )}
 
             {/* menu items */}

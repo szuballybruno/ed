@@ -18,13 +18,15 @@ export const useAdminBreadcrumbsState = () => {
 
     const companySelectorLogic = useCompanySelectorLogic({ companies });
     const activeCompany = companySelectorLogic.activeCompany;
+    const activeCompanyId = activeCompany?.id ?? null;
 
     return {
         setState,
         ...state,
         headerContentRef,
         activeCompany,
-        companySelectorLogic
+        companySelectorLogic,
+        activeCompanyId
     };
 };
 

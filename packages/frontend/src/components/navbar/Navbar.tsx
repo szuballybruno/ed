@@ -2,7 +2,6 @@ import { memo } from 'react';
 import { Responsivity } from '../../helpers/responsivity';
 import { ObjectComparer } from '../../static/objectComparer';
 import { FlexFloat } from '../controls/FlexFloat';
-import { useCurrentCourseItemCodeContext } from '../system/CurrentCourseItemFrame';
 import { DesktopNavbar } from './DesktopNavbar';
 import { MobileNavigation } from './MobileNavigation';
 

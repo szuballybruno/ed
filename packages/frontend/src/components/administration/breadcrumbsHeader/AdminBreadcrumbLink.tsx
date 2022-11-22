@@ -1,6 +1,7 @@
-import { NavLink } from 'react-router-dom';
-import { ApplicationRoute } from '../../../models/types';
+import { AdminActiveCompanyIdType, AdminActiveCompanyRouteParamType, ApplicationRoute } from '../../../models/types';
+import { Navigator } from '../../../services/core/navigatior';
 import { EpistoDiv } from '../../controls/EpistoDiv';
+import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { AdminBreadcrumbsContent } from './AdminBreadcrumbsContent';
 
 export const AdminBreadcrumbLink = (props: {
@@ -8,23 +9,26 @@ export const AdminBreadcrumbLink = (props: {
     isCurrent: boolean,
     iconComponent?: JSX.Element,
     route?: ApplicationRoute,
+    activeCompanyId: AdminActiveCompanyIdType
 }) => {
 
-    const { route, title, iconComponent, isCurrent } = props;
+    const { route, title, iconComponent, isCurrent, activeCompanyId } = props;
     const isLink = !isCurrent && route;
+    const { navigate3 } = Navigator.useNavigation();
 
     return <EpistoDiv>
 
         {isLink
             ? (
-                <NavLink
-                    to={route.route.getAbsolutePath()}>
+                <EpistoFlex2
+                    cursor="pointer"
+                    onClick={() => navigate3(route as ApplicationRoute<AdminActiveCompanyRouteParamType>, { params: { activeCompanyId } })}>
 
                     <AdminBreadcrumbsContent
                         iconComponent={iconComponent}
                         isCurrent={isCurrent}
                         title={title} />
-                </NavLink>
+                </EpistoFlex2>
             )
             : (
                 <AdminBreadcrumbsContent
