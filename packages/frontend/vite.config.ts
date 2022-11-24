@@ -4,4 +4,7 @@ import viteTsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
   plugins: [react(), viteTsconfigPaths()],
+  build: {
+    outDir: 'build'
+  }
 });

@@ -23,7 +23,7 @@ const bundler: 'vite' | 'cra' = 'vite';
 const getEnvVar = (name: string): string => {
 
     if (bundler === 'vite') {
-        return import.meta.env[`VITE_${name}`];
+        return ((import.meta as any).env as any)[`VITE_${name}`];
     }
     else {
         return process.env[`REACT_APP_${name}`] as any;
