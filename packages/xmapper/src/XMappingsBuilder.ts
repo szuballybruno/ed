@@ -1,5 +1,8 @@
-import { ClassType } from "../../backend/build/services/misc/advancedTypes/ClassType";
 import { MappingFunctionType, ContainerItemType } from "./XMapperTypes";
+
+declare type ClassType<T> = {
+    new(): T;
+};
 
 export class XMappingsBuilder<TServices extends any[]> {
 
