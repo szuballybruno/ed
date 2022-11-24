@@ -37,6 +37,8 @@ COPY ./packages/frontend/.env ./packages/frontend/.env
 COPY ./packages/frontend/.eslintrc.json ./packages/frontend/.eslintrc.json
 COPY ./packages/frontend/src ./packages/frontend/src
 COPY ./packages/frontend/public ./packages/frontend/public
+COPY ./packages/frontend/index.html ./packages/frontend/index.html
+COPY ./packages/frontend/vite.config.ts ./packages/frontend/vite.config.ts
 
 RUN echo "Copying commonlogic files..."
 COPY ./packages/commonlogic/tsconfig.json ./packages/commonlogic/tsconfig.json
