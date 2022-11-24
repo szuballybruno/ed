@@ -1,3 +1,5 @@
+import { Id } from '@episto/commontypes';
+import { AnswerSignupQuestionDTO, SurveyDataDTO } from '@episto/communication';
 import { AnswerData } from '../models/entity/answer/AnswerData';
 import { AnswerVersion } from '../models/entity/answer/AnswerVersion';
 import { AnswerGivenAnswerBridge } from '../models/entity/misc/AnswerGivenAnswerBridge';
@@ -5,46 +7,27 @@ import { AnswerSession } from '../models/entity/misc/AnswerSession';
 import { GivenAnswer } from '../models/entity/misc/GivenAnswer';
 import { SignupCompletedView } from '../models/views/SignupCompletedView';
 import { SignupQuestionView } from '../models/views/SignupQuestionView';
-import { AnswerSignupQuestionDTO } from '@episto/communication';
-import { SurveyDataDTO } from '@episto/communication';
-import { Id } from '@episto/commontypes';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
-import { AuthorizationService } from './AuthorizationService';
 import { CompanyService } from './CompanyService';
-import { EmailService } from './EmailService';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { PermissionService } from './PermissionService';
-import { QuestionAnswerService } from './QuestionAnswerService';
-import { SQLFunctionsService } from './sqlServices/FunctionsService';
 
 export class SignupService {
 
-    private _emailService: EmailService;
-    private _sqlFuncService: SQLFunctionsService;
     private _ormService: ORMConnectionService;
     private _mapperService: MapperService;
-    private _authorizationService: AuthorizationService;
-    private _questionAnswerService: QuestionAnswerService;
     private _permissionService: PermissionService;
     private _companyService: CompanyService;
 
     constructor(
-        emailService: EmailService,
-        sqlFuncService: SQLFunctionsService,
         ormService: ORMConnectionService,
         mapperService: MapperService,
-        authorizationService: AuthorizationService,
-        questionAnswerService: QuestionAnswerService,
         permissionService: PermissionService,
         companyService: CompanyService) {
 
-        this._emailService = emailService;
-        this._sqlFuncService = sqlFuncService;
         this._ormService = ormService;
         this._mapperService = mapperService;
-        this._authorizationService = authorizationService;
-        this._questionAnswerService = questionAnswerService;
         this._permissionService = permissionService;
         this._companyService = companyService;
     }

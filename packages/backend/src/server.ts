@@ -5,6 +5,7 @@ import { fileURLToPath } from 'url';
 import { LoggerService } from './services/LoggerService';
 import { log } from './services/misc/logger';
 import { ORMConnectionService } from './services/ORMConnectionService/ORMConnectionService';
+import { XORMConnectionService } from './services/XORM/XORMConnectionService';
 import { ServiceProviderInitializator } from './startup/initApp';
 import { initTurboExpress } from './startup/instatiateTurboExpress';
 import { XTurboExpressListener } from './turboImplementations/XTurboExpressListener';
@@ -29,7 +30,7 @@ const startServerAsync = async (initializator: ServiceProviderInitializator) => 
         .useTransientServicesContextAsync(async serviceProvider => {
 
             const ormService = serviceProvider
-                .getService(ORMConnectionService);
+                .getService(XORMConnectionService);
 
             await ormService
                 .validateSchemaAsync();

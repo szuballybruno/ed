@@ -1,4 +1,3 @@
-import { FunctionSignatureAnyArgs } from '../advancedTypes/FunctionSignature';
 
 /**
  * Makes a mutable type out of a readonly one
@@ -41,7 +40,7 @@ export type GetSingleContainerType<TContainer extends ContainerType, TTypeKey> =
  * Mapping type, used as container touple items type
  * Has [keyType, returnType, paramsType]
  */
-export type ContainerItemType<TTypeKey, TReturn, TMapFn extends FunctionSignatureAnyArgs<any>> = [TTypeKey, TReturn, Parameters<ReturnType<TMapFn>>];
+export type ContainerItemType<TTypeKey, TReturn, TMapFn extends (...args: any[]) => any> = [TTypeKey, TReturn, Parameters<ReturnType<TMapFn>>];
 
 export type MappingFunctionType<TServices extends any[], TObject> = (services: TServices) => (...args: [...any]) => TObject;
 

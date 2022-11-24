@@ -157,7 +157,7 @@ import { UserWeeklyCourseItemProgressView } from '../../models/views/UserWeeklyC
 import { VideoCursorSecondsView } from '../../models/views/VideoCursorSecondsView';
 import { VideoPlayerDataView } from '../../models/views/VideoPlayerDataView';
 import { VideoVersionView } from '../../models/views/VideoVersionView';
-import { XDBMSchemaService } from '../XDBManager/XDBManagerTypes';
+import { XDBMSchemaService } from '../XORM/XDBManagerTypes';
 
 export const createDBSchema = (): XDBMSchemaService => {
 
@@ -254,59 +254,6 @@ export const createDBSchema = (): XDBMSchemaService => {
             QuestionModuleCompareView,
             LeaderboardView,
             UserOverviewView
-        ],
-
-        functionScripts: [
-            'acquire_task_lock_fn',
-            'create_daily_tip_fn',
-            'get_user_session_first_activity_id'
-        ],
-
-        constraints: [
-            {
-                tableName: 'coin_transaction',
-                fileName: 'coin_transaction_valid_relation_enforce_constraint'
-            },
-            {
-                tableName: 'activation_code',
-                fileName: 'activation_code_uniqe_constraint'
-            },
-            {
-                tableName: 'role_permission_bridge',
-                fileName: 'role_permission_bridge_constraint'
-            },
-            {
-                tableName: 'role',
-                fileName: 'role_constraint'
-            },
-            { fileName: 'video_completion_constraints' },
-            { fileName: 'exam_completion_constraints' },
-            { fileName: 'prequiz_completion_constraints' },
-            { fileName: 'course_completion_constraints' },
-            { fileName: 'course_access_bridge_constraints' },
-            { fileName: 'prequiz_constraints' },
-            { fileName: 'permission_assignment_bridge_constraints' },
-            { fileName: 'video_data_constraints' }
-        ],
-
-        indices: [
-            {
-                tableName: 'user',
-                name: 'user_email_unique_index'
-            },
-            {
-                tableName: 'user_course_bridge',
-                name: 'single_current_course_bridge_unique_index'
-            }
-        ],
-
-        triggers: [
-            'role_assignment_validity_check_trigger',
-            'exam_pretest_module_integrity_trigger',
-            'permission_assignment_bridge_trigger',
-            'role_permission_bridge_validity_trigger',
-            'ucb_stage_trigger',
-            'prequiz_completion_trigger'
         ],
 
         entities: [

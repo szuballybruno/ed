@@ -23,6 +23,9 @@ COPY ./packages/commontypes/package.json ./packages/commontypes/package.json
 RUN echo "Copying communication package.json..."
 COPY ./packages/communication/package.json ./packages/communication/package.json
 
+RUN echo "Copying xmapper package.json..."
+COPY ./packages/xmapper/package.json ./packages/xmapper/package.json
+
 # yarn install (no-lockfile)
 RUN echo "Yarn installing deps..."
 RUN yarn --no-lockfile
@@ -53,6 +56,10 @@ COPY ./packages/commontypes/src ./packages/commontypes/src
 RUN echo "Copying communication files..."
 COPY ./packages/communication/tsconfig.json ./packages/communication/tsconfig.json
 COPY ./packages/communication/src ./packages/communication/src
+
+RUN echo "Copying xmapper files..."
+COPY ./packages/xmapper/tsconfig.json ./packages/xmapper/tsconfig.json
+COPY ./packages/xmapper/src ./packages/xmapper/src
 
 # build backend
 RUN echo "Running Yarn build backend script..."

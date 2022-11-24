@@ -1,37 +1,29 @@
+import { Id } from '@episto/commontypes';
+import { CoinTransactionDTO } from '@episto/communication';
 import { CoinTransaction } from '../models/entity/misc/CoinTransaction';
 import { GivenAnswer } from '../models/entity/misc/GivenAnswer';
 import { CoinBalanceView } from '../models/views/CoinBalanceView';
 import { CoinTransactionView } from '../models/views/CoinTransactionView';
-import { CoinTransactionDTO } from '@episto/communication';
-import { Id } from '@episto/commontypes';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
-import { AuthorizationService } from './AuthorizationService';
 import { LoggerService } from './LoggerService';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
-import { InsertCoinFnParamsType, SQLFunctionsService } from './sqlServices/FunctionsService';
 
 export class CoinTransactionService {
 
-    private _funcService: SQLFunctionsService;
     private _mapperService: MapperService;
     private _ormConnectionService: ORMConnectionService;
-    private _authorizationService: AuthorizationService;
 
     constructor(
-        funcService: SQLFunctionsService,
         ormConnService: ORMConnectionService,
         mapperService: MapperService,
-        authorizationService: AuthorizationService,
         private _loggerService: LoggerService) {
 
-        this._funcService = funcService;
         this._mapperService = mapperService;
         this._ormConnectionService = ormConnService;
-        this._authorizationService = authorizationService;
     }
 
-    async makeCoinTransactionAsync(params: InsertCoinFnParamsType) {
+    async makeCoinTransactionAsync(params: any) {
 
         this._loggerService
             .logScoped('COINS', `Adding new coin... ${params.userId} - ${params.amount}`);
