@@ -1,7 +1,7 @@
 
+import { DependencyContainer } from '@episto/xinjector';
 import { ParametrizedConstructor } from '../services/misc/advancedTypes/ParametrizedConstructor';
 import { SQLConnectionService } from '../services/sqlServices/SQLConnectionService';
-import { DependencyContainer } from '../../../xinjector/src/XDInjector';
 import { getTransientServiceContainer, instansiateSingletonServices, instatiateServices, ServiceProvider } from './serviceDependencyContainer';
 
 export type UseTransientServicesContextFunction = <T>(fnInTransientContext: (transientProvider: ServiceProvider) => Promise<T>) => Promise<T>;
