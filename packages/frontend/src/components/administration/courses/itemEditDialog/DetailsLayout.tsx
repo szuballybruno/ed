@@ -16,7 +16,8 @@ export const DetailsLayout = ({
     subTitle,
     paging,
     cancelEdit,
-    okEdit
+    okEdit,
+    okEnabled
 }: {
     chipText: string,
     chipColor: string,
@@ -24,7 +25,8 @@ export const DetailsLayout = ({
     subTitle: string,
     paging: PagingType<EditDialogSubpage>,
     cancelEdit: () => void,
-    okEdit: () => void
+    okEdit: () => void,
+    okEnabled: boolean
 }) => {
 
     const subpages = paging.items;
@@ -89,6 +91,7 @@ export const DetailsLayout = ({
                     {/* save button */}
                     <EpistoButton
                         variant="colored"
+                        isDisabled={!okEnabled}
                         onClick={okEdit}>
                         {translatableTexts.misc.ok}
                     </EpistoButton>

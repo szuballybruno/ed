@@ -113,6 +113,7 @@ export const AdminCourseContentSubpage = () => {
 
     const [currentItem, setCurrentItem] = useState<ItemEditDialogParams | null>(null);
     const isDetailsPaneOpen = useMemo(() => !!currentItem, [currentItem]);
+    const currentVersionCode = currentItem?.versionCode ?? null;
 
     /**
      * Item edit dialog's callback function 
@@ -416,19 +417,21 @@ export const AdminCourseContentSubpage = () => {
         {
             action: () => setIsAddButtonsPopperOpen(true),
             icon: <Add ref={ref} />,
-            title: translatableTexts.misc.add
+            title: translatableTexts.misc.add,
+            disabled: isDetailsPaneOpen
         },
         {
             action: () => openItemEditDialog('module'),
             icon: <Edit ref={ref} />,
-            title: translatableTexts.administration.courseContentSubpage.editModules
+            title: translatableTexts.administration.courseContentSubpage.editModules,
+            disabled: isDetailsPaneOpen
         },
         {
             action: handleSaveAsync,
             title: 'Mentés',
-            disabled: !isSaveEnabled
+            disabled: !isSaveEnabled || isDetailsPaneOpen
         }
-    ], [handleSaveAsync, isSaveEnabled, openItemEditDialog]);
+    ], [handleSaveAsync, isSaveEnabled, openItemEditDialog, isDetailsPaneOpen]);
 
     /**
      * Get grid columns
@@ -439,7 +442,8 @@ export const AdminCourseContentSubpage = () => {
         itemsMutatorFunctions,
         handleSelectVideoFile,
         currentDropModuleId,
-        isDetailsPaneOpen);
+        isDetailsPaneOpen,
+        currentVersionCode);
 
     return (
         <>
@@ -465,6 +469,7 @@ export const AdminCourseContentSubpage = () => {
             {/* actual page content  */}
             <CourseAdministartionFrame
                 noHeightOverflow
+                disabled={isDetailsPaneOpen}
                 isAnySelected={isAnySelected}>
 
                 {/* Right side content */}

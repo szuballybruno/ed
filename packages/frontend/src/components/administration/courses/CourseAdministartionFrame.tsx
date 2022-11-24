@@ -16,11 +16,13 @@ import { AdminCourseList } from './AdminCourseList';
 export const CourseAdministartionFrame = ({
     children,
     isAnySelected,
-    noHeightOverflow
+    noHeightOverflow,
+    disabled
 }: {
     children?: ReactNode,
     isAnySelected: boolean,
-    noHeightOverflow?: boolean
+    noHeightOverflow?: boolean,
+    disabled?: boolean
 }) => {
 
     const { activeCompany, activeCompanyId } = useAdminBreadcrumbsContext();
@@ -80,6 +82,7 @@ export const CourseAdministartionFrame = ({
 
             {/* header */}
             <AdminBreadcrumbsHeader
+                disabled={disabled}
                 subRouteLabel={currentCourse?.title ?? ''}>
 
                 <EpistoButton

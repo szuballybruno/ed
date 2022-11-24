@@ -6,6 +6,7 @@ import { useCompanySelectorLogic } from '../users/CompanySelectorDropdown';
 export type AdminBreadcrumbsStateType = {
     subRouteLabel?: string;
     backButtonProps?: any;
+    disabled?: boolean;
 };
 
 export const useAdminBreadcrumbsState = () => {

@@ -44,7 +44,8 @@ export const useGridColumns = (
     itemsMutatorFunctions: IXMutatorFunctions<CourseContentItemAdminDTO, 'versionCode', VersionCode>,
     onSelectVideoFile: (row: RowSchema) => void,
     currentDropModuleId: Id<'ModuleVersion'> | null,
-    isSimpleView: boolean) => {
+    isSimpleView: boolean,
+    currentVersionCode: VersionCode | null) => {
 
     const TextCellRenderer = ({
         children,
@@ -159,7 +160,8 @@ export const useGridColumns = (
                     style={{ cursor: 'pointer' }}
                     onClick={() => handleViewDetails(row)}
                     align="center">
-                    <EpistoFont>
+                    <EpistoFont
+                        fontWeight={currentVersionCode === row.data.versionCode ? 'heavy' : undefined}>
                         {value}
                     </EpistoFont>
                 </EpistoFlex2>

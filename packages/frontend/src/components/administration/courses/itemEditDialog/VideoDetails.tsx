@@ -1,6 +1,6 @@
 import { Id } from '@episto/commontypes';
 import { ModuleEditDTO } from '@episto/communication';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { CourseItemApiService } from '../../../../services/api/CourseItemApiService';
 import { ArrayBuilder, usePaging } from '../../../../static/frontendHelpers';
 import { EditDialogSubpage } from '../EditDialogBase';
@@ -72,6 +72,27 @@ export const VideoDetails = ({
         audioTextEditorLogic.audioText
     ]);
 
+    const isChanged = useMemo(() => {
+
+        if (videoEditorLogic.questionMutations !== questionMutations)
+            return true;
+
+        if (videoEditorLogic.answerMutations !== answerMutations)
+            return true;
+
+        if (audioTextEditorLogic.audioText !== videoAudioText)
+            return true;
+
+        return false;
+    }, [
+        videoEditorLogic.questionMutations,
+        videoEditorLogic.answerMutations,
+        audioTextEditorLogic.audioText,
+        questionMutations,
+        answerMutations,
+        videoAudioText
+    ]);
+
     const pages = courseItemEditData
         ? new ArrayBuilder()
             .add({
@@ -104,6 +125,7 @@ export const VideoDetails = ({
             chipText={'Videó'}
             chipColor={'var(--deepBlue)'}
             cancelEdit={cancelEdit}
-            okEdit={handleOk} />
+            okEdit={handleOk}
+            okEnabled={isChanged} />
     );
 };

@@ -8,8 +8,7 @@ export const AdminBreadcrumbsHeader = ({ children, ...props }: {
     children?: ReactNode,
     subRouteLabel?: string,
     backButtonProps?: EpistoButtonPropsType,
-    viewSwitchChecked?: boolean,
-    viewSwitchFunction?: (checked: boolean) => void
+    disabled?: boolean
 }) => {
     const { setState, headerContentRef } = useAdminBreadcrumbsContext();
 
@@ -18,7 +17,6 @@ export const AdminBreadcrumbsHeader = ({ children, ...props }: {
 
     useEffect(() => {
 
-        // console.log('set');
         setState(propsMemo);
     }, [setState, propsMemo]);
 
