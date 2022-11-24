@@ -12,7 +12,7 @@ import { EpistoLineChart } from '../../../universal/charts/base_charts/EpistoLin
 import { DashboardSection } from '../../../universal/DashboardSection';
 import { adminExamStatistics, AdminExamStatisticsListItem, adminExamStatisticsListItems, HotspotsSlider } from './ExamStats';
 
-export const AdminVideoStatisticsModalPage = () => {
+export const AdminVideoStatisticsModalPage = ({ videoUrl }: { videoUrl: string }) => {
 
     const ValueLabelComponent = (props: { children: ReactNode, value: any }) => {
         const { children, value } = props;
@@ -34,9 +34,22 @@ export const AdminVideoStatisticsModalPage = () => {
     };
     const [playedSeconds, setPlayedSeconds] = useState(0);
 
-    return <EpistoFlex2 direction="column"
+    return <EpistoFlex2
+        direction="column"
         overflowY="scroll"
         p="20px">
+
+        {/* vidi */}
+        <EpistoReactPlayer
+            width="100%"
+            height="calc(56.25 / 100)"
+            controls
+            progressInterval={100}
+            style={{
+                borderRadius: 7,
+                overflow: 'hidden'
+            }}
+            url={videoUrl} />
 
         {/* First statistics card section */}
         <EpistoFlex2 mt="10px">

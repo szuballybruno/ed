@@ -1,8 +1,6 @@
+import { Id, VersionCode } from '@episto/commontypes';
 import { ModuleEditDTO } from '@episto/communication';
-import { VersionCode } from '@episto/commontypes';
-import { Id } from '@episto/commontypes';
 import { AnswerMutationsType, QuestionMutationsType } from '../questionsEditGrid/QuestionEditGridTypes';
-import { ItemEditDialogPageType } from './ItemEditDialog';
 
 export type ItemEditDialogParams = {
     isVideo: boolean;
@@ -13,7 +11,7 @@ export type ItemEditDialogParams = {
     questionMutations: QuestionMutationsType;
     answerMutations: AnswerMutationsType;
     defaultModuleId: Id<'Module'> | null;
+    videoAudioText: string;
     modules: ModuleEditDTO[];
-    page?: ItemEditDialogPageType;
     examType: 'normal' | 'pretest' | 'final';
 };

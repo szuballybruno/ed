@@ -36,7 +36,6 @@ export const QuestionsEditGrid = ({
             {/* grid */}
             <EpistoDataGrid
                 onFocusChanged={logic.onFocusChanged}
-                showFooter
                 columns={columns}
                 rows={questionRows}
                 getKey={getKey} />

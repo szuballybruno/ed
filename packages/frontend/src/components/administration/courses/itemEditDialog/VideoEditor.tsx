@@ -1,52 +1,39 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { CourseItemApiService } from '../../../../services/api/CourseItemApiService';
-import { ModuleEditDTO } from '@episto/communication';
 import { Id } from '@episto/commontypes';
-import { useStateAndRef } from '../../../../static/frontendHelpers';
-import { translatableTexts } from '../../../../static/translatableTexts';
-import { EpistoButton } from '../../../controls/EpistoButton';
-import { EpistoFlex, EpistoFlex2 } from '../../../controls/EpistoFlex';
+import { CourseItemEditDTO, ModuleEditDTO } from '@episto/communication';
+import { useCallback, useMemo, useState } from 'react';
+import { EpistoFlex2 } from '../../../controls/EpistoFlex';
 import { EpistoReactPlayer } from '../../../controls/EpistoReactPlayer';
 import { useQuestionEditGridLogic } from '../questionsEditGrid/QuestionEditGridLogic';
 import { AnswerMutationsType, QuestionMutationsType } from '../questionsEditGrid/QuestionEditGridTypes';
 import { QuestionsEditGrid } from '../questionsEditGrid/QuestionsEditGrid';
-import { EpistoEntry } from '../../../controls/EpistoEntry';
 
-export const VideoEditor = ({
+export const useVideoEditorLogic = ({
     videoVersionId,
-    enabled,
-    onClose,
     questionMutations,
     answerMutations,
     defaultModuleId,
-    modules
+    modules,
+    editData
 }: {
-    enabled: boolean,
     videoVersionId: Id<'VideoVersion'>,
-    onClose: (questionMutations: QuestionMutationsType, answerMutations: AnswerMutationsType, audioText: string) => void,
     questionMutations: QuestionMutationsType,
     answerMutations: AnswerMutationsType,
     defaultModuleId: Id<'Module'> | null,
-    modules: ModuleEditDTO[]
+    modules: ModuleEditDTO[],
+    editData: CourseItemEditDTO | null
 }) => {
 
-    // http
-    const { courseItemEditData, courseItemEditDataState } = CourseItemApiService
-        .useCourseItemEditData(videoVersionId, null, enabled);
+    const {
+        videoUrl
+    } = editData ?? {
+        videoUrl: ''
+    };
+    const questions = useMemo(() => editData?.questions ?? [], [editData]);
 
     const [playedSeconds, setPlayedSeconds] = useState(0);
 
     // TODO optimize this
     const getPlayedSeconds = useCallback(() => Math.floor(playedSeconds), [playedSeconds]);
-
-    const videoUrl = courseItemEditData?.videoUrl ?? '';
-    const questions = useMemo(() => courseItemEditData?.questions ?? [], [courseItemEditData]);
-
-    const [questionGridHasFocusRef, questionGridHasFocus, setQuestionGridHasFocus] = useStateAndRef(false);
-
-    const [audioText, setAudioText] = useState('');
-
-    useEffect(() => setAudioText(courseItemEditData?.videoAudioText ?? ''), [courseItemEditData?.videoAudioText]);
 
     const logic = useQuestionEditGridLogic({
         questions,
@@ -58,72 +45,62 @@ export const VideoEditor = ({
         modules,
         showTiming: true,
         getPlayedSeconds,
-        onFocusChanged: setQuestionGridHasFocus,
         showQuestionModuleSelector: false
     });
 
-    const onCloseHandler = useCallback(() => {
+    return {
+        videoUrl,
+        logic,
+        setPlayedSeconds,
+        questionMutations: logic.questionMutations,
+        answerMutations: logic.answerMutations
+    };
+};
 
-        onClose(logic.questionMutations, logic.answerMutations, audioText);
-    }, [onClose, logic, audioText]);
+export type VideoEditorLogicType = ReturnType<typeof useVideoEditorLogic>;
 
-    return <EpistoFlex2
-        direction="column"
-        flex="1"
-        padding="10px">
+export const VideoEditor = ({
+    logic: {
+        videoUrl,
+        logic,
+        setPlayedSeconds
+    }
+}: {
+    logic: VideoEditorLogicType
+}) => {
 
-        {/* video preview */}
-        <EpistoFlex2
-            className="mildShadow"
-            height="300px">
+    return (
+        <>
+            <EpistoFlex2
+                direction="column"
+                flex="1"
+                padding="10px">
 
-            <EpistoReactPlayer
-                width="100%"
-                height="calc(56.25 / 100)"
-                controls
-                onProgress={x => setPlayedSeconds(x.playedSeconds)}
-                progressInterval={100}
-                style={{
-                    borderRadius: 7,
-                    overflow: 'hidden'
-                }}
-                url={videoUrl} />
-        </EpistoFlex2>
+                {/* video preview */}
+                <EpistoFlex2
+                    className="mildShadow"
+                    height="300px">
 
-        {/* audio text */}
-        <EpistoFlex2
-            padding="10px"
-            bg="white"
-            borderRadius="5px"
-            mt="10px">
+                    <EpistoReactPlayer
+                        width="100%"
+                        height="calc(56.25 / 100)"
+                        controls
+                        onProgress={x => setPlayedSeconds(x.playedSeconds)}
+                        progressInterval={100}
+                        style={{
+                            borderRadius: 7,
+                            overflow: 'hidden'
+                        }}
+                        url={videoUrl ?? ''} />
+                </EpistoFlex2>
 
-            <EpistoEntry
-                isMultiline
-                value={audioText}
-                setValue={setAudioText} />
-        </EpistoFlex2>
+                {/* questions list */}
+                <EpistoFlex2 flex="1">
 
-        {/* questions list */}
-        <EpistoFlex2 flex="1">
-
-            <QuestionsEditGrid
-                logic={logic} />
-        </EpistoFlex2>
-
-        {/* footer */}
-        <EpistoFlex
-            margin={{
-                top: 'px5'
-            }}
-            width="stretch"
-            justify="flex-end">
-
-            <EpistoButton
-                isDisabled={questionGridHasFocus}
-                variant="colored"
-                onClick={onCloseHandler}>
-                {translatableTexts.misc.ok}
-            </EpistoButton>
-        </EpistoFlex>
-    </EpistoFlex2>;
+                    <QuestionsEditGrid
+                        logic={logic} />
+                </EpistoFlex2>
+            </EpistoFlex2>
+        </>
+    );
 };
