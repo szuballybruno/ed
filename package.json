@@ -4,9 +4,12 @@
     "packages/*"
   ],
   "scripts": {
-    "builddeps": "cd ./packages/commontypes && yarn build && cd ../communication && yarn build && cd ../commonlogic && yarn build",
-    "buildfront": "cd ./packages/commontypes && yarn build && cd ../communication && yarn build && cd ../commonlogic && yarn build && cd ../frontend && yarn build",
-    "buildback": "cd ./packages/commontypes && yarn build && cd ../communication && yarn build && cd ../commonlogic && yarn build && cd ../backend && yarn build",
-    "startback": "cd ./packages/commontypes && yarn build && cd ../communication && yarn build && cd ../commonlogic && yarn build && cd ../backend && yarn start"
-  }
+    "builddeps": "lerna run build --ignore={@episto/backend,@episto/frontend,@eutil/script-producer,@eutil/pipeline-generator}",
+    "buildfront": "lerna run build --ignore={@episto/backend,@eutil/script-producer,@eutil/pipeline-generator}",
+    "buildback": "lerna run build --ignore={@episto/frontend,@eutil/script-producer,@eutil/pipeline-generator}"
+  },
+  "devDependencies": {
+    "lerna": "^6.0.3"
+  },
+  "name": "epistogram"
 }
