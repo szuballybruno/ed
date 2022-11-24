@@ -31,7 +31,7 @@ export const LoginScreen = () => {
     const { refetchAuthHandshake } = useRefetchUserAsync();
     const { hasPermission } = useAuthorizationContext();
     const dest = useQueryParams<{ dest: string }>()
-        .getValue(x => x.dest, 'string');
+        .getValueOrNull(x => x.dest, 'string');
     const [isUpToDate, setIsUpToDate] = useState(false);
 
     // state

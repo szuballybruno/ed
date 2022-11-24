@@ -18,14 +18,26 @@ export type LoggingKeysType =
     'EVENTS' |
     'PLAYER DEBUG';
 
+const bundler: 'vite' | 'cra' = 'vite';
+
+const getEnvVar = (name: string): string => {
+
+    if (bundler === 'vite') {
+        return import.meta.env[`VITE_${name}`];
+    }
+    else {
+        return process.env[`REACT_APP_${name}`] as any;
+    }
+};
+
 export const Environment = (() => {
 
-    const serverUrl = process.env.REACT_APP_SERVER_URL;
-    const assetCDNStorageUrl = process.env.REACT_APP_CDN_URL;
-    const currentVersion = process.env.REACT_APP_CURRENT_VERSION;
-    const oneSignalAppId = process.env.REACT_APP_ONE_SIGNAL_APP_ID;
-    const isUnderMaintenance = process.env.REACT_APP_UNDER_MAINTENANCE === 'true';
-    const isLocalhost = process.env.REACT_APP_IS_LOCALHOST === 'true';
+    const serverUrl = getEnvVar('SERVER_URL');
+    const assetCDNStorageUrl = getEnvVar('CDN_URL');
+    const currentVersion = getEnvVar('CURRENT_VERSION');
+    const oneSignalAppId = getEnvVar('ONE_SIGNAL_APP_ID');
+    const isUnderMaintenance = getEnvVar('UNDER_MAINTENANCE') === 'true';
+    const isLocalhost = getEnvVar('IS_LOCALHOST') === 'true';
 
     const currentOrigin = window.location.origin;
     const getAuthHandshakeIntervalInMs = 5 * 60 * 1000; // 5 minutes
