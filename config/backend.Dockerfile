@@ -30,6 +30,7 @@ RUN yarn --no-lockfile
 # copy other files
 RUN echo "Copying root files..."
 COPY ./tsconfig.json ./tsconfig.json
+COPY ./lerna.json ./lerna.json
 
 RUN echo "Copying backend files..."
 COPY ./packages/backend/tsconfig.json ./packages/backend/tsconfig.json
