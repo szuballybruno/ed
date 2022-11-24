@@ -8,6 +8,7 @@ import { MainRouting } from './MainRouting';
 import './styles/globalCssClasses.css';
 import './styles/globalCssTypes';
 import './styles/index.css';
+import type { Lol } from '@episto/backend';
 
 jsExtensions.initJsExtensions();
 

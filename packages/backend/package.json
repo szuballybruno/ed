@@ -1,10 +1,11 @@
 {
   "name": "@episto/backend",
-  "version": "0.3.0",
+  "version": "1.0.0",
   "private": true,
   "license": "UNLICENSED",
   "type": "module",
   "main": "./server.ts",
+  "typings": "./build/index.d.ts",
   "scripts": {
     "build": "tsc -v && tsc",
     "start": "nodemon -x node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm src/server.ts",

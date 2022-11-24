@@ -1,5 +1,6 @@
 import { jsExtensions } from '@episto/commonlogic';
 import { dirname } from 'path';
+import './index';
 import 'reflect-metadata'; // needs to be imported for TypeORM
 import { fileURLToPath } from 'url';
 import { LoggerService } from './services/LoggerService';

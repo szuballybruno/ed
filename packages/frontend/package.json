@@ -12,6 +12,7 @@
     "@chakra-ui/system": "2.2.12",
     "@emotion/react": "11.10.4",
     "@emotion/styled": "11.10.4",
+    "@episto/backend": "1.0.0",
     "@episto/commonlogic": "1.0.0",
     "@episto/commontypes": "1.0.0",
     "@episto/communication": "1.0.0",
