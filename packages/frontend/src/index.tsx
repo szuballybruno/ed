@@ -10,6 +10,10 @@ import './styles/globalCssTypes';
 import './styles/index.css';
 import type { Lol } from '@episto/backend';
 
+const asd: Lol = {
+    helloka: 'asd'
+};
+
 jsExtensions.initJsExtensions();
 
 /**
