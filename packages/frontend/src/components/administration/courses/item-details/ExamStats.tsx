@@ -261,10 +261,10 @@ export const ExamStats = () => {
 
     return <EpistoFlex2 direction="column"
         overflowY="scroll"
-        p="20px">
+        p="5px">
 
         {/* First statistics card section */}
-        <EpistoFlex2 mt="10px">
+        <EpistoFlex2 >
 
             <Grid
                 className="whall"

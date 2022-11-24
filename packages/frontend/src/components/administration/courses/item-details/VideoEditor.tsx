@@ -74,7 +74,7 @@ export const VideoEditor = ({
             <EpistoFlex2
                 direction="column"
                 flex="1"
-                padding="10px">
+                padding="5px">
 
                 {/* video preview */}
                 <EpistoFlex2

@@ -44,8 +44,7 @@ export const DetailsLayout = ({
                     background="rgba(255,255,255,0.97)"
                     align='center'
                     justify="space-between"
-                    padding="0px 30px 0px 30px"
-                    paddingBottom="5px"
+                    padding="10px"
                     className="mildShadow">
 
                     {/* header left */}

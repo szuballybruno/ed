@@ -524,7 +524,6 @@ export const AdminCourseContentSubpage = () => {
                         <EpistoFlex2
                             flex="4"
                             bg="white"
-                            padding="10px"
                             maxWidth={isDetailsPaneOpen ? '9999px' : '0px'}>
 
                             {/* video details  */}
