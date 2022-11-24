@@ -169,7 +169,7 @@ const marray = [
                         signupDate: view.signupDate,
                         firstName: view.firstName,
                         lastName: view.lastName,
-                        avatarFilePath: view.avatarFilePath,
+                        avatarFilePath: view.avatarFilePath ?? '',
                         summerizedScoreAvg: view.summerizedScoreAvg,
                         totalSessionLengthSeconds: view.totalSessionLengthSeconds,
                         engagementPoints: view.engagementPoints,

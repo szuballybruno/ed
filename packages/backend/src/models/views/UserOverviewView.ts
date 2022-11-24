@@ -23,7 +23,7 @@ export class UserOverviewView {
     signupDate: Date;
 
     @XViewColumn()
-    avatarFilePath: string;
+    avatarFilePath: string | null;
 
     @XViewColumn()
     summerizedScoreAvg: number;
