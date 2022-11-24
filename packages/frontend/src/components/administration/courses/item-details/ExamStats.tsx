@@ -191,8 +191,6 @@ export const adminExamStatistics = [
     }
 ] as StatisticsGroupType[];
 
-
-
 export const AdminExamStatisticsListItem = (props: {
     title: string,
     color: string
@@ -256,7 +254,7 @@ export const ValueLabelComponent = (props: { children: ReactNode, value: any }) 
     );
 };
 
-export const AdminExamStatisticsModalPage = () => {
+export const ExamStats = () => {
 
 
     const [playedSeconds, setPlayedSeconds] = useState(0);

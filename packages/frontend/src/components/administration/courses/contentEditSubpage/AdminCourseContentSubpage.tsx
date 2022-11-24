@@ -14,6 +14,7 @@ import { useIntParam } from '../../../../static/locationHelpers';
 import { translatableTexts } from '../../../../static/translatableTexts';
 import { XEventManager } from '../../../../static/XEventManager/XEventManager';
 import { EpistoDataGrid } from '../../../controls/EpistoDataGrid';
+import { EpistoDiv } from '../../../controls/EpistoDiv';
 import { EpistoFlex2 } from '../../../controls/EpistoFlex';
 import { useXMutatorNew } from '../../../lib/XMutator/XMutatorReact';
 import { useSetBusy } from '../../../system/LoadingFrame/BusyBarContext';
@@ -23,8 +24,9 @@ import { FileSelector } from '../../../universal/fileSelector/FileSelector';
 import { SelectedFileDataType, useFileSelectorLogic } from '../../../universal/fileSelector/FileSelectorLogic';
 import { AdminSubpageHeader } from '../../AdminSubpageHeader';
 import { CourseAdministartionFrame } from '../CourseAdministartionFrame';
-import { ItemEditDialogParams } from '../itemEditDialog/ItemEditDialogTypes';
-import { VideoDetails } from '../itemEditDialog/VideoDetails';
+import { ExamDetails } from '../item-details/ExamDetails';
+import { ItemEditDialogParams } from '../item-details/ItemEditDialogTypes';
+import { VideoDetails } from '../item-details/VideoDetails';
 import { ModuleEditDialog } from '../moduleEdit/ModuleEditDialog';
 import { useModuleEditDialogLogic } from '../moduleEdit/ModuleEditDialogLogic';
 import { AnswerMutationsType, QuestionMutationsType } from '../questionsEditGrid/QuestionEditGridTypes';
@@ -253,22 +255,20 @@ export const AdminCourseContentSubpage = () => {
     const openItemEditDialog = useCallback((type: 'video' | 'exam' | 'module', row?: RowSchema) => {
 
         const data = row?.data!;
-        const isVideo = !!data?.videoVersionId;
+        const isVideo = type === 'video';
+        const defaultModuleId = modules
+            .firstOrNull(x => x.moduleVersionId === data.moduleVersionId)?.moduleId ?? null;
 
-        // open item details panel 
-        if (type === 'exam' || type === 'video') {
+        // open exam 
+        if (type === 'exam') {
 
             const params: ItemEditDialogParams = {
                 isVideo,
                 itemVersionId: isVideo ? data.videoVersionId! : data.examVersionId!,
-                itemTitle: data.itemTitle,
-                courseTitle: 'Course name',
                 versionCode: data.versionCode,
                 questionMutations: data.questionMutations,
                 answerMutations: data.answerMutations,
-                videoAudioText: data.videoAudioText,
-                defaultModuleId: modules
-                    .firstOrNull(x => x.moduleVersionId === data.moduleVersionId)?.moduleId ?? null,
+                defaultModuleId,
                 modules,
                 examType: data.itemType === 'pretest'
                     ? 'pretest'
@@ -278,9 +278,23 @@ export const AdminCourseContentSubpage = () => {
             };
 
             setCurrentItem(params);
+        }
 
-            // itemEditDialogLogic
-            //     .openDialog();
+        // open video 
+        else if (type === 'video') {
+
+            const params: ItemEditDialogParams = {
+                isVideo,
+                itemVersionId: isVideo ? data.videoVersionId! : data.examVersionId!,
+                versionCode: data.versionCode,
+                questionMutations: data.questionMutations,
+                answerMutations: data.answerMutations,
+                videoAudioText: data.videoAudioText,
+                defaultModuleId,
+                modules
+            };
+
+            setCurrentItem(params);
         }
 
         // open module edit dialog
@@ -489,18 +503,22 @@ export const AdminCourseContentSubpage = () => {
                         overflow="hidden">
 
                         {/* grid */}
-                        <EpistoDataGrid
-                            dragEnabled={!isDetailsPaneOpen}
-                            columns={gridColumns}
-                            rows={gridRowItems}
-                            getKey={getRowKey}
-                            onRowOrderChange={handleReorder}
-                            onDragStart={setDraggedRow}
-                            onDragEnd={() => setDraggedRow(null)}
-                            pinnedColumns={{
-                                left: ['rowNumber', 'itemTitle'],
-                                right: ['quickMenu']
-                            }} />
+                        <EpistoDiv
+                            flex="1"
+                            minWidth="200px">
+                            <EpistoDataGrid
+                                dragEnabled={!isDetailsPaneOpen}
+                                columns={gridColumns}
+                                rows={gridRowItems}
+                                getKey={getRowKey}
+                                onRowOrderChange={handleReorder}
+                                onDragStart={setDraggedRow}
+                                onDragEnd={() => setDraggedRow(null)}
+                                pinnedColumns={{
+                                    left: ['rowNumber', 'itemTitle'],
+                                    right: ['quickMenu']
+                                }} />
+                        </EpistoDiv>
 
                         {/* details pane */}
                         <EpistoFlex2
@@ -509,14 +527,25 @@ export const AdminCourseContentSubpage = () => {
                             padding="10px"
                             maxWidth={isDetailsPaneOpen ? '9999px' : '0px'}>
 
+                            {/* video details  */}
                             {currentItem && currentItem.isVideo && <VideoDetails
                                 answerMutations={currentItem.answerMutations}
                                 callback={callback}
                                 defaultModuleId={currentItem.defaultModuleId!}
                                 modules={modules}
                                 questionMutations={currentItem.questionMutations}
-                                videoAudioText={currentItem.videoAudioText}
+                                videoAudioText={currentItem.videoAudioText!}
                                 videoVersionId={currentItem.itemVersionId as Id<'VideoVersion'>}
+                                cancelEdit={() => setCurrentItem(null)} />}
+
+                            {/* exam details */}
+                            {currentItem && !currentItem.isVideo && <ExamDetails
+                                answerMutations={currentItem.answerMutations}
+                                callback={callback}
+                                defaultModuleId={currentItem.defaultModuleId!}
+                                modules={modules}
+                                questionMutations={currentItem.questionMutations}
+                                examVersionId={currentItem.itemVersionId as Id<'ExamVersion'>}
                                 cancelEdit={() => setCurrentItem(null)} />}
 
                         </EpistoFlex2>

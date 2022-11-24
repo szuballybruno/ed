@@ -6,12 +6,11 @@ export type ItemEditDialogParams = {
     isVideo: boolean;
     versionCode: VersionCode;
     itemVersionId: Id<'VideoVersion'> | Id<'ExamVersion'>;
-    itemTitle: string;
-    courseTitle: string;
     questionMutations: QuestionMutationsType;
     answerMutations: AnswerMutationsType;
     defaultModuleId: Id<'Module'> | null;
-    videoAudioText: string;
     modules: ModuleEditDTO[];
-    examType: 'normal' | 'pretest' | 'final';
+
+    videoAudioText?: string;
+    examType?: 'normal' | 'pretest' | 'final';
 };
