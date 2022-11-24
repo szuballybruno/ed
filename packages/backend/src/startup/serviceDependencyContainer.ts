@@ -1,3 +1,4 @@
+import { DependencyContainer, DepHierarchyFunction, XDependency } from '@episto/xinjector';
 import { ActivationCodeService } from '../services/ActivationCodeService';
 import { AnswerService } from '../services/AnswerService';
 import { AuthenticationService } from '../services/AuthenticationService';
@@ -64,7 +65,6 @@ import { VideoRatingService } from '../services/VideoRatingService';
 import { VideoService } from '../services/VideoService';
 import { XDBMSchemaService } from '../services/XORM/XDBManagerTypes';
 import { XORMConnectionService } from '../services/XORM/XORMConnectionService';
-import { DependencyContainer, DepHierarchyFunction, XDependency } from '../utilities/XDInjection/XDInjector';
 
 type CTAnyArgs<T> = { new(...args: any[]): T };
 

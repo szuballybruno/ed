@@ -13,6 +13,8 @@
   },
   "dependencies": {
     "@episto/xmapper": "1.0.0",
+    "@episto/xcore": "1.0.0",
+    "@episto/xinjector": "1.0.0",
     "@episto/commonlogic": "1.0.0",
     "@episto/commontypes": "1.0.0",
     "@episto/communication": "1.0.0",

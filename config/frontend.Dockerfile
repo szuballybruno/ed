@@ -22,6 +22,9 @@ COPY ./packages/commontypes/package.json ./packages/commontypes/package.json
 RUN echo "Copying communication package.json..."
 COPY ./packages/communication/package.json ./packages/communication/package.json
 
+RUN echo "Copying xcore package.json..."
+COPY ./packages/xcore/package.json ./packages/xcore/package.json
+
 # yarn install (no-lockfile)
 RUN echo "Yarn installing deps..."
 RUN yarn --no-lockfile
@@ -52,6 +55,10 @@ COPY ./packages/commontypes/src ./packages/commontypes/src
 RUN echo "Copying communication files..."
 COPY ./packages/communication/tsconfig.json ./packages/communication/tsconfig.json
 COPY ./packages/communication/src ./packages/communication/src
+
+RUN echo "Copying xcore files..."
+COPY ./packages/xcore/tsconfig.json ./packages/xcore/tsconfig.json
+COPY ./packages/xcore/src ./packages/xcore/src
 
 # build backend
 RUN echo "Running Yarn build backend script..."

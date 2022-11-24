@@ -1,6 +1,7 @@
-import { ParametrizedConstructor } from '../../services/misc/advancedTypes/ParametrizedConstructor';
-import { ParametrizedFunction } from '../../services/misc/advancedTypes/ParametrizedFunction';
 import { RemapToFunctions, RemapToConstructors } from './XDInjectorTypes';
+
+type ParametrizedFunction<T = any> = (...args: any[]) => T;
+type ParametrizedConstructor<T = any> = { new(...args: any[]): T };
 
 export type DepHierarchyFunction = ParametrizedFunction | ParametrizedConstructor;
 export type DepHierarchyItemConstraint = string | DepHierarchyFunction;

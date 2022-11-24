@@ -2,13 +2,12 @@
   "extends": "./../../tsconfig.json",
   "include": [
     "src"
-, "../xinjector/src/XDInjector.ts"  ],
+  ],
   "exclude": [
     "node_modules",
     "tests"
   ],
   "compilerOptions": {
-    "outDir": "./build",
-    "module": "ESNext"
+    "outDir": "./dist",
   }
 }

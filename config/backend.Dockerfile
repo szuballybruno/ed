@@ -26,6 +26,12 @@ COPY ./packages/communication/package.json ./packages/communication/package.json
 RUN echo "Copying xmapper package.json..."
 COPY ./packages/xmapper/package.json ./packages/xmapper/package.json
 
+RUN echo "Copying xcore package.json..."
+COPY ./packages/xcore/package.json ./packages/xcore/package.json
+
+RUN echo "Copying xinjector package.json..."
+COPY ./packages/xinjector/package.json ./packages/xinjector/package.json
+
 # yarn install (no-lockfile)
 RUN echo "Yarn installing deps..."
 RUN yarn --no-lockfile
@@ -60,6 +66,14 @@ COPY ./packages/communication/src ./packages/communication/src
 RUN echo "Copying xmapper files..."
 COPY ./packages/xmapper/tsconfig.json ./packages/xmapper/tsconfig.json
 COPY ./packages/xmapper/src ./packages/xmapper/src
+
+RUN echo "Copying xinjector files..."
+COPY ./packages/xinjector/tsconfig.json ./packages/xinjector/tsconfig.json
+COPY ./packages/xinjector/src ./packages/xinjector/src
+
+RUN echo "Copying xcore files..."
+COPY ./packages/xcore/tsconfig.json ./packages/xcore/tsconfig.json
+COPY ./packages/xcore/src ./packages/xcore/src
 
 # build backend
 RUN echo "Running Yarn build backend script..."
