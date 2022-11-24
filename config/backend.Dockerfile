@@ -32,6 +32,9 @@ COPY ./packages/xcore/package.json ./packages/xcore/package.json
 RUN echo "Copying xinjector package.json..."
 COPY ./packages/xinjector/package.json ./packages/xinjector/package.json
 
+RUN echo "Copying xorm package.json..."
+COPY ./packages/xorm/package.json ./packages/xorm/package.json
+
 # yarn install (no-lockfile)
 RUN echo "Yarn installing deps..."
 RUN yarn --no-lockfile
@@ -74,6 +77,10 @@ COPY ./packages/xinjector/src ./packages/xinjector/src
 RUN echo "Copying xcore files..."
 COPY ./packages/xcore/tsconfig.json ./packages/xcore/tsconfig.json
 COPY ./packages/xcore/src ./packages/xcore/src
+
+RUN echo "Copying xorm files..."
+COPY ./packages/xorm/tsconfig.json ./packages/xorm/tsconfig.json
+COPY ./packages/xorm/src ./packages/xorm/src
 
 # build backend
 RUN echo "Running Yarn build backend script..."
