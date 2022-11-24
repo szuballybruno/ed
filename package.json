@@ -9,7 +9,7 @@
     "buildback": "lerna run build --ignore={@episto/frontend,@eutil/script-producer,@eutil/pipeline-generator}"
   },
   "devDependencies": {
-    "lerna": "^6.0.3"
+    "lerna": "6.0.3"
   },
   "name": "epistogram"
 }
