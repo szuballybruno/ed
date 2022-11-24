@@ -63,8 +63,8 @@ import { VersionCreateService } from '../services/VersionCreateService';
 import { VersionSaveService } from '../services/VersionSaveService';
 import { VideoRatingService } from '../services/VideoRatingService';
 import { VideoService } from '../services/VideoService';
-import { XDBMSchemaService } from '../services/XORM/XDBManagerTypes';
-import { XORMConnectionService } from '../services/XORM/XORMConnectionService';
+import { ISQLConnectionService, XDBMSchemaService } from '@episto/xorm';
+import { XORMConnectionService } from '@episto/xorm';
 
 type CTAnyArgs<T> = { new(...args: any[]): T };
 

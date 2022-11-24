@@ -1,18 +1,18 @@
-import { ClassType } from '../misc/advancedTypes/ClassType';
 import { getKeys, getKeyValues } from '@episto/commonlogic';
-import { ConsoleColor, log } from '../misc/logger';
-import { SQLConnectionService } from '../sqlServices/SQLConnectionService';
-import { CheckExpression, CrossJoinCondition, EntityTokenValuePair, InnerJoinCondition, InsertTokenValuePair, LeftJoinCondition, OperationType, SaveEntityType, SelectColumnsType, SelectCondition, SimpleExpressionPart, SQLParamType, SQLStaticValueType, XOrmExpression } from './XORMTypes';
-import { getXViewColumnNames } from './XORMDecorators';
 import { Id } from '@episto/commontypes';
+import { ClassType, ISQLConnectionService } from './XDBManagerTypes';
+import { getXViewColumnNames } from './XORMDecorators';
+import { CheckExpression, CrossJoinCondition, EntityTokenValuePair, InnerJoinCondition, InsertTokenValuePair, LeftJoinCondition, OperationType, SaveEntityType, SelectColumnsType, SelectCondition, SimpleExpressionPart, SQLParamType, SQLStaticValueType, XOrmExpression } from './XORMTypes';
 import { XORMUtils } from './XORMUtils';
 
 const INDENT = '   ';
 
+const log = (text: string) => console.log(text);
+
 export class XQueryBuilderCore<TEntity, TParams> {
 
     constructor(
-        private _sqlConnectionService: SQLConnectionService,
+        private _sqlConnectionService: ISQLConnectionService,
         private _loggingEnabled: boolean) {
     }
 
@@ -114,7 +114,7 @@ ${valuesQuery}
 RETURNING id`;
 
         if (this._loggingEnabled)
-            log(`${query}\n${valuesLog}`, { color: ConsoleColor.purple, noStamp: true });
+            log(`${query}\n${valuesLog}`);
 
         const result = await this._sqlConnectionService
             .executeSQLAsync(query, values);
@@ -165,7 +165,7 @@ WHERE ${tableName}.id = value_table.id::int;
 `;
 
         if (this._loggingEnabled)
-            log(`${query}\n${valuesLog}`, { color: ConsoleColor.purple, noStamp: true });
+            log(`${query}\n${valuesLog}`);
 
         const res = await this._sqlConnectionService
             .executeSQLAsync(query, values);
@@ -532,7 +532,7 @@ WHERE ${tableName}.id = value_table.id::int;
             if (this._loggingEnabled) {
 
                 log('X SQL Query: ');
-                log(queryLog, { color: ConsoleColor.purple, noStamp: true });
+                log(queryLog);
             }
 
             const values = this._getParamValues(params);

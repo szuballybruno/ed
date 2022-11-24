@@ -12,6 +12,7 @@
     "lintfix": "eslint --fix"
   },
   "dependencies": {
+    "@episto/xorm": "1.0.0",
     "@episto/xmapper": "1.0.0",
     "@episto/xcore": "1.0.0",
     "@episto/xinjector": "1.0.0",

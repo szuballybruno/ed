@@ -1,5 +1,5 @@
 import { ViewEntity } from '../MyORM';
-import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { XViewColumn } from '@episto/xorm';
 import { VersionCode } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
 

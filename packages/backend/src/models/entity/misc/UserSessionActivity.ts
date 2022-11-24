@@ -1,5 +1,5 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from '../../MyORM';
-import { XJoinColumn, XManyToOne, XViewColumn } from '../../../services/XORM/XORMDecorators';
+import { XJoinColumn, XManyToOne, XViewColumn } from '@episto/xorm';
 import { SessionActivityType } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
 import { ActivitySession } from './ActivitySession';

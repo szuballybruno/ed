@@ -1,4 +1,4 @@
-import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { XViewColumn } from '@episto/xorm';
 import { CourseStageNameType } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
 

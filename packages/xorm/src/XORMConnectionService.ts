@@ -1,5 +1,4 @@
-import { SQLConnectionService } from "../sqlServices/SQLConnectionService";
-import { SQLSchemaObjectType, XDBMSchemaType } from "./XDBManagerTypes";
+import { ISQLConnectionService, SQLSchemaObjectType, XDBMSchemaType } from "./XDBManagerTypes";
 import { getXViewColumnNames } from "./XORMDecorators";
 import { XORMUtils } from "./XORMUtils";
 
@@ -7,7 +6,7 @@ export class XORMConnectionService {
 
     constructor(
         private _schema: XDBMSchemaType,
-        private _sqlConnectionService: SQLConnectionService) {
+        private _sqlConnectionService: ISQLConnectionService) {
     }
 
     async validateSchemaAsync() {

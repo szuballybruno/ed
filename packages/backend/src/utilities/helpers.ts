@@ -7,7 +7,7 @@ import { ErrorWithCode } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
 import { KeyofConstrained } from './misc';
 import { ITurboRequest } from './XTurboExpress/XTurboExpressTypes';
-import { XORMUtils } from '../services/XORM/XORMUtils';
+import { XORMUtils } from '@episto/xorm';
 
 export const snoozeAsync = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 

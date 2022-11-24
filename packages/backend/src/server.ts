@@ -4,7 +4,7 @@ import 'reflect-metadata'; // needs to be imported for TypeORM
 import { fileURLToPath } from 'url';
 import { LoggerService } from './services/LoggerService';
 import { log } from './services/misc/logger';
-import { XORMConnectionService } from './services/XORM/XORMConnectionService';
+import { XORMConnectionService } from '@episto/xorm';
 import { ServiceProviderInitializator } from './startup/initApp';
 import { initTurboExpress } from './startup/instatiateTurboExpress';
 import { XTurboExpressListener } from './turboImplementations/XTurboExpressListener';

@@ -157,7 +157,7 @@ import { UserWeeklyCourseItemProgressView } from '../../models/views/UserWeeklyC
 import { VideoCursorSecondsView } from '../../models/views/VideoCursorSecondsView';
 import { VideoPlayerDataView } from '../../models/views/VideoPlayerDataView';
 import { VideoVersionView } from '../../models/views/VideoVersionView';
-import { XDBMSchemaService } from '../XORM/XDBManagerTypes';
+import { XDBMSchemaService } from '@episto/xorm';
 
 export const createDBSchema = (): XDBMSchemaService => {
 

@@ -1,5 +1,5 @@
 import {Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation} from '../../MyORM';
-import {XViewColumn} from '../../../services/XORM/XORMDecorators';
+import {XViewColumn} from '@episto/xorm';
 import {Id} from '@episto/commontypes';
 import {ActivitySession} from './ActivitySession';
 import {ActivityStreak} from './ActivityStreak';

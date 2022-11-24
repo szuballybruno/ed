@@ -1,4 +1,3 @@
-import { ClassType } from '../../services/misc/advancedTypes/ClassType';
 
 type MetadataType = {
     className: string;
@@ -75,7 +74,7 @@ const getMetadataProperiesByCode = <T = any>(className: string, metadataKey: str
         }));
 };
 
-const getSinglePropertyNameByMetadataCode = <T>(classType: ClassType<T>, metadataCode: string): keyof T | null => {
+const getSinglePropertyNameByMetadataCode = <T>(classType: { new(): T }, metadataCode: string): keyof T | null => {
 
     const className = classType.name;
 

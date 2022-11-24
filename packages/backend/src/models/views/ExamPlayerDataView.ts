@@ -1,5 +1,5 @@
 import {ViewColumn, ViewEntity} from '../MyORM';
-import {DeletionDateColumn, XViewColumn} from '../../services/XORM/XORMDecorators';
+import {DeletionDateColumn, XViewColumn} from '@episto/xorm';
 import {Id} from '@episto/commontypes';
 
 

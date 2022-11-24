@@ -4,9 +4,9 @@ import { InsertEntity } from '../../utilities/misc';
 import { ClassType } from '../misc/advancedTypes/ClassType';
 import { GlobalConfiguration } from '../misc/GlobalConfiguration';
 import { SQLConnectionService } from '../sqlServices/SQLConnectionService';
-import { EntityType, ParamConstraintType, SaveEntityType } from '../XORM/XORMTypes';
-import { XQueryBuilder } from '../XORM/XQueryBuilder';
-import { XQueryBuilderCore } from '../XORM/XQueryBuilderCore';
+import { EntityType, ParamConstraintType, SaveEntityType } from '@episto/xorm';
+import { XQueryBuilder } from '@episto/xorm';
+import { XQueryBuilderCore } from '@episto/xorm';
 
 export class ORMConnectionService {
 

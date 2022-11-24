@@ -1,5 +1,5 @@
 import { Id } from '@episto/commontypes';
-import { ClassType } from '../misc/advancedTypes/ClassType';
+import { ClassType } from './XDBManagerTypes';
 
 export type SQLParamType<TParams, TParamName extends keyof TParams> = {
 
