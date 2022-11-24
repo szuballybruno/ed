@@ -1,5 +1,5 @@
 import { Grid, Tooltip } from '@chakra-ui/react';
-import React, { ReactNode, useState } from 'react';
+import { ReactNode } from 'react';
 import { defaultCharts } from '../../../../static/defaultChartOptions';
 import { iterate } from '../../../../static/frontendHelpers';
 import { EpistoDivider } from '../../../controls/EpistoDivider';
@@ -12,7 +12,7 @@ import { EpistoLineChart } from '../../../universal/charts/base_charts/EpistoLin
 import { DashboardSection } from '../../../universal/DashboardSection';
 import { adminExamStatistics, AdminExamStatisticsListItem, adminExamStatisticsListItems, HotspotsSlider } from './ExamStats';
 
-export const AdminVideoStatisticsModalPage = ({ videoUrl }: { videoUrl: string }) => {
+export const AdminVideoStatisticsModalPage = () => {
 
     const ValueLabelComponent = (props: { children: ReactNode, value: any }) => {
         const { children, value } = props;
@@ -32,24 +32,11 @@ export const AdminVideoStatisticsModalPage = ({ videoUrl }: { videoUrl: string }
             </Tooltip >
         );
     };
-    const [playedSeconds, setPlayedSeconds] = useState(0);
 
     return <EpistoFlex2
         direction="column"
         overflowY="scroll"
         p="20px">
-
-        {/* vidi */}
-        <EpistoReactPlayer
-            width="100%"
-            height="calc(56.25 / 100)"
-            controls
-            progressInterval={100}
-            style={{
-                borderRadius: 7,
-                overflow: 'hidden'
-            }}
-            url={videoUrl} />
 
         {/* First statistics card section */}
         <EpistoFlex2 mt="10px">
@@ -89,7 +76,6 @@ export const AdminVideoStatisticsModalPage = ({ videoUrl }: { videoUrl: string }
                     width="100%"
                     height="calc(56.25 / 100)"
                     controls={false}
-                    onProgress={x => setPlayedSeconds(x.playedSeconds)}
                     progressInterval={100}
                     style={{
                         borderRadius: 7,

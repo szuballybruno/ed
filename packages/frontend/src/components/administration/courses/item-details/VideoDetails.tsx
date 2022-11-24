@@ -96,8 +96,7 @@ export const VideoDetails = ({
     const pages = courseItemEditData
         ? new ArrayBuilder()
             .add({
-                content: () => <AdminVideoStatisticsModalPage
-                    videoUrl={videoUrl} />,
+                content: () => <AdminVideoStatisticsModalPage />,
                 title: 'Statisztika'
             })
             .add({
