@@ -96,13 +96,13 @@ export const VideoDetails = ({
     const pages = courseItemEditData
         ? new ArrayBuilder()
             .add({
-                content: () => <AdminVideoStatisticsModalPage />,
-                title: 'Statisztika'
-            })
-            .add({
                 content: () => <VideoEditor
                     logic={videoEditorLogic} />,
                 title: 'Kérdések'
+            })
+            .add({
+                content: () => <AdminVideoStatisticsModalPage />,
+                title: 'Statisztika'
             })
             .add({
                 content: () => <VideoAudioTextEditor

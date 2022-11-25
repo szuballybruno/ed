@@ -81,13 +81,13 @@ export const ExamDetails = ({
     const pages = courseItemEditData
         ? new ArrayBuilder()
             .add({
-                content: () => <ExamStats />,
-                title: 'Statisztika'
-            })
-            .add({
                 content: () => <ExamEditor
                     logic={examEditorLogic} />,
                 title: 'Szerkesztés'
+            })
+            .add({
+                content: () => <ExamStats />,
+                title: 'Statisztika'
             })
             .getArray()
         : [];
