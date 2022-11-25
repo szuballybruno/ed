@@ -2,7 +2,7 @@
   "extends": "./../../tsconfig.json",
   "include": [
     "src"
-, "../xinjector/src/XDInjector.ts", "../xorm/XORM"  ],
+  ],
   "exclude": [
     "node_modules",
     "tests"

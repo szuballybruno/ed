@@ -1,5 +1,5 @@
 import { ConstructorSignature } from '../../services/misc/advancedTypes/ConstructorSignature';
-import { XMetadataHandler } from '@episto/xcore/src/XMetadataHandler';
+import { XMetadataHandler } from '@episto/xcore';
 import { EndpointOptionsType } from './XTurboExpressTypes';
 
 const CONTROLLER_ACTION_METADATA_KEY = 'CONTROLLER_ACTION_METADATA_KEY';
