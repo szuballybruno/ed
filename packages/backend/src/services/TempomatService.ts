@@ -10,6 +10,7 @@ import { AuthorizationService } from './AuthorizationService';
 import { EventService } from './EventService';
 import { LoggerService } from './LoggerService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { start } from 'repl';
 
 type CalculateTempomatValuesArgs = {
     tempomatMode: TempomatModeType,
@@ -29,7 +30,7 @@ export type CalculatedTempomatValueType = {
     originalPrevisionedCompletionDate: Date,
     requiredCompletionDate: Date,
     startDate: Date,
-    lagBehindPercentage: number
+    relativeUserPaceDiff: number
 }
 
 export interface CalculatedTempomatValueTypeWithUserId extends CalculatedTempomatValueType {
@@ -147,9 +148,14 @@ export class TempomatService {
     }
 
     /**
-     * getAvgLagBehindPercentage
+     * Calculates the average relative pace of the
+     * user for every started course. 
+     * 
+     * e.g.: Course 1: 30%, Course 2: 60% means
+     * that the user is 45% faster than the estimated
+     * or required tempo.
      */
-    async getAvgLagBehindPercentageAsync(userId: Id<'User'>) {
+    async getAvgRelativeUserPaceDiffAsync(userId: Id<'User'>) {
 
         const tempomatCalculationDatas = await this
             .getTempomatCalculationDatasAsync(userId);
@@ -157,74 +163,73 @@ export class TempomatService {
         if (tempomatCalculationDatas.length === 0)
             return null;
 
-        const allLagBehindPercentages = tempomatCalculationDatas
+        const allRelativeUserPaces = tempomatCalculationDatas
             .map(x => {
 
                 const tempomatValues = this
                     .calculateTempomatValues(x);
 
-                return tempomatValues?.lagBehindPercentage!;
+                return tempomatValues?.relativeUserPaceDiff;
             });
 
-        if (allLagBehindPercentages.any(x => x === null))
+        if (allRelativeUserPaces.any(x => x === null))
             return null;
 
         // calculates the average lag beghind from all started course
-        const avgLagBehindPercentage = allLagBehindPercentages
-            .reduce((a, b) => a + b, 0) / allLagBehindPercentages.length;
+        const avgRelativeUserPace = allRelativeUserPaces
+            .reduce((a, b) => a + b, 0) / allRelativeUserPaces.length;
 
-        return avgLagBehindPercentage;
-    }
-
-    getLagBehindPercentageFromTempomatCalculationData(tempomatCalculationDataViews: TempomatCalculationDataView[]) {
-
-        return tempomatCalculationDataViews
-            .map(x => {
-
-                const newPrevisionedCompletionDate = this
-                    .calculatePrevisionedDate(
-                        x.originalPrevisionedCompletionDate,
-                        x.totalItemCount,
-                        x.totalCompletedItemCount,
-                        x.startDate,
-                        x.tempomatMode,
-                        x.tempomatAdjustmentValue
-                    );
-
-                const lagBehindPercentage = this
-                    ._calculateLagBehindPercentage(
-                        x.startDate,
-                        x.requiredCompletionDate
-                            ? x.requiredCompletionDate
-                            : x.originalPrevisionedCompletionDate,
-                        newPrevisionedCompletionDate
-                    );
-
-                return lagBehindPercentage;
-            });
+        return avgRelativeUserPace;
     }
 
     /*
     * Calc the average lag beghind from all started course
     */
-    getAvgLagBehindPercentage(tempomatCalculationDatas: TempomatCalculationDataView[]) {
+    getAvgRelativeUserPaceDiffs(tempomatCalculationDatas: TempomatCalculationDataView[]) {
 
         return tempomatCalculationDatas
             .groupBy(x => x.userId)
             .map(x => {
 
-                const lagBehindAvg = this
-                    .getLagBehindPercentageFromTempomatCalculationData(x.items);
+                const relativeUserPaceDiff = this
+                    .getRelativeUserPaceDiffs(x.items);
 
-                const filteredLagBehindAvgs = lagBehindAvg
+                const filteredRelativeUserPaceDiffs = relativeUserPaceDiff
                     .filter(x => x)
                     .filter(x => x !== 0);
 
                 return {
                     userId: x.first.userId,
-                    lagBehindAvg: getArrayAverage(lagBehindAvg)
+                    relativeUserPaceDiff: getArrayAverage(filteredRelativeUserPaceDiffs)
                 };
             });
+    }
+
+    getRelativeUserPaceDiffs(tempomatCalculationDatas: TempomatCalculationDataView[]) {
+
+        return tempomatCalculationDatas.map(x => {
+            const actualUserPace = this
+                ._calculateActualUserPace(
+                    x.startDate,
+                    new Date(Date.now()),
+                    x.totalCompletedItemCount
+                )
+
+            const estimatedUserPace = this
+                ._calculateEstimatedUserPace(
+                    x.startDate,
+                    x.requiredCompletionDate || x.originalPrevisionedCompletionDate,
+                    x.totalItemCount
+                )
+
+            const relativeUserPaceDiff = this
+                ._calculateRelativeUserPaceDiff(
+                    estimatedUserPace,
+                    actualUserPace
+                );
+
+            return relativeUserPaceDiff;
+        })
     }
 
 
@@ -233,15 +238,14 @@ export class TempomatService {
         return tempomatCalculationDataViews
             .map(x => ({
                 userId: x.userId,
-                ...this
-                    .calculateTempomatValues(x)
+                ...this.calculateTempomatValues(x)
             }));
     }
 
-    calculateCompanyLagBehinds(companyTempomatValues: CalculatedTempomatValueTypeWithUserId[]) {
+    calculateCompanyRelativeUserPaceDiffs(companyTempomatValues: CalculatedTempomatValueTypeWithUserId[]) {
         return companyTempomatValues
-            .filter(x => (x !== null && x.lagBehindPercentage !== null))
-            .map(x => x.lagBehindPercentage);
+            .filter(x => (x !== null && x.relativeUserPaceDiff !== null))
+            .map(x => x.relativeUserPaceDiff);
     }
 
     /**
@@ -252,45 +256,46 @@ export class TempomatService {
         totalItemCount,
         totalCompletedItemCount,
         startDate,
-        tempomatMode,
-        tempomatAdjustmentValue,
         requiredCompletionDate
     }: CalculateTempomatValuesArgs): CalculatedTempomatValueType {
 
         try {
 
             const previsionedCompletionDate = this
-                .calculatePrevisionedDate(
-                    originalPrevisionedCompletionDate,
-                    totalItemCount,
-                    totalCompletedItemCount,
+                .calculateNewPrevisionedDate(
+                    new Date(Date.now()),
                     startDate,
-                    tempomatMode,
-                    tempomatAdjustmentValue
+                    totalCompletedItemCount,
+                    totalItemCount
                 );
 
             const { recommendedItemsPerDay, recommendedItemsPerWeek } = this
                 ._calculateRecommendedItemsPerDay(
                     startDate,
-                    previsionedCompletionDate,
-                    requiredCompletionDate,
-                    totalItemCount
+                    new Date(Date.now()),
+                    requiredCompletionDate || originalPrevisionedCompletionDate,
+                    totalItemCount,
+                    requiredCompletionDate ? 'increase' : 'normal'
                 );
 
-            const lagBehindPercentage = this
-                ._calculateLagBehindPercentage(
+            const actualUserPace = this
+                ._calculateActualUserPace(
                     startDate,
-                    (() => {
+                    new Date(Date.now()),
+                    totalCompletedItemCount
+                )
 
-                        if (requiredCompletionDate)
-                            return requiredCompletionDate;
+            const estimatedUserPace = this
+                ._calculateEstimatedUserPace(
+                    startDate,
+                    requiredCompletionDate || originalPrevisionedCompletionDate,
+                    totalItemCount
+                )
 
-                        if (!requiredCompletionDate && originalPrevisionedCompletionDate)
-                            return originalPrevisionedCompletionDate;
-
-                        return addDays(startDate, totalItemCount / 6);
-                    })(),
-                    previsionedCompletionDate
+            const relativeUserPaceDiff = this
+                ._calculateRelativeUserPaceDiff(
+                    estimatedUserPace,
+                    actualUserPace
                 );
 
             return instantiate<CalculatedTempomatValueType>({
@@ -300,7 +305,7 @@ export class TempomatService {
                 originalPrevisionedCompletionDate,
                 requiredCompletionDate,
                 startDate,
-                lagBehindPercentage
+                relativeUserPaceDiff
             });
         }
         catch (e: any) {
@@ -309,118 +314,48 @@ export class TempomatService {
         }
     }
 
+
     /**
-     * Calculates the current previsioned date for every tempomat mode
-     * * LIGHT MODE: Push the previsioned day by lag behind days
-     *      1. First subtract the START DATE from the ORIGINAL ESTIMATION
-     *      2. Then you got the ORIGINAL PREVISIONED LENGTH
-     *      3. Then divide the VIDEOS COUNT with the ORIGINAL PREVISIONED LENGTH
-     *      4. Then you got the ORIGINAL ESTIMATED VIDEOS PER DAY
-     *      5. Then you need the DAYS SPENT FROM START DATE
-     *      6. Which you first need to multiply by the ORIGINAL ESTIMATED VIDEOS PER DAY
-     *         to get HOW MANY VIDEOS YOU SHOULD HAVE WATCHED BY NOW
-     *      7. AND then multiply DAYS SPENT FROM START
-     *         DATE by WATCHED VIDEOS FROM START DATE TO CURRENT DATE to get
-     *         HOW MANY VIDEOS YOU HAVE WATCHED BY NOW
-     *      8. For the last step, you need to subtract the HOW MANY VIDEOS YOU SHOULD HAVE WATCHED BY NOW by
-     *         HOW MANY VIDEOS YOU HAVE WATCHED BY NOW to get your LAG BEHIND DAYS COUNT
-     *         That LAG BEHIND DAYS COUNT then added to the NEW PREVISIONED COMPLETION DATE so
-     *         the PREVISIONED VIDEOS PER DAY remains the same
-     *
-     * * AUTO, BALANCED MODE: Push the previsioned day LESS than the lag behind
-     *      1. ... same steps
-     *      2. Plus you need to multiply by the ACTUAL ADJUSTMENT VALUE (e.g. 0.2) that
-     *         comes from the PRETEST, so you push the NEW PREVISIONED COMPLETION DATE LESS
-     *         than on LIGHT MODE and the PREVISIONED VIDEOS PER DAY will be a bit HIGHER
+     * Calculates the real lag behind in days which
+     * means that whatever deadline the user exceeds
+     * it counts the days from it.
+     * 
+     * @param currentDate 
+     * @param deadlineDate 
+     * @returns 
      */
-    calculatePrevisionedDate(
-        originalPrevisionedCompletionDate: Date | null,
-        totalItemCount: number,
-        totalCompletedItemCount: number,
-        startDate: Date,
-        tempomatMode: TempomatModeType,
-        adjustmentCorrection: number
+    calculateLagBehindDaysFromDeadline(
+        currentDate: Date,
+        deadlineDate: Date
     ) {
-        const originalPrevisionedLength = originalPrevisionedCompletionDate
-            ? this._calculateOriginalPrevisionedLength(
-                originalPrevisionedCompletionDate,
-                startDate)
-            : null;
 
-        // If there is no pretest so no original previsioned length
-        // use 6 items per day as fallback value
-        const originalEstimatedVideosPerDay = originalPrevisionedLength
-            ? totalItemCount / originalPrevisionedLength
-            : 6;
+        /* If the user haven't exceeded the deadline return 0 */
+        if (currentDate <= deadlineDate)
+            return 0;
 
-        const daysSpentFromStartDate = this
-            ._calculateDaysSpentFromStartDate(startDate);
-
-        const howManyVideosShouldHaveWatchedByNow = this
-            ._calculateHowManyVideosShouldHaveWatchedByNow(originalEstimatedVideosPerDay, daysSpentFromStartDate, totalItemCount);
-
-        const lagBehindVideos = this
-            ._calculateLagBehindVideos(howManyVideosShouldHaveWatchedByNow, totalCompletedItemCount);
-
-        const lagBehindDays = this
-            ._calculateLagBehindDays(lagBehindVideos, originalEstimatedVideosPerDay);
-
-        // if there is no pretest so no original previsioned completion date
-        // return a rough estimation with 6 videos a day
-        const newPrevisionedDate = originalPrevisionedCompletionDate
-            ? this._calculateNewPrevisionedDateByTempomatMode(tempomatMode, originalPrevisionedCompletionDate, lagBehindDays, adjustmentCorrection)
-            : addDays(startDate, totalItemCount / 6);
-
-        this._loggerService.logScoped('TEMPOMAT', 'CURRENT TEMPOMAT CALCULATION: ');
-        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', `Start date: ${startDate}`);
-        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', `Original previsioned completion date: ${originalPrevisionedCompletionDate}`);
-        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', `Original previsioned length: ${originalPrevisionedLength} days`);
-        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', `Total item count: ${totalItemCount}`);
-        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', `Original estimated videos per day: ${originalEstimatedVideosPerDay}`);
-        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', `Days spent from start date: ${daysSpentFromStartDate}`);
-        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', `Videos should have watched by now: ${howManyVideosShouldHaveWatchedByNow}`);
-        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', `Watched videos: ${totalCompletedItemCount}`);
-        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', `Lag behind: ${lagBehindDays} days`);
-        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', `Mode: '${tempomatMode}'`);
-        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', `Adjustment: ${adjustmentCorrection * 100}%`);
-        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', `New previsoned date: ${newPrevisionedDate}`);
-
-        return newPrevisionedDate;
+        return dateDiffInDays(deadlineDate, currentDate)
     }
 
-    calculateLagBehindDaysWithPretest(
-        originalPrevisionedCompletionDate: Date | null,
-        totalItemCount: number,
-        totalCompletedItemCount: number,
-        startDate: Date
+
+    /**
+     * Calculates the previsioned difference between
+     * deadline and previsionedCompletionDate (that is based on
+     * the users real pace)
+     * 
+     ** '=0' => User will complete the course on deadline
+     ** '>0' => User will complete the course after deadline
+     ** '<0' => User will complete the course before deadline
+     * 
+     * @param deadlineDate 
+     * @param previsionedCompletionDate 
+     * @returns
+     */
+    calculatePrevisionedLagBehindDays(
+        deadlineDate: Date,
+        previsionedCompletionDate: Date
     ) {
-        if (!originalPrevisionedCompletionDate)
-            throw new Error('Previsioned length is null, this could mean theres a problem with the prequiz or a view depending on it.');
 
-        const originalPrevisionedLength = originalPrevisionedCompletionDate
-            ? this._calculateOriginalPrevisionedLength(
-                originalPrevisionedCompletionDate,
-                startDate
-            )
-            : null;
-
-        const originalEstimatedVideosPerDay = originalPrevisionedLength
-            ? totalItemCount / originalPrevisionedLength
-            : 6;
-
-        const daysSpentFromStartDate = this
-            ._calculateDaysSpentFromStartDate(startDate);
-
-        const howManyVideosShouldHaveWatchedByNow = this
-            ._calculateHowManyVideosShouldHaveWatchedByNow(originalEstimatedVideosPerDay, daysSpentFromStartDate, totalItemCount);
-
-        const lagBehindVideos = this
-            ._calculateLagBehindVideos(howManyVideosShouldHaveWatchedByNow, totalCompletedItemCount);
-
-        const lagBehindDays = this
-            ._calculateLagBehindDays(lagBehindVideos, originalEstimatedVideosPerDay);
-
-        return lagBehindDays;
+        return dateDiffInDays(deadlineDate, previsionedCompletionDate)
     }
 
     /**
@@ -428,211 +363,190 @@ export class TempomatService {
      */
 
     /**
-     * Calculates the lag behind from three dates.
-     * @returns A positive int percentage when there is lag from
-     * the original estimation or null because it cannot be determined
+     * Calculates the users relative pace.
+     * 
+     * It's a previsioned relative pace because there is not necessarily a real lag behind
+     * and the user is just slower or faster than the original estimated pace. 
+     * 
+     * No matter if it's an estimation or a deadline.
+     * 
+     ** '=0' => User is progressing as estimated
+     ** '>0' => User is faster than the estimation
+     ** '<0' => User is slower than the estimation
      */
-    private _calculateLagBehindPercentage(
+    private _calculateRelativeUserPaceDiff(
+        originalEstimatedUserPace: number,
+        realUserPace: number
+    ) {
+        return relativeDiffInPercentage(originalEstimatedUserPace, realUserPace)
+    }
+
+    private _calculateActualUserPace(
         startDate: Date,
-        originalPrevisionedCompletionDate: Date,
-        newPrevisionedDate: Date
+        currentDate: Date,
+        completedCourseItemCount: number
     ) {
 
-        const daysFromStartToOriginalPrevisioned = dateDiffInDays(startDate, originalPrevisionedCompletionDate);
-        const daysFromStartToNewPrevisioned = dateDiffInDays(startDate, newPrevisionedDate);
+        const daysSpentFromStartDate = dateDiffInDays(startDate, currentDate)
 
-        return Math.ceil(relativeDiffInPercentage(daysFromStartToOriginalPrevisioned, daysFromStartToNewPrevisioned));
+        const actualUserPace = daysSpentFromStartDate / completedCourseItemCount;
+
+        return actualUserPace;
+    }
+
+    private _calculateEstimatedUserPace(
+        startDate: Date,
+        deadlineDate: Date,
+        totalCourseItemCount: number
+    ) {
+
+        const previsionedCourseLength = dateDiffInDays(startDate, deadlineDate)
+
+        const estimatedUserPace = previsionedCourseLength / totalCourseItemCount;
+
+        return estimatedUserPace;
     }
 
     /**
      * Calculates recommended items per day from either the
      * required or the previsioned completion date
      * because it cannot be determined
+     * 
+     * In normal mode, calculates from start date, so the
+     * recommendation stays the same through the whole completion.
+     * 
+     * In increase mode, calculates from current date, so the
+     * recommendation increases 
+     * 
+     * @param startDate 
+     * @param currentDate 
+     * @param deadlineDate 
+     * @param totalItemsCount 
+     * @param mode 
+     * @returns 
      */
     private _calculateRecommendedItemsPerDay(
         startDate: Date,
-        currentPrevisionedCompletionDate: Date,
-        requiredCompletionDate: Date,
-        totalItemsCount: number
+        currentDate: Date,
+        deadlineDate: Date,
+        totalItemsCount: number,
+        mode: 'normal' | 'increase'
     ) {
 
-        // If there is required completion date, calculate
-        // recommended items per day from that
-        if (requiredCompletionDate) {
+        // In normal mode it can't exceed the limits, so returning
+        // the originally calculated recommendations.
+        if (mode === 'normal') {
 
-            const daysFromStartToRequired = dateDiffInDays(startDate, requiredCompletionDate);
-            const recommendedItemsPerDay = Math.ceil(totalItemsCount / daysFromStartToRequired);
-            const recommendedItemsPerWeek = recommendedItemsPerDay * 7;
+            const daysFromStartToDeadline = dateDiffInDays(startDate, deadlineDate);
+            const recommendedItemsPerDay = Math.ceil(totalItemsCount / daysFromStartToDeadline);
+            const recommendedItemsPerWeek = (() => {
 
-            return {
-                recommendedItemsPerDay,
-                recommendedItemsPerWeek
-            };
-        }
+                const recommendedItemsPerWeek = recommendedItemsPerDay * 7;
 
-        // If there is no required completion date, calculate
-        // recommended items per day from previsioned completion date
-        if (!requiredCompletionDate && currentPrevisionedCompletionDate) {
+                if (recommendedItemsPerDay >= totalItemsCount)
+                    return totalItemsCount;
 
-            const daysFromStartToCurrentPrevisioned = dateDiffInDays(startDate, currentPrevisionedCompletionDate);
-            const recommendedItemsPerDay = Math.ceil(totalItemsCount / daysFromStartToCurrentPrevisioned);
-            const recommendedItemsPerWeek = recommendedItemsPerDay * 7;
+                return recommendedItemsPerWeek;
+
+            })();
 
             return {
                 recommendedItemsPerDay,
                 recommendedItemsPerWeek
-            };
+            }
+
         }
+
+        /* increase mode */
+
+        const totalItems20Percent = totalItemsCount / 5
+
+        // Deadline already exceeded so recommending the maximum.
+        if (currentDate > deadlineDate) {
+            return {
+                recommendedItemsPerDay: totalItems20Percent,
+                recommendedItemsPerWeek: totalItemsCount
+            }
+        }
+
+        /**
+         * Limiting the recommended videos per day because
+         * it makes no sense to recommend e.g. 100 videos
+         * 2 days before the deadline.
+         */
+        const limitRecommendation = (
+            recommendedItemsPerDay: number,
+            totalItemsCount: number,
+            daysUntilDeadline: number
+        ) => {
+
+            const totalItems20Percent = totalItemsCount / 5
+
+            // Never recommend more than 20% of the course
+            // for one day, even if the deadline is near.
+            if (recommendedItemsPerDay > totalItems20Percent)
+                return totalItems20Percent;
+
+            // The user will probably fail the deadline so
+            // limiting the recommendations, to not recommend
+            // the whole course for the last days.
+            //
+            // TODO: This condition should be further improved for
+            // short courses. (Because the whole course could be 5 days long)
+            if (daysUntilDeadline < 5)
+                return totalItems20Percent;
+
+            return recommendedItemsPerDay;
+        }
+
+        const daysUntilDeadline = dateDiffInDays(currentDate, deadlineDate);
+        const recommendedItemsPerDay = Math.ceil(totalItemsCount / daysUntilDeadline);
+        const limitedRecommendedItemsPerDay = limitRecommendation(recommendedItemsPerDay, totalItemsCount, daysUntilDeadline);
+        const limitedRecommendedItemsPerWeek = (() => {
+
+            const recommendedItemsPerWeek = limitedRecommendedItemsPerDay * 7;
+
+            if (recommendedItemsPerDay >= totalItemsCount)
+                return totalItemsCount;
+
+            return recommendedItemsPerWeek;
+        })();
+
+        return {
+            recommendedItemsPerDay: limitedRecommendedItemsPerDay,
+            recommendedItemsPerWeek: limitedRecommendedItemsPerWeek
+        };/* 
 
         // fallback value if there is no pretest
         return {
             recommendedItemsPerDay: 6,
             recommendedItemsPerWeek: 41
-        };
+        }; */
     }
 
-    private _calculateOriginalPrevisionedLength(originalPrevisionedCompletionDate: Date, startDate: Date) {
-
-        return dateDiffInDays(startDate, originalPrevisionedCompletionDate);
-    }
-
-    private _calculateDaysSpentFromStartDate(startDate: Date) {
-
-        const currentDate = new Date(Date.now());
-
-        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', '-------------------------------------------------------');
-        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', 'Calculating daysSpentFromStartDate...');
-        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', 'Input startDate: ' + startDate);
-        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', 'Current date: ' + currentDate);
-
-        const daysSpentFromStartDate = Math.abs(dateDiffInDays(currentDate, startDate))
-
-        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', '-------------------------------------------------------');
-        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', 'Days spent from start date: ' + daysSpentFromStartDate);
-
-        return daysSpentFromStartDate;
-    }
-
-    private _calculateHowManyVideosShouldHaveWatchedByNow(
-        originalEstimatedVideosPerDay: number,
-        daysSpentFromStartDate: number,
+    /**
+     * TODO: Desc
+     * 
+     * @param startDate 
+     * @param currentDate 
+     * @param avgVideosWatchedPerDay 
+     * @param totalCourseItemCount 
+     */
+    calculateNewPrevisionedDate(
+        startDate: Date,
+        currentDate: Date,
+        completedCourseItemCount: number,
         totalCourseItemCount: number
     ) {
 
-        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', '-------------------------------------------------------');
-        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', 'Calculating howManyVideosShouldHaveWatchedByNow...');
-        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', 'Input originalEstimatedVideosPerDay: ' + originalEstimatedVideosPerDay);
-        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', 'Input daysSpentFromStartDate: ' + daysSpentFromStartDate);
+        const courseItemsLeft = totalCourseItemCount - completedCourseItemCount
 
-        const howManyVideosShouldHaveWatchedByNow = (() => {
+        const daysSpentFromStartDate = dateDiffInDays(startDate, currentDate);
 
-            const videosShouldHaveWatchedByNow = originalEstimatedVideosPerDay * daysSpentFromStartDate
+        const avgCourseItemsWatchedPerDay = daysSpentFromStartDate / completedCourseItemCount;
 
-            if (videosShouldHaveWatchedByNow > totalCourseItemCount) {
-                return totalCourseItemCount;
-            }
+        const daysLeft = courseItemsLeft * avgCourseItemsWatchedPerDay
 
-            return videosShouldHaveWatchedByNow;
-        })();
-
-        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', '-------------------------------------------------------');
-        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', 'How many videos should have watched by now: ' + daysSpentFromStartDate);
-
-        return howManyVideosShouldHaveWatchedByNow;
-    }
-
-    private _calculateLagBehindVideos(
-        howManyVideosShouldHaveWatchedByNow: number,
-        watchedVideos: number
-    ) {
-
-        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', '-------------------------------------------------------');
-        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', 'Calculating new lagBehindVideos...');
-        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', 'Input howManyVideosShouldHaveWatchedByNow: ' + howManyVideosShouldHaveWatchedByNow);
-        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', 'Input watchedVideos: ' + watchedVideos);
-
-        const lagBehindVideos = howManyVideosShouldHaveWatchedByNow - watchedVideos
-
-        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', '-------------------------------------------------------');
-        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', 'Lag behind videos: ' + lagBehindVideos);
-
-        return lagBehindVideos;
-    }
-
-    private _calculateLagBehindDays(
-        lagBehindVideos: number,
-        originalEstimatedVideosPerDay: number
-    ) {
-
-        const currentDate = new Date(Date.now());
-
-        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', '-------------------------------------------------------');
-        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', 'Calculating new lagBehindDays...');
-        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', 'Input lagBehindVideos: ' + lagBehindVideos);
-        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', 'Input originalEstimatedVideosPerDay: ' + originalEstimatedVideosPerDay);
-        // this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', 'Input originalPrevisionedCompletionDate: ' + originalPrevisionedCompletionDate);
-
-        // TODO: REFACTOR IN PROGRESS
-        const lagBehindDays = (() => {
-
-            return lagBehindVideos / originalEstimatedVideosPerDay
-
-        })()
-
-        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', '-------------------------------------------------------');
-        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', 'Lag behind days: ' + lagBehindDays);
-
-        return lagBehindDays;
-    }
-
-    private _calculateNewPrevisionedDateByTempomatMode(
-        tempomatMode: TempomatModeType,
-        originalPrevisionedCompletionDate: Date,
-        lagBehindDays: number,
-        adjustmentCorrection?: number
-    ) {
-
-        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', '-------------------------------------------------------');
-        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', 'Calculating new previsionedDate...');
-        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', 'Input tempomatMode: ' + tempomatMode);
-        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', 'Input originalPrevisionedCompletionDate: ' + originalPrevisionedCompletionDate);
-        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', 'Input lagBehindDays: ' + lagBehindDays);
-        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', 'Input adjustmentCorrection: ' + adjustmentCorrection);
-
-        const newPrevisionedDate = (() => {
-            switch (tempomatMode as TempomatModeType) {
-
-                case 'light':
-
-                    return addDays(originalPrevisionedCompletionDate, lagBehindDays);
-                case 'balanced':
-
-                    if (!adjustmentCorrection || adjustmentCorrection === 0)
-                        throw new Error('No adjustment correction provided');
-
-                    return addDays(originalPrevisionedCompletionDate, lagBehindDays * adjustmentCorrection);
-                case 'strict':
-
-                    // THIS IS BAD BECAUSE IT CAN BE SMALLER THAN THE CURRENT DATE
-                    // --> IF CURRENT DATE > ORIG.PREV.DATE --> NPV should be
-                    // CURRENT DATE + ACTUAL VIDEOS PER DAY -> THATS THE REAL VALUE
-                    return originalPrevisionedCompletionDate;
-                case 'auto':
-
-                    if (!adjustmentCorrection || adjustmentCorrection === 0)
-                        throw new Error('No adjustment correction provided');
-
-                    return addDays(originalPrevisionedCompletionDate, lagBehindDays * adjustmentCorrection);
-                default:
-                    throw new Error('Tempomat mode doesn\'t exists');
-            }
-        })();
-
-        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', '-------------------------------------------------------');
-        this._loggerService.logScoped('TEMPOMAT', 'SECONDARY', 'New previsioned date: ' + newPrevisionedDate);
-
-        return newPrevisionedDate >= originalPrevisionedCompletionDate
-            ? newPrevisionedDate
-            : originalPrevisionedCompletionDate;
+        return addDays(currentDate, daysLeft);
     }
 }

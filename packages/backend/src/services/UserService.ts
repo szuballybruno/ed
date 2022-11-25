@@ -101,27 +101,27 @@ export class UserService {
         const userIds = companyUserOverviewViews
             .map(x => x.userId);
 
-        const userIdLagBehindAvgRows = await this
-            ._getAvgUserLagBehinds(userIds, companyId);
+        const userIdRelativePaceDiffAvgRows = await this
+            ._getAvgUserRelativePaceDiffs(userIds, companyId);
 
         const userProductivityAndLagBehindStats = companyUserOverviewViews
             .map(({ userId, averagePerformancePercentage }) => {
 
-                const lagBehindAvg = userIdLagBehindAvgRows
+                const relativePaceDiffAvg = userIdRelativePaceDiffAvgRows
                     .single(x => x.userId === userId)
-                    .lagBehindAvg;
+                    .relativePaceDiffAvg;
 
                 const productivityPercentage = this
                     ._userStatsService
-                    .calculateProductivity(averagePerformancePercentage, lagBehindAvg);
+                    .calculateProductivity(averagePerformancePercentage, relativePaceDiffAvg);
 
-                const invertedLagBehind = lagBehindAvg
-                    ? 100 - lagBehindAvg
+                const invertedRelativeUserPaceDiff = relativePaceDiffAvg
+                    ? 100 - relativePaceDiffAvg
                     : null;
 
                 return instantiate<UserLagbehindStatType>({
                     userId,
-                    invertedLagBehind,
+                    invertedRelativeUserPaceDiff,
                     productivityPercentage
                 });
             });
@@ -148,7 +148,7 @@ export class UserService {
     /**
      * getAvgUserLagBehinds
      */
-    private async _getAvgUserLagBehinds(userIds: Id<'User'>[], companyId: Id<'Company'> | null) {
+    private async _getAvgUserRelativePaceDiffs(userIds: Id<'User'>[], companyId: Id<'Company'> | null) {
 
         /**
          * This is sort of a cheat way to filter by companyId, 
@@ -169,20 +169,20 @@ export class UserService {
             .and('originalPrevisionedCompletionDate', 'IS NOT', 'NULL')
             .getMany();
 
-        const userIdLagBehindAvgRows = this._tempomatService
-            .getAvgLagBehindPercentage(companyTempomatCalculationViews);
+        const userIdRelativePaceDiffAvgRows = this._tempomatService
+            .getAvgRelativeUserPaceDiffs(companyTempomatCalculationViews);
 
         const userOverviewViewsWithLagBehind = userIds
             .map(userId => {
 
-                const lagBehindAvgRow = userIdLagBehindAvgRows
-                    .firstOrNull(userIdLagBehindAvgRow => userIdLagBehindAvgRow.userId === userId);
+                const relativePaceDiffAvgRow = userIdRelativePaceDiffAvgRows
+                    .firstOrNull(userIdRelativePaceDiffAvgRows => userIdRelativePaceDiffAvgRows.userId === userId);
 
-                const lagBehindAvg = lagBehindAvgRow?.lagBehindAvg ?? 0;
+                const relativePaceDiffAvg = relativePaceDiffAvgRow?.relativeUserPaceDiff ?? 0;
 
                 return {
                     userId,
-                    lagBehindAvg
+                    relativePaceDiffAvg
                 };
             });
 

@@ -92,7 +92,8 @@ const marray = [
         .addArrayMapping(AdminCourseUserStatsDTO, () => (
             views: (AdminCourseUserStatsView & {
                 previsionedDate: Date | null,
-                lagBehindDays: number | null
+                previsionedLagBehindDays: number | null,
+                actualLagBehindDays: number | null
             })[],
         ) => {
 
@@ -115,7 +116,8 @@ const marray = [
                 requiredCompletionDate: x.requiredCompletionDate,
                 completionDate: x.completionDate,
                 previsionedDate: x.previsionedDate,
-                lagBehindDays: x.lagBehindDays,
+                previsionedLagBehindDays: x.previsionedLagBehindDays,
+                actualLagBehindDays: x.actualLagBehindDays
             }));
         }),
 
@@ -177,7 +179,7 @@ const marray = [
                         reactionTime: view.reactionTime,
                         username: view.username,
                         productivityPercentage: lagBehindStat.productivityPercentage,
-                        invertedLagBehind: lagBehindStat.invertedLagBehind,
+                        invertedRelativeUserPaceDiff: lagBehindStat.invertedRelativeUserPaceDiff
                     });
                 });
         }),
@@ -279,7 +281,7 @@ const marray = [
             tempomatValues: Partial<CalculatedTempomatValueType>[]) => adminUserCourseViews
                 .map((view, index) => {
 
-                    const { recommendedItemsPerWeek, lagBehindPercentage, previsionedCompletionDate } = tempomatValues
+                    const { recommendedItemsPerWeek, relativeUserPaceDiff, previsionedCompletionDate } = tempomatValues
                         .byIndex(index);
 
                     return instantiate<UserCourseStatsDTO>({
@@ -303,7 +305,7 @@ const marray = [
                         requiredCompletionDate: view.requiredCompletionDate,
                         tempomatMode: view.tempomatMode,
                         recommendedItemsPerWeek: recommendedItemsPerWeek ?? null,
-                        lagBehindPercentage: lagBehindPercentage ?? null,
+                        relativeUserPaceDiff: relativeUserPaceDiff ?? null,
                         previsionedCompletionDate: previsionedCompletionDate ?? null,
                     });
                 })
@@ -606,11 +608,11 @@ const marray = [
             });
         }),
     epistoMappingsBuilder
-        .addMapping(UserLearningPageStatsDTO, () => (view: UserLearningPageStatsView, totalLagBehindPercentage: number | null) => {
+        .addMapping(UserLearningPageStatsDTO, () => (view: UserLearningPageStatsView, avgRelativeUserPaceDiff: number | null) => {
             return instantiate<UserLearningPageStatsDTO>({
                 userId: view.userId,
                 userEmail: view.userEmail,
-                totalLagBehindPercentage: totalLagBehindPercentage,
+                avgRelativeUserPaceDiff,
                 videosToBeRepeatedCount: view.videosToBeRepeatedCount,
                 questionsToBeRepeatedCount: view.questionsToBeRepeatedCount,
                 completedVideoCount: view.completedVideoCount,
@@ -621,12 +623,12 @@ const marray = [
             });
         }),
     epistoMappingsBuilder
-        .addMapping(HomePageStatsDTO, () => (view: HomePageStatsView, lagBehindPercentage: number | null) => {
+        .addMapping(HomePageStatsDTO, () => (view: HomePageStatsView, relativeUserPaceDiff: number | null) => {
             return instantiate<HomePageStatsDTO>({
                 userId: view.userId,
                 videosToBeRepeatedCount: view.videosToBeRepeatedCount,
                 completedVideosLastMonth: view.completedVideosLastMonth,
-                lagBehindPercentage: lagBehindPercentage,
+                relativeUserPaceDiff: relativeUserPaceDiff,
                 performanceLastMonth: view.performanceLastMonth
             });
         }),

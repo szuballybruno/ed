@@ -13,7 +13,7 @@ export class UserAdminListDTO {
     engagementPoints: number;
     completedVideoCount: number;
     productivityPercentage: number | null;
-    invertedLagBehind: number | null;
+    invertedRelativeUserPaceDiff: number | null;
     reactionTime: number | null;
     username: string;
 }

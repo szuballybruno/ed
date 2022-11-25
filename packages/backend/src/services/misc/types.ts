@@ -9,5 +9,5 @@ export type OldData<TVersion, TData, TEntity> = {
 export type UserLagbehindStatType = {
     userId: Id<'User'>,
     productivityPercentage: number,
-    invertedLagBehind: number | null
+    invertedRelativeUserPaceDiff: number | null
 }

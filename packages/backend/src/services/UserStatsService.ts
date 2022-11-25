@@ -88,12 +88,12 @@ export class UserStatsService {
             .where('userId', '=', 'userId')
             .getSingle();
 
-        const avgLagBehindPercentage = await this
+        const avgRelativeUserPace = await this
             ._tempomatService
-            .getAvgLagBehindPercentageAsync(userId);
+            .getAvgRelativeUserPaceDiffAsync(userId);
 
         return this._mapperService
-            .mapTo(HomePageStatsDTO, [stats, avgLagBehindPercentage]);
+            .mapTo(HomePageStatsDTO, [stats, avgRelativeUserPace]);
     }
 
     async getUserLearningPageStatsAsync(principalId: PrincipalId) {
@@ -106,13 +106,13 @@ export class UserStatsService {
             .where('userId', '=', 'userId')
             .getSingle();
 
-        const avgLagBehindPercentage = await this
+        const avgRelativeUserPaceDiff = await this
             ._tempomatService
-            .getAvgLagBehindPercentageAsync(userId);
+            .getAvgRelativeUserPaceDiffAsync(userId);
 
         return this
             ._mapperService
-            .mapTo(UserLearningPageStatsDTO, [stats, avgLagBehindPercentage]);
+            .mapTo(UserLearningPageStatsDTO, [stats, avgRelativeUserPaceDiff]);
     }
 
     async getImproveYourselfPageStatsAsync(principalId: PrincipalId) {
@@ -145,7 +145,11 @@ export class UserStatsService {
      *       started a course yet, return all the courses with empty
      *       data, instead of []
      */
-    async getUserCourseStatsAsync(principalId: PrincipalId, userId: Id<'User'>, loadAvailable: boolean) {
+    async getUserCourseStatsAsync(
+        principalId: PrincipalId,
+        userId: Id<'User'>,
+        loadAvailable: boolean
+    ) {
 
         const query = this._ormService
             .query(AdminUserCoursesView, { userId })
@@ -184,72 +188,59 @@ export class UserStatsService {
             .and('companyId', '=', 'companyId')
             .getMany();
 
-        /* TODO: This lag behind days doesn't contain 
-           adjustment correction like it should */
         const userLagBehinds = stats
             .map(x => {
 
-                if (!x.originalPrevisionedCompletionDate || !x.startDate)
-                    return {
-                        userId: x.userId,
-                        courseId: x.courseId,
-                        lagBehindDays: null
-                    };
+                const previsionedCompletionDate = this._tempomatService
+                    .calculateNewPrevisionedDate(
+                        x.startDate,
+                        new Date(Date.now()),
+                        x.totalCompletedItemCount,
+                        x.totalItemCount
+                    )
+
+                const actualLagBehindDays = this._tempomatService
+                    .calculateLagBehindDaysFromDeadline(
+                        new Date(Date.now()),
+                        x.requiredCompletionDate || x.originalPrevisionedCompletionDate
+                    )
+
+                const previsionedLagBehindDays = this._tempomatService
+                    .calculatePrevisionedLagBehindDays(
+                        x.requiredCompletionDate || x.originalPrevisionedCompletionDate,
+                        previsionedCompletionDate
+                    )
 
                 return {
                     userId: x.userId,
                     courseId: x.courseId,
-                    lagBehindDays: this._tempomatService
-                        .calculateLagBehindDaysWithPretest(
-                            x.originalPrevisionedCompletionDate,
-                            x.totalItemCount,
-                            x.totalCompletedItemCount,
-                            x.startDate
-                        )
-                };
-            });
-
-        const userEstimatedCompletionDates = stats
-            .map(x => {
-
-                if (!x.originalPrevisionedCompletionDate || !x.startDate)
-                    return {
-                        userId: x.userId,
-                        courseId: x.courseId,
-                        previsionedDate: null
-                    };
-
-                return {
-                    userId: x.userId,
-                    courseId: x.courseId,
-                    previsionedDate: this._tempomatService
-                        .calculatePrevisionedDate(
-                            x.originalPrevisionedCompletionDate,
-                            x.totalItemCount,
-                            x.totalCompletedItemCount,
-                            x.startDate,
-                            x.tempomatMode,
-                            x.tempomatAdjustmentValue
-                        )
-                };
-            });
+                    previsionedCompletionDate,
+                    actualLagBehindDays,
+                    previsionedLagBehindDays
+                }
+            })
 
         const mergedStats = (() => {
 
             return stats.map(x => {
 
-                const previsionedDate = userEstimatedCompletionDates
+                const previsionedDate = userLagBehinds
                     .find(pd => pd.userId === x.userId && pd.courseId === x.courseId)
-                    ?.previsionedDate || null;
+                    ?.previsionedCompletionDate || null;
 
-                const lagBehindDays = userLagBehinds
+                const previsionedLagBehindDays = userLagBehinds
                     .find(lbd => lbd.userId === x.userId && lbd.courseId === x.courseId)
-                    ?.lagBehindDays || null;
+                    ?.previsionedLagBehindDays || null;
+
+                const actualLagBehindDays = userLagBehinds
+                    .find(lbd => lbd.userId === x.userId && lbd.courseId === x.courseId)
+                    ?.actualLagBehindDays || null;
 
                 return {
                     ...x,
                     previsionedDate: previsionedDate,
-                    lagBehindDays: lagBehindDays
+                    previsionedLagBehindDays: previsionedLagBehindDays,
+                    actualLagBehindDays: actualLagBehindDays
                 };
             });
         })();
@@ -509,11 +500,11 @@ export class UserStatsService {
         const companyTempomatValues = this._tempomatService
             .calculateCompanyTempomatValues(tempomatCalculationViews);
 
-        const companyAvgLagBehindPercentages = this
-            ._calculateCompanyAvgLagBehindPercentages(tempomatCalculationViews);
+        const companyAvgRelativeUserPaceDiffs = this
+            ._calculateCompanyAvgRelativeUserPaceDiffs(tempomatCalculationViews);
 
         const companyAvgProductivity = this
-            ._calculateCompanyProductivity(companyAvgPerformancePercentages, companyAvgLagBehindPercentages);
+            ._calculateCompanyProductivity(companyAvgPerformancePercentages, companyAvgRelativeUserPaceDiffs);
 
         const userFlagCalculationData = this
             ._createUserFlagCalculationData(
@@ -562,7 +553,7 @@ export class UserStatsService {
 
         const avgLagBehindPercentage = await this
             ._tempomatService
-            .getAvgLagBehindPercentageAsync(userId) || 0;
+            .getAvgRelativeUserPaceDiffAsync(userId) || 0;
 
         return this
             .calculateProductivity(avgPerformancePercentage, avgLagBehindPercentage);
@@ -714,7 +705,7 @@ export class UserStatsService {
                     .first();
 
                 const userProductivity = this
-                    .calculateProductivity(x.userPerformanceAverage, userTempomatValuesFirst.lagBehindPercentage);
+                    .calculateProductivity(x.userPerformanceAverage, userTempomatValuesFirst.relativeUserPaceDiff);
 
                 const avgPerformancePercentage = companyAvgPerformancePercentages
                     .find(capp => capp.companyId === x.companyId);
@@ -737,9 +728,9 @@ export class UserStatsService {
             });
     }
 
-    calculateProductivity(avgPerformancePercentage: number, avgLagBehindPercentage: number) {
+    calculateProductivity(avgPerformancePercentage: number, avgRelativeUserPaceDiff: number) {
 
-        const lagBehindPoints = 100 - avgLagBehindPercentage;
+        const lagBehindPoints = 100 - avgRelativeUserPaceDiff;
 
         const productivityPercentage = avgPerformancePercentage / lagBehindPoints > 1
             ? lagBehindPoints * (avgPerformancePercentage / lagBehindPoints) * avgPerformancePercentage / 100
@@ -775,7 +766,7 @@ export class UserStatsService {
             });
     }
 
-    private _calculateCompanyAvgLagBehindPercentages(companyTempomatCalculationDatas: CompanyTempomatCalculationData[]) {
+    private _calculateCompanyAvgRelativeUserPaceDiffs(companyTempomatCalculationDatas: CompanyTempomatCalculationData[]) {
 
         const companyTempomatCalculationDataGroups = companyTempomatCalculationDatas
             .groupBy(x => x.companyId);
@@ -785,8 +776,8 @@ export class UserStatsService {
 
                 return {
                     companyId: x.first.companyId,
-                    avgLagBehindPercentage: (() => {
-                        const lagBehindAverages = x.items
+                    avgRelativeUserPaceDiff: (() => {
+                        const relativeUserPaceDiffAverages = x.items
                             .map(y => {
 
                                 return this._tempomatService
@@ -798,12 +789,12 @@ export class UserStatsService {
                                         tempomatMode: y.tempomatMode,
                                         tempomatAdjustmentValue: y.tempomatAdjustmentValue,
                                         requiredCompletionDate: y.requiredCompletionDate
-                                    }).lagBehindPercentage;
+                                    }).relativeUserPaceDiff;
                             });
 
                         // filter out NaN values
-                        return getArrayAverage(lagBehindAverages
-                            .filter(lba => lba));
+                        return getArrayAverage(relativeUserPaceDiffAverages
+                            .filter(rupda => rupda));
                     })()
                 };
             });
@@ -815,22 +806,22 @@ export class UserStatsService {
      * lag behind.
      * 
      * @param companyAvgPerformancePercentage 
-     * @param companyAvgLagBehindPercentage 
+     * @param companyAvgUserPaceDiffs 
      */
     private _calculateCompanyProductivity(
         companyAvgPerformancePercentage: {
             companyId: Id<'Company'>,
             avgPerformancePercentage: number
         }[],
-        companyAvgLagBehindPercentage: {
+        companyAvgUserPaceDiffs: {
             companyId: Id<'Company'>,
-            avgLagBehindPercentage: number
+            avgRelativeUserPaceDiff: number
         }[]
     ) {
 
         const companyProductivityBaseValues = mergeArraysByKey(
             companyAvgPerformancePercentage,
-            companyAvgLagBehindPercentage,
+            companyAvgUserPaceDiffs,
             'companyId'
         );
 
@@ -838,7 +829,7 @@ export class UserStatsService {
             return {
                 companyId: x.companyId,
                 avgProductivityPercentage: this
-                    .calculateProductivity(x.avgPerformancePercentage, x.avgLagBehindPercentage)
+                    .calculateProductivity(x.avgPerformancePercentage, x.avgRelativeUserPaceDiff)
             };
         });
     }

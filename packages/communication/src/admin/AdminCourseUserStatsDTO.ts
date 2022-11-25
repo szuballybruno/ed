@@ -19,6 +19,7 @@ export class AdminCourseUserStatsDTO {
     requiredCompletionDate: Date | null;
     completionDate: Date | null;
     previsionedDate: Date | null;
-    lagBehindDays: number | null;
+    previsionedLagBehindDays: number | null;
+    actualLagBehindDays: number | null;
 }
 
