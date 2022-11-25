@@ -1,4 +1,5 @@
 export { Id } from "./Id";
+export { PrincipalId } from "./PrincipalId";
 
 export { XMetadataHandler } from "./XMetadataHandler";
 
