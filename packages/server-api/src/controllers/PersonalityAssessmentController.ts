@@ -1,0 +1,41 @@
+import { PersonalityAssessmentService } from '@episto/server-services';
+import { apiRoutes } from '@episto/communication';
+import { Id } from '@episto/commontypes';
+import { ServiceProvider } from '../startup/ServiceProvider';
+import { ActionParams } from '../XTurboExpress/ActionParams';
+import { XControllerAction } from '../XTurboExpress/XTurboExpressDecorators';
+import { XController } from '../XTurboExpress/XTurboExpressTypes';
+
+export class PersonalityAssessmentController implements XController<PersonalityAssessmentController> {
+
+    private _personalityAssessmentService: PersonalityAssessmentService;
+
+    constructor(serviceProvider: ServiceProvider) {
+
+        this._personalityAssessmentService = serviceProvider.getService(PersonalityAssessmentService);
+    }
+
+    @XControllerAction(apiRoutes.personalityAssessment.getPersonalityTraitCategories)
+    getPersonalityTraitCategoriesAction(params: ActionParams) {
+
+        return this._personalityAssessmentService
+            .getPersonalityTraitCategoriesAsync(params.principalId);
+    }
+
+    @XControllerAction(apiRoutes.personalityAssessment.getPersonalityTraitCategoryDetails)
+    getPersonalityTraitCategoryDetailsAction(params: ActionParams) {
+
+        const query = params
+            .getQuery<any>();
+
+        const personalityTraitCategoryId = Id
+            .create<'PersonalityTraitCategory'>(query
+                .getValue(x => x.personalityTraitCategoryId, 'int'));
+
+        const isMax = query
+            .getValue(x => x.isMax, 'boolean');
+
+        return this._personalityAssessmentService
+            .getPersonalityTraitCategoryDetailsAsync(params.principalId, personalityTraitCategoryId, isMax);
+    }
+}

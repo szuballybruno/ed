@@ -2,6 +2,5 @@ node_modules
 dist
 /node_modules
 /node_modules/.yarn-integrity
-/epistogram_frontend/build
 /deploy/temp
 /deploy/out

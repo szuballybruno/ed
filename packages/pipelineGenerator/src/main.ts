@@ -9,7 +9,7 @@ import { removeAllFilesInFolder, replaceAll, writeFile } from './helpers';
     const rootFolderPath = __dirname + '/../../../';
     const pipelineTemplateFilePath = __dirname + "/../template/pipelineTemplate.yml";
     const outputDirectoryPath = rootFolderPath + ".github/workflows";
-    const backendConfigEnvPath = rootFolderPath + "packages/backend/config/config.env";
+    const backendConfigEnvPath = rootFolderPath + "packages/server-api/config/config.env";
     const localConfigGenOutDir = __dirname + "/../out/configGen.bat";
     const pipelineText = fs.readFileSync(pipelineTemplateFilePath, 'utf8');
 

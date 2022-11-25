@@ -1,5 +1,5 @@
 # Get the latest node image 
-FROM node:18.7.0
+FROM node:18.12.1
 
 # set the working directory, in which every command will run
 WORKDIR /app
@@ -8,11 +8,11 @@ WORKDIR /app
 RUN echo "Copying root package.json..."
 COPY ./package.json ./package.json
 
-RUN echo "Copying backend package.json..."
-COPY ./packages/backend/package.json ./packages/backend/package.json
+RUN echo "Copying server-api package.json..."
+COPY ./packages/server-api/package.json ./packages/server-api/package.json
 
-RUN echo "Copying frontend package.json..."
-COPY ./packages/frontend/package.json ./packages/frontend/package.json
+RUN echo "Copying server-services package.json..."
+COPY ./packages/server-services/package.json ./packages/server-services/package.json
 
 RUN echo "Copying commonlogic package.json..."
 COPY ./packages/commonlogic/package.json ./packages/commonlogic/package.json
@@ -22,7 +22,6 @@ COPY ./packages/commontypes/package.json ./packages/commontypes/package.json
 
 RUN echo "Copying communication package.json..."
 COPY ./packages/communication/package.json ./packages/communication/package.json
-COPY ./packages/communication/rollup.config.js ./packages/communication/rollup.config.js
 
 RUN echo "Copying xmapper package.json..."
 COPY ./packages/xmapper/package.json ./packages/xmapper/package.json
@@ -45,15 +44,15 @@ RUN echo "Copying root files..."
 COPY ./tsconfig.json ./tsconfig.json
 COPY ./lerna.json ./lerna.json
 
-RUN echo "Copying backend files..."
-COPY ./packages/backend/tsconfig.json ./packages/backend/tsconfig.json
-COPY ./packages/backend/src ./packages/backend/src
-COPY ./packages/backend/config ./packages/backend/config
-COPY ./packages/backend/emails ./packages/backend/emails
+RUN echo "Copying server-services files..."
+COPY ./packages/server-services/tsconfig.json ./packages/server-services/tsconfig.json
+COPY ./packages/server-services/src ./packages/server-services/src
+COPY ./packages/server-services/emails ./packages/server-services/emails
 
-RUN echo "Copying frontend files..."
-COPY ./packages/frontend/tsconfig.json ./packages/frontend/tsconfig.json
-COPY ./packages/frontend/src ./packages/frontend/src
+RUN echo "Copying server-api files..."
+COPY ./packages/server-api/tsconfig.json ./packages/server-api/tsconfig.json
+COPY ./packages/server-api/src ./packages/server-api/src
+COPY ./packages/server-api/config ./packages/server-api/config
 
 RUN echo "Copying commonlogic files..."
 COPY ./packages/commonlogic/tsconfig.json ./packages/commonlogic/tsconfig.json
@@ -66,6 +65,7 @@ COPY ./packages/commontypes/src ./packages/commontypes/src
 RUN echo "Copying communication files..."
 COPY ./packages/communication/tsconfig.json ./packages/communication/tsconfig.json
 COPY ./packages/communication/src ./packages/communication/src
+COPY ./packages/communication/rollup.config.js ./packages/communication/rollup.config.js
 
 RUN echo "Copying xmapper files..."
 COPY ./packages/xmapper/tsconfig.json ./packages/xmapper/tsconfig.json
@@ -83,12 +83,12 @@ RUN echo "Copying xorm files..."
 COPY ./packages/xorm/tsconfig.json ./packages/xorm/tsconfig.json
 COPY ./packages/xorm/src ./packages/xorm/src
 
-# build backend
-RUN echo "Running Yarn build backend script..."
-RUN yarn buildback
+# build server-api
+RUN echo "Running Yarn build server-api script..."
+RUN yarn build-server
 
 # expose port 5000
 EXPOSE 5000
 
 # start container 
-CMD node --es-module-specifier-resolution=node ./packages/backend/build/server.js
+CMD node --es-module-specifier-resolution=node ./packages/server-api/dist/server.js

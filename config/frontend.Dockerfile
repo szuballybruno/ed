@@ -3,7 +3,7 @@
 # CONTAINER #1 ----- BUILDER 
 # task: build react app
 #
-FROM node:16.13.0 as builder
+FROM node:18.12.1 as builder
 WORKDIR /app
 
 # copy package.json
@@ -61,8 +61,8 @@ RUN echo "Copying xcore files..."
 COPY ./packages/xcore/tsconfig.json ./packages/xcore/tsconfig.json
 COPY ./packages/xcore/src ./packages/xcore/src
 
-# build backend
-RUN echo "Running Yarn build backend script..."
+# build frontend
+RUN echo "Running Yarn build frontend script..."
 RUN yarn buildfront
 
 #

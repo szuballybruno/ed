@@ -1,5 +1,5 @@
 {
     "eslint.workingDirectories": [
-        "./packages/backend/src"
+        "./packages/server-api/src"
     ]
 }
