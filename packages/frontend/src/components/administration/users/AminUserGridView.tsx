@@ -203,7 +203,7 @@ const mapToRow = (user: UserAdminListDTO): RowType => {
                 day: '2-digit'
             }) + '',
         summerizedScoreAvg: user.summerizedScoreAvg,
-        invertedLagBehind: user.invertedLagBehind!,
+        invertedLagBehind: user.invertedRelativeUserPaceDiff!,
         totalSessionLengthSeconds: user.totalSessionLengthSeconds,
         completedVideoCount: user.completedVideoCount,
         engagementPoints: user.engagementPoints,

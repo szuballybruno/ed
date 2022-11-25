@@ -43,7 +43,7 @@ export const LearningStatistics = (props: {
         {
             title: 'Haladásom',
             iconPath: Environment.getAssetUrl('/images/learningpagestaticon1.png'),
-            value: getProgressFromLagBehind(userLearningPageStats?.totalLagBehindPercentage)
+            value: getProgressFromLagBehind(userLearningPageStats?.avgRelativeUserPaceDiff)
         }, {
             title: 'Ismétlésre ajánlott videók',
             iconPath: Environment.getAssetUrl('/images/learningpagestaticon2.png'),

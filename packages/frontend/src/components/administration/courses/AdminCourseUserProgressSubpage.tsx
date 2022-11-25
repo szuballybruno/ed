@@ -151,7 +151,7 @@ export const useCourseUsersColumns = ({
                 : <EmptyCell />
         })
         .addIf(preset === 'inprogress', {
-            field: 'lagBehindDays',
+            field: 'previsionedLagBehindDays',
             headerName: 'Lemaradás',
             width: 150,
             resizable: true,

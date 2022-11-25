@@ -219,7 +219,7 @@ export const useUserCoursesColumns = ({
             resizable: true
         })
         .add({
-            field: 'lagBehindPercentage',
+            field: 'relativeUserPaceDiff',
             headerName: 'Becsült lemaradás',
             width: 150,
             resizable: true,
