@@ -1,9 +1,7 @@
-import {UserController} from '../../src/api/UserController';
-import {setupIntegrationTest, TestParams} from '../misc/base';
-import {AssignablePermissionType, permissionTesterWrapper} from '../misc/permissionTesterWrapper';
-import {getCompaniesSeedData} from '../../src/sql/seed/seed_companies';
-import {getUserSeedData} from '../../src/sql/seed/seed_users';
-import {TestTurboResponse} from '../misc/TestListener';
+import { UserController } from '../../../backend/src/api/UserController';
+import { setupIntegrationTest, TestParams } from '../misc/base';
+import { AssignablePermissionType, permissionTesterWrapper } from '../misc/permissionTesterWrapper';
+import { TestTurboResponse } from '../misc/TestListener';
 
 export const expectNoPermissions = (
     result: TestTurboResponse,
@@ -69,7 +67,7 @@ const testGetBriefUserDataAction = async (testParams: TestParams) => {
     }];
 
     await permissionTesterWrapper(
-        assignablePermissions ,
+        assignablePermissions,
         serviceProvider,
         async (assignedPermissions) => {
 
@@ -107,7 +105,7 @@ const testGetEditUserDataAction = async (testParams: TestParams) => {
     }];
 
     await permissionTesterWrapper(
-        assignablePermissions ,
+        assignablePermissions,
         serviceProvider,
         async (assignedPermissions) => {
 
@@ -147,7 +145,7 @@ const testGetUserAdministrationUserListAction = async (testParams: TestParams) =
     }];
 
     await permissionTesterWrapper(
-        assignablePermissions ,
+        assignablePermissions,
         serviceProvider,
         async (assignedPermissions) => {
 

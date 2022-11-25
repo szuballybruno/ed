@@ -1,7 +1,7 @@
 import {setupIntegrationTest, TestParams} from '../misc/base';
 import {getCompaniesSeedData} from '../../src/sql/seed/seed_companies';
 import {getUserSeedData} from '../../src/sql/seed/seed_users';
-import {UserStatsController} from '../../src/api/UserStatsController';
+import {UserStatsController} from '../../../backend/src/api/UserStatsController';
 
 const testCalculateCompanyProductivity = async (testParams: TestParams) => {
 

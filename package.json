@@ -5,9 +5,9 @@
   ],
   "scripts": {
     "bootstrap": "lerna bootstrap",
-    "builddeps": "lerna run build --ignore={@episto/backend,@episto/frontend,@eutil/script-producer,@eutil/pipeline-generator}",
-    "buildfront": "lerna run build --ignore={@episto/backend,@eutil/script-producer,@eutil/pipeline-generator}",
-    "buildback": "lerna run build --ignore={@episto/frontend,@eutil/script-producer,@eutil/pipeline-generator}"
+    "builddeps": "lerna run build --ignore={@episto/server-tests,@episto/backend,@episto/frontend,@eutil/script-producer,@eutil/pipeline-generator}",
+    "buildfront": "lerna run build --ignore={@episto/server-tests,@episto/backend,@eutil/script-producer,@eutil/pipeline-generator}",
+    "buildback": "lerna run build --ignore={@episto/server-tests,@episto/frontend,@eutil/script-producer,@eutil/pipeline-generator}"
   },
   "devDependencies": {
     "lerna": "6.0.3"

@@ -160,7 +160,6 @@ const _setupTest = (opts: {
 class IntegrationTestSetupBuilder {
 
     private _login: boolean = true;
-    private _purge: boolean = true;
     private _throwError: boolean = true;
     private _logResError: boolean = true;
     private _tests: TestFunctionsType;
@@ -171,11 +170,6 @@ class IntegrationTestSetupBuilder {
 
     noLogin() {
         this._login = false;
-        return this;
-    }
-
-    noPurgeDB() {
-        this._purge = false;
         return this;
     }
 

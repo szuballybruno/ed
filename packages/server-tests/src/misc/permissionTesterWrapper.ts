@@ -1,12 +1,12 @@
-import { Permission } from '../../src/models/entity/authorization/Permission';
-import { RoleService } from '../../src/services/RoleService';
+import { Permission } from '../../../backend/src/models/entity/authorization/Permission';
+import { RoleService } from '../../../backend/src/services/RoleService';
 import {
     permissionCodes
 } from '@episto/commontypes';
 import { PermissionCodeType } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
-import { ServiceProvider } from '../../src/startup/serviceDependencyContainer';
-import { throwNotImplemented } from '../../src/utilities/helpers';
+import { ServiceProvider } from '../../../backend/src/startup/serviceDependencyContainer';
+import { throwNotImplemented } from '../../../backend/src/utilities/helpers';
 import { JestLogger } from './jestLogger';
 
 export type AssignablePermissionType = {

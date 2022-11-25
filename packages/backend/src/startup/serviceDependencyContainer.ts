@@ -1,4 +1,5 @@
 import { DependencyContainer, DepHierarchyFunction, XDependency } from '@episto/xinjector';
+import { XDBMSchemaService, XORMConnectionService } from '@episto/xorm';
 import { ActivationCodeService } from '../services/ActivationCodeService';
 import { AnswerService } from '../services/AnswerService';
 import { AuthenticationService } from '../services/AuthenticationService';
@@ -63,8 +64,6 @@ import { VersionCreateService } from '../services/VersionCreateService';
 import { VersionSaveService } from '../services/VersionSaveService';
 import { VideoRatingService } from '../services/VideoRatingService';
 import { VideoService } from '../services/VideoService';
-import { ISQLConnectionService, XDBMSchemaService } from '@episto/xorm';
-import { XORMConnectionService } from '@episto/xorm';
 
 type CTAnyArgs<T> = { new(...args: any[]): T };
 
@@ -74,7 +73,10 @@ export class ServiceProvider {
 
     constructor(services: any) {
 
-        this._services = { ...this._services, ...services };
+        this._services = {
+            ...this._services,
+            ...services
+        };
     }
 
     getService<T>(ct: CTAnyArgs<T>) {
