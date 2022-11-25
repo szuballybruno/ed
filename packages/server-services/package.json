@@ -7,10 +7,7 @@
   "main": "./server.ts",
   "typings": "./build/index.d.ts",
   "scripts": {
-    "build": "tsc -v && tsc",
-    "start": "nodemon -x node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm src/server.ts",
-    "cleaninstall": "yarn --force --no-lockfile",
-    "lintfix": "eslint --fix"
+    "build": "tsc"
   },
   "dependencies": {
     "@episto/xorm": "1.0.0",

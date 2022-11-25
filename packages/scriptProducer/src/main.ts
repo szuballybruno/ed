@@ -4,7 +4,7 @@ import { SoftSchemaScriptService } from "./SoftSchemaScriptService";
 
 const rootFolderPath = __dirname + '/../../../';
 const deployFolderFilePath = `${rootFolderPath}deploy`;
-const sqlFolderFilePath = `${rootFolderPath}packages/backend/sql`;
+const sqlFolderFilePath = `${rootFolderPath}packages/server-services/sql`;
 const migrationsFolderFilePath = sqlFolderFilePath + '/migrations';
 
 const getMigrationScript = ({

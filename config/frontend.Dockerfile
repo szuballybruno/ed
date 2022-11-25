@@ -61,8 +61,8 @@ RUN echo "Copying xcore files..."
 COPY ./packages/xcore/tsconfig.json ./packages/xcore/tsconfig.json
 COPY ./packages/xcore/src ./packages/xcore/src
 
-# build backend
-RUN echo "Running Yarn build backend script..."
+# build frontend
+RUN echo "Running Yarn build frontend script..."
 RUN yarn buildfront
 
 #

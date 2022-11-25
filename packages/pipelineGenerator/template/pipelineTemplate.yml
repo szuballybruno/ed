@@ -95,7 +95,7 @@ jobs:
       - name: Generate config.env file
         run: |
 $GEN_ENV_SCRIPT$
-        working-directory: ./packages/backend
+        working-directory: ./packages/server-api
 
       - name: Build backend container
         run: |

@@ -7,8 +7,8 @@
     "typings": "./dist/index.d.ts",
     "type": "module",
     "scripts": {
-        "start": "tsc",
-        "build": "tsc -v && tsc"
+        "start": "nodemon -x node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm src/server.ts",
+        "build": "tsc"
     },
     "dependencies": {
         "@episto/server-services": "1.0.0"

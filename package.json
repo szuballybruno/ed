@@ -6,9 +6,8 @@
   "scripts": {
     "bootstrap": "lerna bootstrap",
     "builddeps": "lerna run build --ignore={@episto/server-tests,@episto/server-api,@episto/frontend,@eutil/script-producer,@eutil/pipeline-generator}",
-    "buildfront": "lerna run build --ignore={@episto/server-tests,@episto/server-api,@episto/server-services,@eutil/script-producer,@eutil/pipeline-generator}",
-    "buildback": "lerna run build --ignore={@episto/server-tests,@episto/frontend,@eutil/script-producer,@eutil/pipeline-generator}",
-    "lasd": "lerna run build --scope=C --include-filtered-dependencies"
+    "build-server": "lerna run build --scope=@episto/server-api --include-filtered-dependencies",
+    "buildfront": "lerna run build --scope=@episto/frontend --include-filtered-dependencies"
   },
   "devDependencies": {
     "lerna": "6.0.3"

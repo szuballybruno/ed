@@ -27,11 +27,11 @@
         },
         {
             "type": "shell",
-            "label": "run backend",
+            "label": "run server-api",
             "command": "yarn start",
             "problemMatcher": [],
             "options": {
-                "cwd": "${workspaceFolder}/packages/backend"
+                "cwd": "${workspaceFolder}/packages/server-api"
             },
             "presentation": {
                 "group": "run"
@@ -42,7 +42,7 @@
             "label": "run-all",
             "dependsOn": [
                 "run frontend",
-                "run backend",
+                "run server-api",
             ],
             "problemMatcher": []
         },

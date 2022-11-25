@@ -123,7 +123,7 @@ jobs:
           echo DB_SERVICE_USER_NAME = ${{secrets.DB_SERVICE_USER_NAME}} >> config/config.env
           echo DB_SERVICE_USER_PASSWORD = ${{secrets.DB_SERVICE_USER_PASSWORD}} >> config/config.env
           echo DB_IS_ORM_LOGGING_ENABLED = true >> config/config.env
-        working-directory: ./packages/backend
+        working-directory: ./packages/server-api
 
       - name: Build backend container
         run: |
