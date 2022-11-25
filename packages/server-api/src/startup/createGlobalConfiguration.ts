@@ -1,7 +1,7 @@
-import { instantiate } from '@episto/commonlogic';
-import { DBConnectionParamsType, EnvironmentType, GlobalConfigurationService, LogScopeType } from '@episto/server-services';
+import { EnvironmentType, GlobalConfigurationService, LogScopeType } from '@episto/server-services';
 import dotenv from 'dotenv';
 import * as fs from 'fs';
+import { ICookieOptions } from '../XTurboExpress/XTurboExpressTypes';
 
 class Helper {
     static getEnvConfigEntry(entryName: string): string;
@@ -143,7 +143,7 @@ export const createGlobalConfiguration = (rootDir: string) => {
             isHostedOnGCP: Helper.getEnvConfigEntry('IS_HOSTED_ON_GCP', 'bool'),
         },
         logging: {
-            enabledScopes: ['GENERIC', 'ERROR'] as LogScopeType[],
+            enabledScopes: ['GENERIC', 'ERROR', 'TRANSACTION'] as LogScopeType[],
         },
         practiseQuestions: {
             incorrectQuestionDelayMinutes: 1,
@@ -174,7 +174,7 @@ export const createGlobalConfiguration = (rootDir: string) => {
         }
     });
 
-    const cookieOptions = {
+    const cookieOptions: ICookieOptions = {
         sameSite: 'strict',
         secure: !globalConfigService.misc.isLocalhost,
         httpOnly: true,

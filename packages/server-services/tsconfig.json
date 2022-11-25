@@ -8,7 +8,6 @@
     "tests"
   ],
   "compilerOptions": {
-    "outDir": "./build",
-    "module": "ESNext"
+    "outDir": "./dist",
   }
 }

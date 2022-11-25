@@ -1,6 +1,7 @@
 import { ActivationCodeService, AnswerService, AuthenticationService, GlobalConfigurationService, AuthorizationService, CoinAcquireService, CoinTransactionService, CommentService, CompanyService, CourseCompletionService, CourseItemService, CourseProgressService, CourseRatingService, CourseService, createDBSchema, DailyTipService, DomainProviderService, EmailService, EventService, ExamService, FileService, FileSystemService, HashService, LeaderboardService, LikeService, LoggerService, MapperService, MiscService, ModuleService, ORMConnectionService, ParametrizedConstructor, PasswordChangeService, PermissionService, PersonalityAssessmentService, PlaybackService, PlayerService, PlaylistService, PractiseQuestionService, PrequizService, PretestService, QuestionAnswerService, QuestionService, RoleService, SampleMergeService, ShopService, SignupService, SQLConnectionService, SQLPoolService, StorageService, TeacherInfoService, TempomatService, TokenService, UrlService, UserCourseBridgeService, UserInvitationService, UserProgressService, UserRegistrationService, UserService, UserSessionActivityService, UserStatsService, VersionCreateService, VersionSaveService, VideoRatingService, VideoService } from '@episto/server-services';
 import { DependencyContainer, DepHierarchyFunction, XDependency } from '@episto/xinjector';
 import { XDBMSchemaService, XORMConnectionService } from '@episto/xorm';
+import { CookieOptionProvider } from '../CookieOptionProvider';
 import { createGlobalConfiguration } from './createGlobalConfiguration';
 import { ServiceProvider } from './ServiceProvider';
 
@@ -18,6 +19,7 @@ export const instansiateSingletonServices = (rootDir: string) => {
         .getClassBuilder()
         .addClassInstance(XDBMSchemaService, dbSchema)
         .addClassInstance(GlobalConfigurationService, globalConfigService)
+        .addClassInstance(CookieOptionProvider, new CookieOptionProvider(cookieOptions))
         .addClass(LoggerService, [GlobalConfigurationService])
         .addClass(SQLPoolService, [GlobalConfigurationService])
         .getContainer();
@@ -30,27 +32,27 @@ export const instansiateSingletonServices = (rootDir: string) => {
 
 export const getTransientServiceContainer = (singletonProvider: ServiceProvider): DependencyContainer<ParametrizedConstructor<any>> => {
 
-    const schemaService = singletonProvider.getService(XDBMSchemaService);
     const loggerService = singletonProvider.getService(LoggerService);
-    const poolService = singletonProvider.getService(SQLPoolService);
-    const connService = new SQLConnectionService(poolService, loggerService);
+    const gcService = singletonProvider.getService(GlobalConfigurationService);
+    const cookieOptionProvider = singletonProvider.getService(CookieOptionProvider);
 
     // create transients
     const container = XDependency
         .getClassBuilder()
 
         // add singleton instances
-        .addClassInstance(GlobalConfigurationService, singletonProvider.getService(GlobalConfigurationService))
+        .addClassInstance(GlobalConfigurationService, gcService)
+        .addClassInstance(LoggerService, loggerService)
+        .addClassInstance(CookieOptionProvider, cookieOptionProvider)
         .addClassInstance(XDBMSchemaService, singletonProvider.getService(XDBMSchemaService))
-        .addClassInstance(LoggerService, singletonProvider.getService(LoggerService))
-        .addClassInstance(SQLPoolService, singletonProvider.getService(SQLPoolService))
 
         // add transient signatures
+        .addClass(SQLPoolService, [GlobalConfigurationService])
+        .addClass(SQLConnectionService, [SQLPoolService, LoggerService])
+        .addClass(XORMConnectionService, [XDBMSchemaService, SQLConnectionService])
         .addClass(UrlService, [GlobalConfigurationService, DomainProviderService])
         .addClass(MapperService, [UrlService])
         .addClass(HashService, [GlobalConfigurationService])
-        .addClass(SQLConnectionService, [SQLPoolService, LoggerService])
-        .addClassInstance(XORMConnectionService, new XORMConnectionService(schemaService, connService))
         .addClass(ORMConnectionService, [GlobalConfigurationService, SQLConnectionService])
         .addClass(PermissionService, [ORMConnectionService, MapperService])
         .addClass(AuthorizationService, [PermissionService, ORMConnectionService])

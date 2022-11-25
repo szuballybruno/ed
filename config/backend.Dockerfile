@@ -91,4 +91,4 @@ RUN yarn build-server
 EXPOSE 5000
 
 # start container 
-CMD node --es-module-specifier-resolution=node ./packages/server-api/build/server.js
+CMD node --es-module-specifier-resolution=node ./packages/server-api/dist/server.js

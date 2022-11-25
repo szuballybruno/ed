@@ -13,12 +13,11 @@ const rootDir = dirname(fileURLToPath(import.meta.url));
 
 const startServerAsync = async (initializator: ServiceProviderInitializator) => {
 
-    const listener = new XTurboExpressListener(
-        initializator
-            .getSingletonProvider()
-            .getService(LoggerService),
-        initializator
-    );
+    const loggerService = initializator
+        .getSingletonProvider()
+        .getService(LoggerService);
+
+    const listener = new XTurboExpressListener(loggerService, initializator);
 
     /**
      * Validate schema

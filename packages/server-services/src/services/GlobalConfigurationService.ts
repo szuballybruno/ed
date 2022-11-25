@@ -1,3 +1,4 @@
+import { instantiate } from "@episto/commonlogic";
 
 export type EnvironmentType = 'development' | 'production' | 'demo' | 'local';
 
@@ -118,7 +119,23 @@ export class GlobalConfigurationService {
 
     getDatabaseConnectionParameters(): DBConnectionParamsType {
 
-        return null as any;
+        const gcpCloudSqlConnectionString = '/cloudsql/gifted-country-324010:europe-central2:epistogram';
+
+        return instantiate<DBConnectionParamsType>({
+            host: this.database.isHostedOnGCP
+                ? gcpCloudSqlConnectionString
+                : this.database.publicHostAddress,
+            port: this.database.isHostedOnGCP
+                ? undefined
+                : this.database.port,
+            username: this.database.serviceUserName,
+            password: this.database.serviceUserPassword,
+            databaseName: this.database.name,
+            socketPath: this.database
+                .isHostedOnGCP
+                ? gcpCloudSqlConnectionString
+                : undefined
+        })
     };
 
     constructor(config: ExcludeFunctions<GlobalConfigurationService>) {
