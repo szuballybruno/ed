@@ -9,13 +9,17 @@
     "type": "module",
     "scripts": {
         "start": "tsc",
-        "build": "tsc -v && tsc"
+        "build-old": "tsc -v && tsc",
+        "build": "rollup --config rollup.config.js"
     },
     "dependencies": {
         "@episto/commontypes": "1.0.0"
     },
     "devDependencies": {
+        "@rollup/plugin-typescript": "8.3.3",
         "@types/node": "^18.11.9",
+        "rollup": "3.4.0",
+        "rollup-plugin-dts": "5.0.0",
         "typescript": "4.8.4"
     }
 }

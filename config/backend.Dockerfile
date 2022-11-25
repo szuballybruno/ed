@@ -22,6 +22,7 @@ COPY ./packages/commontypes/package.json ./packages/commontypes/package.json
 
 RUN echo "Copying communication package.json..."
 COPY ./packages/communication/package.json ./packages/communication/package.json
+COPY ./packages/communication/rollup.config.js ./packages/communication/rollup.config.js
 
 RUN echo "Copying xmapper package.json..."
 COPY ./packages/xmapper/package.json ./packages/xmapper/package.json
