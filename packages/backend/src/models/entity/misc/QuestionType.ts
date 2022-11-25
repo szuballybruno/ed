@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from '../../MyORM';
-import { XViewColumn } from '../../../services/XORM/XORMDecorators';
+import { XViewColumn } from '@episto/xorm';
 import { QuestionData } from '../question/QuestionData';
 
 @Entity()

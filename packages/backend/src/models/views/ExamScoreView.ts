@@ -1,4 +1,4 @@
-import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { XViewColumn } from '@episto/xorm';
 
 
 export class ExamScoreView {

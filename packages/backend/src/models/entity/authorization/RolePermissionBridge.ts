@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from '../../MyORM';
-import { XViewColumn } from '../../../services/XORM/XORMDecorators';
+import { XViewColumn } from '@episto/xorm';
 import { Id } from '@episto/commontypes';
 import { Permission } from './Permission';
 import { Role as Role } from './Role';

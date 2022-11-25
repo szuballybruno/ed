@@ -1,6 +1,7 @@
-import { MyRelation } from '../../models/MyORM';
-import { XMetadataHandler } from '../../utilities/XMetadata/XMetadataHandler';
-import { ClassType } from '../misc/advancedTypes/ClassType';
+import { XMetadataHandler } from '@episto/xcore';
+import { ClassType } from './XDBManagerTypes';
+
+export declare type MyRelation<T> = T;
 
 const IS_DELETED_FLAG_METADATA_KEY = 'IS_DELETED_FLAG_METADATA_KEY';
 const X_VIEW_COLUMN_METADATA_KEY = 'X_VIEW_COLUMN_METADATA_KEY';

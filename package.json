@@ -4,6 +4,7 @@
     "packages/*"
   ],
   "scripts": {
+    "bootstrap": "lerna bootstrap",
     "builddeps": "lerna run build --ignore={@episto/backend,@episto/frontend,@eutil/script-producer,@eutil/pipeline-generator}",
     "buildfront": "lerna run build --ignore={@episto/backend,@eutil/script-producer,@eutil/pipeline-generator}",
     "buildback": "lerna run build --ignore={@episto/frontend,@eutil/script-producer,@eutil/pipeline-generator}"

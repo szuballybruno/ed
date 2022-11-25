@@ -1,5 +1,4 @@
-import { ClassType } from '../misc/advancedTypes/ClassType';
-import { SQLConnectionService } from '../sqlServices/SQLConnectionService';
+import { ClassType, ISQLConnectionService } from './XDBManagerTypes';
 import { getIsDeletedDecoratorPropertyData } from './XORMDecorators';
 import { CheckExpression, ClosingBracketCondition, ColumnSelectObjType, CrossJoinCondition, ExpressionPart, InnerJoinCondition, LeftJoinCondition, OperationType, OrderByExpression, ParamConstraintType, SelectColumnsType, SelectCondition, SimpleExpressionPart, SQLBracketType, SQLStaticValueType } from './XORMTypes';
 import { XQueryBuilderCore } from './XQueryBuilderCore';
@@ -82,13 +81,13 @@ export class XQueryBuilder<TEntity, TParams extends ParamConstraintType<TParams>
     private _mainClassType: ClassType<TEntity>;
     private _params: TParams | undefined;
     private _allowDeleted = false;
-    private _sqlConnection: SQLConnectionService;
+    private _sqlConnection: ISQLConnectionService;
     private _bracket: SQLBracketType;
     private _loggingEnabled: boolean;
 
     _expression: SimpleExpressionPart<TParams>[] = [];
 
-    constructor(connection: SQLConnectionService, classType: ClassType<TEntity>, loggingEnabled: boolean, params?: TParams) {
+    constructor(connection: ISQLConnectionService, classType: ClassType<TEntity>, loggingEnabled: boolean, params?: TParams) {
 
         this._connection = new XQueryBuilderCore<TEntity, TParams>(connection, loggingEnabled);
         this._sqlConnection = connection;

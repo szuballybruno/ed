@@ -1,4 +1,4 @@
-import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { XViewColumn } from '@episto/xorm';
 import { Id } from '@episto/commontypes';
 
 
@@ -23,7 +23,7 @@ export class UserOverviewView {
     signupDate: Date;
 
     @XViewColumn()
-    avatarFilePath: string;
+    avatarFilePath: string | null;
 
     @XViewColumn()
     summerizedScoreAvg: number;

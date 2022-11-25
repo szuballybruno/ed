@@ -1,4 +1,4 @@
-import { DeletionDateColumn, IsDeletedColumn, XViewColumn } from '../../services/XORM/XORMDecorators';
+import { DeletionDateColumn, IsDeletedColumn, XViewColumn } from '@episto/xorm';
 import { Id } from '@episto/commontypes';
 
 

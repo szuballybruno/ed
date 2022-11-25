@@ -1,5 +1,3 @@
-// console.log('Extending prototypes...');
-
 export const initJsExtensions = () => 1;
 
 declare global {

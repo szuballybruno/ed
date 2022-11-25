@@ -1,3 +1,4 @@
+import { DependencyContainer, DepHierarchyFunction, XDependency } from '@episto/xinjector';
 import { ActivationCodeService } from '../services/ActivationCodeService';
 import { AnswerService } from '../services/AnswerService';
 import { AuthenticationService } from '../services/AuthenticationService';
@@ -44,7 +45,6 @@ import { RoleService } from '../services/RoleService';
 import { SampleMergeService } from '../services/SampleMergeService';
 import { ShopService } from '../services/ShopService';
 import { SignupService } from '../services/SignupService';
-import { SQLFunctionsService } from '../services/sqlServices/FunctionsService';
 import { SQLConnectionService } from '../services/sqlServices/SQLConnectionService';
 import { SQLPoolService } from '../services/sqlServices/SQLPoolService';
 import { StorageService } from '../services/StorageService';
@@ -63,8 +63,8 @@ import { VersionCreateService } from '../services/VersionCreateService';
 import { VersionSaveService } from '../services/VersionSaveService';
 import { VideoRatingService } from '../services/VideoRatingService';
 import { VideoService } from '../services/VideoService';
-import { XDBMSchemaService } from '../services/XDBManager/XDBManagerTypes';
-import { DependencyContainer, DepHierarchyFunction, XDependency } from '../utilities/XDInjection/XDInjector';
+import { ISQLConnectionService, XDBMSchemaService } from '@episto/xorm';
+import { XORMConnectionService } from '@episto/xorm';
 
 type CTAnyArgs<T> = { new(...args: any[]): T };
 
@@ -131,19 +131,19 @@ export const getTransientServiceContainer = (singletonProvider: ServiceProvider)
         .addClass(MapperService, [UrlService])
         .addClass(HashService, [GlobalConfiguration])
         .addClass(SQLConnectionService, [SQLPoolService, LoggerService])
-        .addClass(ORMConnectionService, [GlobalConfiguration, SQLConnectionService, XDBMSchemaService])
+        .addClass(XORMConnectionService, [XDBMSchemaService, SQLConnectionService])
+        .addClass(ORMConnectionService, [GlobalConfiguration, SQLConnectionService])
         .addClass(PermissionService, [ORMConnectionService, MapperService])
         .addClass(AuthorizationService, [PermissionService, ORMConnectionService])
-        .addClass(SQLFunctionsService, [SQLConnectionService, GlobalConfiguration])
         .addClass(EventService, [MapperService, ORMConnectionService, AuthorizationService, LoggerService])
-        .addClass(CoinTransactionService, [SQLFunctionsService, ORMConnectionService, MapperService, AuthorizationService, LoggerService])
+        .addClass(CoinTransactionService, [ORMConnectionService, MapperService, LoggerService])
         .addClass(CoinAcquireService, [CoinTransactionService, ORMConnectionService, EventService, GlobalConfiguration, LoggerService])
         .addClass(UserSessionActivityService, [ORMConnectionService, CoinAcquireService, LoggerService])
         .addClass(ActivationCodeService, [ORMConnectionService])
         .addClass(DomainProviderService, [ORMConnectionService, GlobalConfiguration])
         .addClass(EmailService, [GlobalConfiguration, UrlService, DomainProviderService])
         .addClass(VersionSaveService, [ORMConnectionService, LoggerService, FileService])
-        .addClass(SignupService, [EmailService, SQLFunctionsService, ORMConnectionService, MapperService, AuthorizationService, QuestionAnswerService, PermissionService, CompanyService])
+        .addClass(SignupService, [ORMConnectionService, MapperService, PermissionService, CompanyService])
         .addClass(QuestionAnswerService, [ORMConnectionService, CoinAcquireService, LoggerService, GlobalConfiguration])
         .addClass(TeacherInfoService, [ORMConnectionService, MapperService, AuthorizationService])
         .addClass(RoleService, [ORMConnectionService, MapperService, AuthorizationService])
@@ -186,7 +186,7 @@ export const getTransientServiceContainer = (singletonProvider: ServiceProvider)
         .addClass(CommentService, [ORMConnectionService, MapperService, AuthorizationService])
         .addClass(LikeService, [ORMConnectionService, MapperService, AuthorizationService])
         .addClass(LeaderboardService, [ORMConnectionService, CompanyService, MapperService])
-        .addClass(CompanyService, [ORMConnectionService, MapperService, AuthorizationService, DomainProviderService, FileService, XDBMSchemaService, ActivationCodeService])
+        .addClass(CompanyService, [ORMConnectionService, MapperService, AuthorizationService, DomainProviderService, FileService])
         .getContainer();
 
     return XDependency

@@ -12,7 +12,8 @@
         "build": "tsc -v && tsc"
     },
     "dependencies": {
-        "@episto/communication": "1.0.0"
+        "@episto/communication": "1.0.0",
+        "@episto/xcore": "1.0.0"
     },
     "devDependencies": {
         "@types/node": "^18.11.9",

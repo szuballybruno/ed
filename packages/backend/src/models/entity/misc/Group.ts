@@ -1,5 +1,5 @@
 import { Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from '../../MyORM';
-import { XViewColumn } from '../../../services/XORM/XORMDecorators';
+import { XViewColumn } from '@episto/xorm';
 import { PermissionAssignmentBridge } from '../authorization/PermissionAssignmentBridge';
 
 @Entity()

@@ -1,5 +1,5 @@
 import { Id } from '@episto/commontypes';
-import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { XViewColumn } from '@episto/xorm';
 
 
 export class UserModulePerformanceAnswerGroupView {

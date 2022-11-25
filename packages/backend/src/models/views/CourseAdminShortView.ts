@@ -1,5 +1,5 @@
-import { XViewColumn } from '../../services/XORM/XORMDecorators';
-import { DeletionDateColumn } from '../../services/XORM/XORMDecorators';
+import { XViewColumn } from '@episto/xorm';
+import { DeletionDateColumn } from '@episto/xorm';
 import { Id } from '@episto/commontypes';
 
 

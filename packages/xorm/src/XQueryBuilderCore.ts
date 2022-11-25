@@ -1,18 +1,17 @@
-import { ClassType } from '../misc/advancedTypes/ClassType';
-import { getKeys, getKeyValues } from '@episto/commonlogic';
-import { toSQLSnakeCasing as snk, toSQLSnakeCasing } from '../../utilities/helpers';
-import { ConsoleColor, log } from '../misc/logger';
-import { SQLConnectionService } from '../sqlServices/SQLConnectionService';
-import { CheckExpression, CrossJoinCondition, EntityTokenValuePair, InnerJoinCondition, InsertTokenValuePair, LeftJoinCondition, OperationType, SaveEntityType, SelectColumnsType, SelectCondition, SimpleExpressionPart, SQLParamType, SQLStaticValueType, XOrmExpression } from './XORMTypes';
+import { getKeys, getKeyValues, Id } from '@episto/xcore';
+import { ClassType, ISQLConnectionService } from './XDBManagerTypes';
 import { getXViewColumnNames } from './XORMDecorators';
-import { Id } from '@episto/commontypes';
+import { CheckExpression, CrossJoinCondition, EntityTokenValuePair, InnerJoinCondition, InsertTokenValuePair, LeftJoinCondition, OperationType, SaveEntityType, SelectColumnsType, SelectCondition, SimpleExpressionPart, SQLParamType, SQLStaticValueType, XOrmExpression } from './XORMTypes';
+import { XORMUtils } from './XORMUtils';
 
 const INDENT = '   ';
+
+const log = (text: string) => console.log(text);
 
 export class XQueryBuilderCore<TEntity, TParams> {
 
     constructor(
-        private _sqlConnectionService: SQLConnectionService,
+        private _sqlConnectionService: ISQLConnectionService,
         private _loggingEnabled: boolean) {
     }
 
@@ -105,7 +104,7 @@ export class XQueryBuilderCore<TEntity, TParams> {
 
         const { insertFields, insertColumns } = this._getInsertColumns(entities, isDefaultInsert);
         const { valuesQuery, valuesLog, values } = this._getInsertValues(insertFields, entities, isDefaultInsert);
-        const tableName = 'public.' + toSQLSnakeCasing(signature.name);
+        const tableName = 'public.' + XORMUtils.toSQLSnakeCasing(signature.name);
 
         const query = `
 INSERT INTO ${tableName} (${insertColumns.join(', ')})
@@ -114,7 +113,7 @@ ${valuesQuery}
 RETURNING id`;
 
         if (this._loggingEnabled)
-            log(`${query}\n${valuesLog}`, { color: ConsoleColor.purple, noStamp: true });
+            log(`${query}\n${valuesLog}`);
 
         const result = await this._sqlConnectionService
             .executeSQLAsync(query, values);
@@ -140,7 +139,7 @@ RETURNING id`;
 
         const { valuesQuery, values, valuesLog } = this._getInsertValues(insertFieldsWithId, entities, false);
 
-        const tableName = 'public.' + toSQLSnakeCasing(signature.name);
+        const tableName = 'public.' + XORMUtils.toSQLSnakeCasing(signature.name);
 
         const setQuery = insertColumns
             .map((insertColumn, i) => {
@@ -165,7 +164,7 @@ WHERE ${tableName}.id = value_table.id::int;
 `;
 
         if (this._loggingEnabled)
-            log(`${query}\n${valuesLog}`, { color: ConsoleColor.purple, noStamp: true });
+            log(`${query}\n${valuesLog}`);
 
         const res = await this._sqlConnectionService
             .executeSQLAsync(query, values);
@@ -176,7 +175,7 @@ WHERE ${tableName}.id = value_table.id::int;
      */
     async hardDeleteAsync<T>(signature: ClassType<T>, ids: Id<any>[]) {
 
-        const tableName = 'public.' + toSQLSnakeCasing(signature.name);
+        const tableName = 'public.' + XORMUtils.toSQLSnakeCasing(signature.name);
 
         await this._sqlConnectionService
             .executeSQLAsync(`DELETE FROM ${tableName} WHERE id = ANY($1::int[])`, [ids]);
@@ -217,7 +216,7 @@ WHERE ${tableName}.id = value_table.id::int;
 
         return {
             insertColumns: insertFields
-                .map(x => toSQLSnakeCasing(x)),
+                .map(x => XORMUtils.toSQLSnakeCasing(x)),
             insertFields
         };
     }
@@ -255,7 +254,7 @@ WHERE ${tableName}.id = value_table.id::int;
                 return ['DEFAULT'];
 
             return etvp.tokenValuePairs.map(tvp => tvp.token)
-.join(', ');
+                .join(', ');
         };
 
         const valuesQuery = entityInsertDatas
@@ -284,7 +283,7 @@ WHERE ${tableName}.id = value_table.id::int;
         expressionParts: XOrmExpression,
         params: TParams): { sqlQuery: string, sqlParams: any[], isExplicitSelect: boolean } {
 
-        const tableName = `"${snk(classType.name)}"`;
+        const tableName = `"${XORMUtils.toSQLSnakeCasing(classType.name)}"`;
         const sqlTableRef = `public.${tableName} ${tableName}`;
 
         // get processed params list 
@@ -302,8 +301,8 @@ WHERE ${tableName}.id = value_table.id::int;
         const sqlQuery = isExplicitSelect
             ? queryAsString
             : `SELECT \n${getXViewColumnNames(classType)
-.map(x => `${INDENT}${tableName}.${snk(x)}`)
-.join(',\n')} \nFROM  ${sqlTableRef}${queryAsString}`;
+                .map(x => `${INDENT}${tableName}.${XORMUtils.toSQLSnakeCasing(x)}`)
+                .join(',\n')} \nFROM  ${sqlTableRef}${queryAsString}`;
 
         // filter out null params since they're embedded in the sql query now
         // as static values, ther's no need to supply them
@@ -378,18 +377,18 @@ WHERE ${tableName}.id = value_table.id::int;
             const text = ((): string => {
 
                 if (selectCond.entity)
-                    return `"${this._toSQLSnakeCasing(selectCond.entity.name)}".*`;
+                    return `"${XORMUtils.toSQLSnakeCasing(selectCond.entity.name)}".*`;
 
                 if (selectCond.columnSelects) {
 
                     const getSelectColumns = (x: SelectColumnsType<any, any>) => INDENT + getKeyValues(x.columnSelectObj)
-                        .map(kv => `"${this._toSQLSnakeCasing(x.classType.name)}".${this._toSQLSnakeCasing(kv.value)} ${this._toSQLSnakeCasing(kv.key as string)}`)
+                        .map(kv => `"${XORMUtils.toSQLSnakeCasing(x.classType.name)}".${XORMUtils.toSQLSnakeCasing(kv.value)} ${XORMUtils.toSQLSnakeCasing(kv.key as string)}`)
                         .join(', ');
 
                     return selectCond
                         .columnSelects
                         .map(x => x.columnSelectObj === '*'
-                            ? `${INDENT}"${this._toSQLSnakeCasing(x.classType.name)}".*`
+                            ? `${INDENT}"${XORMUtils.toSQLSnakeCasing(x.classType.name)}".*`
                             : getSelectColumns(x))
                         .join(',\n');
                 }
@@ -439,7 +438,7 @@ WHERE ${tableName}.id = value_table.id::int;
 
             const columns = expressionPart
                 .orderColumns
-                .map(x => toSQLSnakeCasing(x))
+                .map(x => XORMUtils.toSQLSnakeCasing(x))
                 .join(', ');
 
             return `\n\nORDER BY ${columns}`;
@@ -462,7 +461,7 @@ WHERE ${tableName}.id = value_table.id::int;
         const { code, type, entityA, entityB, keyA, keyB, op, bracket } = expression;
 
         const tableAName: string = this._toSQLTableName(entityA);
-        const snakeColumn: string = this._toSQLSnakeCasing(keyA as string);
+        const snakeColumn: string = XORMUtils.toSQLSnakeCasing(keyA as string);
         const fullValueA = `${tableAName}.${snakeColumn}`;
 
         const bracketProc = bracket ? '(' : '';
@@ -475,7 +474,7 @@ WHERE ${tableName}.id = value_table.id::int;
 
             // where condition right side is a 'ref to another entity' 
             if (type === 'ENTITY_REF')
-                return { tokenValue: `${this._toSQLTableName(entityB!)}.${this._toSQLSnakeCasing(keyB as string)}` };
+                return { tokenValue: `${this._toSQLTableName(entityB!)}.${XORMUtils.toSQLSnakeCasing(keyB as string)}` };
 
             // where condition right side is a 'params value'
             if (sqlParamsList.length === 0)
@@ -510,17 +509,12 @@ WHERE ${tableName}.id = value_table.id::int;
 
     private _toSQLTableName<T>(classType: ClassType<T>) {
 
-        return this._escapeTableName(this._toSQLSnakeCasing(classType.name));
+        return this._escapeTableName(XORMUtils.toSQLSnakeCasing(classType.name));
     }
 
     private _escapeTableName(name: string) {
 
         return `"${name}"`;
-    }
-
-    private _toSQLSnakeCasing(str: string) {
-
-        return snk(str);
     }
 
     /**
@@ -537,7 +531,7 @@ WHERE ${tableName}.id = value_table.id::int;
             if (this._loggingEnabled) {
 
                 log('X SQL Query: ');
-                log(queryLog, { color: ConsoleColor.purple, noStamp: true });
+                log(queryLog);
             }
 
             const values = this._getParamValues(params);
