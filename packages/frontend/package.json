@@ -52,7 +52,7 @@
     "word-wrap": "1.2.3"
   },
   "scripts": {
-    "start": "vite --port 80",
+    "start": "tsc && vite --port 80",
     "build": "tsc && vite build",
     "serve-vite": "vite preview",
     "start-cra": "cross-env DISABLE_ESLINT_PLUGIN=true react-app-rewired start",
