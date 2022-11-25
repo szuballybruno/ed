@@ -3,7 +3,7 @@
 # CONTAINER #1 ----- BUILDER 
 # task: build react app
 #
-FROM node:16.13.0 as builder
+FROM node:18.12.1 as builder
 WORKDIR /app
 
 # copy package.json

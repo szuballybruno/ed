@@ -1,5 +1,5 @@
 # Get the latest node image 
-FROM node:18.7.0
+FROM node:18.12.1
 
 # set the working directory, in which every command will run
 WORKDIR /app
