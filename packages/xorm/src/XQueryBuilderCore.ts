@@ -1,5 +1,5 @@
 import { getKeys, getKeyValues, Id } from '@episto/xcore';
-import { ClassType, ISQLConnectionService } from './XDBManagerTypes';
+import { ClassType, ISQLConnectionService } from './XORMTypes';
 import { getXViewColumnNames } from './XORMDecorators';
 import { CheckExpression, CrossJoinCondition, EntityTokenValuePair, InnerJoinCondition, InsertTokenValuePair, LeftJoinCondition, OperationType, SaveEntityType, SelectColumnsType, SelectCondition, SimpleExpressionPart, SQLParamType, SQLStaticValueType, XOrmExpression } from './XORMTypes';
 import { XORMUtils } from './XORMUtils';

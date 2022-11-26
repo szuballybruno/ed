@@ -1,5 +1,5 @@
 
-export type RemapToFunctions<TTuple extends [...any[]]> = TTuple extends never[]
+export type RemapToFunctions<TTuple extends [...some[]]> = TTuple extends never[]
 ?
 ({
     [TIndex in keyof TTuple]: never
@@ -8,7 +8,7 @@ export type RemapToFunctions<TTuple extends [...any[]]> = TTuple extends never[]
     [TIndex in keyof TTuple]: ParametrizedFunction<TTuple[TIndex]>;
 } & { length: TTuple['length'] });
 
-export type RemapToConstructors<TTuple extends [...any[]]> = TTuple extends never[]
+export type RemapToConstructors<TTuple extends [...some[]]> = TTuple extends never[]
     ?
     ({
         [TIndex in keyof TTuple]: never

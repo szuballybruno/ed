@@ -375,7 +375,7 @@ export class UserStatsService {
             reactionTimeScorePoints: stats.totalUserReactionTimePoints,
             productivityPercentage: productivityPercentage,
 
-            isAnyCoursesInProgress: inProgressCourses.any(x => true),
+            isAnyCoursesInProgress: inProgressCourses.some(x => true),
             inProgressCourses: inProgressCoursesAsCourseShortDTOs,
 
             userActivityDistributionData: {

@@ -4,7 +4,7 @@ import { AnswerQuestionDTO } from '@episto/communication';
 import { AnswerResultDTO } from '@episto/communication';
 import { apiRoutes } from '@episto/communication';
 import { IXGatewayServiceProvider } from '@episto/x-gateway';
-import { ActionParams } from '../ActionParams';
+import { ActionParams } from '../helpers/ActionParams';
 import { XControllerAction } from '@episto/x-gateway';
 
 export class QuestionController {

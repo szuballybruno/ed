@@ -1,6 +1,6 @@
 import { CourseProgressService } from '@episto/server-services';
 import { apiRoutes } from '@episto/communication';
-import { ActionParams } from '../ActionParams';
+import { ActionParams } from '../helpers/ActionParams';
 import { XControllerAction } from '@episto/x-gateway';
 import { IXGatewayServiceProvider } from '@episto/x-gateway';
 

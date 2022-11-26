@@ -148,7 +148,7 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
         this.mutations = muts;
 
         // set is any mutated 
-        this.isAnyItemsMutated = muts.any();
+        this.isAnyItemsMutated = muts.length > 0;
 
         // exit if post mutation changed scope
         // below calls will be handled dieeferntly

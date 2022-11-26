@@ -1,13 +1,13 @@
 import { AnswerSignupQuestionDTO } from '@episto/communication';
 import { PersonalityAssessmentService } from '@episto/server-services';
 import { SignupService } from '@episto/server-services';
-import { ActionParams } from '../ActionParams';
+import { ActionParams } from '../helpers/ActionParams';
 import { XControllerAction } from '@episto/x-gateway';
 import { apiRoutes } from '@episto/communication';
 import { IXGatewayServiceProvider } from '@episto/x-gateway';
-import { Controller } from '../Controller';
+import { IController } from '../interfaces/IController';
 
-export class SurveyController implements Controller<SurveyController> {
+export class SurveyController implements IController<SurveyController> {
 
     private _signupService: SignupService;
     private _personalityAssessmentService: PersonalityAssessmentService;

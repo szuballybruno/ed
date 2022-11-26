@@ -1,7 +1,7 @@
 
 import { GlobalConfigurationService, LoggerService, ORMConnectionService, SQLConnectionService } from '@episto/server-services';
 import { ActionWrapperFunctionType, IXGatewayListener, IXGatewayServiceProvider, XGatewayBuilder } from '@episto/x-gateway';
-import { ActionParams } from '../ActionParams';
+import { ActionParams } from './ActionParams';
 import { AuthenticationController } from '../controllers/AuthenticationController';
 import { CoinTransactionsController } from '../controllers/CoinTransactionsController';
 import { CommentController } from '../controllers/CommentController';

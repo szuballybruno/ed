@@ -1,28 +1,32 @@
-import { ISQLConnectionService, SQLSchemaObjectType, XDBMSchemaType } from "./XDBManagerTypes";
+import { ISQLConnectionService, IXORMSchemaProviderService, SQLSchemaObjectType } from "./XORMTypes";
 import { getXViewColumnNames } from "./XORMDecorators";
 import { XORMUtils } from "./XORMUtils";
 
 export class XORMConnectionService {
 
     constructor(
-        private _schema: XDBMSchemaType,
+        private _schemaProviderService: IXORMSchemaProviderService,
         private _sqlConnectionService: ISQLConnectionService) {
     }
 
     async validateSchemaAsync() {
 
+        const schema = this
+            ._schemaProviderService
+            .getSchema();
+
         const sqlTables = await this._getTableSchema();
         this._validateSchemaObjects({
             type: 'Tables',
             schemaFromDB: sqlTables,
-            ormSchemaEntities: this._schema.entities
+            ormSchemaEntities: schema.entities
         });
 
         const sqlViews = await this._getViewSchema();
         this._validateSchemaObjects({
             type: 'Views',
             schemaFromDB: sqlViews,
-            ormSchemaEntities: this._schema.views
+            ormSchemaEntities: schema.views
         });
     }
 
@@ -41,7 +45,7 @@ export class XORMConnectionService {
                 .some(sqlTable => sqlTable.name === XORMUtils
                     .toSQLSnakeCasing(entity.name)));
 
-        if (missingEntities.any())
+        if (missingEntities.length > 0)
             throw new Error(`${type}: ${missingEntities
                 .map(x => x.name)
                 .join(', ')} are missing from DB!`);
@@ -67,9 +71,9 @@ export class XORMConnectionService {
                     missingColumns
                 };
             })
-            .filter(x => x.missingColumns.any());
+            .filter(x => x.missingColumns.length > 0);
 
-        if (missingColumns.any()) {
+        if (missingColumns.length > 0) {
 
             const log = missingColumns
                 .map(x => `- ${type} (${x.tableName}): ${x.missingColumns.join(', ')}`)

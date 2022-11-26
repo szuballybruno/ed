@@ -1,6 +1,6 @@
 import { DailyTipEditDataDTO } from '@episto/communication';
 import { DailyTipService } from '@episto/server-services';
-import { ActionParams } from '../ActionParams';
+import { ActionParams } from '../helpers/ActionParams';
 import { XControllerAction } from '@episto/x-gateway';
 import { apiRoutes } from '@episto/communication';
 import { IXGatewayServiceProvider } from '@episto/x-gateway';

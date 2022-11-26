@@ -166,7 +166,7 @@ export class TempomatService {
                 return tempomatValues?.lagBehindPercentage!;
             });
 
-        if (allLagBehindPercentages.any(x => x === null))
+        if (allLagBehindPercentages.some(x => x === null))
             return null;
 
         // calculates the average lag beghind from all started course

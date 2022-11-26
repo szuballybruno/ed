@@ -1,8 +1,8 @@
 import { ErrorWithCode } from '@episto/commontypes';
 import { AuthenticationService, CompanyService, GlobalConfigurationService, LoggerService } from '@episto/server-services';
 import { IXGatewayMiddlewareInstance, IXGatewayServiceProvider, MiddlewareParams } from '@episto/x-gateway';
-import { ActionParams } from '../ActionParams';
-import { getAuthCookies } from '../cookieHelpers';
+import { ActionParams } from '../helpers/ActionParams';
+import { getAuthCookies } from '../helpers/cookieHelpers';
 
 export class AuthenticationMiddleware implements IXGatewayMiddlewareInstance<void, ActionParams> {
 

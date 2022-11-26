@@ -267,7 +267,7 @@ Array.prototype.all = function <T>(func: (item: T) => boolean) {
 };
 
 // eslint-disable-next-line no-extend-native
-Array.prototype.any = function <T>(funcOrItem?: T | ((item: T) => boolean)) {
+Array.prototype.some = function <T>(funcOrItem?: T | ((item: T) => boolean)) {
 
     if (!funcOrItem)
         return this.some(x => true);

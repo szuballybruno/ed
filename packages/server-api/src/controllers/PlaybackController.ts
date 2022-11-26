@@ -3,11 +3,11 @@ import { VideoPlaybackSampleDTO } from '@episto/communication';
 import { VideoSeekEventDTO } from '@episto/communication';
 import { apiRoutes } from '@episto/communication';
 import { IXGatewayServiceProvider } from '@episto/x-gateway';
-import { ActionParams } from '../ActionParams';
+import { ActionParams } from '../helpers/ActionParams';
 import { XControllerAction } from '@episto/x-gateway';
-import { Controller } from '../Controller';
+import { IController } from '../interfaces/IController';
 
-export class PlaybackController implements Controller<PlaybackController> {
+export class PlaybackController implements IController<PlaybackController> {
 
     private _playbackService: PlaybackService;
 

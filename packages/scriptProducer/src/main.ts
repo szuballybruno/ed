@@ -86,7 +86,7 @@ const getMigrationVerisonsArgs = () => {
             .replace('\r', ''))
         .filter(x => !!x);
 
-    if (!veList.any())
+    if (!veList.length > 0)
         throw new Error('Server has no version migration history. Create it manually.');
 
     return veList;

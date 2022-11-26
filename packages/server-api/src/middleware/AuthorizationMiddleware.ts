@@ -1,7 +1,7 @@
 import { apiRoutes } from '@episto/communication';
 import { AuthorizationService } from '@episto/server-services';
 import { IXGatewayMiddlewareInstance, IXGatewayServiceProvider, MiddlewareParams } from '@episto/x-gateway';
-import { ActionParams } from '../ActionParams';
+import { ActionParams } from '../helpers/ActionParams';
 
 export class AuthorizationMiddleware implements IXGatewayMiddlewareInstance<ActionParams, ActionParams> {
 

@@ -3,11 +3,11 @@ import { apiRoutes } from '@episto/communication';
 import { TempomatModeType } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
 import { IXGatewayServiceProvider } from '@episto/x-gateway';
-import { ActionParams } from '../ActionParams';
+import { ActionParams } from '../helpers/ActionParams';
 import { XControllerAction } from '@episto/x-gateway';
-import { Controller } from '../Controller';
+import { IController } from '../interfaces/IController';
 
-export class TempomatController implements Controller<TempomatController> {
+export class TempomatController implements IController<TempomatController> {
 
     private _tempomatService: TempomatService;
 

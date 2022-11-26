@@ -1,4 +1,4 @@
-import { ClassType, ISQLConnectionService } from './XDBManagerTypes';
+import { ClassType, ISQLConnectionService } from './XORMTypes';
 import { getIsDeletedDecoratorPropertyData } from './XORMDecorators';
 import { CheckExpression, ClosingBracketCondition, ColumnSelectObjType, CrossJoinCondition, ExpressionPart, InnerJoinCondition, LeftJoinCondition, OperationType, OrderByExpression, ParamConstraintType, SelectColumnsType, SelectCondition, SimpleExpressionPart, SQLBracketType, SQLStaticValueType } from './XORMTypes';
 import { XQueryBuilderCore } from './XQueryBuilderCore';
@@ -441,7 +441,7 @@ export class XQueryBuilder<TEntity, TParams extends ParamConstraintType<TParams>
             }))
             .filter(x => !x.checkResult[0]);
 
-        if (notAllowedParamValueKeys.any())
+        if (notAllowedParamValueKeys.length > 0)
             throw new Error(`Param values are of an unallowed type: ${notAllowedParamValueKeys
                 .map(x => `${x.key} - cause: ${x.checkResult[1]}`)
                 .join(', ')}`);

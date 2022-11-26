@@ -9,11 +9,11 @@ import { apiRoutes } from '@episto/communication';
 import { CourseModeType } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
 import { IXGatewayServiceProvider } from '@episto/x-gateway';
-import { ActionParams } from '../ActionParams';
+import { ActionParams } from '../helpers/ActionParams';
 import { XControllerAction } from '@episto/x-gateway';
-import { Controller } from '../Controller';
+import { IController } from '../interfaces/IController';
 
-export class CourseController implements Controller<CourseController> {
+export class CourseController implements IController<CourseController> {
 
     private _courseService: CourseService;
     private _userCourseBridgeService: UserCourseBridgeService;

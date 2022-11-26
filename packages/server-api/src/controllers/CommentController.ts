@@ -2,13 +2,13 @@ import { CommentService } from '@episto/server-services';
 import { LikeService } from '@episto/server-services';
 import { CommentCreateDTO } from '@episto/communication';
 import { apiRoutes } from '@episto/communication';
-import { ActionParams } from '../ActionParams';
+import { ActionParams } from '../helpers/ActionParams';
 import { XControllerAction } from '@episto/x-gateway';
 import { IXGatewayServiceProvider } from '@episto/x-gateway';
 import { Id } from '@episto/commontypes';
-import { Controller } from '../Controller';
+import { IController } from '../interfaces/IController';
 
-export class CommentController implements Controller<CommentController> {
+export class CommentController implements IController<CommentController> {
 
     private _commentService: CommentService;
     private _userCommentBridgeService: LikeService;

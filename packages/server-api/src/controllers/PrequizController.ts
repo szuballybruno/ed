@@ -2,11 +2,11 @@ import { PrequizService } from '@episto/server-services';
 import { apiRoutes } from '@episto/communication';
 import { Id } from '@episto/commontypes';
 import { IXGatewayServiceProvider } from '@episto/x-gateway';
-import { ActionParams } from '../ActionParams';
+import { ActionParams } from '../helpers/ActionParams';
 import { XControllerAction } from '@episto/x-gateway';
-import { Controller } from '../Controller';
+import { IController } from '../interfaces/IController';
 
-export class PrequizController implements Controller<PrequizController> {
+export class PrequizController implements IController<PrequizController> {
 
     private _prequizService: PrequizService;
 

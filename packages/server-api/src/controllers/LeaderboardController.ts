@@ -1,11 +1,11 @@
 import { apiRoutes } from '@episto/communication';
 import { LeaderboardService } from '@episto/server-services';
 import { IXGatewayServiceProvider } from '@episto/x-gateway';
-import { ActionParams } from '../ActionParams';
+import { ActionParams } from '../helpers/ActionParams';
 import { XControllerAction } from '@episto/x-gateway';
-import { Controller } from '../Controller';
+import { IController } from '../interfaces/IController';
 
-export class LeaderboardController implements Controller<LeaderboardController> {
+export class LeaderboardController implements IController<LeaderboardController> {
 
     private _leaderboardService: LeaderboardService;
 

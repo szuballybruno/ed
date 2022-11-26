@@ -1,10 +1,10 @@
 import { apiRoutes } from '@episto/communication';
 import { ActivationCodeService, MiscService, UserCourseBridgeService } from '@episto/server-services';
 import { IXGatewayServiceProvider, XControllerAction } from '@episto/x-gateway';
-import { ActionParams } from '../ActionParams';
-import { Controller } from '../Controller';
+import { ActionParams } from '../helpers/ActionParams';
+import { IController } from '../interfaces/IController';
 
-export class MiscController implements Controller<MiscController> {
+export class MiscController implements IController<MiscController> {
 
     private _miscService: MiscService;
     private _courseBridgeService: UserCourseBridgeService;

@@ -8,7 +8,6 @@ declare global {
         orderBy(func: (item: T) => number | string | Date): Array<T>;
         groupBy<TKey>(func: (item: T) => TKey): Grouping<T, TKey>[];
         isDistinctBy<TKey>(func: (item: T) => TKey): boolean;
-        any(funcOrItem?: T | ((item: T) => boolean)): boolean;
         none(func?: (item: T) => boolean): boolean;
         all(func: (item: T) => boolean): boolean;
         findLastIndex(func: (item: T) => boolean): number | null;
@@ -262,18 +261,6 @@ Array.prototype.findLastIndex = function <T>(func: (item: T) => boolean) {
 Array.prototype.all = function <T>(func: (item: T) => boolean) {
 
     return !this.some(x => !func(x));
-};
-
-// eslint-disable-next-line no-extend-native
-Array.prototype.any = function <T>(funcOrItem?: T | ((item: T) => boolean)) {
-
-    if (!funcOrItem)
-        return this.some(x => true);
-
-    if (typeof funcOrItem === 'function')
-        return this.some(funcOrItem as any);
-
-    return this.some(x => x === funcOrItem);
 };
 
 // eslint-disable-next-line no-extend-native

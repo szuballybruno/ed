@@ -2,11 +2,11 @@ import { UserProgressService } from '@episto/server-services';
 import { apiRoutes } from '@episto/communication';
 import { Id } from '@episto/commontypes';
 import { IXGatewayServiceProvider } from '@episto/x-gateway';
-import { ActionParams } from '../ActionParams';
+import { ActionParams } from '../helpers/ActionParams';
 import { XControllerAction } from '@episto/x-gateway';
-import { Controller } from '../Controller';
+import { IController } from '../interfaces/IController';
 
-export class UserProgressController implements Controller<UserProgressController> {
+export class UserProgressController implements IController<UserProgressController> {
 
     private _userProgressService: UserProgressService;
 

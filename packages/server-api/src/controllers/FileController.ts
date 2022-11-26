@@ -1,11 +1,11 @@
 import { FileService } from '@episto/server-services';
 import { apiRoutes } from '@episto/communication';
 import { IXGatewayServiceProvider } from '@episto/x-gateway';
-import { ActionParams } from '../ActionParams';
+import { ActionParams } from '../helpers/ActionParams';
 import { XControllerAction } from '@episto/x-gateway';
-import { Controller } from '../Controller';
+import { IController } from '../interfaces/IController';
 
-export class FileController implements Controller<FileController> {
+export class FileController implements IController<FileController> {
 
     private _fileService: FileService;
 

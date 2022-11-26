@@ -4,8 +4,8 @@ import { initJsExtensions } from '@episto/xcore';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { getCORSMiddleware } from './middleware/CORSMiddleware';
-import { ServiceProviderInitializator } from './startup/initApp';
-import { startServerAsync } from './startup/startServer';
+import { ServiceProviderInitializator } from './helpers/initApp';
+import { startServerAsync } from './helpers/startServer';
 
 await (async () => {
 

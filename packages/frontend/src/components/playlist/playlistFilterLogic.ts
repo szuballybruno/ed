@@ -43,7 +43,7 @@ export const usePlaylistFilterLogic = (playlist: PlaylistModuleDTO[]) => {
                                         .includes(filterKeyword))
                 } as PlaylistModuleDTO;
             })
-            .filter(x => x.items.any());
+            .filter(x => x.items.length > 0);
     }, [playlist, playlistFilters]);
 
     const setFilterKeyword = (kv: string) => {

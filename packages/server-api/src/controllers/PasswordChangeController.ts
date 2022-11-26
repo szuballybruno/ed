@@ -1,12 +1,12 @@
 import { ChangePasswordDTO } from '@episto/communication';
 import { PasswordChangeService } from '@episto/server-services';
-import { ActionParams } from '../ActionParams';
+import { ActionParams } from '../helpers/ActionParams';
 import { XControllerAction } from '@episto/x-gateway';
 import { apiRoutes } from '@episto/communication';
 import { IXGatewayServiceProvider } from '@episto/x-gateway';
-import { Controller } from '../Controller';
+import { IController } from '../interfaces/IController';
 
-export class PasswordChangeController implements Controller<PasswordChangeController> {
+export class PasswordChangeController implements IController<PasswordChangeController> {
 
     private _passwordChangeService: PasswordChangeService;
 

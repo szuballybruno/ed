@@ -4,13 +4,13 @@ import { RegisterUserViaInvitationTokenDTO } from '@episto/communication';
 import { RegisterUserViaPublicTokenDTO } from '@episto/communication';
 import { apiRoutes } from '@episto/communication';
 import { IXGatewayServiceProvider } from '@episto/x-gateway';
-import { setAuthCookies } from '../cookieHelpers';
-import { ActionParams } from '../ActionParams';
+import { setAuthCookies } from '../helpers/cookieHelpers';
+import { ActionParams } from '../helpers/ActionParams';
 import { XControllerAction } from '@episto/x-gateway';
-import { Controller } from '../Controller';
-import { CookieOptionProvider } from '../CookieOptionProvider';
+import { IController } from '../interfaces/IController';
+import { CookieOptionProvider } from '../helpers/CookieOptionProvider';
 
-export class RegistrationController implements Controller<RegistrationController> {
+export class RegistrationController implements IController<RegistrationController> {
 
     private _userRegistrationService: UserRegistrationService;
     private _config: GlobalConfigurationService;

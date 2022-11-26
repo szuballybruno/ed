@@ -57,8 +57,8 @@ export class CourseProgressService {
             .mapTo(CourseLearningDTO, [completedCourses]);
 
         return {
-            isAnyCoursesComplete: completedCourses.any(x => true),
-            isAnyCoursesInProgress: inProgressCourses.any(x => true),
+            isAnyCoursesComplete: completedCourses.some(x => true),
+            isAnyCoursesInProgress: inProgressCourses.some(x => true),
             completedCourses: completedCoursesAsCourseShortDTOs,
             inProgressCourses: inProgressCoursesAsCourseShortDTOs
         } as UserCoursesDataDTO;

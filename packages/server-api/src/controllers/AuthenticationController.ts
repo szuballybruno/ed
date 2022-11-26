@@ -1,14 +1,14 @@
 import { ErrorWithCode } from '@episto/commontypes';
 import { apiRoutes } from '@episto/communication';
 import { AuthenticationService, GlobalConfigurationService } from '@episto/server-services';
-import { getAuthCookies, setAuthCookies } from '../cookieHelpers';
-import { CookieOptionProvider } from '../CookieOptionProvider';
+import { getAuthCookies, setAuthCookies } from '../helpers/cookieHelpers';
+import { CookieOptionProvider } from '../helpers/CookieOptionProvider';
 import { IXGatewayServiceProvider } from '@episto/x-gateway';
-import { Controller } from '../Controller';
+import { IController } from '../interfaces/IController';
 import { XControllerAction } from '@episto/x-gateway';
-import { ActionParams } from '../ActionParams';
+import { ActionParams } from '../helpers/ActionParams';
 
-export class AuthenticationController implements Controller<AuthenticationController> {
+export class AuthenticationController implements IController<AuthenticationController> {
 
     private _authenticationService: AuthenticationService;
     private _config: GlobalConfigurationService;

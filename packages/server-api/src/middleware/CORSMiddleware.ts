@@ -1,6 +1,6 @@
 import { DomainProviderService } from '@episto/server-services';
 import cors from 'cors';
-import { ServiceProviderInitializator } from '../startup/initApp';
+import { ServiceProviderInitializator } from '../helpers/initApp';
 
 export const getCORSMiddleware = async (initializator: ServiceProviderInitializator) => {
 

@@ -83,7 +83,7 @@ export class UserService {
         const filterdViews = showReviewRequiredUsersOnly
             ? companyUserOverviewViews
                 .filter(x => lowFlaggedUserIds
-                    .any(y => y === x.userId))
+                    .some(y => y === x.userId))
             : companyUserOverviewViews;
 
         return this

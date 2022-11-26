@@ -15,6 +15,7 @@
             "**/out": true,
             "node_modules": true,
             "out": true
-        }
+        },
+        "typescript.tsdk": "epistogram\\node_modules\\typescript\\lib"
     }
 }

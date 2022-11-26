@@ -11,7 +11,8 @@
     "start-built-server": "node --es-module-specifier-resolution=node ./packages/server-api/dist/server.js"
   },
   "devDependencies": {
-    "lerna": "6.0.3"
+    "lerna": "6.0.3",
+    "typescript": "4.9.3"
   },
   "name": "epistogram"
 }

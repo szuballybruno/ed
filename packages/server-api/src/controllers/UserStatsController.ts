@@ -1,12 +1,12 @@
 import { apiRoutes } from '@episto/communication';
 import { Id } from '@episto/commontypes';
-import { ActionParams } from '../ActionParams';
+import { ActionParams } from '../helpers/ActionParams';
 import { XControllerAction } from '@episto/x-gateway';
-import { Controller } from '../Controller';
+import { IController } from '../interfaces/IController';
 import { UserStatsService } from '@episto/server-services';
 import { IXGatewayServiceProvider } from '@episto/x-gateway';
 
-export class UserStatsController implements Controller<UserStatsController> {
+export class UserStatsController implements IController<UserStatsController> {
 
     private _userStatsService: UserStatsService;
 

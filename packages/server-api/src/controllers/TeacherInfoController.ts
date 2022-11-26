@@ -1,13 +1,13 @@
 import { TeacherInfoEditDTO } from '@episto/communication';
 import { TeacherInfoService } from '@episto/server-services';
-import { ActionParams } from '../ActionParams';
+import { ActionParams } from '../helpers/ActionParams';
 import { XControllerAction } from '@episto/x-gateway';
 import { apiRoutes } from '@episto/communication';
 import { IXGatewayServiceProvider } from '@episto/x-gateway';
 import { Id } from '@episto/commontypes';
-import { Controller } from '../Controller';
+import { IController } from '../interfaces/IController';
 
-export class TeacherInfoController implements Controller<TeacherInfoController> {
+export class TeacherInfoController implements IController<TeacherInfoController> {
 
     private _teacherInfoService: TeacherInfoService;
 

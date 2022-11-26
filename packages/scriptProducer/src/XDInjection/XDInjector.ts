@@ -241,7 +241,7 @@ export class XDependency {
                 const allDepsInOrdered = depHierarchyItem
                     .getDepsCompareKeys()
                     .all(x => ordered
-                        .any(orderedItem => orderedItem.getCompareKey() === x));
+                        .some(orderedItem => orderedItem.getCompareKey() === x));
 
                 if (hasZeroDeps || allDepsInOrdered) {
 

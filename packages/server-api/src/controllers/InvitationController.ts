@@ -2,11 +2,11 @@ import { UserInvitationService } from '@episto/server-services';
 import { UserEditSaveDTO } from '@episto/communication';
 import { apiRoutes } from '@episto/communication';
 import { IXGatewayServiceProvider } from '@episto/x-gateway';
-import { ActionParams } from '../ActionParams';
+import { ActionParams } from '../helpers/ActionParams';
 import { XControllerAction } from '@episto/x-gateway';
-import { Controller } from '../Controller';
+import { IController } from '../interfaces/IController';
 
-export class InvitationController implements Controller<InvitationController> {
+export class InvitationController implements IController<InvitationController> {
 
     private _userInvitationService: UserInvitationService;
 

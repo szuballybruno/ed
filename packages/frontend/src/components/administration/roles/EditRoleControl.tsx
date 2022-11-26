@@ -75,7 +75,7 @@ export const EditRoleControl = (props: {
 
                     return (
                         <EpistoCheckbox
-                            value={selectedPermissions.any(x => x.code === data.row.code)}
+                            value={selectedPermissions.some(x => x.code === data.row.code)}
                             setValue={val => val
                                 ? setSelectedPermissions([...selectedPermissions, data.row])
                                 : deselectPermission(data.row.code)} />
@@ -110,7 +110,7 @@ export const EditRoleControl = (props: {
         const perms = permissionsList
             .filter(pDto => roleEditData
                 .permissionIds
-                .any(pid => pid === pDto.id));
+                .some(pid => pid === pDto.id));
 
         setName(roleEditData.name);
         setSelectedCompany(comp);

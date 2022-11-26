@@ -1,7 +1,7 @@
-import { ActivationCodeService, AnswerService, AuthenticationService, GlobalConfigurationService, AuthorizationService, CoinAcquireService, CoinTransactionService, CommentService, CompanyService, CourseCompletionService, CourseItemService, CourseProgressService, CourseRatingService, CourseService, createDBSchema, DailyTipService, DomainProviderService, EmailService, EventService, ExamService, FileService, FileSystemService, HashService, LeaderboardService, LikeService, LoggerService, MapperService, MiscService, ModuleService, ORMConnectionService, ParametrizedConstructor, PasswordChangeService, PermissionService, PersonalityAssessmentService, PlaybackService, PlayerService, PlaylistService, PractiseQuestionService, PrequizService, PretestService, QuestionAnswerService, QuestionService, RoleService, SampleMergeService, ShopService, SignupService, SQLConnectionService, SQLPoolService, StorageService, TeacherInfoService, TempomatService, TokenService, UrlService, UserCourseBridgeService, UserInvitationService, UserProgressService, UserRegistrationService, UserService, UserSessionActivityService, UserStatsService, VersionCreateService, VersionSaveService, VideoRatingService, VideoService } from '@episto/server-services';
+import { ActivationCodeService, AnswerService, AuthenticationService, AuthorizationService, CoinAcquireService, CoinTransactionService, CommentService, CompanyService, CourseCompletionService, CourseItemService, CourseProgressService, CourseRatingService, CourseService, DailyTipService, DBSchemaProviderService, DomainProviderService, EmailService, EventService, ExamService, FileService, FileSystemService, GlobalConfigurationService, HashService, LeaderboardService, LikeService, LoggerService, MapperService, MiscService, ModuleService, ORMConnectionService, ParametrizedConstructor, PasswordChangeService, PermissionService, PersonalityAssessmentService, PlaybackService, PlayerService, PlaylistService, PractiseQuestionService, PrequizService, PretestService, QuestionAnswerService, QuestionService, RoleService, SampleMergeService, ShopService, SignupService, SQLConnectionService, SQLPoolService, StorageService, TeacherInfoService, TempomatService, TokenService, UrlService, UserCourseBridgeService, UserInvitationService, UserProgressService, UserRegistrationService, UserService, UserSessionActivityService, UserStatsService, VersionCreateService, VersionSaveService, VideoRatingService, VideoService } from '@episto/server-services';
 import { DependencyContainer, DepHierarchyFunction, XDependency } from '@episto/xinjector';
-import { XDBMSchemaService, XORMConnectionService } from '@episto/xorm';
-import { CookieOptionProvider } from '../CookieOptionProvider';
+import { XORMConnectionService } from '@episto/xorm';
+import { CookieOptionProvider } from './CookieOptionProvider';
 import { createGlobalConfiguration } from './createGlobalConfiguration';
 import { ServiceProvider } from './ServiceProvider';
 
@@ -13,11 +13,9 @@ export const instansiateSingletonServices = (rootDir: string) => {
 
     //
     // INIT DB SCHEMA
-    const dbSchema = createDBSchema();
-
     const container = XDependency
         .getClassBuilder()
-        .addClassInstance(XDBMSchemaService, dbSchema)
+        .addClass(DBSchemaProviderService, [])
         .addClassInstance(GlobalConfigurationService, globalConfigService)
         .addClassInstance(CookieOptionProvider, new CookieOptionProvider(cookieOptions))
         .addClass(LoggerService, [GlobalConfigurationService])
@@ -44,12 +42,12 @@ export const getTransientServiceContainer = (singletonProvider: ServiceProvider)
         .addClassInstance(GlobalConfigurationService, gcService)
         .addClassInstance(LoggerService, loggerService)
         .addClassInstance(CookieOptionProvider, cookieOptionProvider)
-        .addClassInstance(XDBMSchemaService, singletonProvider.getService(XDBMSchemaService))
+        .addClassInstance(DBSchemaProviderService, singletonProvider.getService(DBSchemaProviderService))
 
         // add transient signatures
         .addClass(SQLPoolService, [GlobalConfigurationService])
         .addClass(SQLConnectionService, [SQLPoolService, LoggerService])
-        .addClass(XORMConnectionService, [XDBMSchemaService, SQLConnectionService])
+        .addClass(XORMConnectionService, [DBSchemaProviderService, SQLConnectionService])
         .addClass(UrlService, [GlobalConfigurationService, DomainProviderService])
         .addClass(MapperService, [UrlService])
         .addClass(HashService, [GlobalConfigurationService])

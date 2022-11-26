@@ -1,13 +1,13 @@
 import { CourseRatingQuestionAnswersDTO } from '@episto/communication';
 import { CourseRatingService } from '@episto/server-services';
-import { ActionParams } from '../ActionParams';
+import { ActionParams } from '../helpers/ActionParams';
 import { XControllerAction } from '@episto/x-gateway';
 import { apiRoutes } from '@episto/communication';
 import { Id } from '@episto/commontypes';
-import { Controller } from '../Controller';
+import { IController } from '../interfaces/IController';
 import { IXGatewayServiceProvider } from '@episto/x-gateway';
 
-export class CourseRatingController implements Controller<CourseRatingController> {
+export class CourseRatingController implements IController<CourseRatingController> {
 
     private _courseRatingService: CourseRatingService;
 
