@@ -17,7 +17,6 @@ export class ServiceProviderInitializator implements IInitializeTransientProvide
 
     constructor(
         private _rootDir: string,
-        private _isPurgeMode: boolean,
         private _modifySingletons?: (singletonProvider: ServiceProvider) => void) {
 
         this._singletonProvider = this._initSingletons();

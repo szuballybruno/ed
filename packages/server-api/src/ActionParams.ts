@@ -1,9 +1,9 @@
 import { XSafeObjectWrapper } from '@episto/commonlogic';
 import { ErrorWithCode, Id } from '@episto/commontypes';
 import { ParametrizedRouteType, RouteParameterType } from '@episto/communication';
+import { IXGatewayRequest, IXGatewayResponse } from '@episto/x-gateway';
 import { PrincipalId } from '@episto/xcore';
 import { UploadedFile } from 'express-fileupload';
-import { ITurboRequest, ITurboResponse } from './XTurboExpressTypes';
 
 export type ParamsData<T extends RouteParameterType> = {
     body: XSafeObjectWrapper<T['body']>,
@@ -18,13 +18,13 @@ const withValue = <T>(obj: T, errorFunc?: () => void) => {
 
         if (obj === '')
             return false;
-    
+
         if (obj === undefined)
             return false;
-    
+
         if (obj === null)
             return false;
-    
+
         return true;
     };
 
@@ -59,8 +59,8 @@ const withValueOrBadRequest = <T>(obj: any, type?: ParsableValueType) => {
 };
 
 export class ActionParams<
-    TRequest extends ITurboRequest = ITurboRequest,
-    TResponse extends ITurboResponse = ITurboResponse> {
+    TRequest extends IXGatewayRequest = IXGatewayRequest,
+    TResponse extends IXGatewayResponse = IXGatewayResponse> {
 
     private _principalId: PrincipalId;
     isMultipart: boolean;

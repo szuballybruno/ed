@@ -1,25 +1,23 @@
-import { ErrorWithCode } from '@episto/commontypes';
-import { LoggerService } from '@episto/server-services';
-import { ServiceProvider } from '../startup/ServiceProvider';
-import { ITurboExpressLayer } from './ITurboExpressLayer';
-import { getControllerActionMetadatas } from './XTurboExpressDecorators';
-import { ActionWrapperFunctionType, ApiActionType, ControllerActionReturnType, EndpointOptionsType, GetServiceProviderType, ITurboMiddleware, ITurboRequest, ITurboResponse, IXTurboExpressListener, MiddlwareFnType, TurboActionType } from './XTurboExpressTypes';
+import { IXGatewayLayer } from './interface/IXGatewayLayer';
+import { IXGatewayListener } from './interface/IXGatewayListener';
+import { IXGatewayMiddleware } from './interface/IXGatewayMiddleware';
+import { IXGatewayRequest } from './interface/IXGatewayRequest';
+import { IXGatewayResponse } from './interface/IXGatewayResponse';
+import { IXGatewayServiceProvider } from './interface/IXGatewayServiceProvider';
+import { getControllerActionMetadatas } from './XGatewayDecorators';
+import { ActionWrapperFunctionType, ApiActionType, EndpointOptionsType, GetServiceProviderType, MiddlwareFnType, TurboActionType } from './XGatewayTypes';
 
-export class TurboExpressBuilder<
-    TActionParams,
-    TRequest extends ITurboRequest,
-    TResponse extends ITurboResponse> {
+export class XGatewayBuilder<TActionParams> {
 
     private _port: string;
-    private _middlewares: ITurboMiddleware<any, TRequest, TResponse, any>[];
+    private _middlewares: IXGatewayMiddleware<any, any>[];
     private _expressMiddlewares: MiddlwareFnType[];
-    private _controllers: ITurboExpressLayer[];
+    private _controllers: IXGatewayLayer[];
     private _getServiceProvider: GetServiceProviderType;
     private _actionWrapperFunction: ActionWrapperFunctionType;
 
     constructor(
-        private _loggerService: LoggerService,
-        private _listener: IXTurboExpressListener<TRequest, TResponse>) {
+        private _listener: IXGatewayListener) {
 
         this._middlewares = [];
         this._expressMiddlewares = [];
@@ -29,23 +27,23 @@ export class TurboExpressBuilder<
     setServicesCreationFunction(createServices: GetServiceProviderType) {
 
         this._getServiceProvider = createServices;
-        return this as Pick<TurboExpressBuilder<TActionParams, TRequest, TResponse>, 'addActionWrapperFunction'>;
+        return this as Pick<XGatewayBuilder<TActionParams>, 'addActionWrapperFunction'>;
     }
 
     addActionWrapperFunction(avFunction: ActionWrapperFunctionType) {
 
         this._actionWrapperFunction = avFunction;
-        return this as Pick<TurboExpressBuilder<TActionParams, TRequest, TResponse>, 'setPort'>;
+        return this as Pick<XGatewayBuilder<TActionParams>, 'setPort'>;
     }
 
     setPort(port: string) {
 
         this._port = port;
-        return this as Pick<TurboExpressBuilder<TActionParams, TRequest, TResponse>, 'setTurboMiddleware'>;
+        return this as Pick<XGatewayBuilder<TActionParams>, 'setTurboMiddleware'>;
     }
 
-    setTurboMiddleware<TInParams, TOutParams>(middleware: ITurboMiddleware<TInParams, TRequest, TResponse, TOutParams>):
-        Pick<TurboExpressBuilder<TActionParams, TRequest, TResponse>, 'setTurboMiddleware' | 'addController' | 'setExpressMiddleware'> {
+    setTurboMiddleware<TInParams, TOutParams>(middleware: IXGatewayMiddleware<TInParams, TOutParams>):
+        Pick<XGatewayBuilder<TActionParams>, 'setTurboMiddleware' | 'addController' | 'setExpressMiddleware'> {
 
         this._middlewares
             .push(middleware);
@@ -53,7 +51,7 @@ export class TurboExpressBuilder<
         return this;
     }
 
-    setExpressMiddleware(middleware: MiddlwareFnType): Pick<TurboExpressBuilder<TActionParams, TRequest, TResponse>, 'addController' | 'setExpressMiddleware'> {
+    setExpressMiddleware(middleware: MiddlwareFnType): Pick<XGatewayBuilder<TActionParams>, 'addController' | 'setExpressMiddleware'> {
 
         this._expressMiddlewares
             .push(middleware);
@@ -61,7 +59,7 @@ export class TurboExpressBuilder<
         return this;
     }
 
-    addController(signature: ITurboExpressLayer): Pick<TurboExpressBuilder<TActionParams, TRequest, TResponse>, 'build' | 'addController'> {
+    addController(signature: IXGatewayLayer): Pick<XGatewayBuilder<TActionParams>, 'build' | 'addController'> {
 
         this._controllers
             .push(signature);
@@ -69,9 +67,9 @@ export class TurboExpressBuilder<
         return this;
     }
 
-    build(): Pick<TurboExpressBuilder<TActionParams, TRequest, TResponse>, 'listen'> {
+    build(): Pick<XGatewayBuilder<TActionParams>, 'listen'> {
 
-        this._getActions()
+        this._getActionsFromMetadata()
             .forEach(x => this
                 ._addAPIEndpoint(x.path, x.sign, x.propName, x.meta));
 
@@ -88,14 +86,14 @@ export class TurboExpressBuilder<
 
     private _addAPIEndpoint = (
         path: string,
-        controllerSignature: ITurboExpressLayer,
+        controllerSignature: IXGatewayLayer,
         functionName: string,
         options?: EndpointOptionsType) => {
 
         /**
          * Handles middleware execution
          */
-        const runMiddlewaresAsync = async (req: TRequest, res: TResponse, serviceProvider: ServiceProvider) => {
+        const runMiddlewaresAsync = async (req: IXGatewayRequest, res: IXGatewayResponse, serviceProvider: IXGatewayServiceProvider) => {
 
             // run middlewares 
             let prevMiddlewareParam: any = {};
@@ -124,52 +122,21 @@ export class TurboExpressBuilder<
         /**
          * Handle controller action execution 
          */
-        const executeControllerAction = async (actionParams: TActionParams, serviceProvider: ServiceProvider) => {
+        const executeControllerAction = async (actionParams: TActionParams, serviceProvider: IXGatewayServiceProvider) => {
 
             /**
              * Instantiate controller 
-        */
+             */
             const controllerInstance = new controllerSignature(serviceProvider);
 
             /**
              * Get controller action and execute it
-        */
+             */
             const controllerAction: ApiActionType<TActionParams> = controllerInstance[functionName];
-            const boundControllerAction: (params: TActionParams) => ControllerActionReturnType = controllerAction.bind(controllerInstance);
-            const controllerActionResultOrData: ControllerActionReturnType = await boundControllerAction(actionParams);
+            const boundControllerAction: (params: TActionParams) => Promise<any> = controllerAction.bind(controllerInstance);
+            const controllerActionResultData: any = await boundControllerAction(actionParams);
 
-            /**
-             * Complicated solution 
-        */
-            if ((controllerActionResultOrData as any)?.auth) {
-
-                const controllerActionResult = controllerActionResultOrData as any;
-
-                if (!controllerActionResult.auth)
-                    throw new Error('Controller action declaration has no auth block!');
-
-                const authRes = await controllerActionResult.auth();
-                if (authRes.state === 'FAILED') {
-
-                    this._loggerService
-                        .logScoped('ERROR', 'Authorization function returned "FAILED" state.');
-
-                    throw new ErrorWithCode('Authorization failed!', 'no permission');
-                }
-
-                const actionRes = await controllerActionResult
-                    .action();
-
-                return actionRes;
-            }
-
-            /**
-             * Simple solution
-        */
-            else {
-
-                return controllerActionResultOrData;
-            }
+            return controllerActionResultData;
         };
 
         /**
@@ -179,21 +146,18 @@ export class TurboExpressBuilder<
          * - execute middleware
          * - execute action  
          */
-        const asyncStuff = async (req: TRequest, res: TResponse) => {
-
-            this._loggerService
-                .logScoped('SERVER', `${req.path}: REQUEST ARRIVED`);
+        const asyncStuff = async (req: IXGatewayRequest, res: IXGatewayResponse) => {
 
             /**
              * Instatiate all services, 
              * establish connection to DB
-        */
+             */
             const serviceProvider = await this._getServiceProvider();
 
             /**
              * Executes the middlewares, 
              * then the controller action (with action params returned from middlewares) 
-        */
+             */
             const executeMiddlewaresAndControllerAction = async () => {
 
                 const actionParams = await runMiddlewaresAsync(req, res, serviceProvider);
@@ -204,7 +168,7 @@ export class TurboExpressBuilder<
              * Execute middlewares, 
              * and controller action in the action wrapper function, 
              * which is an external async wrapper (for flexibility)
-        */
+             */
             const actionWrapperResult = await this
                 ._actionWrapperFunction(serviceProvider, executeMiddlewaresAndControllerAction);
 
@@ -225,22 +189,18 @@ export class TurboExpressBuilder<
             });
     };
 
-    private _getActions(): TurboActionType[] {
+    private _getActionsFromMetadata(): TurboActionType[] {
 
         const actions = this._controllers
             .flatMap((sign) => {
 
                 const controllerMetadatas = getControllerActionMetadatas(sign);
 
-                this._loggerService.logScoped('BOOTSTRAP', `Controller: ${sign.name}`);
-
                 const actions = controllerMetadatas
                     .orderBy(meta => meta.metadata.isPost + '')
                     .map(meta => {
 
                         const path = meta.metadata.path;
-
-                        this._loggerService.logScoped('BOOTSTRAP', 'SECONDARY', `Adding endpoint ${meta.metadata.isPost ? '[POST]' : '[GET] '} ${path}`);
 
                         return {
                             path,

@@ -3,20 +3,20 @@ import { RegisterUserViaActivationCodeDTO } from '@episto/communication';
 import { RegisterUserViaInvitationTokenDTO } from '@episto/communication';
 import { RegisterUserViaPublicTokenDTO } from '@episto/communication';
 import { apiRoutes } from '@episto/communication';
-import { ServiceProvider } from '../startup/ServiceProvider';
+import { IXGatewayServiceProvider } from '@episto/x-gateway';
 import { setAuthCookies } from '../cookieHelpers';
-import { ActionParams } from '../XTurboExpress/ActionParams';
-import { XControllerAction } from '../XTurboExpress/XTurboExpressDecorators';
-import { XController } from '../XTurboExpress/XTurboExpressTypes';
+import { ActionParams } from '../ActionParams';
+import { XControllerAction } from '@episto/x-gateway';
+import { Controller } from '../Controller';
 import { CookieOptionProvider } from '../CookieOptionProvider';
 
-export class RegistrationController implements XController<RegistrationController> {
+export class RegistrationController implements Controller<RegistrationController> {
 
     private _userRegistrationService: UserRegistrationService;
     private _config: GlobalConfigurationService;
     private _cookieOptionProvider: CookieOptionProvider;
 
-    constructor(serviceProvider: ServiceProvider) {
+    constructor(serviceProvider: IXGatewayServiceProvider) {
 
         this._userRegistrationService = serviceProvider.getService(UserRegistrationService);
         this._config = serviceProvider.getService(GlobalConfigurationService);

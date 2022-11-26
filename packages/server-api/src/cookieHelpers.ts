@@ -1,13 +1,13 @@
 import { GlobalConfigurationService } from '@episto/server-services';
+import { IXCookieOptions, IXGatewayRequest, IXGatewayResponse } from '@episto/x-gateway';
 import dayjs from 'dayjs';
-import { ICookieOptions, ITurboRequest, ITurboResponse } from './XTurboExpress/XTurboExpressTypes';
 
 export const setAuthCookies = (
     config: GlobalConfigurationService,
-    res: ITurboResponse,
+    res: IXGatewayResponse,
     accessToken: string,
     refreshToken: string,
-    options: ICookieOptions) => {
+    options: IXCookieOptions) => {
 
     res.setCookie(config.misc.accessTokenCookieName, accessToken, {
         ...options,
@@ -24,7 +24,7 @@ export const setAuthCookies = (
     });
 };
 
-export const getAuthCookies = (req: ITurboRequest, config: GlobalConfigurationService) => {
+export const getAuthCookies = (req: IXGatewayRequest, config: GlobalConfigurationService) => {
 
     return {
         accessToken: req.getCookie(config.misc.accessTokenCookieName),

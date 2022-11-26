@@ -2,18 +2,18 @@ import { CommentService } from '@episto/server-services';
 import { LikeService } from '@episto/server-services';
 import { CommentCreateDTO } from '@episto/communication';
 import { apiRoutes } from '@episto/communication';
-import { ActionParams } from '../XTurboExpress/ActionParams';
-import { XControllerAction } from '../XTurboExpress/XTurboExpressDecorators';
-import { ServiceProvider } from '../startup/ServiceProvider';
+import { ActionParams } from '../ActionParams';
+import { XControllerAction } from '@episto/x-gateway';
+import { IXGatewayServiceProvider } from '@episto/x-gateway';
 import { Id } from '@episto/commontypes';
-import { XController } from '../XTurboExpress/XTurboExpressTypes';
+import { Controller } from '../Controller';
 
-export class CommentController implements XController<CommentController> {
+export class CommentController implements Controller<CommentController> {
 
     private _commentService: CommentService;
     private _userCommentBridgeService: LikeService;
 
-    constructor(serviceProvider: ServiceProvider) {
+    constructor(serviceProvider: IXGatewayServiceProvider) {
 
         this._commentService = serviceProvider.getService(CommentService);
         this._userCommentBridgeService = serviceProvider.getService(LikeService);

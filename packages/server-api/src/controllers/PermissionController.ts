@@ -1,15 +1,15 @@
 import { PermissionService } from '@episto/server-services';
 import { apiRoutes } from '@episto/communication';
-import { ServiceProvider } from '../startup/ServiceProvider';
-import { ActionParams } from '../XTurboExpress/ActionParams';
-import { XControllerAction } from '../XTurboExpress/XTurboExpressDecorators';
-import { XController } from '../XTurboExpress/XTurboExpressTypes';
+import { IXGatewayServiceProvider } from '@episto/x-gateway';
+import { ActionParams } from '../ActionParams';
+import { XControllerAction } from '@episto/x-gateway';
+import { Controller } from '../Controller';
 
-export class PermissionController implements XController<PermissionController> {
+export class PermissionController implements Controller<PermissionController> {
 
     private _permissionService: PermissionService;
 
-    constructor(serviceProvider: ServiceProvider) {
+    constructor(serviceProvider: IXGatewayServiceProvider) {
 
         this._permissionService = serviceProvider.getService(PermissionService);
     }

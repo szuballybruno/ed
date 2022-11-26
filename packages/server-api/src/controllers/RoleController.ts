@@ -3,16 +3,16 @@ import { RoleCreateDTO } from '@episto/communication';
 import { RoleEditDTO } from '@episto/communication';
 import { apiRoutes } from '@episto/communication';
 import { Id } from '@episto/commontypes';
-import { ServiceProvider } from '../startup/ServiceProvider';
-import { ActionParams } from '../XTurboExpress/ActionParams';
-import { XControllerAction } from '../XTurboExpress/XTurboExpressDecorators';
-import { XController } from '../XTurboExpress/XTurboExpressTypes';
+import { IXGatewayServiceProvider } from '@episto/x-gateway';
+import { ActionParams } from '../ActionParams';
+import { XControllerAction } from '@episto/x-gateway';
+import { Controller } from '../Controller';
 
-export class RoleController implements XController<RoleController> {
+export class RoleController implements Controller<RoleController> {
 
     private _roleService: RoleService;
 
-    constructor(serviceProvider: ServiceProvider) {
+    constructor(serviceProvider: IXGatewayServiceProvider) {
 
         this._roleService = serviceProvider.getService(RoleService);
     }

@@ -1,16 +1,16 @@
 import { ChangePasswordDTO } from '@episto/communication';
 import { PasswordChangeService } from '@episto/server-services';
-import { ActionParams } from '../XTurboExpress/ActionParams';
-import { XControllerAction } from '../XTurboExpress/XTurboExpressDecorators';
+import { ActionParams } from '../ActionParams';
+import { XControllerAction } from '@episto/x-gateway';
 import { apiRoutes } from '@episto/communication';
-import { ServiceProvider } from '../startup/ServiceProvider';
-import { XController } from '../XTurboExpress/XTurboExpressTypes';
+import { IXGatewayServiceProvider } from '@episto/x-gateway';
+import { Controller } from '../Controller';
 
-export class PasswordChangeController implements XController<PasswordChangeController> {
+export class PasswordChangeController implements Controller<PasswordChangeController> {
 
     private _passwordChangeService: PasswordChangeService;
 
-    constructor(serviceProvider: ServiceProvider) {
+    constructor(serviceProvider: IXGatewayServiceProvider) {
 
         this._passwordChangeService = serviceProvider.getService(PasswordChangeService);
     }

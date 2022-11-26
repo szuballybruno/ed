@@ -8,17 +8,17 @@ import { Mutation } from '@episto/communication';
 import { apiRoutes } from '@episto/communication';
 import { CourseModeType } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
-import { ServiceProvider } from '../startup/ServiceProvider';
-import { ActionParams } from '../XTurboExpress/ActionParams';
-import { XControllerAction } from '../XTurboExpress/XTurboExpressDecorators';
-import { XController } from '../XTurboExpress/XTurboExpressTypes';
+import { IXGatewayServiceProvider } from '@episto/x-gateway';
+import { ActionParams } from '../ActionParams';
+import { XControllerAction } from '@episto/x-gateway';
+import { Controller } from '../Controller';
 
-export class CourseController implements XController<CourseController> {
+export class CourseController implements Controller<CourseController> {
 
     private _courseService: CourseService;
     private _userCourseBridgeService: UserCourseBridgeService;
 
-    constructor(serviceProvider: ServiceProvider) {
+    constructor(serviceProvider: IXGatewayServiceProvider) {
 
         this._courseService = serviceProvider.getService(CourseService);
         this._userCourseBridgeService = serviceProvider.getService(UserCourseBridgeService);

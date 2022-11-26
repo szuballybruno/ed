@@ -1,15 +1,15 @@
 import { VideoService } from '@episto/server-services';
 import { apiRoutes } from '@episto/communication';
 import { Id } from '@episto/commontypes';
-import { ServiceProvider } from '../startup/ServiceProvider';
-import { ActionParams } from '../XTurboExpress/ActionParams';
-import { XControllerAction } from '../XTurboExpress/XTurboExpressDecorators';
-import { XController } from '../XTurboExpress/XTurboExpressTypes';
+import { IXGatewayServiceProvider } from '@episto/x-gateway';
+import { ActionParams } from '../ActionParams';
+import { XControllerAction } from '@episto/x-gateway';
+import { Controller } from '../Controller';
 
-export class VideoController implements XController<VideoController> {
+export class VideoController implements Controller<VideoController> {
     private _videoService: VideoService;
 
-    constructor(serviceProvider: ServiceProvider) {
+    constructor(serviceProvider: IXGatewayServiceProvider) {
 
         this._videoService = serviceProvider.getService(VideoService);
     }

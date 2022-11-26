@@ -3,16 +3,16 @@ import { UserEditSaveDTO } from '@episto/communication';
 import { UserEditSimpleDTO } from '@episto/communication';
 import { apiRoutes } from '@episto/communication';
 import { Id } from '@episto/commontypes';
-import { ServiceProvider } from '../startup/ServiceProvider';
-import { ActionParams } from '../XTurboExpress/ActionParams';
-import { XControllerAction } from '../XTurboExpress/XTurboExpressDecorators';
-import { XController } from '../XTurboExpress/XTurboExpressTypes';
+import { IXGatewayServiceProvider } from '@episto/x-gateway';
+import { ActionParams } from '../ActionParams';
+import { XControllerAction } from '@episto/x-gateway';
+import { Controller } from '../Controller';
 
-export class UserController implements XController<UserController> {
+export class UserController implements Controller<UserController> {
 
     private _userService: UserService;
 
-    constructor(serviceProvider: ServiceProvider) {
+    constructor(serviceProvider: IXGatewayServiceProvider) {
 
         this._userService = serviceProvider.getService(UserService);
     }

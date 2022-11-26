@@ -1,6 +1,8 @@
+import { IXGatewayServiceProvider } from "@episto/x-gateway";
+
 type CTAnyArgs<T> = { new(...args: any[]): T };
 
-export class ServiceProvider {
+export class ServiceProvider implements IXGatewayServiceProvider {
 
     private _services: any;
 

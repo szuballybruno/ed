@@ -1,20 +1,17 @@
-import { AuthenticationService, GlobalConfigurationService } from '@episto/server-services';
-import { CompanyService } from '@episto/server-services';
-import { LoggerService } from '@episto/server-services';
 import { ErrorWithCode } from '@episto/commontypes';
-import { ActionParams } from '../XTurboExpress/ActionParams';
-import { ITurboMiddlewareInstance, ITurboRequest, ITurboResponse, MiddlewareParams } from '../XTurboExpress/XTurboExpressTypes';
+import { AuthenticationService, CompanyService, GlobalConfigurationService, LoggerService } from '@episto/server-services';
+import { IXGatewayMiddlewareInstance, IXGatewayServiceProvider, MiddlewareParams } from '@episto/x-gateway';
+import { ActionParams } from '../ActionParams';
 import { getAuthCookies } from '../cookieHelpers';
-import { ServiceProvider } from '../startup/ServiceProvider';
 
-export class AuthenticationMiddleware implements ITurboMiddlewareInstance<void, ITurboRequest, ITurboResponse, ActionParams> {
+export class AuthenticationMiddleware implements IXGatewayMiddlewareInstance<void, ActionParams> {
 
     private _authenticationService: AuthenticationService;
     private _loggerService: LoggerService;
     private _companyService: CompanyService;
     private _config: GlobalConfigurationService;
 
-    constructor(serviceProvider: ServiceProvider) {
+    constructor(serviceProvider: IXGatewayServiceProvider) {
 
         this._authenticationService = serviceProvider.getService(AuthenticationService);
         this._companyService = serviceProvider.getService(CompanyService);
@@ -22,7 +19,7 @@ export class AuthenticationMiddleware implements ITurboMiddlewareInstance<void, 
         this._config = serviceProvider.getService(GlobalConfigurationService);
     }
 
-    runMiddlewareAsync = async (params: MiddlewareParams<void, ITurboRequest, ITurboResponse>): Promise<ActionParams> => {
+    runMiddlewareAsync = async (params: MiddlewareParams<void>): Promise<ActionParams> => {
 
         const { req, res, options } = params;
 

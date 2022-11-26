@@ -1,8 +1,8 @@
-import { ICookieOptions } from "./XTurboExpress/XTurboExpressTypes";
+import { IXCookieOptions } from "@episto/x-gateway";
 
 export class CookieOptionProvider {
 
-    constructor(public cookieOptions: ICookieOptions) {
+    constructor(public cookieOptions: IXCookieOptions) {
 
     }
 }

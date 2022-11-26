@@ -1,8 +1,8 @@
 import { Request } from 'express';
 import { UploadedFile } from 'express-fileupload';
-import { ITurboRequest } from '../XTurboExpress/XTurboExpressTypes';
+import { IXGatewayRequest } from '../interface/IXGatewayRequest';
 
-export class TurboRequest implements ITurboRequest {
+export class ExpressRequest implements IXGatewayRequest {
 
     path: string;
     body: any;

@@ -1,16 +1,16 @@
 import { PretestService } from '@episto/server-services';
 import { apiRoutes } from '@episto/communication';
 import { Id } from '@episto/commontypes';
-import { ServiceProvider } from '../startup/ServiceProvider';
-import { ActionParams } from '../XTurboExpress/ActionParams';
-import { XControllerAction } from '../XTurboExpress/XTurboExpressDecorators';
-import { XController } from '../XTurboExpress/XTurboExpressTypes';
+import { IXGatewayServiceProvider } from '@episto/x-gateway';
+import { ActionParams } from '../ActionParams';
+import { XControllerAction } from '@episto/x-gateway';
+import { Controller } from '../Controller';
 
-export class PretestController implements XController<PretestController> {
+export class PretestController implements Controller<PretestController> {
 
     private _pretestService: PretestService;
 
-    constructor(serviceProvider: ServiceProvider) {
+    constructor(serviceProvider: IXGatewayServiceProvider) {
 
         this._pretestService = serviceProvider.getService(PretestService);
     }

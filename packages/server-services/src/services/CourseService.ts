@@ -67,10 +67,11 @@ export class CourseService {
      * Returns courses that the principal can use as context
      * when assigning permissions to a user
      */
-    getPermissionAssignCoursesAsync(principalId: PrincipalId, userId: Id<'User'>) {
+    async getPermissionAssignCoursesAsync(principalId: PrincipalId, userId: Id<'User'>) {
 
         // TODO: CourseDataId is not CourseId
         throwNotImplemented();
+        return Promise.resolve(1 as any);
     }
 
     /**
@@ -235,34 +236,28 @@ export class CourseService {
     /**
      * Save course thumbnail.
      */
-    saveCourseThumbnailAsync(
+    async saveCourseThumbnailAsync(
         userId: PrincipalId,
         file: UploadedFile,
         courseId: Id<'Course'>
     ) {
 
-        return {
-            action: async () => {
-                return this._fileService
-                    .uploadAssigendFileAsync({
-                        entitySignature: CourseData,
-                        entityId: courseId,
-                        fileBuffer: file.data,
-                        fileCode: 'course_cover',
-                        storageFileIdField: 'coverFileId'
-                    });
-            },
-            auth: async () => {
+        const { companyId } = await this._ormService
+            .query(User, { userId })
+            .where('id', '=', 'userId')
+            .getSingle();
 
-                const { companyId } = await this._ormService
-                    .query(User, { userId })
-                    .where('id', '=', 'userId')
-                    .getSingle();
+        await this._authorizationService
+            .checkPermissionAsync(userId, 'EDIT_COMPANY_COURSES', { companyId });
 
-                return this._authorizationService
-                    .checkPermissionAsync(userId, 'EDIT_COMPANY_COURSES', { companyId });
-            }
-        };
+        return this._fileService
+            .uploadAssigendFileAsync({
+                entitySignature: CourseData,
+                entityId: courseId,
+                fileBuffer: file.data,
+                fileCode: 'course_cover',
+                storageFileIdField: 'coverFileId'
+            });
     }
 
     /**
@@ -428,8 +423,7 @@ export class CourseService {
             .versionId;
 
         const modules = await this._moduleService
-            .getModuleEditDTOsAsync(userId, courseVersionId)
-            .action();
+            .getModuleEditDTOsAsync(userId, courseVersionId);
 
         const items = this._mapperService
             .mapTo(CourseContentItemAdminDTO, [views]);
@@ -487,29 +481,22 @@ export class CourseService {
     /**
      * Soft delete course.
      */
-    softDeleteCourseAsync(
+    async softDeleteCourseAsync(
         userId: PrincipalId,
         courseId: Id<'Course'>
     ) {
 
-        return {
-            action: async () => {
+        const { companyId } = await this._ormService
+            .query(User, { userId })
+            .where('id', '=', 'userId')
+            .getSingle();
 
-                await this._ormService
-                    .softDelete(CourseData, [courseId]);
+        await this._authorizationService
+            .checkPermissionAsync(userId, 'EDIT_COMPANY_COURSES', { companyId });
 
-            },
-            auth: async () => {
 
-                const { companyId } = await this._ormService
-                    .query(User, { userId })
-                    .where('id', '=', 'userId')
-                    .getSingle();
-
-                return this._authorizationService
-                    .checkPermissionAsync(userId, 'EDIT_COMPANY_COURSES', { companyId });
-            }
-        };
+        await this._ormService
+            .softDelete(CourseData, [courseId]);
     }
 
     /**

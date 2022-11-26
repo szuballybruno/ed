@@ -1,16 +1,16 @@
 import { CourseItemService } from '@episto/server-services';
 import { apiRoutes } from '@episto/communication';
 import { Id } from '@episto/commontypes';
-import { ServiceProvider } from '../startup/ServiceProvider';
-import { ActionParams } from '../XTurboExpress/ActionParams';
-import { XControllerAction } from '../XTurboExpress/XTurboExpressDecorators';
-import { XController } from '../XTurboExpress/XTurboExpressTypes';
+import { IXGatewayServiceProvider } from '@episto/x-gateway';
+import { ActionParams } from '../ActionParams';
+import { XControllerAction } from '@episto/x-gateway';
+import { Controller } from '../Controller';
 
-export class CourseItemController implements XController<CourseItemController> {
+export class CourseItemController implements Controller<CourseItemController> {
 
     private _courseItemService: CourseItemService;
 
-    constructor(serviceProvider: ServiceProvider) {
+    constructor(serviceProvider: IXGatewayServiceProvider) {
 
         this._courseItemService = serviceProvider.getService(CourseItemService);
     }

@@ -1,17 +1,17 @@
 import { TeacherInfoEditDTO } from '@episto/communication';
 import { TeacherInfoService } from '@episto/server-services';
-import { ActionParams } from '../XTurboExpress/ActionParams';
-import { XControllerAction } from '../XTurboExpress/XTurboExpressDecorators';
+import { ActionParams } from '../ActionParams';
+import { XControllerAction } from '@episto/x-gateway';
 import { apiRoutes } from '@episto/communication';
-import { ServiceProvider } from '../startup/ServiceProvider';
+import { IXGatewayServiceProvider } from '@episto/x-gateway';
 import { Id } from '@episto/commontypes';
-import { XController } from '../XTurboExpress/XTurboExpressTypes';
+import { Controller } from '../Controller';
 
-export class TeacherInfoController implements XController<TeacherInfoController> {
+export class TeacherInfoController implements Controller<TeacherInfoController> {
 
     private _teacherInfoService: TeacherInfoService;
 
-    constructor(serviceProvider: ServiceProvider) {
+    constructor(serviceProvider: IXGatewayServiceProvider) {
 
         this._teacherInfoService = serviceProvider.getService(TeacherInfoService);
     }

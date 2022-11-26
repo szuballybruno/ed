@@ -3,18 +3,18 @@ import { apiRoutes } from '@episto/communication';
 import { AuthenticationService, GlobalConfigurationService } from '@episto/server-services';
 import { getAuthCookies, setAuthCookies } from '../cookieHelpers';
 import { CookieOptionProvider } from '../CookieOptionProvider';
-import { ServiceProvider } from '../startup/ServiceProvider';
-import { ActionParams } from '../XTurboExpress/ActionParams';
-import { XControllerAction } from '../XTurboExpress/XTurboExpressDecorators';
-import { XController } from '../XTurboExpress/XTurboExpressTypes';
+import { IXGatewayServiceProvider } from '@episto/x-gateway';
+import { Controller } from '../Controller';
+import { XControllerAction } from '@episto/x-gateway';
+import { ActionParams } from '../ActionParams';
 
-export class AuthenticationController implements XController<AuthenticationController> {
+export class AuthenticationController implements Controller<AuthenticationController> {
 
     private _authenticationService: AuthenticationService;
     private _config: GlobalConfigurationService;
     private _cookieOptionProvider: CookieOptionProvider;
 
-    constructor(serviceProvider: ServiceProvider) {
+    constructor(serviceProvider: IXGatewayServiceProvider) {
 
         this._authenticationService = serviceProvider.getService(AuthenticationService);
         this._config = serviceProvider.getService(GlobalConfigurationService);

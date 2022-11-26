@@ -56,29 +56,23 @@ export class ModuleService {
      * get module edit dtos 
      * for module admin
      */
-    getModuleEditDTOsAsync(principalId: PrincipalId, courseVersionId: Id<'CourseVersion'>) {
+    async getModuleEditDTOsAsync(principalId: PrincipalId, courseVersionId: Id<'CourseVersion'>) {
 
-        return {
-            action: async () => {
-                const modules = await this._ormService
-                    .query(ModuleEditView, { courseVersionId })
-                    .where('courseVersionId', '=', 'courseVersionId')
-                    .getMany();
+        const { companyId } = await this._ormService
+            .query(User, { userId: principalId.toSQLValue() })
+            .where('id', '=', 'userId')
+            .getSingle();
 
-                return this._mapperService
-                    .mapTo(ModuleEditDTO, [modules]);
-            },
-            auth: async () => {
+        await this._authorizationService
+            .checkPermissionAsync(principalId, 'EDIT_COMPANY_COURSES', { companyId });
 
-                const { companyId } = await this._ormService
-                    .query(User, { userId: principalId.toSQLValue() })
-                    .where('id', '=', 'userId')
-                    .getSingle();
+        const modules = await this._ormService
+            .query(ModuleEditView, { courseVersionId })
+            .where('courseVersionId', '=', 'courseVersionId')
+            .getMany();
 
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'EDIT_COMPANY_COURSES', { companyId });
-            }
-        };
+        return this._mapperService
+            .mapTo(ModuleEditDTO, [modules]);
     }
 
     /**

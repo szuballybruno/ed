@@ -1,19 +1,18 @@
 import { apiRoutes } from '@episto/communication';
 import { AuthorizationService } from '@episto/server-services';
-import { ServiceProvider } from '../startup/ServiceProvider';
-import { ActionParams } from '../XTurboExpress/ActionParams';
-import { ITurboMiddlewareInstance, ITurboRequest, ITurboResponse, MiddlewareParams } from '../XTurboExpress/XTurboExpressTypes';
+import { IXGatewayMiddlewareInstance, IXGatewayServiceProvider, MiddlewareParams } from '@episto/x-gateway';
+import { ActionParams } from '../ActionParams';
 
-export class AuthorizationMiddleware implements ITurboMiddlewareInstance<ActionParams, ITurboRequest, ITurboResponse, ActionParams> {
+export class AuthorizationMiddleware implements IXGatewayMiddlewareInstance<ActionParams, ActionParams> {
 
     private _authorizationService: AuthorizationService;
 
-    constructor(serviceProvider: ServiceProvider) {
+    constructor(serviceProvider: IXGatewayServiceProvider) {
 
         this._authorizationService = serviceProvider.getService(AuthorizationService);
     }
 
-    async runMiddlewareAsync(params: MiddlewareParams<ActionParams, ITurboRequest, ITurboResponse>): Promise<ActionParams> {
+    async runMiddlewareAsync(params: MiddlewareParams<ActionParams>): Promise<ActionParams> {
 
         if (params.options.isPublic)
             return params.inParams;

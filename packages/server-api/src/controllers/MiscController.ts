@@ -1,19 +1,16 @@
-import { MiscService } from '@episto/server-services';
-import { UserCourseBridgeService } from '@episto/server-services';
 import { apiRoutes } from '@episto/communication';
-import { ServiceProvider } from '../startup/ServiceProvider';
-import { ActionParams } from '../XTurboExpress/ActionParams';
-import { XControllerAction } from '../XTurboExpress/XTurboExpressDecorators';
-import { XController } from '../XTurboExpress/XTurboExpressTypes';
-import { ActivationCodeService } from '@episto/server-services';
+import { ActivationCodeService, MiscService, UserCourseBridgeService } from '@episto/server-services';
+import { IXGatewayServiceProvider, XControllerAction } from '@episto/x-gateway';
+import { ActionParams } from '../ActionParams';
+import { Controller } from '../Controller';
 
-export class MiscController implements XController<MiscController> {
+export class MiscController implements Controller<MiscController> {
 
     private _miscService: MiscService;
     private _courseBridgeService: UserCourseBridgeService;
     private _activationCodeService: ActivationCodeService;
 
-    constructor(serviceProvider: ServiceProvider) {
+    constructor(serviceProvider: IXGatewayServiceProvider) {
 
         this._miscService = serviceProvider.getService(MiscService);
         this._courseBridgeService = serviceProvider.getService(UserCourseBridgeService);

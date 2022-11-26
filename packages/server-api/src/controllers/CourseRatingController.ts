@@ -1,17 +1,17 @@
 import { CourseRatingQuestionAnswersDTO } from '@episto/communication';
 import { CourseRatingService } from '@episto/server-services';
-import { ActionParams } from '../XTurboExpress/ActionParams';
-import { XControllerAction } from '../XTurboExpress/XTurboExpressDecorators';
+import { ActionParams } from '../ActionParams';
+import { XControllerAction } from '@episto/x-gateway';
 import { apiRoutes } from '@episto/communication';
 import { Id } from '@episto/commontypes';
-import { XController } from '../XTurboExpress/XTurboExpressTypes';
-import { ServiceProvider } from '../startup/ServiceProvider';
+import { Controller } from '../Controller';
+import { IXGatewayServiceProvider } from '@episto/x-gateway';
 
-export class CourseRatingController implements XController<CourseRatingController> {
+export class CourseRatingController implements Controller<CourseRatingController> {
 
     private _courseRatingService: CourseRatingService;
 
-    constructor(serviceProvider: ServiceProvider) {
+    constructor(serviceProvider: IXGatewayServiceProvider) {
 
         this._courseRatingService = serviceProvider.getService(CourseRatingService);
     }

@@ -1,7 +1,7 @@
 import { EnvironmentType, GlobalConfigurationService, LogScopeType } from '@episto/server-services';
+import { IXCookieOptions } from '@episto/x-gateway';
 import dotenv from 'dotenv';
 import * as fs from 'fs';
-import { ICookieOptions } from '../XTurboExpress/XTurboExpressTypes';
 
 class Helper {
     static getEnvConfigEntry(entryName: string): string;
@@ -174,7 +174,7 @@ export const createGlobalConfiguration = (rootDir: string) => {
         }
     });
 
-    const cookieOptions: ICookieOptions = {
+    const cookieOptions: IXCookieOptions = {
         sameSite: 'strict',
         secure: !globalConfigService.misc.isLocalhost,
         httpOnly: true,

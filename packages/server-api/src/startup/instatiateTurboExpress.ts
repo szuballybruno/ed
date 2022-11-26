@@ -1,20 +1,21 @@
 
+import { GlobalConfigurationService, LoggerService, ORMConnectionService, SQLConnectionService } from '@episto/server-services';
+import { ActionWrapperFunctionType, IXGatewayListener, IXGatewayServiceProvider, XGatewayBuilder } from '@episto/x-gateway';
+import { ActionParams } from '../ActionParams';
 import { AuthenticationController } from '../controllers/AuthenticationController';
-import { CourseProgressController } from '../controllers/CourseProgressController';
-import { InvitationController } from '../controllers/InvitationController';
-import { LeaderboardController } from '../controllers/LeaderboardController';
-import { SurveyController } from '../controllers/SurveyController';
-import { TeacherInfoController } from '../controllers/TeacherInfoController';
 import { CoinTransactionsController } from '../controllers/CoinTransactionsController';
 import { CommentController } from '../controllers/CommentController';
 import { CompanyController } from '../controllers/CompanyController';
 import { CourseController } from '../controllers/CourseController';
 import { CourseItemController } from '../controllers/CourseItemController';
+import { CourseProgressController } from '../controllers/CourseProgressController';
 import { CourseRatingController } from '../controllers/CourseRatingController';
 import { DailyTipController } from '../controllers/DailyTipController';
 import { EventController } from '../controllers/EventController';
 import { ExamController } from '../controllers/ExamController';
 import { FileController } from '../controllers/FileController';
+import { InvitationController } from '../controllers/InvitationController';
+import { LeaderboardController } from '../controllers/LeaderboardController';
 import { MiscController } from '../controllers/MiscController';
 import { ModuleController } from '../controllers/ModuleController';
 import { PasswordChangeController } from '../controllers/PasswordChangeController';
@@ -28,22 +29,19 @@ import { QuestionController } from '../controllers/QuestionController';
 import { RegistrationController } from '../controllers/RegistrationController';
 import { RoleController } from '../controllers/RoleController';
 import { ShopController } from '../controllers/ShopController';
+import { SurveyController } from '../controllers/SurveyController';
+import { TeacherInfoController } from '../controllers/TeacherInfoController';
 import { TempomatController } from '../controllers/TempomatController';
 import { UserController } from '../controllers/UserController';
 import { UserProgressController } from '../controllers/UserProgressController';
 import { UserStatsController } from '../controllers/UserStatsController';
 import { VideoController } from '../controllers/VideoController';
 import { VideoRatingController } from '../controllers/VideoRatingController';
-import { AuthenticationMiddleware } from '../turboImplementations/AuthenticationMiddleware';
-import { AuthorizationMiddleware } from '../turboImplementations/AuthorizationMiddleware';
-import { ActionParams } from '../XTurboExpress/ActionParams';
-import { ActionWrapperFunctionType, ITurboRequest, ITurboResponse, IXTurboExpressListener } from '../XTurboExpress/XTurboExpressTypes';
-import { TurboExpressBuilder } from '../XTurboExpress/TurboExpress';
+import { AuthenticationMiddleware } from '../middleware/AuthenticationMiddleware';
+import { AuthorizationMiddleware } from '../middleware/AuthorizationMiddleware';
 import { ServiceProviderInitializator } from './initApp';
-import { ServiceProvider } from './ServiceProvider';
-import { ORMConnectionService, SQLConnectionService, LoggerService, GlobalConfigurationService } from '@episto/server-services';
 
-export const actionWrapper: ActionWrapperFunctionType = async (serviceProvider: ServiceProvider, action: () => Promise<any>) => {
+export const actionWrapper: ActionWrapperFunctionType = async (serviceProvider: IXGatewayServiceProvider, action: () => Promise<any>) => {
 
     const ormService = serviceProvider
         .getService(ORMConnectionService);
@@ -97,15 +95,14 @@ export const actionWrapper: ActionWrapperFunctionType = async (serviceProvider: 
 
 export const initTurboExpress = (
     initializator: ServiceProviderInitializator,
-    listener: IXTurboExpressListener) => {
+    listener: IXGatewayListener) => {
 
     const singletonProvider = initializator
         .getSingletonProvider();
 
     const globalConfig = singletonProvider.getService(GlobalConfigurationService);
-    const loggerService = singletonProvider.getService(LoggerService);
 
-    const turboExpress = new TurboExpressBuilder<ActionParams, ITurboRequest, ITurboResponse>(loggerService, listener)
+    const turboExpress = new XGatewayBuilder<ActionParams>(listener)
         .setServicesCreationFunction(initializator.getInitializedTransientServices.bind(initializator))
         .addActionWrapperFunction(actionWrapper)
         .setPort(globalConfig.misc.hostPort)

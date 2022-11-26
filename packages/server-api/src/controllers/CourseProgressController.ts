@@ -1,14 +1,14 @@
 import { CourseProgressService } from '@episto/server-services';
 import { apiRoutes } from '@episto/communication';
-import { ActionParams } from '../XTurboExpress/ActionParams';
-import { XControllerAction } from '../XTurboExpress/XTurboExpressDecorators';
-import { ServiceProvider } from '../startup/ServiceProvider';
+import { ActionParams } from '../ActionParams';
+import { XControllerAction } from '@episto/x-gateway';
+import { IXGatewayServiceProvider } from '@episto/x-gateway';
 
 export class CourseProgressController {
 
     private _courseProgressService: CourseProgressService;
 
-    constructor(serviceProvider: ServiceProvider) {
+    constructor(serviceProvider: IXGatewayServiceProvider) {
 
         this._courseProgressService = serviceProvider
             .getService(CourseProgressService);

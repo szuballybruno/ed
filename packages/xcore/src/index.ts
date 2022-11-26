@@ -6,3 +6,5 @@ export { XMetadataHandler } from "./XMetadataHandler";
 export { initJsExtensions } from "./jsExtensions";
 
 export * from './helpers';
+
+export { ConstructorSignature } from './ConstructorSignature';
