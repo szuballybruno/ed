@@ -1,4 +1,4 @@
-import { IXORMSchemaProviderService, XDBMSchemaType } from '@episto/xorm';
+import { Ix-ormSchemaProviderService, XDBMSchemaType } from '@episto/x-orm';
 import { Answer } from '../models/entity/answer/Answer';
 import { AnswerData } from '../models/entity/answer/AnswerData';
 import { AnswerVersion } from '../models/entity/answer/AnswerVersion';
@@ -159,7 +159,7 @@ import { VideoCursorSecondsView } from '../models/views/VideoCursorSecondsView';
 import { VideoPlayerDataView } from '../models/views/VideoPlayerDataView';
 import { VideoVersionView } from '../models/views/VideoVersionView';
 
-export class DBSchemaProviderService implements IXORMSchemaProviderService {
+export class DBSchemaProviderService implements Ix-ormSchemaProviderService {
 
     constructor() {
 

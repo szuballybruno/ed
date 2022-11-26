@@ -2,7 +2,7 @@ import { User } from '../models/entity/misc/User';
 import { getPassowrdValidationError } from '@episto/commonlogic';
 import { ErrorWithCode } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
-import { PrincipalId } from '@episto/xcore';
+import { PrincipalId } from '@episto/x-core';
 import { AuthorizationService } from './AuthorizationService';
 import { DomainProviderService } from './DomainProviderService';
 import { EmailService } from './EmailService';

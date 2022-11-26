@@ -1,6 +1,6 @@
 import { LoggerService } from '@episto/server-services';
 import { ExpressListener, GatewayErrorDataType, GatewaySuccessDataType } from '@episto/x-gateway';
-import { initJsExtensions } from '@episto/xcore';
+import { initJsExtensions } from '@episto/x-core';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { getCORSMiddleware } from './middleware/CORSMiddleware';

@@ -1,6 +1,6 @@
 import { FieldMutation } from '@episto/communication';
 import { Mutation } from '@episto/communication';
-import { getKeys } from '@episto/xcore';
+import { getKeys } from '@episto/x-core';
 import { clone } from '../../../static/frontendHelpers';
 import { Logger } from '../../../static/Logger';
 

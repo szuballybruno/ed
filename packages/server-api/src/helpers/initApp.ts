@@ -1,6 +1,6 @@
 
 import { ParametrizedConstructor, SQLConnectionService } from '@episto/server-services';
-import { DependencyContainer } from '@episto/xinjector';
+import { DependencyContainer } from '@episto/x-injector';
 import { getTransientServiceContainer, instansiateSingletonServices, instatiateServices } from './serviceDependencyContainer';
 import { ServiceProvider } from './ServiceProvider';
 

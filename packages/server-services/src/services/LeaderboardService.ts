@@ -1,6 +1,6 @@
 import { LeaderboardPeriodType, LeaderboardScopeType } from "@episto/commontypes";
 import { LeaderboardListItemDTO } from "@episto/communication";
-import { PrincipalId } from "@episto/xcore";
+import { PrincipalId } from "@episto/x-core";
 import { LeaderboardView } from "../models/views/LeaderboardView";
 import { CompanyService } from "./CompanyService";
 import { MapperService } from "./MapperService";

@@ -1,7 +1,7 @@
 import { VideoRating } from '../models/entity/misc/VideoRating';
 import { VideoRatingDTO } from '@episto/communication';
 import { Id } from '@episto/commontypes';
-import { PrincipalId } from '@episto/xcore';
+import { PrincipalId } from '@episto/x-core';
 import { AuthorizationService } from './AuthorizationService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 

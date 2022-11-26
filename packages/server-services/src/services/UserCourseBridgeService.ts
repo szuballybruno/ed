@@ -4,7 +4,7 @@ import { CurrentCourseDataDTO } from '@episto/communication';
 import { UserCourseBridge } from '../models/entity/misc/UserCourseBridge';
 import { CourseStateView } from '../models/views/CourseStateView';
 import { CurrentUserCourseBridgeView } from '../models/views/CurrentUserCourseBridgeView';
-import { PrincipalId } from '@episto/xcore';
+import { PrincipalId } from '@episto/x-core';
 import { MapperService } from './MapperService';
 import { QueryServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';

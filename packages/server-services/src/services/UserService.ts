@@ -14,7 +14,7 @@ import { TempomatCalculationDataView } from '../models/views/TempomatCalculation
 import { UserOverviewView } from '../models/views/UserOverviewView';
 import { getFullName } from '../utilities/helpers';
 import { InsertEntity } from '../utilities/misc';
-import { PrincipalId } from '@episto/xcore';
+import { PrincipalId } from '@episto/x-core';
 import { AuthorizationService } from './AuthorizationService';
 import { HashService } from './HashService';
 import { MapperService } from './MapperService';

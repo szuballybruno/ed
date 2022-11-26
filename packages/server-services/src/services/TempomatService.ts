@@ -5,7 +5,7 @@ import { instantiate } from '@episto/commonlogic';
 import { TempomatModeType } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
 import { addDays, dateDiffInDays, getArrayAverage, relativeDiffInPercentage } from '../utilities/helpers';
-import { PrincipalId } from '@episto/xcore';
+import { PrincipalId } from '@episto/x-core';
 import { AuthorizationService } from './AuthorizationService';
 import { EventService } from './EventService';
 import { LoggerService } from './LoggerService';

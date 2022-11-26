@@ -1,2 +1,2 @@
 
-export { Id } from '@episto/xcore';
+export { Id } from '@episto/x-core';

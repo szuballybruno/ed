@@ -6,7 +6,7 @@ import { CourseProgressShortDTO } from '@episto/communication';
 import { UserCoursesDataDTO } from '@episto/communication';
 import { instantiate } from '@episto/commonlogic';
 import { Id } from '@episto/commontypes';
-import { PrincipalId } from '@episto/xcore';
+import { PrincipalId } from '@episto/x-core';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { PlaylistService } from './PlaylistService';

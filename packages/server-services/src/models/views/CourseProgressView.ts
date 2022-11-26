@@ -1,4 +1,4 @@
-import { XViewColumn } from '@episto/xorm';
+import { XViewColumn } from '@episto/x-orm';
 import { CourseStageNameType } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
 

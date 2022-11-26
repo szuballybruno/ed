@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from '../../MyORM';
-import { XViewColumn } from '@episto/xorm';
+import { XViewColumn } from '@episto/x-orm';
 import { CourseRatingQuesitonType } from '@episto/commontypes';
 import { CourseRatingGroup } from './CourseRatingGroup';
 import { CourseRatingQuestionUserAnswer } from './CourseRatingQuestionUserAnswer';

@@ -1,4 +1,4 @@
-import { initJsExtensions } from "@episto/xcore";
+import { initJsExtensions } from "@episto/x-core";
 
 initJsExtensions();
 

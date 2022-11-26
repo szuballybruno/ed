@@ -1,4 +1,4 @@
-import { XMetadataHandler } from '@episto/xcore';
+import { XMetadataHandler } from '@episto/x-core';
 import { EndpointOptionsType } from './XGatewayTypes';
 
 type ConstructorSignature<T> = { new(...args: any[]): T; };

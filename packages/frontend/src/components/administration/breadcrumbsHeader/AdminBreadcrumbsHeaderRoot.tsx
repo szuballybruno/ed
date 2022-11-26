@@ -1,5 +1,5 @@
 import { Id } from '@episto/commontypes';
-import { getKeys } from '@episto/xcore';
+import { getKeys } from '@episto/x-core';
 import { ArrowBack } from '@mui/icons-material';
 import { useCallback } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';

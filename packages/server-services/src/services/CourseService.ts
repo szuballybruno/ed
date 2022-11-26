@@ -36,7 +36,7 @@ import { CourseVisibilityType, OrderType } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
 import { filterByProperty, orderByProperty, throwNotImplemented } from '../utilities/helpers';
 import { VersionMigrationContainer } from '../utilities/misc';
-import { PrincipalId } from '@episto/xcore';
+import { PrincipalId } from '@episto/x-core';
 import { AuthorizationService } from './AuthorizationService';
 import { FileService } from './FileService';
 import { MapperService } from './MapperService';

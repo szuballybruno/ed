@@ -10,10 +10,10 @@
     "build": "tsc"
   },
   "dependencies": {
-    "@episto/xorm": "1.0.0",
-    "@episto/xmapper": "1.0.0",
-    "@episto/xcore": "1.0.0",
-    "@episto/xinjector": "1.0.0",
+    "@episto/x-orm": "1.0.0",
+    "@episto/x-mapper": "1.0.0",
+    "@episto/x-core": "1.0.0",
+    "@episto/x-injector": "1.0.0",
     "@episto/commonlogic": "1.0.0",
     "@episto/commontypes": "1.0.0",
     "@episto/communication": "1.0.0",

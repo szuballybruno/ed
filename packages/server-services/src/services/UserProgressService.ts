@@ -8,7 +8,7 @@ import { instantiate } from '@episto/commonlogic';
 import { EpistoLineChartDataType } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
 import { dateDiffInDays, forN } from '../utilities/helpers';
-import { PrincipalId } from '@episto/xcore';
+import { PrincipalId } from '@episto/x-core';
 import { AuthorizationService } from './AuthorizationService';
 import { MapperService } from './MapperService';
 import { ServiceBase } from './misc/ServiceBase';

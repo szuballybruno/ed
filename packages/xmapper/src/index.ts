@@ -1,3 +1,3 @@
 export { XMappingsBuilder } from "./XMappingsBuilder";
-export { XMapper } from "./XMapperService";
-export * from './XMapperTypes';
+export { x-mapper } from "./x-mapperService";
+export * from './x-mapperTypes';

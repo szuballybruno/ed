@@ -1,6 +1,6 @@
-export { XORMConnectionService } from "./XORMConnectionService";
+export { x-ormConnectionService } from "./x-ormConnectionService";
 export { XQueryBuilder } from './XQueryBuilder';
 export { XQueryBuilderCore } from './XQueryBuilderCore';
-export { XORMUtils } from './XORMUtils';
-export * from './XORMTypes';
-export * from "./XORMDecorators";
+export { x-ormUtils } from './x-ormUtils';
+export * from './x-ormTypes';
+export * from "./x-ormDecorators";

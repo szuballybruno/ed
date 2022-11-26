@@ -11,7 +11,7 @@
         "build": "tsc -v && tsc"
     },
     "dependencies": {
-        "@episto/xcore": "1.0.0"
+        "@episto/x-core": "1.0.0"
     },
     "devDependencies": {
         "@types/node": "18.11.9"

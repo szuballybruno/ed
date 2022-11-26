@@ -3,9 +3,9 @@ import { Id } from '@episto/commontypes';
 import { InsertEntity } from '../../utilities/misc';
 import { ClassType } from '../misc/advancedTypes/ClassType';
 import { SQLConnectionService } from '../sqlServices/SQLConnectionService';
-import { EntityType, ParamConstraintType, SaveEntityType } from '@episto/xorm';
-import { XQueryBuilder } from '@episto/xorm';
-import { XQueryBuilderCore } from '@episto/xorm';
+import { EntityType, ParamConstraintType, SaveEntityType } from '@episto/x-orm';
+import { XQueryBuilder } from '@episto/x-orm';
+import { XQueryBuilderCore } from '@episto/x-orm';
 import { GlobalConfigurationService } from '../GlobalConfigurationService';
 
 export class ORMConnectionService {
@@ -48,7 +48,7 @@ export class ORMConnectionService {
     }
 
     /**
-     * XORM query builder
+     * x-orm query builder
      */
     query<TEntity, TParam extends ParamConstraintType<TParam>, TResult = TEntity>(classType: ClassType<TEntity>, params?: TParam) {
 

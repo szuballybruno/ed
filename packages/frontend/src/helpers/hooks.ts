@@ -17,7 +17,7 @@ const useMemoize = <T>(latestObject: T, onChange?: (changedProps: string[]) => v
 
     // return old ref which won't 
     // cause rerenders down the line
-    if (!changedProps.length > 0)
+    if (!(changedProps.length > 0))
         return ref.current;
 
     // update old ref 

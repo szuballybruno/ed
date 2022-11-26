@@ -11,7 +11,7 @@ import { Mutation } from '@episto/communication';
 import { VersionCode } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
 import { VersionMigrationContainer } from '../utilities/misc';
-import { PrincipalId } from '@episto/xcore';
+import { PrincipalId } from '@episto/x-core';
 import { AnswerService } from './AnswerService';
 import { AuthorizationService } from './AuthorizationService';
 import { MapperService } from './MapperService';

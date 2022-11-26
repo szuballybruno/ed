@@ -7,7 +7,7 @@ import { AnswerSession } from '../models/entity/misc/AnswerSession';
 import { GivenAnswer } from '../models/entity/misc/GivenAnswer';
 import { SignupCompletedView } from '../models/views/SignupCompletedView';
 import { SignupQuestionView } from '../models/views/SignupQuestionView';
-import { PrincipalId } from '@episto/xcore';
+import { PrincipalId } from '@episto/x-core';
 import { CompanyService } from './CompanyService';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';

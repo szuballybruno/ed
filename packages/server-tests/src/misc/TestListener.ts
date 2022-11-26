@@ -1,4 +1,4 @@
-import { ConstructorSignature } from "@episto/xcore";
+import { ConstructorSignature } from "@episto/x-core";
 
 
 export type TestCookie = {

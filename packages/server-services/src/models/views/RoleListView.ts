@@ -1,5 +1,5 @@
-import { XViewColumn } from '@episto/xorm';
-import { DeletionDateColumn } from '@episto/xorm';
+import { XViewColumn } from '@episto/x-orm';
+import { DeletionDateColumn } from '@episto/x-orm';
 import { PermissionCodeType } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
 
