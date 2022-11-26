@@ -7,6 +7,6 @@ const toSQLSnakeCasing = (name: string) => {
         .toLowerCase();
 };
 
-export const x-ormUtils = {
+export const XORMUtils = {
     toSQLSnakeCasing
 }

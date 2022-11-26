@@ -1,4 +1,4 @@
-import { MappingFunctionType, ContainerItemType } from "./x-mapperTypes";
+import { MappingFunctionType, ContainerItemType } from "./XMapperTypes";
 
 declare type ClassType<T> = {
     new(): T;
