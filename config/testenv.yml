@@ -3,38 +3,42 @@ name: epi-test-env
 
 services:
 
-  db:
+  database:
     image: postgres
     restart: always
     environment:
       POSTGRES_PASSWORD: 'epistogram'
       POSTGRES_USER: 'dev_service_user'
       POSTGRES_DB: 'localhostDB'
-    # entrypoint: psql -U dev_service_user -d localhostDB -f ./init/epistogram_DEV_backup.sql
     volumes: 
-      # - ./postgres_data:/var/lib/postgresql/data
       - ./init:/init
       - ./init/init-script.sh:/docker-entrypoint-initdb.d/init-database.sh
     expose:
       - 5432
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dev_service_user -d localhostDB"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
       
-  test: 
-    depends_on: 
-      - db
-    restart: always
-    stdin_open: true
-    environment:
-      PGPASSWORD: 'epistogram'
-    build: 
-      context: ../
-      dockerfile: ./config/test.Dockerfile
-
-  # server: 
+  # test: 
   #   depends_on: 
   #     - db
   #   restart: always
+  #   stdin_open: true
   #   environment:
   #     PGPASSWORD: 'epistogram'
   #   build: 
   #     context: ../
-  #     dockerfile: ./config/backend.Dockerfile
+  #     dockerfile: ./config/test.Dockerfile
+
+  server: 
+    depends_on: 
+      database: 
+        condition: service_healthy
+    restart: always
+    environment:
+      PGPASSWORD: 'epistogram'
+    build: 
+      context: ../
+      dockerfile: ./config/backend.Dockerfile
