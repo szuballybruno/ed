@@ -1,6 +1,6 @@
 import { ActivationCodeService, AnswerService, AuthenticationService, AuthorizationService, CoinAcquireService, CoinTransactionService, CommentService, CompanyService, CourseCompletionService, CourseItemService, CourseProgressService, CourseRatingService, CourseService, DailyTipService, DBSchemaProviderService, DomainProviderService, EmailService, EventService, ExamService, FileService, FileSystemService, GlobalConfigurationService, HashService, LeaderboardService, LikeService, LoggerService, MapperService, MiscService, ModuleService, ORMConnectionService, ParametrizedConstructor, PasswordChangeService, PermissionService, PersonalityAssessmentService, PlaybackService, PlayerService, PlaylistService, PractiseQuestionService, PrequizService, PretestService, QuestionAnswerService, QuestionService, RoleService, SampleMergeService, ShopService, SignupService, SQLConnectionService, SQLPoolService, StorageService, TeacherInfoService, TempomatService, TokenService, UrlService, UserCourseBridgeService, UserInvitationService, UserProgressService, UserRegistrationService, UserService, UserSessionActivityService, UserStatsService, VersionCreateService, VersionSaveService, VideoRatingService, VideoService } from '@episto/server-services';
 import { DependencyContainer, DepHierarchyFunction, XDependency } from '@episto/x-injector';
-import { x-ormConnectionService } from '@episto/x-orm';
+import { XOrmConnectionService } from '@episto/x-orm';
 import { CookieOptionProvider } from './CookieOptionProvider';
 import { createGlobalConfiguration } from './createGlobalConfiguration';
 import { ServiceProvider } from './ServiceProvider';
@@ -47,7 +47,7 @@ export const getTransientServiceContainer = (singletonProvider: ServiceProvider)
         // add transient signatures
         .addClass(SQLPoolService, [GlobalConfigurationService])
         .addClass(SQLConnectionService, [SQLPoolService, LoggerService])
-        .addClass(x-ormConnectionService, [DBSchemaProviderService, SQLConnectionService])
+        .addClass(XOrmConnectionService, [DBSchemaProviderService, SQLConnectionService])
         .addClass(UrlService, [GlobalConfigurationService, DomainProviderService])
         .addClass(MapperService, [UrlService])
         .addClass(HashService, [GlobalConfigurationService])

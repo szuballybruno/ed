@@ -1,17 +1,16 @@
 {
-  "name": "@eutil/script-producer",
+  "name": "@episto/script-producer",
   "version": "1.0.0",
-  "description": "",
-  "main": "src/main.ts",
+  "private": true,
+  "license": "UNLICENSED",
+  "main": "./dist/index.js",
+  "typings": "./dist/index.d.ts",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "rollup --config rollup.config.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
-    "node": "^17.7.2"
+    "@episto/x-core": "1.0.0"
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "8.3.3",
