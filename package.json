@@ -8,6 +8,7 @@
     "build-deps": "lerna run build --ignore={@episto/server-tests,@episto/server-api,@episto/frontend,@eutil/script-producer,@eutil/pipeline-generator}",
     "build-server": "lerna run build --scope=@episto/server-api --include-filtered-dependencies",
     "build-client": "lerna run build --scope=@episto/frontend --include-filtered-dependencies",
+    "build-script-producer": "lerna run build --scope=@eutil/script-producer --include-filtered-dependencies",
     "start-built-server": "node --es-module-specifier-resolution=node ./packages/server-api/dist/server.js"
   },
   "devDependencies": {
