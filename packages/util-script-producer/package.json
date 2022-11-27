@@ -1,5 +1,5 @@
 {
-  "name": "@eutil/script-producer",
+  "name": "@episto/script-producer",
   "version": "1.0.0",
   "private": true,
   "license": "UNLICENSED",
@@ -15,10 +15,6 @@
     "@episto/x-injector": "1.0.0"
   },
   "devDependencies": {
-    "@rollup/plugin-typescript": "8.3.3",
-    "@types/node": "18.11.9",
-    "rollup": "3.4.0",
-    "rollup-plugin-dts": "5.0.0",
-    "ts-node": "^10.9.1"
+    "@types/node": "18.11.9"
   }
 }
