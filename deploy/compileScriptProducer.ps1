@@ -1,4 +1,4 @@
-cd ../packages/scriptProducer
-yarn
-yarn build
-cd ../../deploy
+cd ..
+yarn 
+yarn "build-script-producer"
+cd deploy

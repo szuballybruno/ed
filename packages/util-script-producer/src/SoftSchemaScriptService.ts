@@ -1,6 +1,6 @@
 
+import { DepHierarchyItem, XDependency } from '@episto/x-injector';
 import { getAllFilePaths, Polyfills, readFileSync, regexMatchAll } from './polyfills';
-import { DepHierarchyItem, XDependency } from './XDInjection/XDInjector';
 
 type ViewFile = {
     name: string,
