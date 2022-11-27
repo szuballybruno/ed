@@ -15,12 +15,6 @@ export const TempomatTempoInfo = (props: {
 
     const tempomatLabel = (() => {
 
-        if (tempomatMode === 'auto')
-            return 'Automata';
-
-        if (tempomatMode === 'balanced')
-            return 'Kiegyensúlyozott';
-
         if (tempomatMode === 'light')
             return 'Megengedő';
 

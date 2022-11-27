@@ -16,12 +16,6 @@ export const TempomatModeImage = (props: {
 
     const url = (() => {
 
-        if (mode === 'auto')
-            return Environment.getAssetUrl('/images/autopilot.png');
-
-        if (mode === 'balanced')
-            return Environment.getAssetUrl('/images/balancedmode.png');
-
         if (mode === 'light')
             return Environment.getAssetUrl('/images/lightmode.png');
 

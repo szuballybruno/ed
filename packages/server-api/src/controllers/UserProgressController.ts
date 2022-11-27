@@ -1,4 +1,4 @@
-import { UserProgressService } from '@episto/server-services';
+import { LoggerService, UserProgressService } from '@episto/server-services';
 import { apiRoutes } from '@episto/communication';
 import { Id } from '@episto/commontypes';
 import { IXGatewayServiceProvider } from '@episto/x-gateway';
@@ -34,7 +34,7 @@ export class UserProgressController implements IController<UserProgressControlle
     };
 
     @XControllerAction(apiRoutes.userProgress.getUserProgressData)
-    getUserProgressDataAction = (params: ActionParams) => {
+    async getUserProgressDataAction(params: ActionParams) {
 
         const courseId = Id
             .create<'Course'>(params

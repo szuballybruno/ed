@@ -53,7 +53,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
                 requiredCompletionDate: null,
                 stageName,
                 startDate,
-                tempomatMode: 'auto'
+                tempomatMode: 'strict'
             });
     }
 

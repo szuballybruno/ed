@@ -34,7 +34,7 @@ export class TempomatController implements IController<TempomatController> {
             .getBody<any>();
 
         const mode = body
-            .getValue<TempomatModeType>(bod => bod.mode, 'custom', value => value === 'auto' || value === 'balanced' || value === 'light' || value === 'strict');
+            .getValue<TempomatModeType>(bod => bod.mode, 'custom', value => value === 'light' || value === 'strict');
 
         const courseId = Id
             .create<'Course'>(body

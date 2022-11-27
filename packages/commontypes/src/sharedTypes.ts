@@ -56,7 +56,7 @@ export type AnswerSessionType = 'signup' | 'exam' | 'practise' | 'pretest' | 'vi
 
 export type CourseStageNameType = 'assigned' | 'prequiz' | 'pretest' | 'pretest_results' | 'watch' | 'finished';
 
-export type TempomatModeType = 'auto' | 'light' | 'balanced' | 'strict';
+export type TempomatModeType = 'light' | 'strict';
 
 export type EventCodeType = 'coin_acquire_answer_streak' | 'coin_acquire_session_streak' | 'lag_behind_notification';
 

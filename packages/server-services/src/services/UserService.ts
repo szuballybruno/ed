@@ -798,7 +798,7 @@ export class UserService {
                 requiredCompletionDate: null,
                 stageName: 'assigned',
                 startDate: null,
-                tempomatMode: 'balanced'
+                tempomatMode: 'strict'
             }));
 
         // insert new course acccess bridges

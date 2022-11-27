@@ -10,7 +10,6 @@ import { AuthorizationService } from './AuthorizationService';
 import { EventService } from './EventService';
 import { LoggerService } from './LoggerService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
-import { start } from 'repl';
 
 type CalculateTempomatValuesArgs = {
     tempomatMode: TempomatModeType,

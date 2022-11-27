@@ -59,7 +59,7 @@ export const TempomatSettingsDialog = (props: {
             <EpistoFlex2 direction="column"
                 align="center"
                 flex="1" >
-                
+
                 <EpistoDivider
                     h="1px"
                     w="calc(100% - 20px)"
@@ -70,25 +70,11 @@ export const TempomatSettingsDialog = (props: {
                     padding="5px">
 
                     <TempomatModeTile
-                        tempomatMode="auto"
-                        title="Automata üzemmód"
-                        description={translatableTexts.tempomat.autoModeDescription}
-                        isSelected={tempomatMode === 'auto'}
-                        onClick={() => handleSetTempomatMode('auto')} />
-
-                    <TempomatModeTile
                         tempomatMode="light"
                         title="Megengedő üzemmód"
                         isSelected={tempomatMode === 'light'}
                         description={translatableTexts.tempomat.lightModeDescription}
                         onClick={() => handleSetTempomatMode('light')} />
-
-                    <TempomatModeTile
-                        tempomatMode="balanced"
-                        title="Kiegyensúlyozott üzemmód"
-                        isSelected={tempomatMode === 'balanced'}
-                        description={translatableTexts.tempomat.balancedModeDescription}
-                        onClick={() => handleSetTempomatMode('balanced')} />
 
                     <TempomatModeTile
                         tempomatMode="strict"

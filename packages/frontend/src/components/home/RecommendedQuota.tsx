@@ -5,6 +5,7 @@ import { PagingType } from '../../static/frontendHelpers';
 import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 import { RecommendedItemQuota } from './RecommendedItemQuota';
 
+/* TODO: THIS COMPONENT IS NOT USED */
 export const RecommendedQuota = (props: { activeCoursesPaging: PagingType<UserActiveCourseDTO> } & EpistoFlex2Props) => {
 
     const { activeCoursesPaging, ...css } = props;
@@ -12,6 +13,14 @@ export const RecommendedQuota = (props: { activeCoursesPaging: PagingType<UserAc
 
     const currentCourse = activeCoursesPaging.currentItem;
     const { recommendedItemQuota } = useRecommendedItemQuota(currentCourse?.courseId);
+
+    const completedToday = recommendedItemQuota?.completedToday || 0;
+    const completedThisWeek = recommendedItemQuota?.completedThisWeek || 0;
+
+    const recommendedItemsPerDay = recommendedItemQuota?.recommendedItemsPerDay || null;
+    const recommendedItemsPerWeek = recommendedItemQuota?.recommendedItemsPerWeek || null;
+
+    const tempomatMode = recommendedItemQuota?.tempomatMode || 'strict';
 
     if (!currentCourse)
         return <EpistoFlex2>
@@ -38,14 +47,14 @@ export const RecommendedQuota = (props: { activeCoursesPaging: PagingType<UserAc
 
                 {/* daily recommended videos count */}
                 <RecommendedItemQuota
-                    completedCount={recommendedItemQuota?.completedToday ?? 0}
-                    recommendedItemCount={recommendedItemQuota?.recommendedItemsPerDay ?? 0}
+                    completedCount={completedToday}
+                    recommendedItemCount={recommendedItemsPerDay}
                     isDaily />
 
                 {/* weekly recommended videos count */}
                 <RecommendedItemQuota
-                    completedCount={recommendedItemQuota?.completedThisWeek ?? 0}
-                    recommendedItemCount={recommendedItemQuota?.recommendedItemsPerWeek ?? 0} />
+                    completedCount={completedThisWeek}
+                    recommendedItemCount={recommendedItemsPerWeek} />
             </EpistoFlex2>
 
             {/* active course thumbnail */}

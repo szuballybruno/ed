@@ -97,7 +97,7 @@ export const CourseItemSelector = ({
         {/* Tempomat info dialog */}
         {!isMobile && <TempomatSettingsDialog
             onTempomatModeChanged={onTempomatModeChanged}
-            tempomatMode={tempomatMode ?? 'auto'}
+            tempomatMode={tempomatMode ?? 'strict'}
             courseId={courseId}
             tempomatDialogLogic={tempomatDialogLogic} />}
 
@@ -138,7 +138,7 @@ export const CourseItemSelector = ({
                 flex="1">
 
                 <TempomatTempoInfo
-                    tempomatMode={tempomatMode ?? 'auto'}
+                    tempomatMode={tempomatMode ?? 'strict'}
                     onClick={() => tempomatDialogLogic.openDialog()} />
             </EpistoFlex2>}
 
