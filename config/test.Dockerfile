@@ -1,8 +1,12 @@
-FROM alpine:3.14
+FROM ubuntu
 
-# set the working directory, in which every command will run
-WORKDIR /app
+RUN apt-get update
+RUN apt-get --assume-yes --force-yes install telnet
+RUN apt-get install -y postgresql-client
 
-# copy package json files
-RUN echo "Copying root package.json..."
-COPY ./package.json ./package.json
+# CMD "psql --dbname localhostDB -U dev_service_user -h 172.21.0.2 -p 7014"
+
+# RUN apk update
+# RUN apk add busybox-extras
+
+# CMD "ping 127.0.0.1";"telnet 127.0.0.1 7014";"telnet 127.0.0.1 5432";"telnet localhost 5432";"telnet 0.0.0.0 5432";
