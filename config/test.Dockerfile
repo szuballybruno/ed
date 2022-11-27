@@ -1,8 +1,15 @@
 FROM ubuntu
 
+# to have package cache in the image
+# that's necessary for apt-get install to work
 RUN apt-get update
-RUN apt-get --assume-yes --force-yes install telnet
-RUN apt-get install -y postgresql-client
+
+# install curl
+RUN apt-get -y install curl
+
+# RUN apt-get update
+# RUN apt-get --assume-yes --force-yes install telnet
+# RUN apt-get install -y postgresql-client
 
 # CMD "psql --dbname localhostDB -U dev_service_user -h 172.21.0.2"
 

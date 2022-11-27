@@ -20,17 +20,6 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-      
-  # test: 
-  #   depends_on: 
-  #     - db
-  #   restart: always
-  #   stdin_open: true
-  #   environment:
-  #     PGPASSWORD: 'epistogram'
-  #   build: 
-  #     context: ../
-  #     dockerfile: ./config/test.Dockerfile
 
   server: 
     depends_on: 
@@ -39,6 +28,16 @@ services:
     restart: always
     environment:
       PGPASSWORD: 'epistogram'
+    expose: 
+      - 5000
     build: 
       context: ../
       dockerfile: ./config/backend.Dockerfile
+      
+  test_runner: 
+    depends_on: 
+      - server
+    stdin_open: true
+    build: 
+      context: ../
+      dockerfile: ./config/test.Dockerfile
