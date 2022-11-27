@@ -4,7 +4,7 @@ RUN apt-get update
 RUN apt-get --assume-yes --force-yes install telnet
 RUN apt-get install -y postgresql-client
 
-# CMD "psql --dbname localhostDB -U dev_service_user -h 172.21.0.2 -p 7014"
+# CMD "psql --dbname localhostDB -U dev_service_user -h 172.21.0.2"
 
 # RUN apk update
 # RUN apk add busybox-extras

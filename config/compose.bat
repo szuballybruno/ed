@@ -1,2 +1,2 @@
-docker-compose -f ./testenv.yml up --build --force-recreate
-@REM  --abort-on-container-exit
+docker-compose -f ./testenv.yml up --build --force-recreate --abort-on-container-exit --renew-anon-volumes
+@REM  
