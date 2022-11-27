@@ -8,7 +8,7 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "start": "node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm ./src/index.ts"
+    "start": "node --no-warnings --experimental-specifier-resolution=node ./dist/index.js"
   },
   "dependencies": {
     "@episto/x-core": "1.0.0",
