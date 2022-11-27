@@ -1,22 +1,21 @@
-import { Column, Entity, PrimaryGeneratedColumn, Relation } from '../../MyORM';
-import { XJoinColumn, XManyToOne, XOneToMany, XViewColumn } from '@episto/x-orm';
-import { EntityType } from '@episto/x-orm';
 import { Id } from '@episto/commontypes';
+import { XJoinColumn, XManyToOne, XOneToMany, XViewColumn } from '@episto/x-orm';
+import { Column, Entity, PrimaryGeneratedColumn, Relation } from '../../MyORM';
 import { AnswerSession } from '../misc/AnswerSession';
 import { Comment } from '../misc/Comment';
+import { UserSessionActivity } from '../misc/UserSessionActivity';
+import { UserVideoProgressBridge } from '../misc/UserVideoProgressBridge';
+import { VideoRating } from '../misc/VideoRating';
 import { ModuleVersion } from '../module/ModuleVersion';
 import { VideoPlaybackSample } from '../playback/VideoPlaybackSample';
 import { VideoPlaybackSession } from '../playback/VideoPlaybackSession';
 import { VideoSeekEvent } from '../playback/VideoSeekEvent';
 import { QuestionVersion } from '../question/QuestionVersion';
-import { UserSessionActivity } from '../misc/UserSessionActivity';
-import { UserVideoProgressBridge } from '../misc/UserVideoProgressBridge';
-import { VideoRating } from '../misc/VideoRating';
 import { Video } from './Video';
 import { VideoData } from './VideoData';
 
 @Entity()
-export class VideoVersion extends EntityType<'VideoVersion'> {
+export class VideoVersion {
 
     @PrimaryGeneratedColumn()
     @XViewColumn()

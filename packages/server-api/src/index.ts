@@ -1,0 +1,1 @@
+export type { AuthenticationController } from './controllers/AuthenticationController';
