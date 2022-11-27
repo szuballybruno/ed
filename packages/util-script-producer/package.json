@@ -18,6 +18,7 @@
     "@rollup/plugin-typescript": "8.3.3",
     "@types/node": "18.11.9",
     "rollup": "3.4.0",
-    "rollup-plugin-dts": "5.0.0"
+    "rollup-plugin-dts": "5.0.0",
+    "ts-node": "^10.9.1"
   }
 }
