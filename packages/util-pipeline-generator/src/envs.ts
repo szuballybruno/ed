@@ -149,7 +149,7 @@ export const localConfig = getBaseConfig('local', 'local', 'local', config => {
 
     config.database.DB_NAME = 'localhostDB';
     config.database.DB_HOST_ADDRESS = 'localhost';
-    config.database.DB_PORT = '7014';
+    config.database.DB_PORT = '5432';
     config.database.DB_SERVICE_USER_NAME = 'dev_service_user';
     config.database.DB_SERVICE_USER_PASSWORD = 'epistogram';
     config.database.DB_IS_ORM_LOGGING_ENABLED = false;

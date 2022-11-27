@@ -12,6 +12,7 @@
     "start-tests": "lerna run start --scope=@episto/server-tests",
     "start-server": "lerna run start --scope=@episto/server-api",
     "build-script-producer": "lerna run build --scope=@eutil/script-producer --include-filtered-dependencies",
+    "start-script-producer": "lerna run start --scope=@eutil/script-producer",
     "start-built-server": "node --es-module-specifier-resolution=node ./packages/server-api/dist/server.js"
   },
   "devDependencies": {
