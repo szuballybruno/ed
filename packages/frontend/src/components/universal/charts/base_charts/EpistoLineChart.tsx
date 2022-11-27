@@ -45,6 +45,8 @@ export const EpistoLineChart = (props: {
         height: '100%',
     };
 
+    console.log(dataset);
+
     return <ReactECharts
         option={{
             title: {
@@ -86,11 +88,50 @@ export const EpistoLineChart = (props: {
             series: dataset.map((d, index) => {
                 return Object.assign(
                     d,
+                    {
+                        color: 'lightgreen',
+                        showSymbol: seriesOptions.showSymbol,
+                        symbol: seriesOptions.symbol,
+                        symbolSize: seriesOptions.symbolSize,
+                        lineStyle: {
+                            color: d.lineStyle?.color ? d.lineStyle.color : undefined,
+                            type: d.lineStyle?.type ? d.lineStyle.type : undefined,
+                            width: seriesOptions?.lineStyle?.width,
+                            shadowColor: seriesOptions?.lineStyle?.shadowColor,
+                            shadowOffsetX: seriesOptions?.lineStyle?.shadowOffsetX,
+                            shadowOffsetY: seriesOptions?.lineStyle?.shadowOffsetY,
+                            shadowBlur: seriesOptions?.lineStyle?.shadowBlur
+                        }
+                    },
+                    {
+                        type: 'line'
+                    }
+                ); /* Object.assign(
+                    {
+                        data: d.data,
+                        name: d.name
+                    },
+                    {
+                        showSymbol: seriesOptions.showSymbol,
+                        symbol: seriesOptions.symbol,
+                        symbolSize: seriesOptions.symbolSize,
+                        lineStyle: {
+                            //color: d.lineStyle?.color ? d.lineStyle.color : seriesOptions?.lineStyle?.color,
+                            //type: d.lineStyle?.type ? d.lineStyle.type : seriesOptions?.lineStyle?.type,
+                            width: seriesOptions?.lineStyle?.width,
+                            shadowColor: seriesOptions?.lineStyle?.shadowColor,
+                            shadowOffsetX: seriesOptions?.lineStyle?.shadowOffsetX,
+                            shadowOffsetY: seriesOptions?.lineStyle?.shadowOffsetY,
+                            shadowBlur: seriesOptions?.lineStyle?.shadowBlur
+                        }
+                    }
+                ); */ /* Object.assign(
+                    d,
                     seriesOptions,
                     {
                         type: 'line'
                     }
-                );
+                ); */ /* */
             })
         }}
         style={{

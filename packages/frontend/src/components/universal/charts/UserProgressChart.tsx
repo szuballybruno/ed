@@ -32,6 +32,7 @@ export const UserProgressChart = (props: {
             axisLabel: {
                 show: true,
                 interval: interval,
+                showMaxLabel: true,
                 rotate: 0,
                 margin: 20
             },
@@ -72,17 +73,21 @@ export const UserProgressChart = (props: {
         yAxisLabelSuffix='%'
         dataset={[
             {
-                name: 'Eredetileg becsült haladás',
-                data: userProgress.originalPrevisionedProgress
-            },
-            {
 
                 name: 'Becsült haladás',
-                data: userProgress.previsionedProgress
+                data: userProgress.previsionedProgress,
+                lineStyle: {
+                    color: 'lightgreen',
+                    type: 'dashed'
+                }
             },
             {
                 name: 'Valós haladás',
-                data: userProgress.actualProgress
+                data: userProgress.actualProgress,
+                lineStyle: {
+                    color: 'lightgreen',
+                    type: 'line'
+                }
             }
         ]}
         style={{

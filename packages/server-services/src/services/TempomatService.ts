@@ -540,7 +540,7 @@ export class TempomatService {
 
         const courseItemsLeft = totalCourseItemCount - completedCourseItemCount
 
-        const daysSpentFromStartDate = dateDiffInDays(startDate, currentDate);
+        const daysSpentFromStartDate = dateDiffInDays(currentDate, startDate);
 
         const avgCourseItemsWatchedPerDay = daysSpentFromStartDate / completedCourseItemCount;
 
@@ -548,4 +548,4 @@ export class TempomatService {
 
         return addDays(currentDate, daysLeft);
     }
-}
+} 

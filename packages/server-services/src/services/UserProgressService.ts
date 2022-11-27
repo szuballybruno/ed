@@ -14,6 +14,7 @@ import { MapperService } from './MapperService';
 import { ServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { TempomatService } from './TempomatService';
+import { start } from 'repl';
 
 export class UserProgressService extends ServiceBase {
 
@@ -129,6 +130,9 @@ export class UserProgressService extends ServiceBase {
             ._tempomatService
             .calculateTempomatValuesAsync(userIdOrPrincipalId, courseId);
 
+        console.log(startDate)
+        console.log(previsionedCompletionDate)
+
         const estimatedLengthInDays = (previsionedCompletionDate && startDate)
             ? dateDiffInDays(startDate, previsionedCompletionDate)
             : null;
@@ -148,24 +152,53 @@ export class UserProgressService extends ServiceBase {
 
         };
 
-        const estimatedDates = calculateDatesFromCurrentDate(new Date(Date.now()), estimatedLengthInDays!);/* 
+        const estimatedDates = calculateDatesFromCurrentDate(startDate, estimatedLengthInDays!);
+        const estimatedDatesFromCurrent = calculateDatesFromCurrentDate(new Date(Date.now()), estimatedLengthInDays!)
+        /* 
         const originalEstimatedDates = calculateDatesFromStart(startDate!, originalEstimatedLengthInDays!); */
 
-        const daysFromStart = startDate
-            ? dateDiffInDays(new Date(startDate), new Date(Date.now()))
-            : null;
 
 
 
-        const calculateEpistoLineChartData = (dates: string[]): EpistoLineChartDataType => {
+
+        const calculateEpistoLineChartData = (dates: number[]): EpistoLineChartDataType => {
             return dates
                 .map((_, index) => (100 / dates.length) * (index + 1)) as EpistoLineChartDataType;
         };
 
-        const previsionedProgress = calculateEpistoLineChartData(estimatedDates);/* 
-        const originalPrevisionedProgress = calculateEpistoLineChartData(originalEstimatedDates); */
+        const calculateEpistoLineChartDataWithPrediction = (allDates: string[], actualProgress: number[]): (number | null)[] => {
 
-        let latestCompletionDatePercentage = 0;
+            /*   console.log('actualProgress')
+              console.log(actualProgress);
+  
+              console.log('allDates');
+              console.log(allDates) */
+
+
+            let actualLastIndex = 0;
+            let actualLastValue = 0;
+
+            return allDates
+                .map((x, index) => {
+
+
+                    if (typeof actualProgress[index] === 'number') {
+
+                        actualLastIndex = index;
+                        actualLastValue = actualProgress[index];
+                        return null;
+                    }
+
+                    console.log('ActualLastValue: ' + actualLastValue)
+
+                    return ((100 - actualLastValue) / (allDates.length - actualLastIndex)) * (index + 1 - actualLastIndex) + actualLastValue
+
+                })
+        };
+
+        /*  const originalPrevisionedProgress = calculateEpistoLineChartData(originalEstimatedDates); */
+
+
 
 
 
@@ -175,9 +208,19 @@ export class UserProgressService extends ServiceBase {
 
         //const interval = Math.floor(estimatedDates.length / 7);
 
-        console.log(previsionedProgress);
+        /*         console.log(previsionedProgress); */
 
-        const calculateActualProgressChart = () => {
+        const calculateActualProgressChart = (
+            currentDate: Date,
+            startDate: Date,
+            dailyViews: UserDailyCourseItemProgressView[]
+        ) => {
+
+            let latestCompletionDatePercentage = 0;
+
+            const daysFromStart = startDate
+                ? dateDiffInDays(startDate, currentDate)
+                : null;
 
             const datesUntilToday = daysFromStart
                 ? forN(daysFromStart, index => index)
@@ -199,7 +242,14 @@ export class UserProgressService extends ServiceBase {
                 : [];
         }
 
-        const actualProgress = calculateActualProgressChart()
+        const actualProgress = calculateActualProgressChart(new Date(Date.now()), startDate, dailyViews);
+
+
+        const previsionedProgress = calculateEpistoLineChartDataWithPrediction(estimatedDates, actualProgress);
+
+        console.log(actualProgress)
+        console.log(estimatedDates)
+        console.log(previsionedProgress)
 
         return instantiate<UserCourseProgressChartDTO>({
             dates: estimatedDates,

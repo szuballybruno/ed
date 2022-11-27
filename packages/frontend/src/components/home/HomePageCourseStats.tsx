@@ -30,16 +30,16 @@ export const HomePageCourseStats = (props: {
     const recommendedItemsPerDay = recommendedItemQuota?.recommendedItemsPerDay || null;
     const recommendedItemsPerWeek = recommendedItemQuota?.recommendedItemsPerWeek || null;
 
-    const isDailyStrictMode = (recommendedItemsPerDay && completedToday);
+    const isDailyStrictMode = (recommendedItemsPerDay);
     const isDailyLightMode = (!recommendedItemsPerDay && completedToday);
 
-    const isWeeklyStrictMode = (recommendedItemsPerWeek && completedThisWeek);
+    const isWeeklyStrictMode = (recommendedItemsPerWeek);
     const isWeeklyLightMode = (!recommendedItemsPerWeek && completedThisWeek);
 
     const dailyVideos = (() => {
 
         if (isDailyStrictMode)
-            return `${completedToday}/${recommendedItemsPerDay}`;
+            return `${completedToday || 0}/${recommendedItemsPerDay}`;
 
         if (isDailyLightMode)
             return completedToday;
