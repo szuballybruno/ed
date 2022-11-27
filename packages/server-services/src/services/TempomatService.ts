@@ -171,11 +171,7 @@ export class TempomatService {
                 return tempomatValues?.relativeUserPaceDiff;
             });
 
-<<<<<<< HEAD
-        if (allRelativeUserPaces.any(x => x === null))
-=======
-        if (allLagBehindPercentages.some(x => x === null))
->>>>>>> origin/dev
+        if (allRelativeUserPaces.some(x => x === null))
             return null;
 
         // calculates the average lag beghind from all started course
