@@ -23,8 +23,8 @@ RUN echo "Copying communication package.json..."
 COPY ./packages/communication/package.json ./packages/communication/package.json
 COPY ./packages/communication/rollup.config.js ./packages/communication/rollup.config.js
 
-RUN echo "Copying xcore package.json..."
-COPY ./packages/xcore/package.json ./packages/xcore/package.json
+RUN echo "Copying x-core package.json..."
+COPY ./packages/x-core/package.json ./packages/x-core/package.json
 
 # yarn install (no-lockfile)
 RUN echo "Yarn installing deps..."
@@ -57,9 +57,9 @@ RUN echo "Copying communication files..."
 COPY ./packages/communication/tsconfig.json ./packages/communication/tsconfig.json
 COPY ./packages/communication/src ./packages/communication/src
 
-RUN echo "Copying xcore files..."
-COPY ./packages/xcore/tsconfig.json ./packages/xcore/tsconfig.json
-COPY ./packages/xcore/src ./packages/xcore/src
+RUN echo "Copying x-core files..."
+COPY ./packages/x-core/tsconfig.json ./packages/x-core/tsconfig.json
+COPY ./packages/x-core/src ./packages/x-core/src
 
 # build frontend
 RUN echo "Running Yarn build frontend script..."

@@ -1,11 +1,11 @@
-import { ISQLConnectionService, IXORMSchemaProviderService, SQLSchemaObjectType } from "./XORMTypes";
-import { getXViewColumnNames } from "./XORMDecorators";
-import { XORMUtils } from "./XORMUtils";
+import { ISQLConnectionService, Ix-ormSchemaProviderService, SQLSchemaObjectType } from "./x-ormTypes";
+import { getXViewColumnNames } from "./x-ormDecorators";
+import { x-ormUtils } from "./x-ormUtils";
 
-export class XOrmConnectionService {
+export class x-ormConnectionService {
 
     constructor(
-        private _schemaProviderService: IXORMSchemaProviderService,
+        private _schemaProviderService: Ix-ormSchemaProviderService,
         private _sqlConnectionService: ISQLConnectionService) {
     }
 
@@ -42,7 +42,7 @@ export class XOrmConnectionService {
 
         const missingEntities = ormSchemaEntities
             .filter(entity => !schemaFromDB
-                .some(sqlTable => sqlTable.name === XORMUtils
+                .some(sqlTable => sqlTable.name === x-ormUtils
                     .toSQLSnakeCasing(entity.name)));
 
         if (missingEntities.length > 0)
@@ -56,13 +56,13 @@ export class XOrmConnectionService {
                 const entityColumns = getXViewColumnNames(entity as any);
 
                 const sqlTable = schemaFromDB
-                    .single(x => x.name === XORMUtils.toSQLSnakeCasing(entity.name));
+                    .single(x => x.name === x-ormUtils.toSQLSnakeCasing(entity.name));
 
                 const sqlTableColumns = sqlTable
                     .columnNames;
 
                 const missingColumns = entityColumns
-                    .map(entityColumn => XORMUtils.toSQLSnakeCasing(entityColumn))
+                    .map(entityColumn => x-ormUtils.toSQLSnakeCasing(entityColumn))
                     .filter(entityColumnSnake => !sqlTableColumns
                         .includes(entityColumnSnake));
 
