@@ -13,13 +13,11 @@ const sqlFolderFilePath = `${rootFolderPath}/packages/server-services/sql`;
 const migrationsFolderFilePath = sqlFolderFilePath + '/migrations';
 
 const getMigrationScript = ({
-    createMigrationsTableScript,
     migrationVersions,
     dropSoftSchemaScript,
     softSchemaCreateScript
 }: {
     migrationVersions: string[],
-    createMigrationsTableScript: string,
     dropSoftSchemaScript: string,
     softSchemaCreateScript: string
 }) => {
@@ -58,9 +56,6 @@ VALUES ('${ver}', now()); `;
 
 -- BEGIN TRANSACTION
 BEGIN;
-
--- CREATE MIGARTION VERSION TABLE
-${createMigrationsTableScript}
 
 -- STORE MIGRATION VERSION
 ${insertMigrationVersionsScript}
@@ -143,14 +138,10 @@ const createScripts = () => {
     const softSchemaCreateScript = new SoftSchemaScriptService(sqlFolderFilePath)
         .getSoftSchemaScript();
 
-    const createMigrationsTableScript = Polyfills
-        .readFileAsText(`${deployFolderFilePath}/sql/createMigrationVersionTable.sql`);
-
     const dropSoftSchemaScript = Polyfills
         .readFileAsText(`${deployFolderFilePath}/sql/dropSoftSchema.sql`);
 
     const fullMigrationScript = getMigrationScript({
-        createMigrationsTableScript,
         softSchemaCreateScript,
         dropSoftSchemaScript,
         migrationVersions: missingMigraitonVersions
@@ -158,15 +149,9 @@ const createScripts = () => {
 
     console.log(`Full migraion script created.`);
 
-    // full script 
     const fullScriptPath = outFolderFilePath + '/fullMigrationScript.sql';
     console.log(`Writing file... ${fullScriptPath}`);
     writeFileSync(fullScriptPath, fullMigrationScript);
-
-    // soft schema
-    const softSchemaCreateScriptPath = outFolderFilePath + '/fullMigrationScript.sql';
-    console.log(`Writing file... ${softSchemaCreateScriptPath}`);
-    writeFileSync(softSchemaCreateScriptPath, softSchemaCreateScript);
 };
 
 process

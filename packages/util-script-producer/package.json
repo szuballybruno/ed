@@ -8,7 +8,8 @@
   "type": "module",
   "scripts": {
     "build": "rollup --config rollup.config.js",
-    "start": "node --es-module-specifier-resolution=node ./dist/index.js"
+    "start": "node --es-module-specifier-resolution=node ./dist/index.js",
+    "start-dev": "node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm ./src/index.ts"
   },
   "dependencies": {
     "@episto/x-core": "1.0.0",
