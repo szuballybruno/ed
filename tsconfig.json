@@ -11,6 +11,7 @@
     "experimentalDecorators": true,
     "strictPropertyInitialization": false,
     "declaration": true,
+    "noImplicitAny": false,
     "noEmit": false,
     "declarationMap": true,
     "module": "esnext",
