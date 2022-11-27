@@ -1,8 +1,5 @@
 {
   "compilerOptions": {
-    "target": "ES2017",
-    "moduleResolution": "node",
-    "esModuleInterop": true,
     "sourceMap": true,
     "strict": true,
     "skipLibCheck": true,
@@ -14,7 +11,10 @@
     "noImplicitAny": false,
     "noEmit": false,
     "declarationMap": true,
-    "module": "esnext",
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "module": "ESNext",
+    "target": "ESNext",
     "lib": [
       "ESNext"
     ]

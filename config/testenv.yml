@@ -34,10 +34,10 @@ services:
       context: ../
       dockerfile: ./config/backend.Dockerfile
       
-  test_runner: 
+  tests: 
     depends_on: 
       - server
     stdin_open: true
     build: 
       context: ../
-      dockerfile: ./config/test.Dockerfile
+      dockerfile: ./config/tests.Dockerfile
