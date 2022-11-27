@@ -1,1 +1,1 @@
-docker-compose -f stack.yml up
+docker-compose -f ./testenv.yml up
