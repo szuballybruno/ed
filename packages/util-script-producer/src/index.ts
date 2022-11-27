@@ -1,11 +1,14 @@
 import { Polyfills, writeFileSync } from "./polyfills";
 import { SoftSchemaScriptService } from "./SoftSchemaScriptService";
 import { initJsExtensions } from "@episto/x-core";
+import * as url from 'url';
 
 initJsExtensions();
 
+const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 const rootFolderPath = __dirname + '/../../..';
 const deployFolderFilePath = `${rootFolderPath}/deploy`;
+const outFolderFilePath = `${deployFolderFilePath}/out`;
 const sqlFolderFilePath = `${rootFolderPath}/packages/server-services/sql`;
 const migrationsFolderFilePath = sqlFolderFilePath + '/migrations';
 
@@ -79,7 +82,7 @@ COMMIT;
 const getMigrationVerisonsArgs = () => {
 
     const versions = Polyfills
-        .readFileAsText(deployFolderFilePath + '/out/migrationVersionsOnServer.txt');
+        .readFileAsText(outFolderFilePath + '/migrationVersionsOnServer.txt');
 
     const veList = versions
         .split('\n')
@@ -135,7 +138,7 @@ const createScripts = () => {
 
     const missingMigraitonVersions = getMissingMigrations(migrationsFolderFilePath);
 
-    console.log(`Missing versions: ${missingMigraitonVersions.join(', ')}`);
+    console.log(`Missing versions: ${missingMigraitonVersions.length > 0 ? missingMigraitonVersions.join(', ') : '-> no missing version, up to date.'}`);
 
     const softSchemaCreateScript = new SoftSchemaScriptService(sqlFolderFilePath)
         .getSoftSchemaScript();
@@ -153,8 +156,17 @@ const createScripts = () => {
         migrationVersions: missingMigraitonVersions
     });
 
-    writeFileSync(deployFolderFilePath + '/out/fullMigrationScript.sql', fullMigrationScript);
-    writeFileSync(deployFolderFilePath + '/out/softSchemaCreateScript.sql', softSchemaCreateScript);
+    console.log(`Full migraion script created.`);
+
+    // full script 
+    const fullScriptPath = outFolderFilePath + '/fullMigrationScript.sql';
+    console.log(`Writing file... ${fullScriptPath}`);
+    writeFileSync(fullScriptPath, fullMigrationScript);
+
+    // soft schema
+    const softSchemaCreateScriptPath = outFolderFilePath + '/fullMigrationScript.sql';
+    console.log(`Writing file... ${softSchemaCreateScriptPath}`);
+    writeFileSync(softSchemaCreateScriptPath, softSchemaCreateScript);
 };
 
 process
