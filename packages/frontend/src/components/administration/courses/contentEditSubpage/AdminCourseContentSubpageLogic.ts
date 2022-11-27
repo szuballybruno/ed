@@ -104,7 +104,7 @@ export const mapToRowSchema = (
 
     const isLengthWarning = item
         .warnings
-        .any(x => x.code === 'video_too_long');
+        .some(x => x.code === 'video_too_long');
 
     const hasErrors = item
         .errors

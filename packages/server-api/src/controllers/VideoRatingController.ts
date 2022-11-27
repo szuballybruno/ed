@@ -1,17 +1,17 @@
 import { VideoRatingDTO } from '@episto/communication';
 import { VideoRatingService } from '@episto/server-services';
-import { ActionParams } from '../XTurboExpress/ActionParams';
-import { XControllerAction } from '../XTurboExpress/XTurboExpressDecorators';
+import { ActionParams } from '../helpers/ActionParams';
+import { XControllerAction } from '@episto/x-gateway';
 import { apiRoutes } from '@episto/communication';
-import { ServiceProvider } from '../startup/ServiceProvider';
+import { IXGatewayServiceProvider } from '@episto/x-gateway';
 import { Id } from '@episto/commontypes';
-import { XController } from '../XTurboExpress/XTurboExpressTypes';
+import { IController } from '../interfaces/IController';
 
-export class VideoRatingController implements XController<VideoRatingController> {
+export class VideoRatingController implements IController<VideoRatingController> {
 
     private _videoRatingService: VideoRatingService;
 
-    constructor(serviceProvider: ServiceProvider) {
+    constructor(serviceProvider: IXGatewayServiceProvider) {
 
         this._videoRatingService = serviceProvider.getService(VideoRatingService);
     }

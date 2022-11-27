@@ -3,7 +3,7 @@ import { PractiseQuestionInfoView } from '../models/views/PractiseQuestionInfoVi
 import { AnswerQuestionDTO } from '@episto/communication';
 import { Id } from '@episto/commontypes';
 import { isXMinutesAgo } from '../utilities/helpers';
-import { PrincipalId } from '@episto/xcore';
+import { PrincipalId } from '@episto/x-core';
 import { AuthorizationService } from './AuthorizationService';
 import { MapperService } from './MapperService';
 import { GlobalConfigurationService } from './GlobalConfigurationService';

@@ -1,16 +1,16 @@
 import { PersonalityAssessmentService } from '@episto/server-services';
 import { apiRoutes } from '@episto/communication';
 import { Id } from '@episto/commontypes';
-import { ServiceProvider } from '../startup/ServiceProvider';
-import { ActionParams } from '../XTurboExpress/ActionParams';
-import { XControllerAction } from '../XTurboExpress/XTurboExpressDecorators';
-import { XController } from '../XTurboExpress/XTurboExpressTypes';
+import { IXGatewayServiceProvider } from '@episto/x-gateway';
+import { ActionParams } from '../helpers/ActionParams';
+import { XControllerAction } from '@episto/x-gateway';
+import { IController } from '../interfaces/IController';
 
-export class PersonalityAssessmentController implements XController<PersonalityAssessmentController> {
+export class PersonalityAssessmentController implements IController<PersonalityAssessmentController> {
 
     private _personalityAssessmentService: PersonalityAssessmentService;
 
-    constructor(serviceProvider: ServiceProvider) {
+    constructor(serviceProvider: IXGatewayServiceProvider) {
 
         this._personalityAssessmentService = serviceProvider.getService(PersonalityAssessmentService);
     }

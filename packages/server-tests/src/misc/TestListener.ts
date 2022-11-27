@@ -1,14 +1,5 @@
-import { ClassType } from '../../src/services/misc/advancedTypes/ClassType';
-import { respondError } from '../../src/startup/initTurboExpressListener';
-import { throwNotImplemented } from '../../src/utilities/helpers';
-import { ITurboExpressLayer } from '../../src/utilities/XTurboExpress/ITurboExpressLayer';
-import { getControllerActionMetadatas } from '../../src/utilities/XTurboExpress/XTurboExpressDecorators';
-import {
-    ITurboRequest,
-    ITurboResponse,
-    IXTurboExpressListener,
-    RegisterEndpointOptsType
-} from '../../src/utilities/XTurboExpress/XTurboExpressTypes';
+import { ConstructorSignature } from "@episto/x-core";
+
 
 export type TestCookie = {
     key: string;
@@ -19,7 +10,7 @@ export type TestCallEndpointOptions<T = any> = {
     body?: any,
     query?: any,
     cookies?: TestCookie[],
-    resultSignature?: ClassType<T>
+    resultSignature?: ConstructorSignature<T>
 };
 
 export class TestTurboResponse<TData = any> implements ITurboResponse {

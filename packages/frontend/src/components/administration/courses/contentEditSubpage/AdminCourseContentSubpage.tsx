@@ -161,7 +161,7 @@ export const AdminCourseContentSubpage = () => {
     // module edit dialog logic
     const canDelete = useCallback((moduleVersionId: Id<'ModuleVersion'>) => !itemsMutatorState
         .mutatedItems
-        .any(x => x.moduleVersionId === moduleVersionId), []);
+        .some(x => x.moduleVersionId === moduleVersionId), []);
 
     const moduleEditDialogLogic = useModuleEditDialogLogic({
         canDelete,
@@ -468,7 +468,7 @@ export const AdminCourseContentSubpage = () => {
             {/* add buttons popper */}
             <AddNewItemPopper
                 isOpen={isAddButtonsPopperOpen}
-                hasModules={nonPretestModules.any()}
+                hasModules={nonPretestModules.length > 0}
                 targetElement={ref?.current}
                 onAddItem={handleAddRow}
                 onClose={closeAddPopper} />

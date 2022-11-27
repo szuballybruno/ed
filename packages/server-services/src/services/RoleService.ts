@@ -13,7 +13,7 @@ import { ErrorWithCode } from '@episto/commontypes';
 import { PermissionCodeType } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
 import { instatiateInsertEntity } from '../utilities/misc';
-import { PrincipalId } from '@episto/xcore';
+import { PrincipalId } from '@episto/x-core';
 import { AuthorizationService } from './AuthorizationService';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
@@ -108,193 +108,166 @@ export class RoleService {
             .createManyAsync(RoleAssignmentBridge, newBridges);
     }
 
-    createRoleAsync(principalId: PrincipalId, dto: RoleCreateDTO) {
+    async createRoleAsync(principalId: PrincipalId, dto: RoleCreateDTO) {
+
+        const userId = principalId.toSQLValue();
+
+        const { companyId } = await this._ormService
+            .query(User, { userId: principalId.toSQLValue() })
+            .where('id', '=', 'userId')
+            .getSingle();
+
+        await this._authorizationService
+            .checkPermissionAsync(principalId, 'EDIT_CUSTOM_ROLES', { companyId });
+
+        // create role
+        const { id: roleId } = await this._ormService
+            .createAsync(Role, {
+                name: dto.name,
+                companyId: dto.companyId,
+                isCustom: dto.isCustom,
+                deletionDate: null
+            });
+
+        // create permission assignments 
+        const permAssignemnts = dto
+            .permissionIds
+            .map(x => ({
+                permissionId: x,
+                roleId: roleId
+            } as RolePermissionBridge));
+
+        await this._ormService
+            .save(RolePermissionBridge, permAssignemnts);
+    }
+
+    async getRoleEditDataAsync(principalId: PrincipalId, roleId: Id<'Role'>) {
+
+        const userId = principalId.toSQLValue();
+
+        const { companyId } = await this._ormService
+            .query(User, { userId: principalId.toSQLValue() })
+            .where('id', '=', 'userId')
+            .getSingle();
+
+        await this._authorizationService
+            .checkPermissionAsync(principalId, 'VIEW_CUSTOM_ROLES', { companyId });
+
+        type ResultType = {
+            roleId: Id<'Role'>,
+            roleName: string,
+            permissionId: Id<'Permission'>,
+            isCustom: boolean,
+            companyId: Role['companyId']
+        }
+
+        const roles = await this._ormService
+            .withResType<ResultType>()
+            .query(Role, {
+                userId,
+                roleId,
+                editCoCode: 'EDIT_CUSTOM_ROLES' as PermissionCodeType,
+                editGlobCode: 'EDIT_PREDEFINED_ROLES' as PermissionCodeType
+            })
+            .selectFrom(x => x
+                .columns(Role, {
+                    roleId: 'id',
+                    roleName: 'name',
+                    companyId: 'companyId',
+                    isCustom: 'isCustom'
+                })
+                .columns(RolePermissionBridge, {
+                    permissionId: 'permissionId'
+                }))
+            .innerJoin(UserPermissionView, x => x
+                .on('assigneeUserId', '=', 'userId')
+                .openBracket()
+                .and('contextCompanyId', '=', 'companyId', Role)
+                .and('permissionCode', '=', 'editCoCode')
+                .or('permissionCode', '=', 'editGlobCode')
+                .and('contextCompanyId', 'IS', 'NULL')
+                .closeBracket())
+            .leftJoin(RolePermissionBridge, x => x
+                .on('roleId', '=', 'id', Role))
+            .where('id', '=', 'roleId')
+            .getMany();
+
+        if (roles.none())
+            throw new ErrorWithCode('forbidden');
+
+        const group = roles
+            .groupBy(x => x.roleId)
+            .single();
+
+        const resultGroupFirst = group.first;
 
         return {
-            action: async () => {
-                const userId = principalId.toSQLValue();
-
-                // create role
-                const { id: roleId } = await this._ormService
-                    .createAsync(Role, {
-                        name: dto.name,
-                        companyId: dto.companyId,
-                        isCustom: dto.isCustom,
-                        deletionDate: null
-                    });
-
-                // create permission assignments 
-                const permAssignemnts = dto
-                    .permissionIds
-                    .map(x => ({
-                        permissionId: x,
-                        roleId: roleId
-                    } as RolePermissionBridge));
-
-                await this._ormService
-                    .save(RolePermissionBridge, permAssignemnts);
-            },
-            auth: async () => {
-
-                const { companyId } = await this._ormService
-                    .query(User, { userId: principalId.toSQLValue() })
-                    .where('id', '=', 'userId')
-                    .getSingle();
-
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'EDIT_CUSTOM_ROLES', { companyId });
-            }
+            roleId: resultGroupFirst.roleId,
+            name: resultGroupFirst.roleName,
+            companyId: resultGroupFirst.companyId,
+            isCustom: resultGroupFirst.isCustom,
+            permissionIds: group
+                .items
+                .map(x => x.permissionId)
         };
     }
 
-    getRoleEditDataAsync(principalId: PrincipalId, roleId: Id<'Role'>) {
+    async deleteRoleAsync(principalId: PrincipalId, roleId: Id<'Role'>) {
 
-        return {
-            action: async (): Promise<RoleEditDTO> => {
-                const userId = principalId.toSQLValue();
+        const { companyId } = await this._ormService
+            .query(User, { userId: principalId.toSQLValue() })
+            .where('id', '=', 'userId')
+            .getSingle();
 
-                type ResultType = {
-                    roleId: Id<'Role'>,
-                    roleName: string,
-                    permissionId: Id<'Permission'>,
-                    isCustom: boolean,
-                    companyId: Role['companyId']
-                }
+        await this._authorizationService
+            .checkPermissionAsync(principalId, 'DELETE_CUSTOM_ROLES', { companyId });
 
-                const roles = await this._ormService
-                    .withResType<ResultType>()
-                    .query(Role, {
-                        userId,
-                        roleId,
-                        editCoCode: 'EDIT_CUSTOM_ROLES' as PermissionCodeType,
-                        editGlobCode: 'EDIT_PREDEFINED_ROLES' as PermissionCodeType
-                    })
-                    .selectFrom(x => x
-                        .columns(Role, {
-                            roleId: 'id',
-                            roleName: 'name',
-                            companyId: 'companyId',
-                            isCustom: 'isCustom'
-                        })
-                        .columns(RolePermissionBridge, {
-                            permissionId: 'permissionId'
-                        }))
-                    .innerJoin(UserPermissionView, x => x
-                        .on('assigneeUserId', '=', 'userId')
-                        .openBracket()
-                        .and('contextCompanyId', '=', 'companyId', Role)
-                        .and('permissionCode', '=', 'editCoCode')
-                        .or('permissionCode', '=', 'editGlobCode')
-                        .and('contextCompanyId', 'IS', 'NULL')
-                        .closeBracket())
-                    .leftJoin(RolePermissionBridge, x => x
-                        .on('roleId', '=', 'id', Role))
-                    .where('id', '=', 'roleId')
-                    .getMany();
+        const userId = principalId.toSQLValue();
 
-                if (roles.none())
-                    throw new ErrorWithCode('forbidden');
-
-                const group = roles
-                    .groupBy(x => x.roleId)
-                    .single();
-
-                const resultGroupFirst = group.first;
-
-                return {
-                    roleId: resultGroupFirst.roleId,
-                    name: resultGroupFirst.roleName,
-                    companyId: resultGroupFirst.companyId,
-                    isCustom: resultGroupFirst.isCustom,
-                    permissionIds: group
-                        .items
-                        .map(x => x.permissionId)
-                };
-            },
-            auth: async () => {
-
-                const { companyId } = await this._ormService
-                    .query(User, { userId: principalId.toSQLValue() })
-                    .where('id', '=', 'userId')
-                    .getSingle();
-
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'VIEW_CUSTOM_ROLES', { companyId });
-            }
-        };
-
+        await this._ormService
+            .softDelete(Role, [roleId]);
     }
 
-    deleteRoleAsync(principalId: PrincipalId, roleId: Id<'Role'>) {
+    async saveRoleAsync(principalId: PrincipalId, dto: RoleEditDTO) {
 
-        return {
-            action: async () => {
-                const userId = principalId.toSQLValue();
+        const userId = principalId.toSQLValue();
 
-                await this._ormService
-                    .softDelete(Role, [roleId]);
-            },
-            auth: async () => {
+        const { companyId } = await this._ormService
+            .query(User, { userId: principalId.toSQLValue() })
+            .where('id', '=', 'userId')
+            .getSingle();
 
-                const { companyId } = await this._ormService
-                    .query(User, { userId: principalId.toSQLValue() })
-                    .where('id', '=', 'userId')
-                    .getSingle();
+        await this._authorizationService
+            .checkPermissionAsync(principalId, 'EDIT_CUSTOM_ROLES', { companyId });
 
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'DELETE_CUSTOM_ROLES', { companyId });
-            }
-        };
+        // save role
+        const role = await this._ormService
+            .query(Role, { roleId: dto.roleId })
+            .where('id', '=', 'roleId')
+            .getSingle();
 
-    }
+        await this._ormService
+            .save(Role, {
+                id: role.id,
+                name: dto.name,
+                companyId: dto.companyId
+            });
 
-    saveRoleAsync(principalId: PrincipalId, dto: RoleEditDTO) {
+        const bridgesToDelete = await this._ormService
+            .query(RolePermissionBridge, { roleId: dto.roleId })
+            .where('roleId', '=', 'roleId')
+            .getMany();
 
-        return {
-            action: async () => {
-                const userId = principalId.toSQLValue();
+        // save role permission bridges
+        await this._ormService
+            .hardDelete(RolePermissionBridge, bridgesToDelete.map(x => x.id));
 
-                // save role
-                const role = await this._ormService
-                    .query(Role, { roleId: dto.roleId })
-                    .where('id', '=', 'roleId')
-                    .getSingle();
-
-                await this._ormService
-                    .save(Role, {
-                        id: role.id,
-                        name: dto.name,
-                        companyId: dto.companyId
-                    });
-
-                const bridgesToDelete = await this._ormService
-                    .query(RolePermissionBridge, { roleId: dto.roleId })
-                    .where('roleId', '=', 'roleId')
-                    .getMany();
-
-                // save role permission bridges
-                await this._ormService
-                    .hardDelete(RolePermissionBridge, bridgesToDelete.map(x => x.id));
-
-                await this._ormService
-                    .createManyAsync(RolePermissionBridge, dto
-                        .permissionIds
-                        .map(x => ({
-                            permissionId: x,
-                            roleId: dto.roleId
-                        })));
-            },
-            auth: async () => {
-
-                const { companyId } = await this._ormService
-                    .query(User, { userId: principalId.toSQLValue() })
-                    .where('id', '=', 'userId')
-                    .getSingle();
-
-                return this._authorizationService
-                    .checkPermissionAsync(principalId, 'EDIT_CUSTOM_ROLES', { companyId });
-            }
-        };
-
+        await this._ormService
+            .createManyAsync(RolePermissionBridge, dto
+                .permissionIds
+                .map(x => ({
+                    permissionId: x,
+                    roleId: dto.roleId
+                })));
     }
 }

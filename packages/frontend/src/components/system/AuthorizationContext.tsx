@@ -6,7 +6,7 @@ export const getAuthorizationContextLogic = (_permissionCodes: PermissionCodeTyp
     const hasPermission = <TCode extends PermissionCodeType>(code: TCode) => {
 
         const isFound = _permissionCodes
-            .any(userPermissionCode => userPermissionCode === code);
+            .some(userPermissionCode => userPermissionCode === code);
 
         return isFound;
     };

@@ -1,5 +1,5 @@
 import { Id } from '@episto/commontypes';
-import { XORMUtils } from '@episto/xorm';
+import { XORMUtils } from '@episto/x-orm';
 import moment from 'moment';
 import { User } from '../models/entity/misc/User';
 import { ClassType } from '../services/misc/advancedTypes/ClassType';

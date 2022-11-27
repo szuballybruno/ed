@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from '../../MyORM';
-import { XViewColumn } from '@episto/xorm';
+import { XViewColumn } from '@episto/x-orm';
 import { Id } from '@episto/commontypes';
 import { TempomatAdjustmentValue } from '../misc/TempomatAdjustmentValue';
 import { PrequizQuestion } from './PrequizQuestion';

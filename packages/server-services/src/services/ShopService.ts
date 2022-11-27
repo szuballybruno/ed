@@ -20,7 +20,7 @@ import { FileService } from './FileService';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { UrlService } from './UrlService';
-import { PrincipalId } from '@episto/xcore';
+import { PrincipalId } from '@episto/x-core';
 import { StorageFile } from '../models/entity/misc/StorageFile';
 import { Id } from '@episto/commontypes';
 import { CourseShopItemListView } from '../models/views/CourseShopItemListView';

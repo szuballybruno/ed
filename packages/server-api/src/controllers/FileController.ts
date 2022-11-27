@@ -1,15 +1,15 @@
 import { FileService } from '@episto/server-services';
 import { apiRoutes } from '@episto/communication';
-import { ServiceProvider } from '../startup/ServiceProvider';
-import { ActionParams } from '../XTurboExpress/ActionParams';
-import { XControllerAction } from '../XTurboExpress/XTurboExpressDecorators';
-import { XController } from '../XTurboExpress/XTurboExpressTypes';
+import { IXGatewayServiceProvider } from '@episto/x-gateway';
+import { ActionParams } from '../helpers/ActionParams';
+import { XControllerAction } from '@episto/x-gateway';
+import { IController } from '../interfaces/IController';
 
-export class FileController implements XController<FileController> {
+export class FileController implements IController<FileController> {
 
     private _fileService: FileService;
 
-    constructor(serviceProvider: ServiceProvider) {
+    constructor(serviceProvider: IXGatewayServiceProvider) {
 
         this._fileService = serviceProvider.getService(FileService);
     }

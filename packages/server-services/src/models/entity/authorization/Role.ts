@@ -1,5 +1,5 @@
 import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Relation } from '../../MyORM';
-import { DeletionDateColumn, XViewColumn } from '@episto/xorm';
+import { DeletionDateColumn, XViewColumn } from '@episto/x-orm';
 import { Id } from '@episto/commontypes';
 import { getJoinColumnName } from '../../../utilities/helpers';
 import { Company } from '../misc/Company';

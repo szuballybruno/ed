@@ -1,17 +1,17 @@
 import { AnswerQuestionDTO, AnswerResultDTO, apiRoutes } from '@episto/communication';
 import { PlayerService } from '@episto/server-services';
 import { VideoService } from '@episto/server-services';
-import { ServiceProvider } from '../startup/ServiceProvider';
-import { ActionParams } from '../XTurboExpress/ActionParams';
-import { XControllerAction } from '../XTurboExpress/XTurboExpressDecorators';
-import { XController } from '../XTurboExpress/XTurboExpressTypes';
+import { IXGatewayServiceProvider } from '@episto/x-gateway';
+import { ActionParams } from '../helpers/ActionParams';
+import { XControllerAction } from '@episto/x-gateway';
+import { IController } from '../interfaces/IController';
 
-export class PlayerController implements XController<PlayerController> {
+export class PlayerController implements IController<PlayerController> {
 
     private _playerService: PlayerService;
     private _videoService: VideoService;
 
-    constructor(serviceProvider: ServiceProvider) {
+    constructor(serviceProvider: IXGatewayServiceProvider) {
 
         this._playerService = serviceProvider.getService(PlayerService);
         this._videoService = serviceProvider.getService(VideoService);

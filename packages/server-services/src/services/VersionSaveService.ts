@@ -8,7 +8,7 @@ import { ClassType } from './misc/advancedTypes/ClassType';
 import { OldData } from './misc/types';
 import { XMutatorHelpers } from './misc/XMutatorHelpers';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
-import { EntityType, GetIdType } from '@episto/xorm';
+import { EntityType, GetIdType } from '@episto/x-orm';
 
 type SaveActionType = {
     mutation: Mutation<any, any> | null;

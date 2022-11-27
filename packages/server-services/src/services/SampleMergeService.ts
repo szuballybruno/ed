@@ -14,7 +14,7 @@ export class SampleMergeService {
             const currentSample = samples[sampleIndex];
 
             // ignore previously overlapping samples
-            if (allOverlappingIndices.any(x => x === sampleIndex))
+            if (allOverlappingIndices.some(x => x === sampleIndex))
                 continue;
 
             // samples that are overlapping with current 
@@ -25,7 +25,7 @@ export class SampleMergeService {
                         return;
 
                     if (allOverlappingIndices
-                        .any(overlappingIndex => overlappingIndex === index))
+                        .some(overlappingIndex => overlappingIndex === index))
                         return;
 
                     return {

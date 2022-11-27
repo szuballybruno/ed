@@ -1,17 +1,17 @@
 import { ShopItemEditDTO } from '@episto/communication';
 import { ShopService } from '@episto/server-services';
-import { ActionParams } from '../XTurboExpress/ActionParams';
-import { XControllerAction } from '../XTurboExpress/XTurboExpressDecorators';
+import { ActionParams } from '../helpers/ActionParams';
+import { XControllerAction } from '@episto/x-gateway';
 import { apiRoutes } from '@episto/communication';
-import { ServiceProvider } from '../startup/ServiceProvider';
+import { IXGatewayServiceProvider } from '@episto/x-gateway';
 import { Id } from '@episto/commontypes';
-import { XController } from '../XTurboExpress/XTurboExpressTypes';
+import { IController } from '../interfaces/IController';
 
-export class ShopController implements XController<ShopController> {
+export class ShopController implements IController<ShopController> {
 
     private _shopService: ShopService;
 
-    constructor(serviceProvider: ServiceProvider) {
+    constructor(serviceProvider: IXGatewayServiceProvider) {
 
         this._shopService = serviceProvider.getService(ShopService);
     }

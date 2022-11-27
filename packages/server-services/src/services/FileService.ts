@@ -5,12 +5,12 @@ import { ErrorWithCode } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
 import { fileCodes, FileCodesType } from '../static/FileCodes';
 import { StringKeyof } from '../utilities/misc';
-import { PrincipalId } from '@episto/xcore';
+import { PrincipalId } from '@episto/x-core';
 import { ClassType } from './misc/advancedTypes/ClassType';
 import { log } from './misc/logger';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { StorageService } from './StorageService';
-import { EntityType } from '@episto/xorm';
+import { EntityType } from '@episto/x-orm';
 
 export type UploadFileRelatedEntityIdType = { id: Id<any>, file: UploadedFile };
 

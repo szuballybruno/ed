@@ -26,7 +26,7 @@ const hasMutationForKey = <TMutatee, TKeyField extends keyof TMutatee>(mutations
     return <TKey extends TMutatee[TKeyField]>(key: TKey) => {
 
         return mutations
-            .any(mut => mut.key === key);
+            .some(mut => mut.key === key);
     };
 };
 

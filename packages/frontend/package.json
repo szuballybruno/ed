@@ -12,7 +12,7 @@
     "@chakra-ui/system": "2.2.12",
     "@emotion/react": "11.10.4",
     "@emotion/styled": "11.10.4",
-    "@episto/xcore": "1.0.0",
+    "@episto/x-core": "1.0.0",
     "@episto/commonlogic": "1.0.0",
     "@episto/commontypes": "1.0.0",
     "@episto/communication": "1.0.0",
@@ -95,7 +95,6 @@
     "eslint-plugin-react": "7.31.10",
     "eslint-plugin-react-hooks": "4.6.0",
     "react-app-rewired": "2.2.1",
-    "typescript": "4.8.4",
     "vite": "^3.2.4",
     "vite-tsconfig-paths": "^3.6.0"
   },

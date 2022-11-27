@@ -2,16 +2,16 @@ import { TempomatService } from '@episto/server-services';
 import { apiRoutes } from '@episto/communication';
 import { TempomatModeType } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
-import { ServiceProvider } from '../startup/ServiceProvider';
-import { ActionParams } from '../XTurboExpress/ActionParams';
-import { XControllerAction } from '../XTurboExpress/XTurboExpressDecorators';
-import { XController } from '../XTurboExpress/XTurboExpressTypes';
+import { IXGatewayServiceProvider } from '@episto/x-gateway';
+import { ActionParams } from '../helpers/ActionParams';
+import { XControllerAction } from '@episto/x-gateway';
+import { IController } from '../interfaces/IController';
 
-export class TempomatController implements XController<TempomatController> {
+export class TempomatController implements IController<TempomatController> {
 
     private _tempomatService: TempomatService;
 
-    constructor(serviceProvider: ServiceProvider) {
+    constructor(serviceProvider: IXGatewayServiceProvider) {
 
         this._tempomatService = serviceProvider.getService(TempomatService);
     }

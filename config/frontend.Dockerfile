@@ -63,7 +63,7 @@ COPY ./packages/xcore/src ./packages/xcore/src
 
 # build frontend
 RUN echo "Running Yarn build frontend script..."
-RUN yarn buildfront
+RUN yarn build-client
 
 #
 # CONTAINER #2 ----- RUNNER 

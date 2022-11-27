@@ -1,0 +1,16 @@
+{
+    "name": "@episto/x-gateway",
+    "version": "1.0.0",
+    "private": true,
+    "license": "UNLICENSED",
+    "main": "./dist/index.js",
+    "typings": "./dist/index.d.ts",
+    "type": "module",
+    "scripts": {
+        "start": "tsc",
+        "build": "tsc -v && tsc"
+    },
+    "devDependencies": {
+        "@types/node": "18.11.9"
+    }
+}

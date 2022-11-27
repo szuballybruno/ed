@@ -1,5 +1,5 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from '../../MyORM';
-import { XViewColumn } from '@episto/xorm';
+import { XViewColumn } from '@episto/x-orm';
 import { CourseModeType, CourseStageNameType, TempomatModeType } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
 import { Course } from '../course/Course';

@@ -6,7 +6,7 @@ import { CourseRatingQuestionView } from '../models/views/CourseRatingQuestionVi
 import { MapperService } from './MapperService';
 import { ServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
-import { PrincipalId } from '@episto/xcore';
+import { PrincipalId } from '@episto/x-core';
 import { Id } from '@episto/commontypes';
 import { AuthorizationService } from './AuthorizationService';
 import { CoinTransactionService } from './CoinTransactionService';

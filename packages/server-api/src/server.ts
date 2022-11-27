@@ -1,47 +1,11 @@
 import { LoggerService } from '@episto/server-services';
-import { initJsExtensions } from '@episto/xcore';
-import { XORMConnectionService } from '@episto/xorm';
+import { ExpressListener, GatewayErrorDataType, GatewaySuccessDataType } from '@episto/x-gateway';
+import { initJsExtensions } from '@episto/x-core';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { ServiceProviderInitializator } from './startup/initApp';
-import { initTurboExpress } from './startup/instatiateTurboExpress';
-import { XTurboExpressListener } from './turboImplementations/XTurboExpressListener';
-
-initJsExtensions();
-
-const rootDir = dirname(fileURLToPath(import.meta.url));
-
-const startServerAsync = async (initializator: ServiceProviderInitializator) => {
-
-    const loggerService = initializator
-        .getSingletonProvider()
-        .getService(LoggerService);
-
-    const listener = new XTurboExpressListener(loggerService, initializator);
-
-    /**
-     * Validate schema
-     */
-    await initializator
-        .useTransientServicesContextAsync(async serviceProvider => {
-
-            const ormService = serviceProvider
-                .getService(XORMConnectionService);
-
-            await ormService
-                .validateSchemaAsync();
-        });
-
-    /**
-     * INIT TURBO EXPRESS
-     */
-    const turboExpress = initTurboExpress(initializator, listener);
-
-    /**
-     * LISTEN (start server)
-     */
-    turboExpress.listen();
-};
+import { getCORSMiddleware } from './middleware/CORSMiddleware';
+import { ServiceProviderInitializator } from './helpers/initApp';
+import { startServerAsync } from './helpers/startServer';
 
 await (async () => {
 
@@ -49,7 +13,34 @@ await (async () => {
     console.log('------------- APPLICATION STARTED ----------------');
     console.log('');
 
-    const initializator = new ServiceProviderInitializator(rootDir, false);
+    // root misc
+    initJsExtensions();
+    const rootDir = dirname(fileURLToPath(import.meta.url));
 
-    await startServerAsync(initializator);
+    // get listener 
+    const getListener = async (initializator: ServiceProviderInitializator) => {
+
+        const loggerService = initializator
+            .getSingletonProvider()
+            .getService(LoggerService);
+
+        const corsMiddleware = await getCORSMiddleware(initializator);
+
+        const errorCallback = (data: GatewayErrorDataType) => {
+
+            loggerService.logScoped('ERROR', `---------------- [${data.opts.controllerSignature.name}/${data.req.path}] Failed! ----------------`,);
+            loggerService.logScoped('ERROR', data.errorin.message);
+            loggerService.logScoped('ERROR', data.errorin.stack);
+        }
+
+        const successCallback = (data: GatewaySuccessDataType) => {
+
+            loggerService.logScoped('SERVER', `${data.opts.controllerSignature.name}/${data.req.path}: Succeeded...`);
+        }
+
+        return new ExpressListener(successCallback, errorCallback, corsMiddleware);
+    }
+
+    // start server
+    await startServerAsync(rootDir, getListener);
 })();

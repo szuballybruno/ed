@@ -32,7 +32,7 @@ import { instantiate } from '@episto/commonlogic';
 import { CourseUserPresetType } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
 import { adjustByPercentage, dateDiffInDays, getArrayAverage, mergeArraysByKey } from '../utilities/helpers';
-import { PrincipalId } from '@episto/xcore';
+import { PrincipalId } from '@episto/x-core';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { CalculatedTempomatValueType, CalculatedTempomatValueTypeWithUserId, TempomatService } from './TempomatService';
@@ -366,7 +366,7 @@ export class UserStatsService {
             reactionTimeScorePoints: stats.totalUserReactionTimePoints,
             productivityPercentage: productivityPercentage,
 
-            isAnyCoursesInProgress: inProgressCourses.any(x => true),
+            isAnyCoursesInProgress: inProgressCourses.some(x => true),
             inProgressCourses: inProgressCoursesAsCourseShortDTOs,
 
             userActivityDistributionData: {

@@ -1,16 +1,16 @@
 import { apiRoutes } from '@episto/communication';
 import { Id } from '@episto/commontypes';
-import { ActionParams } from '../XTurboExpress/ActionParams';
-import { XControllerAction } from '../XTurboExpress/XTurboExpressDecorators';
-import { XController } from '../XTurboExpress/XTurboExpressTypes';
+import { ActionParams } from '../helpers/ActionParams';
+import { XControllerAction } from '@episto/x-gateway';
+import { IController } from '../interfaces/IController';
 import { UserStatsService } from '@episto/server-services';
-import { ServiceProvider } from '../startup/ServiceProvider';
+import { IXGatewayServiceProvider } from '@episto/x-gateway';
 
-export class UserStatsController implements XController<UserStatsController> {
+export class UserStatsController implements IController<UserStatsController> {
 
     private _userStatsService: UserStatsService;
 
-    constructor(serviceProvider: ServiceProvider) {
+    constructor(serviceProvider: IXGatewayServiceProvider) {
 
         this._userStatsService = serviceProvider.getService(UserStatsService);
     }

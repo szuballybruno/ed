@@ -3,9 +3,9 @@ import { PractiseQuestionService } from '@episto/server-services';
 import { AnswerQuestionDTO } from '@episto/communication';
 import { AnswerResultDTO } from '@episto/communication';
 import { apiRoutes } from '@episto/communication';
-import { ServiceProvider } from '../startup/ServiceProvider';
-import { ActionParams } from '../XTurboExpress/ActionParams';
-import { XControllerAction } from '../XTurboExpress/XTurboExpressDecorators';
+import { IXGatewayServiceProvider } from '@episto/x-gateway';
+import { ActionParams } from '../helpers/ActionParams';
+import { XControllerAction } from '@episto/x-gateway';
 
 export class QuestionController {
 
@@ -13,7 +13,7 @@ export class QuestionController {
     private _authorizationService: AuthorizationService;
 
     constructor(
-        serviceProvider: ServiceProvider) {
+        serviceProvider: IXGatewayServiceProvider) {
 
         this._practiseQuestionService = serviceProvider.getService(PractiseQuestionService);
         this._authorizationService = serviceProvider.getService(AuthorizationService);

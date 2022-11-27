@@ -5,7 +5,7 @@ import { instantiate } from '@episto/commonlogic';
 import { TempomatModeType } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
 import { addDays, dateDiffInDays, getArrayAverage, relativeDiffInPercentage } from '../utilities/helpers';
-import { PrincipalId } from '@episto/xcore';
+import { PrincipalId } from '@episto/x-core';
 import { AuthorizationService } from './AuthorizationService';
 import { EventService } from './EventService';
 import { LoggerService } from './LoggerService';
@@ -172,7 +172,11 @@ export class TempomatService {
                 return tempomatValues?.relativeUserPaceDiff;
             });
 
+<<<<<<< HEAD
         if (allRelativeUserPaces.any(x => x === null))
+=======
+        if (allLagBehindPercentages.some(x => x === null))
+>>>>>>> origin/dev
             return null;
 
         // calculates the average lag beghind from all started course

@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, Relation } from '../../MyORM';
-import { XViewColumn } from '@episto/xorm';
+import { XViewColumn } from '@episto/x-orm';
 import { Id } from '@episto/commontypes';
 import { User } from './User';
 

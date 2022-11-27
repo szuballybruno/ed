@@ -1,5 +1,5 @@
 import { DeleteDateColumn, ViewColumn, ViewEntity } from '../MyORM';
-import { DeletionDateColumn, XViewColumn } from '@episto/xorm';
+import { DeletionDateColumn, XViewColumn } from '@episto/x-orm';
 import { Id } from '@episto/commontypes';
 
 

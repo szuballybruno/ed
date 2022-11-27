@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from '../../MyORM';
-import { XViewColumn } from '@episto/xorm';
+import { XViewColumn } from '@episto/x-orm';
 import { Id } from '@episto/commontypes';
 import { getJoinColumnName } from '../../../utilities/helpers';
 import { Company } from '../misc/Company';

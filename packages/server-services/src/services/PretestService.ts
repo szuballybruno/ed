@@ -4,7 +4,7 @@ import { PretestDataDTO } from '@episto/communication';
 import { PretestResultDTO } from '@episto/communication';
 import { instantiate } from '@episto/commonlogic';
 import { Id } from '@episto/commontypes';
-import { PrincipalId } from '@episto/xcore';
+import { PrincipalId } from '@episto/x-core';
 import { AuthorizationService } from './AuthorizationService';
 import { ExamService } from './ExamService';
 import { MapperService } from './MapperService';

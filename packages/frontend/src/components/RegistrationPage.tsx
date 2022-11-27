@@ -69,7 +69,7 @@ export const RegistrationPage = () => {
             showNotification(translatableTexts.registrationPage.successfulRegistration);
             const { permissions } = await refetchAuthHandshake();
 
-            if (permissions.any(x => x === 'BYPASS_SURVEY')) {
+            if (permissions.some(x => x === 'BYPASS_SURVEY')) {
 
                 navigate2(applicationRoutes.homeRoute);
             }

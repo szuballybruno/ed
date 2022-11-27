@@ -1,4 +1,4 @@
-import { XViewColumn } from '@episto/xorm';
+import { XViewColumn } from '@episto/x-orm';
 import { Id } from '@episto/commontypes';
 
 export class PractiseQuestionInfoView {

@@ -1,4 +1,4 @@
-import { XMapper } from '@episto/xmapper';
+import { XMapper } from '@episto/x-mapper';
 import { epistoMappingsBuilder, EpistoMappingsType } from './misc/mappings';
 import { UrlService } from './UrlService';
 

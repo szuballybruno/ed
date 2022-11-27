@@ -1,7 +1,7 @@
 import { Comment } from '../models/entity/misc/Comment';
 import { Like } from '../models/entity/misc/Like';
 import { Id } from '@episto/commontypes';
-import { PrincipalId } from '@episto/xcore';
+import { PrincipalId } from '@episto/x-core';
 import { AuthorizationService } from './AuthorizationService';
 import { MapperService } from './MapperService';
 import { QueryServiceBase } from './misc/ServiceBase';

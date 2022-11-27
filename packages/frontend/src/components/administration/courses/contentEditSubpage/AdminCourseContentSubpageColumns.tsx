@@ -118,7 +118,7 @@ export const useGridColumns = (
 
         return itemsMutatorFunctions
             .getMutatedItems()
-            .any(x => x.itemType === 'final') && row.itemType.type !== 'final';
+            .some(x => x.itemType === 'final') && row.itemType.type !== 'final';
     }, [itemsMutatorFunctions]);
 
     const handleViewDetails = useCallback((row: RowSchema) => {
