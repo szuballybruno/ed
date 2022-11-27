@@ -4,9 +4,9 @@ import { initJsExtensions } from "@episto/x-core";
 
 initJsExtensions();
 
-const rootFolderPath = __dirname + '/../../../';
-const deployFolderFilePath = `${rootFolderPath}deploy`;
-const sqlFolderFilePath = `${rootFolderPath}packages/server-services/sql`;
+const rootFolderPath = __dirname + '/../../..';
+const deployFolderFilePath = `${rootFolderPath}/deploy`;
+const sqlFolderFilePath = `${rootFolderPath}/packages/server-services/sql`;
 const migrationsFolderFilePath = sqlFolderFilePath + '/migrations';
 
 const getMigrationScript = ({
