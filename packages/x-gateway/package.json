@@ -10,6 +10,9 @@
         "start": "tsc",
         "build": "tsc -v && tsc"
     },
+    "dependencies": {
+        "@episto/x-core": "1.0.0"
+    },
     "devDependencies": {
         "@types/node": "18.11.9"
     }

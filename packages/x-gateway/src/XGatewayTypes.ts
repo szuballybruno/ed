@@ -1,4 +1,3 @@
-import { PermissionCodeType } from '@episto/commontypes';
 import { IXGatewayLayer } from './interface/IXGatewayLayer';
 import { IXGatewayRequest } from './interface/IXGatewayRequest';
 import { IXGatewayResponse } from './interface/IXGatewayResponse';
@@ -49,7 +48,6 @@ export class EndpointOptionsType implements IRouteOptions {
     isPublic?: boolean;
     isPost?: boolean;
     isUnauthorized?: boolean;
-    checkPermission?: PermissionCodeType;
 }
 
 export type MiddlwareFnType = (req: any, res: any, next: any) => void;
