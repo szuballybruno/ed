@@ -1,2 +1,2 @@
-docker-compose build -f ./testenv.yml up --no-cache
+docker-compose build -f ./testenv.yml --force-recreate
 @REM  
