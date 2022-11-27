@@ -1,5 +1,5 @@
 import { Id } from '@episto/commontypes';
-import { XORMUtils } from '@episto/x-orm';
+import { x-ormUtils } from '@episto/x-orm';
 import moment from 'moment';
 import { User } from '../models/entity/misc/User';
 import { ClassType } from '../services/misc/advancedTypes/ClassType';
@@ -27,7 +27,7 @@ export const isXMinutesAgo = (date: Date, minutes: number) => {
 export const getJoinColumnName = <T>(c: ClassType<T>, prop: KeyofConstrained<T, Id<any> | null>) => {
 
     return {
-        name: XORMUtils.toSQLSnakeCasing(prop as string)
+        name: x-ormUtils.toSQLSnakeCasing(prop as string)
     };
 };
 

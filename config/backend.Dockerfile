@@ -23,17 +23,20 @@ COPY ./packages/commontypes/package.json ./packages/commontypes/package.json
 RUN echo "Copying communication package.json..."
 COPY ./packages/communication/package.json ./packages/communication/package.json
 
-RUN echo "Copying xmapper package.json..."
-COPY ./packages/xmapper/package.json ./packages/xmapper/package.json
+RUN echo "Copying x-gateway package.json..."
+COPY ./packages/x-gateway/package.json ./packages/x-gateway/package.json
 
-RUN echo "Copying xcore package.json..."
-COPY ./packages/xcore/package.json ./packages/xcore/package.json
+RUN echo "Copying x-mapper package.json..."
+COPY ./packages/x-mapper/package.json ./packages/x-mapper/package.json
 
-RUN echo "Copying xinjector package.json..."
-COPY ./packages/xinjector/package.json ./packages/xinjector/package.json
+RUN echo "Copying x-core package.json..."
+COPY ./packages/x-core/package.json ./packages/x-core/package.json
 
-RUN echo "Copying xorm package.json..."
-COPY ./packages/xorm/package.json ./packages/xorm/package.json
+RUN echo "Copying x-injector package.json..."
+COPY ./packages/x-injector/package.json ./packages/x-injector/package.json
+
+RUN echo "Copying x-orm package.json..."
+COPY ./packages/x-orm/package.json ./packages/x-orm/package.json
 
 # yarn install (no-lockfile)
 RUN echo "Yarn installing deps..."
@@ -67,21 +70,25 @@ COPY ./packages/communication/tsconfig.json ./packages/communication/tsconfig.js
 COPY ./packages/communication/src ./packages/communication/src
 COPY ./packages/communication/rollup.config.js ./packages/communication/rollup.config.js
 
-RUN echo "Copying xmapper files..."
-COPY ./packages/xmapper/tsconfig.json ./packages/xmapper/tsconfig.json
-COPY ./packages/xmapper/src ./packages/xmapper/src
+RUN echo "Copying x-mapper files..."
+COPY ./packages/x-mapper/tsconfig.json ./packages/x-mapper/tsconfig.json
+COPY ./packages/x-mapper/src ./packages/x-mapper/src
 
-RUN echo "Copying xinjector files..."
-COPY ./packages/xinjector/tsconfig.json ./packages/xinjector/tsconfig.json
-COPY ./packages/xinjector/src ./packages/xinjector/src
+RUN echo "Copying x-gateway files..."
+COPY ./packages/x-gateway/tsconfig.json ./packages/x-gateway/tsconfig.json
+COPY ./packages/x-gateway/src ./packages/x-gateway/src
 
-RUN echo "Copying xcore files..."
-COPY ./packages/xcore/tsconfig.json ./packages/xcore/tsconfig.json
-COPY ./packages/xcore/src ./packages/xcore/src
+RUN echo "Copying x-injector files..."
+COPY ./packages/x-injector/tsconfig.json ./packages/x-injector/tsconfig.json
+COPY ./packages/x-injector/src ./packages/x-injector/src
 
-RUN echo "Copying xorm files..."
-COPY ./packages/xorm/tsconfig.json ./packages/xorm/tsconfig.json
-COPY ./packages/xorm/src ./packages/xorm/src
+RUN echo "Copying x-core files..."
+COPY ./packages/x-core/tsconfig.json ./packages/x-core/tsconfig.json
+COPY ./packages/x-core/src ./packages/x-core/src
+
+RUN echo "Copying x-orm files..."
+COPY ./packages/x-orm/tsconfig.json ./packages/x-orm/tsconfig.json
+COPY ./packages/x-orm/src ./packages/x-orm/src
 
 # build server-api
 RUN echo "Running Yarn build server-api script..."

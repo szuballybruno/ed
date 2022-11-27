@@ -116,7 +116,7 @@ export type ExpressionPart<TEntity, TParams> =
 
 export type SimpleExpressionPart<TParams> = ExpressionPart<any, TParams>;
 
-export type XORMExpression = SimpleExpressionPart<any>[];
+export type x-ormExpression = SimpleExpressionPart<any>[];
 
 export type ColumnSelectObjType<TEntity, TRes> = '*' | {
     [K in keyof Partial<TRes>]: keyof TEntity;
@@ -150,7 +150,7 @@ export type XDBMSchemaType = {
     entities: Function[];
 }
 
-export interface IXORMSchemaProviderService {
+export interface Ix-ormSchemaProviderService {
     getSchema(): XDBMSchemaType;
 }
 
