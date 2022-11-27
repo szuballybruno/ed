@@ -8,7 +8,7 @@
     "type": "module",
     "scripts": {
         "test": "node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm ./src/index.ts",
-        "start": "tsc",
+        "start": "yarn test",
         "build": "tsc"
     },
     "dependencies": {

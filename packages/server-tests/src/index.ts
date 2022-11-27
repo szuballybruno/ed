@@ -7,4 +7,5 @@ initJsExtensions();
 await Helpers
     .getSuiteBuilder()
     .addSuites({ IntegrationTestSuite })
+    .setAbortOnException('YES')
     .runAllAsync();

@@ -21,7 +21,6 @@ COPY ./packages/commontypes/package.json ./packages/commontypes/package.json
 
 RUN echo "Copying communication package.json..."
 COPY ./packages/communication/package.json ./packages/communication/package.json
-COPY ./packages/communication/rollup.config.js ./packages/communication/rollup.config.js
 
 RUN echo "Copying x-core package.json..."
 COPY ./packages/x-core/package.json ./packages/x-core/package.json
@@ -56,6 +55,7 @@ COPY ./packages/commontypes/src ./packages/commontypes/src
 RUN echo "Copying communication files..."
 COPY ./packages/communication/tsconfig.json ./packages/communication/tsconfig.json
 COPY ./packages/communication/src ./packages/communication/src
+COPY ./packages/communication/rollup.config.js ./packages/communication/rollup.config.js
 
 RUN echo "Copying x-core files..."
 COPY ./packages/x-core/tsconfig.json ./packages/x-core/tsconfig.json

@@ -43,9 +43,9 @@ export const getTransientServiceContainer = (singletonProvider: ServiceProvider)
         .addClassInstance(LoggerService, loggerService)
         .addClassInstance(CookieOptionProvider, cookieOptionProvider)
         .addClassInstance(DBSchemaProviderService, singletonProvider.getService(DBSchemaProviderService))
+        .addClassInstance(SQLPoolService, singletonProvider.getService(SQLPoolService))
 
         // add transient signatures
-        .addClass(SQLPoolService, [GlobalConfigurationService])
         .addClass(SQLConnectionService, [SQLPoolService, LoggerService])
         .addClass(XOrmConnectionService, [DBSchemaProviderService, SQLConnectionService])
         .addClass(UrlService, [GlobalConfigurationService, DomainProviderService])

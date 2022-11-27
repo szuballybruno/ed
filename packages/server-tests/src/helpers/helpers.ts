@@ -1,10 +1,9 @@
 import { apiRoutes } from "@episto/communication"
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { writeFileSync } from "fs";
+import { domain } from "./config";
 
 type ApiRoutesType = typeof apiRoutes;
-
-const domain = 'http://localhost:5000';
 
 const fetchAsync = async (getRoute: (routes: ApiRoutesType) => string, query: any) => {
 
@@ -12,15 +11,25 @@ const fetchAsync = async (getRoute: (routes: ApiRoutesType) => string, query: an
 
     console.log(`Fetching ${route}`, query);
 
-    const response = await axios
-        .get(route, {
-            params: query
-        });
+    try {
 
-    const data = response
-        .data;
+        const response = await axios
+            .get(route, {
+                params: query
+            });
 
-    return data;
+        const data = response
+            .data;
+
+        return data;
+    }
+    catch (error: any) {
+
+        const axError = error as AxiosError;
+        const axErrorMessage = `AxiosError: Code: ${axError.code} Msg: ${axError.message} Status: ${axError.response?.status} Status msg: ${axError.response?.statusText}`
+
+        throw new Error(axErrorMessage);
+    }
 }
 
 export type TestSuiteType = {
@@ -59,9 +68,16 @@ const throwIf = (condition: boolean) => {
 class SuiteListBuilder {
 
     private _suites: TestSuiteType[] = [];
+    private _abortOnException: boolean;
 
     constructor() {
 
+    }
+
+    setAbortOnException(yn: 'YES' | 'NO') {
+
+        this._abortOnException = yn === 'YES';
+        return this;
     }
 
     addSuites(obj: { [K: string]: TestSuiteType }) {
@@ -100,6 +116,12 @@ class SuiteListBuilder {
                     success = true;
                 }
                 catch (error: any) {
+
+                    if (this._abortOnException) {
+
+                        console.log(`   Test: ${suiteTest.name} -> ${'Failed'}`);
+                        throw new Error(`Error msg: ${error?.message}`);
+                    }
 
                     errors.push(error);
                 }

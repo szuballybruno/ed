@@ -17,7 +17,7 @@ services:
       - 5432
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U dev_service_user -d localhostDB"]
-      interval: 10s
+      interval: 20s
       timeout: 5s
       retries: 5
 
@@ -37,7 +37,8 @@ services:
   tests: 
     depends_on: 
       - server
-    stdin_open: true
+    environment:
+      IS_DOCKERIZED: 'true'
     build: 
       context: ../
       dockerfile: ./config/tests.Dockerfile

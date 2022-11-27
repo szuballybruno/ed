@@ -22,6 +22,7 @@ $version_result= psql `
     -tc "SELECT version_name FROM public.migration_version;" `
     -o "./out/migrationVersionsOnServer.txt"
 
-cd ../packages/util-script-producer
-yarn start
-cd ../../deploy
+cd ../
+yarn "build-script-producer"
+yarn "start-script-producer"
+cd deploy
