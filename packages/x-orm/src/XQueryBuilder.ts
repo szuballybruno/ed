@@ -1,6 +1,6 @@
-import { ClassType, ISQLConnectionService } from './x-ormTypes';
-import { getIsDeletedDecoratorPropertyData } from './x-ormDecorators';
-import { CheckExpression, ClosingBracketCondition, ColumnSelectObjType, CrossJoinCondition, ExpressionPart, InnerJoinCondition, LeftJoinCondition, OperationType, OrderByExpression, ParamConstraintType, SelectColumnsType, SelectCondition, SimpleExpressionPart, SQLBracketType, SQLStaticValueType } from './x-ormTypes';
+import { ClassType, ISQLConnectionService } from './XORMTypes';
+import { getIsDeletedDecoratorPropertyData } from './XORMDecorators';
+import { CheckExpression, ClosingBracketCondition, ColumnSelectObjType, CrossJoinCondition, ExpressionPart, InnerJoinCondition, LeftJoinCondition, OperationType, OrderByExpression, ParamConstraintType, SelectColumnsType, SelectCondition, SimpleExpressionPart, SQLBracketType, SQLStaticValueType } from './XORMTypes';
 import { XQueryBuilderCore } from './XQueryBuilderCore';
 
 // TODO IMPLEMENT ALIASES

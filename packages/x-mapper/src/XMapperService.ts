@@ -1,7 +1,7 @@
-import { ContainerType, GetSingleContainerType } from './x-mapperTypes';
+import { ContainerType, GetSingleContainerType } from './XMapperTypes';
 import { XMappingsBuilder } from './XMappingsBuilder';
 
-export class x-mapper<TServices extends any[], TContainer extends ContainerType> {
+export class XMapper<TServices extends any[], TContainer extends ContainerType> {
 
     constructor(private _builder: XMappingsBuilder<TServices>, private _services: TServices) {
 

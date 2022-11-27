@@ -46,7 +46,7 @@ const parseIntOrFail = (text: string, name?: string) => {
 
 const getFileName = (path: string): string => {
 
-    var splitTest = function (str) {
+    var splitTest = function (str: any) {
         return str.split('\\').pop().split('/').pop();
     }
 

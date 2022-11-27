@@ -1,5 +1,5 @@
 import { XMetadataHandler } from '@episto/x-core';
-import { ClassType } from './x-ormTypes';
+import { ClassType } from './XORMTypes';
 
 export declare type MyRelation<T> = T;
 

@@ -1,6 +1,8 @@
-import './jsExtensions';
 import { Polyfills, writeFileSync } from "./polyfills";
 import { SoftSchemaScriptService } from "./SoftSchemaScriptService";
+import { initJsExtensions } from "@episto/x-core";
+
+initJsExtensions();
 
 const rootFolderPath = __dirname + '/../../../';
 const deployFolderFilePath = `${rootFolderPath}deploy`;
@@ -86,7 +88,7 @@ const getMigrationVerisonsArgs = () => {
             .replace('\r', ''))
         .filter(x => !!x);
 
-    if (!veList.length > 0)
+    if (!(veList.length > 0))
         throw new Error('Server has no version migration history. Create it manually.');
 
     return veList;
