@@ -37,7 +37,8 @@ services:
   tests: 
     depends_on: 
       - server
-    stdin_open: true
+    environment:
+      IS_DOCKERIZED: 'true'
     build: 
       context: ../
       dockerfile: ./config/tests.Dockerfile

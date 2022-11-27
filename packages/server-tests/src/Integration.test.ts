@@ -2,10 +2,19 @@ import { Helpers, test, testSuite } from "./helpers/helpers";
 
 export const IntegrationTestSuite = testSuite(async () => [
 
-    test('the data is peanut butter', async () => {
+    // test('the data is peanut butter', async () => {
+
+    //     const data = await Helpers
+    //         .fetchAsync(x => x.authentication.loginUser, { asd: 1 });
+
+    //     if (data !== 'peanut butter')
+    //         throw new Error('asd');
+    // }),
+
+    test('GET companies', async () => {
 
         const data = await Helpers
-            .fetchAsync(x => x.authentication.loginUser, { asd: 1 });
+            .fetchAsync(x => x.companies.getCompanies, { asd: 1 });
 
         if (data !== 'peanut butter')
             throw new Error('asd');

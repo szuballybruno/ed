@@ -67,7 +67,21 @@ export class ExpressListener implements IXGatewayListener {
 
     listen(port: string, callback?: () => void) {
 
-        this._expressServer.listen(port, callback);
+        // handle 404
+        this
+            ._expressServer
+            .use('/', (req, res) => {
+
+                console.error(`-- 404 recieved -- path: ${req.path}`);
+                res
+                    .status(404)
+                    .send(null);
+            });
+
+        // listen
+        this
+            ._expressServer
+            .listen(port, callback);
     }
 
     // ------------ PRIVATE
