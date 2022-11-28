@@ -48,8 +48,8 @@ jobs:
           file: ./config/frontend.Dockerfile
           context: .
           push: true
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=gha,scope=$GITHUB_REF_NAME-${{ env.FRONTEND_IMAGE_NAME }}
+          cache-to: type=gha,scope=$GITHUB_REF_NAME-${{ env.FRONTEND_IMAGE_NAME }},mode=max
           tags: |
             ${{ env.FRONTEND_IMAGE_NAME }}
 
@@ -115,8 +115,8 @@ jobs:
           file: ./config/backend.Dockerfile
           context: .
           push: true
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=gha,scope=$GITHUB_REF_NAME-${{ env.BACKEND_IMAGE_NAME }}
+          cache-to: type=gha,scope=$GITHUB_REF_NAME-${{ env.BACKEND_IMAGE_NAME }},mode=max
           tags: |
             ${{ env.BACKEND_IMAGE_NAME }}
           
