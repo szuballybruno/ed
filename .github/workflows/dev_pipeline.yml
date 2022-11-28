@@ -124,7 +124,7 @@ jobs:
 
   # GENERATE MIGRATION SCRIPT
   generate_migration_script: 
-    name: Build backend
+    name: Generate migration script
     runs-on: ubuntu-latest
 
     steps:
@@ -143,7 +143,7 @@ jobs:
           context: .
           cache-from: type=gha,scope=${{ env.GITHUB_REF_NAME }}-migen
           cache-to: type=gha,scope=${{ env.GITHUB_REF_NAME }}-migen,mode=max
-          output: type=tar,dest=${PWD}/image/migen.tar
+          outputs: type=docker,dest=migen.tar
           tags: |
             migen
 
