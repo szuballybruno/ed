@@ -139,7 +139,7 @@ jobs:
         with:
           file: ./config/migen.Dockerfile
           context: .
-          push: false
+          push: true
           cache-from: type=gha,scope=${{ env.GITHUB_REF_NAME }}-migen
           cache-to: type=gha,scope=${{ env.GITHUB_REF_NAME }}-migen,mode=max
           tags: |
