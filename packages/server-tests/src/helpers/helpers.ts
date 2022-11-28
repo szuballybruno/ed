@@ -1,6 +1,5 @@
-import { apiRoutes } from "@episto/communication"
+import { apiRoutes } from "@episto/communication";
 import axios, { AxiosError } from "axios";
-import { writeFileSync } from "fs";
 import { domain } from "./config";
 
 type ApiRoutesType = typeof apiRoutes;
@@ -9,7 +8,7 @@ const fetchAsync = async (getRoute: (routes: ApiRoutesType) => string, query: an
 
     const route = `${domain}${getRoute(apiRoutes)}`;
 
-    console.log(`Fetching ${route}`, query);
+    // console.log(`Fetching ${route}`, query);
 
     try {
 
@@ -65,6 +64,11 @@ const throwIf = (condition: boolean) => {
     throw new Error(`Test failed.`);
 }
 
+type ErrorLogItem = {
+    error: Error,
+    testPath: string
+}
+
 class SuiteListBuilder {
 
     private _suites: TestSuiteType[] = [];
@@ -95,45 +99,61 @@ class SuiteListBuilder {
 
     async runAllAsync() {
 
-        let errors: any[] = [];
+        let errors: ErrorLogItem[] = [];
 
         for (let suiteIndex = 0; suiteIndex < this._suites.length; suiteIndex++) {
 
-            const suiteTest = this._suites[suiteIndex];
+            const testSuite = this._suites[suiteIndex];
 
-            console.log(`Suite: ${suiteTest.name}`);
+            console.log(`Suite: ${testSuite.name}`);
 
-            const suiteTests = await suiteTest.getTests();
+            const suiteTests = await testSuite.getTests();
 
             for (let testIndex = 0; testIndex < suiteTests.length; testIndex++) {
 
-                const suiteTest = suiteTests[testIndex];
+                const test = suiteTests[testIndex];
                 let success = false;
 
                 try {
 
-                    await suiteTest.run();
+                    await test.run();
                     success = true;
                 }
                 catch (error: any) {
 
                     if (this._abortOnException) {
 
-                        console.log(`   Test: ${suiteTest.name} -> ${'Failed'}`);
+                        console.log(`   Test: "${test.name}" -> ${'Failed'}`);
                         throw new Error(`Error msg: ${error?.message}`);
                     }
 
-                    errors.push(error);
+                    errors
+                        .push({
+                            error,
+                            testPath: `${testSuite.name} / "${test.name}"`
+                        });
                 }
 
-                console.log(`   Test: ${suiteTest.name} -> ${success ? 'Ok' : 'Failed'}`);
+                console.log(`   Test: "${test.name}" -> ${success ? 'Ok' : 'Failed'}`);
             }
         }
 
-        writeFileSync('./error.log', JSON.stringify(errors, null, '\t'));
+        const getCleanerStack = (err: Error) => {
+
+            Error.captureStackTrace(err, getCleanerStack);
+            return err.stack;
+        }
+
+        const errorMessage = errors
+            .map(errorLogItem => ({
+                msg: errorLogItem.error.message ?? 'no message',
+                stack: getCleanerStack(errorLogItem.error),
+                path: errorLogItem.testPath
+            }))
+            .map(x => `-----------------------------\n${x.path}\n${x.msg}\n${x.stack}`);
 
         if (errors.length > 0)
-            throw new Error(`Some tests failed!`);
+            throw new Error(`${errors.length} tests failed: \n\n${errorMessage.join('\n\n')}`);
     }
 }
 

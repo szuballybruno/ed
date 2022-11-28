@@ -4,3 +4,4 @@ dist
 /node_modules/.yarn-integrity
 /deploy/temp
 /deploy/out
+error.log
