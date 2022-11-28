@@ -143,7 +143,7 @@ jobs:
           context: .
           cache-from: type=gha,scope=${{ env.GITHUB_REF_NAME }}-migen
           cache-to: type=gha,scope=${{ env.GITHUB_REF_NAME }}-migen,mode=max
-          output: type=tar,dest=migen.tar
+          output: type=tar,dest=${PWD}/image/migen.tar
           tags: |
             migen
 
