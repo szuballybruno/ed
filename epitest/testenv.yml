@@ -28,7 +28,6 @@ services:
     environment:
       PGPASSWORD: 'epistogram'
       IS_DOCKERIZED: 'true'
-    environment:
     expose: 
       - 5000
     healthcheck:
