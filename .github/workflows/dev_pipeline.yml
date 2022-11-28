@@ -158,7 +158,9 @@ jobs:
 
       - name: Ls
         run: | 
+          cd ./migen_out
           ls
+          echo ./fullMigrationScript.sql
           
   # RUN TESTS 
   # run_tests: 
