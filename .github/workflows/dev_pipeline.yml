@@ -137,17 +137,20 @@ jobs:
 
       # Pull the latest image to build, and avoid caching pull-only images.
       # (docker pull is faster than caching in most cases.)
-      - run: docker-compose -f ./config/testenv.yml pull
+      - name: Compose pull
+        run: docker-compose -f config/testenv.yml pull
 
       # In this step, this action saves a list of existing images,
       # the cache is created without them in the post run.
       # It also restores the cache if it exists.
-      - uses: satackey/action-docker-layer-caching@v0.0.11
+      - name: Use (init) layer caching - satackey/action-docker-layer-caching
+        uses: satackey/action-docker-layer-caching@v0.0.11
         # Ignore the failure of a step and avoid terminating the job.
         continue-on-error: true
 
       # run docker-compose up
-      - run: docker-compose -f ./config/testenv.yml up --build --force-recreate --abort-on-container-exit --renew-anon-volumes
+      - name: Compose up
+        run: docker-compose -f config/testenv.yml up --build --force-recreate --abort-on-container-exit --renew-anon-volumes
 
   # DEPLOY DATABASE
   # deploy_database: 
