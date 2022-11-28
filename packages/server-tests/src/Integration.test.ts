@@ -1,25 +1,28 @@
-import { Helpers, test, testSuite } from "./helpers/helpers";
+import { Helpers } from "./helpers/helpers";
+import { test, testSuite } from "./helpers/TestSuiteBuilder";
 
 export const IntegrationTestSuite = testSuite(async () => [
 
-    test('the data is peanut butter', async () => {
+    test('Login', async () => {
 
-        const data = await Helpers
+        const response = await Helpers
             .postAsync(x => x.authentication.loginUser, {
-                email: 'endre.marosi@email.com',
+                email: 'endre.marosi@epistogram.com',
                 password: 'admin'
+            }, {
+                origin: 'http://local.epistogram.com'
             });
 
-        // if (data !== 'peanut butter')
-        //     throw new Error('asd');
+        if (!response.headers["set-cookie"]?.some(x => x.startsWith('epi_access_token')))
+            throw new Error('No access token recieved!');
     }),
 
     test('GET companies', async () => {
 
-        const data = await Helpers
+        const response = await Helpers
             .fetchAsync(x => x.companies.getCompanies, { asd: 1 });
 
-        if (data !== 'peanut butter')
+        if (response.data !== 'peanut butter')
             throw new Error('asd');
     })
 ]);

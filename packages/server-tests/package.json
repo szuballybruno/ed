@@ -8,18 +8,19 @@
     "type": "module",
     "scripts": {
         "start": "node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm ./src/index.ts",
-        "mon": "nodemon -x node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm src/server.ts",
+        "mon": "nodemon -x node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm src/index.ts",
         "build": "tsc"
     },
     "dependencies": {
         "@episto/communication": "1.0.0",
-        "@episto/x-core": "1.0.0",
         "@episto/server-api": "1.0.0",
+        "@episto/x-core": "1.0.0",
         "axios": "^1.2.0"
     },
     "devDependencies": {
         "@babel/preset-typescript": "^7.18.6",
         "@types/node": "18.11.9",
-        "cross-env": "^7.0.3"
+        "cross-env": "^7.0.3",
+        "ts-node": "^10.9.1"
     }
 }

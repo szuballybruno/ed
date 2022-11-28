@@ -1,11 +1,10 @@
-import { Helpers } from "./helpers/helpers";
-import { IntegrationTestSuite } from './Integration.test';
 import { initJsExtensions } from "@episto/x-core";
+import { SuiteListBuilder } from "./helpers/TestSuiteBuilder";
+import { IntegrationTestSuite } from './Integration.test';
 
 initJsExtensions();
 
-await Helpers
-    .getSuiteBuilder()
+await new SuiteListBuilder()
     .addSuites({ IntegrationTestSuite })
     .setAbortOnException('NO')
     .runAllAsync();

@@ -30,7 +30,7 @@ export class AuthenticationMiddleware implements IXGatewayMiddlewareInstance<voi
             .logScoped('SERVER', `${requestPath}: Authorizing request...`);
 
         // not company bound
-        if (!options.isCompanyBound) {
+        if (options.ignoreCompanyDomain) {
 
             this._loggerService
                 .logScoped('SERVER', `${requestPath}: Route no company bound...`);

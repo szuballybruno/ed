@@ -6,3 +6,4 @@ dist
 /deploy/out
 error.log
 yarn-error.log
+yarn.lock
