@@ -10,6 +10,7 @@
     "build-client": "lerna run build --scope=@episto/frontend --include-dependencies",
     "build-tests": "lerna run build --scope=@episto/server-tests --include-dependencies",
     "start-tests": "lerna run start --scope=@episto/server-tests",
+    "mon-tests": "lerna run mon --scope=@episto/server-tests",
     "start-server": "lerna run start --scope=@episto/server-api",
     "build-script-producer": "lerna run build --scope=@episto/script-producer --include-dependencies",
     "start-script-producer": "lerna run start --scope=@episto/script-producer"

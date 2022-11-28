@@ -5,10 +5,13 @@ export const IntegrationTestSuite = testSuite(async () => [
     test('the data is peanut butter', async () => {
 
         const data = await Helpers
-            .fetchAsync(x => x.authentication.loginUser, { asd: 1 });
+            .postAsync(x => x.authentication.loginUser, {
+                email: 'endre.marosi@email.com',
+                password: 'admin'
+            });
 
-        if (data !== 'peanut butter')
-            throw new Error('asd');
+        // if (data !== 'peanut butter')
+        //     throw new Error('asd');
     }),
 
     test('GET companies', async () => {

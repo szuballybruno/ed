@@ -5,3 +5,4 @@ dist
 /deploy/temp
 /deploy/out
 error.log
+yarn-error.log

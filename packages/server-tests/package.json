@@ -7,8 +7,8 @@
     "typings": "./dist/index.d.ts",
     "type": "module",
     "scripts": {
-        "test": "node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm ./src/index.ts",
-        "start": "yarn test",
+        "start": "node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm ./src/index.ts",
+        "mon": "nodemon -x node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm src/server.ts",
         "build": "tsc"
     },
     "dependencies": {

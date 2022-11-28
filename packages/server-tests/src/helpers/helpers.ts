@@ -1,21 +1,16 @@
 import { apiRoutes } from "@episto/communication";
-import axios, { AxiosError } from "axios";
+import axios, { AxiosError, AxiosRequestConfig } from "axios";
 import { domain } from "./config";
 
 type ApiRoutesType = typeof apiRoutes;
 
-const fetchAsync = async (getRoute: (routes: ApiRoutesType) => string, query: any) => {
-
-    const route = `${domain}${getRoute(apiRoutes)}`;
-
-    // console.log(`Fetching ${route}`, query);
+const axiosCallAsync = async (route: string, opts: AxiosRequestConfig) => {
 
     try {
 
-        const response = await axios
-            .get(route, {
-                params: query
-            });
+        const response = opts.method === "POST"
+            ? await axios.post(route, opts)
+            : await axios.get(route, opts);
 
         const data = response
             .data;
@@ -29,6 +24,29 @@ const fetchAsync = async (getRoute: (routes: ApiRoutesType) => string, query: an
 
         throw new Error(axErrorMessage);
     }
+}
+
+const fetchAsync = async (getRoute: (routes: ApiRoutesType) => string, query: any) => {
+
+    const route = `${domain}${getRoute(apiRoutes)}`;
+
+    return axiosCallAsync(route, {
+        params: query
+    });
+}
+
+const postAsync = (getRoute: (routes: ApiRoutesType) => string, body: any) => {
+
+    const route = `${domain}${getRoute(apiRoutes)}`;
+    const json = body ? JSON.stringify(body) : undefined;
+
+    return axiosCallAsync(route, {
+        method: 'POST',
+        data: json,
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
 }
 
 export type TestSuiteType = {
@@ -161,6 +179,7 @@ const getSuiteBuilder = () => new SuiteListBuilder();
 
 export const Helpers = {
     fetchAsync,
+    postAsync,
     test,
     throwIf,
     testSuite,
