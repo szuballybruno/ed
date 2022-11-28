@@ -111,7 +111,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           tags: |
-            $BACKEND_IMAGE_NAME
+            ${{ env.BACKEND_IMAGE_NAME }}
 
       # - name: Build backend container
       #   run: |
