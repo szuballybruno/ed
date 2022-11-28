@@ -154,12 +154,6 @@ export class UserProgressService extends ServiceBase {
 
         const estimatedDates = calculateDatesFromCurrentDate(startDate, estimatedLengthInDays!);
         const estimatedDatesFromCurrent = calculateDatesFromCurrentDate(new Date(Date.now()), estimatedLengthInDays!)
-        /* 
-        const originalEstimatedDates = calculateDatesFromStart(startDate!, originalEstimatedLengthInDays!); */
-
-
-
-
 
         const calculateEpistoLineChartData = (dates: number[]): EpistoLineChartDataType => {
             return dates
@@ -167,13 +161,6 @@ export class UserProgressService extends ServiceBase {
         };
 
         const calculateEpistoLineChartDataWithPrediction = (allDates: string[], actualProgress: number[]): (number | null)[] => {
-
-            /*   console.log('actualProgress')
-              console.log(actualProgress);
-  
-              console.log('allDates');
-              console.log(allDates) */
-
 
             let actualLastIndex = 0;
             let actualLastValue = 0;
@@ -195,20 +182,6 @@ export class UserProgressService extends ServiceBase {
 
                 })
         };
-
-        /*  const originalPrevisionedProgress = calculateEpistoLineChartData(originalEstimatedDates); */
-
-
-
-
-
-        /* const originalEstimatedLengthInDays = (originalPrevisionedCompletionDate && startDate)
-        ? dateDiffInDays(startDate, originalPrevisionedCompletionDate)
-        : null; */
-
-        //const interval = Math.floor(estimatedDates.length / 7);
-
-        /*         console.log(previsionedProgress); */
 
         const calculateActualProgressChart = (
             currentDate: Date,
@@ -244,12 +217,7 @@ export class UserProgressService extends ServiceBase {
 
         const actualProgress = calculateActualProgressChart(new Date(Date.now()), startDate, dailyViews);
 
-
         const previsionedProgress = calculateEpistoLineChartDataWithPrediction(estimatedDates, actualProgress);
-
-        console.log(actualProgress)
-        console.log(estimatedDates)
-        console.log(previsionedProgress)
 
         return instantiate<UserCourseProgressChartDTO>({
             dates: estimatedDates,

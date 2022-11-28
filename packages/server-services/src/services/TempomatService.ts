@@ -204,6 +204,10 @@ export class TempomatService {
             });
     }
 
+    /**
+     * Calculates multiple relative user pace diffs from
+     * tempomat calculation data.
+     */
     getRelativeUserPaceDiffs(tempomatCalculationDatas: TempomatCalculationDataView[]) {
 
         return tempomatCalculationDatas.map(x => {
@@ -231,8 +235,11 @@ export class TempomatService {
         })
     }
 
-
-
+    /**
+     * Calculates tempomat values with userId 
+     * @param tempomatCalculationDataViews 
+     * @returns 
+     */
     calculateCompanyTempomatValues(tempomatCalculationDataViews: TempomatCalculationDataView[]): CalculatedTempomatValueTypeWithUserId[] {
         return tempomatCalculationDataViews
             .map(x => ({
@@ -393,6 +400,10 @@ export class TempomatService {
         return actualUserPace;
     }
 
+    /**
+     * Calculates the estimated user pace that would be
+     * required to match the deadline or original estimation.
+     */
     private _calculateEstimatedUserPace(
         startDate: Date,
         deadlineDate: Date,
@@ -456,7 +467,7 @@ export class TempomatService {
 
         }
 
-        /* increase mode */
+        // Increase mode. Try to recommend as much videos as it can.
 
         const totalItems20Percent = totalItemsCount / 5
 
@@ -486,7 +497,7 @@ export class TempomatService {
             if (recommendedItemsPerDay > totalItems20Percent)
                 return totalItems20Percent;
 
-            // The user will probably fail the deadline so
+            // The user will probably fail the deadline at this point so
             // limiting the recommendations, to not recommend
             // the whole course for the last days.
             //
@@ -514,7 +525,9 @@ export class TempomatService {
         return {
             recommendedItemsPerDay: limitedRecommendedItemsPerDay,
             recommendedItemsPerWeek: limitedRecommendedItemsPerWeek
-        };/* 
+        };
+
+        /* TODO: Implement fallback value when no pretest
 
         // fallback value if there is no pretest
         return {
@@ -524,11 +537,16 @@ export class TempomatService {
     }
 
     /**
-     * TODO: Desc
+     * Calculates the real previsioned date only from
+     * the actual progress that has been made. 
+     * 
+     * TODO: The previsioned date can be incorrect, because
+     *       the completed course item count can contain 
+     *       the same video more than one times.
      * 
      * @param startDate 
      * @param currentDate 
-     * @param avgVideosWatchedPerDay 
+     * @param completedCourseItemCount 
      * @param totalCourseItemCount 
      */
     calculateNewPrevisionedDate(
@@ -538,10 +556,12 @@ export class TempomatService {
         totalCourseItemCount: number
     ) {
 
+        // This is not correct yet
         const courseItemsLeft = totalCourseItemCount - completedCourseItemCount
 
         const daysSpentFromStartDate = dateDiffInDays(currentDate, startDate);
 
+        // This needs a uniquely completed course item count too
         const avgCourseItemsWatchedPerDay = daysSpentFromStartDate / completedCourseItemCount;
 
         const daysLeft = courseItemsLeft * avgCourseItemsWatchedPerDay

@@ -81,11 +81,6 @@ export const RecommendedItemQuota = (props: {
                             return '-';
                         })()}
                     </EpistoFont>
-                    {/* 
-                    <EpistoFont
-                        fontSize="fontSmall">
-                        videó
-                    </EpistoFont> */}
                 </EpistoFlex2>
             </EpistoFlex2>
 

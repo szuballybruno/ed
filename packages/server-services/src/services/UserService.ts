@@ -119,6 +119,8 @@ export class UserService {
                     ? 100 - relativePaceDiffAvg
                     : null;
 
+                console.log(invertedRelativeUserPaceDiff);
+
                 return instantiate<UserLagbehindStatType>({
                     userId,
                     invertedRelativeUserPaceDiff,
@@ -172,7 +174,7 @@ export class UserService {
         const userIdRelativePaceDiffAvgRows = this._tempomatService
             .getAvgRelativeUserPaceDiffs(companyTempomatCalculationViews);
 
-        const userOverviewViewsWithLagBehind = userIds
+        const userOverviewViewsWithRelativePaceDiff = userIds
             .map(userId => {
 
                 const relativePaceDiffAvgRow = userIdRelativePaceDiffAvgRows
@@ -186,7 +188,7 @@ export class UserService {
                 };
             });
 
-        return userOverviewViewsWithLagBehind;
+        return userOverviewViewsWithRelativePaceDiff;
     }
 
     /**
