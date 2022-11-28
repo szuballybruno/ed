@@ -9,6 +9,8 @@ env:
   BACKEND_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/epistogram-backend-dev
   BACKEND_CLOUD_RUN_SVC_NAME: epistogram-backend-dev
   
+  MIGEN_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/epistogram-migen-dev
+  
   CLOUD_SQL_CONNCETION_NAME: gifted-country-324010:europe-central2:epistogram
   GCP_PROJECT_NAME: gifted-country-324010
 
@@ -142,17 +144,18 @@ jobs:
           push: true
           cache-from: type=gha,scope=${{ env.GITHUB_REF_NAME }}-migen
           cache-to: type=gha,scope=${{ env.GITHUB_REF_NAME }}-migen,mode=max
+          output: type=tar,dest=migen.tar
           tags: |
             migen
 
-      - name: Run migen
-        run: |
-          docker run \
-            -v ${PWD}/migen_out:/app/packages/util-script-producer/out migen
+      # - name: Run migen
+      #   run: |
+      #     docker run \
+      #       -v ${PWD}/migen_out:/app/packages/util-script-producer/out migen
 
       - name: Ls
         run: | 
-          ls ${PWD}/migen_out
+          ls
           
   # RUN TESTS 
   # run_tests: 
