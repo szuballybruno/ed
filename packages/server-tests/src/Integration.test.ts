@@ -1,28 +1,52 @@
 import { Helpers } from "./helpers/helpers";
 import { test, testSuite } from "./helpers/TestSuiteBuilder";
 
+const CORRUPT_REQUEST_URL = 'http://local.corrupt_epistogram.com';
+
+const VALID_CREDENTIALS_BODY = {
+    email: 'endre.marosi@epistogram.com',
+    password: 'admin'
+};
+
+let accessToken = '';
+
 export const IntegrationTestSuite = testSuite(async () => [
 
-    test('Login', async () => {
+    test('Login with corrupt url', async ({ context }) => {
 
-        const response = await Helpers
-            .postAsync(x => x.authentication.loginUser, {
-                email: 'endre.marosi@epistogram.com',
-                password: 'admin'
-            }, {
-                origin: 'http://local.epistogram.com'
-            });
-
-        if (!response.headers["set-cookie"]?.some(x => x.startsWith('epi_access_token')))
-            throw new Error('No access token recieved!');
+        Helpers
+            .shouldThrow(() => context
+                .overwriteRequestDefaults({
+                    origin: CORRUPT_REQUEST_URL
+                })
+                .postAsync(x => x.authentication.loginUser, VALID_CREDENTIALS_BODY));
     }),
 
-    test('GET companies', async () => {
+    test('Login', async ({ context }) => {
 
-        const response = await Helpers
+        const response = await context
+            .postAsync(x => x.authentication.loginUser, VALID_CREDENTIALS_BODY);
+
+        const setCookies = response.headers["set-cookie"] ?? [];
+
+        if (!setCookies?.some(x => x.startsWith('epi_access_token')))
+            throw new Error('No access token recieved!');
+
+        const accessTokenValue = setCookies
+            .single(x => x.startsWith('epi_access_token'))
+            .split(';')[0]
+            .split('=')[1];
+
+        accessToken = accessTokenValue;
+    }),
+
+    test('Get companies after login', async ({ context }) => {
+
+        const response = await context
+            .setAuthToken(accessToken)
             .fetchAsync(x => x.companies.getCompanies, { asd: 1 });
 
-        if (response.data !== 'peanut butter')
-            throw new Error('asd');
+        Helpers
+            .throwIf(!response.data.some(x => x.name === 'EpistoGram'));
     })
 ]);

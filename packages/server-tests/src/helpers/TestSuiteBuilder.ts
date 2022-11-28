@@ -1,26 +1,32 @@
+import { TestContext, TestContextDefaults } from "./TestContext";
+
 export type TestSuiteType = {
     name?: string;
-    getTests: () => Promise<TestType[]>;
+    getTests: GetTestsFnType;
 }
+
+export type GetTestsFnType = () => Promise<TestType[]>;
 
 export type TestType = {
     name: string;
-    run: () => Promise<void>;
+    run: TestFnType;
 }
+
+export type TestFnType = (params: { context: TestContext }) => Promise<void>;
 
 type ErrorLogItem = {
     error: Error,
     testPath: string
 }
 
-export const testSuite = (getTests: () => Promise<TestType[]>): TestSuiteType => {
+export const testSuite = (getTests: GetTestsFnType): TestSuiteType => {
 
     return {
         getTests
     };
 }
 
-export const test = (what: string, fn: () => Promise<void>): TestType => {
+export const test = (what: string, fn: TestFnType): TestType => {
 
     return {
         name: what,
@@ -33,7 +39,7 @@ export class SuiteListBuilder {
     private _suites: TestSuiteType[] = [];
     private _abortOnException: boolean;
 
-    constructor() {
+    constructor(private _testContextDefaults: TestContextDefaults) {
 
     }
 
@@ -66,16 +72,19 @@ export class SuiteListBuilder {
 
             console.log(`Suite: ${testSuite.name}`);
 
-            const suiteTests = await testSuite.getTests();
+            const suiteTests = await testSuite
+                .getTests();
 
             for (let testIndex = 0; testIndex < suiteTests.length; testIndex++) {
+
+                const testContext = new TestContext(this._testContextDefaults);
 
                 const test = suiteTests[testIndex];
                 let success = false;
 
                 try {
 
-                    await test.run();
+                    await test.run({ context: testContext });
                     success = true;
                 }
                 catch (error: any) {
