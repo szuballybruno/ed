@@ -1,5 +1,4 @@
-version: '3.8'
-name: epi-test-env
+version: '3.3'
 
 services:
 

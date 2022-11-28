@@ -1,5 +1,5 @@
 {
-  "name": "@eutil/script-producer",
+  "name": "@episto/script-producer",
   "version": "1.0.0",
   "private": true,
   "license": "UNLICENSED",
@@ -8,16 +8,13 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "start": "node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm ./src/index.ts"
+    "start": "node --no-warnings --experimental-specifier-resolution=node ./dist/index.js"
   },
   "dependencies": {
     "@episto/x-core": "1.0.0",
     "@episto/x-injector": "1.0.0"
   },
   "devDependencies": {
-    "@rollup/plugin-typescript": "8.3.3",
-    "@types/node": "18.11.9",
-    "rollup": "3.4.0",
-    "rollup-plugin-dts": "5.0.0"
+    "@types/node": "18.11.9"
   }
 }

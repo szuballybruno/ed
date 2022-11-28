@@ -8,7 +8,7 @@
     "type": "module",
     "scripts": {
         "start": "tsc",
-        "build": "tsc -v && tsc"
+        "build": "tsc"
     },
     "dependencies": {
         "@episto/x-core": "1.0.0"
