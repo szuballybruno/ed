@@ -6,10 +6,16 @@ import * as url from 'url';
 initJsExtensions();
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
-const rootFolderPath = __dirname + '/../../..';
-const deployFolderFilePath = `${rootFolderPath}/deploy`;
-const outFolderFilePath = `${deployFolderFilePath}/out`;
-const sqlFolderFilePath = `${rootFolderPath}/packages/server-services/sql`;
+
+// internal 
+const projectRoot = `${__dirname}/..`;
+const fullScriptPath = `${projectRoot}/out/fullMigrationScript.sql`;
+const migrationVersionsFilePath = `${projectRoot}/migrationVersionsOnServer.txt`;
+const dropSoftSchemaScriptPath = `${projectRoot}/sql/dropSoftSchema.sql`;
+
+// external 
+const monorepoRoot = __dirname + '/../../..';
+const sqlFolderFilePath = `${monorepoRoot}/packages/server-services/sql`;
 const migrationsFolderFilePath = sqlFolderFilePath + '/migrations';
 
 const getMigrationScript = ({
@@ -77,7 +83,7 @@ COMMIT;
 const getMigrationVerisonsArgs = () => {
 
     const versions = Polyfills
-        .readFileAsText(outFolderFilePath + '/migrationVersionsOnServer.txt');
+        .readFileAsText(migrationVersionsFilePath);
 
     const veList = versions
         .split('\n')
@@ -139,7 +145,7 @@ const createScripts = () => {
         .getSoftSchemaScript();
 
     const dropSoftSchemaScript = Polyfills
-        .readFileAsText(`${deployFolderFilePath}/sql/dropSoftSchema.sql`);
+        .readFileAsText(dropSoftSchemaScriptPath);
 
     const fullMigrationScript = getMigrationScript({
         softSchemaCreateScript,
@@ -149,7 +155,6 @@ const createScripts = () => {
 
     console.log(`Full migraion script created.`);
 
-    const fullScriptPath = outFolderFilePath + '/fullMigrationScript.sql';
     console.log(`Writing file... ${fullScriptPath}`);
     writeFileSync(fullScriptPath, fullMigrationScript);
 };

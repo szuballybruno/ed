@@ -1,0 +1,1 @@
+docker build ../ -f ../config/migen.Dockerfile -t migen
