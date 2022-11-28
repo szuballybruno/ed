@@ -34,36 +34,15 @@ jobs:
 
       - name: Configure GCP Docker
         run: gcloud auth configure-docker --quiet
-      
-      - name: Set up Docker Buildx for layer caching
-        id: buildx
-        uses: docker/setup-buildx-action@master
-
-      - name: Cache Docker layers
-        uses: actions/cache@v2
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-single-buildx-${{ github.sha }}
-          restore-keys: ${{ runner.os }}-single-buildx
 
       - name: Copy proper .env file
         run: cp -fr ./config/dev.env ./.env 
-        working-directory: ./packages/frontend
-
-      - name: Append additional values to .env file 
-        run: |
-          echo "" >> ./.env
-          echo "REACT_APP_CURRENT_VERSION=`(date '+%Y.%m.%d.%H:%M')`" >> ./.env
-          echo "REACT_APP_UNDER_MAINTENANCE=false" >> ./.env
         working-directory: ./packages/frontend
 
       - name: Build frontend container
         run: |
           docker buildx build . \
           --file ./config/frontend.Dockerfile \
-          --cache-from type=local,src=/tmp/.buildx-cache \
-          --cache-to type=local,dest=/tmp/.buildx-cache,mode=max \
-          --builder ${{ steps.buildx.outputs.name }} \
           --tag $FRONTEND_IMAGE_NAME \
           --push
 
@@ -74,7 +53,7 @@ jobs:
 
     steps:
       - name: Checkout branch
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           ref: dev # references the target branch
         
@@ -89,7 +68,6 @@ jobs:
         run: gcloud auth configure-docker --quiet
       
       - name: Set up Docker Buildx for layer caching
-        id: buildx
         uses: docker/setup-buildx-action@master
 
       - name: Generate config.env file
@@ -125,13 +103,23 @@ jobs:
           echo DB_IS_ORM_LOGGING_ENABLED = true >> config/config.env
         working-directory: ./packages/server-api
 
-      - name: Build backend container
-        run: |
-          docker buildx build . \
-          --file ./config/backend.Dockerfile \
-          --builder ${{ steps.buildx.outputs.name }} \
-          --tag $BACKEND_IMAGE_NAME \
-          --push
+      - uses: docker/build-push-action@v2
+        with:
+          file: ./config/backend.Dockerfile
+          context: .
+          push: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          tags: 
+            - $BACKEND_IMAGE_NAME
+
+      # - name: Build backend container
+      #   run: |
+      #     docker buildx build . \
+      #     --file ./config/backend.Dockerfile \
+      #     --builder ${{ steps.buildx.outputs.name }} \
+      #     --tag $BACKEND_IMAGE_NAME \
+      #     --push
           
   # DEPLOY DATABASE
   deploy_database: 
