@@ -130,9 +130,6 @@ export class UserProgressService extends ServiceBase {
             ._tempomatService
             .calculateTempomatValuesAsync(userIdOrPrincipalId, courseId);
 
-        console.log(startDate)
-        console.log(previsionedCompletionDate)
-
         const estimatedLengthInDays = (previsionedCompletionDate && startDate)
             ? dateDiffInDays(startDate, previsionedCompletionDate)
             : null;
@@ -153,14 +150,8 @@ export class UserProgressService extends ServiceBase {
         };
 
         const estimatedDates = calculateDatesFromCurrentDate(startDate, estimatedLengthInDays!);
-        const estimatedDatesFromCurrent = calculateDatesFromCurrentDate(new Date(Date.now()), estimatedLengthInDays!)
 
-        const calculateEpistoLineChartData = (dates: number[]): EpistoLineChartDataType => {
-            return dates
-                .map((_, index) => (100 / dates.length) * (index + 1)) as EpistoLineChartDataType;
-        };
-
-        const calculateEpistoLineChartDataWithPrediction = (allDates: string[], actualProgress: number[]): (number | null)[] => {
+        const calculatePrevisionedProgressChart = (allDates: string[], actualProgress: number[]): (number | null)[] => {
 
             let actualLastIndex = 0;
             let actualLastValue = 0;
@@ -175,8 +166,6 @@ export class UserProgressService extends ServiceBase {
                         actualLastValue = actualProgress[index];
                         return null;
                     }
-
-                    console.log('ActualLastValue: ' + actualLastValue)
 
                     return ((100 - actualLastValue) / (allDates.length - actualLastIndex)) * (index + 1 - actualLastIndex) + actualLastValue
 
@@ -216,8 +205,7 @@ export class UserProgressService extends ServiceBase {
         }
 
         const actualProgress = calculateActualProgressChart(new Date(Date.now()), startDate, dailyViews);
-
-        const previsionedProgress = calculateEpistoLineChartDataWithPrediction(estimatedDates, actualProgress);
+        const previsionedProgress = calculatePrevisionedProgressChart(estimatedDates, actualProgress);
 
         return instantiate<UserCourseProgressChartDTO>({
             dates: estimatedDates,

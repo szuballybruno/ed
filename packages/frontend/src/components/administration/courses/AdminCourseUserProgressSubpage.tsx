@@ -144,6 +144,7 @@ export const useCourseUsersColumns = ({
                 ? <EpistoFont>
                     {new Date(value)
                         .toLocaleString('hu-hu', {
+                            year: 'numeric',
                             month: '2-digit',
                             day: '2-digit'
                         })}
@@ -151,8 +152,27 @@ export const useCourseUsersColumns = ({
                 : <EmptyCell />
         })
         .addIf(preset === 'inprogress', {
+            field: 'actualLagBehindDays',
+            headerName: 'Eddigi lemaradás',
+            width: 150,
+            resizable: true,
+            renderCell: ({ value }) => value
+                ? <ChipSmall
+                    text={Math.ceil(value) + ' nap'}
+                    color={(() => {
+                        if (value < 3)
+                            return 'var(--mildGreen)';
+
+                        if (value < 10)
+                            return 'var(--mildOrange)';
+
+                        return 'var(--mildRed)';
+                    })()} />
+                : <EmptyCell />
+        })
+        .addIf(preset === 'inprogress', {
             field: 'previsionedLagBehindDays',
-            headerName: 'Lemaradás',
+            headerName: 'Várható lemaradás',
             width: 150,
             resizable: true,
             renderCell: ({ value }) => value

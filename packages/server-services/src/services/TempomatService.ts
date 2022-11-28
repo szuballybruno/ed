@@ -23,7 +23,7 @@ type CalculateTempomatValuesArgs = {
 
 
 export type CalculatedTempomatValueType = {
-    previsionedCompletionDate: Date,
+    previsionedCompletionDate: Date | null,
     recommendedItemsPerDay: number,
     recommendedItemsPerWeek: number,
     originalPrevisionedCompletionDate: Date,
@@ -269,8 +269,8 @@ export class TempomatService {
 
             const previsionedCompletionDate = this
                 .calculateNewPrevisionedDate(
-                    new Date(Date.now()),
                     startDate,
+                    new Date(Date.now()),
                     totalCompletedItemCount,
                     totalItemCount
                 );
@@ -556,13 +556,27 @@ export class TempomatService {
         totalCourseItemCount: number
     ) {
 
+        if (!startDate)
+            return null;
+
+        if (!completedCourseItemCount || completedCourseItemCount < 1)
+            return null;
+
         // This is not correct yet
         const courseItemsLeft = totalCourseItemCount - completedCourseItemCount
 
-        const daysSpentFromStartDate = dateDiffInDays(currentDate, startDate);
+        const daysSpentFromStartDate = dateDiffInDays(startDate, currentDate);
 
         // This needs a uniquely completed course item count too
-        const avgCourseItemsWatchedPerDay = daysSpentFromStartDate / completedCourseItemCount;
+        const avgCourseItemsWatchedPerDay = (() => {
+
+            const watchedItemsAvg = completedCourseItemCount / daysSpentFromStartDate
+
+            if (typeof watchedItemsAvg !== 'number' || watchedItemsAvg < 0.5)
+                return 0.5;
+
+            return watchedItemsAvg;
+        })();
 
         const daysLeft = courseItemsLeft * avgCourseItemsWatchedPerDay
 

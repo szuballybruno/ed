@@ -45,8 +45,6 @@ export const EpistoLineChart = (props: {
         height: '100%',
     };
 
-    console.log(dataset);
-
     return <ReactECharts
         option={{
             title: {

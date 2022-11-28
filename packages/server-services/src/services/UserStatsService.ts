@@ -199,17 +199,46 @@ export class UserStatsService {
                         x.totalItemCount
                     )
 
-                const actualLagBehindDays = this._tempomatService
-                    .calculateLagBehindDaysFromDeadline(
-                        new Date(Date.now()),
-                        x.requiredCompletionDate || x.originalPrevisionedCompletionDate
-                    )
+                const actualLagBehindDays = (() => {
 
-                const previsionedLagBehindDays = this._tempomatService
-                    .calculatePrevisionedLagBehindDays(
-                        x.requiredCompletionDate || x.originalPrevisionedCompletionDate,
-                        previsionedCompletionDate
-                    )
+                    if (x.requiredCompletionDate)
+                        return this._tempomatService
+                            .calculateLagBehindDaysFromDeadline(
+                                new Date(Date.now()),
+                                x.requiredCompletionDate
+                            )
+
+                    if (x.originalPrevisionedCompletionDate)
+                        return this._tempomatService
+                            .calculateLagBehindDaysFromDeadline(
+                                new Date(Date.now()),
+                                x.originalPrevisionedCompletionDate
+                            )
+
+                    return null;
+                })()
+
+                const previsionedLagBehindDays = (() => {
+
+                    if (!previsionedCompletionDate)
+                        return null;
+
+                    if (x.requiredCompletionDate)
+                        return this._tempomatService
+                            .calculatePrevisionedLagBehindDays(
+                                x.requiredCompletionDate,
+                                previsionedCompletionDate
+                            )
+
+                    if (x.originalPrevisionedCompletionDate)
+                        return this._tempomatService
+                            .calculatePrevisionedLagBehindDays(
+                                x.originalPrevisionedCompletionDate,
+                                previsionedCompletionDate
+                            )
+
+                    return null;
+                })()
 
                 return {
                     userId: x.userId,
@@ -730,7 +759,16 @@ export class UserStatsService {
 
     calculateProductivity(avgPerformancePercentage: number, avgRelativeUserPaceDiff: number) {
 
-        const lagBehindPoints = 100 - avgRelativeUserPaceDiff;
+        const lagBehindPoints = (() => {
+
+            if (avgRelativeUserPaceDiff >= 100)
+                return 0;
+
+            if (avgRelativeUserPaceDiff <= -100)
+                return 200;
+
+            return 100 - avgRelativeUserPaceDiff;
+        })();
 
         const productivityPercentage = avgPerformancePercentage / lagBehindPoints > 1
             ? lagBehindPoints * (avgPerformancePercentage / lagBehindPoints) * avgPerformancePercentage / 100

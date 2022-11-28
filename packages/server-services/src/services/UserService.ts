@@ -115,11 +115,19 @@ export class UserService {
                     ._userStatsService
                     .calculateProductivity(averagePerformancePercentage, relativePaceDiffAvg);
 
-                const invertedRelativeUserPaceDiff = relativePaceDiffAvg
-                    ? 100 - relativePaceDiffAvg
-                    : null;
+                const invertedRelativeUserPaceDiff = (() => {
 
-                console.log(invertedRelativeUserPaceDiff);
+                    if (!relativePaceDiffAvg)
+                        return null;
+
+                    if (relativePaceDiffAvg >= 100)
+                        return 0;
+
+                    if (relativePaceDiffAvg <= -100)
+                        return 200;
+
+                    return 100 - relativePaceDiffAvg
+                })();
 
                 return instantiate<UserLagbehindStatType>({
                     userId,
