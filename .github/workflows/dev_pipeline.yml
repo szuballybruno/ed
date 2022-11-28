@@ -15,45 +15,112 @@ env:
 jobs:
     
   # BUILD FRONTEND
-  build_frontend:
-    name: Build frontend
-    runs-on: ubuntu-latest
+  # build_frontend:
+  #   name: Build frontend
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout branch
-        uses: actions/checkout@v2
-        with:
-          ref: dev
+  #   steps:
+  #     - name: Checkout branch
+  #       uses: actions/checkout@v2
+  #       with:
+  #         ref: dev
         
-      - name: Login to GCP
-        uses: google-github-actions/setup-gcloud@v0
-        with:
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
-          service_account_email: ${{ secrets.GCP_EMAIL }}
-          service_account_key: ${{ secrets.GCP_CREDENTIALS }}
+  #     - name: Login to GCP
+  #       uses: google-github-actions/setup-gcloud@v0
+  #       with:
+  #         project_id: ${{ secrets.GCP_PROJECT_ID }}
+  #         service_account_email: ${{ secrets.GCP_EMAIL }}
+  #         service_account_key: ${{ secrets.GCP_CREDENTIALS }}
 
-      - name: Configure GCP Docker
-        run: gcloud auth configure-docker --quiet
+  #     - name: Configure GCP Docker
+  #       run: gcloud auth configure-docker --quiet
 
-      - name: Copy proper .env file
-        run: cp -fr ./config/dev.env ./.env 
-        working-directory: ./packages/frontend
+  #     - name: Copy proper .env file
+  #       run: cp -fr ./config/dev.env ./.env 
+  #       working-directory: ./packages/frontend
       
-      - name: Set up Docker Buildx for layer caching
-        uses: docker/setup-buildx-action@master
+  #     - name: Set up Docker Buildx for layer caching
+  #       uses: docker/setup-buildx-action@master
 
-      - name: Build frontend container
-        uses: docker/build-push-action@v3
-        with:
-          file: ./config/frontend.Dockerfile
-          context: .
-          push: true
-          cache-from: type=gha,scope=$GITHUB_REF_NAME-${{ env.FRONTEND_IMAGE_NAME }}
-          cache-to: type=gha,scope=$GITHUB_REF_NAME-${{ env.FRONTEND_IMAGE_NAME }},mode=max
-          tags: |
-            ${{ env.FRONTEND_IMAGE_NAME }}
+  #     - name: Build frontend container
+  #       uses: docker/build-push-action@v3
+  #       with:
+  #         file: ./config/frontend.Dockerfile
+  #         context: .
+  #         push: true
+  #         cache-from: type=gha,scope=$GITHUB_REF_NAME-${{ env.FRONTEND_IMAGE_NAME }}
+  #         cache-to: type=gha,scope=$GITHUB_REF_NAME-${{ env.FRONTEND_IMAGE_NAME }},mode=max
+  #         tags: |
+  #           ${{ env.FRONTEND_IMAGE_NAME }}
 
-  # BUILD BACKEND
+  # # BUILD BACKEND
+  # build_backend: 
+  #   name: Build backend
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #     - name: Checkout branch
+  #       uses: actions/checkout@v3
+  #       with:
+  #         ref: dev # references the target branch
+        
+  #     - name: Login to GCP
+  #       uses: google-github-actions/setup-gcloud@v0
+  #       with:
+  #         project_id: ${{ secrets.GCP_PROJECT_ID }}
+  #         service_account_email: ${{ secrets.GCP_EMAIL }}
+  #         service_account_key: ${{ secrets.GCP_CREDENTIALS }}
+
+  #     - name: Configure GCP Docker
+  #       run: gcloud auth configure-docker --quiet
+
+  #     - name: Generate config.env file
+  #       run: |
+  #         echo \# ---- CONFIG FILE --- > config/config.env
+  #         echo \# ---- gcp >> config/config.env
+  #         echo BRANCH_NAME = dev >> config/config.env
+  #         echo BACKEND_URL = api.dev.epistogram.com >> config/config.env
+  #         echo MIN_INSTANCE_COUNT = 0 >> config/config.env
+  #         echo IS_UNDER_MAINTENANCE = false >> config/config.env
+  #         echo \# ---- misc >> config/config.env
+  #         echo DOMAIN_TEMPLATE = https://dev.[DOMAIN] >> config/config.env
+  #         echo ENVIRONMENT_NAME = dev >> config/config.env
+  #         echo HOST_PORT = 5000 >> config/config.env
+  #         echo JWT_SIGN_SECRET = ${{secrets.JWT_SIGN_SECRET}} >> config/config.env
+  #         echo IS_HOSTED_ON_GCP = true >> config/config.env
+  #         echo IS_LOCALHOST = false >> config/config.env
+  #         echo VIDEO_COMPLETED_PERCENTAGE = 5 >> config/config.env
+  #         echo \# ---- fileStorage >> config/config.env
+  #         echo FILE_STORAGE_URL = https://storage.googleapis.com/epistogram_bucket_dev >> config/config.env
+  #         echo FILE_STORAGE_BUCKET_NAME = epistogram_bucket_dev >> config/config.env
+  #         echo \# ---- mail >> config/config.env
+  #         echo MAIL_TOKEN_SECRET = ${{secrets.MAIL_TOKEN_SECRET}} >> config/config.env
+  #         echo MAIL_HOST = smtp.sendgrid.net >> config/config.env
+  #         echo MAIL_SENDER_MAIL = ${{secrets.MAIL_SENDER_MAIL}} >> config/config.env
+  #         echo MAIL_SENDER_PASSWORD = ${{secrets.MAIL_SENDER_PASSWORD}} >> config/config.env
+  #         echo \# ---- database >> config/config.env
+  #         echo DB_NAME = epistogram_DEV >> config/config.env
+  #         echo DB_HOST_ADDRESS = ${{secrets.DB_HOST_ADDRESS}} >> config/config.env
+  #         echo DB_PORT = ${{secrets.DB_PORT}} >> config/config.env
+  #         echo DB_SERVICE_USER_NAME = ${{secrets.DB_SERVICE_USER_NAME}} >> config/config.env
+  #         echo DB_SERVICE_USER_PASSWORD = ${{secrets.DB_SERVICE_USER_PASSWORD}} >> config/config.env
+  #         echo DB_IS_ORM_LOGGING_ENABLED = true >> config/config.env
+  #       working-directory: ./packages/server-api
+      
+  #     - name: Set up Docker Buildx for layer caching
+  #       uses: docker/setup-buildx-action@master
+
+  #     - uses: docker/build-push-action@v3
+  #       with:
+  #         file: ./config/backend.Dockerfile
+  #         context: .
+  #         push: true
+  #         cache-from: type=gha,scope=$GITHUB_REF_NAME-${{ env.BACKEND_IMAGE_NAME }}
+  #         cache-to: type=gha,scope=$GITHUB_REF_NAME-${{ env.BACKEND_IMAGE_NAME }},mode=max
+  #         tags: |
+  #           ${{ env.BACKEND_IMAGE_NAME }}
+
+  # GENERATE MIGRATION SCRIPT
   build_backend: 
     name: Build backend
     runs-on: ubuntu-latest
@@ -63,173 +130,140 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: dev # references the target branch
-        
-      - name: Login to GCP
-        uses: google-github-actions/setup-gcloud@v0
-        with:
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
-          service_account_email: ${{ secrets.GCP_EMAIL }}
-          service_account_key: ${{ secrets.GCP_CREDENTIALS }}
-
-      - name: Configure GCP Docker
-        run: gcloud auth configure-docker --quiet
-
-      - name: Generate config.env file
-        run: |
-          echo \# ---- CONFIG FILE --- > config/config.env
-          echo \# ---- gcp >> config/config.env
-          echo BRANCH_NAME = dev >> config/config.env
-          echo BACKEND_URL = api.dev.epistogram.com >> config/config.env
-          echo MIN_INSTANCE_COUNT = 0 >> config/config.env
-          echo IS_UNDER_MAINTENANCE = false >> config/config.env
-          echo \# ---- misc >> config/config.env
-          echo DOMAIN_TEMPLATE = https://dev.[DOMAIN] >> config/config.env
-          echo ENVIRONMENT_NAME = dev >> config/config.env
-          echo HOST_PORT = 5000 >> config/config.env
-          echo JWT_SIGN_SECRET = ${{secrets.JWT_SIGN_SECRET}} >> config/config.env
-          echo IS_HOSTED_ON_GCP = true >> config/config.env
-          echo IS_LOCALHOST = false >> config/config.env
-          echo VIDEO_COMPLETED_PERCENTAGE = 5 >> config/config.env
-          echo \# ---- fileStorage >> config/config.env
-          echo FILE_STORAGE_URL = https://storage.googleapis.com/epistogram_bucket_dev >> config/config.env
-          echo FILE_STORAGE_BUCKET_NAME = epistogram_bucket_dev >> config/config.env
-          echo \# ---- mail >> config/config.env
-          echo MAIL_TOKEN_SECRET = ${{secrets.MAIL_TOKEN_SECRET}} >> config/config.env
-          echo MAIL_HOST = smtp.sendgrid.net >> config/config.env
-          echo MAIL_SENDER_MAIL = ${{secrets.MAIL_SENDER_MAIL}} >> config/config.env
-          echo MAIL_SENDER_PASSWORD = ${{secrets.MAIL_SENDER_PASSWORD}} >> config/config.env
-          echo \# ---- database >> config/config.env
-          echo DB_NAME = epistogram_DEV >> config/config.env
-          echo DB_HOST_ADDRESS = ${{secrets.DB_HOST_ADDRESS}} >> config/config.env
-          echo DB_PORT = ${{secrets.DB_PORT}} >> config/config.env
-          echo DB_SERVICE_USER_NAME = ${{secrets.DB_SERVICE_USER_NAME}} >> config/config.env
-          echo DB_SERVICE_USER_PASSWORD = ${{secrets.DB_SERVICE_USER_PASSWORD}} >> config/config.env
-          echo DB_IS_ORM_LOGGING_ENABLED = true >> config/config.env
-        working-directory: ./packages/server-api
       
       - name: Set up Docker Buildx for layer caching
         uses: docker/setup-buildx-action@master
 
-      - uses: docker/build-push-action@v3
+      - name: Build and run migration script generator 
+        uses: docker/build-push-action@v3
         with:
-          file: ./config/backend.Dockerfile
+          file: ./config/migen.Dockerfile
           context: .
-          push: true
-          cache-from: type=gha,scope=$GITHUB_REF_NAME-${{ env.BACKEND_IMAGE_NAME }}
-          cache-to: type=gha,scope=$GITHUB_REF_NAME-${{ env.BACKEND_IMAGE_NAME }},mode=max
+          push: false
+          cache-from: type=gha,scope=${{ env.GITHUB_REF_NAME }}-migen
+          cache-to: type=gha,scope=${{ env.GITHUB_REF_NAME }}-migen,mode=max
           tags: |
-            ${{ env.BACKEND_IMAGE_NAME }}
+            migen
+
+      - name: Run migen
+        run: |
+          docker run `
+            -v ${PWD}/migen_out:/app/packages/util-script-producer/out migen
+
+      - name: Ls
+        run: | 
+          ls ${PWD}/migen_out
           
   # RUN TESTS 
-  run_tests: 
-    name: Run tests
-    runs-on: ubuntu-latest
+  # run_tests: 
+  #   name: Run tests
+  #   runs-on: ubuntu-latest
     
-    steps:
-      - name: Checkout branch
-        uses: actions/checkout@v3
-        with:
-          ref: dev
+  #   steps:
+  #     - name: Checkout branch
+  #       uses: actions/checkout@v3
+  #       with:
+  #         ref: dev
       
-      # - name: Set up Docker Buildx for layer caching
-      #   uses: docker/setup-buildx-action@master
+  #     # - name: Set up Docker Buildx for layer caching
+  #     #   uses: docker/setup-buildx-action@master
 
-      # Pull the latest image to build, and avoid caching pull-only images.
-      # (docker pull is faster than caching in most cases.)
-      - name: Compose pull
-        run: docker-compose -f ./epitest/testenv.yml pull
+  #     # Pull the latest image to build, and avoid caching pull-only images.
+  #     # (docker pull is faster than caching in most cases.)
+  #     - name: Compose pull
+  #       run: docker-compose -f ./epitest/testenv.yml pull
 
-      # In this step, this action saves a list of existing images,
-      # the cache is created without them in the post run.
-      # It also restores the cache if it exists.
-      - name: Use (init) layer caching - satackey/action-docker-layer-caching
-        uses: satackey/action-docker-layer-caching@v0.0.11
-        # Ignore the failure of a step and avoid terminating the job.j
-        continue-on-error: true
+  #     # In this step, this action saves a list of existing images,
+  #     # the cache is created without them in the post run.
+  #     # It also restores the cache if it exists.
+  #     - name: Use (init) layer caching - satackey/action-docker-layer-caching
+  #       uses: satackey/action-docker-layer-caching@v0.0.11
+  #       # Ignore the failure of a step and avoid terminating the job.j
+  #       continue-on-error: true
 
-      # run docker-compose up
-      - name: Compose up
-        run: docker-compose -f ./epitest/testenv.yml up --build --force-recreate --abort-on-container-exit --renew-anon-volumes
+  #     # run docker-compose up
+  #     - name: Compose up
+  #       run: docker-compose -f ./epitest/testenv.yml up --build --force-recreate --abort-on-container-exit --renew-anon-volumes
 
-  # DEPLOY DATABASE
-  deploy_database: 
-    name: Deploy database
-    runs-on: ubuntu-latest
-    needs: [build_backend, build_frontend, run_tests]
+  # # DEPLOY DATABASE
+  # deploy_database: 
+  #   name: Deploy database
+  #   runs-on: ubuntu-latest
+  #   needs: [build_backend, build_frontend, run_tests]
 
-    steps:
+  #   steps:
 
-      - name: Checkout branch
-        uses: actions/checkout@v2
-        with:
-          ref: dev
+  #     - name: Checkout branch
+  #       uses: actions/checkout@v2
+  #       with:
+  #         ref: dev
     
-      - name: Migrate schema
-        working-directory: ./deploy
-        shell: pwsh
-        run: |
-          ./migrateDatabase.ps1 `
-            -dbpass '${{secrets.DB_SERVICE_USER_PASSWORD}}' `
-            -dbhost '${{secrets.DB_HOST_ADDRESS}}' `
-            -dbport '${{secrets.DB_PORT}}' `
-            -dbname 'epistogram_DEV' `
-            -dbuser '${{secrets.DB_SERVICE_USER_NAME}}'
+  #     - name: Migrate schema
+  #       working-directory: ./deploy
+  #       shell: pwsh
+  #       run: |
+  #         ./migrateDatabase.ps1 `
+  #           -dbpass '${{secrets.DB_SERVICE_USER_PASSWORD}}' `
+  #           -dbhost '${{secrets.DB_HOST_ADDRESS}}' `
+  #           -dbport '${{secrets.DB_PORT}}' `
+  #           -dbname 'epistogram_DEV' `
+  #           -dbuser '${{secrets.DB_SERVICE_USER_NAME}}'
   
-  # DEPLOY FRONTEND
-  deploy_frontend:
-    name: Deploy frontend
-    runs-on: ubuntu-latest
-    needs: [deploy_database]
+  # # DEPLOY FRONTEND
+  # deploy_frontend:
+  #   name: Deploy frontend
+  #   runs-on: ubuntu-latest
+  #   needs: [deploy_database]
     
-    steps:  
-      - name: Login to GCP
-        uses: google-github-actions/setup-gcloud@v0
-        with:
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
-          service_account_email: ${{ secrets.GCP_EMAIL }}
-          service_account_key: ${{ secrets.GCP_CREDENTIALS }}
+  #   steps:  
+  #     - name: Login to GCP
+  #       uses: google-github-actions/setup-gcloud@v0
+  #       with:
+  #         project_id: ${{ secrets.GCP_PROJECT_ID }}
+  #         service_account_email: ${{ secrets.GCP_EMAIL }}
+  #         service_account_key: ${{ secrets.GCP_CREDENTIALS }}
 
-      - name: Configure GCP Docker
-        run: gcloud auth configure-docker --quiet
+  #     - name: Configure GCP Docker
+  #       run: gcloud auth configure-docker --quiet
 
-      - name: Deploy Docker image to GCP CloudRun
-        run: |
-          gcloud run deploy $FRONTEND_CLOUD_RUN_SVC_NAME \
-          --image $FRONTEND_IMAGE_NAME \
-          --region europe-west1 \
-          --platform managed \
-          --max-instances 1 \
-          --port 80 \
-          --allow-unauthenticated 
+  #     - name: Deploy Docker image to GCP CloudRun
+  #       run: |
+  #         gcloud run deploy $FRONTEND_CLOUD_RUN_SVC_NAME \
+  #         --image $FRONTEND_IMAGE_NAME \
+  #         --region europe-west1 \
+  #         --platform managed \
+  #         --max-instances 1 \
+  #         --port 80 \
+  #         --allow-unauthenticated 
 
-  # DEPLOY BACKEND
-  deploy_backend:
-    name: Deploy backend
-    runs-on: ubuntu-latest
-    needs: [deploy_database]
+  # # DEPLOY BACKEND
+  # deploy_backend:
+  #   name: Deploy backend
+  #   runs-on: ubuntu-latest
+  #   needs: [deploy_database]
 
-    steps:
-      - name: Login to GCP
-        uses: google-github-actions/setup-gcloud@v0
-        with:
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
-          service_account_email: ${{ secrets.GCP_EMAIL }}
-          service_account_key: ${{ secrets.GCP_CREDENTIALS }}
+  #   steps:
+  #     - name: Login to GCP
+  #       uses: google-github-actions/setup-gcloud@v0
+  #       with:
+  #         project_id: ${{ secrets.GCP_PROJECT_ID }}
+  #         service_account_email: ${{ secrets.GCP_EMAIL }}
+  #         service_account_key: ${{ secrets.GCP_CREDENTIALS }}
 
-      - name: Configure GCP Docker
-        run: gcloud auth configure-docker --quiet
+  #     - name: Configure GCP Docker
+  #       run: gcloud auth configure-docker --quiet
         
-      - name: Deploy Docker image to GCP CloudRun
-        run: |
-          gcloud run deploy $BACKEND_CLOUD_RUN_SVC_NAME \
-          --image $BACKEND_IMAGE_NAME \
-          --add-cloudsql-instances $CLOUD_SQL_CONNCETION_NAME \
-          --region europe-west1 \
-          --platform managed \
-          --max-instances 1 \
-          --min-instances 0 \
-          --port 5000 \
-          --allow-unauthenticated \
-          --memory 4Gi \
-          --cpu 2 \
-          --concurrency 200
+  #     - name: Deploy Docker image to GCP CloudRun
+  #       run: |
+  #         gcloud run deploy $BACKEND_CLOUD_RUN_SVC_NAME \
+  #         --image $BACKEND_IMAGE_NAME \
+  #         --add-cloudsql-instances $CLOUD_SQL_CONNCETION_NAME \
+  #         --region europe-west1 \
+  #         --platform managed \
+  #         --max-instances 1 \
+  #         --min-instances 0 \
+  #         --port 5000 \
+  #         --allow-unauthenticated \
+  #         --memory 4Gi \
+  #         --cpu 2 \
+  #         --concurrency 200
