@@ -48,6 +48,7 @@ export class EndpointOptionsType implements IRouteOptions {
     isPublic?: boolean;
     isPost?: boolean;
     isUnauthorized?: boolean;
+    isCompanyBound?: boolean;
 }
 
 export type MiddlwareFnType = (req: any, res: any, next: any) => void;

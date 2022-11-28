@@ -26,6 +26,7 @@ export const apiRoutes = {
     },
 
     misc: {
+        healthcheck: '/misc/healthcheck',
         getHomePageDTO: '/misc/get-overview-page-dto',
         getCurrentCourseData: '/misc/get-current-course-data',
         getCourseOverviewData: '/misc/get-course-overview-data' as ParametrizedRouteType<{ query: { userId?: Id<'User'>, courseId?: Id<'Course'> } }>,

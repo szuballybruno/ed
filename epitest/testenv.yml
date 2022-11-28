@@ -27,15 +27,23 @@ services:
     restart: always
     environment:
       PGPASSWORD: 'epistogram'
+      IS_DOCKERIZED: 'true'
+    environment:
     expose: 
       - 5000
+    healthcheck:
+      test: ["CMD", "yarn --cwd ./packages/server-api healthcheck"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
     build: 
       context: ../
       dockerfile: ./config/backend.Dockerfile
       
   tests: 
     depends_on: 
-      - server
+      server:
+        condition: service_healthy
     environment:
       IS_DOCKERIZED: 'true'
     build: 

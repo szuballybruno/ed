@@ -61,9 +61,9 @@
         },
         // build deps
         {
-            "label": "builddeps",
+            "label": "build-deps",
             "type": "shell",
-            "command": "yarn builddeps",
+            "command": "yarn build-deps",
             "problemMatcher": [],
             "presentation": {
                 "group": "deps"

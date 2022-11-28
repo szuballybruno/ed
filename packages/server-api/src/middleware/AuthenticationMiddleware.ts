@@ -29,6 +29,15 @@ export class AuthenticationMiddleware implements IXGatewayMiddlewareInstance<voi
         this._loggerService
             .logScoped('SERVER', `${requestPath}: Authorizing request...`);
 
+        // not company bound
+        if (!options.isCompanyBound) {
+
+            this._loggerService
+                .logScoped('SERVER', `${requestPath}: Route no company bound...`);
+
+            return new ActionParams(req, res, null as any, null as any);
+        }
+
         const company = await this
             ._companyService
             .getCompanyByDomainAsync(req.origin);
