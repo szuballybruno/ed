@@ -103,7 +103,7 @@ jobs:
           echo DB_IS_ORM_LOGGING_ENABLED = true >> config/config.env
         working-directory: ./packages/server-api
 
-      - uses: docker/build-push-action@v2
+      - uses: docker/build-push-action@v3
         with:
           file: ./config/backend.Dockerfile
           context: .
@@ -112,14 +112,6 @@ jobs:
           cache-to: type=gha,mode=max
           tags: |
             ${{ env.BACKEND_IMAGE_NAME }}
-
-      # - name: Build backend containera
-      #   run: |
-      #     docker buildx build . \
-      #     --file ./config/backend.Dockerfile \
-      #     --builder ${{ steps.buildx.outputs.name }} \
-      #     --tag $BACKEND_IMAGE_NAME \
-      #     --push
           
   # DEPLOY DATABASE
   # deploy_database: 
