@@ -17,7 +17,7 @@ COPY ./packages/x-core/package.json ./packages/x-core/package.json
 
 # yarn install
 RUN echo "Yarn installing deps..."
-RUN yarn
+RUN yarn --silent
 
 # copy
 RUN echo "Copying files..."

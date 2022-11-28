@@ -19,9 +19,9 @@ COPY ./packages/x-core/package.json ./packages/x-core/package.json
 COPY ./packages/x-injector/package.json ./packages/x-injector/package.json
 COPY ./packages/x-orm/package.json ./packages/x-orm/package.json
 
-# yarn install (no-lockfile)
+# yarn install
 RUN echo "Yarn installing deps..."
-RUN yarn
+RUN yarn --silent
 
 # copy other files
 RUN echo "Copying files..."
