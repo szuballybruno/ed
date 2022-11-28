@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from '../../MyORM';
-import { XViewColumn } from '../../../services/XORM/XORMDecorators';
+import { XViewColumn } from '@episto/xorm';
 import { PermissionCodeType, PermissionScopeType } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
 

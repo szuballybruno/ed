@@ -59,7 +59,7 @@ total_user_sessions AS
 
 	GROUP BY usav.user_id
 ),
-completed_video_count_avg AS
+completed_video_count_cte AS
 (
 	SELECT
 		ccvcv.user_id,
@@ -79,9 +79,7 @@ user_performance_averages AS
 	AND upv.performance_percentage != 0
 	
 	GROUP BY upv.user_id
-
 )
-
 SELECT 
 	u.id user_id,
 	u.first_name,
@@ -91,11 +89,11 @@ SELECT
 	u.creation_date signup_date,
 	u.username,
 	sf.file_path avatar_file_path,
-    sara.summerized_score_avg,
-	upa.average_performance_percentage,
-	tus.total_session_length_seconds,
-	cvca.completed_video_count,
-	uev.engagement_points,
+    COALESCE(sara.summerized_score_avg, 0) summerized_score_avg,
+	COALESCE(upa.average_performance_percentage, 0) average_performance_percentage,
+	COALESCE(tus.total_session_length_seconds, 0) total_session_length_seconds,
+	COALESCE(cvcc.completed_video_count, 0) completed_video_count,
+	COALESCE(uev.engagement_points, 0) engagement_points,
 	urtv.total_user_reaction_time_points reaction_time
 FROM public.user u
 
@@ -111,8 +109,8 @@ ON sara.user_id = u.id
 LEFT JOIN user_performance_averages upa
 ON upa.user_id = u.id
 
-LEFT JOIN completed_video_count_avg cvca
-ON cvca.user_id = u.id
+LEFT JOIN completed_video_count_cte cvcc
+ON cvcc.user_id = u.id
 
 LEFT JOIN public.user_engagement_view uev
 ON uev.user_id = u.id

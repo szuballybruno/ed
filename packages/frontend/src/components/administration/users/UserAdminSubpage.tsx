@@ -1,26 +1,23 @@
-import { useContext } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
+import { AdminActiveCompanyType } from '../../../models/types';
 import { CompanyApiService } from '../../../services/api/CompanyApiService';
 import { UserApiService } from '../../../services/api/UserApiService1';
 import { useIsMatchingCurrentRoute } from '../../../static/frontendHelpers';
 import { useRouteParams2 } from '../../../static/locationHelpers';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
-import { CurrentUserContext } from '../../system/AuthenticationFrame';
-import { useAuthorizationContext } from '../../system/AuthorizationContext';
 import { EpistoRoutes } from '../../universal/EpistoRoutes';
-import { AdminBreadcrumbsHeader } from '../AdminBreadcrumbsHeader';
+import { AdminBreadcrumbsHeader } from '../breadcrumbsHeader/AdminBreadcrumbsHeader';
 import { AdminAddUserSubpage } from './AdminAddUserSubpage';
 import { AminUserGridView, useAdminUserGridLogic, useGridFilterSettingsLogic } from './AminUserGridView';
-import { CompanySelectorDropdown, useCompanySelectorLogic } from './CompanySelectorDropdown';
 import { UserDetailsRootView } from './UserDetailsRootView';
 
-export const UserAdminSubpage = () => {
+export const UserAdminSubpage = ({ activeCompany }: { activeCompany: AdminActiveCompanyType }) => {
+
+    const activeCompanyId = activeCompany?.id ?? null;
 
     const userAdminRoute = applicationRoutes
         .administrationRoute
         .usersRoute;
-
-    const { hasPermission } = useAuthorizationContext();
 
     const params = useRouteParams2(applicationRoutes.administrationRoute.usersRoute.userRoute);
     const userId = params.getValueOrNull(x => x.userId, 'int');
@@ -28,31 +25,26 @@ export const UserAdminSubpage = () => {
     const isMatchingCurrentAppRoute = useIsMatchingCurrentRoute();
     const isSimpleView = isMatchingCurrentAppRoute(userAdminRoute.addRoute).isMatchingRouteExactly || !!userId;
 
-    const currentUser = useContext(CurrentUserContext);
-
     const { companies } = CompanyApiService.useCompanies();
 
     const filterLogic = useGridFilterSettingsLogic();
 
-    const companySelectorLogic = useCompanySelectorLogic({ companies });
 
     const gridLogic = useAdminUserGridLogic({
         isSimpleView,
         filterLogic,
-        selectedCompanyId: companySelectorLogic.activeCompanyId,
+        selectedCompanyId: activeCompanyId,
         userId
     });
-
-    const companiesHeaderComponent = hasPermission('CAN_VIEW_HIDDEN_MENUS') && <CompanySelectorDropdown
-        logic={companySelectorLogic} />;
 
     const { briefUserData } = UserApiService.useBriefUserData(userId);
     const subRouteLabel = briefUserData?.fullName;
 
     return (
-        <AdminBreadcrumbsHeader
-            subRouteLabel={subRouteLabel}
-            headerComponent={companiesHeaderComponent}>
+        <>
+            <AdminBreadcrumbsHeader
+                subRouteLabel={subRouteLabel}>
+            </AdminBreadcrumbsHeader>
 
             <EpistoFlex2
                 width="100%">
@@ -63,7 +55,7 @@ export const UserAdminSubpage = () => {
 
                     <AminUserGridView
                         logic={gridLogic}
-                        companySelectorLogic={companySelectorLogic} />
+                        activeCompanyId={activeCompanyId} />
                 </EpistoFlex2>
 
                 <EpistoRoutes
@@ -74,18 +66,19 @@ export const UserAdminSubpage = () => {
                                 companies={companies}
                                 headerButtons={[]}
                                 tabMenuItems={[]}
-                                activeCompany={companySelectorLogic.activeCompany}
+                                activeCompany={activeCompany}
                                 refetchUsersFunction={gridLogic.refetchUsers.bind(gridLogic)} />
                         },
                         {
                             route: userAdminRoute.userRoute,
                             element: <UserDetailsRootView
                                 refetchUsers={gridLogic.refetchUsers.bind(gridLogic)}
-                                activeCompany={companySelectorLogic.activeCompany}
-                                companies={companies} />
+                                activeCompany={activeCompany}
+                                companies={companies}
+                                activeCompanyId={activeCompanyId} />
                         }
                     ]} />
             </EpistoFlex2>
-        </AdminBreadcrumbsHeader>
+        </>
     );
 };

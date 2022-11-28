@@ -1,5 +1,5 @@
 import { CourseModeType, CourseStageNameType, Id, TempomatModeType } from '@episto/commontypes';
-import { XViewColumn } from '../../services/XORM/XORMDecorators';
+import { XViewColumn } from '@episto/xorm';
 
 export class CurrentUserCourseBridgeView {
     @XViewColumn()

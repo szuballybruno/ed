@@ -1,3 +1,5 @@
+import { ErrorWithCode, Id, PermissionCodeType } from '@episto/commontypes';
+import { CompanyAssociatedCourseDTO, CompanyDTO, CompanyEditDataDTO, CompanyPublicDTO, Mutation, RoleAssignCompanyDTO } from '@episto/communication';
 import { UploadedFile } from 'express-fileupload';
 import { Permission } from '../models/entity/authorization/Permission';
 import { PermissionAssignmentBridge } from '../models/entity/authorization/PermissionAssignmentBridge';
@@ -9,26 +11,15 @@ import { CompanyAssociatedCoursesView } from '../models/views/CompanyAssociatedC
 import { CompanyView } from '../models/views/CompanyView';
 import { UserPermissionView } from '../models/views/UserPermissionView';
 import { UserRoleAssignCompanyView } from '../models/views/UserRoleAssignCompanyView';
-import { CompanyAssociatedCourseDTO } from '@episto/communication';
-import { CompanyDTO } from '@episto/communication';
-import { CompanyEditDataDTO } from '@episto/communication';
-import { CompanyPublicDTO } from '@episto/communication';
-import { RoleAssignCompanyDTO } from '@episto/communication';
-import { Mutation } from '@episto/communication';
-import { ErrorWithCode } from '@episto/commontypes';
-import { PermissionCodeType } from '@episto/commontypes';
-import { Id } from '@episto/commontypes';
+import { throwNotImplemented } from '../utilities/helpers';
 import { InsertEntity } from '../utilities/misc';
 import { PrincipalId } from '../utilities/XTurboExpress/ActionParams';
-import { ActivationCodeService } from './ActivationCodeService';
 import { AuthorizationService } from './AuthorizationService';
 import { DomainProviderService } from './DomainProviderService';
 import { FileService } from './FileService';
 import { MapperService } from './MapperService';
 import { ClassType } from './misc/advancedTypes/ClassType';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
-import { XDBMSchemaService } from './XDBManager/XDBManagerTypes';
-import { throwNotImplemented } from '../utilities/helpers';
 
 export class CompanyService {
 
@@ -37,9 +28,7 @@ export class CompanyService {
         private _mapperService: MapperService,
         private _authorizationService: AuthorizationService,
         private _domainProviderService: DomainProviderService,
-        private _fileService: FileService,
-        private _schema: XDBMSchemaService,
-        private _activationCodeService: ActivationCodeService) {
+        private _fileService: FileService) {
     }
 
     /**

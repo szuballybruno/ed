@@ -1,6 +1,8 @@
 import { XSafeObjectWrapper } from '@episto/commonlogic';
+import { useCallback } from 'react';
 import { useLocation, useParams, useSearchParams } from 'react-router-dom';
 import { ApplicationRoute } from '../models/types';
+import { Navigator } from '../services/core/navigatior';
 
 /**
  * @deprecated use "useRouteParams" 
@@ -19,20 +21,10 @@ export const useIntParam = (name: string): number | null => {
     return parsed;
 };
 
-export const useRouteParams = <TParams, TQuery>(route: ApplicationRoute<TParams, TQuery>) => {
-
-    return useRouteValues(route).params;
-};
-
-export const useRouteQuery = <TParams, TQuery>(route: ApplicationRoute<TParams, TQuery>) => {
-
-    return useRouteValues(route).query;
-};
-
 /**
  * @deprecated nono
  */
-export const useRouteValues = <TParams, TQuery>(route: ApplicationRoute<TParams, TQuery>) => {
+const _useRouteValues = <TParams, TQuery>(route: ApplicationRoute<TParams, TQuery>) => {
 
     const queryObj = useSearchParams()[0];
     const query = {} as any;
@@ -54,81 +46,90 @@ export const useRouteValues = <TParams, TQuery>(route: ApplicationRoute<TParams,
     };
 };
 
+export const useRouteParams_OLD = <TParams, TQuery>(route: ApplicationRoute<TParams, TQuery>) => {
+
+    return _useRouteValues(route).params;
+};
+
+export const useRouteQuery = <TParams, TQuery>(route: ApplicationRoute<TParams, TQuery>) => {
+
+    return _useRouteValues(route).query;
+};
+
+const _parseUrlByTemplate = (currentUrl: string, route: ApplicationRoute<any, any>) => {
+
+    const template = route.route.getAbsolutePath();
+    const currentUrlSegments = currentUrl.split('/');
+    const templateSegments = template.split('/');
+    const params = {} as any;
+
+    /**
+     * Check if template segment lenght is greater than the url segment length,
+     * this is a "fatal" error, so we return immediately  
+     */
+    if (templateSegments.length > currentUrlSegments.length)
+        return {};
+
+    const paramMatches = templateSegments
+        .map((templateSegment, templateSegmentIndex) => {
+
+            const urlSegment = currentUrlSegments[templateSegmentIndex];
+
+            const isSegementParameter = templateSegment
+                .startsWith(':');
+
+            // parse parameter
+            if (isSegementParameter) {
+
+                const parameterKey = templateSegment
+                    .replace(':', '');
+
+                return {
+                    value: urlSegment,
+                    name: parameterKey
+                };
+            }
+
+            // parse normal segment 
+            else {
+
+                const isMatchingUrlSegment = templateSegment === urlSegment;
+
+                return isMatchingUrlSegment
+                    ? 'notparam'
+                    : 'mismatch';
+            }
+        });
+
+    // mimatch error
+    if (paramMatches.some(x => x === 'mismatch'))
+        return {};
+
+    // set param values 
+    paramMatches
+        .filter(x => x !== 'mismatch' && x !== 'notparam')
+        .forEach((x: any) => {
+
+            params[x.name] = x.value;
+        });
+
+    return params;
+};
+
+/**
+ * Up to date solution to parse route params
+ */
 export const useRouteParams2 = <TParams, TQuery>(route: ApplicationRoute<TParams, TQuery>) => {
 
     // unused, just for UI update triggers 
     const _ = useLocation();
-
-    const template = route.route.getAbsolutePath();
-    const url = window.location.pathname;
-    const urlSplit = url.split('/');
-    const templateSplit = template.split('/');
-
-    const paramsObj = (() => {
-
-        const params = {} as any;
-
-        // lenght error 
-        if (templateSplit.length > urlSplit.length)
-            return {};
-
-        const paramMatches = templateSplit
-            .map((templatePart, index) => {
-
-                const isParam = templatePart.startsWith(':');
-                if (!isParam)
-                    return templatePart === urlSplit[index]
-                        ? 'notparam'
-                        : 'mismatch';
-
-                return { value: urlSplit[index], name: templatePart.replace(':', '') };
-            });
-
-        // mimatch error
-        if (paramMatches.some(x => x === 'mismatch'))
-            return {};
-
-        // set param values 
-        paramMatches
-            .filter(x => x !== 'mismatch' && x !== 'notparam')
-            .forEach((x: any) => {
-
-                params[x.name] = x.value;
-            });
-
-        return params;
-    })();
+    const currentUrl = window.location.pathname;
+    const paramsObj = _parseUrlByTemplate(currentUrl, route);
 
     return new XSafeObjectWrapper<TParams>(paramsObj);
 };
 
-export const useSetQueryParams = <TParmas = any>() => {
-
-    const [, setSearchParams] = useSearchParams();
-    const searchParams = useQueryParams().data;
-
-    const setQueryParams = (key: keyof TParmas, value: string | null) => {
-
-        // append param 
-        if (value !== null) {
-
-            const newParmas = { ...searchParams, [key]: value };
-            setSearchParams(newParmas);
-        }
-
-        // remove param 
-        else {
-
-            const newParmas: any = { ...searchParams };
-            delete newParmas[key];
-            setSearchParams(newParmas);
-        }
-    };
-
-    return { setQueryParams };
-};
-
-const useQueryParams = <TParams = any>() => {
+export const useQueryParams = <TParams = any>() => {
 
     const [searchParams] = useSearchParams();
 
@@ -157,27 +158,31 @@ const useQueryParams = <TParams = any>() => {
     return new XSafeObjectWrapper<TParams>(searchParamsObj as any);
 };
 
-/**
- * @deprecated use "useRouteParams" 
- */
-export const useStringParam = (name: string) => {
 
-    const param = useParams()[name];
-    if (!param)
-        return null;
+export const useSetQueryParams = <TParmas = any>() => {
 
-    return param;
-};
+    const [, setSearchParams] = useSearchParams();
+    const searchParams = useQueryParams().data;
 
-/**
- * @deprecated use "useRouteParams" 
- */
-export const useQueryVal = (name: string) => {
+    const setQueryParams = (key: keyof TParmas, value: string | null) => {
 
-    const [query] = useSearchParams();
-    const val = query.get(name);
+        // append param 
+        if (value !== null) {
 
-    return val;
+            const newParmas = { ...searchParams, [key]: value };
+            setSearchParams(newParmas);
+        }
+
+        // remove param 
+        else {
+
+            const newParmas: any = { ...searchParams };
+            delete newParmas[key];
+            setSearchParams(newParmas);
+        }
+    };
+
+    return { setQueryParams };
 };
 
 /**
@@ -214,8 +219,52 @@ export const stringifyQueryObject = (queryObj: any) => {
     return qs;
 };
 
+const _replaceRouteParam = <TParams>(
+    route: ApplicationRoute<TParams, any>,
+    paramKey: keyof TParams,
+    paramValue: string) => {
+
+    const currentUrl = window.location.pathname;
+    const params = _parseUrlByTemplate(currentUrl, route);
+    const oldParamValue = params[paramKey];
+
+    if (oldParamValue === undefined)
+        throw new Error(`Param key "${paramKey as any}" not found on parsed url!`);
+
+    const fullRoute = route.route.getAbsolutePath();
+    const paramToken = `:${paramKey as any}`;
+
+    const replacedRouteCurrent = fullRoute
+        .replace(paramToken, oldParamValue);
+
+    const replacedRouteNew = fullRoute
+        .replace(paramToken, paramValue);
+
+    const newRoute = currentUrl
+        .replace(replacedRouteCurrent, replacedRouteNew);
+
+    return newRoute;
+};
+
+export const useSetRouteParam = <TParams>(
+    route: ApplicationRoute<TParams, any>,
+    paramKey: keyof TParams) => {
+
+    const { hrefNavigate } = Navigator
+        .useHrefNav();
+
+    return {
+        setRouteParam: useCallback((paramValue: string) => {
+
+            const newRoute = _replaceRouteParam(route, paramKey, paramValue);
+            hrefNavigate(newRoute);
+        }, [route, paramKey, hrefNavigate])
+    };
+};
+
 export const LocationHelpers = {
     useRouteParams2,
     useSetQueryParams,
-    useQueryParams
+    useQueryParams,
+    useSetRouteParam
 };

@@ -1,4 +1,4 @@
-import { XJoinColumn, XManyToOne, XViewColumn } from '../../../services/XORM/XORMDecorators';
+import { XJoinColumn, XManyToOne, XViewColumn } from '@episto/xorm';
 import { Id } from '@episto/commontypes';
 import { Column, Entity, PrimaryGeneratedColumn } from '../../MyORM';
 import { AnswerSession } from './AnswerSession';

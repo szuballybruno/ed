@@ -5,6 +5,7 @@ import { useAuthorizationContext } from '../system/AuthorizationContext';
 import { EpistoRoutes } from '../universal/EpistoRoutes';
 import { ActivationCodesAdminPage } from './activationCodes/ActivationCodesAdminPage';
 import { AdminLeftPane } from './AdminLeftPane';
+import { AdminBreadcrumbsHeaderRoot, useAdminBreadcrumbsRootLogic } from './breadcrumbsHeader/AdminBreadcrumbsHeaderRoot';
 import { CompanyAdminPage } from './companies/CompanyAdminPage';
 import { CourseAdministartionSubpage } from './courses/CourseAdministartionSubpage';
 import { DebugPage } from './debug/DebugPage';
@@ -20,85 +21,96 @@ export const AdminPage = () => {
 
     const adminRoute = applicationRoutes.administrationRoute;
     const { hasPermission } = useAuthorizationContext();
+    const logic = useAdminBreadcrumbsRootLogic();
+    const { activeCompany } = logic;
+    const activeCompanyId = activeCompany?.id ?? null;
 
     return <>
 
         {/* admin left pane */}
-        <AdminLeftPane />
+        <AdminLeftPane
+            activeCompanyId={activeCompanyId} />
 
         {/* admin content pane */}
         <ContentPane
             isNavbarLowHeight
             padding="0 10px 10px 10px">
 
-            <EpistoRoutes
-                renderRoutes={new ArrayBuilder()
+            <AdminBreadcrumbsHeaderRoot
+                logic={logic}>
 
-                    // administration home
-                    .add({
-                        route: adminRoute.statsRoute,
-                        element: <AdminStatsSubpage />
-                    })
+                <EpistoRoutes
+                    renderRoutes={new ArrayBuilder()
 
-                    // user administration
-                    .add({
-                        route: adminRoute.usersRoute,
-                        element: <UserAdminSubpage />
-                    })
+                        // administration home
+                        .add({
+                            route: adminRoute.statsRoute,
+                            element: <AdminStatsSubpage />
+                        })
 
-                    // course administartion
-                    .add({
-                        route: adminRoute.coursesRoute,
-                        element: <CourseAdministartionSubpage />
-                    })
+                        // user administration
+                        .add({
+                            route: adminRoute.usersRoute,
+                            element: <UserAdminSubpage
+                                activeCompany={activeCompany} />
+                        })
 
-                    // shop administartion
-                    .addIf(hasPermission('CAN_VIEW_HIDDEN_MENUS'), {
-                        route: adminRoute.shopRoute,
-                        element: <ShopAdminSubpage />
-                    })
+                        // course administartion
+                        .add({
+                            route: adminRoute.coursesRoute,
+                            element: <CourseAdministartionSubpage
+                                activeCompanyId={activeCompanyId} />
+                        })
 
-                    // personality assessment administartion
-                    .addIf(hasPermission('CAN_VIEW_HIDDEN_MENUS'), {
-                        route: adminRoute.personalityAssessmentRoute,
-                        element: <EpistoRoutes
-                            renderRoutes={[
-                                {
-                                    route: adminRoute.personalityAssessmentRoute.indexRoute,
-                                    element: <PersonalityTraitCategoriesSubpage />
-                                },
-                                {
-                                    route: adminRoute.personalityAssessmentRoute.editTipsRoute,
-                                    element: <EditPersonalityTraitCategorySubpage />
-                                },
-                                {
-                                    route: adminRoute.personalityAssessmentRoute.editTipsRoute.editTipRoute,
-                                    element: <EditDailyTipSubpage />
-                                }
-                            ]} />,
-                    })
+                        // shop administartion
+                        .addIf(hasPermission('CAN_VIEW_HIDDEN_MENUS'), {
+                            route: adminRoute.shopRoute,
+                            element: <ShopAdminSubpage />
+                        })
 
-                    .addIf(hasPermission('CAN_VIEW_HIDDEN_MENUS'), {
-                        route: adminRoute.companiesRoute,
-                        element: <CompanyAdminPage />
-                    })
+                        // personality assessment administartion
+                        .addIf(hasPermission('CAN_VIEW_HIDDEN_MENUS'), {
+                            route: adminRoute.personalityAssessmentRoute,
+                            element: <EpistoRoutes
+                                renderRoutes={[
+                                    {
+                                        route: adminRoute.personalityAssessmentRoute.indexRoute,
+                                        element: <PersonalityTraitCategoriesSubpage />
+                                    },
+                                    {
+                                        route: adminRoute.personalityAssessmentRoute.editTipsRoute,
+                                        element: <EditPersonalityTraitCategorySubpage />
+                                    },
+                                    {
+                                        route: adminRoute.personalityAssessmentRoute.editTipsRoute.editTipRoute,
+                                        element: <EditDailyTipSubpage />
+                                    }
+                                ]} />,
+                        })
 
-                    .addIf(hasPermission('CAN_VIEW_HIDDEN_MENUS'), {
-                        route: adminRoute.rolesRoute,
-                        element: <RoleAdminPage />
-                    })
+                        .addIf(hasPermission('CAN_VIEW_HIDDEN_MENUS'), {
+                            route: adminRoute.companiesRoute,
+                            element: <CompanyAdminPage />
+                        })
 
-                    .addIf(hasPermission('CAN_VIEW_HIDDEN_MENUS'), {
-                        route: adminRoute.activationCodesRoute,
-                        element: <ActivationCodesAdminPage />
-                    })
+                        .addIf(hasPermission('CAN_VIEW_HIDDEN_MENUS'), {
+                            route: adminRoute.rolesRoute,
+                            element: <RoleAdminPage />
+                        })
 
-                    .addIf(hasPermission('CAN_VIEW_HIDDEN_MENUS'), {
-                        route: adminRoute.debugRoute,
-                        element: <DebugPage />
-                    })
+                        .addIf(hasPermission('CAN_VIEW_HIDDEN_MENUS'), {
+                            route: adminRoute.activationCodesRoute,
+                            element: <ActivationCodesAdminPage
+                                activeCompany={activeCompany} />
+                        })
 
-                    .getArray()} />
+                        .addIf(hasPermission('CAN_VIEW_HIDDEN_MENUS'), {
+                            route: adminRoute.debugRoute,
+                            element: <DebugPage />
+                        })
+
+                        .getArray()} />
+            </AdminBreadcrumbsHeaderRoot>
         </ContentPane>
     </>;
 };

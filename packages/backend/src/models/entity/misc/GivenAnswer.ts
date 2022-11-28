@@ -9,7 +9,7 @@ import {
     PrimaryGeneratedColumn,
     Relation
 } from '../../MyORM';
-import { DeletionDateColumn, XJoinColumn, XManyToOne, XViewColumn } from '../../../services/XORM/XORMDecorators';
+import { DeletionDateColumn, XJoinColumn, XManyToOne, XViewColumn } from '@episto/xorm';
 import { Id } from '@episto/commontypes';
 import { AnswerGivenAnswerBridge } from './AnswerGivenAnswerBridge';
 import { AnswerSession } from './AnswerSession';

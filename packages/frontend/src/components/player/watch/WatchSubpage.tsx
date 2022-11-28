@@ -5,7 +5,7 @@ import { Responsivity } from '../../../helpers/responsivity';
 import { PlayerApiService } from '../../../services/api/PlayerApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { setPageTitle } from '../../../static/frontendHelpers';
-import { useStringParam } from '../../../static/locationHelpers';
+import { useRouteParams2 } from '../../../static/locationHelpers';
 import { Logger } from '../../../static/Logger';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoDiv } from '../../controls/EpistoDiv';
@@ -28,7 +28,8 @@ export const WatchSubpage = () => {
 
     const warningDialogLogic = useEpistoDialogLogic<{ descriptorCode: string }>('warn3');
     const { navigate2, navigateToPlayer } = useNavigation();
-    const urlPlaylistItemCode = useStringParam('descriptorCode')!;
+    const urlPlaylistItemCode = useRouteParams2(applicationRoutes.playerRoute.watchRoute)
+        .getValue(x => x.descriptorCode, 'string');
     const [watchSubpageState, setWatchSubpageState] = useState<WatchSubpageState>('watch');
     const [isScrolledFromTop, setIsScrolledFromTop] = useState(false);
     const { setParent, scroll, parentElement } = useScrollIntoView();

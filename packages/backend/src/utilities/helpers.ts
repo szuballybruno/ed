@@ -7,6 +7,7 @@ import { ErrorWithCode } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
 import { KeyofConstrained } from './misc';
 import { ITurboRequest } from './XTurboExpress/XTurboExpressTypes';
+import { XORMUtils } from '@episto/xorm';
 
 export const snoozeAsync = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -30,7 +31,7 @@ export const isXMinutesAgo = (date: Date, minutes: number) => {
 export const getJoinColumnName = <T>(c: ClassType<T>, prop: KeyofConstrained<T, Id<any> | null>) => {
 
     return {
-        name: toSQLSnakeCasing(prop as string)
+        name: XORMUtils.toSQLSnakeCasing(prop as string)
     };
 };
 
@@ -55,13 +56,6 @@ export const throwNotImplemented = (): Error => {
 
     throw new Error('Not implemented!');
     return {} as any;
-};
-
-export const toSQLSnakeCasing = (name: string) => {
-
-    return name.split(/(?=[A-Z])/)
-        .join('_')
-        .toLowerCase();
 };
 
 /**

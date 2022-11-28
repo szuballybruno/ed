@@ -10,7 +10,7 @@ import { ClassType } from './misc/advancedTypes/ClassType';
 import { log } from './misc/logger';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { StorageService } from './StorageService';
-import { EntityType } from './XORM/XORMTypes';
+import { EntityType } from '@episto/xorm';
 
 export type UploadFileRelatedEntityIdType = { id: Id<any>, file: UploadedFile };
 

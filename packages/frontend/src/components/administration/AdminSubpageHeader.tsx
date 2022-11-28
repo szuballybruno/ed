@@ -8,6 +8,7 @@ import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 import { EpistoTabs } from '../controls/EpistoTabs';
+import { useAdminBreadcrumbsContext } from './breadcrumbsHeader/AdminBreadcrumbsContext';
 
 export const AdminSubpageHeader = ({
     children,
@@ -34,7 +35,7 @@ export const AdminSubpageHeader = ({
 
     const tabMenuItemsList = (tabMenuItems ?? []);
     const isMatchingCurrentRoute = useIsMatchingCurrentRoute();
-    const { navigate2 } = useNavigation();
+    const { navigate3 } = useNavigation();
     const urlParams = useParams<{ userId: string, courseId: string, videoId: string, examId: string, shopItemId: string }>();
     const userId = urlParams.userId ? parseInt(urlParams.userId) : null;
     const courseId = urlParams.courseId ? parseInt(urlParams.courseId) : null;
@@ -42,10 +43,13 @@ export const AdminSubpageHeader = ({
     const examId = urlParams.examId ? parseInt(urlParams.examId) : null;
     const shopItemId = urlParams.shopItemId ? parseInt(urlParams.shopItemId) : null;
 
+    const { activeCompanyId } = useAdminBreadcrumbsContext();
+
     const currentMatchingRoute = tabMenuItemsList
         .firstOrNull(route => isMatchingCurrentRoute(route).isMatchingRouteExactly);
 
-    const { data: queryParams } = LocationHelpers.useQueryParams();
+    const { data: query } = LocationHelpers
+        .useQueryParams();
 
     const handleNavigateToTab = (path: string) => {
 
@@ -61,16 +65,17 @@ export const AdminSubpageHeader = ({
         }
         else {
 
-            const routeParms = {
+            const params = {
                 userId,
                 courseId,
                 videoId,
                 examId,
                 shopItemId,
+                activeCompanyId,
                 ...navigationQueryParams,
             };
 
-            navigate2(targetRoute, routeParms, queryParams);
+            navigate3(targetRoute, { params, query });
         }
     };
 

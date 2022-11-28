@@ -5,7 +5,7 @@ import { showNotification } from '../../../services/core/notifications';
 import { CompanyAssociatedCourseDTO } from '@episto/communication';
 import { Id } from '@episto/commontypes';
 import { EpistoIcons } from '../../../static/EpistoIcons';
-import { useRouteParams } from '../../../static/locationHelpers';
+import { useRouteParams_OLD } from '../../../static/locationHelpers';
 import { EpistoCheckbox } from '../../controls/EpistoCheckbox';
 import { EpistoDataGrid, EpistoDataGridColumnBuilder } from '../../controls/EpistoDataGrid';
 import { EpistoImage } from '../../controls/EpistoImage';
@@ -63,7 +63,7 @@ export const CompanyAdminCoursesPage = () => {
 
     const { indexRoute, editRoute, coursesRoute } = applicationRoutes.administrationRoute.companiesRoute;
 
-    const companyId = useRouteParams(editRoute)
+    const companyId = useRouteParams_OLD(editRoute)
         .getValue(x => x.companyId, 'int');
 
     const { courseAssociations, refetchCourseAssociations, courseAssociationsState, courseAssociationsError } = CompanyApiService

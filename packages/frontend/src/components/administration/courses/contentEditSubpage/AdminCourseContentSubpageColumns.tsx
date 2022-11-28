@@ -1,20 +1,19 @@
-import { Equalizer, Quiz } from '@mui/icons-material';
+import { Id, VersionCode } from '@episto/commontypes';
+import { CourseContentItemAdminDTO, ModuleEditDTO } from '@episto/communication';
+import { Quiz } from '@mui/icons-material';
 import Delete from '@mui/icons-material/Delete';
 import { useGridApiContext } from '@mui/x-data-grid';
-import { ReactNode, useState } from 'react';
-import { CourseContentItemAdminDTO } from '@episto/communication';
-import { ModuleEditDTO } from '@episto/communication';
-import { VersionCode } from '@episto/commontypes';
-import { Id } from '@episto/commontypes';
+import { ReactNode, useCallback, useState } from 'react';
 import { EpistoButton } from '../../../controls/EpistoButton';
 import { EpistoCheckbox } from '../../../controls/EpistoCheckbox';
 import { EpistoDataGridColumnBuilder } from '../../../controls/EpistoDataGrid';
+import { EpistoFlex2 } from '../../../controls/EpistoFlex';
+import { EpistoFont } from '../../../controls/EpistoFont';
 import { EpistoSelect } from '../../../controls/EpistoSelect';
 import { IXMutatorFunctions } from '../../../lib/XMutator/XMutatorCore';
 import { ChipSmall } from '../ChipSmall';
 import { RowSchema } from './AdminCourseContentSubpageLogic';
 import classses from './css/AdminCourseContentSubpage.module.css';
-import { ItemEditDialogPageType } from '../itemEditDialog/ItemEditDialog';
 
 const useSetAndCommitCellValue = <TRow, TKey, TField extends keyof TRow,>() => {
 
@@ -41,10 +40,12 @@ const useSetAndCommitCellValue = <TRow, TKey, TField extends keyof TRow,>() => {
 
 export const useGridColumns = (
     modules: ModuleEditDTO[],
-    openDialog: (type: 'video' | 'exam', page: ItemEditDialogPageType, data?: RowSchema) => void,
+    openDialog: (type: 'video' | 'exam', data?: RowSchema) => void,
     itemsMutatorFunctions: IXMutatorFunctions<CourseContentItemAdminDTO, 'versionCode', VersionCode>,
     onSelectVideoFile: (row: RowSchema) => void,
-    currentDropModuleId: Id<'ModuleVersion'> | null) => {
+    currentDropModuleId: Id<'ModuleVersion'> | null,
+    isSimpleView: boolean,
+    currentVersionCode: VersionCode | null) => {
 
     const TextCellRenderer = ({
         children,
@@ -113,12 +114,20 @@ export const useGridColumns = (
         return true;
     };
 
-    const isMarkAsFinalDisabled = (row: RowSchema) => itemsMutatorFunctions
-        .getMutatedItems()
-        .any(x => x.itemType === 'final') && row.itemType.type !== 'final';
+    const isMarkAsFinalDisabled = useCallback((row: RowSchema) => {
+
+        return itemsMutatorFunctions
+            .getMutatedItems()
+            .any(x => x.itemType === 'final') && row.itemType.type !== 'final';
+    }, [itemsMutatorFunctions]);
+
+    const handleViewDetails = useCallback((row: RowSchema) => {
+
+        openDialog(row.itemType?.type === 'video' ? 'video' : 'exam', row);
+    }, [openDialog]);
 
     const gridColumns = new EpistoDataGridColumnBuilder<RowSchema, VersionCode>()
-        .add({
+        .addIf(!isSimpleView, {
             field: 'itemTitle',
             headerName: 'Cím',
             width: 220,
@@ -139,7 +148,26 @@ export const useGridColumns = (
                 </TextCellRenderer>;
             }
         })
-        .add({
+        .addIf(isSimpleView, {
+            field: 'itemTitle',
+            headerName: 'Cím',
+            width: 500,
+            resizable: true,
+            renderCell: ({ value, row }) => (
+                <EpistoFlex2
+                    background="deepBlue"
+                    className="whall"
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => handleViewDetails(row)}
+                    align="center">
+                    <EpistoFont
+                        fontWeight={currentVersionCode === row.data.versionCode ? 'heavy' : undefined}>
+                        {value}
+                    </EpistoFont>
+                </EpistoFlex2>
+            )
+        })
+        .addIf(!isSimpleView, {
             field: 'itemSubtitle',
             headerName: 'Alcím',
             width: 220,
@@ -160,7 +188,7 @@ export const useGridColumns = (
                 </TextCellRenderer>;
             }
         })
-        .add({
+        .addIf(!isSimpleView, {
             field: 'itemOrderIndex',
             headerName: 'Elhelyezkedés',
             width: 80,
@@ -173,7 +201,7 @@ export const useGridColumns = (
                 </TextCellRenderer>;
             }
         })
-        .add({
+        .addIf(!isSimpleView, {
             field: 'module',
             headerName: 'Modul',
             width: 250,
@@ -204,7 +232,7 @@ export const useGridColumns = (
                 rowKey={props.key}
                 row={props.row} />
         })
-        .add({
+        .addIf(!isSimpleView, {
             field: 'itemType',
             headerName: 'Típus',
             width: 120,
@@ -218,7 +246,7 @@ export const useGridColumns = (
                     color={value.color} />;
             }
         })
-        .add({
+        .addIf(!isSimpleView, {
             field: 'isFinal',
             headerName: 'Zaro',
             width: 80,
@@ -238,7 +266,7 @@ export const useGridColumns = (
                 )
                 : <></>
         })
-        .add({
+        .addIf(!isSimpleView, {
             field: 'videoLength',
             headerName: 'Videó hossza',
             width: 80,
@@ -252,7 +280,7 @@ export const useGridColumns = (
                     color={value.color} />;
             }
         })
-        .add({
+        .addIf(!isSimpleView, {
             field: 'errors',
             headerName: 'Hibak',
             width: 100,
@@ -267,7 +295,7 @@ export const useGridColumns = (
                     color={value.color} />;
             }
         })
-        .add({
+        .addIf(!isSimpleView, {
             field: 'videoFile',
             headerName: 'Videó fájl',
             width: 180,
@@ -284,7 +312,7 @@ export const useGridColumns = (
                 </EpistoButton >;
             }
         })
-        .add({
+        .addIf(!isSimpleView, {
             field: 'quickMenu',
             headerName: 'Gyorshivatkozások',
             width: 150,
@@ -293,15 +321,9 @@ export const useGridColumns = (
                 return (
                     <div className="h-flex">
                         <EpistoButton
-                            onClick={() => openDialog(row.itemType?.type === 'video' ? 'video' : 'exam', 'videoQuestion', row)}>
+                            onClick={() => handleViewDetails(row)}>
 
                             <Quiz />
-                        </EpistoButton>
-
-                        <EpistoButton
-                            onClick={() => openDialog(row.itemType?.type === 'video' ? 'video' : 'exam', 'videoStats', row)}>
-
-                            <Equalizer />
                         </EpistoButton>
 
                         <EpistoButton

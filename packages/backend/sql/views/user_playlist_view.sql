@@ -1,9 +1,12 @@
 WITH 
-items_with_user AS
+items_with_user_cte AS
 (
 	SELECT 
 		ucb.user_id,
 		ucb.course_id,
+        ucb.current_item_code = plv.module_code module_is_current,
+        ucb.current_item_code = plv.playlist_item_code item_is_current,
+		ucb.course_mode,
 		plv.module_order_index,
 		plv.item_order_index,
 		plv.video_version_id,
@@ -20,26 +23,10 @@ items_with_user AS
 		plv.item_subtitle,
 		plv.playlist_item_code,
 		plv.video_audio_text,
-        ucb.current_item_code = plv.module_code module_is_current,
+		plv.item_order_index = 0 AND plv.module_order_index = 1 is_first_item,
 		esv.score_percentage,
         uprv.is_recommended_for_practise IS TRUE is_recommended_for_practise,
- 
-        -- state
-		CASE 
-			WHEN ucb.current_item_code = plv.playlist_item_code
-				THEN 'current'
-			WHEN vc.completion_date IS NOT NULL OR ec.completion_date IS NOT NULL
-				THEN 'completed'
-			WHEN ucb.course_mode = 'advanced' 
-				THEN 'available'
-            WHEN plv.item_order_index = 0 AND plv.module_order_index = 1
-                THEN 'available'
-			WHEN LAG(vc.completion_date, 1) OVER (
-                PARTITION BY plv.course_version_id 
-                ORDER BY module_order_index, item_order_index) IS NOT NULL 
-				THEN 'available'
-				ELSE 'locked'
-		END item_state
+		COALESCE(vc.completion_date, ec.completion_date) completion_date
 	FROM public.playlist_view plv
 	
 	LEFT JOIN public.course_version cv 
@@ -65,9 +52,31 @@ items_with_user AS
     LEFT JOIN public.user_practise_recommendation_view uprv
     ON uprv.video_version_id = plv.video_version_id
     AND uprv.user_id = ucb.user_id
+),
+items_with_state_cte AS
+(
+	SELECT 
+		iwuc.*,
+		-- state
+		CASE 
+			WHEN iwuc.item_is_current
+				THEN 'current'
+			WHEN iwuc.completion_date IS NOT NULL
+				THEN 'completed'
+			WHEN iwuc.course_mode = 'advanced' 
+				THEN 'available'
+            WHEN iwuc.is_first_item
+                THEN 'available'
+			WHEN LAG(iwuc.completion_date, 1) OVER (
+                PARTITION BY iwuc.course_version_id, iwuc.user_id
+                ORDER BY module_order_index, item_order_index) IS NOT NULL 
+				THEN 'available'
+				ELSE 'locked'
+		END item_state
+	FROM items_with_user_cte iwuc
 )
 SELECT * 
-FROM items_with_user
+FROM items_with_state_cte
 
 ORDER BY
 	user_id,

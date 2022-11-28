@@ -1,15 +1,15 @@
-import { jsExtensions } from '@episto/commonlogic';
+import { initJsExtensions } from '@episto/xcore';
 import { dirname } from 'path';
 import 'reflect-metadata'; // needs to be imported for TypeORM
 import { fileURLToPath } from 'url';
 import { LoggerService } from './services/LoggerService';
 import { log } from './services/misc/logger';
-import { ORMConnectionService } from './services/ORMConnectionService/ORMConnectionService';
+import { XORMConnectionService } from '@episto/xorm';
 import { ServiceProviderInitializator } from './startup/initApp';
 import { initTurboExpress } from './startup/instatiateTurboExpress';
 import { XTurboExpressListener } from './turboImplementations/XTurboExpressListener';
 
-jsExtensions.initJsExtensions();
+initJsExtensions();
 
 const rootDir = dirname(fileURLToPath(import.meta.url));
 
@@ -29,7 +29,7 @@ const startServerAsync = async (initializator: ServiceProviderInitializator) => 
         .useTransientServicesContextAsync(async serviceProvider => {
 
             const ormService = serviceProvider
-                .getService(ORMConnectionService);
+                .getService(XORMConnectionService);
 
             await ormService
                 .validateSchemaAsync();

@@ -1,4 +1,4 @@
-import { jsExtensions } from '@episto/commonlogic';
+import { initJsExtensions } from '@episto/xcore';
 import { LicenseInfo } from '@mui/x-license-pro';
 import { FC } from 'react';
 import { createRoot } from 'react-dom/client';
@@ -9,7 +9,7 @@ import './styles/globalCssClasses.css';
 import './styles/globalCssTypes';
 import './styles/index.css';
 
-jsExtensions.initJsExtensions();
+initJsExtensions();
 
 /**
  * Initialize app

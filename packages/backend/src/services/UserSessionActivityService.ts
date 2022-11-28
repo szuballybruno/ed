@@ -9,7 +9,7 @@ import { CoinAcquireService } from './CoinAcquireService';
 import { LoggerService } from './LoggerService';
 import { ClassType } from './misc/advancedTypes/ClassType';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
-import { EntityType } from './XORM/XORMTypes';
+import { EntityType } from '@episto/xorm';
 
 type RollingSessionEntityType<TId extends string> = EntityType<TId> & {
     userId: Id<'User'>,

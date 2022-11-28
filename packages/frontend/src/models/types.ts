@@ -2,6 +2,8 @@ import { ReactNode } from 'react';
 import { EpistoButtonPropsType } from '../components/controls/EpistoButton';
 import { HasPermissionFnType } from '../components/system/AuthorizationContext';
 import { trimEndChar } from '@episto/commonlogic';
+import { Id } from '@episto/commontypes';
+import { CompanyDTO } from '@episto/communication';
 
 export type LoadingStateType = 'idle' | 'loading' | 'error' | 'success';
 
@@ -45,6 +47,10 @@ export class EpistoRoute {
         return path.replaceAll('//', '/');
     }
 }
+
+export type AdminActiveCompanyType = CompanyDTO | null;
+export type AdminActiveCompanyIdType = Id<'Company'> | null;
+export type AdminActiveCompanyRouteParamType = { activeCompanyId: AdminActiveCompanyIdType };
 
 export type ApplicationRoute<TParams = void, TQuery = void> = {
     name?: string;

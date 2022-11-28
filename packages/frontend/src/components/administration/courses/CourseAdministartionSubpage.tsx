@@ -1,11 +1,12 @@
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
+import { AdminActiveCompanyIdType } from '../../../models/types';
 import { EpistoRoutes } from '../../universal/EpistoRoutes';
 import { AdminCourseUserProgressSubpage } from './AdminCourseUserProgressSubpage';
 import { AdminCourseContentSubpage } from './contentEditSubpage/AdminCourseContentSubpage';
 import { CourseStatisticsSubpage } from './CourseStatisticsSubpage';
 import { EditCourseDetailsSubpage } from './EditCourseDetailsSubpage';
 
-export const CourseAdministartionSubpage = () => {
+export const CourseAdministartionSubpage = ({ activeCompanyId }: { activeCompanyId: AdminActiveCompanyIdType }) => {
 
     return (
         <EpistoRoutes
@@ -16,7 +17,8 @@ export const CourseAdministartionSubpage = () => {
                 },
                 {
                     route: applicationRoutes.administrationRoute.coursesRoute.courseDetailsRoute,
-                    element: <EditCourseDetailsSubpage />
+                    element: <EditCourseDetailsSubpage
+                        activeCompanyId={activeCompanyId} />
                 },
                 {
                     route: applicationRoutes.administrationRoute.coursesRoute.courseContentRoute,

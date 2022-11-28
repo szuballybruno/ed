@@ -1,5 +1,5 @@
 # Get the latest node image 
-FROM node:18.7.0
+FROM node:18.12.1
 
 # set the working directory, in which every command will run
 WORKDIR /app
@@ -22,6 +22,19 @@ COPY ./packages/commontypes/package.json ./packages/commontypes/package.json
 
 RUN echo "Copying communication package.json..."
 COPY ./packages/communication/package.json ./packages/communication/package.json
+COPY ./packages/communication/rollup.config.js ./packages/communication/rollup.config.js
+
+RUN echo "Copying xmapper package.json..."
+COPY ./packages/xmapper/package.json ./packages/xmapper/package.json
+
+RUN echo "Copying xcore package.json..."
+COPY ./packages/xcore/package.json ./packages/xcore/package.json
+
+RUN echo "Copying xinjector package.json..."
+COPY ./packages/xinjector/package.json ./packages/xinjector/package.json
+
+RUN echo "Copying xorm package.json..."
+COPY ./packages/xorm/package.json ./packages/xorm/package.json
 
 # yarn install (no-lockfile)
 RUN echo "Yarn installing deps..."
@@ -30,6 +43,7 @@ RUN yarn --no-lockfile
 # copy other files
 RUN echo "Copying root files..."
 COPY ./tsconfig.json ./tsconfig.json
+COPY ./lerna.json ./lerna.json
 
 RUN echo "Copying backend files..."
 COPY ./packages/backend/tsconfig.json ./packages/backend/tsconfig.json
@@ -52,6 +66,22 @@ COPY ./packages/commontypes/src ./packages/commontypes/src
 RUN echo "Copying communication files..."
 COPY ./packages/communication/tsconfig.json ./packages/communication/tsconfig.json
 COPY ./packages/communication/src ./packages/communication/src
+
+RUN echo "Copying xmapper files..."
+COPY ./packages/xmapper/tsconfig.json ./packages/xmapper/tsconfig.json
+COPY ./packages/xmapper/src ./packages/xmapper/src
+
+RUN echo "Copying xinjector files..."
+COPY ./packages/xinjector/tsconfig.json ./packages/xinjector/tsconfig.json
+COPY ./packages/xinjector/src ./packages/xinjector/src
+
+RUN echo "Copying xcore files..."
+COPY ./packages/xcore/tsconfig.json ./packages/xcore/tsconfig.json
+COPY ./packages/xcore/src ./packages/xcore/src
+
+RUN echo "Copying xorm files..."
+COPY ./packages/xorm/tsconfig.json ./packages/xorm/tsconfig.json
+COPY ./packages/xorm/src ./packages/xorm/src
 
 # build backend
 RUN echo "Running Yarn build backend script..."

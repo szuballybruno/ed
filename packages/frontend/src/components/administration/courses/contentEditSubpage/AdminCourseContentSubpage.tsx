@@ -14,6 +14,7 @@ import { useIntParam } from '../../../../static/locationHelpers';
 import { translatableTexts } from '../../../../static/translatableTexts';
 import { XEventManager } from '../../../../static/XEventManager/XEventManager';
 import { EpistoDataGrid } from '../../../controls/EpistoDataGrid';
+import { EpistoDiv } from '../../../controls/EpistoDiv';
 import { EpistoFlex2 } from '../../../controls/EpistoFlex';
 import { useXMutatorNew } from '../../../lib/XMutator/XMutatorReact';
 import { useSetBusy } from '../../../system/LoadingFrame/BusyBarContext';
@@ -23,13 +24,22 @@ import { FileSelector } from '../../../universal/fileSelector/FileSelector';
 import { SelectedFileDataType, useFileSelectorLogic } from '../../../universal/fileSelector/FileSelectorLogic';
 import { AdminSubpageHeader } from '../../AdminSubpageHeader';
 import { CourseAdministartionFrame } from '../CourseAdministartionFrame';
-import { CallbackParamsType, ItemEditDialog, ItemEditDialogPageType, useItemEditDialogLogic } from '../itemEditDialog/ItemEditDialog';
+import { ExamDetails } from '../item-details/ExamDetails';
+import { ItemEditDialogParams } from '../item-details/ItemEditDialogTypes';
+import { VideoDetails } from '../item-details/VideoDetails';
 import { ModuleEditDialog } from '../moduleEdit/ModuleEditDialog';
 import { useModuleEditDialogLogic } from '../moduleEdit/ModuleEditDialogLogic';
+import { AnswerMutationsType, QuestionMutationsType } from '../questionsEditGrid/QuestionEditGridTypes';
 import { AddNewItemPopper } from './AddNewItemPopper';
 import { useGridColumns } from './AdminCourseContentSubpageColumns';
 import { mapToRowSchema, RowSchema } from './AdminCourseContentSubpageLogic';
 import { VideoUploadProgressNotification } from './VideoUploadProgressNotification';
+
+export type CallbackParamsType = {
+    questionMutations: QuestionMutationsType;
+    answerMutations: AnswerMutationsType;
+    videoAudioText?: string;
+};
 
 export const AdminCourseContentSubpage = () => {
 
@@ -103,16 +113,27 @@ export const AdminCourseContentSubpage = () => {
     useSetBusy(CourseApiService.useSaveCourseContentData, saveCourseDataState);
     useSetBusy(CourseApiService.useCourseContentAdminData, courseContentAdminDataState);
 
+    const [currentItem, setCurrentItem] = useState<ItemEditDialogParams | null>(null);
+    const isDetailsPaneOpen = useMemo(() => !!currentItem, [currentItem]);
+    const currentVersionCode = currentItem?.versionCode ?? null;
+
     /**
      * Item edit dialog's callback function 
      * this is called when the dialog is closed
      */
     const callback = useCallback(({
-        versionCode,
         questionMutations,
         answerMutations,
         videoAudioText
     }: CallbackParamsType) => {
+
+        if (!currentItem)
+            return;
+
+        // close details pane
+        setCurrentItem(null);
+
+        const { versionCode } = currentItem;
 
         itemsMutatorFunctions
             .mutate({
@@ -135,9 +156,7 @@ export const AdminCourseContentSubpage = () => {
                     field: 'videoAudioText',
                     newValue: videoAudioText
                 });
-    }, [itemsMutatorFunctions]);
-
-    const itemEditDialogLogic = useItemEditDialogLogic(callback);
+    }, [itemsMutatorFunctions, currentItem]);
 
     // module edit dialog logic
     const canDelete = useCallback((moduleVersionId: Id<'ModuleVersion'>) => !itemsMutatorState
@@ -233,37 +252,59 @@ export const AdminCourseContentSubpage = () => {
     /**
      * Open item edit dialog  
      */
-    const openItemEditDialog = (type: 'video' | 'exam' | 'module', page?: ItemEditDialogPageType, row?: RowSchema) => {
+    const openItemEditDialog = useCallback((type: 'video' | 'exam' | 'module', row?: RowSchema) => {
 
         const data = row?.data!;
-        const isVideo = !!data?.videoVersionId;
+        const isVideo = type === 'video';
+        const defaultModuleId = modules
+            .firstOrNull(x => x.moduleVersionId === data.moduleVersionId)?.moduleId ?? null;
 
-        if (type === 'exam' || type === 'video')
-            itemEditDialogLogic
-                .openDialog({
-                    isVideo,
-                    itemVersionId: isVideo ? data.videoVersionId! : data.examVersionId!,
-                    itemTitle: data.itemTitle,
-                    courseTitle: 'Course name',
-                    versionCode: data.versionCode,
-                    questionMutations: data.questionMutations,
-                    answerMutations: data.answerMutations,
-                    defaultModuleId: modules
-                        .firstOrNull(x => x.moduleVersionId === data.moduleVersionId)?.moduleId ?? null,
-                    modules,
-                    page: page,
-                    examType: data.itemType === 'pretest'
-                        ? 'pretest'
-                        : data.itemType === 'final'
-                            ? 'final'
-                            : 'normal'
-                });
+        // open exam 
+        if (type === 'exam') {
 
-        if (type === 'module')
+            const params: ItemEditDialogParams = {
+                isVideo,
+                itemVersionId: isVideo ? data.videoVersionId! : data.examVersionId!,
+                versionCode: data.versionCode,
+                questionMutations: data.questionMutations,
+                answerMutations: data.answerMutations,
+                defaultModuleId,
+                modules,
+                examType: data.itemType === 'pretest'
+                    ? 'pretest'
+                    : data.itemType === 'final'
+                        ? 'final'
+                        : 'normal'
+            };
+
+            setCurrentItem(params);
+        }
+
+        // open video 
+        else if (type === 'video') {
+
+            const params: ItemEditDialogParams = {
+                isVideo,
+                itemVersionId: isVideo ? data.videoVersionId! : data.examVersionId!,
+                versionCode: data.versionCode,
+                questionMutations: data.questionMutations,
+                answerMutations: data.answerMutations,
+                videoAudioText: data.videoAudioText,
+                defaultModuleId,
+                modules
+            };
+
+            setCurrentItem(params);
+        }
+
+        // open module edit dialog
+        else {
+
             moduleEditDialogLogic
                 .dialogLogic
                 .openDialog();
-    };
+        }
+    }, [moduleEditDialogLogic.dialogLogic, modules]);
 
     /**
      * Add item row  
@@ -365,100 +406,151 @@ export const AdminCourseContentSubpage = () => {
     }, [courseId, itemsMutatorFunctions, itemsMutatorState, moduleEditDialogLogic, refetchCourseContentAdminData, saveCourseDataAsync, showErrorDialog]);
 
     /**
+     * Handle reorders
+     */
+    const handleReorder = useCallback(({ sourceIndex, targetIndex }: { sourceIndex: number, targetIndex: number }) => {
+
+        const nonPretestItems = gridRowItems.filter(x => x.itemType.type !== 'pretest');
+        const shiftedSourceIndex = sourceIndex - 1;
+        const shiftedTargetIndex = targetIndex - 1;
+        const reorderedItems = moveItemInArray(nonPretestItems, shiftedSourceIndex, shiftedTargetIndex);
+
+        reorderedItems
+            .groupBy(x => x.module.versionId)
+            .forEach(group => group
+                .items
+                .forEach((row, index) => itemsMutatorFunctions
+                    .mutate({
+                        key: getRowKey(row),
+                        field: 'itemOrderIndex',
+                        newValue: index
+                    })));
+    }, [getRowKey, gridRowItems, itemsMutatorFunctions]);
+
+    const headerButtons = useMemo(() => [
+        {
+            action: () => setIsAddButtonsPopperOpen(true),
+            icon: <Add ref={ref} />,
+            title: translatableTexts.misc.add,
+            disabled: isDetailsPaneOpen
+        },
+        {
+            action: () => openItemEditDialog('module'),
+            icon: <Edit ref={ref} />,
+            title: translatableTexts.administration.courseContentSubpage.editModules,
+            disabled: isDetailsPaneOpen
+        },
+        {
+            action: handleSaveAsync,
+            title: 'Mentés',
+            disabled: !isSaveEnabled || isDetailsPaneOpen
+        }
+    ], [handleSaveAsync, isSaveEnabled, openItemEditDialog, isDetailsPaneOpen]);
+
+    /**
      * Get grid columns
      */
-    const gridColumns = useGridColumns(modules, openItemEditDialog, itemsMutatorFunctions, handleSelectVideoFile, currentDropModuleId);
+    const gridColumns = useGridColumns(
+        modules,
+        openItemEditDialog,
+        itemsMutatorFunctions,
+        handleSelectVideoFile,
+        currentDropModuleId,
+        isDetailsPaneOpen,
+        currentVersionCode);
 
     return (
-        <CourseAdministartionFrame
-            noHeightOverflow
-            isAnySelected={isAnySelected}>
-
+        <>
             {/* video file selector */}
             <FileSelector
                 logic={videoFileSelectorLogic} />
 
-            {/* Right side content */}
-            <AdminSubpageHeader
-                tabMenuItems={[
-                    applicationRoutes.administrationRoute.coursesRoute.courseDetailsRoute,
-                    applicationRoutes.administrationRoute.coursesRoute.courseContentRoute,
-                    applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute,
-                    applicationRoutes.administrationRoute.coursesRoute.courseUserProgressRoute
-                ]}
-                direction="column"
-                headerButtons={[
-                    {
-                        action: () => setIsAddButtonsPopperOpen(true),
-                        icon: <Add ref={ref} />,
-                        title: translatableTexts.misc.add
-                    },
-                    {
-                        action: () => openItemEditDialog('module'),
-                        icon: <Edit ref={ref} />,
-                        title: translatableTexts.administration.courseContentSubpage.editModules
-                    },
-                    {
-                        action: handleSaveAsync,
-                        title: 'Mentés',
-                        disabled: !isSaveEnabled
-                    }
-                ]}>
+            {/* add buttons popper */}
+            <AddNewItemPopper
+                isOpen={isAddButtonsPopperOpen}
+                hasModules={nonPretestModules.any()}
+                targetElement={ref?.current}
+                onAddItem={handleAddRow}
+                onClose={closeAddPopper} />
 
-                {/* dialogs */}
-                <EpistoDialog logic={deleteWarningDialogLogic} />
+            {/* dialogs */}
+            <EpistoDialog logic={deleteWarningDialogLogic} />
 
-                <ItemEditDialog
-                    logic={itemEditDialogLogic} />
+            {/* module edit dialog */}
+            <ModuleEditDialog
+                logic={moduleEditDialogLogic} />
 
-                <ModuleEditDialog
-                    logic={moduleEditDialogLogic} />
+            {/* actual page content  */}
+            <CourseAdministartionFrame
+                noHeightOverflow
+                disabled={isDetailsPaneOpen}
+                isAnySelected={isAnySelected}>
 
-                {/* add buttons popper */}
-                <AddNewItemPopper
-                    isOpen={isAddButtonsPopperOpen}
-                    hasModules={nonPretestModules.any()}
-                    targetElement={ref?.current}
-                    onAddItem={handleAddRow}
-                    onClose={closeAddPopper} />
+                {/* Right side content */}
+                <AdminSubpageHeader
+                    tabMenuItems={[
+                        applicationRoutes.administrationRoute.coursesRoute.courseDetailsRoute,
+                        applicationRoutes.administrationRoute.coursesRoute.courseContentRoute,
+                        applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute,
+                        applicationRoutes.administrationRoute.coursesRoute.courseUserProgressRoute
+                    ]}
+                    direction="column"
+                    headerButtons={headerButtons}>
 
-                {/* data grid */}
-                <EpistoFlex2
-                    flex="1"
-                    overflow="hidden">
+                    {/* content */}
+                    <EpistoFlex2
+                        flex="1"
+                        overflow="hidden">
 
-                    <EpistoDataGrid
-                        dragEnabled
-                        columns={gridColumns}
-                        rows={gridRowItems}
-                        getKey={getRowKey}
-                        onRowOrderChange={({ sourceIndex, targetIndex }) => {
+                        {/* grid */}
+                        <EpistoDiv
+                            flex="1"
+                            minWidth="200px">
+                            <EpistoDataGrid
+                                dragEnabled={!isDetailsPaneOpen}
+                                columns={gridColumns}
+                                rows={gridRowItems}
+                                getKey={getRowKey}
+                                onRowOrderChange={handleReorder}
+                                onDragStart={setDraggedRow}
+                                onDragEnd={() => setDraggedRow(null)}
+                                pinnedColumns={{
+                                    left: ['rowNumber', 'itemTitle'],
+                                    right: ['quickMenu']
+                                }} />
+                        </EpistoDiv>
 
-                            const nonPretestItems = gridRowItems.filter(x => x.itemType.type !== 'pretest');
-                            const shiftedSourceIndex = sourceIndex - 1;
-                            const shiftedTargetIndex = targetIndex - 1;
-                            const reorderedItems = moveItemInArray(nonPretestItems, shiftedSourceIndex, shiftedTargetIndex);
+                        {/* details pane */}
+                        <EpistoFlex2
+                            flex="4"
+                            bg="white"
+                            maxWidth={isDetailsPaneOpen ? '9999px' : '0px'}>
 
-                            reorderedItems
-                                .groupBy(x => x.module.versionId)
-                                .forEach(group => group
-                                    .items
-                                    .forEach((row, index) => itemsMutatorFunctions
-                                        .mutate({
-                                            key: getRowKey(row),
-                                            field: 'itemOrderIndex',
-                                            newValue: index
-                                        })));
-                        }}
-                        showFooter
-                        onDragStart={setDraggedRow}
-                        onDragEnd={() => setDraggedRow(null)}
-                        pinnedColumns={{
-                            left: ['rowNumber', 'itemTitle'],
-                            right: ['quickMenu']
-                        }} />
-                </EpistoFlex2>
-            </AdminSubpageHeader>
-        </CourseAdministartionFrame>
+                            {/* video details  */}
+                            {currentItem && currentItem.isVideo && <VideoDetails
+                                answerMutations={currentItem.answerMutations}
+                                callback={callback}
+                                defaultModuleId={currentItem.defaultModuleId!}
+                                modules={modules}
+                                questionMutations={currentItem.questionMutations}
+                                videoAudioText={currentItem.videoAudioText!}
+                                videoVersionId={currentItem.itemVersionId as Id<'VideoVersion'>}
+                                cancelEdit={() => setCurrentItem(null)} />}
+
+                            {/* exam details */}
+                            {currentItem && !currentItem.isVideo && <ExamDetails
+                                answerMutations={currentItem.answerMutations}
+                                callback={callback}
+                                defaultModuleId={currentItem.defaultModuleId!}
+                                modules={modules}
+                                questionMutations={currentItem.questionMutations}
+                                examVersionId={currentItem.itemVersionId as Id<'ExamVersion'>}
+                                cancelEdit={() => setCurrentItem(null)} />}
+
+                        </EpistoFlex2>
+                    </EpistoFlex2>
+                </AdminSubpageHeader>
+            </CourseAdministartionFrame>
+        </>
     );
 };

@@ -5,7 +5,10 @@ SELECT
 		THEN vd.title
 		ELSE ed.title 
 	END title,
-    vd.subtitle,
+    CASE WHEN civ.item_type = 'video' 
+		THEN vd.subtitle
+		ELSE ed.subtitle 
+	END subtitle,
 	vd.video_file_length_seconds video_length_seconds,
 	vd.audio_text video_audio_text,
 	sf.file_path video_file_path,
@@ -40,7 +43,7 @@ ON vd.id = vv.video_data_id
 LEFT JOIN public.exam_version ev
 ON ev.id = civ.exam_version_id
 
-LEFT JOIN public.video_data ed
+LEFT JOIN public.exam_data ed
 ON ed.id = ev.exam_data_id
 
 LEFT JOIN public.storage_file sf

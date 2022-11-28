@@ -1,4 +1,4 @@
-import { XViewColumn } from '../../../services/XORM/XORMDecorators';
+import { XViewColumn } from '@episto/xorm';
 import { Id } from '@episto/commontypes';
 import { Column, Entity, PrimaryGeneratedColumn } from '../../MyORM';
 

@@ -1,5 +1,6 @@
 import { PasswordValidationIssueType } from '@episto/commontypes';
 import { UserPermissionDTO } from '@episto/communication';
+import { getKeys } from '@episto/xcore';
 
 export const normalizeToEnglish = (str: string) => {
 
@@ -55,27 +56,6 @@ export const typecheck = (obj: any, type: 'function') => {
         return typeof obj === 'function';
 
     return false;
-};
-
-export const getKeys = <T>(obj: T): (keyof T)[] => {
-
-    const keys: any[] = [];
-    for (const key in obj) {
-
-        keys.push(key as keyof T);
-    }
-
-    return keys;
-};
-
-export const getKeyValues = <T>(obj: T) => {
-
-    return Object
-        .keys(obj as any)
-        .map((key) => ({
-            key: key as keyof T,
-            value: (obj as any)[key]
-        }));
 };
 
 export const noUndefined = <T>(obj: Partial<T>) => {

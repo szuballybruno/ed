@@ -14,6 +14,7 @@ import { FlexListTitleSubtitle } from '../../universal/FlexListTitleSubtitle';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { Id } from '@episto/commontypes';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
+import { useAdminBreadcrumbsContext } from '../breadcrumbsHeader/AdminBreadcrumbsContext';
 
 export const EditPersonalityTraitCategorySubpage = () => {
 
@@ -24,6 +25,7 @@ export const EditPersonalityTraitCategorySubpage = () => {
     const traitCategoryId = Id
         .create<'PersonalityTraitCategory'>(useIntParam('traitCategoryId')!);
     const isMax = useBoolParam('isMax');
+    const { activeCompanyId } = useAdminBreadcrumbsContext();
 
     // http 
     const {
@@ -44,7 +46,7 @@ export const EditPersonalityTraitCategorySubpage = () => {
 
     const handleEdit = (dailyTipId: Id<'DailyTip'>) => {
 
-        navigate2(applicationRoutes.administrationRoute.personalityAssessmentRoute.editTipsRoute.editTipRoute, { traitCategoryId, isMax, dailyTipId });
+        navigate2(applicationRoutes.administrationRoute.personalityAssessmentRoute.editTipsRoute.editTipRoute, { activeCompanyId, traitCategoryId, isMax, dailyTipId });
     };
 
     const handleAddTip = async () => {
