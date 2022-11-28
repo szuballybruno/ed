@@ -15,36 +15,43 @@ env:
 jobs:
     
   # BUILD FRONTEND
-  # build_frontend:
-  #   name: Build frontend
-  #   runs-on: ubuntu-latest
+  build_frontend:
+    name: Build frontend
+    runs-on: ubuntu-latest
 
-  #   steps:
-  #     - name: Checkout branch
-  #       uses: actions/checkout@v2
-  #       with:
-  #         ref: dev
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v2
+        with:
+          ref: dev
         
-  #     - name: Login to GCP
-  #       uses: google-github-actions/setup-gcloud@v0
-  #       with:
-  #         project_id: ${{ secrets.GCP_PROJECT_ID }}
-  #         service_account_email: ${{ secrets.GCP_EMAIL }}
-  #         service_account_key: ${{ secrets.GCP_CREDENTIALS }}
+      - name: Login to GCP
+        uses: google-github-actions/setup-gcloud@v0
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_email: ${{ secrets.GCP_EMAIL }}
+          service_account_key: ${{ secrets.GCP_CREDENTIALS }}
 
-  #     - name: Configure GCP Docker
-  #       run: gcloud auth configure-docker --quiet
+      - name: Configure GCP Docker
+        run: gcloud auth configure-docker --quiet
 
-  #     - name: Copy proper .env file
-  #       run: cp -fr ./config/dev.env ./.env 
-  #       working-directory: ./packages/frontend
+      - name: Copy proper .env file
+        run: cp -fr ./config/dev.env ./.env 
+        working-directory: ./packages/frontend
+      
+      - name: Set up Docker Buildx for layer caching
+        uses: docker/setup-buildx-action@master
 
-  #     - name: Build frontend container
-  #       run: |
-  #         docker buildx build . \
-  #         --file ./config/frontend.Dockerfile \
-  #         --tag $FRONTEND_IMAGE_NAME \
-  #         --push
+      - name: Build frontend container
+        uses: docker/build-push-action@v3
+        with:
+          file: ./config/frontend.Dockerfile
+          context: .
+          push: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          tags: |
+            ${{ env.FRONTEND_IMAGE_NAME }}
 
   # BUILD BACKEND
   build_backend: 
@@ -66,9 +73,6 @@ jobs:
 
       - name: Configure GCP Docker
         run: gcloud auth configure-docker --quiet
-      
-      - name: Set up Docker Buildx for layer caching
-        uses: docker/setup-buildx-action@master
 
       - name: Generate config.env file
         run: |
@@ -102,6 +106,9 @@ jobs:
           echo DB_SERVICE_USER_PASSWORD = ${{secrets.DB_SERVICE_USER_PASSWORD}} >> config/config.env
           echo DB_IS_ORM_LOGGING_ENABLED = true >> config/config.env
         working-directory: ./packages/server-api
+      
+      - name: Set up Docker Buildx for layer caching
+        uses: docker/setup-buildx-action@master
 
       - uses: docker/build-push-action@v3
         with:
