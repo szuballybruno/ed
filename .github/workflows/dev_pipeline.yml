@@ -147,10 +147,14 @@ jobs:
           tags: |
             migen
 
-      # - name: Run migen
-      #   run: |
-      #     docker run \
-      #       -v ${PWD}/migen_out:/app/packages/util-script-producer/out migen
+      - name: Load build docker image
+        run: |
+          docker load < migen.tar 
+
+      - name: Run migen
+        run: |
+          docker run \
+            -v ${PWD}/migen_out:/app/packages/util-script-producer/out migen
 
       - name: Ls
         run: | 
