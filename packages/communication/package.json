@@ -8,7 +8,7 @@
     "type": "module",
     "scripts": {
         "start": "tsc",
-        "build-old": "tsc -v && tsc",
+        "build-old": "tsc",
         "build": "rollup --config rollup.config.js"
     },
     "dependencies": {

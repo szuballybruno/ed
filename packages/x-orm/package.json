@@ -9,7 +9,7 @@
     "scripts": {
         "watch": "tsc --watch",
         "start": "tsc",
-        "build": "tsc -v && tsc"
+        "build": "tsc"
     },
     "dependencies": {
         "@episto/x-core": "1.0.0"

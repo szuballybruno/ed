@@ -6,14 +6,13 @@
   "scripts": {
     "bootstrap": "lerna bootstrap",
     "build-deps": "lerna run build --ignore={@episto/server-tests,@episto/server-api,@episto/frontend,@episto/script-producer,@episto/pipeline-generator}",
-    "build-server": "lerna run build --scope=@episto/server-api --include-filtered-dependencies",
-    "build-client": "lerna run build --scope=@episto/frontend --include-filtered-dependencies",
-    "build-tests": "lerna run build --scope=@episto/server-tests --include-filtered-dependencies",
+    "build-server": "lerna run build --scope=@episto/server-api --include-dependencies",
+    "build-client": "lerna run build --scope=@episto/frontend --include-dependencies",
+    "build-tests": "lerna run build --scope=@episto/server-tests --include-dependencies",
     "start-tests": "lerna run start --scope=@episto/server-tests",
     "start-server": "lerna run start --scope=@episto/server-api",
-    "build-script-producer": "lerna run build --scope=@episto/script-producer --include-filtered-dependencies",
-    "start-script-producer": "lerna run start --scope=@episto/script-producer",
-    "start-built-server": "node --es-module-specifier-resolution=node ./packages/server-api/dist/server.js"
+    "build-script-producer": "lerna run build --scope=@episto/script-producer --include-dependencies",
+    "start-script-producer": "lerna run start --scope=@episto/script-producer"
   },
   "devDependencies": {
     "lerna": "6.0.3",

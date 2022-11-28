@@ -8,7 +8,7 @@
     "type": "module",
     "scripts": {
         "start": "tsc",
-        "build": "tsc -v && tsc"
+        "build": "tsc"
     },
     "dependencies": {
         "@episto/communication": "1.0.0",
