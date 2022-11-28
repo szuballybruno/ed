@@ -113,7 +113,7 @@ jobs:
           tags: |
             ${{ env.BACKEND_IMAGE_NAME }}
 
-      # - name: Build backend container
+      # - name: Build backend containera
       #   run: |
       #     docker buildx build . \
       #     --file ./config/backend.Dockerfile \
