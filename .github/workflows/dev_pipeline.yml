@@ -14,7 +14,7 @@ env:
 
 jobs:
     
-  # BUILD FRONTEND
+  # BUILD FRONTENDa
   build_frontend:
     name: Build frontend
     runs-on: ubuntu-latest
