@@ -1,12 +1,13 @@
 import { Helpers } from "./helpers/helpers";
 import { test, testSuite } from "./helpers/TestSuiteBuilder";
 
-const CORRUPT_REQUEST_URL = 'http://local.corrupt_epistogram.com';
-
-const VALID_CREDENTIALS_BODY = {
-    email: 'endre.marosi@epistogram.com',
-    password: 'admin'
-};
+const CONSTANTS = {
+    CORRUPT_REQUEST_URL: 'http://local.corrupt_epistogram.com',
+    VALID_CREDENTIALS_BODY: {
+        email: 'endre.marosi@epistogram.com',
+        password: 'admin'
+    }
+}
 
 let accessToken = '';
 
@@ -17,15 +18,15 @@ export const IntegrationTestSuite = testSuite(async () => [
         Helpers
             .shouldThrow(() => context
                 .overwriteRequestDefaults({
-                    origin: CORRUPT_REQUEST_URL
+                    origin: CONSTANTS.CORRUPT_REQUEST_URL
                 })
-                .postAsync(x => x.authentication.loginUser, VALID_CREDENTIALS_BODY));
+                .postAsync(x => x.authentication.loginUser, CONSTANTS.VALID_CREDENTIALS_BODY));
     }),
 
     test('Login', async ({ context }) => {
 
         const response = await context
-            .postAsync(x => x.authentication.loginUser, VALID_CREDENTIALS_BODY);
+            .postAsync(x => x.authentication.loginUser, CONSTANTS.VALID_CREDENTIALS_BODY);
 
         const setCookies = response.headers["set-cookie"] ?? [];
 

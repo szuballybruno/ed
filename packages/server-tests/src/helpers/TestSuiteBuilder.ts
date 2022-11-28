@@ -1,8 +1,13 @@
 import { TestContext, TestContextDefaults } from "./TestContext";
 
-export type TestSuiteType = {
+export type TestSuiteDefinitionType = {
     name?: string;
-    getTests: GetTestsFnType;
+    getTestsAsync: GetTestsFnType;
+}
+
+export type TestSuiteType = {
+    name: string;
+    tests: TestType[];
 }
 
 export type GetTestsFnType = () => Promise<TestType[]>;
@@ -14,15 +19,20 @@ export type TestType = {
 
 export type TestFnType = (params: { context: TestContext }) => Promise<void>;
 
-type ErrorLogItem = {
-    error: Error,
-    testPath: string
+type TestResultItemType = {
+    error: Error | null,
+    test: TestType,
+    suite: TestSuiteType
+}
+type SuiteResultItemType = {
+    suite: TestSuiteType;
+    testResults: TestResultItemType[];
 }
 
-export const testSuite = (getTests: GetTestsFnType): TestSuiteType => {
+export const testSuite = (getTests: GetTestsFnType): TestSuiteDefinitionType => {
 
     return {
-        getTests
+        getTestsAsync: getTests
     };
 }
 
@@ -36,7 +46,7 @@ export const test = (what: string, fn: TestFnType): TestType => {
 
 export class SuiteListBuilder {
 
-    private _suites: TestSuiteType[] = [];
+    private _suites: TestSuiteDefinitionType[] = [];
     private _abortOnException: boolean;
 
     constructor(private _testContextDefaults: TestContextDefaults) {
@@ -49,7 +59,7 @@ export class SuiteListBuilder {
         return this;
     }
 
-    addSuites(obj: { [K: string]: TestSuiteType }) {
+    addSuites(obj: { [K: string]: TestSuiteDefinitionType }) {
 
         Object
             .keys(obj)
@@ -64,47 +74,82 @@ export class SuiteListBuilder {
 
     async runAllAsync() {
 
-        let errors: ErrorLogItem[] = [];
+        let suiteResults: SuiteResultItemType[] = [];
 
-        for (let suiteIndex = 0; suiteIndex < this._suites.length; suiteIndex++) {
+        const testSuites = await this
+            ._getTestsAsync();
 
-            const testSuite = this._suites[suiteIndex];
+        for (let suiteIndex = 0; suiteIndex < testSuites.length; suiteIndex++) {
 
-            console.log(`Suite: ${testSuite.name}`);
+            const testSuite = testSuites[suiteIndex];
+            const { tests } = testSuite;
+            let testResults: TestResultItemType[] = [];
 
-            const suiteTests = await testSuite
-                .getTests();
+            for (let testIndex = 0; testIndex < tests.length; testIndex++) {
 
-            for (let testIndex = 0; testIndex < suiteTests.length; testIndex++) {
+                const result = await this
+                    ._executeTest(testSuite, tests[testIndex]);
 
-                const testContext = new TestContext(this._testContextDefaults);
+                testResults
+                    .push(result);
+            }
 
-                const test = suiteTests[testIndex];
-                let success = false;
+            const suiteResult: SuiteResultItemType = {
+                suite: testSuite,
+                testResults
+            };
 
-                try {
+            suiteResults
+                .push(suiteResult);
+        }
 
-                    await test.run({ context: testContext });
-                    success = true;
-                }
-                catch (error: any) {
+        /**
+         * Log suite results 
+         */
+        this._logResults(suiteResults);
 
-                    if (this._abortOnException) {
+        /**
+         * Throw final error log
+         */
+        this._throwFinalErrorLog(suiteResults);
+    }
 
-                        console.log(`   Test: "${test.name}" -> ${'Failed'}`);
-                        throw new Error(`Error msg: ${error?.message}`);
-                    }
+    private async _executeTest(suite: TestSuiteType, test: TestType): Promise<TestResultItemType> {
 
-                    errors
-                        .push({
-                            error,
-                            testPath: `${testSuite.name} / "${test.name}"`
-                        });
-                }
+        const testContext = new TestContext(this._testContextDefaults);
 
-                console.log(`   Test: "${test.name}" -> ${success ? 'Ok' : 'Failed'}`);
+        let testError: Error | null = null;
+
+        try {
+
+            await test
+                .run({ context: testContext });
+        }
+        catch (error: any) {
+
+            if (this._abortOnException) {
+
+                console.log(`   Test: "${test.name}" -> ${'Failed'}`);
+                throw new Error(`Error msg: ${error?.message}`);
+            }
+            else {
+
+                testError = error;
             }
         }
+
+        return ({
+            error: testError,
+            suite,
+            test
+        });
+    }
+
+    private _throwFinalErrorLog(suiteResults: SuiteResultItemType[]) {
+
+        const errors = suiteResults
+            .flatMap(x => x.testResults)
+            .filter(x => x.error);
 
         const getCleanerStack = (err: Error) => {
 
@@ -114,13 +159,53 @@ export class SuiteListBuilder {
 
         const errorMessage = errors
             .map(errorLogItem => ({
-                msg: errorLogItem.error.message ?? 'no message',
-                stack: getCleanerStack(errorLogItem.error),
-                path: errorLogItem.testPath
+                msg: errorLogItem.error!.message ?? 'no message',
+                stack: getCleanerStack(errorLogItem.error!),
+                path: `${errorLogItem.suite.name} / "${errorLogItem.test.name}"`
             }))
             .map(x => `-----------------------------\n${x.path}\n${x.msg}\n${x.stack}`);
 
         if (errors.length > 0)
             throw new Error(`${errors.length} tests failed: \n\n${errorMessage.join('\n\n')}`);
+    }
+
+    private _logResults(suiteResults: SuiteResultItemType[]) {
+
+        const flat = suiteResults.flatMap(x => x.testResults);
+
+        console.log(`Executed ${flat.length} tests (${flat.filter(x => x.error).length} failed)!`);
+
+        suiteResults
+            .forEach(sr => {
+
+                console.log(`Suite: ${sr.suite.name}`);
+
+                sr
+                    .testResults
+                    .forEach(tr => {
+
+                        console.log(`   Test: "${tr.test.name}" -> ${tr.error ? 'Failed' : 'Ok'}`);
+                    })
+            })
+    }
+
+    private async _getTestsAsync() {
+
+        let testSuites: TestSuiteType[] = [];
+
+        for (let suiteIndex = 0; suiteIndex < this._suites.length; suiteIndex++) {
+
+            const testSuiteDef = this._suites[suiteIndex];
+            const tests = await testSuiteDef
+                .getTestsAsync();
+
+            testSuites
+                .push({
+                    name: testSuiteDef.name!,
+                    tests
+                });
+        }
+
+        return testSuites;
     }
 }
