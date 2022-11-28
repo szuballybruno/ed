@@ -1,11 +1,15 @@
-import { Helpers } from "./helpers/helpers";
-import { IntegrationTestSuite } from './Integration.test';
 import { initJsExtensions } from "@episto/x-core";
+import { SuiteListBuilder } from "./helpers/TestSuiteBuilder";
+import { IntegrationTestSuite } from './Integration.test';
 
 initJsExtensions();
 
-await Helpers
-    .getSuiteBuilder()
+await new SuiteListBuilder({
+    applyDefaultConfig: (defaults) => {
+
+        defaults.headers['Origin'] = 'http://local.epistogram.com';
+    }
+})
     .addSuites({ IntegrationTestSuite })
-    .setAbortOnException('YES')
+    .setAbortOnException('NO')
     .runAllAsync();

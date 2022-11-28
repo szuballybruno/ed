@@ -17,7 +17,7 @@ export class MiscController implements IController<MiscController> {
         this._activationCodeService = serviceProvider.getService(ActivationCodeService);
     }
 
-    @XControllerAction(apiRoutes.misc.healthcheck, { isCompanyBound: false, isUnauthorized: true, isPublic: true })
+    @XControllerAction(apiRoutes.misc.healthcheck, { ignoreCompanyDomain: true, isUnauthorized: true, isPublic: true })
     healthcheck(params: ActionParams) {
 
         return Promise.resolve('healthy');

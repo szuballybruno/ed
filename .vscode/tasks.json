@@ -37,6 +37,27 @@
                 "group": "run"
             }
         },
+        {
+            "type": "shell",
+            "label": "run-server-api-testing",
+            "command": "yarn start-server",
+            "problemMatcher": [],
+            "presentation": {
+                "group": "testing"
+            }
+        },
+        {
+            "type": "shell",
+            "label": "mon-server-services",
+            "command": "yarn tsc --watch",
+            "options": {
+                "cwd": "${workspaceFolder}/packages/server-services"
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "group": "deps"
+            }
+        },
         // run-all
         {
             "label": "run-all",
@@ -45,6 +66,29 @@
                 "run server-api",
             ],
             "problemMatcher": []
+        },
+        // mon-tests
+        {
+            "label": "run-mon-tests",
+            "type": "shell",
+            "command": "yarn mon-tests",
+            "problemMatcher": [],
+            "presentation": {
+                "group": "testing"
+            }
+        },
+        // testdev
+        {
+            "label": "testdev",
+            "dependsOn": [
+                "run-server-api-testing",
+                "run-mon-tests",
+                "mon-server-services"
+            ],
+            "problemMatcher": [],
+            "presentation": {
+                "group": "testing"
+            }
         },
         // startprod
         {

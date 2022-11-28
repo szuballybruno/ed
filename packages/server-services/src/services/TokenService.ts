@@ -6,8 +6,6 @@ import { ErrorWithCode } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
 import { GlobalConfigurationService } from './GlobalConfigurationService';
 
-const { sign, verify } = JsonWebToken;
-
 export class TokenService {
 
     private _config: GlobalConfigurationService;
@@ -98,12 +96,12 @@ export class TokenService {
         secret: string,
         expiresIn: string | number): string => {
 
-        return sign(tokenData as any, secret, { expiresIn: expiresIn });
+        return JsonWebToken.sign(tokenData as any, secret, { expiresIn: expiresIn });
     };
 
     private verifyJWTToken = <TTokenPayload>(token: string, secret: string) => {
 
-        const payload = verify(token, secret) as any as TTokenPayload;
+        const payload = JsonWebToken.verify(token, secret) as any as TTokenPayload;
 
         if (!payload)
             throw new ErrorWithCode('Token verification failed!', 'forbidden');
