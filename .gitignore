@@ -11,3 +11,4 @@ yarn.lock
 **.tar.gz
 **.tar
 .yarn.lock
+testlogs.txt

@@ -2,7 +2,7 @@ import { Helpers } from "./helpers/helpers";
 import { test, testSuite } from "./helpers/TestSuiteBuilder";
 
 const CONSTANTS = {
-    CORRUPT_REQUEST_URL: 'http://local.corrupt_epistogram.com',
+    CORRUPT_REQUEST_URL: 'http://epitest.corrupt_epistogram.com',
     VALID_CREDENTIALS_BODY: {
         email: 'endre.marosi@epistogram.com',
         password: 'admin'

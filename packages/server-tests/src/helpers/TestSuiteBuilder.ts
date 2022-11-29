@@ -1,3 +1,4 @@
+import { writeFileSync } from "fs";
 import { TestContext, TestContextDefaults } from "./TestContext";
 
 export type TestSuiteDefinitionType = {
@@ -48,6 +49,7 @@ export class SuiteListBuilder {
 
     private _suites: TestSuiteDefinitionType[] = [];
     private _abortOnException: boolean;
+    private _logs: string[] = [];
 
     constructor(private _testContextDefaults: TestContextDefaults) {
 
@@ -165,28 +167,37 @@ export class SuiteListBuilder {
             }))
             .map(x => `-----------------------------\n${x.path}\n${x.msg}\n${x.stack}`);
 
+        const finalMessage = `${errors.length} tests failed: \n\n${errorMessage.join('\n\n')}`;
+
+        // push final message to logs
+        this._logs.push(finalMessage);
+
+        // flushLogsToFile
+        writeFileSync('./testlogs.txt', this._logs.join('\n'));
+
+        // throw final exception
         if (errors.length > 0)
-            throw new Error(`${errors.length} tests failed: \n\n${errorMessage.join('\n\n')}`);
+            throw new Error(finalMessage);
     }
 
     private _logResults(suiteResults: SuiteResultItemType[]) {
 
         const flat = suiteResults.flatMap(x => x.testResults);
 
-        console.log(`Executed ${flat.length} tests (${flat.filter(x => x.error).length} failed)!`);
+        this._logs.push(`Executed ${flat.length} tests (${flat.filter(x => x.error).length} failed)!`);
 
         suiteResults
             .forEach(sr => {
 
-                console.log(`Suite: ${sr.suite.name}`);
+                this._logs.push(`Suite: ${sr.suite.name}`);
 
                 sr
                     .testResults
                     .forEach(tr => {
 
-                        console.log(`   Test: "${tr.test.name}" -> ${tr.error ? 'Failed' : 'Ok'}`);
+                        this._logs.push(`   Test: "${tr.test.name}" -> ${tr.error ? 'Failed' : 'Ok'}`);
                     })
-            })
+            });
     }
 
     private async _getTestsAsync() {
