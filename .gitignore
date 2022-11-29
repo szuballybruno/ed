@@ -10,3 +10,4 @@ yarn.lock
 .docker_temp**
 **.tar.gz
 **.tar
+.yarn.lock
