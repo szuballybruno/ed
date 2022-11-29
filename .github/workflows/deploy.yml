@@ -3,14 +3,12 @@ on:
   push:
     branches: [ main, demo, dev, dev2 ]
 env:
-  FRONTEND_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/epistogram-frontend-dev:latest
-  FRONTEND_CLOUD_RUN_SVC_NAME: epistogram-frontend-dev
-
-  BACKEND_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/epistogram-backend-dev
-  BACKEND_CLOUD_RUN_SVC_NAME: epistogram-backend-dev
-  
-  MIGEN_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/epistogram-migen-dev
-  
+  BRANCH_NAME: ${{ github.head_ref || github.ref_name }} 
+  FRONTEND_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/epistogram-frontend-${{ env.BRANCH_NAME }}
+  BACKEND_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/epistogram-backend-${{ env.BRANCH_NAME }}
+  FRONTEND_CLOUD_RUN_SVC_NAME: epistogram-frontend-${{ env.BRANCH_NAME }}
+  BACKEND_CLOUD_RUN_SVC_NAME: epistogram-backend-${{ env.BRANCH_NAME }}
+  MIGEN_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/epistogram-migen-${{ env.BRANCH_NAME }}
   CLOUD_SQL_CONNCETION_NAME: gifted-country-324010:europe-central2:epistogram
   GCP_PROJECT_NAME: gifted-country-324010
 
@@ -20,7 +18,7 @@ jobs:
 # ------ prerequisites
 # 
 
-  step1: 
+  job1: 
     name: Hello
     runs-on: ubuntu-latest
 
@@ -28,8 +26,7 @@ jobs:
       - name: Checkout branch
         uses: actions/checkout@v3
 
-      - name: asd
+      - name: echo
         run: |
-          cat ./Readme.md
-          echo ${{ github.ref }}
+          echo ${{ env.BACKEND_IMAGE_NAME }}
       
