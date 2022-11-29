@@ -32,7 +32,6 @@ services:
       - 5000
     healthcheck:
       test: ["CMD-SHELL", "curl --fail http://localhost:5000/misc/healthcheck || exit 1"]
-      # test: ["CMD", "yarn --cwd ./packages/server-api healthcheck"]
       interval: 5s
       timeout: 10s
       retries: 5
