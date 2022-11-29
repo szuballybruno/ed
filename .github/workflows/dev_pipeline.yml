@@ -182,16 +182,13 @@ jobs:
             -dbport '${{secrets.DB_PORT}}' `
             -dbname 'epistogram_DEV' `
             -dbuser '${{secrets.DB_SERVICE_USER_NAME}}' `
-            -dbdumppath ${PWD}/database-backup.sql
+            -dbdumppath ./database-backup.sql
 
-      - name: Ls
-        run: ls -R
-
-      # - name: Upload database-backup artifact
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #     name: database-backup
-      #     path: ./deploy/database-backup.sql
+      - name: Upload database-backup artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: database-backup
+          path: ./database-backup.sql
 
   # RUN TESTS 
   run_tests: 
