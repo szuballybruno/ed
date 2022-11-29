@@ -13,7 +13,7 @@ COPY ./packages/x-injector/package.json ./packages/x-injector/package.json
 
 # yarn install
 RUN echo "Yarn installing deps..."
-RUN yarn --silent
+RUN yarn install > ./install.log
 
 # copy other files
 RUN echo "Copying files..."
@@ -29,10 +29,9 @@ COPY ./packages/x-core/src ./packages/x-core/src
 COPY ./packages/util-script-producer/tsconfig.json ./packages/util-script-producer/tsconfig.json
 COPY ./packages/util-script-producer/src ./packages/util-script-producer/src
 COPY ./packages/util-script-producer/sql ./packages/util-script-producer/sql
+COPY ./packages/util-script-producer/inputs/versions.txt ./packages/util-script-producer/inputs/versions.txt
 
 COPY ./packages/server-services/sql ./packages/server-services/sql
-
-COPY ./temp/migrationVersionsOnServer.txt ./packages/util-script-producer/migrationVersionsOnServer.txt
 
 # build server-api
 RUN echo "Running Yarn build server-api script..."

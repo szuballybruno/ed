@@ -10,7 +10,7 @@ const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 // internal 
 const projectRoot = `${__dirname}/..`;
 const fullScriptPath = `${projectRoot}/out/migration-script.sql`;
-const migrationVersionsFilePath = `${projectRoot}/migrationVersionsOnServer.txt`;
+const migrationVersionsFilePath = `${projectRoot}/inputs/versions.txt`;
 const dropSoftSchemaScriptPath = `${projectRoot}/sql/dropSoftSchema.sql`;
 
 // external 

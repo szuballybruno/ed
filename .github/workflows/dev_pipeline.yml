@@ -15,9 +15,13 @@ env:
   GCP_PROJECT_NAME: gifted-country-324010
 
 jobs:
-    
-  build_frontend:
-    name: Build frontend
+
+# 
+# ------ prerequisites
+# 
+
+  generate_migration_script: 
+    name: Generate migration script
     runs-on: ubuntu-latest
 
     steps:
@@ -25,34 +29,119 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: dev
-        
-      - name: Login to GCP
-        uses: google-github-actions/setup-gcloud@v0
-        with:
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
-          service_account_email: ${{ secrets.GCP_EMAIL }}
-          service_account_key: ${{ secrets.GCP_CREDENTIALS }}
-
-      - name: Configure GCP Docker
-        run: gcloud auth configure-docker --quiet
-
-      - name: Copy proper .env file
-        run: cp -fr ./config/dev.env ./.env 
-        working-directory: ./packages/frontend
       
       - name: Set up Docker Buildx for layer caching
         uses: docker/setup-buildx-action@master
 
-      - name: Build frontend container
+      - name: Get migration versions 
+        run: |
+          ./packages/util-script-producer/scripts/get_mig_versions.ps1 `
+            -dbpass '${{secrets.DB_SERVICE_USER_PASSWORD}}' `
+            -dbhost '${{secrets.DB_HOST_ADDRESS}}' `
+            -dbport '${{secrets.DB_PORT}}' `
+            -dbname 'epistogram_DEV' `
+            -dbuser '${{secrets.DB_SERVICE_USER_NAME}}'
+
+      - name: Build and run migration script generator 
         uses: docker/build-push-action@v3
         with:
-          file: ./config/frontend.Dockerfile
+          file: ./packages/util-script-producer/docker/migen.Dockerfile
           context: .
-          push: true
-          cache-from: type=gha,scope=$GITHUB_REF_NAME-${{ env.FRONTEND_IMAGE_NAME }}
-          cache-to: type=gha,scope=$GITHUB_REF_NAME-${{ env.FRONTEND_IMAGE_NAME }},mode=max
+          cache-from: type=gha,scope=${{ env.GITHUB_REF_NAME }}-migen
+          cache-to: type=gha,scope=${{ env.GITHUB_REF_NAME }}-migen,mode=max
+          outputs: type=docker,dest=migen.tar
           tags: |
-            ${{ env.FRONTEND_IMAGE_NAME }}
+            migen
+
+      - name: Load build docker image
+        run: |
+          docker load < migen.tar 
+
+      - name: Run migen
+        run: |
+          docker run \
+            -v ${PWD}/migen_out:/app/packages/util-script-producer/out migen
+
+      - name: Upload srcipt artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: migration-script
+          path: ./migen_out/migration-script.sql
+
+  database_backup:
+    name: Backup database
+    runs-on: ubuntu-latest
+
+    steps: 
+      - name: Checkout branch
+        uses: actions/checkout@v3
+        with:
+          ref: dev
+
+      - name: Backup
+        shell: pwsh
+        run: |
+          ./scripts/db_dump.ps1 `
+            -dbpass '${{secrets.DB_SERVICE_USER_PASSWORD}}' `
+            -dbhost '${{secrets.DB_HOST_ADDRESS}}' `
+            -dbport '${{secrets.DB_PORT}}' `
+            -dbname 'epistogram_DEV' `
+            -dbuser '${{secrets.DB_SERVICE_USER_NAME}}' `
+            -dbdumppath ./database-backup.sql
+
+      - name: Upload database-backup artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: database-backup
+          path: ./database-backup.sql
+
+# 
+# ------ testing 
+# 
+
+  run_tests: 
+    name: Run tests
+    runs-on: ubuntu-latest
+    needs: [generate_migration_script,database_backup]
+    
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v3
+        with:
+          ref: dev
+      
+      # Pull the latest image to build, and avoid caching pull-only images.
+      # (docker pull is faster than caching in most cases.)
+      - name: Compose pull
+        run: docker-compose -f ./epitest/testenv.yml pull
+
+      # In this step, this action saves a list of existing images,
+      # the cache is created without them in the post run.
+      # It also restores the cache if it exists.
+      - name: Init layer caching
+        uses: satackey/action-docker-layer-caching@v0.0.11
+        # Ignore the failure of a step and avoid terminating the job.j
+        continue-on-error: true
+
+      - name: Download migration-script artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: migration-script
+          path: ./epitest/init
+
+      - name: Download database-backup artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: database-backup
+          path: ./epitest/init
+
+      # run docker-compose up
+      - name: Compose up
+        run: docker-compose -f ./epitest/testenv.yml up --build --force-recreate --abort-on-container-exit --renew-anon-volumes
+
+# 
+# ------ building 
+# 
 
   build_backend: 
     name: Build backend
@@ -119,9 +208,9 @@ jobs:
           cache-to: type=gha,scope=$GITHUB_REF_NAME-${{ env.BACKEND_IMAGE_NAME }},mode=max
           tags: |
             ${{ env.BACKEND_IMAGE_NAME }}
-
-  generate_migration_script: 
-    name: Generate migration script
+    
+  build_frontend:
+    name: Build frontend
     runs-on: ubuntu-latest
 
     steps:
@@ -129,102 +218,38 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: dev
+        
+      - name: Login to GCP
+        uses: google-github-actions/setup-gcloud@v0
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_email: ${{ secrets.GCP_EMAIL }}
+          service_account_key: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: Configure GCP Docker
+        run: gcloud auth configure-docker --quiet
+
+      - name: Copy proper .env file
+        run: cp -fr ./config/dev.env ./.env 
+        working-directory: ./packages/frontend
       
       - name: Set up Docker Buildx for layer caching
         uses: docker/setup-buildx-action@master
 
-      - name: Build and run migration script generator 
+      - name: Build frontend container
         uses: docker/build-push-action@v3
         with:
-          file: ./config/migen.Dockerfile
+          file: ./config/frontend.Dockerfile
           context: .
-          cache-from: type=gha,scope=${{ env.GITHUB_REF_NAME }}-migen
-          cache-to: type=gha,scope=${{ env.GITHUB_REF_NAME }}-migen,mode=max
-          outputs: type=docker,dest=migen.tar
+          push: true
+          cache-from: type=gha,scope=$GITHUB_REF_NAME-${{ env.FRONTEND_IMAGE_NAME }}
+          cache-to: type=gha,scope=$GITHUB_REF_NAME-${{ env.FRONTEND_IMAGE_NAME }},mode=max
           tags: |
-            migen
+            ${{ env.FRONTEND_IMAGE_NAME }}
 
-      - name: Load build docker image
-        run: |
-          docker load < migen.tar 
-
-      - name: Run migen
-        run: |
-          docker run \
-            -v ${PWD}/migen_out:/app/packages/util-script-producer/out migen
-
-      - name: Upload srcipt artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: migration-script
-          path: ./migen_out/migration-script.sql
-
-  database_backup:
-    name: Backup database
-    runs-on: ubuntu-latest
-
-    steps: 
-      - name: Checkout branch
-        uses: actions/checkout@v3
-        with:
-          ref: dev
-
-      - name: Backup
-        shell: pwsh
-        run: |
-          ./deploy/db_dump.ps1 `
-            -dbpass '${{secrets.DB_SERVICE_USER_PASSWORD}}' `
-            -dbhost '${{secrets.DB_HOST_ADDRESS}}' `
-            -dbport '${{secrets.DB_PORT}}' `
-            -dbname 'epistogram_DEV' `
-            -dbuser '${{secrets.DB_SERVICE_USER_NAME}}' `
-            -dbdumppath ./database-backup.sql
-
-      - name: Upload database-backup artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: database-backup
-          path: ./database-backup.sql
-
-  run_tests: 
-    name: Run tests
-    runs-on: ubuntu-latest
-    needs: [generate_migration_script,database_backup]
-    
-    steps:
-      - name: Checkout branch
-        uses: actions/checkout@v3
-        with:
-          ref: dev
-      
-      # Pull the latest image to build, and avoid caching pull-only images.
-      # (docker pull is faster than caching in most cases.)
-      - name: Compose pull
-        run: docker-compose -f ./epitest/testenv.yml pull
-
-      # In this step, this action saves a list of existing images,
-      # the cache is created without them in the post run.
-      # It also restores the cache if it exists.
-      - name: Init layer caching
-        uses: satackey/action-docker-layer-caching@v0.0.11
-        # Ignore the failure of a step and avoid terminating the job.j
-        continue-on-error: true
-
-      - name: Download migration-script artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: migration-script
-          path: ./epitest/init
-
-      - name: Download database-backup artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: database-backup
-          path: ./epitest/init
-
-      # run docker-compose up
-      - name: Compose up
-        run: docker-compose -f ./epitest/testenv.yml up --build --force-recreate --abort-on-container-exit --renew-anon-volumes
+# 
+# ------ deploy
+# 
 
   deploy_database: 
     name: Deploy database
@@ -247,7 +272,7 @@ jobs:
       - name: Migrate schema
         shell: pwsh
         run: |
-          ./deploy/db_run.ps1 `
+          ./scripts/db_exec.ps1 `
             -dbpass '${{secrets.DB_SERVICE_USER_PASSWORD}}' `
             -dbhost '${{secrets.DB_HOST_ADDRESS}}' `
             -dbport '${{secrets.DB_PORT}}' `
