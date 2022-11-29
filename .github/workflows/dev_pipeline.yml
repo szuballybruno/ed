@@ -35,8 +35,9 @@ jobs:
 
       - name: Get migration versions 
         shell: pwsh
+        working-directory: ./packages/util-script-producer/scripts
         run: |
-          ./packages/util-script-producer/scripts/get_mig_versions.ps1 `
+          ./get_mig_versions.ps1 `
             -dbpass '${{secrets.DB_SERVICE_USER_PASSWORD}}' `
             -dbhost '${{secrets.DB_HOST_ADDRESS}}' `
             -dbport '${{secrets.DB_PORT}}' `
