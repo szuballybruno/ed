@@ -155,14 +155,13 @@ export class EmailService {
                 }
             });
 
-            const isLocalhost = this
+            const { sendRealEmails } = this
                 ._config
-                .misc
-                .isLocalhost;
+                .misc;
 
-            const to = isLocalhost
-                ? 'spengler.manfred@epistogram.com'
-                : email.to;
+            const to = sendRealEmails
+                ? email.to
+                : 'spengler.manfred@epistogram.com';
 
             const rootParentPath = path.resolve(this._config.rootDirectory, '../')
 

@@ -1,7 +1,7 @@
 import { EnvironmentType, GlobalConfigurationService, LogScopeType } from '@episto/server-services';
 import { IXCookieOptions } from '@episto/x-gateway';
-import dotenv from 'dotenv';
 import * as fs from 'fs';
+import { AdvancedDotEnv } from './AdvancedDotEnv';
 
 class Helper {
     static getEnvConfigEntry(entryName: string): string;
@@ -52,29 +52,13 @@ class Helper {
 
     static loadEnv(rootDirectory: string) {
 
-        console.log('Loading config.env...');
+        const gitRef = process.env.BRANCH_NAME ?? 'local';
 
-        const checkFileExists = (path: string) => {
+        AdvancedDotEnv
+            .loadDotEnvFile(`${rootDirectory}/../config/default.config.env`);
 
-            try {
-                if (fs.existsSync(path)) {
-
-                    return true;
-                }
-            } catch (err) {
-
-                return false;
-            }
-        };
-
-        const envFilePath = `${rootDirectory}/../config/config.env`;
-        const envFilePathExists = checkFileExists(envFilePath);
-
-        if (!envFilePathExists)
-            throw new Error(`Env file not found! Path: ${envFilePath}`);
-
-        dotenv
-            .config({ path: envFilePath });
+        AdvancedDotEnv
+            .loadDotEnvFile(`${rootDirectory}/../config/${gitRef}.config.env`);
     }
 }
 
@@ -117,20 +101,22 @@ export const createGlobalConfiguration = (rootDir: string) => {
             hostPort: Helper.getEnvConfigEntry('HOST_PORT'),
             environmentName: Helper.getEnvConfigEntry('ENVIRONMENT_NAME'),
             isProd: Helper.getEnvConfigEntry('ENVIRONMENT_NAME') === 'prod',
-            isLocalhost: Helper.getEnvConfigEntry('IS_LOCALHOST', 'bool'),
             domainTemplate: Helper.getEnvConfigEntry('DOMAIN_TEMPLATE'),
             accessTokenCookieName: `epi_access_token_${Helper.getEnvConfigEntry('ENVIRONMENT_NAME')}`,
             refreshTokenCookieName: `epi_refresh_token_${Helper.getEnvConfigEntry('ENVIRONMENT_NAME')}`,
-            videoCompletedPercentage: Helper.getEnvConfigEntry('VIDEO_COMPLETED_PERCENTAGE', 'int')
+            videoCompletedPercentage: Helper.getEnvConfigEntry('VIDEO_COMPLETED_PERCENTAGE', 'int'),
+            sendRealEmails: Helper.getEnvConfigEntry('SEND_REAL_EMAILS', 'bool'),
+            bypassDBTokenCheck: Helper.getEnvConfigEntry('BYPASS_DB_TOKEN_CHECK', 'bool'),
+            doNotUseSecureCookies: Helper.getEnvConfigEntry('DO_NOT_USE_SECURE_COOKIES', 'bool')
         },
         fileStorage: {
-            assetStoreUrl: Helper.getEnvConfigEntry('FILE_STORAGE_URL'),
+            assetStoreUrl: `https://storage.googleapis.com/${Helper.getEnvConfigEntry('FILE_STORAGE_BUCKET_NAME')}`,
             bucketName: Helper.getEnvConfigEntry('FILE_STORAGE_BUCKET_NAME'),
         },
         mail: {
-            mailHost: Helper.getEnvConfigEntry('MAIL_HOST'),
-            senderEmail: Helper.getEnvConfigEntry('MAIL_SENDER_MAIL'),
-            senderPassword: Helper.getEnvConfigEntry('MAIL_SENDER_PASSWORD')
+            mailHost: 'smtp.sendgrid.net',
+            senderEmail: Helper.getEnvConfigEntry('MAIL_SERVICE_USER_NAME'),
+            senderPassword: Helper.getEnvConfigEntry('MAIL_SERVICE_USER_PASSWORD')
         },
         database: {
             name: Helper.getEnvConfigEntry('DB_NAME'),
@@ -139,7 +125,7 @@ export const createGlobalConfiguration = (rootDir: string) => {
             port: parseInt(Helper.getEnvConfigEntry('DB_PORT')),
             serviceUserName: Helper.getEnvConfigEntry('DB_SERVICE_USER_NAME'),
             serviceUserPassword: Helper.getEnvConfigEntry('DB_SERVICE_USER_PASSWORD'),
-            isOrmLoggingEnabled: Helper.getEnvConfigEntry('DB_IS_ORM_LOGGING_ENABLED', 'bool'),
+            isOrmLoggingEnabled: false,
             isHostedOnGCP: Helper.getEnvConfigEntry('IS_HOSTED_ON_GCP', 'bool'),
         },
         logging: {
@@ -176,7 +162,7 @@ export const createGlobalConfiguration = (rootDir: string) => {
 
     const cookieOptions: IXCookieOptions = {
         sameSite: 'strict',
-        secure: !globalConfigService.misc.isLocalhost,
+        secure: !globalConfigService.misc.doNotUseSecureCookies,
         httpOnly: true,
         domain: '.epistogram.com'
     };

@@ -36,6 +36,8 @@ export class SQLPoolService {
         });
 
         this._pool = pool;
+
+        log('Postgres client pool created.');
     }
 
     async connectClientAsync() {

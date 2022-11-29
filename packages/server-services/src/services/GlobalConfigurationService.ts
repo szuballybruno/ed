@@ -54,8 +54,10 @@ export class GlobalConfigurationService {
         hostPort: string;
         environmentName: string;
         isProd: boolean;
-        isLocalhost: boolean;
+        bypassDBTokenCheck: boolean;
+        sendRealEmails: boolean;
         domainTemplate: string;
+        doNotUseSecureCookies: boolean;
         accessTokenCookieName: string;
         refreshTokenCookieName: string;
         videoCompletedPercentage: number;

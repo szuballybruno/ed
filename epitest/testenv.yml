@@ -28,6 +28,7 @@ services:
     environment:
       PGPASSWORD: 'epistogram'
       IS_DOCKERIZED: 'true'
+      BRANCH_NAME: 'epitest'
     expose: 
       - 5000
     healthcheck:

@@ -213,7 +213,7 @@ export class AuthenticationService {
     private _renewUserSessionAsync = async (userId: Id<'User'>, prevRefreshToken: string) => {
 
         // BYPASS TOKEN IN DB CHECK IF LOCALHOST 
-        if (!this._globalConfig.misc.isLocalhost) {
+        if (!this._globalConfig.misc.bypassDBTokenCheck) {
 
             // check if this refresh token is associated to the user
             const refreshTokenFromDb = await this._userService
