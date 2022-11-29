@@ -278,7 +278,7 @@ jobs:
             -dbhost '${{secrets.DB_HOST_ADDRESS}}' `
             -dbport '${{secrets.DB_PORT}}' `
             -dbname 'epistogram_DEV' `
-            -dbuser '${{secrets.DB_SERVICE_USER_NAME}}'
+            -dbuser '${{secrets.DB_SERVICE_USER_NAME}}' `
             -scriptpath ./database-backup.sql
   
   deploy_frontend:
