@@ -44,7 +44,7 @@ jobs:
             -dbname 'epistogram_DEV' `
             -dbuser '${{secrets.DB_SERVICE_USER_NAME}}'
 
-      - name: Build and run migration script generator 
+      - name: Build migen
         uses: docker/build-push-action@v3
         with:
           file: ./packages/util-script-producer/docker/migen.Dockerfile
@@ -55,7 +55,7 @@ jobs:
           tags: |
             migen
 
-      - name: Load build docker image
+      - name: Load migen image
         run: |
           docker load < migen.tar 
 
@@ -64,7 +64,7 @@ jobs:
           docker run \
             -v ${PWD}/migen_out:/app/packages/util-script-producer/out migen
 
-      - name: Upload srcipt artifact
+      - name: Upload migration-script artifact
         uses: actions/upload-artifact@v3
         with:
           name: migration-script
@@ -138,11 +138,7 @@ jobs:
           path: ./epitest/init
 
       - name: Compose up
-        run: docker compose -f ./epitest/testenv.yml up \
-          --build \
-          --force-recreate \
-          --abort-on-container-exit \
-          --renew-anon-volumes
+        run: docker compose --file ./epitest/testenv.yml up --build --force-recreate --abort-on-container-exit --renew-anon-volumes
 
 # 
 # ------ building 
