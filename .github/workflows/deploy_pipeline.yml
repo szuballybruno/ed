@@ -4,9 +4,7 @@ on:
     branches: [ dev ]
 env:
   BRANCH_NAME: ${{ github.head_ref || github.ref_name }} 
-  DB_NAME_dev: epistogram_DEV
-  DB_NAME_demo: epistogram_DEMO
-  DB_NAME_main: epistogram_PROD
+  DB_NAME: epistogram_${{github.ref_name}}
 
   FRONTEND_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/epistogram-frontend-${{ github.ref_name }}
   FRONTEND_CLOUD_RUN_SVC_NAME: epistogram-frontend-${{ github.ref_name }}
@@ -36,12 +34,6 @@ jobs:
       - name: Set up Docker Buildx for layer caching
         uses: docker/setup-buildx-action@master
 
-      - name: Get db postfix
-        id: db_postfix
-        uses: ASzc/change-string-case-action@v5
-        with:
-          string: ${{env.BRANCH_NAME}}
-
       - name: Get migration versions 
         shell: pwsh
         working-directory: ./packages/util-script-producer/scripts
@@ -50,7 +42,7 @@ jobs:
             -dbpass '${{secrets.DB_SERVICE_USER_PASSWORD}}' `
             -dbhost '${{secrets.DB_HOST_ADDRESS}}' `
             -dbport '${{secrets.DB_PORT}}' `
-            -dbname 'epistogram_${{steps.string.outputs.uppercase}}' `
+            -dbname '${{env.DB_NAME}}' `
             -dbuser '${{secrets.DB_SERVICE_USER_NAME}}'
 
       - name: Build migen
@@ -87,12 +79,6 @@ jobs:
       - name: Checkout branch
         uses: actions/checkout@v3
 
-      - name: Get db postfix
-        id: db_postfix
-        uses: ASzc/change-string-case-action@v5
-        with:
-          string: ${{env.BRANCH_NAME}}
-
       - name: Backup
         shell: pwsh
         run: |
@@ -100,7 +86,7 @@ jobs:
             -dbpass '${{secrets.DB_SERVICE_USER_PASSWORD}}' `
             -dbhost '${{secrets.DB_HOST_ADDRESS}}' `
             -dbport '${{secrets.DB_PORT}}' `
-            -dbname 'epistogram_${{steps.string.outputs.uppercase}}' `
+            -dbname '${{env.DB_NAME}}' `
             -dbuser '${{secrets.DB_SERVICE_USER_NAME}}' `
             -dbdumppath ./database-backup.sql
 
@@ -252,12 +238,6 @@ jobs:
         with:
           name: database-backup
           path: ./
-    
-      - name: Get db postfix
-        id: db_postfix
-        uses: ASzc/change-string-case-action@v5
-        with:
-          string: ${{env.BRANCH_NAME}}
 
       - name: Migrate schema
         shell: pwsh
@@ -266,7 +246,7 @@ jobs:
             -dbpass '${{secrets.DB_SERVICE_USER_PASSWORD}}' `
             -dbhost '${{secrets.DB_HOST_ADDRESS}}' `
             -dbport '${{secrets.DB_PORT}}' `
-            -dbname 'epistogram_${{steps.string.outputs.uppercase}}' `
+            -dbname '${{env.DB_NAME}}' `
             -dbuser '${{secrets.DB_SERVICE_USER_NAME}}' `
             -scriptpath ./database-backup.sql
   
