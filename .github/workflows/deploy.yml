@@ -2,9 +2,11 @@ name: ci_cd_pipeline_dev
 on:
   push:
     branches: [ main, demo, dev, dev2 ]
+asd: 
+  BAB: hello
 env:
   BRANCH_NAME: ${{ github.head_ref || github.ref_name }} 
-  FRONTEND_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/epistogram-frontend-${{ BRANCH_NAME }}
+  FRONTEND_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/epistogram-frontend-${{ asd.BAB }}
   BACKEND_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/epistogram-backend-${{ env.BRANCH_NAME }}
   FRONTEND_CLOUD_RUN_SVC_NAME: epistogram-frontend-${{ env.BRANCH_NAME }}
   BACKEND_CLOUD_RUN_SVC_NAME: epistogram-backend-${{ env.BRANCH_NAME }}
