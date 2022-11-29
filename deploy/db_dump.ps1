@@ -12,6 +12,6 @@ $nick= "$host/$dbname"
 echo "Backup database... $nick"
 
 $Env:PGPASSWORD= $dbpass
-& $pgdump_exe -E UTF8 -h $dbhost -p $dbport -U $dbuser -f $dbdumppath $dbname 
+pg_dump -E UTF8 -h $dbhost -p $dbport -U $dbuser -f $dbdumppath $dbname 
 
 echo "Backup done. $nick"
