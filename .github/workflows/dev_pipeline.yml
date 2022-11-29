@@ -162,6 +162,27 @@ jobs:
           name: db-migration-script
           path: ./migen_out/fullMigrationScript.sql
 
+  # backup database for testing 
+  database_backup:
+    name: Backup database
+
+    steps: 
+      - name: Backup
+        run: |
+          ./deploy/db_dump.ps1 `
+            -dbpass '${{secrets.DB_SERVICE_USER_PASSWORD}}' `
+            -dbhost '${{secrets.DB_HOST_ADDRESS}}' `
+            -dbport '${{secrets.DB_PORT}}' `
+            -dbname 'epistogram_DEV' `
+            -dbuser '${{secrets.DB_SERVICE_USER_NAME}}' `
+            -dbdumppath ./../database-backup.sql
+
+      - name: Upload database-backup artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: database-backup
+          path: ./deploy/database-backup.sql
+
           
   # RUN TESTS 
   run_tests: 
@@ -188,11 +209,18 @@ jobs:
       #   # Ignore the failure of a step and avoid terminating the job.j
       #   continue-on-error: true
 
-      # download artifact
+      # download db-migration-script artifact
       - name: Download db-migration-script artifact
         uses: actions/download-artifact@v3
         with:
           name: db-migration-script
+          path: ./epitest/init
+
+      # download database-backup artifact
+      - name: Download database-backup artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: database-backup
           path: ./epitest/init
 
       - name: Ls
