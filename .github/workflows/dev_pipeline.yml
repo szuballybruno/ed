@@ -112,16 +112,16 @@ jobs:
       
       # Pull the latest image to build, and avoid caching pull-only images.
       # (docker pull is faster than caching in most cases.)
-      - name: Compose pull
-        run: docker-compose -f ./epitest/testenv.yml pull
+      # - name: Compose pull
+      #   run: docker-compose -f ./epitest/testenv.yml pull
 
-      # In this step, this action saves a list of existing images,
-      # the cache is created without them in the post run.
-      # It also restores the cache if it exists.
-      - name: Init layer caching
-        uses: satackey/action-docker-layer-caching@v0.0.11
-        # Ignore the failure of a step and avoid terminating the job.j
-        continue-on-error: true
+      # # In this step, this action saves a list of existing images,
+      # # the cache is created without them in the post run.
+      # # It also restores the cache if it exists.
+      # - name: Init layer caching
+      #   uses: satackey/action-docker-layer-caching@v0.0.11
+      #   # Ignore the failure of a step and avoid terminating the job.j
+      #   continue-on-error: true
 
       - name: Download migration-script artifact
         uses: actions/download-artifact@v3
@@ -135,9 +135,12 @@ jobs:
           name: database-backup
           path: ./epitest/init
 
-      # run docker-compose up
       - name: Compose up
-        run: docker-compose -f ./epitest/testenv.yml up --build --force-recreate --abort-on-container-exit --renew-anon-volumes
+        run: docker compose -f ./epitest/testenv.yml up \
+          --build \
+          --force-recreate \
+          --abort-on-container-exit \
+          --renew-anon-volumes
 
 # 
 # ------ building 
