@@ -7,7 +7,7 @@ initJsExtensions();
 await new SuiteListBuilder({
     applyDefaultConfig: (defaults) => {
 
-        defaults.headers['Origin'] = 'http://local.epistogram.com';
+        defaults.headers['Origin'] = 'http://epitest.epistogram.com';
     }
 })
     .addSuites({ IntegrationTestSuite })
