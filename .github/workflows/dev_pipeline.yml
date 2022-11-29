@@ -185,7 +185,7 @@ jobs:
             -dbdumppath ${PWD}/database-backup.sql
 
       - name: Ls
-        run: ls ./deploy -R
+        run: ls -R
 
       # - name: Upload database-backup artifact
       #   uses: actions/upload-artifact@v3
