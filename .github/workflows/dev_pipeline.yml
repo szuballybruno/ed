@@ -34,6 +34,7 @@ jobs:
         uses: docker/setup-buildx-action@master
 
       - name: Get migration versions 
+        shell: pwsh
         run: |
           ./packages/util-script-producer/scripts/get_mig_versions.ps1 `
             -dbpass '${{secrets.DB_SERVICE_USER_PASSWORD}}' `
