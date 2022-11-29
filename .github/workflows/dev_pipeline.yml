@@ -176,12 +176,12 @@ jobs:
       - name: Backup
         shell: pwsh
         run: |
-          ./deploy/db_dump.ps1 \
-            -dbpass '${{secrets.DB_SERVICE_USER_PASSWORD}}' \
-            -dbhost '${{secrets.DB_HOST_ADDRESS}}' \
-            -dbport '${{secrets.DB_PORT}}' \
-            -dbname 'epistogram_DEV' \
-            -dbuser '${{secrets.DB_SERVICE_USER_NAME}}' \
+          ./deploy/db_dump.ps1 `
+            -dbpass '${{secrets.DB_SERVICE_USER_PASSWORD}}' `
+            -dbhost '${{secrets.DB_HOST_ADDRESS}}' `
+            -dbport '${{secrets.DB_PORT}}' `
+            -dbname 'epistogram_DEV' `
+            -dbuser '${{secrets.DB_SERVICE_USER_NAME}}' `
             -dbdumppath ./database-backup.sql
 
       - name: Upload database-backup artifact
