@@ -4,8 +4,11 @@ on:
     branches: [ dev ]
 env:
   BRANCH_NAME: ${{ github.head_ref || github.ref_name }} 
+  DB_NAME_dev: epistogram_DEV
+  DB_NAME_demo: epistogram_DEMO
+  DB_NAME_main: epistogram_PROD
 
-  FRONTEND_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/epistogram-frontend-${{ github.ref_name }}:latest
+  FRONTEND_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/epistogram-frontend-${{ github.ref_name }}
   FRONTEND_CLOUD_RUN_SVC_NAME: epistogram-frontend-${{ github.ref_name }}
 
   BACKEND_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/epistogram-backend-${{ github.ref_name }}
@@ -41,7 +44,7 @@ jobs:
             -dbpass '${{secrets.DB_SERVICE_USER_PASSWORD}}' `
             -dbhost '${{secrets.DB_HOST_ADDRESS}}' `
             -dbport '${{secrets.DB_PORT}}' `
-            -dbname 'epistogram_${{ github.ref_name }}' `
+            -dbname '${{'env.DB_NAME_${{env.BRANCH_NAME}}'}}`
             -dbuser '${{secrets.DB_SERVICE_USER_NAME}}'
 
       - name: Build migen
@@ -85,7 +88,7 @@ jobs:
             -dbpass '${{secrets.DB_SERVICE_USER_PASSWORD}}' `
             -dbhost '${{secrets.DB_HOST_ADDRESS}}' `
             -dbport '${{secrets.DB_PORT}}' `
-            -dbname 'epistogram_${{ github.ref_name }}' `
+            -dbname '${{'env.DB_NAME_${{env.BRANCH_NAME}}'}}' `
             -dbuser '${{secrets.DB_SERVICE_USER_NAME}}' `
             -dbdumppath ./database-backup.sql
 
@@ -245,7 +248,7 @@ jobs:
             -dbpass '${{secrets.DB_SERVICE_USER_PASSWORD}}' `
             -dbhost '${{secrets.DB_HOST_ADDRESS}}' `
             -dbport '${{secrets.DB_PORT}}' `
-            -dbname 'epistogram_${{ github.ref_name }}' `
+            -dbname '${{'env.DB_NAME_${{env.BRANCH_NAME}}'}}' `
             -dbuser '${{secrets.DB_SERVICE_USER_NAME}}' `
             -scriptpath ./database-backup.sql
   
