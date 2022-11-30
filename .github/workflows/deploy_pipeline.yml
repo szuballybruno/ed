@@ -19,9 +19,9 @@ env:
 
 jobs:
 
-# 
-# ------ prerequisites
-# 
+  # 
+  # ------ prerequisites
+  # 
 
   generate_migration_script: 
     name: Generate migration script
@@ -96,9 +96,9 @@ jobs:
           name: database-backup
           path: ./database-backup.sql
 
-# 
-# ------ testing 
-# 
+  # 
+  # ------ testing 
+  # 
 
   run_tests: 
     name: Run tests
@@ -108,19 +108,6 @@ jobs:
     steps:
       - name: Checkout branch
         uses: actions/checkout@v3
-      
-      # Pull the latest image to build, and avoid caching pull-only images.
-      # (docker pull is faster than caching in most cases.)
-      # - name: Compose pull
-      #   run: docker-compose -f ./epitest/testenv.yml pull
-
-      # # In this step, this action saves a list of existing images,
-      # # the cache is created without them in the post run.
-      # # It also restores the cache if it exists.
-      # - name: Init layer caching
-      #   uses: satackey/action-docker-layer-caching@v0.0.11
-      #   # Ignore the failure of a step and avoid terminating the job.j
-      #   continue-on-error: true
 
       - name: Download migration-script artifact
         uses: actions/download-artifact@v3
@@ -143,9 +130,9 @@ jobs:
           name: test-logs
           path: ./epitest/out/testlogs.txt
 
-# 
-# ------ building 
-# 
+  # 
+  # ------ building 
+  # 
 
   build_backend: 
     name: Build backend
@@ -167,6 +154,8 @@ jobs:
 
       - name: Set secrets to ${{ github.ref_name }}.config.env file
         run: |
+          echo "" = ${{secrets.JWT_SIGN_SECRET}} >> ./config/${{ github.ref_name }}.config.env
+          echo "" = ${{secrets.JWT_SIGN_SECRET}} >> ./config/${{ github.ref_name }}.config.env
           echo JWT_SIGN_SECRET = ${{secrets.JWT_SIGN_SECRET}} >> ./config/${{ github.ref_name }}.config.env
           echo MAIL_TOKEN_SECRET = ${{secrets.MAIL_TOKEN_SECRET}} >> ./config/${{ github.ref_name }}.config.env
           echo MAIL_SERVICE_USER_NAME = ${{secrets.MAIL_SENDER_MAIL}} >> ./config/${{ github.ref_name }}.config.env
@@ -225,9 +214,9 @@ jobs:
           tags: |
             ${{ env.FRONTEND_IMAGE_NAME }}
 
-# 
-# ------ deploy
-# 
+  # 
+  # ------ deploy
+  # 
 
   deploy_database: 
     name: Deploy database
