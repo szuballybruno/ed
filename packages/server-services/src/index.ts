@@ -1,6 +1,6 @@
 // needs to be imported for TypeORM
 import 'reflect-metadata';
-export { GlobalConfigurationService, DBConnectionParamsType, EnvironmentType, LogScopeType } from './services/GlobalConfigurationService';
+export * from './services/GlobalConfigurationService';
 export { ActivationCodeService } from './services/ActivationCodeService';
 export { AnswerService } from './services/AnswerService';
 export { AuthenticationService } from './services/AuthenticationService';

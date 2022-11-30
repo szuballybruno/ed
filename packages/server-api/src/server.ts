@@ -26,11 +26,18 @@ await (async () => {
 
         const corsMiddleware = await getCORSMiddleware(initializator);
 
+        const getCleanerStack = (err: Error) => {
+
+            Error.captureStackTrace(err, getCleanerStack);
+            return err.stack;
+        }
+
         const errorCallback = (data: GatewayErrorDataType) => {
 
-            loggerService.logScoped('ERROR', `---------------- [${data.opts.controllerSignature.name}/${data.req.path}] Failed! ----------------`,);
-            loggerService.logScoped('ERROR', data.errorin.message);
-            loggerService.logScoped('ERROR', data.errorin.stack);
+            const stack = getCleanerStack(data.errorin);
+            const msg = `[${data.opts.controllerSignature.name}${data.req.path}] Failed, responding ${data.res.getCode()}!`
+            loggerService.logScoped('ERROR', `---------------- ${msg} ----------------`,);
+            loggerService.logScoped('ERROR', `${data.errorin.message}\n${stack}`);
         }
 
         const successCallback = (data: GatewaySuccessDataType) => {

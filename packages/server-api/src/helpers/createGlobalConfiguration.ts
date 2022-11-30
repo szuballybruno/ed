@@ -1,6 +1,5 @@
-import { EnvironmentType, GlobalConfigurationService, LogScopeType } from '@episto/server-services';
+import { EnvironmentType, ExcludeFunctions, GlobalConfigurationService, LogScopeType } from '@episto/server-services';
 import { IXCookieOptions } from '@episto/x-gateway';
-import * as fs from 'fs';
 import { AdvancedDotEnv } from './AdvancedDotEnv';
 
 class Helper {
@@ -66,7 +65,7 @@ export const createGlobalConfiguration = (rootDir: string) => {
 
     Helper.loadEnv(rootDir);
 
-    const globalConfigService = new GlobalConfigurationService({
+    const globalConfigObj: ExcludeFunctions<GlobalConfigurationService> = {
         rootDirectory: rootDir,
         security: {
             secrets: {
@@ -107,7 +106,8 @@ export const createGlobalConfiguration = (rootDir: string) => {
             videoCompletedPercentage: Helper.getEnvConfigEntry('VIDEO_COMPLETED_PERCENTAGE', 'int'),
             sendRealEmails: Helper.getEnvConfigEntry('SEND_REAL_EMAILS', 'bool'),
             bypassDBTokenCheck: Helper.getEnvConfigEntry('BYPASS_DB_TOKEN_CHECK', 'bool'),
-            doNotUseSecureCookies: Helper.getEnvConfigEntry('DO_NOT_USE_SECURE_COOKIES', 'bool')
+            useSecureCookies: Helper.getEnvConfigEntry('USE_SECURE_COOKIES', 'bool'),
+            logDotEnv: Helper.getEnvConfigEntry('LOG_DOTENV', 'bool')
         },
         fileStorage: {
             assetStoreUrl: `https://storage.googleapis.com/${Helper.getEnvConfigEntry('FILE_STORAGE_BUCKET_NAME')}`,
@@ -158,11 +158,16 @@ export const createGlobalConfiguration = (rootDir: string) => {
             activityStreak5Days: 20,
             activityStreak10Days: 50,
         }
-    });
+    };
+
+    if (globalConfigObj.misc.logDotEnv)
+        console.log(globalConfigObj);
+
+    const globalConfigService = new GlobalConfigurationService(globalConfigObj);
 
     const cookieOptions: IXCookieOptions = {
         sameSite: 'strict',
-        secure: !globalConfigService.misc.doNotUseSecureCookies,
+        secure: globalConfigService.misc.useSecureCookies,
         httpOnly: true,
         domain: '.epistogram.com'
     };

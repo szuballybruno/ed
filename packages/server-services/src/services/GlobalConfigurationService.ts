@@ -17,7 +17,7 @@ export type LogScopeType =
     'ERROR' |
     'FILE UPLOAD';
 
-type ExcludeFunctions<T> = {
+export type ExcludeFunctions<T> = {
     [K in keyof T as T[K] extends Function ? never : K]: T[K];
 };
 
@@ -57,7 +57,8 @@ export class GlobalConfigurationService {
         bypassDBTokenCheck: boolean;
         sendRealEmails: boolean;
         domainTemplate: string;
-        doNotUseSecureCookies: boolean;
+        useSecureCookies: boolean;
+        logDotEnv: boolean;
         accessTokenCookieName: string;
         refreshTokenCookieName: string;
         videoCompletedPercentage: number;

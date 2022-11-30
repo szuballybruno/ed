@@ -12,3 +12,4 @@ yarn.lock
 **.tar
 .yarn.lock
 testlogs.txt
+**.log

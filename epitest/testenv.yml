@@ -46,6 +46,8 @@ services:
         condition: service_healthy
     environment:
       IS_DOCKERIZED: 'true'
+    volumes: 
+      - ./out:/app/packages/server-tests/logs
     build: 
       context: ../
       dockerfile: ./config/tests.Dockerfile

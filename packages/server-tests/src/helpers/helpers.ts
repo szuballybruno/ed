@@ -11,21 +11,29 @@ const throwIf = (condition: boolean) => {
     throw new Error(`Test failed.`);
 }
 
-const shouldThrow = async (fn: () => Promise<any>) => {
+const shouldThrow = (errorcheck: (error: any) => boolean) => {
 
-    let didThrow = false;
+    return {
+        execute: async (fn: () => Promise<any>) => {
 
-    try {
+            let error: Error | null = null;
 
-        await fn();
+            try {
+
+                await fn();
+            }
+            catch (e: any) {
+
+                error = e;
+            }
+
+            if (!error)
+                throw new Error(`Should throw error but didnt.`);
+
+            if (!errorcheck(error))
+                throw new Error(`Thrown error is of an unexpected type!`);
+        }
     }
-    catch (e: any) {
-
-        didThrow = true;
-    }
-
-    if (!didThrow)
-        throw new Error(`Should throw error but didnt.`);
 }
 
 export const Helpers = {

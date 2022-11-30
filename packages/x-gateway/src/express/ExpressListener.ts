@@ -88,8 +88,8 @@ export class ExpressListener implements IXGatewayListener {
 
     private _onError(data: GatewayErrorDataType) {
 
+        this._setErrorResponse(data.res, data.errorin);
         this._onErrorCallback(data);
-        this._respondError(data.res, data.errorin);
     }
 
     private _onSuccess(data: GatewaySuccessDataType) {
@@ -98,7 +98,7 @@ export class ExpressListener implements IXGatewayListener {
         data.res.respond(200, data.value);
     }
 
-    private _respondError = (res: IXGatewayResponse, error: any) => {
+    private _setErrorResponse = (res: IXGatewayResponse, error: any) => {
 
         const errorCode = error?.code ?? 'internal server error';
 

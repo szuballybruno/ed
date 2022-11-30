@@ -7,6 +7,7 @@ type RequestOptions = { origin?: string, cookie?: string };
 type GetRouteFn = (routes: ApiRoutesType) => string;
 
 export type TestContextDefaults = {
+    environmentName: string,
     applyDefaultConfig: (defaults: typeof axios.defaults) => void
 };
 
@@ -31,7 +32,7 @@ export class TestContext {
     setAuthToken(token: string) {
 
         this.overwriteRequestDefaults({
-            cookie: `epi_access_token_local=${token}`
+            cookie: `epi_access_token_${this._contextDefaults.environmentName}=${token}`
         });
 
         return this;
@@ -83,8 +84,11 @@ export class TestContext {
 
             const axError = error as AxiosError;
             const axErrorMessage = `AxiosError: Code: ${axError.code} Msg: ${axError.message} Status: ${axError.response?.status} Status msg: ${axError.response?.statusText}`
+            const newError = new Error(axErrorMessage);
+            
+            newError['axiosError'] = axError;  
 
-            throw new Error(axErrorMessage);
+            throw newError;
         }
     }
 

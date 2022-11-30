@@ -9,6 +9,11 @@ export class ExpressResponse implements IXGatewayResponse {
 
     }
 
+    getCode(): number {
+
+        return this._res.statusCode;
+    }
+
     setCookie(key: string, value: string, opts: IXCookieOptions): void {
 
         this._res.cookie(key, value, opts);

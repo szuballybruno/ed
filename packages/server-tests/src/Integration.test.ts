@@ -1,3 +1,4 @@
+import { AxiosError } from "axios";
 import { Helpers } from "./helpers/helpers";
 import { test, testSuite } from "./helpers/TestSuiteBuilder";
 
@@ -11,12 +12,15 @@ const CONSTANTS = {
 
 let accessToken = '';
 
+const asAxiosError = (error: any) => (error?.axiosError as AxiosError | null);
+
 export const IntegrationTestSuite = testSuite(async () => [
 
     test('Login with corrupt url', async ({ context }) => {
 
-        Helpers
-            .shouldThrow(() => context
+        await Helpers
+            .shouldThrow(error => asAxiosError(error)?.response?.status === 500)
+            .execute(() => context
                 .overwriteRequestDefaults({
                     origin: CONSTANTS.CORRUPT_REQUEST_URL
                 })

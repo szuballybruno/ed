@@ -50,6 +50,9 @@ VALUES ('${ver}', now()); `;
             const migrationScript = `--MIGRATION: ${ver}\n${Polyfills
                 .readFileAsText(`${migrationsFolderFilePath}/${ver}.sql`)}`;
 
+            if (!migrationScript.trimEnd().endsWith(';'))
+                return migrationScript + ';';
+
             return migrationScript;
         })
         .join('\n\n');

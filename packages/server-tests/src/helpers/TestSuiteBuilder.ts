@@ -1,4 +1,5 @@
 import { writeFileSync } from "fs";
+import { Logger } from "./Logger";
 import { TestContext, TestContextDefaults } from "./TestContext";
 
 export type TestSuiteDefinitionType = {
@@ -89,8 +90,12 @@ export class SuiteListBuilder {
 
             for (let testIndex = 0; testIndex < tests.length; testIndex++) {
 
+                const test = tests[testIndex];
+
+                Logger.log(`------ Executing test "${test.name}"...`);
+
                 const result = await this
-                    ._executeTest(testSuite, tests[testIndex]);
+                    ._executeTest(testSuite, test);
 
                 testResults
                     .push(result);
@@ -131,7 +136,7 @@ export class SuiteListBuilder {
 
             if (this._abortOnException) {
 
-                console.log(`   Test: "${test.name}" -> ${'Failed'}`);
+                Logger.log(`   Test: "${test.name}" -> ${'Failed'}`);
                 throw new Error(`Error msg: ${error?.message}`);
             }
             else {
@@ -170,10 +175,10 @@ export class SuiteListBuilder {
         const finalMessage = `${errors.length} tests failed: \n\n${errorMessage.join('\n\n')}`;
 
         // push final message to logs
-        this._logs.push(finalMessage);
+        Logger.log(finalMessage, true);
 
         // flushLogsToFile
-        writeFileSync('./testlogs.txt', this._logs.join('\n'));
+        Logger.flush();
 
         // throw final exception
         if (errors.length > 0)
@@ -184,18 +189,18 @@ export class SuiteListBuilder {
 
         const flat = suiteResults.flatMap(x => x.testResults);
 
-        this._logs.push(`Executed ${flat.length} tests (${flat.filter(x => x.error).length} failed)!`);
+        Logger.log(`Executed ${flat.length} tests (${flat.filter(x => x.error).length} failed)!`);
 
         suiteResults
             .forEach(sr => {
 
-                this._logs.push(`Suite: ${sr.suite.name}`);
+                Logger.log(`Suite: ${sr.suite.name}`);
 
                 sr
                     .testResults
                     .forEach(tr => {
 
-                        this._logs.push(`   Test: "${tr.test.name}" -> ${tr.error ? 'Failed' : 'Ok'}`);
+                        Logger.log(`   Test: "${tr.test.name}" -> ${tr.error ? 'Failed' : 'Ok'}`);
                     })
             });
     }

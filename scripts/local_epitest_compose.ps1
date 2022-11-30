@@ -1,4 +1,9 @@
-cd ./../packages/util-script-producer/scripts
-./local_migen_full.ps1
-cd ../../../scripts
-./db_exec/ps1
+
+# migen 
+./local_migen.ps1
+
+# backup db
+./local_get_test_db_backup.ps1
+
+# compose
+./compose_up_epitest.ps1
