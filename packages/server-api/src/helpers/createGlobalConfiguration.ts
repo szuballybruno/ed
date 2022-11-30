@@ -1,4 +1,4 @@
-import { EnvironmentType, ExcludeFunctions, GlobalConfigurationService, LogScopeType } from '@episto/server-services';
+import { ExcludeFunctions, GlobalConfigurationService, LogScopeType } from '@episto/server-services';
 import { IXCookieOptions } from '@episto/x-gateway';
 import { AdvancedDotEnv } from './AdvancedDotEnv';
 
@@ -12,7 +12,7 @@ class Helper {
         const value = process.env[fullEntryName];
 
         if (value === '' || value === undefined || value === null)
-            throw new Error(`Unable to load .env variable '${fullEntryName}' in env '${Helper.getCurrentEnvironmentName()}'!`);
+            throw new Error(`Unable to load .env variable '${fullEntryName}' in env '${Helper.getEnvName()}'!`);
 
         /**
          * bool
@@ -44,26 +44,25 @@ class Helper {
         return value;
     }
 
-    static getCurrentEnvironmentName = () => {
-
-        return process.env.ENVIRONMENT_NAME as EnvironmentType;
-    };
-
-    static loadEnv(rootDirectory: string) {
-
-        const gitRef = process.env.BRANCH_NAME ?? 'local';
+    static loadEnv(rootDirectory: string, envName: string) {
 
         AdvancedDotEnv
             .loadDotEnvFile(`${rootDirectory}/../config/default.config.env`);
 
         AdvancedDotEnv
-            .loadDotEnvFile(`${rootDirectory}/../config/${gitRef}.config.env`);
+            .loadDotEnvFile(`${rootDirectory}/../config/${envName}.config.env`);
+    }
+
+    static getEnvName() {
+
+        return process.env.ENV_NAME ?? 'local';
     }
 }
 
 export const createGlobalConfiguration = (rootDir: string) => {
 
-    Helper.loadEnv(rootDir);
+    const envName = Helper.getEnvName();
+    Helper.loadEnv(rootDir, envName);
 
     const globalConfigObj: ExcludeFunctions<GlobalConfigurationService> = {
         rootDirectory: rootDir,
@@ -98,11 +97,11 @@ export const createGlobalConfiguration = (rootDir: string) => {
         },
         misc: {
             hostPort: Helper.getEnvConfigEntry('HOST_PORT'),
-            environmentName: Helper.getEnvConfigEntry('ENVIRONMENT_NAME'),
-            isProd: Helper.getEnvConfigEntry('ENVIRONMENT_NAME') === 'prod',
+            environmentName: envName,
+            isProd: envName === 'main',
             domainTemplate: Helper.getEnvConfigEntry('DOMAIN_TEMPLATE'),
-            accessTokenCookieName: `epi_access_token_${Helper.getEnvConfigEntry('ENVIRONMENT_NAME')}`,
-            refreshTokenCookieName: `epi_refresh_token_${Helper.getEnvConfigEntry('ENVIRONMENT_NAME')}`,
+            accessTokenCookieName: `epi_access_token_${envName}`,
+            refreshTokenCookieName: `epi_refresh_token_${envName}`,
             videoCompletedPercentage: Helper.getEnvConfigEntry('VIDEO_COMPLETED_PERCENTAGE', 'int'),
             sendRealEmails: Helper.getEnvConfigEntry('SEND_REAL_EMAILS', 'bool'),
             bypassDBTokenCheck: Helper.getEnvConfigEntry('BYPASS_DB_TOKEN_CHECK', 'bool'),

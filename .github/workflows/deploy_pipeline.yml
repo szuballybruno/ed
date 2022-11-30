@@ -311,4 +311,5 @@ jobs:
           --allow-unauthenticated \
           --memory 4Gi \
           --cpu 2 \
-          --concurrency 200
+          --concurrency 200 \
+          --set-env-vars "ENV_NAME=${{ env.BRANCH_NAME }}"
