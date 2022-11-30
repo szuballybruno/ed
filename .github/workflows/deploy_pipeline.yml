@@ -239,10 +239,10 @@ jobs:
       - name: Checkout branch
         uses: actions/checkout@v3
 
-      - name: Download database-backup artifact
+      - name: Download migration-script artifact
         uses: actions/download-artifact@v3
         with:
-          name: database-backup
+          name: migration-script
           path: ./
 
       - name: Migrate schema
@@ -254,7 +254,7 @@ jobs:
             -dbport '${{secrets.DB_PORT}}' `
             -dbname '${{env.DB_NAME}}' `
             -dbuser '${{secrets.DB_SERVICE_USER_NAME}}' `
-            -scriptpath ./database-backup.sql
+            -scriptpath ./migration-script.sql
   
   deploy_frontend:
     name: Deploy frontend
