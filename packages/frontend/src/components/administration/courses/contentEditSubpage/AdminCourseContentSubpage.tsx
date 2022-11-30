@@ -252,9 +252,9 @@ export const AdminCourseContentSubpage = () => {
     /**
      * Open item edit dialog  
      */
-    const openItemEditDialog = useCallback((type: 'video' | 'exam' | 'module', row?: RowSchema) => {
+    const openItemEditDialog = useCallback((type: 'video' | 'exam', row: RowSchema) => {
 
-        const data = row?.data!;
+        const data = row.data;
         const isVideo = type === 'video';
         const defaultModuleId = modules
             .firstOrNull(x => x.moduleVersionId === data.moduleVersionId)?.moduleId ?? null;
@@ -296,15 +296,17 @@ export const AdminCourseContentSubpage = () => {
 
             setCurrentItem(params);
         }
+    }, [modules]);
 
-        // open module edit dialog
-        else {
+    /**
+     * Open module edit dialog 
+     */
+    const openModuleEditDialog = useCallback(() => {
 
-            moduleEditDialogLogic
-                .dialogLogic
-                .openDialog();
-        }
-    }, [moduleEditDialogLogic.dialogLogic, modules]);
+        moduleEditDialogLogic
+            .dialogLogic
+            .openDialog();
+    }, [moduleEditDialogLogic]);
 
     /**
      * Add item row  
@@ -435,7 +437,7 @@ export const AdminCourseContentSubpage = () => {
             disabled: isDetailsPaneOpen
         },
         {
-            action: () => openItemEditDialog('module'),
+            action: () => openModuleEditDialog(),
             icon: <Edit ref={ref} />,
             title: translatableTexts.administration.courseContentSubpage.editModules,
             disabled: isDetailsPaneOpen
@@ -445,7 +447,7 @@ export const AdminCourseContentSubpage = () => {
             title: 'Mentés',
             disabled: !isSaveEnabled || isDetailsPaneOpen
         }
-    ], [handleSaveAsync, isSaveEnabled, openItemEditDialog, isDetailsPaneOpen]);
+    ], [handleSaveAsync, isSaveEnabled, openModuleEditDialog, isDetailsPaneOpen]);
 
     /**
      * Get grid columns
