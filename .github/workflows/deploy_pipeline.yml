@@ -1,7 +1,7 @@
 name: epistogram_deploy_pipeline
 on:
   push:
-    branches: [ dev ]
+    branches: [ dev, demo ]
 env:
   BRANCH_NAME: ${{ github.head_ref || github.ref_name }} 
   DB_NAME: epistogram_${{github.ref_name}}
