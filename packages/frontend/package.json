@@ -3,6 +3,12 @@
   "version": "0.3.0",
   "private": true,
   "license": "UNLICENSED",
+  "scripts": {
+    "start": "tsc && vite --port 80",
+    "build": "tsc && vite build --mode local",
+    "build-serve": "yarn build && yarn serve",
+    "serve": "serve -l 80 -s build"
+  },
   "dependencies": {
     "@chakra-ui/image": "2.0.11",
     "@chakra-ui/input": "2.0.11",
@@ -50,12 +56,6 @@
     "sass": "1.54.8",
     "screenfull": "6.0.2",
     "word-wrap": "1.2.3"
-  },
-  "scripts": {
-    "start": "tsc && vite --port 80",
-    "build": "tsc && vite build",
-    "build-serve": "yarn build && yarn serve",
-    "serve": "serve -l 80 -s build"
   },
   "browserslist": {
     "production": [

@@ -58,6 +58,15 @@
                 "group": "deps"
             }
         },
+        {
+            "type": "shell",
+            "label": "local_epitest_compose",
+            "command": "local_epitest_compose.ps1",
+            "options": {
+                "cwd": "${workspaceFolder}/scripts"
+            },
+            "problemMatcher": []
+        },
         // run-all
         {
             "label": "run-all",

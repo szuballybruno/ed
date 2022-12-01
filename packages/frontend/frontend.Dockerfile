@@ -4,6 +4,7 @@
 # task: build react app
 #
 FROM node:18.12.1 as builder
+ARG ENVIRONMENT_NAME=local
 WORKDIR /app
 
 # copy package.json
@@ -32,6 +33,7 @@ COPY ./packages/frontend/src ./packages/frontend/src
 COPY ./packages/frontend/public ./packages/frontend/public
 COPY ./packages/frontend/index.html ./packages/frontend/index.html
 COPY ./packages/frontend/vite.config.ts ./packages/frontend/vite.config.ts
+COPY ./packages/frontend/setenv.js ./packages/frontend/setenv.js
 
 COPY ./packages/commonlogic/tsconfig.json ./packages/commonlogic/tsconfig.json
 COPY ./packages/commonlogic/src ./packages/commonlogic/src
@@ -46,9 +48,11 @@ COPY ./packages/communication/rollup.config.js ./packages/communication/rollup.c
 COPY ./packages/x-core/tsconfig.json ./packages/x-core/tsconfig.json
 COPY ./packages/x-core/src ./packages/x-core/src
 
-# build frontend
+RUN echo "Setting env to package json build script ${ENVIRONMENT_NAME}..."
+RUN node ./packages/frontend/setenv.js ${ENVIRONMENT_NAME}
+
 RUN echo "Running Yarn build frontend script..."
-RUN yarn build-client
+RUN yarn build-client 
 
 #
 # CONTAINER #2 ----- RUNNER 

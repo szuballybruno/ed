@@ -9,7 +9,7 @@ it('Register new user via activation code test', () => {
         username: 'testuser_124142',
         lastName: 'user',
         firstName: 'test',
-        activationCode: 'DEVTEST-11',
+        activationCode: 'DEVTEST-2',
         password: 'admin123',
         passwordCompare: 'admin123'
     });

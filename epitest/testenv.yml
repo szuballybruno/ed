@@ -51,9 +51,6 @@ services:
       database: 
         condition: service_healthy
     restart: always
-    environment:
-      IS_DOCKERIZED: 'true'
-      ENV_NAME: 'epitest'
     expose: 
       - 80
     healthcheck:
@@ -64,6 +61,8 @@ services:
     build: 
       context: ../
       dockerfile: ./packages/frontend/frontend.Dockerfile
+      args: 
+        - ENVIRONMENT_NAME=epitest
     networks:
       test_net: 
         aliases: 
