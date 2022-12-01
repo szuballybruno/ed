@@ -19,8 +19,8 @@ COPY ./packages/x-injector/package.json ./packages/x-injector/package.json
 COPY ./packages/x-orm/package.json ./packages/x-orm/package.json
 
 # yarn install
-RUN echo "Yarn installing deps..."
-RUN yarn --silent
+RUN echo "Installing deps..."
+RUN yarn --immutable --immutable-cache --check-cache
 
 # copy other files
 RUN echo "Copying files..."

@@ -13,3 +13,4 @@ yarn.lock
 .yarn.lock
 testlogs.txt
 **.log
+.mp4

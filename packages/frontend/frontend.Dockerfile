@@ -16,8 +16,8 @@ COPY ./packages/communication/package.json ./packages/communication/package.json
 COPY ./packages/x-core/package.json ./packages/x-core/package.json
 
 # yarn install
-RUN echo "Yarn installing deps..."
-RUN yarn --silent
+RUN echo "Installing deps..."
+RUN yarn --immutable --immutable-cache --check-cache
 
 # copy
 RUN echo "Copying files..."

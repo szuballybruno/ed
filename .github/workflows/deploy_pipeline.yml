@@ -170,7 +170,7 @@ jobs:
 
       - uses: docker/build-push-action@v3
         with:
-          file: ./config/backend.Dockerfile
+          file: ./packages/server-api/backend.Dockerfile
           context: .
           push: true
           cache-from: type=gha,scope=$GITHUB_REF_NAME-${{ env.BACKEND_IMAGE_NAME }}
@@ -206,7 +206,7 @@ jobs:
       - name: Build frontend container
         uses: docker/build-push-action@v3
         with:
-          file: ./config/frontend.Dockerfile
+          file: ./packages/frontend/frontend.Dockerfile
           context: .
           push: true
           cache-from: type=gha,scope=$GITHUB_REF_NAME-${{ env.FRONTEND_IMAGE_NAME }}

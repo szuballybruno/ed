@@ -20,8 +20,7 @@ services:
       timeout: 5s
       retries: 5
     networks:
-      test_net: 
-        aliases: db.epitest.epistogram.com
+      - test_net
 
   server: 
     depends_on: 
@@ -41,10 +40,11 @@ services:
       retries: 5
     build: 
       context: ../
-      dockerfile: ./config/backend.Dockerfile
+      dockerfile: ./packages/server-api/backend.Dockerfile
     networks:
       test_net: 
-        aliases: api.epitest.epistogram.com
+        aliases: 
+          - api.epitest.epistogram.com
 
   client: 
     depends_on: 
@@ -66,7 +66,8 @@ services:
       dockerfile: ./packages/frontend/frontend.Dockerfile
     networks:
       test_net: 
-        aliases: epitest.epistogram.com
+        aliases: 
+          - epitest.epistogram.com
       
   tests-client: 
     depends_on: 
@@ -78,10 +79,9 @@ services:
       - ./out:/app/packages/tests-client/cypress/videos
     build: 
       context: ../
-      dockerfile: ./packages/tests-client/tests.Dockerfile
+      dockerfile: ./packages/tests-client/testsclient.Dockerfile
     networks:
-      test_net: 
-        aliases: clienttest.epitest.epistogram.com
+      - test_net
 
 networks:
   test_net:
@@ -97,4 +97,4 @@ networks:
   #     - ./out:/app/packages/tests-server/logs
   #   build: 
   #     context: ../
-  #     dockerfile: ./packages/tests-server/tests.Dockerfile
+  #     dockerfile::/app/packages/tests-server/tests.Dockerfile

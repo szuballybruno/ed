@@ -10088,7 +10088,12 @@ COPY public.activity_session (id, start_date, end_date, is_finalized, user_id, a
 985	2022-11-29 09:18:28.005+01	2022-11-29 09:19:46.232+01	t	1	\N
 986	2022-11-29 18:22:56.376+01	2022-11-29 18:22:56.376+01	t	1	\N
 987	2022-11-30 12:03:10.097+01	2022-11-30 12:07:44.735+01	t	1	\N
-988	2022-11-30 12:56:45.018+01	2022-11-30 12:59:49.009+01	f	1	\N
+989	2022-11-30 16:43:22.193+01	2022-11-30 16:43:22.956+01	t	1	\N
+988	2022-11-30 12:56:45.018+01	2022-11-30 12:59:49.009+01	t	1	\N
+990	2022-11-30 17:23:36.774+01	2022-11-30 17:23:36.899+01	t	1	\N
+991	2022-11-30 17:30:26.56+01	2022-11-30 17:30:26.641+01	t	1	\N
+992	2022-12-01 12:01:46.759+01	2022-12-01 12:01:46.902+01	t	1	\N
+993	2022-12-01 13:41:50.384+01	2022-12-01 13:41:50.463+01	f	1	\N
 \.
 
 
@@ -10157,7 +10162,7 @@ COPY public.activity_streak (id, start_date, end_date, is_finalized, user_id) FR
 58	2022-11-21 14:40:33.194+01	2022-11-22 17:56:48.417+01	t	50
 60	2022-11-25 12:55:45.565+01	2022-11-25 12:55:46.496+01	f	50
 59	2022-11-24 15:28:57.914+01	2022-11-25 22:21:42.048+01	t	1
-61	2022-11-28 17:22:07.058+01	2022-11-30 12:59:49.006+01	f	1
+61	2022-11-28 17:22:07.058+01	2022-12-01 13:41:50.461+01	f	1
 \.
 
 
@@ -56474,6 +56479,9 @@ COPY public.coin_transaction (id, creation_date, amount, is_gifted, user_id, act
 353	2022-11-29 18:22:56.405+01	10	f	1	986	\N	\N	\N	\N	\N
 354	2022-11-30 12:03:10.108+01	10	f	1	987	\N	\N	\N	\N	\N
 355	2022-11-30 12:56:45.027+01	10	f	1	988	\N	\N	\N	\N	\N
+356	2022-11-30 16:43:22.243+01	10	f	1	989	\N	\N	\N	\N	\N
+357	2022-12-01 12:01:46.78+01	10	f	1	992	\N	\N	\N	\N	\N
+358	2022-12-01 13:41:50.396+01	10	f	1	993	\N	\N	\N	\N	\N
 \.
 
 
@@ -72094,7 +72102,7 @@ COPY public."user" (id, deletion_date, creation_date, is_god, is_invitation_acce
 14	\N	2022-10-04 20:30:47.313+02	f	t	Invitation	t	nbouyiivbjsfulxoum@tmmcv.net		TEszt	Utolso	\N	\N	\N	$2a$12$tq1Yd7anSMlEcI5cmIxFf.iV3H/yuEM8d32Tg0uJoRe2Y6f2uhjye		\N	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyRW1haWwiOiJuYm91eWlpdmJqc2Z1bHhvdW1AdG1tY3YubmV0IiwiaWF0IjoxNjY0OTA4MjQ3LCJleHAiOjE2NjUzNjU0NDd9.wVQgmkyuNNVo_XIgwotMzHbPuAlbVivatTiDCMysa3Y	\N	2	26	f
 11	\N	2022-10-04 17:41:38.32+02	f	t	Invitation	t	info@mannimedia.hu		Manfréd	Spengler	\N	\N	\N	$2a$12$LIVbUc4gFsNaUtLEM0nDE.eHWsz70GlLxSUX7DDj3hWt9jaI.9YaO		\N	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyRW1haWwiOiJpbmZvQG1hbm5pbWVkaWEuaHUiLCJpYXQiOjE2NjQ4OTgwOTgsImV4cCI6MTY2NTM1NTI5OH0.YJ9eTUNb9OIyL4mYQuUjrWhQhgqZvCw_hCm3nwQhyqc	\N	2	26	t
 50	\N	2022-11-21 14:39:43.223+01	f	t	Invitation	t	bohbtwcyrappxeannw@tmmbt.net	spenglermanfred	Manfréd	Spengler	\N	\N	\N	$2a$12$0nSRgeON3BXRAFETwuEvUeNnTQaxeCo9UdANj1bqWO5GVV0CUKxka	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUwLCJpYXQiOjE2NjkzNzczNDYsImV4cCI6MTY2OTYzNjU0Nn0.ZfxYjmFRJJG5yyjSoSYqirehNSMp0uy0KlJQW17klmA	\N	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyRW1haWwiOiJib2hidHdjeXJhcHB4ZWFubndAdG1tYnQubmV0IiwiaWF0IjoxNjY5MDM3OTgzLCJleHAiOjE2Njk0OTUxODN9.h76fvrAaaTJYtR-36rAG7whXIVmlPUcH1yhZqQFobZ8	\N	2	4	f
-1	\N	2022-10-04 12:02:36.025+02	t	t	Invitation	t	endre.marosi@epistogram.com	endremarosi	Endre	Marosi		\N	\N	$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTY2OTgwOTU4OSwiZXhwIjoxNjcwMDY4Nzg5fQ.p0pHpSV2DiFEfMIViQNFqGO7nqmtt_d_HeZ5dzmkiT4	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTY2NTE2NTI5MywiZXhwIjoxNjY1MTk0MDkzfQ.s36BTvYQ0YRKWKcmuvRp7FPBoY8nT9cQDk3aWfATdNc	\N	508	2	26	t
+1	\N	2022-10-04 12:02:36.025+02	t	t	Invitation	t	endre.marosi@epistogram.com	endremarosi	Endre	Marosi		\N	\N	$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTY2OTg5ODUxMCwiZXhwIjoxNjcwMTU3NzEwfQ.my4hXaxGqr2cVMHGpC9hLyItQ2svhJPNlC_BuH6409E	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTY2NTE2NTI5MywiZXhwIjoxNjY1MTk0MDkzfQ.s36BTvYQ0YRKWKcmuvRp7FPBoY8nT9cQDk3aWfATdNc	\N	508	2	26	t
 \.
 
 
@@ -75456,6 +75464,19 @@ COPY public.user_session_activity (id, creation_date, type, video_version_id, ex
 3296	2022-11-30 12:58:59.799+01	login	\N	\N	988
 3297	2022-11-30 12:59:34.831+01	login	\N	\N	988
 3298	2022-11-30 12:59:49.01+01	login	\N	\N	988
+3299	2022-11-30 16:43:22.209+01	login	\N	\N	989
+3300	2022-11-30 16:43:22.363+01	generic	\N	\N	989
+3301	2022-11-30 16:43:22.471+01	login	\N	\N	989
+3302	2022-11-30 16:43:22.905+01	generic	\N	\N	989
+3303	2022-11-30 16:43:22.958+01	login	\N	\N	989
+3304	2022-11-30 17:23:36.782+01	generic	\N	\N	990
+3305	2022-11-30 17:23:36.9+01	login	\N	\N	990
+3306	2022-11-30 17:30:26.563+01	generic	\N	\N	991
+3307	2022-11-30 17:30:26.644+01	login	\N	\N	991
+3308	2022-12-01 12:01:46.767+01	generic	\N	\N	992
+3309	2022-12-01 12:01:46.903+01	login	\N	\N	992
+3310	2022-12-01 13:41:50.389+01	generic	\N	\N	993
+3311	2022-12-01 13:41:50.464+01	login	\N	\N	993
 \.
 
 
@@ -85012,7 +85033,7 @@ SELECT pg_catalog.setval('public.activity_id_seq', 6, true);
 -- Name: activity_session_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dev_service_user
 --
 
-SELECT pg_catalog.setval('public.activity_session_id_seq', 988, true);
+SELECT pg_catalog.setval('public.activity_session_id_seq', 993, true);
 
 
 --
@@ -85061,7 +85082,7 @@ SELECT pg_catalog.setval('public.answer_version_id_seq', 39349, true);
 -- Name: coin_transaction_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dev_service_user
 --
 
-SELECT pg_catalog.setval('public.coin_transaction_id_seq', 355, true);
+SELECT pg_catalog.setval('public.coin_transaction_id_seq', 358, true);
 
 
 --
@@ -85467,7 +85488,7 @@ SELECT pg_catalog.setval('public.user_id_seq', 50, true);
 -- Name: user_session_activity_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dev_service_user
 --
 
-SELECT pg_catalog.setval('public.user_session_activity_id_seq', 3298, true);
+SELECT pg_catalog.setval('public.user_session_activity_id_seq', 3311, true);
 
 
 --
