@@ -4,7 +4,7 @@
 # task: build react app
 #
 FROM node:18.12.1 as builder
-ARG ENVIRONMENT_NAME=local
+ARG ENVIRONMENT_NAME=unknown
 WORKDIR /app
 
 # copy package.json
