@@ -26,7 +26,7 @@ COPY ./lerna.json ./lerna.json
 
 COPY ./packages/frontend/tsconfig.json ./packages/frontend/tsconfig.json
 COPY ./packages/frontend/config-overrides.js ./packages/frontend/config-overrides.js
-COPY ./packages/frontend/.env ./packages/frontend/.env
+COPY ./packages/frontend/config ./packages/frontend/config
 COPY ./packages/frontend/.eslintrc.json ./packages/frontend/.eslintrc.json
 COPY ./packages/frontend/src ./packages/frontend/src
 COPY ./packages/frontend/public ./packages/frontend/public

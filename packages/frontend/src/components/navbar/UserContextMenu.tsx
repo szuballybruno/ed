@@ -4,7 +4,6 @@ import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { useLogout } from '../../services/api/authenticationApiService';
 import { useNavigation } from '../../services/core/navigatior';
 import { useShowErrorDialog } from '../../services/core/notifications';
-import { Environment } from '../../static/Environemnt';
 import { ArrayBuilder } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
@@ -148,7 +147,6 @@ export const UserContextMenu = (props: {
                 fontSize="fontNormal14">
 
                 {translatableTexts.navbar.version}
-                {Environment.currentVersion ?? '1999.01.01.01:01'}
             </EpistoFont>
         </EpistoPopper >
     );

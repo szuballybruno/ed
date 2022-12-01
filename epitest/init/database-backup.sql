@@ -8984,8 +8984,6 @@ ALTER TABLE ONLY public.video_version ALTER COLUMN id SET DEFAULT nextval('publi
 --
 
 COPY public.activation_code (id, code, company_id, user_id, trial_length_days) FROM stdin;
-58	DEVTEST-1	2	\N	30
-68	DEVTEST-11	2	\N	30
 59	DEVTEST-2	2	\N	30
 1	PCW-HAFIKUXU	2	\N	30
 2	PCW-FICOFIXO	2	\N	30
@@ -9124,6 +9122,8 @@ COPY public.activation_code (id, code, company_id, user_id, trial_length_days) F
 140	ATECEGED10	4	\N	30
 131	ATECEGED1	4	\N	30
 139	ATECEGED9	4	\N	30
+58	DEVTEST-1	2	51	30
+68	DEVTEST-11	2	52	30
 \.
 
 
@@ -10093,7 +10093,11 @@ COPY public.activity_session (id, start_date, end_date, is_finalized, user_id, a
 990	2022-11-30 17:23:36.774+01	2022-11-30 17:23:36.899+01	t	1	\N
 991	2022-11-30 17:30:26.56+01	2022-11-30 17:30:26.641+01	t	1	\N
 992	2022-12-01 12:01:46.759+01	2022-12-01 12:01:46.902+01	t	1	\N
-993	2022-12-01 13:41:50.384+01	2022-12-01 13:41:50.463+01	f	1	\N
+993	2022-12-01 13:41:50.384+01	2022-12-01 13:41:50.463+01	t	1	\N
+995	2022-12-01 17:57:16.9+01	2022-12-01 17:57:16.9+01	f	51	\N
+994	2022-12-01 17:52:40.457+01	2022-12-01 17:53:38.919+01	t	1	\N
+996	2022-12-01 18:02:39.154+01	2022-12-01 18:02:39.235+01	f	1	\N
+997	2022-12-01 18:04:34.2+01	2022-12-01 18:04:35.445+01	f	52	\N
 \.
 
 
@@ -10162,7 +10166,9 @@ COPY public.activity_streak (id, start_date, end_date, is_finalized, user_id) FR
 58	2022-11-21 14:40:33.194+01	2022-11-22 17:56:48.417+01	t	50
 60	2022-11-25 12:55:45.565+01	2022-11-25 12:55:46.496+01	f	50
 59	2022-11-24 15:28:57.914+01	2022-11-25 22:21:42.048+01	t	1
-61	2022-11-28 17:22:07.058+01	2022-12-01 13:41:50.461+01	f	1
+62	2022-12-01 17:57:16.886+01	2022-12-01 17:57:16.886+01	f	51
+61	2022-11-28 17:22:07.058+01	2022-12-01 18:02:39.233+01	f	1
+63	2022-12-01 18:04:34.196+01	2022-12-01 18:04:35.443+01	f	52
 \.
 
 
@@ -16760,6 +16766,10 @@ COPY public.answer_session (id, start_date, is_practise, exam_version_id, video_
 738	2022-11-25 22:22:13.507+01	f	\N	5989	1
 739	2022-11-25 22:22:37.029+01	f	\N	5992	1
 740	2022-11-25 22:22:38.985+01	f	\N	5989	1
+741	2022-12-01 17:57:16.843+01	f	1	\N	51
+742	2022-12-01 17:57:16.855+01	t	\N	\N	51
+743	2022-12-01 18:04:34.167+01	f	1	\N	52
+744	2022-12-01 18:04:34.175+01	t	\N	\N	52
 \.
 
 
@@ -56482,6 +56492,9 @@ COPY public.coin_transaction (id, creation_date, amount, is_gifted, user_id, act
 356	2022-11-30 16:43:22.243+01	10	f	1	989	\N	\N	\N	\N	\N
 357	2022-12-01 12:01:46.78+01	10	f	1	992	\N	\N	\N	\N	\N
 358	2022-12-01 13:41:50.396+01	10	f	1	993	\N	\N	\N	\N	\N
+359	2022-12-01 17:52:40.477+01	10	f	1	994	\N	\N	\N	\N	\N
+360	2022-12-01 17:57:16.919+01	10	f	51	995	\N	\N	\N	\N	\N
+361	2022-12-01 18:04:34.214+01	10	f	52	997	\N	\N	\N	\N	\N
 \.
 
 
@@ -72102,7 +72115,9 @@ COPY public."user" (id, deletion_date, creation_date, is_god, is_invitation_acce
 14	\N	2022-10-04 20:30:47.313+02	f	t	Invitation	t	nbouyiivbjsfulxoum@tmmcv.net		TEszt	Utolso	\N	\N	\N	$2a$12$tq1Yd7anSMlEcI5cmIxFf.iV3H/yuEM8d32Tg0uJoRe2Y6f2uhjye		\N	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyRW1haWwiOiJuYm91eWlpdmJqc2Z1bHhvdW1AdG1tY3YubmV0IiwiaWF0IjoxNjY0OTA4MjQ3LCJleHAiOjE2NjUzNjU0NDd9.wVQgmkyuNNVo_XIgwotMzHbPuAlbVivatTiDCMysa3Y	\N	2	26	f
 11	\N	2022-10-04 17:41:38.32+02	f	t	Invitation	t	info@mannimedia.hu		Manfréd	Spengler	\N	\N	\N	$2a$12$LIVbUc4gFsNaUtLEM0nDE.eHWsz70GlLxSUX7DDj3hWt9jaI.9YaO		\N	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyRW1haWwiOiJpbmZvQG1hbm5pbWVkaWEuaHUiLCJpYXQiOjE2NjQ4OTgwOTgsImV4cCI6MTY2NTM1NTI5OH0.YJ9eTUNb9OIyL4mYQuUjrWhQhgqZvCw_hCm3nwQhyqc	\N	2	26	t
 50	\N	2022-11-21 14:39:43.223+01	f	t	Invitation	t	bohbtwcyrappxeannw@tmmbt.net	spenglermanfred	Manfréd	Spengler	\N	\N	\N	$2a$12$0nSRgeON3BXRAFETwuEvUeNnTQaxeCo9UdANj1bqWO5GVV0CUKxka	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUwLCJpYXQiOjE2NjkzNzczNDYsImV4cCI6MTY2OTYzNjU0Nn0.ZfxYjmFRJJG5yyjSoSYqirehNSMp0uy0KlJQW17klmA	\N	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyRW1haWwiOiJib2hidHdjeXJhcHB4ZWFubndAdG1tYnQubmV0IiwiaWF0IjoxNjY5MDM3OTgzLCJleHAiOjE2Njk0OTUxODN9.h76fvrAaaTJYtR-36rAG7whXIVmlPUcH1yhZqQFobZ8	\N	2	4	f
-1	\N	2022-10-04 12:02:36.025+02	t	t	Invitation	t	endre.marosi@epistogram.com	endremarosi	Endre	Marosi		\N	\N	$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTY2OTg5ODUxMCwiZXhwIjoxNjcwMTU3NzEwfQ.my4hXaxGqr2cVMHGpC9hLyItQ2svhJPNlC_BuH6409E	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTY2NTE2NTI5MywiZXhwIjoxNjY1MTk0MDkzfQ.s36BTvYQ0YRKWKcmuvRp7FPBoY8nT9cQDk3aWfATdNc	\N	508	2	26	t
+51	\N	2022-12-01 17:57:14.663+01	f	f	Invitation	t	testuser@email.com	testuser	test	user	\N	\N	\N	$2a$12$dDoDDkpLhIP2DE0HQCnxW.7YIkFeyrMV7/jTSvCsGPUuN5RBPdCnO	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUxLCJpYXQiOjE2Njk5MTM4MzYsImV4cCI6MTY3MDE3MzAzNn0.Mm7XWqMx0U6Sj0lpynRITEOQMT3KeZP1n-2R33NVSRM	\N	\N	\N	2	26	t
+1	\N	2022-10-04 12:02:36.025+02	t	t	Invitation	t	endre.marosi@epistogram.com	endremarosi	Endre	Marosi		\N	\N	$2a$12$kNDmMKg.TrLi.RpvAUNeiuQa/AcnMArV8/Nixjge1uVct2bEtOE5C	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTY2OTkxNDE1OSwiZXhwIjoxNjcwMTczMzU5fQ.ONpv3oi_Yq87GvQQM56XN-4rhqyFBi0BSb3AXH-DICM	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTY2NTE2NTI5MywiZXhwIjoxNjY1MTk0MDkzfQ.s36BTvYQ0YRKWKcmuvRp7FPBoY8nT9cQDk3aWfATdNc	\N	508	2	26	t
+52	\N	2022-12-01 18:04:33.387+01	f	f	Invitation	t	testuser_124142@email.com	testuser_124142	test	user	\N	\N	\N	$2a$12$4MoXxQz/hBATQd2pOEnbXe.IqBYJxR/hHKeonslVUOUAnfMEZ3ZYK	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUyLCJpYXQiOjE2Njk5MTQyNzUsImV4cCI6MTY3MDE3MzQ3NX0.nuuGyoDlcavF50g8_XfsK-8fM1Zo6YSJsXBslZqkEeQ	\N	\N	\N	2	26	t
 \.
 
 
@@ -75477,6 +75492,16 @@ COPY public.user_session_activity (id, creation_date, type, video_version_id, ex
 3309	2022-12-01 12:01:46.903+01	login	\N	\N	992
 3310	2022-12-01 13:41:50.389+01	generic	\N	\N	993
 3311	2022-12-01 13:41:50.464+01	login	\N	\N	993
+3312	2022-12-01 17:52:40.463+01	generic	\N	\N	994
+3313	2022-12-01 17:52:40.573+01	login	\N	\N	994
+3314	2022-12-01 17:53:38.855+01	generic	\N	\N	994
+3315	2022-12-01 17:53:38.92+01	login	\N	\N	994
+3316	2022-12-01 17:57:16.904+01	login	\N	\N	995
+3317	2022-12-01 18:02:39.158+01	generic	\N	\N	996
+3318	2022-12-01 18:02:39.236+01	login	\N	\N	996
+3319	2022-12-01 18:04:34.203+01	login	\N	\N	997
+3320	2022-12-01 18:04:34.609+01	generic	\N	\N	997
+3321	2022-12-01 18:04:35.446+01	login	\N	\N	997
 \.
 
 
@@ -85033,14 +85058,14 @@ SELECT pg_catalog.setval('public.activity_id_seq', 6, true);
 -- Name: activity_session_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dev_service_user
 --
 
-SELECT pg_catalog.setval('public.activity_session_id_seq', 993, true);
+SELECT pg_catalog.setval('public.activity_session_id_seq', 997, true);
 
 
 --
 -- Name: activity_streak_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dev_service_user
 --
 
-SELECT pg_catalog.setval('public.activity_streak_id_seq', 61, true);
+SELECT pg_catalog.setval('public.activity_streak_id_seq', 63, true);
 
 
 --
@@ -85068,7 +85093,7 @@ SELECT pg_catalog.setval('public.answer_id_seq', 2127, true);
 -- Name: answer_session_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dev_service_user
 --
 
-SELECT pg_catalog.setval('public.answer_session_id_seq', 740, true);
+SELECT pg_catalog.setval('public.answer_session_id_seq', 744, true);
 
 
 --
@@ -85082,7 +85107,7 @@ SELECT pg_catalog.setval('public.answer_version_id_seq', 39349, true);
 -- Name: coin_transaction_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dev_service_user
 --
 
-SELECT pg_catalog.setval('public.coin_transaction_id_seq', 358, true);
+SELECT pg_catalog.setval('public.coin_transaction_id_seq', 361, true);
 
 
 --
@@ -85481,14 +85506,14 @@ SELECT pg_catalog.setval('public.user_exam_progress_bridge_id_seq', 1, false);
 -- Name: user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dev_service_user
 --
 
-SELECT pg_catalog.setval('public.user_id_seq', 50, true);
+SELECT pg_catalog.setval('public.user_id_seq', 52, true);
 
 
 --
 -- Name: user_session_activity_id_seq; Type: SEQUENCE SET; Schema: public; Owner: dev_service_user
 --
 
-SELECT pg_catalog.setval('public.user_session_activity_id_seq', 3311, true);
+SELECT pg_catalog.setval('public.user_session_activity_id_seq', 3321, true);
 
 
 --

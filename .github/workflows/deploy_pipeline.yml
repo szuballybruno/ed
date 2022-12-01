@@ -196,10 +196,6 @@ jobs:
 
       - name: Configure GCP Docker
         run: gcloud auth configure-docker --quiet
-
-      - name: Copy proper .env file
-        run: cp -fr ./config/${{ github.ref_name }}.env ./.env 
-        working-directory: ./packages/frontend
       
       - name: Set up Docker Buildx for layer caching
         uses: docker/setup-buildx-action@master
