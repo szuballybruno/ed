@@ -54,16 +54,8 @@
   "scripts": {
     "start": "tsc && vite --port 80",
     "build": "tsc && vite build",
-    "serve-vite": "vite preview",
-    "start-cra": "cross-env DISABLE_ESLINT_PLUGIN=true react-app-rewired start",
-    "build-cra": "tsc -v && cross-env DISABLE_ESLINT_PLUGIN=true GENERATE_SOURCEMAP=false react-app-rewired build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "lint": "eslint . --ext .ts --ext .tsx",
-    "lintfix": "eslint . --ext .ts --ext .tsx --fix",
-    "serve": "serve -l 80 -s build",
-    "startprod": "yarn build && serve -l 80 -s build",
-    "cleaninstall": "yarn --force --no-lockfile"
+    "build-serve": "yarn build && yarn serve",
+    "serve": "serve -l 80 -s build"
   },
   "browserslist": {
     "production": [

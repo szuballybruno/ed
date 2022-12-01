@@ -32,15 +32,8 @@ export const IntegrationTestSuite = testSuite(async () => [
         const response = await context
             .postAsync(x => x.authentication.loginUser, CONSTANTS.VALID_CREDENTIALS_BODY);
 
-        const setCookies = response.headers["set-cookie"] ?? [];
-
-        if (!setCookies?.some(x => x.startsWith('epi_access_token')))
-            throw new Error('No access token recieved!');
-
-        const accessTokenValue = setCookies
-            .single(x => x.startsWith('epi_access_token'))
-            .split(';')[0]
-            .split('=')[1];
+        const accessTokenValue = Helpers
+            .findSetCookieHeaderValue(response, 'epi_access_token');
 
         accessToken = accessTokenValue;
     }),

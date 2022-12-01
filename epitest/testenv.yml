@@ -19,6 +19,9 @@ services:
       interval: 20s
       timeout: 5s
       retries: 5
+    networks:
+      test_net: 
+        aliases: db.epitest.epistogram.com
 
   server: 
     depends_on: 
@@ -39,15 +42,59 @@ services:
     build: 
       context: ../
       dockerfile: ./config/backend.Dockerfile
-      
-  tests: 
+    networks:
+      test_net: 
+        aliases: api.epitest.epistogram.com
+
+  client: 
     depends_on: 
-      server:
+      database: 
+        condition: service_healthy
+    restart: always
+    environment:
+      IS_DOCKERIZED: 'true'
+      ENV_NAME: 'epitest'
+    expose: 
+      - 80
+    healthcheck:
+      test: ["CMD-SHELL", "curl --fail http://epitest.epistogram.com || exit 1"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+    build: 
+      context: ../
+      dockerfile: ./packages/frontend/frontend.Dockerfile
+    networks:
+      test_net: 
+        aliases: epitest.epistogram.com
+      
+  tests-client: 
+    depends_on: 
+      client:
         condition: service_healthy
     environment:
       IS_DOCKERIZED: 'true'
     volumes: 
-      - ./out:/app/packages/server-tests/logs
+      - ./out:/app/packages/tests-client/cypress/videos
     build: 
       context: ../
-      dockerfile: ./config/tests.Dockerfile
+      dockerfile: ./packages/tests-client/tests.Dockerfile
+    networks:
+      test_net: 
+        aliases: clienttest.epitest.epistogram.com
+
+networks:
+  test_net:
+    driver: bridge
+      
+  # tests-server: 
+  #   depends_on: 
+  #     server:
+  #       condition: service_healthy
+  #   environment:
+  #     IS_DOCKERIZED: 'true'
+  #   volumes: 
+  #     - ./out:/app/packages/tests-server/logs
+  #   build: 
+  #     context: ../
+  #     dockerfile: ./packages/tests-server/tests.Dockerfile

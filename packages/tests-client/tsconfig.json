@@ -1,0 +1,17 @@
+{
+  "extends": "./../../tsconfig.json",
+  "include": [
+    "**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "tests"
+  ],
+  "compilerOptions": {
+    "outDir": "./dist",
+    "types": [
+      "cypress",
+      "node"
+    ]
+  }
+}

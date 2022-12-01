@@ -1,0 +1,16 @@
+{
+    "name": "@episto/tests-client",
+    "version": "1.0.0",
+    "private": true,
+    "license": "UNLICENSED",
+    "main": "./dist/index.js",
+    "typings": "./dist/index.d.ts",
+    "type": "module",
+    "scripts": {
+        "open-cy": "npx cypress open",
+        "start-cy": "cypress run"
+    },
+    "devDependencies": {
+        "cypress": "^11.2.0"
+    }
+}

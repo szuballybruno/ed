@@ -7,7 +7,7 @@ WORKDIR /app
 # copy package json files
 RUN echo "Copying package.json files..."
 COPY ./package.json ./package.json
-COPY ./packages/server-tests/package.json ./packages/server-tests/package.json
+COPY ./packages/tests-server/package.json ./packages/tests-server/package.json
 COPY ./packages/server-api/package.json ./packages/server-api/package.json
 COPY ./packages/server-services/package.json ./packages/server-services/package.json
 COPY ./packages/commonlogic/package.json ./packages/commonlogic/package.json
@@ -28,8 +28,8 @@ RUN echo "Copying files..."
 COPY ./tsconfig.json ./tsconfig.json
 COPY ./lerna.json ./lerna.json
 
-COPY ./packages/server-tests/tsconfig.json ./packages/server-tests/tsconfig.json
-COPY ./packages/server-tests/src ./packages/server-tests/src
+COPY ./packages/tests-server/tsconfig.json ./packages/tests-server/tsconfig.json
+COPY ./packages/tests-server/src ./packages/tests-server/src
 
 COPY ./packages/server-services/tsconfig.json ./packages/server-services/tsconfig.json
 COPY ./packages/server-services/src ./packages/server-services/src
@@ -64,9 +64,9 @@ COPY ./packages/x-core/src ./packages/x-core/src
 COPY ./packages/x-orm/tsconfig.json ./packages/x-orm/tsconfig.json
 COPY ./packages/x-orm/src ./packages/x-orm/src
 
-# build server-tests
-RUN echo "Running Yarn build server-tests script..."
-RUN yarn build-tests
+# build stests-server
+RUN echo "Building tests-server..."
+RUN yarn build-tests-server
 
 # start container 
-CMD yarn start-tests
+CMD yarn start-tests-server

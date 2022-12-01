@@ -49,7 +49,7 @@ export class TestContext {
         });
     }
 
-    async postAsync(getRoute: GetRouteFn, body: any) {
+    async postAsync<TBody = any>(getRoute: GetRouteFn, body: TBody) {
 
         const route = `${domain}${getRoute(apiRoutes)}`;
         const json = body ? JSON.stringify(body) : undefined;
@@ -85,8 +85,8 @@ export class TestContext {
             const axError = error as AxiosError;
             const axErrorMessage = `AxiosError: Code: ${axError.code} Msg: ${axError.message} Status: ${axError.response?.status} Status msg: ${axError.response?.statusText}`
             const newError = new Error(axErrorMessage);
-            
-            newError['axiosError'] = axError;  
+
+            newError['axiosError'] = axError;
 
             throw newError;
         }

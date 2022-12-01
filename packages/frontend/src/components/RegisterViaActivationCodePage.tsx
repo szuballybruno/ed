@@ -306,6 +306,7 @@ export const RegisterViaActivationCodePage = () => {
                         minH='80px'>
 
                         <EpistoButton
+                            dataTestid="register-button"
                             style={{
                                 width: '100%',
                                 backgroundColor: isAllValid ? '#324658' : undefined,

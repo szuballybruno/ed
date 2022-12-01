@@ -1,7 +1,21 @@
+import { AxiosResponse } from "axios";
 
 
 
+const findSetCookieHeaderValue = (response: AxiosResponse, startsWith: string) => {
 
+    const setCookies = response.headers["set-cookie"] ?? [];
+
+    if (!setCookies?.some(x => x.startsWith(startsWith)))
+        throw new Error(`No set-cookie header found starting with ${startsWith}!`);
+
+    const tokenValue = setCookies
+        .single(x => x.startsWith(startsWith))
+        .split(';')[0]
+        .split('=')[1];
+
+    return tokenValue;
+}
 
 const throwIf = (condition: boolean) => {
 
@@ -39,4 +53,5 @@ const shouldThrow = (errorcheck: (error: any) => boolean) => {
 export const Helpers = {
     throwIf,
     shouldThrow,
+    findSetCookieHeaderValue
 }
