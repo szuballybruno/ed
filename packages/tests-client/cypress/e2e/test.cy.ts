@@ -5,11 +5,11 @@ it('Register new user via activation code test', () => {
     cy.visit('/register-via-activation-code');
 
     fillInputs({
-        email: 'testuser.email.com',
-        username: 'testuser',
+        email: 'testuser_124142@email.com',
+        username: 'testuser_124142',
         lastName: 'user',
         firstName: 'test',
-        activationCode: 'DEVTEST-1',
+        activationCode: 'DEVTEST-11',
         password: 'admin123',
         passwordCompare: 'admin123'
     });

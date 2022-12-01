@@ -126,9 +126,10 @@ jobs:
 
       - name: Upload test-logs artifact
         uses: actions/upload-artifact@v3
+        if: always()
         with:
-          name: test-logs
-          path: ./epitest/out/testlogs.txt
+          name: test-artifacts
+          path: ./epitest/out
 
   # 
   # ------ building 

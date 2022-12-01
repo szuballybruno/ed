@@ -9,6 +9,7 @@
     "build-server": "lerna run build --scope=@episto/server-api --include-dependencies",
     "build-client": "lerna run build --scope=@episto/frontend --include-dependencies",
     "build-tests-server": "lerna run build --scope=@episto/tests-server --include-dependencies",
+    "build-serve-client": "lerna run build-serve --scope=@episto/frontend",
     "start-tests-server": "lerna run start --scope=@episto/tests-server",
     "start-tests-client": "lerna run start-cy --scope=@episto/tests-client",
     "mon-tests-server": "lerna run mon --scope=@episto/tests-server",
