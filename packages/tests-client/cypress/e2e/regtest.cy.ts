@@ -16,5 +16,5 @@ it('Register new user via activation code test', () => {
 
     clickButton('register-button');
 
-    cy.url().should('include', '/home');
+    cy.url().should('include', '/survey');
 })

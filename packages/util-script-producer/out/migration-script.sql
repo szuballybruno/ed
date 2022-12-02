@@ -1,14 +1,9 @@
 
--- MIGRATION VERSIONS: migration20
-
 -- BEGIN TRANSACTION
 BEGIN;
 
--- STORE MIGRATION VERSION
+-- INSERT MISSING MIGRATION VERSIONS ()
 
--- MIGRATION: migration20
-INSERT INTO public.migration_version
-VALUES ('migration20', now()); 
 
 -- DROP SOFT SCHEMA
 CREATE OR REPLACE PROCEDURE drop_all_fn()
@@ -39,8 +34,9 @@ BEGIN
 		ON nsp.oid = connamespace
 		AND nsp.nspname = 'public'
 
-		WHERE con.contype = 'u' 
-		OR con.contype = 'c'
+		WHERE (con.contype = 'u' 
+		OR con.contype = 'c')
+		AND con.conname != 'migration_version_version_name_unique'
 	) sq
 	INTO var_drop_constraints_script;
 	
@@ -97,6 +93,7 @@ BEGIN
 		WHERE tablename NOT LIKE 'pg%'
 		AND indexname NOT LIKE '%REL_%'
 		AND indexname NOT LIKE '%PK_%'
+		AND indexname != 'migration_version_version_name_unique'
 	) sq
 	INTO var_drop_indices_script;
 	
@@ -128,11 +125,7 @@ CALL drop_all_fn();
 DROP PROCEDURE drop_all_fn;
 
 -- EXECUTE MIGRATIONS 
---MIGRATION: migration20
-UPDATE public.user_course_bridge
-SET tempomat_mode = 'strict'
-WHERE tempomat_mode = 'balanced'
-OR tempomat_mode = 'auto';
+
 
 -- CREATE SOFT SCHEMA
 
@@ -329,6 +322,16 @@ AS
 SELECT 
     2.0 incorrect_answer_value_multiplier,
     4.0 question_max_score;
+
+--course_company_bridge_view
+CREATE VIEW course_company_bridge_view
+AS
+SELECT 
+	cab.id,
+	cab.company_id,
+	cab.course_id
+FROM course_access_bridge cab
+WHERE cab.company_id IS NOT NULL;
 
 --course_completion_view
 CREATE VIEW course_completion_view
@@ -3599,65 +3602,129 @@ LEFT JOIN public.user_performance_answer_group_view upagv
 ON upagv.user_id = u.id
 ;
 
---course_admin_short_view
-CREATE VIEW course_admin_short_view
+--course_admin_content_view
+CREATE VIEW course_admin_content_view
 AS
-WITH 
-exam_count AS 
+WITH
+question_version_answer_counts AS 
 (
-	SELECT COUNT(ev.id) exam_count, mv.course_version_id
-	FROM public.exam_version ev
+	SELECT 
+		qv.id question_version_id, 
+		COUNT(av.id) answer_count,
+		COALESCE(SUM(ad.is_correct::int), 0) correct_answer_count
+	FROM public.question_version qv 
+
+	LEFT JOIN public.answer_version av
+	ON av.question_version_id = qv.id
+
+	LEFT JOIN public.answer_data ad
+	ON ad.id = av.answer_data_id
+
+	GROUP BY
+		qv.id,
+		qv.video_version_id,
+		qv.exam_version_id
+),
+questions AS 
+(
+	SELECT 
+		qv.id question_version_id, 
+		qd.question_text question_text, 
+		qv.video_version_id,
+		qv.exam_version_id,
+		qvac.answer_count,
+		qvac.correct_answer_count,
+		qvac.answer_count = 0 issue_answers_missing,
+		qvac.correct_answer_count = 0 issue_correct_answers_missing
+	FROM public.question_version qv 
+
+	LEFT JOIN public.question_data qd
+	ON qd.id = qv.question_data_id
+
+	LEFT JOIN public.answer_version av
+	ON av.question_version_id = qv.id
+
+	LEFT JOIN public.answer_data ad
+	ON ad.id = av.answer_data_id
 	
-	LEFT JOIN public.module_version mv
-	ON mv.id = ev.module_version_id
+	LEFT JOIN question_version_answer_counts qvac
+	ON qvac.question_version_id = qv.id
+),
+items AS
+(
+	SELECT 
+		sq.video_version_id,
+		sq.exam_version_id,
+		sq.question_count,
+		sq.question_count = 0 issue_questions_missing,
+		sq.question_issues question_issues
+	FROM 
+	(
+		SELECT 
+			civ.video_version_id,
+			civ.exam_version_id,
+			COUNT(qs.question_version_id) question_count,
+			STRING_AGG(qs.question_text || CASE WHEN qs.issue_answers_missing THEN ': ans_miss' ELSE ': corr_ans_miss' END, CHR(10)) 
+				FILTER (WHERE qs.issue_answers_missing OR qs.issue_correct_answers_missing) question_issues,
+			COALESCE(SUM(qs.issue_answers_missing::int), 0) missing_answers_issues_count,
+			COALESCE(SUM(qs.issue_correct_answers_missing::int), 0) missing_correct_answers_count
+		FROM public.course_item_view civ
+		
+		LEFT JOIN questions qs
+		ON qs.video_version_id = civ.video_version_id 
+		OR qs.exam_version_id = civ.exam_version_id
+
+		GROUP BY
+			civ.video_version_id,
+			civ.exam_version_id
+	) sq
 	
-	GROUP BY mv.course_version_id
+	ORDER BY
+		sq.question_count DESC
 )
 SELECT 
 	lcvv.course_id,
-	cd.title title,
-	co.deletion_date IS NOT NULL is_deleted,
-	cc.id category_id,
-	cc.name category_name,
-	scc.id sub_category_id,
-	scc.name sub_category_name,
-	u.id teacher_id,
-	u.first_name teacher_first_name,
-	u.last_name teacher_last_name,
-	sf.file_path cover_file_path,
-	cvcv.video_count,
-	ec.exam_count
+	lcvv.version_id course_version_id,
+	civ.module_name,
+	civ.module_order_index,
+	civ.module_version_id,
+	civ.video_version_id,
+	civ.exam_version_id,
+	civ.item_order_index,
+	civ.item_title,
+	civ.item_subtitle,
+	civ.item_type,
+	civ.version_code,
+	CONCAT_WS(
+		CHR(10), 
+		CASE WHEN it.issue_questions_missing THEN 'questions_missing' END, 
+		it.question_issues) errors,
+	CONCAT_WS(
+		CHR(10), 
+		CASE WHEN civ.item_type = 'video' AND vd.video_file_length_seconds > 480 
+			THEN 'video_too_long' END) warnings,
+	vd.video_file_length_seconds video_length,
+	vd.audio_text video_audio_text
 FROM public.latest_course_version_view lcvv
 
-LEFT JOIN public.course_version cv 
-ON cv.id = lcvv.version_id
+LEFT JOIN public.course_item_view civ
+ON civ.course_version_id = lcvv.version_id
 
-LEFT JOIN public.course co
-ON co.id = cv.course_id
+LEFT JOIN items it
+ON it.video_version_id = civ.video_version_id 
+OR it.exam_version_id = civ.exam_version_id
 
-LEFT JOIN public.course_data cd 
-ON cd.id = cv.course_data_id 
+LEFT JOIN public.video_version vv
+ON vv.id = it.video_version_id
 
-LEFT JOIN public.storage_file sf
-ON sf.id = cd.cover_file_id
+LEFT JOIN public.video_data vd
+ON vd.id = vv.video_data_id
 
-LEFT JOIN public.user u
-ON u.id = cd.teacher_id
-
-LEFT JOIN public.course_category cc
-ON cc.id = cd.category_id
-
-LEFT JOIN public.course_category scc
-ON scc.id = cd.sub_category_id
-
-LEFT JOIN public.course_video_count_view cvcv
-ON cvcv.course_id = co.id
-
-LEFT JOIN exam_count ec
-ON ec.course_version_id = lcvv.version_id
-	
-ORDER BY
-	lcvv.course_id;
+ORDER BY 
+	lcvv.course_id, 
+	civ.module_order_index,
+	civ.item_order_index
+;
 
 --course_spent_time_view
 CREATE VIEW course_spent_time_view
@@ -4913,132 +4980,74 @@ LEFT JOIN public.storage_file sf
 ON sf.id = cd.cover_file_id
 ;
 
---course_admin_content_view
-CREATE VIEW course_admin_content_view
+--course_admin_list_view
+CREATE VIEW course_admin_list_view
 AS
-WITH
-question_version_answer_counts AS 
+WITH 
+course_users_cte AS 
 (
 	SELECT 
-		qv.id question_version_id, 
-		COUNT(av.id) answer_count,
-		COALESCE(SUM(ad.is_correct::int), 0) correct_answer_count
-	FROM public.question_version qv 
-
-	LEFT JOIN public.answer_version av
-	ON av.question_version_id = qv.id
-
-	LEFT JOIN public.answer_data ad
-	ON ad.id = av.answer_data_id
-
-	GROUP BY
-		qv.id,
-		qv.video_version_id,
-		qv.exam_version_id
-),
-questions AS 
-(
-	SELECT 
-		qv.id question_version_id, 
-		qd.question_text question_text, 
-		qv.video_version_id,
-		qv.exam_version_id,
-		qvac.answer_count,
-		qvac.correct_answer_count,
-		qvac.answer_count = 0 issue_answers_missing,
-		qvac.correct_answer_count = 0 issue_correct_answers_missing
-	FROM public.question_version qv 
-
-	LEFT JOIN public.question_data qd
-	ON qd.id = qv.question_data_id
-
-	LEFT JOIN public.answer_version av
-	ON av.question_version_id = qv.id
-
-	LEFT JOIN public.answer_data ad
-	ON ad.id = av.answer_data_id
+		co.id course_id,
+		ccbv.company_id,
+		COALESCE(COUNT(*), 0) user_count
+	FROM public.course co
 	
-	LEFT JOIN question_version_answer_counts qvac
-	ON qvac.question_version_id = qv.id
-),
-items AS
-(
-	SELECT 
-		sq.video_version_id,
-		sq.exam_version_id,
-		sq.question_count,
-		sq.question_count = 0 issue_questions_missing,
-		sq.question_issues question_issues
-	FROM 
-	(
-		SELECT 
-			civ.video_version_id,
-			civ.exam_version_id,
-			COUNT(qs.question_version_id) question_count,
-			STRING_AGG(qs.question_text || CASE WHEN qs.issue_answers_missing THEN ': ans_miss' ELSE ': corr_ans_miss' END, CHR(10)) 
-				FILTER (WHERE qs.issue_answers_missing OR qs.issue_correct_answers_missing) question_issues,
-			COALESCE(SUM(qs.issue_answers_missing::int), 0) missing_answers_issues_count,
-			COALESCE(SUM(qs.issue_correct_answers_missing::int), 0) missing_correct_answers_count
-		FROM public.course_item_view civ
-		
-		LEFT JOIN questions qs
-		ON qs.video_version_id = civ.video_version_id 
-		OR qs.exam_version_id = civ.exam_version_id
-
-		GROUP BY
-			civ.video_version_id,
-			civ.exam_version_id
-	) sq
+	INNER JOIN public.course_company_bridge_view ccbv
+	ON ccbv.course_id = co.id
 	
-	ORDER BY
-		sq.question_count DESC
+	LEFT JOIN public.user_course_bridge ucb
+	ON ucb.course_id = co.id
+	
+	LEFT JOIN public.user u
+	ON u.id = ucb.user_id
+	AND u.company_id = ccbv.company_id
+	
+	GROUP BY 
+		co.id,
+		ccbv.company_id
 )
 SELECT 
-	casv.course_id,
-	lcvv.version_id course_version_id,
-	civ.module_name,
-	civ.module_order_index,
-	civ.module_version_id,
-	civ.video_version_id,
-	civ.exam_version_id,
-	civ.item_order_index,
-	civ.item_title,
-	civ.item_subtitle,
-	civ.item_type,
-	civ.version_code,
-	CONCAT_WS(
-		CHR(10), 
-		CASE WHEN it.issue_questions_missing THEN 'questions_missing' END, 
-		it.question_issues) errors,
-	CONCAT_WS(
-		CHR(10), 
-		CASE WHEN civ.item_type = 'video' AND vd.video_file_length_seconds > 480 
-			THEN 'video_too_long' END) warnings,
-	vd.video_file_length_seconds video_length,
-	vd.audio_text video_audio_text
-FROM public.course_admin_short_view casv
+	lcvv.course_id,
+	ccbv.company_id,
+	cd.title title,
+	cc.id category_id,
+	cc.name category_name,
+	sf.file_path cover_file_path,
+	cuc.user_count
+FROM public.latest_course_version_view lcvv
 
-LEFT JOIN public.latest_course_version_view lcvv
-ON lcvv.course_id = casv.course_id
+LEFT JOIN public.course_version cv 
+ON cv.id = lcvv.version_id
 
-LEFT JOIN public.course_item_view civ
-ON civ.course_version_id = lcvv.version_id
+LEFT JOIN public.course co
+ON co.id = cv.course_id
 
-LEFT JOIN items it
-ON it.video_version_id = civ.video_version_id 
-OR it.exam_version_id = civ.exam_version_id
+LEFT JOIN public.course_data cd 
+ON cd.id = cv.course_data_id 
 
-LEFT JOIN public.video_version vv
-ON vv.id = it.video_version_id
+INNER JOIN public.course_company_bridge_view ccbv
+ON ccbv.course_id = co.id
 
-LEFT JOIN public.video_data vd
-ON vd.id = vv.video_data_id
+LEFT JOIN public.storage_file sf
+ON sf.id = cd.cover_file_id
 
-ORDER BY 
-	casv.course_id, 
-	civ.module_order_index,
-	civ.item_order_index
-;
+LEFT JOIN public.course_category cc
+ON cc.id = cd.category_id
+
+LEFT JOIN public.course_category scc
+ON scc.id = cd.sub_category_id
+
+LEFT JOIN public.course_video_count_view cvcv
+ON cvcv.course_id = co.id
+
+LEFT JOIN course_users_cte cuc
+ON cuc.course_id = co.id
+AND cuc.company_id = ccbv.company_id
+
+WHERE co.deletion_date IS NULL
+	
+ORDER BY
+	lcvv.course_id;
 
 --course_details_view
 CREATE VIEW course_details_view

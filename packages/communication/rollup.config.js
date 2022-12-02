@@ -1,21 +1,24 @@
 import typescript from "@rollup/plugin-typescript";
+import sourcemaps from "rollup-plugin-sourcemaps";
 import dts from "rollup-plugin-dts";
 
 export default [
     {
         input: "./src/index.ts",
         output: {
+            sourcemap: "inline",
             file: './dist/index.js',
-            // dir: "./dist",
-            // format: "esm",
-            // sourcemaps: true
             format: 'esm',
             name: 'index.js',
+            sourcemaps: true,
         },
         plugins: [
             typescript({
-                tsconfig: "./tsconfig.json"
-            })
+                tsconfig: "./tsconfig.json",
+                sourceMap: true,
+                inlineSources: false,
+            }),
+            sourcemaps(),
         ]
     },
     {

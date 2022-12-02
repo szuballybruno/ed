@@ -19,11 +19,11 @@ const sqlFolderFilePath = `${monorepoRoot}/packages/server-services/sql`;
 const migrationsFolderFilePath = sqlFolderFilePath + '/migrations';
 
 const getMigrationScript = ({
-    migrationVersions,
+    missingMigraitonVersions,
     dropSoftSchemaScript,
     softSchemaCreateScript
 }: {
-    migrationVersions: string[],
+    missingMigraitonVersions: string[],
     dropSoftSchemaScript: string,
     softSchemaCreateScript: string
 }) => {
@@ -31,7 +31,7 @@ const getMigrationScript = ({
     /**
      * Insert migration verisons 
      */
-    const insertMigrationVersionsScript = migrationVersions
+    const insertMigrationVersionsScript = missingMigraitonVersions
         .map(ver => {
 
             return `
@@ -44,7 +44,7 @@ VALUES ('${ver}', now()); `;
     /**
      * Migration scripts 
      */
-    const migartionScripts = migrationVersions
+    const migartionScripts = missingMigraitonVersions
         .map(ver => {
 
             const migrationScript = `--MIGRATION: ${ver}\n${Polyfills
@@ -61,12 +61,10 @@ VALUES ('${ver}', now()); `;
      * Assemble final script 
      */
     return `
--- MIGRATION VERSIONS: ${migrationVersions.join(', ')}
-
 -- BEGIN TRANSACTION
 BEGIN;
 
--- STORE MIGRATION VERSION
+-- INSERT MISSING MIGRATION VERSIONS (${missingMigraitonVersions.join(', ')})
 ${insertMigrationVersionsScript}
 
 -- DROP SOFT SCHEMA
@@ -153,7 +151,7 @@ const createScripts = () => {
     const fullMigrationScript = getMigrationScript({
         softSchemaCreateScript,
         dropSoftSchemaScript,
-        migrationVersions: missingMigraitonVersions
+        missingMigraitonVersions
     });
 
     console.log(`Full migraion script created.`);
@@ -166,7 +164,7 @@ process
     .on('uncaughtException', (err) => {
 
         console.error('---- FATAL ERROR -----');
-        console.error(err);
+        throw err;
     });
 
 // console.log(Polyfills.getAllFilePaths(backendPath));

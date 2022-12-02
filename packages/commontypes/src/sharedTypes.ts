@@ -21,6 +21,8 @@ export type ErrorCodeType =
     'last_name_invalid' |
     'username_invalid';
 
+export type UserPerformanceRating = 'very_good' | 'good' | 'average' | 'bad' | 'very_bad';
+
 export type GivenAnswerStateType = 'INCORRECT' | 'CORRECT' | 'MIXED';
 
 export type LeaderboardPeriodType = 'monthly' | 'weekly' | 'daily';

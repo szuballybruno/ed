@@ -39,6 +39,15 @@
         },
         {
             "type": "shell",
+            "label": "build-serve-client",
+            "command": "yarn build-serve-client",
+            "problemMatcher": [],
+            "presentation": {
+                "group": "run"
+            }
+        },
+        {
+            "type": "shell",
             "label": "run-server-api-testing",
             "command": "yarn start-server",
             "problemMatcher": [],
@@ -62,6 +71,15 @@
             "type": "shell",
             "label": "local_epitest_compose",
             "command": "local_epitest_compose.ps1",
+            "options": {
+                "cwd": "${workspaceFolder}/scripts"
+            },
+            "problemMatcher": []
+        },
+        {
+            "type": "shell",
+            "label": "compose_up_epitest",
+            "command": "compose_up_epitest.ps1",
             "options": {
                 "cwd": "${workspaceFolder}/scripts"
             },
@@ -137,9 +155,9 @@
         {
             "label": "localMigration",
             "type": "shell",
-            "command": "powershell.exe ./localMigration.ps1",
+            "command": "powershell.exe ./local_migen_and_migration.ps1",
             "options": {
-                "cwd": "${workspaceFolder}/deploy"
+                "cwd": "${workspaceFolder}/scripts"
             },
             "problemMatcher": [],
             "presentation": {

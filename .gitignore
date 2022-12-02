@@ -14,3 +14,4 @@ yarn.lock
 testlogs.txt
 **.log
 .mp4
+epitest/out/test.cy.ts.mp4
