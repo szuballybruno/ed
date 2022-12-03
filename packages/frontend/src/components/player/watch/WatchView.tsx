@@ -359,14 +359,14 @@ export const WatchView = ({
                     boxShadow: 'inset -1px -2px 1px 1px rgba(0,0,0,0.10)'
                 }} />}
 
-            {!isMobile && <EpistoPaging
-                index={descCommentPaging.currentIndex}
-                slides={[
-                    VideoDescription,
-                    VideoComments
-                ]}>
-
-            </EpistoPaging>}
+            {!isMobile && (
+                <EpistoPaging
+                    index={descCommentPaging.currentIndex}
+                    slides={[
+                        VideoDescription,
+                        VideoComments
+                    ]} />
+            )}
         </EpistoDiv>
     </>;
 };

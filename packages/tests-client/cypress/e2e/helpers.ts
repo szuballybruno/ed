@@ -11,7 +11,11 @@ export const fillInputs = (object: any) => {
         .forEach(x => fillInput(x, object[x]));
 }
 
-export const clickByTestId = (testid: string) => {
+export const clickByTestId = (testid: string, timeoutInS?: number) => {
 
-    cy.get(`[data-test-id="${testid}"]`).click();
+    const timeout = timeoutInS
+        ? timeoutInS * 10
+        : 1000 * 10;
+
+    cy.get(`[data-test-id="${testid}"]`, { timeout }).click();
 }

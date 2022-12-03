@@ -12,6 +12,7 @@
     "build-tests-server": "lerna run build --scope=@episto/tests-server --include-dependencies",
     "start-tests-server": "lerna run start --scope=@episto/tests-server",
     "start-tests-client": "lerna run start-cy --scope=@episto/tests-client",
+    "open-cy": "lerna run open-cy --scope=@episto/tests-client",
     "mon-tests-server": "lerna run mon --scope=@episto/tests-server",
     "start-server": "lerna run start --scope=@episto/server-api",
     "build-script-producer": "lerna run build --scope=@episto/script-producer --include-dependencies",
