@@ -7,6 +7,7 @@ import { startUserGuide } from '../../services/core/userGuidingService';
 import { Environment } from '../../static/Environemnt';
 import { usePaging } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { ContentPane } from '../pageRootContainer/ContentPane';
 import { useRefetchUserAsync } from '../system/AuthenticationFrame';
@@ -54,7 +55,7 @@ export const SurveyPage = () => {
         onPrevoiusOverNavigation={slidesState.previous}
         onJumpToResults={slidesState.jumpToLast} />;
 
-    const SummarySlide = (isCurrent: boolean) => <SurveyWrapper
+    const SummarySlide = () => <SurveyWrapper
         currentImage={Environment.getAssetUrl('/images/analysis3D.png')}
         onNext={isInvitedUser ? handleGoToHomePage : undefined}
         nextButtonTitle={isInvitedUser ? translatableTexts.signupPage.goToHomePage : undefined}
@@ -80,9 +81,9 @@ export const SurveyPage = () => {
                 noOverflow
                 hideNavbar>
 
-                <EpistoPaging
+                <EpistoFlex2
+                    flex="1"
                     width={isMobile ? 'calc(100vw - 40px)' : 'calc(100% - 150px)'}
-                    //height={isMobile ? 'calc(100vh - 100px)' : 'calc(100vh - 100px)'}
                     maxHeight={(() => {
                         if (isIPhone)
                             return 'calc(100vh - 60px)';
@@ -93,18 +94,18 @@ export const SurveyPage = () => {
                         return '800px';
                     })()}
                     className="roundBorders largeSoftShadow"
-                    alwaysRender={true}
                     maxW='1400px'
                     background="var(--transparentWhite70)"
-                    p="10px"
+                    padding="10px"
+                    paddingBottom={isIPhone ? '40px' : '10px'}
                     my={isMobile ? '10px' : undefined}
-                    pb={isIPhone ? '40px' : '10px'}
-                    m={isMobile ? undefined : '10px'}
-                    zIndex="1"
-                    //flex="1"
-                    slides={slides}
-                    index={slidesState.currentIndex} />
+                    margin={isMobile ? undefined : '10px'}
+                    zIndex="1" >
 
+                    <EpistoPaging
+                        slides={slides}
+                        index={slidesState.currentIndex} />
+                </EpistoFlex2>
             </ContentPane>
         </>
     );

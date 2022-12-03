@@ -211,8 +211,7 @@ export const SurveyWrapper = (props: {
             justifyContent={isMobile ? 'center' : 'space-between'}
             boxShadow={'5px 5px 15px 3px rgba(0,0,0,0.07)'}
             px="10px"
-            my={isMobile ? '0' : '20'}
-        >
+            my={isMobile ? '0' : '20'}>
 
             {/* back button */}
             {canNavPrevious && <EpistoButton
@@ -242,6 +241,7 @@ export const SurveyWrapper = (props: {
             {/* next button */}
             {onNext && <EpistoButton
                 variant={'outlined'}
+                dataTestid="survey-next-button"
                 onClick={() => onNext!()}
                 style={{
                     alignSelf: 'center',
@@ -254,7 +254,6 @@ export const SurveyWrapper = (props: {
 
                 {nextButtonTitle}
             </EpistoButton>}
-
         </EpistoFlex2>
-    </EpistoFlex2 >;
+    </EpistoFlex2>;
 };

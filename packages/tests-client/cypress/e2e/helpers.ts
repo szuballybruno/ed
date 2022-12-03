@@ -11,7 +11,7 @@ export const fillInputs = (object: any) => {
         .forEach(x => fillInput(x, object[x]));
 }
 
-export const clickButton = (testid: string) => {
+export const clickByTestId = (testid: string) => {
 
     cy.get(`[data-test-id="${testid}"]`).click();
 }

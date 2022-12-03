@@ -1,21 +1,24 @@
 import { EpistoDiv } from '../controls/EpistoDiv';
-import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 
-export const EpistoPaging = (props: EpistoFlex2Props & {
+export const EpistoPaging = ({
+    slides,
+    index,
+    alwaysRender
+}: {
     slides: ((isCurrent: boolean) => JSX.Element)[],
     index: number,
     alwaysRender?: boolean,
 }) => {
 
-    const { slides, index, alwaysRender, ...flex } = props;
-
     const renderSlides = () => slides
-        .map((x, xi) => {
+        .map((x, index) => {
 
-            const isCurrent = xi === index;
+            const isCurrent = index === index;
 
             return <EpistoDiv
-                key={xi}
+                id={`${EpistoPaging.name}.Slide_${index}`}
+                key={index}
                 className="whall"
                 display={isCurrent ? undefined : 'none'}>
 
@@ -29,9 +32,9 @@ export const EpistoPaging = (props: EpistoFlex2Props & {
 
     return (
         <EpistoFlex2
-            flex="1"
-            id="slidesDisplayRoot"
-            {...flex}>
+            id={EpistoPaging.name}
+            className="whall"
+            flex="1">
 
             {alwaysRender
                 ? renderSlides()
