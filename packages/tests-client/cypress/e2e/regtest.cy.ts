@@ -16,5 +16,5 @@ it('Register new user via activation code test', () => {
 
     clickButton('register-button');
 
-    cy.url().should('include', '/survey');
+    cy.url({ timeout: 20 * 1000 }).should('include', '/survey');
 })

@@ -7,13 +7,13 @@ dist
 error.log
 yarn-error.log
 yarn.lock
+testlogs.txt
+.yarn.lock
 .docker_temp**
 **.tar.gz
 **.tar
-.yarn.lock
-testlogs.txt
 **.log
-.mp4
+**.mp4
 epitest/out/test.cy.ts.mp4
 database-backup.sql
 migration-script.sql
