@@ -1,8 +1,7 @@
 import { defineConfig } from "cypress";
+import { getConfig } from "./cypress/e2e/helpers";
 
-const isInDocker = process.env.IS_DOCKERIZED === 'true';
-const environmentName = isInDocker ? 'epitest' : 'local';
-export const origin = `http://${environmentName}.epistogram.com`;
+const { origin, isInDocker } = getConfig();
 
 export default defineConfig({
   e2e: {

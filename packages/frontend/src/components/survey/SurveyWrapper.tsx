@@ -10,38 +10,28 @@ import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoImage } from '../controls/EpistoImage';
 import { EpistoHeader } from '../EpistoHeader';
 
-export const SurveyWrapper = (props: {
+export const SurveyWrapper = ({
+    onNavPrevious,
+    description,
+    title,
+    nextButtonTitle,
+    currentImage,
+    bottomComponent,
+    children,
+    onNext
+}: {
     children?: ReactNode,
     nextButtonTitle?: string
     currentImage?: string,
-
     onNext?: () => void,
     onNavPrevious?: () => void
     title?: string,
-    upperTitle?: string,
     description?: string | ReactNode,
     bottomComponent?: ReactNode,
-    upperComponent?: ReactNode,
-    headerRightButton?: { name: string, action: () => void }
 }) => {
 
-    const { onNavPrevious, headerRightButton } = props;
-    const canNavPrevious = !!onNavPrevious;
-
-    const description = props.description;
     const hasDescription = !!description;
-
-    const title = props.title;
-    const hasTitle = props.title;
-
-    const upperTitle = props.upperTitle;
-    const hasUpperTitle = !!upperTitle;
-
-    const nextButtonTitle = props.nextButtonTitle;
-    const currentImage = props.currentImage;
     const hasImage = hasValue(currentImage);
-    const children = props.children;
-    const onNext = props.onNext;
 
     const { isMobile } = Responsivity
         .useIsMobileView();
@@ -165,7 +155,7 @@ export const SurveyWrapper = (props: {
                     direction="column">
 
                     {/* title */}
-                    {hasTitle && <EpistoHeader
+                    {title && <EpistoHeader
                         textHeight={isMobile ? '100%' : undefined}
                         variant="strongSub"
                         type="strong"
@@ -214,8 +204,8 @@ export const SurveyWrapper = (props: {
             my={isMobile ? '0' : '20'}>
 
             {/* back button */}
-            {canNavPrevious && <EpistoButton
-                onClick={() => onNavPrevious!()}
+            {onNavPrevious && <EpistoButton
+                onClick={() => onNavPrevious()}
                 variant="outlined"
                 style={{
                     marginTop: '0',
@@ -235,14 +225,14 @@ export const SurveyWrapper = (props: {
                 flex="1"
                 pl={isMobile ? '10px' : '0'}
                 mx={isMobile ? '5px' : '20'}>
-                {props.bottomComponent}
+                {bottomComponent}
             </EpistoDiv>
 
             {/* next button */}
             {onNext && <EpistoButton
                 variant={'outlined'}
                 dataTestid="survey-next-button"
-                onClick={() => onNext!()}
+                onClick={() => onNext()}
                 style={{
                     alignSelf: 'center',
                     color: 'white',

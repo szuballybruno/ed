@@ -91,10 +91,10 @@ export class UserRegistrationService {
                 lastName,
                 companyId,
                 departmentId: 26 as any,
-                registrationType: 'Invitation',
+                registrationType: 'ActivationCode',
                 invitationToken: null,
                 isSurveyRequired,
-                unhashedPassword: 'guest',
+                unhashedPassword: password,
                 username
             });
 

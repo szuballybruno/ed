@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { Responsivity } from '../../helpers/responsivity';
 import { SurveyApiService } from '../../services/api/SurveyApiService';
@@ -42,6 +43,16 @@ export const SurveyPage = () => {
         startUserGuide();
     };
 
+    const summaryDecription = useMemo(() => translatableTexts.signupPage.summarySlideDescriptionParts
+        .map(x => (
+            <>
+                <EpistoFont>
+                    {x}
+                </EpistoFont>
+                <br />
+            </>
+        )), []);
+
     const GreetSlide = () => <SurveyWrapper
         title={translatableTexts.signupPage.greetSlideTitle}
         currentImage={Environment.getAssetUrl('/signupQuestionImages/regisztracio.svg')}
@@ -60,10 +71,7 @@ export const SurveyPage = () => {
         onNext={isInvitedUser ? handleGoToHomePage : undefined}
         nextButtonTitle={isInvitedUser ? translatableTexts.signupPage.goToHomePage : undefined}
         onNavPrevious={() => slidesState.previous()}
-        description={translatableTexts.signupPage.summarySlideDescriptionParts
-            .map(x => <><EpistoFont>{x}</EpistoFont><br /></>)
-        }
-        headerRightButton={isInvitedUser ? { name: translatableTexts.signupPage.goToHomePage, action: handleGoToHomePage } : undefined}>
+        description={summaryDecription}>
     </SurveyWrapper >;
 
     const slides = [

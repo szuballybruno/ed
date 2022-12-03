@@ -1,8 +1,6 @@
-import { fillInputs, clickByTestId } from "./helpers";
+import { clickByTestId, fillInputs, getConfig, getUserCredentials } from "./helpers";
 
-const SEED = 1;
-const PASSWORD = `${SEED}_admin123`;
-const EMAIL = `${SEED}_testuser_124142@email.com`;
+const CREDENTIALS = getUserCredentials(7);
 
 describe('Registration tests', () => {
 
@@ -10,14 +8,24 @@ describe('Registration tests', () => {
 
         cy.visit('/register-via-activation-code');
 
+        const {
+            email,
+            activationCode,
+            firstName,
+            lastName,
+            password,
+            passwordCompare,
+            username
+        } = CREDENTIALS;
+
         fillInputs({
-            email: EMAIL,
-            username: `${SEED}_testuser_124142`,
-            lastName: `${SEED}_user`,
-            firstName: `${SEED}_test`,
-            activationCode: 'DEVTEST-2',
-            password: PASSWORD,
-            passwordCompare: PASSWORD
+            email,
+            activationCode,
+            firstName,
+            lastName,
+            password,
+            passwordCompare,
+            username
         });
 
         clickByTestId('register-button');
@@ -27,12 +35,26 @@ describe('Registration tests', () => {
 
     it('Visit survey, and complete it, and wait for redirect to home', () => {
 
-        cy.request('POST', '/authentication/login-user', {
-            email: EMAIL,
-            password: PASSWORD,
+        const { apiOrigin, origin } = getConfig();
+
+        const body = {
+            email: CREDENTIALS.email,
+            password: CREDENTIALS.password,
+        };
+
+        cy.request({
+            method: 'POST',
+            url: `${apiOrigin}/authentication/login-user`,
+            body: body,
+            headers: {
+                'Origin': origin
+            }
         });
 
         cy.visit('/survey');
+
+        // wait for text to appear
+        cy.wait(2000);
 
         clickByTestId('survey-next-button');
 
