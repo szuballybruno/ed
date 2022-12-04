@@ -13,8 +13,11 @@ import { EpistoDiv } from '../../controls/EpistoDiv';
 import { EpistoDivider } from '../../controls/EpistoDivider';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
+import { EpistoSearch } from '../../controls/EpistoSearch';
+import { SegmentedButton } from '../../controls/SegmentedButton';
 import { NavigateToCourseItemActionType } from '../../playlist/Playlist';
 import { PlaylistFilterLogicType } from '../../playlist/playlistFilterLogic';
+import { useScrollIntoView } from '../../system/AutoScrollContext';
 import { EpistoPaging } from '../../universal/EpistoPaging';
 import { TimeoutFrame } from '../../universal/TimeoutFrame';
 import { VideoQuestionnaire } from '../../universal/VideoQuestionnaire';
@@ -59,6 +62,7 @@ export const WatchView = ({
     const { isMobile } = Responsivity
         .useIsMobileView();
     const descCommentPaging = usePaging<string>({ items: ['Leírás', 'Hozzászólások'] });
+    const mobilePaging = usePaging<string>({ items: ['Tartalom', 'Leírás'] });
     const [isShowNewDialogsEnabled, setShowNewDialogsEnabled] = useState(true);
     const dialogThresholdSecs = 1;
     const [maxWatchedSeconds, setMaxWatchedSeconds] = useState(videoPlayerData.maxWatchedSeconds);
@@ -79,6 +83,9 @@ export const WatchView = ({
         });
     }, [postVideoSeekEvent, videoPlaybackSessionId, videoVersionId]);
 
+
+    const { disableAutoScroll, enableAutoScroll } = useScrollIntoView();
+
     // questions
     const [currentQuestion, setCurrentQuestion] = useState<QuestionDTO | null>(null);
     const isQuestionVisible = !!currentQuestion;
@@ -96,6 +103,53 @@ export const WatchView = ({
     const limitSeek = courseMode === 'beginner';
     const videoPlayerState = useVideoPlayerState(videoPlayerData, isShowingOverlay, maxWatchedSeconds, limitSeek, handleVideoSeekEvent);
     const { playedSeconds, videoLength, isSeeking, isPlaying, isVideoEnded, stopPlaying } = videoPlayerState;
+
+    const MobileCourseItemSelector = () => <EpistoFlex2
+        direction='column'>
+        <EpistoFlex2
+            background='var(--transparentWhite70)'
+            width='100%'>
+            <EpistoSearch
+                boxShadow='none'
+                border='none'
+                borderRadius='0'
+                value={playlistFilterLogic.playlistFilters.keyword}
+                onKeywordChanged={x => {
+
+                    if (typeof x === 'string' && x.length > 0) {
+
+                        disableAutoScroll();
+                    }
+
+                    if (typeof x === 'string' && x.length === 0) {
+
+                        enableAutoScroll();
+                    }
+
+                    scroll();
+
+                    return playlistFilterLogic.setFilterKeyword(x);
+                }} />
+        </EpistoFlex2>
+
+        <CourseItemSelector
+            isMobile={isMobile}
+            isVideoReady={isVideoReady}
+            currentItemCode={currentItemCode}
+            nextItemState={nextItemState}
+            courseId={courseId}
+            mode={courseMode}
+            refetchPlayerData={refetchPlayerData}
+            playlistFilterLogic={playlistFilterLogic} />
+
+    </EpistoFlex2>;
+
+    const MobileVideoDescription = () => <EpistoFlex2
+        flex='1'
+        minHeight='500px'
+        background='white'>
+        {videoPlayerData.description}
+    </EpistoFlex2>;
 
     const VideoDescription = () => <PlayerDescription
         paging={descCommentPaging}
@@ -323,6 +377,23 @@ export const WatchView = ({
                 videoVersionId={videoPlayerData!.videoVersionId}
                 isMobile={isMobile}
                 courseId={courseId} />}
+
+            {isMobile && <EpistoFlex2
+                background='white'
+                p='10px'
+                width='100%'>
+
+                <SegmentedButton
+                    variant='tab'
+                    additionalWrapperStyle={{
+                        width: '100%'
+                    }}
+                    additionalButtonStyle={{
+                        width: '100%'
+                    }}
+                    paging={mobilePaging} />
+            </EpistoFlex2>}
+
         </EpistoFlex2>
 
         {/* under video info */}
@@ -340,15 +411,12 @@ export const WatchView = ({
                 isMobile={isMobile}
                 courseId={courseId} />}
 
-            {isMobile && <CourseItemSelector
-                isMobile={isMobile}
-                isVideoReady={isVideoReady}
-                currentItemCode={currentItemCode}
-                nextItemState={nextItemState}
-                courseId={courseId}
-                mode={courseMode}
-                refetchPlayerData={refetchPlayerData}
-                playlistFilterLogic={playlistFilterLogic} />}
+            {isMobile && <EpistoPaging
+                index={mobilePaging.currentIndex}
+                slides={[
+                    MobileCourseItemSelector,
+                    MobileVideoDescription
+                ]} />}
 
             {!isMobile && <EpistoDivider
                 style={{

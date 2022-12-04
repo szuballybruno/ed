@@ -9,12 +9,12 @@ import { AdminBreadcrumbsHeaderRoot, useAdminBreadcrumbsRootLogic } from './brea
 import { CompanyAdminPage } from './companies/CompanyAdminPage';
 import { CourseAdministartionSubpage } from './courses/CourseAdministartionSubpage';
 import { DebugPage } from './debug/DebugPage';
+import { AdminHomeOverview } from './home/AdminHomeOverview';
 import { EditDailyTipSubpage } from './personalityAssessment/EditDailyTipSubpage';
 import { EditPersonalityTraitCategorySubpage } from './personalityAssessment/EditPersonalityTraitCategorySubpage';
 import { PersonalityTraitCategoriesSubpage } from './personalityAssessment/PersonalityTraitCategoriesSubpage';
 import { RoleAdminPage } from './roles/RoleAdminPage';
 import { ShopAdminSubpage } from './shop/ShopAdminSubpage';
-import { AdminStatsSubpage } from './stats/AdminStatsSubpage';
 import { UserAdminSubpage } from './users/UserAdminSubpage';
 
 export const AdminPage = () => {
@@ -45,7 +45,7 @@ export const AdminPage = () => {
                         // administration home
                         .add({
                             route: adminRoute.statsRoute,
-                            element: <AdminStatsSubpage />
+                            element: <AdminHomeOverview />
                         })
 
                         // user administration

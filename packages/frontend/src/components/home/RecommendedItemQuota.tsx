@@ -1,3 +1,4 @@
+import { Responsivity } from '../../helpers/responsivity';
 import { Environment } from '../../static/Environemnt';
 import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
@@ -8,13 +9,14 @@ export const RecommendedItemQuota = (props: {
     completedCount: number,
     recommendedItemCount: number | null,
     isDeadlineSet?: boolean,
-    isDaily?: boolean
+    isDaily?: boolean,
 } & EpistoFlex2Props) => {
 
     const { isDaily, completedCount, recommendedItemCount, isDeadlineSet, ...css } = props;
 
-    const isStrictMode = recommendedItemCount && completedCount;
+    const isStrictMode = recommendedItemCount;
     const isLightMode = !recommendedItemCount && completedCount;
+    const isMobile = Responsivity.useIsMobileView();
 
     const label = (() => {
 
@@ -73,12 +75,12 @@ export const RecommendedItemQuota = (props: {
                         {(() => {
 
                             if (isStrictMode)
-                                return `${completedCount}/${recommendedItemCount || 0} videó`;
+                                return `${completedCount || 0}/${recommendedItemCount || 0} videó`;
 
                             if (isLightMode)
                                 return `${completedCount} db`;
 
-                            return '-';
+                            return '0';
                         })()}
                     </EpistoFont>
                 </EpistoFlex2>
@@ -88,7 +90,7 @@ export const RecommendedItemQuota = (props: {
                 value={Math.min(100, completedCount / recommendedItemCount * 100)}
                 variant="determinate"
                 style={{
-                    width: isDeadlineSet
+                    width: isDeadlineSet || isMobile
                         ? '100%'
                         : '80%',
                     marginTop: 10,
