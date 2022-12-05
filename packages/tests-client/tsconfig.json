@@ -8,6 +8,7 @@
     "tests"
   ],
   "compilerOptions": {
+    "target": "es2019",
     "outDir": "./dist",
     "types": [
       "cypress",

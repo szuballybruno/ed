@@ -8,9 +8,10 @@
     "type": "module",
     "scripts": {
         "open-cy": "npx cypress open",
-        "start-cy": "cypress run --browser chrome"
+        "start-cy": "cross-env ELECTRON_ENABLE_LOGGING=1 cypress run"
     },
     "devDependencies": {
+        "cross-env": "^7.0.3",
         "cypress": "^11.2.0"
     }
 }

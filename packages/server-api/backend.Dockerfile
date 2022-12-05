@@ -20,7 +20,7 @@ COPY ./packages/x-orm/package.json ./packages/x-orm/package.json
 
 # yarn install
 RUN echo "Installing deps..."
-RUN yarn --immutable --immutable-cache --check-cache
+RUN yarn --immutable --immutable-cache --check-cache --network-timeout 100000
 
 # copy other files
 RUN echo "Copying files..."

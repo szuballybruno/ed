@@ -1,4 +1,4 @@
-FROM cypress/base:18.12.1
+FROM cypress/browsers:node18.12.0-chrome107
 
 WORKDIR /app
 
@@ -8,7 +8,7 @@ COPY ./lerna.json ./lerna.json
 COPY ./packages/tests-client/package.json ./packages/tests-client/package.json
 
 RUN echo "Installing deps..."
-RUN yarn --immutable --immutable-cache --check-cache
+RUN yarn --immutable --immutable-cache --check-cache --network-timeout 100000
 
 RUN echo "Copying files..."
 COPY ./tsconfig.json ./tsconfig.json

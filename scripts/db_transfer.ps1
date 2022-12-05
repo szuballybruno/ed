@@ -20,6 +20,15 @@ param (
     -dbname $src_name `
     -dbdumppath './../temp/transferdump.sql'
 
+# recreate schema
+./db_exec_inline.ps1 `
+    -dbpass $dest_pass `
+    -dbhost $dest_host `
+    -dbport $dest_port `
+    -dbuser $dest_user `
+    -dbname $dest_name `
+    -script 'DROP SCHEMA IF EXISTS public CASCADE; CREATE SCHEMA IF NOT EXISTS public;'
+
 # restore db
 ./db_exec.ps1 `
     -dbpass $dest_pass `

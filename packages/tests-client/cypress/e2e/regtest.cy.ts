@@ -1,12 +1,22 @@
 import { clickByTestId, fillInputs, getConfig, getUserCredentials } from "./helpers";
 
-const CREDENTIALS = getUserCredentials(38);
+const CREDENTIALS = getUserCredentials(0);
 
 console.log(CREDENTIALS);
 
 describe('Registration tests', () => {
 
     it('Register new user via activation code test', () => {
+
+        const isInDocker = Cypress.env('isInDocker');
+        const { apiOrigin, origin } = getConfig(isInDocker);
+
+        console.log(`Api origin: ${apiOrigin}`);
+        console.log(`Origin: ${origin}`);
+        console.log(`IsInDocker: ${isInDocker}`);
+        // console.log(`Env via process: ${JSON.stringify(process ? process.env : undefined)}`);
+        // console.log(`Env (IS_DOCKERIZED) via Cypress: ${Cypress.env('IS_DOCKERIZED')}`);
+        // console.log(`Env (IS_DOCKERIZED) via Cypress: ${Cypress.env('asd')}`);
 
         cy.visit('/register-via-activation-code');
 
@@ -35,36 +45,43 @@ describe('Registration tests', () => {
         cy.url({ timeout: 20 * 1000 }).should('include', '/survey');
     });
 
-    it('Visit survey, and complete it, and wait for redirect to home', () => {
+    // it('Visit survey, and complete it, and wait for redirect to home', () => {
 
-        const { apiOrigin, origin } = getConfig();
+    //     const { apiOrigin, origin, isInDocker } = getConfig();
 
-        const body = {
-            email: CREDENTIALS.email,
-            password: CREDENTIALS.password,
-        };
+    //     console.log(`Api origin: ${apiOrigin}`);
+    //     console.log(`Origin: ${origin}`);
+    //     console.log(`IsInDocker: ${isInDocker}`);
+    //     console.log(`Env via process: ${JSON.stringify(process ? process.env : undefined)}`);
+    //     console.log(`Env (IS_DOCKERIZED) via Cypress: ${Cypress.env('IS_DOCKERIZED')}`);
+    //     console.log(`Env (IS_DOCKERIZED) via Cypress: ${Cypress.env('asd')}`);
 
-        cy.request({
-            method: 'POST',
-            url: `${apiOrigin}/authentication/login-user`,
-            body: body,
-            headers: {
-                'Origin': origin
-            },
-        });
+    //     const body = {
+    //         email: CREDENTIALS.email,
+    //         password: CREDENTIALS.password,
+    //     };
 
-        cy.visit('/survey');
-        cy.wait(4000);
+    //     cy.request({
+    //         method: 'POST',
+    //         url: `${apiOrigin}/authentication/login-user`,
+    //         body: body,
+    //         headers: {
+    //             'Origin': origin
+    //         },
+    //     });
 
-        clickByTestId('greet-slide-survey-next-button');
+    //     cy.visit('/survey');
+    //     cy.wait(4000);
 
-        for (let index = 0; index <= 34; index++) {
+    //     clickByTestId('greet-slide-survey-next-button');
 
-            clickByTestId(`survey-option-qi:${index}-ai:1`, { noFocus: true });
-        }
+    //     for (let index = 0; index <= 34; index++) {
 
-        clickByTestId('summary-slide-survey-next-button');
+    //         clickByTestId(`survey-option-qi:${index}-ai:1`, { noFocus: true });
+    //     }
 
-        cy.url({ timeout: 20 * 1000 }).should('include', '/home');
-    });
+    //     clickByTestId('summary-slide-survey-next-button');
+
+    //     cy.url({ timeout: 20 * 1000 }).should('include', '/home');
+    // });
 });

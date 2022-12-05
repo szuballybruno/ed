@@ -1,7 +1,8 @@
 import { defineConfig } from "cypress";
-import { getConfig } from "./cypress/e2e/helpers";
+import { getConfig, globalConfig } from "./cypress/e2e/helpers";
 
-const { origin, isInDocker } = getConfig();
+const { isInDocker } = globalConfig;
+const { origin } = getConfig(isInDocker);
 
 export default defineConfig({
   e2e: {
@@ -9,6 +10,9 @@ export default defineConfig({
     setupNodeEvents(on, config) {
       // implement node event listeners here
     },
+    env: {
+      isInDocker: isInDocker
+    }
   },
   hosts: isInDocker
     ? undefined

@@ -18,7 +18,7 @@ COPY ./packages/x-core/package.json ./packages/x-core/package.json
 
 # yarn install
 RUN echo "Installing deps..."
-RUN yarn --immutable --immutable-cache --check-cache
+RUN yarn --immutable --immutable-cache --check-cache --network-timeout 100000
 
 # copy
 RUN echo "Copying files..."
