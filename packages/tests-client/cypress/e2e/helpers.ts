@@ -42,7 +42,7 @@ export const getUserCredentials = (seed: number) => {
         username: `${seed}_testuser_124142`,
         lastName: `${seed}_user`,
         firstName: `${seed}_test`,
-        activationCode: getActivationCode(seed),
+        activationCode: 'DEVTEST-1', // getActivationCode(seed),
         password: PASSWORD,
         passwordCompare: PASSWORD
     }
