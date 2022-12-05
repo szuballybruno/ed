@@ -1,8 +1,6 @@
-import { clickByTestId, fillInputs, getConfig, getConfigInTest, getUserCredentials } from "./helpers";
+import { clickByTestId, fillInputs, getConfigInTest, getUserCredentials } from "./helpers";
 
 const CREDENTIALS = getUserCredentials(0);
-
-console.log(CREDENTIALS);
 
 describe('Registration tests', () => {
 

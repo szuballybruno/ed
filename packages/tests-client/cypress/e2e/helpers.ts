@@ -59,35 +59,41 @@ const getEnvVar = (varName: string) => {
     return process.env[varName];
 }
 
-export const globalConfig = (() => {
-
-    const varName = 'IS_DOCKERIZED';
-    const envValue = getEnvVar(varName);//Cypress.env(varName);
-    const isInDocker = envValue === 'true';
-
-    console.log('Getting config...');
-    console.log(`${varName}: ${envValue}`);
-
-    return {
-        isInDocker
-    }
-})();
-
 export const getConfigInTest = () => {
 
     const isInDocker = Cypress.env('isInDocker');
     const config = getConfig(isInDocker);
 
-    console.log(`Api origin: ${config.apiOrigin}`);
-    console.log(`Origin: ${config.origin}`);
-    console.log(`IsInDocker: ${isInDocker}`);
+    console.log(`
+    ----------- CONFIG IN TEST ---------------
+    Running in docker: ${isInDocker ? 'yes' : 'no'}
+    Api origin: ${config.apiOrigin}
+    Origin: ${config.origin}
+    ------------------------------------------
+    `);
 
     return config;
 }
 
-export const getConfig = (isInDocker: boolean) => {
+export const getConfigOutsideOfTest = () => {
 
-    console.log(`Running in docker: ${isInDocker ? 'yes' : 'no'}`);
+    const varName = 'IS_DOCKERIZED';
+    const envValue = getEnvVar(varName);//Cypress.env(varName);
+    const isInDocker = envValue === 'true';
+    const config = getConfig(isInDocker);
+
+    console.log(`
+    --------- CONFIG OUTSIDE OF TEST ---------
+    Running in docker: ${isInDocker ? 'yes' : 'no'}
+    Api origin: ${config.apiOrigin}
+    Origin: ${config.origin}
+    ------------------------------------------
+    `);
+
+    return config;
+}
+
+const getConfig = (isInDocker: boolean) => {
 
     const environmentName = isInDocker ? 'epitest' : 'local';
 
