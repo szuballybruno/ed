@@ -44,7 +44,7 @@ export class PermissionService extends QueryServiceBase<Permission> {
      */
     async getPermissionAsync<TCode extends PermissionCodeType>(...args: GetPermissionScope<TCode> extends 'USER'
         ? [Id<'User'>, TCode]
-        : [Id<'User'>, TCode, GetParamByCodeType<TCode>]) {
+        : [Id<'User'>, TCode, GetParamByCodeType<TCode>]): Promise<UserPermissionView | null> {
 
         const { code, contextCompanyId, contextCourseId, userId } = this._getParams(args);
 

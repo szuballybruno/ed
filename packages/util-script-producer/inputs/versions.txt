@@ -1,4 +1,3 @@
- migration9
  migration10
  migration11
  migration12
@@ -9,4 +8,5 @@
  migration17
  migration18
  migration19
+ migration20
 

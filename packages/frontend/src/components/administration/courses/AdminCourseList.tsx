@@ -1,94 +1,86 @@
-import { memo } from 'react';
-import { CourseAdminListItemDTO } from '@episto/communication';
 import { Id } from '@episto/commontypes';
-import { useIntParam } from '../../../static/locationHelpers';
+import { CourseAdminListItemDTO } from '@episto/communication';
+import { EpistoDataGrid, EpistoDataGridColumnBuilder } from '../../controls/EpistoDataGrid';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoImage } from '../../controls/EpistoImage';
-import { EpistoSearch } from '../../controls/EpistoSearch';
-import { ForceNoOverflowY } from '../../controls/ForceNoOverflowY';
-import { FlexList } from '../../universal/FlexList';
+import { UserPerformanceChip } from '../../universal/UserPerformanceChip';
 
-export const AdminCourseList = memo((props: {
+export const AdminCourseList = ({
+    courses,
+    onCourseClick,
+    isSimpleView
+}: {
     onCourseClick: (courseId: Id<'Course'>) => void,
     courses: CourseAdminListItemDTO[],
-    noOverflow?: boolean
+    isSimpleView?: boolean
 }) => {
 
-    // props
-    const { courses, noOverflow, onCourseClick } = props;
+    const columns = new EpistoDataGridColumnBuilder<CourseAdminListItemDTO, Id<'Course'>>()
+        .add({
+            field: 'thumbnailImageURL',
+            headerName: '',
+            renderCell: ({ key, value, row }) => (
+                <EpistoImage
+                    key={key.toString()}
+                    onClick={() => onCourseClick(row.courseId)}
+                    src={value}
+                    width='85px'
+                    mb='5px'
+                    cursor="pointer"
+                    className='roundBorders'
+                    objectFit="cover" />
+            )
+        })
+        .addIf(!isSimpleView, {
+            field: 'title',
+            headerName: 'Title',
+            width: 250
+        })
+        .addIf(!isSimpleView, {
+            field: 'currentUserCount',
+            headerName: 'currentUserCount',
+            width: 200
+        })
+        .addIf(!isSimpleView, {
+            field: 'abandonedUserCount',
+            headerName: 'abandonedUserCount',
+            width: 200
+        })
+        .addIf(!isSimpleView, {
+            field: 'completedByUsersCount',
+            headerName: 'completedByUsersCount',
+            width: 200
+        })
+        .addIf(!isSimpleView, {
+            field: 'difficultVideoCount',
+            headerName: 'difficultVideoCount',
+            width: 200
+        })
+        .addIf(!isSimpleView, {
+            field: 'unansweredQuestionCount',
+            headerName: 'unansweredQuestionCount',
+            width: 200
+        })
+        .addIf(!isSimpleView, {
+            field: 'averageUserPerformance',
+            headerName: 'averageUserPerformance',
+            width: 200,
+            renderCell: ({ value }) => (
+                <UserPerformanceChip
+                    performance={value} />
+            )
+        })
+        .getColumns();
 
-    const isMinimized = true;
+    return (
+        <EpistoFlex2
+            className="whall roundBorders"
+            background="var(--transparentWhite90)">
 
-    // util
-    const courseId = Id
-        .create<'Course'>(useIntParam('courseId')!);
-
-    return <EpistoFlex2
-        className="roundBorders"
-        direction="column"
-        mr="5px"
-        align='center'
-        background="var(--transparentWhite90)"
-        minWidth="95px">
-
-        {!isMinimized && <EpistoSearch
-            background="white"
-            boxShadow="inset 0px -2px 10px -5px #33333315"
-            borderRadius="7px 0 0 0" />}
-
-        {/* List of courses */}
-        <ForceNoOverflowY disabled={!noOverflow}>
-            <FlexList
-                flex="1"
-                mt="5px"
-                direction='column'
-                align='center'
-                width='85px'
-                className="roundBorders"
-                background="var(--transparentWhite70)">
-
-                {courses
-                    .map((course, index) => {
-
-                        return <EpistoImage
-                            title={course.title}
-                            key={index}
-                            onClick={() => onCourseClick(course.courseId)}
-                            src={course.thumbnailImageURL}
-                            width='85px'
-                            mb='5px'
-                            cursor="pointer"
-                            className='roundBorders'
-                            objectFit="cover" />;
-
-                        /*       align="center"
-                              mb="1"
-                              thumbnailContent={
-                                  <EpistoFlex2
-                                      className="roundBorders"
-                                      style={{
-                                          height: '40px',
-                                          width: '100%'
-                                      }}
-                                      overflow="hidden">
-  
-                                      
-                                  </EpistoFlex2>
-                              }
-                              midContent={isMinimized
-                                  ? undefined
-                                  : <FlexListTitleSubtitle
-                                      title={course.title}
-                                      subTitle={''}
-                                      isSelected={course.courseId === courseId}
-                                  />
-                              } />; */
-                    })}
-            </FlexList>
-        </ForceNoOverflowY>
-    </EpistoFlex2>;
-}, (prev, next) => {
-
-    return prev.onCourseClick === next.onCourseClick
-        && prev.courses.length === next.courses.length;
-});
+            <EpistoDataGrid
+                columns={columns}
+                rows={courses}
+                getKey={x => x.courseId} />
+        </EpistoFlex2>
+    );
+};

@@ -1,4 +1,4 @@
-import { DataGridPro, GridCellParams, GridColDef, GridColumnVisibilityModel, GridRenderCellParams, useGridApiContext, useGridApiRef } from '@mui/x-data-grid-pro';
+import { DataGridPro, GridCellParams, GridColDef, GridRenderCellParams, useGridApiContext, useGridApiRef } from '@mui/x-data-grid-pro';
 import { ReactNode, useCallback, useEffect } from 'react';
 import { areArraysEqual, typedMemo } from '../../static/frontendHelpers';
 import { Logger } from '../../static/Logger';
@@ -36,6 +36,7 @@ export type RenderEditCellParamsType<TKey, TRow, TField extends keyof TRow> = Re
 export type GridColumnType<TRow, TKey, TField extends keyof TRow> = {
     field: TField;
     headerName: string;
+    transformer?: (params: { value: TRow[TField] }) => string;
     renderCell?: (params: RenderCellParamsType<TKey, TRow, TField>) => ReactNode | string;
     renderEditCell?: (params: RenderEditCellParamsType<TKey, TRow, TField>) => ReactNode | string;
     width?: number;
@@ -75,7 +76,7 @@ export type EpistoDataGridColumnVisibilityModel<TRow> = {
 
 const mapToMUIDataGridColumn = <TSchema, TKey>(column: GridColumnType<TSchema, TKey, keyof TSchema>, getKey: (row: TSchema) => TKey) => {
 
-    const { renderCell, type, editHandler, renderEditCell, field, ...others } = column;
+    const { renderCell, type, editHandler, renderEditCell, field, transformer, ...others } = column;
 
     const hasEditHandler = !!editHandler;
 
@@ -83,6 +84,9 @@ const mapToMUIDataGridColumn = <TSchema, TKey>(column: GridColumnType<TSchema, T
         ...others,
         field: field as any,
         editable: hasEditHandler,
+        valueFormatter: transformer
+            ? ({ value }) => transformer({ value })
+            : undefined
     };
 
     if (renderCell)
@@ -137,7 +141,6 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>({
     showFooter,
     getKey,
     onFocusChanged,
-    columnVisibilityModel,
     dragEnabled,
     isRowEditable,
     onRowOrderChange,
@@ -157,7 +160,6 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>({
     showFooter?: boolean,
     id?: string,
     onFocusChanged?: (hasFocus: boolean) => void,
-    columnVisibilityModel?: EpistoDataGridColumnVisibilityModel<TSchema>,
     isRowEditable?: (row: TSchema) => boolean,
     dragEnabled?: boolean,
     onRowOrderChange?: (opts: {
@@ -281,7 +283,6 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>({
             onCellClick={handleCellClick}
             disableColumnMenu
             initialState={{ pinnedColumns: pinnedColumns as any }}
-            columnVisibilityModel={columnVisibilityModel as GridColumnVisibilityModel}
             density={density === 'dense'
                 ? 'compact'
                 : 'standard'}

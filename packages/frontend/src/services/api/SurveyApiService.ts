@@ -19,7 +19,8 @@ const usePersonalityData = () => {
 
 const useSurveyData = () => {
 
-    const qr = QueryService.useXQuery<SurveyDataDTO>(apiRoutes.survey.getSurveyData);
+    const qr = QueryService
+        .useXQuery<SurveyDataDTO>(apiRoutes.survey.getSurveyData);
 
     return {
         surveyData: qr.data,

@@ -76,7 +76,7 @@ items AS
 		sq.question_count DESC
 )
 SELECT 
-	casv.course_id,
+	lcvv.course_id,
 	lcvv.version_id course_version_id,
 	civ.module_name,
 	civ.module_order_index,
@@ -98,10 +98,7 @@ SELECT
 			THEN 'video_too_long' END) warnings,
 	vd.video_file_length_seconds video_length,
 	vd.audio_text video_audio_text
-FROM public.course_admin_short_view casv
-
-LEFT JOIN public.latest_course_version_view lcvv
-ON lcvv.course_id = casv.course_id
+FROM public.latest_course_version_view lcvv
 
 LEFT JOIN public.course_item_view civ
 ON civ.course_version_id = lcvv.version_id
@@ -117,6 +114,6 @@ LEFT JOIN public.video_data vd
 ON vd.id = vv.video_data_id
 
 ORDER BY 
-	casv.course_id, 
+	lcvv.course_id, 
 	civ.module_order_index,
 	civ.item_order_index

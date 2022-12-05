@@ -18,23 +18,25 @@ export type LoggingKeysType =
     'EVENTS' |
     'PLAYER DEBUG';
 
-const bundler: 'vite' | 'cra' = 'vite';
 
 const getEnvVar = (name: string): string => {
 
-    if (bundler === 'vite') {
-        return ((import.meta as any).env as any)[`VITE_${name}`];
-    }
-    else {
-        return process.env[`REACT_APP_${name}`] as any;
-    }
+    return ((import.meta as any).env as any)[`VITE_${name}`];
+};
+
+const getEnvName = () => {
+
+    return import.meta.env.MODE;
 };
 
 export const Environment = (() => {
 
+    const envName = getEnvName();
+
+    console.log(`----- RUNNIN IN ${envName} ENV ----- `);
+
     const serverUrl = getEnvVar('SERVER_URL');
     const assetCDNStorageUrl = getEnvVar('CDN_URL');
-    const currentVersion = getEnvVar('CURRENT_VERSION');
     const oneSignalAppId = getEnvVar('ONE_SIGNAL_APP_ID');
     const isUnderMaintenance = getEnvVar('UNDER_MAINTENANCE') === 'true';
     const isLocalhost = getEnvVar('IS_LOCALHOST') === 'true';
@@ -44,7 +46,7 @@ export const Environment = (() => {
     const eventPoolingIntervalInMs = 5 * 60 * 1000; // 5 mins
     const sessionHangThresholdInMs = 2 * 60 * 60 * 1000; // 2 hours
     const loggingEnabled = true;
-    const loggingEnabledKeys: LoggingKeysType[] = ['WARNING', 'PLAYER DEBUG', 'PLAYBACK'];
+    const loggingEnabledKeys: LoggingKeysType[] = ['WARNING', 'AUTH'];
 
     const getAssetUrl = (path: string, assetUrlPath?: string) => {
 
@@ -55,7 +57,6 @@ export const Environment = (() => {
         sessionHangThresholdInMs,
         serverUrl,
         assetCDNStorageUrl,
-        currentVersion,
         oneSignalAppId,
         isUnderMaintenance,
         isLocalhost,

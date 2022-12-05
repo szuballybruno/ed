@@ -440,7 +440,7 @@ export class UserService {
     }) {
 
         return await this
-            .createUserAsync({
+            .insertUserAsync({
                 email,
                 firstName,
                 lastName,
@@ -448,7 +448,7 @@ export class UserService {
                 companyId,
                 departmentId,
                 registrationType,
-                password: 'guest',
+                password: unhashedPassword,
                 invitationToken,
                 isGod: false,
                 avatarFileId: null,
@@ -462,13 +462,13 @@ export class UserService {
                 userDescription: null,
                 username,
                 isSurveyRequired
-            }, unhashedPassword);
+            });
     }
 
     /**
      * Create a new user.
      */
-    createUserAsync = async (user: InsertEntity<User>, unhashedPassword: string): Promise<User> => {
+    async insertUserAsync(user: InsertEntity<User>): Promise<User> {
 
         // check if user already exists with email
         const existingUser = await this.getUserByEmailAsync(user.email);
@@ -482,7 +482,7 @@ export class UserService {
         // hash user password
         const hashedPassword = await this
             ._hashService
-            .hashPasswordAsync(unhashedPassword);
+            .hashPasswordAsync(user.password);
 
         user.password = hashedPassword;
 

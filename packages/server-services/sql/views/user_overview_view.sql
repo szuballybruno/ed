@@ -89,7 +89,7 @@ SELECT
 	u.creation_date signup_date,
 	u.username,
 	sf.file_path avatar_file_path,
-    COALESCE(sara.summerized_score_avg, 0) summerized_score_avg,
+    sara.summerized_score_avg summerized_score_avg,
 	COALESCE(upa.average_performance_percentage, 0) average_performance_percentage,
 	COALESCE(tus.total_session_length_seconds, 0) total_session_length_seconds,
 	COALESCE(cvcc.completed_video_count, 0) completed_video_count,

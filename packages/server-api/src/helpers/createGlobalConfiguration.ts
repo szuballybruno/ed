@@ -69,10 +69,10 @@ export const createGlobalConfiguration = (rootDir: string) => {
         security: {
             secrets: {
                 accessTokenSecret: Helper.getEnvConfigEntry('JWT_SIGN_SECRET'),
-                refreshTokenSecret: 'dasdmaodwhw8dha7y37iaiyd7sta77aw6eads7yawid',
-                regTokenSecret: 'dwafwfawiudaw8d79afya09d3asnklswf87aw0dja9wu8d',
-                invitationTokenSecret: 'd42dh9hd23c9283h9f2fj98h23d9ja0jd98jwd989awhd',
-                setNewPasswordTokenSecret: 'sdajwd99839d8y9ac9ayw7dya398yd9aysdas'
+                refreshTokenSecret: Helper.getEnvConfigEntry('JWT_SIGN_SECRET'),
+                regTokenSecret: Helper.getEnvConfigEntry('JWT_SIGN_SECRET'),
+                invitationTokenSecret: Helper.getEnvConfigEntry('JWT_SIGN_SECRET'),
+                setNewPasswordTokenSecret: Helper.getEnvConfigEntry('JWT_SIGN_SECRET')
             },
             tokenLifespans: {
                 accessTokenLifespanInS: 2 * 60 * 60, // 2 hours 
@@ -82,18 +82,20 @@ export const createGlobalConfiguration = (rootDir: string) => {
                 invitationTokenLifespanInS: 127 * 60 * 60, // 127 hours
             },
             gcpStorageAuthCredentials: JSON
-                .parse(`{
-                            "type": "service_account",
-                            "project_id": "gifted-country-324010",
-                            "private_key_id": "45a2d3ae7029f73a1cb0a9f68db034684baf5548",
-                            "private_key": "-----BEGIN PRIVATE KEY-----\\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDcdRB084t/rjca\\ne4nmXK8TR1v1HdWMPKyJVlPa9EjPXjfh/aWCwF2bq2h/KS3F+oOytzr3jftU2bKi\\noYcwB27yJ1CingGdt01S/zgG3+si10JxA+4kr4bj8Gybqdy+9zdA7Cf89uNTL7+l\\n0rJL6+Z2h9nK1FYmkJD2jMZJOenp5FRxscgEVbp5lIcRihik64xli5INRWz95lXL\\nJO33wjehuz13/vXgOfuByc0Am1ZZJA8O7xVbEGBTyIsJ7Bt8vXBztUQ9X1DeshIf\\nk/kARjDzar9l+BcA72lrBd46oUK80GOOAB10pANpadjZVBteISilHR6LGtVN0qET\\ndtBKpPGPAgMBAAECggEANOZqUoX2XWcClfo69uoaoLeo20KTcZlFlZb/fDTOG+Rx\\n6GqjAqMCU05oPss0zqL0YzgQkEKjopKyiM/VzrKZ7sV8VekwXhYUGexgF1Y36B5b\\nNR9KT8dGyP9yMFAsRi6wNYX1eoALwHReun26hvlOTfb/Tepx2cMq5d6V3hBljtfn\\nRogkVDHTyXDGMGkuZEMEGQgaFxGwuyRZpqukvKm6WaO+EyFmlqhiEKAReu9RIzY1\\nFZuLNX23o8OGvNt9B191rEBJmmDcZ4quS6MwKz92H5tWgoxusZSt11WUqssLaNob\\nF/3VqPeiB/gy0UBNoVKEfQq9Ic6zmYl7EmH10ALLMQKBgQD3x6rBV2xpOpsIeTxt\\n82SDOQv+q0NyBsW5werIYt0VB75QKXpcAwUwT69BCSJ/iAaKZbD/WsDMVdBYmlrZ\\njOhyzJeLrLqP2HB58ZfFbrXJtP1/wQqGZBcpSC1CzWBpOBkU8JjRFepxbPHAz//O\\nj07zl6bUTJJB162dzXFRq83BtQKBgQDjxVpLVXWTWYhMRjQYlZH4JTwZJIrrrqtT\\nBoD4F/8qKkgTDytl3mUhQu8MUyQfirQ45xd1mxtetCzVm6WK8wwX/x6q4Ufzxmz/\\nDmmpvtM4u/o4jG3rSQTtzECg4+4mdB6c8l0Ut1NSxBNhbhv2DFHmqUM0Uvt7M8ZT\\nVbKI6LyAswKBgB7tOQ7wzoND4V3pY/WFT6JhWHHtBnoRBlTtM1TXoiih0stGohMh\\n/V/OUl2XukqYu9hCYRk+Rpo6i8rDWVuWDt1lU/UHFjImHcPat8rYyq/me02a1ql3\\njLyGWb/gyovXiKnobeqLBbwqkPI0BAXQNVaKMzSEaiz1sqHjpqU/AGuRAoGAWQqJ\\npfGeqR/THJ5FN2chTTShLeMPO9totmhQeqxG4CDvVCQV/xjVyA72jIbkFECQ+727\\negpMxNUCwe665HrnO2pMftja2/2yFnN38xfaUs+JnhmnztcYyi2TBlKUgwvZ+9jz\\ncmnIdQ6Z1PjKjYF7cwSwdQALt7ohyeoyhTsWlekCgYBmbyjj08Ej2wRiqqWmqnp6\\na8xMJYuPic2UAita5uS5dQbX/8mmfoSVh41h2ywPZOAdzD9RZk1iUJQtmPIfSyAJ\\nkUvn52HdUqhK/+MTKp2TzLH+/4Wr8BrSWVjeLgpv9jCD42Q1gMugYBqyJE2H5Q0r\\nNC8DEguc5E4iaXekP5PErw==\\n-----END PRIVATE KEY-----\\n",
-                            "client_email": "epistogram-service-account@gifted-country-324010.iam.gserviceaccount.com",
-                            "client_id": "113272476749962373318",
-                            "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-                            "token_uri": "https://oauth2.googleapis.com/token",
-                            "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-                            "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/epistogram-service-account%40gifted-country-324010.iam.gserviceaccount.com"
-                        }`)
+                .parse(`
+                {
+                    "type": "service_account",
+                    "project_id": "gifted-country-324010",
+                    "private_key_id": "30620e0d02feef285859e9111767700a059d5167",
+                    "private_key": "-----BEGIN PRIVATE KEY-----\\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDctzBpxf+34a8E\\nGcW7rlQLefMx6HvvTZysHDU11Q0JQoshZMc4K/4dPoIU936/pYXcMTdxWYBc+E0F\\nOtzBK2NbehT5qsWsvftv+3WMwOr14nWMV6Krpqkf7mE4nNGMlBBc9C4biOtTd4Jd\\nhHQMi8bZPVH2xUl38sdOQAS/QJjoFXinTVZQ37DjdQjoezh3xiXl0k/A3mttBlod\\neV2VpXq5PKy97Wt8otWneumVu6IJq0Y4AUTnKv9pEvYItyofJr/0UbWKF2u/U9Es\\nFb2copAgw4fZOgh8mv0wtf2CJgQw4lSNea4Yyjy+St5jXNu+KtA6EWzFyZFnqdwc\\nJRCMBFUnAgMBAAECggEAZx7RqEGhYay4Q/60kyT2UGxYMxOvP9WvovwE4lNZpV9p\\nOJ9osrZfIhOv3BLsLacsnP2DrVpHLmi2N4DSXhAi+jzWKvXeKICUxrOiLrJ9tIbr\\nK7hQIMmbj/ckhjpCb19IK93L4wJ8DEG0b3PwcmIl9B6Bun1ff4K3GrivXxnTtu5e\\npxOm3GuIvrdNimi4KF0bhcsq3gNMeh5JCFGTDNBPZ1JD97oMN3gw45isnO8eRW5s\\n0uFEgaHSYeR0nCyZwDcQl6dRX/m6ifsErRY+7AX3VzaSA/WOxD3+dZe3c9cF7BUO\\nWn/a3WAPO2g3FWpvSd+u8velOpksptcXRz9iCse/1QKBgQD83pbaujWvtkxE3u6Z\\nBXec7NSH1jaql0YcZHzfnQ4qDzvYugMoVnNY8y4YS0epMbj9Zi348HXHCm1xLJ5M\\nD4WyTHJDzU9tgorrDnWOxcpUYFGmXi2jLT91fla8O+eQb/O4H0qvHdRErf6DgXjQ\\nArgzAliZT2GBKpXmN4sp4rj/TQKBgQDfcrIPe/k1SmeOehtm4bCV/9hy+Ygf97wk\\noq/9HOk7NI0I0kpEveHuL4cV6QYmB0hxgAtpEW4Zk1Uwgwu0Q2qvd3T0OXAsH5Ff\\n0B9w3ZFNb/DIEoF8OWAH1gmMmXmLFU/+H+JPC2Pj5M+DafTlJBHC4Zw9PFaSHyhA\\nO70zm4WUQwKBgE+fVyjwUU9Ou51EBSUxz4QeHp3XGceFcpImIhvXPEqKGXIYwD3H\\nWvK7P9xud9YSzgkcT4V/UdamtedZAU855ANMhv5Ke6Qj4tI471NRfHAtFAiqxvwG\\nl2DLs0v6IOQeHEPxtnaFkf0+PFH0RrJY6N9G8db0Y+NkIWcoPi2mMlJRAoGBAKUC\\nYUYYCi/1c0X/HG88aZhL6H73kTPyUYlIbuhfSklDhIcoLFpZUxf/FyXyAG1i4XeX\\n1FVR3tmaOMXrcGA9jPJpKAAWzqR253c3DZDevqfN66UELYUcJbODt2eSCvTP11PW\\nHdy7j5fC6A+m1ofEvC0LSMLb5R5hTespco5C4kFbAoGAfYQrWmmT9AJszsDV5+0c\\no2eovcpA16tSQBfUn7bB0ExJ+FyXdT4gG8WcFx9cOybnfjV10R89r5cgHMrueL+O\\n0NB5rnxt8Ojb02dVaZUzeSUynBPLrQ5RNy5Sz5kUZ9hOG5sCFRlZNOVSv3CV11Dc\\nmhrLdRe8+zdWmmTVuKEu9N8=\\n-----END PRIVATE KEY-----\\n",
+                    "client_email": "storage-admin-service-account@gifted-country-324010.iam.gserviceaccount.com",
+                    "client_id": "105320048972068302567",
+                    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+                    "token_uri": "https://oauth2.googleapis.com/token",
+                    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+                    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/storage-admin-service-account%40gifted-country-324010.iam.gserviceaccount.com"
+                }
+                  `)
         },
         misc: {
             hostPort: Helper.getEnvConfigEntry('HOST_PORT'),

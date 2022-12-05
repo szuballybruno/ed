@@ -1,5 +1,5 @@
-import { useRecommendedItemQuota } from '../../../services/api/userProgressApiService';
 import { Id } from '@episto/commontypes';
+import { useRecommendedItemQuota } from '../../../services/api/userProgressApiService';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { RecommendedItemQuota } from '../../home/RecommendedItemQuota';
 import { PlayerTitleSubtitle } from './PlayerTitleSubtitle';
@@ -34,7 +34,7 @@ export const PlayerTitleBlock = (props: {
         background={isMobile ? 'white' : undefined}
         width={isMobile ? '100%' : undefined}
         zIndex={14}
-        align="center">
+        align='center'>
 
         {/* video title and subtitle */}
         <PlayerTitleSubtitle
@@ -42,9 +42,9 @@ export const PlayerTitleBlock = (props: {
             subTitle={subTitle}
             isMobile={isMobile} />
 
+
         {isMobile && <RecommendedItemQuota
-            flex={'2'}
-            minWidth='120px'
+            minWidth='130px'
             mb='0'
             isDaily
             isDeadlineSet={recommendedItemQuota?.isDeadlineSet ?? false}

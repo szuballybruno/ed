@@ -15,7 +15,7 @@ import { ModuleVersion } from '../models/entity/module/ModuleVersion';
 import { AvailableCourseView } from '../models/views/AvailableCourseView';
 import { CourseAdminContentView } from '../models/views/CourseAdminContentView';
 import { CourseAdminDetailedView } from '../models/views/CourseAdminDetailedView';
-import { CourseAdminShortView } from '../models/views/CourseAdminShortView';
+import { CourseAdminListView } from '../models/views/CourseAdminListView';
 import { CourseDetailsView } from '../models/views/CourseDetailsView';
 import { LatestCourseVersionView } from '../models/views/LatestCourseVersionView';
 import { UserPlaylistView } from '../models/views/UserPlaylistView';
@@ -471,7 +471,7 @@ export class CourseService {
     ) {
 
         const courseAdminShortViews = await this._ormService
-            .query(CourseAdminShortView)
+            .query(CourseAdminListView)
             .getMany();
 
         return this._mapperService
