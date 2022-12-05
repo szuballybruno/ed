@@ -1,8 +1,7 @@
 import { defineConfig } from "cypress";
-import { getConfig, globalConfig } from "./cypress/e2e/helpers";
+import { getConfigOutsideOfTest } from "./cypress/e2e/helpers";
 
-const { isInDocker } = globalConfig;
-const { origin } = getConfig(isInDocker);
+const { origin, isInDocker } = getConfigOutsideOfTest();
 
 export default defineConfig({
   e2e: {
