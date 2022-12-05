@@ -1,5 +1,5 @@
 import { ErrorWithCode } from '@episto/commontypes';
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { Responsivity } from '../../helpers/responsivity';
 import { AuthenticationStateType, useLogInUser } from '../../services/api/authenticationApiService';
@@ -16,7 +16,7 @@ import { EpistoFont } from '../controls/EpistoFont';
 import { ContentPane } from '../pageRootContainer/ContentPane';
 import { GenericBackground } from '../pageRootContainer/GenericBackground';
 import { RootContainerBackground } from '../pageRootContainer/RootContainerBackground';
-import { AuthenticationStateContext, useRefetchUserAsync } from '../system/AuthenticationFrame';
+import { useAuthContextStateAsync } from '../system/AuthenticationFrame';
 import { useAuthorizationContext } from '../system/AuthorizationContext';
 import { LoadingFrame } from '../system/LoadingFrame';
 import { useEpistoDialogLogic } from '../universal/epistoDialog/EpistoDialogLogic';
@@ -27,8 +27,7 @@ export const LoginScreen = () => {
     // util
     const { navigate2, navigateToHref } = useNavigation();
     const showErrorDialog = useShowErrorDialog();
-    const authState = useContext(AuthenticationStateContext);
-    const { refetchAuthHandshake } = useRefetchUserAsync();
+    const { refetchAuthHandshake, authState } = useAuthContextStateAsync();
     const { hasPermission } = useAuthorizationContext();
     const dest = useQueryParams<{ dest: string }>()
         .getValueOrNull(x => x.dest, 'string');

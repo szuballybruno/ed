@@ -9,7 +9,7 @@
   ],
   "compilerOptions": {
     "outDir": "./dist",
-    "sourceMap": false,
+    "sourceMap": true,
     "declaration": true,
     "declarationDir": "./dts"
   }

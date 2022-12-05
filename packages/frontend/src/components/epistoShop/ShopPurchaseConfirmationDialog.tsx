@@ -156,7 +156,6 @@ export const ShopPurchaseConfirmationDialog = (props: {
 
         <EpistoPaging
             slides={[confirmationSlide, feedbackSlide]}
-            index={paging.currentIndex}
-            justify="center" />
+            index={paging.currentIndex} />
     </EpistoDialog>;
 };

@@ -12,6 +12,7 @@ import { EpistoPaging } from '../../universal/EpistoPaging';
 import { useVideoPlayerFullscreenContext } from './videoPlayer/VideoPlayerFullscreenFrame';
 import { WatchSubpageState } from './WatchSubpage';
 import { Responsivity } from '../../../helpers/responsivity';
+import { EpistoFlex2 } from '../../controls/EpistoFlex';
 
 export const ExamPlayer = (props: {
     exam: ExamPlayerDataDTO,
@@ -114,9 +115,13 @@ export const ExamPlayer = (props: {
             goToCourseRating={goToCourseRating} />
     ];
 
-    return <EpistoPaging
-        flex="1"
-        height={isMobile ? '100vh' : undefined}
-        slides={examWorkflowPages}
-        index={examWorkflowSlides.currentIndex} />;
+    return (
+        <EpistoFlex2
+            height={isMobile ? '100vh' : undefined}>
+
+            <EpistoPaging
+                slides={examWorkflowPages}
+                index={examWorkflowSlides.currentIndex} />;
+        </EpistoFlex2>
+    );
 };

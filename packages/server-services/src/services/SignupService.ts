@@ -71,6 +71,13 @@ export class SignupService {
 
         const userId = principalId.getId();
 
+        const isPermAssigned = await this
+            ._permissionService
+            .getPermissionAsync(userId, 'BYPASS_SURVEY', { companyId });
+
+        if (isPermAssigned)
+            return;
+            
         await this._permissionService
             .assignPermission(userId, 'BYPASS_SURVEY', { companyId: companyId });
     }

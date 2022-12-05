@@ -484,7 +484,6 @@ export const AdminCourseContentSubpage = () => {
 
             {/* actual page content  */}
             <CourseAdministartionFrame
-                noHeightOverflow
                 disabled={isDetailsPaneOpen}
                 isAnySelected={isAnySelected}>
 

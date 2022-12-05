@@ -26,7 +26,7 @@ import { CompanyAssociatedCoursesView } from '../../models/views/CompanyAssociat
 import { CompanyView } from '../../models/views/CompanyView';
 import { CourseAdminContentView } from '../../models/views/CourseAdminContentView';
 import { CourseAdminDetailedView } from '../../models/views/CourseAdminDetailedView';
-import { CourseAdminShortView } from '../../models/views/CourseAdminShortView';
+import { CourseAdminListView } from '../../models/views/CourseAdminListView';
 import { CourseDetailsView } from '../../models/views/CourseDetailsView';
 import { CourseItemEditView } from '../../models/views/CourseItemEditView';
 import { CourseLearningStatsView } from '../../models/views/CourseLearningStatsView';
@@ -973,6 +973,7 @@ const marray = [
             secondaryColor: company.secondaryColor,
             logoUrl: urlService.getAssetUrlNullable(logoFilePath),
             coverUrl: urlService.getAssetUrlNullable(coverFilePath),
+            isSurveyRequired: company.isSurveyRequired
         })),
     // TODO: unused mapping, check DTO's and endpoints too
     epistoMappingsBuilder
@@ -1035,7 +1036,7 @@ const marray = [
         }),
 
     epistoMappingsBuilder
-        .addArrayMapping(CourseAdminListItemDTO, ([urlService]) => (views: CourseAdminShortView[]) => {
+        .addArrayMapping(CourseAdminListItemDTO, ([urlService]) => (views: CourseAdminListView[]) => {
             return views.map(view => {
 
                 const thumbnailImageURL = view.coverFilePath
@@ -1045,23 +1046,17 @@ const marray = [
                 return instantiate<CourseAdminListItemDTO>({
                     title: view.title,
                     courseId: view.courseId,
-                    videosCount: view.videoCount,
-                    examCount: view.examCount,
                     thumbnailImageURL,
                     category: {
                         id: view.categoryId,
                         name: view.categoryName
                     },
-                    subCategory: {
-                        id: view.subCategoryId,
-                        name: view.subCategoryName
-                    },
-                    teacher: {
-                        id: view.teacherId,
-                        fullName: toFullName(view.teacherFirstName, view.teacherLastName)
-                        //firstName: view.teacherFirstName,
-                        //lastName: view.teacherLastName,
-                    }
+                    abandonedUserCount: 1,
+                    averageUserPerformance: 'average',
+                    completedByUsersCount: 1,
+                    currentUserCount: 1,
+                    difficultVideoCount: 1,
+                    unansweredQuestionCount: 1
                 });
             });
         }),

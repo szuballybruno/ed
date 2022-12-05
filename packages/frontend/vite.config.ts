@@ -6,5 +6,6 @@ export default defineConfig({
   plugins: [react(), viteTsconfigPaths()],
   build: {
     outDir: 'build'
-  }
+  },
+  envDir: './config'
 });

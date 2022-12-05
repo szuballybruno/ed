@@ -26,8 +26,9 @@ BEGIN
 		ON nsp.oid = connamespace
 		AND nsp.nspname = 'public'
 
-		WHERE con.contype = 'u' 
-		OR con.contype = 'c'
+		WHERE (con.contype = 'u' 
+		OR con.contype = 'c')
+		AND con.conname != 'migration_version_version_name_unique'
 	) sq
 	INTO var_drop_constraints_script;
 	
@@ -84,6 +85,7 @@ BEGIN
 		WHERE tablename NOT LIKE 'pg%'
 		AND indexname NOT LIKE '%REL_%'
 		AND indexname NOT LIKE '%PK_%'
+		AND indexname != 'migration_version_version_name_unique'
 	) sq
 	INTO var_drop_indices_script;
 	

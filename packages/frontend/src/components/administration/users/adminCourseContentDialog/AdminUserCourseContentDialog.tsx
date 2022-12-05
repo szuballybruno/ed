@@ -49,9 +49,8 @@ export const AdminUserCourseContentDialog = (props: {
                     userId={dialogParams.userId} />
             },
             {
-                title: 'Videók',
-                component: <AdminUserVideosDataGridControl
-                    userId={dialogParams.userId}
+                title: 'Modulok',
+                component: <AdminUserModulesDataGridControl
                     courseId={dialogParams.courseId}
                     handleMoreButton={
                         function (): void {
@@ -70,13 +69,10 @@ export const AdminUserCourseContentDialog = (props: {
                     }} />
             },
             {
-                title: 'Modulok',
-                component: <AdminUserModulesDataGridControl
-                    courseId={dialogParams.courseId}
-                    handleMoreButton={
-                        function (): void {
-                            throw new Error('Function not implemented.');
-                        }} />
+                title: 'Videók',
+                component: <AdminUserVideosDataGridControl
+                    userId={dialogParams.userId}
+                    courseId={dialogParams.courseId} />
             },
             {
                 title: '',

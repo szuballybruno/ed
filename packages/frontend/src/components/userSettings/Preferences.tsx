@@ -16,7 +16,7 @@ import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoLabel } from '../controls/EpistoLabel';
 import { EpistoConinInfo } from '../EpistoCoinInfo';
 import { ProfileImage } from '../ProfileImage';
-import { CurrentUserContext, useRefetchUserAsync } from '../system/AuthenticationFrame';
+import { CurrentUserContext, useAuthContextStateAsync } from '../system/AuthenticationFrame';
 import { DashboardSection } from '../universal/DashboardSection';
 import { EpistoImageSelector } from '../universal/EpistoImageSelector';
 
@@ -46,7 +46,7 @@ const usePreferencesLogic = () => {
     const { postAvatarFileAsync, postAvatarFileState } = useUploadAvatarFile();
     const { requestChangePasswordAsync, requestChangePasswordState } = useRequestPasswordChangeAuthenticated();
 
-    const { refetchAuthHandshake } = useRefetchUserAsync();
+    const { refetchAuthHandshake } = useAuthContextStateAsync();
 
     const [isPasswordChangeOpen, setIsPasswordChangeOpen] = useState(false);
     const [currentPassword, setCurrentPassword] = useState('');

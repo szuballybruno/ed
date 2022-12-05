@@ -80,7 +80,7 @@ import { CommentListView } from '../models/views/CommentListView';
 import { CorrectAnswerRatesSplitView } from '../models/views/CorrectAnswerRatesSplitView';
 import { CourseAdminContentView } from '../models/views/CourseAdminContentView';
 import { CourseAdminDetailedView } from '../models/views/CourseAdminDetailedView';
-import { CourseAdminShortView } from '../models/views/CourseAdminShortView';
+import { CourseAdminListView } from '../models/views/CourseAdminListView';
 import { CourseAllItemsCompletedView } from '../models/views/CourseAllItemsCompletedView';
 import { CourseDetailsView } from '../models/views/CourseDetailsView';
 import { CourseItemEditView } from '../models/views/CourseItemEditView';
@@ -208,7 +208,7 @@ export class DBSchemaProviderService implements IXORMSchemaProviderService {
                 AvailableCourseView,
                 ExamResultView,
                 LatestExamResultView,
-                CourseAdminShortView,
+                CourseAdminListView,
                 QuestionDataView,
                 UserCourseCompletionOriginalEstimationView,
                 UserCourseCompletionCurrentView,

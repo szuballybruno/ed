@@ -10,38 +10,30 @@ import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoImage } from '../controls/EpistoImage';
 import { EpistoHeader } from '../EpistoHeader';
 
-export const SurveyWrapper = (props: {
+export const SurveyWrapper = ({
+    testid,
+    onNavPrevious,
+    description,
+    title,
+    nextButtonTitle,
+    currentImage,
+    bottomComponent,
+    children,
+    onNext
+}: {
+    testid: string,
     children?: ReactNode,
     nextButtonTitle?: string
     currentImage?: string,
-
     onNext?: () => void,
     onNavPrevious?: () => void
     title?: string,
-    upperTitle?: string,
     description?: string | ReactNode,
     bottomComponent?: ReactNode,
-    upperComponent?: ReactNode,
-    headerRightButton?: { name: string, action: () => void }
 }) => {
 
-    const { onNavPrevious, headerRightButton } = props;
-    const canNavPrevious = !!onNavPrevious;
-
-    const description = props.description;
     const hasDescription = !!description;
-
-    const title = props.title;
-    const hasTitle = props.title;
-
-    const upperTitle = props.upperTitle;
-    const hasUpperTitle = !!upperTitle;
-
-    const nextButtonTitle = props.nextButtonTitle;
-    const currentImage = props.currentImage;
     const hasImage = hasValue(currentImage);
-    const children = props.children;
-    const onNext = props.onNext;
 
     const { isMobile } = Responsivity
         .useIsMobileView();
@@ -165,7 +157,7 @@ export const SurveyWrapper = (props: {
                     direction="column">
 
                     {/* title */}
-                    {hasTitle && <EpistoHeader
+                    {title && <EpistoHeader
                         textHeight={isMobile ? '100%' : undefined}
                         variant="strongSub"
                         type="strong"
@@ -200,7 +192,7 @@ export const SurveyWrapper = (props: {
             </EpistoFlex2>
         </EpistoFlex2>
 
-        {/* progress bar */}
+        {/* bottom bar */}
         <EpistoFlex2
             wrap='nowrap'
             align="center"
@@ -211,12 +203,11 @@ export const SurveyWrapper = (props: {
             justifyContent={isMobile ? 'center' : 'space-between'}
             boxShadow={'5px 5px 15px 3px rgba(0,0,0,0.07)'}
             px="10px"
-            my={isMobile ? '0' : '20'}
-        >
+            my={isMobile ? '0' : '20'}>
 
             {/* back button */}
-            {canNavPrevious && <EpistoButton
-                onClick={() => onNavPrevious!()}
+            {onNavPrevious && <EpistoButton
+                onClick={() => onNavPrevious()}
                 variant="outlined"
                 style={{
                     marginTop: '0',
@@ -236,13 +227,14 @@ export const SurveyWrapper = (props: {
                 flex="1"
                 pl={isMobile ? '10px' : '0'}
                 mx={isMobile ? '5px' : '20'}>
-                {props.bottomComponent}
+                {bottomComponent}
             </EpistoDiv>
 
             {/* next button */}
             {onNext && <EpistoButton
                 variant={'outlined'}
-                onClick={() => onNext!()}
+                dataTestid={`${testid}-survey-next-button`}
+                onClick={onNext}
                 style={{
                     alignSelf: 'center',
                     color: 'white',
@@ -254,7 +246,6 @@ export const SurveyWrapper = (props: {
 
                 {nextButtonTitle}
             </EpistoButton>}
-
         </EpistoFlex2>
-    </EpistoFlex2 >;
+    </EpistoFlex2>;
 };

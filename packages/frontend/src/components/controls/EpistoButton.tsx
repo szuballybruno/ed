@@ -16,6 +16,8 @@ export type EpistoButtonPropsType = {
         [key: string]: CSSProperties
     },
 
+    dataTestid?: string,
+
     /**
      * @deprecated use globalCssTypes
      */
@@ -29,31 +31,31 @@ export type EpistoButtonPropsType = {
     tooltip?: string
 } & CSSOptionsType;
 
-export const EpistoButton = forwardRef<HTMLButtonElement, EpistoButtonPropsType>((props: EpistoButtonPropsType, ref) => {
-
-    const {
-        children,
-        onClick,
-        isRound,
-        size,
-        padding,
-        fontSize,
-        variant,
-        style,
-        className,
-        icon,
-        isDisabled,
-        name,
-        type,
-        sx,
-        onClickNoPropagation,
-        tooltip,
-        ...cssOptions
-    } = props;
+export const EpistoButton = forwardRef<HTMLButtonElement, EpistoButtonPropsType>(({
+    children,
+    onClick,
+    isRound,
+    size,
+    padding,
+    fontSize,
+    variant,
+    style,
+    className,
+    icon,
+    isDisabled,
+    dataTestid,
+    name,
+    type,
+    sx,
+    onClickNoPropagation,
+    tooltip,
+    buttonProps: btp,
+    ...cssOptions
+}: EpistoButtonPropsType, ref) => {
 
     const { cssOptionClasses } = useCSSOptionClasses(cssOptions);
 
-    const { variant: _, ...buttonProps } = props.buttonProps ?? { variant: null };
+    const { variant: _, ...buttonProps } = btp ?? { variant: null };
 
     const getVariant = () => {
 
@@ -70,6 +72,8 @@ export const EpistoButton = forwardRef<HTMLButtonElement, EpistoButtonPropsType>
     };
 
     return <Button
+        id={EpistoButton.name}
+        data-test-id={dataTestid}
         title={tooltip}
         onClick={(e) => {
 
