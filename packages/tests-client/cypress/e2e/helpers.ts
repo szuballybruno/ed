@@ -16,7 +16,7 @@ export const dataTestIdSelector = (testid: string) => `[data-test-id='${testid}'
 
 export const clickByTestId = (testid: string, opts: { timeoutInS?: number, noFocus?: boolean } = {}) => {
 
-    const timeoutInS = opts.timeoutInS ? opts.timeoutInS : 4;
+    const timeoutInS = opts.timeoutInS ? opts.timeoutInS : 20;
     const noFocus = opts.noFocus ? true : false;
 
     const expr = cy
@@ -73,10 +73,22 @@ export const globalConfig = (() => {
     }
 })();
 
+export const getConfigInTest = () => {
+
+    const isInDocker = Cypress.env('isInDocker');
+    const config = getConfig(isInDocker);
+
+    console.log(`Api origin: ${config.apiOrigin}`);
+    console.log(`Origin: ${config.origin}`);
+    console.log(`IsInDocker: ${isInDocker}`);
+
+    return config;
+}
+
 export const getConfig = (isInDocker: boolean) => {
 
     console.log(`Running in docker: ${isInDocker ? 'yes' : 'no'}`);
-    
+
     const environmentName = isInDocker ? 'epitest' : 'local';
 
     const origin = `http://${environmentName}.epistogram.com`;

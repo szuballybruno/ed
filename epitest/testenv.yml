@@ -6,7 +6,7 @@ services:
     image: postgres
     restart: always
     environment:
-      POSTGRES_PASSWORD: 'epistogram'
+      POSTGRES_PASSWORD: "${PGPASSWORD}"
       POSTGRES_USER: 'dev_service_user'
       POSTGRES_DB: 'localhostDB'
     volumes: 
@@ -28,7 +28,7 @@ services:
         condition: service_healthy
     restart: always
     environment:
-      PGPASSWORD: 'epistogram'
+      PGPASSWORD: "${PGPASSWORD}"
       IS_DOCKERIZED: 'true'
       ENV_NAME: 'epitest'
     expose: 
@@ -44,7 +44,7 @@ services:
     networks:
       test_net: 
         aliases: 
-          - api.epitest.epistogram.com
+          - epitest.api.epistogram.com
 
   client: 
     depends_on: 

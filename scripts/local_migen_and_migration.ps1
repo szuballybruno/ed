@@ -2,7 +2,7 @@
 ./local_migen.ps1
 
 ./db_exec.ps1 `
-    -dbpass 'epistogram' `
+    -dbpass "$env:PGPASSWORD" `
     -dbhost 'localhost' `
     -dbport '5432' `
     -dbuser 'dev_service_user' `

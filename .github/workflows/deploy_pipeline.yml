@@ -17,6 +17,8 @@ env:
   CLOUD_SQL_CONNCETION_NAME: gifted-country-324010:europe-central2:epistogram
   GCP_PROJECT_NAME: gifted-country-324010
 
+  PGPASSWORD: ${{ secrets.DB_SERVICE_USER_PASSWORD }}
+
 jobs:
 
   # 
