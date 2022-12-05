@@ -7,7 +7,14 @@ export default defineConfig({
   e2e: {
     baseUrl: origin,
     setupNodeEvents(on, config) {
-      // implement node event listeners here
+      on('after:run', (results) => {
+
+        console.log(`
+        -----------------------------
+        [after:run] Test run finshed!
+        -----------------------------
+        `);
+      })
     },
     env: {
       isInDocker: isInDocker

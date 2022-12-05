@@ -35,7 +35,7 @@ services:
       - 5000
     healthcheck:
       test: ["CMD-SHELL", "curl --fail http://localhost:5000/misc/healthcheck || exit 1"]
-      interval: 5s
+      interval: 15s
       timeout: 10s
       retries: 5
     build: 
@@ -57,7 +57,7 @@ services:
       - 80
     healthcheck:
       test: ["CMD-SHELL", "curl --fail http://epitest.epistogram.com || exit 1"]
-      interval: 5s
+      interval: 15s
       timeout: 10s
       retries: 5
     build: 

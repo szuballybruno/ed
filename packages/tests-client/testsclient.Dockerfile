@@ -19,4 +19,4 @@ COPY ./packages/tests-client/cypress.config.ts ./packages/tests-client/cypress.c
 RUN echo "Building tests-client..."
 RUN yarn lerna run build --scope=@episto/tests-client --include-dependencies
 
-CMD yarn lerna run start-cy --scope=@episto/tests-client --include-dependencies
+CMD yarn lerna run start-cy --scope=@episto/tests-client
