@@ -1,10 +1,10 @@
 name: epistogram_deploy_pipeline
 on:
   push:
-    branches: [ dev, demo, main ]
+    branches: [ devasd ]
 
 env:
-  BRANCH_NAME: ${{ github.ref_name }} 
+  BRANCH_NAME: ${{ github.head_ref || github.ref_name }} 
   DB_NAME: epistogram_${{github.ref_name}}
 
   FRONTEND_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/epistogram-frontend-${{ github.ref_name }}
@@ -73,6 +73,66 @@ jobs:
         with:
           name: migration-script
           path: ./migen_out/migration-script.sql
+
+  database_backup:
+    name: Backup database
+    runs-on: ubuntu-latest
+
+    steps: 
+      - name: Checkout branch
+        uses: actions/checkout@v3
+
+      - name: Backup
+        shell: pwsh
+        run: |
+          ./scripts/db_dump.ps1 `
+            -dbpass '${{secrets.DB_SERVICE_USER_PASSWORD}}' `
+            -dbhost '${{secrets.DB_HOST_ADDRESS}}' `
+            -dbport '${{secrets.DB_PORT}}' `
+            -dbname '${{env.DB_NAME}}' `
+            -dbuser '${{secrets.DB_SERVICE_USER_NAME}}' `
+            -dbdumppath ./database-backup.sql
+
+      - name: Upload database-backup artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: database-backup
+          path: ./database-backup.sql
+
+  # 
+  # ------ testing 
+  # 
+
+  run_tests: 
+    name: Run tests
+    runs-on: ubuntu-latest
+    needs: [generate_migration_script,database_backup]
+    
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v3
+
+      - name: Download migration-script artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: migration-script
+          path: ./epitest/init
+
+      - name: Download database-backup artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: database-backup
+          path: ./epitest/init
+
+      - name: Compose up
+        run: docker compose --file ./epitest/testenv.yml up --build --force-recreate --abort-on-container-exit --renew-anon-volumes
+
+      - name: Upload test-logs artifact
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: test-artifacts
+          path: ./epitest/out
 
   # 
   # ------ building 
