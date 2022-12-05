@@ -162,7 +162,7 @@ jobs:
   deploy_database: 
     name: Deploy database
     runs-on: ubuntu-latest
-    needs: [build_backend, build_frontend, run_tests, generate_migration_script]
+    needs: [build_backend, build_frontend, generate_migration_script]
 
     steps:
 
