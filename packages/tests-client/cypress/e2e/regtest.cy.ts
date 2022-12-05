@@ -1,6 +1,6 @@
 import { clickByTestId, fillInputs, getConfig, getUserCredentials } from "./helpers";
 
-const CREDENTIALS = getUserCredentials(7);
+const CREDENTIALS = getUserCredentials(10);
 
 describe('Registration tests', () => {
 

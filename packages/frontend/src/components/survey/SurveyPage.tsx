@@ -16,10 +16,12 @@ import { EpistoPaging } from '../universal/EpistoPaging';
 import { SurveyQuestions } from './SurveyQuestions';
 import { SurveyWrapper } from './SurveyWrapper';
 
+const pagingItems = [1, 2, 3];
+
 export const SurveyPage = () => {
 
     // slides
-    const slidesState = usePaging({ items: [1, 2, 3] });
+    const slidesState = usePaging({ items: pagingItems });
     const { refetchAuthHandshake } = useRefetchUserAsync();
     const { completeSurveyAsync } = SurveyApiService.useCompleteSurvey();
     const isInvitedUser = true;

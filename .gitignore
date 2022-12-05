@@ -17,3 +17,4 @@ testlogs.txt
 epitest/out/test.cy.ts.mp4
 database-backup.sql
 migration-script.sql
+**/screenshots
