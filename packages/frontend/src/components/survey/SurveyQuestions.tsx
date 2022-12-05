@@ -5,6 +5,8 @@ import { EMPTY_ARRAY } from '../../helpers/emptyArray';
 import { SurveyApiService } from '../../services/api/SurveyApiService';
 import { useShowErrorDialog } from '../../services/core/notifications';
 import { usePaging } from '../../static/frontendHelpers';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { EpistoFont } from '../controls/EpistoFont';
 import { MUI } from '../controls/MUIControls';
 import { LinearProgressWithLabel } from './ProgressIndicator';
 import { SurveyWrapper } from './SurveyWrapper';
@@ -12,11 +14,13 @@ import { SurveyWrapper } from './SurveyWrapper';
 export const SurveyQuestions = ({
     onNextOverNavigation,
     onPrevoiusOverNavigation,
-    onJumpToResults
+    onJumpToResults,
+    isSomethingLoading
 }: {
     onPrevoiusOverNavigation: () => void,
     onNextOverNavigation: () => void,
-    onJumpToResults: () => void
+    onJumpToResults: () => void,
+    isSomethingLoading: boolean
 }) => {
 
     const { surveyData, refetchSurveyData, surveyDataError, surveyDataStatus } = SurveyApiService
@@ -24,6 +28,8 @@ export const SurveyQuestions = ({
 
     const { postSurveyAnswerAsync, postSurveyAnswerStatus } = SurveyApiService
         .useAnswerSurveyQuestion();
+
+    const isSomethingLoadingLocal = isSomethingLoading || surveyDataStatus === 'loading' || postSurveyAnswerStatus === 'loading';
 
     const showError = useShowErrorDialog();
 
@@ -104,37 +110,44 @@ export const SurveyQuestions = ({
                         value={questionnaireProgressbarValue} />
                 )}>
 
-                <MUI.RadioGroup
-                    id="answers"
-                    style={{ marginBottom: '30px' }}
-                    onChange={x => handleAnswerSelectedAsync(x.target.value as any)}
-                    name="radioGroup1">
+                {answers
+                    .map((answer, index) => {
 
-                    {answers
-                        .map((answer, index) => {
+                        const isSelected = answer.answerVersionId === selectedAnswerVersionId;
+                        const isDisabled = isSomethingLoadingLocal;
+                        const answerAsync = () => handleAnswerSelectedAsync(answer.answerVersionId);
+                        const onClickHandler = isSelected
+                            ? handleNextQuestion
+                            : answerAsync;
 
-                            const isSelected = answer.answerVersionId === selectedAnswerVersionId;
+                        return (
+                            <EpistoFlex2
+                                key={`${currentQuestionIndex}-${index}`}
+                                data-test-id={`survey-option-qi:${currentQuestionIndex}-ai:${index}`}
+                                pointerEvents={isDisabled ? 'none' : undefined}
+                                cursor={isDisabled ? undefined : 'pointer'}
+                                onClick={onClickHandler}
+                                align="center"
+                                style={{
+                                    margin: '5px 0px 0px 0px',
+                                    backgroundColor: isSelected ? '#7CC0C24F' : 'white',
+                                    padding: '5px 10px',
+                                    border: '1px solid var(--mildGrey)',
+                                    borderRadius: '6px'
+                                }}>
 
-                            return (
-                                <MUI.FormControlLabel
-                                    disabled={surveyDataStatus === 'loading'}
-                                    key={`${currentQuestionIndex}-${index}`}
-                                    onClick={isSelected ? handleNextQuestion : undefined}
-                                    data-test-id={`survey-option-qi:${currentQuestionIndex}-ai:${index}`}
-                                    value={answer.answerVersionId}
+                                <MUI.Radio
+                                    checked={isSelected} />
+
+                                <EpistoFont
                                     style={{
-                                        margin: '5px 0px 0px 0px',
-                                        backgroundColor: isSelected ? '#7CC0C24F' : 'white',
-                                        padding: '5px 10px',
-                                        border: '1px solid var(--mildGrey)',
-                                        borderRadius: '6px'
-                                    }}
-                                    control={<MUI.Radio
-                                        checked={isSelected} />}
-                                    label={answer.answerText} />
-                            );
-                        })}
-                </MUI.RadioGroup>
+                                        userSelect: 'none'
+                                    }}>
+                                    {answer.answerText}
+                                </EpistoFont>
+                            </EpistoFlex2>
+                        );
+                    })}
             </SurveyWrapper>
         </>
     );

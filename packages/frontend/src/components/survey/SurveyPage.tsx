@@ -11,7 +11,7 @@ import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { ContentPane } from '../pageRootContainer/ContentPane';
-import { useRefetchUserAsync } from '../system/AuthenticationFrame';
+import { useAuthContextStateAsync } from '../system/AuthenticationFrame';
 import { EpistoPaging } from '../universal/EpistoPaging';
 import { SurveyQuestions } from './SurveyQuestions';
 import { SurveyWrapper } from './SurveyWrapper';
@@ -22,12 +22,13 @@ export const SurveyPage = () => {
 
     // slides
     const slidesState = usePaging({ items: pagingItems });
-    const { refetchAuthHandshake } = useRefetchUserAsync();
-    const { completeSurveyAsync } = SurveyApiService.useCompleteSurvey();
+    const { refetchAuthHandshake, authState } = useAuthContextStateAsync();
+    const { completeSurveyAsync, completeSurveyStatus } = SurveyApiService.useCompleteSurvey();
     const isInvitedUser = true;
     const { isMobile } = Responsivity
         .useIsMobileView();
     const isIPhone = browser.isIPhone;
+    const isSomethingLoading = useMemo(() => authState === 'loading' || completeSurveyStatus === 'loading', [authState, completeSurveyStatus]);
 
     const { navigate2 } = useNavigation();
 
@@ -88,10 +89,11 @@ export const SurveyPage = () => {
 
     const QuestionnaireSlide = useMemo(() => () => (
         <SurveyQuestions
+            isSomethingLoading={isSomethingLoading}
             onNextOverNavigation={handleGoToSummary}
             onPrevoiusOverNavigation={slidesState.previous}
             onJumpToResults={slidesState.jumpToLast} />
-    ), [handleGoToSummary, slidesState]);
+    ), [handleGoToSummary, slidesState, isSomethingLoading]);
 
     const SummarySlide = useMemo(() => () => (
         <SurveyWrapper

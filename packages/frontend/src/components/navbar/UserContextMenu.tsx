@@ -12,7 +12,7 @@ import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoPopper } from '../controls/EpistoPopper';
 import { EpistoConinInfo } from '../EpistoCoinInfo';
-import { useRefetchUserAsync } from '../system/AuthenticationFrame';
+import { useAuthContextStateAsync } from '../system/AuthenticationFrame';
 import { useAuthorizationContext } from '../system/AuthorizationContext';
 
 export const UserContextMenu = (props: {
@@ -25,7 +25,7 @@ export const UserContextMenu = (props: {
 
     // context
     const { hasPermission } = useAuthorizationContext();
-    const { refetchAuthHandshake } = useRefetchUserAsync();
+    const { refetchAuthHandshake } = useAuthContextStateAsync();
 
     // util 
     const { navigate2, openNewTab } = useNavigation();

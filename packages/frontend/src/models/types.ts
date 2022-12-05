@@ -61,7 +61,7 @@ export type ApplicationRoute<TParams = void, TQuery = void> = {
     paramsType?: TParams;
     queryType?: TQuery;
     isUnauthorized?: boolean;
-    ignoreAccessAppRestriction?: boolean;
+    isSurvey?: boolean;
     isAuthoirziedToVisit?: (hasPermission: HasPermissionFnType) => boolean
 }
 

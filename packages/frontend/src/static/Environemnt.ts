@@ -46,7 +46,7 @@ export const Environment = (() => {
     const eventPoolingIntervalInMs = 5 * 60 * 1000; // 5 mins
     const sessionHangThresholdInMs = 2 * 60 * 60 * 1000; // 2 hours
     const loggingEnabled = true;
-    const loggingEnabledKeys: LoggingKeysType[] = ['WARNING', 'PLAYER DEBUG', 'PLAYBACK'];
+    const loggingEnabledKeys: LoggingKeysType[] = ['WARNING', 'AUTH'];
 
     const getAssetUrl = (path: string, assetUrlPath?: string) => {
 
