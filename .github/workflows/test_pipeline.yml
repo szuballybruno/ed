@@ -1,7 +1,7 @@
 name: epistogram_deploy_pipeline
 on:
   pull_request:
-    branches: [ devasd ]
+    branches: [ dev, demo, main ]
 
 env:
   BRANCH_NAME: ${{ github.event.pull_request.base.ref }}
