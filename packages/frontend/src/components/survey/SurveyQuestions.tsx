@@ -41,8 +41,9 @@ export const SurveyQuestions = ({
         currentItem: currentQuestion
     } = questionPaging;
 
-    const questionnaireProgressbarValue = (currentQuestionIndex / questions.length) * 100;
-    const questionnaireProgressLabel = `${currentQuestionIndex + 1}/${questions.length}`;
+    const questionnaireProgressbarValue = questions.length === 0
+        ? 0
+        : (currentQuestionIndex / questions.length) * 100;
 
     /**
      * Handle next question 
@@ -87,9 +88,12 @@ export const SurveyQuestions = ({
     const selectedAnswerVersionId = (currentQuestion?.answers ?? [])
         .filter(x => x.isGiven)[0]?.answerVersionId as null | Id<'AnswerVersion'>;
 
+    const answers = useMemo(() => currentQuestion?.answers ?? EMPTY_ARRAY, [currentQuestion]);
+
     return (
         <>
             <SurveyWrapper
+                testid="question-slides"
                 title={currentQuestion?.questionText ?? ''}
                 nextButtonTitle="Következő"
                 onNext={selectedAnswerVersionId ? handleNextQuestion : undefined}
@@ -103,19 +107,19 @@ export const SurveyQuestions = ({
                 <MUI.RadioGroup
                     id="answers"
                     style={{ marginBottom: '30px' }}
+                    onChange={x => handleAnswerSelectedAsync(x.target.value as any)}
                     name="radioGroup1">
 
-                    {(currentQuestion?.answers ?? [])
+                    {answers
                         .map((answer, index) => {
 
                             const isSelected = answer.answerVersionId === selectedAnswerVersionId;
 
                             return (
                                 <MUI.FormControlLabel
+                                    disabled={surveyDataStatus === 'loading'}
                                     key={`${currentQuestionIndex}-${index}`}
-                                    onClick={() => isSelected
-                                        ? handleNextQuestion()
-                                        : handleAnswerSelectedAsync(answer.answerVersionId)}
+                                    onClick={isSelected ? handleNextQuestion : undefined}
                                     data-test-id={`survey-option-qi:${currentQuestionIndex}-ai:${index}`}
                                     value={answer.answerVersionId}
                                     style={{

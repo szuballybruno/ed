@@ -1,6 +1,8 @@
 import { clickByTestId, fillInputs, getConfig, getUserCredentials } from "./helpers";
 
-const CREDENTIALS = getUserCredentials(10);
+const CREDENTIALS = getUserCredentials(38);
+
+console.log(CREDENTIALS);
 
 describe('Registration tests', () => {
 
@@ -48,22 +50,20 @@ describe('Registration tests', () => {
             body: body,
             headers: {
                 'Origin': origin
-            }
+            },
         });
 
         cy.visit('/survey');
+        cy.wait(4000);
 
-        // wait for text to appear
-        cy.wait(2000);
-
-        clickByTestId('survey-next-button');
+        clickByTestId('greet-slide-survey-next-button');
 
         for (let index = 0; index <= 34; index++) {
 
-            clickByTestId(`survey-option-qi:${index}-ai:1`);
+            clickByTestId(`survey-option-qi:${index}-ai:1`, { noFocus: true });
         }
 
-        clickByTestId('survey-next-button');
+        clickByTestId('summary-slide-survey-next-button');
 
         cy.url({ timeout: 20 * 1000 }).should('include', '/home');
     });

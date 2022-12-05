@@ -72,6 +72,7 @@ export const EpistoButton = forwardRef<HTMLButtonElement, EpistoButtonPropsType>
     };
 
     return <Button
+        id={EpistoButton.name}
         data-test-id={dataTestid}
         title={tooltip}
         onClick={(e) => {

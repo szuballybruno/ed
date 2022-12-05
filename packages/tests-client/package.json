@@ -8,7 +8,7 @@
     "type": "module",
     "scripts": {
         "open-cy": "npx cypress open",
-        "start-cy": "cypress run"
+        "start-cy": "cypress run --browser chrome"
     },
     "devDependencies": {
         "cypress": "^11.2.0"

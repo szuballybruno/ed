@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, useMemo } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { Responsivity } from '../../helpers/responsivity';
 import { AdminActiveCompanyIdType, AdminActiveCompanyRouteParamType, ApplicationRoute } from '../../models/types';
@@ -125,19 +125,22 @@ export const DesktopNavbar = ({
         );
     };
 
-    const LargeRender = () => {
+    const LargeRender = useMemo(() => () => {
 
         return (
             <EpistoFlex2>
                 {menuItems
                     .map((route, index) => {
+
+                        const navToRoute = () => {
+                            handleNavigation(route);
+                        };
+
                         return (
                             <EpistoButton
                                 variant="plain"
                                 key={index}
-                                onClick={() => {
-                                    handleNavigation(route);
-                                }}>
+                                onClick={navToRoute}>
 
                                 {route.icon}
                             </EpistoButton>
@@ -148,7 +151,7 @@ export const DesktopNavbar = ({
                 <ContinueCourseButton />
             </EpistoFlex2>
         );
-    };
+    }, [handleNavigation, menuItems]);
 
     Logger.logScoped('RENDER', 'Rendering navbar');
 

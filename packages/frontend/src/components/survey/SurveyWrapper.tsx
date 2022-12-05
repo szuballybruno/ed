@@ -11,6 +11,7 @@ import { EpistoImage } from '../controls/EpistoImage';
 import { EpistoHeader } from '../EpistoHeader';
 
 export const SurveyWrapper = ({
+    testid,
     onNavPrevious,
     description,
     title,
@@ -20,6 +21,7 @@ export const SurveyWrapper = ({
     children,
     onNext
 }: {
+    testid: string,
     children?: ReactNode,
     nextButtonTitle?: string
     currentImage?: string,
@@ -190,7 +192,7 @@ export const SurveyWrapper = ({
             </EpistoFlex2>
         </EpistoFlex2>
 
-        {/* progress bar */}
+        {/* bottom bar */}
         <EpistoFlex2
             wrap='nowrap'
             align="center"
@@ -231,8 +233,8 @@ export const SurveyWrapper = ({
             {/* next button */}
             {onNext && <EpistoButton
                 variant={'outlined'}
-                dataTestid="survey-next-button"
-                onClick={() => onNext()}
+                dataTestid={`${testid}-survey-next-button`}
+                onClick={onNext}
                 style={{
                     alignSelf: 'center',
                     color: 'white',

@@ -12,13 +12,23 @@ export const fillInputs = (object: any) => {
         .forEach(x => fillInput(x, object[x]));
 }
 
-export const clickByTestId = (testid: string, timeoutInS?: number) => {
+export const dataTestIdSelector = (testid: string) => `[data-test-id='${testid}']`;
 
-    const timeout = timeoutInS
-        ? timeoutInS * 10
-        : 1000 * 10;
+export const clickByTestId = (testid: string, opts: { timeoutInS?: number, noFocus?: boolean } = {}) => {
 
-    cy.get(`[data-test-id="${testid}"]`, { timeout }).click();
+    const timeoutInS = opts.timeoutInS ? opts.timeoutInS : 4;
+    const noFocus = opts.noFocus ? true : false;
+
+    const expr = cy
+        .get(dataTestIdSelector(testid), { timeout: timeoutInS * 1000 })
+        .should('be.visible')
+        .trigger('mouseover');
+
+    if (!noFocus)
+        expr.focus()
+
+    expr
+        .click({ force: true });
 }
 
 export const getUserCredentials = (seed: number) => {

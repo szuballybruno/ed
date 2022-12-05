@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { Responsivity } from '../../helpers/responsivity';
 import { SurveyApiService } from '../../services/api/SurveyApiService';
@@ -31,56 +31,87 @@ export const SurveyPage = () => {
 
     const { navigate2 } = useNavigation();
 
-    const handleGoToSummary = () => {
-
-        slidesState.next();
-        completeSurveyAsync();
-        refetchAuthHandshake();
-    };
-
-    const handleGoToHomePage = () => {
-
-        navigate2(applicationRoutes.homeRoute);
-
-        startUserGuide();
-    };
-
     const summaryDecription = useMemo(() => translatableTexts.signupPage.summarySlideDescriptionParts
-        .map(x => (
-            <>
+        .map((x, i) => (
+            <EpistoFlex2
+                key={i}>
+
                 <EpistoFont>
                     {x}
                 </EpistoFont>
-                <br />
-            </>
+
+                <br
+                    key={`br_${i}`} />
+            </EpistoFlex2>
         )), []);
 
-    const GreetSlide = () => <SurveyWrapper
-        title={translatableTexts.signupPage.greetSlideTitle}
-        currentImage={Environment.getAssetUrl('/signupQuestionImages/regisztracio.svg')}
-        description={translatableTexts.signupPage.greetSlideDescription}
-        onNext={() => slidesState.next()}
-        nextButtonTitle={translatableTexts.signupPage.greetSlideNextButton}>
-    </SurveyWrapper>;
+    /**
+     * Handle next slide 
+     */
+    const handleNext = useCallback(() => {
 
-    const QuestionnaireSlide = () => <SurveyQuestions
-        onNextOverNavigation={handleGoToSummary}
-        onPrevoiusOverNavigation={slidesState.previous}
-        onJumpToResults={slidesState.jumpToLast} />;
+        slidesState.next();
+    }, [slidesState]);
 
-    const SummarySlide = () => <SurveyWrapper
-        currentImage={Environment.getAssetUrl('/images/analysis3D.png')}
-        onNext={isInvitedUser ? handleGoToHomePage : undefined}
-        nextButtonTitle={isInvitedUser ? translatableTexts.signupPage.goToHomePage : undefined}
-        onNavPrevious={() => slidesState.previous()}
-        description={summaryDecription}>
-    </SurveyWrapper >;
+    /**
+     * Go to summary 
+     */
+    const handleGoToSummary = useCallback(async () => {
 
-    const slides = [
+        await completeSurveyAsync();
+        await refetchAuthHandshake();
+        handleNext();
+    }, [
+        handleNext,
+        completeSurveyAsync,
+        refetchAuthHandshake
+    ]);
+
+    /**
+     * Go to home page
+     */
+    const handleGoToHomePage = useCallback(() => {
+
+        navigate2(applicationRoutes.homeRoute);
+        startUserGuide();
+    }, [navigate2]);
+
+    const GreetSlide = useMemo(() => () => (
+        <SurveyWrapper
+            testid="greet-slide"
+            title={translatableTexts.signupPage.greetSlideTitle}
+            currentImage={Environment.getAssetUrl('/signupQuestionImages/regisztracio.svg')}
+            description={translatableTexts.signupPage.greetSlideDescription}
+            onNext={handleNext}
+            nextButtonTitle={translatableTexts.signupPage.greetSlideNextButton} />
+    ), [handleNext]);
+
+    const QuestionnaireSlide = useMemo(() => () => (
+        <SurveyQuestions
+            onNextOverNavigation={handleGoToSummary}
+            onPrevoiusOverNavigation={slidesState.previous}
+            onJumpToResults={slidesState.jumpToLast} />
+    ), [handleGoToSummary, slidesState]);
+
+    const SummarySlide = useMemo(() => () => (
+        <SurveyWrapper
+            testid="summary-slide"
+            currentImage={Environment.getAssetUrl('/images/analysis3D.png')}
+            onNext={isInvitedUser ? handleGoToHomePage : undefined}
+            nextButtonTitle={isInvitedUser ? translatableTexts.signupPage.goToHomePage : undefined}
+            onNavPrevious={() => slidesState.previous()}
+            description={summaryDecription} />
+    ), [isInvitedUser, slidesState, summaryDecription, handleGoToHomePage]);
+
+    const slides = useMemo(() => [
         GreetSlide,
         QuestionnaireSlide,
         SummarySlide
-    ];
+    ], [
+        GreetSlide,
+        QuestionnaireSlide,
+        SummarySlide
+    ]);
 
     return (
         <>

@@ -63,11 +63,13 @@ export const ContentPaneRoot = ({
                     : 'scroll'}
             overflowX="hidden" >
 
-            {(isNavbarShowing && !isMobile) && <Navbar
-                isLowHeight={isNavbarLowHeight}
-                showLogo={showLogo}
-                isMinimalMode={isMinimalMode}
-                backgroundContent={navbarBg} />}
+            {(isNavbarShowing && !isMobile) && (
+                <Navbar
+                    isLowHeight={isNavbarLowHeight}
+                    showLogo={showLogo}
+                    isMinimalMode={isMinimalMode}
+                    backgroundContent={navbarBg} />
+            )}
 
             <EpistoFlex2
                 id={`${ContentPaneRoot.name}-ContentContainer`}
@@ -98,13 +100,13 @@ export const ContentPaneRoot = ({
                 {children}
             </EpistoFlex2>
 
-            {
-                (isNavbarShowing && isMobile) && <Navbar
+            {(isNavbarShowing && isMobile) && (
+                <Navbar
                     isLowHeight={isNavbarLowHeight}
                     showLogo={showLogo}
                     isMinimalMode={isMinimalMode}
                     backgroundContent={navbarBg} />
-            }
-        </EpistoFlex2 >
+            )}
+        </EpistoFlex2>
     );
 };
