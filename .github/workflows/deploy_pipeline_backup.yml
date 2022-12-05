@@ -1,0 +1,305 @@
+name: epistogram_deploy_pipeline
+on:
+  push:
+    branches: [ devasd ]
+
+env:
+  BRANCH_NAME: ${{ github.head_ref || github.ref_name }} 
+  DB_NAME: epistogram_${{github.ref_name}}
+
+  FRONTEND_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/epistogram-frontend-${{ github.ref_name }}
+  FRONTEND_CLOUD_RUN_SVC_NAME: epistogram-frontend-${{ github.ref_name }}
+
+  BACKEND_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/epistogram-backend-${{ github.ref_name }}
+  BACKEND_CLOUD_RUN_SVC_NAME: epistogram-backend-${{ github.ref_name }}
+  
+  MIGEN_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/epistogram-migen-${{ github.ref_name }}
+  
+  CLOUD_SQL_CONNCETION_NAME: gifted-country-324010:europe-central2:epistogram
+  GCP_PROJECT_NAME: gifted-country-324010
+
+  PGPASSWORD: ${{ secrets.DB_SERVICE_USER_PASSWORD }}
+
+jobs:
+
+  # 
+  # ------ prerequisites
+  # 
+
+  generate_migration_script: 
+    name: Generate migration script
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v3
+      
+      - name: Set up Docker Buildx for layer caching
+        uses: docker/setup-buildx-action@master
+
+      - name: Get migration versions 
+        shell: pwsh
+        working-directory: ./packages/util-script-producer/scripts
+        run: |
+          ./get_mig_versions.ps1 `
+            -dbpass '${{secrets.DB_SERVICE_USER_PASSWORD}}' `
+            -dbhost '${{secrets.DB_HOST_ADDRESS}}' `
+            -dbport '${{secrets.DB_PORT}}' `
+            -dbname '${{env.DB_NAME}}' `
+            -dbuser '${{secrets.DB_SERVICE_USER_NAME}}'
+
+      - name: Build migen
+        uses: docker/build-push-action@v3
+        with:
+          file: ./packages/util-script-producer/docker/migen.Dockerfile
+          context: .
+          cache-from: type=gha,scope=${{ env.GITHUB_REF_NAME }}-migen
+          cache-to: type=gha,scope=${{ env.GITHUB_REF_NAME }}-migen,mode=max
+          outputs: type=docker,dest=migen.tar
+          tags: |
+            migen
+
+      - name: Load migen image
+        run: |
+          docker load < migen.tar 
+
+      - name: Run migen
+        run: |
+          docker run \
+            -v ${PWD}/migen_out:/app/packages/util-script-producer/out migen
+
+      - name: Upload migration-script artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: migration-script
+          path: ./migen_out/migration-script.sql
+
+  database_backup:
+    name: Backup database
+    runs-on: ubuntu-latest
+
+    steps: 
+      - name: Checkout branch
+        uses: actions/checkout@v3
+
+      - name: Backup
+        shell: pwsh
+        run: |
+          ./scripts/db_dump.ps1 `
+            -dbpass '${{secrets.DB_SERVICE_USER_PASSWORD}}' `
+            -dbhost '${{secrets.DB_HOST_ADDRESS}}' `
+            -dbport '${{secrets.DB_PORT}}' `
+            -dbname '${{env.DB_NAME}}' `
+            -dbuser '${{secrets.DB_SERVICE_USER_NAME}}' `
+            -dbdumppath ./database-backup.sql
+
+      - name: Upload database-backup artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: database-backup
+          path: ./database-backup.sql
+
+  # 
+  # ------ testing 
+  # 
+
+  run_tests: 
+    name: Run tests
+    runs-on: ubuntu-latest
+    needs: [generate_migration_script,database_backup]
+    
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v3
+
+      - name: Download migration-script artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: migration-script
+          path: ./epitest/init
+
+      - name: Download database-backup artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: database-backup
+          path: ./epitest/init
+
+      - name: Compose up
+        run: docker compose --file ./epitest/testenv.yml up --build --force-recreate --abort-on-container-exit --renew-anon-volumes
+
+      - name: Upload test-logs artifact
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: test-artifacts
+          path: ./epitest/out
+
+  # 
+  # ------ building 
+  # 
+
+  build_backend: 
+    name: Build backend
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v3
+        
+      - name: Login to GCP
+        uses: google-github-actions/setup-gcloud@v0
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_email: ${{ secrets.GCP_EMAIL }}
+          service_account_key: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: Configure GCP Docker
+        run: gcloud auth configure-docker --quiet
+
+      - name: Set secrets to ${{ github.ref_name }}.config.env file
+        run: |
+          echo "" = ${{secrets.JWT_SIGN_SECRET}} >> ./config/${{ github.ref_name }}.config.env
+          echo "" = ${{secrets.JWT_SIGN_SECRET}} >> ./config/${{ github.ref_name }}.config.env
+          echo JWT_SIGN_SECRET = ${{secrets.JWT_SIGN_SECRET}} >> ./config/${{ github.ref_name }}.config.env
+          echo MAIL_TOKEN_SECRET = ${{secrets.MAIL_TOKEN_SECRET}} >> ./config/${{ github.ref_name }}.config.env
+          echo MAIL_SERVICE_USER_NAME = ${{secrets.MAIL_SENDER_MAIL}} >> ./config/${{ github.ref_name }}.config.env
+          echo MAIL_SERVICE_USER_PASSWORD = ${{secrets.MAIL_SENDER_PASSWORD}} >> ./config/${{ github.ref_name }}.config.env
+          echo DB_HOST_ADDRESS = ${{secrets.DB_HOST_ADDRESS}} >> ./config/${{ github.ref_name }}.config.env
+          echo DB_SERVICE_USER_NAME = ${{secrets.DB_SERVICE_USER_NAME}} >> ./config/${{ github.ref_name }}.config.env
+          echo DB_SERVICE_USER_PASSWORD = ${{secrets.DB_SERVICE_USER_PASSWORD}} >> ./config/${{ github.ref_name }}.config.env
+        working-directory: ./packages/server-api
+      
+      - name: Set up Docker Buildx for layer caching
+        uses: docker/setup-buildx-action@master
+
+      - uses: docker/build-push-action@v3
+        with:
+          file: ./packages/server-api/backend.Dockerfile
+          context: .
+          push: true
+          cache-from: type=gha,scope=$GITHUB_REF_NAME-${{ env.BACKEND_IMAGE_NAME }}
+          cache-to: type=gha,scope=$GITHUB_REF_NAME-${{ env.BACKEND_IMAGE_NAME }},mode=max
+          tags: |
+            ${{ env.BACKEND_IMAGE_NAME }}
+    
+  build_frontend:
+    name: Build frontend
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v3
+        
+      - name: Login to GCP
+        uses: google-github-actions/setup-gcloud@v0
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_email: ${{ secrets.GCP_EMAIL }}
+          service_account_key: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: Configure GCP Docker
+        run: gcloud auth configure-docker --quiet
+      
+      - name: Set up Docker Buildx for layer caching
+        uses: docker/setup-buildx-action@master
+
+      - name: Build frontend container
+        uses: docker/build-push-action@v3
+        with:
+          file: ./packages/frontend/frontend.Dockerfile
+          context: .
+          build-args: ENVIRONMENT_NAME=${{ env.BRANCH_NAME }}
+          push: true
+          cache-from: type=gha,scope=$GITHUB_REF_NAME-${{ env.FRONTEND_IMAGE_NAME }}
+          cache-to: type=gha,scope=$GITHUB_REF_NAME-${{ env.FRONTEND_IMAGE_NAME }},mode=max
+          tags: |
+            ${{ env.FRONTEND_IMAGE_NAME }}
+
+  # 
+  # ------ deploy
+  # 
+
+  deploy_database: 
+    name: Deploy database
+    runs-on: ubuntu-latest
+    needs: [build_backend, build_frontend, run_tests, generate_migration_script]
+
+    steps:
+
+      - name: Checkout branch
+        uses: actions/checkout@v3
+
+      - name: Download migration-script artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: migration-script
+          path: ./
+
+      - name: Migrate schema
+        shell: pwsh
+        run: |
+          ./scripts/db_exec.ps1 `
+            -dbpass '${{secrets.DB_SERVICE_USER_PASSWORD}}' `
+            -dbhost '${{secrets.DB_HOST_ADDRESS}}' `
+            -dbport '${{secrets.DB_PORT}}' `
+            -dbname '${{env.DB_NAME}}' `
+            -dbuser '${{secrets.DB_SERVICE_USER_NAME}}' `
+            -scriptpath ./migration-script.sql
+  
+  deploy_frontend:
+    name: Deploy frontend
+    runs-on: ubuntu-latest
+    needs: [deploy_database]
+    
+    steps:  
+      - name: Login to GCP
+        uses: google-github-actions/setup-gcloud@v0
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_email: ${{ secrets.GCP_EMAIL }}
+          service_account_key: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: Configure GCP Docker
+        run: gcloud auth configure-docker --quiet
+
+      - name: Deploy Docker image to GCP CloudRun
+        run: |
+          gcloud run deploy $FRONTEND_CLOUD_RUN_SVC_NAME \
+          --image $FRONTEND_IMAGE_NAME \
+          --region europe-west1 \
+          --platform managed \
+          --max-instances 1 \
+          --port 80 \
+          --allow-unauthenticated 
+
+  deploy_backend:
+    name: Deploy backend
+    runs-on: ubuntu-latest
+    needs: [deploy_database]
+
+    steps:
+      - name: Login to GCP
+        uses: google-github-actions/setup-gcloud@v0
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_email: ${{ secrets.GCP_EMAIL }}
+          service_account_key: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: Configure GCP Docker
+        run: gcloud auth configure-docker --quiet
+        
+      - name: Deploy Docker image to GCP CloudRun
+        run: |
+          gcloud run deploy $BACKEND_CLOUD_RUN_SVC_NAME \
+          --image $BACKEND_IMAGE_NAME \
+          --add-cloudsql-instances $CLOUD_SQL_CONNCETION_NAME \
+          --region europe-west1 \
+          --platform managed \
+          --max-instances 1 \
+          --min-instances 0 \
+          --port 5000 \
+          --allow-unauthenticated \
+          --memory 4Gi \
+          --cpu 2 \
+          --concurrency 200 \
+          --set-env-vars "ENV_NAME=${{ env.BRANCH_NAME }}"

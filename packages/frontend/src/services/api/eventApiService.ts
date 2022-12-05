@@ -1,17 +1,15 @@
-import { useContext } from 'react';
+import { apiRoutes, EventDTO } from '@episto/communication';
 import { useQuery } from 'react-query';
-import { AuthenticationStateContext } from '../../components/system/AuthenticationFrame';
+import { useAuthContextStateAsync } from '../../components/system/AuthenticationFrame';
 import { Environment } from '../../static/Environemnt';
-import { EventDTO } from '@episto/communication';
-import { apiRoutes } from '@episto/communication';
-import { httpGetAsync } from '../core/httpClient';
 import { useGetCurrentAppRoute } from '../../static/frontendHelpers';
+import { httpGetAsync } from '../core/httpClient';
 
 export const useEventListener = () => {
 
-    const authState = useContext(AuthenticationStateContext);
     const currentRoute = useGetCurrentAppRoute();
     const isEnabled = !currentRoute.isUnauthorized;
+    const { authState } = useAuthContextStateAsync();
 
     const { data } = useQuery(
         ['eventListenerQuery'],

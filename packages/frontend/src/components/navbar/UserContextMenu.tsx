@@ -4,7 +4,6 @@ import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { useLogout } from '../../services/api/authenticationApiService';
 import { useNavigation } from '../../services/core/navigatior';
 import { useShowErrorDialog } from '../../services/core/notifications';
-import { Environment } from '../../static/Environemnt';
 import { ArrayBuilder } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
@@ -13,7 +12,7 @@ import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoPopper } from '../controls/EpistoPopper';
 import { EpistoConinInfo } from '../EpistoCoinInfo';
-import { useRefetchUserAsync } from '../system/AuthenticationFrame';
+import { useAuthContextStateAsync } from '../system/AuthenticationFrame';
 import { useAuthorizationContext } from '../system/AuthorizationContext';
 
 export const UserContextMenu = (props: {
@@ -26,7 +25,7 @@ export const UserContextMenu = (props: {
 
     // context
     const { hasPermission } = useAuthorizationContext();
-    const { refetchAuthHandshake } = useRefetchUserAsync();
+    const { refetchAuthHandshake } = useAuthContextStateAsync();
 
     // util 
     const { navigate2, openNewTab } = useNavigation();
@@ -148,7 +147,6 @@ export const UserContextMenu = (props: {
                 fontSize="fontNormal14">
 
                 {translatableTexts.navbar.version}
-                {Environment.currentVersion ?? '1999.01.01.01:01'}
             </EpistoFont>
         </EpistoPopper >
     );

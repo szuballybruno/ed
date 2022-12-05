@@ -114,7 +114,7 @@ const useColumns = (
         .addIf(preset === 'all', {
             field: 'completedVideoCount',
             headerName: 'Megtekintett videók száma',
-            renderCell: (value) => value ? value.value + 'db' : '-'
+            renderCell: (value) => value?.value ? value.value + 'db' : '0db'
         })
         .addIf(preset === 'reviewRequired', {
             field: 'productivityPercentage',
@@ -203,7 +203,7 @@ const mapToRow = (user: UserAdminListDTO): RowType => {
                 day: '2-digit'
             }) + '',
         summerizedScoreAvg: user.summerizedScoreAvg,
-        invertedLagBehind: user.invertedLagBehind!,
+        invertedLagBehind: user.invertedRelativeUserPaceDiff!,
         totalSessionLengthSeconds: user.totalSessionLengthSeconds,
         completedVideoCount: user.completedVideoCount,
         engagementPoints: user.engagementPoints,

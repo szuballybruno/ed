@@ -1,10 +1,8 @@
+import { Id, OmitProperty } from '@episto/commontypes';
+import { UserVideoStatsDTO } from '@episto/communication';
 import { useCallback } from 'react';
 import { useUserVideoStats } from '../../../../services/api/userStatsApiService';
-import { UserVideoStatsDTO } from '@episto/communication';
-import { OmitProperty } from '@episto/commontypes';
-import { Id } from '@episto/commontypes';
 import { secondsToTime } from '../../../../static/frontendHelpers';
-import { EpistoButton } from '../../../controls/EpistoButton';
 import { EpistoDataGrid, GridColumnType } from '../../../controls/EpistoDataGrid';
 import { EpistoFlex2 } from '../../../controls/EpistoFlex';
 import { EpistoFont } from '../../../controls/EpistoFont';
@@ -15,10 +13,9 @@ import { ChipSmall } from '../../courses/ChipSmall';
 export const AdminUserVideosDataGridControl = (props: {
     userId: Id<'User'>,
     courseId: Id<'Course'> | null
-    handleMoreButton: () => void
 }) => {
 
-    const { handleMoreButton, courseId, userId } = props;
+    const { courseId, userId } = props;
 
     const { userVideoStats, userVideoStatsStatus, userVideoStatsError } = useUserVideoStats(courseId!, userId);
 
@@ -147,21 +144,6 @@ export const AdminUserVideosDataGridControl = (props: {
                         })}
                 </EpistoFont>
                 : <EmptyCell />
-        }),
-
-        columnDefGen('moreDetails', {
-            headerName: 'Részletek',
-            width: 150,
-            renderCell: (params) =>
-
-                <EpistoButton
-                    variant="outlined"
-                    onClick={() => {
-                        handleMoreButton();
-                    }} >
-
-                    Bővebben
-                </EpistoButton>
         })
     ];
 

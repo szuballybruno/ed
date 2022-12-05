@@ -5,6 +5,8 @@ export interface EpistoLineChartSeriesOptionsType extends EpistoChartSeriesOptio
     symbol?: string,
     symbolSize?: number,
     lineStyle?: {
+        color?: string,
+        type?: string,
         width?: number,
         shadowColor?: string,
         shadowOffsetX?: number,

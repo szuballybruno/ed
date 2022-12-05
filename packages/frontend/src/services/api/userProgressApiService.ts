@@ -1,5 +1,4 @@
-import { RecomendedItemQuotaDTO } from '@episto/communication';
-import { UserActiveCourseDTO } from '@episto/communication';
+import { RecommendedItemQuotaDTO, UserActiveCourseDTO } from '@episto/communication';
 import { UserCourseProgressChartDTO } from '@episto/communication';
 import { apiRoutes } from '@episto/communication';
 import { Id } from '@episto/commontypes';
@@ -19,7 +18,7 @@ export const useUserCourseProgressChartData = (courseId: Id<'Course'> | null, en
 
 export const useRecommendedItemQuota = (courseId?: Id<'Course'>) => {
 
-    const qr = QueryService.useXQuery<RecomendedItemQuotaDTO>(apiRoutes.userProgress.getRecommendedItemQuota, { courseId }, !!courseId);
+    const qr = QueryService.useXQuery<RecommendedItemQuotaDTO>(apiRoutes.userProgress.getRecommendedItemQuota, { courseId }, !!courseId);
 
     return {
         recommendedItemQuota: qr.data,

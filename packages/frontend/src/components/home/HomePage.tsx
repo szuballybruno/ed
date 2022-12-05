@@ -14,7 +14,7 @@ import { EpistoFont } from '../controls/EpistoFont';
 import { ContentPane } from '../pageRootContainer/ContentPane';
 import { LeftPane } from '../pageRootContainer/LeftPane';
 import { PlaylistItem } from '../playlist/PlaylistItem';
-import { CurrentUserContext, useRefetchUserAsync } from '../system/AuthenticationFrame';
+import { CurrentUserContext, useAuthContextStateAsync } from '../system/AuthenticationFrame';
 import { useCurrentCourseItemCodeContext } from '../system/CurrentCourseItemFrame';
 import { useSetBusy } from '../system/LoadingFrame/BusyBarContext';
 import { DashboardSection } from '../universal/DashboardSection';
@@ -92,7 +92,7 @@ const HomePage = () => {
     useSetBusy(useOverviewPageDTO, status, error);
 
     const user = useContext(CurrentUserContext);
-    const { refetchAuthHandshake } = useRefetchUserAsync();
+    const { refetchAuthHandshake } = useAuthContextStateAsync();
 
     const isSmallerThan1320 = Responsivity
         .useIsSmallerThan('1320px');

@@ -21,6 +21,6 @@ export class UserCourseStatsDTO {
     requiredCompletionDate: Date;
     tempomatMode: TempomatModeType;
     recommendedItemsPerWeek: number | null;
-    lagBehindPercentage: number | null;
+    relativeUserPaceDiff: number | null;
     previsionedCompletionDate: Date | null;
 }

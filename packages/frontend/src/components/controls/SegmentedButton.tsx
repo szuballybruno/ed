@@ -6,11 +6,15 @@ import { segmentedButtonStyles } from './segmentedButtonStyles';
 export const SegmentedButton = <T,>({
     paging,
     getDisplayValue,
-    variant
+    variant,
+    additionalButtonStyle,
+    additionalWrapperStyle
 }: {
     paging: PagingType<T>,
     variant: 'default' | 'tab',
     getDisplayValue?: (item: T) => string,
+    additionalButtonStyle?: React.CSSProperties,
+    additionalWrapperStyle?: React.CSSProperties
 }) => {
 
     const disp = getDisplayValue ?? ((item: T) => item);
@@ -26,7 +30,10 @@ export const SegmentedButton = <T,>({
     return <>
         <ToggleButtonGroup
             sx={stylePreset.toggleButtonGroupSx}
-            style={stylePreset.toggleButtonGroupStyle}>
+            style={{
+                ...stylePreset.toggleButtonGroupStyle,
+                ...additionalWrapperStyle
+            }}>
 
             {paging
                 .items
@@ -40,7 +47,8 @@ export const SegmentedButton = <T,>({
                             selected={isActive}
                             style={{
                                 ...stylePreset.toggleButtonStyle,
-                                ...buttonStyle
+                                ...buttonStyle,
+                                ...additionalButtonStyle
                             }}
                             sx={stylePreset.toggleButtonSx}
                             key={index}

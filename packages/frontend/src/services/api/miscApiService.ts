@@ -1,11 +1,11 @@
 import { Id } from '@episto/commontypes';
 import { ActivationCodeListDTO, apiRoutes, CourseOverviewDataDTO, CurrentCourseDataDTO, OverviewPageDTO, QuestionModuleCompareDTO } from '@episto/communication';
-import { useAuthStateContext } from '../../components/system/AuthenticationFrame';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { GlobalEventManagerType } from '../../components/system/EventManagerFrame';
 import { useGetCurrentAppRoute } from '../../static/frontendHelpers';
 import { QueryService } from '../../static/XQuery/XQueryReact';
 import { usePostDataUnsafe } from '../core/httpClient';
+import { useAuthContextStateAsync } from '../../components/system/AuthenticationFrame';
 
 export const useCourseOverviewData = (userId?: Id<'User'>, courseId?: Id<'Course'>) => {
 
@@ -44,8 +44,8 @@ export const useMiscApiService = (globalEventManager: GlobalEventManagerType) =>
     const useCurrentCourseItemCode = () => {
 
         const currentRoute = useGetCurrentAppRoute();
-        const state = useAuthStateContext();
-        const isEnabled = !currentRoute.isUnauthorized && state === 'authenticated';
+        const { authState } = useAuthContextStateAsync();
+        const isEnabled = !currentRoute.isUnauthorized && !currentRoute.isSurvey && authState === 'authenticated';
 
         const qr = QueryService
             .useXQueryNew<CurrentCourseDataDTO>(apiRoutes.misc.getCurrentCourseData, { isEnabled });

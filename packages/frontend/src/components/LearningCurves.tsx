@@ -8,6 +8,7 @@ import { FlexFloat } from './controls/FlexFloat';
 import { TabPanel } from './courseDetails/TabPanel';
 import { EpistoHeader } from './EpistoHeader';
 
+/* TODO: REMOVE */
 export const LearningCurves = () => {
 
     const [currentTab, setCurrentTab] = useState(0);

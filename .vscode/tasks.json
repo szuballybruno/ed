@@ -27,24 +27,95 @@
         },
         {
             "type": "shell",
-            "label": "run backend",
+            "label": "run server-api",
             "command": "yarn start",
             "problemMatcher": [],
             "options": {
-                "cwd": "${workspaceFolder}/packages/backend"
+                "cwd": "${workspaceFolder}/packages/server-api"
             },
             "presentation": {
                 "group": "run"
             }
+        },
+        {
+            "type": "shell",
+            "label": "build-serve-client",
+            "command": "yarn build-serve-client",
+            "problemMatcher": [],
+            "presentation": {
+                "group": "run"
+            }
+        },
+        {
+            "type": "shell",
+            "label": "run-server-api-testing",
+            "command": "yarn start-server",
+            "problemMatcher": [],
+            "presentation": {
+                "group": "testing"
+            }
+        },
+        {
+            "type": "shell",
+            "label": "mon-server-services",
+            "command": "yarn tsc --watch",
+            "options": {
+                "cwd": "${workspaceFolder}/packages/server-services"
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "group": "deps"
+            }
+        },
+        {
+            "type": "shell",
+            "label": "local_epitest_compose",
+            "command": "local_epitest_compose.ps1",
+            "options": {
+                "cwd": "${workspaceFolder}/scripts"
+            },
+            "problemMatcher": []
+        },
+        {
+            "type": "shell",
+            "label": "compose_up_epitest",
+            "command": "compose_up_epitest.ps1",
+            "options": {
+                "cwd": "${workspaceFolder}/scripts"
+            },
+            "problemMatcher": []
         },
         // run-all
         {
             "label": "run-all",
             "dependsOn": [
                 "run frontend",
-                "run backend",
+                "run server-api",
             ],
             "problemMatcher": []
+        },
+        // mon-tests
+        {
+            "label": "run-mon-tests",
+            "type": "shell",
+            "command": "yarn mon-tests",
+            "problemMatcher": [],
+            "presentation": {
+                "group": "testing"
+            }
+        },
+        // testdev
+        {
+            "label": "testdev",
+            "dependsOn": [
+                "run-server-api-testing",
+                "run-mon-tests",
+                "mon-server-services"
+            ],
+            "problemMatcher": [],
+            "presentation": {
+                "group": "testing"
+            }
         },
         // startprod
         {
@@ -61,9 +132,9 @@
         },
         // build deps
         {
-            "label": "builddeps",
+            "label": "build-deps",
             "type": "shell",
-            "command": "yarn builddeps",
+            "command": "yarn build-deps",
             "problemMatcher": [],
             "presentation": {
                 "group": "deps"
@@ -84,9 +155,9 @@
         {
             "label": "localMigration",
             "type": "shell",
-            "command": "powershell.exe ./localMigration.ps1",
+            "command": "powershell.exe ./local_migen_and_migration.ps1",
             "options": {
-                "cwd": "${workspaceFolder}/deploy"
+                "cwd": "${workspaceFolder}/scripts"
             },
             "problemMatcher": [],
             "presentation": {

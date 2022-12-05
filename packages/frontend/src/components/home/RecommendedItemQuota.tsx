@@ -1,3 +1,4 @@
+import { Responsivity } from '../../helpers/responsivity';
 import { Environment } from '../../static/Environemnt';
 import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
@@ -6,16 +7,34 @@ import { EpistoProgressBar } from '../controls/EpistoProgressBar';
 
 export const RecommendedItemQuota = (props: {
     completedCount: number,
-    recommendedItemCount: number,
+    recommendedItemCount: number | null,
     isDeadlineSet?: boolean,
-    isDaily?: boolean
+    isDaily?: boolean,
 } & EpistoFlex2Props) => {
 
     const { isDaily, completedCount, recommendedItemCount, isDeadlineSet, ...css } = props;
 
-    const label = isDaily
-        ? 'Napi ajánlott videók'
-        : 'Heti ajánlott videók';
+    const isStrictMode = recommendedItemCount;
+    const isLightMode = !recommendedItemCount && completedCount;
+    const isMobile = Responsivity.useIsMobileView();
+
+    const label = (() => {
+
+        if (isStrictMode && isDaily)
+            return 'Napi ajánlott videók';
+
+        if (isLightMode && isDaily)
+            return 'Ma megtekintett videók';
+
+        if (isStrictMode && !isDaily)
+            return 'Heti ajánlott videók';
+
+        if (isLightMode && !isDaily)
+            return 'A héten megtekintett videók';
+
+        return 'Ma megtekintett videók';
+
+    })();
 
     return (
         <EpistoFlex2
@@ -53,26 +72,30 @@ export const RecommendedItemQuota = (props: {
                             marginRight: 2
                         }}>
 
-                        {completedCount}/{recommendedItemCount}
-                    </EpistoFont>
+                        {(() => {
 
-                    <EpistoFont
-                        fontSize="fontSmall">
-                        videó
+                            if (isStrictMode)
+                                return `${completedCount || 0}/${recommendedItemCount || 0} videó`;
+
+                            if (isLightMode)
+                                return `${completedCount} db`;
+
+                            return '0';
+                        })()}
                     </EpistoFont>
                 </EpistoFlex2>
             </EpistoFlex2>
 
-            <EpistoProgressBar
+            {!!recommendedItemCount && <EpistoProgressBar
                 value={Math.min(100, completedCount / recommendedItemCount * 100)}
                 variant="determinate"
                 style={{
-                    width: isDeadlineSet
+                    width: isDeadlineSet || isMobile
                         ? '100%'
                         : '80%',
                     marginTop: 10,
                     height: '5px'
-                }} />
+                }} />}
         </EpistoFlex2>
     );
 };

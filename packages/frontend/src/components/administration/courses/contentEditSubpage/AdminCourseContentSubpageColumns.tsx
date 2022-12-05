@@ -40,7 +40,7 @@ const useSetAndCommitCellValue = <TRow, TKey, TField extends keyof TRow,>() => {
 
 export const useGridColumns = (
     modules: ModuleEditDTO[],
-    openDialog: (type: 'video' | 'exam', data?: RowSchema) => void,
+    openDialog: (type: 'video' | 'exam', data: RowSchema) => void,
     itemsMutatorFunctions: IXMutatorFunctions<CourseContentItemAdminDTO, 'versionCode', VersionCode>,
     onSelectVideoFile: (row: RowSchema) => void,
     currentDropModuleId: Id<'ModuleVersion'> | null,
@@ -118,7 +118,7 @@ export const useGridColumns = (
 
         return itemsMutatorFunctions
             .getMutatedItems()
-            .any(x => x.itemType === 'final') && row.itemType.type !== 'final';
+            .some(x => x.itemType === 'final') && row.itemType.type !== 'final';
     }, [itemsMutatorFunctions]);
 
     const handleViewDetails = useCallback((row: RowSchema) => {

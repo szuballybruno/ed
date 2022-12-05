@@ -14,7 +14,7 @@ import { EpistoFont } from './controls/EpistoFont';
 import { EpistoImage } from './controls/EpistoImage';
 import { MUI } from './controls/MUIControls';
 import { ContentPane } from './pageRootContainer/ContentPane';
-import { useRefetchUserAsync } from './system/AuthenticationFrame';
+import { useAuthContextStateAsync } from './system/AuthenticationFrame';
 import { LoadingFrame } from './system/LoadingFrame';
 import { PasswordEntry, usePasswordEntryState } from './universal/PasswordEntry';
 
@@ -42,7 +42,7 @@ export const RegistrationPage = () => {
     const { registerUserAsync, registerUserState } = useRegisterUser();
     const { registerInvitedUserAsync, registerInvitedUserState } = useRegisterInvitedUser();
 
-    const { refetchAuthHandshake } = useRefetchUserAsync();
+    const { refetchAuthHandshake } = useAuthContextStateAsync();
 
     const handleRegisterUser = async () => {
 
@@ -69,7 +69,7 @@ export const RegistrationPage = () => {
             showNotification(translatableTexts.registrationPage.successfulRegistration);
             const { permissions } = await refetchAuthHandshake();
 
-            if (permissions.any(x => x === 'BYPASS_SURVEY')) {
+            if (permissions.some(x => x === 'BYPASS_SURVEY')) {
 
                 navigate2(applicationRoutes.homeRoute);
             }

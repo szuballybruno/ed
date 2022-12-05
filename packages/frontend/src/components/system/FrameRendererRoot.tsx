@@ -3,6 +3,8 @@ import { Logger } from '../../static/Logger';
 import { XDialogHosterFrame } from '../lib/XDialog/XDialogHosterFrame';
 import { VideoPlayerFullscreenContextFrame } from '../player/watch/videoPlayer/VideoPlayerFullscreenFrame';
 import { AuthenticationFrame } from './AuthenticationFrame';
+import { AuthFirewallFrame } from './AuthFirewallFrame';
+import { AuthorizationFrame } from './AuthorizationFrame';
 import { AutoScrollFrame } from './AutoScrollContext';
 import { CurrentCourseItemFrame } from './CurrentCourseItemFrame';
 import { ErrorDialogFrame } from './ErrorDialogFrame';
@@ -100,6 +102,8 @@ const getFrames = (): FrameType[] => {
         ProgressierFrame,
         VideoPlayerFullscreenContextFrame,
         AuthenticationFrameWrapper,
+        AuthorizationFrame,
+        AuthFirewallFrame,
         CurrentCourseItemFrame,
         QuerySubscriptionFrameWrapper,
     ];

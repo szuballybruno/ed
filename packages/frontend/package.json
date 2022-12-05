@@ -3,6 +3,12 @@
   "version": "0.3.0",
   "private": true,
   "license": "UNLICENSED",
+  "scripts": {
+    "start": "tsc && vite --port 80",
+    "build": "tsc && vite build --mode local",
+    "build-serve": "yarn build && yarn serve",
+    "serve": "serve -l 80 -s build"
+  },
   "dependencies": {
     "@chakra-ui/image": "2.0.11",
     "@chakra-ui/input": "2.0.11",
@@ -12,7 +18,7 @@
     "@chakra-ui/system": "2.2.12",
     "@emotion/react": "11.10.4",
     "@emotion/styled": "11.10.4",
-    "@episto/xcore": "1.0.0",
+    "@episto/x-core": "1.0.0",
     "@episto/commonlogic": "1.0.0",
     "@episto/commontypes": "1.0.0",
     "@episto/communication": "1.0.0",
@@ -51,20 +57,6 @@
     "screenfull": "6.0.2",
     "word-wrap": "1.2.3"
   },
-  "scripts": {
-    "start": "tsc && vite --port 80",
-    "build": "tsc && vite build",
-    "serve-vite": "vite preview",
-    "start-cra": "cross-env DISABLE_ESLINT_PLUGIN=true react-app-rewired start",
-    "build-cra": "tsc -v && cross-env DISABLE_ESLINT_PLUGIN=true GENERATE_SOURCEMAP=false react-app-rewired build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "lint": "eslint . --ext .ts --ext .tsx",
-    "lintfix": "eslint . --ext .ts --ext .tsx --fix",
-    "serve": "serve -l 80 -s build",
-    "startprod": "yarn build && serve -l 80 -s build",
-    "cleaninstall": "yarn --force --no-lockfile"
-  },
   "browserslist": {
     "production": [
       ">0.2%",
@@ -95,7 +87,6 @@
     "eslint-plugin-react": "7.31.10",
     "eslint-plugin-react-hooks": "4.6.0",
     "react-app-rewired": "2.2.1",
-    "typescript": "4.8.4",
     "vite": "^3.2.4",
     "vite-tsconfig-paths": "^3.6.0"
   },

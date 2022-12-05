@@ -5,12 +5,22 @@
   ],
   "scripts": {
     "bootstrap": "lerna bootstrap",
-    "builddeps": "lerna run build --ignore={@episto/server-tests,@episto/backend,@episto/frontend,@eutil/script-producer,@eutil/pipeline-generator}",
-    "buildfront": "lerna run build --ignore={@episto/server-tests,@episto/backend,@eutil/script-producer,@eutil/pipeline-generator}",
-    "buildback": "lerna run build --ignore={@episto/server-tests,@episto/frontend,@eutil/script-producer,@eutil/pipeline-generator}"
+    "build-deps": "lerna run build --ignore={@episto/tests-server,@episto/server-api,@episto/frontend,@episto/script-producer,@episto/pipeline-generator}",
+    "build-server": "lerna run build --scope=@episto/server-api --include-dependencies",
+    "build-client": "lerna run build --scope=@episto/frontend --include-dependencies",
+    "build-serve-client": "lerna run build-serve --scope=@episto/frontend",
+    "build-tests-server": "lerna run build --scope=@episto/tests-server --include-dependencies",
+    "start-tests-server": "lerna run start --scope=@episto/tests-server",
+    "start-tests-client": "lerna run start-cy --scope=@episto/tests-client",
+    "open-cy": "lerna run open-cy --scope=@episto/tests-client",
+    "mon-tests-server": "lerna run mon --scope=@episto/tests-server",
+    "start-server": "lerna run start --scope=@episto/server-api",
+    "build-script-producer": "lerna run build --scope=@episto/script-producer --include-dependencies",
+    "start-script-producer": "lerna run start --scope=@episto/script-producer"
   },
   "devDependencies": {
-    "lerna": "6.0.3"
+    "lerna": "6.0.3",
+    "typescript": "4.9.3"
   },
   "name": "epistogram"
 }

@@ -32,12 +32,6 @@ export const useUserCoursesColumns = ({
 
         const getImagePath = (path: string) => Environment.getAssetUrl(`images/${path}.png`);
 
-        if (mode === 'auto')
-            return [getImagePath('autopilot'), 'Automata mód'];
-
-        if (mode === 'balanced')
-            return [getImagePath('balancedmode'), 'Kiegyensúlyozott mód'];
-
         if (mode === 'light')
             return [getImagePath('lightmode'), 'Megengedő mód'];
 
@@ -219,7 +213,7 @@ export const useUserCoursesColumns = ({
             resizable: true
         })
         .add({
-            field: 'lagBehindPercentage',
+            field: 'relativeUserPaceDiff',
             headerName: 'Becsült lemaradás',
             width: 150,
             resizable: true,

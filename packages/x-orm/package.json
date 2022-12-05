@@ -1,0 +1,20 @@
+{
+    "name": "@episto/x-orm",
+    "version": "1.0.0",
+    "private": true,
+    "license": "UNLICENSED",
+    "main": "./dist/index.js",
+    "typings": "./dist/index.d.ts",
+    "type": "module",
+    "scripts": {
+        "watch": "tsc --watch",
+        "start": "tsc",
+        "build": "tsc"
+    },
+    "dependencies": {
+        "@episto/x-core": "1.0.0"
+    },
+    "devDependencies": {
+        "@types/node": "18.11.9"
+    }
+}

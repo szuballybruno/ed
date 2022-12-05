@@ -161,7 +161,7 @@ export const AdminCourseContentSubpage = () => {
     // module edit dialog logic
     const canDelete = useCallback((moduleVersionId: Id<'ModuleVersion'>) => !itemsMutatorState
         .mutatedItems
-        .any(x => x.moduleVersionId === moduleVersionId), []);
+        .some(x => x.moduleVersionId === moduleVersionId), []);
 
     const moduleEditDialogLogic = useModuleEditDialogLogic({
         canDelete,
@@ -252,9 +252,9 @@ export const AdminCourseContentSubpage = () => {
     /**
      * Open item edit dialog  
      */
-    const openItemEditDialog = useCallback((type: 'video' | 'exam' | 'module', row?: RowSchema) => {
+    const openItemEditDialog = useCallback((type: 'video' | 'exam', row: RowSchema) => {
 
-        const data = row?.data!;
+        const data = row.data;
         const isVideo = type === 'video';
         const defaultModuleId = modules
             .firstOrNull(x => x.moduleVersionId === data.moduleVersionId)?.moduleId ?? null;
@@ -296,15 +296,17 @@ export const AdminCourseContentSubpage = () => {
 
             setCurrentItem(params);
         }
+    }, [modules]);
 
-        // open module edit dialog
-        else {
+    /**
+     * Open module edit dialog 
+     */
+    const openModuleEditDialog = useCallback(() => {
 
-            moduleEditDialogLogic
-                .dialogLogic
-                .openDialog();
-        }
-    }, [moduleEditDialogLogic.dialogLogic, modules]);
+        moduleEditDialogLogic
+            .dialogLogic
+            .openDialog();
+    }, [moduleEditDialogLogic]);
 
     /**
      * Add item row  
@@ -435,7 +437,7 @@ export const AdminCourseContentSubpage = () => {
             disabled: isDetailsPaneOpen
         },
         {
-            action: () => openItemEditDialog('module'),
+            action: () => openModuleEditDialog(),
             icon: <Edit ref={ref} />,
             title: translatableTexts.administration.courseContentSubpage.editModules,
             disabled: isDetailsPaneOpen
@@ -445,7 +447,7 @@ export const AdminCourseContentSubpage = () => {
             title: 'Mentés',
             disabled: !isSaveEnabled || isDetailsPaneOpen
         }
-    ], [handleSaveAsync, isSaveEnabled, openItemEditDialog, isDetailsPaneOpen]);
+    ], [handleSaveAsync, isSaveEnabled, openModuleEditDialog, isDetailsPaneOpen]);
 
     /**
      * Get grid columns
@@ -468,7 +470,7 @@ export const AdminCourseContentSubpage = () => {
             {/* add buttons popper */}
             <AddNewItemPopper
                 isOpen={isAddButtonsPopperOpen}
-                hasModules={nonPretestModules.any()}
+                hasModules={nonPretestModules.length > 0}
                 targetElement={ref?.current}
                 onAddItem={handleAddRow}
                 onClose={closeAddPopper} />
@@ -482,7 +484,6 @@ export const AdminCourseContentSubpage = () => {
 
             {/* actual page content  */}
             <CourseAdministartionFrame
-                noHeightOverflow
                 disabled={isDetailsPaneOpen}
                 isAnySelected={isAnySelected}>
 

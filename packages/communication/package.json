@@ -4,12 +4,11 @@
     "private": true,
     "license": "UNLICENSED",
     "main": "./dist/index.js",
-    "module": "./dist/index.js",
     "typings": "./dist/index.d.ts",
     "type": "module",
     "scripts": {
         "start": "tsc",
-        "build-old": "tsc -v && tsc",
+        "build-old": "tsc",
         "build": "rollup --config rollup.config.js"
     },
     "dependencies": {
@@ -20,6 +19,6 @@
         "@types/node": "18.11.9",
         "rollup": "3.4.0",
         "rollup-plugin-dts": "5.0.0",
-        "typescript": "4.8.4"
+        "rollup-plugin-sourcemaps": "^0.6.3"
     }
 }

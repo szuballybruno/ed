@@ -8,7 +8,6 @@ import { setPageTitle, useIsMatchingCurrentRoute } from '../../../static/fronten
 import { useIntParam } from '../../../static/locationHelpers';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
-import { EpistoFont } from '../../controls/EpistoFont';
 import { useAdminBreadcrumbsContext } from '../breadcrumbsHeader/AdminBreadcrumbsContext';
 import { AdminBreadcrumbsHeader } from '../breadcrumbsHeader/AdminBreadcrumbsHeader';
 import { AdminCourseList } from './AdminCourseList';
@@ -16,12 +15,10 @@ import { AdminCourseList } from './AdminCourseList';
 export const CourseAdministartionFrame = ({
     children,
     isAnySelected,
-    noHeightOverflow,
     disabled
 }: {
     children?: ReactNode,
     isAnySelected: boolean,
-    noHeightOverflow?: boolean,
     disabled?: boolean
 }) => {
 
@@ -93,26 +90,22 @@ export const CourseAdministartionFrame = ({
             </AdminBreadcrumbsHeader>
 
             {/* course list */}
-            <AdminCourseList
-                noOverflow={noHeightOverflow}
-                onCourseClick={navToCourse}
-                courses={courses} />
+            <EpistoFlex2
+                flex="1"
+                maxWidth={isAnySelected ? '100px' : '9999px'}>
+                <AdminCourseList
+                    onCourseClick={navToCourse}
+                    courses={courses} />
+            </EpistoFlex2>
 
             {/* content pane */}
-            {isAnySelected
-                ? children
-                : <EpistoFlex2
-                    justify="center"
-                    className="whall"
-                    bg="white">
+            <EpistoFlex2
+                flex="1"
+                overflow="hidden"
+                maxWidth={isAnySelected ? '9999px' : '0px'}>
 
-                    <EpistoFont
-                        style={{
-                            marginTop: '50px'
-                        }}>
-                        Kérlek válassz ki egy kurzust
-                    </EpistoFont>
-                </EpistoFlex2>}
+                {children}
+            </EpistoFlex2>
         </EpistoFlex2>
     );
 };

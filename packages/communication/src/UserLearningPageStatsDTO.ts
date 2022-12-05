@@ -3,7 +3,7 @@ import { Id } from '@episto/commontypes';
 export class UserLearningPageStatsDTO {
     userId: Id<'User'>;
     userEmail: string;
-    totalLagBehindPercentage: number | null;
+    avgRelativeUserPaceDiff: number | null;
     videosToBeRepeatedCount: number;
     questionsToBeRepeatedCount: number;
     completedVideoCount: number;

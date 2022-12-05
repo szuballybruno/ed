@@ -29,7 +29,7 @@ export const useTryCatchWrapper = (getMessageFromCode: (code: ErrorCodeType, def
 
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-    const getWrappedAction = (action: () => Promise<void>) => {
+    const getWrappedAction = useCallback((action: () => Promise<void>) => {
 
         return async () => {
 
@@ -50,10 +50,42 @@ export const useTryCatchWrapper = (getMessageFromCode: (code: ErrorCodeType, def
                     setErrorMessage(customMessage);
             }
         };
-    };
+    }, [getMessageFromCode]);
 
     return {
         getWrappedAction,
+        errorMessage
+    };
+};
+
+export const useSafeWrapper = (
+    action: () => Promise<void>,
+    getMessageFromCode: (code: ErrorCodeType, defaultMessage: string) => string | undefined) => {
+
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+    const wrappedAction = useCallback(async () => {
+
+        try {
+
+            await action();
+            setErrorMessage(null);
+        }
+        catch (e: any) {
+
+            const defaultMessage = 'Ismeretlen hiba tortent!';
+            const errorWithCode = (e as ErrorWithCode);
+            const customMessage = errorWithCode.code
+                ? getMessageFromCode(errorWithCode.code, defaultMessage) ?? null
+                : null;
+
+            if (customMessage)
+                setErrorMessage(customMessage);
+        }
+    }, [action, getMessageFromCode]);
+
+    return {
+        wrappedAction,
         errorMessage
     };
 };
