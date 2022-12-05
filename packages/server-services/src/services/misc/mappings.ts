@@ -973,6 +973,7 @@ const marray = [
             secondaryColor: company.secondaryColor,
             logoUrl: urlService.getAssetUrlNullable(logoFilePath),
             coverUrl: urlService.getAssetUrlNullable(coverFilePath),
+            isSurveyRequired: company.isSurveyRequired
         })),
     // TODO: unused mapping, check DTO's and endpoints too
     epistoMappingsBuilder

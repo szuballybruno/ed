@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useMemo } from 'react';
 import { applicationRoutes } from '../configuration/applicationRoutes';
 import { Responsivity } from '../helpers/responsivity';
+import { CompanyApiService } from '../services/api/CompanyApiService';
 import { useRegisterUserViaActivationCode } from '../services/api/registrationApiService';
 import { useNavigation } from '../services/core/navigatior';
 import { showNotification } from '../services/core/notifications';
 import { Environment } from '../static/Environemnt';
-import { useTryCatchWrapper } from '../static/frontendHelpers';
+import { useSafeWrapper } from '../static/frontendHelpers';
 import { LocationHelpers } from '../static/locationHelpers';
 import { translatableTexts } from '../static/translatableTexts';
 import { EpistoButton } from './controls/EpistoButton';
@@ -54,6 +55,9 @@ export const RegisterViaActivationCodePage = () => {
     const activationCodeEntryState = useEpistoEntryState({ isMandatory: true });
     const passwordState = usePasswordEntryState();
 
+    const { companyDetails } = CompanyApiService
+        .useCompanyDetailsByDomain();
+
     /**
      * Set activation code
      */
@@ -68,33 +72,6 @@ export const RegisterViaActivationCodePage = () => {
         activationCodeEntryState
             .setValue(activationCode);
     }, [activationCode, activationCodeEntryState]);
-
-    /**
-     * Prepare error handler wrapper 
-     * for register function
-     */
-    const { errorMessage, getWrappedAction } = useTryCatchWrapper((code, defaultMsg) => {
-
-        if (code === 'activation_code_issue') {
-
-            activationCodeEntryState
-                .setErrorMsg(translatableTexts.misc.wrongActivationCode);
-        }
-        else if (code === 'email_taken') {
-
-            emailEntryState
-                .setErrorMsg(translatableTexts.misc.wrongEmailAddress);
-        }
-        else if (code === 'username_invalid') {
-
-            usernameEntryState
-                .setErrorMsg(translatableTexts.misc.wrongUsername);
-        }
-        else {
-
-            return defaultMsg;
-        }
-    });
 
     /**
      * Is validation ok
@@ -149,10 +126,10 @@ export const RegisterViaActivationCodePage = () => {
     /**
      * Register async 
      */
-    const handleRegisterAsync = getWrappedAction(async () => {
+    const handleRegisterAsync = useCallback(async () => {
 
         if (!isAllValid)
-            return;
+            throw new Error('Not all fields are valid!');
 
         await registerUserViaActivationCodeAsync({
             activationCode: activationCodeEntryState.value,
@@ -165,8 +142,52 @@ export const RegisterViaActivationCodePage = () => {
         });
 
         showNotification(translatableTexts.registerViaActivationCodePage.successfulSignup);
-        navigate2(applicationRoutes.homeRoute);
-    });
+
+        navigate2(companyDetails?.isSurveyRequired
+            ? applicationRoutes.surveyRoute
+            : applicationRoutes.homeRoute);
+    }, [
+        navigate2,
+        registerUserViaActivationCodeAsync,
+        isAllValid,
+        activationCodeEntryState.value,
+        companyDetails?.isSurveyRequired,
+        emailEntryState.value,
+        firstNameEntryState.value,
+        lastNameEntryState.value,
+        usernameEntryState.value,
+        passwordState.password,
+        passwordState.passwordCompare
+    ]);
+
+    /**
+     * Prepare error handler wrapper 
+     * for register function
+     */
+    const getMessageFromCode = useCallback((code, defaultMsg) => {
+
+        if (code === 'activation_code_issue') {
+
+            activationCodeEntryState
+                .setErrorMsg(translatableTexts.misc.wrongActivationCode);
+        }
+        else if (code === 'email_taken') {
+
+            emailEntryState
+                .setErrorMsg(translatableTexts.misc.wrongEmailAddress);
+        }
+        else if (code === 'username_invalid') {
+
+            usernameEntryState
+                .setErrorMsg(translatableTexts.misc.wrongUsername);
+        }
+        else {
+
+            return defaultMsg;
+        }
+    }, [activationCodeEntryState, emailEntryState, usernameEntryState]);
+
+    const { errorMessage, wrappedAction: handleRegisterSafeAsync } = useSafeWrapper(handleRegisterAsync, getMessageFromCode);
 
     return <>
 
@@ -312,7 +333,7 @@ export const RegisterViaActivationCodePage = () => {
                                 backgroundColor: isAllValid ? '#324658' : undefined,
                                 height: 60
                             }}
-                            isDisabled={!isAllValid}
+                            // isDisabled={!isAllValid}
                             onClick={handleRegisterAsync}
                             variant="colored">
 

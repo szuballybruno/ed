@@ -8,4 +8,5 @@ export class CompanyPublicDTO {
     backdropColor: string | null;
     logoUrl: string | null;
     coverUrl: string | null;
+    isSurveyRequired: boolean;
 }
