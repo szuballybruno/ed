@@ -3,7 +3,7 @@
 --
 
 -- Dumped from database version 14.4
--- Dumped by pg_dump version 14.4
+-- Dumped by pg_dump version 14.5
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -3637,46 +3637,6 @@ ALTER SEQUENCE public.course_access_bridge_id_seq OWNED BY public.course_access_
 
 
 --
--- Name: course_admin_short_view; Type: VIEW; Schema: public; Owner: dev_service_user
---
-
-CREATE VIEW public.course_admin_short_view AS
- WITH exam_count AS (
-         SELECT count(ev.id) AS exam_count,
-            mv.course_version_id
-           FROM (public.exam_version ev
-             LEFT JOIN public.module_version mv ON ((mv.id = ev.module_version_id)))
-          GROUP BY mv.course_version_id
-        )
- SELECT lcvv.course_id,
-    cd.title,
-    (co.deletion_date IS NOT NULL) AS is_deleted,
-    cc.id AS category_id,
-    cc.name AS category_name,
-    scc.id AS sub_category_id,
-    scc.name AS sub_category_name,
-    u.id AS teacher_id,
-    u.first_name AS teacher_first_name,
-    u.last_name AS teacher_last_name,
-    sf.file_path AS cover_file_path,
-    cvcv.video_count,
-    ec.exam_count
-   FROM (((((((((public.latest_course_version_view lcvv
-     LEFT JOIN public.course_version cv ON ((cv.id = lcvv.version_id)))
-     LEFT JOIN public.course co ON ((co.id = cv.course_id)))
-     LEFT JOIN public.course_data cd ON ((cd.id = cv.course_data_id)))
-     LEFT JOIN public.storage_file sf ON ((sf.id = cd.cover_file_id)))
-     LEFT JOIN public."user" u ON ((u.id = cd.teacher_id)))
-     LEFT JOIN public.course_category cc ON ((cc.id = cd.category_id)))
-     LEFT JOIN public.course_category scc ON ((scc.id = cd.sub_category_id)))
-     LEFT JOIN public.course_video_count_view cvcv ON ((cvcv.course_id = co.id)))
-     LEFT JOIN exam_count ec ON ((ec.course_version_id = lcvv.version_id)))
-  ORDER BY lcvv.course_id;
-
-
-ALTER TABLE public.course_admin_short_view OWNER TO dev_service_user;
-
---
 -- Name: course_admin_content_view; Type: VIEW; Schema: public; Owner: dev_service_user
 --
 
@@ -3724,7 +3684,7 @@ CREATE VIEW public.course_admin_content_view AS
                   GROUP BY civ_1.video_version_id, civ_1.exam_version_id) sq
           ORDER BY sq.question_count DESC
         )
- SELECT casv.course_id,
+ SELECT lcvv.course_id,
     lcvv.version_id AS course_version_id,
     civ.module_name,
     civ.module_order_index,
@@ -3748,13 +3708,12 @@ CREATE VIEW public.course_admin_content_view AS
         END) AS warnings,
     vd.video_file_length_seconds AS video_length,
     vd.audio_text AS video_audio_text
-   FROM (((((public.course_admin_short_view casv
-     LEFT JOIN public.latest_course_version_view lcvv ON ((lcvv.course_id = casv.course_id)))
+   FROM ((((public.latest_course_version_view lcvv
      LEFT JOIN public.course_item_view civ ON ((civ.course_version_id = lcvv.version_id)))
      LEFT JOIN items it ON (((it.video_version_id = civ.video_version_id) OR (it.exam_version_id = civ.exam_version_id))))
      LEFT JOIN public.video_version vv ON ((vv.id = it.video_version_id)))
      LEFT JOIN public.video_data vd ON ((vd.id = vv.video_data_id)))
-  ORDER BY casv.course_id, civ.module_order_index, civ.item_order_index;
+  ORDER BY lcvv.course_id, civ.module_order_index, civ.item_order_index;
 
 
 ALTER TABLE public.course_admin_content_view OWNER TO dev_service_user;
@@ -3798,6 +3757,58 @@ CREATE VIEW public.course_admin_detailed_view AS
 
 
 ALTER TABLE public.course_admin_detailed_view OWNER TO dev_service_user;
+
+--
+-- Name: course_company_bridge_view; Type: VIEW; Schema: public; Owner: dev_service_user
+--
+
+CREATE VIEW public.course_company_bridge_view AS
+ SELECT cab.id,
+    cab.company_id,
+    cab.course_id
+   FROM public.course_access_bridge cab
+  WHERE (cab.company_id IS NOT NULL);
+
+
+ALTER TABLE public.course_company_bridge_view OWNER TO dev_service_user;
+
+--
+-- Name: course_admin_list_view; Type: VIEW; Schema: public; Owner: dev_service_user
+--
+
+CREATE VIEW public.course_admin_list_view AS
+ WITH course_users_cte AS (
+         SELECT co_1.id AS course_id,
+            ccbv_1.company_id,
+            COALESCE(count(*), (0)::bigint) AS user_count
+           FROM (((public.course co_1
+             JOIN public.course_company_bridge_view ccbv_1 ON ((ccbv_1.course_id = co_1.id)))
+             LEFT JOIN public.user_course_bridge ucb ON ((ucb.course_id = co_1.id)))
+             LEFT JOIN public."user" u ON (((u.id = ucb.user_id) AND (u.company_id = ccbv_1.company_id))))
+          GROUP BY co_1.id, ccbv_1.company_id
+        )
+ SELECT lcvv.course_id,
+    ccbv.company_id,
+    cd.title,
+    cc.id AS category_id,
+    cc.name AS category_name,
+    sf.file_path AS cover_file_path,
+    cuc.user_count
+   FROM (((((((((public.latest_course_version_view lcvv
+     LEFT JOIN public.course_version cv ON ((cv.id = lcvv.version_id)))
+     LEFT JOIN public.course co ON ((co.id = cv.course_id)))
+     LEFT JOIN public.course_data cd ON ((cd.id = cv.course_data_id)))
+     JOIN public.course_company_bridge_view ccbv ON ((ccbv.course_id = co.id)))
+     LEFT JOIN public.storage_file sf ON ((sf.id = cd.cover_file_id)))
+     LEFT JOIN public.course_category cc ON ((cc.id = cd.category_id)))
+     LEFT JOIN public.course_category scc ON ((scc.id = cd.sub_category_id)))
+     LEFT JOIN public.course_video_count_view cvcv ON ((cvcv.course_id = co.id)))
+     LEFT JOIN course_users_cte cuc ON (((cuc.course_id = co.id) AND (cuc.company_id = ccbv.company_id))))
+  WHERE (co.deletion_date IS NULL)
+  ORDER BY lcvv.course_id;
+
+
+ALTER TABLE public.course_admin_list_view OWNER TO dev_service_user;
 
 --
 -- Name: exam_highest_score_answer_session_view; Type: VIEW; Schema: public; Owner: dev_service_user
@@ -59265,95 +59276,17 @@ COPY public."like" (id, deletion_date, creation_date, user_id, comment_id) FROM 
 --
 
 COPY public.migration_version (version_name, creation_date) FROM stdin;
-migration9	2022-10-25 14:18:37.372615+00
-migration10	2022-10-25 15:38:31.886901+00
-migration11	2022-10-26 09:45:40.794962+00
-migration12	2022-10-28 09:10:47.224444+00
-migration13	2022-10-28 13:30:12.783209+00
-migration14	2022-10-31 16:31:41.209532+00
-migration15	2022-11-11 14:57:22.180753+00
-migration16	2022-11-20 17:07:02.220879+00
-migration17	2022-11-20 19:06:37.11624+00
-migration18	2022-11-21 13:31:39.440885+00
-migration19	2022-11-21 13:31:39.440885+00
-migration9	2022-10-25 14:18:37.372615+00
-migration10	2022-10-25 15:38:31.886901+00
-migration11	2022-10-26 09:45:40.794962+00
-migration12	2022-10-28 09:10:47.224444+00
-migration13	2022-10-28 13:30:12.783209+00
-migration14	2022-10-31 16:31:41.209532+00
-migration15	2022-11-11 14:57:22.180753+00
-migration16	2022-11-20 17:07:02.220879+00
-migration17	2022-11-20 19:06:37.11624+00
-migration18	2022-11-21 13:31:39.440885+00
-migration19	2022-11-21 13:31:39.440885+00
-migration9	2022-10-25 14:18:37.372615+00
-migration10	2022-10-25 15:38:31.886901+00
-migration11	2022-10-26 09:45:40.794962+00
-migration12	2022-10-28 09:10:47.224444+00
-migration13	2022-10-28 13:30:12.783209+00
-migration14	2022-10-31 16:31:41.209532+00
-migration15	2022-11-11 14:57:22.180753+00
-migration16	2022-11-20 17:07:02.220879+00
-migration17	2022-11-20 19:06:37.11624+00
-migration18	2022-11-21 13:31:39.440885+00
-migration19	2022-11-21 13:31:39.440885+00
-migration9	2022-10-25 14:18:37.372615+00
-migration10	2022-10-25 15:38:31.886901+00
-migration11	2022-10-26 09:45:40.794962+00
-migration12	2022-10-28 09:10:47.224444+00
-migration13	2022-10-28 13:30:12.783209+00
-migration14	2022-10-31 16:31:41.209532+00
-migration15	2022-11-11 14:57:22.180753+00
-migration16	2022-11-20 17:07:02.220879+00
-migration17	2022-11-20 19:06:37.11624+00
-migration18	2022-11-21 13:31:39.440885+00
-migration19	2022-11-21 13:31:39.440885+00
-migration9	2022-10-25 14:18:37.372615+00
-migration10	2022-10-25 15:38:31.886901+00
-migration11	2022-10-26 09:45:40.794962+00
-migration12	2022-10-28 09:10:47.224444+00
-migration13	2022-10-28 13:30:12.783209+00
-migration14	2022-10-31 16:31:41.209532+00
-migration15	2022-11-11 14:57:22.180753+00
-migration16	2022-11-20 17:07:02.220879+00
-migration17	2022-11-20 19:06:37.11624+00
-migration18	2022-11-21 13:31:39.440885+00
-migration19	2022-11-21 13:31:39.440885+00
-migration9	2022-10-25 14:18:37.372615+00
-migration10	2022-10-25 15:38:31.886901+00
-migration11	2022-10-26 09:45:40.794962+00
-migration12	2022-10-28 09:10:47.224444+00
-migration13	2022-10-28 13:30:12.783209+00
-migration14	2022-10-31 16:31:41.209532+00
-migration15	2022-11-11 14:57:22.180753+00
-migration16	2022-11-20 17:07:02.220879+00
-migration17	2022-11-20 19:06:37.11624+00
-migration18	2022-11-21 13:31:39.440885+00
-migration19	2022-11-21 13:31:39.440885+00
-migration9	2022-10-25 14:18:37.372615+00
-migration10	2022-10-25 15:38:31.886901+00
-migration11	2022-10-26 09:45:40.794962+00
-migration12	2022-10-28 09:10:47.224444+00
-migration13	2022-10-28 13:30:12.783209+00
-migration14	2022-10-31 16:31:41.209532+00
-migration15	2022-11-11 14:57:22.180753+00
-migration16	2022-11-20 17:07:02.220879+00
-migration17	2022-11-20 19:06:37.11624+00
-migration18	2022-11-21 13:31:39.440885+00
-migration19	2022-11-21 13:31:39.440885+00
-migration9	2022-10-25 14:18:37.372615+00
-migration10	2022-10-25 15:38:31.886901+00
-migration11	2022-10-26 09:45:40.794962+00
-migration12	2022-10-28 09:10:47.224444+00
-migration13	2022-10-28 13:30:12.783209+00
-migration14	2022-10-31 16:31:41.209532+00
-migration15	2022-11-11 14:57:22.180753+00
-migration16	2022-11-20 17:07:02.220879+00
-migration17	2022-11-20 19:06:37.11624+00
-migration18	2022-11-21 13:31:39.440885+00
-migration19	2022-11-21 13:31:39.440885+00
-migration20	2022-11-30 14:00:18.980062+00
+migration10	2022-12-02 15:59:43.778551+00
+migration11	2022-12-02 15:59:43.778551+00
+migration12	2022-12-02 15:59:43.778551+00
+migration13	2022-12-02 15:59:43.778551+00
+migration14	2022-12-02 15:59:43.778551+00
+migration15	2022-12-02 15:59:43.778551+00
+migration16	2022-12-02 15:59:43.778551+00
+migration17	2022-12-02 15:59:43.778551+00
+migration18	2022-12-02 15:59:43.778551+00
+migration19	2022-12-02 15:59:43.778551+00
+migration20	2022-12-02 15:59:43.778551+00
 \.
 
 
@@ -109014,6 +108947,14 @@ ALTER TABLE ONLY public.course_completion
 
 ALTER TABLE ONLY public.exam_completion
     ADD CONSTRAINT exam_completion_unique UNIQUE (answer_session_id);
+
+
+--
+-- Name: migration_version migration_version_version_name_unique; Type: CONSTRAINT; Schema: public; Owner: dev_service_user
+--
+
+ALTER TABLE ONLY public.migration_version
+    ADD CONSTRAINT migration_version_version_name_unique UNIQUE (version_name);
 
 
 --
