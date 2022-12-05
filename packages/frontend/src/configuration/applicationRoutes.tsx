@@ -128,7 +128,8 @@ export const getApplicationRoutes = () => {
         surveyRoute: {
             title: translatableTexts.routeTitles.survey,
             route: new EpistoRoute('/', 'survey'),
-            ignoreAccessAppRestriction: true
+            ignoreAccessAppRestriction: true,
+            isUnauthorized: true
         },
 
         setNewPasswordRoute: {
