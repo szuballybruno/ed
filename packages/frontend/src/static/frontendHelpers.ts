@@ -540,6 +540,14 @@ export const useGetCurrentAppRoute = () => {
     return matchingRoute;
 };
 
+export const useCurrentAppRouteCheck = (checkFn: (route: ApplicationRoute) => boolean) => {
+
+    const currentRoute = useGetCurrentAppRoute();
+    const result = useMemo(() => checkFn(currentRoute), [checkFn, currentRoute]);
+
+    return useMemo(() => result, [result]);
+};
+
 /**
  * @deprecated BIG BIG NONON
  */

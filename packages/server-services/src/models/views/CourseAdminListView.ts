@@ -26,4 +26,10 @@ export class CourseAdminListView {
 
     @XViewColumn()
     userCountCurrent: number; 
+
+    @XViewColumn()
+    userCountAll: number; 
+
+    @XViewColumn()
+    userCountAllChange: number; 
 }

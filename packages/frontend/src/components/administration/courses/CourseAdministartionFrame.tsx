@@ -22,7 +22,7 @@ export const CourseAdministartionFrame = ({
     disabled?: boolean
 }) => {
 
-    const { activeCompany, activeCompanyId } = useAdminBreadcrumbsContext();
+    const { activeCompanyId } = useAdminBreadcrumbsContext();
 
     // util
     const { navigate3 } = useNavigation();
@@ -31,7 +31,8 @@ export const CourseAdministartionFrame = ({
     const isMatchingCurrentUrl = useIsMatchingCurrentRoute();
 
     // http
-    const { courses, coursesStatus, coursesError, refetchCoursesAsync } = CourseApiService.useAdminCourseList('');
+    const { courses, coursesStatus, coursesError, refetchCoursesAsync } = CourseApiService
+        .useAdminCourseList(activeCompanyId!, !!activeCompanyId);
 
     // dt
     const currentCourse = courses

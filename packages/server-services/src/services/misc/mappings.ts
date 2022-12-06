@@ -1052,6 +1052,8 @@ const marray = [
                             id: view.categoryId,
                             name: view.categoryName
                         },
+                        allUserCount: view.userCountAll,
+                        allUserCountChange: view.userCountAllChange,
                         completedByUsersCount: view.userCountCompleted,
                         currentUserCount: view.userCountCurrent,
                         averageUserPerformance: 'average',

@@ -469,12 +469,9 @@ export class CourseService {
      * Returns admin list items
      */
     async getAdminCoursesAsync(
-        principalId: PrincipalId
+        principalId: PrincipalId,
+        companyId: Id<'Company'>
     ) {
-
-        const companyId = await this
-            ._companyService
-            .getPrincipalCompanyId(principalId);
 
         const courseAdminShortViews = await this._ormService
             .query(CourseAdminListView, { companyId })
