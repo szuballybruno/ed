@@ -482,6 +482,13 @@ export const getSubroutes = (route: ApplicationRoute<any, any>): ApplicationRout
 //     return result;
 // };
 
+export const coalesce = <T,>(obj: T | null, defaultObj: Partial<T>): T => {
+
+    return (obj === null
+        ? defaultObj
+        : obj) as any;
+};
+
 export const useGetCurrentAppRoute = () => {
 
     const currentUrl = useCurrentUrlPathname();
