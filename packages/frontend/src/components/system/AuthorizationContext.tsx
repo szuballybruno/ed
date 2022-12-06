@@ -13,7 +13,8 @@ export const getAuthorizationContextLogic = (_permissionCodes: PermissionCodeTyp
 
     return {
         hasPermission,
-        isAuthenticated: true
+        isAuthenticated: true,
+        permissionCodes: _permissionCodes
     };
 };
 

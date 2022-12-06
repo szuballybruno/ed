@@ -48,7 +48,7 @@ export const useCurrentUserContext = () => {
     return useContext(CurrentUserContext);
 };
 
-export const useAuthContextStateAsync = () => {
+export const useAuthContextState = () => {
 
     return useContext(RefetchUserAsyncContext);
 };

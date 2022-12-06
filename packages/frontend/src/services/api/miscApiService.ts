@@ -5,7 +5,7 @@ import { GlobalEventManagerType } from '../../components/system/EventManagerFram
 import { useGetCurrentAppRoute } from '../../static/frontendHelpers';
 import { QueryService } from '../../static/XQuery/XQueryReact';
 import { usePostDataUnsafe } from '../core/httpClient';
-import { useAuthContextStateAsync } from '../../components/system/AuthenticationFrame';
+import { useAuthContextState } from '../../components/system/AuthenticationFrame';
 
 export const useCourseOverviewData = (userId?: Id<'User'>, courseId?: Id<'Course'>) => {
 
@@ -44,7 +44,7 @@ export const useMiscApiService = (globalEventManager: GlobalEventManagerType) =>
     const useCurrentCourseItemCode = () => {
 
         const currentRoute = useGetCurrentAppRoute();
-        const { authState } = useAuthContextStateAsync();
+        const { authState } = useAuthContextState();
         const isEnabled = !currentRoute.isUnauthorized && !currentRoute.isSurvey && authState === 'authenticated';
 
         const qr = QueryService

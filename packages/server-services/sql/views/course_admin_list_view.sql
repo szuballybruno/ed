@@ -2,24 +2,26 @@ WITH
 course_users_cte AS 
 (
 	SELECT 
-		co.id course_id,
 		ccbv.company_id,
-		COALESCE(COUNT(*), 0) user_count
+		co.id course_id,
+		COUNT(*)::int user_count_all,
+		SUM((ucb.stage_name = 'finished')::int)::int user_count_completed,
+		SUM((ucb.stage_name != 'finished')::int)::int user_count_current
 	FROM public.course co
 	
-	INNER JOIN public.course_company_bridge_view ccbv
+	LEFT JOIN public.course_company_bridge_view ccbv
 	ON ccbv.course_id = co.id
 	
 	LEFT JOIN public.user_course_bridge ucb
 	ON ucb.course_id = co.id
 	
-	LEFT JOIN public.user u
+	INNER JOIN public.user u
 	ON u.id = ucb.user_id
 	AND u.company_id = ccbv.company_id
 	
 	GROUP BY 
-		co.id,
-		ccbv.company_id
+		ccbv.company_id,
+		co.id
 )
 SELECT 
 	lcvv.course_id,
@@ -28,7 +30,8 @@ SELECT
 	cc.id category_id,
 	cc.name category_name,
 	sf.file_path cover_file_path,
-	cuc.user_count
+	COALESCE(cuc.user_count_completed, 0) user_count_completed,
+	COALESCE(cuc.user_count_current, 0) user_count_current
 FROM public.latest_course_version_view lcvv
 
 LEFT JOIN public.course_version cv 

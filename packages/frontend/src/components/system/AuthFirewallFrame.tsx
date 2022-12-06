@@ -1,18 +1,14 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
-import { useAuthHandshake } from '../../services/api/authenticationApiService';
 import { useNavigation } from '../../services/core/navigatior';
 import { PropsWithChildren, useCurrentUrlPathname, useGetCurrentAppRoute } from '../../static/frontendHelpers';
 import { Logger } from '../../static/Logger';
+import { useAuthContextState } from './AuthenticationFrame';
 import { useAuthorizationContext } from './AuthorizationContext';
-import { useEventManagerContext } from './EventManagerFrame';
 
 export const AuthFirewallFrame = ({ children }: PropsWithChildren): JSX.Element => {
 
-    const globalEventManager = useEventManagerContext();
-    const authHanshakeState = useAuthHandshake(globalEventManager);
-    const { authState } = authHanshakeState;
-    
+    const { authState } = useAuthContextState();
     const dest = useCurrentUrlPathname();
     const { loginRoute, surveyRoute } = applicationRoutes;
     const { navigate2 } = useNavigation();
@@ -20,78 +16,87 @@ export const AuthFirewallFrame = ({ children }: PropsWithChildren): JSX.Element 
     const { hasPermission } = useAuthorizationContext();
     const isUnauthorized = !!currentRoute.isUnauthorized;
 
-    // check for error before render, 
-    // redirect to login if necessary
-    useEffect(() => {
+    /**
+     * Check authentication 
+     */
+    const authorizationResult = useMemo((): 'OK' | 'WAIT' | (() => void) => {
 
-        const isCurrentRouteLogin = currentRoute.route.getAbsolutePath() === applicationRoutes.loginRoute.route.getAbsolutePath();
+        const isCurrentRouteLogin = currentRoute
+            .route
+            .getAbsolutePath() === applicationRoutes
+                .loginRoute
+                .route
+                .getAbsolutePath();
+
+        Logger.logScoped('AUTH', `Current route: ${currentRoute.route.getAbsolutePath()} IsUnrestricted: ${isUnauthorized}`);
 
         // error
         if (authState === 'error' && !isCurrentRouteLogin) {
 
             Logger.logScoped('AUTH', `Auth state: ${authState}. Redirecting to login.`);
-
-            navigate2(loginRoute);
+            return () => navigate2(loginRoute);
         }
-    }, [authState, navigate2, loginRoute, currentRoute]);
 
-    Logger.logScoped('AUTH', `Current route: ${currentRoute.route.getAbsolutePath()} IsUnrestricted: ${isUnauthorized}`);
+        // if loading return blank page
+        if (authState === 'loading') {
 
-    // if loading return blank page
-    if (authState === 'loading') {
+            Logger.logScoped('AUTH', `Auth state: ${authState}. Rendering empty div until loaded.`);
+            return 'WAIT';
+        }
 
-        Logger.logScoped('AUTH', `Auth state: ${authState}. Rendering empty div until loaded.`);
+        // check authentication 
+        if (authState === 'forbidden' && !isUnauthorized) {
 
-        return <div></div>;
-    }
-
-    // check authentication 
-    if (authState === 'forbidden' && !isUnauthorized) {
-
-        Logger.logScoped('AUTH', `Auth state: ${authState}. Redirecting...`);
-
-        navigate2(loginRoute, {}, { dest });
-
-        return <div></div>;
-    }
-
-    // check authorization
-    const authCheckResult = (() => {
+            Logger.logScoped('AUTH', `Auth state: ${authState}. Redirecting...`);
+            return () => navigate2(loginRoute, {}, { dest });
+        }
 
         // if skip survey is enabled, let execution continue
-        const bypassSurvey = hasPermission('BYPASS_SURVEY');
-        if (bypassSurvey)
-            return;
+        if (hasPermission('BYPASS_SURVEY')) {
 
-        // access app restriction is ignored, 
-        // for example on the survey route itself, 
-        // let execution continue
-        const ignoreAccessAppRestriction = !!currentRoute.isSurvey;
-        if (ignoreAccessAppRestriction)
-            return;
+            Logger.logScoped('AUTH', `Auth state: ${authState}. Survey bypassed. Rendering...`);
+            return 'OK';
+        }
 
-        // if route is unauthorized, 
-        // for example on register routes, 
-        // let execution continue
-        if (isUnauthorized)
-            return;
+        // current route is unauthorized
+        if (isUnauthorized) {
+
+            Logger.logScoped('AUTH', `Auth state: ${authState}. Route unauthoirized. Rendering...`);
+            return 'OK';
+        }
+
+        // current route is survey
+        if (currentRoute.isSurvey) {
+
+            Logger.logScoped('AUTH', `Auth state: ${authState}. Route isSurvey. Rendering...`);
+            return 'OK';
+        }
 
         /**
-         * No conditions matched, nothing left to do 
-         * but to navigate user back to survey
+         * No exception matched, redirecting to survey
          */
         Logger.logScoped('AUTH', 'Redirecting to survey...');
-        navigate2(surveyRoute);
+        return () => navigate2(surveyRoute);
 
-        return <div></div>;
-    })();
+    }, [authState, navigate2, loginRoute, currentRoute, dest, isUnauthorized, hasPermission, surveyRoute]);
 
-    if (authCheckResult)
-        return authCheckResult;
+    /**
+     * Exec auth returned navigation function 
+     */
+    useEffect(() => {
 
-    Logger.logScoped('AUTH', `Auth state: ${authState}. Rendering content...`);
+        if (typeof authorizationResult === 'function')
+            authorizationResult();
+    }, [authorizationResult]);
 
-    return <>
-        {children}
-    </>;
+    /**
+     * Render
+     */
+    return (
+        <>
+            {authorizationResult === 'OK'
+                ? children
+                : <></>}
+        </>
+    );
 };
