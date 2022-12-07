@@ -104,7 +104,7 @@ const StatisticsCard = ({
             {/* something */}
             {additionalInfo && <EpistoFlex2
                 align="center"
-                p="5px 10px 5px 0"
+                padding="5px 10px 5px 0"
                 position="absolute"
                 top="0"
                 right="0"
@@ -153,7 +153,7 @@ const StatisticsCard = ({
                             }}
                             alt=""
                             src={iconPath} />
-                        : <EpistoFlex2 w='20px' />}
+                        : <EpistoFlex2 width='20px' />}
 
                     {/* texts */}
                     <EpistoFlex2

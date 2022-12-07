@@ -101,18 +101,18 @@ export const AdminUserCourseContentDialog = (props: {
                 justify="space-between"
                 align="center"
                 position="sticky"
-                w="100%"
+                width="100%"
                 top="0"
                 maxH="80px"
-                p="20px 30px 20px 30px"
+                padding="20px 30px 20px 30px"
                 className="mildShadow"
                 zIndex="1000">
 
                 <EpistoFlex2
                     align="center"
-                    h="50px">
+                    height="50px">
                     <EpistoFlex2
-                        h="50px"
+                        height="50px"
                         direction="column"
                         justify='center'
                         mr="20px">

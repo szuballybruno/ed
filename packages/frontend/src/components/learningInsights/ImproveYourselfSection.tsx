@@ -31,7 +31,7 @@ export const ImproveYourselfSection = () => {
 
         <EpistoFlex2
             flex='1'
-            p='20px'
+            padding='20px'
             align='center'>
 
             <EpistoFont>
@@ -43,7 +43,7 @@ export const ImproveYourselfSection = () => {
 
         <EpistoFlex2
             flex='1'
-            p='20px'>
+            padding='20px'>
 
             <EpistoGrid
                 className='whall'

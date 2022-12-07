@@ -144,10 +144,10 @@ export const CourseOverviewStats = ({
                 <EpistoFlex2
                     flex="1"
                     direction="column"
-                    p="20px">
+                    padding="20px">
 
                     <EpistoFlex2
-                        h="30px"
+                        height="30px"
                         align="center"
                         justify="center">
 
@@ -158,7 +158,7 @@ export const CourseOverviewStats = ({
 
                     {/* navigation buttons */}
                     <EpistoFlex2
-                        h="30px"
+                        height="30px"
                         align="center"
                         justify="center">
 

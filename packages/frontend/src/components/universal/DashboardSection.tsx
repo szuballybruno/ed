@@ -36,13 +36,13 @@ export const DashboardSection = ({
                     variant="strongSub"
                     fontWeight='600'
                     type='strong'
-                    m="5px 10px 0 10px">
+                    margin="5px 10px 0 10px">
 
                     {headerContent}
                 </EpistoHeader>
 
                 <FlexFloat
-                    p='0 10px'
+                    padding='0 10px'
                     width='100%'
                     {...css}>
 
@@ -57,7 +57,7 @@ export const DashboardSection = ({
             className="roundBorders"
             background="transparent"
             direction="column"
-            p="10px"
+            padding="10px"
             boxShadow={variant === 'noShadow' ? 'none' : undefined}
             {...css}>
 
@@ -65,14 +65,14 @@ export const DashboardSection = ({
                 text={title}
                 showDivider={showDivider}
                 variant="strongSub"
-                m="5px 10px 5px 10px">
+                margin="5px 10px 5px 10px">
 
                 {headerContent}
             </EpistoHeader>
 
             <EpistoFlex2
                 flex='1'
-                p='0 10px'>
+                padding='0 10px'>
 
                 {children}
             </EpistoFlex2>

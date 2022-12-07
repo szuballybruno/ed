@@ -28,7 +28,7 @@ export const EpistoHeader = ({
         <EpistoFlex2
             align='center'
             justify='space-between'
-            h={textHeight ?? '25px'}>
+            height={textHeight ?? '25px'}>
 
             <EpistoFont
                 fontSize={variant === 'giant'

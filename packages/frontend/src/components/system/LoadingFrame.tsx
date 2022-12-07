@@ -129,7 +129,7 @@ export const LoadingFrame = (props: EpistoFlex2Props & LoadingFramePropsType) =>
             width="100%"
             top="0"
             left="0"
-            p="30px">
+            padding="30px">
 
             {/* error */}
             {currentLoadingState === 'error' && <EpistoFlex2

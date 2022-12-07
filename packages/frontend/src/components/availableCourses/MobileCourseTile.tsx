@@ -19,7 +19,7 @@ export const MobileCourseTile = (props: {
     return <EpistoFlex2
         className='roundBorders tinyShadow'
         background='var(--transparentWhite70)'
-        p='5px'
+        padding='5px'
         mb='5px'
         direction='column'>
 
@@ -33,9 +33,6 @@ export const MobileCourseTile = (props: {
                     width='100px'>
 
                     <EpistoImage
-                        style={{
-                            filter: 'contrast(40%)'
-                        }}
                         src={course.thumbnailImageURL} />
 
                     <EpistoFlex2
@@ -44,16 +41,17 @@ export const MobileCourseTile = (props: {
                         justify='center'
                         position='absolute'>
 
-                        <img
+                        <EpistoImage
                             alt=""
                             src={Environment.getAssetUrl(
                                 '/icons/play2.svg'
                             )}
+                            className="square30"
                             style={{
-                                width: '25px',
-                                height: '25px',
-                            }}
-                        />
+                                background: 'white',
+                                borderRadius: '50%',
+                                padding: '4px 2px 4px 5px'
+                            }} />
                     </EpistoFlex2>
 
                 </EpistoFlex2>

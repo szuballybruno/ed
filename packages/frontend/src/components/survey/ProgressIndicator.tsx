@@ -11,7 +11,7 @@ export const LinearProgressWithLabel = (props: EpistoLinearProgressProps & { val
             flex='1'
             align='center'
             minWidth="calc(100% - 35px)"
-            h='10px'
+            height='10px'
             mr='5px'>
 
             <EpistoProgressBar

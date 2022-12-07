@@ -16,7 +16,7 @@ export const TailingAdminButtons = ({
             justify="right"
             width="100%"
             direction='row'
-            p="10px">
+            padding="10px">
 
             {/* delete button */}
             {onDeleteCallback && <EpistoButton

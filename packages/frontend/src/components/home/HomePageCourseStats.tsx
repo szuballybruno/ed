@@ -10,12 +10,30 @@ import StatisticsCard, { StatisticsCardProps } from '../statisticsCard/Statistic
 import { UserProgressChart } from '../universal/charts/UserProgressChart';
 import { NoProgressChartYet } from './NoProgressChartYet';
 
-export const HomePageCourseStats = (props: {
+const NoCourseStatsYet = () => (
+    <EpistoFlex2
+        align='center'
+        justify='center'
+        textAlign='center'
+        style={{
+            boxSizing: 'border-box',
+            gap: '10px',
+            gridAutoFlow: 'row dense',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
+            gridAutoRows: '160px'
+        }}>
+
+        Itt fognak megjelenni a kurzussal kapcsolatos statisztikáid, amint elkezdesz egy új kurzust
+    </EpistoFlex2>
+)
+
+export const HomePageCourseStats = ({
+    activeCoursesPaging,
+    isSmallDesktop
+}: {
     activeCoursesPaging: PagingType<UserActiveCourseDTO>,
     isSmallDesktop: boolean
 }) => {
-
-    const { activeCoursesPaging, isSmallDesktop } = props;
 
     const courseId = activeCoursesPaging?.currentItem?.courseId;
 
@@ -46,6 +64,8 @@ export const HomePageCourseStats = (props: {
 
         return '0';
     })();
+
+    const canShowChart = userProgressDataIsValid && userProgressData.dates.length > 5;
 
     const dailyLabel = (() => {
 
@@ -126,20 +146,23 @@ export const HomePageCourseStats = (props: {
             minHeight='400px'
             width='100%'
             align='center'
-            flexWrap={isSmallDesktop ? 'wrap' : 'nowrap'}
+            wrap="wrap"
+            // flexWrap={isSmallDesktop ? 'wrap' : 'nowrap'}
             justify='space-between'
             flex='1'>
 
+            {/* recommended  */}
             <EpistoFlex2
-                flex='2'>
+                flex='1'>
 
                 {recommendedItemQuota
                     ? <Grid
+                        flex="1"
                         background='transparent'
                         boxShadow="unset"
-                        w={isSmallDesktop ? '100%' : '550px'}
-                        minW={'550px'}
-                        p={isSmallDesktop ? '10px 0' : '10px'}
+                        width={isSmallDesktop ? '100%' : '550px'}
+                        minWidth={'550px'}
+                        padding={isSmallDesktop ? '10px 0' : '10px'}
                         style={{
                             boxSizing: 'border-box',
                             gap: '10px',
@@ -166,34 +189,22 @@ export const HomePageCourseStats = (props: {
                             )}
 
                     </Grid>
-                    : <EpistoFlex2
-                        align='center'
-                        justify='center'
-                        textAlign='center'
-                        style={{
-                            boxSizing: 'border-box',
-                            gap: '10px',
-                            gridAutoFlow: 'row dense',
-                            gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
-                            gridAutoRows: '160px'
-                        }}>
-
-                        Itt fognak megjelenni a kurzussal kapcsolatos statisztikáid, amint elkezdesz egy új kurzust
-                    </EpistoFlex2>}
+                    : <NoCourseStatsYet />}
             </EpistoFlex2>
 
             {/* chart item  */}
             <FlexFloat
-                flex='3'
+                flex='1'
                 background='transparent'
                 boxShadow="unset"
-                minW='500px'
-                h={isSmallDesktop ? '400px' : '100%'}
+                minWidth='500px'
+                height={isSmallDesktop ? '400px' : '100%'}
                 direction="column"
-                p="10px" >
+                padding="10px" >
 
-                {(userProgressDataIsValid && userProgressData.dates.length > 5)
-                    ? <UserProgressChart userProgress={userProgressData!} />
+                {canShowChart
+                    ? <UserProgressChart
+                        userProgress={userProgressData!} />
                     : <NoProgressChartYet />}
             </FlexFloat>
         </EpistoFlex2>

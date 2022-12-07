@@ -100,7 +100,7 @@ export const EpistoDialog = <TParams = any>({
             {/* buttons */}
             {dialogButtons.length > 0 && <>
                 <EpistoFlex2
-                    p="10px"
+                    padding="10px"
                     flexDirection="row-reverse">
 
                     {dialogButtons

@@ -30,7 +30,7 @@ export const ModuleView = (params: {
             justify="center">
 
             <EpistoFlex2
-                p='20px'
+                padding='20px'
                 direction="row"
                 align="center">
 
@@ -50,7 +50,7 @@ export const ModuleView = (params: {
 
                 <EpistoFlex2
                     flex='2'
-                    p='20px'
+                    padding='20px'
                     direction="column"
                     justify="center">
 
@@ -69,7 +69,7 @@ export const ModuleView = (params: {
             height="60px"
             borderTop="1px solid var(--mildGrey)"
             justify="flex-end"
-            p="10px">
+            padding="10px">
 
             <EpistoButton variant="colored"
                 onClick={startModule}

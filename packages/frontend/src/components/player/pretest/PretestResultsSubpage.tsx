@@ -25,8 +25,8 @@ export const PretestDateInfo = (props: {
         my="10px">
 
         <EpistoImage
-            h="30px"
-            w="30px"
+            height="30px"
+            width="30px"
             mr="10px"
             src={Environment.getAssetUrl('/images/tempomatdatechange.png')}
         />
@@ -100,7 +100,7 @@ export const PretestResultsSubpage = () => {
                 flex="1"
                 direction="column"
                 minHeight={isMobile ? undefined : 'calc(100vh - 100px)'}
-                p="20px"
+                padding="20px"
                 align='center'
                 justify='center'
                 className="roundBorders largeSoftShadow"
@@ -111,7 +111,7 @@ export const PretestResultsSubpage = () => {
                     top='20px'
                     align="center"
                     justify="center"
-                    h="50px">
+                    height="50px">
 
                     <EpistoFont
                         fontSize="fontLargePlus"

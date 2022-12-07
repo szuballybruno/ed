@@ -25,12 +25,12 @@ export const VideoContent = () => {
         width="100%">
         <FlexListItem
             align="center"
-            p="5px"
+            padding="5px"
             thumbnailContent={<Image
                 className="square70"
                 src={Environment.getAssetUrl('file_extension_icons/001-xlsx-1.svg')}
                 objectFit="cover"
-                m="10px" />}
+                margin="10px" />}
             midContent={<Flex className="whall"
                 direction="column">
                 <Flex ml={10}>

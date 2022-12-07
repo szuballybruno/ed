@@ -13,7 +13,7 @@ export const EditSection = (props: {
 
     return <EpistoFlex2
         direction="column"
-        p="20px"
+        padding="20px"
         mb="10px"
         bg="white"
         {...css}>

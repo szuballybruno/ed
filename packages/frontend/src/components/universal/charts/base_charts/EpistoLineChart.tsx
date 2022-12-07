@@ -24,7 +24,7 @@ export const EpistoLineChart = (props: {
 
     const {
         title,
-        dataset,
+        dataset: datasets,
         xAxisData,
         xAxisLabel,
         yAxisLabel,
@@ -56,7 +56,7 @@ export const EpistoLineChart = (props: {
                     ? Object.assign(
                         {
                             show: true,
-                            data: dataset.map((data) => ({
+                            data: datasets.map((data) => ({
                                 name: data.name
                             }))
                         },
@@ -83,54 +83,30 @@ export const EpistoLineChart = (props: {
                         },
                         yAxis)
                     : undefined,
-            series: dataset.map((d, index) => {
-                return Object.assign(
-                    d,
-                    {
-                        color: 'lightgreen',
-                        showSymbol: seriesOptions.showSymbol,
-                        symbol: seriesOptions.symbol,
-                        symbolSize: seriesOptions.symbolSize,
-                        lineStyle: {
-                            color: d.lineStyle?.color ? d.lineStyle.color : undefined,
-                            type: d.lineStyle?.type ? d.lineStyle.type : undefined,
-                            width: seriesOptions?.lineStyle?.width,
-                            shadowColor: seriesOptions?.lineStyle?.shadowColor,
-                            shadowOffsetX: seriesOptions?.lineStyle?.shadowOffsetX,
-                            shadowOffsetY: seriesOptions?.lineStyle?.shadowOffsetY,
-                            shadowBlur: seriesOptions?.lineStyle?.shadowBlur
+            series: datasets
+                .map((dataset, index) => {
+                    return Object.assign(
+                        dataset,
+                        {
+                            color: 'lightgreen',
+                            showSymbol: seriesOptions.showSymbol,
+                            symbol: seriesOptions.symbol,
+                            symbolSize: seriesOptions.symbolSize,
+                            lineStyle: {
+                                color: dataset.lineStyle?.color ? dataset.lineStyle.color : undefined,
+                                type: dataset.lineStyle?.type ? dataset.lineStyle.type : undefined,
+                                width: seriesOptions?.lineStyle?.width,
+                                shadowColor: seriesOptions?.lineStyle?.shadowColor,
+                                shadowOffsetX: seriesOptions?.lineStyle?.shadowOffsetX,
+                                shadowOffsetY: seriesOptions?.lineStyle?.shadowOffsetY,
+                                shadowBlur: seriesOptions?.lineStyle?.shadowBlur
+                            }
+                        },
+                        {
+                            type: 'line'
                         }
-                    },
-                    {
-                        type: 'line'
-                    }
-                ); /* Object.assign(
-                    {
-                        data: d.data,
-                        name: d.name
-                    },
-                    {
-                        showSymbol: seriesOptions.showSymbol,
-                        symbol: seriesOptions.symbol,
-                        symbolSize: seriesOptions.symbolSize,
-                        lineStyle: {
-                            //color: d.lineStyle?.color ? d.lineStyle.color : seriesOptions?.lineStyle?.color,
-                            //type: d.lineStyle?.type ? d.lineStyle.type : seriesOptions?.lineStyle?.type,
-                            width: seriesOptions?.lineStyle?.width,
-                            shadowColor: seriesOptions?.lineStyle?.shadowColor,
-                            shadowOffsetX: seriesOptions?.lineStyle?.shadowOffsetX,
-                            shadowOffsetY: seriesOptions?.lineStyle?.shadowOffsetY,
-                            shadowBlur: seriesOptions?.lineStyle?.shadowBlur
-                        }
-                    }
-                ); */ /* Object.assign(
-                    d,
-                    seriesOptions,
-                    {
-                        type: 'line'
-                    }
-                ); */ /* */
-            })
+                    );
+                })
         }}
         style={{
             ...defaultStyle,

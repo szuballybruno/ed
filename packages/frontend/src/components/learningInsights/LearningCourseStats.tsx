@@ -59,7 +59,7 @@ export const LearningCourseStats = () => {
                     minColumnWidth="250px"
                     auto="fill"
                     gap="10px"
-                    p="10px">
+                    padding="10px">
                     {inProgressCourses
                         .map((course, index) => {
                             return <LearningCourseStatsTile
@@ -80,7 +80,7 @@ export const LearningCourseStats = () => {
                         })
                     }
                 </EpistoGrid>
-                : <EpistoFlex2 p="100px">
+                : <EpistoFlex2 padding="100px">
 
                     <EpistoFont fontSize="fontHuge">
 
@@ -100,7 +100,7 @@ export const LearningCourseStats = () => {
                     minColumnWidth="300px"
                     auto="fill"
                     gap="10px"
-                    p="10px">
+                    padding="10px">
 
                     {completedCourses
                         .map((course, index) => <LearningCourseStatsTile
@@ -121,7 +121,7 @@ export const LearningCourseStats = () => {
 
                 </EpistoGrid>
 
-                : <EpistoFlex2 p="100px">
+                : <EpistoFlex2 padding="100px">
 
                     <EpistoFont fontSize="fontHuge">
 

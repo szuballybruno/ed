@@ -48,14 +48,14 @@ export const AdminUserCourseStatsOverview = ({
 
     return <EpistoFlex2
         direction="column"
-        p="20px"
+        padding="20px"
         flex="1">
 
         <EpistoFlex2
             flex="1">
 
             <EpistoFlex2
-                h="350px"
+                height="350px"
                 flex="1"
                 align="stretch">
 
@@ -106,7 +106,7 @@ export const AdminUserCourseStatsOverview = ({
             </EpistoFlex2>
 
             <EpistoFlex2
-                h="350px"
+                height="350px"
                 className="roundBorders"
                 flex="1"
                 direction="column"

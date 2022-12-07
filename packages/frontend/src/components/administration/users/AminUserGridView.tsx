@@ -395,7 +395,7 @@ export const AminUserGridView = ({
             <Flex
                 justify='space-between'
                 align='center'
-                h='60px'>
+                height='60px'>
 
                 {!isSimpleView && <SegmentedButton
                     paging={filterLogic.presetPaging}

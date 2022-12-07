@@ -27,7 +27,7 @@ export const NavigationLinkList = <TRoute extends ApplicationRoute<any, any>>({
                     key={index}>
 
                     <EpistoFlex2
-                        p="5px 15px"
+                        padding="5px 15px"
                         bg={isCurrent ? 'white' : undefined}
                         align="center"
                         borderLeft={isCurrent ? 'solid 4px var(--mildDeepBlue)' : 'solid 4px transparent'}

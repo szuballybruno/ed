@@ -16,7 +16,7 @@ export const TempomatModeTile = (props: {
     return <EpistoFlex2
         flex="1"
         direction="column"
-        p="10px"
+        padding="10px"
         mx="10px"
         maxW="220px"
         align="center"

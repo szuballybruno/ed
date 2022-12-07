@@ -33,7 +33,7 @@ const ActiveCourseSelectorHeader = ({ activeCoursesPaging }: { activeCoursesPagi
     return (
         <EpistoFlex2
             flex='1'
-            h="30px"
+            height="30px"
             align="center"
             justify="flex-end">
 
@@ -67,7 +67,7 @@ const CoinsAcquiredHeaderContent = ({ coinsAcquired }: { coinsAcquired }) => {
     return (
         <EpistoFlex2
             borderRadius="5px"
-            p="7px"
+            padding="7px"
             align="center">
 
             <EpistoFont>
@@ -144,8 +144,8 @@ const HomePage = () => {
                     <EpistoFlex2
                         className="roundBorders"
                         boxShadow="inset -1px -1px 2px 1px rgba(0,0,0,0.10)"
-                        p="3px"
-                        m="7px 10px 7px 0px"
+                        padding="3px"
+                        margin="7px 10px 7px 0px"
                         bgColor={'var(--epistoTeal)'} />
 
                     <FlexListTitleSubtitle
@@ -187,7 +187,7 @@ const HomePage = () => {
                     isMobile={isMobile}
                     minHeight="350px"
                     maxWidth={!isSmallerThan1320 ? '900px' : undefined}
-                    m={isMobile ? '10px 0' : '0 5px 10px 0'}
+                    margin={isMobile ? '10px 0' : '0 5px 10px 0'}
                     flex={(isMobile || isSmallerThan1320) ? '1' : '3'}>
 
                     {isAnyCourseInProgess

@@ -86,9 +86,9 @@ export const DesktopAvailableCoursesPage = ({
                                 <EpistoFlex2
                                     className="roundBorders"
                                     boxShadow="inset -1px -1px 2px 1px rgba(0,0,0,0.10)"
-                                    p="3px"
+                                    padding="3px"
                                     height="30px"
-                                    m="2px 10px 2px 0px"
+                                    margin="2px 10px 2px 0px"
                                     bgColor={filterProps.filterCategoryId === categoryOption.id
                                         ? 'var(--deepBlue)'
                                         : 'var(--epistoTeal)'} />
@@ -116,7 +116,7 @@ export const DesktopAvailableCoursesPage = ({
                     align="center"
                     justify="space-between"
                     width="100%"
-                    p="0 0 20px 0">
+                    padding="0 0 20px 0">
 
                     {/* toggle buttons */}
                     <MUI.ToggleButtonGroup

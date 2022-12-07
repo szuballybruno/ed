@@ -10,7 +10,7 @@ export const LearningStatisticsSeciton = (props: {
     return <EpistoFlex2 width="100%"
         maxW="100%"
         direction="column"
-        p="20px">
+        padding="20px">
 
         <EpistoHeader variant="sub"
             text={props.title}

@@ -39,7 +39,7 @@ export const LearningCurves = () => {
             background="var(--transparentWhite70)"
             minH="400px"
             mr="10px"
-            p="10px"
+            padding="10px"
             overflow="scroll">
 
 
@@ -49,7 +49,7 @@ export const LearningCurves = () => {
                 text={translatableTexts.learningOverview.learningCurveTitle}
                 showDivider
                 variant="strongSub"
-                m="5px 10px 0 10px" />
+                margin="5px 10px 0 10px" />
 
             <EpistoFlex2 my="10px">
 
@@ -108,7 +108,7 @@ export const LearningCurves = () => {
             background="var(--transparentWhite70)"
             direction="column"
             justify="center"
-            p="10px"
+            padding="10px"
             flex="1"
             minWidth='250px'
             style={{

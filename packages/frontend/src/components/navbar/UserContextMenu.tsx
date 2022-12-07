@@ -91,7 +91,7 @@ export const UserContextMenu = (props: {
                         onClick={menuItem.onClick}>
 
                         <EpistoFlex2 className="whall"
-                            m="5px"
+                            margin="5px"
                             align="center">
                             {menuItem.icon}
 

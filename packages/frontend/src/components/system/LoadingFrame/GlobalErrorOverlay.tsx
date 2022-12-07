@@ -23,7 +23,7 @@ export const GlobalErrorOverlay = ({
                 className="whall">
 
                 <EpistoFlex2
-                    p="30px"
+                    padding="30px"
                     bg="white">
 
                     <EpistoFont>

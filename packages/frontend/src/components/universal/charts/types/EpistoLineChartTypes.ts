@@ -3,6 +3,7 @@ import { EpistoChartLegendType, EpistoChartTooltipType, EpistoChartXAxisType, Ep
 export interface EpistoLineChartSeriesOptionsType extends EpistoChartSeriesOptionsType {
     showSymbol?: boolean,
     symbol?: string,
+    type?: string;
     symbolSize?: number,
     lineStyle?: {
         color?: string,

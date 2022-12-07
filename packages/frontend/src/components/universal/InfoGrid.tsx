@@ -13,7 +13,7 @@ export const InfoGrid = (props: { infos: string[] }) => {
         {infos
             .map((info, i) => <FlexFloat
                 key={i}
-                p="10px"
+                padding="10px"
                 boxShadow="0"
                 borderRadius="0"
                 borderLeft="4px solid var(--epistoTeal)">

@@ -64,7 +64,7 @@ export const LearningCourseStatsTileInfo = (props: {
                 }}
                 value={progressPercentage} />
 
-            <EpistoFlex2 m="0 5px 0 20px">
+            <EpistoFlex2 margin="0 5px 0 20px">
 
                 {`${progressPercentage}%`}
             </EpistoFlex2>

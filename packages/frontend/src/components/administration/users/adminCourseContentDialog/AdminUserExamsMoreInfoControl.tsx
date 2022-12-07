@@ -71,11 +71,10 @@ export const AdminUserExamsMoreInfoControl = (props: {
                     id="answersRoot"
                     direction={'column'}
                     flex={1}
-                    m={'10px 5px 5px 5px'}
+                    margin={'10px 5px 5px 5px'}
                     pb='100px'
-                    h='100%'
-                    boxSizing='border-box'
-                    height='fit-content'>
+                    height='100%'
+                    boxSizing='border-box'>
 
                     {questionsAnswers
                         .map((question, index) => {

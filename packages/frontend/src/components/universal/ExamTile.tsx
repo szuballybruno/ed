@@ -63,7 +63,7 @@ export const ExamTile = (props: {
         overflow="hidden"
         background="var(--transparentWhite70)"
         boxShadow={'1px 1px 5px 2px rgba(255,100,30,0.1)'}
-        p="5px"
+        padding="5px"
         justifyContent="space-between"
         {...css}>
 
@@ -86,7 +86,7 @@ export const ExamTile = (props: {
                         top="0"
                         height="100%"
                         width="100%"
-                        p="4px">
+                        padding="4px">
 
                         <img
                             style={{
@@ -115,7 +115,7 @@ export const ExamTile = (props: {
 
                 <EpistoFlex2
                     direction="column"
-                    p="10px">
+                    padding="10px">
 
                     <EpistoFont>
 
@@ -238,7 +238,7 @@ export const ExamTile = (props: {
             <EpistoFlex2
                 width="100%"
                 justifyContent="space-between"
-                p="5">
+                padding="5">
 
                 {/* <EpistoButton style={{
                     width: "50%",

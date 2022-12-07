@@ -97,7 +97,7 @@ export const LearningStatistics = (props: {
 
         {statsss.map((stat, index) => {
             return <StatisticsCard
-                h='140px'
+                height='140px'
                 key={index}
                 {...stat} />;
         })}

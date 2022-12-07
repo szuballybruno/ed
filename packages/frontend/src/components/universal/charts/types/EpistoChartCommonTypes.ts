@@ -16,7 +16,9 @@ export type EpistoChartXAxisType = {
     type?: string,
     axisLabel?: {
         show?: boolean,
+        interval?: any;
         rotate?: number,
+        showMaxLabel?: boolean;
         margin?: number,
         formatter?: (params: any) => string | string
     },
@@ -26,12 +28,14 @@ export type EpistoChartXAxisType = {
 }
 
 export type EpistoChartYAxisType = {
+    name: string;
     nameLocation?: string,
     nameGap?: number,
     nameTextStyle?: {
         fontWeight: number
     },
-    type?: string
+    type?: string,
+    max?: number
 }
 
 export interface EpistoChartSeriesOptionsType {
@@ -65,6 +69,7 @@ export interface EpistoChartLegendType {
     itemHeight?: number,
     top?: number | string,
     left?: number | string,
+    show?: any;
     textStyle?: {
         fontWeight: number,
         color: string

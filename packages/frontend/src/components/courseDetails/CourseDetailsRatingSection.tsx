@@ -13,7 +13,7 @@ export const CourseDetailsRatingSection = () => {
             <EpistoFlex2 height="100%">
                 <EpistoFlex2 width='70px'
                     height='70px'
-                    m='10px'
+                    margin='10px'
                     className={'circle'}
                     border="2px solid var(--epistoTeal)"
                     bg="var(--deepBlue)"

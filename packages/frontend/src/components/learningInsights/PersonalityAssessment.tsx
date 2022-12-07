@@ -168,7 +168,7 @@ export const PersonalityAssessment = (props: EpistoFlex2Props) => {
                             return <AccordionItem
                                 key={index}
                                 className="roundBorders mildShadow"
-                                p="5px 0"
+                                padding="5px 0"
                                 background="var(--transparentWhite70)"
                                 onClick={() => {
                                     setOpenAccordions([index]);

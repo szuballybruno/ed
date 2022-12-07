@@ -246,8 +246,8 @@ export const ValueLabelComponent = (props: { children: ReactNode, value: any }) 
             label={value}
             placement="top"
             zIndex="9999"
-            h="100px"
-            w="200px">
+            height="100px"
+            width="200px">
 
             {children}
         </Tooltip >
@@ -261,7 +261,7 @@ export const ExamStats = () => {
 
     return <EpistoFlex2 direction="column"
         overflowY="scroll"
-        p="5px">
+        padding="5px">
 
         {/* First statistics card section */}
         <EpistoFlex2 >
@@ -293,7 +293,7 @@ export const ExamStats = () => {
             {/* Video player with hotspots slider */}
             <EpistoFlex2
                 align="flex-start"
-                m="5px 5px 0 0"
+                margin="5px 5px 0 0"
                 position="relative"
                 flex="1">
 
@@ -316,9 +316,9 @@ export const ExamStats = () => {
                     borderRadius="0 0 7px 7px"
                     //background="#FFFFFF"
                     position="absolute"
-                    h="40px"
+                    height="40px"
                     pt="10px"
-                    w="100%"
+                    width="100%"
                     bottom="0">
 
                     <HotspotsSlider valueLabelComponent={ValueLabelComponent} />
@@ -327,13 +327,13 @@ export const ExamStats = () => {
 
             {/* Video statistics */}
             <EpistoFlex2
-                m="5px 0 0 5px"
+                margin="5px 0 0 5px"
                 flex="1">
 
                 <EpistoFlex2
                     direction="column"
                     className="roundBorders"
-                    p="15px"
+                    padding="15px"
                     flex="1"
                     background="var(--transparentWhite70)">
 
@@ -405,8 +405,8 @@ export const ExamStats = () => {
                             <EpistoDivider
                                 orientation="vertical"
                                 background="black"
-                                w="1px"
-                                m="0 10px" />
+                                width="1px"
+                                margin="0 10px" />
 
                             <EpistoFlex2
                                 direction="column"
@@ -452,8 +452,8 @@ export const ExamStats = () => {
             //boxShadow="inset -1px -1px 7px rgba(0,0,0,0.20)"
             color="black"
             showDivider
-            m="10px 0 0 0"
-            w="100%">
+            margin="10px 0 0 0"
+            width="100%">
 
             <EpistoLineChart
                 title=""

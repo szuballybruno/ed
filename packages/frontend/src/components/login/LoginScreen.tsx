@@ -225,7 +225,7 @@ export const LoginScreen = () => {
                                 justify="center"
                                 width={isMobile ? 'calc(100% - 20px)' : undefined}
                                 //height={isMobile ? '100%' : undefined}
-                                p={isMobile ? '20px' : '80px 100px'}
+                                padding={isMobile ? '20px' : '80px 100px'}
                                 maxH={isMobile ? undefined : 'calc(100% - 100px)'}
                                 maxW={isMobile ? undefined : 'calc(100% - 20px)'}
                                 background="var(--transparentWhite70)"

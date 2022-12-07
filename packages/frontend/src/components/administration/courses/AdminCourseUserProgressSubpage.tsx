@@ -377,7 +377,7 @@ export const AdminCourseUserProgressSubpage = () => {
                 <EpistoFlex2
                     justify='flex-end'
                     align='center'
-                    h='60px'>
+                    height='60px'>
 
                     <SegmentedButton
                         paging={filterLogic.presetPaging}

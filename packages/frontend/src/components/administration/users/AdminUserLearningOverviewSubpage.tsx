@@ -35,11 +35,11 @@ const UserStatisticsProgressWithLabel = (props: {
         color={props.isSelected ? 'white' : undefined}
         onClick={props.onClick}
         background={props.isSelected ? 'var(--epistoTeal)' : undefined}
-        w="100%"
+        width="100%"
         mt="10px"
-        h="40px"
+        height="40px"
         align="center"
-        p="5px 15px">
+        padding="5px 15px">
 
         <EpistoFont style={{
             minWidth: 100
@@ -147,25 +147,25 @@ export const AdminUserStatisticsSubpage = ({
                         direction="column"
                         justify="flex-start"
                         flex="4"
-                        p="0 5px 0 0">
+                        padding="0 5px 0 0">
 
                         <EpistoFlex2
                             background="var(--transparentWhite70)"
                             className="roundBorders mildShadow"
                             align="center"
-                            p="10px"
+                            padding="10px"
                             maxH="150px"
                             flex="1"
                             position="relative">
 
                             <EpistoImage
-                                h={'120px'}
-                                w={'120px'}
+                                height={'120px'}
+                                width={'120px'}
                                 src={Environment.getAssetUrl('/images/happyfacechart.png')} />
 
                             <EpistoFlex2
                                 direction="column"
-                                p="10px">
+                                padding="10px">
 
                                 <EpistoFont
                                     style={{
@@ -192,7 +192,7 @@ export const AdminUserStatisticsSubpage = ({
                         </EpistoFlex2>
 
                         <EpistoFlex2
-                            w="100%"
+                            width="100%"
                             mt="20px"
                             direction="column">
 
@@ -224,9 +224,9 @@ export const AdminUserStatisticsSubpage = ({
                     <EpistoFlex2
                         direction="column"
                         flex="5"
-                        p="0 0 10px 20px">
+                        padding="0 0 10px 20px">
 
-                        <EpistoFlex2 h="150px">
+                        <EpistoFlex2 height="150px">
 
                             <StatisticsCard
                                 iconPath={Environment.getAssetUrl('images/learningreport01.png')}
@@ -244,7 +244,7 @@ export const AdminUserStatisticsSubpage = ({
                                 title={texts.statisticsCards.watchedVideosInMonth} />
                         </EpistoFlex2>
 
-                        <EpistoFlex2 p="20px 10px 10px 2px">
+                        <EpistoFlex2 padding="20px 10px 10px 2px">
 
                             {measurementDescriptions[paging.currentIndex]}
                         </EpistoFlex2>
@@ -259,7 +259,7 @@ export const AdminUserStatisticsSubpage = ({
                     auto="fill"
                     gap="15px"
                     minColumnWidth="250px"
-                    p="10px 0">
+                    padding="10px 0">
 
                     {userLearningOverviewData?.inProgressCourses && userLearningOverviewData.inProgressCourses.map((course, index) => {
                         return <LearningCourseStatsTile
@@ -280,7 +280,7 @@ export const AdminUserStatisticsSubpage = ({
             <EditSection
                 title={texts.sectionTitles.averageProgressWithCourses}>
 
-                <EpistoFlex2 p="10px 0">
+                <EpistoFlex2 padding="10px 0">
                     <div
                         style={{
                             width: '80%',
@@ -334,7 +334,7 @@ export const AdminUserStatisticsSubpage = ({
                     <FlexFloat
                         background="var(--transparentWhite70)"
                         direction="column"
-                        p="10px"
+                        padding="10px"
                         minWidth='250px'
                         style={{
                             gridColumn: 'auto / span 2',
@@ -366,7 +366,7 @@ export const AdminUserStatisticsSubpage = ({
                     <FlexFloat
                         background="var(--transparentWhite70)"
                         direction="column"
-                        p="10px"
+                        padding="10px"
                         minWidth='250px'
                         style={{
                             gridColumn: 'auto / span 2',

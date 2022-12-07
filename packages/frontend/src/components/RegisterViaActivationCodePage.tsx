@@ -206,7 +206,7 @@ export const RegisterViaActivationCodePage = () => {
                 maxW="1700px"
                 mx={isMobile ? undefined : '100px'}
                 my={'20px'}
-                p={isMobile ? '10px' : '50px 150px'}
+                padding={isMobile ? '10px' : '50px 150px'}
                 overflow={isMobile ? 'visible' : 'hidden'}
                 position={'relative'}>
 

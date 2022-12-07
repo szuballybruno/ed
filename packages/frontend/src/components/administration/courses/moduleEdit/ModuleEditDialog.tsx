@@ -35,7 +35,7 @@ export const ModuleEditDialog = ({
 
             <EpistoFlex2
                 bg="white"
-                p="15px"
+                padding="15px"
                 direction="column"
                 width="90vw"
                 height="90vh">
