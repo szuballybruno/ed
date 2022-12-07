@@ -1,17 +1,19 @@
 import { ReactNode } from 'react';
 import { EpistoFlex2, EpistoFlex2Props } from '../../controls/EpistoFlex';
-import { EpistoFont } from '../../controls/EpistoFont';
 import { EpistoHeader } from '../../EpistoHeader';
+import { PreviewOverlay } from '../../universal/PreviewOverlay';
 
 export const AdminStatGroup = ({
     title,
     children,
     headerContent,
+    isPreview,
     ...css
 }: {
     title?: string,
     children?: ReactNode,
     headerContent?: ReactNode,
+    isPreview?: boolean
 } & EpistoFlex2Props) => {
 
     return <EpistoFlex2
@@ -23,6 +25,7 @@ export const AdminStatGroup = ({
         className="roundBorders"
         background="var(--transparentWhite70)"
         padding="20px"
+        position="relative"
         {...css}>
 
         {title && <EpistoFlex2
@@ -39,5 +42,8 @@ export const AdminStatGroup = ({
         </EpistoFlex2>}
 
         {children}
+
+        {isPreview && <PreviewOverlay/>}
+
     </EpistoFlex2>;
 };

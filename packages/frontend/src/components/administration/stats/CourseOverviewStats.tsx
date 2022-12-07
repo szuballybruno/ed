@@ -63,18 +63,21 @@ export const CourseOverviewStats = ({
             title: 'Felhasználó jelenleg',
             value: activeUsersCount,
             suffix: 'aktív',
+            isPreview: true
         },
         {
             iconPath: Environment.getAssetUrl('/images/teacherdashboard5.png'),
             title: 'Végezte el a kurzust',
             value: completedUsersCount,
             suffix: 'tanuló',
+            isPreview: true
         },
         {
             iconPath: Environment.getAssetUrl('/images/teacherdashboard6.png'),
             title: 'Hagyta félbe a tanfolyamot',
             value: suspendedUsersCount,
             suffix: 'tanuló',
+            isPreview: true
         },
         {
             iconPath: Environment.getAssetUrl('/images/teacherdashboard7.png'),
@@ -82,19 +85,22 @@ export const CourseOverviewStats = ({
             value: avgCoursePerformancePercentage
                 ? Math.round(avgCoursePerformancePercentage)
                 : null,
-            suffix: '%'
+            suffix: '%',
+            isPreview: true
         },
         {
             iconPath: Environment.getAssetUrl('/images/teacherdashboard8.png'),
             title: 'Nehéznek megjelölve',
             value: difficultVideosCount,
-            suffix: 'videó'
+            suffix: 'videó',
+            isPreview: true
         },
         {
             iconPath: Environment.getAssetUrl('/images/teacherdashboard9.png'),
             title: 'Vár válaszokra a tanártól',
             value: questionsWaitingToBeAnswered,
-            suffix: 'kérdés'
+            suffix: 'kérdés',
+            isPreview: true
         }
     ], [
         activeUsersCount,
@@ -193,15 +199,11 @@ export const CourseOverviewStats = ({
                 gridTemplateColumns="repeat(2, minmax(0, 1fr))">
 
                 {stats
-                    .map(({ iconPath, title, value, suffix }, key) => (
+                    .map((props, key) => (
                         <StatisticsCard
                             key={key}
                             minWidth="180px"
-                            p="10px 0"
-                            iconPath={iconPath}
-                            title={title}
-                            value={value}
-                            suffix={suffix} />
+                            {...props} />
                     ))}
             </EpistoGrid>
         </AdminStatGroup>

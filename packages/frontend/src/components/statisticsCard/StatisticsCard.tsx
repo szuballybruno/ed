@@ -2,13 +2,14 @@ import {
     ArrowDropDown,
     ArrowDropUp,
     ArrowRight,
-    FiberManualRecord, Lock
+    FiberManualRecord
 } from '@mui/icons-material';
 import React, { useState } from 'react';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { FlexFloat } from '../controls/FlexFloat';
+import { PreviewOverlay } from '../universal/PreviewOverlay';
 
 export type StatisticsCardProps = {
     iconPath?: string
@@ -19,7 +20,7 @@ export type StatisticsCardProps = {
     isOpenByDefault?: boolean
     children?: React.ReactNode
     chartSize?: 'normal' | 'large',
-    isComingSoon?: boolean,
+    isPreview?: boolean,
     isMobile?: boolean,
     additionalFunction?: () => void,
     additionalInfo?: {
@@ -31,7 +32,7 @@ export type StatisticsCardProps = {
 
 const StatisticsCard = ({
     iconPath,
-    isComingSoon,
+    isPreview,
     isMobile,
     children,
     additionalFunction,
@@ -96,26 +97,11 @@ const StatisticsCard = ({
             position="relative"
             {...css}>
 
-            {/* locked overlay */}
-            {isComingSoon && <EpistoFlex2
-                title="Ez az adat jelenleg nem áll rendelkezésre. Nézz vissza később."
-                flexDir={'column'}
-                alignItems={'flex-end'}
-                justifyContent={'flex-start'}
-                color={'black'}
-                pos={'absolute'}
-                width="100%"
-                height="100%"
-                borderRadius='5px'
-                bgColor={'#33333317'}>
+            {/* preview overlay */}
+            {isPreview && <PreviewOverlay
+                align="corner" />}
 
-                <Lock style={{
-                    width: '20px',
-                    height: '20px',
-                    margin: 10
-                }} />
-            </EpistoFlex2>}
-
+            {/* something */}
             {additionalInfo && <EpistoFlex2
                 align="center"
                 p="5px 10px 5px 0"
@@ -142,7 +128,7 @@ const StatisticsCard = ({
                 align="center"
                 justify="center"
                 background="var(--transparentWhite70)"
-                p="10px"
+                padding="10px"
                 gridColumn="auto / span 2"
                 gridRow="auto / span 2">
 
@@ -152,7 +138,7 @@ const StatisticsCard = ({
             {/* closed state */}
             {!isOpen && (
                 <EpistoFlex2
-                    p={isMobile ? '10px 2px 10px 0' : undefined}
+                    padding={isMobile ? '10px 2px 10px 0' : '5px'}
                     flex="1"
                     align="center">
 

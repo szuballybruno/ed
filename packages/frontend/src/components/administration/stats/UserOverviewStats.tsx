@@ -14,7 +14,8 @@ export const UserOverviewStats = ({ flaggedUsersCount }: { flaggedUsersCount: nu
             value: '3.5',
             suffix: 'óra',
             iconPath: Environment.getAssetUrl('images/teacherdashboardstatistic2.png'),
-            isOpenByDefault: false
+            isOpenByDefault: false,
+            isPreview: true
         },
         /* Average time spent with learning per week */
         {
@@ -22,7 +23,8 @@ export const UserOverviewStats = ({ flaggedUsersCount }: { flaggedUsersCount: nu
             value: '3.5',
             suffix: 'óra',
             iconPath: Environment.getAssetUrl('images/teacherdashboardstatistic2.png'),
-            isOpenByDefault: false
+            isOpenByDefault: false,
+            isPreview: true
         },
         /* Average time spent per sessions */
         {
@@ -30,7 +32,8 @@ export const UserOverviewStats = ({ flaggedUsersCount }: { flaggedUsersCount: nu
             value: '38',
             suffix: 'perc',
             iconPath: Environment.getAssetUrl('images/teacherdashboardstatistic4.png'),
-            isOpenByDefault: false
+            isOpenByDefault: false,
+            isPreview: true
         },
         /* Dropout rate */
         {
@@ -39,6 +42,7 @@ export const UserOverviewStats = ({ flaggedUsersCount }: { flaggedUsersCount: nu
             suffix: '%',
             iconPath: Environment.getAssetUrl('images/teacherdashboardstatistic7.png'),
             isOpenByDefault: false,
+            isPreview: true
         },
         /* Dropout rate */
         {
@@ -47,6 +51,7 @@ export const UserOverviewStats = ({ flaggedUsersCount }: { flaggedUsersCount: nu
             suffix: 'esetben',
             iconPath: Environment.getAssetUrl('/images/teacherdashboard3.png'),
             isOpenByDefault: false,
+            isPreview: true
         },
         /* Dropout rate */
         {
@@ -55,6 +60,7 @@ export const UserOverviewStats = ({ flaggedUsersCount }: { flaggedUsersCount: nu
             suffix: 'esetben',
             iconPath: Environment.getAssetUrl('/images/teacherdashboard3.png'),
             isOpenByDefault: false,
+            isPreview: true
         },
     ], [flaggedUsersCount]);
 

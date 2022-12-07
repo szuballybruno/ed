@@ -6,7 +6,7 @@ import { AdminOverviewGraphs } from './AdminOverviewGraphs';
 import { CourseOverviewStats, useCourseOverviewStatsLogic } from './CourseOverviewStats';
 import { UserOverviewStats } from './UserOverviewStats';
 
-export const AdminHomeOverview = () => {
+export const AdminOverviewStatsPage = () => {
 
     const { adminOverviewStatsData } = useAdminHomeOverviewStatsData();
     const { flaggedUsers: flaggedUsersCount } = coalesce(adminOverviewStatsData, { flaggedUsers: 0 });

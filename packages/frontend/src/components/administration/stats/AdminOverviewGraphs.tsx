@@ -98,6 +98,7 @@ export const AdminOverviewGraphs = () => {
                 .map((item, index) => {
 
                     return <AdminStatGroup
+                        isPreview
                         title={item.title}
                         padding="0px"
                         background="white"
