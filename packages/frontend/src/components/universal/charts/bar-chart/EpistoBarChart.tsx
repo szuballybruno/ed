@@ -1,7 +1,8 @@
 import ReactECharts from 'echarts-for-react';
 import React from 'react';
-import { EpistoBarChartDatasetType, EpistoBarChartOptionsType } from '../types/EpistoBarChartTypes';
-import { EpistoChartXAxisDataType } from '../types/EpistoChartCommonTypes';
+import { EpistoBarChartDatasetType } from './EpistoBarChartTypes';
+import { EpistoChartXAxisDataType } from '../EpistoChartCommonTypes';
+import { barChartVariants } from './barChartVariants';
 
 /**
  * Wrapper component for ECharts
@@ -10,7 +11,16 @@ import { EpistoChartXAxisDataType } from '../types/EpistoChartCommonTypes';
  * @see Docs: https://echarts.apache.org/en/option.html#title
  */
 
-export const EpistoBarChart = (props: {
+export const EpistoBarChart = ({
+    title,
+    dataset,
+    xAxisData,
+    xAxisLabel,
+    yAxisLabel,
+    yAxisLabelSuffix,
+    style,
+    variant
+}: {
     title: string,
     dataset: EpistoBarChartDatasetType,
     xAxisData?: EpistoChartXAxisDataType
@@ -18,26 +28,16 @@ export const EpistoBarChart = (props: {
     yAxisLabel?: string,
     yAxisLabelSuffix?: string,
     style?: React.CSSProperties,
-    options: EpistoBarChartOptionsType
+    variant: keyof typeof barChartVariants
 }) => {
 
     const {
-        title,
-        dataset,
-        xAxisData,
-        xAxisLabel,
-        yAxisLabel,
-        yAxisLabelSuffix,
-        style,
-        options: {
-            legend,
-            tooltip,
-            xAxis,
-            yAxis,
-            seriesOptions
-        }
-    } = props;
-
+        seriesOptions,
+        legend,
+        tooltip,
+        xAxis,
+        yAxis
+    } = barChartVariants[variant];
 
     const defaultStyle = {
         width: '100%',

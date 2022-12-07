@@ -24,11 +24,14 @@ export type EpistoChartXAxisType = {
     },
     axisLine?: {
         show: boolean
+    },
+    axisTick?: {
+        alignWithLabel?: boolean
     }
 }
 
 export type EpistoChartYAxisType = {
-    name: string;
+    name?: string;
     nameLocation?: string,
     nameGap?: number,
     nameTextStyle?: {
@@ -40,6 +43,20 @@ export type EpistoChartYAxisType = {
 
 export interface EpistoChartSeriesOptionsType {
     name?: string,
+    type?: string,
+    symbolSize?: number,
+    lineStyle?: {
+        width?: number,
+        shadowOffsetY?: number,
+        shadowOffsetX?: number
+    },
+    areaStyle?: {
+        opacity?: number,
+        shadowBlur?: number,
+        shadowOffsetY?: number,
+        shadowOffsetX?: number,
+        shadowColor?: string
+    },
     top?: number,
     avoidLabelOverlap?: boolean,
     itemStyle?: {
@@ -54,7 +71,11 @@ export interface EpistoChartSeriesOptionsType {
     label?: {
         color?: string,
         show?: boolean,
-        position?: string
+        formatter?: string;
+        position?: string,
+        emphasis?: {
+            show?: true
+        }
     },
     labelLine?: {
         show?: boolean,

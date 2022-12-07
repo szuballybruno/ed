@@ -1,13 +1,11 @@
 import { Grid } from '@chakra-ui/react';
-import React from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
-import { defaultCharts } from '../../../static/defaultChartOptions';
 import { Environment } from '../../../static/Environemnt';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { StatisticsGroupType } from '../../learningInsights/LearningStatistics';
 import StatisticsCard from '../../statisticsCard/StatisticsCard';
-import { EpistoBarChart } from '../../universal/charts/base_charts/EpistoBarChart';
-import { EpistoPieChart } from '../../universal/charts/base_charts/EpistoPieChart';
+import { EpistoBarChart } from '../../universal/charts/bar-chart/EpistoBarChart';
+import { EpistoPieChart } from '../../universal/charts/pie-chart/EpistoPieChart';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { CourseAdministartionFrame } from './CourseAdministartionFrame';
 
@@ -75,7 +73,7 @@ export const CourseStatisticsSubpage = () => {
                             { value: 17, name: 'Vizsga / tesztkitöltés' },
                             { value: 10, name: 'Kérdések megválaszolása' },
                             { value: 20, name: 'Nincs tevékenység' }]}
-                        options={defaultCharts.pie2} />
+                        variant="pie2" />
                 },
             ]
         }, {
@@ -87,7 +85,7 @@ export const CourseStatisticsSubpage = () => {
                     isOpenByDefault: true,
                     children: <EpistoBarChart
                         title='Kurzus megtekintések alakulása'
-                        options={defaultCharts.blueGreenBarChart}
+                        variant="blueGreenBarChart"
                         xAxisData={[
                             '03. 21.',
                             '03. 22.',

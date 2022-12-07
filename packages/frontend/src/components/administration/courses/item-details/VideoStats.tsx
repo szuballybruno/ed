@@ -1,6 +1,5 @@
 import { Grid, Tooltip } from '@chakra-ui/react';
 import { ReactNode } from 'react';
-import { defaultCharts } from '../../../../static/defaultChartOptions';
 import { iterate } from '../../../../static/frontendHelpers';
 import { EpistoDivider } from '../../../controls/EpistoDivider';
 import { EpistoFlex2 } from '../../../controls/EpistoFlex';
@@ -8,7 +7,7 @@ import { EpistoFont } from '../../../controls/EpistoFont';
 import { EpistoReactPlayer } from '../../../controls/EpistoReactPlayer';
 import { EpistoSelect } from '../../../controls/EpistoSelect';
 import StatisticsCard from '../../../statisticsCard/StatisticsCard';
-import { EpistoLineChart } from '../../../universal/charts/base_charts/EpistoLineChart';
+import { EpistoLineChart } from '../../../universal/charts/line-chart/EpistoLineChart';
 import { DashboardSection } from '../../../universal/DashboardSection';
 import { adminExamStatistics, AdminExamStatisticsListItem, adminExamStatisticsListItems, HotspotsSlider } from './ExamStats';
 
@@ -241,7 +240,6 @@ export const AdminVideoStatisticsModalPage = () => {
                 ]}
                 xAxisLabel="Időpont"
                 yAxisLabel="Felhasználók"
-                options={defaultCharts.simpleLineChart}
                 style={{
                     height: '350px',
                     minHeight: 350,

@@ -1,13 +1,13 @@
 import { Grid } from '@chakra-ui/react';
+import { UserActiveCourseDTO } from '@episto/communication';
 import { useEffect } from 'react';
 import { useRecommendedItemQuota, useUserCourseProgressChartData } from '../../services/api/userProgressApiService';
-import { UserActiveCourseDTO } from '@episto/communication';
 import { Environment } from '../../static/Environemnt';
 import { PagingType } from '../../static/frontendHelpers';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { FlexFloat } from '../controls/FlexFloat';
 import StatisticsCard, { StatisticsCardProps } from '../statisticsCard/StatisticsCard';
-import { UserProgressChart } from '../universal/charts/UserProgressChart';
+import { UserProgressChart } from '../universal/charts/line-chart/UserProgressChart';
 import { NoProgressChartYet } from './NoProgressChartYet';
 
 const NoCourseStatsYet = () => (
@@ -25,7 +25,7 @@ const NoCourseStatsYet = () => (
 
         Itt fognak megjelenni a kurzussal kapcsolatos statisztikáid, amint elkezdesz egy új kurzust
     </EpistoFlex2>
-)
+);
 
 export const HomePageCourseStats = ({
     activeCoursesPaging,

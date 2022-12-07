@@ -1,8 +1,9 @@
+import { EpistoLineChartDatasetType } from '@episto/commontypes';
+import { EChartsOption } from 'echarts';
 import ReactECharts from 'echarts-for-react';
 import React from 'react';
-import { EpistoLineChartDatasetType } from '@episto/commontypes';
-import { EpistoChartXAxisDataType } from '../types/EpistoChartCommonTypes';
-import { EpistoLineChartOptionsType } from '../types/EpistoLineChartTypes';
+import { EpistoChartXAxisDataType } from '../EpistoChartCommonTypes';
+import { simpleLineChart } from './lineChartVariants';
 
 /**
  * Wrapper component for ECharts
@@ -11,7 +12,16 @@ import { EpistoLineChartOptionsType } from '../types/EpistoLineChartTypes';
  * @see Docs: https://echarts.apache.org/en/option.html#title
  */
 
-export const EpistoLineChart = (props: {
+export const EpistoLineChart = ({
+    title,
+    dataset: datasets,
+    xAxisData,
+    xAxisLabel,
+    yAxisLabel,
+    yAxisLabelSuffix,
+    style,
+    options
+}: {
     title: string,
     dataset: EpistoLineChartDatasetType,
     xAxisData?: EpistoChartXAxisDataType
@@ -19,26 +29,16 @@ export const EpistoLineChart = (props: {
     yAxisLabel?: string,
     yAxisLabelSuffix?: string,
     style?: React.CSSProperties,
-    options: EpistoLineChartOptionsType
+    options?: EChartsOption
 }) => {
 
     const {
-        title,
-        dataset: datasets,
-        xAxisData,
-        xAxisLabel,
-        yAxisLabel,
-        yAxisLabelSuffix,
-        style,
-        options: {
-            legend,
-            tooltip,
-            xAxis,
-            yAxis,
-            seriesOptions
-        }
-    } = props;
-
+        legend,
+        tooltip,
+        xAxis,
+        yAxis,
+        seriesOptions
+    } = options ? Object.assign(simpleLineChart, options) : simpleLineChart;
 
     const defaultStyle = {
         width: '100%',

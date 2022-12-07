@@ -1,5 +1,6 @@
 import ReactECharts from 'echarts-for-react';
-import { EpistoPieChartDataType, EpistoPieChartOptionsType } from '../types/EpistoPieChartTypes';
+import { pieChartVariantOptions } from './pieChartVariants';
+import { EpistoPieChartDataType } from './EpistoPieChartTypes';
 
 /**
  * Wrapper component for ECharts
@@ -8,27 +9,28 @@ import { EpistoPieChartDataType, EpistoPieChartOptionsType } from '../types/Epis
  * @see Docs: https://echarts.apache.org/en/option.html#title
  */
 
-export const EpistoPieChart = (props: {
+export const EpistoPieChart = ({
+    title,
+    isSortValues,
+    segments,
+    style,
+    variant
+}: {
     title: string,
     isSortValues?: boolean,
     segments: EpistoPieChartDataType,
     style?: React.CSSProperties,
-    options: EpistoPieChartOptionsType
+    variant: keyof typeof pieChartVariantOptions
 }) => {
 
-    const {
-        title,
-        isSortValues,
-        segments,
-        style,
-        options: {
-            visualMap,
-            legend,
-            tooltip,
-            seriesOptions
-        }
-    } = props;
+    const optionsBase = pieChartVariantOptions[variant];
 
+    const {
+        visualMap,
+        legend,
+        tooltip,
+        seriesOptions
+    } = optionsBase;
 
     const defaultStyle = {
         width: '100%',

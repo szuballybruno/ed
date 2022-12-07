@@ -1,7 +1,6 @@
 import { Grid, Tooltip } from '@chakra-ui/react';
 import { FiberManualRecord } from '@mui/icons-material';
 import React, { ReactNode, useState } from 'react';
-import { defaultCharts } from '../../../../static/defaultChartOptions';
 import { iterate } from '../../../../static/frontendHelpers';
 import { EpistoDivider } from '../../../controls/EpistoDivider';
 import { EpistoFlex2 } from '../../../controls/EpistoFlex';
@@ -11,8 +10,8 @@ import { EpistoSelect } from '../../../controls/EpistoSelect';
 import { EpistoSlider } from '../../../controls/EpistoSlider';
 import { StatisticsGroupType } from '../../../learningInsights/LearningStatistics';
 import StatisticsCard from '../../../statisticsCard/StatisticsCard';
-import { EpistoLineChart } from '../../../universal/charts/base_charts/EpistoLineChart';
-import { EpistoPieChart } from '../../../universal/charts/base_charts/EpistoPieChart';
+import { EpistoLineChart } from '../../../universal/charts/line-chart/EpistoLineChart';
+import { EpistoPieChart } from '../../../universal/charts/pie-chart/EpistoPieChart';
 import { DashboardSection } from '../../../universal/DashboardSection';
 
 export const HotspotsSlider = (props: {
@@ -153,7 +152,7 @@ export const adminExamStatistics = [
                         { value: 40, name: '10%-ig nézi meg a videót' }
                     ]}
                     isSortValues
-                    options={defaultCharts.redRadiusPie}
+                    variant="redRadiusPie"
                     style={{
                         width: '100%',
                         height: '100%'
@@ -467,7 +466,6 @@ export const ExamStats = () => {
                 ]}
                 xAxisLabel="Időpont"
                 yAxisLabel="Felhasználók"
-                options={defaultCharts.simpleLineChart}
                 style={{
                     height: '350px',
                     minHeight: 350,

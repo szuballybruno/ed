@@ -1,5 +1,6 @@
 import ReactECharts from 'echarts-for-react';
-import { EpistoRadarChartDataType, EpistoRadarChartOptionsType } from '../types/EpistoRadarChartTypes';
+import { EpistoRadarChartDataType } from './EpistoRadarChartTypes';
+import { getRadarOptions } from './radarVariantOptions';
 
 /**
  * Wrapper component for ECharts
@@ -8,7 +9,12 @@ import { EpistoRadarChartDataType, EpistoRadarChartOptionsType } from '../types/
  * @see Docs: https://echarts.apache.org/en/option.html#title
  */
 
-export const EpistoRadarChart = (props: {
+export const EpistoRadarChart = ({
+    title,
+    areas,
+    style,
+    radarIndicators,
+}: {
     title: string,
     isSortValues?: boolean,
     areas: EpistoRadarChartDataType,
@@ -17,24 +23,15 @@ export const EpistoRadarChart = (props: {
         name: string,
         max?: number
     }[]
-    options: EpistoRadarChartOptionsType
 }) => {
 
-
     const {
-        title,
-        areas,
-        style,
-        radarIndicators,
-        options: {
-            visualMap,
-            legend,
-            tooltip,
-            radar,
-            seriesOptions
-        }
-    } = props;
-
+        visualMap,
+        legend,
+        tooltip,
+        radar,
+        seriesOptions
+    } = getRadarOptions();
 
     const defaultStyle = {
         width: '100%',

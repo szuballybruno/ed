@@ -1,9 +1,8 @@
 import { useMemo } from 'react';
-import { defaultCharts } from '../../../static/defaultChartOptions';
 import { translatableTexts } from '../../../static/translatableTexts';
 import StatisticsCard, { StatisticsCardProps } from '../../statisticsCard/StatisticsCard';
-import { EpistoBarChart } from '../../universal/charts/base_charts/EpistoBarChart';
-import { EpistoPieChart } from '../../universal/charts/base_charts/EpistoPieChart';
+import { EpistoBarChart } from '../../universal/charts/bar-chart/EpistoBarChart';
+import { EpistoPieChart } from '../../universal/charts/pie-chart/EpistoPieChart';
 import { AdminStatGroup } from './AdminStatGroup';
 
 export const AdminOverviewGraphs = () => {
@@ -33,7 +32,7 @@ export const AdminOverviewGraphs = () => {
                     name: 'Jelenlegi hét',
                     data: [[0, 6], [1, 9], [2, 10], [3, 9], [4, 3], [5, 4]]
                 }]}
-                options={defaultCharts.blueGreenBarChart} />,
+                variant="blueGreenBarChart" />,
         },
 
         /* Most active days chart */
@@ -56,7 +55,7 @@ export const AdminOverviewGraphs = () => {
                 xAxisLabel="A hét napjai"
                 yAxisLabel="Belépések száma"
                 yAxisLabelSuffix="db"
-                options={defaultCharts.blueGreenBarChart} />
+                variant="blueGreenBarChart" />
         },
 
         /* User activity distribution chart */
@@ -71,7 +70,7 @@ export const AdminOverviewGraphs = () => {
                     { value: 17, name: 'Vizsga / tesztkitöltés' },
                     { value: 10, name: 'Kérdések megválaszolása' },
                     { value: 20, name: 'Nincs tevékenység' }]}
-                options={defaultCharts.redRadiusPie} />
+                variant="redRadiusPie" />
         },
 
         /* Most watched courses chart */
@@ -88,7 +87,7 @@ export const AdminOverviewGraphs = () => {
                     { value: 13, name: 'Cyberbiztonság az irodában' },
                     { value: 17, name: 'Egyéb kurzusok' }
                 ]}
-                options={defaultCharts.donut} />
+                variant="donut" />
         }
     ];
 

@@ -10,7 +10,7 @@ import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoPopper } from '../controls/EpistoPopper';
 import { LoadingFrame } from '../system/LoadingFrame';
-import { PersonalityChart } from '../universal/charts/PersonalityChart';
+import { PersonalityChart } from '../universal/charts/radar-chart/PersonalityChart';
 
 export const PersonalityAssessment = (props: EpistoFlex2Props) => {
 

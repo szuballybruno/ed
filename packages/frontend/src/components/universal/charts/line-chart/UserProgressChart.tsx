@@ -1,8 +1,8 @@
 import { EpistoLineChartDatasetType } from '@episto/commontypes';
 import { UserCourseProgressChartDTO } from '@episto/communication';
 import { useMemo } from 'react';
-import { EpistoLineChart } from './base_charts/EpistoLineChart';
-import { EpistoLineChartOptionsType } from './types/EpistoLineChartTypes';
+import { EpistoLineChart } from './EpistoLineChart';
+import { EpistoLineChartOptionsType } from './EpistoLineChartTypes';
 
 const useUserProgressChartOptions = (interval: number, maxYValue: number) => useMemo((): EpistoLineChartOptionsType => ({
     legend: {

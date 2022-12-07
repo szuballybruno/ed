@@ -3,7 +3,6 @@ import { useState } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 import { ButtonType } from '../../../models/types';
 import { UserApiService } from '../../../services/api/UserApiService1';
-import { defaultCharts } from '../../../static/defaultChartOptions';
 import { Environment } from '../../../static/Environemnt';
 import { usePaging } from '../../../static/frontendHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
@@ -16,7 +15,7 @@ import { FlexFloat } from '../../controls/FlexFloat';
 import { NoProgressChartYet } from '../../home/NoProgressChartYet';
 import { LearningCourseStatsTile } from '../../learningInsights/LearningCourseStatsTile';
 import StatisticsCard from '../../statisticsCard/StatisticsCard';
-import { EpistoPieChart } from '../../universal/charts/base_charts/EpistoPieChart';
+import { EpistoPieChart } from '../../universal/charts/pie-chart/EpistoPieChart';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { EditSection } from '../courses/EditSection';
 import { useAdminCourseContentDialogLogic } from './adminCourseContentDialog/AdminCourseContentDialogLogic';
@@ -394,7 +393,7 @@ export const AdminUserStatisticsSubpage = ({
                                     name: texts.activitiesPieChartTexts.noActivity
                                 }
                             ]}
-                            options={defaultCharts.pie3} />
+                            variant="pie3" />
 
                     </FlexFloat>
 

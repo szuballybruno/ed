@@ -2,12 +2,11 @@ import { Grid } from '@chakra-ui/react';
 import DoneIcon from '@mui/icons-material/Done';
 import React from 'react';
 import { CourseDetailsDTO } from '@episto/communication';
-import { defaultCharts } from '../../static/defaultChartOptions';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoHeader } from '../EpistoHeader';
-import { EpistoRadarChart } from '../universal/charts/base_charts/EpistoRadarChart';
+import { EpistoRadarChart } from '../universal/charts/radar-chart/EpistoRadarChart';
 
 export const CourseDetailsSummarySection = (props: {
     courseDetails: CourseDetailsDTO
@@ -109,7 +108,6 @@ export const CourseDetailsSummarySection = (props: {
                         color: 'black',
                         max: 10
                     }))}
-                    options={defaultCharts.radar}
                     style={{
                         width: '100%',
                         minWidth: '500px',
