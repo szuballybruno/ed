@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 import { EpistoFlex2, EpistoFlex2Props } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
+import { EpistoHeader } from '../../EpistoHeader';
 
 export const AdminStatGroup = ({
     title,
@@ -25,14 +26,14 @@ export const AdminStatGroup = ({
         {...css}>
 
         {title && <EpistoFlex2
-            h="40px"
-            w="100%"
+            marginTop="10px"
+            padding="0px 20px 0px 20px"
             align="center"
+            height="40px"
             justify="space-between">
 
-            <EpistoFont>
-                {title}
-            </EpistoFont>
+            <EpistoHeader
+                text={title} />
 
             {headerContent}
         </EpistoFlex2>}

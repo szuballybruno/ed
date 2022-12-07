@@ -7,7 +7,7 @@ export const EpistoFormLabel = ({ text, children }: { text: string } & PropsWith
         <>
             <EpistoFont
                 isUppercase
-                fontSize="fontExtraSmall"
+                fontSize="fontSmall"
                 style={{
                     marginTop: 10,
                     letterSpacing: '1.2px'

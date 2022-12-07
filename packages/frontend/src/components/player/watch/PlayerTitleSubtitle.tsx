@@ -26,7 +26,7 @@ export const PlayerTitleSubtitle = (props: {
         </EpistoFont>
 
         <EpistoFont
-            fontSize={isMobile ? 'fontMid' : 'fontLarge'}
+            fontSize={isMobile ? 'fontLarge' : 'fontLarge'}
             style={{
                 fontWeight: 400
             }}>

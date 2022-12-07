@@ -107,6 +107,8 @@ export const CourseOverviewStats = ({
 
     return (
         <AdminStatGroup
+            padding="0"
+            background="white"
             title="Kurzusok teljesítménye"
             headerContent={(
                 <EpistoButton
@@ -183,7 +185,9 @@ export const CourseOverviewStats = ({
 
             <EpistoGrid
                 auto="fill"
+                flex="1"
                 mt="20px"
+                padding="10px"
                 minColumnWidth="50px"
                 gap="10px"
                 gridTemplateColumns="repeat(2, minmax(0, 1fr))">

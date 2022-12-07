@@ -21,7 +21,7 @@ export const ChipSmall = (props: {
     return (
         <p
             className={new ArrayBuilder()
-                .addIf(size === 'small', 'fontExtraSmall')
+                .addIf(size === 'small', 'fontSmall')
                 .addIf(size !== 'small', 'fontSmall')
                 .add('roundBorders')
                 .add(classes.pElement)

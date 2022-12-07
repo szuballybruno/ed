@@ -52,6 +52,8 @@
 
 /* base */
 html {
+
+    /* rem means relative to this number - sort of a baseline for every font size in the app */
     font-size: 14px;
     width: 100vw;
     height: 100vh;
@@ -114,29 +116,12 @@ body * ::-webkit-scrollbar {
     border: 1px solid var(--mildGrey);
 }
 
-/* font sizes */
-.fontExtraSmall {
-    font-size: 12px !important;
-}
-
 .fontSmall {
-    font-size: 13px !important;
-}
-
-.fontNormal14 {
-    font-size: 0.8rem !important;
-}
-
-.fontMid {
-    font-size: 15px !important;
-}
-
-.fontMidPlus {
-    font-size: 16px !important;
+    font-size: 0.9rem !important;
 }
 
 .fontLarge {
-    font-size: 17px !important;
+    font-size: 1.1rem !important;
 }
 
 .fontLargePlus {

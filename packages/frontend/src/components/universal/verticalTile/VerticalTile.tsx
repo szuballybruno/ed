@@ -56,7 +56,7 @@ export const VerticalTile = (props: {
 
                     <EpistoFont
                         fontWeight={'heavy'}
-                        fontSize="fontMid">
+                        fontSize="fontLarge">
 
                         {title}
                     </EpistoFont>

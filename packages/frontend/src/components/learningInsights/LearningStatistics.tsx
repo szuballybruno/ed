@@ -12,7 +12,7 @@ export const getProgressFromLagBehind = (lagBehindPercentage?: number | null) =>
         return '-';
 
     if (lagBehindPercentage > 30)
-        return 'Elmarad';
+        return 'Lemaradás';
 
     if (lagBehindPercentage > 15)
         return 'Megfelelő';

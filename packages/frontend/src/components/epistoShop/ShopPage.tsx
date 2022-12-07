@@ -69,7 +69,7 @@ export const ShopPage = () => {
 
             {/* categories title */}
             <EpistoFont
-                fontSize="fontExtraSmall"
+                fontSize="fontSmall"
                 isUppercase
                 style={{
                     textAlign: 'left',

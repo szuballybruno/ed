@@ -102,7 +102,6 @@ export const PersonalityAssessment = (props: EpistoFlex2Props) => {
 
                         <EpistoFont
                             isUppercase
-                            fontSize="fontNormal14"
                             style={{
                                 marginLeft: 5
                             }}>
@@ -121,7 +120,6 @@ export const PersonalityAssessment = (props: EpistoFlex2Props) => {
                         target={ref?.current}>
 
                         <EpistoFont
-                            fontSize="fontNormal14"
                             style={{
                                 maxWidth: '300px'
                             }}>

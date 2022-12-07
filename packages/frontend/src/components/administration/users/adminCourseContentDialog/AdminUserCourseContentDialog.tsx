@@ -149,7 +149,7 @@ export const AdminUserCourseContentDialog = (props: {
                                     }}>
                                     {courseTitle}
                                 </EpistoFont>
-                                <EpistoFont fontSize={'fontMid'}>
+                                <EpistoFont fontSize={'fontLarge'}>
                                     {userFullName}
                                 </EpistoFont>
                             </>

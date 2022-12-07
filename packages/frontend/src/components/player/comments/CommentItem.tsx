@@ -142,7 +142,7 @@ export const CommentItem = (props: {
 
                 <EpistoButton
                     onClick={() => handleAnswerComment(comment)}
-                    className="fontExtraSmall"
+                    className="fontSmall"
                     style={{
                         color: 'grey',
                         marginTop: 3

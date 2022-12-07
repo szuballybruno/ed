@@ -86,19 +86,6 @@ export const MobileCourseTile = (props: {
                         title="Eredményed"
                         iconUrl={Environment.getAssetUrl('images/weeklyquota.png')}
                         text={course.finalExamScorePercentage + ''} />}
-
-                    {/*   {/* start course 
-                    {!course.isStarted && <EpistoFont
-                        onClick={() => handlePlayCourse(course)}
-                        fontWeight='heavy'
-                        fontSize='fontLarge'
-                        style={{
-                            flex: '1',
-                            color: 'var(--epistoTeal)'
-                        }}>
-
-                        {translatableTexts.availableCourses.startCourse}
-                    </EpistoFont>} */}
                 </EpistoFlex2>
             } />
 

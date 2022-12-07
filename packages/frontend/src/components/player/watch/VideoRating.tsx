@@ -76,7 +76,7 @@ export const VideoRating = (props: { videoVersionId: Id<'VideoVersion'> }) => {
 
                 {/* title */}
                 <EpistoFont
-                    fontSize="fontExtraSmall"
+                    fontSize="fontSmall"
                     isUppercase>
 
                     {translatableTexts.player.videoRating.experienceRating}
@@ -96,7 +96,7 @@ export const VideoRating = (props: { videoVersionId: Id<'VideoVersion'> }) => {
 
                 {/* title */}
                 <EpistoFont
-                    fontSize="fontExtraSmall"
+                    fontSize="fontSmall"
                     isUppercase>
 
                     {translatableTexts.player.videoRating.difficultyRating}

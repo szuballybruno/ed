@@ -14,6 +14,7 @@ export type StatisticsCardProps = {
     iconPath?: string
     suffix?: string
     title?: string
+    noShadow?: boolean;
     value?: string | number | null
     isOpenByDefault?: boolean
     children?: React.ReactNode
@@ -40,6 +41,7 @@ const StatisticsCard = ({
     title,
     suffix,
     value,
+    noShadow,
     ...css
 }: StatisticsCardProps) => {
 
@@ -75,17 +77,17 @@ const StatisticsCard = ({
                     }} />;
     };
 
-    const fontSize = (() => {
+    const mainFontSize = (() => {
 
-        // const isLongValue = typeof value === 'string' && value.length < 8;
         const length = Math.max(1, ((value ?? '') + '').length);
 
-        return `${2.0 / Math.max(1, length * 0.15)}rem`;
+        return `${2.0 / Math.max(1, length * 0.16)}rem`;
     })();
 
     return (
         <FlexFloat
             id={StatisticsCard.name}
+            boxShadow={noShadow ? '' : '0 0 15px #00000015'}
             background="var(--transparentWhite70)"
             gridColumn={chartSize === 'large' ? '1 / -1' : (isOpen ? 'span 2' : 'unset')} // do not remove!!
             gridRow={chartSize === 'large' ? 'span 2' : (isOpen ? 'span 2' : 'unset')} // do not remove!!
@@ -183,7 +185,7 @@ const StatisticsCard = ({
                             <EpistoFont
                                 allowedLines={1}
                                 style={{
-                                    fontSize: fontSize,
+                                    fontSize: mainFontSize,
                                     lineHeight: 1,
                                     maxWidth: 'calc(100% - 10px)'
                                 }}>
@@ -204,10 +206,7 @@ const StatisticsCard = ({
                         </EpistoFlex2>
 
                         {/* title */}
-                        <EpistoFont
-                            style={{
-                                fontSize: isMobile ? '0.8rem' : '0.85rem'
-                            }}>
+                        <EpistoFont>
                             {title}
                         </EpistoFont>
                     </EpistoFlex2>

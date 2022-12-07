@@ -64,7 +64,6 @@ export const CourseDetailsTeacherSection = (props: {
 
                     {/* full name */}
                     <EpistoFont
-                        fontSize={'fontNormal14'}
                         style={{
                             fontWeight: 'bold'
                         }}>

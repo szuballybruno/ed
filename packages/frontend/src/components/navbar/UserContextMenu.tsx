@@ -81,31 +81,6 @@ export const UserContextMenu = (props: {
                 width="100%"
                 bgColor={'black'} />
 
-            {/* admin menu item */}
-            {/* {canAccessAdmin && (
-                <EpistoButton
-                    onClick={() => navigate2(applicationRoutes.administrationRoute.homeRoute.overviewRoute)}>
-
-                    <EpistoFlex2 className="whall"
-                        m="5px"
-                        align="center">
-                        {applicationRoutes.administrationRoute.icon}
-
-                        <EpistoFont
-                            fontSize="fontNormal14"
-                            isUppercase
-                            style={{
-                                marginLeft: '14px',
-                                textAlign: 'left',
-                                fontWeight: 400,
-                            }}>
-
-                            {applicationRoutes.administrationRoute.title}
-                        </EpistoFont>
-                    </EpistoFlex2>
-                </EpistoButton>
-            )} */}
-
             {/* menu items */}
             {userMenuItems
                 .map((menuItem, index) => (
@@ -121,7 +96,6 @@ export const UserContextMenu = (props: {
                             {menuItem.icon}
 
                             <EpistoFont
-                                fontSize="fontNormal14"
                                 isUppercase
                                 style={{
                                     marginLeft: '14px',
@@ -143,8 +117,7 @@ export const UserContextMenu = (props: {
                     background: 'white',
                     padding: '5px',
                     marginTop: '20px',
-                }}
-                fontSize="fontNormal14">
+                }}>
 
                 {translatableTexts.navbar.version}
             </EpistoFont>

@@ -368,7 +368,7 @@ export const ExamStats = () => {
                                     direction="column">
 
                                     <EpistoFont
-                                        fontSize="fontMid"
+                                        fontSize="fontLarge"
                                         style={{
                                             fontWeight: 500
                                         }}>
@@ -379,14 +379,12 @@ export const ExamStats = () => {
                                     <EpistoFlex2
                                         justify="space-between">
 
-                                        <EpistoFont
-                                            fontSize="fontNormal14">
+                                        <EpistoFont>
 
                                             3:29
                                         </EpistoFont>
 
-                                        <EpistoFont
-                                            fontSize="fontNormal14">
+                                        <EpistoFont>
 
                                             38 felhasználó
                                         </EpistoFont>
@@ -415,7 +413,7 @@ export const ExamStats = () => {
                                 flex="3">
 
                                 <EpistoFont
-                                    fontSize="fontMid"
+                                    fontSize="fontLarge"
                                     style={{
                                         fontWeight: 500
                                     }}>
@@ -426,14 +424,12 @@ export const ExamStats = () => {
                                 <EpistoFlex2
                                     justify="space-between">
 
-                                    <EpistoFont
-                                        fontSize="fontNormal14">
+                                    <EpistoFont>
 
                                         Helyesen válaszolók aránya
                                     </EpistoFont>
 
-                                    <EpistoFont
-                                        fontSize="fontNormal14">
+                                    <EpistoFont>
 
                                         38%
                                     </EpistoFont>

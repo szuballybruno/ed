@@ -39,7 +39,6 @@ export const NavigationLinkList = <TRoute extends ApplicationRoute<any, any>>({
 
                         {/* text */}
                         {!isNoText && <EpistoFont
-                            fontSize="fontNormal14"
                             isUppercase
                             style={{
                                 marginLeft: '10px',

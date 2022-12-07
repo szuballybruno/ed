@@ -115,7 +115,7 @@ export const EpistoEntryNew = forwardRef<HTMLInputElement, EpistoEntryNewPropsTy
 
         {labelVariant === 'top' && <EpistoFont
             isUppercase
-            fontSize="fontExtraSmall"
+            fontSize="fontSmall"
             style={{
                 margin: '5px 0'
             }}>

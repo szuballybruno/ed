@@ -94,7 +94,7 @@ export const VideoControls = (props: {
 
         {/* timestamp */}
         <EpistoFont
-            fontSize={isMobile ? 'fontMid' : 'fontSmall'} >
+            fontSize={isMobile ? 'fontLarge' : 'fontSmall'} >
             {`${secondsToTime(playedSeconds)}/${secondsToTime(videoLength)}`}
         </EpistoFont>
 

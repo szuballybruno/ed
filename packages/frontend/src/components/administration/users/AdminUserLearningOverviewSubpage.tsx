@@ -44,7 +44,7 @@ const UserStatisticsProgressWithLabel = (props: {
         <EpistoFont style={{
             minWidth: 100
         }}
-            fontSize={'fontExtraSmall'}>
+            fontSize={'fontSmall'}>
             {props.title}
         </EpistoFont>
 
@@ -179,14 +179,12 @@ export const AdminUserStatisticsSubpage = ({
                                 <EpistoFont
                                     style={{
                                         fontWeight: 600
-                                    }}
-                                    fontSize={'fontNormal14'}>
+                                    }}>
 
                                     {texts.userPerformanceTitles.performedWell}
                                 </EpistoFont>
 
-                                <EpistoFont
-                                    fontSize={'fontNormal14'}>
+                                <EpistoFont>
 
                                     {texts.userPerformanceDescriptions.performedWell}
                                 </EpistoFont>

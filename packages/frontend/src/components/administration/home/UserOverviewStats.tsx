@@ -59,13 +59,17 @@ export const UserOverviewStats = ({ flaggedUsersCount }: { flaggedUsersCount: nu
     ], [flaggedUsersCount]);
 
     return (
-        <AdminStatGroup>
+        <AdminStatGroup
+            title="Felhasznalok statisztikaja"
+            padding="0"
+            background="white">
+
             <EpistoGrid
                 auto="fill"
                 minColumnWidth="50px"
                 gap="10px"
                 gridTemplateColumns="repeat(2, minmax(0, 1fr))"
-                padding="5px"
+                padding="10px"
                 flex="1">
 
                 {stats

@@ -23,7 +23,7 @@ export const LinearProgressWithLabel = (props: EpistoLinearProgressProps & { val
         </EpistoFlex2>
         <EpistoFlex2 minWidth='35px'>
 
-            <EpistoFont fontSize={'fontNormal14'}>
+            <EpistoFont >
                 {`${Math.round(props.value)}%`}
             </EpistoFont>
         </EpistoFlex2>

@@ -94,7 +94,7 @@ export const EditDialogBase = <TParams,>({
                     </EpistoFlex2>
 
                     <EpistoFont
-                        fontSize={'fontMid'}>
+                        fontSize={'fontLarge'}>
 
                         {subTitle}
                     </EpistoFont>

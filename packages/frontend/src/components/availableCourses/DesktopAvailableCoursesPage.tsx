@@ -47,7 +47,7 @@ export const DesktopAvailableCoursesPage = ({
 
                 {/* categories title */}
                 <EpistoFont
-                    fontSize="fontExtraSmall"
+                    fontSize="fontSmall"
                     isUppercase
                     style={{ margin: '10px' }}>
 
