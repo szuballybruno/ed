@@ -14,7 +14,8 @@ export const colors = [
     'fontError',
     'deepBlue',
     'change',
-    'mildRed'
+    'mildRed',
+    'goodGreen'
 ] as const;
 
 const sizes = ['px5', 'px10', 'px15', 'px20'] as const;

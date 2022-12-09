@@ -15,7 +15,7 @@ export const OverlayDialog = (props: {
     return <EpistoDiv
         id="questionnaireDialog"
         bg="white"
-        p="20px"
+        padding="20px"
         maxWidth={isMobile ? '100vw' : undefined}
         maxHeight={isMobile ? '100vh' : undefined}
         borderRadius="20px"

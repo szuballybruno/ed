@@ -69,7 +69,7 @@ export const ShopPage = () => {
 
             {/* categories title */}
             <EpistoFont
-                fontSize="fontExtraSmall"
+                fontSize="fontSmall"
                 isUppercase
                 style={{
                     textAlign: 'left',
@@ -112,9 +112,9 @@ export const ShopPage = () => {
                             <EpistoFlex2
                                 className="roundBorders"
                                 boxShadow="inset -1px -1px 2px 1px rgba(0,0,0,0.10)"
-                                p="3px"
+                                padding="3px"
                                 height="30px"
-                                m="2px 10px 2px 0px"
+                                margin="2px 10px 2px 0px"
                                 bgColor="var(--epistoTeal)" />
 
                             {category.name}
@@ -139,7 +139,7 @@ export const ShopPage = () => {
                     align="center"
                     justify="space-between"
                     width="100%"
-                    p="20px 0">
+                    padding="20px 0">
 
                     {/* user coin balance */}
                     <EpistoFlex2

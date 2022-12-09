@@ -1,14 +1,13 @@
 import { useUserCourseStatsOverviewData } from '../../../services/api/userStatsApiService';
 import { Id } from '@episto/commontypes';
-import { defaultCharts } from '../../../static/defaultChartOptions';
 import { Environment } from '../../../static/Environemnt';
 import { roundNumber } from '../../../static/frontendHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { NoProgressChartYet } from '../../home/NoProgressChartYet';
 import StatisticsCard from '../../statisticsCard/StatisticsCard';
-import { EpistoPieChart } from '../../universal/charts/base_charts/EpistoPieChart';
-import { UserProgressChart } from '../../universal/charts/UserProgressChart';
+import { EpistoPieChart } from '../../universal/charts/pie-chart/EpistoPieChart';
+import { UserProgressChart } from '../../universal/charts/line-chart/UserProgressChart';
 
 export const AdminUserCourseStatsOverview = ({
     userId,
@@ -48,14 +47,14 @@ export const AdminUserCourseStatsOverview = ({
 
     return <EpistoFlex2
         direction="column"
-        p="20px"
+        padding="20px"
         flex="1">
 
         <EpistoFlex2
             flex="1">
 
             <EpistoFlex2
-                h="350px"
+                height="350px"
                 flex="1"
                 align="stretch">
 
@@ -67,7 +66,7 @@ export const AdminUserCourseStatsOverview = ({
                             { value: performancePercentage, name: `Teljesítmény ${performancePercentage}%` },
                             { value: 100 - performancePercentage, name: `Teljesítmény ${performancePercentage}%` }
                         ]}
-                        options={defaultCharts.twoSegmentRedDoughnut} />
+                        variant="twoSegmentRedDoughnut" />
                 </EpistoFlex2>
                 <EpistoFlex2 flex="1">
 
@@ -77,7 +76,7 @@ export const AdminUserCourseStatsOverview = ({
                             { value: courseProgressPercentage, name: '' },
                             { value: 100 - courseProgressPercentage, name: `Haladás ${roundNumber(courseProgressPercentage)}%` },
                         ]}
-                        options={defaultCharts.twoSegmentGreenDoughnut} />
+                        variant="twoSegmentGreenDoughnut" />
                 </EpistoFlex2>
                 <EpistoFlex2 flex="1">
 
@@ -101,12 +100,12 @@ export const AdminUserCourseStatsOverview = ({
                                 name: texts.activitiesPieChartTexts.noActivity
                             }
                         ]}
-                        options={defaultCharts.twoSegmentGreenDoughnut} />
+                        variant="twoSegmentGreenDoughnut"/>
                 </EpistoFlex2>
             </EpistoFlex2>
 
             <EpistoFlex2
-                h="350px"
+                height="350px"
                 className="roundBorders"
                 flex="1"
                 direction="column"

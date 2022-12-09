@@ -128,7 +128,7 @@ export const MobileCourseDetailsPage = (props: {
 
             {/* Category */}
             <EpistoFlex2
-                p='10px 10px 0 10px'>
+                padding='10px 10px 0 10px'>
 
                 <EpistoFont>
                     {courseDetails?.categoryName ?? ''}
@@ -137,7 +137,7 @@ export const MobileCourseDetailsPage = (props: {
 
             {/* Title */}
             <EpistoFlex2
-                p='0 10px 10px 10px'>
+                padding='0 10px 10px 10px'>
 
                 <EpistoFont
                     fontSize='fontLargePlus'
@@ -183,7 +183,7 @@ export const MobileCourseDetailsPage = (props: {
 
             {/* short description */}
             <EpistoFlex2
-                p='10px'
+                padding='10px'
                 pr="20px"
                 width='100%'>
 
@@ -238,7 +238,7 @@ export const MobileCourseDetailsPage = (props: {
                 mb='50px'
                 background="var(--transparentWhite70)"
                 className="roundBorders mildShadow"
-                p="20px"
+                padding="20px"
                 backdropFilter={'blur(7px)'}>
 
 

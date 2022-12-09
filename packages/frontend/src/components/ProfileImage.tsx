@@ -31,7 +31,7 @@ export const ProfileImage = forwardRef<HTMLDivElement, ProfileImageProps>(({
     const showImage = !!url;
 
     return <EpistoFlex2
-        p="4px"
+        padding="4px"
         className={className + ' circle'}
         boxShadow="inset -7px -2px 20px 0px rgba(124,192,194,0.9)"
         {...css}>

@@ -1,7 +1,6 @@
 import { Grid, Tooltip } from '@chakra-ui/react';
 import { FiberManualRecord } from '@mui/icons-material';
 import React, { ReactNode, useState } from 'react';
-import { defaultCharts } from '../../../../static/defaultChartOptions';
 import { iterate } from '../../../../static/frontendHelpers';
 import { EpistoDivider } from '../../../controls/EpistoDivider';
 import { EpistoFlex2 } from '../../../controls/EpistoFlex';
@@ -11,8 +10,8 @@ import { EpistoSelect } from '../../../controls/EpistoSelect';
 import { EpistoSlider } from '../../../controls/EpistoSlider';
 import { StatisticsGroupType } from '../../../learningInsights/LearningStatistics';
 import StatisticsCard from '../../../statisticsCard/StatisticsCard';
-import { EpistoLineChart } from '../../../universal/charts/base_charts/EpistoLineChart';
-import { EpistoPieChart } from '../../../universal/charts/base_charts/EpistoPieChart';
+import { EpistoLineChart } from '../../../universal/charts/line-chart/EpistoLineChart';
+import { EpistoPieChart } from '../../../universal/charts/pie-chart/EpistoPieChart';
 import { DashboardSection } from '../../../universal/DashboardSection';
 
 export const HotspotsSlider = (props: {
@@ -153,7 +152,7 @@ export const adminExamStatistics = [
                         { value: 40, name: '10%-ig nézi meg a videót' }
                     ]}
                     isSortValues
-                    options={defaultCharts.redRadiusPie}
+                    variant="redRadiusPie"
                     style={{
                         width: '100%',
                         height: '100%'
@@ -246,8 +245,8 @@ export const ValueLabelComponent = (props: { children: ReactNode, value: any }) 
             label={value}
             placement="top"
             zIndex="9999"
-            h="100px"
-            w="200px">
+            height="100px"
+            width="200px">
 
             {children}
         </Tooltip >
@@ -261,7 +260,7 @@ export const ExamStats = () => {
 
     return <EpistoFlex2 direction="column"
         overflowY="scroll"
-        p="5px">
+        padding="5px">
 
         {/* First statistics card section */}
         <EpistoFlex2 >
@@ -293,7 +292,7 @@ export const ExamStats = () => {
             {/* Video player with hotspots slider */}
             <EpistoFlex2
                 align="flex-start"
-                m="5px 5px 0 0"
+                margin="5px 5px 0 0"
                 position="relative"
                 flex="1">
 
@@ -316,9 +315,9 @@ export const ExamStats = () => {
                     borderRadius="0 0 7px 7px"
                     //background="#FFFFFF"
                     position="absolute"
-                    h="40px"
+                    height="40px"
                     pt="10px"
-                    w="100%"
+                    width="100%"
                     bottom="0">
 
                     <HotspotsSlider valueLabelComponent={ValueLabelComponent} />
@@ -327,13 +326,13 @@ export const ExamStats = () => {
 
             {/* Video statistics */}
             <EpistoFlex2
-                m="5px 0 0 5px"
+                margin="5px 0 0 5px"
                 flex="1">
 
                 <EpistoFlex2
                     direction="column"
                     className="roundBorders"
-                    p="15px"
+                    padding="15px"
                     flex="1"
                     background="var(--transparentWhite70)">
 
@@ -368,7 +367,7 @@ export const ExamStats = () => {
                                     direction="column">
 
                                     <EpistoFont
-                                        fontSize="fontMid"
+                                        fontSize="fontLarge"
                                         style={{
                                             fontWeight: 500
                                         }}>
@@ -379,14 +378,12 @@ export const ExamStats = () => {
                                     <EpistoFlex2
                                         justify="space-between">
 
-                                        <EpistoFont
-                                            fontSize="fontNormal14">
+                                        <EpistoFont>
 
                                             3:29
                                         </EpistoFont>
 
-                                        <EpistoFont
-                                            fontSize="fontNormal14">
+                                        <EpistoFont>
 
                                             38 felhasználó
                                         </EpistoFont>
@@ -407,15 +404,15 @@ export const ExamStats = () => {
                             <EpistoDivider
                                 orientation="vertical"
                                 background="black"
-                                w="1px"
-                                m="0 10px" />
+                                width="1px"
+                                margin="0 10px" />
 
                             <EpistoFlex2
                                 direction="column"
                                 flex="3">
 
                                 <EpistoFont
-                                    fontSize="fontMid"
+                                    fontSize="fontLarge"
                                     style={{
                                         fontWeight: 500
                                     }}>
@@ -426,14 +423,12 @@ export const ExamStats = () => {
                                 <EpistoFlex2
                                     justify="space-between">
 
-                                    <EpistoFont
-                                        fontSize="fontNormal14">
+                                    <EpistoFont>
 
                                         Helyesen válaszolók aránya
                                     </EpistoFont>
 
-                                    <EpistoFont
-                                        fontSize="fontNormal14">
+                                    <EpistoFont>
 
                                         38%
                                     </EpistoFont>
@@ -456,8 +451,8 @@ export const ExamStats = () => {
             //boxShadow="inset -1px -1px 7px rgba(0,0,0,0.20)"
             color="black"
             showDivider
-            m="10px 0 0 0"
-            w="100%">
+            margin="10px 0 0 0"
+            width="100%">
 
             <EpistoLineChart
                 title=""
@@ -471,7 +466,6 @@ export const ExamStats = () => {
                 ]}
                 xAxisLabel="Időpont"
                 yAxisLabel="Felhasználók"
-                options={defaultCharts.simpleLineChart}
                 style={{
                     height: '350px',
                     minHeight: 350,

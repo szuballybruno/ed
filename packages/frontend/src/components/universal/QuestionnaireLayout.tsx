@@ -24,7 +24,7 @@ export const QuestionnaireLayout = (props: {
             id="questionnaireLayoutRoot"
             zIndex='6'
             direction="column"
-            p="0 0 20px 0"
+            padding="0 0 20px 0"
             align="center"
             {...css}>
 
@@ -33,7 +33,7 @@ export const QuestionnaireLayout = (props: {
                 display={onlyShowAnswers === true ? 'none' : undefined}
                 direction="column"
                 align="center"
-                p="20px"
+                padding="20px"
                 alignSelf="center">
 
                 {/* title */}

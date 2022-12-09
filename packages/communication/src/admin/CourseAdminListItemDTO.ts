@@ -6,6 +6,8 @@ export class CourseAdminListItemDTO {
     title: string;
     thumbnailImageURL: string;
     category: CourseCategoryMinimalDTO;
+    allUserCount: number;
+    allUserCountChange: number;
     currentUserCount: number;
     completedByUsersCount: number;
     abandonedUserCount: number;

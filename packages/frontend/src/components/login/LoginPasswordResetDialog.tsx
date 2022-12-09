@@ -49,7 +49,7 @@ export const LoginPasswordResetDialog = (params: {
                 {/* head */}
                 <EpistoFlex2
                     bg="var(--deepBlue)"
-                    p="20px"
+                    padding="20px"
                     alignSelf="stretch"
                     overflow="hidden"
                     position="relative">
@@ -87,7 +87,7 @@ export const LoginPasswordResetDialog = (params: {
 
                     <FlexFloat
                         align="center"
-                        p="5px"
+                        padding="5px"
                         borderRadius="15px">
 
                         <AlternateEmailIcon

@@ -216,7 +216,7 @@ export const apiRoutes = {
         deleteCourse: '/course/delete-course',
         createCourse: '/course/create-course',
         getCourseDetails: '/course/get-course-details',
-        getAdminCourseList: '/course/get-admin-course-list',
+        getAdminCourseList: '/course/get-admin-course-list' as ParametrizedRouteType<{ query: { companyId: Id<'Company'> } }>,
         setCourseMode: '/course/set-course-mode',
         getAvailableCourseCategories: '/course/get-available-course-categories',
         startCourse: '/course/start-course' as ParametrizedRouteType<{ body: CourseStartDTO }>

@@ -1,5 +1,5 @@
 import { Responsivity } from '../../helpers/responsivity';
-import { PropsWithChildren, useGetCurrentAppRoute } from '../../static/frontendHelpers';
+import { PropsWithChildren, useCurrentAppRouteCheck } from '../../static/frontendHelpers';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import Navbar from '../navbar/Navbar';
 import { useVideoPlayerFullscreenContext } from '../player/watch/videoPlayer/VideoPlayerFullscreenFrame';
@@ -27,12 +27,11 @@ export const ContentPaneRoot = ({
         isHeaderFixed: rawIsHeaderFixed
     } = contextValue.contentPaneProps;
 
-    const { isMobile } = Responsivity
-        .useIsMobileView();
+    const { isMobile } = Responsivity.useIsMobileView();
+
     const [isFullscreen] = useVideoPlayerFullscreenContext();
 
-    const currentRoute = useGetCurrentAppRoute();
-    const { isUnauthorized } = currentRoute;
+    const isUnauthorized = useCurrentAppRouteCheck(x => !!x.isUnauthorized);
 
     const isHeaderFixed = isMobile || rawIsHeaderFixed;
     const isNavbarShowing = !hideNavbar && !isUnauthorized;

@@ -45,7 +45,7 @@ export const QuestionAnswer = (props: {
             size="small"
             value="advanced" />
 
-        <EpistoFont fontSize="fontNormal14">
+        <EpistoFont>
             {answerText}
         </EpistoFont>
     </FlexFloat>;

@@ -138,14 +138,14 @@ export const CourseOverviewSubpage = () => {
                 direction="column"
                 justify='flex-start'
                 className="whall roundBorders mildShadow"
-                p="20px">
+                padding="20px">
 
                 <EpistoGrid
                     minColumnWidth={'250px'}
                     gap={'10px'}
                     auto={'fill'}
                     marginBottom={'10px'}
-                    w="100%">
+                    width="100%">
 
                     {courseStatsOverviewData
                         .map((item, index) => {
@@ -156,7 +156,7 @@ export const CourseOverviewSubpage = () => {
                                 iconPath={item.iconPath}
                                 value={isNullOrUndefined(item.value) ? undefined : item.value + ''}
                                 height='150px'
-                                p="10px 10px 10px 30px" />;
+                                padding="10px 10px 10px 30px" />;
                         })}
                 </EpistoGrid>
 

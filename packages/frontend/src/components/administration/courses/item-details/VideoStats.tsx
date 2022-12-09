@@ -1,6 +1,5 @@
 import { Grid, Tooltip } from '@chakra-ui/react';
 import { ReactNode } from 'react';
-import { defaultCharts } from '../../../../static/defaultChartOptions';
 import { iterate } from '../../../../static/frontendHelpers';
 import { EpistoDivider } from '../../../controls/EpistoDivider';
 import { EpistoFlex2 } from '../../../controls/EpistoFlex';
@@ -8,7 +7,7 @@ import { EpistoFont } from '../../../controls/EpistoFont';
 import { EpistoReactPlayer } from '../../../controls/EpistoReactPlayer';
 import { EpistoSelect } from '../../../controls/EpistoSelect';
 import StatisticsCard from '../../../statisticsCard/StatisticsCard';
-import { EpistoLineChart } from '../../../universal/charts/base_charts/EpistoLineChart';
+import { EpistoLineChart } from '../../../universal/charts/line-chart/EpistoLineChart';
 import { DashboardSection } from '../../../universal/DashboardSection';
 import { adminExamStatistics, AdminExamStatisticsListItem, adminExamStatisticsListItems, HotspotsSlider } from './ExamStats';
 
@@ -25,8 +24,8 @@ export const AdminVideoStatisticsModalPage = () => {
                 label={value}
                 placement="top"
                 zIndex="9999"
-                h="100px"
-                w="200px">
+                height="100px"
+                width="200px">
 
                 {children}
             </Tooltip >
@@ -36,7 +35,7 @@ export const AdminVideoStatisticsModalPage = () => {
     return <EpistoFlex2
         direction="column"
         overflowY="scroll"
-        p="5px">
+        padding="5px">
 
         {/* First statistics card section */}
         <EpistoFlex2>
@@ -68,7 +67,7 @@ export const AdminVideoStatisticsModalPage = () => {
             {/* Video player with hotspots slider */}
             <EpistoFlex2
                 align="flex-start"
-                m="5px 5px 0 0"
+                margin="5px 5px 0 0"
                 position="relative"
                 flex="1">
 
@@ -90,9 +89,9 @@ export const AdminVideoStatisticsModalPage = () => {
                     borderRadius="0 0 7px 7px"
                     //background="#FFFFFF"
                     position="absolute"
-                    h="40px"
+                    height="40px"
                     pt="10px"
-                    w="100%"
+                    width="100%"
                     bottom="0">
 
                     <HotspotsSlider valueLabelComponent={ValueLabelComponent} />
@@ -101,13 +100,13 @@ export const AdminVideoStatisticsModalPage = () => {
 
             {/* Video statistics */}
             <EpistoFlex2
-                m="5px 0 0 5px"
+                margin="5px 0 0 5px"
                 flex="1">
 
                 <EpistoFlex2
                     direction="column"
                     className="roundBorders"
-                    p="15px"
+                    padding="15px"
                     flex="1"
                     background="var(--transparentWhite70)">
 
@@ -142,7 +141,7 @@ export const AdminVideoStatisticsModalPage = () => {
                                     direction="column">
 
                                     <EpistoFont
-                                        fontSize="fontMid"
+                                        fontSize="fontLarge"
                                         style={{
                                             fontWeight: 500
                                         }}>
@@ -153,14 +152,12 @@ export const AdminVideoStatisticsModalPage = () => {
                                     <EpistoFlex2
                                         justify="space-between">
 
-                                        <EpistoFont
-                                            fontSize="fontNormal14">
+                                        <EpistoFont>
 
                                             3:29
                                         </EpistoFont>
 
-                                        <EpistoFont
-                                            fontSize="fontNormal14">
+                                        <EpistoFont>
 
                                             38 felhasználó
                                         </EpistoFont>
@@ -181,15 +178,15 @@ export const AdminVideoStatisticsModalPage = () => {
                             <EpistoDivider
                                 orientation="vertical"
                                 background="black"
-                                w="1px"
-                                m="0 10px" />
+                                width="1px"
+                                margin="0 10px" />
 
                             <EpistoFlex2
                                 direction="column"
                                 flex="3">
 
                                 <EpistoFont
-                                    fontSize="fontMid"
+                                    fontSize="fontLarge"
                                     style={{
                                         fontWeight: 500
                                     }}>
@@ -200,14 +197,12 @@ export const AdminVideoStatisticsModalPage = () => {
                                 <EpistoFlex2
                                     justify="space-between">
 
-                                    <EpistoFont
-                                        fontSize="fontNormal14">
+                                    <EpistoFont>
 
                                         Helyesen válaszolók aránya
                                     </EpistoFont>
 
-                                    <EpistoFont
-                                        fontSize="fontNormal14">
+                                    <EpistoFont>
 
                                         38%
                                     </EpistoFont>
@@ -230,8 +225,8 @@ export const AdminVideoStatisticsModalPage = () => {
             //boxShadow="inset -1px -1px 7px rgba(0,0,0,0.20)"
             color="black"
             showDivider
-            m="10px 0 0 0"
-            w="100%">
+            margin="10px 0 0 0"
+            width="100%">
 
             <EpistoLineChart
                 title=""
@@ -245,7 +240,6 @@ export const AdminVideoStatisticsModalPage = () => {
                 ]}
                 xAxisLabel="Időpont"
                 yAxisLabel="Felhasználók"
-                options={defaultCharts.simpleLineChart}
                 style={{
                     height: '350px',
                     minHeight: 350,

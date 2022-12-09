@@ -133,7 +133,7 @@ export const Playlist = ({
 
                         <FlexList
                             id="courseItemListContainer"
-                            p="10px">
+                            padding="10px">
 
                             {module
                                 .items

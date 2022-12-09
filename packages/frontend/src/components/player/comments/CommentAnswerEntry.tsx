@@ -90,7 +90,7 @@ export const CommentAnswerEntry = (props: {
             <EpistoFlex2
                 justify="space-between"
                 align="center"
-                m="10px 0">
+                margin="10px 0">
 
                 <EpistoFlex2 direction="column">
 

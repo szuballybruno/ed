@@ -17,7 +17,7 @@ export const AdminBreadcrumbsContent = ({
             {iconComponent && <EpistoFlex2
                 width='27px'
                 height="100%"
-                m={'2px 10px 2px 2px'}>
+                margin={'2px 10px 2px 2px'}>
 
                 {iconComponent}
             </EpistoFlex2>}

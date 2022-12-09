@@ -60,9 +60,9 @@ export const EditDialogBase = <TParams,>({
                 align='center'
                 justify="space-between"
                 position="sticky"
-                w="100%"
+                width="100%"
                 top="0"
-                p="0px 30px 0px 30px"
+                padding="0px 30px 0px 30px"
                 maxH='70px'
                 minH='70px'
                 className="mildShadow"
@@ -94,7 +94,7 @@ export const EditDialogBase = <TParams,>({
                     </EpistoFlex2>
 
                     <EpistoFont
-                        fontSize={'fontMid'}>
+                        fontSize={'fontLarge'}>
 
                         {subTitle}
                     </EpistoFont>

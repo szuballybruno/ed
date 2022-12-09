@@ -51,7 +51,7 @@ export const huTranslation: TranslationType = {
                 saturday: 'Szombat',
                 sunday: 'Vasárnap'
             },
-            
+
             wrongActivationCode: 'Helytelen aktivációs kód.',
             wrongEmailAddress: 'Nem megfelelő email cím, vagy már használatban van.',
             wrongUsername: 'A felhasználó név foglalt, vagy nem megengedett!',
@@ -463,6 +463,11 @@ export const huTranslation: TranslationType = {
             incorrectAnswer: 'Hibás!',
             startExam: 'Kezdés!',
             exitExam: 'Kilépek a tesztből',
+
+            pretest: {
+                resultBeginnerModeDescription: 'Mivel kevesebb, mint 50%-ot értél el a felmérő teszten, számodra a Kezdő üzemmódot ajánlanánk. Ebben az esetben folyamatosan haladhatsz a videókkal, de nem tudsz szabadon elindítani újat, csak az éppen aktuálisan következőt (ekkor felnyílik a lakat ikon). A videókban csak addig a pontig tudsz előre tekerni, ameddig már egyszer eljutottál. Bármikor átválthatsz azonban Haladó módra, ahol ezek a korlátozások megszűnnek!',
+                resultAdvancedModeDescription: 'Mivel több, mint 50%-ot értél el a felmérő teszten, számodra a Haladó üzemmódot ajánlanánk. Ebben az esetben szabadon haladhatsz a videókkal, nem korlátozunk rá, hogy sorban nézd őket végig és a videókon belül is szabadon kereshetsz.'
+            },
 
             examResultStats: {
                 correctAnswersRatio: {

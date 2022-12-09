@@ -153,11 +153,10 @@ export const ExamResultsSlide = (props: {
                     id="answersRoot"
                     direction={'column'}
                     flex={1}
-                    m={isMobile ? '10px 0 5px 0' : '10px 5px 5px 5px'}
+                    margin={isMobile ? '10px 0 5px 0' : '10px 5px 5px 5px'}
                     pb='20px'
-                    h='100%'
-                    boxSizing='border-box'
-                    height='fit-content'>
+                    height='100%'
+                    boxSizing='border-box'>
 
                     {questionsAnswers
                         .map((question, index) => {

@@ -129,7 +129,7 @@ export const PractiseQuestions = (props: {
 
             <EpistoFlex2
                 justifyContent="center"
-                p={isMobile ? '10px' : undefined}
+                padding={isMobile ? '10px' : undefined}
                 display={isAnswered ? undefined : 'none'}>
 
                 {!isMobile && <EpistoFont

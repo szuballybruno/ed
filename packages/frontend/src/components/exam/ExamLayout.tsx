@@ -216,7 +216,7 @@ export const MobileExamLayout = ({
             align='center'
             justify={isFirst ? 'flex-end' : 'space-between'}
             mb='5px'
-            p='20px' >
+            padding='20px' >
 
             {/* back button */}
             {
@@ -349,7 +349,7 @@ export const DesktopExamLayout = ({
             height="60px"
             align='center'
             mb='5px'
-            p='20px'>
+            padding='20px'>
 
             {/* back button */}
             {(handleBack && !isFirst) && ExamLayoutButton({

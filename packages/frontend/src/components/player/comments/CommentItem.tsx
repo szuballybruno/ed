@@ -51,8 +51,8 @@ export const CommentItem = (props: {
                 orientation="vertical" />}
 
         <EpistoFlex2
-            p="20px"
-            h='80px'>
+            padding="20px"
+            height='80px'>
 
             <Avatar
                 src={avatarUrl} />
@@ -142,7 +142,7 @@ export const CommentItem = (props: {
 
                 <EpistoButton
                     onClick={() => handleAnswerComment(comment)}
-                    className="fontExtraSmall"
+                    className="fontSmall"
                     style={{
                         color: 'grey',
                         marginTop: 3

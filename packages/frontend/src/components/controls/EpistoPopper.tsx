@@ -28,7 +28,7 @@ export const EpistoPopper = (props: {
             style={style}
             borderRadius="10px"
             direction="column"
-            p="20px">
+            padding="20px">
             {children}
         </FlexFloat>
     </Popover>;

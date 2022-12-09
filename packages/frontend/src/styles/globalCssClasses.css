@@ -116,6 +116,14 @@
     color: var(--mildRed) !important;
 }
 
+.color-mildRed {
+    color: var(--mildRed) !important;
+}
+
+.color-goodGreen {
+    color: var(--deepGreen) !important;
+}
+
 /* background color */
 
 .background-fontDark {

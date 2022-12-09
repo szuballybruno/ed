@@ -113,7 +113,7 @@ export const EpistoEntry = <TValue extends number | string | null,>(props: Epist
 
         {labelVariant === 'top' && <EpistoFont
             isUppercase
-            fontSize="fontExtraSmall"
+            fontSize="fontSmall"
             style={{
                 margin: '5px 0',
                 letterSpacing: '1.2px'
@@ -127,7 +127,6 @@ export const EpistoEntry = <TValue extends number | string | null,>(props: Epist
             className={new ClassBuilder()
                 .if(!transparentBackground, 'mildShadow')
                 .custom('roundBorders')
-                .custom('fontNormal14')
                 .build()}
             inputRef={ref}
             onInput={onInput}

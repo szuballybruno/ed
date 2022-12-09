@@ -56,7 +56,7 @@ export const ShopPurchaseConfirmationDialog = (props: {
     const confirmationSlide = () => (
         <EpistoFlex2 direction="column"
             align="center"
-            w="500px">
+            width="500px">
 
             <EpistoFont
                 className="dividerBorderBottom"
@@ -104,10 +104,10 @@ export const ShopPurchaseConfirmationDialog = (props: {
         <EpistoFlex2
             direction="column"
             align="center"
-            w="500px"
-            h="200px"
+            width="500px"
+            height="200px"
             justify="space-between"
-            p="20px">
+            padding="20px">
 
             {/* greet */}
             <EpistoFont>

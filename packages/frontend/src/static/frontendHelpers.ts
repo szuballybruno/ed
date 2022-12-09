@@ -482,6 +482,13 @@ export const getSubroutes = (route: ApplicationRoute<any, any>): ApplicationRout
 //     return result;
 // };
 
+export const coalesce = <T,>(obj: T | null | undefined, defaultObj: Partial<T>): T => {
+
+    return (obj === null
+        ? defaultObj
+        : obj) as any;
+};
+
 export const useGetCurrentAppRoute = () => {
 
     const currentUrl = useCurrentUrlPathname();
@@ -538,6 +545,14 @@ export const useGetCurrentAppRoute = () => {
         throw new Error(`No route matched "${currentUrl}"`);
 
     return matchingRoute;
+};
+
+export const useCurrentAppRouteCheck = (checkFn: (route: ApplicationRoute) => boolean) => {
+
+    const currentRoute = useGetCurrentAppRoute();
+    const result = useMemo(() => checkFn(currentRoute), [checkFn, currentRoute]);
+
+    return useMemo(() => result, [result]);
 };
 
 /**

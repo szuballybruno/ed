@@ -29,13 +29,13 @@ export const VerticalTile = (props: {
         shadow="0 0 10px 1px #CCC"
         background="var(--transparentWhite70)"
         justifyContent="space-between"
-        p="5px"
+        padding="5px"
         {...css}>
 
         {imageComponent}
 
         <EpistoFlex2
-            p="10px 10px 0 10px"
+            padding="10px 10px 0 10px"
             direction={'column'}
             flex="1">
 
@@ -56,7 +56,7 @@ export const VerticalTile = (props: {
 
                     <EpistoFont
                         fontWeight={'heavy'}
-                        fontSize="fontMid">
+                        fontSize="fontLarge">
 
                         {title}
                     </EpistoFont>
@@ -66,7 +66,7 @@ export const VerticalTile = (props: {
 
         <EpistoFlex2
             direction='column'
-            p='0 10px 10px 10px'>
+            padding='0 10px 10px 10px'>
 
             {infoComponent}
         </EpistoFlex2>

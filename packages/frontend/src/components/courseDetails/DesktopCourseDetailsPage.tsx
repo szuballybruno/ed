@@ -159,7 +159,7 @@ export const DesktopCourseDetailsPage = (props: {
                         mb='50px'
                         background="var(--transparentWhite70)"
                         className="roundBorders mildShadow"
-                        p="20px"
+                        padding="20px"
                         backdropFilter={'blur(7px)'}>
 
 
@@ -216,7 +216,7 @@ export const DesktopCourseDetailsPage = (props: {
                             width="100%"
                             height='230px'
                             justifyContent={'center'}
-                            p='10px'>
+                            padding='10px'>
 
                             <img
                                 src={courseDetails?.thumbnailURL}
@@ -247,7 +247,7 @@ export const DesktopCourseDetailsPage = (props: {
                                     )}
                                     midContent={(
                                         <EpistoFlex2 flex={1}
-                                            p='5px'>
+                                            padding='5px'>
                                             <EpistoFont>
                                                 {sidebarInfo.name}
                                             </EpistoFont>

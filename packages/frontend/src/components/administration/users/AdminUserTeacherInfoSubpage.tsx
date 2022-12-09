@@ -181,7 +181,7 @@ export const AdminUserTeacherInfoSubpage = ({
                                         borderRadius='7px'
                                         height='180px'
                                         boxSizing={'border-box'}
-                                        m='5px'>
+                                        margin='5px'>
 
                                         <EpistoFlex2>
                                             <img src={badge.icon}
