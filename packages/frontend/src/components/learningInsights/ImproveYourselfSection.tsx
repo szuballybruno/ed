@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useDailyTip } from '../../services/api/dailyTipApiService';
 import { useImproveYourselfPageStats } from '../../services/api/userStatsApiService';
-import { defaultCharts } from '../../static/defaultChartOptions';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoGrid } from '../controls/EpistoGrid';
 import StatisticsCard from '../statisticsCard/StatisticsCard';
-import { EpistoBarChart } from '../universal/charts/base_charts/EpistoBarChart';
+import { EpistoBarChart } from '../universal/charts/bar-chart/EpistoBarChart';
 
 const weekdayLabels = Object.values(translatableTexts.misc.daysOfWeekFromMonday);
 
@@ -31,7 +30,7 @@ export const ImproveYourselfSection = () => {
 
         <EpistoFlex2
             flex='1'
-            p='20px'
+            padding='20px'
             align='center'>
 
             <EpistoFont>
@@ -43,7 +42,7 @@ export const ImproveYourselfSection = () => {
 
         <EpistoFlex2
             flex='1'
-            p='20px'>
+            padding='20px'>
 
             <EpistoGrid
                 className='whall'
@@ -77,7 +76,7 @@ export const ImproveYourselfSection = () => {
                                 name: 'Jelenlegi hét',
                                 data: improveYourselfPageStats?.mostProductiveTimeRangeChartData!
                             }]}
-                            options={defaultCharts.blueGreenBarChart2} />
+                            variant="blueGreenBarChart2" />
                         : <EpistoFlex2
                             align='center'
                             justify='center'>
@@ -109,7 +108,7 @@ export const ImproveYourselfSection = () => {
                             xAxisLabel="A hét napjai"
                             yAxisLabel="Belépések időtartama"
                             yAxisLabelSuffix=" perc"
-                            options={defaultCharts.blueGreenBarChart} />
+                            variant="blueGreenBarChart" />
                         : <EpistoFlex2
                             align='center'
                             justify='center'>

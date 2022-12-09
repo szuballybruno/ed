@@ -1,9 +1,7 @@
-import React from 'react';
-import wrap from 'word-wrap';
 import { PersonalityChartDataDTO } from '@episto/communication';
-import { defaultCharts } from '../../../static/defaultChartOptions';
-import { translatableTexts } from '../../../static/translatableTexts';
-import { EpistoRadarChart } from './base_charts/EpistoRadarChart';
+import wrap from 'word-wrap';
+import { translatableTexts } from '../../../../static/translatableTexts';
+import { EpistoRadarChart } from './EpistoRadarChart';
 
 export const PersonalityChart = (props: {
     data: PersonalityChartDataDTO,
@@ -44,6 +42,5 @@ export const PersonalityChart = (props: {
                 color: 'black',
                 max: 7
             }))
-        }
-        options={defaultCharts.radar} />;
+        } />;
 };

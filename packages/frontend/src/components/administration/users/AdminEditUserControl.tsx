@@ -224,7 +224,7 @@ export const AdminEditUserControl = ({
 
                     <EpistoFont
                         isUppercase
-                        fontSize="fontExtraSmall"
+                        fontSize="fontSmall"
                         style={{
                             marginTop: '10px',
                             letterSpacing: '1.2px'
@@ -257,7 +257,7 @@ export const AdminEditUserControl = ({
 
                     <EpistoFont
                         isUppercase
-                        fontSize="fontExtraSmall"
+                        fontSize="fontSmall"
                         style={{
                             marginTop: '10px',
                             letterSpacing: '1.2px'
@@ -345,7 +345,7 @@ export const AdminEditUserControl = ({
 
                     <EpistoFont
                         isUppercase
-                        fontSize="fontExtraSmall"
+                        fontSize="fontSmall"
                         style={{
                             marginTop: '10px',
                             letterSpacing: '1.2px'

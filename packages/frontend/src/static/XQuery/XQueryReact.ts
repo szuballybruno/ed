@@ -117,6 +117,9 @@ const useXQueryParametrized = <
     return useXQuery(route as string, query, isEnabled);
 };
 
+/**
+ * @deprecated Use: useXQueryArrayParametrized
+ */
 const useXQueryArray = <TData>(url: string, queryParams?: any, isEnabled?: boolean): QueryHookResultType<TData[]> => {
 
     const { data, ...qr } = useXQuery<TData[]>(url, queryParams, isEnabled);

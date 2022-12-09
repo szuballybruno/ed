@@ -86,7 +86,7 @@ export const SessionWatcherFrame: FC<PropsWithChildren> = ({ children }) => {
                 justify="center">
 
                 <EpistoFlex2
-                    p="30px"
+                    padding="30px"
                     borderRadius="10px"
                     bg="white"
                     direction="column"

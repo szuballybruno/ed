@@ -1,9 +1,33 @@
 import { Id } from '@episto/commontypes';
 import { CourseAdminListItemDTO } from '@episto/communication';
+import { useMemo } from 'react';
 import { EpistoDataGrid, EpistoDataGridColumnBuilder } from '../../controls/EpistoDataGrid';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
+import { EpistoFont } from '../../controls/EpistoFont';
 import { EpistoImage } from '../../controls/EpistoImage';
-import { UserPerformanceChip } from '../../universal/UserPerformanceChip';
+
+const ChangeLabel = ({ change, value, tooltip }: { value: number, change: number, tooltip?: string }) => {
+
+    const positiveChange = change > 0;
+
+    return (
+        <EpistoFlex2
+            title={tooltip}>
+
+            <EpistoFont>
+                {value}
+            </EpistoFont>
+
+            {change != 0 && <EpistoFont
+                margin={{
+                    left: 'px5'
+                }}
+                color={positiveChange ? 'goodGreen' : 'mildRed'}>
+                {positiveChange ? '+' : ''}{change}
+            </EpistoFont>}
+        </EpistoFlex2>
+    );
+};
 
 export const AdminCourseList = ({
     courses,
@@ -15,7 +39,7 @@ export const AdminCourseList = ({
     isSimpleView?: boolean
 }) => {
 
-    const columns = new EpistoDataGridColumnBuilder<CourseAdminListItemDTO, Id<'Course'>>()
+    const columns = useMemo(() => new EpistoDataGridColumnBuilder<CourseAdminListItemDTO, Id<'Course'>>()
         .add({
             field: 'thumbnailImageURL',
             headerName: '',
@@ -37,40 +61,51 @@ export const AdminCourseList = ({
             width: 250
         })
         .addIf(!isSimpleView, {
-            field: 'currentUserCount',
-            headerName: 'currentUserCount',
-            width: 200
+            field: 'allUserCount',
+            headerName: 'User count (all)',
+            width: 200,
+            renderCell: ({ row: { allUserCountChange, allUserCount } }) => (
+                <ChangeLabel
+                    change={allUserCountChange}
+                    value={allUserCount}
+                    tooltip={`${allUserCountChange} uj aktiv felhasznalo, 14 nappal ezelotti allapothoz kepest.`} />
+            )
         })
         .addIf(!isSimpleView, {
-            field: 'abandonedUserCount',
-            headerName: 'abandonedUserCount',
+            field: 'currentUserCount',
+            headerName: 'User count (in-progress)',
             width: 200
         })
         .addIf(!isSimpleView, {
             field: 'completedByUsersCount',
-            headerName: 'completedByUsersCount',
+            headerName: 'User count (completed course)',
             width: 200
         })
-        .addIf(!isSimpleView, {
-            field: 'difficultVideoCount',
-            headerName: 'difficultVideoCount',
-            width: 200
-        })
-        .addIf(!isSimpleView, {
-            field: 'unansweredQuestionCount',
-            headerName: 'unansweredQuestionCount',
-            width: 200
-        })
-        .addIf(!isSimpleView, {
-            field: 'averageUserPerformance',
-            headerName: 'averageUserPerformance',
-            width: 200,
-            renderCell: ({ value }) => (
-                <UserPerformanceChip
-                    performance={value} />
-            )
-        })
-        .getColumns();
+        // .addIf(!isSimpleView, {
+        //     field: 'abandonedUserCount',
+        //     headerName: 'abandonedUserCount',
+        //     width: 200
+        // })
+        // .addIf(!isSimpleView, {
+        //     field: 'difficultVideoCount',
+        //     headerName: 'difficultVideoCount',
+        //     width: 200
+        // })
+        // .addIf(!isSimpleView, {
+        //     field: 'unansweredQuestionCount',
+        //     headerName: 'unansweredQuestionCount',
+        //     width: 200
+        // })
+        // .addIf(!isSimpleView, {
+        //     field: 'averageUserPerformance',
+        //     headerName: 'averageUserPerformance',
+        //     width: 200,
+        //     renderCell: ({ value }) => (
+        //         <UserPerformanceChip
+        //             performance={value} />
+        //     )
+        // })
+        .getColumns(), [isSimpleView, onCourseClick]);
 
     return (
         <EpistoFlex2

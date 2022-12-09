@@ -18,7 +18,7 @@ export const EpistoLabel = ({
 
         <EpistoFont
             isUppercase={isOverline}
-            fontSize={isOverline ? 'fontExtraSmall' : undefined}
+            fontSize={isOverline ? 'fontSmall' : undefined}
             style={{
                 marginBottom: '3px',
                 marginTop: isOverline ? '10px' : undefined,

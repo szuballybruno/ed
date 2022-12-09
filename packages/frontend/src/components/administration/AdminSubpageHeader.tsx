@@ -115,7 +115,7 @@ export const AdminSubpageHeader = ({
 
                 {/* tabs */}
                 <EpistoFlex2
-                    p="10px"
+                    padding="10px"
                     flex="1">
 
                     {(tabMenuItems && currentMatchingAbsUrl) && <EpistoTabs

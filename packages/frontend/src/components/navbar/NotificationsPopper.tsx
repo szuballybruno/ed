@@ -43,7 +43,6 @@ export const NotificationsPopper = (props: {
                                 />
 
                                 <EpistoFont
-                                    fontSize="fontNormal14"
                                     style={{
                                         marginLeft: '14px',
                                         textAlign: 'left',

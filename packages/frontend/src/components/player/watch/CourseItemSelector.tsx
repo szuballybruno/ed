@@ -113,8 +113,8 @@ export const CourseItemSelector = ({
             closeButtonType="top">
 
             <EpistoFlex2
-                w='450px'
-                h='120px'
+                width='450px'
+                height='120px'
                 align='center'
                 justify='center'
                 padding='20px'>

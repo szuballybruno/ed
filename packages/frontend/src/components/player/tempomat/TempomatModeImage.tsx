@@ -42,11 +42,11 @@ export const TempomatModeImage = (props: {
             _active={{
                 boxShadow: 'inset -2px -2px 6px rgba(255, 255, 255, .7), inset -2px -2px 4px rgba(255, 255, 255, .5), inset 2px 2px 2px rgba(255, 255, 255, .075), inset 2px 2px 4px rgba(0, 0, 0, .15)'
             }}
-            p="10px"
+            padding="10px"
             objectFit="contain"
             alt=""
-            w="140px"
-            h="80px"
+            width="140px"
+            height="80px"
             src={url}
             style={style}
             className={new ClassBuilder()

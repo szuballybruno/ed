@@ -255,8 +255,8 @@ export const useUserCoursesColumns = ({
                 return <EpistoFlex2 align='center'>
 
                     <EpistoImage
-                        h='30px'
-                        w='30px'
+                        height='30px'
+                        width='30px'
                         src={imageUrl} />
 
                     <EpistoFont

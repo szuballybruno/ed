@@ -1037,28 +1037,31 @@ const marray = [
 
     epistoMappingsBuilder
         .addArrayMapping(CourseAdminListItemDTO, ([urlService]) => (views: CourseAdminListView[]) => {
-            return views.map(view => {
+            return views
+                .map(view => {
 
-                const thumbnailImageURL = view.coverFilePath
-                    ? urlService.getAssetUrl(view.coverFilePath)
-                    : urlService.getAssetUrl('/images/defaultCourseCover.jpg');
+                    const thumbnailImageURL = view.coverFilePath
+                        ? urlService.getAssetUrl(view.coverFilePath)
+                        : urlService.getAssetUrl('/images/defaultCourseCover.jpg');
 
-                return instantiate<CourseAdminListItemDTO>({
-                    title: view.title,
-                    courseId: view.courseId,
-                    thumbnailImageURL,
-                    category: {
-                        id: view.categoryId,
-                        name: view.categoryName
-                    },
-                    abandonedUserCount: 1,
-                    averageUserPerformance: 'average',
-                    completedByUsersCount: 1,
-                    currentUserCount: 1,
-                    difficultVideoCount: 1,
-                    unansweredQuestionCount: 1
+                    return instantiate<CourseAdminListItemDTO>({
+                        title: view.title,
+                        courseId: view.courseId,
+                        thumbnailImageURL,
+                        category: {
+                            id: view.categoryId,
+                            name: view.categoryName
+                        },
+                        allUserCount: view.userCountAll,
+                        allUserCountChange: view.userCountAllChange,
+                        completedByUsersCount: view.userCountCompleted,
+                        currentUserCount: view.userCountCurrent,
+                        averageUserPerformance: 'average',
+                        abandonedUserCount: 1,
+                        difficultVideoCount: 1,
+                        unansweredQuestionCount: 1
+                    });
                 });
-            });
         }),
     epistoMappingsBuilder
         .addMapping(TeacherInfoEditDTO, () => (teacherInfo: TeacherInfo) => {

@@ -60,7 +60,7 @@ export const ExamGreetSlide = (props: {
             width={'100%'}
             height={!isMobile ? '100%' : undefined}
             background='var(--transparentWhite70)'
-            p='20px'
+            padding='20px'
             className="roundBorders mildShadow">
 
             <img

@@ -46,7 +46,7 @@ export const CourseDetailsBriefingInfoItem = (props: {
             align={'flex-start'}>
 
             <EpistoFont
-                fontSize={'fontExtraSmall'}
+                fontSize={'fontSmall'}
                 style={{
                     fontWeight: 'bold'
                 }}>
@@ -55,7 +55,7 @@ export const CourseDetailsBriefingInfoItem = (props: {
             </EpistoFont>
 
             <EpistoFont
-                fontSize={'fontExtraSmall'}>
+                fontSize={'fontSmall'}>
 
                 {subTitle}
             </EpistoFont>

@@ -129,7 +129,7 @@ export const QuesitionView = ({
         {(!!coinsAcquired && isShowingAcquiredCoins) && <EpistoFlex2
             mt="10px"
             borderRadius="5px"
-            p="7px"
+            padding="7px"
             align="center">
 
             <EpistoFont>

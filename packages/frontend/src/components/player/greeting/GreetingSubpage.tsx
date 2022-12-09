@@ -101,7 +101,7 @@ export const GreetingSubpage = () => {
                 justify='center'
                 background='var(--transparentWhite70)'
                 flex="1"
-                p='20px'
+                padding='20px'
                 className="whall roundBorders mildShadow">
                 <img
                     src={Environment.getAssetUrl('/images/examCover.png')}

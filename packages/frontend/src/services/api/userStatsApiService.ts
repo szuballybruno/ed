@@ -94,12 +94,11 @@ export const useUserExamStats = (courseId: Id<'Course'>, userId: Id<'User'>) => 
 
 export const useAdminHomeOverviewStatsData = () => {
 
-    const queryRes = QueryService.useXQuery<AdminHomePageOverviewDTO>(apiRoutes.userStats.getAdminHomeOverviewStats);
+    const queryRes = QueryService
+        .useXQuery<AdminHomePageOverviewDTO>(apiRoutes.userStats.getAdminHomeOverviewStats);
 
     return {
-        adminHomePageOverviewStats: queryRes.data,
-        adminHomePageOverviewStatsStatus: queryRes.state,
-        adminHomePageOverviewStatsError: queryRes.error
+        adminOverviewStatsData: queryRes.data,
     };
 };
 

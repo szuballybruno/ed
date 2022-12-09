@@ -380,7 +380,7 @@ export const WatchView = ({
 
             {isMobile && <EpistoFlex2
                 background='white'
-                p='10px'
+                padding='10px'
                 width='100%'>
 
                 <SegmentedButton

@@ -40,7 +40,7 @@ export const RecommendedQuota = (props: { activeCoursesPaging: PagingType<UserAc
             <EpistoFlex2
                 flex="1"
                 align="flex-start"
-                p="10px 10px 10px 20px"
+                padding="10px 10px 10px 20px"
                 direction="column"
                 minWidth="150px"
                 justify="center">
@@ -77,7 +77,7 @@ export const RecommendedQuota = (props: { activeCoursesPaging: PagingType<UserAc
             align="center"
             justify="flex-start"
             flex="1"
-            p="10px"
+            padding="10px"
             fontSize="13px">
 
             {/* <EpistoFont>

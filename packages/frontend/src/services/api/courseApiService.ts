@@ -25,9 +25,10 @@ const usePermissionAssignCourses = (userId: Id<'User'>) => {
     };
 };
 
-const useAdminCourseList = (searchText: string) => {
+const useAdminCourseList = (companyId: Id<'Company'>, isEnabled?: boolean) => {
 
-    const qr = QueryService.useXQuery<CourseAdminListItemDTO[]>(apiRoutes.course.getAdminCourseList, { searchText });
+    const qr = QueryService
+        .useXQueryArrayParametrized(CourseAdminListItemDTO, apiRoutes.course.getAdminCourseList, { companyId }, isEnabled);
 
     return {
         courses: qr.data ?? [],

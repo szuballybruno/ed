@@ -48,7 +48,7 @@ export const ExamAbortDialog = ({
 
             <EpistoFlex2
                 direction='column'
-                p='20px'>
+                padding='20px'>
 
                 <EpistoFont
                     margin={{

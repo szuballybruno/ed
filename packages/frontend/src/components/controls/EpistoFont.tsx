@@ -4,11 +4,25 @@ import { isNumber, isString, useCSSOptionClasses } from '../../static/frontendHe
 import { CSSOptionsFont } from '../../styles/globalCssTypes';
 import styles from './css/EpistoFont.module.css';
 
-export type FontSizeType = number | 'fontExtraSmall' | 'fontSmall' | 'fontNormal14' | 'fontMid' | 'fontMidPlus' | 'fontLarge' | 'fontLargePlus' | 'fontHuge' | 'fontGiant' | 'fontXXL'
+export type FontSizeType = number | 'fontSmall' | 'fontSmall' | 'fontLarge' | 'fontMidPlus' | 'fontLarge' | 'fontLargePlus' | 'fontHuge' | 'fontGiant' | 'fontXXL'
 
-export const EpistoFont = (params: {
+export const EpistoFont = ({
+    className,
+    style,
+    fontSize,
+    onClick,
+    allowedLines,
+    maxFontSize,
+    isMultiline,
+    noLineBreak,
+    isUppercase,
+    isAutoFontSize,
+    children,
+    tooltip,
+    ...cssOptions
+}: {
     children: ReactNode,
-    
+
     /**
      * @deprecated use globalCss
      */
@@ -28,7 +42,7 @@ export const EpistoFont = (params: {
     maxFontSize?: number,
     isMultiline?: boolean,
     noLineBreak?: boolean,
-    
+
     /**
      * @deprecated
      */
@@ -36,22 +50,6 @@ export const EpistoFont = (params: {
     isAutoFontSize?: boolean,
     tooltip?: string
 } & CSSOptionsFont) => {
-
-    const {
-        className,
-        style,
-        fontSize,
-        onClick,
-        allowedLines,
-        maxFontSize,
-        isMultiline,
-        noLineBreak,
-        isUppercase,
-        isAutoFontSize,
-        children,
-        tooltip,
-        ...cssOptions
-    } = params;
 
     const { cssOptionClasses } = useCSSOptionClasses(cssOptions);
 
@@ -86,6 +84,7 @@ export const EpistoFont = (params: {
     // whiteSpace: "pre-line" is required for new lines
     // whiteSpace: "normal" is required for autoFontSize
     return <p
+        id={EpistoFont.name}
         onClick={onClick}
         ref={ref}
         style={{

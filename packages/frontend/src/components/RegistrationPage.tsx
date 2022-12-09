@@ -14,7 +14,7 @@ import { EpistoFont } from './controls/EpistoFont';
 import { EpistoImage } from './controls/EpistoImage';
 import { MUI } from './controls/MUIControls';
 import { ContentPane } from './pageRootContainer/ContentPane';
-import { useAuthContextStateAsync } from './system/AuthenticationFrame';
+import { useAuthContextState } from './system/AuthenticationFrame';
 import { LoadingFrame } from './system/LoadingFrame';
 import { PasswordEntry, usePasswordEntryState } from './universal/PasswordEntry';
 
@@ -42,7 +42,7 @@ export const RegistrationPage = () => {
     const { registerUserAsync, registerUserState } = useRegisterUser();
     const { registerInvitedUserAsync, registerInvitedUserState } = useRegisterInvitedUser();
 
-    const { refetchAuthHandshake } = useAuthContextStateAsync();
+    const { refetchAuthHandshake } = useAuthContextState();
 
     const handleRegisterUser = async () => {
 

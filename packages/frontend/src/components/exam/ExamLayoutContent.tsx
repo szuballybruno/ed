@@ -31,8 +31,8 @@ export const DesktopExamLayoutContent = (props: {
                 {/* header */}
                 <EpistoFlex2
                     id="examLayoutContentHeader"
-                    p='20px 0 40px 0'
-                    minW='400px'
+                    padding='20px 0 40px 0'
+                    minWidth='400px'
                     align="center">
 
                     <img
@@ -56,7 +56,7 @@ export const DesktopExamLayoutContent = (props: {
                 <EpistoFlex2
                     id="examLayoutContentContainer"
                     direction={'row'}
-                    minW='500px'
+                    minWidth='500px'
                     justifyContent={'center'}
                     pt='10px'>
 
@@ -95,7 +95,7 @@ export const MobileExamLayoutContent = (props: {
                 <EpistoFlex2
                     direction='column'
                     id="examLayoutContentHeader"
-                    p='0 20px 20px 20px'
+                    padding='0 20px 20px 20px'
                     align="center">
 
                     <img

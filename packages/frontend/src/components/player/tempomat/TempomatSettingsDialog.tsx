@@ -61,8 +61,8 @@ export const TempomatSettingsDialog = (props: {
                 flex="1" >
 
                 <EpistoDivider
-                    h="1px"
-                    w="calc(100% - 20px)"
+                    height="1px"
+                    width="calc(100% - 20px)"
                     background="grey" />
 
                 <EpistoFlex2
@@ -85,12 +85,12 @@ export const TempomatSettingsDialog = (props: {
                 </EpistoFlex2>
 
                 <EpistoDivider
-                    h="1px"
-                    w="calc(100% - 20px)"
+                    height="1px"
+                    width="calc(100% - 20px)"
                     background="grey" />
 
                 <EpistoFlex2
-                    h="150px"
+                    height="150px"
                     align="center"
                     justify="center"
                     my="20px"
@@ -120,8 +120,8 @@ export const TempomatSettingsDialog = (props: {
                         align="center">
 
                         <EpistoImage
-                            h="30px"
-                            w="30px"
+                            height="30px"
+                            width="30px"
                             mr="5px"
                             src={Environment.getAssetUrl('/images/tempomatdatechange.png')}
                         />

@@ -86,13 +86,13 @@ export const AdminCourseUserOverviewDialog = (props: {
             direction="column"
             justify='flex-start'
             className="whall roundBorders"
-            p="20px">
+            padding="20px">
 
             <EpistoGrid
                 minColumnWidth={'250px'}
                 gap={'10px'}
                 auto={'fill'}
-                w="100%">
+                width="100%">
 
                 {courseStatsOverviewData
                     .map((item, index) => {
@@ -103,7 +103,7 @@ export const AdminCourseUserOverviewDialog = (props: {
                             iconPath={item.iconPath}
                             value={isNullOrUndefined(item.value) ? undefined : item.value + ''}
                             height='150px'
-                            p="10px 10px 10px 30px" />;
+                            padding="10px 10px 10px 30px" />;
                     })}
             </EpistoGrid>
 

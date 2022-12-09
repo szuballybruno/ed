@@ -7,6 +7,7 @@ import { useNavigation } from '../../../services/core/navigatior';
 import { useShowErrorDialog } from '../../../services/core/notifications';
 import { Environment } from '../../../static/Environemnt';
 import { useIntParam } from '../../../static/locationHelpers';
+import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
@@ -25,8 +26,8 @@ export const PretestDateInfo = (props: {
         my="10px">
 
         <EpistoImage
-            h="30px"
-            w="30px"
+            height="30px"
+            width="30px"
             mr="10px"
             src={Environment.getAssetUrl('/images/tempomatdatechange.png')}
         />
@@ -68,7 +69,8 @@ export const PretestResultsSubpage = () => {
 
     const { pretestResults, pretestResultsError, pretestResultsState } = PretestApiService.usePretestResults(courseId);
     const correctAnswerRate = pretestResults?.correctAnswerRate ?? 0;
-    const isBeginner = correctAnswerRate < 50;
+    const isBeginnerMode = correctAnswerRate < 50;
+
     const { isMobile } = Responsivity
         .useIsMobileView();
 
@@ -100,7 +102,7 @@ export const PretestResultsSubpage = () => {
                 flex="1"
                 direction="column"
                 minHeight={isMobile ? undefined : 'calc(100vh - 100px)'}
-                p="20px"
+                padding="20px"
                 align='center'
                 justify='center'
                 className="roundBorders largeSoftShadow"
@@ -111,7 +113,7 @@ export const PretestResultsSubpage = () => {
                     top='20px'
                     align="center"
                     justify="center"
-                    h="50px">
+                    height="50px">
 
                     <EpistoFont
                         fontSize="fontLargePlus"
@@ -122,7 +124,7 @@ export const PretestResultsSubpage = () => {
                     </EpistoFont>
                 </EpistoFlex2>
 
-
+                {/* result statistics */}
                 <Grid
                     gap={'10px'}
                     padding="10px"
@@ -155,7 +157,7 @@ export const PretestResultsSubpage = () => {
                         minWidth={isMobile ? 'calc(100vw - 20px)' : undefined}
                         pl='10px'
                         iconPath={Environment.getAssetUrl('/images/pretest3.png')}
-                        value={isBeginner
+                        value={isBeginnerMode
                             ? 'Kezdő'
                             : 'Haladó'}
                         suffix=""
@@ -185,14 +187,6 @@ export const PretestResultsSubpage = () => {
                         iconPath={Environment.getAssetUrl('/images/weeklyquota.png')}
                         isOpenByDefault={false} />
 
-                    {/*   <StatisticsCard
-                        iconPath={Environment.getAssetUrl('/images/pretest4.png')}
-                        value={pretestResults?.requiredCompletionDate
-                            ? 'Szigorú'
-                            : 'Automata'}
-                        suffix=""
-                        title="módban indul a tempomat" /> */}
-
                 </Grid>
 
                 <EpistoFlex2
@@ -212,13 +206,14 @@ export const PretestResultsSubpage = () => {
                         <EpistoFont
                             fontSize2='normal'>
 
-                            Mivel kevesebb, mint 50%-ot értél el a felmérő teszten, számodra a Kezdő üzemmódot ajánlanánk. Ebben az esetben folyamatosan haladhatsz a videókkal, de nem tudsz szabadon elindítani újat, csak az éppen aktuálisan következőt (ekkor felnyílik a lakat ikon). A videókban csak addig a pontig tudsz előre tekerni, ameddig már egyszer eljutottál.
-                            Bármikor átválthatsz azonban Haladó módra, ahol ezek a korlátozások megszűnnek!
+                            {!isBeginnerMode
+                                ? translatableTexts.exam.pretest.resultBeginnerModeDescription
+                                : translatableTexts.exam.pretest.resultAdvancedModeDescription}
                         </EpistoFont>
                     </EpistoFlex2>
 
-                    {
-                        pretestResults && <EpistoFlex2
+                    {pretestResults && (
+                        <EpistoFlex2
                             width={isMobile ? '100%' : undefined}
                             direction={isMobile ? 'column' : 'row'}
                             my={isMobile ? '0' : '15px'}
@@ -230,7 +225,7 @@ export const PretestResultsSubpage = () => {
                                     width: isMobile ? '100%' : undefined
                                 }}
                                 onClick={() => setModeAndNavigateAsync('beginner')}
-                                variant={isBeginner ? 'colored' : 'plain'}>
+                                variant={isBeginnerMode ? 'colored' : 'plain'}>
 
                                 Kezdő üzemmóddal indulok
                             </EpistoButton>
@@ -242,12 +237,12 @@ export const PretestResultsSubpage = () => {
                                     marginLeft: 10
                                 }}
                                 onClick={() => setModeAndNavigateAsync('advanced')}
-                                variant={isBeginner ? 'plain' : 'colored'}>
+                                variant={isBeginnerMode ? 'plain' : 'colored'}>
 
                                 Inkább haladó üzemmóddal kezdek
                             </EpistoButton>
                         </EpistoFlex2>
-                    }
+                    )}
 
                 </EpistoFlex2>
             </EpistoFlex2>

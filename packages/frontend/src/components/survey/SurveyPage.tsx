@@ -11,7 +11,7 @@ import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { ContentPane } from '../pageRootContainer/ContentPane';
-import { useAuthContextStateAsync } from '../system/AuthenticationFrame';
+import { useAuthContextState } from '../system/AuthenticationFrame';
 import { EpistoPaging } from '../universal/EpistoPaging';
 import { SurveyQuestions } from './SurveyQuestions';
 import { SurveyWrapper } from './SurveyWrapper';
@@ -22,7 +22,7 @@ export const SurveyPage = () => {
 
     // slides
     const slidesState = usePaging({ items: pagingItems });
-    const { refetchAuthHandshake, authState } = useAuthContextStateAsync();
+    const { refetchAuthHandshake, authState } = useAuthContextState();
     const { completeSurveyAsync, completeSurveyStatus } = SurveyApiService.useCompleteSurvey();
     const isInvitedUser = true;
     const { isMobile } = Responsivity

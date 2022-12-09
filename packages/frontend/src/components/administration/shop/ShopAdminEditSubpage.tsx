@@ -324,7 +324,7 @@ export const ShopAdminEditSubpage = () => {
                                 .map((x, index) => (
                                     <EpistoFlex2
                                         key={index}
-                                        m="5px"
+                                        margin="5px"
                                         justify="space-between">
                                         <EpistoFont>
                                             {x.id ? 'id:' + x.id : 'Uj'} - {x.code}

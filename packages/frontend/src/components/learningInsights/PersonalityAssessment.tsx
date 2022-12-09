@@ -10,7 +10,7 @@ import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoPopper } from '../controls/EpistoPopper';
 import { LoadingFrame } from '../system/LoadingFrame';
-import { PersonalityChart } from '../universal/charts/PersonalityChart';
+import { PersonalityChart } from '../universal/charts/radar-chart/PersonalityChart';
 
 export const PersonalityAssessment = (props: EpistoFlex2Props) => {
 
@@ -102,7 +102,6 @@ export const PersonalityAssessment = (props: EpistoFlex2Props) => {
 
                         <EpistoFont
                             isUppercase
-                            fontSize="fontNormal14"
                             style={{
                                 marginLeft: 5
                             }}>
@@ -121,7 +120,6 @@ export const PersonalityAssessment = (props: EpistoFlex2Props) => {
                         target={ref?.current}>
 
                         <EpistoFont
-                            fontSize="fontNormal14"
                             style={{
                                 maxWidth: '300px'
                             }}>
@@ -170,7 +168,7 @@ export const PersonalityAssessment = (props: EpistoFlex2Props) => {
                             return <AccordionItem
                                 key={index}
                                 className="roundBorders mildShadow"
-                                p="5px 0"
+                                padding="5px 0"
                                 background="var(--transparentWhite70)"
                                 onClick={() => {
                                     setOpenAccordions([index]);

@@ -48,7 +48,7 @@ export type TranslationType = {
                 saturday: string;
                 sunday: string;
             },
-            
+
             wrongActivationCode: string;
             wrongEmailAddress: string;
             wrongUsername: string;
@@ -423,6 +423,11 @@ export type TranslationType = {
             incorrectAnswer: string;
             startExam: string;
             exitExam: string;
+
+            pretest: {
+                resultBeginnerModeDescription: string;
+                resultAdvancedModeDescription: string;
+            };
 
             examResultStats: {
                 correctAnswersRatio: {

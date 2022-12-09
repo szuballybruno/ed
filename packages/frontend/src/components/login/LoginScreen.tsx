@@ -16,7 +16,7 @@ import { EpistoFont } from '../controls/EpistoFont';
 import { ContentPane } from '../pageRootContainer/ContentPane';
 import { GenericBackground } from '../pageRootContainer/GenericBackground';
 import { RootContainerBackground } from '../pageRootContainer/RootContainerBackground';
-import { useAuthContextStateAsync } from '../system/AuthenticationFrame';
+import { useAuthContextState } from '../system/AuthenticationFrame';
 import { useAuthorizationContext } from '../system/AuthorizationContext';
 import { LoadingFrame } from '../system/LoadingFrame';
 import { useEpistoDialogLogic } from '../universal/epistoDialog/EpistoDialogLogic';
@@ -27,7 +27,7 @@ export const LoginScreen = () => {
     // util
     const { navigate2, navigateToHref } = useNavigation();
     const showErrorDialog = useShowErrorDialog();
-    const { refetchAuthHandshake, authState } = useAuthContextStateAsync();
+    const { refetchAuthHandshake, authState } = useAuthContextState();
     const { hasPermission } = useAuthorizationContext();
     const dest = useQueryParams<{ dest: string }>()
         .getValueOrNull(x => x.dest, 'string');
@@ -225,7 +225,7 @@ export const LoginScreen = () => {
                                 justify="center"
                                 width={isMobile ? 'calc(100% - 20px)' : undefined}
                                 //height={isMobile ? '100%' : undefined}
-                                p={isMobile ? '20px' : '80px 100px'}
+                                padding={isMobile ? '20px' : '80px 100px'}
                                 maxH={isMobile ? undefined : 'calc(100% - 100px)'}
                                 maxW={isMobile ? undefined : 'calc(100% - 20px)'}
                                 background="var(--transparentWhite70)"

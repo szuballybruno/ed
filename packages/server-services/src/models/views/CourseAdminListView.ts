@@ -7,6 +7,9 @@ export class CourseAdminListView {
     courseId: Id<'Course'>;
 
     @XViewColumn()
+    companyId: Id<'Company'>;
+
+    @XViewColumn()
     title: string;
 
     @XViewColumn()
@@ -17,4 +20,16 @@ export class CourseAdminListView {
 
     @XViewColumn()
     coverFilePath: string;
+
+    @XViewColumn()
+    userCountCompleted: number;
+
+    @XViewColumn()
+    userCountCurrent: number; 
+
+    @XViewColumn()
+    userCountAll: number; 
+
+    @XViewColumn()
+    userCountAllChange: number; 
 }

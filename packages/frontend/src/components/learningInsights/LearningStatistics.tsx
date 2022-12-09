@@ -12,7 +12,7 @@ export const getProgressFromLagBehind = (lagBehindPercentage?: number | null) =>
         return '-';
 
     if (lagBehindPercentage > 30)
-        return 'Elmarad';
+        return 'Lemaradás';
 
     if (lagBehindPercentage > 15)
         return 'Megfelelő';
@@ -97,7 +97,7 @@ export const LearningStatistics = (props: {
 
         {statsss.map((stat, index) => {
             return <StatisticsCard
-                h='140px'
+                height='140px'
                 key={index}
                 {...stat} />;
         })}

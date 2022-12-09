@@ -102,7 +102,6 @@ export const VideoQuestionnaire = (props: {
 
                     <EpistoFont
                         isUppercase
-                        fontSize="fontNormal14"
                         style={{
                             margin: '10px'
                         }}>

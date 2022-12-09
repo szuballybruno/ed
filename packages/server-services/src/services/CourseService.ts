@@ -49,6 +49,7 @@ import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { VersionCreateService } from './VersionCreateService';
 import { UserCourseBridge } from '../models/entity/misc/UserCourseBridge';
 import { instantiate } from '@episto/commonlogic';
+import { CompanyService } from '..';
 
 export class CourseService {
 
@@ -60,7 +61,8 @@ export class CourseService {
         private _userCourseBridgeService: UserCourseBridgeService,
         private _authorizationService: AuthorizationService,
         private _verisonCreateService: VersionCreateService,
-        private _playerService: PlayerService) {
+        private _playerService: PlayerService,
+        private _companyService: CompanyService) {
     }
 
     /**
@@ -467,11 +469,13 @@ export class CourseService {
      * Returns admin list items
      */
     async getAdminCoursesAsync(
-        userId: PrincipalId
+        principalId: PrincipalId,
+        companyId: Id<'Company'>
     ) {
 
         const courseAdminShortViews = await this._ormService
-            .query(CourseAdminListView)
+            .query(CourseAdminListView, { companyId })
+            .where('companyId', '=', 'companyId')
             .getMany();
 
         return this._mapperService

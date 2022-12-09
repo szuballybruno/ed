@@ -64,7 +64,7 @@ export const SetNewPasswordPage = () => {
                 justify="center"
                 width={isMobile ? '100%' : undefined}
                 height={isMobile ? '100%' : undefined}
-                p={isMobile ? '10px' : '80px 100px'}
+                padding={isMobile ? '10px' : '80px 100px'}
                 maxH={'calc(100% - 100px)'}
                 background="var(--transparentWhite70)"
                 zIndex="7"
