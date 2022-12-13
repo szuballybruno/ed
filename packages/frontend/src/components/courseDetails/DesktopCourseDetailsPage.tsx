@@ -24,7 +24,13 @@ import { CourseDetailsSummarySection } from './CourseDetailsSummarySection';
 import { CourseDetailsTeacherSection } from './CourseDetailsTeacherSection';
 import { TabPanel } from './TabPanel';
 
-export const DesktopCourseDetailsPage = (props: {
+export const DesktopCourseDetailsPage = ({
+    userId,
+    courseDetails,
+    currentColor,
+    handlePlayCourse,
+    sidebarInfos
+}: {
     userId: Id<'User'>
     courseDetails: CourseDetailsDTO,
     currentColor: string,
@@ -32,7 +38,6 @@ export const DesktopCourseDetailsPage = (props: {
     sidebarInfos: CourseDetailsSidebarInfoType[]
 }) => {
 
-    const { userId, courseDetails, currentColor, handlePlayCourse, sidebarInfos } = props;
     const { adminCourseContentDialogLogic } = useAdminCourseContentDialogLogic();
     const [currentTab, setCurrentTab] = useState(0);
     const isSmallerThan1320 = Responsivity.useIsSmallerThan('1320px');
@@ -68,264 +73,261 @@ export const DesktopCourseDetailsPage = (props: {
             title: translatableTexts.courseDetails.tabLabels.teacher,
             component: <CourseDetailsTeacherSection
                 courseDetails={courseDetails} />
-        }/* ,
-        {
-            title: translatableTexts.courseDetails.tabLabels.ratings,
-            component: <CourseDetailsRatingSection />
-        } */
+        }
     ];
 
-    return <>
+    return (
+        <>
+            <RootContainerBackground>
+                <EpistoFlex2
+                    className="whall"
+                    bg={`linear-gradient(160deg, ${currentColor}, white)`} />
+            </RootContainerBackground>
 
-        <RootContainerBackground>
-            <EpistoFlex2
-                className="whall"
-                bg={`linear-gradient(160deg, ${currentColor}, white)`} />
-        </RootContainerBackground>
+            <AdminUserCourseContentDialog
+                dialogLogic={adminCourseContentDialogLogic} />
 
-        <AdminUserCourseContentDialog
-            dialogLogic={adminCourseContentDialogLogic} />
-
-        <ContentPane
-            overflowY="scroll"
+            <ContentPane
+                overflowY="scroll"
             /* padding="0 100px 0 100px" */>
 
-            {/* Title */}
-            <EpistoHeader
-                alignSelf="left"
-                margin="0px 40px 40px 0px"
-                variant="xxl"
-                text={courseDetails?.title ?? ''} />
+                {/* Title */}
+                <EpistoHeader
+                    alignSelf="left"
+                    margin="0px 40px 40px 0px"
+                    variant="xxl"
+                    text={courseDetails?.title ?? ''} />
 
-            {/* content */}
-            <EpistoFlex2>
+                {/* content */}
+                <EpistoFlex2>
 
-                {/* left pane */}
-                <EpistoFlex2
-                    id='CourseDetails-LeftPane'
-                    flex="1"
-                    direction={'column'}
-                    mr='30px'>
-
-                    {/* short description */}
+                    {/* left pane */}
                     <EpistoFlex2
-                        pr="20px"
-                        width='100%'>
-
-                        <EpistoFont>
-
-                            {courseDetails?.shortDescription}
-                        </EpistoFont>
-                    </EpistoFlex2>
-
-                    {/* briefing info items */}
-                    <EpistoGrid
-                        mt="20px"
-                        auto='fill'
-                        minColumnWidth='100px'
-                        gridTemplateColumns={isSmallerThan1320 ? 'repeat(2, minmax(0, 1fr))' : 'repeat(4, minmax(0, 1fr))'}
-                        gap='10px'>
-
-                        <CourseDetailsBriefingInfoItem
-                            icon={Environment.getAssetUrl('/course_page_icons/about_category.svg')}
-                            title={translatableTexts.courseDetails.briefingInfoItems.category}
-                            subTitle={courseDetails?.subCategoryName} />
-
-                        {courseDetails && <CourseDetailsBriefingInfoItem
-                            icon={<ProfileImage
-                                className="square50"
-                                url={courseDetails!.teacherData.teacherAvatarFilePath}
-                                firstName={courseDetails!.teacherData.teacherFirstName}
-                                lastName={courseDetails!.teacherData.teacherLastName} />}
-                            title={translatableTexts!.courseDetails.briefingInfoItems.teacher}
-                            subTitle={courseDetails!.teacherData.teacherFullName} />}
-
-                        <CourseDetailsBriefingInfoItem
-                            icon={Environment.getAssetUrl('/course_page_icons/about_difficulty.svg')}
-                            title={translatableTexts.courseDetails.briefingInfoItems.difficulty}
-                            subTitle={courseDetails?.difficulty + ' / 10 pont'} />
-
-                        <CourseDetailsBriefingInfoItem
-                            icon={Environment.getAssetUrl('/course_page_icons/about_learning_experience.svg')}
-                            title={translatableTexts.courseDetails.briefingInfoItems.learningExperience}
-                            subTitle={courseDetails?.benchmark + ' / 5 pont'} />
-                    </EpistoGrid>
-
-                    {/* tabs */}
-                    <EpistoFlex2
-                        direction="column"
+                        id='CourseDetails-LeftPane'
                         flex="1"
-                        mt='30px'
-                        mb='50px'
-                        background="var(--transparentWhite70)"
-                        className="roundBorders mildShadow"
-                        padding="20px"
-                        backdropFilter={'blur(7px)'}>
+                        direction={'column'}
+                        mr='30px'>
 
-
-                        {/* tab button headers */}
+                        {/* short description */}
                         <EpistoFlex2
-                            justify={'flex-start'}
-                            sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                            pr="20px"
+                            width='100%'>
 
-                            <EpistoTabs
-                                tabItems={desktopTabs
-                                    .map((x, index) => ({
-                                        key: index,
-                                        label: x.title
-                                    }))}
-                                selectedTabKey={currentTab}
-                                onChange={setCurrentTab} />
+                            <EpistoFont>
+
+                                {courseDetails?.shortDescription}
+                            </EpistoFont>
                         </EpistoFlex2>
 
-                        <EpistoFlex2 flex="1">
+                        {/* briefing info items */}
+                        <EpistoGrid
+                            mt="20px"
+                            auto='fill'
+                            minColumnWidth='100px'
+                            gridTemplateColumns={isSmallerThan1320 ? 'repeat(2, minmax(0, 1fr))' : 'repeat(4, minmax(0, 1fr))'}
+                            gap='10px'>
 
-                            {desktopTabs
-                                .map((x, index) => <TabPanel
-                                    style={{
-                                        width: '100%'
-                                    }}
-                                    value={currentTab}
-                                    key={index}
-                                    index={index}>
+                            <CourseDetailsBriefingInfoItem
+                                icon={Environment.getAssetUrl('/course_page_icons/about_category.svg')}
+                                title={translatableTexts.courseDetails.briefingInfoItems.category}
+                                subTitle={courseDetails?.subCategoryName} />
 
-                                    {courseDetails && x.component}
-                                </TabPanel>)}
+                            {courseDetails && <CourseDetailsBriefingInfoItem
+                                icon={<ProfileImage
+                                    className="square50"
+                                    url={courseDetails!.teacherData.teacherAvatarFilePath}
+                                    firstName={courseDetails!.teacherData.teacherFirstName}
+                                    lastName={courseDetails!.teacherData.teacherLastName} />}
+                                title={translatableTexts!.courseDetails.briefingInfoItems.teacher}
+                                subTitle={courseDetails!.teacherData.teacherFullName} />}
+
+                            <CourseDetailsBriefingInfoItem
+                                icon={Environment.getAssetUrl('/course_page_icons/about_difficulty.svg')}
+                                title={translatableTexts.courseDetails.briefingInfoItems.difficulty}
+                                subTitle={courseDetails?.difficulty + ' / 10 pont'} />
+
+                            <CourseDetailsBriefingInfoItem
+                                icon={Environment.getAssetUrl('/course_page_icons/about_learning_experience.svg')}
+                                title={translatableTexts.courseDetails.briefingInfoItems.learningExperience}
+                                subTitle={courseDetails?.benchmark + ' / 5 pont'} />
+                        </EpistoGrid>
+
+                        {/* tabs */}
+                        <EpistoFlex2
+                            direction="column"
+                            flex="1"
+                            mt='30px'
+                            mb='50px'
+                            background="var(--transparentWhite70)"
+                            className="roundBorders mildShadow"
+                            padding="20px"
+                            backdropFilter={'blur(7px)'}>
+
+
+                            {/* tab button headers */}
+                            <EpistoFlex2
+                                justify={'flex-start'}
+                                sx={{ borderBottom: 1, borderColor: 'divider' }}>
+
+                                <EpistoTabs
+                                    tabItems={desktopTabs
+                                        .map((x, index) => ({
+                                            key: index,
+                                            label: x.title
+                                        }))}
+                                    selectedTabKey={currentTab}
+                                    onChange={setCurrentTab} />
+                            </EpistoFlex2>
+
+                            <EpistoFlex2 flex="1">
+
+                                {desktopTabs
+                                    .map((x, index) => <TabPanel
+                                        style={{
+                                            width: '100%'
+                                        }}
+                                        value={currentTab}
+                                        key={index}
+                                        index={index}>
+
+                                        {courseDetails && x.component}
+                                    </TabPanel>)}
+                            </EpistoFlex2>
                         </EpistoFlex2>
                     </EpistoFlex2>
-                </EpistoFlex2>
 
-                {/* Right pane */}
-                <EpistoFlex2
-                    direction={'column'}
-                    minWidth="400px"
-                    flexBasis="400px">
-
+                    {/* Right pane */}
                     <EpistoFlex2
                         direction={'column'}
-                        alignItems={'center'}
-                        margin='10px'
-                        boxSizing={'border-box'}
-                        bg={'white'}
-                        height='580px'
-                        borderWidth='1px'
-                        borderRadius='10px'
-                        shadow={'#00000024 0px 0px 5px 0px'}>
+                        minWidth="400px"
+                        flexBasis="400px">
 
                         <EpistoFlex2
-                            width="100%"
-                            height='230px'
-                            justifyContent={'center'}
-                            padding='10px'>
+                            direction={'column'}
+                            alignItems={'center'}
+                            margin='10px'
+                            boxSizing={'border-box'}
+                            bg={'white'}
+                            height='580px'
+                            borderWidth='1px'
+                            borderRadius='10px'
+                            shadow={'#00000024 0px 0px 5px 0px'}>
 
-                            <img
-                                src={courseDetails?.thumbnailURL}
-                                style={{
-                                    borderRadius: 5,
-                                    objectFit: 'cover'
-                                }}
-                                alt={''} />
-                        </EpistoFlex2>
+                            <EpistoFlex2
+                                width="100%"
+                                height='230px'
+                                justifyContent={'center'}
+                                padding='10px'>
 
-                        {/* sidebar infos list */}
-                        {sidebarInfos
-                            .map((sidebarInfo, index) => (
-                                <FlexListItem
-                                    key={index}
-                                    width="100%"
-                                    px='15px'
-                                    height='40px'
-                                    thumbnailContent={(
+                                <img
+                                    src={courseDetails?.thumbnailURL}
+                                    style={{
+                                        borderRadius: 5,
+                                        objectFit: 'cover'
+                                    }}
+                                    alt={''} />
+                            </EpistoFlex2>
+
+                            {/* sidebar infos list */}
+                            {sidebarInfos
+                                .map((sidebarInfo, index) => (
+                                    <FlexListItem
+                                        key={index}
+                                        width="100%"
+                                        px='15px'
+                                        height='40px'
+                                        thumbnailContent={(
+                                            <img
+                                                src={sidebarInfo.icon}
+                                                style={{
+                                                    borderRadius: 5,
+                                                    height: 22,
+                                                    objectFit: 'cover'
+                                                }}
+                                                alt={''} />
+                                        )}
+                                        midContent={(
+                                            <EpistoFlex2 flex={1}
+                                                padding='5px'>
+                                                <EpistoFont>
+                                                    {sidebarInfo.name}
+                                                </EpistoFont>
+                                            </EpistoFlex2>
+                                        )}
+                                        endContent={(
+                                            <EpistoFlex2
+                                                direction={'row'}
+                                                mx='4px'
+                                                justifyContent={'space-between'}
+                                                alignItems={'center'}>
+
+                                                <EpistoFont>
+                                                    {sidebarInfo.value}
+                                                </EpistoFont>
+                                            </EpistoFlex2>
+                                        )} />
+                                ))}
+
+                            <EpistoFlex2>
+
+                                {/* start coures */}
+                                <EpistoButton
+                                    style={{
+                                        flex: '1',
+                                        color: 'var(--epistoTeal)',
+                                        maxHeight: 40,
+                                        marginTop: 15,
+                                        marginBottom: 15,
+                                        display: courseDetails?.canStartCourse ? undefined : 'none'
+                                    }}
+                                    variant="outlined"
+                                    onClick={handlePlayCourse}
+                                    icon={(
                                         <img
-                                            src={sidebarInfo.icon}
+                                            src={Environment.getAssetUrl('/icons/play2.svg')}
+                                            alt=""
                                             style={{
-                                                borderRadius: 5,
-                                                height: 22,
-                                                objectFit: 'cover'
-                                            }}
-                                            alt={''} />
-                                    )}
-                                    midContent={(
-                                        <EpistoFlex2 flex={1}
-                                            padding='5px'>
-                                            <EpistoFont>
-                                                {sidebarInfo.name}
-                                            </EpistoFont>
-                                        </EpistoFlex2>
-                                    )}
-                                    endContent={(
-                                        <EpistoFlex2
-                                            direction={'row'}
-                                            mx='4px'
-                                            justifyContent={'space-between'}
-                                            alignItems={'center'}>
+                                                width: '25px',
+                                                height: '25px',
+                                                marginRight: '5px'
+                                            }} />
+                                    )}>
+                                    {courseDetails?.currentItemCode
+                                        ? translatableTexts.courseDetails.continueCourse
+                                        : translatableTexts.courseDetails.startCourse}
+                                </EpistoButton>
 
-                                            <EpistoFont>
-                                                {sidebarInfo.value}
-                                            </EpistoFont>
-                                        </EpistoFlex2>
-                                    )} />
-                            ))}
+                                {/* stats */}
+                                {courseDetails?.currentItemCode && <EpistoButton
+                                    style={{
+                                        maxHeight: 40,
+                                        marginTop: 15,
+                                        marginBottom: 15,
+                                        marginLeft: 10,
+                                        display: courseDetails?.canStartCourse ? undefined : 'none'
+                                    }}
+                                    variant="outlined"
+                                    onClick={() => {
 
-                        <EpistoFlex2>
+                                        if (!courseDetails.courseId)
+                                            return;
 
-                            {/* start coures */}
-                            <EpistoButton
-                                style={{
-                                    flex: '1',
-                                    color: 'var(--epistoTeal)',
-                                    maxHeight: 40,
-                                    marginTop: 15,
-                                    marginBottom: 15,
-                                    display: courseDetails?.canStartCourse ? undefined : 'none'
-                                }}
-                                variant="outlined"
-                                onClick={handlePlayCourse}
-                                icon={(
-                                    <img
-                                        src={Environment.getAssetUrl('/icons/play2.svg')}
-                                        alt=""
-                                        style={{
-                                            width: '25px',
-                                            height: '25px',
-                                            marginRight: '5px'
-                                        }} />
-                                )}>
-                                {courseDetails?.currentItemCode
-                                    ? translatableTexts.courseDetails.continueCourse
-                                    : translatableTexts.courseDetails.startCourse}
-                            </EpistoButton>
+                                        adminCourseContentDialogLogic
+                                            .openDialog({
+                                                courseId: courseDetails.courseId,
+                                                userId: userId
+                                            });
+                                    }}>
 
-                            {/* stats */}
-                            {courseDetails?.currentItemCode && <EpistoButton
-                                style={{
-                                    maxHeight: 40,
-                                    marginTop: 15,
-                                    marginBottom: 15,
-                                    marginLeft: 10,
-                                    display: courseDetails?.canStartCourse ? undefined : 'none'
-                                }}
-                                variant="outlined"
-                                onClick={() => {
+                                    {translatableTexts.learningOverview.myStatisticsTitle}
+                                </EpistoButton>}
 
-                                    if (!courseDetails.courseId)
-                                        return;
-
-                                    adminCourseContentDialogLogic
-                                        .openDialog({
-                                            courseId: courseDetails.courseId,
-                                            userId: userId
-                                        });
-                                }}>
-
-                                {translatableTexts.learningOverview.myStatisticsTitle}
-                            </EpistoButton>}
+                            </EpistoFlex2>
 
                         </EpistoFlex2>
-
                     </EpistoFlex2>
                 </EpistoFlex2>
-            </EpistoFlex2>
-        </ContentPane>
-    </>;
+            </ContentPane>
+        </>
+    );
 };

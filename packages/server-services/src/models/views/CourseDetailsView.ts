@@ -126,4 +126,7 @@ export class CourseDetailsView {
 
     @XViewColumn()
     totalVideoQuestionCount: number;
+
+    @XViewColumn()
+    totalCompletionCount: number;
 }

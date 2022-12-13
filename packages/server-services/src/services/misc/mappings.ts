@@ -869,7 +869,6 @@ const marray = [
                 : urlService.getAssetUrl('/images/defaultCourseCover.jpg');
 
             return instantiate<CourseDetailsDTO>({
-
                 title: detailsView.title,
                 modificationDate: detailsView.modificationDate ? detailsView.modificationDate.toString() : '-',
                 description: detailsView.description,
@@ -887,13 +886,10 @@ const marray = [
                 humanSkillBenefitsDescription: detailsView.humanSkillBenefitsDescription,
                 currentItemCode: detailsView.currentItemCode,
                 stageName: detailsView.stageName,
-
                 skillBenefits: parseCommaSeparatedStringList(detailsView.skillBenefits),
                 technicalRequirements: parseCommaSeparatedStringList(detailsView.technicalRequirements),
                 humanSkillBenefits: parseSkillBenefits(detailsView.humanSkillBenefits),
-
                 modules: modules,
-
                 teacherData: {
                     teacherFullName: toFullName(detailsView.teacherFirstName, detailsView.teacherLastName),
                     teacherFirstName: detailsView.teacherFirstName,
@@ -909,11 +905,11 @@ const marray = [
                         ? urlService.getAssetUrl(detailsView.teacherAvatarFilePath)
                         : null
                 },
-
                 totalModuleCount: detailsView.totalModuleCount,
                 totalVideoCount: detailsView.totalVideoCount,
                 totalVideoQuestionCount: detailsView.totalVideoQuestionCount,
-                totalVideoSumLengthSeconds: detailsView.totalVideoSumLengthSeconds
+                totalVideoSumLengthSeconds: detailsView.totalVideoSumLengthSeconds,
+                totalCompletionCount: detailsView.totalCompletionCount
             });
 
         }),

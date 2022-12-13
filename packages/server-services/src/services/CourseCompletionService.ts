@@ -20,17 +20,15 @@ export class CourseCompletionService {
             .and('userId', '=', 'userId')
             .getOneOrNull();
 
+        if (!isCompleted)
+            return;
+
         const previousCompletion = await this
             ._ormService
             .query(CourseCompletion, { courseVersionId })
             .where('courseVersionId', '=', 'courseVersionId')
             .getOneOrNull();
 
-        // if not completed 
-        if (!isCompleted)
-            return;
-
-        // if already inserted completion
         if (previousCompletion)
             return;
 

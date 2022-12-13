@@ -484,7 +484,7 @@ export const getSubroutes = (route: ApplicationRoute<any, any>): ApplicationRout
 
 export const coalesce = <T,>(obj: T | null | undefined, defaultObj: Partial<T>): T => {
 
-    return (obj === null
+    return ((obj === null || obj === undefined)
         ? defaultObj
         : obj) as any;
 };
