@@ -29,7 +29,6 @@ export const UserAdminSubpage = ({ activeCompany }: { activeCompany: AdminActive
 
     const filterLogic = useGridFilterSettingsLogic();
 
-
     const gridLogic = useAdminUserGridLogic({
         isSimpleView,
         filterLogic,

@@ -438,38 +438,29 @@ export const AminUserGridView = ({
                 align='center'
                 height='60px'>
 
-                {!isSimpleView && <SegmentedButton
-                    paging={filterLogic.presetPaging}
-                    getDisplayValue={x => x.title}
-                    variant="tab" />}
+                {/* search bar */}
+                <UsersSearchFilters
+                    setSearchKeyword={filterLogic.setSearchKeyword} />
 
-                <EpistoFlex2
-                    flex={isSimpleView ? '1' : undefined}>
+                {/* add button */}
+                {!isSimpleView && <EpistoButton
+                    style={{
+                        alignItems: 'center',
+                        margin: '0 5px'
+                    }}
+                    onClick={() => {
 
-                    {/* search bar */}
-                    <UsersSearchFilters
-                        setSearchKeyword={filterLogic.setSearchKeyword} />
+                        navigate3(usersRoute.addRoute, { params: { activeCompanyId } });
+                    }}>
 
-                    {/* add button */}
-                    {!isSimpleView && <EpistoButton
+                    <Add
                         style={{
-                            alignItems: 'center',
-                            margin: '0 5px'
-                        }}
-                        onClick={() => {
+                            height: 20,
+                            margin: '0 5px 2px 2px'
+                        }} />
 
-                            navigate3(usersRoute.addRoute, { params: { activeCompanyId } });
-                        }}>
-
-                        <Add
-                            style={{
-                                height: 20,
-                                margin: '0 5px 2px 2px'
-                            }} />
-
-                        Felhasználó hozzáadása
-                    </EpistoButton>}
-                </EpistoFlex2>
+                    Felhasználó hozzáadása
+                </EpistoButton>}
             </Flex>
 
             {/* content */}
