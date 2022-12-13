@@ -58,10 +58,10 @@ const useUserControlDropdownData = () => {
     };
 };
 
-export const useUserAdminList = (isToBeReviewed: boolean, companyId: Id<'Company'> | null) => {
+export const useUserAdminList = (companyId: Id<'Company'>, isEnabled?: boolean) => {
 
     const queryRes = QueryService
-        .useXQueryArray<UserAdminListDTO>(apiRoutes.user.getAdminUsersList, { isToBeReviewed, companyId });
+        .useXQueryArray<UserAdminListDTO>(apiRoutes.user.getAdminUsersList, { companyId }, isEnabled);
 
     return {
         userOverviewStats: queryRes.data,

@@ -1,8 +1,9 @@
 import { instantiate } from '@episto/commonlogic';
-import { Id, TempomatModeType } from '@episto/commontypes';
+import { Id, TempomatModeType, UserPerformanceRating } from '@episto/commontypes';
 import { PrincipalId } from '@episto/x-core';
 import { UserCourseBridge } from '../models/entity/misc/UserCourseBridge';
 import { TempomatCalculationDataModel } from '../models/TempomatCalculationDataModel';
+import { UserPerformancePercentageAverageModel } from '../models/UserPerformancePercentageAverageModel';
 import { TempomatCalculationDataView } from '../models/views/TempomatCalculationDataView';
 import { TempomatTargetDateDataView } from '../models/views/TempomatTargetDateDataView';
 import { addDays, dateDiffInDays } from '../utilities/helpers';
@@ -19,7 +20,7 @@ export class TempomatService {
     /**
      * getTempomatDatasByCompanyIdAsync
      */
-    public async getTempomatDatasByCompanyIdAsync(companyId: Id<'Company'> | null): Promise<TempomatCalculationDataModel[]> {
+    public async getUserPerformancePercentageAverageAsync(companyId: Id<'Company'> | null): Promise<UserPerformancePercentageAverageModel[]> {
 
         const calcDatas = await this
             ._ormService
@@ -27,8 +28,25 @@ export class TempomatService {
             .where('companyId', '=', 'companyId')
             .getMany();
 
-        return this
+        const tempomatValues = this
             .getTempomatValuesBatch(calcDatas, new Date());
+
+        return tempomatValues
+            .groupBy(x => x.userId)
+            .map(x => {
+
+                const averageUserPerformancePercentage = x
+                    .items
+                    .map(x => x.userPerformancePercentage)
+                    .reduce((a, b) => a + b, 0) / x.items.length;
+
+                return instantiate<UserPerformancePercentageAverageModel>({
+                    userId: x.key,
+                    averageUserPerformancePercentage,
+                    performanceRating: this
+                        ._getPerformanceRating(averageUserPerformancePercentage)
+                });
+            })
     }
 
     /**
@@ -160,6 +178,7 @@ export class TempomatService {
     getUserAvgPerformancePercentages(views: TempomatCalculationDataView[]) {
 
         const userPerformanceAverages = views
+            .filter(x => Boolean(x.startDate))
             .groupBy(x => x.userId)
             .map(userGroup => {
 
@@ -198,10 +217,9 @@ export class TempomatService {
         tempomatMode: TempomatModeType,
         originalPrevisionedCompletionDate: Date | null,
         requiredCompletionDate: Date | null,
-        startDate: Date,
+        startDate: Date | null,
         totalItemCount: number,
         totalCompletedItemCount: number,
-        tempomatAdjustmentValue: number,
         currentDate: Date,
         userId: Id<'User'>
     }): TempomatCalculationDataModel {
@@ -210,6 +228,28 @@ export class TempomatService {
 
             if (!originalPrevisionedCompletionDate)
                 throw new Error(`Original previsionedCompletionDate is null or undefined!`);
+
+            if (!startDate) {
+
+                const tempDate = new Date()
+                    .addDays(45);
+
+                return instantiate<TempomatCalculationDataModel>({
+                    previsionedCompletionDate: tempDate,
+                    recommendedItemsPerDay: 0,
+                    recommendedItemsPerWeek: 0,
+                    originalPrevisionedCompletionDate: tempDate,
+                    requiredCompletionDate: tempDate,
+                    startDate: null,
+                    userPerformancePercentage: 0,
+                    lagBehindDays: 0,
+                    userId,
+                    avgItemCompletionPerDay: 0,
+                    avgItemCompletionPercentagePerDay: 0,
+                    recommendedPercentPerDay: 0,
+                    isStartedCourse: false
+                });
+            }
 
             const completedCourseItemCount = totalCompletedItemCount;
             const remainingItemsCount = totalItemCount - completedCourseItemCount;
@@ -255,7 +295,7 @@ export class TempomatService {
 
             const lagBehindDays = 0;
 
-            const avgItemCompletionPercentagePerDay = avgItemCompletionPerDay / totalItemCount * 100; 
+            const avgItemCompletionPercentagePerDay = avgItemCompletionPerDay / totalItemCount * 100;
             const recommendedPercentPerDay = recommendedItemsPerDay / totalItemCount * 100;
 
             return instantiate<TempomatCalculationDataModel>({
@@ -270,7 +310,8 @@ export class TempomatService {
                 userId,
                 avgItemCompletionPerDay,
                 avgItemCompletionPercentagePerDay,
-                recommendedPercentPerDay
+                recommendedPercentPerDay,
+                isStartedCourse: true
             });
         }
         catch (e: any) {
@@ -284,12 +325,19 @@ export class TempomatService {
      */
     getTempomatValuesBatch(views: TempomatCalculationDataView[], currentDate: Date): TempomatCalculationDataModel[] {
 
-        return views
-            .map(view => this
-                .getTempomatValues({
-                    ...view,
-                    currentDate
-                }));
+        try {
+
+            return views
+                .map(view => this
+                    .getTempomatValues({
+                        ...view,
+                        currentDate
+                    }));
+        }
+        catch (e: any) {
+
+            throw new Error(`Get tempomat values batch failed. ${e.message}`);
+        }
     }
 
     // ---------------------- PRIVATE FUNCTIONS
@@ -410,5 +458,13 @@ export class TempomatService {
             return 0;
 
         return (actualItemsPerDay - targetItemsPerDay) / targetItemsPerDay;
+    }
+
+    /**
+     * Get performance rating
+     */
+    private _getPerformanceRating(performancePercentage: number): UserPerformanceRating {
+
+        return 'average';
     }
 } 

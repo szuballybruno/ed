@@ -52,13 +52,13 @@ export class UserService {
             .where('companyId', '=', 'companyId')
             .getMany();
 
-        const tempomatDatas = await this
+        const performanceAverages = await this
             ._tempomatService
-            .getTempomatDatasByCompanyIdAsync(companyId);
+            .getUserPerformancePercentageAverageAsync(companyId);
 
         return this
             ._mapperService
-            .mapTo(UserAdminListDTO, [companyUserOverviewViews, tempomatDatas]);
+            .mapTo(UserAdminListDTO, [companyUserOverviewViews, performanceAverages]);
     }
 
     /**

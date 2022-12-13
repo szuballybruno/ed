@@ -17,6 +17,7 @@ import { Task } from '../../models/entity/misc/Task';
 import { TeacherInfo } from '../../models/entity/misc/TeacherInfo';
 import { User } from '../../models/entity/misc/User';
 import { TempomatCalculationDataModel } from '../../models/TempomatCalculationDataModel';
+import { UserPerformancePercentageAverageModel } from '../../models/UserPerformancePercentageAverageModel';
 import { ActivationCodeListView } from '../../models/views/ActivationCodeListView';
 import { AdminCourseUserStatsView } from '../../models/views/AdminCourseUserStatsView';
 import { AdminHomePageOverviewView } from '../../models/views/AdminHomePageOverviewView';
@@ -157,13 +158,17 @@ const marray = [
     epistoMappingsBuilder
         .addArrayMapping(UserAdminListDTO, () => (
             views: UserOverviewView[],
-            tempomatDatas: TempomatCalculationDataModel[]) => {
+            performanceAverages: UserPerformancePercentageAverageModel[]) => {
 
             return views
                 .map(view => {
 
-                    const tempomatData = tempomatDatas
-                        .single(x => x.userId === view.userId);
+                    const pa = performanceAverages
+                        .firstOrNull(x => x.userId === view.userId);
+
+                    const performanceAverage = pa?.averageUserPerformancePercentage ?? 0;
+                    const performanceRating = pa?.performanceRating ?? 'average';
+                    const hasPerformanceAverage = !!pa;
 
                     return instantiate<UserAdminListDTO>({
                         userId: view.userId,
@@ -173,14 +178,12 @@ const marray = [
                         firstName: view.firstName,
                         lastName: view.lastName,
                         avatarFilePath: view.avatarFilePath ?? '',
-                        summerizedScoreAvg: view.summerizedScoreAvg,
                         totalSessionLengthSeconds: view.totalSessionLengthSeconds,
-                        engagementPoints: view.engagementPoints,
                         completedVideoCount: view.completedVideoCount,
-                        reactionTime: view.reactionTime,
                         username: view.username,
-                        productivityPercentage: tempomatData.userPerformancePercentage,
-                        invertedRelativeUserPaceDiff: tempomatData.userPerformancePercentage
+                        performanceAverage,
+                        hasPerformanceAverage,
+                        performanceRating
                     });
                 });
         }),

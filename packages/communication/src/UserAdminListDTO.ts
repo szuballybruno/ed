@@ -1,4 +1,4 @@
-import { Id } from '@episto/commontypes';
+import { Id, UserPerformanceRating } from '@episto/commontypes';
 
 export class UserAdminListDTO {
     userId: Id<'User'>;
@@ -8,12 +8,10 @@ export class UserAdminListDTO {
     firstName: string;
     lastName: string;
     avatarFilePath: string;
-    summerizedScoreAvg: number;
     totalSessionLengthSeconds: number;
-    engagementPoints: number;
-    completedVideoCount: number;
-    productivityPercentage: number | null;
-    invertedRelativeUserPaceDiff: number | null;
-    reactionTime: number | null;
     username: string;
+    completedVideoCount: number;
+    performanceAverage: number;
+    hasPerformanceAverage: boolean;
+    performanceRating: UserPerformanceRating;
 }

@@ -18,7 +18,7 @@ export class TempomatCalculationDataView {
     requiredCompletionDate: Date | null;
 
     @XViewColumn()
-    startDate: Date;
+    startDate: Date | null;
 
     @XViewColumn()
     tempomatMode: TempomatModeType;
@@ -31,7 +31,4 @@ export class TempomatCalculationDataView {
 
     @XViewColumn()
     totalCompletedItemCount: number;
-
-    @XViewColumn()
-    tempomatAdjustmentValue: number;
 }
