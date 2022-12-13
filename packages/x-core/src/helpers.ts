@@ -28,3 +28,28 @@ const compareDatesWithoutTime = (dateA: Date, dateB: Date) => {
 export const DateHelpers = {
     compareDatesWithoutTime
 }
+
+export const deepMergeObjects = (...objects: any[]) => {
+
+    const isObject = (obj: any) => obj && typeof obj === 'object';
+
+    return objects
+        .reduce((prev, obj) => {
+
+            Object
+                .keys(obj)
+                .forEach(key => {
+                    const pVal = prev[key];
+                    const oVal = obj[key];
+
+                    if (isObject(pVal) && isObject(oVal)) {
+                        prev[key] = deepMergeObjects(pVal, oVal);
+                    }
+                    else {
+                        prev[key] = oVal;
+                    }
+                });
+
+            return prev;
+        }, {});
+}

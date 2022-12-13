@@ -1,28 +1,30 @@
-import { EChartsOption } from 'echarts-for-react';
+import { EChartsOption } from 'echarts';
 
-export const simpleLineChart: EChartsOption = {
-    tooltip: {
-        trigger: 'axis',
-        // formatter: (params) => {
-        //     return 'Időpont: ' + new Date(params[0].axisValue * 1000)
-        //         .toISOString()
-        //         .substr(14, 5) + ' <br />Felhasználók akik ezen a ponton elhagyták a videót: ' + params[0].data[0];
-        // }
-    },
+export const defaultOptions: EChartsOption = {
     xAxis: {
-        type: 'time',
+        nameLocation: 'middle',
+        nameGap: 40,
+        nameTextStyle: {
+            fontWeight: 600
+        },
+        boundaryGap: false,
+        type: 'category',
         axisLabel: {
-            formatter: (params) => {
-
-                return 'asd';
-                // return new Date(params * 1000)
-                //     .toISOString()
-                //     .substr(14, 5);
-            }
+            show: true,
+            showMaxLabel: true,
+            rotate: 0,
+            margin: 20,
+        },
+        axisLine: {
+            show: false
         }
-
     },
-    seriesOptions: {
-        showSymbol: false
+    yAxis: {
+        nameLocation: 'middle',
+        nameGap: 40,
+        nameTextStyle: {
+            fontWeight: 600
+        },
+        type: 'value'
     }
 };
