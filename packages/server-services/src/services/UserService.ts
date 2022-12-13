@@ -1,6 +1,7 @@
 import { instantiate } from '@episto/commonlogic';
 import { ErrorWithCode, Id } from '@episto/commontypes';
 import { BriefUserDataDTO, DepartmentDTO, Mutation, UserAdminListDTO, UserControlDropdownDataDTO, UserCourseStatsDTO, UserDTO, UserEditReadDTO, UserEditSaveDTO, UserEditSimpleDTO } from '@episto/communication';
+import { PrincipalId } from '@episto/x-core';
 import { CourseData } from '../models/entity/course/CourseData';
 import { AnswerSession } from '../models/entity/misc/AnswerSession';
 import { CourseAccessBridge } from '../models/entity/misc/CourseAccessBridge';
@@ -10,21 +11,17 @@ import { TeacherInfo } from '../models/entity/misc/TeacherInfo';
 import { User } from '../models/entity/misc/User';
 import { UserCourseBridge } from '../models/entity/misc/UserCourseBridge';
 import { RegistrationType } from '../models/Types';
-import { TempomatCalculationDataView } from '../models/views/TempomatCalculationDataView';
 import { UserOverviewView } from '../models/views/UserOverviewView';
 import { getFullName } from '../utilities/helpers';
 import { InsertEntity } from '../utilities/misc';
-import { PrincipalId } from '@episto/x-core';
 import { AuthorizationService } from './AuthorizationService';
 import { HashService } from './HashService';
 import { MapperService } from './MapperService';
-import { UserLagbehindStatType } from './misc/types';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { RoleService } from './RoleService';
 import { TeacherInfoService } from './TeacherInfoService';
 import { TempomatService } from './TempomatService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
-import { UserStatsService } from './UserStatsService';
 
 export class UserService {
 
@@ -36,167 +33,32 @@ export class UserService {
         private _roleService: RoleService,
         private _authorizationService: AuthorizationService,
         private _userCourseBridgeService: UserCourseBridgeService,
-        private _userStatsService: UserStatsService,
         private _tempomatService: TempomatService) {
     }
 
     /**
      * Get admin user list
-     * TODO: what an absolute fucking garbage clusterfuck this is... NEEDS A SHITTON OF REFACTORING!
      */
     async getUserAdminListAsync(
         principalId: PrincipalId,
-        showReviewRequiredUsersOnly: boolean,
-        companyId: Id<'Company'> | null
+        companyId: Id<'Company'>
     ) {
 
-        /**
-         * Check permission 
-         */
-        if (companyId)
-            await this._authorizationService
-                .checkPermissionAsync(principalId, 'ADMINISTRATE_COMPANY', { companyId: companyId });
-
-        /**
-         * This is sort of a cheat way to filter by companyId, 
-         * since if the company is is null, the equasion will be: != null,
-         * meaning all rows will be returned, regardless of their companyId  
-         */
-        const companyFilterOperator = companyId === null
-            ? '!='
-            : '=';
+        await this._authorizationService
+            .checkPermissionAsync(principalId, 'ADMINISTRATE_COMPANY', { companyId: companyId });
 
         const companyUserOverviewViews = await this._ormService
             .query(UserOverviewView, { companyId })
-            .where('companyId', companyFilterOperator, 'companyId')
+            .where('companyId', '=', 'companyId')
             .getMany();
 
-        const userIds = companyUserOverviewViews
-            .map(x => x.userId);
-
-        const userProductivityAndLagBehindStats = await this
-            ._getUserLagBehindStatsAsync(companyUserOverviewViews, companyId);
-
-        const lowFlaggedUserIds = await this
-            ._getLowFlaggedUserIdsAsync(userIds, companyId);
-
-        const filterdViews = showReviewRequiredUsersOnly
-            ? companyUserOverviewViews
-                .filter(x => lowFlaggedUserIds
-                    .some(y => y === x.userId))
-            : companyUserOverviewViews;
+        const tempomatDatas = await this
+            ._tempomatService
+            .getTempomatDatasByCompanyIdAsync(companyId);
 
         return this
             ._mapperService
-            .mapTo(UserAdminListDTO, [filterdViews, userProductivityAndLagBehindStats]);
-    }
-
-    /**
-     * getUserLagBehindStatsAsync
-     */
-    private async _getUserLagBehindStatsAsync(
-        companyUserOverviewViews: UserOverviewView[],
-        companyId: Id<'Company'> | null) {
-
-        const userIds = companyUserOverviewViews
-            .map(x => x.userId);
-
-        const userIdRelativePaceDiffAvgRows = await this
-            ._getAvgUserRelativePaceDiffs(userIds, companyId);
-
-        const userProductivityAndLagBehindStats = companyUserOverviewViews
-            .map(({ userId, averagePerformancePercentage }) => {
-
-                const relativePaceDiffAvg = userIdRelativePaceDiffAvgRows
-                    .single(x => x.userId === userId)
-                    .relativePaceDiffAvg;
-
-                const productivityPercentage = this
-                    ._userStatsService
-                    .calculateProductivity(averagePerformancePercentage, relativePaceDiffAvg);
-
-                const invertedRelativeUserPaceDiff = (() => {
-
-                    if (!relativePaceDiffAvg)
-                        return null;
-
-                    if (relativePaceDiffAvg >= 100)
-                        return 0;
-
-                    if (relativePaceDiffAvg <= -100)
-                        return 200;
-
-                    return 100 - relativePaceDiffAvg
-                })();
-
-                return instantiate<UserLagbehindStatType>({
-                    userId,
-                    invertedRelativeUserPaceDiff,
-                    productivityPercentage
-                });
-            });
-
-        return userProductivityAndLagBehindStats;
-    }
-
-    /**
-     * getLowFlaggedUserIdsAsync
-     */
-    private async _getLowFlaggedUserIdsAsync(userIds: Id<'User'>[], companyId: Id<'Company'> | null) {
-
-        const lowUserFlags = await this
-            ._userStatsService
-            .flagUsersAsync(companyId, 'low');
-
-        const lowFlaggedUserIds = userIds
-            .filter(userId => lowUserFlags
-                .some(userFlag => userFlag.userId === userId));
-
-        return lowFlaggedUserIds;
-    }
-
-    /**
-     * getAvgUserLagBehinds
-     */
-    private async _getAvgUserRelativePaceDiffs(userIds: Id<'User'>[], companyId: Id<'Company'> | null) {
-
-        /**
-         * This is sort of a cheat way to filter by companyId, 
-         * since if the company is is null, the equasion will be: != null,
-         * meaning all rows will be returned, regardless of their companyId  
-         */
-        const companyFilterOperator = companyId === null
-            ? '!='
-            : '=';
-
-        // TODO: CHECK FOR PERMISSIONS IN VIEW
-        const companyTempomatCalculationViews = await this._ormService
-            .query(TempomatCalculationDataView, { companyId })
-            .innerJoin(User, x => x
-                .on('companyId', companyFilterOperator, 'companyId')
-                .and('id', '=', 'userId', TempomatCalculationDataView))
-            .where('startDate', 'IS NOT', 'NULL')
-            .and('originalPrevisionedCompletionDate', 'IS NOT', 'NULL')
-            .getMany();
-
-        const userIdRelativePaceDiffAvgRows = this._tempomatService
-            .getAvgRelativeUserPaceDiffs(companyTempomatCalculationViews);
-
-        const userOverviewViewsWithRelativePaceDiff = userIds
-            .map(userId => {
-
-                const relativePaceDiffAvgRow = userIdRelativePaceDiffAvgRows
-                    .firstOrNull(userIdRelativePaceDiffAvgRows => userIdRelativePaceDiffAvgRows.userId === userId);
-
-                const relativePaceDiffAvg = relativePaceDiffAvgRow?.relativeUserPaceDiff ?? 0;
-
-                return {
-                    userId,
-                    relativePaceDiffAvg
-                };
-            });
-
-        return userOverviewViewsWithRelativePaceDiff;
+            .mapTo(UserAdminListDTO, [companyUserOverviewViews, tempomatDatas]);
     }
 
     /**

@@ -42,6 +42,6 @@ export class UserProgressController implements IController<UserProgressControlle
                 .getValue(x => x.courseId, 'int'));
 
         return this._userProgressService
-            .getProgressChartDataAsync(params.principalId, courseId);
+            .getProgressChartDataAsync(params.principalId, courseId, params.principalId.getId());
     };
 }

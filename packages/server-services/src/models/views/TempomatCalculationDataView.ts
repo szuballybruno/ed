@@ -12,7 +12,10 @@ export class TempomatCalculationDataView {
     courseId: Id<'Course'>;
 
     @XViewColumn()
-    requiredCompletionDate: Date;
+    companyId: Id<'Company'>;
+
+    @XViewColumn()
+    requiredCompletionDate: Date | null;
 
     @XViewColumn()
     startDate: Date;
@@ -21,7 +24,7 @@ export class TempomatCalculationDataView {
     tempomatMode: TempomatModeType;
 
     @XViewColumn()
-    originalPrevisionedCompletionDate: Date;
+    originalPrevisionedCompletionDate: Date | null;
 
     @XViewColumn()
     totalItemCount: number;

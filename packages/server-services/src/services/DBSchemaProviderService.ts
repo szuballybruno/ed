@@ -126,7 +126,6 @@ import { UserActiveCourseView } from '../models/views/UserActiveCourseView';
 import { UserAnswerView } from '../models/views/UserAnswerView';
 import { UserCourseBridgeView } from '../models/views/UserCourseBridgeView';
 import { UserCourseCompletionCurrentView } from '../models/views/UserCourseCompletionCurrentView';
-import { UserCourseCompletionOriginalEstimationView } from '../models/views/UserCourseCompletionOriginalEstimationView';
 import { UserCourseProgressView } from '../models/views/UserCourseProgressView';
 import { AdminUserCoursesView } from '../models/views/UserCourseStatsView';
 import { UserDailyActivityChartView } from '../models/views/UserDailyActivityChartView';
@@ -210,7 +209,6 @@ export class DBSchemaProviderService implements IXORMSchemaProviderService {
                 LatestExamResultView,
                 CourseAdminListView,
                 QuestionDataView,
-                UserCourseCompletionOriginalEstimationView,
                 UserCourseCompletionCurrentView,
                 UserAnswerView,
                 UserDailyCourseItemProgressView,

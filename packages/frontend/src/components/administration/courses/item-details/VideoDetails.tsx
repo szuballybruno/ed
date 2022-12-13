@@ -26,7 +26,7 @@ export const VideoDetails = ({
     callback,
     cancelEdit
 }: {
-    videoVersionId: Id<'VideoVerison'>,
+    videoVersionId: Id<'VideoVersion'>,
     defaultModuleId: Id<'Module'>,
     modules: ModuleEditDTO[],
     questionMutations: QuestionMutationsType,

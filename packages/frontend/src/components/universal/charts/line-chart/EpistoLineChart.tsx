@@ -5,13 +5,6 @@ import React from 'react';
 import { EpistoChartXAxisDataType } from '../EpistoChartCommonTypes';
 import { simpleLineChart } from './lineChartVariants';
 
-/**
- * Wrapper component for ECharts
- **
- * All chart options:
- * @see Docs: https://echarts.apache.org/en/option.html#title
- */
-
 export const EpistoLineChart = ({
     title,
     dataset: datasets,
@@ -32,13 +25,17 @@ export const EpistoLineChart = ({
     options?: EChartsOption
 }) => {
 
+    const overwrittenOptions = options
+        ? Object.assign(simpleLineChart, options)
+        : simpleLineChart;
+
     const {
         legend,
         tooltip,
         xAxis,
         yAxis,
         seriesOptions
-    } = options ? Object.assign(simpleLineChart, options) : simpleLineChart;
+    } = overwrittenOptions;
 
     const defaultStyle = {
         width: '100%',

@@ -1,53 +1,34 @@
-import { UserCourseBridge } from '../models/entity/misc/UserCourseBridge';
-import { TempomatCalculationDataView } from '../models/views/TempomatCalculationDataView';
-import { UserCourseProgressView } from '../models/views/UserCourseProgressView';
 import { instantiate } from '@episto/commonlogic';
-import { TempomatModeType } from '@episto/commontypes';
-import { Id } from '@episto/commontypes';
-import { addDays, dateDiffInDays, getArrayAverage, relativeDiffInPercentage } from '../utilities/helpers';
+import { Id, TempomatModeType } from '@episto/commontypes';
 import { PrincipalId } from '@episto/x-core';
-import { AuthorizationService } from './AuthorizationService';
-import { EventService } from './EventService';
-import { LoggerService } from './LoggerService';
+import { UserCourseBridge } from '../models/entity/misc/UserCourseBridge';
+import { TempomatCalculationDataModel } from '../models/TempomatCalculationDataModel';
+import { TempomatCalculationDataView } from '../models/views/TempomatCalculationDataView';
+import { TempomatTargetDateDataView } from '../models/views/TempomatTargetDateDataView';
+import { addDays, dateDiffInDays } from '../utilities/helpers';
+import { GlobalConfigurationService } from './GlobalConfigurationService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
-
-type CalculateTempomatValuesArgs = {
-    tempomatMode: TempomatModeType,
-    originalPrevisionedCompletionDate: Date,
-    startDate: Date,
-    requiredCompletionDate: Date,
-    totalItemCount: number,
-    totalCompletedItemCount: number,
-    tempomatAdjustmentValue: number,
-}
-
-
-export type CalculatedTempomatValueType = {
-    previsionedCompletionDate: Date | null,
-    recommendedItemsPerDay: number,
-    recommendedItemsPerWeek: number,
-    originalPrevisionedCompletionDate: Date,
-    requiredCompletionDate: Date,
-    startDate: Date,
-    relativeUserPaceDiff: number
-}
-
-export interface CalculatedTempomatValueTypeWithUserId extends CalculatedTempomatValueType {
-    userId: Id<'User'>
-}
-
 
 export class TempomatService {
 
-    private _authorizationService: AuthorizationService;
-
     constructor(
-        private _ormService: ORMConnectionService,
-        private _loggerService: LoggerService,
-        private _eventService: EventService,
-        private authorizationService: AuthorizationService) {
+        private _config: GlobalConfigurationService,
+        private _ormService: ORMConnectionService) {
+    }
 
-        this._authorizationService = authorizationService;
+    /**
+     * getTempomatDatasByCompanyIdAsync
+     */
+    public async getTempomatDatasByCompanyIdAsync(companyId: Id<'Company'> | null): Promise<TempomatCalculationDataModel[]> {
+
+        const calcDatas = await this
+            ._ormService
+            .query(TempomatCalculationDataView, { companyId })
+            .where('companyId', '=', 'companyId')
+            .getMany();
+
+        return this
+            .getTempomatValuesBatch(calcDatas, new Date());
     }
 
     /**
@@ -72,25 +53,6 @@ export class TempomatService {
     }
 
     /**
-     * TODO: Create a logic for adding notifications
-     */
-    async handleLagBehindAsync(userCourseProgressView: UserCourseProgressView) {
-
-        const { courseId, userId, lagBehindPercentage } = userCourseProgressView;
-
-        if (lagBehindPercentage < 35)
-            return;
-
-        this._loggerService
-            .logScoped('TEMPOMAT', `User ${userId} is lagging behind in course ${courseId} by ${lagBehindPercentage}% Sending notification...`);
-
-        await this._eventService
-            .addLagBehindNotificationEventAsync(userId, {
-                lagBehindPercentage
-            });
-    }
-
-    /**
      * Temp mode
      */
     async getTempomatModeAsync(principalId: PrincipalId, courseId: Id<'Course'>) {
@@ -107,34 +69,31 @@ export class TempomatService {
     }
 
     /**
-     * Get single tempomat calculation data
+     * Returns the original previsioned completion date, 
+     * relative to the current date, and the prequiz user answers / default daily minutes
      */
-    async getTempomatCalculationDataAsync(userId: Id<'User'>, courseId: number) {
+    async getTempomatPrevisionedCompletionDateAsync(
+        userId: Id<'User'>,
+        courseId: Id<'Course'>) {
 
-        return await this
+        const data = await this
             ._ormService
-            .query(TempomatCalculationDataView, { courseId, userId })
+            .query(TempomatTargetDateDataView, { userId, courseId })
             .where('courseId', '=', 'courseId')
             .and('userId', '=', 'userId')
             .getSingle();
+
+        const estimatedMinutesPerDay = data.estimatedMinutesPerDay ?? this._config.tempomat.defaultMinutesPerDay;
+        const previsionedDurationDays = data.courseDurationMinutes / estimatedMinutesPerDay;
+        const previsionedCompletionDate = new Date().addDays(previsionedDurationDays);
+
+        return previsionedCompletionDate;
     }
 
     /**
-     * Gets all tempomat calc datas associated with user
+     * Calc tempomat values for one users one course
      */
-    async getTempomatCalculationDatasAsync(userId: Id<'User'>) {
-
-        return await this
-            ._ormService
-            .query(TempomatCalculationDataView, { userId })
-            .where('userId', '=', 'userId')
-            .getMany();
-    }
-
-    /**
- * Calc tempomat values for one users one course
- */
-    async calculateTempomatValuesAsync(userId: Id<'User'>, courseId: Id<'Course'>) {
+    async getTempomatValuesAsync(userId: Id<'User'>, courseId: Id<'Course'>) {
 
         const tempomatCalculationData = await this._ormService
             .query(TempomatCalculationDataView, { userId, courseId })
@@ -143,175 +102,175 @@ export class TempomatService {
             .getSingle();
 
         return this
-            .calculateTempomatValues(tempomatCalculationData);
+            .getTempomatValues({
+                ...tempomatCalculationData,
+                currentDate: new Date()
+            });
     }
 
     /**
-     * Calculates the average relative pace of the
-     * user for every started course. 
-     * 
-     * e.g.: Course 1: 30%, Course 2: 60% means
-     * that the user is 45% faster than the estimated
-     * or required tempo.
+     * getTempomatClculationDataViewsAsync
      */
-    async getAvgRelativeUserPaceDiffAsync(userId: Id<'User'>) {
+    async getTempomatCalculationDataViewsByCourseIdsAsync(courseIds: Id<'Course'>[], userId: Id<'User'>) {
+
+        const tempomatCalculationData = await this._ormService
+            .query(TempomatCalculationDataView, { userId, courseIds })
+            .where('userId', '=', 'userId')
+            .and('courseId', '=', 'courseIds')
+            .getMany();
+
+        return tempomatCalculationData;
+    }
+
+    /**
+     * getTempomatClculationDataViewsAsync
+     */
+    async getTempomatCalculationDataViewsByUserIdsAsync(userIds: Id<'User'>[], courseId: Id<'Course'>) {
+
+        const tempomatCalculationData = await this._ormService
+            .query(TempomatCalculationDataView, { userIds, courseId })
+            .where('userId', '=', 'userIds')
+            .and('courseId', '=', 'courseId')
+            .getMany();
+
+        return tempomatCalculationData;
+    }
+
+    /**
+     * Calculates the average performance 
+     * for a user across all courses 
+     */
+    async getUserAvgPerformancePercentageAsync(userId: Id<'User'>) {
 
         const tempomatCalculationDatas = await this
-            .getTempomatCalculationDatasAsync(userId);
+            ._ormService
+            .query(TempomatCalculationDataView, { userId })
+            .where('userId', '=', 'userId')
+            .getMany();
 
-        if (tempomatCalculationDatas.length === 0)
-            return null;
-
-        const allRelativeUserPaces = tempomatCalculationDatas
-            .map(x => {
-
-                const tempomatValues = this
-                    .calculateTempomatValues(x);
-
-                return tempomatValues?.relativeUserPaceDiff;
-            });
-
-        if (allRelativeUserPaces.some(x => x === null))
-            return null;
-
-        // calculates the average lag beghind from all started course
-        const avgRelativeUserPace = allRelativeUserPaces
-            .reduce((a, b) => a + b, 0) / allRelativeUserPaces.length;
-
-        return avgRelativeUserPace;
+        return this
+            .getUserAvgPerformancePercentages(tempomatCalculationDatas)
+            .single()
+            .averageProgressPercentage;
     }
 
     /*
-    * Calc the average lag beghind from all started course
+    * Get user avg performance percentages
     */
-    getAvgRelativeUserPaceDiffs(tempomatCalculationDatas: TempomatCalculationDataView[]) {
+    getUserAvgPerformancePercentages(views: TempomatCalculationDataView[]) {
 
-        return tempomatCalculationDatas
+        const userPerformanceAverages = views
             .groupBy(x => x.userId)
-            .map(x => {
+            .map(userGroup => {
 
-                const relativeUserPaceDiff = this
-                    .getRelativeUserPaceDiffs(x.items);
-
-                const filteredRelativeUserPaceDiffs = relativeUserPaceDiff
-                    .filter(x => x)
-                    .filter(x => x !== 0);
+                const userGroupAvg = userGroup
+                    .items
+                    .map(view => this
+                        .getTempomatValues({
+                            ...view,
+                            currentDate: new Date()
+                        })
+                        .userPerformancePercentage)
+                    .reduce((diffA, diffB) => diffA + diffB, 0) / userGroup.items.length;
 
                 return {
-                    userId: x.first.userId,
-                    relativeUserPaceDiff: getArrayAverage(filteredRelativeUserPaceDiffs)
+                    userId: userGroup.key,
+                    averageProgressPercentage: userGroupAvg
                 };
             });
+
+        return userPerformanceAverages;
     }
 
     /**
-     * Calculates multiple relative user pace diffs from
-     * tempomat calculation data.
+     * Get tempomat values for a specific user
      */
-    getRelativeUserPaceDiffs(tempomatCalculationDatas: TempomatCalculationDataView[]) {
-
-        return tempomatCalculationDatas.map(x => {
-            const actualUserPace = this
-                ._calculateActualUserPace(
-                    x.startDate,
-                    new Date(Date.now()),
-                    x.totalCompletedItemCount
-                )
-
-            const estimatedUserPace = this
-                ._calculateEstimatedUserPace(
-                    x.startDate,
-                    x.requiredCompletionDate || x.originalPrevisionedCompletionDate,
-                    x.totalItemCount
-                )
-
-            const relativeUserPaceDiff = this
-                ._calculateRelativeUserPaceDiff(
-                    estimatedUserPace,
-                    actualUserPace
-                );
-
-            return relativeUserPaceDiff;
-        })
-    }
-
-    /**
-     * Calculates tempomat values with userId 
-     * @param tempomatCalculationDataViews 
-     * @returns 
-     */
-    calculateCompanyTempomatValues(tempomatCalculationDataViews: TempomatCalculationDataView[]): CalculatedTempomatValueTypeWithUserId[] {
-        return tempomatCalculationDataViews
-            .map(x => ({
-                userId: x.userId,
-                ...this.calculateTempomatValues(x)
-            }));
-    }
-
-    calculateCompanyRelativeUserPaceDiffs(companyTempomatValues: CalculatedTempomatValueTypeWithUserId[]) {
-        return companyTempomatValues
-            .filter(x => (x !== null && x.relativeUserPaceDiff !== null))
-            .map(x => x.relativeUserPaceDiff);
-    }
-
-    /**
-     * Calc tempomat values for one users one course
-     */
-    calculateTempomatValues({
+    getTempomatValues({
         originalPrevisionedCompletionDate,
         totalItemCount,
-        totalCompletedItemCount,
         startDate,
-        requiredCompletionDate
-    }: CalculateTempomatValuesArgs): CalculatedTempomatValueType {
+        requiredCompletionDate,
+        currentDate,
+        tempomatMode,
+        totalCompletedItemCount,
+        userId
+    }: {
+        tempomatMode: TempomatModeType,
+        originalPrevisionedCompletionDate: Date | null,
+        requiredCompletionDate: Date | null,
+        startDate: Date,
+        totalItemCount: number,
+        totalCompletedItemCount: number,
+        tempomatAdjustmentValue: number,
+        currentDate: Date,
+        userId: Id<'User'>
+    }): TempomatCalculationDataModel {
 
         try {
 
-            const previsionedCompletionDate = this
-                .calculateNewPrevisionedDate(
+            if (!originalPrevisionedCompletionDate)
+                throw new Error(`Original previsionedCompletionDate is null or undefined!`);
+
+            const completedCourseItemCount = totalCompletedItemCount;
+            const remainingItemsCount = totalItemCount - completedCourseItemCount;
+            const targetCompletionDate = requiredCompletionDate || originalPrevisionedCompletionDate;
+
+            const avgItemCompletionPerDay = this
+                ._getAverageCompletedItemsCountPerDay({
+                    completedCourseItemCount,
+                    currentDate,
+                    startDate
+                });
+
+            const estimatedCompletionDate = this
+                ._getEstimatedCompletionDate({
+                    avgItemCompletionPerDay,
+                    currentDate,
+                    completedCourseItemCount,
+                    totalCourseItemCount: totalItemCount,
+                    originalPrevisionedCompletionDate
+                });
+
+            const recommendedItemsPerDay = this
+                ._getRecommendedItemsPerDay({
                     startDate,
-                    new Date(Date.now()),
-                    totalCompletedItemCount,
-                    totalItemCount
-                );
+                    currentDate,
+                    targetCompletionDate,
+                    remainingItemsCount,
+                    avgItemCompletionPerDay,
+                    ignoreTargetDate: tempomatMode === 'light'
+                });
 
-            const { recommendedItemsPerDay, recommendedItemsPerWeek } = this
-                ._calculateRecommendedItemsPerDay(
-                    startDate,
-                    new Date(Date.now()),
-                    requiredCompletionDate || originalPrevisionedCompletionDate,
-                    totalItemCount,
-                    requiredCompletionDate ? 'increase' : 'normal'
-                );
+            const recommendedItemsPerWeek = this
+                ._getRecommendedItemsPerWeek({
+                    recommendedItemsPerDay,
+                    remainingItemsCount
+                });
 
-            const actualUserPace = this
-                ._calculateActualUserPace(
-                    startDate,
-                    new Date(Date.now()),
-                    totalCompletedItemCount
-                )
+            const userPaceDifferencePercentage = this
+                ._getUserPaceDifferencePercentage({
+                    actualItemsPerDay: avgItemCompletionPerDay,
+                    targetItemsPerDay: recommendedItemsPerDay
+                });
 
-            const estimatedUserPace = this
-                ._calculateEstimatedUserPace(
-                    startDate,
-                    requiredCompletionDate || originalPrevisionedCompletionDate,
-                    totalItemCount
-                )
+            const lagBehindDays = 0;
 
-            const relativeUserPaceDiff = this
-                ._calculateRelativeUserPaceDiff(
-                    estimatedUserPace,
-                    actualUserPace
-                );
+            const avgItemCompletionPercentagePerDay = avgItemCompletionPerDay / totalItemCount * 100; 
+            const recommendedPercentPerDay = recommendedItemsPerDay / totalItemCount * 100;
 
-            return instantiate<CalculatedTempomatValueType>({
-                previsionedCompletionDate,
+            return instantiate<TempomatCalculationDataModel>({
+                previsionedCompletionDate: estimatedCompletionDate,
                 recommendedItemsPerDay,
                 recommendedItemsPerWeek,
                 originalPrevisionedCompletionDate,
                 requiredCompletionDate,
                 startDate,
-                relativeUserPaceDiff
+                userPerformancePercentage: userPaceDifferencePercentage,
+                lagBehindDays,
+                userId,
+                avgItemCompletionPerDay,
+                avgItemCompletionPercentagePerDay,
+                recommendedPercentPerDay
             });
         }
         catch (e: any) {
@@ -320,266 +279,136 @@ export class TempomatService {
         }
     }
 
-
     /**
-     * Calculates the real lag behind in days which
-     * means that whatever deadline the user exceeds
-     * it counts the days from it.
-     * 
-     * @param currentDate 
-     * @param deadlineDate 
-     * @returns 
+     * Get tempomat values for a specific user
      */
-    calculateLagBehindDaysFromDeadline(
-        currentDate: Date,
-        deadlineDate: Date
-    ) {
+    getTempomatValuesBatch(views: TempomatCalculationDataView[], currentDate: Date): TempomatCalculationDataModel[] {
 
-        /* If the user haven't exceeded the deadline return 0 */
-        if (currentDate <= deadlineDate)
-            return 0;
-
-        return dateDiffInDays(deadlineDate, currentDate)
+        return views
+            .map(view => this
+                .getTempomatValues({
+                    ...view,
+                    currentDate
+                }));
     }
 
+    // ---------------------- PRIVATE FUNCTIONS
 
     /**
-     * Calculates the previsioned difference between
-     * deadline and previsionedCompletionDate (that is based on
-     * the users real pace)
-     * 
-     ** '=0' => User will complete the course on deadline
-     ** '>0' => User will complete the course after deadline
-     ** '<0' => User will complete the course before deadline
-     * 
-     * @param deadlineDate 
-     * @param previsionedCompletionDate 
-     * @returns
+     * Get recommended items per day,
+     * if target date is ignored, 
+     * returns the average item completion count per day
      */
-    calculatePrevisionedLagBehindDays(
-        deadlineDate: Date,
-        previsionedCompletionDate: Date
-    ) {
-
-        return dateDiffInDays(deadlineDate, previsionedCompletionDate)
-    }
-
-    /**
-     * ---------------------- PRIVATE FUNCTIONS
-     */
-
-    /**
-     * Calculates the users relative pace.
-     * 
-     * It's a previsioned relative pace because there is not necessarily a real lag behind
-     * and the user is just slower or faster than the original estimated pace. 
-     * 
-     * No matter if it's an estimation or a deadline.
-     * 
-     ** '=0' => User is progressing as estimated
-     ** '>0' => User is faster than the estimation
-     ** '<0' => User is slower than the estimation
-     */
-    private _calculateRelativeUserPaceDiff(
-        originalEstimatedUserPace: number,
-        realUserPace: number
-    ) {
-        return relativeDiffInPercentage(originalEstimatedUserPace, realUserPace)
-    }
-
-    private _calculateActualUserPace(
+    private _getRecommendedItemsPerDay({
+        currentDate,
+        targetCompletionDate,
+        startDate,
+        remainingItemsCount,
+        avgItemCompletionPerDay,
+        ignoreTargetDate
+    }: {
         startDate: Date,
         currentDate: Date,
-        completedCourseItemCount: number
-    ) {
+        targetCompletionDate: Date,
+        remainingItemsCount: number,
+        avgItemCompletionPerDay: number,
+        ignoreTargetDate: boolean
+    }) {
 
-        const daysSpentFromStartDate = dateDiffInDays(startDate, currentDate)
+        // if ignored target date, return avg
+        if (ignoreTargetDate)
+            return avgItemCompletionPerDay;
 
-        const actualUserPace = daysSpentFromStartDate / completedCourseItemCount;
+        const maxRecommendedItemsPerDay = 20;
+        const isDeadlineExceeded = currentDate > targetCompletionDate;
+        const remainingDays = dateDiffInDays(startDate, targetCompletionDate);
 
-        return actualUserPace;
+        const maxRecommendedItemsAfterDeadline = Math
+            .min(remainingItemsCount, maxRecommendedItemsPerDay);
+
+        const recommendedItemsPerDay = (isDeadlineExceeded || remainingDays === 0)
+            ? maxRecommendedItemsAfterDeadline
+            : remainingItemsCount / remainingDays;
+
+        return recommendedItemsPerDay;
     }
 
     /**
-     * Calculates the estimated user pace that would be
-     * required to match the deadline or original estimation.
+     * Get recommended items per week
      */
-    private _calculateEstimatedUserPace(
-        startDate: Date,
-        deadlineDate: Date,
-        totalCourseItemCount: number
-    ) {
+    private _getRecommendedItemsPerWeek({
+        remainingItemsCount,
+        recommendedItemsPerDay
+    }: {
+        remainingItemsCount: number,
+        recommendedItemsPerDay: number
+    }) {
 
-        const previsionedCourseLength = dateDiffInDays(startDate, deadlineDate)
-
-        const estimatedUserPace = previsionedCourseLength / totalCourseItemCount;
-
-        return estimatedUserPace;
+        return Math
+            .min(recommendedItemsPerDay * 7, remainingItemsCount);
     }
 
     /**
-     * Calculates recommended items per day from either the
-     * required or the previsioned completion date
-     * because it cannot be determined
-     * 
-     * In normal mode, calculates from start date, so the
-     * recommendation stays the same through the whole completion.
-     * 
-     * In increase mode, calculates from current date, so the
-     * recommendation increases 
-     * 
-     * @param startDate 
-     * @param currentDate 
-     * @param deadlineDate 
-     * @param totalItemsCount 
-     * @param mode 
-     * @returns 
+     * Get estimated completion date  
      */
-    private _calculateRecommendedItemsPerDay(
-        startDate: Date,
+    private _getEstimatedCompletionDate({
+        avgItemCompletionPerDay,
+        completedCourseItemCount,
+        currentDate,
+        originalPrevisionedCompletionDate,
+        totalCourseItemCount
+    }: {
+        avgItemCompletionPerDay: number,
         currentDate: Date,
-        deadlineDate: Date,
-        totalItemsCount: number,
-        mode: 'normal' | 'increase'
-    ) {
+        completedCourseItemCount: number,
+        totalCourseItemCount: number,
+        originalPrevisionedCompletionDate: Date,
+    }) {
 
-        // In normal mode it can't exceed the limits, so returning
-        // the originally calculated recommendations.
-        if (mode === 'normal') {
+        // default value until user has some progress
+        if (avgItemCompletionPerDay === 0)
+            return originalPrevisionedCompletionDate;
 
-            const daysFromStartToDeadline = dateDiffInDays(startDate, deadlineDate);
-            const recommendedItemsPerDay = Math.ceil(totalItemsCount / daysFromStartToDeadline);
-            const recommendedItemsPerWeek = (() => {
-
-                const recommendedItemsPerWeek = recommendedItemsPerDay * 7;
-
-                if (recommendedItemsPerDay >= totalItemsCount)
-                    return totalItemsCount;
-
-                return recommendedItemsPerWeek;
-
-            })();
-
-            return {
-                recommendedItemsPerDay,
-                recommendedItemsPerWeek
-            }
-
-        }
-
-        // Increase mode. Try to recommend as much videos as it can.
-
-        const totalItems20Percent = totalItemsCount / 5
-
-        // Deadline already exceeded so recommending the maximum.
-        if (currentDate > deadlineDate) {
-            return {
-                recommendedItemsPerDay: totalItems20Percent,
-                recommendedItemsPerWeek: totalItemsCount
-            }
-        }
-
-        /**
-         * Limiting the recommended videos per day because
-         * it makes no sense to recommend e.g. 100 videos
-         * 2 days before the deadline.
-         */
-        const limitRecommendation = (
-            recommendedItemsPerDay: number,
-            totalItemsCount: number,
-            daysUntilDeadline: number
-        ) => {
-
-            const totalItems20Percent = totalItemsCount / 5
-
-            // Never recommend more than 20% of the course
-            // for one day, even if the deadline is near.
-            if (recommendedItemsPerDay > totalItems20Percent)
-                return totalItems20Percent;
-
-            // The user will probably fail the deadline at this point so
-            // limiting the recommendations, to not recommend
-            // the whole course for the last days.
-            //
-            // TODO: This condition should be further improved for
-            // short courses. (Because the whole course could be 5 days long)
-            if (daysUntilDeadline < 5)
-                return totalItems20Percent;
-
-            return recommendedItemsPerDay;
-        }
-
-        const daysUntilDeadline = dateDiffInDays(currentDate, deadlineDate);
-        const recommendedItemsPerDay = Math.ceil(totalItemsCount / daysUntilDeadline);
-        const limitedRecommendedItemsPerDay = limitRecommendation(recommendedItemsPerDay, totalItemsCount, daysUntilDeadline);
-        const limitedRecommendedItemsPerWeek = (() => {
-
-            const recommendedItemsPerWeek = limitedRecommendedItemsPerDay * 7;
-
-            if (recommendedItemsPerDay >= totalItemsCount)
-                return totalItemsCount;
-
-            return recommendedItemsPerWeek;
-        })();
-
-        return {
-            recommendedItemsPerDay: limitedRecommendedItemsPerDay,
-            recommendedItemsPerWeek: limitedRecommendedItemsPerWeek
-        };
-
-        /* TODO: Implement fallback value when no pretest
-
-        // fallback value if there is no pretest
-        return {
-            recommendedItemsPerDay: 6,
-            recommendedItemsPerWeek: 41
-        }; */
+        const courseItemsLeft = totalCourseItemCount - completedCourseItemCount;
+        const daysLeft = courseItemsLeft / avgItemCompletionPerDay;
+        return addDays(currentDate, daysLeft);
     }
 
     /**
-     * Calculates the real previsioned date only from
-     * the actual progress that has been made. 
-     * 
-     * TODO: The previsioned date can be incorrect, because
-     *       the completed course item count can contain 
-     *       the same video more than one times.
-     * 
-     * @param startDate 
-     * @param currentDate 
-     * @param completedCourseItemCount 
-     * @param totalCourseItemCount 
+     * Get average item count completed per day (date period start <-> now)
      */
-    calculateNewPrevisionedDate(
+    private _getAverageCompletedItemsCountPerDay({
+        completedCourseItemCount,
+        currentDate,
+        startDate,
+    }: {
         startDate: Date,
         currentDate: Date,
         completedCourseItemCount: number,
-        totalCourseItemCount: number
-    ) {
-
-        if (!startDate)
-            return null;
-
-        if (!completedCourseItemCount || completedCourseItemCount < 1)
-            return null;
-
-        // This is not correct yet
-        const courseItemsLeft = totalCourseItemCount - completedCourseItemCount
+    }) {
 
         const daysSpentFromStartDate = dateDiffInDays(startDate, currentDate);
+        const avgItemCompletionPerDay = daysSpentFromStartDate === 0
+            ? 0
+            : completedCourseItemCount / daysSpentFromStartDate;
 
-        // This needs a uniquely completed course item count too
-        const avgCourseItemsWatchedPerDay = (() => {
+        return avgItemCompletionPerDay;
+    }
 
-            const watchedItemsAvg = completedCourseItemCount / daysSpentFromStartDate
+    /**
+     * Get user pace diff percentage 
+     */
+    private _getUserPaceDifferencePercentage({
+        actualItemsPerDay,
+        targetItemsPerDay
+    }: {
+        actualItemsPerDay: number,
+        targetItemsPerDay: number
+    }) {
 
-            if (typeof watchedItemsAvg !== 'number' || watchedItemsAvg < 0.5)
-                return 0.5;
+        if (actualItemsPerDay === targetItemsPerDay)
+            return 0;
 
-            return watchedItemsAvg;
-        })();
-
-        const daysLeft = courseItemsLeft * avgCourseItemsWatchedPerDay
-
-        return addDays(currentDate, daysLeft);
+        return (actualItemsPerDay - targetItemsPerDay) / targetItemsPerDay;
     }
 } 

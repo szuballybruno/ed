@@ -1,5 +1,5 @@
 import { Id, UserActivityDistributionChartData } from '@episto/commontypes';
-import { UserCourseProgressChartDTO } from './UserCourseProgressChartDTO';
+import { UserProgressChartStep } from './UserProgressChartStep';
 
 export class UserCourseStatsOverviewDTO {
     userId: Id<'User'>;
@@ -13,7 +13,6 @@ export class UserCourseStatsOverviewDTO {
     completedVideoCount: number;
     answeredVideoQuestionCount: number;
     answeredPractiseQuestionCount: number;
-
     userActivityDistributionChartData: UserActivityDistributionChartData;
-    progressChartData: UserCourseProgressChartDTO;
+    progressChartData: UserProgressChartStep[];
 }

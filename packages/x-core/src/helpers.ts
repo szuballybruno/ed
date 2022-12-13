@@ -19,3 +19,12 @@ export const getKeyValues = <T>(obj: T) => {
             value: (obj as any)[key]
         }));
 };
+
+const compareDatesWithoutTime = (dateA: Date, dateB: Date) => {
+
+    return new Date(dateA).setHours(0, 0, 0, 0) === new Date(dateB).setHours(0, 0, 0, 0);
+}
+
+export const DateHelpers = {
+    compareDatesWithoutTime
+}

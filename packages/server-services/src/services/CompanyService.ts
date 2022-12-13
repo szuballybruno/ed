@@ -11,7 +11,7 @@ import { CompanyAssociatedCoursesView } from '../models/views/CompanyAssociatedC
 import { CompanyView } from '../models/views/CompanyView';
 import { UserPermissionView } from '../models/views/UserPermissionView';
 import { UserRoleAssignCompanyView } from '../models/views/UserRoleAssignCompanyView';
-import { throwNotImplemented } from '../utilities/helpers';
+import { newNotImplemented } from '../utilities/helpers';
 import { InsertEntity } from '../utilities/misc';
 import { PrincipalId } from '@episto/x-core';
 import { AuthorizationService } from './AuthorizationService';
@@ -494,6 +494,6 @@ export class CompanyService {
     }
     async createCompanyActivationCodesAsync(activationCodeCount: number, companyId: Id<'Company'>) {
 
-        throw throwNotImplemented();
+        throw newNotImplemented();
     }
 }

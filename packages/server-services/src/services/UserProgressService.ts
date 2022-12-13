@@ -1,20 +1,15 @@
+import { instantiate } from '@episto/commonlogic';
+import { Id } from '@episto/commontypes';
+import { RecommendedItemQuotaDTO, UserActiveCourseDTO, UserProgressChartStep } from '@episto/communication';
+import { DateHelpers, PrincipalId } from '@episto/x-core';
 import { UserActiveCourseView } from '../models/views/UserActiveCourseView';
 import { UserDailyCourseItemProgressView } from '../models/views/UserDailyCourseItemProgressView';
 import { UserWeeklyCourseItemProgressView } from '../models/views/UserWeeklyCourseItemProgressView';
-import { RecommendedItemQuotaDTO } from '@episto/communication';
-import { UserActiveCourseDTO } from '@episto/communication';
-import { UserCourseProgressChartDTO } from '@episto/communication';
-import { instantiate } from '@episto/commonlogic';
-import { EpistoLineChartDataType } from '@episto/commontypes';
-import { Id } from '@episto/commontypes';
-import { dateDiffInDays, forN } from '../utilities/helpers';
-import { PrincipalId } from '@episto/x-core';
 import { AuthorizationService } from './AuthorizationService';
 import { MapperService } from './MapperService';
 import { ServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { TempomatService } from './TempomatService';
-import { start } from 'repl';
 
 export class UserProgressService extends ServiceBase {
 
@@ -53,7 +48,7 @@ export class UserProgressService extends ServiceBase {
 
         const tempomatData = await this
             ._tempomatService
-            .calculateTempomatValuesAsync(userId, courseId);
+            .getTempomatValuesAsync(userId, courseId);
 
         const tempomatMode = await this
             ._tempomatService
@@ -75,6 +70,7 @@ export class UserProgressService extends ServiceBase {
         })();
 
         const recommendedItemsPerWeek = (() => {
+
             if (!tempomatData.recommendedItemsPerWeek)
                 return null;
 
@@ -84,6 +80,8 @@ export class UserProgressService extends ServiceBase {
 
             return tempomatData.recommendedItemsPerWeek
         })();
+
+        const isDeadlineSet = !!requiredCompletionDate;
 
         const currentDailyCompletedView = await this._ormService
             .query(UserDailyCourseItemProgressView, { userId, courseId })
@@ -100,7 +98,7 @@ export class UserProgressService extends ServiceBase {
             .getOneOrNull();
 
         return instantiate<RecommendedItemQuotaDTO>({
-            isDeadlineSet: !!requiredCompletionDate,
+            isDeadlineSet,
             tempomatMode: tempomatMode,
             previsionedCompletionDate: previsionedCompletionDate,
             recommendedItemsPerDay: recommendedItemsPerDay,
@@ -110,107 +108,77 @@ export class UserProgressService extends ServiceBase {
         });
     }
 
+    /**
+     * Get user progress chart data 
+     */
     async getProgressChartDataAsync(
         principalId: PrincipalId,
         courseId: Id<'Course'>,
-        userId?: Id<'User'>
+        userId: Id<'User'>
     ) {
 
-        const userIdOrPrincipalId = userId
-            ? userId
-            : principalId.getId();
-
-        const dailyViews = await this._ormService
-            .query(UserDailyCourseItemProgressView, { userIdOrPrincipalId, courseId })
-            .where('userId', '=', 'userIdOrPrincipalId')
+        const dailyProgressViews = await this._ormService
+            .query(UserDailyCourseItemProgressView, { userId, courseId })
+            .where('userId', '=', 'userId')
             .and('courseId', '=', 'courseId')
             .getMany();
 
-        const { startDate, previsionedCompletionDate } = await this
+        const currentDate = new Date();
+        const rangeSize = 60;
+        const rangeHalf = rangeSize / 2;
+        const rangeStartDate = currentDate.addDays(-1 * rangeHalf);
+
+        const {
+            avgItemCompletionPercentagePerDay,
+            recommendedPercentPerDay
+        } = await this
             ._tempomatService
-            .calculateTempomatValuesAsync(userIdOrPrincipalId, courseId);
+            .getTempomatValuesAsync(userId, courseId);
 
-        const estimatedLengthInDays = (previsionedCompletionDate && startDate)
-            ? dateDiffInDays(startDate, previsionedCompletionDate)
-            : null;
+        let lastStep: UserProgressChartStep = {
+            actualCompletedPercentage: 0,
+            date: rangeStartDate,
+            previsionedCompletedPercentage: 0,
+            recommendedCompletedPercentage: 0
+        };
 
-        const calculateDatesFromCurrentDate = (currentDate: Date, estimatedLengthInDays: number) => {
+        const steps = Array
+            .from({ length: rangeSize })
+            .map((_, index) => {
 
-            return forN(estimatedLengthInDays, index => {
-
-                const date = currentDate
+                const date = rangeStartDate
                     .addDays(index);
 
-                return date.toLocaleDateString(undefined, {
-                    month: '2-digit',
-                    day: '2-digit'
+                const pastCurrent = index > rangeHalf;
+
+                const actualProgressView = dailyProgressViews
+                    .firstOrNull(x => DateHelpers
+                        .compareDatesWithoutTime(x.completionDate, date));
+
+                const actualCompletedPercentage = pastCurrent
+                    ? null
+                    : (lastStep.actualCompletedPercentage ?? 0) + (actualProgressView?.completedPercentage ?? 0);
+
+                const previsionedCompletedPercentage = actualCompletedPercentage !== null
+                    ? actualCompletedPercentage
+                    : lastStep.previsionedCompletedPercentage + avgItemCompletionPercentagePerDay;
+
+                const recommendedCompletedPercentage = actualCompletedPercentage !== null
+                    ? actualCompletedPercentage
+                    : lastStep.recommendedCompletedPercentage + recommendedPercentPerDay;
+
+                const step = instantiate<UserProgressChartStep>({
+                    date,
+                    actualCompletedPercentage,
+                    previsionedCompletedPercentage,
+                    recommendedCompletedPercentage
                 });
-            });
 
-        };
+                lastStep = step;
 
-        const estimatedDates = calculateDatesFromCurrentDate(startDate, estimatedLengthInDays!);
+                return step;
+            })
 
-        const calculatePrevisionedProgressChart = (allDates: string[], actualProgress: number[]): (number | null)[] => {
-
-            let actualLastIndex = 0;
-            let actualLastValue = 0;
-
-            return allDates
-                .map((x, index) => {
-
-
-                    if (typeof actualProgress[index] === 'number') {
-
-                        actualLastIndex = index;
-                        actualLastValue = actualProgress[index];
-                        return null;
-                    }
-
-                    return ((100 - actualLastValue) / (allDates.length - actualLastIndex)) * (index + 1 - actualLastIndex) + actualLastValue
-
-                })
-        };
-
-        const calculateActualProgressChart = (
-            currentDate: Date,
-            startDate: Date,
-            dailyViews: UserDailyCourseItemProgressView[]
-        ) => {
-
-            let latestCompletionDatePercentage = 0;
-
-            const daysFromStart = startDate
-                ? dateDiffInDays(startDate, currentDate)
-                : null;
-
-            const datesUntilToday = daysFromStart
-                ? forN(daysFromStart, index => index)
-                : null;
-
-            return datesUntilToday
-                ? datesUntilToday.map((_, index) => {
-
-                    const up = dailyViews.find(x => x.offsetDaysFromStart === index + 1)?.completedPercentage || 0;
-
-                    if (latestCompletionDatePercentage <= up) {
-
-                        latestCompletionDatePercentage += up;
-                        return up;
-                    } else {
-                        return latestCompletionDatePercentage;
-                    }
-                })
-                : [];
-        }
-
-        const actualProgress = calculateActualProgressChart(new Date(Date.now()), startDate, dailyViews);
-        const previsionedProgress = calculatePrevisionedProgressChart(estimatedDates, actualProgress);
-
-        return instantiate<UserCourseProgressChartDTO>({
-            dates: estimatedDates,
-            previsionedProgress: previsionedProgress,
-            actualProgress: actualProgress
-        });
+        return steps;
     }
 }

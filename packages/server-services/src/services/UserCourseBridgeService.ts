@@ -28,13 +28,13 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
         courseId,
         stageName,
         currentItemCode,
-        startDate
+        startDate,
     }: {
         userId: Id<'User'>,
         courseId: Id<'Course'>,
         stageName: CourseStageNameType,
         currentItemCode: string | null,
-        startDate: Date | null
+        startDate: Date | null,
     }) {
 
         /**
@@ -71,6 +71,20 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
                 stageName,
                 currentItemCode: itemCode,
                 lastInteractionDate: new Date()
+            });
+    }
+
+    /**
+     * Set previsined completion date of user course bridge 
+     */
+    async setPrevisionedCompletionDateAsync(
+        userId: Id<'User'>,
+        courseId: Id<'Course'>,
+        previsionedCompletionDate: Date) {
+
+        await this
+            ._updateBridge(userId, courseId, {
+                previsionedCompletionDate
             });
     }
 

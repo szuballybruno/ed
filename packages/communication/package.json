@@ -8,6 +8,7 @@
     "type": "module",
     "scripts": {
         "start": "tsc",
+        "watch": "tsc --watch",
         "build-old": "tsc",
         "build": "rollup --config rollup.config.js"
     },

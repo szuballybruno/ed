@@ -1,8 +1,9 @@
 import { EpistoLineChartDatasetType } from '@episto/commontypes';
-import { UserCourseProgressChartDTO } from '@episto/communication';
+import { UserProgressChartStep } from '@episto/communication';
 import { useMemo } from 'react';
+import { Formatters } from '../../../../static/frontendHelpers';
 import { EpistoLineChart } from './EpistoLineChart';
-import { EpistoLineChartOptionsType } from './EpistoLineChartTypes';
+import { EpistoLineChartOptionsType, SeriesProps } from './EpistoLineChartTypes';
 
 const useUserProgressChartOptions = (interval: number, maxYValue: number) => useMemo((): EpistoLineChartOptionsType => ({
     legend: {
@@ -35,6 +36,25 @@ const useUserProgressChartOptions = (interval: number, maxYValue: number) => use
             show: false
         }
     },
+    tooltip: {
+        trigger: 'axis',
+        formatter: ([
+            recommendedCompletedPercentage,
+            previsionedCompletedPercentage,
+            actualCompletedPercentage
+        ]: SeriesProps[]) => {
+
+            return `
+                ${recommendedCompletedPercentage.axisValue} <br />
+                Ajánlott haladás: ${Math.round(recommendedCompletedPercentage.data * 10) / 10}% <br />
+                Becsült haladás: ${Math.round(previsionedCompletedPercentage.data * 10) / 10}% <br />
+                Valós haladás: ${actualCompletedPercentage.data ?? '-'}
+            `;
+            // return 'Időpont: ' + new Date(params[0].axisValue * 1000)
+            //     .toISOString()
+            //     .substr(14, 5) + ' <br />Felhasználók akik ezen a ponton elhagyták a videót: ' + params[0].data[0];
+        }
+    },
     yAxis: {
         name: 'Haladás',
         nameLocation: 'middle',
@@ -59,38 +79,20 @@ const useUserProgressChartOptions = (interval: number, maxYValue: number) => use
     }
 }), [interval, maxYValue]);
 
-const useChartDatasets = (userProgress: UserCourseProgressChartDTO) => useMemo((): EpistoLineChartDatasetType => {
-
-    const progressItems = userProgress
-        .dates
-        .map((x, index) => ({
-            date: x,
-            actualProgress: (userProgress.actualProgress as any as (number | null)[])[index] ?? null,
-            previsionedProgress: (userProgress.previsionedProgress as any as (number | null)[])[index] ?? null
-        }));
-
-    const previsionedRangeLength = progressItems.length - progressItems.filter(x => x.actualProgress !== null).length;
-    const orderedActualProgresses = progressItems
-        .filter(x => x.actualProgress !== null)
-        .map(x => x.actualProgress!)
-        .orderBy(x => x);
-
-    const actualProgressEndIndex = orderedActualProgresses.length;
-
-    const prevoiusGrowth = orderedActualProgresses.last() - orderedActualProgresses.first();
-    const growthStep = prevoiusGrowth / previsionedRangeLength;
-
-    const previsinedGrowthSeries = progressItems
-        .map((x, i) => i < actualProgressEndIndex ? x.actualProgress : i * growthStep);
-
-    const actualProgressSeries = progressItems
-        .filter(x => x.actualProgress !== null)
-        .map(x => x.actualProgress);
+const useChartDatasets = (userProgress: UserProgressChartStep[]) => useMemo((): EpistoLineChartDatasetType => {
 
     return [
         {
+            name: 'Ajánlott haladás',
+            data: userProgress.map(x => x.recommendedCompletedPercentage),
+            lineStyle: {
+                color: 'orange',
+                type: 'dotted'
+            }
+        },
+        {
             name: 'Becsült haladás',
-            data: previsinedGrowthSeries,
+            data: userProgress.map(x => x.previsionedCompletedPercentage),
             lineStyle: {
                 color: 'lightgreen',
                 type: 'dotted'
@@ -98,23 +100,22 @@ const useChartDatasets = (userProgress: UserCourseProgressChartDTO) => useMemo((
         },
         {
             name: 'Valós haladás',
-            data: actualProgressSeries,
+            data: userProgress.map(x => x.actualCompletedPercentage),
             lineStyle: {
                 color: 'green',
                 type: 'line'
             }
-        },
+        }
     ];
 }, [userProgress]);
 
 export const UserProgressChart = ({
     userProgress
 }: {
-    userProgress: UserCourseProgressChartDTO
+    userProgress: UserProgressChartStep[]
 }) => {
 
-
-    const interval = useMemo(() => Math.floor(userProgress.previsionedProgress.length / 7), [userProgress.previsionedProgress.length]);
+    const interval = useMemo(() => Math.floor(userProgress.length / 7), [userProgress]);
     const datasets = useChartDatasets(userProgress);
     const maxProgressValue = datasets[0].data.last() as any;
     const maxYValue = Math.round(Math.min(100, maxProgressValue * 1.8));
@@ -123,7 +124,9 @@ export const UserProgressChart = ({
     return <EpistoLineChart
         title=''
         options={options}
-        xAxisData={userProgress.dates}
+        xAxisData={userProgress
+            .map(x => Formatters
+                .toDateStringFormatted(x.date))}
         xAxisLabel="Dátum"
         yAxisLabel="Haladás"
         yAxisLabelSuffix='%'

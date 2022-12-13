@@ -20,16 +20,13 @@ export class UserController implements IController<UserController> {
     @XControllerAction(apiRoutes.user.getAdminUsersList)
     getUserOverviewStatsAction(params: ActionParams) {
 
-        const isToBeReviewed = params
-            .getQuery<{ isToBeReviewed: boolean }>()
-            .getValue(x => x.isToBeReviewed, 'boolean');
-
         const companyId = params
-            .getQuery<{ companyId?: Id<'Company'> }>()
-            .getValueOrNull(x => x.companyId, 'int') ?? null;
+            .getFromParameterized(apiRoutes.user.getAdminUsersList)
+            .query
+            .getValue(x => x.companyId, 'int');
 
         return this._userService
-            .getUserAdminListAsync(params.principalId, isToBeReviewed, companyId);
+            .getUserAdminListAsync(params.principalId, companyId);
     }
 
     @XControllerAction(apiRoutes.user.deleteUser, { isPost: true })

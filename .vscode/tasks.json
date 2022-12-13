@@ -39,6 +39,30 @@
         },
         {
             "type": "shell",
+            "label": "watch-server-services",
+            "command": "yarn watch",
+            "problemMatcher": [],
+            "options": {
+                "cwd": "${workspaceFolder}/packages/server-services"
+            },
+            "presentation": {
+                "group": "run"
+            }
+        },
+        {
+            "type": "shell",
+            "label": "watch-communication",
+            "command": "yarn watch",
+            "problemMatcher": [],
+            "options": {
+                "cwd": "${workspaceFolder}/packages/communication"
+            },
+            "presentation": {
+                "group": "run"
+            }
+        },
+        {
+            "type": "shell",
             "label": "build-serve-client",
             "command": "yarn build-serve-client",
             "problemMatcher": [],

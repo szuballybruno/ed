@@ -1,3 +1,4 @@
+export { UserProgressChartStep } from "./UserProgressChartStep";
 export { CurrentCourseDataDTO } from "./CurrentCourseDataDTO";
 export { GreetingsDataDTO } from "./GreetingsDataDTO";
 export { ActivationCodeListDTO } from "./ActivationCodeListDTO";
@@ -113,7 +114,6 @@ export { UserActiveCourseDTO } from "./UserActiveCourseDTO";
 export { UserAdminListDTO } from "./UserAdminListDTO";
 export { UserControlDropdownDataDTO } from "./UserControlDropdownDataDTO";
 export { UserCourseProgressChartDayDTO } from "./UserCourseProgressChartDayDTO";
-export { UserCourseProgressChartDTO } from "./UserCourseProgressChartDTO";
 export { UserCoursesDataDTO } from "./UserCoursesDataDTO";
 export { UserCourseStatsDTO } from "./UserCourseStatsDTO";
 export { UserCourseStatsOverviewDTO } from "./UserCourseStatsOverviewDTO";
