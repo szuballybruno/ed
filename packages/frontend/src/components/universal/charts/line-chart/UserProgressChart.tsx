@@ -46,13 +46,20 @@ const useUserProgressChartOptions = (
                     actualCompletedPercentage
                 ]: any) => {
 
+                    const asd = (param: any) => {
+
+                        const data = param?.data;
+                        if (data === null || data === undefined)
+                            return '-';
+
+                        return `${Math.round(data * 10) / 10}%`;
+                    };
+
                     return `
                 ${recommendedCompletedPercentage.axisValue} <br />
-                Ajánlott haladás: ${Math.round(recommendedCompletedPercentage.data * 10) / 10}% <br />
-                Becsült haladás: ${Math.round(previsionedCompletedPercentage.data * 10) / 10}% <br />
-                Valós haladás: ${actualCompletedPercentage.data 
-                    ? `${Math.round(actualCompletedPercentage.data * 10) / 10}%` 
-                    : '-'}
+                Ajánlott haladás: ${asd(recommendedCompletedPercentage)} <br />
+                Becsült haladás: ${asd(previsionedCompletedPercentage)} <br />
+                Valós haladás: ${asd(actualCompletedPercentage)}
             `;
                 }
             },
