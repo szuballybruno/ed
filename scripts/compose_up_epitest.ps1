@@ -1,1 +1,2 @@
-docker compose -f ./../epitest/testenv.yml up --build --force-recreate --abort-on-container-exit --renew-anon-volumes
+# docker compose -f ./../epitest/testenv.yml up --build --force-recreate --abort-on-container-exit --renew-anon-volumes
+docker compose --file ./epitest/testenv.yml up --build --force-recreate --abort-on-container-exit --renew-anon-volumes --exit-code-from tests-client
