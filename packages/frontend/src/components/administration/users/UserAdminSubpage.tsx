@@ -7,7 +7,7 @@ import { useRouteParams2 } from '../../../static/locationHelpers';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoRoutes } from '../../universal/EpistoRoutes';
 import { AdminBreadcrumbsHeader } from '../breadcrumbsHeader/AdminBreadcrumbsHeader';
-import { AdminAddUserSubpage } from './AdminAddUserSubpage';
+import { AdminAddUserSubpage } from './addEditUser/AdminAddUserSubpage';
 import { AminUserGridView, useAdminUserGridLogic, useGridFilterSettingsLogic } from './AminUserGridView';
 import { UserDetailsRootView } from './UserDetailsRootView';
 

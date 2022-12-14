@@ -2,7 +2,7 @@ import { Flex } from '@chakra-ui/react';
 import { Id, OrderType, UserPerformanceRating } from '@episto/commontypes';
 import { UserAdminListDTO } from '@episto/communication';
 import { Add } from '@mui/icons-material';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { AdminActiveCompanyIdType } from '../../../models/types';
 import { UserApiService } from '../../../services/api/UserApiService1';
@@ -19,33 +19,8 @@ import { EpistoFont } from '../../controls/EpistoFont';
 import { ProfileImage } from '../../ProfileImage';
 import { EpistoDialog } from '../../universal/epistoDialog/EpistoDialog';
 import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogLogic';
-import { useUserPerformanceDisplayValues } from '../../universal/UserPerformanceChip';
+import { PerformanceRatingChip } from '../../universal/UserPerformanceChip';
 import { UsersSearchFilters } from './UsersSearchFilters';
-
-const PerformanceRatingChip = ({ value, ...props }: { rating: UserPerformanceRating, value: number }) => {
-
-    const rating: UserPerformanceRating = props.rating;
-    const { color, text } = useUserPerformanceDisplayValues(rating);
-
-    return (
-        <EpistoFlex2
-            borderRadius='5px'
-            padding='5px'
-            color='white'
-            background={color}>
-
-            <EpistoFont
-                tooltip={`${Math.round(value * 10) / 10}%`}>
-                {text}
-            </EpistoFont>
-
-            {rating === 'very_good' && <EpistoIcons.Star
-                style={{
-                    marginLeft: '2px'
-                }} />}
-        </EpistoFlex2>
-    );
-};
 
 const useColumns = (
     isSimpleView: boolean,
@@ -160,7 +135,7 @@ const useColumns = (
                 align="center">
                 <EpistoButton
                     variant="outlined"
-                    onClick={() => navigate2(applicationRoutes.administrationRoute.usersRoute.userRoute.editRoute, { activeCompanyId, userId: value })}>
+                    onClick={() => navigate2(applicationRoutes.administrationRoute.usersRoute.userRoute.statsRoute, { activeCompanyId, userId: value })}>
 
                     Bővebben
                 </EpistoButton>
@@ -359,7 +334,7 @@ export const AminUserGridView = ({
             .openDialog(user);
     };
 
-    const columns = useColumns(isSimpleView, filterLogic.currentPreset, userId, showDeleteUserDialog, userId => {
+    const changeToUser = useCallback((userId: Id<'User'>) => {
 
         getSubroutes(userRoute)
             .forEach(appRoute => {
@@ -372,11 +347,16 @@ export const AminUserGridView = ({
 
                     navigate3(appRoute, {
                         query,
-                        params: { userId }
+                        params: {
+                            userId,
+                            activeCompanyId
+                        }
                     });
                 }
             });
-    }, activeCompanyId);
+    }, [activeCompanyId, isMatchingCurrentAppRoute, navigate3, userRoute]);
+
+    const columns = useColumns(isSimpleView, filterLogic.currentPreset, userId, showDeleteUserDialog, changeToUser, activeCompanyId);
 
     return (
         <Flex

@@ -1,9 +1,9 @@
 import { Id } from '@episto/commontypes';
 import { CompanyDTO, UserEditSaveDTO } from '@episto/communication';
-import { UserApiService } from '../../../services/api/UserApiService1';
-import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
-import { useEventTrigger, useSubscribeEventTrigger } from '../../../static/frontendHelpers';
-import { AdminSubpageHeader } from '../AdminSubpageHeader';
+import { UserApiService } from '../../../../services/api/UserApiService1';
+import { showNotification, useShowErrorDialog } from '../../../../services/core/notifications';
+import { useEventTrigger, useSubscribeEventTrigger } from '../../../../static/frontendHelpers';
+import { AdminSubpageHeader } from '../../AdminSubpageHeader';
 import { AdminEditUserControl } from './AdminEditUserControl';
 
 export const AdminEditUserSubpage = ({

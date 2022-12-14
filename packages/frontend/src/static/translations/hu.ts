@@ -239,9 +239,9 @@ export const huTranslation: TranslationType = {
             administrationUserIndex: 'Felhasználók',
             administrationAddUser: 'Felhasználó hozzáadása',
             administrationEditUser: 'Szerkesztés',
-            administrationUserStatistics: 'Tanulási jelentés',
+            administrationUserStatistics: 'Statisztika',
             administrationUserTasks: 'Feladatok',
-            administrationEditTeacherInfo: 'Oktató adatai',
+            administrationEditTeacherInfo: 'Oktatói adatok',
             administrationUserCourses: 'Felhasználó kurzusai',
 
             administrationCourseAdmin: 'Kurzus lista',
@@ -533,7 +533,7 @@ export const huTranslation: TranslationType = {
                 },
                 statisticsCards: {
                     activeTimeSpentOnPlatform: 'Aktívan eltöltött idő a platformon',
-                    watchedVideosInMonth: 'Megtekintett videó a hónapban',
+                    totalWatchedVideoCount: 'Megtekintett videók',
                     userEngagementDescription: ' A hallgató elköteleződése 4 mérőszám összeségéből áll össze. Vizsgáljuk a belépésének gyakoriságát, az aktivitásának intenzitását, a platformelhagyást, valamint a lemorzsolódást is. Az elköteleződési szint magasan tartása kulcsfontosságú, hiszen a felhasználónak azt kell éreznie, hogy valóban értéket kap a tanulás során, és nem csak kötelező rosszként éli meg a képzési folyamatot. Csökkenő elköteleződés esetén kérdéseket teszünk fel neki, ezt pedig összehasonlítjuk a kurzuselhagyási és értékelési adatokkal, ezáltal pedig felderíthető, melyek azok a kritikus pontok a tananyagban, melyek javításra szorulnak.',
                     answeredVideoAndPractiseQuizQuestions: 'Megválaszolt tudást vizsgáló kérdés',
                     correctAnswerRatePercentage: 'Helyes válaszok aránya',

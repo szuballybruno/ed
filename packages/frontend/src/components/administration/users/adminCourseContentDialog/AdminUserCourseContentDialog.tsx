@@ -10,10 +10,10 @@ import { EpistoTabs } from '../../../controls/EpistoTabs';
 import { TabPanel } from '../../../courseDetails/TabPanel';
 import { EpistoDialog } from '../../../universal/epistoDialog/EpistoDialog';
 import { EpistoDialogLogicType } from '../../../universal/epistoDialog/EpistoDialogTypes';
-import { AdminUserCourseStatsOverview } from '../AdminUserCourseStatsOverview';
-import { AdminUserExamsDataGridControl } from '../dataGrids/AdminUserExamsDataGridControl';
-import { AdminUserModulesDataGridControl } from '../dataGrids/AdminUserModulesDataGridControl';
-import { AdminUserVideosDataGridControl } from '../dataGrids/AdminUserVideosDataGridControl';
+import { AdminUserCourseStatsOverview } from './AdminUserCourseStatsOverview';
+import { AdminUserExamsDataGridControl } from './dataGrids/AdminUserExamsDataGridControl';
+import { AdminUserModulesDataGridControl } from './dataGrids/AdminUserModulesDataGridControl';
+import { AdminUserVideosDataGridControl } from './dataGrids/AdminUserVideosDataGridControl';
 import { AdminUserExamsMoreInfoControl } from './AdminUserExamsMoreInfoControl';
 
 export const AdminUserCourseContentDialog = (props: {

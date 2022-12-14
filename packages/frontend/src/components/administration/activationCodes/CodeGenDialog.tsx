@@ -11,7 +11,7 @@ import { EpistoLabel } from '../../controls/EpistoLabel';
 import { EpistoDialog } from '../../universal/epistoDialog/EpistoDialog';
 import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogLogic';
 import { useAdminBreadcrumbsContext } from '../breadcrumbsHeader/AdminBreadcrumbsContext';
-import { CompanySelectorDropdown } from '../users/CompanySelectorDropdown';
+import { CompanySelectorDropdown } from '../companySelector/CompanySelectorDropdown';
 
 export const useCodeGenDialogLogic = (activeCompany: AdminActiveCompanyType, refreshList: () => void) => {
 

@@ -1,16 +1,16 @@
 import { useCallback } from 'react';
-import { useUserExamStats } from '../../../../services/api/userStatsApiService';
+import { useUserExamStats } from '../../../../../services/api/userStatsApiService';
 import { UserExamStatsDTO } from '@episto/communication';
 import { OmitProperty } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
-import { secondsToTime } from '../../../../static/frontendHelpers';
-import { EpistoButton } from '../../../controls/EpistoButton';
-import { EpistoDataGrid, GridColumnType } from '../../../controls/EpistoDataGrid';
-import { EpistoFlex2 } from '../../../controls/EpistoFlex';
-import { EpistoFont } from '../../../controls/EpistoFont';
-import { LoadingFrame } from '../../../system/LoadingFrame';
-import { EmptyCell } from '../../../universal/EmptyCell';
-import { ChipSmall } from '../../courses/ChipSmall';
+import { secondsToTime } from '../../../../../static/frontendHelpers';
+import { EpistoButton } from '../../../../controls/EpistoButton';
+import { EpistoDataGrid, GridColumnType } from '../../../../controls/EpistoDataGrid';
+import { EpistoFlex2 } from '../../../../controls/EpistoFlex';
+import { EpistoFont } from '../../../../controls/EpistoFont';
+import { LoadingFrame } from '../../../../system/LoadingFrame';
+import { EmptyCell } from '../../../../universal/EmptyCell';
+import { ChipSmall } from '../../../courses/ChipSmall';
 
 export const AdminUserExamsDataGridControl = (props: {
     userId: Id<'User'>,

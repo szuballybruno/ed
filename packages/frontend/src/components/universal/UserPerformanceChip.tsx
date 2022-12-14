@@ -1,6 +1,8 @@
 import { UserPerformanceRating } from '@episto/commontypes';
-import { useMemo } from 'react';
-import { ChipSmall } from '../administration/courses/ChipSmall';
+import { PropsWithChildren, useMemo } from 'react';
+import { EpistoIcons } from '../../static/EpistoIcons';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { EpistoFont } from '../controls/EpistoFont';
 
 export const useUserPerformanceDisplayValues = (rating: UserPerformanceRating) => {
 
@@ -37,13 +39,30 @@ export const useUserPerformanceDisplayValues = (rating: UserPerformanceRating) =
     }, [rating]);
 };
 
-export const UserPerformanceChip = ({ performance }: { performance: UserPerformanceRating }) => {
+export const PerformanceRatingChip = ({ value, children, ...props }: { rating: UserPerformanceRating, value: number } & PropsWithChildren) => {
 
-    const { color, text } = useUserPerformanceDisplayValues(performance);
+    const rating: UserPerformanceRating = props.rating;
+    const { color, text } = useUserPerformanceDisplayValues(rating);
+    const showStar = rating === 'very_good' && !children;
 
     return (
-        <ChipSmall
-            text={text}
-            color={color} />
+        <EpistoFlex2
+            borderRadius='5px'
+            padding='5px'
+            color='white'
+            background={color}>
+
+            <EpistoFont
+                tooltip={`${Math.round(value * 10) / 10 - 100}% ${value < 100 ? 'lemaradás' : 'előrehaladás'} a célhoz képest`}>
+                {text}
+            </EpistoFont>
+
+            {showStar && <EpistoIcons.Star
+                style={{
+                    marginLeft: '2px'
+                }} />}
+
+            {children}
+        </EpistoFlex2>
     );
 };

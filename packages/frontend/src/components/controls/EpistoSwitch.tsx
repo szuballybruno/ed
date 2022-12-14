@@ -17,7 +17,6 @@ export const EpistoSwitch = ({
             align="center"
             mx="5px"
             pr="15px"
-            border={`1px solid ${checked ? 'var(--epistoTeal)' : 'gray'}`}
             borderRadius="30px">
             
             <Switch

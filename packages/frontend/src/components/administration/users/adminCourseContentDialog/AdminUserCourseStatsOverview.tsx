@@ -1,13 +1,13 @@
-import { useUserCourseStatsOverviewData } from '../../../services/api/userStatsApiService';
+import { useUserCourseStatsOverviewData } from '../../../../services/api/userStatsApiService';
 import { Id } from '@episto/commontypes';
-import { Environment } from '../../../static/Environemnt';
-import { roundNumber } from '../../../static/frontendHelpers';
-import { translatableTexts } from '../../../static/translatableTexts';
-import { EpistoFlex2 } from '../../controls/EpistoFlex';
-import { NoProgressChartYet } from '../../home/NoProgressChartYet';
-import StatisticsCard from '../../statisticsCard/StatisticsCard';
-import { EpistoPieChart } from '../../universal/charts/pie-chart/EpistoPieChart';
-import { UserProgressChart } from '../../universal/charts/line-chart/UserProgressChart';
+import { Environment } from '../../../../static/Environemnt';
+import { roundNumber } from '../../../../static/frontendHelpers';
+import { translatableTexts } from '../../../../static/translatableTexts';
+import { EpistoFlex2 } from '../../../controls/EpistoFlex';
+import { NoProgressChartYet } from '../../../home/NoProgressChartYet';
+import StatisticsCard from '../../../statisticsCard/StatisticsCard';
+import { EpistoPieChart } from '../../../universal/charts/pie-chart/EpistoPieChart';
+import { UserProgressChart } from '../../../universal/charts/line-chart/UserProgressChart';
 
 export const AdminUserCourseStatsOverview = ({
     userId,

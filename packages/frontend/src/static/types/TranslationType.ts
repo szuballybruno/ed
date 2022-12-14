@@ -493,7 +493,7 @@ export type TranslationType = {
                 };
                 statisticsCards: {
                     activeTimeSpentOnPlatform: string;
-                    watchedVideosInMonth: string;
+                    totalWatchedVideoCount: string;
                     userEngagementDescription: string;
                     answeredVideoAndPractiseQuizQuestions: string;
                     correctAnswerRatePercentage: string;

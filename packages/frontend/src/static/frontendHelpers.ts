@@ -256,9 +256,24 @@ export const toDateStringFormatted = (date: Date) => {
     return `${getMonthName(monthIndex)}. ${dayIndex}`;
 };
 
+const formatDate = (value: string | Date) => {
+
+    const date = typeof value === 'string'
+        ? new Date(value)
+        : value;
+
+    return date
+        .toLocaleString('hu-hu', {
+            month: '2-digit',
+            day: '2-digit',
+            year: 'numeric'
+        });
+};
+
 export const Formatters = {
     dateTimeToString,
     toDateStringFormatted,
+    formatDate
 };
 
 export const getUrl = (path: string, params?: any, query?: any) => {

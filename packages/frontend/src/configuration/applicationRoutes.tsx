@@ -55,7 +55,6 @@ export type ApplicationRoutesType = {
                 editRoute: ApplicationRoute<AdminActiveCompanyRouteParamType & { userId: Id<'User'> }>;
                 statsRoute: ApplicationRoute<AdminActiveCompanyRouteParamType & { userId: Id<'User'> }>;
                 teacherInfoRoute: ApplicationRoute<AdminActiveCompanyRouteParamType & { userId: Id<'User'> }>;
-                courseContentRoute: ApplicationRoute<AdminActiveCompanyRouteParamType & { userId: Id<'User'> }>;
             };
         };
         coursesRoute: ApplicationRoute<AdminActiveCompanyRouteParamType, void> & {
@@ -334,10 +333,6 @@ export const getApplicationRoutes = () => {
                     teacherInfoRoute: {
                         title: translatableTexts.routeTitles.administrationEditTeacherInfo,
                         route: new EpistoRoute('/administration/:activeCompanyId/users/:userId', 'teacherinfo'),
-                    },
-                    courseContentRoute: {
-                        title: translatableTexts.routeTitles.administrationUserCourses,
-                        route: new EpistoRoute('/administration/:activeCompanyId/users/:userId', 'courses'),
                     },
                 },
             },

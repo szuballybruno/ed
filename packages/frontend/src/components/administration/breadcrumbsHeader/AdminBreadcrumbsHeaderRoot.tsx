@@ -9,7 +9,7 @@ import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { MUI } from '../../controls/MUIControls';
 import { useAuthorizationContext } from '../../system/AuthorizationContext';
-import { CompanySelectorDropdown } from '../users/CompanySelectorDropdown';
+import { CompanySelectorDropdown } from '../companySelector/CompanySelectorDropdown';
 import { AdminBreadcrumbLink } from './AdminBreadcrumbLink';
 import { AdminBreadcrumbsContext, useAdminBreadcrumbsState } from './AdminBreadcrumbsContext';
 

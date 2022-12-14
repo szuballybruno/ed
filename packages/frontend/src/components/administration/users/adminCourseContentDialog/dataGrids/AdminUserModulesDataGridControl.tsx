@@ -1,14 +1,14 @@
 import { useCallback } from 'react';
-import { useUserModuleStats } from '../../../../services/api/userStatsApiService';
+import { useUserModuleStats } from '../../../../../services/api/userStatsApiService';
 import { UserModuleStatsDTO } from '@episto/communication';
 import { OmitProperty } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
-import { useIntParam } from '../../../../static/locationHelpers';
-import { EpistoDataGrid, GridColumnType } from '../../../controls/EpistoDataGrid';
-import { EpistoFlex2 } from '../../../controls/EpistoFlex';
-import { EpistoFont } from '../../../controls/EpistoFont';
-import { LoadingFrame } from '../../../system/LoadingFrame';
-import { EmptyCell } from '../../../universal/EmptyCell';
+import { useIntParam } from '../../../../../static/locationHelpers';
+import { EpistoDataGrid, GridColumnType } from '../../../../controls/EpistoDataGrid';
+import { EpistoFlex2 } from '../../../../controls/EpistoFlex';
+import { EpistoFont } from '../../../../controls/EpistoFont';
+import { LoadingFrame } from '../../../../system/LoadingFrame';
+import { EmptyCell } from '../../../../universal/EmptyCell';
 
 export const AdminUserModulesDataGridControl = (props: {
     courseId: Id<'Course'> | null
