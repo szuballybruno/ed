@@ -1,20 +1,20 @@
 import { Id, TeacherBadgeNameType } from '@episto/commontypes';
 import { useEffect, useState } from 'react';
-import { ButtonType } from '../../../models/types';
-import { useSaveTeacherInfoData, useTeacherInfoEditData } from '../../../services/api/teacherInfoApiService';
-import { UserApiService } from '../../../services/api/UserApiService1';
-import { useNavigation } from '../../../services/core/navigatior';
-import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
-import { translatableTexts } from '../../../static/translatableTexts';
-import { EpistoButton } from '../../controls/EpistoButton';
-import { EpistoEntry } from '../../controls/EpistoEntry';
-import { EpistoFlex2 } from '../../controls/EpistoFlex';
-import { EpistoFont } from '../../controls/EpistoFont';
-import { EpistoLabel } from '../../controls/EpistoLabel';
-import { EpistoSlider } from '../../controls/EpistoSlider';
-import { MUI } from '../../controls/MUIControls';
-import { AdminSubpageHeader } from '../AdminSubpageHeader';
-import { EditSection } from '../courses/EditSection';
+import { ButtonType } from '../../../../models/types';
+import { useSaveTeacherInfoData, useTeacherInfoEditData } from '../../../../services/api/teacherInfoApiService';
+import { UserApiService } from '../../../../services/api/UserApiService1';
+import { useNavigation } from '../../../../services/core/navigatior';
+import { showNotification, useShowErrorDialog } from '../../../../services/core/notifications';
+import { translatableTexts } from '../../../../static/translatableTexts';
+import { EpistoButton } from '../../../controls/EpistoButton';
+import { EpistoEntry } from '../../../controls/EpistoEntry';
+import { EpistoFlex2 } from '../../../controls/EpistoFlex';
+import { EpistoFont } from '../../../controls/EpistoFont';
+import { EpistoLabel } from '../../../controls/EpistoLabel';
+import { EpistoSlider } from '../../../controls/EpistoSlider';
+import { MUI } from '../../../controls/MUIControls';
+import { AdminSubpageHeader } from '../../AdminSubpageHeader';
+import { EditSection } from '../../courses/EditSection';
 
 export const AdminUserTeacherInfoSubpage = ({
     tabMenuItems,

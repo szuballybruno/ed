@@ -1,14 +1,14 @@
 import { Id, OmitProperty } from '@episto/commontypes';
 import { UserVideoStatsDTO } from '@episto/communication';
 import { useCallback } from 'react';
-import { useUserVideoStats } from '../../../../services/api/userStatsApiService';
-import { secondsToTime } from '../../../../static/frontendHelpers';
-import { EpistoDataGrid, GridColumnType } from '../../../controls/EpistoDataGrid';
-import { EpistoFlex2 } from '../../../controls/EpistoFlex';
-import { EpistoFont } from '../../../controls/EpistoFont';
-import { LoadingFrame } from '../../../system/LoadingFrame';
-import { EmptyCell } from '../../../universal/EmptyCell';
-import { ChipSmall } from '../../courses/ChipSmall';
+import { useUserVideoStats } from '../../../../../services/api/userStatsApiService';
+import { secondsToTime } from '../../../../../static/frontendHelpers';
+import { EpistoDataGrid, GridColumnType } from '../../../../controls/EpistoDataGrid';
+import { EpistoFlex2 } from '../../../../controls/EpistoFlex';
+import { EpistoFont } from '../../../../controls/EpistoFont';
+import { LoadingFrame } from '../../../../system/LoadingFrame';
+import { EmptyCell } from '../../../../universal/EmptyCell';
+import { ChipSmall } from '../../../courses/ChipSmall';
 
 export const AdminUserVideosDataGridControl = (props: {
     userId: Id<'User'>,

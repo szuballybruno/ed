@@ -1,39 +1,28 @@
+import { Id } from '@episto/commontypes';
+import { UserCourseStatsDTO } from '@episto/communication';
 import { useCallback, useEffect, useState } from 'react';
-import { applicationRoutes } from '../../../../configuration/applicationRoutes';
-import { ButtonType } from '../../../../models/types';
 import { UserApiService } from '../../../../services/api/UserApiService1';
 import { useUserAssignedCourses } from '../../../../services/api/userStatsApiService';
 import { showNotification } from '../../../../services/core/notifications';
 import { LocalStorageService } from '../../../../services/core/storageService';
-import { UserCourseStatsDTO } from '@episto/communication';
-import { Id } from '@episto/commontypes';
+import { EpistoButton } from '../../../controls/EpistoButton';
 import { EpistoDataGrid } from '../../../controls/EpistoDataGrid';
 import { EpistoFlex2 } from '../../../controls/EpistoFlex';
 import { EpistoSwitch } from '../../../controls/EpistoSwitch';
 import { useXMutatorNew } from '../../../lib/XMutator/XMutatorReact';
 import { useSetBusy } from '../../../system/LoadingFrame/BusyBarContext';
-import { AdminSubpageHeader } from '../../AdminSubpageHeader';
 import { useAdminCourseContentDialogLogic } from '../adminCourseContentDialog/AdminCourseContentDialogLogic';
 import { AdminUserCourseContentDialog } from '../adminCourseContentDialog/AdminUserCourseContentDialog';
-import { UserCoursesRowType, useUserCoursesColumns } from './AdminUserCoursesColumns';
+import { UserCoursesRowType, useUserCoursesColumns } from './UserCoursesColumns';
 
-export const AdminUserCoursesSubpage = ({
-    tabMenuItems,
-    headerButtons,
+export const UserCourses = ({
     userId
 }: {
-    tabMenuItems: any[],
-    headerButtons: ButtonType[],
     userId: Id<'User'>
 }) => {
 
-    const { usersRoute } = applicationRoutes.administrationRoute;
-
     const [editModeEnabled, setEditModeEnabled] = useState(LocalStorageService
         .readStorage('editModeEnabled') === 'true');
-
-    const { userEditData } = UserApiService
-        .useEditUserData(userId);
 
     const {
         userAssignedCourses,
@@ -92,40 +81,47 @@ export const AdminUserCoursesSubpage = ({
     const { adminCourseContentDialogLogic } = useAdminCourseContentDialogLogic();
 
     return (
-        <AdminSubpageHeader
-            direction="row"
-            tabMenuItems={tabMenuItems}
-            headerContent={<>
-                <EpistoSwitch
-                    checked={editModeEnabled}
-                    setChecked={setEditModeEnabled}
-                    label={editModeEnabled ? 'Disable editing' : 'Enable editing'} />
-            </>}
-            headerButtons={headerButtons
-                .concat(editModeEnabled
-                    ? [{
-                        title: 'Save',
-                        action: handleSaveUserCourses,
-                    }]
-                    : [])}>
+        <EpistoFlex2
+            flex="1"
+            direction="column">
 
             <AdminUserCourseContentDialog
                 dialogLogic={adminCourseContentDialogLogic} />
 
-            {/* courses grid */}
-            {rows.length > 0 && <EpistoDataGrid
-                getKey={getRowKey}
-                rows={rows}
-                columns={columns} />}
+            {/* header */}
+            <EpistoFlex2
+                justify="flex-end">
 
-            {/* no data yet */}
-            {rows.length === 0 && <EpistoFlex2
-                flex='1'
-                align='center'
-                justify='center'>
+                <EpistoSwitch
+                    checked={editModeEnabled}
+                    setChecked={setEditModeEnabled}
+                    label={editModeEnabled ? 'Disable editing' : 'Enable editing'} />
 
-                A felhasználó még egyetlen kurzust sem kezdett el
-            </EpistoFlex2>}
-        </AdminSubpageHeader>
+                {editModeEnabled && <EpistoButton
+                    onClick={handleSaveUserCourses}>
+                    Save
+                </EpistoButton>}
+            </EpistoFlex2>
+
+            {/* content */}
+            <EpistoFlex2
+                flex="1">
+
+                {/* courses grid */}
+                {rows.length > 0 && <EpistoDataGrid
+                    getKey={getRowKey}
+                    rows={rows}
+                    columns={columns} />}
+
+                {/* no data yet */}
+                {rows.length === 0 && <EpistoFlex2
+                    flex='1'
+                    align='center'
+                    justify='center'>
+
+                    A felhasználó még egyetlen kurzust sem kezdett el
+                </EpistoFlex2>}
+            </EpistoFlex2>
+        </EpistoFlex2>
     );
 };

@@ -103,22 +103,17 @@ export class UserStatsService {
 
     /**
      * Gets the statistics for the users every course
-     * TODO: Filter courses by permissions
-     * TODO: Rearrange the view, so when the user hasn't
-     *       started a course yet, return all the courses with empty
-     *       data, instead of []
      */
     async getUserCourseStatsAsync(
         principalId: PrincipalId,
-        userId: Id<'User'>,
-        loadAvailable: boolean
+        userId: Id<'User'>
     ) {
 
-        const query = this._ormService
+        const userCoursesDataViews = await this
+            ._ormService
             .query(AdminUserCoursesView, { userId })
-            .where('userId', '=', 'userId');
-
-        const userCoursesDataViews = await (loadAvailable ? query : query.and('isAssigned', '=', 'true'))
+            .where('userId', '=', 'userId')
+            .and('isAssigned', '=', 'true')
             .getMany();
 
         const courseIds = userCoursesDataViews

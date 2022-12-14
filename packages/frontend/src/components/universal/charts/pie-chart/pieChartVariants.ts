@@ -1,3 +1,5 @@
+import { deepMergeObjects } from '@episto/x-core';
+import { EChartsOption, SeriesOption } from 'echarts';
 import { EpistoPieChartOptionsType } from './EpistoPieChartTypes';
 
 export const pieChartVariantOptions: { [K: string]: EpistoPieChartOptionsType } = {
@@ -226,3 +228,26 @@ export const pieChartVariantOptions: { [K: string]: EpistoPieChartOptionsType } 
         }
     },
 };
+
+export const getPieDefaultOptions = (seriesOptions: SeriesOption): EChartsOption => ({
+    legend: {
+        top: 'bottom',
+        show: true
+    },
+    series: [
+        deepMergeObjects({
+            type: 'pie',
+            labelLine: {
+                show: false
+            },
+            label: {
+                show: false,
+            },
+            roseType: 'area',
+            radius: [10, 140],
+            tooltip: {
+                show: false
+            },
+        } as SeriesOption, seriesOptions)
+    ]
+});

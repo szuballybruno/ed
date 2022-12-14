@@ -3,7 +3,7 @@ import { TempomatModeType } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
 import { Environment } from '../../../../static/Environemnt';
 import { EpistoIcons } from '../../../../static/EpistoIcons';
-import { secondsToTime } from '../../../../static/frontendHelpers';
+import { Formatters, secondsToTime } from '../../../../static/frontendHelpers';
 import { EpistoButton } from '../../../controls/EpistoButton';
 import { EpistoCheckbox } from '../../../controls/EpistoCheckbox';
 import { EpistoDataGridColumnBuilder } from '../../../controls/EpistoDataGrid';
@@ -15,8 +15,30 @@ import { IXMutatorFunctions } from '../../../lib/XMutator/XMutatorCore';
 import { EmptyCell } from '../../../universal/EmptyCell';
 import { CircularProgressWithLabel } from '../../courses/AdminCourseUserProgressSubpage';
 import { ChipSmall } from '../../courses/ChipSmall';
+import { PerformanceRatingChip } from '../../../universal/UserPerformanceChip';
 
 export type UserCoursesRowType = UserCourseStatsDTO & { moreDetails: number };
+
+const TempomatModeDisplay = ({ mode }: { mode: TempomatModeType }) => {
+
+    const [imageUrl, displayText] = ((): [string, string] => {
+
+        const getImagePath = (path: string) => Environment.getAssetUrl(`images/${path}.png`);
+
+        if (mode === 'light')
+            return [getImagePath('lightmode'), 'Megengedő mód'];
+
+        return [getImagePath('strictmode'), 'Szigorú mód'];
+    })();
+
+    return (
+        <EpistoImage
+            title={displayText}
+            height='30px'
+            width='30px'
+            src={imageUrl} />
+    );
+};
 
 export const useUserCoursesColumns = ({
     handleOpenUserCourseDetailsDialog,
@@ -27,27 +49,6 @@ export const useUserCoursesColumns = ({
     hideStats: boolean,
     mutatorFunctions: IXMutatorFunctions<UserCourseStatsDTO, 'courseId', Id<'Course'>>
 }) => {
-
-    const getTempomatDisplayData = (mode: TempomatModeType): [string, string] => {
-
-        const getImagePath = (path: string) => Environment.getAssetUrl(`images/${path}.png`);
-
-        if (mode === 'light')
-            return [getImagePath('lightmode'), 'Megengedő mód'];
-
-        return [getImagePath('strictmode'), 'Szigorú mód'];
-    };
-
-    const getPerformanceDisplayData = (value: number) => {
-
-        if (value > 5)
-            return ['Átlagon felüli', 'var(--deepGreen)'];
-
-        if (value < -5)
-            return ['Átlagon aluli', 'var(--intenseRed)'];
-
-        return ['Átlagos', ''];
-    };
 
     const builder = new EpistoDataGridColumnBuilder<UserCoursesRowType, Id<'Course'>>()
         .add({
@@ -62,7 +63,7 @@ export const useUserCoursesColumns = ({
         .add({
             field: 'courseName',
             headerName: 'Cím',
-            width: 300,
+            width: 150,
             resizable: true
         });
 
@@ -125,8 +126,8 @@ export const useUserCoursesColumns = ({
     return builder
         .add({
             field: 'courseProgressPercentage',
-            headerName: 'Haladás a kurzusban',
-            width: 150,
+            headerName: 'Haladás',
+            width: 80,
             resizable: true,
             renderCell: ({ value }) => value
                 ? <CircularProgressWithLabel
@@ -135,14 +136,47 @@ export const useUserCoursesColumns = ({
 
         })
         .add({
-            field: 'performancePercentage',
-            headerName: 'Jelenlegi teljesítmény',
-            width: 150,
+            field: 'totalSpentSeconds',
+            headerName: 'Eltöltött idő',
+            width: 90,
             resizable: true,
             renderCell: ({ value }) => value
-                ? <CircularProgressWithLabel
-                    value={value} />
+                ? <EpistoFont>
+                    {secondsToTime(value)}
+                </EpistoFont>
                 : <EmptyCell />
+        })
+        .add({
+            field: 'performanceRating',
+            headerName: 'Teljesítmény',
+            width: 150,
+            renderCell: ({ value, row: { performancePercentage } }) => (
+                <PerformanceRatingChip
+                    rating={value}
+                    value={performancePercentage} />
+            )
+        })
+        .add({
+            field: 'previsionedCompletionDate',
+            headerName: 'Várható befejezés',
+            width: 130,
+            resizable: true,
+            renderCell: ({ value }) => value
+                ? <EpistoFont>
+                    {Formatters.formatDate(value)}
+                </EpistoFont>
+                : <EmptyCell />
+        })
+        .add({
+            field: 'requiredCompletionDate',
+            headerName: 'Határidő',
+            renderCell: ({ value }) => (
+                <EpistoFont>
+                    {value
+                        ? Formatters.formatDate(value)
+                        : '-'}
+                </EpistoFont>
+            )
         })
         .add({
             field: 'completedVideoCount',
@@ -157,26 +191,15 @@ export const useUserCoursesColumns = ({
             resizable: true,
         })
         .add({
-            field: 'totalSpentSeconds',
-            headerName: 'Eltöltött idő',
-            width: 150,
-            resizable: true,
-            renderCell: ({ value }) => value
-                ? <EpistoFont>
-                    {secondsToTime(value)}
-                </EpistoFont>
-                : <EmptyCell />
-        })
-        .add({
             field: 'answeredVideoQuestionCount',
             headerName: 'Megválaszolt videós kérdések',
-            width: 150,
+            width: 190,
             resizable: true
         })
         .add({
             field: 'answeredPractiseQuestionCount',
             headerName: 'Megválaszolt gyakorló kérdések',
-            width: 150,
+            width: 220,
             resizable: true
         })
         .add({
@@ -194,54 +217,24 @@ export const useUserCoursesColumns = ({
             field: 'recommendedItemsPerWeek',
             headerName: 'Ajánlott videók hetente',
             width: 150,
-            resizable: true
-        })
-        .add({
-            field: 'previsionedCompletionDate',
-            headerName: 'Kurzus várható befejezése',
-            width: 150,
             resizable: true,
-            renderCell: ({ value }) => value
-                ? <EpistoFont>
-                    {new Date(value)
-                        .toLocaleString('hu-hu', {
-                            month: '2-digit',
-                            day: '2-digit'
-                        })}
+            renderCell: ({ value }) => (
+                <EpistoFont>
+                    {value ? Math.ceil(value) : 0}
                 </EpistoFont>
-                : <EmptyCell />
+            )
         })
         .add({
             field: 'tempomatMode',
-            headerName: 'Jelenlegi tempomat mód',
-            width: 250,
+            headerName: 'Tempomat mód',
+            width: 120,
             resizable: true,
-            renderCell: ({ value }) => {
-
-                if (!value)
-                    return <EmptyCell />;
-
-                const [imageUrl, displayText] = getTempomatDisplayData(value);
-
-                return <EpistoFlex2 align='center'>
-
-                    <EpistoImage
-                        height='30px'
-                        width='30px'
-                        src={imageUrl} />
-
-                    <EpistoFont
-                        style={{
-                            marginLeft: 5
-                        }}>
-                        {displayText}
-                    </EpistoFont>
-                </EpistoFlex2>;
-            }
-        })
-        .add({
-            field: 'requiredCompletionDate',
-            headerName: 'Határidő',
+            renderCell: ({ value }) => (
+                value
+                    ? <TempomatModeDisplay
+                        mode={value} />
+                    : <EmptyCell />
+            )
         })
         .add({
             field: 'moreDetails',

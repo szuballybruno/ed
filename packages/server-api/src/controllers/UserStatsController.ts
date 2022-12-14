@@ -46,8 +46,7 @@ export class UserStatsController implements IController<UserStatsController> {
         return this._userStatsService
             .getUserCourseStatsAsync(
                 params.principalId,
-                query.getValue(x => x.userId, 'int'),
-                query.getValue(x => x.loadAvailable, 'boolean'));
+                query.getValue(x => x.userId, 'int'));
     }
 
     @XControllerAction(apiRoutes.userStats.getAdminCourseUsers)

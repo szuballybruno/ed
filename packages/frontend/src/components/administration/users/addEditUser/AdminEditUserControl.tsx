@@ -1,28 +1,28 @@
 import { useEffect, useState } from 'react';
-import { useCoinBalanceOfUser, useGiftCoinsToUser } from '../../../services/api/coinTransactionsApiService';
-import { UserApiService } from '../../../services/api/UserApiService1';
-import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
+import { useCoinBalanceOfUser, useGiftCoinsToUser } from '../../../../services/api/coinTransactionsApiService';
+import { UserApiService } from '../../../../services/api/UserApiService1';
+import { showNotification, useShowErrorDialog } from '../../../../services/core/notifications';
 import { CompanyDTO } from '@episto/communication';
 import { RoleDTO } from '@episto/communication';
 import { UserEditReadDTO } from '@episto/communication';
 import { UserEditSaveDTO } from '@episto/communication';
 import { Id } from '@episto/commontypes';
-import { parseIntOrNull } from '../../../static/frontendHelpers';
-import { translatableTexts } from '../../../static/translatableTexts';
-import { EpistoButton } from '../../controls/EpistoButton';
-import { EpistoCheckbox } from '../../controls/EpistoCheckbox';
-import { EpistoCheckboxLabel } from '../../controls/EpistoCheckboxLabel';
-import { EpistoEntry } from '../../controls/EpistoEntry';
-import { EpistoEntryNew, useEpistoEntryState } from '../../controls/EpistoEntryNew';
-import { EpistoFlex2 } from '../../controls/EpistoFlex';
-import { EpistoFont } from '../../controls/EpistoFont';
-import { EpistoFormLabel } from '../../controls/EpistoFormLabel';
-import { EpistoLabel } from '../../controls/EpistoLabel';
-import { EpistoSelect } from '../../controls/EpistoSelect';
-import { useSetBusy } from '../../system/LoadingFrame/BusyBarContext';
-import { EpistoConinImage } from '../../universal/EpistoCoinImage';
-import { EditSection } from '../courses/EditSection';
-import { TailingAdminButtons } from '../TailingAdminButtons';
+import { parseIntOrNull } from '../../../../static/frontendHelpers';
+import { translatableTexts } from '../../../../static/translatableTexts';
+import { EpistoButton } from '../../../controls/EpistoButton';
+import { EpistoCheckbox } from '../../../controls/EpistoCheckbox';
+import { EpistoCheckboxLabel } from '../../../controls/EpistoCheckboxLabel';
+import { EpistoEntry } from '../../../controls/EpistoEntry';
+import { EpistoEntryNew, useEpistoEntryState } from '../../../controls/EpistoEntryNew';
+import { EpistoFlex2 } from '../../../controls/EpistoFlex';
+import { EpistoFont } from '../../../controls/EpistoFont';
+import { EpistoFormLabel } from '../../../controls/EpistoFormLabel';
+import { EpistoLabel } from '../../../controls/EpistoLabel';
+import { EpistoSelect } from '../../../controls/EpistoSelect';
+import { useSetBusy } from '../../../system/LoadingFrame/BusyBarContext';
+import { EpistoConinImage } from '../../../universal/EpistoCoinImage';
+import { EditSection } from '../../courses/EditSection';
+import { TailingAdminButtons } from '../../TailingAdminButtons';
 
 export const AdminEditUserControl = ({
     editDTO,

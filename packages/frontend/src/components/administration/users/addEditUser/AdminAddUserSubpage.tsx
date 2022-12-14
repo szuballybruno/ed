@@ -1,12 +1,12 @@
 import { useCallback } from 'react';
-import { ButtonType } from '../../../models/types';
-import { useCreateInviteUserAsync } from '../../../services/api/registrationApiService';
-import { UserApiService } from '../../../services/api/UserApiService1';
-import { showNotification } from '../../../services/core/notifications';
+import { ButtonType } from '../../../../models/types';
+import { useCreateInviteUserAsync } from '../../../../services/api/registrationApiService';
+import { UserApiService } from '../../../../services/api/UserApiService1';
+import { showNotification } from '../../../../services/core/notifications';
 import { CompanyDTO } from '@episto/communication';
 import { Id } from '@episto/commontypes';
-import { useEventTrigger, usePostCallback } from '../../../static/frontendHelpers';
-import { AdminSubpageHeader } from '../AdminSubpageHeader';
+import { useEventTrigger, usePostCallback } from '../../../../static/frontendHelpers';
+import { AdminSubpageHeader } from '../../AdminSubpageHeader';
 import { AdminEditUserControl } from './AdminEditUserControl';
 
 export const AdminAddUserSubpage = ({
