@@ -125,7 +125,7 @@ jobs:
           path: ./epitest/init
 
       - name: Compose up
-        run: docker compose --file ./epitest/testenv.yml up --build --force-recreate --abort-on-container-exit --renew-anon-volumes
+        run: docker compose --file ./epitest/testenv.yml up --build --force-recreate --abort-on-container-exit --renew-anon-volumes --exit-code-from tests-client
 
       - name: Upload test-logs artifact
         uses: actions/upload-artifact@v3

@@ -19,56 +19,31 @@ import { EpistoFont } from '../../controls/EpistoFont';
 import { ProfileImage } from '../../ProfileImage';
 import { EpistoDialog } from '../../universal/epistoDialog/EpistoDialog';
 import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogLogic';
+import { useUserPerformanceDisplayValues } from '../../universal/UserPerformanceChip';
 import { UsersSearchFilters } from './UsersSearchFilters';
 
-const PerformanceRatingChip = ({ rating, value }: { rating: UserPerformanceRating, value: number }) => {
+const PerformanceRatingChip = ({ value, ...props }: { rating: UserPerformanceRating, value: number }) => {
 
-    const { color, text } = (() => {
-
-        if (rating === 'average')
-            return {
-                text: 'Átlagos',
-                color: 'orange'
-            };
-
-        if (rating === 'bad')
-            return {
-                text: 'Lassú',
-                color: 'orange'
-            };
-
-        if (rating === 'very_bad')
-            return {
-                text: 'Nagyon lassú',
-                color: 'orange'
-            };
-
-        if (rating === 'good')
-            return {
-                text: 'Gyors',
-                color: 'orange'
-            };
-
-        if (rating === 'very_good')
-            return {
-                text: 'Nagyon gyors',
-                color: 'orange'
-            };
-
-        throw new Error(`Invalid value: ${rating}`);
-    })();
+    const rating: UserPerformanceRating = props.rating;
+    const { color, text } = useUserPerformanceDisplayValues(rating);
 
     return (
-        <EpistoFont
-            tooltip={`${Math.round(value * 10) / 10}%`}
-            style={{
-                borderRadius: '5px',
-                padding: '5px',
-                color: 'white',
-                background: color
-            }}>
-            {text}
-        </EpistoFont>
+        <EpistoFlex2
+            borderRadius='5px'
+            padding='5px'
+            color='white'
+            background={color}>
+
+            <EpistoFont
+                tooltip={`${Math.round(value * 10) / 10}%`}>
+                {text}
+            </EpistoFont>
+
+            {rating === 'very_good' && <EpistoIcons.Star
+                style={{
+                    marginLeft: '2px'
+                }} />}
+        </EpistoFlex2>
     );
 };
 
@@ -168,10 +143,13 @@ const useColumns = (
         .addIf(preset === 'all', {
             field: 'performanceRating',
             headerName: 'Teljesítmény',
-            renderCell: ({ value, row: { performanceAverage } }) => (
-                <PerformanceRatingChip
-                    value={performanceAverage}
-                    rating={value} />
+            width: 150,
+            renderCell: ({ value, row: { performanceAverage, hasPerformanceAverage } }) => (
+                <>
+                    {hasPerformanceAverage && <PerformanceRatingChip
+                        value={performanceAverage}
+                        rating={value} />}
+                </>
             )
         })
         .add({

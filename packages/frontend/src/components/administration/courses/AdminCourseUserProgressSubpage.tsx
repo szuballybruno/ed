@@ -19,7 +19,6 @@ import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { useAdminCourseContentDialogLogic } from '../users/adminCourseContentDialog/AdminCourseContentDialogLogic';
 import { AdminUserCourseContentDialog } from '../users/adminCourseContentDialog/AdminUserCourseContentDialog';
 import { AdminCourseUserOverviewDialog, useAdminCourseUserOverviewDialogLogic } from './AdminCourseUserOverviewDialog';
-import { ChipSmall } from './ChipSmall';
 import { CourseAdministartionFrame } from './CourseAdministartionFrame';
 
 export interface AdminCourseUserRowType extends AdminCourseUserStatsDTO {
@@ -133,60 +132,6 @@ export const useCourseUsersColumns = ({
                             day: '2-digit'
                         })}
                 </EpistoFont>
-                : <EmptyCell />
-        })
-        .addIf(preset === 'inprogress', {
-            field: 'previsionedDate',
-            headerName: 'Várható befejezés',
-            width: 150,
-            resizable: true,
-            renderCell: ({ value }) => value
-                ? <EpistoFont>
-                    {new Date(value)
-                        .toLocaleString('hu-hu', {
-                            year: 'numeric',
-                            month: '2-digit',
-                            day: '2-digit'
-                        })}
-                </EpistoFont>
-                : <EmptyCell />
-        })
-        .addIf(preset === 'inprogress', {
-            field: 'actualLagBehindDays',
-            headerName: 'Eddigi lemaradás',
-            width: 150,
-            resizable: true,
-            renderCell: ({ value }) => value
-                ? <ChipSmall
-                    text={Math.ceil(value) + ' nap'}
-                    color={(() => {
-                        if (value < 3)
-                            return 'var(--mildGreen)';
-
-                        if (value < 10)
-                            return 'var(--mildOrange)';
-
-                        return 'var(--mildRed)';
-                    })()} />
-                : <EmptyCell />
-        })
-        .addIf(preset === 'inprogress', {
-            field: 'previsionedLagBehindDays',
-            headerName: 'Várható lemaradás',
-            width: 150,
-            resizable: true,
-            renderCell: ({ value }) => value
-                ? <ChipSmall
-                    text={Math.ceil(value) + ' nap'}
-                    color={(() => {
-                        if (value < 3)
-                            return 'var(--mildGreen)';
-
-                        if (value < 10)
-                            return 'var(--mildOrange)';
-
-                        return 'var(--mildRed)';
-                    })()} />
                 : <EmptyCell />
         })
         .addIf(preset === 'completed', {

@@ -41,7 +41,7 @@ export class UserCourseBridge {
 
     @Column({ type: 'timestamptz', nullable: true })
     @XViewColumn()
-    previsionedCompletionDate: Date | null;
+    originalEstimatedCompletionDate: Date | null;
 
     @Column({ type: 'timestamptz', nullable: true })
     @XViewColumn()

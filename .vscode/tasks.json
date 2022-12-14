@@ -51,18 +51,6 @@
         },
         {
             "type": "shell",
-            "label": "watch-communication",
-            "command": "yarn watch",
-            "problemMatcher": [],
-            "options": {
-                "cwd": "${workspaceFolder}/packages/communication"
-            },
-            "presentation": {
-                "group": "run"
-            }
-        },
-        {
-            "type": "shell",
             "label": "build-serve-client",
             "command": "yarn build-serve-client",
             "problemMatcher": [],

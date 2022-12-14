@@ -124,22 +124,6 @@ export const useUserCoursesColumns = ({
     // return stats columns
     return builder
         .add({
-            field: 'differenceFromAveragePerformancePercentage',
-            headerName: 'Teljesítmény céges viszonylatban',
-            width: 150,
-            resizable: true,
-            renderCell: ({ value }) => {
-
-                const [text, color] = getPerformanceDisplayData(value);
-
-                return value
-                    ? <ChipSmall
-                        text={text}
-                        color={color} />
-                    : <EmptyCell />;
-            }
-        })
-        .add({
             field: 'courseProgressPercentage',
             headerName: 'Haladás a kurzusban',
             width: 150,
@@ -211,19 +195,6 @@ export const useUserCoursesColumns = ({
             headerName: 'Ajánlott videók hetente',
             width: 150,
             resizable: true
-        })
-        .add({
-            field: 'relativeUserPaceDiff',
-            headerName: 'Becsült lemaradás',
-            width: 150,
-            resizable: true,
-            renderCell: ({ value }) => value
-                ? <EpistoFont isMultiline>
-                    {value > 0
-                        ? value + '%'
-                        : Math.abs(value) + '%-al gyorsabban halad a becslésnél'}
-                </EpistoFont>
-                : <EmptyCell />
         })
         .add({
             field: 'previsionedCompletionDate',

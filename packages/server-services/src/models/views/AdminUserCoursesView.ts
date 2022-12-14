@@ -1,7 +1,5 @@
-import { XViewColumn } from '@episto/x-orm';
-import { TempomatModeType } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
-
+import { XViewColumn } from '@episto/x-orm';
 
 export class AdminUserCoursesView {
 
@@ -13,9 +11,6 @@ export class AdminUserCoursesView {
 
     @XViewColumn()
     isAssigned: boolean;
-
-    @XViewColumn()
-    isTempomatReady: boolean;
 
     @XViewColumn()
     isAccessible: boolean;
@@ -30,16 +25,10 @@ export class AdminUserCoursesView {
     startDate: Date;
 
     @XViewColumn()
-    differenceFromAveragePerformancePercentage: number;
-
-    @XViewColumn()
     correctAnswerRate: number;
 
     @XViewColumn()
     courseProgressPercentage: number;
-
-    @XViewColumn()
-    performancePercentage: number;
 
     @XViewColumn()
     completedVideoCount: number;
@@ -49,9 +38,6 @@ export class AdminUserCoursesView {
 
     @XViewColumn()
     totalSpentSeconds: number;
-
-    @XViewColumn()
-    avgPerformance: number;
 
     @XViewColumn()
     answeredVideoQuestionCount: number;
@@ -64,21 +50,6 @@ export class AdminUserCoursesView {
 
     @XViewColumn()
     requiredCompletionDate: Date;
-
-    @XViewColumn()
-    tempomatMode: TempomatModeType;
-
-    @XViewColumn()
-    originalPrevisionedCompletionDate: Date;
-
-    @XViewColumn()
-    totalItemCount: number;
-
-    @XViewColumn()
-    totalCompletedItemCount: number;
-
-    @XViewColumn()
-    tempomatAdjustmentValue: number;
 }
 
 export class UserCourseStatsViewWithTempomatData extends AdminUserCoursesView {

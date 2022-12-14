@@ -49,7 +49,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
                 creationDate: new Date(),
                 currentItemCode,
                 lastInteractionDate: new Date(),
-                previsionedCompletionDate: null,
+                originalEstimatedCompletionDate: null,
                 requiredCompletionDate: null,
                 stageName,
                 startDate,
@@ -80,11 +80,11 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
     async setPrevisionedCompletionDateAsync(
         userId: Id<'User'>,
         courseId: Id<'Course'>,
-        previsionedCompletionDate: Date) {
+        originalEstimatedCompletionDate: Date) {
 
         await this
             ._updateBridge(userId, courseId, {
-                previsionedCompletionDate
+                originalEstimatedCompletionDate
             });
     }
 

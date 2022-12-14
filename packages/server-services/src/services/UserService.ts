@@ -1,5 +1,5 @@
 import { instantiate } from '@episto/commonlogic';
-import { ErrorWithCode, Id } from '@episto/commontypes';
+import { ErrorWithCode, Id, UserRegistrationStatusType } from '@episto/commontypes';
 import { BriefUserDataDTO, DepartmentDTO, Mutation, UserAdminListDTO, UserControlDropdownDataDTO, UserCourseStatsDTO, UserDTO, UserEditReadDTO, UserEditSaveDTO, UserEditSimpleDTO } from '@episto/communication';
 import { PrincipalId } from '@episto/x-core';
 import { CourseData } from '../models/entity/course/CourseData';
@@ -287,7 +287,8 @@ export class UserService {
         isSurveyRequired,
         unhashedPassword,
         registrationType,
-        username
+        username,
+        registrationState
     }: {
         email: string,
         firstName: string,
@@ -298,7 +299,8 @@ export class UserService {
         isSurveyRequired: boolean,
         unhashedPassword: string,
         registrationType: RegistrationType,
-        username: string
+        registrationState: UserRegistrationStatusType,
+        username: string,
     }) {
 
         return await this
@@ -315,8 +317,7 @@ export class UserService {
                 isGod: false,
                 avatarFileId: null,
                 deletionDate: null,
-                isInvitationAccepted: false,
-                isTrusted: true,
+                registrationStatus: registrationState,
                 linkedInUrl: null,
                 phoneNumber: null,
                 refreshToken: null,
@@ -386,7 +387,7 @@ export class UserService {
         await this._ormService
             .save(User, {
                 id: userId,
-                isInvitationAccepted: true,
+                registrationStatus: 'active',
                 password: await this._hashService
                     .hashPasswordAsync(rawPassword)
             });
@@ -666,7 +667,7 @@ export class UserService {
                 creationDate: new Date(),
                 currentItemCode: null,
                 lastInteractionDate: null,
-                previsionedCompletionDate: null,
+                originalEstimatedCompletionDate: null,
                 requiredCompletionDate: null,
                 stageName: 'assigned',
                 startDate: null,

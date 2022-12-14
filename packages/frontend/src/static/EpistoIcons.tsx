@@ -6,6 +6,7 @@ import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
 import LocationCityIcon from '@mui/icons-material/LocationCity';
 import BackupIcon from '@mui/icons-material/Backup';
 import InsertLinkIcon from '@mui/icons-material/InsertLink';
+import StarsIcon from '@mui/icons-material/Stars';
 
 export const EpistoIcons = {
     Delete: Delete,
@@ -24,5 +25,6 @@ export const EpistoIcons = {
     Dot: FiberManualRecord,
     Upload: BackupIcon,
     Close: Close,
-    Link: InsertLinkIcon
+    Link: InsertLinkIcon,
+    Star: StarsIcon
 };

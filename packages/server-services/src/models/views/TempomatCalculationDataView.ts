@@ -24,7 +24,7 @@ export class TempomatCalculationDataView {
     tempomatMode: TempomatModeType;
 
     @XViewColumn()
-    originalPrevisionedCompletionDate: Date | null;
+    originalEstimatedCompletionDate: Date | null;
 
     @XViewColumn()
     totalItemCount: number;

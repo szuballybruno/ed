@@ -1,8 +1,8 @@
 import { instantiate } from '@episto/commonlogic';
 import { Id, TempomatModeType, UserPerformanceRating } from '@episto/commontypes';
-import { PrincipalId } from '@episto/x-core';
+import { PrincipalId, valueInRange } from '@episto/x-core';
 import { UserCourseBridge } from '../models/entity/misc/UserCourseBridge';
-import { TempomatCalculationDataModel } from '../models/TempomatCalculationDataModel';
+import { TempomatDataModel } from '../models/TempomatCalculationDataModel';
 import { UserPerformancePercentageAverageModel } from '../models/UserPerformancePercentageAverageModel';
 import { TempomatCalculationDataView } from '../models/views/TempomatCalculationDataView';
 import { TempomatTargetDateDataView } from '../models/views/TempomatTargetDateDataView';
@@ -166,10 +166,15 @@ export class TempomatService {
             .where('userId', '=', 'userId')
             .getMany();
 
-        return this
+        const averageProgressPercentage = this
             .getUserAvgPerformancePercentages(tempomatCalculationDatas)
             .single()
             .averageProgressPercentage;
+
+        const averagePerformanceRating = this
+            ._getPerformanceRating(averageProgressPercentage);
+
+        return { averageProgressPercentage, averagePerformanceRating };
     }
 
     /*
@@ -205,7 +210,7 @@ export class TempomatService {
      * Get tempomat values for a specific user
      */
     getTempomatValues({
-        originalPrevisionedCompletionDate,
+        originalEstimatedCompletionDate,
         totalItemCount,
         startDate,
         requiredCompletionDate,
@@ -215,18 +220,18 @@ export class TempomatService {
         userId
     }: {
         tempomatMode: TempomatModeType,
-        originalPrevisionedCompletionDate: Date | null,
+        originalEstimatedCompletionDate: Date | null,
         requiredCompletionDate: Date | null,
         startDate: Date | null,
         totalItemCount: number,
         totalCompletedItemCount: number,
         currentDate: Date,
         userId: Id<'User'>
-    }): TempomatCalculationDataModel {
+    }): TempomatDataModel {
 
         try {
 
-            if (!originalPrevisionedCompletionDate)
+            if (!originalEstimatedCompletionDate)
                 throw new Error(`Original previsionedCompletionDate is null or undefined!`);
 
             if (!startDate) {
@@ -234,11 +239,11 @@ export class TempomatService {
                 const tempDate = new Date()
                     .addDays(45);
 
-                return instantiate<TempomatCalculationDataModel>({
-                    previsionedCompletionDate: tempDate,
+                return instantiate<TempomatDataModel>({
+                    estimatedCompletionDate: tempDate,
                     recommendedItemsPerDay: 0,
                     recommendedItemsPerWeek: 0,
-                    originalPrevisionedCompletionDate: tempDate,
+                    originalEstimatedCompletionDate: tempDate,
                     requiredCompletionDate: tempDate,
                     startDate: null,
                     userPerformancePercentage: 0,
@@ -247,13 +252,15 @@ export class TempomatService {
                     avgItemCompletionPerDay: 0,
                     avgItemCompletionPercentagePerDay: 0,
                     recommendedPercentPerDay: 0,
-                    isStartedCourse: false
+                    isStartedCourse: false,
+                    tempomatMode,
+                    performanceRating: 'average'
                 });
             }
 
             const completedCourseItemCount = totalCompletedItemCount;
             const remainingItemsCount = totalItemCount - completedCourseItemCount;
-            const targetCompletionDate = requiredCompletionDate || originalPrevisionedCompletionDate;
+            const targetCompletionDate = requiredCompletionDate || originalEstimatedCompletionDate;
 
             const avgItemCompletionPerDay = this
                 ._getAverageCompletedItemsCountPerDay({
@@ -268,7 +275,7 @@ export class TempomatService {
                     currentDate,
                     completedCourseItemCount,
                     totalCourseItemCount: totalItemCount,
-                    originalPrevisionedCompletionDate
+                    originalEstimatedCompletionDate
                 });
 
             const recommendedItemsPerDay = this
@@ -287,8 +294,8 @@ export class TempomatService {
                     remainingItemsCount
                 });
 
-            const userPaceDifferencePercentage = this
-                ._getUserPaceDifferencePercentage({
+            const userPerformancePercentage = this
+                ._getUserPerformancePercentage({
                     actualItemsPerDay: avgItemCompletionPerDay,
                     targetItemsPerDay: recommendedItemsPerDay
                 });
@@ -298,20 +305,23 @@ export class TempomatService {
             const avgItemCompletionPercentagePerDay = avgItemCompletionPerDay / totalItemCount * 100;
             const recommendedPercentPerDay = recommendedItemsPerDay / totalItemCount * 100;
 
-            return instantiate<TempomatCalculationDataModel>({
-                previsionedCompletionDate: estimatedCompletionDate,
+            return instantiate<TempomatDataModel>({
+                estimatedCompletionDate: estimatedCompletionDate,
                 recommendedItemsPerDay,
                 recommendedItemsPerWeek,
-                originalPrevisionedCompletionDate,
+                originalEstimatedCompletionDate: originalEstimatedCompletionDate,
                 requiredCompletionDate,
                 startDate,
-                userPerformancePercentage: userPaceDifferencePercentage,
+                userPerformancePercentage,
                 lagBehindDays,
                 userId,
                 avgItemCompletionPerDay,
                 avgItemCompletionPercentagePerDay,
                 recommendedPercentPerDay,
-                isStartedCourse: true
+                isStartedCourse: true,
+                tempomatMode,
+                performanceRating: this
+                    ._getPerformanceRating(userPerformancePercentage)
             });
         }
         catch (e: any) {
@@ -323,7 +333,7 @@ export class TempomatService {
     /**
      * Get tempomat values for a specific user
      */
-    getTempomatValuesBatch(views: TempomatCalculationDataView[], currentDate: Date): TempomatCalculationDataModel[] {
+    getTempomatValuesBatch(views: TempomatCalculationDataView[], currentDate: Date): TempomatDataModel[] {
 
         try {
 
@@ -403,19 +413,19 @@ export class TempomatService {
         avgItemCompletionPerDay,
         completedCourseItemCount,
         currentDate,
-        originalPrevisionedCompletionDate,
+        originalEstimatedCompletionDate,
         totalCourseItemCount
     }: {
         avgItemCompletionPerDay: number,
         currentDate: Date,
         completedCourseItemCount: number,
         totalCourseItemCount: number,
-        originalPrevisionedCompletionDate: Date,
+        originalEstimatedCompletionDate: Date,
     }) {
 
         // default value until user has some progress
         if (avgItemCompletionPerDay === 0)
-            return originalPrevisionedCompletionDate;
+            return originalEstimatedCompletionDate;
 
         const courseItemsLeft = totalCourseItemCount - completedCourseItemCount;
         const daysLeft = courseItemsLeft / avgItemCompletionPerDay;
@@ -446,7 +456,7 @@ export class TempomatService {
     /**
      * Get user pace diff percentage 
      */
-    private _getUserPaceDifferencePercentage({
+    private _getUserPerformancePercentage({
         actualItemsPerDay,
         targetItemsPerDay
     }: {
@@ -454,10 +464,10 @@ export class TempomatService {
         targetItemsPerDay: number
     }) {
 
-        if (actualItemsPerDay === targetItemsPerDay)
-            return 0;
+        if (targetItemsPerDay === 0)
+            return 100;
 
-        return (actualItemsPerDay - targetItemsPerDay) / targetItemsPerDay;
+        return actualItemsPerDay / targetItemsPerDay * 100;
     }
 
     /**
@@ -465,6 +475,21 @@ export class TempomatService {
      */
     private _getPerformanceRating(performancePercentage: number): UserPerformanceRating {
 
-        return 'average';
+        if (performancePercentage < 0)
+            throw new Error(`Performance percentage is not allowed to be smaller than zero!`);
+
+        if (performancePercentage > 130)
+            return 'very_good';
+
+        if (performancePercentage > 110)
+            return 'good';
+
+        if (performancePercentage > 95)
+            return 'average';
+
+        if (performancePercentage > 70)
+            return 'bad';
+
+        return 'very_bad';
     }
 } 

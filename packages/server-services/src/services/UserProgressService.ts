@@ -55,7 +55,7 @@ export class UserProgressService extends ServiceBase {
             .getTempomatModeAsync(principalId, courseId)
 
         const requiredCompletionDate = tempomatData?.requiredCompletionDate || null;
-        const previsionedCompletionDate = tempomatData?.previsionedCompletionDate || null;
+        const previsionedCompletionDate = tempomatData?.estimatedCompletionDate || null;
 
         const recommendedItemsPerDay = (() => {
 

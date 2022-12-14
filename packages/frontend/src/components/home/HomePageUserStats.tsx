@@ -4,7 +4,6 @@ import { useHomePageStats } from '../../services/api/userStatsApiService';
 import { Environment } from '../../static/Environemnt';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoGrid } from '../controls/EpistoGrid';
-import { getProgressFromLagBehind } from '../learningInsights/LearningStatistics';
 import StatisticsCard from '../statisticsCard/StatisticsCard';
 import { CurrentUserContext } from '../system/AuthenticationFrame';
 
@@ -81,7 +80,7 @@ export const HomePageUserStats = (props: {
             minWidth={isSmallDesktop ? '140px' : '225px'}
             marginTop={isMobile ? '5px' : undefined}
             title={translatableTexts.homePage.statsSummary.lagBehindPercentage.title}
-            value={getProgressFromLagBehind(homePageStats?.relativeUserPaceDiff)}
+            value={''}
             suffix={translatableTexts.homePage.statsSummary.lagBehindPercentage.suffix}
             iconPath={Environment.getAssetUrl('images/answeredquestions3D.png')}
             isOpenByDefault={false} />

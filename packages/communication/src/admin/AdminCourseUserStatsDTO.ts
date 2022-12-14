@@ -1,4 +1,4 @@
-import { Id } from "@episto/commontypes";
+import { Id, UserPerformanceRating } from "@episto/commontypes";
 
 export class AdminCourseUserStatsDTO {
     companyId: Id<'Company'>;
@@ -8,7 +8,6 @@ export class AdminCourseUserStatsDTO {
     lastName: string;
     avatarUrl: string;
     completedPercentage: number;
-    performancePercentage: number;
     completedVideoCount: number;
     completedExamCount: number;
     videoCount: number;
@@ -16,10 +15,10 @@ export class AdminCourseUserStatsDTO {
     totalSpentSeconds: number;
     finalExamScorePercentage: number;
     summerizedScore: number;
-    requiredCompletionDate: Date | null;
     completionDate: Date | null;
-    previsionedDate: Date | null;
-    previsionedLagBehindDays: number | null;
-    actualLagBehindDays: number | null;
+    performancePercentage: number;
+    performanceRating: UserPerformanceRating;
+    requiredCompletionDate: Date | null;
+    estimatedCompletionDate: Date | null;
 }
 

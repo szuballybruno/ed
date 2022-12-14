@@ -8,7 +8,7 @@ SELECT
 	ucb.required_completion_date,
 	ucb.start_date start_date,
     ucb.tempomat_mode tempomat_mode,
-	ucb.previsioned_completion_date original_previsioned_completion_date,
+	ucb.original_estimated_completion_date,
 	cicv.item_count total_item_count,
 	COALESCE(ccicv.completed_course_item_count, 0)::int total_completed_item_count
 FROM public.user_course_bridge ucb

@@ -23,7 +23,7 @@ export class CurrentUserCourseBridgeView {
     @XViewColumn()
     tempomatMode: TempomatModeType;
     @XViewColumn()
-    previsionedCompletionDate: Date | null;
+    originalEstimatedCompletionDate: Date | null;
     @XViewColumn()
     requiredCompletionDate: Date | null;
 }

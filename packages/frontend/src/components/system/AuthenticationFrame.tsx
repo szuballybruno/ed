@@ -12,8 +12,7 @@ const userDefaults: UserDTO = {
     email: '',
     firstName: '',
     id: Id.create<'User'>(-1),
-    isInvitationAccepted: true,
-    isTrusted: true,
+    registrationStatus: 'active',
     department: {
         id: Id.create<'Department'>(-1),
         name: ''

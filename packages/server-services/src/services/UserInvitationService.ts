@@ -110,6 +110,7 @@ export class UserInvitationService {
                 registrationType: 'Invitation',
                 invitationToken,
                 isSurveyRequired,
+                registrationState: 'invited',
                 unhashedPassword: 'guest',
                 username: normalizeToEnglishLowercase(`${lastName}${firstName}`)
             });

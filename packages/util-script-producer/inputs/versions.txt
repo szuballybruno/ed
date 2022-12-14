@@ -9,4 +9,6 @@
  migration18
  migration19
  migration20
+ migration21
+ migration22
 

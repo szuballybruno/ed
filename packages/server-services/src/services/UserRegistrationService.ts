@@ -95,7 +95,8 @@ export class UserRegistrationService {
                 invitationToken: null,
                 isSurveyRequired,
                 unhashedPassword: password,
-                username
+                username,
+                registrationState: 'active'
             });
 
         // invalidate activation code

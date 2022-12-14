@@ -83,7 +83,7 @@ export class PretestService {
         const tempomatValues = await this._tempomatService
             .getTempomatValuesAsync(userId, courseId);
 
-        const originalPrevisionedCompletionDate = tempomatValues?.originalPrevisionedCompletionDate || null;
+        const originalEstimatedCompletionDate = tempomatValues?.originalEstimatedCompletionDate || null;
         const recommendedItemsPerDay = tempomatValues?.recommendedItemsPerDay || null;
         const requiredCompletionDate = tempomatValues?.requiredCompletionDate || null;
 
@@ -99,7 +99,7 @@ export class PretestService {
             .mapTo(PretestResultDTO, [
                 pretestResultsView,
                 firstItemPlaylistCode,
-                originalPrevisionedCompletionDate,
+                originalEstimatedCompletionDate,
                 requiredCompletionDate,
                 recommendedItemsPerDay
             ]);
