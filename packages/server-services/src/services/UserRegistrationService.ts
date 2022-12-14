@@ -2,7 +2,7 @@ import { getPassowrdValidationError } from '@episto/commonlogic';
 import { ErrorWithCode } from '@episto/commontypes';
 import { Company } from '../models/entity/misc/Company';
 import { TokenPair } from '../models/TokenPair';
-import { throwNotImplemented } from '../utilities/helpers';
+import { newNotImplemented } from '../utilities/helpers';
 import { ActivationCodeService } from './ActivationCodeService';
 import { AuthenticationService } from './AuthenticationService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
@@ -95,7 +95,8 @@ export class UserRegistrationService {
                 invitationToken: null,
                 isSurveyRequired,
                 unhashedPassword: password,
-                username
+                username,
+                registrationState: 'active'
             });
 
         // invalidate activation code
@@ -157,7 +158,7 @@ export class UserRegistrationService {
         firstName: string,
         lastName: string): Promise<TokenPair> {
 
-        throw throwNotImplemented();
+        throw newNotImplemented();
         // // verify public reg token
         // this._tokenService.verifyPublicRegistrationToken(publicRegToken);
 

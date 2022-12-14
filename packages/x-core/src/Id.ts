@@ -1,7 +1,7 @@
 
 export class Id<T extends String> extends String {
 
-    private _forcedTypeIncompatibility: T = null as any;
+    public _forcedTypeIncompatibility: T = null as any;
 
     private constructor() {
 
@@ -16,5 +16,5 @@ export class Id<T extends String> extends String {
     static create<T extends String>(id: number) {
 
         return id as any as Id<T>;
-    } 
+    }
 }

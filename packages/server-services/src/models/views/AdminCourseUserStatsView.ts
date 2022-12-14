@@ -1,7 +1,5 @@
-import { XViewColumn } from '@episto/x-orm';
-import { TempomatModeType } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
-
+import { XViewColumn } from '@episto/x-orm';
 
 export class AdminCourseUserStatsView {
 
@@ -25,9 +23,6 @@ export class AdminCourseUserStatsView {
 
     @XViewColumn()
     completedPercentage: number;
-
-    @XViewColumn()
-    performancePercentage: number;
 
     @XViewColumn()
     completedVideoCount: number;
@@ -60,18 +55,6 @@ export class AdminCourseUserStatsView {
     startDate: Date;
 
     @XViewColumn()
-    tempomatMode: TempomatModeType;
-
-    @XViewColumn()
-    originalPrevisionedCompletionDate: Date;
-
-    @XViewColumn()
     totalItemCount: number;
-
-    @XViewColumn()
-    totalCompletedItemCount: number;
-
-    @XViewColumn()
-    tempomatAdjustmentValue: number;
 }
 

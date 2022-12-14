@@ -172,7 +172,7 @@ export const apiRoutes = {
     },
 
     user: {
-        getAdminUsersList: '/users/get-admin-user-list',
+        getAdminUsersList: '/users/get-admin-user-list' as ParametrizedRouteType<{ query: { companyId: Id<'Company'> } }>,
         getEditUserData: '/users/get-edit-user-data',
         deleteUser: '/users/delete-user',
         saveUser: '/users/save-user',

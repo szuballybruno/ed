@@ -71,6 +71,7 @@ import { VideoVersion } from '../models/entity/video/VideoVersion';
 import { ActivationCodeListView } from '../models/views/ActivationCodeListView';
 import { ActivityStreakView } from '../models/views/ActivityStreakView';
 import { AdminCourseUserStatsView } from '../models/views/AdminCourseUserStatsView';
+import { AdminUserCoursesView } from '../models/views/AdminUserCoursesView';
 import { AnswerSessionGroupView } from '../models/views/AnswerSessionGroupView';
 import { AnswerSessionView } from '../models/views/AnswerSessionView';
 import { AvailableCourseView } from '../models/views/AvailableCourseView';
@@ -125,10 +126,6 @@ import { TempomatCalculationDataView } from '../models/views/TempomatCalculation
 import { UserActiveCourseView } from '../models/views/UserActiveCourseView';
 import { UserAnswerView } from '../models/views/UserAnswerView';
 import { UserCourseBridgeView } from '../models/views/UserCourseBridgeView';
-import { UserCourseCompletionCurrentView } from '../models/views/UserCourseCompletionCurrentView';
-import { UserCourseCompletionOriginalEstimationView } from '../models/views/UserCourseCompletionOriginalEstimationView';
-import { UserCourseProgressView } from '../models/views/UserCourseProgressView';
-import { AdminUserCoursesView } from '../models/views/UserCourseStatsView';
 import { UserDailyActivityChartView } from '../models/views/UserDailyActivityChartView';
 import { UserDailyCourseItemProgressView } from '../models/views/UserDailyCourseItemProgressView';
 import { UserDailyProgressView } from '../models/views/UserDailyProgressView';
@@ -210,11 +207,8 @@ export class DBSchemaProviderService implements IXORMSchemaProviderService {
                 LatestExamResultView,
                 CourseAdminListView,
                 QuestionDataView,
-                UserCourseCompletionOriginalEstimationView,
-                UserCourseCompletionCurrentView,
                 UserAnswerView,
                 UserDailyCourseItemProgressView,
-                UserCourseProgressView,
                 UserVideoPractiseProgressView,
                 TempomatCalculationDataView,
                 UserDailyActivityChartView,

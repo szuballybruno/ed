@@ -1,7 +1,6 @@
 
 
 export type RegistrationType = 'ActivationCode' | 'PublicRegistrationToken' | 'Invitation';
-
 export type TaskCodeType = 'user_progress_evaluation';
 
 // export type SuperTypeProp<T> = [SafeObjCastType, 'nullable'] | [SafeObjCastType];

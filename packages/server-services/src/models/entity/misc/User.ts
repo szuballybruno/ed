@@ -1,6 +1,6 @@
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, Relation } from '../../MyORM';
 import { DeletionDateColumn, XOneToMany, XViewColumn } from '@episto/x-orm';
-import { Id } from '@episto/commontypes';
+import { Id, UserRegistrationStatusType } from '@episto/commontypes';
 import { RegistrationType } from '../../Types';
 import { ActivitySession } from './ActivitySession';
 import { AnswerSession } from './AnswerSession';
@@ -47,20 +47,12 @@ export class User {
     @XViewColumn()
     isGod: boolean;
 
-    @Column()
-    @XViewColumn()
-    isInvitationAccepted: boolean;
-
     @Column({ type: 'text' })
     @XViewColumn()
     registrationType: RegistrationType;
 
-    // a trusted user has been invited to use the application,
-    // users can join without invitation but they will be considered untrusted, 
-    // thus cannot access the application, except the unprotected parts
-    @Column()
     @XViewColumn()
-    isTrusted: boolean;
+    registrationStatus: UserRegistrationStatusType;
 
     @Column()
     @XViewColumn()

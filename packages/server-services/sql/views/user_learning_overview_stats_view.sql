@@ -125,7 +125,7 @@ WITH stats AS
 	LEFT JOIN public.user_reaction_time_view urtv
 	ON urtv.user_id = u.id
 
-	WHERE u.deletion_date IS NULL -- AND u.is_invitation_accepted = true
+	WHERE u.deletion_date IS NULL
 
 	GROUP BY 
 		u.id, 

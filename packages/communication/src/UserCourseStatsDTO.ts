@@ -1,4 +1,4 @@
-import { Id, TempomatModeType } from '@episto/commontypes';
+import { Id, TempomatModeType, UserPerformanceRating } from '@episto/commontypes';
 
 export class UserCourseStatsDTO {
     userId: Id<'User'>;
@@ -8,19 +8,17 @@ export class UserCourseStatsDTO {
     startDate: Date;
     isAccessible: boolean;
     isAssigned: boolean;
-    differenceFromAveragePerformancePercentage: number;
     courseProgressPercentage: number;
     performancePercentage: number;
+    performanceRating: UserPerformanceRating;
     completedVideoCount: number;
     completedExamCount: number;
     totalSpentSeconds: number;
-    averagePerformanceOnCourse: number;
     answeredVideoQuestionCount: number;
     answeredPractiseQuestionCount: number;
     isFinalExamCompleted: boolean;
     requiredCompletionDate: Date;
     tempomatMode: TempomatModeType;
     recommendedItemsPerWeek: number | null;
-    relativeUserPaceDiff: number | null;
     previsionedCompletionDate: Date | null;
 }

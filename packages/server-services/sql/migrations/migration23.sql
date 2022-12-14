@@ -1,0 +1,2 @@
+ALTER TABLE public.user_course_bridge
+RENAME COLUMN previsioned_completion_date TO original_estimated_completion_date;

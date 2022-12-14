@@ -109,9 +109,8 @@ SELECT
 
     -- tempomat
     tcdv.start_date,
-    tcdv.tempomat_adjustment_value,
     tcdv.tempomat_mode,
-    tcdv.original_previsioned_completion_date,
+    tcdv.original_estimated_completion_date,
     tcdv.total_item_count,
     tcdv.total_completed_item_count
 FROM public.course_access_bridge cab

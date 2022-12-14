@@ -10,24 +10,16 @@ import { AuthorizationService } from './AuthorizationService';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
+import { TempomatService } from './TempomatService';
 
 export class PrequizService {
 
-    private _ormService: ORMConnectionService;
-    private _mapperService: MapperService;
-    private _courseBridgeService: UserCourseBridgeService;
-    private _authorizationService: AuthorizationService;
-
     constructor(
-        ormService: ORMConnectionService,
-        mapperService: MapperService,
-        courseBridgeService: UserCourseBridgeService,
-        authorizationService: AuthorizationService) {
-
-        this._ormService = ormService;
-        this._mapperService = mapperService;
-        this._courseBridgeService = courseBridgeService;
-        this._authorizationService = authorizationService;
+        private _tempomatService: TempomatService,
+        private _ormService: ORMConnectionService,
+        private _mapperService: MapperService,
+        private _courseBridgeService: UserCourseBridgeService,
+        private _authorizationService: AuthorizationService) {
     }
 
     /**
@@ -147,6 +139,16 @@ export class PrequizService {
      * Finish prequiz
      */
     async finishPrequizAsync(principalId: PrincipalId, courseId: Id<'Course'>) {
+
+        /**
+         * Save original target date 
+         */
+        const previsionedCompletionDate = await this
+            ._tempomatService
+            .getTempomatPrevisionedCompletionDateAsync(principalId.getId(), courseId);
+
+        await this._courseBridgeService
+            .setPrevisionedCompletionDateAsync(principalId.getId(), courseId, previsionedCompletionDate);
 
         /**
          * Set stage

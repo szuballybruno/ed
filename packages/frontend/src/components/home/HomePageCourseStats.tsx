@@ -1,6 +1,5 @@
 import { Grid } from '@chakra-ui/react';
 import { UserActiveCourseDTO } from '@episto/communication';
-import { useEffect } from 'react';
 import { useRecommendedItemQuota, useUserCourseProgressChartData } from '../../services/api/userProgressApiService';
 import { Environment } from '../../static/Environemnt';
 import { PagingType } from '../../static/frontendHelpers';
@@ -37,7 +36,7 @@ export const HomePageCourseStats = ({
 
     const courseId = activeCoursesPaging?.currentItem?.courseId;
 
-    const { userProgressData, userProgressDataIsValid } = useUserCourseProgressChartData(courseId ?? null, !!courseId);
+    const { userProgressData } = useUserCourseProgressChartData(courseId ?? null, !!courseId);
     const currentCourse = activeCoursesPaging.currentItem;
 
     const { recommendedItemQuota } = useRecommendedItemQuota(courseId);
@@ -65,8 +64,6 @@ export const HomePageCourseStats = ({
         return '0';
     })();
 
-    const canShowChart = userProgressDataIsValid && userProgressData.dates.length > 5;
-
     const dailyLabel = (() => {
 
         if (isDailyStrictMode)
@@ -93,12 +90,6 @@ export const HomePageCourseStats = ({
 
         return 'Megtekintett videó a héten';
     })();
-
-    useEffect(() => {
-
-        if (!userProgressDataIsValid)
-            return;
-    }, [userProgressData]);
 
     const estimatedCompletionDateString = recommendedItemQuota?.previsionedCompletionDate
         ? new Date(recommendedItemQuota?.previsionedCompletionDate)
@@ -202,9 +193,9 @@ export const HomePageCourseStats = ({
                 direction="column"
                 padding="10px" >
 
-                {canShowChart
+                {userProgressData.length > 0
                     ? <UserProgressChart
-                        userProgress={userProgressData!} />
+                        userProgress={userProgressData} />
                     : <NoProgressChartYet />}
             </FlexFloat>
         </EpistoFlex2>

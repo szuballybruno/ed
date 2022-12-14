@@ -97,6 +97,9 @@ export const createGlobalConfiguration = (rootDir: string) => {
                 }
                   `)
         },
+        tempomat: {
+            defaultMinutesPerDay: 20
+        },
         misc: {
             hostPort: Helper.getEnvConfigEntry('HOST_PORT'),
             environmentName: envName,

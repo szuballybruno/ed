@@ -150,6 +150,6 @@ ON ast.user_id = u.id
 LEFT JOIN user_rank_inside_company uric
 ON uric.user_id = u.id
 
-WHERE u.deletion_date IS NULL -- AND u.is_invitation_accepted = true
+WHERE u.deletion_date IS NULL
 
 ORDER BY u.id

@@ -12,23 +12,23 @@ export class TempomatCalculationDataView {
     courseId: Id<'Course'>;
 
     @XViewColumn()
-    requiredCompletionDate: Date;
+    companyId: Id<'Company'>;
 
     @XViewColumn()
-    startDate: Date;
+    requiredCompletionDate: Date | null;
+
+    @XViewColumn()
+    startDate: Date | null;
 
     @XViewColumn()
     tempomatMode: TempomatModeType;
 
     @XViewColumn()
-    originalPrevisionedCompletionDate: Date;
+    originalEstimatedCompletionDate: Date | null;
 
     @XViewColumn()
     totalItemCount: number;
 
     @XViewColumn()
     totalCompletedItemCount: number;
-
-    @XViewColumn()
-    tempomatAdjustmentValue: number;
 }

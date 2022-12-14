@@ -1,42 +1,45 @@
 import { UserPerformanceRating } from '@episto/commontypes';
+import { useMemo } from 'react';
 import { ChipSmall } from '../administration/courses/ChipSmall';
 
-export const UserPerformanceChip = ({ performance }: { performance: UserPerformanceRating }) => {
+export const useUserPerformanceDisplayValues = (rating: UserPerformanceRating) => {
 
-    const {
-        color,
-        text
-    } = (() => {
+    return useMemo(() => {
 
-        if (performance === 'very_bad')
+        if (rating === 'bad')
             return {
-                color: 'red',
-                text: 'Atlag alatt'
+                text: 'Lassú',
+                color: '#ffbc00'
             };
 
-        if (performance === 'bad')
+        if (rating === 'very_bad')
             return {
-                color: 'red',
-                text: 'Atlag alatt'
+                text: 'Nagyon lassú',
+                color: '#ff5e00'
             };
 
-        if (performance === 'good')
+        if (rating === 'good')
             return {
-                color: 'red',
-                text: 'Atlag alatt'
+                text: 'Gyors',
+                color: '#66e57b'
             };
 
-        if (performance === 'very_good')
+        if (rating === 'very_good')
             return {
-                color: 'red',
-                text: 'Atlag alatt'
+                text: 'Nagyon gyors',
+                color: '#22eb44'
             };
 
         return {
-            color: 'red',
-            text: 'Atlag alatt'
+            text: 'Átlagos',
+            color: '#65cbb8'
         };
-    })();
+    }, [rating]);
+};
+
+export const UserPerformanceChip = ({ performance }: { performance: UserPerformanceRating }) => {
+
+    const { color, text } = useUserPerformanceDisplayValues(performance);
 
     return (
         <ChipSmall

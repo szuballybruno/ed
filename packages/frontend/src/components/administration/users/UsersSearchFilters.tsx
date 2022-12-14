@@ -7,7 +7,9 @@ export const UsersSearchFilters = ({
     setSearchKeyword: (keyword: string) => void,
 }) => {
 
-    return <EpistoFlex2 flex='1'>
+    return <EpistoFlex2
+        maxWidth="500px"
+        flex='1'>
 
         {/* keyword search */}
         <EpistoSearch
