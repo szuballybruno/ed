@@ -40,7 +40,7 @@ process
         const scaffolder = new Scaffolder(connection);
 
         await scaffolder
-            .scaffoldAsync('..//temp');
+            .scaffoldAsync('../server-services/src/models');
     }
     catch (e) {
 
