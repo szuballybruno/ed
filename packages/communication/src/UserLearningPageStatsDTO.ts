@@ -1,10 +1,10 @@
-import { Id, UserPerformanceRating } from '@episto/commontypes';
+import { Id, TempoRatingType } from '@episto/commontypes';
 
 export class UserLearningPageStatsDTO {
     userId: Id<'User'>;
     userEmail: string;
     userPerformancePercentage: number;
-    userPerormanceRating: UserPerformanceRating;
+    userPerormanceRating: TempoRatingType;
     videosToBeRepeatedCount: number;
     questionsToBeRepeatedCount: number;
     completedVideoCount: number;

@@ -147,13 +147,13 @@ export const useUserCoursesColumns = ({
                 : <EmptyCell />
         })
         .add({
-            field: 'performanceRating',
-            headerName: 'Teljesítmény',
+            field: 'tempoRating',
+            headerName: 'Tempó',
             width: 150,
-            renderCell: ({ value, row: { performancePercentage } }) => (
+            renderCell: ({ value, row: { tempoPercentage } }) => (
                 <PerformanceRatingChip
                     rating={value}
-                    value={performancePercentage} />
+                    value={tempoPercentage} />
             )
         })
         .add({

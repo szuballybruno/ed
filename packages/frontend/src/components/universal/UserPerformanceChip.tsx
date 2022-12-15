@@ -1,10 +1,10 @@
-import { UserPerformanceRating } from '@episto/commontypes';
+import { TempoRatingType } from '@episto/commontypes';
 import { PropsWithChildren, useMemo } from 'react';
 import { EpistoIcons } from '../../static/EpistoIcons';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 
-export const useUserPerformanceDisplayValues = (rating: UserPerformanceRating) => {
+export const useUserPerformanceDisplayValues = (rating: TempoRatingType) => {
 
     return useMemo(() => {
 
@@ -39,9 +39,9 @@ export const useUserPerformanceDisplayValues = (rating: UserPerformanceRating) =
     }, [rating]);
 };
 
-export const PerformanceRatingChip = ({ value, children, ...props }: { rating: UserPerformanceRating, value: number } & PropsWithChildren) => {
+export const PerformanceRatingChip = ({ value, children, ...props }: { rating: TempoRatingType, value: number } & PropsWithChildren) => {
 
-    const rating: UserPerformanceRating = props.rating;
+    const rating: TempoRatingType = props.rating;
     const { color, text } = useUserPerformanceDisplayValues(rating);
     const showStar = rating === 'very_good' && !children;
 

@@ -318,7 +318,7 @@ export class CourseService {
          */
         const previsionedCompletionDate = await this
             ._tempomatService
-            .getTempomatPrevisionedCompletionDateAsync(principalId.getId(), courseId);
+            .getEstimatedCompletionDateAsync(principalId.getId(), courseId);
 
         await this
             ._userCourseBridgeService

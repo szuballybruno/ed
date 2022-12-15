@@ -1,7 +1,6 @@
 import { AdminCourseUserStatsDTO } from '@episto/communication';
 import { AdminHomePageOverviewDTO } from '@episto/communication';
 import { HomePageStatsDTO } from '@episto/communication';
-import { ImproveYourselfPageStatsDTO } from '@episto/communication';
 import { UserCourseStatsDTO } from '@episto/communication';
 import { UserCourseStatsOverviewDTO } from '@episto/communication';
 import { UserExamStatsDTO } from '@episto/communication';
@@ -32,17 +31,6 @@ export const useUserLearningPageStats = (userId: Id<'User'>) => {
         userLearningPageStats: queryRes.data,
         userLearningPageStatsStatus: queryRes.state,
         userLearningPageStatsError: queryRes.error
-    };
-};
-
-export const useImproveYourselfPageStats = () => {
-
-    const queryRes = QueryService.useXQuery<ImproveYourselfPageStatsDTO>(apiRoutes.userStats.getImproveYourselfPageStats);
-
-    return {
-        improveYourselfPageStats: queryRes.data,
-        improveYourselfPageStatsStatus: queryRes.state,
-        improveYourselfPageStatsError: queryRes.error
     };
 };
 

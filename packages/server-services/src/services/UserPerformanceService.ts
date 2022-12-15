@@ -1,5 +1,5 @@
 import { Id } from '@episto/x-core';
-import { TempomatDataModel } from '../models/TempomatCalculationDataModel';
+import { TempomatDataModel } from '../models/TempomatDataModel';
 import { TempomatCalculationDataView } from '../models/views/TempomatCalculationDataView';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';

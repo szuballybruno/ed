@@ -81,30 +81,6 @@ export const AdminCourseList = ({
             headerName: 'User count (completed course)',
             width: 200
         })
-        // .addIf(!isSimpleView, {
-        //     field: 'abandonedUserCount',
-        //     headerName: 'abandonedUserCount',
-        //     width: 200
-        // })
-        // .addIf(!isSimpleView, {
-        //     field: 'difficultVideoCount',
-        //     headerName: 'difficultVideoCount',
-        //     width: 200
-        // })
-        // .addIf(!isSimpleView, {
-        //     field: 'unansweredQuestionCount',
-        //     headerName: 'unansweredQuestionCount',
-        //     width: 200
-        // })
-        // .addIf(!isSimpleView, {
-        //     field: 'averageUserPerformance',
-        //     headerName: 'averageUserPerformance',
-        //     width: 200,
-        //     renderCell: ({ value }) => (
-        //         <UserPerformanceChip
-        //             performance={value} />
-        //     )
-        // })
         .getColumns(), [isSimpleView, onCourseClick]);
 
     return (

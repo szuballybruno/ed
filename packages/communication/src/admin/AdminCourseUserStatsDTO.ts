@@ -1,4 +1,4 @@
-import { Id, UserPerformanceRating } from "@episto/commontypes";
+import { Id, TempoRatingType } from "@episto/commontypes";
 
 export class AdminCourseUserStatsDTO {
     companyId: Id<'Company'>;
@@ -16,8 +16,8 @@ export class AdminCourseUserStatsDTO {
     finalExamScorePercentage: number;
     summerizedScore: number;
     completionDate: Date | null;
-    performancePercentage: number;
-    performanceRating: UserPerformanceRating;
+    tempoPercentage: number;
+    tempoRating: TempoRatingType;
     requiredCompletionDate: Date | null;
     estimatedCompletionDate: Date | null;
 }

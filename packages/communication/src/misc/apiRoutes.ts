@@ -147,7 +147,6 @@ export const apiRoutes = {
     userStats: {
         getHomePageStats: '/userstats/get-home-page-stats',
         getUserLearningPageStats: '/userstats/get-user-learning-page-stats',
-        getImproveYourselfPageStats: '/userstats/get-improve-yourself-page-stats',
         getAdminUserCourses: '/userstats/get-user-courses' as ParametrizedRouteType<{ query: { userId: Id<'User'>, loadAvailable: boolean } }>,
         getAdminCourseUsers: '/userstats/get-course-users' as ParametrizedRouteType<{ query: { courseId: Id<'Course'>, preset: CourseUserPresetType } }>,
         getUserVideoStats: '/userstats/get-user-video-stats',
@@ -160,7 +159,7 @@ export const apiRoutes = {
 
     userProgress: {
         getUserProgressData: '/userprogress/get-user-progress-data' as ParametrizedRouteType<{ body: { courseId: Id<'CourseId'> } }>,
-        getRecommendedItemQuota: '/userprogress/get-recommended-item-quota',
+        getCourseProgressOverview: '/userprogress/get-course-progress-overview',
         getActiveCourses: '/userprogress/get-active-courses'
     },
 

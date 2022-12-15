@@ -1,8 +1,8 @@
 import { Id, TempomatModeType } from '@episto/commontypes';
 import { useSetTempomatMode } from '../../../services/api/tempomatApiService';
-import { useRecommendedItemQuota } from '../../../services/api/userProgressApiService';
+import { useCourseProgressOverview } from '../../../services/api/userProgressApiService';
 import { useShowErrorDialog } from '../../../services/core/notifications';
-import { toDateStringFormatted } from '../../../static/frontendHelpers';
+import { coalesce, Formatters } from '../../../static/frontendHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoDivider } from '../../controls/EpistoDivider';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
@@ -22,7 +22,13 @@ export const TempomatSettingsDialog = (props: {
 
     const showError = useShowErrorDialog();
 
-    const { recommendedItemQuota } = useRecommendedItemQuota(courseId);
+    const { courseProgressOverviewData } = useCourseProgressOverview(courseId);
+
+    const {
+        estimatedCompletionDate
+    } = coalesce(courseProgressOverviewData, {
+        estimatedCompletionDate: new Date()
+    });
 
     const { setTempomatMode } = useSetTempomatMode();
 
@@ -38,16 +44,6 @@ export const TempomatSettingsDialog = (props: {
             showError(e);
         }
     };
-
-    // "& .MuiDialog-container": {
-    //     justifyContent: "center",
-    //     alignItems: "center"
-    // },
-    // ".MuiPaper-root": {
-    //     width: "100%",
-    //     margin: "200px"
-
-    // }
 
     return (
         <EpistoDialog
@@ -104,32 +100,15 @@ export const TempomatSettingsDialog = (props: {
                             Jelenlegi várható befejezés:
                         </EpistoFont>
 
-                        <EpistoFont style={{
-                            margin: '0 0 0 10px',
-                            fontWeight: 600
-                        }}>
+                        <EpistoFont
+                            style={{
+                                margin: '0 0 0 10px',
+                                fontWeight: 600
+                            }}>
 
-                            {recommendedItemQuota?.previsionedCompletionDate
-                                ? toDateStringFormatted(new Date(recommendedItemQuota.previsionedCompletionDate))
-                                : '-'}
+                            {Formatters.formatDate(estimatedCompletionDate)}
                         </EpistoFont>
                     </EpistoFlex2>
-
-                    {/* <EpistoFlex2
-                        mx="10px"
-                        align="center">
-
-                        <EpistoImage
-                            height="30px"
-                            width="30px"
-                            mr="5px"
-                            src={Environment.getAssetUrl('/images/tempomatdatechange.png')}
-                        />
-
-                        <EpistoFont>
-                            Módosítom a kitűzött befejezési dátumot
-                        </EpistoFont>
-                    </EpistoFlex2> */}
                 </EpistoFlex2>
             </EpistoFlex2>
         </EpistoDialog >

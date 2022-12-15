@@ -145,7 +145,7 @@ export class PrequizService {
          */
         const previsionedCompletionDate = await this
             ._tempomatService
-            .getTempomatPrevisionedCompletionDateAsync(principalId.getId(), courseId);
+            .getEstimatedCompletionDateAsync(principalId.getId(), courseId);
 
         await this._courseBridgeService
             .setPrevisionedCompletionDateAsync(principalId.getId(), courseId, previsionedCompletionDate);

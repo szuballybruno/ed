@@ -4,7 +4,7 @@ import { UserControlDropdownDataDTO } from '@episto/communication';
 import { UserEditReadDTO } from '@episto/communication';
 import { UserEditSaveDTO } from '@episto/communication';
 import { UserEditSimpleDTO } from '@episto/communication';
-import { UserLearningOverviewDataDTO } from '@episto/communication';
+import { UserStatisticsDTO } from '@episto/communication';
 import { apiRoutes } from '@episto/communication';
 import { Id } from '@episto/commontypes';
 import { QueryService } from '../../static/XQuery/XQueryReact';
@@ -101,7 +101,7 @@ export const UserApiService = {
 
     useUserLearningOverviewData: (userId: Id<'User'>) => {
 
-        const queryRes = QueryService.useXQuery<UserLearningOverviewDataDTO>(apiRoutes.userStats.getUserLearningOverviewData, { userId: userId });
+        const queryRes = QueryService.useXQuery<UserStatisticsDTO>(apiRoutes.userStats.getUserLearningOverviewData, { userId: userId });
 
         return {
             userLearningOverviewData: queryRes.data,

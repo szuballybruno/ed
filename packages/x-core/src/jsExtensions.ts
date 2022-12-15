@@ -23,6 +23,7 @@ declare global {
         count(func: (item: T) => boolean): number;
         insert(index: number, newItem: T): Array<T>;
         each(func: (item: T) => void): Array<T>;
+        average(func: (item: T) => number): number;
     }
 
     interface Date {
@@ -64,6 +65,16 @@ Array.prototype.insert = function <T>(index: number, newItem: T) {
         ...this.slice(index)
     ];
 };
+
+Array.prototype.average = function <T>(func: (item: T) => number) {
+
+    if (this.length === 0)
+        return 0;
+
+    return this
+        .map(x => func(x))
+        .reduce((a, b) => a + b) / this.length;
+}
 
 // eslint-disable-next-line no-extend-native
 Array.prototype.groupBy = function <T, TKey>(func: (item: T) => TKey) {

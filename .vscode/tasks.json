@@ -51,6 +51,18 @@
         },
         {
             "type": "shell",
+            "label": "build-x-core",
+            "command": "yarn build",
+            "problemMatcher": [],
+            "options": {
+                "cwd": "${workspaceFolder}/packages/x-core"
+            },
+            "presentation": {
+                "group": "run"
+            }
+        },
+        {
+            "type": "shell",
             "label": "build-serve-client",
             "command": "yarn build-serve-client",
             "problemMatcher": [],

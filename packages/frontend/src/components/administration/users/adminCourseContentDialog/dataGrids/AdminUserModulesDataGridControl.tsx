@@ -33,7 +33,7 @@ export const AdminUserModulesDataGridControl = (props: {
             moduleName: module.moduleName,
             courseId: module.courseId,
             moduleProgress: module.moduleProgress,
-            performancePercentage: module.performancePercentage,
+            tempoPercentage: module.tempoPercentage,
             lastExamScore: module.lastExamScore,
             moduleQuestionSuccessRate: module.moduleQuestionSuccessRate,
             videosToBeRepeatedCount: module.videosToBeRepeatedCount
@@ -69,8 +69,8 @@ export const AdminUserModulesDataGridControl = (props: {
                 </EpistoFont>
                 : <EmptyCell />
         }),
-        columnDefGen('performancePercentage', {
-            headerName: 'Teljesítmény',
+        columnDefGen('tempoPercentage', {
+            headerName: 'Tempó',
             width: 150,
             resizable: true,
             renderCell: (params) => params.value !== null

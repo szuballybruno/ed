@@ -29,13 +29,6 @@ export class UserStatsController implements IController<UserStatsController> {
             .getUserLearningPageStatsAsync(params.principalId);
     }
 
-    @XControllerAction(apiRoutes.userStats.getImproveYourselfPageStats)
-    getImproveYourselfPageStatsAction(params: ActionParams) {
-
-        return this._userStatsService
-            .getImproveYourselfPageStatsAsync(params.principalId);
-    }
-
     @XControllerAction(apiRoutes.userStats.getAdminUserCourses)
     getUserCourseStatsAction(params: ActionParams) {
 

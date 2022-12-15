@@ -1,32 +1,39 @@
-import { UserLearningOverviewDataDTO } from '@episto/communication';
+import { UserStatisticsDTO } from '@episto/communication';
 import { useMemo } from 'react';
+import { coalesce } from '../../../../static/frontendHelpers';
 import { translatableTexts } from '../../../../static/translatableTexts';
 import { EpistoFlex2 } from '../../../controls/EpistoFlex';
 import StatisticsCard from '../../../statisticsCard/StatisticsCard';
 import { EpistoPieChart } from '../../../universal/charts/pie-chart/EpistoPieChart';
 
-export const ActivityChart = ({ data }: { data: UserLearningOverviewDataDTO | null }) => {
+export const ActivityChart = ({ data }: { data: UserStatisticsDTO | null }) => {
 
-    const watchingVideosPercentage = data?.userActivityDistributionData.watchingVideosPercentage || 0;
-    const completingExamsPercentage = data?.userActivityDistributionData.completingExamsPercentage || 0;
-    const answeringQuestionsPercentage = data?.userActivityDistributionData.answeringQuestionsPercentage || 0;
+    const {
+        examCompletionPercentage,
+        questionAnsweringPercentage,
+        videoWatchActivityPercentage
+     } = coalesce(data?.activityDistribution ?? null, {
+        examCompletionPercentage: 0,
+        questionAnsweringPercentage: 0,
+        videoWatchActivityPercentage: 0
+    });
 
     const texts = translatableTexts.administration.userLearningOverviewSubpage;
 
     const chartSteps = useMemo(() => [
         {
-            value: watchingVideosPercentage,
+            value: videoWatchActivityPercentage,
             name: texts.activitiesPieChartTexts.watchingVideos
         },
         {
-            value: completingExamsPercentage,
+            value: examCompletionPercentage,
             name: texts.activitiesPieChartTexts.doingExamsOrTests
         },
         {
-            value: answeringQuestionsPercentage,
+            value: questionAnsweringPercentage,
             name: texts.activitiesPieChartTexts.answeringQuestions
         }
-    ], [texts, watchingVideosPercentage, completingExamsPercentage, answeringQuestionsPercentage]);
+    ], [texts, videoWatchActivityPercentage, examCompletionPercentage, questionAnsweringPercentage]);
 
     return (
         <StatisticsCard

@@ -1,11 +1,10 @@
-import { TempomatModeType, UserPerformanceRating } from "@episto/commontypes";
+import { TempomatModeType, TempoRatingType } from "@episto/commontypes";
 import { Id } from "@episto/x-core"
 
 export type TempomatDataModel = {
-    originalEstimatedCompletionDate: Date,
-    estimatedCompletionDate: Date | null,
     requiredCompletionDate: Date | null,
-    startDate: Date | null,
+    originalEstimatedCompletionDate: Date,
+    estimatedCompletionDate: Date,
     recommendedItemsPerDay: number,
     recommendedItemsPerWeek: number,
     userPerformancePercentage: number,
@@ -16,5 +15,5 @@ export type TempomatDataModel = {
     recommendedPercentPerDay: number;
     isStartedCourse: boolean;
     tempomatMode: TempomatModeType;
-    performanceRating: UserPerformanceRating;
+    tempoRating: TempoRatingType;
 }

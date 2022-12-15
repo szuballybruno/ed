@@ -1,7 +1,8 @@
 import { instantiate } from '@episto/commonlogic';
 import { Id } from '@episto/commontypes';
-import { RecommendedItemQuotaDTO, UserActiveCourseDTO, UserProgressChartStep } from '@episto/communication';
+import { CourseProgressOverviewDTO, UserActiveCourseDTO, UserProgressChartStep } from '@episto/communication';
 import { DateHelpers, PrincipalId } from '@episto/x-core';
+import { DailyProgressModel } from '../models/DailyProgressModel';
 import { UserActiveCourseView } from '../models/views/UserActiveCourseView';
 import { UserDailyCourseItemProgressView } from '../models/views/UserDailyCourseItemProgressView';
 import { UserWeeklyCourseItemProgressView } from '../models/views/UserWeeklyCourseItemProgressView';
@@ -42,46 +43,23 @@ export class UserProgressService extends ServiceBase {
             .mapTo(UserActiveCourseDTO, [views]);
     }
 
-    async getRecommendedItemQuotaAsync(principalId: PrincipalId, courseId: Id<'Course'>) {
+    /**
+     * Get user course progress dashboard obverview stats 
+     */
+    async getCourseProgressOverviewAsync(principalId: PrincipalId, courseId: Id<'Course'>) {
 
-        const userId = principalId.getId();
+        const userId = principalId
+            .getId();
 
-        const tempomatData = await this
+        const {
+            tempomatMode,
+            requiredCompletionDate,
+            estimatedCompletionDate,
+            recommendedItemsPerDay,
+            recommendedItemsPerWeek
+        } = await this
             ._tempomatService
             .getTempomatValuesAsync(userId, courseId);
-
-        const tempomatMode = await this
-            ._tempomatService
-            .getTempomatModeAsync(principalId, courseId)
-
-        const requiredCompletionDate = tempomatData?.requiredCompletionDate || null;
-        const previsionedCompletionDate = tempomatData?.estimatedCompletionDate || null;
-
-        const recommendedItemsPerDay = (() => {
-
-            if (!tempomatData.recommendedItemsPerDay)
-                return null;
-
-            // If tempomat mode is light, not recommend anything
-            if (tempomatMode === 'light')
-                return null;
-
-            return tempomatData.recommendedItemsPerDay
-        })();
-
-        const recommendedItemsPerWeek = (() => {
-
-            if (!tempomatData.recommendedItemsPerWeek)
-                return null;
-
-            // If tempomat mode is light, not recommend anything
-            if (tempomatMode === 'light')
-                return null;
-
-            return tempomatData.recommendedItemsPerWeek
-        })();
-
-        const isDeadlineSet = !!requiredCompletionDate;
 
         const currentDailyCompletedView = await this._ormService
             .query(UserDailyCourseItemProgressView, { userId, courseId })
@@ -97,12 +75,12 @@ export class UserProgressService extends ServiceBase {
             .and('isCurrent', 'IS', 'true')
             .getOneOrNull();
 
-        return instantiate<RecommendedItemQuotaDTO>({
-            isDeadlineSet,
-            tempomatMode: tempomatMode,
-            previsionedCompletionDate: previsionedCompletionDate,
-            recommendedItemsPerDay: recommendedItemsPerDay,
-            recommendedItemsPerWeek: recommendedItemsPerWeek,
+        return instantiate<CourseProgressOverviewDTO>({
+            tempomatMode,
+            deadlineDate: requiredCompletionDate,
+            estimatedCompletionDate,
+            recommendedItemsPerDay,
+            recommendedItemsPerWeek,
             completedThisWeek: getCurrentWeeklyCompletedView?.completedItemCount ?? 0,
             completedToday: currentDailyCompletedView?.completedItemCount ?? 0
         });
@@ -111,22 +89,14 @@ export class UserProgressService extends ServiceBase {
     /**
      * Get user progress chart data 
      */
-    async getProgressChartDataAsync(
+    async getProgressChartDataByCourseAsync(
         principalId: PrincipalId,
         courseId: Id<'Course'>,
         userId: Id<'User'>
     ) {
 
-        const dailyProgressViews = await this._ormService
-            .query(UserDailyCourseItemProgressView, { userId, courseId })
-            .where('userId', '=', 'userId')
-            .and('courseId', '=', 'courseId')
-            .getMany();
-
         const currentDate = new Date();
         const rangeSize = 60;
-        const rangeHalf = rangeSize / 2;
-        const rangeStartDate = currentDate.addDays(-1 * rangeHalf);
 
         const {
             avgItemCompletionPercentagePerDay,
@@ -134,6 +104,47 @@ export class UserProgressService extends ServiceBase {
         } = await this
             ._tempomatService
             .getTempomatValuesAsync(userId, courseId);
+
+        const dailyProgressViews = await this._ormService
+            .query(UserDailyCourseItemProgressView, { userId, courseId })
+            .where('userId', '=', 'userId')
+            .and('courseId', '=', 'courseId')
+            .getMany();
+
+        const dailyProgressModels = dailyProgressViews
+            .map(x => ({
+                date: x.completionDate,
+                progressPercentage: x.completedPercentage
+            } as DailyProgressModel))
+
+        return this
+            .getProgressChartData({
+                avgItemCompletionPercentagePerDay,
+                currentDate,
+                dailyProgressModels,
+                rangeSize,
+                recommendedPercentPerDay
+            });
+    }
+
+    /**
+     * Get user progress chart data 
+     */
+    async getProgressChartData({
+        currentDate,
+        rangeSize,
+        avgItemCompletionPercentagePerDay,
+        recommendedPercentPerDay,
+        dailyProgressModels
+    }: {
+        currentDate: Date,
+        rangeSize: number,
+        avgItemCompletionPercentagePerDay: number,
+        recommendedPercentPerDay: number,
+        dailyProgressModels: DailyProgressModel[]
+    }) {
+        const rangeHalf = rangeSize / 2;
+        const rangeStartDate = currentDate.addDays(-1 * rangeHalf);
 
         let lastStep: UserProgressChartStep = {
             actualCompletedPercentage: 0,
@@ -151,13 +162,13 @@ export class UserProgressService extends ServiceBase {
 
                 const pastCurrent = index > rangeHalf;
 
-                const actualProgressView = dailyProgressViews
-                    .firstOrNull(x => DateHelpers
-                        .compareDatesWithoutTime(x.completionDate, date));
+                const actualProgressView = dailyProgressModels
+                    .firstOrNull(progressModel => DateHelpers
+                        .compareDatesWithoutTime(progressModel.date, date));
 
                 const actualCompletedPercentage = pastCurrent
                     ? null
-                    : (lastStep.actualCompletedPercentage ?? 0) + (actualProgressView?.completedPercentage ?? 0);
+                    : (lastStep.actualCompletedPercentage ?? 0) + (actualProgressView?.progressPercentage ?? 0);
 
                 const previsionedCompletedPercentage = actualCompletedPercentage !== null
                     ? actualCompletedPercentage

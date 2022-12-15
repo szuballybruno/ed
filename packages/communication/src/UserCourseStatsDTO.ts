@@ -1,4 +1,4 @@
-import { Id, TempomatModeType, UserPerformanceRating } from '@episto/commontypes';
+import { Id, TempomatModeType, TempoRatingType } from '@episto/commontypes';
 
 export class UserCourseStatsDTO {
     userId: Id<'User'>;
@@ -9,8 +9,8 @@ export class UserCourseStatsDTO {
     isAccessible: boolean;
     isAssigned: boolean;
     courseProgressPercentage: number;
-    performancePercentage: number;
-    performanceRating: UserPerformanceRating;
+    tempoPercentage: number;
+    tempoRating: TempoRatingType;
     completedVideoCount: number;
     completedExamCount: number;
     totalSpentSeconds: number;

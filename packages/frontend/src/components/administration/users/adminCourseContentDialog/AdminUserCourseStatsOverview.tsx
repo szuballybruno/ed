@@ -21,8 +21,8 @@ export const AdminUserCourseStatsOverview = ({
 
     const { userCourseStatsOverviewData } = useUserCourseStatsOverviewData(userId, courseId);
 
-    const performancePercentage = userCourseStatsOverviewData
-        ? userCourseStatsOverviewData.performancePercentage
+    const tempoPercentage = userCourseStatsOverviewData
+        ? userCourseStatsOverviewData.tempoPercentage
         : 0;
 
     const courseProgressPercentage = userCourseStatsOverviewData
@@ -61,10 +61,10 @@ export const AdminUserCourseStatsOverview = ({
                 <EpistoFlex2 flex="1">
 
                     <EpistoPieChart
-                        title="Teljesítmény"
+                        title="Tempó"
                         segments={[
-                            { value: performancePercentage, name: `Teljesítmény ${performancePercentage}%` },
-                            { value: 100 - performancePercentage, name: `Teljesítmény ${performancePercentage}%` }
+                            { value: tempoPercentage, name: `Teljesítmény ${tempoPercentage}%` },
+                            { value: 100 - tempoPercentage, name: `Teljesítmény ${tempoPercentage}%` }
                         ]}
                         variant="twoSegmentRedDoughnut" />
                 </EpistoFlex2>

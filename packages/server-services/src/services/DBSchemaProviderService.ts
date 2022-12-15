@@ -101,7 +101,6 @@ import { ExamScoreView } from '../models/views/ExamScoreView';
 import { ExamVersionView } from '../models/views/ExamVersionView';
 import { GivenAnswerView } from '../models/views/GivenAnswerView';
 import { HomePageStatsView } from '../models/views/HomePageStatsView';
-import { ImproveYourselfPageStatsView } from '../models/views/ImproveYourselfPageStatsView';
 import { LatestCourseVersionView } from '../models/views/LatestCourseVersionView';
 import { LatestExamResultView } from '../models/views/LatestExamResultView';
 import { LatestExamView } from '../models/views/LatestExamView';
@@ -109,7 +108,6 @@ import { LatestVideoView } from '../models/views/LatestVideoView';
 import { LeaderboardView } from '../models/views/LeaderboardView';
 import { ModuleEditView } from '../models/views/ModuleEditView';
 import { ModulePlayerView } from '../models/views/ModulePlayerView';
-import { MostProductiveTimeRangeView } from '../models/views/MostProductiveTimeRangeView';
 import { PersonalityTraitCategoryView } from '../models/views/PersonalityTraitCategoryView';
 import { PersonalityTraitView } from '../models/views/PersonalityTraitView';
 import { PlaylistView } from '../models/views/PlaylistView';
@@ -126,7 +124,6 @@ import { TempomatCalculationDataView } from '../models/views/TempomatCalculation
 import { UserActiveCourseView } from '../models/views/UserActiveCourseView';
 import { UserAnswerView } from '../models/views/UserAnswerView';
 import { UserCourseBridgeView } from '../models/views/UserCourseBridgeView';
-import { UserDailyActivityChartView } from '../models/views/UserDailyActivityChartView';
 import { UserDailyCourseItemProgressView } from '../models/views/UserDailyCourseItemProgressView';
 import { UserDailyProgressView } from '../models/views/UserDailyProgressView';
 import { UserEngagementView } from '../models/views/UserEngagementView';
@@ -135,12 +132,9 @@ import { UserInactiveCourseView } from '../models/views/UserInactiveCourseView';
 import { UserLearningOverviewStatsView } from '../models/views/UserLearningOverviewStatsView';
 import { UserLearningPageStatsView } from '../models/views/UserLearningPageStatsView';
 import { UserModulePerformanceAnswerGroupView } from '../models/views/UserModulePerformanceAnswerGroupView';
-import { UserModulePerformanceView } from '../models/views/UserModulePerformanceView';
 import { UserModuleStatsView } from '../models/views/UserModuleStatsView';
 import { UserOverviewView } from '../models/views/UserOverviewView';
 import { UserPerformanceAnswerGroupView } from '../models/views/UserPerformanceAnswerGroupView';
-import { UserPerformanceComparisonStatsView } from '../models/views/UserPerformanceComparisonStatsView';
-import { UserPerformanceView } from '../models/views/UserPerformanceView';
 import { UserPlaylistView } from '../models/views/UserPlaylistView';
 import { UserPractiseRecommendationView } from '../models/views/UserPractiseRecommendationView';
 import { UserReactionTimeView } from '../models/views/UserReactionTimeView';
@@ -211,16 +205,12 @@ export class DBSchemaProviderService implements IXORMSchemaProviderService {
                 UserDailyCourseItemProgressView,
                 UserVideoPractiseProgressView,
                 TempomatCalculationDataView,
-                UserDailyActivityChartView,
                 AnswerSessionGroupView,
                 CorrectAnswerRatesSplitView,
                 UserPerformanceAnswerGroupView,
                 UserModulePerformanceAnswerGroupView,
                 UserReactionTimeView,
-                MostProductiveTimeRangeView,
                 UserSessionDailyView,
-                UserPerformanceView,
-                UserModulePerformanceView,
                 SignupCompletedView,
                 DailyTipView,
                 CourseAdminDetailedView,
@@ -240,7 +230,6 @@ export class DBSchemaProviderService implements IXORMSchemaProviderService {
                 UserInactiveCourseView,
                 HomePageStatsView,
                 UserEngagementView,
-                UserPerformanceComparisonStatsView,
                 UserLearningOverviewStatsView,
                 AdminUserCoursesView,
                 UserVideoStatsView,
@@ -248,7 +237,6 @@ export class DBSchemaProviderService implements IXORMSchemaProviderService {
                 UserModuleStatsView,
                 UserSpentTimeRatioView,
                 UserLearningPageStatsView,
-                ImproveYourselfPageStatsView,
                 GivenAnswerView,
                 AdminCourseUserStatsView,
                 QuestionModuleCompareView,
