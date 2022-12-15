@@ -99,6 +99,7 @@ import { ExamResultStatsView } from '../models/views/ExamResultStatsView';
 import { ExamResultView } from '../models/views/ExamResultView';
 import { ExamScoreView } from '../models/views/ExamScoreView';
 import { ExamVersionView } from '../models/views/ExamVersionView';
+import { Fakeview } from '../models/views/Fakeview';
 import { GivenAnswerView } from '../models/views/GivenAnswerView';
 import { HomePageStatsView } from '../models/views/HomePageStatsView';
 import { LatestCourseVersionView } from '../models/views/LatestCourseVersionView';
@@ -241,7 +242,8 @@ export class DBSchemaProviderService implements IXORMSchemaProviderService {
                 AdminCourseUserStatsView,
                 QuestionModuleCompareView,
                 LeaderboardView,
-                UserOverviewView
+                UserOverviewView,
+                Fakeview
             ],
 
             entities: [

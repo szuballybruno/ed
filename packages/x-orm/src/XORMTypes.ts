@@ -167,11 +167,6 @@ export class XDBMSchemaService implements XDBMSchemaType {
 
 export type ClassType<T> = { new(): T };
 
-export type SQLSchemaObjectType = {
-    name: string;
-    columnNames: string[];
-}
-
 export interface ISQLConnectionService {
     executeSQLAsync<T = any>(script: string, values?: any[]): Promise<{ rows: T[] }>;
 };

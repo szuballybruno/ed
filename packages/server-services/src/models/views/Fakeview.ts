@@ -1,7 +1,7 @@
 import { XViewColumn } from '@episto/x-orm';
 import { Id } from '@episto/commontypes';
 
-export class UserModuleStatsView {
+export class Fakeview {
 
     @XViewColumn()
     userId: Id<'User'>;

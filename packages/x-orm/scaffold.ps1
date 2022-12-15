@@ -1,0 +1,1 @@
+node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm src/main.ts --dbhost=localhost --dbname=localhostDB --dbpassword=$env:PGPASSWORD --dbport=5432 --dbuser=dev_service_user
