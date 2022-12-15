@@ -1,7 +1,7 @@
 import { initJsExtensions } from "@episto/x-core";
 import { Scaffolder } from "./Scaffold";
 import { SimpleSQLConnectionService } from "./SimpleSQLConnectionService";
-import { XOrmConnectionService } from "./XORMConnectionService";
+import { LiveSchemaProvider } from "./LiveSchemaProvider";
 
 initJsExtensions();
 
@@ -36,7 +36,7 @@ process
             port: parseInt(parseArg('dbport')),
         });
 
-        const connection = new XOrmConnectionService(sqlConnection);
+        const connection = new LiveSchemaProvider(sqlConnection);
         const scaffolder = new Scaffolder(connection);
 
         await scaffolder

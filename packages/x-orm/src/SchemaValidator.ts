@@ -1,13 +1,13 @@
 import { SQLObjectType } from "./models/SQLObjectType";
 import { parseOrmSchema } from "./static/schemaParser";
-import { XOrmConnectionService } from "./XORMConnectionService";
+import { LiveSchemaProvider } from "./LiveSchemaProvider";
 import { IXORMSchemaProviderService, XDBMSchemaType } from "./XORMTypes";
 
 export class SchemaValidator {
 
     constructor(
         private _schemaProviderService: IXORMSchemaProviderService,
-        private _connection: XOrmConnectionService) {
+        private _connection: LiveSchemaProvider) {
     }
 
     async validateSchemaAsync() {

@@ -2,12 +2,12 @@ import { writeFileSync } from "fs";
 import { SQLObjectColumnType } from "./models/SQLObjectColumnType";
 import { SQLObjectType } from "./models/SQLObjectType";
 import { getOrmObjectFileTemplate } from "./templates/ormObjectFileTemplate";
-import { XOrmConnectionService } from "./XORMConnectionService";
+import { LiveSchemaProvider } from "./LiveSchemaProvider";
 import { XORMUtils } from "./XORMUtils";
 
 export class Scaffolder {
 
-    constructor(private _connService: XOrmConnectionService) {
+    constructor(private _connService: LiveSchemaProvider) {
     }
 
     async scaffoldAsync(sqlFolderPath: string) {
@@ -34,7 +34,7 @@ export class Scaffolder {
 
                 const props = sqlObject
                     .columns
-                    .map(x => `${TAB}@XViewColumn()\n${TAB}${XORMUtils.toJSCamelCase(x.name)}: ${this._getPropertyType(sqlObject, x)};`)
+                    .map(col => `${TAB}@XViewColumn()\n${TAB}${XORMUtils.toJSCamelCase(col.name)}: ${this._getPropertyType(sqlObject, col)}; // ${col.type}`)
                     .join('\n\n');
 
                 return {
@@ -49,9 +49,23 @@ export class Scaffolder {
 
         const capitalizedName = XORMUtils.toJSCapitalizedName(sqlObject.name);
 
-        if (column.name === 'id')
-            return `Id<'${capitalizedName}'>`;
+        const typeName = (() => {
 
-        return 'string';
+            if (column.name === 'id')
+                return `Id<'${capitalizedName}'>`;
+
+            if (column.type === 'timestamp with time zone')
+                return 'Date';
+
+            if (column.name.endsWith('_id'))
+                return `Id<'${XORMUtils.toJSCapitalizedName(column.name.replace('_id', ''))}'>`;
+
+            if (column.type === 'integer')
+                return 'number';
+
+            return 'string';
+        })();
+
+        return `${typeName}${column.isNullable ? ' | null' : ''}`;
     }
 }
