@@ -47,7 +47,7 @@ process
         const scaffolder = new Scaffolder(connection, typemap);
 
         await scaffolder
-            .scaffoldAsync('../server-services/src/models');
+            .scaffoldAsync('C:\\GitRepositories\\epistogram\\packages\\server-services\\src\\models');
     }
     catch (e) {
 

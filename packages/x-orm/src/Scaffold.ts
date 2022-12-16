@@ -1,4 +1,4 @@
-import { writeFileSync } from "fs";
+import { existsSync, mkdirSync, rmdirSync, writeFileSync } from "fs";
 import { LiveSchemaProvider } from "./LiveSchemaProvider";
 import { SQLObjectColumnType } from "./models/SQLObjectColumnType";
 import { SQLObjectType } from "./models/SQLObjectType";
@@ -28,7 +28,7 @@ export class Scaffolder {
             })
     }
 
-    async scaffoldAsync(sqlFolderPath: string) {
+    async scaffoldAsync(modelsFolderPath: string) {
 
         const liveSchema = await this
             ._connService
@@ -40,19 +40,36 @@ export class Scaffolder {
         const views = this
             ._mapToOrmObjectTexts(liveSchema.filter(x => x.type === 'view'));
 
+        const tablesFolderPath = `${modelsFolderPath}/tables`;
+        const viewsFolderPath = `${modelsFolderPath}/views`;
+
+        // clear folders
+        this._clearFolder(tablesFolderPath); 
+        this._clearFolder(viewsFolderPath); 
+
         // write tables 
         tables
-            .forEach(x => writeFileSync(`${sqlFolderPath}/tables/${x.capitalizedName}.ts`, x.fileText, 'utf-8'));
+            .forEach(x => writeFileSync(`${tablesFolderPath}/${x.capitalizedName}.ts`, x.fileText, 'utf-8'));
 
         // write views 
         views
-            .forEach(x => writeFileSync(`${sqlFolderPath}/views/${x.capitalizedName}.ts`, x.fileText, 'utf-8'));
+            .forEach(x => writeFileSync(`${viewsFolderPath}/${x.capitalizedName}.ts`, x.fileText, 'utf-8'));
 
         // create dbschema file
         const schemaFileContents = this
             ._getDBSchemaFile(liveSchema);
 
-        writeFileSync(`${sqlFolderPath}/DatabaseSchema.ts`, schemaFileContents, 'utf-8');
+        writeFileSync(`${modelsFolderPath}/DatabaseSchema.ts`, schemaFileContents, 'utf-8');
+    }
+
+    private _clearFolder(folderPath: string) {
+
+        if (existsSync(folderPath)) {
+
+            rmdirSync(folderPath, { recursive: true });
+        }
+
+        mkdirSync(folderPath);
     }
 
     private _getDBSchemaFile(liveSchema: SQLObjectType[]) {
