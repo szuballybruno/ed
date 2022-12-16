@@ -9,7 +9,7 @@ import { PersonalityTraitDataDTO } from '@episto/communication';
 import { PersonalityTraitCategoryView } from '../models/views/PersonalityTraitCategoryView';
 import { PersonalityTraitView } from '../models/views/PersonalityTraitView';
 import { MapperService } from './MapperService';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 import { PrincipalId } from '@episto/x-core';
 import { Id } from '@episto/commontypes';
 import { AuthorizationService } from './AuthorizationService';

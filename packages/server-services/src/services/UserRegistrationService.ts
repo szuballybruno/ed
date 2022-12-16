@@ -5,7 +5,7 @@ import { TokenPair } from '../models/misc/TokenPair';
 import { newNotImplemented } from '../utilities/helpers';
 import { ActivationCodeService } from './ActivationCodeService';
 import { AuthenticationService } from './AuthenticationService';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 import { TokenService } from './TokenService';
 import { UserService } from './UserService';
 

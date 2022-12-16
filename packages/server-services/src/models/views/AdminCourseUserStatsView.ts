@@ -25,9 +25,6 @@ export class AdminCourseUserStatsView {
     completedPercentage: number;
 
     @XViewColumn()
-    performancePercentage: number;
-
-    @XViewColumn()
     completedVideoCount: number;
 
     @XViewColumn()
@@ -46,26 +43,5 @@ export class AdminCourseUserStatsView {
     finalExamScorePercentage: number;
 
     @XViewColumn()
-    requiredCompletionDate: Date;
-
-    @XViewColumn()
-    summerizedScore: number;
-
-    @XViewColumn()
     completionDate: Date;
-
-    @XViewColumn()
-    startDate: Date;
-
-    @XViewColumn()
-    tempomatMode: string;
-
-    @XViewColumn()
-    originalEstimatedCompletionDate: Date;
-
-    @XViewColumn()
-    totalItemCount: number;
-
-    @XViewColumn()
-    totalCompletedItemCount: number;
 }

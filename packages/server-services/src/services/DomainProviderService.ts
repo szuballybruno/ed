@@ -2,7 +2,7 @@ import { Company } from '../models/tables/Company';
 import { User } from '../models/tables/User';
 import { Id } from '@episto/commontypes';
 import { GlobalConfigurationService } from './GlobalConfigurationService';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 
 export class DomainProviderService {
 

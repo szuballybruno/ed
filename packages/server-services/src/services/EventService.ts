@@ -7,7 +7,7 @@ import { Id } from '@episto/commontypes';
 import { AuthorizationService } from './AuthorizationService';
 import { LoggerService } from './LoggerService';
 import { MapperService } from './MapperService';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 
 export class EventService {
 

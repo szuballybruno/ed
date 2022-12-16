@@ -3,7 +3,7 @@ import { GetParamByCodeType, GetPermissionScope, PermissionScopeParamType } from
 import { PermissionCodeType } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
 import { PrincipalId } from '@episto/x-core';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 import { PermissionService } from './PermissionService';
 
 export class AuthorizationService {

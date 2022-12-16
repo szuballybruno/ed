@@ -21,7 +21,7 @@ import { CourseCompletionService } from './CourseCompletionService';
 import { LoggerService } from './LoggerService';
 import { MapperService } from './MapperService';
 import { readItemCode } from './misc/encodeService';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 import { QuestionAnswerService } from './QuestionAnswerService';
 import { QuestionService } from './QuestionService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';

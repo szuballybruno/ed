@@ -1,12 +1,12 @@
 import { instantiate } from '@episto/commonlogic';
 import { Id } from '@episto/commontypes';
-import { InsertEntity } from '../../utilities/misc';
-import { ClassType } from '../misc/advancedTypes/ClassType';
-import { SQLConnectionService } from '../sqlServices/SQLConnectionService';
+import { InsertEntity } from '../utilities/misc';
+import { ClassType } from '../models/misc/ClassType';
+import { SQLConnectionService } from './SQLConnectionService';
 import { EntityType, ParamConstraintType, SaveEntityType } from '@episto/x-orm';
 import { XQueryBuilder } from '@episto/x-orm';
 import { XQueryBuilderCore } from '@episto/x-orm';
-import { GlobalConfigurationService } from '../GlobalConfigurationService';
+import { GlobalConfigurationService } from './GlobalConfigurationService';
 
 export class ORMConnectionService {
 

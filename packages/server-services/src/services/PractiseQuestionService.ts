@@ -8,7 +8,7 @@ import { AuthorizationService } from './AuthorizationService';
 import { MapperService } from './MapperService';
 import { GlobalConfigurationService } from './GlobalConfigurationService';
 import { ServiceBase } from './misc/ServiceBase';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 import { QuestionAnswerService } from './QuestionAnswerService';
 import { QuestionService } from './QuestionService';
 

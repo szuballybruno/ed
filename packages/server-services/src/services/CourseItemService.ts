@@ -16,7 +16,7 @@ import { AnswerService } from './AnswerService';
 import { AuthorizationService } from './AuthorizationService';
 import { MapperService } from './MapperService';
 import { XMutatorHelpers } from './misc/XMutatorHelpers';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 import { QuestionService } from './QuestionService';
 import { VersionSaveService } from './VersionSaveService';
 

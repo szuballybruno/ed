@@ -9,7 +9,7 @@ import { InsertEntity } from '../utilities/misc';
 import { MapperService } from './MapperService';
 import { readItemCode } from './misc/encodeService';
 import { QueryServiceBase } from './misc/ServiceBase';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 import { AuthorizationService } from './AuthorizationService';
 
 export class CommentService extends QueryServiceBase<Comment> {

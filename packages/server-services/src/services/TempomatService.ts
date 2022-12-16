@@ -9,7 +9,7 @@ import { TempomatCalculationDataView } from '../models/views/TempomatCalculation
 import { TempomatTargetDateDataView } from '../models/views/TempomatTargetDateDataView';
 import { addDays, dateDiffInDays } from '../utilities/helpers';
 import { GlobalConfigurationService } from './GlobalConfigurationService';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 
 export class TempomatService {
 

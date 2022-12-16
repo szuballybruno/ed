@@ -14,7 +14,7 @@ import { UserModuleStatsView } from '../models/views/UserModuleStatsView';
 import { UserSpentTimeRatioView } from '../models/views/UserSpentTimeRatioView';
 import { UserVideoStatsView } from '../models/views/UserVideoStatsView';
 import { MapperService } from './MapperService';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 import { TempomatService } from './TempomatService';
 import { UserProgressService } from './UserProgressService';
 
@@ -155,7 +155,8 @@ export class UserStatsService {
 
                 return {
                     view: statView,
-                    tempomatData
+                    tempomatData,
+                    tempomatCalcData
                 };
             });
 
@@ -163,11 +164,11 @@ export class UserStatsService {
 
             if (preset === 'inprogress')
                 return mergedStats
-                    .filter(x => x.view.startDate && !x.view.finalExamScorePercentage);
+                    .filter(x => x.tempomatCalcData.startDate && !x.view.finalExamScorePercentage);
 
             if (preset === 'notstartedyet')
                 return mergedStats
-                    .filter(x => !x.view.startDate && x.view.requiredCompletionDate);
+                    .filter(x => !x.tempomatCalcData.startDate && x.tempomatCalcData.requiredCompletionDate);
 
             if (preset === 'completed')
                 return mergedStats

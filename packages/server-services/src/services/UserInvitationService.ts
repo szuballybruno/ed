@@ -6,7 +6,7 @@ import { getFullName } from '../utilities/helpers';
 import { PrincipalId } from '@episto/x-core';
 import { EmailService } from './EmailService';
 import { LoggerService } from './LoggerService';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 import { RoleService } from './RoleService';
 import { TokenService } from './TokenService';
 import { UserService } from './UserService';

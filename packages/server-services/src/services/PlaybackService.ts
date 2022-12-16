@@ -18,7 +18,7 @@ import { CourseCompletionService } from './CourseCompletionService';
 import { MapperService } from './MapperService';
 import { GlobalConfigurationService } from './GlobalConfigurationService';
 import { ServiceBase } from './misc/ServiceBase';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 import { SampleMergeService } from './SampleMergeService';
 import { UserSessionActivityService } from './UserSessionActivityService';
 

@@ -3,7 +3,7 @@ import { ActivityStreakView } from '../models/views/ActivityStreakView';
 import { UserSessionDailyView } from '../models/views/UserSessionDailyView';
 import { CoinTransactionService } from './CoinTransactionService';
 import { EventService } from './EventService';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 import { Id } from '@episto/commontypes';
 import { GlobalConfigurationService } from './GlobalConfigurationService';
 import { LoggerService } from './LoggerService';

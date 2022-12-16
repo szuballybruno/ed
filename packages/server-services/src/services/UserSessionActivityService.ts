@@ -7,8 +7,8 @@ import { Id } from '@episto/commontypes';
 import { InsertEntity } from '../utilities/misc';
 import { CoinAcquireService } from './CoinAcquireService';
 import { LoggerService } from './LoggerService';
-import { ClassType } from './misc/advancedTypes/ClassType';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ClassType } from '../models/misc/ClassType';
+import { ORMConnectionService } from './ORMConnectionService';
 import { EntityType } from '@episto/x-orm';
 
 type RollingSessionEntityType<TId extends string> = EntityType<TId> & {

@@ -12,7 +12,7 @@ import { FileService } from './FileService';
 import { FileSystemService } from './FileSystemService';
 import { LoggerService } from './LoggerService';
 import { GlobalConfigurationService } from './GlobalConfigurationService';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 import { QuestionAnswerService } from './QuestionAnswerService';
 import { UrlService } from './UrlService';
 

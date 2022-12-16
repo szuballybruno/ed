@@ -205,10 +205,10 @@ import { UserModuleStatsView } from './views/UserModuleStatsView';
 import { UserVideoStatsView } from './views/UserVideoStatsView';
 import { UserOverviewView } from './views/UserOverviewView';
 import { UserLearningOverviewStatsView } from './views/UserLearningOverviewStatsView';
+import { AdminCourseUserStatsView } from './views/AdminCourseUserStatsView';
 import { CourseLearningStatsView } from './views/CourseLearningStatsView';
 import { CourseOverviewView } from './views/CourseOverviewView';
 import { AdminUserCoursesView } from './views/AdminUserCoursesView';
-import { AdminCourseUserStatsView } from './views/AdminCourseUserStatsView';
 
 export const databaseSchema: XDBMSchemaService = {
 
@@ -338,10 +338,10 @@ export const databaseSchema: XDBMSchemaService = {
         UserVideoStatsView,
         UserOverviewView,
         UserLearningOverviewStatsView,
+        AdminCourseUserStatsView,
         CourseLearningStatsView,
         CourseOverviewView,
-        AdminUserCoursesView,
-        AdminCourseUserStatsView
+        AdminUserCoursesView
     ],
 
     entities: [

@@ -1,6 +1,6 @@
 import Postgres from 'pg';
-import { GlobalConfigurationService } from '../GlobalConfigurationService';
-import { log } from '../misc/logger';
+import { GlobalConfigurationService } from './GlobalConfigurationService';
+import { log } from './misc/logger';
 
 export class SQLPoolService {
 

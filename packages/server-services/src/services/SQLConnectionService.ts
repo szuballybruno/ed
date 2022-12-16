@@ -1,6 +1,6 @@
 import { ISQLConnectionService } from '@episto/x-orm';
 import Postgres from 'pg';
-import { LoggerService } from '../LoggerService';
+import { LoggerService } from './LoggerService';
 import { SQLPoolService } from './SQLPoolService';
 
 export type ExecSQLFunctionType = (sql: string, values?: any[]) => Promise<Postgres.QueryResult<any>>;

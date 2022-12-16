@@ -9,7 +9,7 @@ import { UserWeeklyCourseItemProgressView } from '../models/views/UserWeeklyCour
 import { AuthorizationService } from './AuthorizationService';
 import { MapperService } from './MapperService';
 import { ServiceBase } from './misc/ServiceBase';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 import { TempomatService } from './TempomatService';
 
 export class UserProgressService extends ServiceBase {

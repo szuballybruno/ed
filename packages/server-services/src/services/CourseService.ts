@@ -33,7 +33,7 @@ import { MapperService } from './MapperService';
 import { FilesObjectType } from './misc/FilesObjectType';
 import { createCharSeparatedList } from './misc/mappings';
 import { ModuleService } from './ModuleService';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 import { PlayerService } from './PlayerService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { VersionCreateService } from './VersionCreateService';

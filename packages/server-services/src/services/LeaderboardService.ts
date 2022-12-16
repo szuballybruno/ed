@@ -4,7 +4,7 @@ import { PrincipalId } from "@episto/x-core";
 import { LeaderboardView } from "../models/views/LeaderboardView";
 import { CompanyService } from "./CompanyService";
 import { MapperService } from "./MapperService";
-import { ORMConnectionService } from "./ORMConnectionService/ORMConnectionService";
+import { ORMConnectionService } from "./ORMConnectionService";
 
 const LIST_LENGTH = 10;
 

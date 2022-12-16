@@ -8,7 +8,7 @@ import { DomainProviderService } from './DomainProviderService';
 import { EmailService } from './EmailService';
 import { HashService } from './HashService';
 import { GlobalConfigurationService } from './GlobalConfigurationService';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 import { TokenService } from './TokenService';
 import { UrlService } from './UrlService';
 import { UserService } from './UserService';

@@ -4,7 +4,7 @@ import { Id } from '@episto/commontypes';
 import { PrincipalId } from '@episto/x-core';
 import { AuthorizationService } from './AuthorizationService';
 import { MapperService } from './MapperService';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 
 export class TeacherInfoService {
 

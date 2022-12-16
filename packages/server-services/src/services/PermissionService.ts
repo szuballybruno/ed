@@ -8,7 +8,7 @@ import { Id } from '@episto/commontypes';
 import { PrincipalId } from '@episto/x-core';
 import { MapperService } from './MapperService';
 import { QueryServiceBase } from './misc/ServiceBase';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 
 export type ContextOptions = {
     companyId?: Id<'Company'>,

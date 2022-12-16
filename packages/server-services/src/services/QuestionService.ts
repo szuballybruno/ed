@@ -10,7 +10,7 @@ import { VersionMigrationContainer } from '../utilities/misc';
 import { MapperService } from './MapperService';
 import { GlobalConfigurationService } from './GlobalConfigurationService';
 import { XMutatorHelpers } from './misc/XMutatorHelpers';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 import { VersionSaveService } from './VersionSaveService';
 
 type QuestionMutationType = Mutation<QuestionEditDataReadDTO, 'questionVersionId'>;

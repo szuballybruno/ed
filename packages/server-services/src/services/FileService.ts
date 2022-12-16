@@ -6,9 +6,9 @@ import { Id } from '@episto/commontypes';
 import { fileCodes, FileCodesType } from '../static/FileCodes';
 import { StringKeyof } from '../utilities/misc';
 import { PrincipalId } from '@episto/x-core';
-import { ClassType } from './misc/advancedTypes/ClassType';
+import { ClassType } from '../models/misc/ClassType';
 import { log } from './misc/logger';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 import { StorageService } from './StorageService';
 import { EntityType } from '@episto/x-orm';
 

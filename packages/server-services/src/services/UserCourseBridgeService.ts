@@ -7,7 +7,7 @@ import { CurrentUserCourseBridgeView } from '../models/views/CurrentUserCourseBr
 import { PrincipalId } from '@episto/x-core';
 import { MapperService } from './MapperService';
 import { QueryServiceBase } from './misc/ServiceBase';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 import { PermissionService } from './PermissionService';
 
 export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> {

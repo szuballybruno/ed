@@ -2,7 +2,7 @@ import { Id } from '@episto/commontypes';
 import { XORMUtils } from '@episto/x-orm';
 import moment from 'moment';
 import { User } from '../models/tables/User';
-import { ClassType } from '../services/misc/advancedTypes/ClassType';
+import { ClassType } from '../models/misc/ClassType';
 import { KeyofConstrained } from './misc';
 
 export const snoozeAsync = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));

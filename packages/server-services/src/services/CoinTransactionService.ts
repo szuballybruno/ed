@@ -7,7 +7,7 @@ import { CoinTransactionView } from '../models/views/CoinTransactionView';
 import { PrincipalId } from '@episto/x-core';
 import { LoggerService } from './LoggerService';
 import { MapperService } from './MapperService';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 
 export class CoinTransactionService {
 

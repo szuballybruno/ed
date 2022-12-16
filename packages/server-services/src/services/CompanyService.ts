@@ -18,8 +18,8 @@ import { AuthorizationService } from './AuthorizationService';
 import { DomainProviderService } from './DomainProviderService';
 import { FileService } from './FileService';
 import { MapperService } from './MapperService';
-import { ClassType } from './misc/advancedTypes/ClassType';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ClassType } from '../models/misc/ClassType';
+import { ORMConnectionService } from './ORMConnectionService';
 
 export class CompanyService {
 

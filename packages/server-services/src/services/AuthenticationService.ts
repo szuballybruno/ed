@@ -5,7 +5,7 @@ import { User } from '../models/tables/User';
 import { HashService } from './HashService';
 import { LoggerService } from './LoggerService';
 import { GlobalConfigurationService } from './GlobalConfigurationService';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 import { PermissionService } from './PermissionService';
 import { TokenService } from './TokenService';
 import { UserService } from './UserService';

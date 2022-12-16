@@ -8,7 +8,7 @@ import { PrincipalId } from '@episto/x-core';
 import { CourseProgressService } from './CourseProgressService';
 import { DomainProviderService } from './DomainProviderService';
 import { MapperService } from './MapperService';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 
 export class MiscService {

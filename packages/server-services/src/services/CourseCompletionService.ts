@@ -2,7 +2,7 @@ import { CourseCompletion } from '../models/tables/CourseCompletion';
 import { CourseAllItemsCompletedView } from '../models/views/CourseAllItemsCompletedView';
 import { Id } from '@episto/commontypes';
 import { MapperService } from './MapperService';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 
 export class CourseCompletionService {
 

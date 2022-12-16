@@ -15,7 +15,7 @@ import { ExamService } from './ExamService';
 import { MapperService } from './MapperService';
 import { readItemCode } from './misc/encodeService';
 import { ModuleService } from './ModuleService';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 import { PermissionService } from './PermissionService';
 import { PlaybackService } from './PlaybackService';
 import { PlaylistService } from './PlaylistService';

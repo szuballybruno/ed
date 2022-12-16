@@ -18,7 +18,7 @@ import { CourseItemService } from './CourseItemService';
 import { FileService } from './FileService';
 import { MapperService } from './MapperService';
 import { XMutatorHelpers } from './misc/XMutatorHelpers';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 import { VersionSaveService } from './VersionSaveService';
 import { FilesObjectType } from './misc/FilesObjectType';
 

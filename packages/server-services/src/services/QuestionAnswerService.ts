@@ -17,7 +17,7 @@ import { InsertEntity } from '../utilities/misc';
 import { CoinAcquireService } from './CoinAcquireService';
 import { LoggerService } from './LoggerService';
 import { GlobalConfigurationService } from './GlobalConfigurationService';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 
 export type AnswerMutationsType = Mutation<AnswerEditDTO, 'answerVersionId'>[];
 export type AnswerVersionWithAnswerDataType = AnswerVersion & AnswerData;

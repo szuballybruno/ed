@@ -5,7 +5,7 @@ import { DailyTipEditDataDTO } from '@episto/communication';
 import { DailyTipView } from '../models/views/DailyTipView';
 import { getRandomNumber } from '../utilities/helpers';
 import { MapperService } from './MapperService';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 import { PrincipalId } from '@episto/x-core';
 import { Id } from '@episto/commontypes';
 import { AuthorizationService } from './AuthorizationService';

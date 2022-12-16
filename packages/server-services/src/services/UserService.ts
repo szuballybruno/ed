@@ -17,7 +17,7 @@ import { InsertEntity } from '../utilities/misc';
 import { AuthorizationService } from './AuthorizationService';
 import { HashService } from './HashService';
 import { MapperService } from './MapperService';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 import { RoleService } from './RoleService';
 import { TeacherInfoService } from './TeacherInfoService';
 import { TempomatService } from './TempomatService';

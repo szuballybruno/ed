@@ -10,7 +10,7 @@ import { SignupQuestionView } from '../models/views/SignupQuestionView';
 import { PrincipalId } from '@episto/x-core';
 import { CompanyService } from './CompanyService';
 import { MapperService } from './MapperService';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 import { PermissionService } from './PermissionService';
 
 export class SignupService {

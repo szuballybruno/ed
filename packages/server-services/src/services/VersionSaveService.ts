@@ -4,10 +4,10 @@ import { FileCodesType } from '../static/FileCodes';
 import { InsertEntity, VersionMigrationContainer } from '../utilities/misc';
 import { FileService, UploadFileRelatedEntityIdType } from './FileService';
 import { LoggerService } from './LoggerService';
-import { ClassType } from './misc/advancedTypes/ClassType';
+import { ClassType } from '../models/misc/ClassType';
 import { OldData } from './misc/types';
 import { XMutatorHelpers } from './misc/XMutatorHelpers';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 import { EntityType, GetIdType } from '@episto/x-orm';
 
 type SaveActionType = {
