@@ -9,7 +9,8 @@
     "scripts": {
         "watch": "tsc --watch",
         "start": "tsc",
-        "build": "tsc"
+        "build": "tsc",
+        "scaffold": "node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm src/main.ts"
     },
     "dependencies": {
         "@episto/x-core": "1.0.0",

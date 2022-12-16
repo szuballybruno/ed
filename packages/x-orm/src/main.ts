@@ -19,10 +19,18 @@ process
 
         console.log('Running...');
 
+        const parseArgOrNull = (name: string) => {
+
+            const arg = process.argv.firstOrNull(x => x.startsWith(`--${name}=`));
+            if (!arg)
+                return null;
+
+            return arg.split('=')[1];
+        }
+
         const parseArg = (name: string) => {
 
             const arg = process.argv.firstOrNull(x => x.startsWith(`--${name}=`));
-
             if (!arg)
                 throw new Error(`Arg not found by name: ${name}`);
 
@@ -39,8 +47,11 @@ process
 
         const connection = new LiveSchemaProvider(sqlConnection);
 
-        const typemapFilePath = './typemap.json';
-        const typemap = existsSync(typemapFilePath)
+        const typemapFilePath = parseArgOrNull('typemapPath');
+        if (typemapFilePath && !existsSync(typemapFilePath))
+            throw new Error(`Typemap file not found at path specified: ${typemapFilePath}`);
+
+        const typemap = typemapFilePath
             ? JSON.parse(readFileSync(typemapFilePath, 'utf-8'))
             : {};
 

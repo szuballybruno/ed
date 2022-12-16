@@ -166,10 +166,10 @@
         {
             "label": "scaffold",
             "type": "shell",
-            "command": "scaffold.ps1",
+            "command": "scaffoldModels.ps1",
             "problemMatcher": [],
             "options": {
-                "cwd": "${workspaceFolder}/packages/x-orm"
+                "cwd": "${workspaceFolder}/packages/server-services"
             }
         },
         {
