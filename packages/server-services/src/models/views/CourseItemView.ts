@@ -1,26 +1,50 @@
-import { ViewEntity } from '../MyORM';
 import { XViewColumn } from '@episto/x-orm';
-import { VersionCode } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
 
-
 export class CourseItemView {
+
+    @XViewColumn()
+    courseVersionId: Id<'CourseVersion'>;
+
+    @XViewColumn()
+    moduleName: string;
+
+    @XViewColumn()
+    moduleOrderIndex: number;
 
     @XViewColumn()
     moduleVersionId: Id<'ModuleVersion'>;
 
     @XViewColumn()
-    videoVersionId: Id<'VideoVersion'> | null;
+    moduleId: Id<'Module'>;
 
     @XViewColumn()
-    videoId: Id<'Video'> | null;
+    videoVersionId: Id<'VideoVersion'>;
 
     @XViewColumn()
-    examVersionId: Id<'ExamVersion'> | null;
+    videoId: Id<'Video'>;
 
     @XViewColumn()
-    examId: Id<'Exam'> | null;
+    examVersionId: Id<'ExamVersion'>;
 
     @XViewColumn()
-    versionCode: VersionCode;
+    examId: Id<'Exam'>;
+
+    @XViewColumn()
+    itemOrderIndex: number;
+
+    @XViewColumn()
+    itemTitle: string;
+
+    @XViewColumn()
+    itemSubtitle: string;
+
+    @XViewColumn()
+    itemType: string;
+
+    @XViewColumn()
+    versionCode: string;
+
+    @XViewColumn()
+    videoAudioText: string;
 }

@@ -1,7 +1,6 @@
 import { XViewColumn } from '@episto/x-orm';
 import { Id } from '@episto/commontypes';
 
-
 export class LatestAnswerSessionView {
 
     @XViewColumn()
@@ -15,5 +14,4 @@ export class LatestAnswerSessionView {
 
     @XViewColumn()
     answerSessionId: Id<'AnswerSession'>;
-
 }

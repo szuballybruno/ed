@@ -1,4 +1,4 @@
-import { Event } from '../models/entity/misc/Event';
+import { Event } from '../models/tables/Event';
 import { CoinAcquireResultDTO } from '@episto/communication';
 import { EventDTO } from '@episto/communication';
 import { LagBehindNotificationDTO } from '@episto/communication';

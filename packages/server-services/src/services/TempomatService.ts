@@ -1,10 +1,10 @@
 import { instantiate } from '@episto/commonlogic';
 import { Id, TempomatModeType, TempoRatingType } from '@episto/commontypes';
 import { PrincipalId } from '@episto/x-core';
-import { UserCourseBridge } from '../models/entity/misc/UserCourseBridge';
-import { TempomatDataAvgModel } from '../models/TempomatDataAvgModel';
-import { TempomatDataModel } from '../models/TempomatDataModel';
-import { UserPerformancePercentageAverageModel } from '../models/UserPerformancePercentageAverageModel';
+import { UserCourseBridge } from '../models/tables/UserCourseBridge';
+import { TempomatDataAvgModel } from '../models/misc/TempomatDataAvgModel';
+import { TempomatDataModel } from '../models/misc/TempomatDataModel';
+import { UserPerformancePercentageAverageModel } from '../models/misc/UserPerformancePercentageAverageModel';
 import { TempomatCalculationDataView } from '../models/views/TempomatCalculationDataView';
 import { TempomatTargetDateDataView } from '../models/views/TempomatTargetDateDataView';
 import { addDays, dateDiffInDays } from '../utilities/helpers';

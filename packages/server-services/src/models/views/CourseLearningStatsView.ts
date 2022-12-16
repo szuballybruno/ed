@@ -1,7 +1,6 @@
 import { XViewColumn } from '@episto/x-orm';
 import { Id } from '@episto/commontypes';
 
-
 export class CourseLearningStatsView {
 
     @XViewColumn()
@@ -11,10 +10,10 @@ export class CourseLearningStatsView {
     courseId: Id<'Course'>;
 
     @XViewColumn()
-    canView: boolean;
+    title: string;
 
     @XViewColumn()
-    teacherId: Id<'User'>;
+    canView: boolean;
 
     @XViewColumn()
     isCompleted: boolean;
@@ -29,9 +28,6 @@ export class CourseLearningStatsView {
     continueItemCode: string;
 
     @XViewColumn()
-    title: string;
-
-    @XViewColumn()
     filePath: string;
 
     @XViewColumn()
@@ -39,6 +35,9 @@ export class CourseLearningStatsView {
 
     @XViewColumn()
     subCategoryName: string;
+
+    @XViewColumn()
+    teacherId: Id<'Teacher'>;
 
     @XViewColumn()
     teacherFirstName: string;
@@ -56,10 +55,10 @@ export class CourseLearningStatsView {
     completedCourseItemCount: number;
 
     @XViewColumn()
-    totalVideoCount: number;
+    completedVideoCount: number;
 
     @XViewColumn()
-    completedVideoCount: number;
+    totalVideoCount: number;
 
     @XViewColumn()
     totalVideoQuestionCount: number;
@@ -71,8 +70,8 @@ export class CourseLearningStatsView {
     avgExamScorePercentage: number;
 
     @XViewColumn()
-    questionSuccessRate: number;
+    finalExamScorePercentage: number;
 
     @XViewColumn()
-    finalExamScorePercentage: number;
+    questionSuccessRate: number;
 }

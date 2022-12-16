@@ -1,24 +1,24 @@
 import { instantiate } from '@episto/commonlogic';
-import { Id, LeaderboardPeriodType, TeacherBadgeNameType, TempoRatingType, UserActivityDistributionChartData } from '@episto/commontypes';
+import { CourseItemStateType, CourseItemType, CourseRatingQuesitonType, CourseStageNameType, CourseVisibilityType, EventCodeType, GivenAnswerStateType, Id, LeaderboardPeriodType, PermissionCodeType, PermissionScopeType, TeacherBadgeNameType, TempoRatingType, UserActivityDistributionChartData, VersionCode } from '@episto/commontypes';
 import { ActivationCodeListDTO, AdminCourseUserStatsDTO, AdminHomePageOverviewDTO, AnswerDTO, AnswerEditDTO, AvailableCourseDTO, CoinTransactionDTO, CommentListDTO, CompanyAssociatedCourseDTO, CompanyDTO, CompanyEditDataDTO, CompanyPublicDTO, CourseAdminListItemDTO, CourseBriefData, CourseCategoryDTO, CourseContentItemAdminDTO, CourseContentItemIssueDTO, CourseDetailsDTO, CourseDetailsEditDataDTO, CourseItemEditDTO, CourseLearningDTO, CourseOverviewDataDTO, CourseProgressShortDTO, CourseRatingGroupDTO, CourseRatingQuestionDTO, CourseShopItemListDTO, CourseStatDTO, DailyTipDTO, DailyTipEditDataDTO, DiscountCodeDTO, EventDTO, ExamPlayerDataDTO, ExamResultQuestionDTO, ExamResultsDTO, ExamStatsDTO, HomePageStatsDTO, LeaderboardListItemDTO, ModuleEditDTO, ModulePlayerDTO, PermissionListDTO, PersonalityTraitCategoryDTO, PersonalityTraitCategoryShortDTO, PlaylistItemDTO, PlaylistModuleDTO, PrequizAnswerDTO, PrequizQuestionDTO, PretestResultDTO, QuestionDTO, QuestionModuleCompareDTO, ResultAnswerDTO, RoleAdminListDTO, RoleDTO, ShopItemAdminShortDTO, ShopItemBriefData, ShopItemCategoryDTO, ShopItemDTO, ShopItemEditDTO, SignupAnswerDTO, SignupQuestionDTO, SurveyDataDTO, TaskDTO, TeacherInfoEditDTO, UserActiveCourseDTO, UserAdminListDTO, UserCourseStatsDTO, UserCourseStatsOverviewDTO, UserDTO, UserExamStatsDTO, UserStatisticsDTO, UserLearningPageStatsDTO, UserModuleStatsDTO, UserProgressChartStep, UserVideoStatsDTO, VideoPlayerDataDTO } from '@episto/communication';
 import { Mutable, XMappingsBuilder } from '@episto/x-mapper';
-import { Permission } from '../../models/entity/authorization/Permission';
-import { Role } from '../../models/entity/authorization/Role';
-import { CourseData } from '../../models/entity/course/CourseData';
-import { Company } from '../../models/entity/misc/Company';
-import { CourseCategory } from '../../models/entity/misc/CourseCategory';
-import { DailyTip } from '../../models/entity/misc/DailyTip';
-import { DiscountCode } from '../../models/entity/misc/DiscountCode';
-import { Event } from '../../models/entity/misc/Event';
-import { PersonalityTraitCategory } from '../../models/entity/misc/PersonalityTraitCategory';
-import { ShopItem } from '../../models/entity/misc/ShopItem';
-import { ShopItemCategory } from '../../models/entity/misc/ShopItemCategory';
-import { Task } from '../../models/entity/misc/Task';
-import { TeacherInfo } from '../../models/entity/misc/TeacherInfo';
-import { User } from '../../models/entity/misc/User';
-import { TempomatDataAvgModel } from '../../models/TempomatDataAvgModel';
-import { TempomatDataModel } from '../../models/TempomatDataModel';
-import { UserPerformancePercentageAverageModel } from '../../models/UserPerformancePercentageAverageModel';
+import { Permission } from '../../models/tables/Permission';
+import { Role } from '../../models/tables/Role';
+import { CourseData } from '../../models/tables/CourseData';
+import { Company } from '../../models/tables/Company';
+import { CourseCategory } from '../../models/tables/CourseCategory';
+import { DailyTip } from '../../models/tables/DailyTip';
+import { DiscountCode } from '../../models/tables/DiscountCode';
+import { Event } from '../../models/tables/Event';
+import { PersonalityTraitCategory } from '../../models/tables/PersonalityTraitCategory';
+import { ShopItem } from '../../models/tables/ShopItem';
+import { ShopItemCategory } from '../../models/tables/ShopItemCategory';
+import { Task } from '../../models/tables/Task';
+import { TeacherInfo } from '../../models/tables/TeacherInfo';
+import { User } from '../../models/tables/User';
+import { TempomatDataAvgModel } from '../../models/misc/TempomatDataAvgModel';
+import { TempomatDataModel } from '../../models/misc/TempomatDataModel';
+import { UserPerformancePercentageAverageModel } from '../../models/misc/UserPerformancePercentageAverageModel';
 import { ActivationCodeListView } from '../../models/views/ActivationCodeListView';
 import { AdminCourseUserStatsView } from '../../models/views/AdminCourseUserStatsView';
 import { AdminHomePageOverviewView } from '../../models/views/AdminHomePageOverviewView';
@@ -265,7 +265,7 @@ const marray = [
                             questionVersionId: viewAsQuestion.questionVersionId,
                             questionText: viewAsQuestion.questionText,
                             imageUrl: assetUrlService.getAssetUrl(viewAsQuestion.imageUrl),
-                            typeId: viewAsQuestion.typeId,
+                            typeId: viewAsQuestion.questionTypeId as any,
                             answers: questionGrouping
                                 .items
                                 .map(viewAsAnswer => {
@@ -363,7 +363,7 @@ const marray = [
                         permissions: grouping
                             .items
                             .map((viewAsPermission): PermissionListDTO => ({
-                                code: viewAsPermission.permissionCode,
+                                code: viewAsPermission.permissionCode as PermissionCodeType,
                                 scope: 'USER' // not used
                             }))
                     };
@@ -467,7 +467,7 @@ const marray = [
                             subTitle: viewAsItem.itemSubtitle,
                             title: viewAsItem.itemTitle,
                             orderIndex: viewAsItem.itemOrderIndex,
-                            state: viewAsItem.itemState,
+                            state: viewAsItem.itemState as CourseItemStateType,
                             playlistItemCode: viewAsItem.playlistItemCode,
                             type: viewAsItem.itemType === 'video' ? 'video' : 'exam',
                             shouldRepeatVideo: viewAsItem.isRecommendedForPractise,
@@ -532,7 +532,7 @@ const marray = [
                         text: viewAsQuestion.questionText,
                         maxScore: viewAsQuestion.questionMaxScore,
                         score: viewAsQuestion.questionScore,
-                        state: viewAsQuestion.givenAnswerState,
+                        state: viewAsQuestion.givenAnswerState as GivenAnswerStateType,
                         answers: questsionGroup
                             .items
                             .map(x => toResultAnswerDTO(x)),
@@ -592,7 +592,7 @@ const marray = [
                 description: view.description,
                 benchmark: view.benchmark,
                 previouslyCompletedCount: view.previouslyCompletedCount,
-                visibility: view.visibility,
+                visibility: view.visibility as CourseVisibilityType,
                 teacherId: view.teacherId,
                 humanSkillBenefitsDescription: view.humanSkillBenefitsDescription,
                 technicalRequirementsDescription: view.technicalRequirements,
@@ -717,9 +717,9 @@ const marray = [
 
             return comments
                 .map(comment => (instantiate<CommentListDTO>({
-                    id: comment.id,
+                    id: comment.commentId,
                     userId: comment.userId,
-                    threadId: comment.threadId,
+                    threadId: comment.threadGroup,
                     fullName: comment.fullName,
                     commentText: comment.commentText,
                     creationDate: comment.creationDate,
@@ -735,7 +735,7 @@ const marray = [
 
             return instantiate<EventDTO>({
                 data: JSON.parse(event.data),
-                type: event.type
+                type: event.type as EventCodeType
             });
         }),
     epistoMappingsBuilder
@@ -751,7 +751,7 @@ const marray = [
             return shopItemViews
                 .map(shopItem => {
                     return instantiate<ShopItemDTO>({
-                        id: shopItem.id,
+                        id: shopItem.shopItemId,
                         courseId: shopItem.courseId,
                         userId: shopItem.userId,
                         name: shopItem.name,
@@ -848,7 +848,7 @@ const marray = [
                 return instantiate<CourseContentItemAdminDTO>({
                     courseId: view.courseId,
                     examVersionId: view.examVersionId,
-                    versionCode: view.versionCode,
+                    versionCode: VersionCode.parse(view.versionCode),
                     itemOrderIndex: view.itemOrderIndex,
                     itemSubtitle: view.itemSubtitle,
                     itemTitle: view.itemTitle,
@@ -860,7 +860,7 @@ const marray = [
                     warnings,
                     videoLength: view.videoLength,
                     videoAudioText: view.videoAudioText,
-                    itemType: view.itemType,
+                    itemType: view.itemType as CourseItemType,
                     questionMutations: [],
                     answerMutations: [],
                 });
@@ -887,10 +887,10 @@ const marray = [
                 difficulty: detailsView.difficulty,
                 benchmark: detailsView.benchmark,
                 previouslyCompletedCount: detailsView.previouslyCompletedCount,
-                visibility: detailsView.visibility,
+                visibility: detailsView.visibility as CourseVisibilityType,
                 humanSkillBenefitsDescription: detailsView.humanSkillBenefitsDescription,
                 currentItemCode: detailsView.currentItemCode,
-                stageName: detailsView.stageName,
+                stageName: detailsView.stageName as CourseStageNameType,
                 skillBenefits: parseCommaSeparatedStringList(detailsView.skillBenefits),
                 technicalRequirements: parseCommaSeparatedStringList(detailsView.technicalRequirements),
                 humanSkillBenefits: parseSkillBenefits(detailsView.humanSkillBenefits),
@@ -967,7 +967,7 @@ const marray = [
                 email: user.email,
                 phoneNumber: user.phoneNumber || '',
                 name: `${user.lastName} ${user.firstName}`,
-                username: user.username,
+                username: user.username!,
                 registrationStatus: 'active',
                 department: (departmentId && departmentName)
                     ? {
@@ -1052,7 +1052,7 @@ const marray = [
                         subCategoryId: view.subCategoryId,
                         subCategoryName: view.subCategoryName,
                         currentItemCode: currentItemCode,
-                        stageName: view.stageName,
+                        stageName: view.stageName as CourseStageNameType,
                         courseLength: 0,
                         teacherName: toFullName(view.teacherFirstName, view.teacherLastName),
                         thumbnailImageURL: thumbnailImageURL,
@@ -1129,12 +1129,14 @@ const marray = [
         }),
     // TODO: Name, purchaseLimit, detailsUrl shouldn\'t be null
     epistoMappingsBuilder
-        .addMapping(ShopItemEditDTO, ([urlService]) => (shopItem: ShopItem, discountCodes: DiscountCode[]) => {
+        .addMapping(ShopItemEditDTO, ([urlService]) => (
+            shopItem: ShopItem,
+            discountCodes: DiscountCode[],
+            coverFilePath: string) => {
+
             return instantiate<ShopItemEditDTO>({
                 id: shopItem.id,
-                coverFilePath: shopItem.coverFile?.filePath
-                    ? urlService.getAssetUrl(shopItem.coverFile.filePath)
-                    : '',
+                coverFilePath: urlService.getAssetUrl(coverFilePath),
                 coinPrice: shopItem.coinPrice,
                 currencyPrice: shopItem.currencyPrice,
                 name: shopItem.name || '',
@@ -1198,7 +1200,7 @@ const marray = [
         .addMapping(PersonalityTraitCategoryShortDTO, () => (x: PersonalityTraitCategoryView, isMax: boolean) => {
 
             return instantiate<PersonalityTraitCategoryShortDTO>({
-                id: x.id,
+                id: x.id as any,
                 title: x.title,
                 label: isMax ? x.maxLabel : x.minLabel,
                 isMax,
@@ -1263,7 +1265,7 @@ const marray = [
             return instantiate<CourseRatingQuestionDTO>({
                 id: question.questionId,
                 text: question.questionText,
-                type: question.questionType,
+                type: question.questionType as CourseRatingQuesitonType,
                 answerText: question.answerText,
                 answerValue: question.answerValue
             });
@@ -1272,7 +1274,7 @@ const marray = [
         .addMapping(CourseRatingGroupDTO, () => (view: CourseRatingQuestionView, questions: CourseRatingQuestionDTO[]) => {
 
             return instantiate<CourseRatingGroupDTO>({
-                id: view.groupId,
+                id: view.groupId as any,
                 name: view.groupName,
                 questions
             });
@@ -1314,8 +1316,8 @@ const marray = [
             return permissions.map(permission => {
 
                 return instantiate<PermissionListDTO>({
-                    code: permission.code,
-                    scope: permission.scope
+                    code: permission.code as PermissionCodeType,
+                    scope: permission.scope as PermissionScopeType
                 });
             });
         }),
@@ -1456,7 +1458,7 @@ export const toQuestionDTO = (lqav: QuestionDataView[]) => {
                 questionText: viewAsQuestion.questionText,
                 imageUrl: viewAsQuestion.imageUrl,
                 showUpTimeSeconds: viewAsQuestion.showUpTimeSeconds,
-                typeId: viewAsQuestion.typeId,
+                typeId: viewAsQuestion.typeId as any,
                 answers: questionGrouping
                     .items
                     .map(viewAsAnswer => {
@@ -1482,7 +1484,7 @@ export const toSignupDataDTO = (questions: SignupQuestionView[], isCompletedSign
                     questionVersionId: viewAsQuestion.questionVersionId,
                     questionText: viewAsQuestion.questionText,
                     imageUrl: viewAsQuestion.imageUrl,
-                    typeId: viewAsQuestion.typeId,
+                    typeId: viewAsQuestion.questionTypeId as any,
                     answers: questionGrouping
                         .items
                         .map(viewAsAnswer => {

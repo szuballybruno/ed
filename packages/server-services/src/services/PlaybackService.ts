@@ -1,10 +1,10 @@
-import { UserVideoProgressBridge } from '../models/entity/misc/UserVideoProgressBridge';
-import { VideoCompletion } from '../models/entity/misc/VideoCompletion';
-import { ModuleVersion } from '../models/entity/module/ModuleVersion';
-import { VideoPlaybackSample } from '../models/entity/playback/VideoPlaybackSample';
-import { VideoSeekEvent } from '../models/entity/playback/VideoSeekEvent';
-import { VideoData } from '../models/entity/video/VideoData';
-import { VideoVersion } from '../models/entity/video/VideoVersion';
+import { UserVideoProgressBridge } from '../models/tables/UserVideoProgressBridge';
+import { VideoCompletion } from '../models/tables/VideoCompletion';
+import { ModuleVersion } from '../models/tables/ModuleVersion';
+import { VideoPlaybackSample } from '../models/tables/VideoPlaybackSample';
+import { VideoSeekEvent } from '../models/tables/VideoSeekEvent';
+import { VideoData } from '../models/tables/VideoData';
+import { VideoVersion } from '../models/tables/VideoVersion';
 import { VideoCursorSecondsView } from '../models/views/VideoCursorSecondsView';
 import { VideoPlaybackSampleDTO } from '@episto/communication';
 import { VideoSeekEventDTO } from '@episto/communication';

@@ -1,10 +1,10 @@
 import { XViewColumn } from '@episto/x-orm';
-
+import { Id } from '@episto/commontypes';
 
 export class PersonalityTraitCategoryView {
 
     @XViewColumn()
-    id: number;
+    id: Id<'PersonalityTraitCategory'>;
 
     @XViewColumn()
     title: string;
@@ -20,10 +20,10 @@ export class PersonalityTraitCategoryView {
 
     @XViewColumn()
     maxDescription: string;
-    
-    @XViewColumn()
-    maxTipsCount: number;
 
     @XViewColumn()
     minTipsCount: number;
+
+    @XViewColumn()
+    maxTipsCount: number;
 }

@@ -1,7 +1,7 @@
 import { Id } from '@episto/commontypes';
 import { XORMUtils } from '@episto/x-orm';
 import moment from 'moment';
-import { User } from '../models/entity/misc/User';
+import { User } from '../models/tables/User';
 import { ClassType } from '../services/misc/advancedTypes/ClassType';
 import { KeyofConstrained } from './misc';
 

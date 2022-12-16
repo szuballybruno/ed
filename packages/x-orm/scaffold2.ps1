@@ -1,1 +1,0 @@
-node --experimental-specifier-resolution=node dist/main.js --dbhost=localhost --dbname=localhostDB --dbpassword=$env:PGPASSWORD --dbport=5432 --dbuser=dev_service_user

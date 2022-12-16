@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { VideoPlaybackSession } from '../models/entity/playback/VideoPlaybackSession';
+import { VideoPlaybackSession } from '../models/tables/VideoPlaybackSession';
 import { CourseItemView } from '../models/views/CourseItemView';
 import { PlaylistView } from '../models/views/PlaylistView';
 import { UserPlaylistView } from '../models/views/UserPlaylistView';
@@ -7,7 +7,7 @@ import { PlayerDataDTO } from '@episto/communication';
 import { PlaylistModuleDTO } from '@episto/communication';
 import { VideoPlayerDataDTO } from '@episto/communication';
 import { instantiate } from '@episto/commonlogic';
-import { CourseItemStateType } from '@episto/commontypes';
+import { CourseItemStateType, CourseModeType } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
 import { instatiateInsertEntity } from '../utilities/misc';
 import { PrincipalId } from '@episto/x-core';
@@ -122,7 +122,7 @@ export class PlayerService {
             examPlayerData: examPlayerDTO,
             modulePlayerData: modulePlayerDTO,
             answerSessionId: answerSessionId,
-            courseMode: userCourseBridge.courseMode,
+            courseMode: userCourseBridge.courseMode as CourseModeType,
             courseId: courseId,
             currentPlaylistItemCode: requestedItemCode,
             modules: modules,

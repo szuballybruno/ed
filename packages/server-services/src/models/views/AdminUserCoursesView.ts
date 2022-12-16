@@ -1,5 +1,5 @@
-import { Id } from '@episto/commontypes';
 import { XViewColumn } from '@episto/x-orm';
+import { Id } from '@episto/commontypes';
 
 export class AdminUserCoursesView {
 
@@ -10,10 +10,13 @@ export class AdminUserCoursesView {
     courseId: Id<'Course'>;
 
     @XViewColumn()
+    isAccessible: boolean;
+
+    @XViewColumn()
     isAssigned: boolean;
 
     @XViewColumn()
-    isAccessible: boolean;
+    courseVersionId: Id<'CourseVersion'>;
 
     @XViewColumn()
     title: string;
@@ -25,16 +28,10 @@ export class AdminUserCoursesView {
     startDate: Date;
 
     @XViewColumn()
-    correctAnswerRate: number;
-
-    @XViewColumn()
     courseProgressPercentage: number;
 
     @XViewColumn()
     completedVideoCount: number;
-
-    @XViewColumn()
-    completedExamCount: number;
 
     @XViewColumn()
     totalSpentSeconds: number;
@@ -46,14 +43,41 @@ export class AdminUserCoursesView {
     answeredPractiseQuestionCount: number;
 
     @XViewColumn()
+    requiredCompletionDate: Date;
+
+    @XViewColumn()
+    tempomatMode: string;
+
+    @XViewColumn()
+    originalEstimatedCompletionDate: Date;
+
+    @XViewColumn()
+    totalItemCount: number;
+
+    @XViewColumn()
+    totalCompletedItemCount: number;
+
+    @XViewColumn()
+    differenceFromAveragePerformancePercentage: number;
+
+    @XViewColumn()
+    performancePercentage: number;
+
+    @XViewColumn()
+    avgPerformance: number;
+
+    @XViewColumn()
     isFinalExamCompleted: boolean;
 
     @XViewColumn()
-    requiredCompletionDate: Date;
-}
+    correctAnswerRate: number;
 
-export class UserCourseStatsViewWithTempomatData extends AdminUserCoursesView {
-    previsionedCompletionDate: Date;
-    lagBehindPercentage: number;
-    recommendedItemsPerWeek: number;
+    @XViewColumn()
+    completedExamCount: number;
+
+    @XViewColumn()
+    recommendedVideosForPractiseCount: number;
+
+    @XViewColumn()
+    isTempomatReady: boolean;
 }

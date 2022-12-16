@@ -19,6 +19,9 @@ export class UserModuleStatsView {
     moduleProgress: number;
 
     @XViewColumn()
+    performancePercentage: number;
+
+    @XViewColumn()
     lastExamScore: number;
 
     @XViewColumn()
@@ -26,7 +29,4 @@ export class UserModuleStatsView {
 
     @XViewColumn()
     videosToBeRepeatedCount: number;
-
-    @XViewColumn()
-    asd: number;
 }

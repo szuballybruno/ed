@@ -2,25 +2,31 @@ import { XViewColumn } from '@episto/x-orm';
 import { Id } from '@episto/commontypes';
 
 export class UserAnswerView {
-    
-    @XViewColumn()
-    userId: Id<'User'>;
 
     @XViewColumn()
     givenAnswerId: Id<'GivenAnswer'>;
 
     @XViewColumn()
-    answerSessionId: Id<'AnswerSession'>;
-
-    @XViewColumn()
-    courseId: Id<'Course'>;
-
-    // TODO
-    isCorrect: boolean;
+    givenAnswerIsCorrect: boolean;
 
     @XViewColumn()
     elapsedSeconds: number;
 
-    // TODO
-    givenAnswerType: string;
+    @XViewColumn()
+    answerSessionId: Id<'AnswerSession'>;
+
+    @XViewColumn()
+    userId: Id<'User'>;
+
+    @XViewColumn()
+    videoId: Id<'Video'>;
+
+    @XViewColumn()
+    examId: Id<'Exam'>;
+
+    @XViewColumn()
+    courseId: Id<'Course'>;
+
+    @XViewColumn()
+    answerSessionType: string;
 }

@@ -4,13 +4,50 @@ import { Id } from '@episto/commontypes';
 export class CourseStateView {
 
     @XViewColumn()
-    courseId: Id<'Course'>;
+    id: Id<'CourseState'>;
+
+    @XViewColumn()
+    creationDate: Date;
+
+    @XViewColumn()
+    startDate: Date;
+
+    @XViewColumn()
+    courseMode: string;
+
+    @XViewColumn()
+    currentItemCode: string;
+
+    @XViewColumn()
+    stageName: string;
+
+    @XViewColumn()
+    tempomatMode: string;
+
+    @XViewColumn()
+    originalEstimatedCompletionDate: Date;
+
+    @XViewColumn()
+    requiredCompletionDate: Date;
+
     @XViewColumn()
     userId: Id<'User'>;
+
+    @XViewColumn()
+    courseId: Id<'Course'>;
+
+    @XViewColumn()
+    lastInteractionDate: Date;
+
     @XViewColumn()
     isCurrent: boolean;
+
     @XViewColumn()
-    inProgress: boolean;
+    hasBridge: boolean;
+
     @XViewColumn()
     isCompleted: boolean;
+
+    @XViewColumn()
+    inProgress: boolean;
 }

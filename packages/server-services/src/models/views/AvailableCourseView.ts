@@ -1,18 +1,22 @@
 import { XViewColumn } from '@episto/x-orm';
-import { CourseStageNameType } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
 
-
 export class AvailableCourseView {
-
-    @XViewColumn()
-    courseId: Id<'Course'>;
 
     @XViewColumn()
     userId: Id<'User'>;
 
     @XViewColumn()
+    courseId: Id<'Course'>;
+
+    @XViewColumn()
+    title: string;
+
+    @XViewColumn()
     canView: boolean;
+
+    @XViewColumn()
+    filePath: string;
 
     @XViewColumn()
     isCompleted: boolean;
@@ -21,22 +25,13 @@ export class AvailableCourseView {
     isStarted: boolean;
 
     @XViewColumn()
+    subCategoryId: Id<'CourseCategory'>;
+
+    @XViewColumn()
     isFeatured: boolean;
 
     @XViewColumn()
     isRecommended: boolean;
-
-    @XViewColumn()
-    currentItemCode: string;
-
-    @XViewColumn()
-    stageName: CourseStageNameType;
-
-    @XViewColumn()
-    title: string;
-
-    @XViewColumn()
-    filePath: string;
 
     @XViewColumn()
     categoryId: Id<'CourseCategory'>;
@@ -45,10 +40,25 @@ export class AvailableCourseView {
     categoryName: string;
 
     @XViewColumn()
-    subCategoryId: Id<'CourseCategory'>;
+    subCategoryName: string;
 
     @XViewColumn()
-    subCategoryName: string;
+    currentItemCode: string;
+
+    @XViewColumn()
+    stageName: string;
+
+    @XViewColumn()
+    requiredCompletionDate: Date;
+
+    @XViewColumn()
+    completedVideoCount: number;
+
+    @XViewColumn()
+    finalExamScorePercentage: number;
+
+    @XViewColumn()
+    teacherId: Id<'Teacher'>;
 
     @XViewColumn()
     teacherFirstName: string;
@@ -67,13 +77,4 @@ export class AvailableCourseView {
 
     @XViewColumn()
     benchmark: number;
-
-    @XViewColumn()
-    completedVideoCount: number;
-
-    @XViewColumn()
-    requiredCompletionDate: Date;
-
-    @XViewColumn()
-    finalExamScorePercentage: number;
 }

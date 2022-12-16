@@ -1,7 +1,6 @@
 import { XViewColumn } from '@episto/x-orm';
 import { Id } from '@episto/commontypes';
 
-
 export class CoursesProgressListView {
 
     @XViewColumn()
@@ -11,10 +10,13 @@ export class CoursesProgressListView {
     courseId: Id<'Course'>;
 
     @XViewColumn()
+    title: string;
+
+    @XViewColumn()
     canView: boolean;
 
     @XViewColumn()
-    teacherId: Id<'User'>;
+    filePath: string;
 
     @XViewColumn()
     isCompleted: boolean;
@@ -23,22 +25,40 @@ export class CoursesProgressListView {
     isStarted: boolean;
 
     @XViewColumn()
-    currentItemCode: string;
-
-    // TODO
-    continueItemCode: string;
+    subCategoryId: Id<'SubCategory'>;
 
     @XViewColumn()
-    title: string;
+    isFeatured: boolean;
 
     @XViewColumn()
-    filePath: string;
+    isRecommended: boolean;
+
+    @XViewColumn()
+    categoryId: Id<'Category'>;
 
     @XViewColumn()
     categoryName: string;
 
     @XViewColumn()
     subCategoryName: string;
+
+    @XViewColumn()
+    currentItemCode: string;
+
+    @XViewColumn()
+    stageName: string;
+
+    @XViewColumn()
+    requiredCompletionDate: Date;
+
+    @XViewColumn()
+    completedVideoCount: number;
+
+    @XViewColumn()
+    finalExamScorePercentage: number;
+
+    @XViewColumn()
+    teacherId: Id<'Teacher'>;
 
     @XViewColumn()
     teacherFirstName: string;
@@ -49,30 +69,12 @@ export class CoursesProgressListView {
     @XViewColumn()
     totalVideoSumLengthSeconds: number;
 
-    // TODO
-    totalCourseItemCount: number;
-
-    // TODO
-    completedCourseItemCount: number;
-
     @XViewColumn()
     totalVideoCount: number;
 
     @XViewColumn()
-    completedVideoCount: number;
+    difficulty: number;
 
-    // TODO
-    totalVideoQuestionCount: number;
-
-    // TODO
-    answeredVideoQuestionCount: number;
-
-    // TODO
-    examSuccessRateAverage: number;
-
-    // TODO
-    questionSuccessRate: number;
-
-    // TODO
-    finalExamSuccessRate: number;
+    @XViewColumn()
+    benchmark: number;
 }

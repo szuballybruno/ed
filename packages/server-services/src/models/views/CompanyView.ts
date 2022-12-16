@@ -1,7 +1,5 @@
-import { DeleteDateColumn, ViewColumn, ViewEntity } from '../MyORM';
-import { DeletionDateColumn, XViewColumn } from '@episto/x-orm';
+import { XViewColumn } from '@episto/x-orm';
 import { Id } from '@episto/commontypes';
-
 
 export class CompanyView {
 
@@ -11,9 +9,8 @@ export class CompanyView {
     @XViewColumn()
     companyId: Id<'Company'>;
 
-    @DeletionDateColumn('bool')
-    @DeleteDateColumn()
-    isDeleted: Date;
+    @XViewColumn()
+    isDeleted: boolean;
 
     @XViewColumn()
     companyName: string;

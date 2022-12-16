@@ -1,22 +1,20 @@
 import { XViewColumn } from '@episto/x-orm';
-import { PermissionCodeType, PermissionScopeType } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
-
 
 export class AssignablePermissionView {
 
     @XViewColumn()
-    assigneeUserId: Id<'User'>;
+    assigneeUserId: Id<'AssigneeUser'>;
 
     @XViewColumn()
-    contextCompanyId: Id<'Company'>;
+    contextCompanyId: Id<'ContextCompany'>;
 
     @XViewColumn()
     permissionId: Id<'Permission'>;
 
     @XViewColumn()
-    permissionCode: PermissionCodeType;
+    permissionCode: string;
 
     @XViewColumn()
-    permissionScope: PermissionScopeType;
+    permissionScope: string;
 }

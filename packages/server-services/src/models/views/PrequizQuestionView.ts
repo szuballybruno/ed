@@ -1,7 +1,6 @@
 import { XViewColumn } from '@episto/x-orm';
 import { Id } from '@episto/commontypes';
 
-
 export class PrequizQuestionView {
 
     @XViewColumn()
@@ -14,19 +13,10 @@ export class PrequizQuestionView {
     isNumericAnswer: boolean;
 
     @XViewColumn()
-    answerId: Id<'Answer'>;
-
-    @XViewColumn()
-    answerText: string;
-
-    @XViewColumn()
     minValue: number;
 
     @XViewColumn()
     maxValue: number;
-
-    @XViewColumn()
-    stepValue: number;
 
     @XViewColumn()
     minLabel: string;
@@ -35,5 +25,14 @@ export class PrequizQuestionView {
     maxLabel: string;
 
     @XViewColumn()
+    stepValue: number;
+
+    @XViewColumn()
     valuePostfix: string;
+
+    @XViewColumn()
+    answerId: Id<'Answer'>;
+
+    @XViewColumn()
+    answerText: string;
 }

@@ -1,5 +1,4 @@
 import { XViewColumn } from '@episto/x-orm';
-import { CourseVisibilityType } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
 
 export class CourseAdminDetailedView {
@@ -23,19 +22,7 @@ export class CourseAdminDetailedView {
     benchmark: number;
 
     @XViewColumn()
-    isPrecourseSurveyRequired: boolean;
-
-    @XViewColumn()
     previouslyCompletedCount: number;
-
-    @XViewColumn()
-    humanSkillBenefitsDescription: string;
-
-    @XViewColumn()
-    technicalRequirementsDescription: string;
-
-    @XViewColumn()
-    visibility: CourseVisibilityType;
 
     @XViewColumn()
     languageName: string;
@@ -47,7 +34,19 @@ export class CourseAdminDetailedView {
     skillBenefits: string;
 
     @XViewColumn()
+    visibility: string;
+
+    @XViewColumn()
     humanSkillBenefits: string;
+
+    @XViewColumn()
+    humanSkillBenefitsDescription: string;
+
+    @XViewColumn()
+    technicalRequirementsDescription: string;
+
+    @XViewColumn()
+    isPrecourseSurveyRequired: boolean;
 
     @XViewColumn()
     categoryId: Id<'CourseCategory'>;

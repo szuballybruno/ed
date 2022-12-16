@@ -1,7 +1,7 @@
 import { UploadedFile } from 'express-fileupload';
 import { getVideoDurationInSeconds } from 'get-video-duration';
-import { VideoData } from '../models/entity/video/VideoData';
-import { VideoVersion } from '../models/entity/video/VideoVersion';
+import { VideoData } from '../models/tables/VideoData';
+import { VideoVersion } from '../models/tables/VideoVersion';
 import { QuestionDataView } from '../models/views/QuestionDataView';
 import { VideoPlayerDataView } from '../models/views/VideoPlayerDataView';
 import { AnswerQuestionDTO } from '@episto/communication';

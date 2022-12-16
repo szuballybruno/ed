@@ -10,6 +10,9 @@ export class CorrectAnswerRatesSplitView {
     courseId: Id<'Course'>;
 
     @XViewColumn()
+    moduleId: Id<'Module'>;
+
+    @XViewColumn()
     startDate: Date;
 
     @XViewColumn()

@@ -1,4 +1,5 @@
-export { LiveSchemaProvider as XOrmConnectionService } from "./LiveSchemaProvider";
+export { LiveSchemaProvider } from "./LiveSchemaProvider";
+export { SchemaValidator } from "./SchemaValidator";
 export { XQueryBuilder } from './XQueryBuilder';
 export { XQueryBuilderCore } from './XQueryBuilderCore';
 export { XORMUtils } from './XORMUtils';

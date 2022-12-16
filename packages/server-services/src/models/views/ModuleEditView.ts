@@ -1,7 +1,6 @@
 import { XViewColumn } from '@episto/x-orm';
 import { Id } from '@episto/commontypes';
 
-
 export class ModuleEditView {
 
     @XViewColumn()
@@ -11,10 +10,10 @@ export class ModuleEditView {
     moduleId: Id<'Module'>;
 
     @XViewColumn()
-    isPretestModule: boolean;
+    courseVersionId: Id<'CourseVersion'>;
 
     @XViewColumn()
-    courseVersionId: Id<'CourseVersion'>;
+    isPretestModule: boolean;
 
     @XViewColumn()
     name: string;
@@ -26,5 +25,5 @@ export class ModuleEditView {
     orderIndex: number;
 
     @XViewColumn()
-    coverFilePath: string | null;
+    coverFilePath: string;
 }

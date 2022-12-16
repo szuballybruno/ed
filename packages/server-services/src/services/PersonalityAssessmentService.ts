@@ -1,5 +1,5 @@
-import { DailyTip } from '../models/entity/misc/DailyTip';
-import { PersonalityTraitCategory } from '../models/entity/misc/PersonalityTraitCategory';
+import { DailyTip } from '../models/tables/DailyTip';
+import { PersonalityTraitCategory } from '../models/tables/PersonalityTraitCategory';
 import { PersonalityAssessmentDTO } from '@episto/communication';
 import { PersonalityCategoryTraitDTO } from '@episto/communication';
 import { PersonalityChartDataDTO } from '@episto/communication';

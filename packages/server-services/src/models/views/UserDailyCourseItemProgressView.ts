@@ -1,7 +1,6 @@
 import { XViewColumn } from '@episto/x-orm';
 import { Id } from '@episto/commontypes';
 
-
 export class UserDailyCourseItemProgressView {
 
     @XViewColumn()
@@ -20,8 +19,8 @@ export class UserDailyCourseItemProgressView {
     completedPercentage: number;
 
     @XViewColumn()
-    isCurrent: number;
+    offsetDaysFromStart: number;
 
     @XViewColumn()
-    offsetDaysFromStart: number;
+    isCurrent: boolean;
 }

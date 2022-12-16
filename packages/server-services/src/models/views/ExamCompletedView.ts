@@ -1,30 +1,35 @@
 import { XViewColumn } from '@episto/x-orm';
 import { Id } from '@episto/commontypes';
 
-
 export class ExamCompletedView {
-	
-	@XViewColumn()
-	userId: Id<'User'>;
-	
-    // TODO
-	examId: Id<'Exam'>;
 
-    // TODO
-	courseId: Id<'Course'>;
-	
-	@XViewColumn()
-	isFinalExam: number;
+    @XViewColumn()
+    userId: Id<'User'>;
 
-	@XViewColumn()
-	orderIndex: number;
+    @XViewColumn()
+    examVersionId: Id<'ExamVersion'>;
 
-	@XViewColumn()
-	successfulSessionCount: boolean;
+    @XViewColumn()
+    courseVersionId: Id<'CourseVersion'>;
 
-	@XViewColumn()
-	hasSuccessfulSession: boolean;
-	
-	@XViewColumn()
-	singleSuccessfulSession: boolean;
+    @XViewColumn()
+    isFinalExam: boolean;
+
+    @XViewColumn()
+    orderIndex: number;
+
+    @XViewColumn()
+    completedSessionCount: number;
+
+    @XViewColumn()
+    hasCompletedSession: boolean;
+
+    @XViewColumn()
+    successfulSessionCount: number;
+
+    @XViewColumn()
+    hasSuccessfulSession: boolean;
+
+    @XViewColumn()
+    singleSuccessfulSession: boolean;
 }

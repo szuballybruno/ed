@@ -1,7 +1,5 @@
 import { XViewColumn } from '@episto/x-orm';
-import { CourseRatingQuesitonType } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
-
 
 export class CourseRatingQuestionView {
 
@@ -12,7 +10,7 @@ export class CourseRatingQuestionView {
     courseId: Id<'Course'>;
 
     @XViewColumn()
-    groupId: number;
+    groupId: Id<'Group'>;
 
     @XViewColumn()
     groupName: string;
@@ -24,7 +22,7 @@ export class CourseRatingQuestionView {
     questionText: string;
 
     @XViewColumn()
-    questionType: CourseRatingQuesitonType;
+    questionType: string;
 
     @XViewColumn()
     answerValue: number;

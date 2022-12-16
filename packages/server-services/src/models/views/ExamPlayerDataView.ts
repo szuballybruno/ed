@@ -1,7 +1,5 @@
-import {ViewColumn, ViewEntity} from '../MyORM';
-import {DeletionDateColumn, XViewColumn} from '@episto/x-orm';
-import {Id} from '@episto/commontypes';
-
+import { XViewColumn } from '@episto/x-orm';
+import { Id } from '@episto/commontypes';
 
 export class ExamPlayerDataView {
 
@@ -15,11 +13,13 @@ export class ExamPlayerDataView {
     examVersionId: Id<'ExamVersion'>;
 
     @XViewColumn()
-    answerSessionId: Id<'AnswerSession'>;
-
-    @DeletionDateColumn('bool')
-    @XViewColumn()
     isDeleted: boolean;
+
+    @XViewColumn()
+    isPretest: boolean;
+
+    @XViewColumn()
+    isSignup: boolean;
 
     @XViewColumn()
     title: string;
@@ -40,12 +40,6 @@ export class ExamPlayerDataView {
     isFinalExam: boolean;
 
     @XViewColumn()
-    isPretest: boolean;
-
-    @XViewColumn()
-    isSignup: boolean;
-
-    @XViewColumn()
     courseId: Id<'Course'>;
 
     @XViewColumn()
@@ -59,6 +53,18 @@ export class ExamPlayerDataView {
 
     @XViewColumn()
     canRetake: boolean;
+
+    @XViewColumn()
+    answerSessionId: Id<'AnswerSession'>;
+
+    @XViewColumn()
+    correctAnswerCount: number;
+
+    @XViewColumn()
+    totalQuestionCount: number;
+
+    @XViewColumn()
+    correctAnswerRate: number;
 
     @XViewColumn()
     isCompletedPreviously: boolean;

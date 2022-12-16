@@ -1,5 +1,5 @@
-import { Permission } from '../models/entity/authorization/Permission';
-import { PermissionAssignmentBridge } from '../models/entity/authorization/PermissionAssignmentBridge';
+import { Permission } from '../models/tables/Permission';
+import { PermissionAssignmentBridge } from '../models/tables/PermissionAssignmentBridge';
 import { UserPermissionView } from '../models/views/UserPermissionView';
 import { PermissionListDTO } from '@episto/communication';
 import { GetPermissionScope, GetParamByCodeType, PermissionScopeParamType } from '@episto/commontypes';
@@ -106,7 +106,7 @@ export class PermissionService extends QueryServiceBase<Permission> {
     /**
      * TODO wtf 
      */
-    async getPermissionMatrixAsync(userId: Id<'User'>, contextCompanyId: Id<'Company'>) {
+    async getPermissionMatrixAsync(userId: Id<'User'>, contextCompanyId: Id<'Company'>): Promise<PermissionCodeType[]> {
 
         const perms = await this._ormService
             .query(UserPermissionView, { userId, contextCompanyId })
@@ -118,9 +118,8 @@ export class PermissionService extends QueryServiceBase<Permission> {
             .getMany();
 
         return perms
-
             .groupBy(x => x.permissionCode)
-            .map(x => x.first.permissionCode);
+            .map(x => x.first.permissionCode as PermissionCodeType);
 
         // return perms
         //     .map((x): PermissionMatrixDTO => ({

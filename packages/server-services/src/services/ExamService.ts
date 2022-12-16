@@ -1,9 +1,9 @@
-import { ExamData } from '../models/entity/exam/ExamData';
-import { ExamVersion } from '../models/entity/exam/ExamVersion';
-import { AnswerSession } from '../models/entity/misc/AnswerSession';
-import { ExamCompletion } from '../models/entity/misc/ExamCompletion';
-import { ModuleVersion } from '../models/entity/module/ModuleVersion';
-import { QuestionVersion } from '../models/entity/question/QuestionVersion';
+import { ExamData } from '../models/tables/ExamData';
+import { ExamVersion } from '../models/tables/ExamVersion';
+import { AnswerSession } from '../models/tables/AnswerSession';
+import { ExamCompletion } from '../models/tables/ExamCompletion';
+import { ModuleVersion } from '../models/tables/ModuleVersion';
+import { QuestionVersion } from '../models/tables/QuestionVersion';
 import { ExamPlayerDataView } from '../models/views/ExamPlayerDataView';
 import { ExamResultStatsView } from '../models/views/ExamResultStatsView';
 import { ExamResultView } from '../models/views/ExamResultView';

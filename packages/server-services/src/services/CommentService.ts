@@ -1,4 +1,4 @@
-import { Comment } from '../models/entity/misc/Comment';
+import { Comment } from '../models/tables/Comment';
 import { CommentListView } from '../models/views/CommentListView';
 import { LatestVideoView } from '../models/views/LatestVideoView';
 import { CommentCreateDTO } from '@episto/communication';
@@ -58,7 +58,8 @@ export class CommentService extends QueryServiceBase<Comment> {
             text: text,
             userId: userId,
             parentCommentId: replyToCommentId,
-            videoVersionId: latestVideoVersion.videoVersionId
+            videoVersionId: latestVideoVersion.videoVersionId,
+            videoId: latestVideoVersion.videoId
         });
 
         await this._ormService

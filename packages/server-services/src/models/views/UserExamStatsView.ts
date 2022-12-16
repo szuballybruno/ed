@@ -1,17 +1,16 @@
 import { XViewColumn } from '@episto/x-orm';
 import { Id } from '@episto/commontypes';
 
-
 export class UserExamStatsView {
-
-    @XViewColumn()
-    userId: Id<'User'>;
 
     @XViewColumn()
     examId: Id<'Exam'>;
 
     @XViewColumn()
     examTitle: string;
+
+    @XViewColumn()
+    userId: Id<'User'>;
 
     @XViewColumn()
     courseId: Id<'Course'>;
@@ -26,7 +25,7 @@ export class UserExamStatsView {
     shouldPractiseExam: boolean;
 
     @XViewColumn()
-    correctAnswerCount: string;
+    correctAnswerCount: number;
 
     @XViewColumn()
     examLengthSeconds: number;

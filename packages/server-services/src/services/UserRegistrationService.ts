@@ -1,7 +1,7 @@
 import { getPassowrdValidationError } from '@episto/commonlogic';
 import { ErrorWithCode } from '@episto/commontypes';
-import { Company } from '../models/entity/misc/Company';
-import { TokenPair } from '../models/TokenPair';
+import { Company } from '../models/tables/Company';
+import { TokenPair } from '../models/misc/TokenPair';
 import { newNotImplemented } from '../utilities/helpers';
 import { ActivationCodeService } from './ActivationCodeService';
 import { AuthenticationService } from './AuthenticationService';

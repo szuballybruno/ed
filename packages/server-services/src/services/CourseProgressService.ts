@@ -5,7 +5,7 @@ import { CourseProgressDTO } from '@episto/communication';
 import { CourseProgressShortDTO } from '@episto/communication';
 import { UserCoursesDataDTO } from '@episto/communication';
 import { instantiate } from '@episto/commonlogic';
-import { Id } from '@episto/commontypes';
+import { CourseStageNameType, Id } from '@episto/commontypes';
 import { PrincipalId } from '@episto/x-core';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
@@ -97,7 +97,7 @@ export class CourseProgressService {
             completedCourseItemCount: courseProgress.completedCourseItemCount,
             progressPercentage: courseProgress.progressPercentage,
             currentItemCode: courseProgress.currentItemCode,
-            currentStageName: courseProgress.currentStageName,
+            currentStageName: courseProgress.currentStageName as CourseStageNameType,
             nextItems: courseProgress.currentStageName === 'watch' ? nextItems : []
         });
     }

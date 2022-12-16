@@ -1,8 +1,8 @@
 import { CourseUserPresetType, Id } from '@episto/commontypes';
 import { AdminCourseUserStatsDTO, CourseLearningDTO, HomePageStatsDTO, UserCourseStatsDTO, UserCourseStatsOverviewDTO, UserExamStatsDTO, UserStatisticsDTO, UserLearningPageStatsDTO, UserModuleStatsDTO, UserVideoStatsDTO } from '@episto/communication';
 import { PrincipalId } from '@episto/x-core';
-import { User } from '../models/entity/misc/User';
-import { TempomatDataModel } from '../models/TempomatDataModel';
+import { User } from '../models/tables/User';
+import { TempomatDataModel } from '../models/misc/TempomatDataModel';
 import { AdminCourseUserStatsView } from '../models/views/AdminCourseUserStatsView';
 import { AdminUserCoursesView } from '../models/views/AdminUserCoursesView';
 import { CourseLearningStatsView } from '../models/views/CourseLearningStatsView';

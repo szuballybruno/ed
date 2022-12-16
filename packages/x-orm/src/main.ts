@@ -2,6 +2,7 @@ import { initJsExtensions } from "@episto/x-core";
 import { Scaffolder } from "./Scaffold";
 import { SimpleSQLConnectionService } from "./SimpleSQLConnectionService";
 import { LiveSchemaProvider } from "./LiveSchemaProvider";
+import { existsSync, readFileSync } from "fs";
 
 initJsExtensions();
 
@@ -9,7 +10,7 @@ process
     .on('uncaughtException', function (exception) {
 
         console.error(exception);
-        throw exception; 
+        throw exception;
     });
 
 (async () => {
@@ -37,7 +38,13 @@ process
         });
 
         const connection = new LiveSchemaProvider(sqlConnection);
-        const scaffolder = new Scaffolder(connection);
+
+        const typemapFilePath = './typemap.json';
+        const typemap = existsSync(typemapFilePath)
+            ? JSON.parse(readFileSync(typemapFilePath, 'utf-8'))
+            : {};
+
+        const scaffolder = new Scaffolder(connection, typemap);
 
         await scaffolder
             .scaffoldAsync('../server-services/src/models');

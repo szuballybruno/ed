@@ -1,7 +1,6 @@
 import { XViewColumn } from '@episto/x-orm';
 import { Id } from '@episto/commontypes';
 
-
 export class ModulePlayerView {
 
     @XViewColumn()
@@ -11,14 +10,14 @@ export class ModulePlayerView {
     moduleVersionId: Id<'ModuleVersion'>;
 
     @XViewColumn()
-    name: string;
-
-    @XViewColumn()
-    description: string;
+    imageFilePath: string;
 
     @XViewColumn()
     orderIndex: number;
 
     @XViewColumn()
-    imageFilePath: string | null;
+    name: string;
+
+    @XViewColumn()
+    description: string;
 }

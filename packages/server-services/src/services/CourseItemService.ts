@@ -1,9 +1,9 @@
-import { Exam } from '../models/entity/exam/Exam';
-import { ExamData } from '../models/entity/exam/ExamData';
-import { ExamVersion } from '../models/entity/exam/ExamVersion';
-import { Video } from '../models/entity/video/Video';
-import { VideoData } from '../models/entity/video/VideoData';
-import { VideoVersion } from '../models/entity/video/VideoVersion';
+import { Exam } from '../models/tables/Exam';
+import { ExamData } from '../models/tables/ExamData';
+import { ExamVersion } from '../models/tables/ExamVersion';
+import { Video } from '../models/tables/Video';
+import { VideoData } from '../models/tables/VideoData';
+import { VideoVersion } from '../models/tables/VideoVersion';
 import { CourseItemEditView } from '../models/views/CourseItemEditView';
 import { CourseContentItemAdminDTO } from '@episto/communication';
 import { CourseItemEditDTO } from '@episto/communication';

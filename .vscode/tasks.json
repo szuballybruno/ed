@@ -154,7 +154,6 @@
                 "group": "run"
             }
         },
-        // build deps
         {
             "label": "build-deps",
             "type": "shell",
@@ -162,6 +161,15 @@
             "problemMatcher": [],
             "presentation": {
                 "group": "deps"
+            }
+        },
+        {
+            "label": "scaffold",
+            "type": "shell",
+            "command": "scaffold.ps1",
+            "problemMatcher": [],
+            "options": {
+                "cwd": "${workspaceFolder}/packages/x-orm"
             }
         },
         {

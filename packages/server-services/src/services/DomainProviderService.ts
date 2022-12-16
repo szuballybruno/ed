@@ -1,5 +1,5 @@
-import { Company } from '../models/entity/misc/Company';
-import { User } from '../models/entity/misc/User';
+import { Company } from '../models/tables/Company';
+import { User } from '../models/tables/User';
 import { Id } from '@episto/commontypes';
 import { GlobalConfigurationService } from './GlobalConfigurationService';
 import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';

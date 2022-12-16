@@ -1,9 +1,9 @@
-import { AnswerData } from '../models/entity/answer/AnswerData';
-import { AnswerVersion } from '../models/entity/answer/AnswerVersion';
-import { AnswerGivenAnswerBridge } from '../models/entity/misc/AnswerGivenAnswerBridge';
-import { AnswerSession } from '../models/entity/misc/AnswerSession';
-import { GivenAnswer } from '../models/entity/misc/GivenAnswer';
-import { GivenAnswerStreak } from '../models/entity/misc/GivenAnswerStreak';
+import { AnswerData } from '../models/tables/AnswerData';
+import { AnswerVersion } from '../models/tables/AnswerVersion';
+import { AnswerGivenAnswerBridge } from '../models/tables/AnswerGivenAnswerBridge';
+import { AnswerSession } from '../models/tables/AnswerSession';
+import { GivenAnswer } from '../models/tables/GivenAnswer';
+import { GivenAnswerStreak } from '../models/tables/GivenAnswerStreak';
 import { GivenAnswerView } from '../models/views/GivenAnswerView';
 import { AnswerEditDTO } from '@episto/communication';
 import { AnswerResultDTO } from '@episto/communication';

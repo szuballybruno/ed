@@ -1,4 +1,4 @@
-import { TeacherInfo } from '../models/entity/misc/TeacherInfo';
+import { TeacherInfo } from '../models/tables/TeacherInfo';
 import { TeacherInfoEditDTO } from '@episto/communication';
 import { Id } from '@episto/commontypes';
 import { PrincipalId } from '@episto/x-core';

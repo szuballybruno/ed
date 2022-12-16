@@ -1,5 +1,5 @@
-import { PrequizCompletion } from '../models/entity/prequiz/PrequizCompletion';
-import { PrequizUserAnswer } from '../models/entity/prequiz/PrequizUserAnswer';
+import { PrequizCompletion } from '../models/tables/PrequizCompletion';
+import { PrequizUserAnswer } from '../models/tables/PrequizUserAnswer';
 import { PrequizQuestionView } from '../models/views/PrequizQuestionView';
 import { PrequizAnswerDTO } from '@episto/communication';
 import { PrequizQuestionDTO } from '@episto/communication';
@@ -84,10 +84,8 @@ export class PrequizService {
         if (!userAnswer)
             return null;
 
-        const answer = userAnswer.answer;
-
         return {
-            answerId: answer?.id ?? null,
+            answerId: userAnswer.answerId ?? null,
             answerValue: userAnswer.value ?? null
         } as PrequizUserAnswerDTO;
     }

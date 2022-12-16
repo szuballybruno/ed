@@ -1,5 +1,5 @@
-import { Id } from '@episto/commontypes';
 import { XViewColumn } from '@episto/x-orm';
+import { Id } from '@episto/commontypes';
 
 export class AdminCourseUserStatsView {
 
@@ -25,6 +25,9 @@ export class AdminCourseUserStatsView {
     completedPercentage: number;
 
     @XViewColumn()
+    performancePercentage: number;
+
+    @XViewColumn()
     completedVideoCount: number;
 
     @XViewColumn()
@@ -43,10 +46,10 @@ export class AdminCourseUserStatsView {
     finalExamScorePercentage: number;
 
     @XViewColumn()
-    summerizedScore: number;
+    requiredCompletionDate: Date;
 
     @XViewColumn()
-    requiredCompletionDate: Date;
+    summerizedScore: number;
 
     @XViewColumn()
     completionDate: Date;
@@ -55,6 +58,14 @@ export class AdminCourseUserStatsView {
     startDate: Date;
 
     @XViewColumn()
-    totalItemCount: number;
-}
+    tempomatMode: string;
 
+    @XViewColumn()
+    originalEstimatedCompletionDate: Date;
+
+    @XViewColumn()
+    totalItemCount: number;
+
+    @XViewColumn()
+    totalCompletedItemCount: number;
+}

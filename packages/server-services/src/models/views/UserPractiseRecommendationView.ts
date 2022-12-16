@@ -3,11 +3,14 @@ import { Id } from '@episto/commontypes';
 
 export class UserPractiseRecommendationView {
 
-    // TODO
-    questionId: Id<'Question'>;
+    @XViewColumn()
+    videoVersionId: Id<'VideoVersion'>;
 
     @XViewColumn()
     videoId: Id<'Video'>;
+
+    @XViewColumn()
+    userId: Id<'User'>;
 
     @XViewColumn()
     courseVersionId: Id<'CourseVersion'>;
@@ -19,9 +22,5 @@ export class UserPractiseRecommendationView {
     totalCorrectAnswerCount: number;
 
     @XViewColumn()
-    userId: Id<'User'>;
-
-    // TODO
-    lastThreeAnswerAverage: number;
-
+    isRecommendedForPractise: boolean;
 }

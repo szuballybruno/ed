@@ -1,5 +1,5 @@
 import { IXGatewayListener } from "@episto/x-gateway";
-import { XOrmConnectionService } from "@episto/x-orm";
+import { SchemaValidator } from "@episto/x-orm";
 import { ServiceProviderInitializator } from "./initApp";
 import { initTurboExpress } from "./instatiateTurboExpress";
 
@@ -18,7 +18,7 @@ export const startServerAsync = async (
         .useTransientServicesContextAsync(async serviceProvider => {
 
             const ormService = serviceProvider
-                .getService(XOrmConnectionService);
+                .getService(SchemaValidator);
 
             await ormService
                 .validateSchemaAsync();

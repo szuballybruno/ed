@@ -1,15 +1,26 @@
 import { XViewColumn } from '@episto/x-orm';
 import { Id } from '@episto/commontypes';
 
-
 export class UserSessionView {
+
+    @XViewColumn()
+    id: Id<'UserSession'>;
+
+    @XViewColumn()
+    startDate: Date;
+
+    @XViewColumn()
+    endDate: Date;
+
+    @XViewColumn()
+    isFinalized: boolean;
 
     @XViewColumn()
     userId: Id<'User'>;
 
-    // TODO
-    sessionStartDate: Date;
+    @XViewColumn()
+    activityStreakId: Id<'ActivityStreak'>;
 
-    // TODO
-    sessionEndDate: Date;
+    @XViewColumn()
+    lengthSeconds: number;
 }

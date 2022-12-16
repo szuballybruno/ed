@@ -2,7 +2,7 @@ import { instantiate } from '@episto/commonlogic';
 import { Id } from '@episto/commontypes';
 import { CourseProgressOverviewDTO, UserActiveCourseDTO, UserProgressChartStep } from '@episto/communication';
 import { DateHelpers, PrincipalId } from '@episto/x-core';
-import { DailyProgressModel } from '../models/DailyProgressModel';
+import { DailyProgressModel } from '../models/misc/DailyProgressModel';
 import { UserActiveCourseView } from '../models/views/UserActiveCourseView';
 import { UserDailyCourseItemProgressView } from '../models/views/UserDailyCourseItemProgressView';
 import { UserWeeklyCourseItemProgressView } from '../models/views/UserWeeklyCourseItemProgressView';

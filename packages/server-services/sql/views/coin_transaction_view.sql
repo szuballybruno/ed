@@ -41,7 +41,8 @@ LEFT JOIN public.question_version qv ON qv.id = ga.question_version_id
 LEFT JOIN public.question_data qd ON qd.id = qv.question_data_id
 
 -- shop item info
-LEFT JOIN public.shop_item_stateful_view sisv ON sisv.id = ca.shop_item_id AND sisv.user_id = ca.user_id
+LEFT JOIN public.shop_item_stateful_view sisv 
+ON sisv.shop_item_id = ca.shop_item_id AND sisv.user_id = ca.user_id
 
 ORDER BY 
 	creation_date DESC

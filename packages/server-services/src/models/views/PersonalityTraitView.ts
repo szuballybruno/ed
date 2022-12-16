@@ -1,39 +1,38 @@
 import { XViewColumn } from '@episto/x-orm';
 import { Id } from '@episto/commontypes';
 
-
 export class PersonalityTraitView {
 
-	@XViewColumn()
-	userId: Id<'User'>;
-	
-	@XViewColumn()
-	traitCategoryId: Id<'PersonalityTraitCategory'>;
-	
-	@XViewColumn()
-	traitCategoryTitle: string;
+    @XViewColumn()
+    userId: Id<'User'>;
 
-	@XViewColumn()
-	minLabel: string;
-	
-	@XViewColumn()
-	maxLabel: string;
-	
-	@XViewColumn()
-	minDescription: string;
+    @XViewColumn()
+    traitCategoryId: Id<'TraitCategory'>;
 
-	@XViewColumn()
-	maxDescription: string;
-	
-	@XViewColumn()
-	minScore: number;
+    @XViewColumn()
+    traitCategoryTitle: string;
 
-	@XViewColumn()
-	maxScore: number;
+    @XViewColumn()
+    maxScore: number;
 
-	@XViewColumn()
-	activeLabel: string;
+    @XViewColumn()
+    minScore: number;
 
-	@XViewColumn()
-	activeDescription: string;
+    @XViewColumn()
+    activeLabel: string;
+
+    @XViewColumn()
+    activeDescription: string;
+
+    @XViewColumn()
+    minLabel: string;
+
+    @XViewColumn()
+    maxLabel: string;
+
+    @XViewColumn()
+    minDescription: string;
+
+    @XViewColumn()
+    maxDescription: string;
 }

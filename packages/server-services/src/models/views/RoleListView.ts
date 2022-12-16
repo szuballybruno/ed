@@ -1,8 +1,5 @@
 import { XViewColumn } from '@episto/x-orm';
-import { DeletionDateColumn } from '@episto/x-orm';
-import { PermissionCodeType } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
-
 
 export class RoleListView {
 
@@ -10,13 +7,12 @@ export class RoleListView {
     userId: Id<'User'>;
 
     @XViewColumn()
+    userEmail: string;
+
+    @XViewColumn()
     ownerCompanyId: Id<'Company'>;
 
     @XViewColumn()
-    ownerName: string;
-
-    @XViewColumn()
-    @DeletionDateColumn('bool')
     isDeleted: boolean;
 
     @XViewColumn()
@@ -26,8 +22,11 @@ export class RoleListView {
     roleName: string;
 
     @XViewColumn()
+    ownerName: string;
+
+    @XViewColumn()
     permissionId: Id<'Permission'>;
 
     @XViewColumn()
-    permissionCode: PermissionCodeType;
+    permissionCode: string;
 }

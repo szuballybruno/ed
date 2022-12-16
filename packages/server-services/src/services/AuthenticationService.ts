@@ -1,7 +1,7 @@
 import { ErrorWithCode, Id } from '@episto/commontypes';
 import { AuthDataDTO } from '@episto/communication';
 import { PrincipalId } from '@episto/x-core';
-import { User } from '../models/entity/misc/User';
+import { User } from '../models/tables/User';
 import { HashService } from './HashService';
 import { LoggerService } from './LoggerService';
 import { GlobalConfigurationService } from './GlobalConfigurationService';
@@ -127,7 +127,7 @@ export class AuthenticationService {
          * Check password 
          */
         const isPasswordCorrect = await this._hashService
-            .comparePasswordAsync(password, user.password);
+            .comparePasswordAsync(password, user.password!);
 
         if (!isPasswordCorrect)
             throw new ErrorWithCode('Invalid password.', 'corrupt_credentials');

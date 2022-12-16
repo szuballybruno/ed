@@ -1,4 +1,4 @@
-import { CourseRatingQuestionUserAnswer } from '../models/entity/courseRating/CourseRatingQuestionUserAnswer';
+import { CourseRatingQuestionUserAnswer } from '../models/tables/CourseRatingQuestionUserAnswer';
 import { CourseRatingGroupDTO } from '@episto/communication';
 import { CourseRatingQuestionAnswersDTO } from '@episto/communication';
 import { CourseRatingQuestionDTO } from '@episto/communication';

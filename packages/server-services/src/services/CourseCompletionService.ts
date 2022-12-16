@@ -1,4 +1,4 @@
-import { CourseCompletion } from '../models/entity/misc/CourseCompletion';
+import { CourseCompletion } from '../models/tables/CourseCompletion';
 import { CourseAllItemsCompletedView } from '../models/views/CourseAllItemsCompletedView';
 import { Id } from '@episto/commontypes';
 import { MapperService } from './MapperService';

@@ -1,6 +1,6 @@
 import { UploadedFile } from 'express-fileupload';
-import { StorageFile } from '../models/entity/misc/StorageFile';
-import { User } from '../models/entity/misc/User';
+import { StorageFile } from '../models/tables/StorageFile';
+import { User } from '../models/tables/User';
 import { ErrorWithCode } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
 import { fileCodes, FileCodesType } from '../static/FileCodes';

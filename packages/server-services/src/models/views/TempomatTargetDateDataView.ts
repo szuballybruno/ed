@@ -1,5 +1,5 @@
-import { Id } from '@episto/commontypes';
 import { XViewColumn } from '@episto/x-orm';
+import { Id } from '@episto/commontypes';
 
 export class TempomatTargetDateDataView {
 
@@ -13,7 +13,7 @@ export class TempomatTargetDateDataView {
     totalItemCount: number;
 
     @XViewColumn()
-    estimatedMinutesPerDay: number | null;
+    estimatedMinutesPerDay: number;
 
     @XViewColumn()
     courseDurationMinutes: number;

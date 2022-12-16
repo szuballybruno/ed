@@ -17,7 +17,8 @@ export const parseOrmSchema = ({
             columns: columnNames
                 .map(columnName => ({
                     name: XORMUtils.toSQLSnakeCasing(columnName),
-                    type: ''
+                    type: '',
+                    isNullable: false
                 })),
             name: XORMUtils.toSQLSnakeCasing(entity.name),
             type

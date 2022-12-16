@@ -4,16 +4,16 @@ import { Id } from '@episto/commontypes';
 export class QuestionDataView {
 
     @XViewColumn()
-    questionId: Id<'Question'>;
+    examVersionId: Id<'ExamVersion'>;
 
     @XViewColumn()
     videoVersionId: Id<'VideoVersion'>;
 
     @XViewColumn()
-    examVersionId: Id<'ExamVersion'>;
+    courseVersionId: Id<'CourseVersion'>;
 
     @XViewColumn()
-    courseVersionId: Id<'CourseVersion'>;
+    questionId: Id<'Question'>;
 
     @XViewColumn()
     questionVersionId: Id<'QuestionVersion'>;
@@ -22,23 +22,26 @@ export class QuestionDataView {
     questionDataId: Id<'QuestionData'>;
 
     @XViewColumn()
-    orderIndex: number;
-
-    @XViewColumn()
     questionText: string;
 
     @XViewColumn()
     imageUrl: string;
 
     @XViewColumn()
+    orderIndex: number;
+
+    @XViewColumn()
     showUpTimeSeconds: number;
 
     @XViewColumn()
-    typeId: number;
+    typeId: Id<'QuesitonType'>;
+
+    @XViewColumn()
+    answerText: string;
 
     @XViewColumn()
     answerVersionId: Id<'AnswerVersion'>;
 
     @XViewColumn()
-    answerText: string;
+    answerId: Id<'Answer'>;
 }

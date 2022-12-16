@@ -1,5 +1,5 @@
-import { Comment } from '../models/entity/misc/Comment';
-import { Like } from '../models/entity/misc/Like';
+import { Comment } from '../models/tables/Comment';
+import { Like } from '../models/tables/Like';
 import { Id } from '@episto/commontypes';
 import { PrincipalId } from '@episto/x-core';
 import { AuthorizationService } from './AuthorizationService';

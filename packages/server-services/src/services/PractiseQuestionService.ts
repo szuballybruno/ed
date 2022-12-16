@@ -1,4 +1,4 @@
-import { AnswerSession } from '../models/entity/misc/AnswerSession';
+import { AnswerSession } from '../models/tables/AnswerSession';
 import { PractiseQuestionInfoView } from '../models/views/PractiseQuestionInfoView';
 import { AnswerQuestionDTO } from '@episto/communication';
 import { Id } from '@episto/commontypes';

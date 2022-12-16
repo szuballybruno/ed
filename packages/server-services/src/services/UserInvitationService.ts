@@ -1,4 +1,4 @@
-import { User } from '../models/entity/misc/User';
+import { User } from '../models/tables/User';
 import { UserEditSaveDTO } from '@episto/communication';
 import { ErrorWithCode } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';

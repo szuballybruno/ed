@@ -1,7 +1,7 @@
 import { instantiate } from '@episto/commonlogic';
 import { CourseModeType, CourseStageNameType, Id } from '@episto/commontypes';
 import { CurrentCourseDataDTO } from '@episto/communication';
-import { UserCourseBridge } from '../models/entity/misc/UserCourseBridge';
+import { UserCourseBridge } from '../models/tables/UserCourseBridge';
 import { CourseStateView } from '../models/views/CourseStateView';
 import { CurrentUserCourseBridgeView } from '../models/views/CurrentUserCourseBridgeView';
 import { PrincipalId } from '@episto/x-core';
@@ -189,7 +189,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
         return instantiate<CurrentCourseDataDTO>({
             courseId: currentCourse.courseId,
             currentItemCode: currentCourse.currentItemCode,
-            stageName: currentCourse.stageName
+            stageName: currentCourse.stageName as CourseStageNameType
         });
     }
 

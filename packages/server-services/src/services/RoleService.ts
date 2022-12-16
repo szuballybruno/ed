@@ -1,7 +1,7 @@
-import { Role } from '../models/entity/authorization/Role';
-import { RoleAssignmentBridge } from '../models/entity/authorization/RoleAssignmentBridge';
-import { RolePermissionBridge } from '../models/entity/authorization/RolePermissionBridge';
-import { User } from '../models/entity/misc/User';
+import { Role } from '../models/tables/Role';
+import { RoleAssignmentBridge } from '../models/tables/RoleAssignmentBridge';
+import { RolePermissionBridge } from '../models/tables/RolePermissionBridge';
+import { User } from '../models/tables/User';
 import { UserPermissionView } from '../models/views/UserPermissionView';
 import { UserRoleView } from '../models/views/UserRoleView';
 import { PermissionListDTO } from '@episto/communication';
@@ -47,7 +47,7 @@ export class RoleService {
                 permissions: items
                     .filter(x => x.permissionId !== null)
                     .map((x): PermissionListDTO => ({
-                        code: x.permissionCode,
+                        code: x.permissionCode as PermissionCodeType,
                         scope: 'COMPANY' // not used 
                     }))
             }));

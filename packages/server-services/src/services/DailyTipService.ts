@@ -1,5 +1,5 @@
-import { DailyTip } from '../models/entity/misc/DailyTip';
-import { DailyTipOccurrence } from '../models/entity/misc/DailyTipOccurrence';
+import { DailyTip } from '../models/tables/DailyTip';
+import { DailyTipOccurrence } from '../models/tables/DailyTipOccurrence';
 import { DailyTipDTO } from '@episto/communication';
 import { DailyTipEditDataDTO } from '@episto/communication';
 import { DailyTipView } from '../models/views/DailyTipView';

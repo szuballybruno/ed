@@ -1,6 +1,6 @@
-import { Question } from '../models/entity/question/Question';
-import { QuestionData } from '../models/entity/question/QuestionData';
-import { QuestionVersion } from '../models/entity/question/QuestionVersion';
+import { Question } from '../models/tables/Question';
+import { QuestionData } from '../models/tables/QuestionData';
+import { QuestionVersion } from '../models/tables/QuestionVersion';
 import { QuestionDataView } from '../models/views/QuestionDataView';
 import { Mutation } from '@episto/communication';
 import { QuestionDTO } from '@episto/communication';
@@ -55,7 +55,7 @@ export class QuestionService {
                     orderIndex: 0,
                     questionText: '',
                     showUpTimeSeconds: null,
-                    typeId: 1,
+                    typeId: 1 as any,
                     moduleId: null as any
                 }),
                 getNewEntity: x => ({}),

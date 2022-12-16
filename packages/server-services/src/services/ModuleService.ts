@@ -1,7 +1,7 @@
-import { Module } from '../models/entity/module/Module';
-import { ModuleData } from '../models/entity/module/ModuleData';
-import { ModuleVersion } from '../models/entity/module/ModuleVersion';
-import { User } from '../models/entity/misc/User';
+import { Module } from '../models/tables/Module';
+import { ModuleData } from '../models/tables/ModuleData';
+import { ModuleVersion } from '../models/tables/ModuleVersion';
+import { User } from '../models/tables/User';
 import { ModuleEditView } from '../models/views/ModuleEditView';
 import { ModulePlayerView } from '../models/views/ModulePlayerView';
 import { CourseContentItemAdminDTO } from '@episto/communication';
