@@ -2,8 +2,11 @@ import { writeFileSync } from "fs";
 import { LiveSchemaProvider } from "./LiveSchemaProvider";
 import { SQLObjectColumnType } from "./models/SQLObjectColumnType";
 import { SQLObjectType } from "./models/SQLObjectType";
+import { getDbSchemaFileTemplate } from "./templates/dbSchemaFileTemplate";
 import { getOrmObjectFileTemplate } from "./templates/ormObjectFileTemplate";
 import { XORMUtils } from "./XORMUtils";
+
+const TAB = '    ';
 
 export class Scaffolder {
 
@@ -44,11 +47,38 @@ export class Scaffolder {
         // write views 
         views
             .forEach(x => writeFileSync(`${sqlFolderPath}/views/${x.capitalizedName}.ts`, x.fileText, 'utf-8'));
+
+        // create dbschema file
+        const schemaFileContents = this
+            ._getDBSchemaFile(liveSchema);
+
+        writeFileSync(`${sqlFolderPath}/DatabaseSchema.ts`, schemaFileContents, 'utf-8');
+    }
+
+    private _getDBSchemaFile(liveSchema: SQLObjectType[]) {
+
+        const imports = liveSchema
+            .map(x => {
+
+                const capName = XORMUtils.toJSCapitalizedName(x.name);
+                return `import { ${capName} } from './${x.type === 'view' ? 'views' : 'tables'}/${capName}';`;
+            })
+            .join('\n');
+
+        const views = liveSchema
+            .filter(x => x.type === 'view')
+            .map(x => `${TAB}${TAB}${XORMUtils.toJSCapitalizedName(x.name)}`)
+            .join(',\n');
+
+        const tables = liveSchema
+            .filter(x => x.type === 'table')
+            .map(x => `${TAB}${TAB}${XORMUtils.toJSCapitalizedName(x.name)}`)
+            .join(',\n');
+
+        return getDbSchemaFileTemplate(imports, views, tables);
     }
 
     private _mapToOrmObjectTexts(liveSchema: SQLObjectType[]) {
-
-        const TAB = '    ';
 
         return liveSchema
             .map(sqlObject => {
