@@ -22,3 +22,4 @@ migration-script.sql
 temp
 /temp
 /libs
+/xlib

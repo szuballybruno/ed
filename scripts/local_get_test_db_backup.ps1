@@ -1,4 +1,8 @@
 
+$dump_path = "$PWD/../epitest/init/database-backup.sql"
+$dump_path_abs = Resolve-Path $dump_path
+echo "dump_path_abs: ${dump_path_abs}"
+
 # backup db
 ./db_dump.ps1 `
     -dbpass "$env:PGPASSWORD" `
@@ -6,4 +10,4 @@
     -dbport '5432' `
     -dbuser 'dev_service_user' `
     -dbname 'localhostDB' `
-    -dbdumppath './../epitest/init/database-backup.sql'
+    -dbdumppath $dump_path

@@ -7,7 +7,7 @@ param (
     [string]$dbdumppath
 )
 
-$nick= "$host/$dbname"
+$nick= "${dbhost}/$dbname"
 
 echo "Backup database... $nick"
 

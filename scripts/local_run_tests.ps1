@@ -1,6 +1,6 @@
 
 # migen 
-./local_migen.ps1
+./local_run_migen.ps1
 
 # backup db
 ./local_get_test_db_backup.ps1

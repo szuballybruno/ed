@@ -1,7 +1,8 @@
 {
   "private": "true",
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "libs/*"
   ],
   "scripts": {
     "bootstrap": "lerna bootstrap",
