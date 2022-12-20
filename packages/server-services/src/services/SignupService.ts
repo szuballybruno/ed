@@ -7,7 +7,7 @@ import { AnswerSession } from '../models/tables/AnswerSession';
 import { GivenAnswer } from '../models/tables/GivenAnswer';
 import { SignupCompletedView } from '../models/views/SignupCompletedView';
 import { SignupQuestionView } from '../models/views/SignupQuestionView';
-import { PrincipalId } from '@episto/x-core';
+import { PrincipalId } from '@thinkhub/x-core';
 import { CompanyService } from './CompanyService';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService';

@@ -15,7 +15,7 @@ import { AnswerQuestionsDTO } from '@episto/communication';
 import { ExamPlayerDataDTO } from '@episto/communication';
 import { ExamResultsDTO } from '@episto/communication';
 import { Id } from '@episto/commontypes';
-import { PrincipalId } from '@episto/x-core';
+import { PrincipalId } from '@thinkhub/x-core';
 import { AuthorizationService } from './AuthorizationService';
 import { CourseCompletionService } from './CourseCompletionService';
 import { LoggerService } from './LoggerService';

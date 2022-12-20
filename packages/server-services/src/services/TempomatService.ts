@@ -1,6 +1,6 @@
 import { instantiate } from '@episto/commonlogic';
 import { Id, TempomatModeType, TempoRatingType } from '@episto/commontypes';
-import { PrincipalId } from '@episto/x-core';
+import { PrincipalId } from '@thinkhub/x-core';
 import { UserCourseBridge } from '../models/tables/UserCourseBridge';
 import { TempomatDataAvgModel } from '../models/misc/TempomatDataAvgModel';
 import { TempomatDataModel } from '../models/misc/TempomatDataModel';

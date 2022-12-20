@@ -1,6 +1,6 @@
 import { CourseUserPresetType, Id } from '@episto/commontypes';
 import { AdminCourseUserStatsDTO, CourseLearningDTO, HomePageStatsDTO, UserCourseStatsDTO, UserCourseStatsOverviewDTO, UserExamStatsDTO, UserStatisticsDTO, UserLearningPageStatsDTO, UserModuleStatsDTO, UserVideoStatsDTO } from '@episto/communication';
-import { PrincipalId } from '@episto/x-core';
+import { PrincipalId } from '@thinkhub/x-core';
 import { User } from '../models/tables/User';
 import { TempomatDataModel } from '../models/misc/TempomatDataModel';
 import { AdminCourseUserStatsView } from '../models/views/AdminCourseUserStatsView';

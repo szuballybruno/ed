@@ -11,10 +11,10 @@
     "watch": "tsc --watch"
   },
   "dependencies": {
-    "@episto/x-orm": "1.0.0",
-    "@episto/x-mapper": "1.0.0",
-    "@episto/x-core": "1.0.0",
-    "@episto/x-injector": "1.0.0",
+    "@thinkhub/x-orm": "1.0.0",
+    "@thinkhub/x-mapper": "1.0.0",
+    "@thinkhub/x-core": "1.0.0",
+    "@thinkhub/x-injector": "1.0.0",
     "@episto/commonlogic": "1.0.0",
     "@episto/commontypes": "1.0.0",
     "@episto/communication": "1.0.0",

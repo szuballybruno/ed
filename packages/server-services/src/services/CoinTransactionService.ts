@@ -4,7 +4,7 @@ import { CoinTransaction } from '../models/tables/CoinTransaction';
 import { GivenAnswer } from '../models/tables/GivenAnswer';
 import { CoinBalanceView } from '../models/views/CoinBalanceView';
 import { CoinTransactionView } from '../models/views/CoinTransactionView';
-import { PrincipalId } from '@episto/x-core';
+import { PrincipalId } from '@thinkhub/x-core';
 import { LoggerService } from './LoggerService';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService';

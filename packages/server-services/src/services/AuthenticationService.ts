@@ -1,6 +1,6 @@
 import { ErrorWithCode, Id } from '@episto/commontypes';
 import { AuthDataDTO } from '@episto/communication';
-import { PrincipalId } from '@episto/x-core';
+import { PrincipalId } from '@thinkhub/x-core';
 import { User } from '../models/tables/User';
 import { HashService } from './HashService';
 import { LoggerService } from './LoggerService';

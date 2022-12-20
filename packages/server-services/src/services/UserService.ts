@@ -1,7 +1,7 @@
 import { instantiate } from '@episto/commonlogic';
 import { ErrorWithCode, Id, UserRegistrationStatusType } from '@episto/commontypes';
 import { BriefUserDataDTO, DepartmentDTO, Mutation, UserAdminListDTO, UserControlDropdownDataDTO, UserCourseStatsDTO, UserDTO, UserEditReadDTO, UserEditSaveDTO, UserEditSimpleDTO } from '@episto/communication';
-import { PrincipalId } from '@episto/x-core';
+import { PrincipalId } from '@thinkhub/x-core';
 import { CourseData } from '../models/tables/CourseData';
 import { AnswerSession } from '../models/tables/AnswerSession';
 import { CourseAccessBridge } from '../models/tables/CourseAccessBridge';

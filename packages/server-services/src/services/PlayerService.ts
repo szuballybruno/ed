@@ -10,7 +10,7 @@ import { instantiate } from '@episto/commonlogic';
 import { CourseItemStateType, CourseModeType } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
 import { instatiateInsertEntity } from '../utilities/misc';
-import { PrincipalId } from '@episto/x-core';
+import { PrincipalId } from '@thinkhub/x-core';
 import { ExamService } from './ExamService';
 import { MapperService } from './MapperService';
 import { readItemCode } from './misc/encodeService';

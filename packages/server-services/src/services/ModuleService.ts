@@ -12,7 +12,7 @@ import { CourseItemSimpleType } from '@episto/commontypes';
 import { VersionCode } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
 import { VersionMigrationContainer } from '../utilities/misc';
-import { PrincipalId } from '@episto/x-core';
+import { PrincipalId } from '@thinkhub/x-core';
 import { AuthorizationService } from './AuthorizationService';
 import { CourseItemService } from './CourseItemService';
 import { FileService } from './FileService';

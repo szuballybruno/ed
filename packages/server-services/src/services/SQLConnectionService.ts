@@ -1,4 +1,4 @@
-import { ISQLConnectionService } from '@episto/x-orm';
+import { ISQLConnectionService } from '@thinkhub/x-orm';
 import Postgres from 'pg';
 import { LoggerService } from './LoggerService';
 import { SQLPoolService } from './SQLPoolService';

@@ -1,9 +1,9 @@
 import { AnswerQuestionDTO, AnswerResultDTO, apiRoutes } from '@episto/communication';
 import { PlayerService } from '@episto/server-services';
 import { VideoService } from '@episto/server-services';
-import { IXGatewayServiceProvider } from '@episto/x-gateway';
+import { IXGatewayServiceProvider } from '@thinkhub/x-gateway';
 import { ActionParams } from '../helpers/ActionParams';
-import { XControllerAction } from '@episto/x-gateway';
+import { XControllerAction } from '@thinkhub/x-gateway';
 import { IController } from '../interfaces/IController';
 
 export class PlayerController implements IController<PlayerController> {

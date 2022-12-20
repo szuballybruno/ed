@@ -1,7 +1,7 @@
 import { instantiate } from '@episto/commonlogic';
 import { CourseVisibilityType, Id, OrderType } from '@episto/commontypes';
 import { AvailableCourseDTO, CourseAdminListItemDTO, CourseBriefData, CourseCategoryDTO, CourseContentAdminDTO, CourseContentItemAdminDTO, CourseDetailsDTO, CourseDetailsEditDataDTO, CourseStartDTO, CreateCourseDTO, GreetingsDataDTO, ModuleEditDTO, Mutation, PlaylistModuleDTO } from '@episto/communication';
-import { PrincipalId } from '@episto/x-core';
+import { PrincipalId } from '@thinkhub/x-core';
 import { UploadedFile } from 'express-fileupload';
 import { TempomatService } from '..';
 import { Course } from '../models/tables/Course';

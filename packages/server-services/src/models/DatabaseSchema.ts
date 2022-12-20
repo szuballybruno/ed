@@ -1,4 +1,4 @@
-import { XDBMSchemaService } from "@episto/x-orm";
+import { XDBMSchemaService } from "@thinkhub/x-orm";
 import { ActivationCode } from './tables/ActivationCode';
 import { ModuleVersion } from './tables/ModuleVersion';
 import { VideoVersion } from './tables/VideoVersion';

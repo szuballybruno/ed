@@ -11,7 +11,7 @@ import { VideoSeekEventDTO } from '@episto/communication';
 import { VideoSamplingResultDTO } from '@episto/communication';
 import { instantiate } from '@episto/commonlogic';
 import { Id } from '@episto/commontypes';
-import { PrincipalId } from '@episto/x-core';
+import { PrincipalId } from '@thinkhub/x-core';
 import { AuthorizationService } from './AuthorizationService';
 import { CoinAcquireService } from './CoinAcquireService';
 import { CourseCompletionService } from './CourseCompletionService';
