@@ -1,8 +1,8 @@
 {
   "private": "true",
   "workspaces": [
-    "packages/*",
-    "thinkhub-xlib/packages/*"
+    "./packages/*",
+    "./thinkhub-xlib/*"
   ],
   "scripts": {
     "bootstrap": "lerna bootstrap",
