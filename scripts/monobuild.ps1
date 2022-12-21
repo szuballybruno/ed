@@ -1,4 +1,5 @@
 param ( 
+    [string] $client_env,
     [switch] $builddeps 
 )
 
@@ -19,7 +20,7 @@ docker build ../../ --file ./../packages/server-api/server.Dockerfile --tag serv
 
 # build client
 echo "------ Building client..."
-docker build ../../ --file ./../packages/frontend/client.Dockerfile --tag client
+docker build ../../ --file ./../packages/frontend/client.Dockerfile --build-arg ENVIRONMENT_NAME=${client_env} --tag client
 
 # build tests-client
 echo "------ Building tests-client..."

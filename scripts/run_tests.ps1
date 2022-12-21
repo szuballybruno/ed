@@ -1,7 +1,7 @@
 $root_folder_path = "${PWD}/../"
 
 # build images
-./monobuild.ps1
+./monobuild.ps1 -client_env "epitest"
 
 # compose images
 docker compose `
