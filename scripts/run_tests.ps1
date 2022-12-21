@@ -1,5 +1,9 @@
 $root_folder_path = "${PWD}/../"
 
+# build images
+./monobuild.ps1
+
+# compose images
 docker compose `
     --file "${root_folder_path}/epitest/testenv.yml" `
     up `
