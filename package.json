@@ -5,6 +5,7 @@
     "./thinkhub-xlib/packages/*"
   ],
   "scripts": {
+    "build-tests-client": "lerna run build --scope=@episto/tests-client --include-dependencies",
     "bootstrap": "lerna bootstrap",
     "build-deps2": "lerna run build --ignore={@episto/server-api,@episto/frontend,@episto/tests-client,@episto/script-producer}",
     "build-deps": "lerna run build --scope={@episto/server-services,@episto/communication,@episto/commontypes}",

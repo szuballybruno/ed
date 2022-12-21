@@ -23,6 +23,7 @@ services:
       - test_net
 
   server: 
+    image: server:latest
     depends_on: 
       database: 
         condition: service_healthy
@@ -38,15 +39,13 @@ services:
       interval: 15s
       timeout: 10s
       retries: 5
-    build: 
-      context: ../
-      dockerfile: ./packages/server-api/backend.Dockerfile
     networks:
       test_net: 
         aliases: 
           - epitest.api.epistogram.com
 
   client: 
+    image: client:latest
     depends_on: 
       database: 
         condition: service_healthy
@@ -60,17 +59,13 @@ services:
       interval: 15s
       timeout: 10s
       retries: 5
-    build: 
-      context: ../
-      dockerfile: ./packages/frontend/frontend.Dockerfile
-      args: 
-        - ENVIRONMENT_NAME=epitest
     networks:
       test_net: 
         aliases: 
           - epitest.epistogram.com
       
   tests-client: 
+    image: tests-client:latest
     depends_on: 
       client:
         condition: service_healthy
@@ -78,9 +73,6 @@ services:
       IS_DOCKERIZED: 'true'
     volumes: 
       - ./out:/app/packages/tests-client/cypress/videos
-    build: 
-      context: ../
-      dockerfile: ./packages/tests-client/testsclient.Dockerfile
     networks:
       - test_net
 
