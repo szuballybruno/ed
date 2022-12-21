@@ -1,12 +1,26 @@
+param ( 
+    [switch] $builddeps 
+)
 
-# build monodeps
-docker build ../../ --file ./../docker/monodeps.Dockerfile --tag monodeps
+if ($builddeps) 
+{
+    # build monodeps
+    echo "------ Building monodeps..."
+    docker build ../../ --file ./../docker/monodeps.Dockerfile --tag monodeps
+}
+
+# build monosrc
+echo "------ Building monosrc..."
+docker build ../../ --file ./../docker/monosrc.Dockerfile --tag monosrc
 
 # build server
-docker build ../../ --file ./../packages/server-api/backend.Dockerfile --tag server
+echo "------ Building server..."
+docker build ../../ --file ./../packages/server-api/server.Dockerfile --tag server
 
 # build client
-docker build ../../ --file ./../packages/frontend/frontend.Dockerfile --tag client
+echo "------ Building client..."
+docker build ../../ --file ./../packages/frontend/client.Dockerfile --tag client
 
 # build tests-client
+echo "------ Building tests-client..."
 docker build ../../ --file ./../packages/tests-client/testsclient.Dockerfile --tag tests-client

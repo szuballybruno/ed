@@ -3,7 +3,7 @@
 $epi_repo_root_folder = "${PWD}/../"
 
 # run script 
-../xlib/packages/x-migen/scripts/run_migen_prod.ps1 `
+./../thinkhub-xlib/packages/x-migen/scripts/run_migen_prod.ps1 `
     -dbname localhostDB `
     -dbhost host.docker.internal `
     -dbusername dev_service_user `
@@ -12,5 +12,5 @@ $epi_repo_root_folder = "${PWD}/../"
     -migenFolderPath `
     -outFolderPath "${epi_repo_root_folder}/epitest/init" `
     -schemaFolderPath "${epi_repo_root_folder}/packages/server-services/sql" `
-    -migen_folder_path "${epi_repo_root_folder}/xlib/packages/x-migen" `
+    -migen_folder_path "${epi_repo_root_folder}/../thinkhub-xlib/packages/x-migen" `
     -mode "SCRIPT_ONLY"

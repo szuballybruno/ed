@@ -1,5 +1,5 @@
 
-$dump_path = "$PWD/../epitest/init/database-backup.sql"
+$dump_path = "$PWD/../epitest/init"
 $dump_path_abs = Resolve-Path $dump_path
 echo "dump_path_abs: ${dump_path_abs}"
 
@@ -10,4 +10,4 @@ echo "dump_path_abs: ${dump_path_abs}"
     -dbport '5432' `
     -dbuser 'dev_service_user' `
     -dbname 'localhostDB' `
-    -dbdumppath $dump_path
+    -dbdumppath "$dump_path/database-backup.sql"

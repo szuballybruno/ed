@@ -3,7 +3,7 @@ ARG ENVIRONMENT_NAME=unknown
 #
 # builder
 #
-FROM monodeps:latest as builder
+FROM monosrc:latest as builder
 ARG ENVIRONMENT_NAME
 WORKDIR /app
 

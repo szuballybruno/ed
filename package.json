@@ -12,11 +12,12 @@
     "build-server": "lerna run build --scope=@episto/server-api --include-dependencies",
     "build-client": "lerna run build --scope=@episto/frontend --include-dependencies",
     "build-serve-client": "lerna run build-serve --scope=@episto/frontend",
-    "start-tests-client": "lerna run start-cy --scope=@episto/tests-client",
     "open-cy": "lerna run open-cy --scope=@episto/tests-client",
-    "start-server": "lerna run start --scope=@episto/server-api",
     "build-script-producer": "lerna run build --scope=@episto/script-producer --include-dependencies",
-    "start-script-producer": "lerna run start --scope=@episto/script-producer"
+    "start-tests-client": "lerna run start-cy --scope=@episto/tests-client",
+    "start-server": "lerna run start --scope=@episto/server-api",
+    "start-script-producer": "lerna run start --scope=@episto/script-producer",
+    "start-server-dist": "lerna run start-dist --scope=@episto/server-api"
   },
   "devDependencies": {
     "lerna": "6.0.3",
