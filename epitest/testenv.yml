@@ -3,14 +3,17 @@ version: '3.3'
 services:
 
   database:
-    image: postgres
+    image: mypg
+    build: 
+      context: ./
+      dockerfile: ./mypg.Dockerfile 
     restart: always
     environment:
       POSTGRES_PASSWORD: "${PGPASSWORD}"
       POSTGRES_USER: 'dev_service_user'
       POSTGRES_DB: 'localhostDB'
-    volumes: 
-      - ./init:/docker-entrypoint-initdb.d
+    # volumes: 
+    #   - ./init:/docker-entrypoint-initdb.d
     expose:
       - 5432
     healthcheck:
