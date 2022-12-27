@@ -18,7 +18,7 @@ param (
     -dbport $src_port `
     -dbuser $src_user `
     -dbname $src_name `
-    -dbdumppath './../temp/transferdump.sql'
+    -dbdumppath './transferdump.sql'
 
 # recreate schema
 ./db_exec_inline.ps1 `
@@ -36,4 +36,4 @@ param (
     -dbport $dest_port `
     -dbuser $dest_user `
     -dbname $dest_name `
-    -scriptpath './../temp/transferdump.sql'
+    -scriptpath './transferdump.sql'

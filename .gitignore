@@ -21,5 +21,4 @@ migration-script.sql
 **/temp
 temp
 /temp
-# thinkhub-xlib
-# /thinkhub-xlib
+transferdump.sql

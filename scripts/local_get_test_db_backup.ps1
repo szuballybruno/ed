@@ -4,7 +4,7 @@ $dump_path_abs = Resolve-Path $dump_path
 echo "dump_path_abs: ${dump_path_abs}"
 
 # backup db
-./db_dump.ps1 `
+./core/db_dump.ps1 `
     -dbpass "$env:PGPASSWORD" `
     -dbhost 'localhost' `
     -dbport '5432' `

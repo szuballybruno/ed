@@ -1,3 +1,8 @@
+#
+# This script will run the prod version of "migen", 
+# with proper paths specified, and generate the migration-script.sql file,
+# which than can be used to migrate the database.
+#
 
 # save repo root folder path
 $epi_repo_root_folder = "${PWD}/../"

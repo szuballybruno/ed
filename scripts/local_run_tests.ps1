@@ -6,4 +6,4 @@
 ./local_get_test_db_backup.ps1
 
 # compose
-./run_tests.ps1
+./run_tests.ps1 # -builddeps
