@@ -38,7 +38,7 @@ jobs:
       - name: Checkout xlib
         uses: actions/checkout@v3
         with:
-          repository: https://github.com/Thinkhub-Software/thinkhub-xlib.git
+          repository: Thinkhub-Software/thinkhub-xlib
           path: '${PWD}/../thinkhub-xlib'
       
       - name: Set up Docker Buildx for layer caching
