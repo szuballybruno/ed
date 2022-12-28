@@ -8,7 +8,7 @@ services:
       context: ./
       dockerfile: ./mypg.Dockerfile 
     environment:
-      POSTGRES_PASSWORD: "${LOCAL_POSTGRES_USER_PASSWORD}"
+      POSTGRES_PASSWORD: "${EPITEST_POSTGRES_USER_PASSWORD}"
       POSTGRES_USER: 'dev_service_user'
       POSTGRES_DB: 'localhostDB'
     expose:

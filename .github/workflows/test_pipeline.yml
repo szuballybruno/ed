@@ -19,6 +19,7 @@ env:
   GCP_PROJECT_NAME: gifted-country-324010
 
   PGPASSWORD: ${{ secrets.DB_SERVICE_USER_PASSWORD }}
+  EPITEST_POSTGRES_USER_PASSWORD: epitest_postgres_user_pass
 
 jobs:
 
