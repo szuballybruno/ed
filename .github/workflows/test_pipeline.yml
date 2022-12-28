@@ -1,23 +1,10 @@
-name: epistogram_deploy_pipeline
+name: epistogram_test_pipeline
 on:
   pull_request:
     branches: [ dev, demo, main ]
 
 env:
-  BRANCH_NAME: ${{ github.event.pull_request.base.ref }}
   DB_NAME: epistogram_${{ github.event.pull_request.base.ref }}
-
-  FRONTEND_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/epistogram-frontend-${{ github.event.pull_request.base.ref }}
-  FRONTEND_CLOUD_RUN_SVC_NAME: epistogram-frontend-${{ github.event.pull_request.base.ref }}
-
-  BACKEND_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/epistogram-backend-${{ github.event.pull_request.base.ref }}
-  BACKEND_CLOUD_RUN_SVC_NAME: epistogram-backend-${{ github.event.pull_request.base.ref }}
-  
-  MIGEN_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/epistogram-migen-${{ github.event.pull_request.base.ref }}
-  
-  CLOUD_SQL_CONNCETION_NAME: gifted-country-324010:europe-central2:epistogram
-  GCP_PROJECT_NAME: gifted-country-324010
-
   PGPASSWORD: ${{ secrets.DB_SERVICE_USER_PASSWORD }}
   EPITEST_POSTGRES_USER_PASSWORD: epitest_postgres_user_pass
 
@@ -42,6 +29,7 @@ jobs:
         with:
           repository: Thinkhub-Software/thinkhub-xlib
           path: '${PWD}/thinkhub-xlib'
+          token: ${{ secrets.XLIB_REPO_READ_PAT }}
           ref: 'master'
       
       - name: Set up Docker Buildx for layer caching
