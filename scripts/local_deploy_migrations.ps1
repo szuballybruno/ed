@@ -11,7 +11,7 @@ $epi_repo_root_folder = "${PWD}/../"
 
 # exec migration script
 ./core/db_exec.ps1 `
-    -dbpass "$env:PGPASSWORD" `
+    -dbpass "$env:LOCAL_POSTGRES_USER_PASSWORD" `
     -dbhost "localhost" `
     -dbport 5432 `
     -dbname "localhostDB" `

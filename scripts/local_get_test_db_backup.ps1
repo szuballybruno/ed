@@ -5,9 +5,9 @@ echo "dump_path_abs: ${dump_path_abs}"
 
 # backup db
 ./core/db_dump.ps1 `
-    -dbpass "$env:PGPASSWORD" `
+    -dbpass "$env:LOCAL_POSTGRES_USER_PASSWORD" `
     -dbhost 'localhost' `
     -dbport '5432' `
     -dbuser 'dev_service_user' `
     -dbname 'localhostDB' `
-    -dbdumppath "$dump_path/database-backup.sql"
+    -dbdumppath "$dump_path/sql/database-backup.sql"

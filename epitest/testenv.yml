@@ -7,13 +7,10 @@ services:
     build: 
       context: ./
       dockerfile: ./mypg.Dockerfile 
-    restart: always
     environment:
-      POSTGRES_PASSWORD: "${PGPASSWORD}"
+      POSTGRES_PASSWORD: "${LOCAL_POSTGRES_USER_PASSWORD}"
       POSTGRES_USER: 'dev_service_user'
       POSTGRES_DB: 'localhostDB'
-    # volumes: 
-    #   - ./init:/docker-entrypoint-initdb.d
     expose:
       - 5432
     healthcheck:
@@ -29,10 +26,7 @@ services:
     depends_on: 
       database: 
         condition: service_healthy
-    restart: always
     environment:
-      PGPASSWORD: "${PGPASSWORD}"
-      IS_DOCKERIZED: 'true'
       ENV_NAME: 'epitest'
     expose: 
       - 5000
@@ -52,8 +46,6 @@ services:
       database: 
         condition: service_healthy
     restart: always
-    environment:
-      IS_DOCKERIZED: 'true'
     expose: 
       - 80
     healthcheck:

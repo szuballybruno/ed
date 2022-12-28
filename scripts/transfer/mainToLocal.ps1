@@ -4,7 +4,7 @@
     -src_port '5432' `
     -src_user 'dev_service_user' `
     -src_name 'epistogram_main' `
-    -dest_pass "$env:PGPASSWORD" `
+    -dest_pass "$env:LOCAL_POSTGRES_USER_PASSWORD" `
     -dest_host 'localhost' `
     -dest_port '5432' `
     -dest_user 'dev_service_user' `

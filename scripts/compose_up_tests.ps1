@@ -7,5 +7,4 @@ docker compose `
     --build `
     --force-recreate `
     --abort-on-container-exit `
-    --renew-anon-volumes `
-    --exit-code-from tests-client
+    --renew-anon-volumes
