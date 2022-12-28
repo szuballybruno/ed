@@ -45,7 +45,6 @@ jobs:
         uses: docker/setup-buildx-action@master
 
       - name: Run migen
-        uses: docker/build-push-action@v3
         run: ${PWD}/../thinkhub-xlib/packages/x-migen/scripts/run_migen_prod.ps1 `
           -dbname '${{env.DB_NAME}}' `
           -dbhost '${{secrets.DB_HOST_ADDRESS}}' `
