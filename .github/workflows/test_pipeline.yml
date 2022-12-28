@@ -32,42 +32,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout branch
+      - name: Checkout
         uses: actions/checkout@v3
+      
+      - name: Checkout xlib
+        uses: actions/checkout@v3
+        with:
+          repository: https://github.com/Thinkhub-Software/thinkhub-xlib.git
+          path: '${PWD}/../thinkhub-xlib'
       
       - name: Set up Docker Buildx for layer caching
         uses: docker/setup-buildx-action@master
 
-      - name: Get migration versions 
-        shell: pwsh
-        working-directory: ./packages/util-script-producer/scripts
-        run: |
-          ./get_mig_versions.ps1 `
-            -dbpass '${{secrets.DB_SERVICE_USER_PASSWORD}}' `
-            -dbhost '${{secrets.DB_HOST_ADDRESS}}' `
-            -dbport '${{secrets.DB_PORT}}' `
-            -dbname '${{env.DB_NAME}}' `
-            -dbuser '${{secrets.DB_SERVICE_USER_NAME}}'
-
-      - name: Build migen
-        uses: docker/build-push-action@v3
-        with:
-          file: ./packages/util-script-producer/docker/migen.Dockerfile
-          context: .
-          cache-from: type=gha,scope=${{ env.GITHUB_REF_NAME }}-migen
-          cache-to: type=gha,scope=${{ env.GITHUB_REF_NAME }}-migen,mode=max
-          outputs: type=docker,dest=migen.tar
-          tags: |
-            migen
-
-      - name: Load migen image
-        run: |
-          docker load < migen.tar 
-
       - name: Run migen
-        run: |
-          docker run \
-            -v ${PWD}/migen_out:/app/packages/util-script-producer/out migen
+        uses: docker/build-push-action@v3
+        run: ${PWD}/../thinkhub-xlib/packages/x-migen/scripts/run_migen_prod.ps1 `
+          -dbname '${{env.DB_NAME}}' `
+          -dbhost '${{secrets.DB_HOST_ADDRESS}}' `
+          -dbpassword '${{secrets.DB_SERVICE_USER_PASSWORD}}' `
+          -dbusername '${{secrets.DB_SERVICE_USER_NAME}}' `
+          -dbport '${{secrets.DB_PORT}}' `
+          -outFolderPath "${PWD}/migen_out" `
+          -schemaFolderPath "${PWD}/../packages/server-services/sql" `
+          -migen_folder_path "${PWD}/../thinkhub-xlib/packages/x-migen" `
+          -mode "SCRIPT_ONLY"
 
       - name: Upload migration-script artifact
         uses: actions/upload-artifact@v3
@@ -75,64 +63,64 @@ jobs:
           name: migration-script
           path: ./migen_out/migration-script.sql
 
-  database_backup:
-    name: Backup database
-    runs-on: ubuntu-latest
+  # database_backup:
+  #   name: Backup database
+  #   runs-on: ubuntu-latest
 
-    steps: 
-      - name: Checkout branch
-        uses: actions/checkout@v3
+  #   steps: 
+  #     - name: Checkout branch
+  #       uses: actions/checkout@v3
 
-      - name: Backup
-        shell: pwsh
-        run: |
-          ./scripts/db_dump.ps1 `
-            -dbpass '${{secrets.DB_SERVICE_USER_PASSWORD}}' `
-            -dbhost '${{secrets.DB_HOST_ADDRESS}}' `
-            -dbport '${{secrets.DB_PORT}}' `
-            -dbname '${{env.DB_NAME}}' `
-            -dbuser '${{secrets.DB_SERVICE_USER_NAME}}' `
-            -dbdumppath ./database-backup.sql
+  #     - name: Backup
+  #       shell: pwsh
+  #       run: |
+  #         ./scripts/db_dump.ps1 `
+  #           -dbpass '${{secrets.DB_SERVICE_USER_PASSWORD}}' `
+  #           -dbhost '${{secrets.DB_HOST_ADDRESS}}' `
+  #           -dbport '${{secrets.DB_PORT}}' `
+  #           -dbname '${{env.DB_NAME}}' `
+  #           -dbuser '${{secrets.DB_SERVICE_USER_NAME}}' `
+  #           -dbdumppath ./database-backup.sql
 
-      - name: Upload database-backup artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: database-backup
-          path: ./database-backup.sql
+  #     - name: Upload database-backup artifact
+  #       uses: actions/upload-artifact@v3
+  #       with:
+  #         name: database-backup
+  #         path: ./database-backup.sql
 
-  # 
-  # ------ testing 
-  # 
+  # # 
+  # # ------ testing 
+  # # 
 
-  run_tests: 
-    name: Run tests
-    runs-on: ubuntu-latest
-    needs: [generate_migration_script,database_backup]
+  # run_tests: 
+  #   name: Run tests
+  #   runs-on: ubuntu-latest
+  #   needs: [generate_migration_script,database_backup]
     
-    steps:
-      - name: Checkout branch
-        uses: actions/checkout@v3
+  #   steps:
+  #     - name: Checkout branch
+  #       uses: actions/checkout@v3
 
-      - name: Download migration-script artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: migration-script
-          path: ./epitest/init
+  #     - name: Download migration-script artifact
+  #       uses: actions/download-artifact@v3
+  #       with:
+  #         name: migration-script
+  #         path: ./epitest/init
 
-      - name: Download database-backup artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: database-backup
-          path: ./epitest/init
+  #     - name: Download database-backup artifact
+  #       uses: actions/download-artifact@v3
+  #       with:
+  #         name: database-backup
+  #         path: ./epitest/init
 
-      - name: Compose up
-        shell: pwsh
-        run: |
-          ./scripts/compose_up_epitest.ps1
+  #     - name: Compose up
+  #       shell: pwsh
+  #       run: |
+  #         ./scripts/compose_up_epitest.ps1
 
-      - name: Upload test-logs artifact
-        uses: actions/upload-artifact@v3
-        if: always()
-        with:
-          name: test-artifacts
-          path: ./epitest/out
+  #     - name: Upload test-logs artifact
+  #       uses: actions/upload-artifact@v3
+  #       if: always()
+  #       with:
+  #         name: test-artifacts
+  #         path: ./epitest/out
