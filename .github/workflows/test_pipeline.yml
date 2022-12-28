@@ -36,12 +36,12 @@ jobs:
         uses: docker/setup-buildx-action@master
 
       - name: Run migen
-        run: ${PWD}/thinkhub-xlib/packages/x-migen/scripts/run_migen_prod.ps1 `
-          -dbname '${{env.DB_NAME}}' `
-          -dbhost '${{secrets.DB_HOST_ADDRESS}}' `
-          -dbpassword '${{secrets.DB_SERVICE_USER_PASSWORD}}' `
-          -dbusername '${{secrets.DB_SERVICE_USER_NAME}}' `
-          -dbport '${{secrets.DB_PORT}}' `
+        run: ./thinkhub-xlib/packages/x-migen/scripts/run_migen_prod.ps1 `
+          -dbname "${{env.DB_NAME}}" `
+          -dbhost "${{secrets.DB_HOST_ADDRESS}}" `
+          -dbpassword "${{secrets.DB_SERVICE_USER_PASSWORD}}" `
+          -dbusername "${{secrets.DB_SERVICE_USER_NAME}}" `
+          -dbport "${{secrets.DB_PORT}}" `
           -outFolderPath "${PWD}/migen_out" `
           -schemaFolderPath "${PWD}/epistogram/packages/server-services/sql" `
           -migen_folder_path "${PWD}/thinkhub-xlib/packages/x-migen" `
