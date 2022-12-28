@@ -40,9 +40,9 @@ jobs:
           -dbpassword "${{secrets.DB_SERVICE_USER_PASSWORD}}" `
           -dbusername "${{secrets.DB_SERVICE_USER_NAME}}" `
           -dbport "${{secrets.DB_PORT}}" `
-          -outFolderPath "./epistogram/migen_out" `
-          -schemaFolderPath "./epistogram/packages/server-services/sql" `
-          -migen_folder_path "./thinkhub-xlib/packages/x-migen" `
+          -outFolderPath "${PWD}/epistogram/migen_out" `
+          -schemaFolderPath "${PWD}/epistogram/packages/server-services/sql" `
+          -migen_folder_path "${PWD}/thinkhub-xlib/packages/x-migen" `
           -mode "SCRIPT_ONLY"
 
       - name: list images
