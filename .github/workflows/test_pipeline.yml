@@ -40,7 +40,7 @@ jobs:
           -dbpassword "${{secrets.DB_SERVICE_USER_PASSWORD}}" `
           -dbusername "${{secrets.DB_SERVICE_USER_NAME}}" `
           -dbport "${{secrets.DB_PORT}}" `
-          -outFolderPath "./migen_out" `
+          -outFolderPath "./epistogram/migen_out" `
           -schemaFolderPath "./epistogram/packages/server-services/sql" `
           -migen_folder_path "./thinkhub-xlib/packages/x-migen" `
           -mode "SCRIPT_ONLY"
@@ -53,7 +53,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: migration-script
-          path: ./migen_out/migration-script.sql
+          path: ./epistogram/migen_out/migration-script.sql
 
   # database_backup:
   #   name: Backup database
