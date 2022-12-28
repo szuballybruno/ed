@@ -34,26 +34,28 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          path: '${PWD}/epistogram'
       
       - name: Checkout xlib
         uses: actions/checkout@v3
         with:
           repository: Thinkhub-Software/thinkhub-xlib
-          path: '${PWD}/../thinkhub-xlib'
+          path: '${PWD}/thinkhub-xlib'
       
       - name: Set up Docker Buildx for layer caching
         uses: docker/setup-buildx-action@master
 
       - name: Run migen
-        run: ${PWD}/../thinkhub-xlib/packages/x-migen/scripts/run_migen_prod.ps1 `
+        run: ${PWD}/thinkhub-xlib/packages/x-migen/scripts/run_migen_prod.ps1 `
           -dbname '${{env.DB_NAME}}' `
           -dbhost '${{secrets.DB_HOST_ADDRESS}}' `
           -dbpassword '${{secrets.DB_SERVICE_USER_PASSWORD}}' `
           -dbusername '${{secrets.DB_SERVICE_USER_NAME}}' `
           -dbport '${{secrets.DB_PORT}}' `
           -outFolderPath "${PWD}/migen_out" `
-          -schemaFolderPath "${PWD}/../packages/server-services/sql" `
-          -migen_folder_path "${PWD}/../thinkhub-xlib/packages/x-migen" `
+          -schemaFolderPath "${PWD}/epistogram/packages/server-services/sql" `
+          -migen_folder_path "${PWD}/thinkhub-xlib/packages/x-migen" `
           -mode "SCRIPT_ONLY"
 
       - name: Upload migration-script artifact
