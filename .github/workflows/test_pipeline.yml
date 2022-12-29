@@ -109,8 +109,7 @@ jobs:
 
       - name: Compose up
         shell: pwsh
-        run: |
-          ./epistogram/scripts/compose_up_epitest.ps1
+        run: ./epistogram/scripts/compose_up_tests.ps1
 
       - name: Upload test-logs artifact
         uses: actions/upload-artifact@v3
