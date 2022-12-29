@@ -95,17 +95,17 @@ jobs:
           token: ${{ secrets.XLIB_REPO_READ_PAT }}
           ref: 'master'
 
-      # - name: Download migration-script artifact
-      #   uses: actions/download-artifact@v3
-      #   with:
-      #     name: migration-script
-      #     path: ./epistogram/epitest/init
+      - name: Download migration-script artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: migration-script
+          path: ./epistogram/epitest/init
 
-      # - name: Download database-backup artifact
-      #   uses: actions/download-artifact@v3
-      #   with:
-      #     name: database-backup
-      #     path: ./epistogram/epitest/init
+      - name: Download database-backup artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: database-backup
+          path: ./epistogram/epitest/init
 
       - name: Build containers
         shell: pwsh
