@@ -3,6 +3,8 @@ param (
     [switch] $builddeps 
 )
 
+echo "Build deps: ${buiddeps}"
+
 if ($builddeps) 
 {
     # build monodeps
