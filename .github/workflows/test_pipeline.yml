@@ -107,9 +107,13 @@ jobs:
       #     name: database-backup
       #     path: ./epistogram/epitest/init
 
+      - name: Build containers
+        shell: pwsh
+        run: ./epistogram/scripts/monobuild.ps1 -client_env "epitest" -builddeps
+
       - name: Run tests
         shell: pwsh
-        run: ./epistogram/scripts/run_tests.ps1 -builddeps
+        run: ./epistogram/scripts/compose_up_tests.ps1
 
       - name: Upload test-logs artifact
         uses: actions/upload-artifact@v3
