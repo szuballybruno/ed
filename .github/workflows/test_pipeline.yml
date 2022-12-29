@@ -66,7 +66,7 @@ jobs:
       - name: Backup db
         shell: pwsh
         run: |
-          ./scripts/db_dump.ps1 `
+          ./scripts/core/db_dump.ps1 `
             -dbpass '${{secrets.DB_SERVICE_USER_PASSWORD}}' `
             -dbhost '${{secrets.DB_HOST_ADDRESS}}' `
             -dbport '${{secrets.DB_PORT}}' `
