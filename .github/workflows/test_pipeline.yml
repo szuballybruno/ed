@@ -55,30 +55,30 @@ jobs:
           name: migration-script
           path: ./epistogram/migen_out/migration-script.sql
 
-  # database_backup:
-  #   name: Backup database
-  #   runs-on: ubuntu-latest
+  database_backup:
+    name: Backup database
+    runs-on: ubuntu-latest
 
-  #   steps: 
-  #     - name: Checkout branch
-  #       uses: actions/checkout@v3
+    steps: 
+      - name: Checkout branch
+        uses: actions/checkout@v3
 
-  #     - name: Backup
-  #       shell: pwsh
-  #       run: |
-  #         ./scripts/db_dump.ps1 `
-  #           -dbpass '${{secrets.DB_SERVICE_USER_PASSWORD}}' `
-  #           -dbhost '${{secrets.DB_HOST_ADDRESS}}' `
-  #           -dbport '${{secrets.DB_PORT}}' `
-  #           -dbname '${{env.DB_NAME}}' `
-  #           -dbuser '${{secrets.DB_SERVICE_USER_NAME}}' `
-  #           -dbdumppath ./database-backup.sql
+      - name: Backup db
+        shell: pwsh
+        run: |
+          ./scripts/db_dump.ps1 `
+            -dbpass '${{secrets.DB_SERVICE_USER_PASSWORD}}' `
+            -dbhost '${{secrets.DB_HOST_ADDRESS}}' `
+            -dbport '${{secrets.DB_PORT}}' `
+            -dbname '${{env.DB_NAME}}' `
+            -dbuser '${{secrets.DB_SERVICE_USER_NAME}}' `
+            -dbdumppath ./database-backup.sql
 
-  #     - name: Upload database-backup artifact
-  #       uses: actions/upload-artifact@v3
-  #       with:
-  #         name: database-backup
-  #         path: ./database-backup.sql
+      - name: Upload database-backup artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: database-backup
+          path: ./database-backup.sql
 
   # # 
   # # ------ testing 
