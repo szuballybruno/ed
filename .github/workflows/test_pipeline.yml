@@ -10,76 +10,76 @@ env:
 
 jobs:
 
-  generate_migration_script: 
-    name: Generate migration script
-    runs-on: ubuntu-latest
+  # generate_migration_script: 
+  #   name: Generate migration script
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          path: './epistogram'
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
+  #       with:
+  #         path: './epistogram'
       
-      - name: Checkout xlib
-        uses: actions/checkout@v3
-        with:
-          repository: Thinkhub-Software/thinkhub-xlib
-          path: './thinkhub-xlib'
-          token: ${{ secrets.XLIB_REPO_READ_PAT }}
-          ref: 'master'
+  #     - name: Checkout xlib
+  #       uses: actions/checkout@v3
+  #       with:
+  #         repository: Thinkhub-Software/thinkhub-xlib
+  #         path: './thinkhub-xlib'
+  #         token: ${{ secrets.XLIB_REPO_READ_PAT }}
+  #         ref: 'master'
 
-      - name: Run migen
-        shell: pwsh
-        run: ./thinkhub-xlib/packages/x-migen/scripts/run_migen_prod.ps1 `
-          -dbname "${{env.DB_NAME}}" `
-          -dbhost "${{secrets.DB_HOST_ADDRESS}}" `
-          -dbpassword "${{secrets.DB_SERVICE_USER_PASSWORD}}" `
-          -dbusername "${{secrets.DB_SERVICE_USER_NAME}}" `
-          -dbport "${{secrets.DB_PORT}}" `
-          -outFolderPath "${PWD}/epistogram/migen_out" `
-          -schemaFolderPath "${PWD}/epistogram/packages/server-services/sql" `
-          -migen_folder_path "${PWD}/thinkhub-xlib/packages/x-migen" `
-          -mode "SCRIPT_ONLY"
+  #     - name: Run migen
+  #       shell: pwsh
+  #       run: ./thinkhub-xlib/packages/x-migen/scripts/run_migen_prod.ps1 `
+  #         -dbname "${{env.DB_NAME}}" `
+  #         -dbhost "${{secrets.DB_HOST_ADDRESS}}" `
+  #         -dbpassword "${{secrets.DB_SERVICE_USER_PASSWORD}}" `
+  #         -dbusername "${{secrets.DB_SERVICE_USER_NAME}}" `
+  #         -dbport "${{secrets.DB_PORT}}" `
+  #         -outFolderPath "${PWD}/epistogram/migen_out" `
+  #         -schemaFolderPath "${PWD}/epistogram/packages/server-services/sql" `
+  #         -migen_folder_path "${PWD}/thinkhub-xlib/packages/x-migen" `
+  #         -mode "SCRIPT_ONLY"
 
-      - name: list images
-        run: |
-          docker images
+  #     - name: list images
+  #       run: |
+  #         docker images
 
-      - name: Upload migration-script artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: migration-script
-          path: ./epistogram/migen_out/migration-script.sql
+  #     - name: Upload migration-script artifact
+  #       uses: actions/upload-artifact@v3
+  #       with:
+  #         name: migration-script
+  #         path: ./epistogram/migen_out/migration-script.sql
 
-  database_backup:
-    name: Backup database
-    runs-on: ubuntu-latest
+  # database_backup:
+  #   name: Backup database
+  #   runs-on: ubuntu-latest
 
-    steps: 
-      - name: Checkout branch
-        uses: actions/checkout@v3
+  #   steps: 
+  #     - name: Checkout branch
+  #       uses: actions/checkout@v3
 
-      - name: Backup db
-        shell: pwsh
-        run: |
-          ./scripts/core/db_dump.ps1 `
-            -dbpass '${{secrets.DB_SERVICE_USER_PASSWORD}}' `
-            -dbhost '${{secrets.DB_HOST_ADDRESS}}' `
-            -dbport '${{secrets.DB_PORT}}' `
-            -dbname '${{env.DB_NAME}}' `
-            -dbuser '${{secrets.DB_SERVICE_USER_NAME}}' `
-            -dbdumppath ./database-backup.sql
+  #     - name: Backup db
+  #       shell: pwsh
+  #       run: |
+  #         ./scripts/core/db_dump.ps1 `
+  #           -dbpass '${{secrets.DB_SERVICE_USER_PASSWORD}}' `
+  #           -dbhost '${{secrets.DB_HOST_ADDRESS}}' `
+  #           -dbport '${{secrets.DB_PORT}}' `
+  #           -dbname '${{env.DB_NAME}}' `
+  #           -dbuser '${{secrets.DB_SERVICE_USER_NAME}}' `
+  #           -dbdumppath ./database-backup.sql
 
-      - name: Upload database-backup artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: database-backup
-          path: ./database-backup.sql
+  #     - name: Upload database-backup artifact
+  #       uses: actions/upload-artifact@v3
+  #       with:
+  #         name: database-backup
+  #         path: ./database-backup.sql
 
   run_tests: 
     name: Run tests
     runs-on: ubuntu-latest
-    needs: [generate_migration_script,database_backup]
+    # needs: [generate_migration_script,database_backup]
     
     steps:
       - name: Checkout branch
