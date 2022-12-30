@@ -13,7 +13,7 @@ echo "------ Building image: ${tag} - buildx: ${buildx}..."
 if($buildx){
 
     echo "Docker cache type: ${cachetype}"
-    echo "Docker cache scope: ${scope}"
+    echo "Docker cache scope: ${cachescope}"
 
     docker buildx build "${contextpath}" `
         --file "${dockerfile}" `

@@ -118,7 +118,7 @@ jobs:
             -client_env "epitest" `
             -builddeps `
             -buildx `
-            -cachescope ${{ env.BRANCH_NAME }} `
+            -cachescope "${{env.BRANCH_NAME}}" `
             -cachetype "gha"
 
       - name: Run tests
