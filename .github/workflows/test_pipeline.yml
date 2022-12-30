@@ -4,6 +4,7 @@ on:
     branches: [ dev, demo, main ]
 
 env:
+  BRANCH_NAME: ${{ github.event.pull_request.base.ref }}
   DB_NAME: epistogram_${{ github.event.pull_request.base.ref }}
   PGPASSWORD: ${{ secrets.DB_SERVICE_USER_PASSWORD }}
   EPITEST_POSTGRES_USER_PASSWORD: epitest_postgres_user_pass
@@ -117,7 +118,7 @@ jobs:
             -client_env "epitest" `
             -builddeps `
             -buildx `
-            -cachescope ${{ env.GITHUB_REF_NAME }} `
+            -cachescope "${{env.BRANCH_NAME}}" `
             -cachetype "gha"
 
       - name: Run tests
