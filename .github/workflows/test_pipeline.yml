@@ -112,7 +112,13 @@ jobs:
 
       - name: Build containers
         shell: pwsh
-        run: ./epistogram/scripts/monobuild.ps1 -client_env "epitest" -builddeps -buildx
+        run: |
+          ./epistogram/scripts/monobuild.ps1 `
+            -client_env "epitest" `
+            -builddeps `
+            -buildx `
+            -cachescope ${{ env.GITHUB_REF_NAME }} `
+            -cachetype "gha"
 
       - name: Run tests
         shell: pwsh

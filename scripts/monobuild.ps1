@@ -1,7 +1,9 @@
 param ( 
     [string] $client_env = "epitest",
     [switch] $builddeps,
-    [switch] $buildx
+    [switch] $buildx,
+    [string] $cachescope = 'local',
+    [string] $cachetype = 'registry'
 )
 
 $root = Resolve-Path "${PSScriptRoot}/../../"
@@ -20,7 +22,9 @@ if ($builddeps)
         -dockerfile "${episto_root}/docker/monodeps.Dockerfile" `
         -tag "monodeps" `
         -contextpath "${root}" `
-        -buildx:$buildx
+        -buildx:$buildx `
+        -cachescope:$cachescope `
+        -cachetype:$cachetype
 }
 
 # build monosrc
@@ -28,14 +32,18 @@ if ($builddeps)
     -dockerfile "${episto_root}/docker/monosrc.Dockerfile" `
     -tag "monosrc" `
     -contextpath "${root}" `
-    -buildx:$buildx
+    -buildx:$buildx `
+    -cachescope:$cachescope `
+    -cachetype:$cachetype
 
 # build server
 & $imgbuild `
     -dockerfile "${episto_root}/packages/server-api/server.Dockerfile" `
     -tag "server" `
     -contextpath "${root}" `
-    -buildx:$buildx
+    -buildx:$buildx `
+    -cachescope:$cachescope `
+    -cachetype:$cachetype
 
 # build client
 & $imgbuild `
@@ -43,11 +51,15 @@ if ($builddeps)
     -tag "client" `
     -contextpath "${root}" `
     -buildarg "ENVIRONMENT_NAME=${client_env}" `
-    -buildx:$buildx
+    -buildx:$buildx `
+    -cachescope:$cachescope `
+    -cachetype:$cachetype
 
 # build tests-client
 & $imgbuild `
     -dockerfile "${episto_root}/packages/tests-client/testsclient.Dockerfile" `
     -tag "tests-client" `
     -contextpath "${root}" `
-    -buildx:$buildx
+    -buildx:$buildx `
+    -cachescope:$cachescope `
+    -cachetype:$cachetype

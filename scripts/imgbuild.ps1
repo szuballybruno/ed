@@ -3,11 +3,10 @@ param (
     [string] $dockerfile,
     [string] $tag,
     [string] $contextpath,
-    [string] $buildarg = "NULL=NULL"
+    [string] $buildarg = "NULL=NULL",
+    [string] $cachescope = 'local',
+    [string] $cachetype = 'registry'
 )
-
-$cachetype = 'registry'
-$scope = 'local'
 
 echo "------ Building image: ${tag} - buildx: ${buildx}..."
 
@@ -20,8 +19,8 @@ if($buildx){
         --file "${dockerfile}" `
         --tag "$tag" `
         --load `
-        --cache-from "type=${cachetype},scope=${scope}-${tag}" `
-        --cache-to "type=${cachetype},scope=${scope}-${tag},mode=max"
+        --cache-from "type=${cachetype},scope=${cachescope}-${tag}" `
+        --cache-to "type=${cachetype},scope=${cachescope}-${tag},mode=max"
 }
 else {
 
