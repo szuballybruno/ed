@@ -8,7 +8,7 @@ psql -U dev_service_user -d localhostDB -f /docker-entrypoint-initdb.d/sql/user-
 echo "---------- User setup done."
 
 echo "---------- Restoring DB..."
-psql -U dev_service_user -d localhostDB -f /docker-entrypoint-initdb.d/sql/database-backup.sql -v ON_ERROR_STOP=1 > /dev/null
+psql -U dev_service_user -d localhostDB -f /docker-entrypoint-initdb.d/sql/database-backup.sql > /dev/null
 echo "---------- Restoring DB done."
 
 echo "---------- Migrating DB..."
