@@ -3,8 +3,8 @@ echo "---------- POSTGRES_PASSWORD: $POSTGRES_PASSWORD"
 echo "---------- POSTGRES_USER: $POSTGRES_USER"
 echo "---------- POSTGRES_DB: $POSTGRES_DB"
 
-echo "---------- User setup..."
-psql -U dev_service_user -d localhostDB -f /docker-entrypoint-initdb.d/sql/user-setup.sql -v ON_ERROR_STOP=1 > /dev/null
+echo "---------- User setup... "
+psql -U dev_service_user -d localhostDB -f /docker-entrypoint-initdb.d/sql/user-setup.sql -v ON_ERROR_STOP=1
 echo "---------- User setup done."
 
 echo "---------- Restoring DB..."
