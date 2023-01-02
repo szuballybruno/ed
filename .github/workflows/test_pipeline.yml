@@ -103,13 +103,13 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: migration-script
-          path: ./epistogram/epitest/init
+          path: ./epistogram/epitest/init-sql
 
       - name: Download database-backup artifact
         uses: actions/download-artifact@v3
         with:
           name: database-backup
-          path: ./epistogram/epitest/init
+          path: ./epistogram/epitest/init-sql
 
       - name: Build containers
         shell: pwsh
