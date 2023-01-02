@@ -18,9 +18,11 @@ if($buildx){
     docker buildx build "${contextpath}" `
         --file "${dockerfile}" `
         --tag "$tag" `
-        --load `
+        --output "type=oci" `
         --cache-from "type=${cachetype},scope=${cachescope}-${tag}" `
         --cache-to "type=${cachetype},scope=${cachescope}-${tag},mode=max"
+
+    # --output "type=oci,dest=./${tag}-oci.tar" `
 }
 else {
 
