@@ -111,6 +111,11 @@ jobs:
           name: database-backup
           path: ./epistogram/epitest/init
 
+      - name: Debug epitest init
+        run: |
+          ls ./epistogram/epitest/init
+          cat ./epistogram/epitest/init/init-database.sh
+
       - name: Build containers
         shell: pwsh
         run: |
