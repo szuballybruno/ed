@@ -48,9 +48,6 @@ jobs:
           token: ${{ secrets.XLIB_REPO_READ_PAT }}
           ref: 'master'
 
-      # - name: Set up Docker Buildx for layer caching
-      #   uses: docker/setup-buildx-action@master
-
       # ------ set secret env variables
       - name: Set secrets to ${{ github.ref_name }}.config.env file
         run: |
