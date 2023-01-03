@@ -1,1 +1,1 @@
-FROM --platform=linux/arm64 parent:latest
+FROM 0.0.0.0:5005/parent:latest

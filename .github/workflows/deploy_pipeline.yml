@@ -7,10 +7,10 @@ env:
   BRANCH_NAME: ${{ github.ref_name }} 
   DB_NAME: epistogram_${{github.ref_name}}
 
-  CLIENT_WEB_IMAGE_NAME: epistogram-frontend-${{github.ref_name}}-img
+  CLIENT_WEB_IMAGE_NAME: gcr.io/${{secrets.GCP_PROJECT_ID}}/epistogram-frontend-${{github.ref_name}}-img
   FRONTEND_CLOUD_RUN_SVC_NAME: epistogram-frontend-${{github.ref_name}}
 
-  SERVER_API_IMAGE_NAME: epistogram-backend-${{github.ref_name}}-img
+  SERVER_API_IMAGE_NAME: gcr.io/${{secrets.GCP_PROJECT_ID}}/epistogram-backend-${{github.ref_name}}-img
   BACKEND_CLOUD_RUN_SVC_NAME: epistogram-backend-${{github.ref_name}}
   
   CLOUD_SQL_CONNCETION_NAME: gifted-country-324010:europe-central2:epistogram
