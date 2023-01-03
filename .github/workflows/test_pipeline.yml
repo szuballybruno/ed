@@ -42,10 +42,6 @@ jobs:
           -migen_folder_path "${PWD}/thinkhub-xlib/packages/x-migen" `
           -mode "SCRIPT_ONLY"
 
-      - name: list images
-        run: |
-          docker images
-
       - name: Upload migration-script artifact
         uses: actions/upload-artifact@v3
         with:
