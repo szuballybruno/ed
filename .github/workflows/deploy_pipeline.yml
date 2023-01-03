@@ -7,13 +7,11 @@ env:
   BRANCH_NAME: ${{ github.ref_name }} 
   DB_NAME: epistogram_${{github.ref_name}}
 
-  FRONTEND_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/epistogram-frontend-${{ github.ref_name }}
-  FRONTEND_CLOUD_RUN_SVC_NAME: epistogram-frontend-${{ github.ref_name }}
+  CLIENT_WEB_IMAGE_NAME: epistogram-frontend-${{github.ref_name}}-img
+  FRONTEND_CLOUD_RUN_SVC_NAME: epistogram-frontend-${{github.ref_name}}
 
-  BACKEND_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/epistogram-backend-${{ github.ref_name }}
-  BACKEND_CLOUD_RUN_SVC_NAME: epistogram-backend-${{ github.ref_name }}
-  
-  MIGEN_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/epistogram-migen-${{ github.ref_name }}
+  SERVER_API_IMAGE_NAME: epistogram-backend-${{github.ref_name}}-img
+  BACKEND_CLOUD_RUN_SVC_NAME: epistogram-backend-${{github.ref_name}}
   
   CLOUD_SQL_CONNCETION_NAME: gifted-country-324010:europe-central2:epistogram
   GCP_PROJECT_NAME: gifted-country-324010
@@ -69,14 +67,20 @@ jobs:
             -cachescope "${{env.BRANCH_NAME}}" `
             -cachetype "gha"
 
+      # ------ name public images 
+      - name: Name public images 
+        run: |
+          docker image tag client:latest $SERVER_API_IMAGE_NAME
+          docker image tag server:latest $CLIENT_WEB_IMAGE_NAME
+
       # ------ push images
       - name: Push server-api
         run: |
-          docker push $BACKEND_IMAGE_NAME
+          docker push $SERVER_API_IMAGE_NAME
 
       - name: Push client-web
         run: |
-          docker push $FRONTEND_IMAGE_NAME
+          docker push $CLIENT_WEB_IMAGE_NAME
 
   # 
   # ----- DEPLOY DATABASE 
@@ -137,7 +141,7 @@ jobs:
       - name: Deploy Docker image to GCP CloudRun
         run: |
           gcloud run deploy $FRONTEND_CLOUD_RUN_SVC_NAME \
-          --image $FRONTEND_IMAGE_NAME \
+          --image $CLIENT_WEB_IMAGE_NAME \
           --region europe-west1 \
           --platform managed \
           --max-instances 1 \
@@ -163,7 +167,7 @@ jobs:
       - name: Deploy Docker image to GCP CloudRun
         run: |
           gcloud run deploy $BACKEND_CLOUD_RUN_SVC_NAME \
-          --image $BACKEND_IMAGE_NAME \
+          --image $SERVER_API_IMAGE_NAME \
           --add-cloudsql-instances $CLOUD_SQL_CONNCETION_NAME \
           --region europe-west1 \
           --platform managed \
