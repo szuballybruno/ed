@@ -1,12 +1,12 @@
-import { CourseRatingQuestionUserAnswer } from '../models/entity/courseRating/CourseRatingQuestionUserAnswer';
+import { CourseRatingQuestionUserAnswer } from '../models/tables/CourseRatingQuestionUserAnswer';
 import { CourseRatingGroupDTO } from '@episto/communication';
 import { CourseRatingQuestionAnswersDTO } from '@episto/communication';
 import { CourseRatingQuestionDTO } from '@episto/communication';
 import { CourseRatingQuestionView } from '../models/views/CourseRatingQuestionView';
 import { MapperService } from './MapperService';
 import { ServiceBase } from './misc/ServiceBase';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
-import { PrincipalId } from '@episto/x-core';
+import { ORMConnectionService } from './ORMConnectionService';
+import { PrincipalId } from '@thinkhub/x-core';
 import { Id } from '@episto/commontypes';
 import { AuthorizationService } from './AuthorizationService';
 import { CoinTransactionService } from './CoinTransactionService';

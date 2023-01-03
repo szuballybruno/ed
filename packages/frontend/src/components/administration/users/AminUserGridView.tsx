@@ -1,5 +1,5 @@
 import { Flex } from '@chakra-ui/react';
-import { Id, OrderType, UserPerformanceRating } from '@episto/commontypes';
+import { Id, OrderType, TempoRatingType } from '@episto/commontypes';
 import { UserAdminListDTO } from '@episto/communication';
 import { Add } from '@mui/icons-material';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -116,13 +116,13 @@ const useColumns = (
             width: 150
         })
         .addIf(preset === 'all', {
-            field: 'performanceRating',
-            headerName: 'Teljesítmény',
+            field: 'tempoRating',
+            headerName: 'Tempó',
             width: 150,
-            renderCell: ({ value, row: { performanceAverage, hasPerformanceAverage } }) => (
+            renderCell: ({ value, row: { avgTempoPercentage, hasAvgTempoPercentage } }) => (
                 <>
-                    {hasPerformanceAverage && <PerformanceRatingChip
-                        value={performanceAverage}
+                    {hasAvgTempoPercentage && <PerformanceRatingChip
+                        value={avgTempoPercentage}
                         rating={value} />}
                 </>
             )
@@ -170,9 +170,9 @@ class RowType {
     completedVideoCount: number;
     detailsButton: Id<'User'>;
     username: string;
-    performanceAverage: number;
-    performanceRating: UserPerformanceRating;
-    hasPerformanceAverage: boolean;
+    avgTempoPercentage: number;
+    tempoRating: TempoRatingType;
+    hasAvgTempoPercentage: boolean;
 };
 
 export type UserDataGridPresetType = 'reviewRequired' | 'all'
@@ -201,9 +201,9 @@ const mapToRow = (user: UserAdminListDTO): RowType => {
         completedVideoCount: user.completedVideoCount,
         detailsButton: user.userId,
         username: user.username,
-        performanceAverage: user.performanceAverage,
-        performanceRating: user.performanceRating,
-        hasPerformanceAverage: user.hasPerformanceAverage
+        avgTempoPercentage: user.avgTempoPercentage,
+        tempoRating: user.tempoRating,
+        hasAvgTempoPercentage: user.hasAvgTempoPercentage
     });
 };
 

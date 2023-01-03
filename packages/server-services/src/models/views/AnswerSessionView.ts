@@ -1,23 +1,31 @@
-import { XViewColumn } from '@episto/x-orm';
+import { XViewColumn } from '@thinkhub/x-orm';
 import { Id } from '@episto/commontypes';
 
-
 export class AnswerSessionView {
-
-    @XViewColumn()
-    userId: Id<'User'>;
 
     @XViewColumn()
     answerSessionId: Id<'AnswerSession'>;
 
     @XViewColumn()
+    userId: Id<'User'>;
+
+    @XViewColumn()
     examVersionId: Id<'ExamVersion'>;
 
     @XViewColumn()
-    isSuccessful: boolean;
+    videoVersionId: Id<'VideoVersion'>;
 
     @XViewColumn()
-    isCompleted: boolean;
+    startDate: Date;
+
+    @XViewColumn()
+    answerSessionAcquiredPoints: number;
+
+    @XViewColumn()
+    answerSessionSuccessRate: number;
+
+    @XViewColumn()
+    isSuccessful: boolean;
 
     @XViewColumn()
     answeredQuestionCount: number;
@@ -29,8 +37,11 @@ export class AnswerSessionView {
     givenAnswerCount: number;
 
     @XViewColumn()
-    answerSessionAcquiredPoints: number;
+    isCompleted: boolean;
 
     @XViewColumn()
-    answerSessionSuccessRate: number;
+    endDate: Date;
+
+    @XViewColumn()
+    answerSessionType: string;
 }

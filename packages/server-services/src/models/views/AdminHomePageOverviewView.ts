@@ -1,20 +1,19 @@
-import { XViewColumn } from '@episto/x-orm';
+import { XViewColumn } from '@thinkhub/x-orm';
 import { Id } from '@episto/commontypes';
 
-
 export class AdminHomePageOverviewView {
-
-    @XViewColumn()
-    companyId: Id<'Company'>;
 
     @XViewColumn()
     courseId: Id<'Course'>;
 
     @XViewColumn()
-    thumbnailUrl: string;
+    companyId: Id<'Company'>;
 
     @XViewColumn()
     title: string;
+
+    @XViewColumn()
+    thumbnailUrl: string;
 
     @XViewColumn()
     activeUsersCount: number;

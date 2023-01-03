@@ -9,11 +9,12 @@
     "scripts": {
         "start": "nodemon -x node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm src/server.ts",
         "build": "tsc",
+        "start-dist": "node --es-module-specifier-resolution=node ./dist/server.js",
         "healthcheck": "node --no-warnings --experimental-specifier-resolution=node ./dist/healthcheck.js"
     },
     "dependencies": {
         "@episto/server-services": "1.0.0",
-        "@episto/x-gateway": "1.0.0",
+        "@thinkhub/x-gateway": "1.0.0",
         "axios": "^1.2.0",
         "body-parser": "1.20.0",
         "express": "~4.17.3",

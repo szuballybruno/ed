@@ -1,25 +1,25 @@
 import { ErrorWithCode, Id, PermissionCodeType } from '@episto/commontypes';
 import { CompanyAssociatedCourseDTO, CompanyDTO, CompanyEditDataDTO, CompanyPublicDTO, Mutation, RoleAssignCompanyDTO } from '@episto/communication';
 import { UploadedFile } from 'express-fileupload';
-import { Permission } from '../models/entity/authorization/Permission';
-import { PermissionAssignmentBridge } from '../models/entity/authorization/PermissionAssignmentBridge';
-import { Company } from '../models/entity/misc/Company';
-import { CourseAccessBridge } from '../models/entity/misc/CourseAccessBridge';
-import { StorageFile } from '../models/entity/misc/StorageFile';
-import { User } from '../models/entity/misc/User';
+import { Permission } from '../models/tables/Permission';
+import { PermissionAssignmentBridge } from '../models/tables/PermissionAssignmentBridge';
+import { Company } from '../models/tables/Company';
+import { CourseAccessBridge } from '../models/tables/CourseAccessBridge';
+import { StorageFile } from '../models/tables/StorageFile';
+import { User } from '../models/tables/User';
 import { CompanyAssociatedCoursesView } from '../models/views/CompanyAssociatedCoursesView';
 import { CompanyView } from '../models/views/CompanyView';
 import { UserPermissionView } from '../models/views/UserPermissionView';
 import { UserRoleAssignCompanyView } from '../models/views/UserRoleAssignCompanyView';
 import { newNotImplemented } from '../utilities/helpers';
 import { InsertEntity } from '../utilities/misc';
-import { PrincipalId } from '@episto/x-core';
+import { PrincipalId } from '@thinkhub/x-core';
 import { AuthorizationService } from './AuthorizationService';
 import { DomainProviderService } from './DomainProviderService';
 import { FileService } from './FileService';
 import { MapperService } from './MapperService';
-import { ClassType } from './misc/advancedTypes/ClassType';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ClassType } from '../models/misc/ClassType';
+import { ORMConnectionService } from './ORMConnectionService';
 
 export class CompanyService {
 

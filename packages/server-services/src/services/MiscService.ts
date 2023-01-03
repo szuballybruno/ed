@@ -4,11 +4,11 @@ import { ActivationCodeListDTO, AvailableCourseDTO, CourseOverviewDataDTO, Overv
 import { ActivationCodeListView } from '../models/views/ActivationCodeListView';
 import { CourseOverviewView } from '../models/views/CourseOverviewView';
 import { QuestionModuleCompareView } from '../models/views/QuestionModuleCompareView';
-import { PrincipalId } from '@episto/x-core';
+import { PrincipalId } from '@thinkhub/x-core';
 import { CourseProgressService } from './CourseProgressService';
 import { DomainProviderService } from './DomainProviderService';
 import { MapperService } from './MapperService';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 
 export class MiscService {

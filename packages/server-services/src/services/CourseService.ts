@@ -1,23 +1,23 @@
 import { instantiate } from '@episto/commonlogic';
 import { CourseVisibilityType, Id, OrderType } from '@episto/commontypes';
 import { AvailableCourseDTO, CourseAdminListItemDTO, CourseBriefData, CourseCategoryDTO, CourseContentAdminDTO, CourseContentItemAdminDTO, CourseDetailsDTO, CourseDetailsEditDataDTO, CourseStartDTO, CreateCourseDTO, GreetingsDataDTO, ModuleEditDTO, Mutation, PlaylistModuleDTO } from '@episto/communication';
-import { PrincipalId } from '@episto/x-core';
+import { PrincipalId } from '@thinkhub/x-core';
 import { UploadedFile } from 'express-fileupload';
 import { TempomatService } from '..';
-import { Course } from '../models/entity/course/Course';
-import { CourseData } from '../models/entity/course/CourseData';
-import { CourseVersion } from '../models/entity/course/CourseVersion';
-import { Exam } from '../models/entity/exam/Exam';
-import { ExamData } from '../models/entity/exam/ExamData';
-import { ExamVersion } from '../models/entity/exam/ExamVersion';
-import { CourseAccessBridge } from '../models/entity/misc/CourseAccessBridge';
-import { CourseCategory } from '../models/entity/misc/CourseCategory';
-import { TeacherInfo } from '../models/entity/misc/TeacherInfo';
-import { User } from '../models/entity/misc/User';
-import { UserCourseBridge } from '../models/entity/misc/UserCourseBridge';
-import { Module } from '../models/entity/module/Module';
-import { ModuleData } from '../models/entity/module/ModuleData';
-import { ModuleVersion } from '../models/entity/module/ModuleVersion';
+import { Course } from '../models/tables/Course';
+import { CourseData } from '../models/tables/CourseData';
+import { CourseVersion } from '../models/tables/CourseVersion';
+import { Exam } from '../models/tables/Exam';
+import { ExamData } from '../models/tables/ExamData';
+import { ExamVersion } from '../models/tables/ExamVersion';
+import { CourseAccessBridge } from '../models/tables/CourseAccessBridge';
+import { CourseCategory } from '../models/tables/CourseCategory';
+import { TeacherInfo } from '../models/tables/TeacherInfo';
+import { User } from '../models/tables/User';
+import { UserCourseBridge } from '../models/tables/UserCourseBridge';
+import { Module } from '../models/tables/Module';
+import { ModuleData } from '../models/tables/ModuleData';
+import { ModuleVersion } from '../models/tables/ModuleVersion';
 import { AvailableCourseView } from '../models/views/AvailableCourseView';
 import { CourseAdminContentView } from '../models/views/CourseAdminContentView';
 import { CourseAdminDetailedView } from '../models/views/CourseAdminDetailedView';
@@ -33,7 +33,7 @@ import { MapperService } from './MapperService';
 import { FilesObjectType } from './misc/FilesObjectType';
 import { createCharSeparatedList } from './misc/mappings';
 import { ModuleService } from './ModuleService';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 import { PlayerService } from './PlayerService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { VersionCreateService } from './VersionCreateService';
@@ -318,7 +318,7 @@ export class CourseService {
          */
         const previsionedCompletionDate = await this
             ._tempomatService
-            .getTempomatPrevisionedCompletionDateAsync(principalId.getId(), courseId);
+            .getEstimatedCompletionDateAsync(principalId.getId(), courseId);
 
         await this
             ._userCourseBridgeService

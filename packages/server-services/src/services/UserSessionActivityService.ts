@@ -1,15 +1,15 @@
 import moment from 'moment';
-import { ActivitySession } from '../models/entity/misc/ActivitySession';
-import { ActivityStreak } from '../models/entity/misc/ActivityStreak';
-import { UserSessionActivity } from '../models/entity/misc/UserSessionActivity';
+import { ActivitySession } from '../models/tables/ActivitySession';
+import { ActivityStreak } from '../models/tables/ActivityStreak';
+import { UserSessionActivity } from '../models/tables/UserSessionActivity';
 import { SessionActivityType } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
 import { InsertEntity } from '../utilities/misc';
 import { CoinAcquireService } from './CoinAcquireService';
 import { LoggerService } from './LoggerService';
-import { ClassType } from './misc/advancedTypes/ClassType';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
-import { EntityType } from '@episto/x-orm';
+import { ClassType } from '../models/misc/ClassType';
+import { ORMConnectionService } from './ORMConnectionService';
+import { EntityType } from '@thinkhub/x-orm';
 
 type RollingSessionEntityType<TId extends string> = EntityType<TId> & {
     userId: Id<'User'>,

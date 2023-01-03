@@ -3,9 +3,9 @@ import { PractiseQuestionService } from '@episto/server-services';
 import { AnswerQuestionDTO } from '@episto/communication';
 import { AnswerResultDTO } from '@episto/communication';
 import { apiRoutes } from '@episto/communication';
-import { IXGatewayServiceProvider } from '@episto/x-gateway';
+import { IXGatewayServiceProvider } from '@thinkhub/x-gateway';
 import { ActionParams } from '../helpers/ActionParams';
-import { XControllerAction } from '@episto/x-gateway';
+import { XControllerAction } from '@thinkhub/x-gateway';
 
 export class QuestionController {
 

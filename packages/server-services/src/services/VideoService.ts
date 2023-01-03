@@ -1,18 +1,18 @@
 import { UploadedFile } from 'express-fileupload';
 import { getVideoDurationInSeconds } from 'get-video-duration';
-import { VideoData } from '../models/entity/video/VideoData';
-import { VideoVersion } from '../models/entity/video/VideoVersion';
+import { VideoData } from '../models/tables/VideoData';
+import { VideoVersion } from '../models/tables/VideoVersion';
 import { QuestionDataView } from '../models/views/QuestionDataView';
 import { VideoPlayerDataView } from '../models/views/VideoPlayerDataView';
 import { AnswerQuestionDTO } from '@episto/communication';
 import { Id } from '@episto/commontypes';
-import { PrincipalId } from '@episto/x-core';
+import { PrincipalId } from '@thinkhub/x-core';
 import { AuthorizationService } from './AuthorizationService';
 import { FileService } from './FileService';
 import { FileSystemService } from './FileSystemService';
 import { LoggerService } from './LoggerService';
 import { GlobalConfigurationService } from './GlobalConfigurationService';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 import { QuestionAnswerService } from './QuestionAnswerService';
 import { UrlService } from './UrlService';
 

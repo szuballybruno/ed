@@ -23,7 +23,7 @@ export type ErrorCodeType =
 
 export type UserRegistrationStatusType = 'invited' | 'active';
 
-export type UserPerformanceRating = 'very_good' | 'good' | 'average' | 'bad' | 'very_bad';
+export type TempoRatingType = 'very_good' | 'good' | 'average' | 'bad' | 'very_bad';
 
 export type GivenAnswerStateType = 'INCORRECT' | 'CORRECT' | 'MIXED';
 

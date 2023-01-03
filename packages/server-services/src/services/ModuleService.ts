@@ -1,7 +1,7 @@
-import { Module } from '../models/entity/module/Module';
-import { ModuleData } from '../models/entity/module/ModuleData';
-import { ModuleVersion } from '../models/entity/module/ModuleVersion';
-import { User } from '../models/entity/misc/User';
+import { Module } from '../models/tables/Module';
+import { ModuleData } from '../models/tables/ModuleData';
+import { ModuleVersion } from '../models/tables/ModuleVersion';
+import { User } from '../models/tables/User';
 import { ModuleEditView } from '../models/views/ModuleEditView';
 import { ModulePlayerView } from '../models/views/ModulePlayerView';
 import { CourseContentItemAdminDTO } from '@episto/communication';
@@ -12,13 +12,13 @@ import { CourseItemSimpleType } from '@episto/commontypes';
 import { VersionCode } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
 import { VersionMigrationContainer } from '../utilities/misc';
-import { PrincipalId } from '@episto/x-core';
+import { PrincipalId } from '@thinkhub/x-core';
 import { AuthorizationService } from './AuthorizationService';
 import { CourseItemService } from './CourseItemService';
 import { FileService } from './FileService';
 import { MapperService } from './MapperService';
 import { XMutatorHelpers } from './misc/XMutatorHelpers';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 import { VersionSaveService } from './VersionSaveService';
 import { FilesObjectType } from './misc/FilesObjectType';
 

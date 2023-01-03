@@ -1,14 +1,15 @@
 import { instantiate } from '@episto/commonlogic';
-import { Id, TempomatModeType, UserPerformanceRating } from '@episto/commontypes';
-import { PrincipalId, valueInRange } from '@episto/x-core';
-import { UserCourseBridge } from '../models/entity/misc/UserCourseBridge';
-import { TempomatDataModel } from '../models/TempomatCalculationDataModel';
-import { UserPerformancePercentageAverageModel } from '../models/UserPerformancePercentageAverageModel';
+import { Id, TempomatModeType, TempoRatingType } from '@episto/commontypes';
+import { PrincipalId } from '@thinkhub/x-core';
+import { UserCourseBridge } from '../models/tables/UserCourseBridge';
+import { TempomatDataAvgModel } from '../models/misc/TempomatDataAvgModel';
+import { TempomatDataModel } from '../models/misc/TempomatDataModel';
+import { UserPerformancePercentageAverageModel } from '../models/misc/UserPerformancePercentageAverageModel';
 import { TempomatCalculationDataView } from '../models/views/TempomatCalculationDataView';
 import { TempomatTargetDateDataView } from '../models/views/TempomatTargetDateDataView';
 import { addDays, dateDiffInDays } from '../utilities/helpers';
 import { GlobalConfigurationService } from './GlobalConfigurationService';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 
 export class TempomatService {
 
@@ -17,37 +18,7 @@ export class TempomatService {
         private _ormService: ORMConnectionService) {
     }
 
-    /**
-     * getTempomatDatasByCompanyIdAsync
-     */
-    public async getUserPerformancePercentageAverageAsync(companyId: Id<'Company'> | null): Promise<UserPerformancePercentageAverageModel[]> {
-
-        const calcDatas = await this
-            ._ormService
-            .query(TempomatCalculationDataView, { companyId })
-            .where('companyId', '=', 'companyId')
-            .getMany();
-
-        const tempomatValues = this
-            .getTempomatValuesBatch(calcDatas, new Date());
-
-        return tempomatValues
-            .groupBy(x => x.userId)
-            .map(x => {
-
-                const averageUserPerformancePercentage = x
-                    .items
-                    .map(x => x.userPerformancePercentage)
-                    .reduce((a, b) => a + b, 0) / x.items.length;
-
-                return instantiate<UserPerformancePercentageAverageModel>({
-                    userId: x.key,
-                    averageUserPerformancePercentage,
-                    performanceRating: this
-                        ._getPerformanceRating(averageUserPerformancePercentage)
-                });
-            })
-    }
+    // ---------------- MISC
 
     /**
      * Set tempomat mode
@@ -67,7 +38,6 @@ export class TempomatService {
                 id: bridge.id,
                 tempomatMode
             });
-
     }
 
     /**
@@ -90,7 +60,7 @@ export class TempomatService {
      * Returns the original previsioned completion date, 
      * relative to the current date, and the prequiz user answers / default daily minutes
      */
-    async getTempomatPrevisionedCompletionDateAsync(
+    async getEstimatedCompletionDateAsync(
         userId: Id<'User'>,
         courseId: Id<'Course'>) {
 
@@ -107,6 +77,80 @@ export class TempomatService {
 
         return previsionedCompletionDate;
     }
+
+    // ------------- AVG values 
+
+    /**
+     * getTempomatDatasByCompanyIdAsync
+     */
+    async getAverageTempomatDataByCompanyAsync(companyId: Id<'Company'>): Promise<TempomatDataAvgModel[]> {
+
+        const tempomatCalcDatasAllUsers = await this
+            ._ormService
+            .query(TempomatCalculationDataView, { companyId })
+            .where('companyId', '=', 'companyId')
+            .getMany();
+
+        const tempomatValuesAllUsers = this
+            .getTempomatValuesBatch(tempomatCalcDatasAllUsers, new Date());
+
+        return tempomatValuesAllUsers
+            .groupBy(x => x.userId)
+            .map(x => {
+
+                const tempomatValues = x.items;
+
+                const avgTempoPercentage = tempomatValues
+                    .average(x => x.recommendedItemsPerDay);
+
+                const avgTempoRating = this
+                    ._getTempoRating(avgTempoPercentage);
+
+                return instantiate<TempomatDataAvgModel>({
+                    userId: x.key,
+                    tempoRating: avgTempoRating,
+                    tempoPercentage: avgTempoPercentage
+                });
+            });
+    }
+
+    /**
+     * Calculates the average performance 
+     * for a user across all courses 
+     */
+    async getAverageTempomatDataByUserAsync(userId: Id<'User'>) {
+
+        const tempomatCalculationDatas = await this
+            ._ormService
+            .query(TempomatCalculationDataView, { userId })
+            .where('userId', '=', 'userId')
+            .getMany();
+
+        const tempomatValues = this
+            .getTempomatValuesBatch(tempomatCalculationDatas, new Date());
+
+        return this
+            ._getAvgTempomatData(tempomatValues);
+    }
+
+    /**
+     * Get average tempomat data
+     */
+    private _getAvgTempomatData(tempomatValues: TempomatDataModel[]) {
+
+        const avgTempoPercentage = tempomatValues
+            .average(x => x.recommendedItemsPerDay);
+
+        const avgTempoRating = this
+            ._getTempoRating(avgTempoPercentage);
+
+        return instantiate<TempomatDataAvgModel>({
+            tempoRating: avgTempoRating,
+            tempoPercentage: avgTempoPercentage
+        });
+    }
+
+    // ------------ EXACT TEMPOMAT VALUES
 
     /**
      * Calc tempomat values for one users one course
@@ -127,83 +171,23 @@ export class TempomatService {
     }
 
     /**
-     * getTempomatClculationDataViewsAsync
+     * Get tempomat values for a specific user
      */
-    async getTempomatCalculationDataViewsByCourseIdsAsync(courseIds: Id<'Course'>[], userId: Id<'User'>) {
+    getTempomatValuesBatch(views: TempomatCalculationDataView[], currentDate: Date): TempomatDataModel[] {
 
-        const tempomatCalculationData = await this._ormService
-            .query(TempomatCalculationDataView, { userId, courseIds })
-            .where('userId', '=', 'userId')
-            .and('courseId', '=', 'courseIds')
-            .getMany();
+        try {
 
-        return tempomatCalculationData;
-    }
+            return views
+                .map(view => this
+                    .getTempomatValues({
+                        ...view,
+                        currentDate
+                    }));
+        }
+        catch (e: any) {
 
-    /**
-     * getTempomatClculationDataViewsAsync
-     */
-    async getTempomatCalculationDataViewsByUserIdsAsync(userIds: Id<'User'>[], courseId: Id<'Course'>) {
-
-        const tempomatCalculationData = await this._ormService
-            .query(TempomatCalculationDataView, { userIds, courseId })
-            .where('userId', '=', 'userIds')
-            .and('courseId', '=', 'courseId')
-            .getMany();
-
-        return tempomatCalculationData;
-    }
-
-    /**
-     * Calculates the average performance 
-     * for a user across all courses 
-     */
-    async getUserAvgPerformancePercentageAsync(userId: Id<'User'>) {
-
-        const tempomatCalculationDatas = await this
-            ._ormService
-            .query(TempomatCalculationDataView, { userId })
-            .where('userId', '=', 'userId')
-            .getMany();
-
-        const averageProgressPercentage = this
-            .getUserAvgPerformancePercentages(tempomatCalculationDatas)
-            .single()
-            .averageProgressPercentage;
-
-        const averagePerformanceRating = this
-            ._getPerformanceRating(averageProgressPercentage);
-
-        return { averageProgressPercentage, averagePerformanceRating };
-    }
-
-    /*
-    * Get user avg performance percentages
-    */
-    getUserAvgPerformancePercentages(views: TempomatCalculationDataView[]) {
-
-        const userPerformanceAverages = views
-            .filter(x => Boolean(x.startDate))
-            .groupBy(x => x.userId)
-            .map(userGroup => {
-
-                const userGroupAvg = userGroup
-                    .items
-                    .map(view => this
-                        .getTempomatValues({
-                            ...view,
-                            currentDate: new Date()
-                        })
-                        .userPerformancePercentage)
-                    .reduce((diffA, diffB) => diffA + diffB, 0) / userGroup.items.length;
-
-                return {
-                    userId: userGroup.key,
-                    averageProgressPercentage: userGroupAvg
-                };
-            });
-
-        return userPerformanceAverages;
+            throw new Error(`Get tempomat values batch failed. ${e.message}`);
+        }
     }
 
     /**
@@ -245,7 +229,6 @@ export class TempomatService {
                     recommendedItemsPerWeek: 0,
                     originalEstimatedCompletionDate: tempDate,
                     requiredCompletionDate: tempDate,
-                    startDate: null,
                     userPerformancePercentage: 0,
                     lagBehindDays: 0,
                     userId,
@@ -254,7 +237,7 @@ export class TempomatService {
                     recommendedPercentPerDay: 0,
                     isStartedCourse: false,
                     tempomatMode,
-                    performanceRating: 'average'
+                    tempoRating: 'average'
                 });
             }
 
@@ -311,7 +294,6 @@ export class TempomatService {
                 recommendedItemsPerWeek,
                 originalEstimatedCompletionDate: originalEstimatedCompletionDate,
                 requiredCompletionDate,
-                startDate,
                 userPerformancePercentage,
                 lagBehindDays,
                 userId,
@@ -320,8 +302,8 @@ export class TempomatService {
                 recommendedPercentPerDay,
                 isStartedCourse: true,
                 tempomatMode,
-                performanceRating: this
-                    ._getPerformanceRating(userPerformancePercentage)
+                tempoRating: this
+                    ._getTempoRating(userPerformancePercentage)
             });
         }
         catch (e: any) {
@@ -330,24 +312,34 @@ export class TempomatService {
         }
     }
 
+    // -------------- GET CALC DATA VIEWS 
+
     /**
-     * Get tempomat values for a specific user
+     * getTempomatClculationDataViewsAsync
      */
-    getTempomatValuesBatch(views: TempomatCalculationDataView[], currentDate: Date): TempomatDataModel[] {
+    async getTempomatCalculationDataViewsByCourseIdsAsync(courseIds: Id<'Course'>[], userId: Id<'User'>) {
 
-        try {
+        const tempomatCalculationData = await this._ormService
+            .query(TempomatCalculationDataView, { userId, courseIds })
+            .where('userId', '=', 'userId')
+            .and('courseId', '=', 'courseIds')
+            .getMany();
 
-            return views
-                .map(view => this
-                    .getTempomatValues({
-                        ...view,
-                        currentDate
-                    }));
-        }
-        catch (e: any) {
+        return tempomatCalculationData;
+    }
 
-            throw new Error(`Get tempomat values batch failed. ${e.message}`);
-        }
+    /**
+     * getTempomatClculationDataViewsAsync
+     */
+    async getTempomatCalculationDataViewsByUserIdsAsync(userIds: Id<'User'>[], courseId: Id<'Course'>) {
+
+        const tempomatCalculationData = await this._ormService
+            .query(TempomatCalculationDataView, { userIds, courseId })
+            .where('userId', '=', 'userIds')
+            .and('courseId', '=', 'courseId')
+            .getMany();
+
+        return tempomatCalculationData;
     }
 
     // ---------------------- PRIVATE FUNCTIONS
@@ -473,21 +465,21 @@ export class TempomatService {
     /**
      * Get performance rating
      */
-    private _getPerformanceRating(performancePercentage: number): UserPerformanceRating {
+    private _getTempoRating(tempoPercentage: number): TempoRatingType {
 
-        if (performancePercentage < 0)
+        if (tempoPercentage < 0)
             throw new Error(`Performance percentage is not allowed to be smaller than zero!`);
 
-        if (performancePercentage > 130)
+        if (tempoPercentage > 130)
             return 'very_good';
 
-        if (performancePercentage > 110)
+        if (tempoPercentage > 110)
             return 'good';
 
-        if (performancePercentage > 95)
+        if (tempoPercentage > 95)
             return 'average';
 
-        if (performancePercentage > 70)
+        if (tempoPercentage > 70)
             return 'bad';
 
         return 'very_bad';

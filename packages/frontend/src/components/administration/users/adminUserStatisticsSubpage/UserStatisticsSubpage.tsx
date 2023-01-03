@@ -34,19 +34,19 @@ export const AdminUserStatisticsSubpage = ({
     const texts = translatableTexts.administration.userLearningOverviewSubpage;
 
     const {
-        answeredVideoAndPractiseQuizQuestions,
-        correctAnswerRatePercentage,
-        totalTimeActiveOnPlatformSeconds,
-        watchedVideos
+        answeredNonExamQuestionCount,
+        correctAnsweredNonExamQuestionCount,
+        totalActivityTimeSeconds,
+        watchedVideoCount
     } = coalesce(userLearningOverviewData, {
-        answeredVideoAndPractiseQuizQuestions: 0,
-        correctAnswerRatePercentage: 0,
-        totalTimeActiveOnPlatformSeconds: 0,
-        watchedVideos: 0
+        answeredNonExamQuestionCount: 0,
+        correctAnsweredNonExamQuestionCount: 0,
+        totalActivityTimeSeconds: 0,
+        watchedVideoCount: 0
     });
 
     const totalTimeActiveOnPlatformSecondsFormatted = Math
-        .floor(totalTimeActiveOnPlatformSeconds / 60 / 60);
+        .floor(totalActivityTimeSeconds / 60 / 60);
 
     return (
         <AdminSubpageHeader
@@ -87,14 +87,14 @@ export const AdminUserStatisticsSubpage = ({
                         {/* answered question count */}
                         <StatisticsCard
                             title={texts.statisticsCards.answeredVideoAndPractiseQuizQuestions}
-                            value={answeredVideoAndPractiseQuizQuestions}
+                            value={answeredNonExamQuestionCount}
                             suffix={translatableTexts.misc.suffixes.count}
                             iconPath={Environment.getAssetUrl('images/learningreport03.png')} />
 
                         {/* correct answer percentage */}
                         <StatisticsCard
                             title={texts.statisticsCards.correctAnswerRatePercentage}
-                            value={Math.floor(correctAnswerRatePercentage)}
+                            value={Math.floor(correctAnsweredNonExamQuestionCount)}
                             suffix={translatableTexts.misc.suffixes.percentage}
                             iconPath={Environment.getAssetUrl('images/learningreport04.png')} />
 
@@ -102,9 +102,9 @@ export const AdminUserStatisticsSubpage = ({
                         <StatisticsCard
                             isPreview
                             title={texts.statisticsCards.reactionTime}
-                            value={(userLearningOverviewData?.userReactionTimeDifferencePercentage || 0) > 20
+                            value={(userLearningOverviewData?.avgReactionTimeSeconds || 0) > 20
                                 ? texts.statisticsCards.belowAverage
-                                : (userLearningOverviewData?.userReactionTimeDifferencePercentage || 0) < -20
+                                : (userLearningOverviewData?.avgReactionTimeSeconds || 0) < -20
                                     ? texts.statisticsCards.aboveAverage
                                     : texts.statisticsCards.average}
                             suffix={''}
@@ -114,7 +114,7 @@ export const AdminUserStatisticsSubpage = ({
                         <StatisticsCard
                             isPreview
                             title={texts.statisticsCards.averageWatchedVideosPerDay}
-                            value={`${Math.floor(userLearningOverviewData?.averageWatchedVideosPerDay || 0)}`}
+                            value={`${Math.floor(userLearningOverviewData?.avgWatchedVideoCountPerDay || 0)}`}
                             suffix={translatableTexts.misc.suffixes.countPerDay}
                             iconPath={Environment.getAssetUrl('images/learningreport06.png')} />
 
@@ -126,7 +126,7 @@ export const AdminUserStatisticsSubpage = ({
 
                         <StatisticsCard
                             iconPath={Environment.getAssetUrl('images/learningreport02.png')}
-                            value={watchedVideos}
+                            value={watchedVideoCount}
                             suffix={translatableTexts.misc.suffixes.count}
                             title={texts.statisticsCards.totalWatchedVideoCount} />
 
@@ -173,7 +173,7 @@ export const AdminUserStatisticsSubpage = ({
                     <StatisticsCard
                         isPreview
                         title={texts.statisticsCards.mostFrequentTimeRange}
-                        value={`${userLearningOverviewData?.mostFrequentTimeRange || translatableTexts.misc.unknown}`}
+                        value={''}
                         suffix={''}
                         iconPath={Environment.getAssetUrl('images/learningreport07.png')}
                         isOpenByDefault={false} />
@@ -181,7 +181,7 @@ export const AdminUserStatisticsSubpage = ({
                     <StatisticsCard
                         isPreview
                         title={texts.statisticsCards.totalDoneExams}
-                        value={`${userLearningOverviewData?.totalDoneExams || 0}`}
+                        value={`${userLearningOverviewData?.totalCompletedExamCount || 0}`}
                         suffix={translatableTexts.misc.suffixes.count}
                         iconPath={Environment.getAssetUrl('images/learningreport08.png')}
                         isOpenByDefault={false} />
@@ -189,7 +189,7 @@ export const AdminUserStatisticsSubpage = ({
                     <StatisticsCard
                         isPreview
                         title={texts.statisticsCards.averageSessionLength}
-                        value={`${Math.floor((userLearningOverviewData?.averageSessionLengthSeconds || 0) / 60)}`}
+                        value={`${Math.floor((userLearningOverviewData?.avgSessionLengthSeconds || 0) / 60)}`}
                         suffix={translatableTexts.misc.suffixes.minute}
                         iconPath={Environment.getAssetUrl('images/learningreport09.png')}
                         isOpenByDefault={false} />
@@ -197,7 +197,7 @@ export const AdminUserStatisticsSubpage = ({
                     <StatisticsCard
                         isPreview
                         title={texts.statisticsCards.videosToBeRepeated}
-                        value={`${userLearningOverviewData?.videosToBeRepeatedCount || 0}`}
+                        value={`${userLearningOverviewData?.totalBadlyUnderstoodVideoCount || 0}`}
                         suffix={translatableTexts.misc.suffixes.count}
                         iconPath={Environment.getAssetUrl('images/learningreport10.png')}
                         isOpenByDefault={false} />

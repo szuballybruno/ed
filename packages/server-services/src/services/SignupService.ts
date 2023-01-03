@@ -1,16 +1,16 @@
 import { Id } from '@episto/commontypes';
 import { AnswerSignupQuestionDTO, SurveyDataDTO } from '@episto/communication';
-import { AnswerData } from '../models/entity/answer/AnswerData';
-import { AnswerVersion } from '../models/entity/answer/AnswerVersion';
-import { AnswerGivenAnswerBridge } from '../models/entity/misc/AnswerGivenAnswerBridge';
-import { AnswerSession } from '../models/entity/misc/AnswerSession';
-import { GivenAnswer } from '../models/entity/misc/GivenAnswer';
+import { AnswerData } from '../models/tables/AnswerData';
+import { AnswerVersion } from '../models/tables/AnswerVersion';
+import { AnswerGivenAnswerBridge } from '../models/tables/AnswerGivenAnswerBridge';
+import { AnswerSession } from '../models/tables/AnswerSession';
+import { GivenAnswer } from '../models/tables/GivenAnswer';
 import { SignupCompletedView } from '../models/views/SignupCompletedView';
 import { SignupQuestionView } from '../models/views/SignupQuestionView';
-import { PrincipalId } from '@episto/x-core';
+import { PrincipalId } from '@thinkhub/x-core';
 import { CompanyService } from './CompanyService';
 import { MapperService } from './MapperService';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 import { PermissionService } from './PermissionService';
 
 export class SignupService {

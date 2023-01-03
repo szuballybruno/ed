@@ -1,6 +1,5 @@
-import { XViewColumn } from '@episto/x-orm';
+import { XViewColumn } from '@thinkhub/x-orm';
 import { Id } from '@episto/commontypes';
-
 
 export class UserDailyProgressView {
 
@@ -11,8 +10,8 @@ export class UserDailyProgressView {
     courseId: Id<'Course'>;
 
     @XViewColumn()
-    spentSeconds: number;
+    creationDate: Date;
 
     @XViewColumn()
-    creationDate: Date;
+    spentSeconds: number;
 }

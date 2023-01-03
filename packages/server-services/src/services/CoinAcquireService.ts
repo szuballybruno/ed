@@ -3,15 +3,15 @@ import { ActivityStreakView } from '../models/views/ActivityStreakView';
 import { UserSessionDailyView } from '../models/views/UserSessionDailyView';
 import { CoinTransactionService } from './CoinTransactionService';
 import { EventService } from './EventService';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 import { Id } from '@episto/commontypes';
 import { GlobalConfigurationService } from './GlobalConfigurationService';
 import { LoggerService } from './LoggerService';
-import { CoinTransaction } from '../models/entity/misc/CoinTransaction';
+import { CoinTransaction } from '../models/tables/CoinTransaction';
 import { instantiate } from '@episto/commonlogic';
 import { InsertEntity } from '../utilities/misc';
 import { CoinAcquireReasonType } from '@episto/commontypes';
-import { GivenAnswer } from '../models/entity/misc/GivenAnswer';
+import { GivenAnswer } from '../models/tables/GivenAnswer';
 
 export class CoinAcquireService {
 
@@ -210,7 +210,7 @@ export class CoinAcquireService {
             .getCoinsForActivityStreakAsync(userId, currentActivityStreak.id);
 
         const alreadyGivenCoinsLegth = coinsForActivityStreak.length;
-        const currentActivityStreakLenght = currentActivityStreak.length_days;
+        const currentActivityStreakLenght = currentActivityStreak.lengthDays;
         const currentActivityStreakId = currentActivityStreak.id;
 
         // no more than 3 different types of streak gives you coins,

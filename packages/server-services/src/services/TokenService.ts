@@ -1,6 +1,6 @@
 import JsonWebToken from 'jsonwebtoken';
-import { AccessTokenPayload } from '../models/DTOs/AccessTokenPayload';
-import { User } from '../models/entity/misc/User';
+import { AccessTokenPayload } from '../models/misc/AccessTokenPayload';
+import { User } from '../models/tables/User';
 import { InvitationTokenPayload } from '@episto/commontypes';
 import { ErrorWithCode } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';

@@ -1,8 +1,8 @@
 import { CourseProgressService } from '@episto/server-services';
 import { apiRoutes } from '@episto/communication';
 import { ActionParams } from '../helpers/ActionParams';
-import { XControllerAction } from '@episto/x-gateway';
-import { IXGatewayServiceProvider } from '@episto/x-gateway';
+import { XControllerAction } from '@thinkhub/x-gateway';
+import { IXGatewayServiceProvider } from '@thinkhub/x-gateway';
 
 export class CourseProgressController {
 

@@ -1,4 +1,4 @@
-import { deepMergeObjects } from '@episto/x-core';
+import { deepMergeObjects } from '@thinkhub/x-core';
 import { EChartsOption } from 'echarts';
 import ReactECharts from 'echarts-for-react';
 import { defaultOptions } from './lineChartVariants';

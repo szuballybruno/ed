@@ -1,4 +1,4 @@
-import { Id, UserActivityDistributionChartData, UserPerformanceRating } from '@episto/commontypes';
+import { Id, UserActivityDistributionChartData, TempoRatingType } from '@episto/commontypes';
 import { UserProgressChartStep } from './UserProgressChartStep';
 
 export class UserCourseStatsOverviewDTO {
@@ -14,6 +14,6 @@ export class UserCourseStatsOverviewDTO {
     answeredPractiseQuestionCount: number;
     userActivityDistributionChartData: UserActivityDistributionChartData;
     progressChartData: UserProgressChartStep[];
-    performancePercentage: number;
-    performanceRating: UserPerformanceRating;
+    tempoPercentage: number;
+    tempoRating: TempoRatingType;
 }

@@ -1,5 +1,5 @@
+import { XViewColumn } from '@thinkhub/x-orm';
 import { Id } from '@episto/commontypes';
-import { XViewColumn } from '@episto/x-orm';
 
 export class CourseAdminListView {
 
@@ -25,11 +25,14 @@ export class CourseAdminListView {
     userCountCompleted: number;
 
     @XViewColumn()
-    userCountCurrent: number; 
+    userCountCurrent: number;
 
     @XViewColumn()
-    userCountAll: number; 
+    userCountAll: number;
 
     @XViewColumn()
-    userCountAllChange: number; 
+    userCountAllPrev: number;
+
+    @XViewColumn()
+    userCountAllChange: number;
 }

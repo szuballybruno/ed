@@ -1,12 +1,12 @@
-import { User } from '../models/entity/misc/User';
+import { User } from '../models/tables/User';
 import { UserEditSaveDTO } from '@episto/communication';
 import { ErrorWithCode } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
 import { getFullName } from '../utilities/helpers';
-import { PrincipalId } from '@episto/x-core';
+import { PrincipalId } from '@thinkhub/x-core';
 import { EmailService } from './EmailService';
 import { LoggerService } from './LoggerService';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 import { RoleService } from './RoleService';
 import { TokenService } from './TokenService';
 import { UserService } from './UserService';

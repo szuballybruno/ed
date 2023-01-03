@@ -1,1 +1,0 @@
-docker-compose -f ./testenv.yml up --abort-on-container-exit --renew-anon-volumes

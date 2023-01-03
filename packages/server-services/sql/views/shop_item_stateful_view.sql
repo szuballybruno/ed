@@ -7,7 +7,7 @@ SELECT
 FROM 
 (
 	SELECT
-		si.id,
+		si.id shop_item_id,
 		u.id AS user_id,
 		(
 			SELECT COUNT(id)::integer FROM public.coin_transaction ct
@@ -48,5 +48,7 @@ FROM
 	LEFT JOIN public.storage_file cosf
 	ON cosf.id = cd.cover_file_id
 
-	ORDER BY user_id, id
+	ORDER BY 
+		u.id, 
+		si.id
 ) sq

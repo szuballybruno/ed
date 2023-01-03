@@ -1,4 +1,4 @@
-import { XViewColumn } from '@episto/x-orm';
+import { XViewColumn } from '@thinkhub/x-orm';
 import { Id } from '@episto/commontypes';
 
 export class CorrectAnswerRatesSplitView {
@@ -8,6 +8,9 @@ export class CorrectAnswerRatesSplitView {
 
     @XViewColumn()
     courseId: Id<'Course'>;
+
+    @XViewColumn()
+    moduleId: Id<'Module'>;
 
     @XViewColumn()
     startDate: Date;

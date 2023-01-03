@@ -1,23 +1,23 @@
 import { instantiate } from '@episto/commonlogic';
 import { ErrorWithCode, Id, UserRegistrationStatusType } from '@episto/commontypes';
 import { BriefUserDataDTO, DepartmentDTO, Mutation, UserAdminListDTO, UserControlDropdownDataDTO, UserCourseStatsDTO, UserDTO, UserEditReadDTO, UserEditSaveDTO, UserEditSimpleDTO } from '@episto/communication';
-import { PrincipalId } from '@episto/x-core';
-import { CourseData } from '../models/entity/course/CourseData';
-import { AnswerSession } from '../models/entity/misc/AnswerSession';
-import { CourseAccessBridge } from '../models/entity/misc/CourseAccessBridge';
-import { Department } from '../models/entity/misc/Department';
-import { StorageFile } from '../models/entity/misc/StorageFile';
-import { TeacherInfo } from '../models/entity/misc/TeacherInfo';
-import { User } from '../models/entity/misc/User';
-import { UserCourseBridge } from '../models/entity/misc/UserCourseBridge';
-import { RegistrationType } from '../models/Types';
+import { PrincipalId } from '@thinkhub/x-core';
+import { CourseData } from '../models/tables/CourseData';
+import { AnswerSession } from '../models/tables/AnswerSession';
+import { CourseAccessBridge } from '../models/tables/CourseAccessBridge';
+import { Department } from '../models/tables/Department';
+import { StorageFile } from '../models/tables/StorageFile';
+import { TeacherInfo } from '../models/tables/TeacherInfo';
+import { User } from '../models/tables/User';
+import { UserCourseBridge } from '../models/tables/UserCourseBridge';
+import { RegistrationType } from '../models/misc/Types';
 import { UserOverviewView } from '../models/views/UserOverviewView';
 import { getFullName } from '../utilities/helpers';
 import { InsertEntity } from '../utilities/misc';
 import { AuthorizationService } from './AuthorizationService';
 import { HashService } from './HashService';
 import { MapperService } from './MapperService';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 import { RoleService } from './RoleService';
 import { TeacherInfoService } from './TeacherInfoService';
 import { TempomatService } from './TempomatService';
@@ -52,13 +52,13 @@ export class UserService {
             .where('companyId', '=', 'companyId')
             .getMany();
 
-        const performanceAverages = await this
+        const avgTempoPercentages = await this
             ._tempomatService
-            .getUserPerformancePercentageAverageAsync(companyId);
+            .getAverageTempomatDataByCompanyAsync(companyId);
 
         return this
             ._mapperService
-            .mapTo(UserAdminListDTO, [companyUserOverviewViews, performanceAverages]);
+            .mapTo(UserAdminListDTO, [companyUserOverviewViews, avgTempoPercentages]);
     }
 
     /**
@@ -340,9 +340,12 @@ export class UserService {
 
         // check username 
         await this
-            ._checkIfUsernameTakenAsync(user.username);
+            ._checkIfUsernameTakenAsync(user.username ?? '');
 
         // hash user password
+        if (!user.password)
+            throw new Error('Password no found!');
+
         const hashedPassword = await this
             ._hashService
             .hashPasswordAsync(user.password);

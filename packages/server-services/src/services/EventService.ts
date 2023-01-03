@@ -1,4 +1,4 @@
-import { Event } from '../models/entity/misc/Event';
+import { Event } from '../models/tables/Event';
 import { CoinAcquireResultDTO } from '@episto/communication';
 import { EventDTO } from '@episto/communication';
 import { LagBehindNotificationDTO } from '@episto/communication';
@@ -7,7 +7,7 @@ import { Id } from '@episto/commontypes';
 import { AuthorizationService } from './AuthorizationService';
 import { LoggerService } from './LoggerService';
 import { MapperService } from './MapperService';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 
 export class EventService {
 

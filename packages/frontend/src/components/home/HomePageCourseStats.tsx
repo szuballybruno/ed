@@ -1,8 +1,8 @@
 import { Grid } from '@chakra-ui/react';
 import { UserActiveCourseDTO } from '@episto/communication';
-import { useRecommendedItemQuota, useUserCourseProgressChartData } from '../../services/api/userProgressApiService';
+import { useCourseProgressOverview, useUserCourseProgressChartData } from '../../services/api/userProgressApiService';
 import { Environment } from '../../static/Environemnt';
-import { PagingType } from '../../static/frontendHelpers';
+import { coalesce, Formatters, PagingType } from '../../static/frontendHelpers';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { FlexFloat } from '../controls/FlexFloat';
 import StatisticsCard, { StatisticsCardProps } from '../statisticsCard/StatisticsCard';
@@ -39,87 +39,50 @@ export const HomePageCourseStats = ({
     const { userProgressData } = useUserCourseProgressChartData(courseId ?? null, !!courseId);
     const currentCourse = activeCoursesPaging.currentItem;
 
-    const { recommendedItemQuota } = useRecommendedItemQuota(courseId);
 
-    const completedToday = recommendedItemQuota?.completedToday || 0;
-    const completedThisWeek = recommendedItemQuota?.completedThisWeek || 0;
+    const { courseProgressOverviewData: recommendedItemQuota } = useCourseProgressOverview(courseId);
 
-    const recommendedItemsPerDay = recommendedItemQuota?.recommendedItemsPerDay || null;
-    const recommendedItemsPerWeek = recommendedItemQuota?.recommendedItemsPerWeek || null;
-
-    const isDailyStrictMode = (recommendedItemsPerDay);
-    const isDailyLightMode = (!recommendedItemsPerDay && completedToday);
-
-    const isWeeklyStrictMode = (recommendedItemsPerWeek);
-    const isWeeklyLightMode = (!recommendedItemsPerWeek && completedThisWeek);
-
-    const dailyVideos = (() => {
-
-        if (isDailyStrictMode)
-            return `${completedToday || 0}/${recommendedItemsPerDay}`;
-
-        if (isDailyLightMode)
-            return completedToday;
-
-        return '0';
-    })();
-
-    const dailyLabel = (() => {
-
-        if (isDailyStrictMode)
-            return 'Teljesítve az ajánlott napi videókból';
-
-        return 'Megtekintett videó ma';
-    })();
-
-    const weeklyVideos = (() => {
-
-        if (isWeeklyStrictMode)
-            return `${completedThisWeek}/${recommendedItemsPerWeek}`;
-
-        if (isWeeklyLightMode)
-            return completedThisWeek;
-
-        return '0';
-    })();
-
-    const weeklyLabel = (() => {
-
-        if (isWeeklyStrictMode)
-            return 'Teljesítve az ajánlott heti videókból';
-
-        return 'Megtekintett videó a héten';
-    })();
-
-    const estimatedCompletionDateString = recommendedItemQuota?.previsionedCompletionDate
-        ? new Date(recommendedItemQuota?.previsionedCompletionDate)
-            .toLocaleDateString('hu-hu', {
-                month: '2-digit',
-                day: '2-digit'
-            }) || 'Ismeretlen'
-        : 'Ismeretlen';
+    const {
+        completedThisWeek,
+        completedToday,
+        estimatedCompletionDate,
+        deadlineDate,
+        recommendedItemsPerDay,
+        recommendedItemsPerWeek,
+        tempomatMode,
+    } = coalesce(recommendedItemQuota, {
+        completedThisWeek: 0,
+        completedToday: 0,
+        deadlineDate: null,
+        estimatedCompletionDate: new Date(),
+        recommendedItemsPerDay: 0,
+        recommendedItemsPerWeek: 0,
+        tempomatMode: 'light'
+    });
 
     const courseStatCards = [
         {
             isMobile: isSmallDesktop,
-            title: dailyLabel,
-            value: dailyVideos,
-            suffix: isDailyStrictMode ? '' : 'db',
+            title: 'Megtekintett videó ma',
+            value: completedToday,
+            suffix: 'db',
             iconPath: Environment.getAssetUrl('/images/dailyquota.png'),
             isOpenByDefault: false
         },
         {
             isMobile: isSmallDesktop,
-            title: weeklyLabel,
-            value: weeklyVideos,
-            suffix: isWeeklyStrictMode ? '' : 'db',
+            title: 'Megtekintett videó a héten',
+            value: completedThisWeek,
+            suffix: 'db',
             iconPath: Environment.getAssetUrl('/images/weeklyquota.png'),
             isOpenByDefault: false
         },
         {
             isMobile: isSmallDesktop,
             title: 'A kurzus várható befejezési ideje',
-            value: estimatedCompletionDateString,
+            value: estimatedCompletionDate
+                ? Formatters.formatDate(estimatedCompletionDate)
+                : 'Ismeretlen',
             suffix: '',
             iconPath: Environment.getAssetUrl('/images/weeklyquota.png'),
             isOpenByDefault: false

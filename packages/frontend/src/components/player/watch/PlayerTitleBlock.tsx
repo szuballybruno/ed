@@ -1,5 +1,6 @@
 import { Id } from '@episto/commontypes';
-import { useRecommendedItemQuota } from '../../../services/api/userProgressApiService';
+import { useCourseProgressOverview } from '../../../services/api/userProgressApiService';
+import { coalesce } from '../../../static/frontendHelpers';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { RecommendedItemQuota } from '../../home/RecommendedItemQuota';
 import { PlayerTitleSubtitle } from './PlayerTitleSubtitle';
@@ -21,7 +22,19 @@ export const PlayerTitleBlock = (props: {
         courseId
     } = props;
 
-    const { recommendedItemQuota, refetchRecommendedItemQuota } = useRecommendedItemQuota(courseId);
+    const { courseProgressOverviewData } = useCourseProgressOverview(courseId);
+
+    const {
+        recommendedItemsPerDay,
+        completedToday,
+        deadlineDate
+    } = coalesce(courseProgressOverviewData, {
+        recommendedItemsPerDay: 0,
+        completedToday: 0,
+        deadlineDate: null
+    });
+
+    const isDeadlineSet = !!deadlineDate;
 
     return <EpistoFlex2
         id="playerTitleBlock"
@@ -47,9 +60,9 @@ export const PlayerTitleBlock = (props: {
             minWidth='130px'
             mb='0'
             isDaily
-            isDeadlineSet={recommendedItemQuota?.isDeadlineSet ?? false}
-            completedCount={recommendedItemQuota?.completedToday ?? 0}
-            recommendedItemCount={recommendedItemQuota?.recommendedItemsPerDay ?? 0} />}
+            isDeadlineSet={isDeadlineSet}
+            completedCount={completedToday}
+            recommendedItemCount={recommendedItemsPerDay} />}
 
         {/* ratings */}
         {!isMobile && <VideoRating videoVersionId={videoVersionId} />}

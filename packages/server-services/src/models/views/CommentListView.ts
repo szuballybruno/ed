@@ -1,23 +1,16 @@
-import { XViewColumn } from '@episto/x-orm';
+import { XViewColumn } from '@thinkhub/x-orm';
 import { Id } from '@episto/commontypes';
-
 
 export class CommentListView {
 
     @XViewColumn()
-    id: Id<'Comment'>;
+    fullName: string;
 
     @XViewColumn()
-    videoId: Id<'Video'>;
+    avatarUrl: string;
 
     @XViewColumn()
-    threadId: number;
-
-    @XViewColumn()
-    userId: Id<'User'>;
-
-    @XViewColumn()
-    fullName: string | null;
+    commentId: Id<'Comment'>;
 
     @XViewColumn()
     commentText: string;
@@ -26,20 +19,29 @@ export class CommentListView {
     creationDate: Date;
 
     @XViewColumn()
+    videoId: Id<'Video'>;
+
+    @XViewColumn()
     parentCommentId: Id<'Comment'>;
 
     @XViewColumn()
-    avatarUrl: string;
+    isAnonymous: boolean;
 
     @XViewColumn()
-    commentLikeCount: number;
+    isQuestion: boolean;
 
     @XViewColumn()
-    currentUserId: Id<'User'>;
+    userId: Id<'User'>;
+
+    @XViewColumn()
+    currentUserId: Id<'CurrentUser'>;
 
     @XViewColumn()
     isLike: boolean;
 
     @XViewColumn()
-    isQuestion: boolean;
+    commentLikeCount: number;
+
+    @XViewColumn()
+    threadGroup: number;
 }

@@ -1,13 +1,40 @@
-import { CourseItemStateType, CourseItemType, Id } from '@episto/commontypes';
-import { XViewColumn } from '@episto/x-orm';
+import { XViewColumn } from '@thinkhub/x-orm';
+import { Id } from '@episto/commontypes';
 
 export class UserPlaylistView {
+
+    @XViewColumn()
+    userId: Id<'User'>;
 
     @XViewColumn()
     courseId: Id<'Course'>;
 
     @XViewColumn()
-    userId: Id<'User'>;
+    moduleIsCurrent: boolean;
+
+    @XViewColumn()
+    itemIsCurrent: boolean;
+
+    @XViewColumn()
+    courseMode: string;
+
+    @XViewColumn()
+    moduleOrderIndex: number;
+
+    @XViewColumn()
+    itemOrderIndex: number;
+
+    @XViewColumn()
+    videoVersionId: Id<'VideoVersion'>;
+
+    @XViewColumn()
+    examVersionId: Id<'ExamVersion'>;
+
+    @XViewColumn()
+    itemTitle: string;
+
+    @XViewColumn()
+    courseVersionId: Id<'CourseVersion'>;
 
     @XViewColumn()
     videoId: Id<'Video'>;
@@ -16,25 +43,19 @@ export class UserPlaylistView {
     examId: Id<'Exam'>;
 
     @XViewColumn()
+    moduleVersionId: Id<'ModuleVersion'>;
+
+    @XViewColumn()
     moduleId: Id<'Module'>;
 
     @XViewColumn()
     moduleName: string;
 
     @XViewColumn()
-    moduleOrderIndex: number;
-
-    @XViewColumn()
     moduleCode: string;
 
     @XViewColumn()
-    itemOrderIndex: number;
-
-    @XViewColumn()
-    itemTitle: string;
-
-    @XViewColumn()
-    itemType: CourseItemType;
+    itemType: string;
 
     @XViewColumn()
     itemSubtitle: string;
@@ -43,17 +64,20 @@ export class UserPlaylistView {
     playlistItemCode: string;
 
     @XViewColumn()
-    moduleIsCurrent: boolean;
+    videoAudioText: string;
 
     @XViewColumn()
-    itemState: CourseItemStateType;
-
-    @XViewColumn()
-    isRecommendedForPractise: boolean;
+    isFirstItem: boolean;
 
     @XViewColumn()
     scorePercentage: number;
 
     @XViewColumn()
-    videoAudioText: string | null;
+    isRecommendedForPractise: boolean;
+
+    @XViewColumn()
+    completionDate: Date;
+
+    @XViewColumn()
+    itemState: string;
 }

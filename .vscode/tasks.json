@@ -1,6 +1,4 @@
 {
-    // See https://go.microsoft.com/fwlink/?LinkId=733558
-    // for the documentation about the tasks.json format
     "version": "2.0.0",
     "tasks": [
         {
@@ -44,6 +42,18 @@
             "problemMatcher": [],
             "options": {
                 "cwd": "${workspaceFolder}/packages/server-services"
+            },
+            "presentation": {
+                "group": "run"
+            }
+        },
+        {
+            "type": "shell",
+            "label": "build-x-core",
+            "command": "yarn build",
+            "problemMatcher": [],
+            "options": {
+                "cwd": "${workspaceFolder}/packages/x-core"
             },
             "presentation": {
                 "group": "run"
@@ -142,7 +152,6 @@
                 "group": "run"
             }
         },
-        // build deps
         {
             "label": "build-deps",
             "type": "shell",
@@ -150,6 +159,15 @@
             "problemMatcher": [],
             "presentation": {
                 "group": "deps"
+            }
+        },
+        {
+            "label": "scaffold",
+            "type": "shell",
+            "command": "scaffoldModels.ps1",
+            "problemMatcher": [],
+            "options": {
+                "cwd": "${workspaceFolder}/packages/server-services"
             }
         },
         {

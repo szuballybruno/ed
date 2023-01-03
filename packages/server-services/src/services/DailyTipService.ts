@@ -1,12 +1,12 @@
-import { DailyTip } from '../models/entity/misc/DailyTip';
-import { DailyTipOccurrence } from '../models/entity/misc/DailyTipOccurrence';
+import { DailyTip } from '../models/tables/DailyTip';
+import { DailyTipOccurrence } from '../models/tables/DailyTipOccurrence';
 import { DailyTipDTO } from '@episto/communication';
 import { DailyTipEditDataDTO } from '@episto/communication';
 import { DailyTipView } from '../models/views/DailyTipView';
 import { getRandomNumber } from '../utilities/helpers';
 import { MapperService } from './MapperService';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
-import { PrincipalId } from '@episto/x-core';
+import { ORMConnectionService } from './ORMConnectionService';
+import { PrincipalId } from '@thinkhub/x-core';
 import { Id } from '@episto/commontypes';
 import { AuthorizationService } from './AuthorizationService';
 

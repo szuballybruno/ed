@@ -1,24 +1,20 @@
 import { CourseUserPresetType, Id } from '@episto/commontypes';
-import { AdminCourseUserStatsDTO, CourseLearningDTO, HomePageStatsDTO, ImproveYourselfPageStatsDTO, UserCourseStatsDTO, UserCourseStatsOverviewDTO, UserExamStatsDTO, UserLearningOverviewDataDTO, UserLearningPageStatsDTO, UserModuleStatsDTO, UserVideoStatsDTO } from '@episto/communication';
-import { PrincipalId } from '@episto/x-core';
-import { User } from '../models/entity/misc/User';
-import { TempomatDataModel } from '../models/TempomatCalculationDataModel';
+import { AdminCourseUserStatsDTO, CourseLearningDTO, HomePageStatsDTO, UserCourseStatsDTO, UserCourseStatsOverviewDTO, UserExamStatsDTO, UserStatisticsDTO, UserLearningPageStatsDTO, UserModuleStatsDTO, UserVideoStatsDTO } from '@episto/communication';
+import { PrincipalId } from '@thinkhub/x-core';
+import { User } from '../models/tables/User';
+import { TempomatDataModel } from '../models/misc/TempomatDataModel';
 import { AdminCourseUserStatsView } from '../models/views/AdminCourseUserStatsView';
+import { AdminUserCoursesView } from '../models/views/AdminUserCoursesView';
 import { CourseLearningStatsView } from '../models/views/CourseLearningStatsView';
 import { HomePageStatsView } from '../models/views/HomePageStatsView';
-import { ImproveYourselfPageStatsView } from '../models/views/ImproveYourselfPageStatsView';
-import { MostProductiveTimeRangeView } from '../models/views/MostProductiveTimeRangeView';
-import { AdminUserCoursesView } from '../models/views/AdminUserCoursesView';
-import { UserDailyActivityChartView } from '../models/views/UserDailyActivityChartView';
 import { UserExamStatsView } from '../models/views/UserExamStatsView';
 import { UserLearningOverviewStatsView } from '../models/views/UserLearningOverviewStatsView';
 import { UserLearningPageStatsView } from '../models/views/UserLearningPageStatsView';
 import { UserModuleStatsView } from '../models/views/UserModuleStatsView';
 import { UserSpentTimeRatioView } from '../models/views/UserSpentTimeRatioView';
 import { UserVideoStatsView } from '../models/views/UserVideoStatsView';
-import { newNotImplemented } from '../utilities/helpers';
 import { MapperService } from './MapperService';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 import { TempomatService } from './TempomatService';
 import { UserProgressService } from './UserProgressService';
 
@@ -51,12 +47,12 @@ export class UserStatsService {
             .where('userId', '=', 'userId')
             .getSingle();
 
-        const { averageProgressPercentage } = await this
+        const { tempoPercentage } = await this
             ._tempomatService
-            .getUserAvgPerformancePercentageAsync(userId);
+            .getAverageTempomatDataByUserAsync(userId);
 
         return this._mapperService
-            .mapTo(HomePageStatsDTO, [stats, averageProgressPercentage]);
+            .mapTo(HomePageStatsDTO, [stats, tempoPercentage]);
     }
 
     async getUserLearningPageStatsAsync(principalId: PrincipalId) {
@@ -69,36 +65,13 @@ export class UserStatsService {
             .where('userId', '=', 'userId')
             .getSingle();
 
-        const { averageProgressPercentage, averagePerformanceRating } = await this
+        const { tempoPercentage, tempoRating } = await this
             ._tempomatService
-            .getUserAvgPerformancePercentageAsync(userId);
+            .getAverageTempomatDataByUserAsync(userId);
 
         return this
             ._mapperService
-            .mapTo(UserLearningPageStatsDTO, [stats, averageProgressPercentage, averagePerformanceRating]);
-    }
-
-    async getImproveYourselfPageStatsAsync(principalId: PrincipalId) {
-
-        const userId = principalId.toSQLValue();
-
-        const stats = await this._ormService
-            .query(ImproveYourselfPageStatsView, { userId })
-            .where('userId', '=', 'userId')
-            .getSingle();
-
-        const mostProductiveTimeRangeView = await this._ormService
-            .query(MostProductiveTimeRangeView, { userId })
-            .where('userId', '=', 'userId')
-            .getMany();
-
-        const userDailyActivityChartView = await this._ormService
-            .query(UserDailyActivityChartView, { userId })
-            .where('userId', '=', 'userId')
-            .getMany();
-
-        return this._mapperService
-            .mapTo(ImproveYourselfPageStatsDTO, [stats, mostProductiveTimeRangeView, userDailyActivityChartView]);
+            .mapTo(UserLearningPageStatsDTO, [stats, tempoPercentage, tempoRating]);
     }
 
     /**
@@ -182,7 +155,8 @@ export class UserStatsService {
 
                 return {
                     view: statView,
-                    tempomatData
+                    tempomatData,
+                    tempomatCalcData
                 };
             });
 
@@ -190,11 +164,11 @@ export class UserStatsService {
 
             if (preset === 'inprogress')
                 return mergedStats
-                    .filter(x => x.view.startDate && !x.view.finalExamScorePercentage);
+                    .filter(x => x.tempomatCalcData.startDate && !x.view.finalExamScorePercentage);
 
             if (preset === 'notstartedyet')
                 return mergedStats
-                    .filter(x => !x.view.startDate && x.view.requiredCompletionDate);
+                    .filter(x => !x.tempomatCalcData.startDate && x.tempomatCalcData.requiredCompletionDate);
 
             if (preset === 'completed')
                 return mergedStats
@@ -268,36 +242,43 @@ export class UserStatsService {
      */
     async getUserLearningOverviewDataAsync(principalId: PrincipalId, userId: Id<'User'>) {
 
-        const userSpentTimeRatio = await this._ormService
+        const userSpentTimeRatio = (await this._ormService
             .query(UserSpentTimeRatioView, { userId })
             .where('userId', '=', 'userId')
-            .getOneOrNull();
+            .getOneOrNull()) ?? {
+            totalExamSessionElapsedTime: 0,
+            totalQuestionElapsedTime: 0,
+            totalVideoWatchElapsedTime: 0,
+            otherTotalSpentSeconds: 0,
+            userId
+        };
 
         const courses = await this._ormService
             .query(CourseLearningStatsView, { userId })
             .where('userId', '=', 'userId')
             .getMany();
 
-        // in progress courses
-        const inProgressCourses = courses
-            .filter(x => x.isStarted && !x.isCompleted);
-
-        const inProgressCoursesAsCourseShortDTOs = this._mapperService
-            .mapTo(CourseLearningDTO, [inProgressCourses]);
+        const hasInProgressCourse = courses
+            .some(x => x.isStarted && !x.isCompleted);
 
         const stats = await this._ormService
             .query(UserLearningOverviewStatsView, { userId })
             .where('userId', '=', 'userId')
             .getSingle();
 
+        const { tempoRating, tempoPercentage } = await this
+            ._tempomatService
+            .getAverageTempomatDataByUserAsync(userId);
+
         return this
             ._mapperService
-            .mapTo(UserLearningOverviewDataDTO, [
+            .mapTo(UserStatisticsDTO, [
+                userId,
                 stats,
-                inProgressCoursesAsCourseShortDTOs,
                 userSpentTimeRatio,
-                inProgressCourses,
-                userId
+                hasInProgressCourse,
+                tempoRating,
+                tempoPercentage,
             ]);
     }
 
@@ -306,7 +287,6 @@ export class UserStatsService {
         courseId: Id<'Course'>,
         userId: Id<'User'>
     ) {
-
         const courseStats = await this._ormService
             .query(AdminUserCoursesView, { userId, courseId })
             .where('userId', '=', 'userId')
@@ -319,13 +299,13 @@ export class UserStatsService {
             .getSingle();
 
         const progressChartData = await this._userProgressService
-            .getProgressChartDataAsync(principalId, courseId, userId);
+            .getProgressChartDataByCourseAsync(principalId, courseId, userId);
 
-        const { userPerformancePercentage, performanceRating } = await this
+        const { userPerformancePercentage, tempoRating } = await this
             ._tempomatService
             .getTempomatValuesAsync(userId, courseId);
 
         return this._mapperService
-            .mapTo(UserCourseStatsOverviewDTO, [courseStats, userSpentTimeRatio, progressChartData, userPerformancePercentage, performanceRating]);
+            .mapTo(UserCourseStatsOverviewDTO, [courseStats, userSpentTimeRatio, progressChartData, userPerformancePercentage, tempoRating]);
     }
 }

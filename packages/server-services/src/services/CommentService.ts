@@ -1,15 +1,15 @@
-import { Comment } from '../models/entity/misc/Comment';
+import { Comment } from '../models/tables/Comment';
 import { CommentListView } from '../models/views/CommentListView';
 import { LatestVideoView } from '../models/views/LatestVideoView';
 import { CommentCreateDTO } from '@episto/communication';
 import { CommentListDTO } from '@episto/communication';
 import { instantiate } from '@episto/commonlogic';
-import { PrincipalId } from '@episto/x-core';
+import { PrincipalId } from '@thinkhub/x-core';
 import { InsertEntity } from '../utilities/misc';
 import { MapperService } from './MapperService';
 import { readItemCode } from './misc/encodeService';
 import { QueryServiceBase } from './misc/ServiceBase';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 import { AuthorizationService } from './AuthorizationService';
 
 export class CommentService extends QueryServiceBase<Comment> {
@@ -58,7 +58,8 @@ export class CommentService extends QueryServiceBase<Comment> {
             text: text,
             userId: userId,
             parentCommentId: replyToCommentId,
-            videoVersionId: latestVideoVersion.videoVersionId
+            videoVersionId: latestVideoVersion.videoVersionId,
+            videoId: latestVideoVersion.videoId
         });
 
         await this._ormService

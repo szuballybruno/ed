@@ -1,6 +1,5 @@
-import { XViewColumn } from '@episto/x-orm';
+import { XViewColumn } from '@thinkhub/x-orm';
 import { Id } from '@episto/commontypes';
-
 
 export class UserLearningOverviewStatsView {
 
@@ -11,22 +10,25 @@ export class UserLearningOverviewStatsView {
     userEmail: string;
 
     @XViewColumn()
-    overallPerformancePercentage: number;
-
-    @XViewColumn()
-    engagementPoints: number;
-
-    @XViewColumn()
     performancePercentage: number;
 
     @XViewColumn()
-    totalUserReactionTimePoints: number;
+    userReactionTimeDifferencePercentage: number;
+
+    @XViewColumn()
+    userReactionTimePoints: number;
 
     @XViewColumn()
     userExamLengthPoints: number;
 
     @XViewColumn()
-    userReactionTimePoints: number;
+    totalUserReactionTimePoints: number;
+
+    @XViewColumn()
+    mostFrequentTimeRange: string;
+
+    @XViewColumn()
+    engagementPoints: number;
 
     @XViewColumn()
     totalTimeActiveOnPlatformSeconds: number;
@@ -35,22 +37,16 @@ export class UserLearningOverviewStatsView {
     watchedVideos: number;
 
     @XViewColumn()
+    completedExamCount: number;
+
+    @XViewColumn()
     answeredVideoAndPractiseQuizQuestions: number;
 
     @XViewColumn()
     correctAnsweredVideoAndPractiseQuizQuestions: number;
 
     @XViewColumn()
-    correctAnswerRatePercentage: number;
-
-    @XViewColumn()
-    userReactionTimeDifferencePercentage: number;
-
-    @XViewColumn()
     averageWatchedVideosPerDay: number;
-
-    @XViewColumn()
-    mostFrequentTimeRange: string;
 
     @XViewColumn()
     averageSessionLengthSeconds: number;
@@ -60,4 +56,10 @@ export class UserLearningOverviewStatsView {
 
     @XViewColumn()
     videosToBeRepeatedCount: number;
+
+    @XViewColumn()
+    correctAnswerRatePercentage: number;
+
+    @XViewColumn()
+    overallPerformancePercentage: number;
 }

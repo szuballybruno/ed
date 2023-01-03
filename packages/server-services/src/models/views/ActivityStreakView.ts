@@ -1,14 +1,10 @@
-import { XViewColumn } from '@episto/x-orm';
+import { XViewColumn } from '@thinkhub/x-orm';
 import { Id } from '@episto/commontypes';
-
 
 export class ActivityStreakView {
 
     @XViewColumn()
     id: Id<'ActivityStreak'>;
-
-    @XViewColumn()
-    userId: Id<'User'>;
 
     @XViewColumn()
     startDate: Date;
@@ -20,5 +16,8 @@ export class ActivityStreakView {
     isFinalized: boolean;
 
     @XViewColumn()
-    length_days: number;
+    userId: Id<'User'>;
+
+    @XViewColumn()
+    lengthDays: number;
 }

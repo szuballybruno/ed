@@ -1,10 +1,10 @@
-import { TeacherInfo } from '../models/entity/misc/TeacherInfo';
+import { TeacherInfo } from '../models/tables/TeacherInfo';
 import { TeacherInfoEditDTO } from '@episto/communication';
 import { Id } from '@episto/commontypes';
-import { PrincipalId } from '@episto/x-core';
+import { PrincipalId } from '@thinkhub/x-core';
 import { AuthorizationService } from './AuthorizationService';
 import { MapperService } from './MapperService';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 
 export class TeacherInfoService {
 

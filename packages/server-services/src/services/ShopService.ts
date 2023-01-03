@@ -1,8 +1,8 @@
 import { UploadedFile } from 'express-fileupload';
-import { DiscountCode } from '../models/entity/misc/DiscountCode';
-import { ShopItem } from '../models/entity/misc/ShopItem';
-import { ShopItemCategory } from '../models/entity/misc/ShopItemCategory';
-import { User } from '../models/entity/misc/User';
+import { DiscountCode } from '../models/tables/DiscountCode';
+import { ShopItem } from '../models/tables/ShopItem';
+import { ShopItemCategory } from '../models/tables/ShopItemCategory';
+import { User } from '../models/tables/User';
 import { CourseShopItemListDTO } from '@episto/communication';
 import { DiscountCodeDTO } from '@episto/communication';
 import { IdResultDTO } from '@episto/communication';
@@ -18,10 +18,10 @@ import { CourseService } from './CourseService';
 import { EmailService } from './EmailService';
 import { FileService } from './FileService';
 import { MapperService } from './MapperService';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 import { UrlService } from './UrlService';
-import { PrincipalId } from '@episto/x-core';
-import { StorageFile } from '../models/entity/misc/StorageFile';
+import { PrincipalId } from '@thinkhub/x-core';
+import { StorageFile } from '../models/tables/StorageFile';
 import { Id } from '@episto/commontypes';
 import { CourseShopItemListView } from '../models/views/CourseShopItemListView';
 import { AuthorizationService } from './AuthorizationService';
@@ -177,10 +177,13 @@ export class ShopService {
 
         const shopItem = await this._ormService
             .query(ShopItem, { shopItemId })
-            .leftJoin(StorageFile, x => x
-                .on('id', '=', 'coverFileId', ShopItem))
             .where('id', '=', 'shopItemId')
             .getSingle();
+
+        const sf = await this._ormService
+            .query(StorageFile, { sfid: shopItem.coverFileId })
+            .where('id', '=', 'sfid')
+            .getOneOrNull();
 
         const discountCodes = await this._ormService
             .query(DiscountCode, { shopItemId })
@@ -188,7 +191,7 @@ export class ShopService {
             .getMany();
 
         return this._mapperService
-            .mapTo(ShopItemEditDTO, [shopItem, discountCodes]);
+            .mapTo(ShopItemEditDTO, [shopItem, discountCodes, sf?.filePath ?? '']);
     }
 
     async getPrivateCourseListAsync(principalId: PrincipalId) {

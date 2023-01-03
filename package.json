@@ -1,24 +1,28 @@
 {
   "private": "true",
   "workspaces": [
-    "packages/*"
+    "./packages/*",
+    "./thinkhub-xlib/packages/*"
   ],
   "scripts": {
+    "build-tests-client": "lerna run build --scope=@episto/tests-client --include-dependencies",
     "bootstrap": "lerna bootstrap",
     "build-deps2": "lerna run build --ignore={@episto/server-api,@episto/frontend,@episto/tests-client,@episto/script-producer}",
     "build-deps": "lerna run build --scope={@episto/server-services,@episto/communication,@episto/commontypes}",
     "build-server": "lerna run build --scope=@episto/server-api --include-dependencies",
     "build-client": "lerna run build --scope=@episto/frontend --include-dependencies",
     "build-serve-client": "lerna run build-serve --scope=@episto/frontend",
-    "start-tests-client": "lerna run start-cy --scope=@episto/tests-client",
     "open-cy": "lerna run open-cy --scope=@episto/tests-client",
-    "start-server": "lerna run start --scope=@episto/server-api",
     "build-script-producer": "lerna run build --scope=@episto/script-producer --include-dependencies",
-    "start-script-producer": "lerna run start --scope=@episto/script-producer"
+    "start-tests-client": "lerna run start-cy --scope=@episto/tests-client",
+    "start-server": "lerna run start --scope=@episto/server-api",
+    "start-script-producer": "lerna run start --scope=@episto/script-producer",
+    "start-server-dist": "lerna run start-dist --scope=@episto/server-api",
+    "read-xlib-tag": "node -e \"const mf = fs.readFileSync('./modules.json', 'utf-8'); const obj = JSON.parse(mf); console.log(obj['Thinkhub-Software/thinkhub-xlib']); \" "
   },
   "devDependencies": {
     "lerna": "6.0.3",
     "typescript": "4.9.3"
   },
-  "name": "epistogram"
+  "name": "@episto/epistogram"
 }

@@ -1,6 +1,5 @@
-import { XViewColumn } from '@episto/x-orm';
+import { XViewColumn } from '@thinkhub/x-orm';
 import { Id } from '@episto/commontypes';
-
 
 export class CoinTransactionView {
 
@@ -21,6 +20,9 @@ export class CoinTransactionView {
 
     @XViewColumn()
     questionText: string;
+
+    @XViewColumn()
+    shopItemName: string;
 
     @XViewColumn()
     reason: string;

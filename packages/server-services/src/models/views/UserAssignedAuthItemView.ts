@@ -1,20 +1,19 @@
-import { XViewColumn } from '@episto/x-orm';
+import { XViewColumn } from '@thinkhub/x-orm';
 import { Id } from '@episto/commontypes';
-
 
 export class UserAssignedAuthItemView {
 
     @XViewColumn()
-    assigneeUserId: Id<'User'>;
+    assigneeUserId: Id<'AssigneeUser'>;
 
     @XViewColumn()
-    permissionId: Id<'Permission'> | null;
+    permissionId: Id<'Permission'>;
 
     @XViewColumn()
-    roleId: Id<'Role'> | null;
+    roleId: Id<'Role'>;
 
     @XViewColumn()
-    contextCompanyId: Id<'Company'>;
+    contextCompanyId: Id<'ContextCompany'>;
 
     @XViewColumn()
     isRole: boolean;

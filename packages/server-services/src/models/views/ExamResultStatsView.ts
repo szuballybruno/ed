@@ -1,6 +1,5 @@
-import { XViewColumn } from '@episto/x-orm';
+import { XViewColumn } from '@thinkhub/x-orm';
 import { Id } from '@episto/commontypes';
-
 
 export class ExamResultStatsView {
 
@@ -20,25 +19,25 @@ export class ExamResultStatsView {
     questionCount: number;
 
     @XViewColumn()
-    avgScorePercentage: number;
+    examLengthSeconds: number;
 
     @XViewColumn()
     scorePercentage: number;
 
     @XViewColumn()
-    examMaxScore: number;
-
-    @XViewColumn()
     examScore: number;
 
     @XViewColumn()
-    scorePercentageDiffFromAvg: number;
-
-    @XViewColumn()
-    examLengthSeconds: number;
+    examMaxScore: number;
 
     @XViewColumn()
     answeredQuestionCount: number;
+
+    @XViewColumn()
+    avgScorePercentage: number;
+
+    @XViewColumn()
+    scorePercentageDiffFromAvg: number;
 
     @XViewColumn()
     isHighestScoreSession: boolean;

@@ -96,23 +96,13 @@ SELECT
     u.last_name,
     sf.file_path avatar_url,
     ucpav.completed_percentage,
-    upv.performance_percentage,
     ccvcv.completed_video_count,
     ccecv.completed_exam_count,
     cvcv.video_count,
     cecv.exam_count,
     cstv.total_spent_seconds,
     fesv.final_exam_score_percentage,
-    tcdv.required_completion_date,
-    sar.summerized_score,
-    ffecc.course_completion_date completion_date,
-
-    -- tempomat
-    tcdv.start_date,
-    tcdv.tempomat_mode,
-    tcdv.original_estimated_completion_date,
-    tcdv.total_item_count,
-    tcdv.total_completed_item_count
+    ffecc.course_completion_date completion_date
 FROM public.course_access_bridge cab
 
 LEFT JOIN public.company comp
@@ -128,10 +118,6 @@ ON co.id = cab.course_id
 LEFT JOIN public.user_course_progress_actual_view ucpav
 ON ucpav.user_id = u.id
 AND ucpav.course_id = co.id
-
-LEFT JOIN public.user_performance_view upv
-ON upv.user_id = u.id
-AND upv.course_id = co.id 
 
 LEFT JOIN public.completed_course_video_count_view ccvcv
 ON ccvcv.user_id = u.id
@@ -154,14 +140,6 @@ AND cstv.course_id = co.id
 LEFT JOIN public.final_exam_score_view fesv
 ON fesv.user_id = u.id
 AND fesv.course_id = co.id
-
-LEFT JOIN summerized_answer_result sar
-ON sar.user_id = u.id
-AND sar.course_id = co.id
-
-LEFT JOIN public.tempomat_calculation_data_view tcdv
-ON tcdv.user_id = u.id
-AND tcdv.course_id = co.id
 
 LEFT JOIN first_final_exam_completion_cte ffecc
 ON ffecc.user_id = u.id

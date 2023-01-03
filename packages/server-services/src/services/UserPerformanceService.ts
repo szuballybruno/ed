@@ -1,8 +1,8 @@
-import { Id } from '@episto/x-core';
-import { TempomatDataModel } from '../models/TempomatCalculationDataModel';
+import { Id } from '@thinkhub/x-core';
+import { TempomatDataModel } from '../models/misc/TempomatDataModel';
 import { TempomatCalculationDataView } from '../models/views/TempomatCalculationDataView';
 import { MapperService } from './MapperService';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 import { TempomatService } from './TempomatService';
 
 export class UserPerformanceService {

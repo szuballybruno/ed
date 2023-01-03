@@ -1,14 +1,14 @@
-import { PrequizCompletion } from '../models/entity/prequiz/PrequizCompletion';
-import { PrequizUserAnswer } from '../models/entity/prequiz/PrequizUserAnswer';
+import { PrequizCompletion } from '../models/tables/PrequizCompletion';
+import { PrequizUserAnswer } from '../models/tables/PrequizUserAnswer';
 import { PrequizQuestionView } from '../models/views/PrequizQuestionView';
 import { PrequizAnswerDTO } from '@episto/communication';
 import { PrequizQuestionDTO } from '@episto/communication';
 import { PrequizUserAnswerDTO } from '@episto/communication';
 import { Id } from '@episto/commontypes';
-import { PrincipalId } from '@episto/x-core';
+import { PrincipalId } from '@thinkhub/x-core';
 import { AuthorizationService } from './AuthorizationService';
 import { MapperService } from './MapperService';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { TempomatService } from './TempomatService';
 
@@ -84,10 +84,8 @@ export class PrequizService {
         if (!userAnswer)
             return null;
 
-        const answer = userAnswer.answer;
-
         return {
-            answerId: answer?.id ?? null,
+            answerId: userAnswer.answerId ?? null,
             answerValue: userAnswer.value ?? null
         } as PrequizUserAnswerDTO;
     }
@@ -145,7 +143,7 @@ export class PrequizService {
          */
         const previsionedCompletionDate = await this
             ._tempomatService
-            .getTempomatPrevisionedCompletionDateAsync(principalId.getId(), courseId);
+            .getEstimatedCompletionDateAsync(principalId.getId(), courseId);
 
         await this._courseBridgeService
             .setPrevisionedCompletionDateAsync(principalId.getId(), courseId, previsionedCompletionDate);

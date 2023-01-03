@@ -1,4 +1,4 @@
-name: epistogram_deploy_pipeline
+name: epistogram_test_pipeline
 on:
   pull_request:
     branches: [ dev, demo, main ]
@@ -6,73 +6,47 @@ on:
 env:
   BRANCH_NAME: ${{ github.event.pull_request.base.ref }}
   DB_NAME: epistogram_${{ github.event.pull_request.base.ref }}
-
-  FRONTEND_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/epistogram-frontend-${{ github.event.pull_request.base.ref }}
-  FRONTEND_CLOUD_RUN_SVC_NAME: epistogram-frontend-${{ github.event.pull_request.base.ref }}
-
-  BACKEND_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/epistogram-backend-${{ github.event.pull_request.base.ref }}
-  BACKEND_CLOUD_RUN_SVC_NAME: epistogram-backend-${{ github.event.pull_request.base.ref }}
-  
-  MIGEN_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/epistogram-migen-${{ github.event.pull_request.base.ref }}
-  
-  CLOUD_SQL_CONNCETION_NAME: gifted-country-324010:europe-central2:epistogram
-  GCP_PROJECT_NAME: gifted-country-324010
-
   PGPASSWORD: ${{ secrets.DB_SERVICE_USER_PASSWORD }}
+  EPITEST_POSTGRES_USER_PASSWORD: epitest_postgres_user_pass
 
 jobs:
-
-  # 
-  # ------ prerequisites
-  # 
 
   generate_migration_script: 
     name: Generate migration script
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout branch
+      - name: Checkout
         uses: actions/checkout@v3
-      
-      - name: Set up Docker Buildx for layer caching
-        uses: docker/setup-buildx-action@master
-
-      - name: Get migration versions 
-        shell: pwsh
-        working-directory: ./packages/util-script-producer/scripts
-        run: |
-          ./get_mig_versions.ps1 `
-            -dbpass '${{secrets.DB_SERVICE_USER_PASSWORD}}' `
-            -dbhost '${{secrets.DB_HOST_ADDRESS}}' `
-            -dbport '${{secrets.DB_PORT}}' `
-            -dbname '${{env.DB_NAME}}' `
-            -dbuser '${{secrets.DB_SERVICE_USER_NAME}}'
-
-      - name: Build migen
-        uses: docker/build-push-action@v3
         with:
-          file: ./packages/util-script-producer/docker/migen.Dockerfile
-          context: .
-          cache-from: type=gha,scope=${{ env.GITHUB_REF_NAME }}-migen
-          cache-to: type=gha,scope=${{ env.GITHUB_REF_NAME }}-migen,mode=max
-          outputs: type=docker,dest=migen.tar
-          tags: |
-            migen
-
-      - name: Load migen image
-        run: |
-          docker load < migen.tar 
+          path: './epistogram'
+      
+      - name: Checkout xlib
+        uses: actions/checkout@v3
+        with:
+          repository: Thinkhub-Software/thinkhub-xlib
+          path: './thinkhub-xlib'
+          token: ${{ secrets.XLIB_REPO_READ_PAT }}
+          ref: 'master'
 
       - name: Run migen
-        run: |
-          docker run \
-            -v ${PWD}/migen_out:/app/packages/util-script-producer/out migen
+        shell: pwsh
+        run: ./thinkhub-xlib/packages/x-migen/scripts/run_migen_prod.ps1 `
+          -dbname "${{env.DB_NAME}}" `
+          -dbhost "${{secrets.DB_HOST_ADDRESS}}" `
+          -dbpassword "${{secrets.DB_SERVICE_USER_PASSWORD}}" `
+          -dbusername "${{secrets.DB_SERVICE_USER_NAME}}" `
+          -dbport "${{secrets.DB_PORT}}" `
+          -outFolderPath "${PWD}/epistogram/migen_out" `
+          -schemaFolderPath "${PWD}/epistogram/packages/server-services/sql" `
+          -migen_folder_path "${PWD}/thinkhub-xlib/packages/x-migen" `
+          -mode "SCRIPT_ONLY"
 
       - name: Upload migration-script artifact
         uses: actions/upload-artifact@v3
         with:
           name: migration-script
-          path: ./migen_out/migration-script.sql
+          path: ./epistogram/migen_out/migration-script.sql
 
   database_backup:
     name: Backup database
@@ -82,10 +56,10 @@ jobs:
       - name: Checkout branch
         uses: actions/checkout@v3
 
-      - name: Backup
+      - name: Backup db
         shell: pwsh
         run: |
-          ./scripts/db_dump.ps1 `
+          ./scripts/core/db_dump.ps1 `
             -dbpass '${{secrets.DB_SERVICE_USER_PASSWORD}}' `
             -dbhost '${{secrets.DB_HOST_ADDRESS}}' `
             -dbport '${{secrets.DB_PORT}}' `
@@ -99,39 +73,56 @@ jobs:
           name: database-backup
           path: ./database-backup.sql
 
-  # 
-  # ------ testing 
-  # 
-
   run_tests: 
     name: Run tests
     runs-on: ubuntu-latest
-    needs: [generate_migration_script,database_backup]
+    needs: [generate_migration_script, database_backup]
     
     steps:
       - name: Checkout branch
         uses: actions/checkout@v3
+        with:
+          path: './epistogram'
+      
+      - name: Checkout xlib
+        uses: actions/checkout@v3
+        with:
+          repository: Thinkhub-Software/thinkhub-xlib
+          path: './thinkhub-xlib'
+          token: ${{ secrets.XLIB_REPO_READ_PAT }}
+          ref: 'master'
+
+      - name: Set up Docker Buildx for layer caching
+        uses: docker/setup-buildx-action@master
 
       - name: Download migration-script artifact
         uses: actions/download-artifact@v3
         with:
           name: migration-script
-          path: ./epitest/init
+          path: ./epistogram/epitest/init-sql
 
       - name: Download database-backup artifact
         uses: actions/download-artifact@v3
         with:
           name: database-backup
-          path: ./epitest/init
+          path: ./epistogram/epitest/init-sql
 
-      - name: Compose up
+      - name: Build containers
         shell: pwsh
         run: |
-          ./scripts/compose_up_epitest.ps1
+          ./epistogram/scripts/monobuild.ps1 `
+            -client_env "epitest" `
+            -builddeps `
+            -cachescope "${{env.BRANCH_NAME}}" `
+            -cachetype "gha"
+
+      - name: Run tests
+        shell: pwsh
+        run: ./epistogram/scripts/compose_up_tests.ps1
 
       - name: Upload test-logs artifact
         uses: actions/upload-artifact@v3
         if: always()
         with:
           name: test-artifacts
-          path: ./epitest/out
+          path: ./epistogram/epitest/out

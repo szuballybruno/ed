@@ -1,8 +1,8 @@
 import generatePassword from 'password-generator';
-import { ActivationCode } from '../models/entity/misc/ActivationCode';
+import { ActivationCode } from '../models/tables/ActivationCode';
 import { Id } from '@episto/commontypes';
 import { forN } from '../utilities/helpers';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 import { ActivationCodeListView } from '../models/views/ActivationCodeListView';
 import { instantiate } from '@episto/commonlogic';
 import { InsertEntity } from '../utilities/misc';

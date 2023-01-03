@@ -1,7 +1,5 @@
-import { XViewColumn } from '@episto/x-orm';
-import { CourseStageNameType, CourseVisibilityType } from '@episto/commontypes';
+import { XViewColumn } from '@thinkhub/x-orm';
 import { Id } from '@episto/commontypes';
-
 
 export class CourseDetailsView {
 
@@ -10,12 +8,6 @@ export class CourseDetailsView {
 
     @XViewColumn()
     userId: Id<'User'>;
-
-    @XViewColumn()
-    canStartCourse: boolean;
-
-    @XViewColumn()
-    modificationDate: Date;
 
     @XViewColumn()
     title: string;
@@ -36,12 +28,6 @@ export class CourseDetailsView {
     previouslyCompletedCount: number;
 
     @XViewColumn()
-    humanSkillBenefitsDescription: string;
-
-    @XViewColumn()
-    visibility: CourseVisibilityType;
-
-    @XViewColumn()
     languageName: string;
 
     @XViewColumn()
@@ -51,30 +37,37 @@ export class CourseDetailsView {
     skillBenefits: string;
 
     @XViewColumn()
+    visibility: string;
+
+    @XViewColumn()
     humanSkillBenefits: string;
 
     @XViewColumn()
-    categoryId: number;
+    humanSkillBenefitsDescription: string;
+
+    @XViewColumn()
+    modificationDate: Date;
+
+    @XViewColumn()
+    currentItemCode: string;
+
+    @XViewColumn()
+    stageName: string;
+
+    @XViewColumn()
+    categoryId: Id<'Category'>;
 
     @XViewColumn()
     categoryName: string;
 
     @XViewColumn()
-    subCategoryId: Id<'CourseCategory'>;
+    subCategoryId: Id<'SubCategory'>;
 
     @XViewColumn()
     subCategoryName: string;
 
     @XViewColumn()
-    stageName: CourseStageNameType;
-
-    @XViewColumn()
-    currentItemCode: string;
-
-    // teacher 
-
-    @XViewColumn()
-    teacherId: Id<'User'>;
+    teacherId: Id<'Teacher'>;
 
     @XViewColumn()
     teacherFirstName: string;
@@ -103,17 +96,11 @@ export class CourseDetailsView {
     @XViewColumn()
     teacherBadges: string;
 
-    // teacher avatar 
-
     @XViewColumn()
     teacherAvatarFilePath: string;
 
-    // cover 
-
     @XViewColumn()
     coverFilePath: string;
-
-    // calculated
 
     @XViewColumn()
     totalVideoCount: number;
@@ -129,4 +116,7 @@ export class CourseDetailsView {
 
     @XViewColumn()
     totalCompletionCount: number;
+
+    @XViewColumn()
+    canStartCourse: boolean;
 }

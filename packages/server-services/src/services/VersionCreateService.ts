@@ -1,8 +1,8 @@
 import { Id } from '@episto/commontypes';
 import { InsertEntity } from '../utilities/misc';
-import { ClassType } from './misc/advancedTypes/ClassType';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
-import { EntityType } from '@episto/x-orm';
+import { ClassType } from '../models/misc/ClassType';
+import { ORMConnectionService } from './ORMConnectionService';
+import { EntityType } from '@thinkhub/x-orm';
 
 export class VersionCreateService {
 

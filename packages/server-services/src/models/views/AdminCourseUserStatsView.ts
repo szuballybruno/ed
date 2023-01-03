@@ -1,5 +1,5 @@
+import { XViewColumn } from '@thinkhub/x-orm';
 import { Id } from '@episto/commontypes';
-import { XViewColumn } from '@episto/x-orm';
 
 export class AdminCourseUserStatsView {
 
@@ -43,18 +43,5 @@ export class AdminCourseUserStatsView {
     finalExamScorePercentage: number;
 
     @XViewColumn()
-    summerizedScore: number;
-
-    @XViewColumn()
-    requiredCompletionDate: Date;
-
-    @XViewColumn()
     completionDate: Date;
-
-    @XViewColumn()
-    startDate: Date;
-
-    @XViewColumn()
-    totalItemCount: number;
 }
-

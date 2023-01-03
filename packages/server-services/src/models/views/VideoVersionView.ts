@@ -1,20 +1,20 @@
-import { XViewColumn } from '@episto/x-orm';
-
+import { XViewColumn } from '@thinkhub/x-orm';
+import { Id } from '@episto/commontypes';
 
 export class VideoVersionView {
 
     @XViewColumn()
-    videoId: number;
+    videoId: Id<'Video'>;
 
     @XViewColumn()
-    videoVersionId: number;
+    videoVersionId: Id<'VideoVersion'>;
 
     @XViewColumn()
-    videoDataId: number;
+    videoDataId: Id<'VideoData'>;
 
     @XViewColumn()
-    moduleVersionId: number;
+    moduleVersionId: Id<'ModuleVersion'>;
 
     @XViewColumn()
-    courseVersionId: number;
+    courseVersionId: Id<'CourseVersion'>;
 }

@@ -1,11 +1,11 @@
-import { Comment } from '../models/entity/misc/Comment';
-import { Like } from '../models/entity/misc/Like';
+import { Comment } from '../models/tables/Comment';
+import { Like } from '../models/tables/Like';
 import { Id } from '@episto/commontypes';
-import { PrincipalId } from '@episto/x-core';
+import { PrincipalId } from '@thinkhub/x-core';
 import { AuthorizationService } from './AuthorizationService';
 import { MapperService } from './MapperService';
 import { QueryServiceBase } from './misc/ServiceBase';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 
 export class LikeService extends QueryServiceBase<Like> {
 

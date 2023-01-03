@@ -1,4 +1,4 @@
-import { RecommendedItemQuotaDTO, UserActiveCourseDTO, UserProgressChartStep } from '@episto/communication';
+import { CourseProgressOverviewDTO, UserActiveCourseDTO, UserProgressChartStep } from '@episto/communication';
 import { apiRoutes } from '@episto/communication';
 import { Id } from '@episto/commontypes';
 import { QueryService } from '../../static/XQuery/XQueryReact';
@@ -20,12 +20,13 @@ export const useUserCourseProgressChartData = (courseId: Id<'Course'> | null, en
     };
 };
 
-export const useRecommendedItemQuota = (courseId?: Id<'Course'>) => {
+export const useCourseProgressOverview = (courseId?: Id<'Course'>) => {
 
-    const qr = QueryService.useXQuery<RecommendedItemQuotaDTO>(apiRoutes.userProgress.getRecommendedItemQuota, { courseId }, !!courseId);
+    const qr = QueryService
+        .useXQuery<CourseProgressOverviewDTO>(apiRoutes.userProgress.getCourseProgressOverview, { courseId }, !!courseId);
 
     return {
-        recommendedItemQuota: qr.data,
+        courseProgressOverviewData: qr.data,
         recommendedItemQuotaState: qr.state,
         recommendedItemQuotaError: qr.error,
         refetchRecommendedItemQuota: qr.refetch

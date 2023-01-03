@@ -1,5 +1,4 @@
-import { XViewColumn } from '@episto/x-orm';
-import { CourseItemType } from '@episto/commontypes';
+import { XViewColumn } from '@thinkhub/x-orm';
 import { Id } from '@episto/commontypes';
 
 export class PlaylistView {
@@ -8,13 +7,7 @@ export class PlaylistView {
     courseId: Id<'Course'>;
 
     @XViewColumn()
-    videoId: Id<'Video'>;
-
-    @XViewColumn()
-    examId: Id<'Exam'>;
-
-    @XViewColumn()
-    moduleId: Id<'Module'>;
+    courseVersionId: Id<'CourseVersion'>;
 
     @XViewColumn()
     moduleName: string;
@@ -23,7 +16,22 @@ export class PlaylistView {
     moduleOrderIndex: number;
 
     @XViewColumn()
-    moduleCode: string;
+    moduleVersionId: Id<'ModuleVersion'>;
+
+    @XViewColumn()
+    moduleId: Id<'Module'>;
+
+    @XViewColumn()
+    videoVersionId: Id<'VideoVersion'>;
+
+    @XViewColumn()
+    videoId: Id<'Video'>;
+
+    @XViewColumn()
+    examVersionId: Id<'ExamVersion'>;
+
+    @XViewColumn()
+    examId: Id<'Exam'>;
 
     @XViewColumn()
     itemOrderIndex: number;
@@ -32,14 +40,20 @@ export class PlaylistView {
     itemTitle: string;
 
     @XViewColumn()
-    itemType: CourseItemType;
-
-    @XViewColumn()
     itemSubtitle: string;
 
     @XViewColumn()
-    playlistItemCode: string;
+    itemType: string;
 
     @XViewColumn()
-    videoAudioText: string | null;
+    versionCode: string;
+
+    @XViewColumn()
+    videoAudioText: string;
+
+    @XViewColumn()
+    moduleCode: string;
+
+    @XViewColumn()
+    playlistItemCode: string;
 }

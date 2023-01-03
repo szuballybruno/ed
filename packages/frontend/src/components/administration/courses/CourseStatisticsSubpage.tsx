@@ -1,4 +1,5 @@
 import { Grid } from '@chakra-ui/react';
+import { useMemo } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { Environment } from '../../../static/Environemnt';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
@@ -11,13 +12,14 @@ import { CourseAdministartionFrame } from './CourseAdministartionFrame';
 
 export const CourseStatisticsSubpage = () => {
 
-    const adminHomeDetailsStatistics = [
+    const adminHomeDetailsStatistics = useMemo((): StatisticsGroupType[] => [
         {
             title: '',
             items: [
 
                 /* Course completion rate */
                 {
+                    isPreview: true,
                     additionalInfo: {
                         change: 'up',
                         value: '32',
@@ -32,6 +34,7 @@ export const CourseStatisticsSubpage = () => {
 
                 /* Average time spent with learning per week */
                 {
+                    isPreview: true,
                     title: 'Átlagos tanulással töltött idő/hét',
                     value: '3.5',
                     suffix: 'óra',
@@ -41,6 +44,7 @@ export const CourseStatisticsSubpage = () => {
 
                 /* Performance on exam */
                 {
+                    isPreview: true,
                     additionalInfo: {
                         change: 'down',
                         value: '20',
@@ -55,6 +59,7 @@ export const CourseStatisticsSubpage = () => {
 
                 /* Average time spent per sessions */
                 {
+                    isPreview: true,
                     title: 'Átlagosan eltöltött idő/alkalom',
                     value: '38',
                     suffix: 'perc',
@@ -64,6 +69,7 @@ export const CourseStatisticsSubpage = () => {
 
                 /* User activity distribution chart */
                 {
+                    isPreview: true,
                     isOpenByDefault: true,
                     children: <EpistoPieChart
                         title="Felhasználók aktivitása"
@@ -82,6 +88,7 @@ export const CourseStatisticsSubpage = () => {
 
                 /* Most active time ranges chart */
                 {
+                    isPreview: true,
                     isOpenByDefault: true,
                     children: <EpistoBarChart
                         title='Kurzus megtekintések alakulása'
@@ -106,6 +113,7 @@ export const CourseStatisticsSubpage = () => {
 
                 /* Average watched videos per day */
                 {
+                    isPreview: true,
                     additionalInfo: {
                         change: 'up',
                         value: '32',
@@ -120,6 +128,7 @@ export const CourseStatisticsSubpage = () => {
 
                 /* Productivity rate */
                 {
+                    isPreview: true,
                     title: 'Produktivitás alakulása (produktív folyamatok aránya nő a non produktívhoz képest)',
                     value: '38',
                     suffix: '%',
@@ -129,6 +138,7 @@ export const CourseStatisticsSubpage = () => {
 
                 /* Dropout rate */
                 {
+                    isPreview: true,
                     additionalInfo: {
                         change: 'down',
                         value: '20',
@@ -143,6 +153,7 @@ export const CourseStatisticsSubpage = () => {
 
                 /* Commitment rate */
                 {
+                    isPreview: true,
                     title: 'Elköteleződés',
                     value: '73',
                     suffix: '%',
@@ -151,7 +162,7 @@ export const CourseStatisticsSubpage = () => {
                 }
             ]
         }
-    ] as StatisticsGroupType[];
+    ], []);
 
     return (
         <CourseAdministartionFrame
@@ -178,10 +189,15 @@ export const CourseStatisticsSubpage = () => {
                                 gridAutoRows="200px"
                                 gridAutoFlow="column dense">
 
-                                {section.items.map((item, index) => {
-                                    return <StatisticsCard key={index}
-                                        {...item} />;
-                                })}
+                                {section
+                                    .items
+                                    .map((item, index) => {
+                                        return (
+                                            <StatisticsCard
+                                                key={index}
+                                                {...item} />
+                                        );
+                                    })}
                             </Grid>
                         </EpistoFlex2>;
                     })}

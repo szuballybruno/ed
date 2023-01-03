@@ -1,17 +1,10 @@
-import { XViewColumn } from '@episto/x-orm';
+import { XViewColumn } from '@thinkhub/x-orm';
 import { Id } from '@episto/commontypes';
-
 
 export class UserOverviewView {
 
     @XViewColumn()
     userId: Id<'User'>;
-
-    @XViewColumn()
-    companyId: Id<'Company'>;
-
-    @XViewColumn()
-    userEmail: string;
 
     @XViewColumn()
     firstName: string;
@@ -20,10 +13,19 @@ export class UserOverviewView {
     lastName: string;
 
     @XViewColumn()
+    companyId: Id<'Company'>;
+
+    @XViewColumn()
+    userEmail: string;
+
+    @XViewColumn()
     signupDate: Date;
 
     @XViewColumn()
-    avatarFilePath: string | null;
+    username: string;
+
+    @XViewColumn()
+    avatarFilePath: string;
 
     @XViewColumn()
     summerizedScoreAvg: number;
@@ -35,14 +37,11 @@ export class UserOverviewView {
     totalSessionLengthSeconds: number;
 
     @XViewColumn()
-    engagementPoints: number;
-
-    @XViewColumn()
     completedVideoCount: number;
 
     @XViewColumn()
-    reactionTime: number;
+    engagementPoints: number;
 
     @XViewColumn()
-    username: string;
+    reactionTime: number;
 }

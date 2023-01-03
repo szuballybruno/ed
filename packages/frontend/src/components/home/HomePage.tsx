@@ -207,7 +207,8 @@ const HomePage = () => {
                     marginBottom="10px"
                     flex={(isMobile || isSmallerThan1320) ? '1' : '2'}>
 
-                    <HomePageUserStats isSmallDesktop={isSmallerThan1320} />
+                    <HomePageUserStats
+                        isSmallDesktop={isSmallerThan1320} />
                 </DashboardSection>
             </EpistoFlex2>
 

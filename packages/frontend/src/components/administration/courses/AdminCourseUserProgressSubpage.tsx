@@ -77,7 +77,7 @@ export const useCourseUsersColumns = ({
 
         })
         .addIf(preset !== 'notstartedyet', {
-            field: 'performancePercentage',
+            field: 'tempoPercentage',
             headerName: 'Jelenlegi teljesítmény',
             width: 150,
             resizable: true,

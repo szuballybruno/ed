@@ -1,22 +1,19 @@
-FROM cypress/browsers:node18.12.0-chrome107
-
+#
+# runner
+#
+FROM cypress/browsers:node18.12.0-chrome107 as build-and-runner
 WORKDIR /app
 
-RUN echo "Copying config files before install..."
-COPY ./package.json ./package.json
-COPY ./lerna.json ./lerna.json
-COPY ./packages/tests-client/package.json ./packages/tests-client/package.json
+# copy package.json
+COPY ./epistogram/package.json ./package.json
+COPY ./epistogram/packages/tests-client/package.json ./packages/tests-client/package.json
 
-RUN echo "Installing deps..."
-RUN yarn --immutable --immutable-cache --check-cache --network-timeout 100000
+# bootstrap
+RUN yarn install --immutable --immutable-cache --check-cache --network-timeout 100000
 
-RUN echo "Copying files..."
-COPY ./tsconfig.json ./tsconfig.json
-COPY ./packages/tests-client/tsconfig.json ./packages/tests-client/tsconfig.json
-COPY ./packages/tests-client/cypress ./packages/tests-client/cypress
-COPY ./packages/tests-client/cypress.config.ts ./packages/tests-client/cypress.config.ts
+# copy files 
+COPY ./epistogram/tsconfig.json ./tsconfig.json
+COPY ./epistogram/packages/tests-client ./packages/tests-client 
 
-RUN echo "Building tests-client..."
-RUN yarn lerna run build --scope=@episto/tests-client --include-dependencies
-
-CMD yarn lerna run start-cy --scope=@episto/tests-client
+# entry
+CMD yarn --cwd ./packages/tests-client start-cy

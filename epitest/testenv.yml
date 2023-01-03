@@ -3,15 +3,14 @@ version: '3.3'
 services:
 
   database:
-    image: postgres
-    restart: always
+    image: mypg
+    build: 
+      context: ./
+      dockerfile: ./mypg.Dockerfile 
     environment:
-      POSTGRES_PASSWORD: "${PGPASSWORD}"
+      POSTGRES_PASSWORD: "${EPITEST_POSTGRES_USER_PASSWORD}"
       POSTGRES_USER: 'dev_service_user'
       POSTGRES_DB: 'localhostDB'
-    volumes: 
-      - ./init:/init
-      - ./init/init-script.sh:/docker-entrypoint-initdb.d/init-database.sh
     expose:
       - 5432
     healthcheck:
@@ -23,13 +22,11 @@ services:
       - test_net
 
   server: 
+    image: server:latest
     depends_on: 
       database: 
         condition: service_healthy
-    restart: always
     environment:
-      PGPASSWORD: "${PGPASSWORD}"
-      IS_DOCKERIZED: 'true'
       ENV_NAME: 'epitest'
     expose: 
       - 5000
@@ -38,21 +35,17 @@ services:
       interval: 15s
       timeout: 10s
       retries: 5
-    build: 
-      context: ../
-      dockerfile: ./packages/server-api/backend.Dockerfile
     networks:
       test_net: 
         aliases: 
           - epitest.api.epistogram.com
 
   client: 
+    image: client:latest
     depends_on: 
       database: 
         condition: service_healthy
     restart: always
-    environment:
-      IS_DOCKERIZED: 'true'
     expose: 
       - 80
     healthcheck:
@@ -60,17 +53,13 @@ services:
       interval: 15s
       timeout: 10s
       retries: 5
-    build: 
-      context: ../
-      dockerfile: ./packages/frontend/frontend.Dockerfile
-      args: 
-        - ENVIRONMENT_NAME=epitest
     networks:
       test_net: 
         aliases: 
           - epitest.epistogram.com
       
   tests-client: 
+    image: tests-client:latest
     depends_on: 
       client:
         condition: service_healthy
@@ -78,9 +67,6 @@ services:
       IS_DOCKERIZED: 'true'
     volumes: 
       - ./out:/app/packages/tests-client/cypress/videos
-    build: 
-      context: ../
-      dockerfile: ./packages/tests-client/testsclient.Dockerfile
     networks:
       - test_net
 

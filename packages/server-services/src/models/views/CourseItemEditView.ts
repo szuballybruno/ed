@@ -1,6 +1,5 @@
-import { XViewColumn } from '@episto/x-orm';
+import { XViewColumn } from '@thinkhub/x-orm';
 import { Id } from '@episto/commontypes';
-
 
 export class CourseItemEditView {
 
@@ -11,22 +10,19 @@ export class CourseItemEditView {
     videoVersionId: Id<'VideoVersion'>;
 
     @XViewColumn()
-    moduleId: Id<'Module'>;
-
-    @XViewColumn()
     title: string;
 
     @XViewColumn()
     subtitle: string;
 
     @XViewColumn()
-    videoLengthSeconds: number | null;
+    videoLengthSeconds: number;
 
     @XViewColumn()
-    videoAudioText: string | null;
+    videoAudioText: string;
 
     @XViewColumn()
-    videoFilePath: string | null;
+    videoFilePath: string;
 
     @XViewColumn()
     questionVersionId: Id<'QuestionVersion'>;
@@ -45,4 +41,7 @@ export class CourseItemEditView {
 
     @XViewColumn()
     answerIsCorrect: boolean;
+
+    @XViewColumn()
+    moduleId: Id<'Module'>;
 }

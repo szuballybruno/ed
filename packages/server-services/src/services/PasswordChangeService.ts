@@ -1,14 +1,14 @@
-import { User } from '../models/entity/misc/User';
+import { User } from '../models/tables/User';
 import { getPassowrdValidationError } from '@episto/commonlogic';
 import { ErrorWithCode } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
-import { PrincipalId } from '@episto/x-core';
+import { PrincipalId } from '@thinkhub/x-core';
 import { AuthorizationService } from './AuthorizationService';
 import { DomainProviderService } from './DomainProviderService';
 import { EmailService } from './EmailService';
 import { HashService } from './HashService';
 import { GlobalConfigurationService } from './GlobalConfigurationService';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 import { TokenService } from './TokenService';
 import { UrlService } from './UrlService';
 import { UserService } from './UserService';
@@ -95,7 +95,7 @@ export class PasswordChangeService {
         const user = await this._userService
             .getUserById(userId);
 
-        if (!await this._hashService.comparePasswordAsync(oldPassword, user.password))
+        if (!await this._hashService.comparePasswordAsync(oldPassword, user.password!))
             throw new ErrorWithCode('Wrong password!', 'bad request');
 
         await this._ormService

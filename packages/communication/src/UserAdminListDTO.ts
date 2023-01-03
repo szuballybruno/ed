@@ -1,4 +1,4 @@
-import { Id, UserPerformanceRating } from '@episto/commontypes';
+import { Id, TempoRatingType } from '@episto/commontypes';
 
 export class UserAdminListDTO {
     userId: Id<'User'>;
@@ -11,7 +11,7 @@ export class UserAdminListDTO {
     totalSessionLengthSeconds: number;
     username: string;
     completedVideoCount: number;
-    performanceAverage: number;
-    hasPerformanceAverage: boolean;
-    performanceRating: UserPerformanceRating;
+    avgTempoPercentage: number;
+    hasAvgTempoPercentage: boolean;
+    tempoRating: TempoRatingType;
 }

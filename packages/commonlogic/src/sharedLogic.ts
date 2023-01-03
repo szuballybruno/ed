@@ -1,6 +1,6 @@
 import { PasswordValidationIssueType } from '@episto/commontypes';
 import { UserPermissionDTO } from '@episto/communication';
-import { getKeys } from '@episto/x-core';
+import { getKeys } from '@thinkhub/x-core';
 
 export const normalizeToEnglish = (str: string) => {
 
