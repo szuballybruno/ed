@@ -30,7 +30,6 @@ jobs:
   build_and_push_images: 
     name: Run tests
     runs-on: ubuntu-latest
-    needs: [generate_migration_script, database_backup]
     
     steps:
 
@@ -78,6 +77,41 @@ jobs:
       - name: Push client-web
         run: |
           docker push $FRONTEND_IMAGE_NAME
+
+  # 
+  # ----- DEPLOY DATABASE 
+  #
+
+  deploy_database: 
+    name: Deploy database
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          path: './epistogram'
+      
+      - name: Checkout xlib
+        uses: actions/checkout@v3
+        with:
+          repository: Thinkhub-Software/thinkhub-xlib
+          path: './thinkhub-xlib'
+          token: ${{ secrets.XLIB_REPO_READ_PAT }}
+          ref: 'master'
+
+      - name: Run migen
+        shell: pwsh
+        run: ./thinkhub-xlib/packages/x-migen/scripts/run_migen_prod.ps1 `
+          -dbname "${{env.DB_NAME}}" `
+          -dbhost "${{secrets.DB_HOST_ADDRESS}}" `
+          -dbpassword "${{secrets.DB_SERVICE_USER_PASSWORD}}" `
+          -dbusername "${{secrets.DB_SERVICE_USER_NAME}}" `
+          -dbport "${{secrets.DB_PORT}}" `
+          -outFolderPath "${PWD}/epistogram/migen_out" `
+          -schemaFolderPath "${PWD}/epistogram/packages/server-services/sql" `
+          -migen_folder_path "${PWD}/thinkhub-xlib/packages/x-migen" `
+          -mode "EXECUTE"
 
   #
   # ----- DEPLOY IMAGES
@@ -140,38 +174,3 @@ jobs:
           --cpu 2 \
           --concurrency 200 \
           --set-env-vars "ENV_NAME=${{ env.BRANCH_NAME }}"
-
-  # 
-  # ----- DEPLOY DATABASE 
-  #
-
-  deploy_database: 
-    name: Deploy database
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          path: './epistogram'
-      
-      - name: Checkout xlib
-        uses: actions/checkout@v3
-        with:
-          repository: Thinkhub-Software/thinkhub-xlib
-          path: './thinkhub-xlib'
-          token: ${{ secrets.XLIB_REPO_READ_PAT }}
-          ref: 'master'
-
-      - name: Run migen
-        shell: pwsh
-        run: ./thinkhub-xlib/packages/x-migen/scripts/run_migen_prod.ps1 `
-          -dbname "${{env.DB_NAME}}" `
-          -dbhost "${{secrets.DB_HOST_ADDRESS}}" `
-          -dbpassword "${{secrets.DB_SERVICE_USER_PASSWORD}}" `
-          -dbusername "${{secrets.DB_SERVICE_USER_NAME}}" `
-          -dbport "${{secrets.DB_PORT}}" `
-          -outFolderPath "${PWD}/epistogram/migen_out" `
-          -schemaFolderPath "${PWD}/epistogram/packages/server-services/sql" `
-          -migen_folder_path "${PWD}/thinkhub-xlib/packages/x-migen" `
-          -mode "EXECUTE"
