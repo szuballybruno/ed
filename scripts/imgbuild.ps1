@@ -28,6 +28,7 @@ if($buildx){
     # push it to localhost repo
     if($push){
 
+        Write-Host "-- Pushing image: ${tag}" -ForegroundColor Cyan
         docker push "$tag"
     }
 }

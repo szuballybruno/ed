@@ -25,6 +25,7 @@ if ($builddeps)
         -tag "localhost:5000/monodeps:latest" `
         -contextpath "${root}" `
         -buildx:$buildx `
+        -push `
         -cacheto "type=${cachetype},${cacheopt}cache-monodeps"  `
         -cachefrom "type=${cachetype},${cacheopt}cache-monodeps"
 }
