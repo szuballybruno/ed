@@ -5,7 +5,7 @@ param (
     [string] $client_env = "epitest",
     [string] $cacheopt_to = 'dest=/tmp/docker-cache/',
     [string] $cacheopt_from = 'src=/tmp/docker-cache/',
-    [string] $cachetype = 'local',
+    [string] $cachetype = 'local'
 )
 
 $root = Resolve-Path "${PSScriptRoot}/../../"

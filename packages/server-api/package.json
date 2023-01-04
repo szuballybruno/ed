@@ -22,7 +22,8 @@
         "@thinkhub/x-gateway": "1.0.0",
         "@thinkhub/x-orm": "1.0.0",
         "axios": "^1.2.0",
-        "dayjs": "1.11.7"
+        "dayjs": "1.11.7",
+        "rollup": "3.9.1"
     },
     "devDependencies": {
         "@types/cors": "2.8.12",

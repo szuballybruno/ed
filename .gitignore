@@ -23,6 +23,6 @@ temp
 /temp
 transferdump.sql
 dump.sql
-./thinkhub-xlib
-thinkhub-xlib
+# ./thinkhub-xlib -- if ignored, lerna failes
+# thinkhub-xlib
 cache
