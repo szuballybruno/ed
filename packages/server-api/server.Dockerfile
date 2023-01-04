@@ -1,7 +1,7 @@
 #
 # builder
 #
-FROM monosrc:latest as builder
+FROM localhost:5000/monosrc:latest as builder
 WORKDIR /app
 
 # build

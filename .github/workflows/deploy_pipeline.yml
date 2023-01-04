@@ -57,6 +57,13 @@ jobs:
           echo DB_SERVICE_USER_NAME = ${{secrets.DB_SERVICE_USER_NAME}} >> ${{ env.CONFIG_ENV_PATH }}
           echo DB_SERVICE_USER_PASSWORD = ${{secrets.DB_SERVICE_USER_PASSWORD}} >> ${{ env.CONFIG_ENV_PATH }}
 
+      # ------ setup build
+      - name: Setup build
+        shell: pwsh
+        run: |
+          ./epistogram/scripts/create-builder.ps1
+          ./epistogram/scripts/run-registry.ps1
+
       # ------ build images
       - name: Build containers
         shell: pwsh
@@ -64,7 +71,7 @@ jobs:
           ./epistogram/scripts/monobuild.ps1 `
             -client_env "${{env.BRANCH_NAME}}" `
             -builddeps `
-            -cachescope "${{env.BRANCH_NAME}}" `
+            -cacheopt "scope=${{env.BRANCH_NAME}}-" `
             -cachetype "gha"
 
       # ------ name public images 

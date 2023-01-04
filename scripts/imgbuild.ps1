@@ -3,26 +3,33 @@ param (
     [string] $dockerfile,
     [string] $tag,
     [string] $contextpath,
-    [string] $buildarg = "NULL=NULL",
-    [string] $cachescope = 'local',
-    [string] $cachetype = 'registry'
+    [string] $cacheto,
+    [string] $cachefrom,
+    [switch] $push = $False,
+    [string] $buildarg = "NULL=NULL"
 )
 
-echo "------ Building image: ${tag} - buildx: ${buildx}..."
+Write-Host "------ Building image: ${tag}" -ForegroundColor Magenta
 
 if($buildx){
 
-    echo "Docker cache type: ${cachetype}"
-    echo "Docker cache scope: ${cachescope}"
+    echo "-- BUILDX is enabled!"
+    echo "-- Cache-to: ${cacheto}"
+    echo "-- Cache-from: ${cachefrom}"
 
+    # build img and load it to docker
     docker buildx build "${contextpath}" `
         --file "${dockerfile}" `
         --tag "$tag" `
-        --output "type=oci" `
-        --cache-from "type=${cachetype},scope=${cachescope}-${tag}" `
-        --cache-to "type=${cachetype},scope=${cachescope}-${tag},mode=max"
+        --load `
+        --cache-from=$cachefrom `
+        --cache-to=$cacheto
 
-    # --output "type=oci,dest=./${tag}-oci.tar" `
+    # push it to localhost repo
+    if($push){
+
+        docker push "$tag"
+    }
 }
 else {
 

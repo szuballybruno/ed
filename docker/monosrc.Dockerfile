@@ -1,4 +1,4 @@
-FROM monodeps:latest
+FROM localhost:5000/monodeps:latest
 WORKDIR /app
 
 # copy files for build  
