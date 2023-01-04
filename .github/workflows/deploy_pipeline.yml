@@ -44,6 +44,13 @@ jobs:
           path: './thinkhub-xlib'
           token: ${{ secrets.XLIB_REPO_READ_PAT }}
           ref: 'master'
+      
+      # ----- setup cacheing 
+      - name: Cache docker-cache folder
+        uses: actions/cache@v3
+        with:
+          path: |
+            /tmp/docker-cache
 
       # ------ set secret env variables
       - name: Set secrets to ${{ github.ref_name }}.config.env file
@@ -70,15 +77,13 @@ jobs:
         run: |
           ./epistogram/scripts/monobuild.ps1 `
             -client_env "${{env.BRANCH_NAME}}" `
-            -builddeps `
-            -cacheopt "scope=${{env.BRANCH_NAME}}-" `
-            -cachetype "gha"
+            -builddeps
 
       # ------ name public images 
       - name: Name public images 
         run: |
-          docker image tag client:latest $SERVER_API_IMAGE_NAME
-          docker image tag server:latest $CLIENT_WEB_IMAGE_NAME
+          docker image tag localhost:5000/server:latest $SERVER_API_IMAGE_NAME
+          docker image tag localhost:5000/client:latest $CLIENT_WEB_IMAGE_NAME
 
       # ------ push images
       - name: Push server-api

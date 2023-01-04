@@ -2,9 +2,10 @@ param (
     [switch] $builddeps,
     [switch] $buildx = $True,
     [string] $client_env = "epitest",
-    [string] $cacheopt = 'ref=localhost:5000/',
-    [string] $cachetype = 'registry'
-) 
+    [string] $cacheopt_to = 'dest=/tmp/docker-cache/',
+    [string] $cacheopt_from = 'src=/tmp/docker-cache/',
+    [string] $cachetype = 'local'
+)
 
 $root = Resolve-Path "${PSScriptRoot}/../../"
 $episto_root = Resolve-Path "${root}/epistogram/"
@@ -14,7 +15,8 @@ echo "Build deps: ${buiddeps}"
 echo "Root: ${root}"
 echo "Episto root: ${episto_root}"
 echo "Buildx: ${buildx}"
-echo "Cacheopt: ${cacheopt}"
+echo "cacheopt_to: ${cacheopt_to}"
+echo "cacheopt_from: ${cacheopt_from}"
 echo "Cachetype: ${cachetype}"
 
 if ($builddeps) 
@@ -26,8 +28,8 @@ if ($builddeps)
         -contextpath "${root}" `
         -buildx:$buildx `
         -push `
-        -cacheto "type=${cachetype},${cacheopt}cache-monodeps"  `
-        -cachefrom "type=${cachetype},${cacheopt}cache-monodeps"
+        -cacheto "type=${cachetype},${cacheopt_to}cache-monodeps"  `
+        -cachefrom "type=${cachetype},${cacheopt_from}cache-monodeps"
 }
 
 # build monosrc
@@ -37,8 +39,8 @@ if ($builddeps)
     -contextpath "${root}" `
     -buildx:$buildx `
     -push `
-    -cacheto "type=${cachetype},${cacheopt}cache-monosrc"  `
-    -cachefrom "type=${cachetype},${cacheopt}cache-monosrc"
+    -cacheto "type=${cachetype},${cacheopt_to}cache-monosrc"  `
+    -cachefrom "type=${cachetype},${cacheopt_from}cache-monosrc"
 
 # build server
 & $imgbuild `
@@ -46,8 +48,8 @@ if ($builddeps)
     -tag "localhost:5000/server:latest" `
     -contextpath "${root}" `
     -buildx:$buildx `
-    -cacheto "type=${cachetype},${cacheopt}cache-server"  `
-    -cachefrom "type=${cachetype},${cacheopt}cache-server"
+    -cacheto "type=${cachetype},${cacheopt_to}cache-server"  `
+    -cachefrom "type=${cachetype},${cacheopt_from}cache-server"
 
 # build client
 & $imgbuild `
@@ -56,8 +58,8 @@ if ($builddeps)
     -contextpath "${root}" `
     -buildarg "ENVIRONMENT_NAME=${client_env}" `
     -buildx:$buildx `
-    -cacheto "type=${cachetype},${cacheopt}cache-client"  `
-    -cachefrom "type=${cachetype},${cacheopt}cache-client"
+    -cacheto "type=${cachetype},${cacheopt_to}cache-client"  `
+    -cachefrom "type=${cachetype},${cacheopt_from}cache-client"
 
 # build tests-client
 & $imgbuild `
@@ -65,5 +67,5 @@ if ($builddeps)
     -tag "localhost:5000/tests-client:latest" `
     -contextpath "${root}" `
     -buildx:$buildx `
-    -cacheto "type=${cachetype},${cacheopt}cache-testsclient"  `
-    -cachefrom "type=${cachetype},${cacheopt}cache-testsclient"
+    -cacheto "type=${cachetype},${cacheopt_to}cache-testsclient"  `
+    -cachefrom "type=${cachetype},${cacheopt_from}cache-testsclient"
