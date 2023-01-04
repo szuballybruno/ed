@@ -36,6 +36,7 @@ if ($builddeps)
     -tag "localhost:5000/monosrc:latest" `
     -contextpath "${root}" `
     -buildx:$buildx `
+    -push `
     -cacheto "type=${cachetype},${cacheopt}cache-monosrc"  `
     -cachefrom "type=${cachetype},${cacheopt}cache-monosrc"
 
