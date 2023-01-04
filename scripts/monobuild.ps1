@@ -1,10 +1,11 @@
 param ( 
     [switch] $builddeps,
     [switch] $buildx = $True,
+    [switch] $tests = $False,
     [string] $client_env = "epitest",
     [string] $cacheopt_to = 'dest=/tmp/docker-cache/',
     [string] $cacheopt_from = 'src=/tmp/docker-cache/',
-    [string] $cachetype = 'local'
+    [string] $cachetype = 'local',
 )
 
 $root = Resolve-Path "${PSScriptRoot}/../../"
@@ -62,10 +63,13 @@ if ($builddeps)
     -cachefrom "type=${cachetype},${cacheopt_from}cache-client"
 
 # build tests-client
-& $imgbuild `
-    -dockerfile "${episto_root}/packages/tests-client/testsclient.Dockerfile" `
-    -tag "localhost:5000/tests-client:latest" `
-    -contextpath "${root}" `
-    -buildx:$buildx `
-    -cacheto "type=${cachetype},${cacheopt_to}cache-testsclient"  `
-    -cachefrom "type=${cachetype},${cacheopt_from}cache-testsclient"
+if($tests){
+
+    & $imgbuild `
+        -dockerfile "${episto_root}/packages/tests-client/testsclient.Dockerfile" `
+        -tag "localhost:5000/tests-client:latest" `
+        -contextpath "${root}" `
+        -buildx:$buildx `
+        -cacheto "type=${cachetype},${cacheopt_to}cache-testsclient"  `
+        -cachefrom "type=${cachetype},${cacheopt_from}cache-testsclient"
+}

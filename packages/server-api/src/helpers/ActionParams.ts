@@ -3,7 +3,8 @@ import { ErrorWithCode, Id } from '@episto/commontypes';
 import { ParametrizedRouteType, RouteParameterType } from '@episto/communication';
 import { IXGatewayRequest, IXGatewayResponse } from '@thinkhub/x-gateway';
 import { PrincipalId } from '@thinkhub/x-core';
-import { UploadedFile } from 'express-fileupload';
+
+type UploadedFile = any; 
 
 export type ParamsData<T extends RouteParameterType> = {
     body: XSafeObjectWrapper<T['body']>,

@@ -14,20 +14,20 @@
     },
     "dependencies": {
         "@episto/server-services": "1.0.0",
+        "@episto/commontypes": "1.0.0",
+        "@episto/communication": "1.0.0",
+        "@episto/commonlogic": "1.0.0",
+        "@thinkhub/x-injector": "1.0.0",
+        "@thinkhub/x-core": "1.0.0",
         "@thinkhub/x-gateway": "1.0.0",
+        "@thinkhub/x-orm": "1.0.0",
         "axios": "^1.2.0",
-        "body-parser": "1.20.0",
-        "express": "~4.17.3",
-        "node-esm-loader": "^0.0.1"
+        "dayjs": "1.11.7"
     },
     "devDependencies": {
         "@types/cors": "2.8.12",
-        "@types/express": "4.17.13",
         "@types/node": "18.11.9",
         "cors": "2.8.5",
-        "nodemon": "2.0.15",
-        "ts-loader": "9.2.8",
-        "ts-node": "10.9.1",
-        "ts-node-dev": "1.1.8"
+        "nodemon": "2.0.15"
     }
 }

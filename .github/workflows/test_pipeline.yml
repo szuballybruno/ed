@@ -113,8 +113,7 @@ jobs:
           ./epistogram/scripts/monobuild.ps1 `
             -client_env "epitest" `
             -builddeps `
-            -cachescope "${{env.BRANCH_NAME}}" `
-            -cachetype "gha"
+            -tests
 
       - name: Run tests
         shell: pwsh
