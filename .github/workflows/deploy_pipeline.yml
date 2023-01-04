@@ -52,6 +52,17 @@ jobs:
           path: /tmp/docker-cache
           key: ${{env.BRANCH_NAME}}-docker-cache
 
+      # ------ auth
+      - name: Login to GCP
+        uses: google-github-actions/setup-gcloud@v0
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_email: ${{ secrets.GCP_EMAIL }}
+          service_account_key: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: Configure GCP Docker
+        run: gcloud auth configure-docker --quiet
+
       # ------ set secret env variables
       - name: Set secrets to ${{ github.ref_name }}.config.env file
         run: |
