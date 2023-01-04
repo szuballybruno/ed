@@ -49,8 +49,8 @@ jobs:
       - name: Cache docker-cache folder
         uses: actions/cache@v3
         with:
-          path: |
-            /tmp/docker-cache
+          path: /tmp/docker-cache
+          key: ${{env.BRANCH_NAME}}-docker-cache
 
       # ------ set secret env variables
       - name: Set secrets to ${{ github.ref_name }}.config.env file
