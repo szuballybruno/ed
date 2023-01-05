@@ -23,7 +23,8 @@ if($buildx){
         --tag "$tag" `
         --load `
         --cache-from=$cachefrom `
-        --cache-to=$cacheto
+        --cache-to=$cacheto `
+        --build-arg ${buildarg}
 
     # push it to localhost repo
     if($push){

@@ -19,6 +19,7 @@ echo "Buildx: ${buildx}"
 echo "cacheopt_to: ${cacheopt_to}"
 echo "cacheopt_from: ${cacheopt_from}"
 echo "Cachetype: ${cachetype}"
+echo "Client env: ${client_env}"
 
 if ($builddeps) 
 {

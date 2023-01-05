@@ -8,6 +8,7 @@
     "type": "module",
     "scripts": {
         "start": "nodemon -x node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm src/server.ts",
+        "build-wp": "webpack --mode production",
         "build": "tsc",
         "start-dist": "node --es-module-specifier-resolution=node ./dist/server.js",
         "healthcheck": "node --no-warnings --experimental-specifier-resolution=node ./dist/healthcheck.js"
@@ -22,13 +23,18 @@
         "@thinkhub/x-gateway": "1.0.0",
         "@thinkhub/x-orm": "1.0.0",
         "axios": "^1.2.0",
-        "dayjs": "1.11.7",
-        "rollup": "3.9.1"
+        "dayjs": "1.11.7"
     },
     "devDependencies": {
         "@types/cors": "2.8.12",
         "@types/node": "18.11.9",
         "cors": "2.8.5",
-        "nodemon": "2.0.15"
+        "nodemon": "2.0.15",
+        "webpack": "5.75.0",
+        "webpack-cli": "5.0.1",
+        "ts-loader": "9.4.2",
+        "json-loader": "0.5.7",
+        "webpack-node-externals": "3.0.0",
+        "rollup": "3.9.1"
     }
 }
