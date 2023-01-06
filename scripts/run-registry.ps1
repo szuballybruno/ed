@@ -1,5 +1,5 @@
 docker run `
     --detach `
-    --publish 5000:5000 `
+    --publish 6000:5000 `
     --restart=always `
     --name registry registry:2

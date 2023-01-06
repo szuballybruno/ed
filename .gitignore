@@ -1,6 +1,8 @@
 node_modules
 dist
+node_modules_old
 /node_modules
+/node_modules_old
 /node_modules/.yarn-integrity
 /deploy/temp
 /deploy/out

@@ -3,7 +3,7 @@ ARG ENVIRONMENT_NAME=unknown
 #
 # builder
 #
-FROM localhost:5000/monosrc:latest as builder
+FROM localhost:6000/monodeps:latest as builder
 ARG ENVIRONMENT_NAME
 WORKDIR /app
 

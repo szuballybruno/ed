@@ -11,6 +11,7 @@ param (
 $root = Resolve-Path "${PSScriptRoot}/../../"
 $episto_root = Resolve-Path "${root}/epistogram/"
 $imgbuild = "${PSScriptRoot}/imgbuild.ps1"
+$apply_dockerignore = "${PSScriptRoot}/apply-dockerignore.ps1"
 
 echo "Build deps: ${buiddeps}"
 echo "Root: ${root}"
@@ -21,12 +22,15 @@ echo "cacheopt_from: ${cacheopt_from}"
 echo "Cachetype: ${cachetype}"
 echo "Client env: ${client_env}"
 
+# apply .dockerignore 
+& $apply_dockerignore
+
+# build monodeps
 if ($builddeps) 
 {
-    # build monodeps
     & $imgbuild `
         -dockerfile "${episto_root}/docker/monodeps.Dockerfile" `
-        -tag "localhost:5000/monodeps:latest" `
+        -tag "localhost:6000/monodeps:latest" `
         -contextpath "${root}" `
         -buildx:$buildx `
         -push `
@@ -34,20 +38,10 @@ if ($builddeps)
         -cachefrom "type=${cachetype},${cacheopt_from}cache-monodeps"
 }
 
-# build monosrc
-& $imgbuild `
-    -dockerfile "${episto_root}/docker/monosrc.Dockerfile" `
-    -tag "localhost:5000/monosrc:latest" `
-    -contextpath "${root}" `
-    -buildx:$buildx `
-    -push `
-    -cacheto "type=${cachetype},${cacheopt_to}cache-monosrc"  `
-    -cachefrom "type=${cachetype},${cacheopt_from}cache-monosrc"
-
 # build server
 & $imgbuild `
     -dockerfile "${episto_root}/packages/server-api/server.Dockerfile" `
-    -tag "localhost:5000/server:latest" `
+    -tag "localhost:6000/server:latest" `
     -contextpath "${root}" `
     -buildx:$buildx `
     -cacheto "type=${cachetype},${cacheopt_to}cache-server"  `
@@ -56,7 +50,7 @@ if ($builddeps)
 # build client
 & $imgbuild `
     -dockerfile "${episto_root}/packages/frontend/client.Dockerfile" `
-    -tag "localhost:5000/client:latest" `
+    -tag "localhost:6000/client:latest" `
     -contextpath "${root}" `
     -buildarg "ENVIRONMENT_NAME=${client_env}" `
     -buildx:$buildx `
@@ -68,7 +62,7 @@ if($tests){
 
     & $imgbuild `
         -dockerfile "${episto_root}/packages/tests-client/testsclient.Dockerfile" `
-        -tag "localhost:5000/tests-client:latest" `
+        -tag "localhost:6000/tests-client:latest" `
         -contextpath "${root}" `
         -buildx:$buildx `
         -cacheto "type=${cachetype},${cacheopt_to}cache-testsclient"  `

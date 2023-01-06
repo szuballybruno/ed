@@ -93,8 +93,8 @@ jobs:
       # ------ name public images 
       - name: Name public images 
         run: |
-          docker image tag localhost:5000/server:latest $SERVER_API_IMAGE_NAME
-          docker image tag localhost:5000/client:latest $CLIENT_WEB_IMAGE_NAME
+          docker image tag localhost:6000/server:latest $SERVER_API_IMAGE_NAME
+          docker image tag localhost:6000/client:latest $CLIENT_WEB_IMAGE_NAME
 
       # ------ push images
       - name: Push server-api

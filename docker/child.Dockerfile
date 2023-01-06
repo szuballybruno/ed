@@ -1,1 +1,1 @@
-FROM localhost:5000/parent:v2
+FROM localhost:6000/parent:v2

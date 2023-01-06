@@ -12,7 +12,7 @@ So `docker buildx build` to the rescue right? Or so I thought, since it has a `c
 NO. It turns out, `docker buildx build` is unable to find local images, which I would need since the base image is a local image. [There's an unanswered question about this on StackOverflow.][1]
 
 As the author suggested, I've tried setting up a local registry server that can be explicitly specified for buildx ([using this tutorial][2]), but no luck there either:
-- it fails with this error: `ERROR: failed to solve: localhost:5000/parent:latest: failed to do request: Head "http://localhost:5000/v2/parent/manifests/latest": dial tcp 127.0.0.1:5000: connect: connection refused` 
+- it fails with this error: `ERROR: failed to solve: localhost:6000/parent:latest: failed to do request: Head "http://localhost:6000/v2/parent/manifests/latest": dial tcp 127.0.0.1:5000: connect: connection refused` 
 - once again, this works perfectly using the normal `docker build` command, and only fails when I'm using `docker buildx build`
 
 
