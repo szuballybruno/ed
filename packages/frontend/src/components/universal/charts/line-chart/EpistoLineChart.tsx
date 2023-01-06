@@ -15,6 +15,7 @@ export const EpistoLineChart = ({
 
     return <ReactECharts
         option={finalOptions}
+        className={ReactECharts.name}
         style={{
             width: '100%',
             height: '100%',

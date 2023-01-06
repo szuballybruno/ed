@@ -1,10 +1,10 @@
 import { Grid } from '@chakra-ui/react';
 import { UserActiveCourseDTO } from '@episto/communication';
+import { useEffect, useState } from 'react';
 import { useCourseProgressOverview, useUserCourseProgressChartData } from '../../services/api/userProgressApiService';
 import { Environment } from '../../static/Environemnt';
 import { coalesce, Formatters, PagingType } from '../../static/frontendHelpers';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
-import { FlexFloat } from '../controls/FlexFloat';
 import StatisticsCard, { StatisticsCardProps } from '../statisticsCard/StatisticsCard';
 import { UserProgressChart } from '../universal/charts/line-chart/UserProgressChart';
 import { NoProgressChartYet } from './NoProgressChartYet';
@@ -38,7 +38,7 @@ export const HomePageCourseStats = ({
 
     const { userProgressData } = useUserCourseProgressChartData(courseId ?? null, !!courseId);
     const currentCourse = activeCoursesPaging.currentItem;
-
+    const [canRenderChart, setCanRenderChart] = useState(false);
 
     const { courseProgressOverviewData: recommendedItemQuota } = useCourseProgressOverview(courseId);
 
@@ -46,19 +46,17 @@ export const HomePageCourseStats = ({
         completedThisWeek,
         completedToday,
         estimatedCompletionDate,
-        deadlineDate,
-        recommendedItemsPerDay,
-        recommendedItemsPerWeek,
-        tempomatMode,
     } = coalesce(recommendedItemQuota, {
         completedThisWeek: 0,
         completedToday: 0,
-        deadlineDate: null,
         estimatedCompletionDate: new Date(),
-        recommendedItemsPerDay: 0,
-        recommendedItemsPerWeek: 0,
-        tempomatMode: 'light'
     });
+
+    useEffect(() => {
+
+        setCanRenderChart(true);
+        return () => setCanRenderChart(false);
+    }, []);
 
     const courseStatCards = [
         {
@@ -89,80 +87,81 @@ export const HomePageCourseStats = ({
         }
     ] as StatisticsCardProps[];
 
-    return <EpistoFlex2
-        mt='10px'
-        flex='1'
-        minHeight='450px'
-        minWidth='100%'
-        direction='column'>
+    const hasProgress = userProgressData.length > 0;
 
+    return (
         <EpistoFlex2
-            minHeight='400px'
-            width='100%'
+            id={HomePageCourseStats.name}
             align='center'
             wrap="wrap"
-            // flexWrap={isSmallDesktop ? 'wrap' : 'nowrap'}
             justify='space-between'
+            overflow="hidden"
             flex='1'>
 
             {/* recommended  */}
             <EpistoFlex2
+                id="Cards"
+                align="center"
                 flex='1'>
 
-                {recommendedItemQuota
-                    ? <Grid
+                {/* stats */}
+                {recommendedItemQuota && (
+                    <Grid
+                        id="Grid"
                         flex="1"
-                        background='transparent'
-                        boxShadow="unset"
-                        width={isSmallDesktop ? '100%' : '550px'}
-                        minWidth={'550px'}
-                        padding={isSmallDesktop ? '10px 0' : '10px'}
-                        style={{
-                            boxSizing: 'border-box',
-                            gap: '10px',
-                            gridAutoFlow: 'row dense',
-                            gridTemplateColumns: isSmallDesktop ? 'auto auto auto auto' : 'repeat(auto-fill, minmax(250px, 1fr))',
-                            gridAutoRows: isSmallDesktop ? '120px' : '150px'
-                        }} >
+                        minWidth="500px"
+                        gridTemplateColumns="repeat(auto-fit, minmax(300px, 1fr))">
 
-                        <img
-                            src={currentCourse?.coverFilePath ?? ''}
-                            alt=""
-                            style={{
-                                height: '100%',
-                                width: '100%',
-                                minWidth: isSmallDesktop ? '150px' : '0',
-                                objectFit: 'cover'
-                            }}
-                            className="roundBorders" />
+                        <EpistoFlex2
+                            minWidth="200px"
+                            minHeight="150px"
+                            margin="5px"
+                            position="relative">
+
+                            <img
+                                src={currentCourse?.coverFilePath ?? ''}
+                                alt=""
+                                style={{
+                                    flex: "1",
+                                    position: "absolute",
+                                    objectFit: 'cover'
+                                }}
+                                className="roundBorders whall" />
+                        </EpistoFlex2>
 
                         {courseStatCards
-                            .map((props, index) => <StatisticsCard
-                                key={index}
-                                {...props} />
-                            )}
-
+                            .map((props, index) => (
+                                <StatisticsCard
+                                    key={index}
+                                    margin="5px"
+                                    minWidth="200px"
+                                    minHeight="150px"
+                                    {...props} />
+                            ))}
                     </Grid>
-                    : <NoCourseStatsYet />}
+                )}
+
+                {/* no stats */}
+                {!recommendedItemQuota && <NoCourseStatsYet />}
             </EpistoFlex2>
 
             {/* chart item  */}
-            <FlexFloat
-                flex='1'
-                background='transparent'
-                boxShadow="unset"
+            <EpistoFlex2
+                id="ChartHost"
                 minWidth='500px'
-                height={isSmallDesktop ? '400px' : '100%'}
-                direction="column"
-                padding="10px" >
+                minHeight='400px'
+                paddingTop="10px"
+                flex="1">
 
-                {userProgressData.length > 0
-                    ? <UserProgressChart
-                        userProgress={userProgressData} />
-                    : <NoProgressChartYet />}
-            </FlexFloat>
-        </EpistoFlex2>
+                {/* progress chart  */}
+                {(hasProgress && canRenderChart) && <UserProgressChart
+                    overflow="hidden"
+                    flex="1"
+                    userProgress={userProgressData} />}
 
-
-    </EpistoFlex2 >;
+                {/* no progress yet */}
+                {!hasProgress && <NoProgressChartYet />}
+            </EpistoFlex2>
+        </EpistoFlex2 >
+    );
 };

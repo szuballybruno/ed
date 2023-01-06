@@ -1,8 +1,10 @@
+import { FlexProps } from '@chakra-ui/layout';
 import { instantiate } from '@episto/commonlogic';
 import { UserProgressChartStep } from '@episto/communication';
 import { EChartsOption } from 'echarts';
 import { useMemo } from 'react';
 import { Formatters } from '../../../../static/frontendHelpers';
+import { EpistoFlex2 } from '../../../controls/EpistoFlex';
 import { EpistoLineChart } from './EpistoLineChart';
 
 const useUserProgressChartOptions = (
@@ -101,14 +103,22 @@ const useUserProgressChartOptions = (
     }, [interval, userProgress]);
 
 export const UserProgressChart = ({
-    userProgress
+    userProgress,
+    ...css
 }: {
     userProgress: UserProgressChartStep[]
-}) => {
+} & FlexProps) => {
 
     const interval = useMemo(() => Math.floor(userProgress.length / 7), [userProgress]);
     const options = useUserProgressChartOptions(interval, userProgress);
 
-    return <EpistoLineChart
-        options={options} />;
+    return (
+        <EpistoFlex2
+            id={UserProgressChart.name}
+            {...css}>
+
+            <EpistoLineChart
+                options={options} />
+        </EpistoFlex2>
+    );
 };
