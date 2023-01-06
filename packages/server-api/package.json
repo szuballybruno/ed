@@ -7,7 +7,8 @@
     "typings": "./dist/index.d.ts",
     "type": "module",
     "scripts": {
-        "start": "node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm src/server.ts",
+        "start": "nodemon -x node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm src/server.ts",
+        "start-nomon": "node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm src/server.ts",
         "build-wp": "webpack --mode production",
         "build": "tsc",
         "start-dist": "node --es-module-specifier-resolution=node ./dist/server.js",

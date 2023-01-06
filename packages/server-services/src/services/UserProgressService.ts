@@ -94,7 +94,6 @@ export class UserProgressService extends ServiceBase {
         courseId: Id<'Course'>,
         userId: Id<'User'>
     ) {
-
         const currentDate = new Date();
         const rangeSize = 60;
 
@@ -115,7 +114,7 @@ export class UserProgressService extends ServiceBase {
             .map(x => ({
                 date: x.completionDate,
                 progressPercentage: x.completedPercentage
-            } as DailyProgressModel))
+            } as DailyProgressModel));
 
         return this
             .getProgressChartData({
@@ -153,6 +152,15 @@ export class UserProgressService extends ServiceBase {
             recommendedCompletedPercentage: 0
         };
 
+        const progressPercentageAtRangeStart = dailyProgressModels
+            .filter(x => x.date < rangeStartDate)
+            .reduce((p, c) => p + c.progressPercentage, 0);
+
+        const progressPercentageDuringrange = dailyProgressModels
+            .reduce((p, c) => p + c.progressPercentage, 0);
+
+        const progressPercentageIncreaseInRange = progressPercentageAtRangeStart - progressPercentageDuringrange;
+
         const steps = Array
             .from({ length: rangeSize })
             .map((_, index) => {
@@ -172,7 +180,7 @@ export class UserProgressService extends ServiceBase {
 
                 const previsionedCompletedPercentage = actualCompletedPercentage !== null
                     ? actualCompletedPercentage
-                    : lastStep.previsionedCompletedPercentage + avgItemCompletionPercentagePerDay;
+                    : lastStep.previsionedCompletedPercentage + progressPercentageIncreaseInRange;
 
                 const recommendedCompletedPercentage = actualCompletedPercentage !== null
                     ? actualCompletedPercentage

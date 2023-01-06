@@ -13,36 +13,18 @@
         // run
         {
             "type": "shell",
-            "label": "run frontend",
-            "command": "yarn start",
+            "label": "start-client-web",
+            "command": "yarn start-client",
             "problemMatcher": [],
-            "options": {
-                "cwd": "${workspaceFolder}/packages/frontend"
-            },
             "presentation": {
                 "group": "run"
             }
         },
         {
             "type": "shell",
-            "label": "run server-api",
-            "command": "yarn start",
+            "label": "start-server-api",
+            "command": "yarn start-server",
             "problemMatcher": [],
-            "options": {
-                "cwd": "${workspaceFolder}/packages/server-api"
-            },
-            "presentation": {
-                "group": "run"
-            }
-        },
-        {
-            "type": "shell",
-            "label": "watch-server-services",
-            "command": "yarn watch",
-            "problemMatcher": [],
-            "options": {
-                "cwd": "${workspaceFolder}/packages/server-services"
-            },
             "presentation": {
                 "group": "run"
             }
@@ -80,13 +62,10 @@
         {
             "type": "shell",
             "label": "mon-server-services",
-            "command": "yarn tsc --watch",
-            "options": {
-                "cwd": "${workspaceFolder}/packages/server-services"
-            },
+            "command": "yarn mon-server-services",
             "problemMatcher": [],
             "presentation": {
-                "group": "deps"
+                "group": "run"
             }
         },
         {
@@ -109,10 +88,11 @@
         },
         // run-all
         {
-            "label": "run-all",
+            "label": "start-dev-mode",
             "dependsOn": [
-                "run frontend",
-                "run server-api",
+                "start-client-web",
+                "start-server-api",
+                "mon-server-services"
             ],
             "problemMatcher": []
         },
@@ -121,19 +101,6 @@
             "label": "run-mon-tests",
             "type": "shell",
             "command": "yarn mon-tests",
-            "problemMatcher": [],
-            "presentation": {
-                "group": "testing"
-            }
-        },
-        // testdev
-        {
-            "label": "testdev",
-            "dependsOn": [
-                "run-server-api-testing",
-                "run-mon-tests",
-                "mon-server-services"
-            ],
             "problemMatcher": [],
             "presentation": {
                 "group": "testing"
