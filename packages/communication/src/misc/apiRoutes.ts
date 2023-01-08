@@ -144,6 +144,10 @@ export const apiRoutes = {
         saveCourseRatingGroupAnswers: '/courserating/save-course-rating-answers'
     },
 
+    adminstats: {
+        getCourseStatsCarouselData: '/adminstats/get-course-stats-carousel-data' as ParametrizedRouteType<{ query: { companyId: Id<'Company'> } }>
+    },
+
     userStats: {
         getHomePageStats: '/userstats/get-home-page-stats',
         getUserLearningPageStats: '/userstats/get-user-learning-page-stats',
@@ -153,7 +157,6 @@ export const apiRoutes = {
         getUserExamStats: '/userstats/get-user-exam-stats',
         getUserModuleStats: '/userstats/get-user-module-stats',
         getUserLearningOverviewData: '/userstats/get-user-learning-overview-data',
-        getAdminHomeOverviewStats: '/userstats/get-admin-home-overview-stats',
         getUserCourseStatsOverviewData: '/userstats/get-user-course-stats-overview-data'
     },
 

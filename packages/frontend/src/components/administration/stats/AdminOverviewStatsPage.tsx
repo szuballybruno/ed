@@ -1,36 +1,35 @@
-import { useAdminHomeOverviewStatsData } from '../../../services/api/userStatsApiService';
-import { coalesce } from '../../../static/frontendHelpers';
+import { CompanyDTO } from '@episto/communication';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { AdminOverviewGraphs } from './AdminOverviewGraphs';
-import { CourseOverviewStats, useCourseOverviewStatsLogic } from './CourseOverviewStats';
+import { CourseCarouselStats, useCourseOverviewStatsLogic } from './CourseCarouselStats';
 import { UserOverviewStats } from './UserOverviewStats';
 
-export const AdminOverviewStatsPage = () => {
+export const AdminOverviewStatsPage = ({ activeCompany }: { activeCompany: CompanyDTO | null }) => {
 
-    const { adminOverviewStatsData } = useAdminHomeOverviewStatsData();
-    const { flaggedUsers: flaggedUsersCount } = coalesce(adminOverviewStatsData, { flaggedUsers: 0 });
-    const courseOverviewStatsLogic = useCourseOverviewStatsLogic({ adminOverviewStatsData });
+    const courseOverviewStatsLogic = useCourseOverviewStatsLogic({ activeCompanyId: activeCompany?.id ?? null });
 
     return (
         <AdminSubpageHeader
+            id={AdminOverviewStatsPage.name}
             isInverseBackground
             direction='column'>
 
             <EpistoFlex2
+                id={`${AdminOverviewStatsPage.name}-inner`}
                 justify='center'
                 wrap="wrap">
 
                 {/* user overview stats  */}
-                <UserOverviewStats
-                    flaggedUsersCount={flaggedUsersCount} />
+                <UserOverviewStats />
 
                 {/* course overview stats  */}
-                <CourseOverviewStats
+                <CourseCarouselStats
                     logic={courseOverviewStatsLogic} />
 
                 {/* graphs */}
                 <AdminOverviewGraphs />
+
             </EpistoFlex2>
         </AdminSubpageHeader>
     );

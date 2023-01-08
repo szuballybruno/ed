@@ -1,7 +1,7 @@
-import { AdminHomePageOverviewDTO } from '@episto/communication';
 import { ArrowBack, ArrowForward, FiberManualRecord } from '@mui/icons-material';
+import { Id } from '@thinkhub/x-core';
 import { useMemo } from 'react';
-import { EMPTY_ARRAY } from '../../../helpers/emptyArray';
+import { AdminStatsApiService } from '../../../services/api/AdminStatsApiService';
 import { Environment } from '../../../static/Environemnt';
 import { coalesce, usePaging } from '../../../static/frontendHelpers';
 import { EpistoButton } from '../../controls/EpistoButton';
@@ -11,20 +11,18 @@ import { EpistoGrid } from '../../controls/EpistoGrid';
 import StatisticsCard, { StatisticsCardProps } from '../../statisticsCard/StatisticsCard';
 import { AdminStatGroup } from './AdminStatGroup';
 
-export const useCourseOverviewStatsLogic = ({ adminOverviewStatsData }: { adminOverviewStatsData: AdminHomePageOverviewDTO | null }) => {
+export const useCourseOverviewStatsLogic = ({ activeCompanyId }: { activeCompanyId: Id<'Company'> | null }) => {
 
-    const { companyCourseStats } = coalesce(adminOverviewStatsData, { companyCourseStats: EMPTY_ARRAY });
-    const activeCoursesPaging = usePaging({ items: companyCourseStats });
+    const { adminOverviewStatsDatas } = AdminStatsApiService
+        .useAdminCourseStatCarouselDatas(activeCompanyId);
+
+    const activeCoursesPaging = usePaging({ items: adminOverviewStatsDatas });
 
     const activeCourseData = coalesce(activeCoursesPaging.currentItem, {
-        activeUsersCount: 0,
-        avgCoursePerformancePercentage: 0,
-        completedUsersCount: 0,
-        difficultVideosCount: 0,
-        questionsWaitingToBeAnswered: 0,
-        suspendedUsersCount: 0,
-        thumbnailUrl: '',
-        title: ''
+        activeUserCount: 0,
+        courseCompletionCount: 0,
+        coverFilePath: '',
+        courseTitle: ''
     });
 
     return {
@@ -32,23 +30,19 @@ export const useCourseOverviewStatsLogic = ({ adminOverviewStatsData }: { adminO
         prev: activeCoursesPaging.previous,
         next: activeCoursesPaging.next,
         currentIndex: activeCoursesPaging.currentIndex,
-        items: companyCourseStats
+        items: adminOverviewStatsDatas
     };
 };
 
 export type CourseOverviewStatsLogicType = ReturnType<typeof useCourseOverviewStatsLogic>;
 
-export const CourseOverviewStats = ({
+export const CourseCarouselStats = ({
     logic: {
-        activeUsersCount,
-        avgCoursePerformancePercentage,
-        completedUsersCount,
-        difficultVideosCount,
-        questionsWaitingToBeAnswered,
-        suspendedUsersCount,
-        thumbnailUrl,
-        title,
         currentIndex,
+        activeUserCount,
+        courseCompletionCount,
+        courseTitle,
+        coverFilePath,
         items,
         next,
         prev
@@ -61,58 +55,51 @@ export const CourseOverviewStats = ({
         {
             iconPath: Environment.getAssetUrl('/images/teacherdashboard4.png'),
             title: 'Felhasználó jelenleg',
-            value: activeUsersCount,
-            suffix: 'aktív',
-            isPreview: true
+            value: activeUserCount,
+            suffix: 'aktív'
         },
         {
             iconPath: Environment.getAssetUrl('/images/teacherdashboard5.png'),
             title: 'Végezte el a kurzust',
-            value: completedUsersCount,
-            suffix: 'tanuló',
-            isPreview: true
+            value: courseCompletionCount,
+            suffix: 'tanuló'
         },
         {
             iconPath: Environment.getAssetUrl('/images/teacherdashboard6.png'),
             title: 'Hagyta félbe a tanfolyamot',
-            value: suspendedUsersCount,
+            value: 0,
             suffix: 'tanuló',
             isPreview: true
         },
         {
             iconPath: Environment.getAssetUrl('/images/teacherdashboard7.png'),
             title: 'Átlagos teljesítmény',
-            value: avgCoursePerformancePercentage
-                ? Math.round(avgCoursePerformancePercentage)
-                : null,
+            value: 0,
             suffix: '%',
             isPreview: true
         },
         {
             iconPath: Environment.getAssetUrl('/images/teacherdashboard8.png'),
             title: 'Nehéznek megjelölve',
-            value: difficultVideosCount,
+            value: 0,
             suffix: 'videó',
             isPreview: true
         },
         {
             iconPath: Environment.getAssetUrl('/images/teacherdashboard9.png'),
             title: 'Vár válaszokra a tanártól',
-            value: questionsWaitingToBeAnswered,
+            value: 0,
             suffix: 'kérdés',
             isPreview: true
         }
     ], [
-        activeUsersCount,
-        avgCoursePerformancePercentage,
-        completedUsersCount,
-        difficultVideosCount,
-        questionsWaitingToBeAnswered,
-        suspendedUsersCount
+        courseCompletionCount,
+        activeUserCount
     ]);
 
     return (
         <AdminStatGroup
+            id={CourseCarouselStats.name}
             padding="0"
             background="white"
             title="Kurzusok teljesítménye"
@@ -131,7 +118,7 @@ export const CourseOverviewStats = ({
                 <EpistoFlex2
                     flex="1">
                     <img
-                        src={Environment.getAssetUrl(thumbnailUrl)}
+                        src={coverFilePath}
                         alt=""
                         style={{
                             height: '100%',
@@ -152,7 +139,7 @@ export const CourseOverviewStats = ({
                         justify="center">
 
                         <EpistoFont>
-                            {title}
+                            {courseTitle}
                         </EpistoFont>
                     </EpistoFlex2>
 

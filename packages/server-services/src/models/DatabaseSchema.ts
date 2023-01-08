@@ -1,85 +1,94 @@
 import { XDBMSchemaService } from "@thinkhub/x-orm";
-import { ActivationCode } from './tables/ActivationCode';
 import { ModuleVersion } from './tables/ModuleVersion';
-import { VideoVersion } from './tables/VideoVersion';
+import { QuestionVersion } from './tables/QuestionVersion';
+import { ActivationCode } from './tables/ActivationCode';
 import { ExamData } from './tables/ExamData';
+import { VideoVersion } from './tables/VideoVersion';
+import { ActivitySession } from './tables/ActivitySession';
 import { ExamVersion } from './tables/ExamVersion';
 import { CourseVersion } from './tables/CourseVersion';
 import { Company } from './tables/Company';
-import { ActivitySession } from './tables/ActivitySession';
+import { GivenAnswer } from './tables/GivenAnswer';
+import { QuestionData } from './tables/QuestionData';
 import { AnswerSession } from './tables/AnswerSession';
 import { ExamCompletion } from './tables/ExamCompletion';
 import { Exam } from './tables/Exam';
 import { ActivityStreak } from './tables/ActivityStreak';
 import { Activity } from './tables/Activity';
-import { QuestionVersion } from './tables/QuestionVersion';
-import { GivenAnswer } from './tables/GivenAnswer';
-import { QuestionData } from './tables/QuestionData';
-import { Course } from './tables/Course';
-import { TempomatAdjustmentValue } from './tables/TempomatAdjustmentValue';
 import { Module } from './tables/Module';
-import { VideoPlaybackSample } from './tables/VideoPlaybackSample';
+import { Comment } from './tables/Comment';
+import { Course } from './tables/Course';
 import { Video } from './tables/Video';
-import { CourseAccessBridge } from './tables/CourseAccessBridge';
 import { StorageFile } from './tables/StorageFile';
-import { PrequizAnswer } from './tables/PrequizAnswer';
+import { VideoPlaybackSample } from './tables/VideoPlaybackSample';
 import { ModuleData } from './tables/ModuleData';
-import { PrequizUserAnswer } from './tables/PrequizUserAnswer';
-import { AnswerVersion } from './tables/AnswerVersion';
-import { CourseCompletion } from './tables/CourseCompletion';
 import { RoleAssignmentBridge } from './tables/RoleAssignmentBridge';
 import { VideoRating } from './tables/VideoRating';
+import { AnswerVersion } from './tables/AnswerVersion';
+import { CourseCompletion } from './tables/CourseCompletion';
+import { AnswerGivenAnswerBridge } from './tables/AnswerGivenAnswerBridge';
 import { RolePermissionBridge } from './tables/RolePermissionBridge';
 import { Permission } from './tables/Permission';
-import { Comment } from './tables/Comment';
-import { AnswerGivenAnswerBridge } from './tables/AnswerGivenAnswerBridge';
-import { CourseData } from './tables/CourseData';
+import { CourseCategory } from './tables/CourseCategory';
 import { Answer } from './tables/Answer';
 import { AnswerData } from './tables/AnswerData';
-import { Like } from './tables/Like';
-import { CourseCategory } from './tables/CourseCategory';
+import { TeacherInfo } from './tables/TeacherInfo';
 import { ConstantValue } from './tables/ConstantValue';
-import { ShopItem } from './tables/ShopItem';
 import { CompanyOwnerBridge } from './tables/CompanyOwnerBridge';
+import { Like } from './tables/Like';
+import { ShopItem } from './tables/ShopItem';
 import { ShopItemCategory } from './tables/ShopItemCategory';
+import { Event } from './tables/Event';
 import { CourseRatingGroup } from './tables/CourseRatingGroup';
 import { DailyTipOccurrence } from './tables/DailyTipOccurrence';
 import { Department } from './tables/Department';
 import { DiscountCode } from './tables/DiscountCode';
-import { TeacherInfo } from './tables/TeacherInfo';
-import { CourseItemCompletion } from './tables/CourseItemCompletion';
+import { CourseRatingQuestion } from './tables/CourseRatingQuestion';
 import { CourseRatingQuestionUserAnswer } from './tables/CourseRatingQuestionUserAnswer';
 import { DailyTip } from './tables/DailyTip';
-import { CourseRatingQuestion } from './tables/CourseRatingQuestion';
 import { Group } from './tables/Group';
 import { MigrationVersion } from './tables/MigrationVersion';
+import { Organization } from './tables/Organization';
 import { GivenAnswerStreak } from './tables/GivenAnswerStreak';
 import { UserSessionActivity } from './tables/UserSessionActivity';
-import { Event } from './tables/Event';
-import { RoleActivityBridge } from './tables/RoleActivityBridge';
-import { Organization } from './tables/Organization';
 import { QuestionType } from './tables/QuestionType';
 import { Question } from './tables/Question';
-import { PrequizCompletion } from './tables/PrequizCompletion';
+import { Task } from './tables/Task';
+import { PrequizUserAnswer } from './tables/PrequizUserAnswer';
 import { PrequizQuestion } from './tables/PrequizQuestion';
 import { PersonalityTraitCategory } from './tables/PersonalityTraitCategory';
+import { RoleActivityBridge } from './tables/RoleActivityBridge';
 import { TestTable } from './tables/TestTable';
 import { TestTable2 } from './tables/TestTable2';
 import { TypeormMetadata } from './tables/TypeormMetadata';
 import { UserCommentBridge } from './tables/UserCommentBridge';
 import { UserCourseAccessBridge } from './tables/UserCourseAccessBridge';
 import { UserExamProgressBridge } from './tables/UserExamProgressBridge';
-import { Task } from './tables/Task';
+import { TempomatAdjustmentValue } from './tables/TempomatAdjustmentValue';
 import { VideoSeekEvent } from './tables/VideoSeekEvent';
 import { VideoPlaybackSession } from './tables/VideoPlaybackSession';
+import { PrequizCompletion } from './tables/PrequizCompletion';
+import { CourseAccessBridge } from './tables/CourseAccessBridge';
 import { VideoCompletion } from './tables/VideoCompletion';
 import { UserVideoProgressBridge } from './tables/UserVideoProgressBridge';
+import { CourseItemCompletion } from './tables/CourseItemCompletion';
+import { PrequizAnswer } from './tables/PrequizAnswer';
+import { CourseData } from './tables/CourseData';
 import { CoinTransaction } from './tables/CoinTransaction';
 import { PermissionAssignmentBridge } from './tables/PermissionAssignmentBridge';
 import { Role } from './tables/Role';
 import { UserCourseBridge } from './tables/UserCourseBridge';
 import { User } from './tables/User';
 import { VideoData } from './tables/VideoData';
+import { PretestResultView } from './views/PretestResultView';
+import { TempomatTargetDateDataView } from './views/TempomatTargetDateDataView';
+import { UserLearningPageStatsView } from './views/UserLearningPageStatsView';
+import { UserPermissionView } from './views/UserPermissionView';
+import { AssignablePermissionView } from './views/AssignablePermissionView';
+import { CompanyView } from './views/CompanyView';
+import { RoleListView } from './views/RoleListView';
+import { UserRoleAssignCompanyView } from './views/UserRoleAssignCompanyView';
+import { AssignableRoleView } from './views/AssignableRoleView';
 import { ActivationCodeListView } from './views/ActivationCodeListView';
 import { ActivityStreakView } from './views/ActivityStreakView';
 import { CoinAcquirePerCourseView } from './views/CoinAcquirePerCourseView';
@@ -106,6 +115,7 @@ import { LatestGivenAnswerView } from './views/LatestGivenAnswerView';
 import { LatestVideoView } from './views/LatestVideoView';
 import { LeaderboardView } from './views/LeaderboardView';
 import { ModuleEditView } from './views/ModuleEditView';
+import { QuestionModuleCompareView } from './views/QuestionModuleCompareView';
 import { ModulePlayerView } from './views/ModulePlayerView';
 import { PersonalityTraitCategoryView } from './views/PersonalityTraitCategoryView';
 import { PersonalityTraitView } from './views/PersonalityTraitView';
@@ -113,17 +123,16 @@ import { PractiseQuestionInfoView } from './views/PractiseQuestionInfoView';
 import { PractiseQuestionView } from './views/PractiseQuestionView';
 import { PrequizQuestionView } from './views/PrequizQuestionView';
 import { QuestionDataView } from './views/QuestionDataView';
-import { QuestionModuleCompareView } from './views/QuestionModuleCompareView';
 import { SchemaVersionView } from './views/SchemaVersionView';
 import { ShopItemStatefulView } from './views/ShopItemStatefulView';
 import { ShopItemView } from './views/ShopItemView';
+import { UserRoleView } from './views/UserRoleView';
+import { UserSessionView } from './views/UserSessionView';
 import { SignupQuestionView } from './views/SignupQuestionView';
 import { UserAssignedAuthItemView } from './views/UserAssignedAuthItemView';
 import { UserCourseBridgeView } from './views/UserCourseBridgeView';
 import { UserPractiseRecommendationView } from './views/UserPractiseRecommendationView';
 import { UserPrequizAnswersView } from './views/UserPrequizAnswersView';
-import { UserRoleView } from './views/UserRoleView';
-import { UserSessionView } from './views/UserSessionView';
 import { VideoCursorSecondsView } from './views/VideoCursorSecondsView';
 import { VideoPlaybackSampleView } from './views/VideoPlaybackSampleView';
 import { VideoPlayerDataView } from './views/VideoPlayerDataView';
@@ -187,15 +196,7 @@ import { LatestExamResultView } from './views/LatestExamResultView';
 import { FinalExamScoreView } from './views/FinalExamScoreView';
 import { HomePageStatsView } from './views/HomePageStatsView';
 import { ModuleLastExamScoreView } from './views/ModuleLastExamScoreView';
-import { PretestResultView } from './views/PretestResultView';
-import { TempomatTargetDateDataView } from './views/TempomatTargetDateDataView';
-import { UserLearningPageStatsView } from './views/UserLearningPageStatsView';
-import { UserPermissionView } from './views/UserPermissionView';
-import { AssignablePermissionView } from './views/AssignablePermissionView';
-import { CompanyView } from './views/CompanyView';
-import { RoleListView } from './views/RoleListView';
-import { UserRoleAssignCompanyView } from './views/UserRoleAssignCompanyView';
-import { AssignableRoleView } from './views/AssignableRoleView';
+import { AdminCourseCarouselDataView } from './views/AdminCourseCarouselDataView';
 import { CourseDetailsView } from './views/CourseDetailsView';
 import { UserPlaylistView } from './views/UserPlaylistView';
 import { CourseAllItemsCompletedView } from './views/CourseAllItemsCompletedView';
@@ -213,6 +214,15 @@ import { AdminUserCoursesView } from './views/AdminUserCoursesView';
 export const databaseSchema: XDBMSchemaService = {
 
     views: [
+        PretestResultView,
+        TempomatTargetDateDataView,
+        UserLearningPageStatsView,
+        UserPermissionView,
+        AssignablePermissionView,
+        CompanyView,
+        RoleListView,
+        UserRoleAssignCompanyView,
+        AssignableRoleView,
         ActivationCodeListView,
         ActivityStreakView,
         CoinAcquirePerCourseView,
@@ -239,6 +249,7 @@ export const databaseSchema: XDBMSchemaService = {
         LatestVideoView,
         LeaderboardView,
         ModuleEditView,
+        QuestionModuleCompareView,
         ModulePlayerView,
         PersonalityTraitCategoryView,
         PersonalityTraitView,
@@ -246,17 +257,16 @@ export const databaseSchema: XDBMSchemaService = {
         PractiseQuestionView,
         PrequizQuestionView,
         QuestionDataView,
-        QuestionModuleCompareView,
         SchemaVersionView,
         ShopItemStatefulView,
         ShopItemView,
+        UserRoleView,
+        UserSessionView,
         SignupQuestionView,
         UserAssignedAuthItemView,
         UserCourseBridgeView,
         UserPractiseRecommendationView,
         UserPrequizAnswersView,
-        UserRoleView,
-        UserSessionView,
         VideoCursorSecondsView,
         VideoPlaybackSampleView,
         VideoPlayerDataView,
@@ -320,15 +330,7 @@ export const databaseSchema: XDBMSchemaService = {
         FinalExamScoreView,
         HomePageStatsView,
         ModuleLastExamScoreView,
-        PretestResultView,
-        TempomatTargetDateDataView,
-        UserLearningPageStatsView,
-        UserPermissionView,
-        AssignablePermissionView,
-        CompanyView,
-        RoleListView,
-        UserRoleAssignCompanyView,
-        AssignableRoleView,
+        AdminCourseCarouselDataView,
         CourseDetailsView,
         UserPlaylistView,
         CourseAllItemsCompletedView,
@@ -345,81 +347,81 @@ export const databaseSchema: XDBMSchemaService = {
     ],
 
     entities: [
-        ActivationCode,
         ModuleVersion,
-        VideoVersion,
+        QuestionVersion,
+        ActivationCode,
         ExamData,
+        VideoVersion,
+        ActivitySession,
         ExamVersion,
         CourseVersion,
         Company,
-        ActivitySession,
+        GivenAnswer,
+        QuestionData,
         AnswerSession,
         ExamCompletion,
         Exam,
         ActivityStreak,
         Activity,
-        QuestionVersion,
-        GivenAnswer,
-        QuestionData,
-        Course,
-        TempomatAdjustmentValue,
         Module,
-        VideoPlaybackSample,
+        Comment,
+        Course,
         Video,
-        CourseAccessBridge,
         StorageFile,
-        PrequizAnswer,
+        VideoPlaybackSample,
         ModuleData,
-        PrequizUserAnswer,
-        AnswerVersion,
-        CourseCompletion,
         RoleAssignmentBridge,
         VideoRating,
+        AnswerVersion,
+        CourseCompletion,
+        AnswerGivenAnswerBridge,
         RolePermissionBridge,
         Permission,
-        Comment,
-        AnswerGivenAnswerBridge,
-        CourseData,
+        CourseCategory,
         Answer,
         AnswerData,
-        Like,
-        CourseCategory,
+        TeacherInfo,
         ConstantValue,
-        ShopItem,
         CompanyOwnerBridge,
+        Like,
+        ShopItem,
         ShopItemCategory,
+        Event,
         CourseRatingGroup,
         DailyTipOccurrence,
         Department,
         DiscountCode,
-        TeacherInfo,
-        CourseItemCompletion,
+        CourseRatingQuestion,
         CourseRatingQuestionUserAnswer,
         DailyTip,
-        CourseRatingQuestion,
         Group,
         MigrationVersion,
+        Organization,
         GivenAnswerStreak,
         UserSessionActivity,
-        Event,
-        RoleActivityBridge,
-        Organization,
         QuestionType,
         Question,
-        PrequizCompletion,
+        Task,
+        PrequizUserAnswer,
         PrequizQuestion,
         PersonalityTraitCategory,
+        RoleActivityBridge,
         TestTable,
         TestTable2,
         TypeormMetadata,
         UserCommentBridge,
         UserCourseAccessBridge,
         UserExamProgressBridge,
-        Task,
+        TempomatAdjustmentValue,
         VideoSeekEvent,
         VideoPlaybackSession,
+        PrequizCompletion,
+        CourseAccessBridge,
         VideoCompletion,
         UserVideoProgressBridge,
+        CourseItemCompletion,
+        PrequizAnswer,
+        CourseData,
         CoinTransaction,
         PermissionAssignmentBridge,
         Role,

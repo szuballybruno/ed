@@ -1,5 +1,7 @@
 // needs to be imported for TypeORM
+
 import 'reflect-metadata';
+export { AdminStatsService } from './services/AdminStatsService';
 export * from './services/GlobalConfigurationService';
 export { ActivationCodeService } from './services/ActivationCodeService';
 export { AnswerService } from './services/AnswerService';

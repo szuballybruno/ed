@@ -14,8 +14,17 @@ export const AdminLeftPane = ({
 
     const { hasPermission } = useAuthorizationContext();
     const administrationRoutes = applicationRoutes.administrationRoute;
+
     const { navigate3 } = Navigator
         .useNavigation();
+
+    const navToAdminPage = (route: ApplicationRoute<AdminActiveCompanyRouteParamType, any>) => {
+
+        if (!activeCompanyId)
+            throw new Error(`No active company id!`);
+
+        navigate3<any, any>(route, { params: { activeCompanyId } });
+    }
 
     const menuItems = new ArrayBuilder<ApplicationRoute<AdminActiveCompanyRouteParamType, any>>()
         .addIf(hasPermission('ADMINISTRATE_COMPANY'), administrationRoutes.usersRoute)
@@ -35,7 +44,7 @@ export const AdminLeftPane = ({
 
             <NavigationLinkList
                 isNoText
-                onNav={route => navigate3(route, { params: { activeCompanyId } })}
+                onNav={route => navToAdminPage(route)}
                 routes={menuItems} />
         </LeftPane>
     );

@@ -4,6 +4,7 @@ export { GreetingsDataDTO } from "./GreetingsDataDTO";
 export { ActivationCodeListDTO } from "./ActivationCodeListDTO";
 export { LeaderboardListItemDTO } from "./LeaderboardListItemDTO";
 export * from "./misc/apiRoutes";
+export { AdminCourseCarouselDataDTO } from "./admin/AdminCourseCarouselDataDTO";
 export { AnswerDTO } from "./AnswerDTO";
 export { AnswerEditDTO } from "./AnswerEditDTO";
 export { AnswerQuestionDTO } from "./AnswerQuestionDTO";

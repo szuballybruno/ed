@@ -1,25 +1,25 @@
 import { instantiate } from '@episto/commonlogic';
 import { CourseItemStateType, CourseItemType, CourseRatingQuesitonType, CourseStageNameType, CourseVisibilityType, EventCodeType, GivenAnswerStateType, Id, LeaderboardPeriodType, PermissionCodeType, PermissionScopeType, TeacherBadgeNameType, TempoRatingType, UserActivityDistributionChartData, VersionCode } from '@episto/commontypes';
-import { ActivationCodeListDTO, AdminCourseUserStatsDTO, AdminHomePageOverviewDTO, AnswerDTO, AnswerEditDTO, AvailableCourseDTO, CoinTransactionDTO, CommentListDTO, CompanyAssociatedCourseDTO, CompanyDTO, CompanyEditDataDTO, CompanyPublicDTO, CourseAdminListItemDTO, CourseBriefData, CourseCategoryDTO, CourseContentItemAdminDTO, CourseContentItemIssueDTO, CourseDetailsDTO, CourseDetailsEditDataDTO, CourseItemEditDTO, CourseLearningDTO, CourseOverviewDataDTO, CourseProgressShortDTO, CourseRatingGroupDTO, CourseRatingQuestionDTO, CourseShopItemListDTO, CourseStatDTO, DailyTipDTO, DailyTipEditDataDTO, DiscountCodeDTO, EventDTO, ExamPlayerDataDTO, ExamResultQuestionDTO, ExamResultsDTO, ExamStatsDTO, HomePageStatsDTO, LeaderboardListItemDTO, ModuleEditDTO, ModulePlayerDTO, PermissionListDTO, PersonalityTraitCategoryDTO, PersonalityTraitCategoryShortDTO, PlaylistItemDTO, PlaylistModuleDTO, PrequizAnswerDTO, PrequizQuestionDTO, PretestResultDTO, QuestionDTO, QuestionModuleCompareDTO, ResultAnswerDTO, RoleAdminListDTO, RoleDTO, ShopItemAdminShortDTO, ShopItemBriefData, ShopItemCategoryDTO, ShopItemDTO, ShopItemEditDTO, SignupAnswerDTO, SignupQuestionDTO, SurveyDataDTO, TaskDTO, TeacherInfoEditDTO, UserActiveCourseDTO, UserAdminListDTO, UserCourseStatsDTO, UserCourseStatsOverviewDTO, UserDTO, UserExamStatsDTO, UserStatisticsDTO, UserLearningPageStatsDTO, UserModuleStatsDTO, UserProgressChartStep, UserVideoStatsDTO, VideoPlayerDataDTO } from '@episto/communication';
+import { ActivationCodeListDTO, AdminCourseCarouselDataDTO, AdminCourseUserStatsDTO, AdminHomePageOverviewDTO, AnswerDTO, AnswerEditDTO, AvailableCourseDTO, CoinTransactionDTO, CommentListDTO, CompanyAssociatedCourseDTO, CompanyDTO, CompanyEditDataDTO, CompanyPublicDTO, CourseAdminListItemDTO, CourseBriefData, CourseCategoryDTO, CourseContentItemAdminDTO, CourseContentItemIssueDTO, CourseDetailsDTO, CourseDetailsEditDataDTO, CourseItemEditDTO, CourseLearningDTO, CourseOverviewDataDTO, CourseProgressShortDTO, CourseRatingGroupDTO, CourseRatingQuestionDTO, CourseShopItemListDTO, CourseStatDTO, DailyTipDTO, DailyTipEditDataDTO, DiscountCodeDTO, EventDTO, ExamPlayerDataDTO, ExamResultQuestionDTO, ExamResultsDTO, ExamStatsDTO, HomePageStatsDTO, LeaderboardListItemDTO, ModuleEditDTO, ModulePlayerDTO, PermissionListDTO, PersonalityTraitCategoryDTO, PersonalityTraitCategoryShortDTO, PlaylistItemDTO, PlaylistModuleDTO, PrequizAnswerDTO, PrequizQuestionDTO, PretestResultDTO, QuestionDTO, QuestionModuleCompareDTO, ResultAnswerDTO, RoleAdminListDTO, RoleDTO, ShopItemAdminShortDTO, ShopItemBriefData, ShopItemCategoryDTO, ShopItemDTO, ShopItemEditDTO, SignupAnswerDTO, SignupQuestionDTO, SurveyDataDTO, TaskDTO, TeacherInfoEditDTO, UserActiveCourseDTO, UserAdminListDTO, UserCourseStatsDTO, UserCourseStatsOverviewDTO, UserDTO, UserExamStatsDTO, UserLearningPageStatsDTO, UserModuleStatsDTO, UserProgressChartStep, UserStatisticsDTO, UserVideoStatsDTO, VideoPlayerDataDTO } from '@episto/communication';
 import { Mutable, XMappingsBuilder } from '@thinkhub/x-mapper';
-import { Permission } from '../../models/tables/Permission';
-import { Role } from '../../models/tables/Role';
-import { CourseData } from '../../models/tables/CourseData';
+import { TempomatDataAvgModel } from '../../models/misc/TempomatDataAvgModel';
+import { TempomatDataModel } from '../../models/misc/TempomatDataModel';
 import { Company } from '../../models/tables/Company';
 import { CourseCategory } from '../../models/tables/CourseCategory';
+import { CourseData } from '../../models/tables/CourseData';
 import { DailyTip } from '../../models/tables/DailyTip';
 import { DiscountCode } from '../../models/tables/DiscountCode';
 import { Event } from '../../models/tables/Event';
+import { Permission } from '../../models/tables/Permission';
 import { PersonalityTraitCategory } from '../../models/tables/PersonalityTraitCategory';
+import { Role } from '../../models/tables/Role';
 import { ShopItem } from '../../models/tables/ShopItem';
 import { ShopItemCategory } from '../../models/tables/ShopItemCategory';
 import { Task } from '../../models/tables/Task';
 import { TeacherInfo } from '../../models/tables/TeacherInfo';
 import { User } from '../../models/tables/User';
-import { TempomatDataAvgModel } from '../../models/misc/TempomatDataAvgModel';
-import { TempomatDataModel } from '../../models/misc/TempomatDataModel';
-import { UserPerformancePercentageAverageModel } from '../../models/misc/UserPerformancePercentageAverageModel';
 import { ActivationCodeListView } from '../../models/views/ActivationCodeListView';
+import { AdminCourseCarouselDataView } from '../../models/views/AdminCourseCarouselDataView';
 import { AdminCourseUserStatsView } from '../../models/views/AdminCourseUserStatsView';
 import { AdminHomePageOverviewView } from '../../models/views/AdminHomePageOverviewView';
 import { AdminUserCoursesView } from '../../models/views/AdminUserCoursesView';
@@ -512,6 +512,19 @@ const marray = [
                 type: 'exam',
                 examStats: statsView ? toStatsDTO(statsView) : null,
             });
+        }),
+
+    epistoMappingsBuilder
+        .addArrayMapping(AdminCourseCarouselDataDTO, ([urlService]) => (views: AdminCourseCarouselDataView[]) => {
+
+            return views
+                .map(x => instantiate<AdminCourseCarouselDataDTO>({
+                    activeUserCount: x.activeUserCount,
+                    courseCompletionCount: x.courseCompletionCount,
+                    courseId: x.courseId,
+                    courseTitle: x.courseTitle,
+                    coverFilePath: urlService.getAssetUrl(x.coverFilePath)
+                }))
         }),
 
     epistoMappingsBuilder

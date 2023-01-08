@@ -121,18 +121,6 @@ export class UserStatsController implements IController<UserStatsController> {
             .getUserLearningOverviewDataAsync(params.principalId, userId);
     }
 
-    @XControllerAction(apiRoutes.userStats.getAdminHomeOverviewStats)
-    getAdminHomeOverviewStatsAction(params: ActionParams): Promise<any> {
-
-        const principalId = params
-            .principalId;
-
-        throw new Error('not implemented ');
-        // throw newNotImplemented();
-        // return this._userStatsService
-        //     .getAdminHomeOverviewStatsAsync(principalId);
-    }
-
     @XControllerAction(apiRoutes.userStats.getUserCourseStatsOverviewData)
     getUserCourseStatsOverviewDataAction(params: ActionParams) {
 

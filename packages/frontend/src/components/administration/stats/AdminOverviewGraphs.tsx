@@ -96,19 +96,22 @@ export const AdminOverviewGraphs = () => {
             {adminHomeDetailsStatistics
                 .map((item, index) => {
 
-                    return <AdminStatGroup
-                        isPreview
-                        title={item.title}
-                        padding="0px"
-                        background="white"
-                        key={index}>
+                    return (
+                        <AdminStatGroup
+                            id={`${AdminOverviewGraphs.name}-${index}}`}
+                            isPreview
+                            title={item.title}
+                            padding="0px"
+                            background="white"
+                            key={index}>
 
-                        <StatisticsCard
-                            noShadow
-                            key={index}
-                            flex="1"
-                            {...item} />
-                    </AdminStatGroup>;
+                            <StatisticsCard
+                                noShadow
+                                key={index}
+                                flex="1"
+                                {...item} />
+                        </AdminStatGroup>
+                    );
                 })}
         </>
     );

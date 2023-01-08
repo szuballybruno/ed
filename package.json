@@ -21,6 +21,8 @@
     "start-server": "lerna run start --scope=@episto/server-api",
     "start-script-producer": "lerna run start --scope=@episto/script-producer",
     "start-server-dist": "lerna run start-dist --scope=@episto/server-api",
+    "scaffold-orm": "lerna run scaffold --scope=@episto/x-orm",
+    "build-comm": "lerna run build --scope=@episto/communication",
     "read-xlib-tag": "node -e \"const mf = fs.readFileSync('./modules.json', 'utf-8'); const obj = JSON.parse(mf); console.log(obj['Thinkhub-Software/thinkhub-xlib']); \" "
   },
   "devDependencies": {

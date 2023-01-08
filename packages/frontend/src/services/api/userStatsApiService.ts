@@ -80,16 +80,6 @@ export const useUserExamStats = (courseId: Id<'Course'>, userId: Id<'User'>) => 
     };
 };
 
-export const useAdminHomeOverviewStatsData = () => {
-
-    const queryRes = QueryService
-        .useXQuery<AdminHomePageOverviewDTO>(apiRoutes.userStats.getAdminHomeOverviewStats);
-
-    return {
-        adminOverviewStatsData: queryRes.data,
-    };
-};
-
 export const useUserCourseStatsOverviewData = (userId: Id<'User'>, courseId: Id<'Course'>) => {
 
     const queryRes = QueryService.useXQuery<UserCourseStatsOverviewDTO>(apiRoutes.userStats.getUserCourseStatsOverviewData, { userId, courseId });

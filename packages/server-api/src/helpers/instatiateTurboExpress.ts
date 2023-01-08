@@ -40,6 +40,7 @@ import { VideoRatingController } from '../controllers/VideoRatingController';
 import { AuthenticationMiddleware } from '../middleware/AuthenticationMiddleware';
 import { AuthorizationMiddleware } from '../middleware/AuthorizationMiddleware';
 import { ServiceProviderInitializator } from './initApp';
+import { AdminStatsController } from '../controllers/AdminStatsController';
 
 export const actionWrapper: ActionWrapperFunctionType = async (serviceProvider: IXGatewayServiceProvider, action: () => Promise<any>) => {
 
@@ -143,6 +144,7 @@ export const initTurboExpress = (
         .addController(VideoController)
         .addController(LeaderboardController)
         .addController(QuestionController)
+        .addController(AdminStatsController)
         .build();
 
     return turboExpress;

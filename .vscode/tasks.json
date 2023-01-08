@@ -52,6 +52,15 @@
         },
         {
             "type": "shell",
+            "label": "build-comm",
+            "command": "yarn build-comm",
+            "problemMatcher": [],
+            "presentation": {
+                "group": "run"
+            }
+        },
+        {
+            "type": "shell",
             "label": "run-server-api-testing",
             "command": "yarn start-server",
             "problemMatcher": [],
