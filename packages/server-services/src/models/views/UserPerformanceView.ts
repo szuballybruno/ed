@@ -10,5 +10,14 @@ export class UserPerformanceView {
     courseId: Id<'Course'>;
 
     @XViewColumn()
+    givenAnswerCount: number;
+
+    @XViewColumn()
+    summarizedMaxScore: number;
+
+    @XViewColumn()
+    summarizedScore: number;
+
+    @XViewColumn()
     performancePercentage: number;
 }

@@ -61,6 +61,15 @@
         },
         {
             "type": "shell",
+            "label": "build-commtypes",
+            "command": "yarn build-commtypes",
+            "problemMatcher": [],
+            "presentation": {
+                "group": "run"
+            }
+        },
+        {
+            "type": "shell",
             "label": "run-server-api-testing",
             "command": "yarn start-server",
             "problemMatcher": [],

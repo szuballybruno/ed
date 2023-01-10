@@ -24,7 +24,7 @@ module_videos_to_be_repeated_cte AS
 	SELECT 
 		asv.user_id,
 		mv.module_id,
-		COUNT(*) videos_to_be_repeated_count
+		COUNT(*)::int videos_to_be_repeated_count
 	FROM public.given_answer ga
 	
 	INNER JOIN public.answer_session_view asv

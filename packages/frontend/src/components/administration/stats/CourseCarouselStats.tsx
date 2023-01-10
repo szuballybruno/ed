@@ -1,7 +1,7 @@
 import { ArrowBack, ArrowForward, FiberManualRecord } from '@mui/icons-material';
 import { Id } from '@thinkhub/x-core';
 import { useMemo } from 'react';
-import { AdminStatsApiService } from '../../../services/api/AdminStatsApiService';
+import { AdminApiService } from '../../../services/api/AdminApiService';
 import { Environment } from '../../../static/Environemnt';
 import { coalesce, usePaging } from '../../../static/frontendHelpers';
 import { EpistoButton } from '../../controls/EpistoButton';
@@ -13,7 +13,7 @@ import { AdminStatGroup } from './AdminStatGroup';
 
 export const useCourseOverviewStatsLogic = ({ activeCompanyId }: { activeCompanyId: Id<'Company'> | null }) => {
 
-    const { adminOverviewStatsDatas } = AdminStatsApiService
+    const { adminOverviewStatsDatas } = AdminApiService
         .useAdminCourseStatCarouselDatas(activeCompanyId);
 
     const activeCoursesPaging = usePaging({ items: adminOverviewStatsDatas });

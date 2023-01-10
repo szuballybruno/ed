@@ -1,17 +1,17 @@
 import { instantiate } from '@episto/commonlogic';
 import { ErrorWithCode, Id, UserRegistrationStatusType } from '@episto/commontypes';
-import { BriefUserDataDTO, DepartmentDTO, Mutation, UserAdminListDTO, UserControlDropdownDataDTO, UserCourseStatsDTO, UserDTO, UserEditReadDTO, UserEditSaveDTO, UserEditSimpleDTO } from '@episto/communication';
+import { BriefUserDataDTO, DepartmentDTO, Mutation, UserAdminListDTO, UserControlDropdownDataDTO, AdminUserCourseDTO, UserDTO, UserEditReadDTO, UserEditSaveDTO, UserEditSimpleDTO } from '@episto/communication';
 import { PrincipalId } from '@thinkhub/x-core';
-import { CourseData } from '../models/tables/CourseData';
+import { RegistrationType } from '../models/misc/Types';
 import { AnswerSession } from '../models/tables/AnswerSession';
 import { CourseAccessBridge } from '../models/tables/CourseAccessBridge';
+import { CourseData } from '../models/tables/CourseData';
 import { Department } from '../models/tables/Department';
 import { StorageFile } from '../models/tables/StorageFile';
 import { TeacherInfo } from '../models/tables/TeacherInfo';
 import { User } from '../models/tables/User';
 import { UserCourseBridge } from '../models/tables/UserCourseBridge';
-import { RegistrationType } from '../models/misc/Types';
-import { UserOverviewView } from '../models/views/UserOverviewView';
+import { AdminUserListView } from '../models/views/AdminUserListView';
 import { getFullName } from '../utilities/helpers';
 import { InsertEntity } from '../utilities/misc';
 import { AuthorizationService } from './AuthorizationService';
@@ -48,7 +48,7 @@ export class UserService {
             .checkPermissionAsync(principalId, 'ADMINISTRATE_COMPANY', { companyId: companyId });
 
         const companyUserOverviewViews = await this._ormService
-            .query(UserOverviewView, { companyId })
+            .query(AdminUserListView, { companyId })
             .where('companyId', '=', 'companyId')
             .getMany();
 
@@ -582,14 +582,14 @@ export class UserService {
     /**
      * Saves user's courses
      */
-    async saveUserCoursesAsync(userId: Id<'User'>, muts: Mutation<UserCourseStatsDTO, 'courseId'>[]) {
+    async saveUserCoursesAsync(userId: Id<'User'>, muts: Mutation<AdminUserCourseDTO, 'courseId'>[]) {
 
         await this._saveUserCourseAccessBridgesAsync(userId, muts);
         await this._saveUserCourseBridgesAsync(userId, muts);
         await this._saveUserCourseRequiredCompletionDates(userId, muts);
     }
 
-    private async _saveUserCourseAccessBridgesAsync(userId: Id<'User'>, muts: Mutation<UserCourseStatsDTO, 'courseId'>[]) {
+    private async _saveUserCourseAccessBridgesAsync(userId: Id<'User'>, muts: Mutation<AdminUserCourseDTO, 'courseId'>[]) {
 
         /**
          * Save access bridges
@@ -637,7 +637,7 @@ export class UserService {
             .hardDelete(CourseAccessBridge, deletedBridgeIds);
     }
 
-    private async _saveUserCourseBridgesAsync(userId: Id<'User'>, muts: Mutation<UserCourseStatsDTO, 'courseId'>[]) {
+    private async _saveUserCourseBridgesAsync(userId: Id<'User'>, muts: Mutation<AdminUserCourseDTO, 'courseId'>[]) {
 
         /**
          * Save access bridges
@@ -683,7 +683,7 @@ export class UserService {
             .createManyAsync(UserCourseBridge, newBridges);
     }
 
-    private async _saveUserCourseRequiredCompletionDates(userId: Id<'User'>, muts: Mutation<UserCourseStatsDTO, 'courseId'>[]) {
+    private async _saveUserCourseRequiredCompletionDates(userId: Id<'User'>, muts: Mutation<AdminUserCourseDTO, 'courseId'>[]) {
 
         /**
          * Required completion dates

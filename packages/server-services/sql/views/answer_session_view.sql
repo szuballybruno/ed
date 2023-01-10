@@ -10,7 +10,7 @@ answer_stats AS
 		SUM ((ga.state = 'CORRECT')::int)::int correct_given_answer_count,
 		(
 			SELECT
-				COUNT(*)
+				COUNT(*)::int
 			FROM public.question_version qv
 
 			LEFT JOIN public.given_answer ga

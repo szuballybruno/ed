@@ -36,14 +36,13 @@ summerized_answer_result AS (
 			WHEN fesv.final_exam_score_percentage IS NULL
 			THEN (
 				(
-					(COALESCE(upagv.practise_correct_answer_rate, 0)) + 
-					(COALESCE(mlea.avg_module_last_exam_score, 0) * 2)
+					(0) + (COALESCE(mlea.avg_module_last_exam_score, 0) * 2)
 				) / 3
 			)
 			WHEN fesv.final_exam_score_percentage > 0
 			THEN (
 				(
-					(COALESCE(upagv.practise_correct_answer_rate, 0)) + 
+					(0) + 
 					(COALESCE(mlea.avg_module_last_exam_score, 0) * 2) +
 					(COALESCE(fesv.final_exam_score_percentage, 0) * 3)
 				) / 6 
@@ -54,10 +53,6 @@ summerized_answer_result AS (
     LEFT JOIN public.final_exam_score_view fesv
     ON fesv.user_id = mlea.user_id
 	AND fesv.course_id = mlea.course_id
-
-    LEFT JOIN public.user_performance_answer_group_view upagv
-    ON upagv.user_id = mlea.user_id
-    AND upagv.course_id = mlea.course_id
 ),
 first_final_exam_completion_cte AS 
 (

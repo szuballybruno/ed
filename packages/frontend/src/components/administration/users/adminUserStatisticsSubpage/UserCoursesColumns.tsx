@@ -1,6 +1,5 @@
-import { UserCourseStatsDTO } from '@episto/communication';
-import { TempomatModeType } from '@episto/commontypes';
-import { Id } from '@episto/commontypes';
+import { Id, TempomatModeType } from '@episto/commontypes';
+import { AdminUserCourseDTO } from '@episto/communication';
 import { Environment } from '../../../../static/Environemnt';
 import { EpistoIcons } from '../../../../static/EpistoIcons';
 import { Formatters, secondsToTime } from '../../../../static/frontendHelpers';
@@ -13,11 +12,12 @@ import { EpistoFont } from '../../../controls/EpistoFont';
 import { EpistoImage } from '../../../controls/EpistoImage';
 import { IXMutatorFunctions } from '../../../lib/XMutator/XMutatorCore';
 import { EmptyCell } from '../../../universal/EmptyCell';
+import { PerformanceChip } from '../../../universal/PerformanceChip';
+import { TempoChip } from '../../../universal/TempoChip';
 import { CircularProgressWithLabel } from '../../courses/AdminCourseUserProgressSubpage';
 import { ChipSmall } from '../../courses/ChipSmall';
-import { PerformanceRatingChip } from '../../../universal/UserPerformanceChip';
 
-export type UserCoursesRowType = UserCourseStatsDTO & { moreDetails: number };
+export type UserCoursesRowType = AdminUserCourseDTO & { moreDetails: number };
 
 const TempomatModeDisplay = ({ mode }: { mode: TempomatModeType }) => {
 
@@ -47,7 +47,7 @@ export const useUserCoursesColumns = ({
 }: {
     handleOpenUserCourseDetailsDialog: (courseId: Id<'Course'>) => void,
     hideStats: boolean,
-    mutatorFunctions: IXMutatorFunctions<UserCourseStatsDTO, 'courseId', Id<'Course'>>
+    mutatorFunctions: IXMutatorFunctions<AdminUserCourseDTO, 'courseId', Id<'Course'>>
 }) => {
 
     const builder = new EpistoDataGridColumnBuilder<UserCoursesRowType, Id<'Course'>>()
@@ -122,7 +122,7 @@ export const useUserCoursesColumns = ({
             })
             .getColumns();
 
-    // return stats columns
+    // return all columns
     return builder
         .add({
             field: 'courseProgressPercentage',
@@ -151,9 +151,19 @@ export const useUserCoursesColumns = ({
             headerName: 'Tempó',
             width: 150,
             renderCell: ({ value, row: { tempoPercentage } }) => (
-                <PerformanceRatingChip
+                <TempoChip
                     rating={value}
                     value={tempoPercentage} />
+            )
+        })
+        .add({
+            field: 'performanceRating',
+            headerName: 'Teljesítmény',
+            width: 150,
+            renderCell: ({ value, row: { performancePercentage } }) => (
+                <PerformanceChip
+                    rating={value}
+                    value={performancePercentage} />
             )
         })
         .add({

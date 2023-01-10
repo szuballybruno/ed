@@ -49,7 +49,7 @@ answered_video_question AS
 	SELECT
 		asv.user_id,
 		cv.course_id,
-		COUNT(ga.id) answered_video_question_count
+		COUNT(ga.id)::int answered_video_question_count
 	FROM public.given_answer ga
 	
 	LEFT JOIN public.answer_session_view asv

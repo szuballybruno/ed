@@ -79,18 +79,6 @@ export class CourseController implements IController<CourseController> {
                 query.getValue(x => x.loadDeleted, 'boolean'));
     };
 
-    @XControllerAction(apiRoutes.course.getAdminCourseList)
-    getAdminCourseListAction = (params: ActionParams) => {
-
-        const data = params
-            .getFromParameterized(apiRoutes.course.getAdminCourseList);
-
-        const companyId = data.query.getValue(x => x.companyId, 'int');
-
-        return this._courseService
-            .getAdminCoursesAsync(params.principalId, companyId);
-    };
-
     @XControllerAction(apiRoutes.course.getCourseBriefData)
     getCourseBriefDataAction = (params: ActionParams) => {
 

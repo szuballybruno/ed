@@ -1,6 +1,7 @@
 import { Id } from '@episto/commontypes';
 import { CourseAdminListItemDTO } from '@episto/communication';
 import { useMemo } from 'react';
+import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoDataGrid, EpistoDataGridColumnBuilder } from '../../controls/EpistoDataGrid';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
@@ -39,49 +40,70 @@ export const AdminCourseList = ({
     isSimpleView?: boolean
 }) => {
 
-    const columns = useMemo(() => new EpistoDataGridColumnBuilder<CourseAdminListItemDTO, Id<'Course'>>()
-        .add({
-            field: 'thumbnailImageURL',
-            headerName: '',
-            renderCell: ({ key, value, row }) => (
-                <EpistoImage
-                    key={key.toString()}
-                    onClick={() => onCourseClick(row.courseId)}
-                    src={value}
-                    width='85px'
-                    mb='5px'
-                    cursor="pointer"
-                    className='roundBorders'
-                    objectFit="cover" />
-            )
-        })
-        .addIf(!isSimpleView, {
-            field: 'title',
-            headerName: 'Title',
-            width: 250
-        })
-        .addIf(!isSimpleView, {
-            field: 'allUserCount',
-            headerName: 'User count (all)',
-            width: 200,
-            renderCell: ({ row: { allUserCountChange, allUserCount } }) => (
-                <ChangeLabel
-                    change={allUserCountChange}
-                    value={allUserCount}
-                    tooltip={`${allUserCountChange} uj aktiv felhasznalo, 14 nappal ezelotti allapothoz kepest.`} />
-            )
-        })
-        .addIf(!isSimpleView, {
-            field: 'currentUserCount',
-            headerName: 'User count (in-progress)',
-            width: 200
-        })
-        .addIf(!isSimpleView, {
-            field: 'completedByUsersCount',
-            headerName: 'User count (completed course)',
-            width: 200
-        })
-        .getColumns(), [isSimpleView, onCourseClick]);
+    const columns = useMemo(() => {
+
+        const builder = new EpistoDataGridColumnBuilder<CourseAdminListItemDTO, Id<'Course'>>()
+            .add({
+                field: 'thumbnailImageURL',
+                headerName: '',
+                renderCell: ({ key, value, row }) => (
+                    <EpistoImage
+                        key={key.toString()}
+                        onClick={() => onCourseClick(row.courseId)}
+                        src={value}
+                        width='85px'
+                        mb='5px'
+                        cursor="pointer"
+                        className='roundBorders'
+                        objectFit="cover" />
+                )
+            });
+
+        if (isSimpleView)
+            return builder
+                .getColumns();
+
+        return builder
+            .add({
+                field: 'title',
+                headerName: 'Kurzus neve',
+                width: 250
+            })
+            .add({
+                field: 'allUserCount',
+                headerName: 'Összes felhasználó száma',
+                width: 200,
+                renderCell: ({ row: { allUserCountChange, allUserCount } }) => (
+                    <ChangeLabel
+                        change={allUserCountChange}
+                        value={allUserCount}
+                        tooltip={`${allUserCountChange} uj aktiv felhasznalo, 14 nappal ezelotti allapothoz kepest.`} />
+                )
+            })
+            .add({
+                field: 'currentUserCount',
+                headerName: 'Aktív felhasználók száma',
+                width: 200
+            })
+            .add({
+                field: 'completedByUsersCount',
+                headerName: 'Elvégzések száma',
+                width: 200
+            })
+            .add({
+                field: 'category',
+                headerName: '',
+                width: 100,
+                renderCell: ({ row }) => (
+                    <EpistoButton
+                        onClick={() => onCourseClick(row.courseId)}
+                        variant="outlined">
+                        Bővebben
+                    </EpistoButton>
+                )
+            })
+            .getColumns();
+    }, [isSimpleView, onCourseClick]);
 
     return (
         <EpistoFlex2
@@ -91,7 +113,12 @@ export const AdminCourseList = ({
             <EpistoDataGrid
                 columns={columns}
                 rows={courses}
-                getKey={x => x.courseId} />
+                getKey={x => x.courseId}
+                pinnedColumns={isSimpleView
+                    ? {}
+                    : {
+                        right: ['category']
+                    }} />
         </EpistoFlex2>
     );
 };

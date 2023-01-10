@@ -4,7 +4,7 @@ import { EpistoIcons } from '../../static/EpistoIcons';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 
-export const useUserPerformanceDisplayValues = (rating: TempoRatingType) => {
+export const useUserTempoDisplayValues = (rating: TempoRatingType) => {
 
     return useMemo(() => {
 
@@ -39,10 +39,10 @@ export const useUserPerformanceDisplayValues = (rating: TempoRatingType) => {
     }, [rating]);
 };
 
-export const PerformanceRatingChip = ({ value, children, ...props }: { rating: TempoRatingType, value: number } & PropsWithChildren) => {
+export const TempoChip = ({ value, children, ...props }: { rating: TempoRatingType, value: number } & PropsWithChildren) => {
 
     const rating: TempoRatingType = props.rating;
-    const { color, text } = useUserPerformanceDisplayValues(rating);
+    const { color, text } = useUserTempoDisplayValues(rating);
     const showStar = rating === 'very_good' && !children;
 
     return (

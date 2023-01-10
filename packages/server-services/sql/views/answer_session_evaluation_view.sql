@@ -10,7 +10,7 @@ total_question_count AS
 	SELECT 
 		ev.id exam_version_id,
 		NULL::int video_version_id,
-		COUNT(qv.id) question_count
+		COUNT(qv.id)::int question_count
 	FROM public.exam_version ev
 	
 	LEFT JOIN public.question_version qv
@@ -25,7 +25,7 @@ total_question_count AS
 	SELECT 
 		NULL::int exam_version_id,
 		vv.id video_version_id,
-		COUNT(qv.id) question_count
+		COUNT(qv.id)::int question_count
 	FROM public.video_version vv
 	
 	LEFT JOIN public.question_version qv
@@ -38,8 +38,8 @@ ga_count AS
 (
 	SELECT 
 		ga.answer_session_id,
-		COUNT(1) answered_count,
-		COALESCE(SUM((ga.state = 'CORRECT')::int)::int, 0) correct_count
+		COUNT(1)::int answered_count,
+		COALESCE(SUM((ga.state = 'CORRECT')::int)::int, 0)::int correct_count
 	FROM given_answer ga
 	GROUP BY
 		ga.answer_session_id

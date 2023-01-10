@@ -1,7 +1,7 @@
 import { XViewColumn } from '@thinkhub/x-orm';
 import { Id } from '@episto/commontypes';
 
-export class UserOverviewView {
+export class AdminUserListView {
 
     @XViewColumn()
     userId: Id<'User'>;
@@ -28,9 +28,6 @@ export class UserOverviewView {
     avatarFilePath: string;
 
     @XViewColumn()
-    summerizedScoreAvg: number;
-
-    @XViewColumn()
     averagePerformancePercentage: number;
 
     @XViewColumn()
@@ -38,10 +35,4 @@ export class UserOverviewView {
 
     @XViewColumn()
     completedVideoCount: number;
-
-    @XViewColumn()
-    engagementPoints: number;
-
-    @XViewColumn()
-    reactionTime: number;
 }

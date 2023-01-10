@@ -104,7 +104,7 @@ SELECT
 	ad.text answer_text,
 	pq.user_id,
 	pq.latest_given_answer_id,
-	pq.given_answer_count
+	pq.given_answer_count::int given_answer_count
 FROM practise_questions pq
 
 LEFT JOIN latest_question_version lqv

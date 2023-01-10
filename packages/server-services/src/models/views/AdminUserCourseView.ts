@@ -1,7 +1,7 @@
 import { XViewColumn } from '@thinkhub/x-orm';
 import { Id } from '@episto/commontypes';
 
-export class AdminUserCoursesView {
+export class AdminUserCourseView {
 
     @XViewColumn()
     userId: Id<'User'>;
@@ -58,13 +58,13 @@ export class AdminUserCoursesView {
     totalCompletedItemCount: number;
 
     @XViewColumn()
-    differenceFromAveragePerformancePercentage: number;
+    performancePercentageDiff: number;
 
     @XViewColumn()
     performancePercentage: number;
 
     @XViewColumn()
-    avgPerformance: number;
+    avgPerformancePercentage: number;
 
     @XViewColumn()
     isFinalExamCompleted: boolean;

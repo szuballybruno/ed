@@ -13,5 +13,14 @@ export class UserModulePerformanceView {
     moduleId: Id<'Module'>;
 
     @XViewColumn()
+    givenAnswerCount: number;
+
+    @XViewColumn()
+    summarizedMaxScore: number;
+
+    @XViewColumn()
+    summarizedScore: number;
+
+    @XViewColumn()
     performancePercentage: number;
 }

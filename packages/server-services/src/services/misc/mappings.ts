@@ -1,6 +1,6 @@
 import { instantiate } from '@episto/commonlogic';
-import { CourseItemStateType, CourseItemType, CourseRatingQuesitonType, CourseStageNameType, CourseVisibilityType, EventCodeType, GivenAnswerStateType, Id, LeaderboardPeriodType, PermissionCodeType, PermissionScopeType, TeacherBadgeNameType, TempoRatingType, UserActivityDistributionChartData, VersionCode } from '@episto/commontypes';
-import { ActivationCodeListDTO, AdminCourseCarouselDataDTO, AdminCourseUserStatsDTO, AdminHomePageOverviewDTO, AnswerDTO, AnswerEditDTO, AvailableCourseDTO, CoinTransactionDTO, CommentListDTO, CompanyAssociatedCourseDTO, CompanyDTO, CompanyEditDataDTO, CompanyPublicDTO, CourseAdminListItemDTO, CourseBriefData, CourseCategoryDTO, CourseContentItemAdminDTO, CourseContentItemIssueDTO, CourseDetailsDTO, CourseDetailsEditDataDTO, CourseItemEditDTO, CourseLearningDTO, CourseOverviewDataDTO, CourseProgressShortDTO, CourseRatingGroupDTO, CourseRatingQuestionDTO, CourseShopItemListDTO, CourseStatDTO, DailyTipDTO, DailyTipEditDataDTO, DiscountCodeDTO, EventDTO, ExamPlayerDataDTO, ExamResultQuestionDTO, ExamResultsDTO, ExamStatsDTO, HomePageStatsDTO, LeaderboardListItemDTO, ModuleEditDTO, ModulePlayerDTO, PermissionListDTO, PersonalityTraitCategoryDTO, PersonalityTraitCategoryShortDTO, PlaylistItemDTO, PlaylistModuleDTO, PrequizAnswerDTO, PrequizQuestionDTO, PretestResultDTO, QuestionDTO, QuestionModuleCompareDTO, ResultAnswerDTO, RoleAdminListDTO, RoleDTO, ShopItemAdminShortDTO, ShopItemBriefData, ShopItemCategoryDTO, ShopItemDTO, ShopItemEditDTO, SignupAnswerDTO, SignupQuestionDTO, SurveyDataDTO, TaskDTO, TeacherInfoEditDTO, UserActiveCourseDTO, UserAdminListDTO, UserCourseStatsDTO, UserCourseStatsOverviewDTO, UserDTO, UserExamStatsDTO, UserLearningPageStatsDTO, UserModuleStatsDTO, UserProgressChartStep, UserStatisticsDTO, UserVideoStatsDTO, VideoPlayerDataDTO } from '@episto/communication';
+import { CourseItemStateType, CourseItemType, CourseRatingQuesitonType, CourseStageNameType, CourseVisibilityType, EventCodeType, GivenAnswerStateType, Id, LeaderboardPeriodType, PerformanceRatingType, PermissionCodeType, PermissionScopeType, TeacherBadgeNameType, TempoRatingType, UserActivityDistributionChartData, VersionCode } from '@episto/commontypes';
+import { ActivationCodeListDTO, AdminCourseCarouselDataDTO, AdminCourseUserStatsDTO, AnswerDTO, AnswerEditDTO, AvailableCourseDTO, CoinTransactionDTO, CommentListDTO, CompanyAssociatedCourseDTO, CompanyDTO, CompanyEditDataDTO, CompanyPublicDTO, CourseAdminListItemDTO, CourseBriefData, CourseCategoryDTO, CourseContentItemAdminDTO, CourseContentItemIssueDTO, CourseDetailsDTO, CourseDetailsEditDataDTO, CourseItemEditDTO, CourseLearningDTO, CourseOverviewDataDTO, CourseProgressShortDTO, CourseRatingGroupDTO, CourseRatingQuestionDTO, CourseShopItemListDTO, CourseStatDTO, DailyTipDTO, DailyTipEditDataDTO, DiscountCodeDTO, EventDTO, ExamPlayerDataDTO, ExamResultQuestionDTO, ExamResultsDTO, ExamStatsDTO, HomePageStatsDTO, LeaderboardListItemDTO, ModuleEditDTO, ModulePlayerDTO, PermissionListDTO, PersonalityTraitCategoryDTO, PersonalityTraitCategoryShortDTO, PlaylistItemDTO, PlaylistModuleDTO, PrequizAnswerDTO, PrequizQuestionDTO, PretestResultDTO, QuestionDTO, QuestionModuleCompareDTO, ResultAnswerDTO, RoleAdminListDTO, RoleDTO, ShopItemAdminShortDTO, ShopItemBriefData, ShopItemCategoryDTO, ShopItemDTO, ShopItemEditDTO, SignupAnswerDTO, SignupQuestionDTO, SurveyDataDTO, TaskDTO, TeacherInfoEditDTO, UserActiveCourseDTO, UserAdminListDTO, AdminUserCourseDTO, UserCourseStatsOverviewDTO, UserDTO, UserExamStatsDTO, UserLearningPageStatsDTO, UserModuleStatsDTO, UserProgressChartStep, UserStatisticsDTO, UserVideoStatsDTO, VideoPlayerDataDTO } from '@episto/communication';
 import { Mutable, XMappingsBuilder } from '@thinkhub/x-mapper';
 import { TempomatDataAvgModel } from '../../models/misc/TempomatDataAvgModel';
 import { TempomatDataModel } from '../../models/misc/TempomatDataModel';
@@ -21,8 +21,8 @@ import { User } from '../../models/tables/User';
 import { ActivationCodeListView } from '../../models/views/ActivationCodeListView';
 import { AdminCourseCarouselDataView } from '../../models/views/AdminCourseCarouselDataView';
 import { AdminCourseUserStatsView } from '../../models/views/AdminCourseUserStatsView';
-import { AdminHomePageOverviewView } from '../../models/views/AdminHomePageOverviewView';
-import { AdminUserCoursesView } from '../../models/views/AdminUserCoursesView';
+import { AdminUserCourseView } from '../../models/views/AdminUserCourseView';
+import { AdminUserListView } from '../../models/views/AdminUserListView';
 import { AvailableCourseView } from '../../models/views/AvailableCourseView';
 import { CoinTransactionView } from '../../models/views/CoinTransactionView';
 import { CommentListView } from '../../models/views/CommentListView';
@@ -60,7 +60,6 @@ import { UserExamStatsView } from '../../models/views/UserExamStatsView';
 import { UserLearningOverviewStatsView } from '../../models/views/UserLearningOverviewStatsView';
 import { UserLearningPageStatsView } from '../../models/views/UserLearningPageStatsView';
 import { UserModuleStatsView } from '../../models/views/UserModuleStatsView';
-import { UserOverviewView } from '../../models/views/UserOverviewView';
 import { UserPlaylistView } from '../../models/views/UserPlaylistView';
 import { UserSpentTimeRatioView } from '../../models/views/UserSpentTimeRatioView';
 import { UserVideoStatsView } from '../../models/views/UserVideoStatsView';
@@ -117,44 +116,9 @@ const marray = [
                     tempoRating: tempomatData.tempoRating
                 }));
         }),
-
-    epistoMappingsBuilder
-        .addMapping(AdminHomePageOverviewDTO, () => (
-            companyCourseStats: AdminHomePageOverviewView[],
-            flaggedUsers: number,
-            avgUsers: number,
-            outstandingUsers: number
-        ) => {
-            return instantiate<AdminHomePageOverviewDTO>({
-                companyId: companyCourseStats
-                    .first()
-                    .companyId,
-                flaggedUsers: flaggedUsers,
-                avgUsers: avgUsers,
-                outstandingUsers: outstandingUsers,
-                companyCourseStats: companyCourseStats
-                    .groupBy(x => x.courseId)
-                    .map(companyCourseStatGroups => {
-
-                        const courseStats = companyCourseStatGroups.first;
-
-                        return {
-                            courseId: courseStats.courseId,
-                            title: courseStats.title,
-                            thumbnailUrl: courseStats.thumbnailUrl,
-                            activeUsersCount: courseStats.activeUsersCount,
-                            suspendedUsersCount: courseStats.suspendedUsersCount,
-                            completedUsersCount: courseStats.completedUsersCount,
-                            avgCoursePerformancePercentage: courseStats.avgCoursePerformancePercentage,
-                            difficultVideosCount: courseStats.difficultVideosCount,
-                            questionsWaitingToBeAnswered: courseStats.questionsWaitingToBeAnswered
-                        };
-                    })
-            });
-        }),
     epistoMappingsBuilder
         .addArrayMapping(UserAdminListDTO, () => (
-            views: UserOverviewView[],
+            views: AdminUserListView[],
             tempomatDataAvgModels: TempomatDataAvgModel[]) => {
 
             return views
@@ -180,7 +144,9 @@ const marray = [
                         username: view.username,
                         avgTempoPercentage,
                         hasAvgTempoPercentage,
-                        tempoRating
+                        tempoRating,
+                        avgPerformancePercentage: view.averagePerformancePercentage,
+                        avgPerformancePercentageRating: getPerformanceRating(view.averagePerformancePercentage)
                     });
                 });
         }),
@@ -203,7 +169,7 @@ const marray = [
 
     epistoMappingsBuilder
         .addMapping(UserCourseStatsOverviewDTO, () => (
-            view: AdminUserCoursesView,
+            view: AdminUserCourseView,
             userSpentTimeRatio: UserSpentTimeRatioView,
             progressChartData: UserProgressChartStep[],
             tempoPercentage: number,
@@ -283,8 +249,8 @@ const marray = [
         }),
 
     epistoMappingsBuilder
-        .addArrayMapping(UserCourseStatsDTO, ([assetUrlService]) => (
-            adminUserCourseViews: AdminUserCoursesView[],
+        .addArrayMapping(AdminUserCourseDTO, ([assetUrlService]) => (
+            adminUserCourseViews: AdminUserCourseView[],
             tempomatValues: TempomatDataModel[]) => {
 
             return adminUserCourseViews
@@ -299,7 +265,7 @@ const marray = [
                     } = tempomatValues
                         .byIndex(index);
 
-                    return instantiate<UserCourseStatsDTO>({
+                    return instantiate<AdminUserCourseDTO>({
                         userId: view.userId,
                         courseId: view.courseId,
                         courseName: view.title,
@@ -320,6 +286,8 @@ const marray = [
                         tempoPercentage: userPerformancePercentage,
                         recommendedItemsPerWeek: recommendedItemsPerWeek,
                         previsionedCompletionDate: previsionedCompletionDate,
+                        performancePercentage: view.performancePercentage,
+                        performanceRating: getPerformanceRating(view.performancePercentage)
                     });
                 });
         }),
@@ -1392,6 +1360,23 @@ const parseSkillBenefits = (str: string) => {
             };
         });
 };
+
+const getPerformanceRating = (performancePercentage: number): PerformanceRatingType => {
+
+    if (performancePercentage < 50)
+        return "very_bad";
+
+    if (performancePercentage < 70)
+        return "bad";
+
+    if (performancePercentage < 90)
+        return "average";
+
+    if (performancePercentage < 95)
+        return "good";
+
+    return "very_good";
+}
 
 const toStatsDTO = (statsView: ExamResultStatsView) => {
 

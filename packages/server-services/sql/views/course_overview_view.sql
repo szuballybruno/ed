@@ -15,11 +15,11 @@ SELECT
 	clsv.course_id,
 	clsv.total_spent_seconds,
 	clsv.completed_video_count,
-	clsv.answered_video_question_count,
+	clsv.answered_video_question_count::int answered_video_question_count,
 	clsv.question_success_rate,
 	clsv.avg_exam_score_percentage exam_success_rate_average,
 	fesv.final_exam_score_percentage final_exam_success_rate,
-	COALESCE(ecsc.episto_coin_amount) coins_acquired
+	COALESCE(ecsc.episto_coin_amount, 0)::int coins_acquired
 FROM public.course_learning_stats_view clsv
 
 LEFT JOIN episto_coin_sum_cte ecsc

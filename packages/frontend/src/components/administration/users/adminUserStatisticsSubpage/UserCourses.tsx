@@ -1,8 +1,8 @@
 import { Id } from '@episto/commontypes';
-import { UserCourseStatsDTO } from '@episto/communication';
+import { AdminUserCourseDTO } from '@episto/communication';
 import { useCallback, useEffect, useState } from 'react';
+import { AdminApiService } from '../../../../services/api/AdminApiService';
 import { UserApiService } from '../../../../services/api/UserApiService1';
-import { useUserAssignedCourses } from '../../../../services/api/userStatsApiService';
 import { showNotification } from '../../../../services/core/notifications';
 import { LocalStorageService } from '../../../../services/core/storageService';
 import { EpistoButton } from '../../../controls/EpistoButton';
@@ -29,14 +29,16 @@ export const UserCourses = ({
         userAssignedCoursesState,
         userAssignedCoursesError,
         refetchUserAssignedCourses
-    } = useUserAssignedCourses(userId, editModeEnabled);
+    } = AdminApiService
+        .useUserAssignedCourses(userId, editModeEnabled);
 
-    const { saveUserCourses, saveUserCoursesState } = UserApiService
+    const { saveUserCourses, saveUserCoursesState } = AdminApiService
         .useSaveUserAssignedCourses();
 
-    useSetBusy(useUserAssignedCourses, userAssignedCoursesState, userAssignedCoursesError);
+    useSetBusy(AdminApiService.useUserAssignedCourses, userAssignedCoursesState, userAssignedCoursesError);
+    useSetBusy(AdminApiService.useSaveUserAssignedCourses, saveUserCoursesState);
 
-    const [{ mutatedItems, mutations }, mutatorFunctions] = useXMutatorNew(UserCourseStatsDTO, 'courseId', UserCourseStatsDTO.name);
+    const [{ mutatedItems, mutations }, mutatorFunctions] = useXMutatorNew(AdminUserCourseDTO, 'courseId', AdminUserCourseDTO.name);
 
     /**
      * Handle save user courses 

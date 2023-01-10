@@ -17,18 +17,6 @@ export class UserController implements IController<UserController> {
         this._userService = serviceProvider.getService(UserService);
     }
 
-    @XControllerAction(apiRoutes.user.getAdminUsersList)
-    getUserOverviewStatsAction(params: ActionParams) {
-
-        const companyId = params
-            .getFromParameterized(apiRoutes.user.getAdminUsersList)
-            .query
-            .getValue(x => x.companyId, 'int');
-
-        return this._userService
-            .getUserAdminListAsync(params.principalId, companyId);
-    }
-
     @XControllerAction(apiRoutes.user.deleteUser, { isPost: true })
     async deleteUserAction(params: ActionParams) {
 
@@ -92,16 +80,5 @@ export class UserController implements IController<UserController> {
 
         return this._userService
             .getBriefUserDataAsync(params.principalId, userId);
-    }
-
-    @XControllerAction(apiRoutes.user.saveUserCourses, { isPost: true })
-    async saveUserCoursesAsync(params: ActionParams) {
-
-        const data = params
-            .getFromParameterized(apiRoutes.user.saveUserCourses);
-
-        await this
-            ._userService
-            .saveUserCoursesAsync(data.body.getValue(x => x.userId, 'int'), data.body.getValue(x => x.mutations, 'any[]'));
     }
 }

@@ -6,7 +6,7 @@ import { Environment } from '../../static/Environemnt';
 import { coalesce } from '../../static/frontendHelpers';
 import { EpistoGrid } from '../controls/EpistoGrid';
 import StatisticsCard, { StatisticsCardProps } from '../statisticsCard/StatisticsCard';
-import { useUserPerformanceDisplayValues } from '../universal/UserPerformanceChip';
+import { useUserTempoDisplayValues } from '../universal/TempoChip';
 
 export type StatisticsGroupType = {
     title: string;
@@ -30,7 +30,7 @@ export const LearningStatistics = (props: {
         userPerormanceRating: 'average'
     });
 
-    const { color, text } = useUserPerformanceDisplayValues(userPerormanceRating);
+    const { color, text } = useUserTempoDisplayValues(userPerormanceRating);
 
     const statistics = useMemo((): StatisticsCardProps[] => {
 

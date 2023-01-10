@@ -1,10 +1,10 @@
 import { CourseUserPresetType, Id } from '@episto/commontypes';
-import { AdminCourseUserStatsDTO, CourseLearningDTO, HomePageStatsDTO, UserCourseStatsDTO, UserCourseStatsOverviewDTO, UserExamStatsDTO, UserStatisticsDTO, UserLearningPageStatsDTO, UserModuleStatsDTO, UserVideoStatsDTO } from '@episto/communication';
+import { AdminCourseUserStatsDTO, CourseLearningDTO, HomePageStatsDTO, AdminUserCourseDTO, UserCourseStatsOverviewDTO, UserExamStatsDTO, UserStatisticsDTO, UserLearningPageStatsDTO, UserModuleStatsDTO, UserVideoStatsDTO } from '@episto/communication';
 import { PrincipalId } from '@thinkhub/x-core';
 import { User } from '../models/tables/User';
 import { TempomatDataModel } from '../models/misc/TempomatDataModel';
 import { AdminCourseUserStatsView } from '../models/views/AdminCourseUserStatsView';
-import { AdminUserCoursesView } from '../models/views/AdminUserCoursesView';
+import { AdminUserCourseView } from '../models/views/AdminUserCourseView';
 import { CourseLearningStatsView } from '../models/views/CourseLearningStatsView';
 import { HomePageStatsView } from '../models/views/HomePageStatsView';
 import { UserExamStatsView } from '../models/views/UserExamStatsView';
@@ -77,26 +77,26 @@ export class UserStatsService {
     /**
      * Gets the statistics for the users every course
      */
-    async getUserCourseStatsAsync(
+    async getAdminUserCoursesAsync(
         principalId: PrincipalId,
         userId: Id<'User'>
     ) {
 
-        const userCoursesDataViews = await this
+        const views = await this
             ._ormService
-            .query(AdminUserCoursesView, { userId })
+            .query(AdminUserCourseView, { userId })
             .where('userId', '=', 'userId')
             .and('isAssigned', '=', 'true')
             .getMany();
 
-        const courseIds = userCoursesDataViews
+        const courseIds = views
             .map(x => x.courseId);
 
         const tempomatCalcDataViews = await this
             ._tempomatService
             .getTempomatCalculationDataViewsByCourseIdsAsync(courseIds, userId);
 
-        const tempomatValues = userCoursesDataViews
+        const tempomatValues = views
             .map((userCourseData): TempomatDataModel => {
 
                 const tempomatCalculationData = tempomatCalcDataViews
@@ -111,7 +111,7 @@ export class UserStatsService {
             });
 
         return this._mapperService
-            .mapTo(UserCourseStatsDTO, [userCoursesDataViews, tempomatValues]);
+            .mapTo(AdminUserCourseDTO, [views, tempomatValues]);
     }
 
     /**
@@ -288,7 +288,7 @@ export class UserStatsService {
         userId: Id<'User'>
     ) {
         const courseStats = await this._ormService
-            .query(AdminUserCoursesView, { userId, courseId })
+            .query(AdminUserCourseView, { userId, courseId })
             .where('userId', '=', 'userId')
             .and('courseId', '=', 'courseId')
             .getSingle();

@@ -1,10 +1,11 @@
 import { Flex } from '@chakra-ui/react';
-import { Id, OrderType, TempoRatingType } from '@episto/commontypes';
+import { Id, OrderType, PerformanceRatingType, TempoRatingType } from '@episto/commontypes';
 import { UserAdminListDTO } from '@episto/communication';
 import { Add } from '@mui/icons-material';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { AdminActiveCompanyIdType } from '../../../models/types';
+import { AdminApiService } from '../../../services/api/AdminApiService';
 import { UserApiService } from '../../../services/api/UserApiService1';
 import { useNavigation } from '../../../services/core/navigatior';
 import { useShowErrorDialog } from '../../../services/core/notifications';
@@ -19,12 +20,12 @@ import { EpistoFont } from '../../controls/EpistoFont';
 import { ProfileImage } from '../../ProfileImage';
 import { EpistoDialog } from '../../universal/epistoDialog/EpistoDialog';
 import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogLogic';
-import { PerformanceRatingChip } from '../../universal/UserPerformanceChip';
+import { PerformanceChip } from '../../universal/PerformanceChip';
+import { TempoChip } from '../../universal/TempoChip';
 import { UsersSearchFilters } from './UsersSearchFilters';
 
 const useColumns = (
     isSimpleView: boolean,
-    preset: UserDataGridPresetType,
     userId: Id<'User'> | null,
     showDeleteUserDialog: (user: RowType) => void,
     openUser: (userId: Id<'User'>) => void,
@@ -98,32 +99,48 @@ const useColumns = (
             headerName: 'Username',
             width: 150
         })
-        .addIf(preset === 'all', {
+        .add({
             field: 'signupDate',
             headerName: 'Regisztráció ideje',
             width: 150
         })
-        .addIf(preset === 'all', {
+        .add({
             field: 'totalSessionLengthSeconds',
             headerName: 'Platformon eltöltött idő',
             renderCell: (value) => value ? formatTimespan(value.value) : '-',
             width: 150
         })
-        .addIf(preset === 'all', {
+        .add({
             field: 'completedVideoCount',
             headerName: 'Megtekintett videók száma',
             renderCell: (value) => value?.value ? value.value + 'db' : '0db',
             width: 150
         })
-        .addIf(preset === 'all', {
+        .add({
             field: 'tempoRating',
             headerName: 'Tempó',
             width: 150,
             renderCell: ({ value, row: { avgTempoPercentage, hasAvgTempoPercentage } }) => (
                 <>
-                    {hasAvgTempoPercentage && <PerformanceRatingChip
-                        value={avgTempoPercentage}
-                        rating={value} />}
+                    {hasAvgTempoPercentage
+                        ? <TempoChip
+                            value={avgTempoPercentage}
+                            rating={value} />
+                        : ' - '}
+                </>
+            )
+        })
+        .add({
+            field: 'avgPerformanceRating',
+            headerName: 'Teljesítmény',
+            width: 150,
+            renderCell: ({ value, row: { avgPerformancePercentage } }) => (
+                <>
+                    {avgPerformancePercentage > 0
+                        ? <PerformanceChip
+                            value={avgPerformancePercentage}
+                            rating={value} />
+                        : ' - '}
                 </>
             )
         })
@@ -173,9 +190,9 @@ class RowType {
     avgTempoPercentage: number;
     tempoRating: TempoRatingType;
     hasAvgTempoPercentage: boolean;
+    avgPerformanceRating: PerformanceRatingType;
+    avgPerformancePercentage: number;
 };
-
-export type UserDataGridPresetType = 'reviewRequired' | 'all'
 
 const mapToRow = (user: UserAdminListDTO): RowType => {
 
@@ -203,52 +220,21 @@ const mapToRow = (user: UserAdminListDTO): RowType => {
         username: user.username,
         avgTempoPercentage: user.avgTempoPercentage,
         tempoRating: user.tempoRating,
-        hasAvgTempoPercentage: user.hasAvgTempoPercentage
+        hasAvgTempoPercentage: user.hasAvgTempoPercentage,
+        avgPerformanceRating: user.avgPerformancePercentageRating,
+        avgPerformancePercentage: user.avgPerformancePercentage
     });
 };
 
 export const useGridFilterSettingsLogic = () => {
 
-    const [orderBy, setOrderBy] = useState<OrderType | null>(null);
     const [searchKeyword, setSearchKeyword] = useState<string | null>(null);
-
-    const presets = useMemo(() => [
-        {
-            title: 'Alapértelmezett nézet',
-            preset: 'all' as UserDataGridPresetType
-        },
-        {
-            title: 'Áttekintésre javasolt',
-            preset: 'reviewRequired' as UserDataGridPresetType
-        }
-    ], []);
-
-    const { setQueryParams } = useSetQueryParams();
-
-    const presetPaging = usePaging({ items: presets, onItemSet: ({ item }) => setQueryParams('preset', item.preset) });
 
     const currentPreset = useRouteQuery(applicationRoutes.administrationRoute.usersRoute)
         .getValueOrNull(x => x.preset, 'string') ?? 'all';
 
-    const currentPresetIndex = presets
-        .singleIndex(x => x.preset === currentPreset);
-
-    const isReviewPreset = currentPreset === 'reviewRequired';
-
-    /**
-     * sync paging selected item to url
-     */
-    useEffect(() => {
-
-        presetPaging.setItem(currentPresetIndex);
-    }, [currentPresetIndex]);
-
     return {
-        orderBy,
-        isReviewPreset,
-        presetPaging,
         currentPreset,
-        setOrderBy,
         setSearchKeyword,
         searchKeyword
     };
@@ -273,7 +259,7 @@ export const useAdminUserGridLogic = ({
     const {
         userOverviewStats,
         refetchOverviewStats
-    } = UserApiService
+    } = AdminApiService
         .useUserAdminList(selectedCompanyId!, !!selectedCompanyId);
 
     const searchIn = (text: string) => {
@@ -356,7 +342,7 @@ export const AminUserGridView = ({
             });
     }, [activeCompanyId, isMatchingCurrentAppRoute, navigate3, userRoute]);
 
-    const columns = useColumns(isSimpleView, filterLogic.currentPreset, userId, showDeleteUserDialog, changeToUser, activeCompanyId);
+    const columns = useColumns(isSimpleView, userId, showDeleteUserDialog, changeToUser, activeCompanyId);
 
     return (
         <Flex
