@@ -47,8 +47,7 @@ export const UserDetailsRootView = ({
             icon: <EpistoIcons.Close />,
             action: () => navigate3(
                 applicationRoutes.administrationRoute.usersRoute, {
-                params: { activeCompanyId },
-                query: { preset: undefined }
+                params: { activeCompanyId }
             })
         }
     ];

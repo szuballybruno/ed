@@ -1,8 +1,8 @@
 import { Flex } from '@chakra-ui/react';
-import { Id, OrderType, PerformanceRatingType, TempoRatingType } from '@episto/commontypes';
+import { Id, PerformanceRatingType, TempoRatingType } from '@episto/commontypes';
 import { UserAdminListDTO } from '@episto/communication';
 import { Add } from '@mui/icons-material';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { AdminActiveCompanyIdType } from '../../../models/types';
 import { AdminApiService } from '../../../services/api/AdminApiService';
@@ -11,8 +11,8 @@ import { useNavigation } from '../../../services/core/navigatior';
 import { useShowErrorDialog } from '../../../services/core/notifications';
 import { Environment } from '../../../static/Environemnt';
 import { EpistoIcons } from '../../../static/EpistoIcons';
-import { formatTimespan, getSubroutes, useIsMatchingCurrentRoute, usePaging } from '../../../static/frontendHelpers';
-import { useRouteQuery, useSetQueryParams } from '../../../static/locationHelpers';
+import { formatTimespan, getSubroutes, useIsMatchingCurrentRoute } from '../../../static/frontendHelpers';
+import { useRouteQuery } from '../../../static/locationHelpers';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoDataGrid, EpistoDataGridColumnBuilder } from '../../controls/EpistoDataGrid';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
@@ -230,11 +230,7 @@ export const useGridFilterSettingsLogic = () => {
 
     const [searchKeyword, setSearchKeyword] = useState<string | null>(null);
 
-    const currentPreset = useRouteQuery(applicationRoutes.administrationRoute.usersRoute)
-        .getValueOrNull(x => x.preset, 'string') ?? 'all';
-
     return {
-        currentPreset,
         setSearchKeyword,
         searchKeyword
     };

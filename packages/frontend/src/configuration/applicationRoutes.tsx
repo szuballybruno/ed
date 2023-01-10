@@ -7,7 +7,6 @@ import LocationCityIcon from '@mui/icons-material/LocationCity';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import SortIcon from '@mui/icons-material/Sort';
 import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
-import { UserDataGridPresetType } from '../components/administration/users/AminUserGridView';
 import { AdminActiveCompanyRouteParamType, ApplicationRoute, EpistoRoute } from '../models/types';
 import { Environment } from '../static/Environemnt';
 import { EpistoIcons } from '../static/EpistoIcons';
@@ -48,7 +47,7 @@ export type ApplicationRoutesType = {
             overviewRoute: ApplicationRoute<AdminActiveCompanyRouteParamType>;
             detailsRoute: ApplicationRoute<AdminActiveCompanyRouteParamType>;
         };
-        usersRoute: ApplicationRoute<AdminActiveCompanyRouteParamType, { preset?: UserDataGridPresetType }> & {
+        usersRoute: ApplicationRoute<AdminActiveCompanyRouteParamType> & {
             indexRoute: ApplicationRoute<AdminActiveCompanyRouteParamType>;
             addRoute: ApplicationRoute<AdminActiveCompanyRouteParamType>;
             userRoute: ApplicationRoute<AdminActiveCompanyRouteParamType & { userId: Id<'User'> }> & {
