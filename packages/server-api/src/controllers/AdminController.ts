@@ -102,7 +102,6 @@ export class AdminController implements IController<AdminController> {
         return this._userStatsService
             .getCourseUserStatsAsync(
                 params.principalId,
-                query.getValue(x => x.courseId, 'int'),
-                query.getValue(x => x.preset));
+                query.getValue(x => x.courseId, 'int'));
     }
 }

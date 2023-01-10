@@ -55,6 +55,7 @@ import { RoleListView } from '../../models/views/RoleListView';
 import { ShopItemStatefulView } from '../../models/views/ShopItemStatefulView';
 import { ShopItemView } from '../../models/views/ShopItemView';
 import { SignupQuestionView } from '../../models/views/SignupQuestionView';
+import { TempomatCalculationDataView } from '../../models/views/TempomatCalculationDataView';
 import { UserActiveCourseView } from '../../models/views/UserActiveCourseView';
 import { UserExamStatsView } from '../../models/views/UserExamStatsView';
 import { UserLearningOverviewStatsView } from '../../models/views/UserLearningOverviewStatsView';
@@ -87,34 +88,43 @@ const marray = [
 
     epistoMappingsBuilder
         .addArrayMapping(AdminCourseUserStatsDTO, () => (
-            items: ({
-                view: AdminCourseUserStatsView,
-                tempomatData: TempomatDataModel
-            })[],
+            views: AdminCourseUserStatsView[],
+            tempomatDatas: TempomatDataModel[]
         ) => {
 
-            return items
-                .map(({ view, tempomatData }) => instantiate<AdminCourseUserStatsDTO>({
-                    companyId: view.companyId,
-                    userId: view.userId,
-                    courseId: view.courseId,
-                    firstName: view.firstName,
-                    lastName: view.lastName,
-                    avatarUrl: view.avatarUrl,
-                    completedPercentage: view.completedPercentage,
-                    completedVideoCount: view.completedVideoCount,
-                    completedExamCount: view.completedExamCount,
-                    videoCount: view.videoCount,
-                    examCount: view.examCount,
-                    totalSpentSeconds: view.totalSpentSeconds,
-                    finalExamScorePercentage: view.finalExamScorePercentage,
-                    summerizedScore: 0,
-                    requiredCompletionDate: tempomatData.requiredCompletionDate,
-                    completionDate: view.completionDate,
-                    tempoPercentage: tempomatData.userPerformancePercentage,
-                    estimatedCompletionDate: tempomatData.estimatedCompletionDate,
-                    tempoRating: tempomatData.tempoRating
-                }));
+            return views
+                .map((view) => {
+
+                    const tempomatData = tempomatDatas
+                        .firstOrNull(x => x.userId === view.userId);
+
+                    const requiredCompletionDate = tempomatData?.requiredCompletionDate ?? null;
+                    const estimatedCompletionDate = tempomatData?.estimatedCompletionDate ?? null;
+                    const tempoPercentage = tempomatData?.userPerformancePercentage ?? 0;
+                    const tempoRating = tempomatData?.tempoRating ?? 'average';
+
+                    return instantiate<AdminCourseUserStatsDTO>({
+                        companyId: view.companyId,
+                        userId: view.userId,
+                        courseId: view.courseId,
+                        firstName: view.firstName,
+                        lastName: view.lastName,
+                        avatarUrl: view.avatarUrl,
+                        completedPercentage: view.completedPercentage,
+                        completedVideoCount: view.completedVideoCount,
+                        completedExamCount: view.completedExamCount,
+                        videoCount: view.videoCount,
+                        examCount: view.examCount,
+                        totalSpentSeconds: view.totalSpentSeconds,
+                        finalExamScorePercentage: view.finalExamScorePercentage,
+                        summerizedScore: 0,
+                        completionDate: view.completionDate,
+                        requiredCompletionDate,
+                        tempoPercentage,
+                        estimatedCompletionDate,
+                        tempoRating
+                    });
+                });
         }),
     epistoMappingsBuilder
         .addArrayMapping(UserAdminListDTO, () => (

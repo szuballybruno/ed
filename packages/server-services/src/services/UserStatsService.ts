@@ -1,8 +1,8 @@
-import { CourseUserPresetType, Id } from '@episto/commontypes';
-import { AdminCourseUserStatsDTO, CourseLearningDTO, HomePageStatsDTO, AdminUserCourseDTO, UserCourseStatsOverviewDTO, UserExamStatsDTO, UserStatisticsDTO, UserLearningPageStatsDTO, UserModuleStatsDTO, UserVideoStatsDTO } from '@episto/communication';
+import { Id } from '@episto/commontypes';
+import { AdminCourseUserStatsDTO, AdminUserCourseDTO, HomePageStatsDTO, UserCourseStatsOverviewDTO, UserExamStatsDTO, UserLearningPageStatsDTO, UserModuleStatsDTO, UserStatisticsDTO, UserVideoStatsDTO } from '@episto/communication';
 import { PrincipalId } from '@thinkhub/x-core';
-import { User } from '../models/tables/User';
 import { TempomatDataModel } from '../models/misc/TempomatDataModel';
+import { User } from '../models/tables/User';
 import { AdminCourseUserStatsView } from '../models/views/AdminCourseUserStatsView';
 import { AdminUserCourseView } from '../models/views/AdminUserCourseView';
 import { CourseLearningStatsView } from '../models/views/CourseLearningStatsView';
@@ -119,66 +119,37 @@ export class UserStatsService {
      */
     async getCourseUserStatsAsync(
         principalId: PrincipalId,
-        courseId: Id<'Course'>,
-        preset: CourseUserPresetType) {
+        courseId: Id<'Course'>) {
 
         const { companyId } = await this._ormService
             .query(User, { userId: principalId })
             .where('id', '=', 'userId')
             .getSingle();
 
-        const userStatViews = await this._ormService
+        const views = await this._ormService
             .query(AdminCourseUserStatsView, { courseId, companyId })
             .where('courseId', '=', 'courseId')
             .and('companyId', '=', 'companyId')
             .getMany();
 
-        const userIds = userStatViews
+        const userIds = views
             .map(view => view.userId);
 
         const tempomatCalculationDataViews = await this
             ._tempomatService
             .getTempomatCalculationDataViewsByUserIdsAsync(userIds, courseId);
 
-        const mergedStats = userStatViews
-            .map(statView => {
+        const tempomatDatas = tempomatCalculationDataViews
+            .map(tempomatCalcData => this
+                ._tempomatService
+                .getTempomatValues({
+                    ...tempomatCalcData,
+                    currentDate: new Date()
+                }));
 
-                const tempomatCalcData = tempomatCalculationDataViews
-                    .single(x => x.userId === statView.userId);
-
-                const tempomatData = this
-                    ._tempomatService
-                    .getTempomatValues({
-                        ...tempomatCalcData,
-                        currentDate: new Date()
-                    });
-
-                return {
-                    view: statView,
-                    tempomatData,
-                    tempomatCalcData
-                };
-            });
-
-        const statisticsItems = (() => {
-
-            if (preset === 'inprogress')
-                return mergedStats
-                    .filter(x => x.tempomatCalcData.startDate && !x.view.finalExamScorePercentage);
-
-            if (preset === 'notstartedyet')
-                return mergedStats
-                    .filter(x => !x.tempomatCalcData.startDate && x.tempomatCalcData.requiredCompletionDate);
-
-            if (preset === 'completed')
-                return mergedStats
-                    .filter(x => x.view.finalExamScorePercentage);
-
-            return [];
-        })();
-
-        return this._mapperService
-            .mapTo(AdminCourseUserStatsDTO, [statisticsItems]);
+        return this
+            ._mapperService
+            .mapTo(AdminCourseUserStatsDTO, [views, tempomatDatas]);
     }
 
     /**

@@ -147,7 +147,7 @@ export const apiRoutes = {
     admin: {
         getCourseStatsCarouselData: '/adminstats/get-course-stats-carousel-data' as ParametrizedRouteType<{ query: { companyId: Id<'Company'> } }>,
         getAdminUserCourses: '/userstats/get-admin-user-courses' as ParametrizedRouteType<{ query: { userId: Id<'User'>, loadAvailable: boolean } }>,
-        getAdminCourseUsers: '/userstats/get-course-users' as ParametrizedRouteType<{ query: { courseId: Id<'Course'>, preset: CourseUserPresetType } }>,
+        getAdminCourseUsers: '/userstats/get-admin-course-users' as ParametrizedRouteType<{ query: { courseId: Id<'Course'>, preset: CourseUserPresetType } }>,
         getAdminUsersList: '/users/get-admin-user-list' as ParametrizedRouteType<{ query: { companyId: Id<'Company'> } }>,
         saveUserCourses: '/users/save-user-courses' as ParametrizedRouteType<{ body: { mutations: Mutation<AdminUserCourseDTO, 'courseId'>[], userId: Id<'User'> } }>,
         getAdminCourseList: '/course/get-admin-course-list' as ParametrizedRouteType<{ query: { companyId: Id<'Company'> } }>,
