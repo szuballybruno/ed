@@ -107,7 +107,15 @@ jobs:
           name: database-backup
           path: ./epistogram/epitest/init-sql
 
-      - name: Build containers
+      # ------ setup build
+      - name: Setup build
+        shell: pwsh
+        run: |
+          ./epistogram/scripts/create-builder.ps1
+          ./epistogram/scripts/run-registry.ps1
+
+      # ------ build images
+      - name: Build images
         shell: pwsh
         run: |
           ./epistogram/scripts/monobuild.ps1 `
@@ -115,6 +123,7 @@ jobs:
             -builddeps `
             -tests
 
+      # ------ run tests via compose
       - name: Run tests
         shell: pwsh
         run: ./epistogram/scripts/compose_up_tests.ps1
