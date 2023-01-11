@@ -1,14 +1,13 @@
-import { XViewColumn } from '@episto/x-orm';
+import { XViewColumn } from '@thinkhub/x-orm';
 import { Id } from '@episto/commontypes';
-
 
 export class UserActiveCourseView {
 
     @XViewColumn()
-    userId: Id<'User'>;
+    courseId: Id<'Course'>;
 
     @XViewColumn()
-    courseId: Id<'Course'>;
+    userId: Id<'User'>;
 
     @XViewColumn()
     title: string;

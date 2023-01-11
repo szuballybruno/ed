@@ -2,10 +2,10 @@ WITH
 items_with_user_cte AS
 (
 	SELECT 
-		ucb.user_id,
-		ucb.course_id,
-        ucb.current_item_code = plv.module_code module_is_current,
-        ucb.current_item_code = plv.playlist_item_code item_is_current,
+		u.id user_id,
+		cv.course_id,
+        COALESCE(ucb.current_item_code = plv.module_code, false) module_is_current,
+        COALESCE(ucb.current_item_code = plv.playlist_item_code, false) item_is_current,
 		ucb.course_mode,
 		plv.module_order_index,
 		plv.item_order_index,
@@ -29,29 +29,32 @@ items_with_user_cte AS
 		COALESCE(vc.completion_date, ec.completion_date) completion_date
 	FROM public.playlist_view plv
 	
+	CROSS JOIN public.user u
+	
 	LEFT JOIN public.course_version cv 
 	ON cv.id = plv.course_version_id
 	
-	INNER JOIN public.user_course_bridge ucb
+	LEFT JOIN public.user_course_bridge ucb
 	ON ucb.course_id = cv.course_id
+	AND ucb.user_id = u.id
 
 	LEFT JOIN public.exam_highest_score_answer_session_view ehsasv
 	ON ehsasv.exam_id = plv.exam_id
-	AND ehsasv.user_id = ucb.user_id
+	AND ehsasv.user_id = u.id
 	
 	LEFT JOIN public.exam_score_view esv
 	ON esv.answer_session_id = ehsasv.answer_session_id
 	
 	LEFT JOIN public.video_completion vc
 	ON vc.video_version_id = plv.video_version_id
-	AND vc.user_id = ucb.user_id
+	AND vc.user_id = u.id
 	
 	LEFT JOIN public.exam_completion ec
 	ON ec.answer_session_id = ehsasv.answer_session_id
 
     LEFT JOIN public.user_practise_recommendation_view uprv
     ON uprv.video_version_id = plv.video_version_id
-    AND uprv.user_id = ucb.user_id
+    AND uprv.user_id = u.id
 ),
 items_with_state_cte AS
 (

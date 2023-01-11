@@ -1,13 +1,13 @@
 import { instantiate } from '@episto/commonlogic';
 import { CourseModeType, CourseStageNameType, Id } from '@episto/commontypes';
 import { CurrentCourseDataDTO } from '@episto/communication';
-import { UserCourseBridge } from '../models/entity/misc/UserCourseBridge';
+import { UserCourseBridge } from '../models/tables/UserCourseBridge';
 import { CourseStateView } from '../models/views/CourseStateView';
 import { CurrentUserCourseBridgeView } from '../models/views/CurrentUserCourseBridgeView';
-import { PrincipalId } from '@episto/x-core';
+import { PrincipalId } from '@thinkhub/x-core';
 import { MapperService } from './MapperService';
 import { QueryServiceBase } from './misc/ServiceBase';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 import { PermissionService } from './PermissionService';
 
 export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> {
@@ -28,13 +28,13 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
         courseId,
         stageName,
         currentItemCode,
-        startDate
+        startDate,
     }: {
         userId: Id<'User'>,
         courseId: Id<'Course'>,
         stageName: CourseStageNameType,
         currentItemCode: string | null,
-        startDate: Date | null
+        startDate: Date | null,
     }) {
 
         /**
@@ -49,7 +49,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
                 creationDate: new Date(),
                 currentItemCode,
                 lastInteractionDate: new Date(),
-                previsionedCompletionDate: null,
+                originalEstimatedCompletionDate: null,
                 requiredCompletionDate: null,
                 stageName,
                 startDate,
@@ -71,6 +71,20 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
                 stageName,
                 currentItemCode: itemCode,
                 lastInteractionDate: new Date()
+            });
+    }
+
+    /**
+     * Set previsined completion date of user course bridge 
+     */
+    async setPrevisionedCompletionDateAsync(
+        userId: Id<'User'>,
+        courseId: Id<'Course'>,
+        originalEstimatedCompletionDate: Date) {
+
+        await this
+            ._updateBridge(userId, courseId, {
+                originalEstimatedCompletionDate
             });
     }
 
@@ -175,7 +189,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
         return instantiate<CurrentCourseDataDTO>({
             courseId: currentCourse.courseId,
             currentItemCode: currentCourse.currentItemCode,
-            stageName: currentCourse.stageName
+            stageName: currentCourse.stageName as CourseStageNameType
         });
     }
 

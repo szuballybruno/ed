@@ -1,9 +1,9 @@
 import { DailyTipEditDataDTO } from '@episto/communication';
 import { DailyTipService } from '@episto/server-services';
 import { ActionParams } from '../helpers/ActionParams';
-import { XControllerAction } from '@episto/x-gateway';
+import { XControllerAction } from '@thinkhub/x-gateway';
 import { apiRoutes } from '@episto/communication';
-import { IXGatewayServiceProvider } from '@episto/x-gateway';
+import { IXGatewayServiceProvider } from '@thinkhub/x-gateway';
 import { Id } from '@episto/commontypes';
 
 export class DailyTipController {

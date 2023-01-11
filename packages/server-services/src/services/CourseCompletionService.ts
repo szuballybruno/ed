@@ -1,8 +1,8 @@
-import { CourseCompletion } from '../models/entity/misc/CourseCompletion';
+import { CourseCompletion } from '../models/tables/CourseCompletion';
 import { CourseAllItemsCompletedView } from '../models/views/CourseAllItemsCompletedView';
 import { Id } from '@episto/commontypes';
 import { MapperService } from './MapperService';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 
 export class CourseCompletionService {
 
@@ -20,17 +20,15 @@ export class CourseCompletionService {
             .and('userId', '=', 'userId')
             .getOneOrNull();
 
+        if (!isCompleted)
+            return;
+
         const previousCompletion = await this
             ._ormService
             .query(CourseCompletion, { courseVersionId })
             .where('courseVersionId', '=', 'courseVersionId')
             .getOneOrNull();
 
-        // if not completed 
-        if (!isCompleted)
-            return;
-
-        // if already inserted completion
         if (previousCompletion)
             return;
 

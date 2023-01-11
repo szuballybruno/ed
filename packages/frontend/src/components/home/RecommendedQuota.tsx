@@ -1,5 +1,5 @@
 import { useDailyTip } from '../../services/api/dailyTipApiService';
-import { useRecommendedItemQuota } from '../../services/api/userProgressApiService';
+import { useCourseProgressOverview } from '../../services/api/userProgressApiService';
 import { UserActiveCourseDTO } from '@episto/communication';
 import { PagingType } from '../../static/frontendHelpers';
 import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
@@ -12,7 +12,7 @@ export const RecommendedQuota = (props: { activeCoursesPaging: PagingType<UserAc
     const { dailyTipData } = useDailyTip();
 
     const currentCourse = activeCoursesPaging.currentItem;
-    const { recommendedItemQuota } = useRecommendedItemQuota(currentCourse?.courseId);
+    const { courseProgressOverviewData: recommendedItemQuota } = useCourseProgressOverview(currentCourse?.courseId);
 
     const completedToday = recommendedItemQuota?.completedToday || 0;
     const completedThisWeek = recommendedItemQuota?.completedThisWeek || 0;

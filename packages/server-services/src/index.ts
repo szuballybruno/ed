@@ -1,5 +1,7 @@
 // needs to be imported for TypeORM
+
 import 'reflect-metadata';
+export { AdminStatsService } from './services/AdminStatsService';
 export * from './services/GlobalConfigurationService';
 export { ActivationCodeService } from './services/ActivationCodeService';
 export { AnswerService } from './services/AnswerService';
@@ -26,10 +28,10 @@ export { LeaderboardService } from './services/LeaderboardService';
 export { LikeService } from './services/LikeService';
 export { LoggerService } from './services/LoggerService';
 export { MapperService } from './services/MapperService';
-export { ParametrizedConstructor } from './services/misc/advancedTypes/ParametrizedConstructor';
+export { ParametrizedConstructor } from './models/misc/ParametrizedConstructor';
 export { MiscService } from './services/MiscService';
 export { ModuleService } from './services/ModuleService';
-export { ORMConnectionService } from './services/ORMConnectionService/ORMConnectionService';
+export { ORMConnectionService } from './services/ORMConnectionService';
 export { PasswordChangeService } from './services/PasswordChangeService';
 export { PermissionService } from './services/PermissionService';
 export { PersonalityAssessmentService } from './services/PersonalityAssessmentService';
@@ -45,8 +47,8 @@ export { RoleService } from './services/RoleService';
 export { SampleMergeService } from './services/SampleMergeService';
 export { ShopService } from './services/ShopService';
 export { SignupService } from './services/SignupService';
-export { SQLConnectionService } from './services/sqlServices/SQLConnectionService';
-export { SQLPoolService } from './services/sqlServices/SQLPoolService';
+export { SQLConnectionService } from './services/SQLConnectionService';
+export { SQLPoolService } from './services/SQLPoolService';
 export { StorageService } from './services/StorageService';
 export { TeacherInfoService } from './services/TeacherInfoService';
 export { TempomatService } from './services/TempomatService';

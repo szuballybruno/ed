@@ -1,11 +1,11 @@
 import { ErrorWithCode, Id } from '@episto/commontypes';
 import { AuthDataDTO } from '@episto/communication';
-import { PrincipalId } from '@episto/x-core';
-import { User } from '../models/entity/misc/User';
+import { PrincipalId } from '@thinkhub/x-core';
+import { User } from '../models/tables/User';
 import { HashService } from './HashService';
 import { LoggerService } from './LoggerService';
 import { GlobalConfigurationService } from './GlobalConfigurationService';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 import { PermissionService } from './PermissionService';
 import { TokenService } from './TokenService';
 import { UserService } from './UserService';
@@ -127,7 +127,7 @@ export class AuthenticationService {
          * Check password 
          */
         const isPasswordCorrect = await this._hashService
-            .comparePasswordAsync(password, user.password);
+            .comparePasswordAsync(password, user.password!);
 
         if (!isPasswordCorrect)
             throw new ErrorWithCode('Invalid password.', 'corrupt_credentials');

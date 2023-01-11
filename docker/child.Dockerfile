@@ -1,0 +1,1 @@
+FROM localhost:6000/parent:v2

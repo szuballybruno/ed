@@ -1,6 +1,5 @@
-import { XViewColumn } from '@episto/x-orm';
+import { XViewColumn } from '@thinkhub/x-orm';
 import { Id } from '@episto/commontypes';
-
 
 export class DailyTipView {
 
@@ -14,6 +13,9 @@ export class DailyTipView {
     description: string;
 
     @XViewColumn()
+    personalityTraitCategoryId: Id<'PersonalityTraitCategory'>;
+
+    @XViewColumn()
     videoFilePath: string;
 
     @XViewColumn()
@@ -24,4 +26,10 @@ export class DailyTipView {
 
     @XViewColumn()
     isCurrentTip: boolean;
+
+    @XViewColumn()
+    tipIsMax: boolean;
+
+    @XViewColumn()
+    userChoiceInCategoryIsMax: boolean;
 }

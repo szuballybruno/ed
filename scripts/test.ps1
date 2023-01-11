@@ -1,1 +1,1 @@
-echo $env:PGPASSWORD
+echo $home

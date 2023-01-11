@@ -36,16 +36,5 @@ export const LearningInsightsOverview = () => {
 
             <PersonalityAssessment />
         </DashboardSection>
-
-        {/* <DashboardSection
-            title='Hozd ki magadból a maximumot'
-            background="var(--transparentWhite70)"
-            borderRadius="6px"
-            showDivider
-            className="largeSoftShadow"
-            marginBottom="10px">
-
-            <ImproveYourselfSection />
-        </DashboardSection> */}
     </EpistoFlex2>;
 };

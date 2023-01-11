@@ -25,7 +25,7 @@ SELECT
 	qv.id question_version_id,
 	qd.question_text question_text,
 	qd.image_url image_url,
-	qd.type_id type_id,
+	qd.type_id question_type_id,
 	av.answer_id,
 	av.id answer_version_id,
 	ad.text answer_text,

@@ -1,6 +1,6 @@
-import { Answer } from '../models/entity/answer/Answer';
-import { AnswerData } from '../models/entity/answer/AnswerData';
-import { AnswerVersion } from '../models/entity/answer/AnswerVersion';
+import { Answer } from '../models/tables/Answer';
+import { AnswerData } from '../models/tables/AnswerData';
+import { AnswerVersion } from '../models/tables/AnswerVersion';
 import { AnswerEditDTO } from '@episto/communication';
 import { Mutation } from '@episto/communication';
 import { VersionMigrationContainer } from '../utilities/misc';

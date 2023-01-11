@@ -1,15 +1,13 @@
-import { XViewColumn } from '@episto/x-orm';
-import { PermissionCodeType } from '@episto/commontypes';
+import { XViewColumn } from '@thinkhub/x-orm';
 import { Id } from '@episto/commontypes';
-
 
 export class UserRoleView {
 
     @XViewColumn()
-    assignmentBridgeId: Id<'RoleAssignmentBridge'>;
+    assignmentBridgeId: Id<'AssignmentBridge'>;
 
     @XViewColumn()
-    contextCompanyId: Id<'Company'>;
+    contextCompanyId: Id<'ContextCompany'>;
 
     @XViewColumn()
     contextCompanyName: string;
@@ -21,7 +19,7 @@ export class UserRoleView {
     roleName: string;
 
     @XViewColumn()
-    assigneeUserId: Id<'User'>;
+    assigneeUserId: Id<'AssigneeUser'>;
 
     @XViewColumn()
     isInherited: boolean;
@@ -30,5 +28,5 @@ export class UserRoleView {
     permissionId: Id<'Permission'>;
 
     @XViewColumn()
-    permissionCode: PermissionCodeType;
+    permissionCode: string;
 }

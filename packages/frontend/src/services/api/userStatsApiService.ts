@@ -1,16 +1,5 @@
-import { AdminCourseUserStatsDTO } from '@episto/communication';
-import { AdminHomePageOverviewDTO } from '@episto/communication';
-import { HomePageStatsDTO } from '@episto/communication';
-import { ImproveYourselfPageStatsDTO } from '@episto/communication';
-import { UserCourseStatsDTO } from '@episto/communication';
-import { UserCourseStatsOverviewDTO } from '@episto/communication';
-import { UserExamStatsDTO } from '@episto/communication';
-import { UserLearningPageStatsDTO } from '@episto/communication';
-import { UserModuleStatsDTO } from '@episto/communication';
-import { UserVideoStatsDTO } from '@episto/communication';
-import { apiRoutes } from '@episto/communication';
-import { CourseUserPresetType } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
+import { apiRoutes, HomePageStatsDTO, UserCourseStatsOverviewDTO, UserExamStatsDTO, UserLearningPageStatsDTO, UserModuleStatsDTO, UserVideoStatsDTO } from '@episto/communication';
 import { QueryService } from '../../static/XQuery/XQueryReact';
 
 export const useHomePageStats = () => {
@@ -32,30 +21,6 @@ export const useUserLearningPageStats = (userId: Id<'User'>) => {
         userLearningPageStats: queryRes.data,
         userLearningPageStatsStatus: queryRes.state,
         userLearningPageStatsError: queryRes.error
-    };
-};
-
-export const useImproveYourselfPageStats = () => {
-
-    const queryRes = QueryService.useXQuery<ImproveYourselfPageStatsDTO>(apiRoutes.userStats.getImproveYourselfPageStats);
-
-    return {
-        improveYourselfPageStats: queryRes.data,
-        improveYourselfPageStatsStatus: queryRes.state,
-        improveYourselfPageStatsError: queryRes.error
-    };
-};
-
-export const useUserAssignedCourses = (userId: Id<'User'>, loadAvailable: boolean) => {
-
-    const queryRes = QueryService
-        .useXQueryArrayParametrized(UserCourseStatsDTO, apiRoutes.userStats.getAdminUserCourses, { userId, loadAvailable });
-
-    return {
-        userAssignedCourses: queryRes.data,
-        userAssignedCoursesState: queryRes.state,
-        userAssignedCoursesError: queryRes.error,
-        refetchUserAssignedCourses: queryRes.refetch
     };
 };
 
@@ -92,16 +57,6 @@ export const useUserExamStats = (courseId: Id<'Course'>, userId: Id<'User'>) => 
     };
 };
 
-export const useAdminHomeOverviewStatsData = () => {
-
-    const queryRes = QueryService
-        .useXQuery<AdminHomePageOverviewDTO>(apiRoutes.userStats.getAdminHomeOverviewStats);
-
-    return {
-        adminOverviewStatsData: queryRes.data,
-    };
-};
-
 export const useUserCourseStatsOverviewData = (userId: Id<'User'>, courseId: Id<'Course'>) => {
 
     const queryRes = QueryService.useXQuery<UserCourseStatsOverviewDTO>(apiRoutes.userStats.getUserCourseStatsOverviewData, { userId, courseId });
@@ -110,17 +65,5 @@ export const useUserCourseStatsOverviewData = (userId: Id<'User'>, courseId: Id<
         userCourseStatsOverviewData: queryRes.data,
         userCourseStatsOverviewDataStatus: queryRes.state,
         userCourseStatsOverviewDataError: queryRes.error
-    };
-};
-
-
-export const useCourseUserStatsData = (courseId: Id<'Course'>, preset: CourseUserPresetType) => {
-
-    const queryRes = QueryService.useXQuery<AdminCourseUserStatsDTO[]>(apiRoutes.userStats.getAdminCourseUsers, { courseId, preset });
-
-    return {
-        courseUserStatsData: queryRes.data,
-        courseUserStatsDataStatus: queryRes.state,
-        courseUserStatsDataError: queryRes.error
     };
 };

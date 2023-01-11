@@ -4,15 +4,18 @@ import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoProgressBar } from '../controls/EpistoProgressBar';
 
-
-export const RecommendedItemQuota = (props: {
+export const RecommendedItemQuota = ({
+    isDaily,
+    completedCount,
+    recommendedItemCount,
+    isDeadlineSet,
+    ...css
+}: {
     completedCount: number,
     recommendedItemCount: number | null,
     isDeadlineSet?: boolean,
     isDaily?: boolean,
 } & EpistoFlex2Props) => {
-
-    const { isDaily, completedCount, recommendedItemCount, isDeadlineSet, ...css } = props;
 
     const isStrictMode = recommendedItemCount;
     const isLightMode = !recommendedItemCount && completedCount;
@@ -33,7 +36,17 @@ export const RecommendedItemQuota = (props: {
             return 'A héten megtekintett videók';
 
         return 'Ma megtekintett videók';
+    })();
 
+    const completedCountSafe = completedCount ?? 0;
+    const recommendedCountSafe = Math.ceil(recommendedItemCount || 0);
+
+    const countLabel = (() => {
+
+        if (isStrictMode)
+            return `${completedCountSafe}/${recommendedCountSafe} videó`;
+
+        return `${completedCountSafe} db`;
     })();
 
     return (
@@ -43,49 +56,40 @@ export const RecommendedItemQuota = (props: {
             direction="column"
             {...css}>
 
+            {/* label  */}
+            <EpistoFont
+                fontSize="fontSmall">
+                {label}
+            </EpistoFont>
+
+            {/* icon + count  */}
             <EpistoFlex2
-                direction={isDeadlineSet ? 'row' : 'column'}
-                justify='space-between'
-                align={isDeadlineSet ? 'center' : 'flex-start'}>
+                align="center">
 
-                <EpistoFont fontSize="fontSmall">
-                    {label}
+                {/* icon */}
+                <img
+                    src={isDaily
+                        ? Environment.getAssetUrl('/images/dailyquota.png')
+                        : Environment.getAssetUrl('/images/weeklyquota.png')}
+                    alt=""
+                    className="square25"
+                    style={{
+                        marginRight: 5
+                    }} />
+
+                {/* count */}
+                <EpistoFont
+                    fontSize={'fontLargePlus'}
+                    style={{
+                        fontWeight: 500,
+                        marginRight: 2
+                    }}>
+
+                    {countLabel}
                 </EpistoFont>
-
-                <EpistoFlex2
-                    align="center">
-
-                    <img
-                        src={isDaily
-                            ? Environment.getAssetUrl('/images/dailyquota.png')
-                            : Environment.getAssetUrl('/images/weeklyquota.png')}
-                        alt=""
-                        className="square25"
-                        style={{
-                            marginRight: 5
-                        }} />
-
-                    <EpistoFont
-                        fontSize={'fontLargePlus'}
-                        style={{
-                            fontWeight: 500,
-                            marginRight: 2
-                        }}>
-
-                        {(() => {
-
-                            if (isStrictMode)
-                                return `${completedCount || 0}/${recommendedItemCount || 0} videó`;
-
-                            if (isLightMode)
-                                return `${completedCount} db`;
-
-                            return '0';
-                        })()}
-                    </EpistoFont>
-                </EpistoFlex2>
             </EpistoFlex2>
 
+            {/* progress bar */}
             {!!recommendedItemCount && <EpistoProgressBar
                 value={Math.min(100, completedCount / recommendedItemCount * 100)}
                 variant="determinate"

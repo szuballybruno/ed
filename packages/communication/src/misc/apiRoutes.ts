@@ -3,7 +3,7 @@ import { SaveCourseContentDTO } from "../admin/SaveCourseContentDTO";
 import { CompanyAssociatedCourseDTO } from "../company/CompanyAssociatedCourseDTO";
 import { CourseStartDTO } from "../CourseStartDTO";
 import { Mutation } from "../mutations/Mutation";
-import { UserCourseStatsDTO } from "../UserCourseStatsDTO";
+import { AdminUserCourseDTO } from "../AdminUserCourseDTO";
 
 export type RouteParameterType<TBody = any, TQuery = any> = { body?: TBody, query?: TQuery };
 export type ParametrizedRouteType<T extends RouteParameterType> = string & T;
@@ -144,23 +144,28 @@ export const apiRoutes = {
         saveCourseRatingGroupAnswers: '/courserating/save-course-rating-answers'
     },
 
+    admin: {
+        getCourseStatsCarouselData: '/adminstats/get-course-stats-carousel-data' as ParametrizedRouteType<{ query: { companyId: Id<'Company'> } }>,
+        getAdminUserCourses: '/userstats/get-admin-user-courses' as ParametrizedRouteType<{ query: { userId: Id<'User'>, loadAvailable: boolean } }>,
+        getAdminCourseUsers: '/userstats/get-admin-course-users' as ParametrizedRouteType<{ query: { courseId: Id<'Course'>, preset: CourseUserPresetType } }>,
+        getAdminUsersList: '/users/get-admin-user-list' as ParametrizedRouteType<{ query: { companyId: Id<'Company'> } }>,
+        saveUserCourses: '/users/save-user-courses' as ParametrizedRouteType<{ body: { mutations: Mutation<AdminUserCourseDTO, 'courseId'>[], userId: Id<'User'> } }>,
+        getAdminCourseList: '/course/get-admin-course-list' as ParametrizedRouteType<{ query: { companyId: Id<'Company'> } }>,
+    },
+
     userStats: {
         getHomePageStats: '/userstats/get-home-page-stats',
         getUserLearningPageStats: '/userstats/get-user-learning-page-stats',
-        getImproveYourselfPageStats: '/userstats/get-improve-yourself-page-stats',
-        getAdminUserCourses: '/userstats/get-user-courses' as ParametrizedRouteType<{ query: { userId: Id<'User'>, loadAvailable: boolean } }>,
-        getAdminCourseUsers: '/userstats/get-course-users' as ParametrizedRouteType<{ query: { courseId: Id<'Course'>, preset: CourseUserPresetType } }>,
         getUserVideoStats: '/userstats/get-user-video-stats',
         getUserExamStats: '/userstats/get-user-exam-stats',
         getUserModuleStats: '/userstats/get-user-module-stats',
         getUserLearningOverviewData: '/userstats/get-user-learning-overview-data',
-        getAdminHomeOverviewStats: '/userstats/get-admin-home-overview-stats',
         getUserCourseStatsOverviewData: '/userstats/get-user-course-stats-overview-data'
     },
 
     userProgress: {
         getUserProgressData: '/userprogress/get-user-progress-data' as ParametrizedRouteType<{ body: { courseId: Id<'CourseId'> } }>,
-        getRecommendedItemQuota: '/userprogress/get-recommended-item-quota',
+        getCourseProgressOverview: '/userprogress/get-course-progress-overview',
         getActiveCourses: '/userprogress/get-active-courses'
     },
 
@@ -172,13 +177,11 @@ export const apiRoutes = {
     },
 
     user: {
-        getAdminUsersList: '/users/get-admin-user-list',
         getEditUserData: '/users/get-edit-user-data',
         deleteUser: '/users/delete-user',
         saveUser: '/users/save-user',
         saveUserSimple: '/users/save-user-simple',
         getBriefUserData: '/users/get-brief-user-data',
-        saveUserCourses: '/users/save-user-courses' as ParametrizedRouteType<{ body: { mutations: Mutation<UserCourseStatsDTO, 'courseId'>[], userId: Id<'User'> } }>,
         getUserControlDropdownData: '/users/get-user-control-dropdown-data'
     },
 
@@ -216,7 +219,6 @@ export const apiRoutes = {
         deleteCourse: '/course/delete-course',
         createCourse: '/course/create-course',
         getCourseDetails: '/course/get-course-details',
-        getAdminCourseList: '/course/get-admin-course-list' as ParametrizedRouteType<{ query: { companyId: Id<'Company'> } }>,
         setCourseMode: '/course/set-course-mode',
         getAvailableCourseCategories: '/course/get-available-course-categories',
         startCourse: '/course/start-course' as ParametrizedRouteType<{ body: CourseStartDTO }>

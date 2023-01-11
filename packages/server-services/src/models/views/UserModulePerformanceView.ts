@@ -1,7 +1,5 @@
-import { XViewColumn } from '@episto/x-orm';
+import { XViewColumn } from '@thinkhub/x-orm';
 import { Id } from '@episto/commontypes';
-
-
 
 export class UserModulePerformanceView {
 
@@ -13,6 +11,15 @@ export class UserModulePerformanceView {
 
     @XViewColumn()
     moduleId: Id<'Module'>;
+
+    @XViewColumn()
+    givenAnswerCount: number;
+
+    @XViewColumn()
+    summarizedMaxScore: number;
+
+    @XViewColumn()
+    summarizedScore: number;
 
     @XViewColumn()
     performancePercentage: number;

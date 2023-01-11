@@ -18,7 +18,7 @@ completed_videos AS
 	SELECT
 		cicv.user_id,
 		cicv.course_version_id,
-		COUNT(*) completed_video_count
+		COUNT(*)::int completed_video_count
 	FROM public.course_item_completion_view cicv
 	
 	WHERE cicv.video_version_id IS NOT NULL

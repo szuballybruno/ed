@@ -1,20 +1,20 @@
-import { XViewColumn } from '@episto/x-orm';
-
+import { XViewColumn } from '@thinkhub/x-orm';
+import { Id } from '@episto/commontypes';
 
 export class ExamVersionView {
 
     @XViewColumn()
-    examId: number;
+    examId: Id<'Exam'>;
 
     @XViewColumn()
-    examVersionId: number;
+    examVersionId: Id<'ExamVersion'>;
 
     @XViewColumn()
-    examDataId: number;
+    examDataId: Id<'ExamData'>;
 
     @XViewColumn()
-    moduleVersionId: number;
+    moduleVersionId: Id<'ModuleVersion'>;
 
     @XViewColumn()
-    courseVersionId: number;
+    courseVersionId: Id<'CourseVersion'>;
 }

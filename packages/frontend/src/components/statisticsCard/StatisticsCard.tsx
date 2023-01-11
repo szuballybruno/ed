@@ -4,7 +4,7 @@ import {
     ArrowRight,
     FiberManualRecord
 } from '@mui/icons-material';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
@@ -30,6 +30,46 @@ export type StatisticsCardProps = {
     }
 } & EpistoFlex2Props;
 
+const useChangeIcon = (change: any) => {
+
+    return useMemo(() => {
+
+        if (!change)
+            return null;
+
+        if (change === 'up')
+            return {
+                icon: <ArrowDropUp
+                    style={{
+                        margin: '3px 0 0 0',
+                        padding: 0
+                    }} />,
+                color: 'var(--deepGreen)'
+            };
+
+        if (change === 'stagnate')
+            return {
+                icon: <FiberManualRecord
+                    style={{
+                        height: 10,
+                        width: 10,
+                        margin: '2px 3px 0 0',
+                        padding: 0
+                    }} />,
+                color: 'var(--mildOrange)'
+            };
+
+        return {
+            icon: <ArrowDropDown
+                style={{
+                    margin: '3px 0 0 0',
+                    padding: 0
+                }} />,
+            color: 'var(--intenseRed)'
+        };
+    }, [change]);
+};
+
 const StatisticsCard = ({
     iconPath,
     isPreview,
@@ -46,37 +86,8 @@ const StatisticsCard = ({
     ...css
 }: StatisticsCardProps) => {
 
-    const [isOpen, setIsOpen] = useState(!!isOpenByDefault);
-
-    const getColorFromChange = (change: 'up' | 'stagnate' | 'down') => {
-        return change === 'up'
-            ? 'var(--deepGreen)'
-            : change === 'stagnate'
-                ? 'var(--mildOrange)'
-                : 'var(--intenseRed)';
-    };
-
-    const getIconFromChange = (change: 'up' | 'stagnate' | 'down') => {
-        return change === 'up'
-            ? <ArrowDropUp
-                style={{
-                    margin: '3px 0 0 0',
-                    padding: 0
-                }} />
-            : change === 'stagnate'
-                ? <FiberManualRecord
-                    style={{
-                        height: 10,
-                        width: 10,
-                        margin: '2px 3px 0 0',
-                        padding: 0
-                    }} />
-                : <ArrowDropDown
-                    style={{
-                        margin: '3px 0 0 0',
-                        padding: 0
-                    }} />;
-    };
+    const [isOpen] = useState(!!isOpenByDefault);
+    const changeIcon = useChangeIcon(additionalInfo?.change);
 
     const mainFontSize = (() => {
 
@@ -108,9 +119,9 @@ const StatisticsCard = ({
                 position="absolute"
                 top="0"
                 right="0"
-                color={getColorFromChange(additionalInfo.change)}>
+                color={changeIcon?.color}>
 
-                {getIconFromChange(additionalInfo.change)}
+                {changeIcon?.icon}
 
                 <EpistoFont
                     style={{

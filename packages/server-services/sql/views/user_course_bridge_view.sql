@@ -9,8 +9,8 @@ SELECT
 	ucb.stage_name current_stage_name,
 	ucb.tempomat_mode,
 	ucb.start_date::date start_date,
-	ucb.previsioned_completion_date::date previsioned_completion_date,
-	ucb.previsioned_completion_date::date - ucb.start_date::date previsioned_length_days,
+	ucb.original_estimated_completion_date::date original_estimated_completion_date,
+	ucb.original_estimated_completion_date::date - ucb.start_date::date original_estimated_length_days,
 	ucb.required_completion_date::date required_completion_date,
 	ucb.required_completion_date::date - CURRENT_DATE required_length_days
 FROM public.user_course_bridge ucb

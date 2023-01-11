@@ -1,4 +1,4 @@
-import { VideoPlaybackSample } from '../models/entity/playback/VideoPlaybackSample';
+import { VideoPlaybackSample } from '../models/tables/VideoPlaybackSample';
 
 export class SampleMergeService {
 

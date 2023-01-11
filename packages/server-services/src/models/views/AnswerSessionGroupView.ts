@@ -1,7 +1,5 @@
-import { XViewColumn } from '@episto/x-orm';
-import { AnswerSessionType } from '@episto/commontypes';
+import { XViewColumn } from '@thinkhub/x-orm';
 import { Id } from '@episto/commontypes';
-
 
 export class AnswerSessionGroupView {
 
@@ -12,7 +10,13 @@ export class AnswerSessionGroupView {
     courseId: Id<'Course'>;
 
     @XViewColumn()
-    answerSessionType: AnswerSessionType;
+    moduleId: Id<'Module'>;
+
+    @XViewColumn()
+    answerSessionType: string;
+
+    @XViewColumn()
+    startDate: Date;
 
     @XViewColumn()
     answerSessionSuccessRate: number;

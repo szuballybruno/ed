@@ -45,7 +45,8 @@ export const AdminPage = () => {
                         // administration home
                         .add({
                             route: adminRoute.statsRoute,
-                            element: <AdminOverviewStatsPage />
+                            element: <AdminOverviewStatsPage
+                                activeCompany={activeCompany} />
                         })
 
                         // user administration

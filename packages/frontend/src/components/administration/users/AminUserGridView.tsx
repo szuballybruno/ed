@@ -1,30 +1,31 @@
 import { Flex } from '@chakra-ui/react';
-import { Id, OrderType } from '@episto/commontypes';
+import { Id, PerformanceRatingType, TempoRatingType } from '@episto/commontypes';
 import { UserAdminListDTO } from '@episto/communication';
 import { Add } from '@mui/icons-material';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { AdminActiveCompanyIdType } from '../../../models/types';
+import { AdminApiService } from '../../../services/api/AdminApiService';
 import { UserApiService } from '../../../services/api/UserApiService1';
 import { useNavigation } from '../../../services/core/navigatior';
 import { useShowErrorDialog } from '../../../services/core/notifications';
 import { Environment } from '../../../static/Environemnt';
 import { EpistoIcons } from '../../../static/EpistoIcons';
-import { formatTimespan, getSubroutes, useIsMatchingCurrentRoute, usePaging } from '../../../static/frontendHelpers';
-import { useRouteQuery, useSetQueryParams } from '../../../static/locationHelpers';
+import { formatTimespan, getSubroutes, useIsMatchingCurrentRoute } from '../../../static/frontendHelpers';
+import { useRouteQuery } from '../../../static/locationHelpers';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoDataGrid, EpistoDataGridColumnBuilder } from '../../controls/EpistoDataGrid';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
-import { SegmentedButton } from '../../controls/SegmentedButton';
 import { ProfileImage } from '../../ProfileImage';
 import { EpistoDialog } from '../../universal/epistoDialog/EpistoDialog';
 import { useEpistoDialogLogic } from '../../universal/epistoDialog/EpistoDialogLogic';
+import { PerformanceChip } from '../../universal/PerformanceChip';
+import { TempoChip } from '../../universal/TempoChip';
 import { UsersSearchFilters } from './UsersSearchFilters';
 
 const useColumns = (
     isSimpleView: boolean,
-    preset: UserDataGridPresetType,
     userId: Id<'User'> | null,
     showDeleteUserDialog: (user: RowType) => void,
     openUser: (userId: Id<'User'>) => void,
@@ -37,19 +38,23 @@ const useColumns = (
             field: 'avatar',
             headerName: 'Avatar',
             width: isSimpleView ? 60 : 80,
-            renderCell: ({ value, row }) => <EpistoFlex2
-                className="whall"
-                justify="center"
-                align='center'
-                cursor={isSimpleView ? 'pointer' : undefined}
-                onClick={isSimpleView ? () => openUser(row.userId) : undefined}>
-                <ProfileImage
-                    className={isSimpleView ? 'square40' : 'square50'}
-                    objectFit="contain"
-                    url={value.avatarUrl ? Environment.getAssetUrl(value.avatarUrl) : null}
-                    firstName={value.firstName}
-                    lastName={value.lastName} />
-            </EpistoFlex2>
+            renderCell: ({ value, row }) => (
+                <EpistoFlex2
+                    className="whall"
+                    justify="center"
+                    align='center'
+
+                    cursor={isSimpleView ? 'pointer' : undefined}
+                    onClick={isSimpleView ? () => openUser(row.userId) : undefined}>
+                    <ProfileImage
+                        smallFrame
+                        className={isSimpleView ? 'square40' : 'square40'}
+                        objectFit="contain"
+                        url={value.avatarUrl ? Environment.getAssetUrl(value.avatarUrl) : null}
+                        firstName={value.firstName}
+                        lastName={value.lastName} />
+                </EpistoFlex2>
+            )
         });
 
     if (isSimpleView)
@@ -87,48 +92,57 @@ const useColumns = (
         .add({
             field: 'email',
             headerName: 'E-mail',
+            width: 250
         })
         .add({
             field: 'username',
             headerName: 'Username',
-        })
-        .addIf(preset === 'all', {
-            field: 'signupDate',
-            headerName: 'Regisztráció ideje',
+            width: 150
         })
         .add({
-            field: 'summerizedScoreAvg',
-            headerName: 'Átlagos teljesítmény',
-            renderCell: (value) => value ? Math.round(value.value) + '%' : '-'
+            field: 'signupDate',
+            headerName: 'Regisztráció ideje',
+            width: 150
         })
-        .addIf(preset === 'all', {
-            field: 'invertedLagBehind',
-            headerName: 'Haladás',
-            renderCell: (value) => value ? Math.round(value.value) + '%' : '-'
-        })
-        .addIf(preset === 'all', {
+        .add({
             field: 'totalSessionLengthSeconds',
             headerName: 'Platformon eltöltött idő',
-            renderCell: (value) => value ? formatTimespan(value.value) : '-'
+            renderCell: (value) => value ? formatTimespan(value.value) : '-',
+            width: 150
         })
-        .addIf(preset === 'all', {
+        .add({
             field: 'completedVideoCount',
             headerName: 'Megtekintett videók száma',
-            renderCell: (value) => value?.value ? value.value + 'db' : '0db'
+            renderCell: (value) => value?.value ? value.value + 'db' : '0db',
+            width: 150
         })
-        .addIf(preset === 'reviewRequired', {
-            field: 'productivityPercentage',
-            headerName: 'Produktivitás',
-            renderCell: (value) => value ? Math.round(value.value) + '%' : '-'
+        .add({
+            field: 'tempoRating',
+            headerName: 'Tempó',
+            width: 150,
+            renderCell: ({ value, row: { avgTempoPercentage, hasAvgTempoPercentage } }) => (
+                <>
+                    {hasAvgTempoPercentage
+                        ? <TempoChip
+                            value={avgTempoPercentage}
+                            rating={value} />
+                        : ' - '}
+                </>
+            )
         })
-        .addIf(preset === 'reviewRequired', {
-            field: 'engagementPoints',
-            headerName: 'Elköteleződés',
-            renderCell: (value) => value ? Math.round(value.value) + '%' : '-'
-        })
-        .addIf(preset === 'reviewRequired', {
-            field: 'reactionTime',
-            headerName: 'Reakcióidő'
+        .add({
+            field: 'avgPerformanceRating',
+            headerName: 'Teljesítmény',
+            width: 150,
+            renderCell: ({ value, row: { avgPerformancePercentage } }) => (
+                <>
+                    {avgPerformancePercentage > 0
+                        ? <PerformanceChip
+                            value={avgPerformancePercentage}
+                            rating={value} />
+                        : ' - '}
+                </>
+            )
         })
         .add({
             field: 'detailsButton',
@@ -138,7 +152,7 @@ const useColumns = (
                 align="center">
                 <EpistoButton
                     variant="outlined"
-                    onClick={() => navigate2(applicationRoutes.administrationRoute.usersRoute.userRoute.editRoute, { activeCompanyId, userId: value })}>
+                    onClick={() => navigate2(applicationRoutes.administrationRoute.usersRoute.userRoute.statsRoute, { activeCompanyId, userId: value })}>
 
                     Bővebben
                 </EpistoButton>
@@ -169,18 +183,16 @@ class RowType {
     nameSimple: string;
     email: string;
     signupDate: string;
-    summerizedScoreAvg: number;
-    invertedLagBehind: number;
     totalSessionLengthSeconds: number;
     completedVideoCount: number;
-    engagementPoints: number;
-    productivityPercentage: number;
-    reactionTime: number | null;
     detailsButton: Id<'User'>;
     username: string;
+    avgTempoPercentage: number;
+    tempoRating: TempoRatingType;
+    hasAvgTempoPercentage: boolean;
+    avgPerformanceRating: PerformanceRatingType;
+    avgPerformancePercentage: number;
 };
-
-export type UserDataGridPresetType = 'reviewRequired' | 'all'
 
 const mapToRow = (user: UserAdminListDTO): RowType => {
 
@@ -202,60 +214,23 @@ const mapToRow = (user: UserAdminListDTO): RowType => {
                 month: '2-digit',
                 day: '2-digit'
             }) + '',
-        summerizedScoreAvg: user.summerizedScoreAvg,
-        invertedLagBehind: user.invertedRelativeUserPaceDiff!,
         totalSessionLengthSeconds: user.totalSessionLengthSeconds,
         completedVideoCount: user.completedVideoCount,
-        engagementPoints: user.engagementPoints,
-        productivityPercentage: user.productivityPercentage!,
-        reactionTime: user.reactionTime,
         detailsButton: user.userId,
-        username: user.username
+        username: user.username,
+        avgTempoPercentage: user.avgTempoPercentage,
+        tempoRating: user.tempoRating,
+        hasAvgTempoPercentage: user.hasAvgTempoPercentage,
+        avgPerformanceRating: user.avgPerformancePercentageRating,
+        avgPerformancePercentage: user.avgPerformancePercentage
     });
 };
 
 export const useGridFilterSettingsLogic = () => {
 
-    const [orderBy, setOrderBy] = useState<OrderType | null>(null);
     const [searchKeyword, setSearchKeyword] = useState<string | null>(null);
 
-    const presets = useMemo(() => [
-        {
-            title: 'Alapértelmezett nézet',
-            preset: 'all' as UserDataGridPresetType
-        },
-        {
-            title: 'Áttekintésre javasolt',
-            preset: 'reviewRequired' as UserDataGridPresetType
-        }
-    ], []);
-
-    const { setQueryParams } = useSetQueryParams();
-
-    const presetPaging = usePaging({ items: presets, onItemSet: ({ item }) => setQueryParams('preset', item.preset) });
-
-    const currentPreset = useRouteQuery(applicationRoutes.administrationRoute.usersRoute)
-        .getValueOrNull(x => x.preset, 'string') ?? 'all';
-
-    const currentPresetIndex = presets
-        .singleIndex(x => x.preset === currentPreset);
-
-    const isReviewPreset = currentPreset === 'reviewRequired';
-
-    /**
-     * sync paging selected item to url
-     */
-    useEffect(() => {
-
-        presetPaging.setItem(currentPresetIndex);
-    }, [currentPresetIndex]);
-
     return {
-        orderBy,
-        isReviewPreset,
-        presetPaging,
-        currentPreset,
-        setOrderBy,
         setSearchKeyword,
         searchKeyword
     };
@@ -275,13 +250,13 @@ export const useAdminUserGridLogic = ({
     userId: Id<'User'> | null
 }) => {
 
-    const { searchKeyword, isReviewPreset } = filterLogic;
+    const { searchKeyword } = filterLogic;
 
     const {
         userOverviewStats,
         refetchOverviewStats
-    } = UserApiService
-        .useUserAdminList(isReviewPreset, selectedCompanyId);
+    } = AdminApiService
+        .useUserAdminList(selectedCompanyId!, !!selectedCompanyId);
 
     const searchIn = (text: string) => {
 
@@ -341,7 +316,7 @@ export const AminUserGridView = ({
             .openDialog(user);
     };
 
-    const columns = useColumns(isSimpleView, filterLogic.currentPreset, userId, showDeleteUserDialog, userId => {
+    const changeToUser = useCallback((userId: Id<'User'>) => {
 
         getSubroutes(userRoute)
             .forEach(appRoute => {
@@ -354,11 +329,16 @@ export const AminUserGridView = ({
 
                     navigate3(appRoute, {
                         query,
-                        params: { userId }
+                        params: {
+                            userId,
+                            activeCompanyId
+                        }
                     });
                 }
             });
-    }, activeCompanyId);
+    }, [activeCompanyId, isMatchingCurrentAppRoute, navigate3, userRoute]);
+
+    const columns = useColumns(isSimpleView, userId, showDeleteUserDialog, changeToUser, activeCompanyId);
 
     return (
         <Flex
@@ -397,38 +377,29 @@ export const AminUserGridView = ({
                 align='center'
                 height='60px'>
 
-                {!isSimpleView && <SegmentedButton
-                    paging={filterLogic.presetPaging}
-                    getDisplayValue={x => x.title}
-                    variant="tab" />}
+                {/* search bar */}
+                <UsersSearchFilters
+                    setSearchKeyword={filterLogic.setSearchKeyword} />
 
-                <EpistoFlex2
-                    flex={isSimpleView ? '1' : undefined}>
+                {/* add button */}
+                {!isSimpleView && <EpistoButton
+                    style={{
+                        alignItems: 'center',
+                        margin: '0 5px'
+                    }}
+                    onClick={() => {
 
-                    {/* search bar */}
-                    <UsersSearchFilters
-                        setSearchKeyword={filterLogic.setSearchKeyword} />
+                        navigate3(usersRoute.addRoute, { params: { activeCompanyId } });
+                    }}>
 
-                    {/* add button */}
-                    {!isSimpleView && <EpistoButton
+                    <Add
                         style={{
-                            alignItems: 'center',
-                            margin: '0 5px'
-                        }}
-                        onClick={() => {
+                            height: 20,
+                            margin: '0 5px 2px 2px'
+                        }} />
 
-                            navigate3(usersRoute.addRoute, { params: { activeCompanyId } });
-                        }}>
-
-                        <Add
-                            style={{
-                                height: 20,
-                                margin: '0 5px 2px 2px'
-                            }} />
-
-                        Felhasználó hozzáadása
-                    </EpistoButton>}
-                </EpistoFlex2>
+                    Felhasználó hozzáadása
+                </EpistoButton>}
             </Flex>
 
             {/* content */}

@@ -21,7 +21,10 @@ export type ErrorCodeType =
     'last_name_invalid' |
     'username_invalid';
 
-export type UserPerformanceRating = 'very_good' | 'good' | 'average' | 'bad' | 'very_bad';
+export type UserRegistrationStatusType = 'invited' | 'active';
+
+export type TempoRatingType = 'very_good' | 'good' | 'average' | 'bad' | 'very_bad';
+export type PerformanceRatingType = 'very_good' | 'good' | 'average' | 'bad' | 'very_bad';
 
 export type GivenAnswerStateType = 'INCORRECT' | 'CORRECT' | 'MIXED';
 

@@ -1,6 +1,8 @@
 node_modules
 dist
+node_modules_old
 /node_modules
+/node_modules_old
 /node_modules/.yarn-integrity
 /deploy/temp
 /deploy/out
@@ -21,3 +23,8 @@ migration-script.sql
 **/temp
 temp
 /temp
+transferdump.sql
+dump.sql
+# ./thinkhub-xlib -- if ignored, lerna failes
+# thinkhub-xlib
+cache

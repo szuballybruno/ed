@@ -1,21 +1,31 @@
-import { XViewColumn } from '@episto/x-orm';
+import { XViewColumn } from '@thinkhub/x-orm';
 import { Id } from '@episto/commontypes';
 
 export class PractiseQuestionInfoView {
+
     @XViewColumn()
     userId: Id<'User'>;
+
+    @XViewColumn()
+    questionId: Id<'Question'>;
 
     @XViewColumn()
     questionVersionId: Id<'QuestionVersion'>;
 
     @XViewColumn()
+    answerCount: number;
+
+    @XViewColumn()
     practiseAnswerCount: number;
 
     @XViewColumn()
-    isCorrect: boolean;
+    givenAnswerDate: Date;
 
     @XViewColumn()
-    givenAnswerDate: Date;
+    givenAnswerId: Id<'GivenAnswer'>;
+
+    @XViewColumn()
+    isCorrect: boolean;
 
     @XViewColumn()
     isPractise: boolean;

@@ -1,6 +1,7 @@
 import { Id } from '@episto/commontypes';
 import { ReactNode, useCallback } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
+import { AdminApiService } from '../../../services/api/AdminApiService';
 import { CourseApiService } from '../../../services/api/courseApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { showNotification } from '../../../services/core/notifications';
@@ -31,7 +32,7 @@ export const CourseAdministartionFrame = ({
     const isMatchingCurrentUrl = useIsMatchingCurrentRoute();
 
     // http
-    const { courses, coursesStatus, coursesError, refetchCoursesAsync } = CourseApiService
+    const { courses, coursesStatus, coursesError, refetchCoursesAsync } = AdminApiService
         .useAdminCourseList(activeCompanyId!, !!activeCompanyId);
 
     // dt
@@ -96,7 +97,8 @@ export const CourseAdministartionFrame = ({
                 maxWidth={isAnySelected ? '100px' : '9999px'}>
                 <AdminCourseList
                     onCourseClick={navToCourse}
-                    courses={courses} />
+                    courses={courses}
+                    isSimpleView={isAnySelected} />
             </EpistoFlex2>
 
             {/* content pane */}

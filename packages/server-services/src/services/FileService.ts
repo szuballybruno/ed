@@ -1,16 +1,16 @@
 import { UploadedFile } from 'express-fileupload';
-import { StorageFile } from '../models/entity/misc/StorageFile';
-import { User } from '../models/entity/misc/User';
+import { StorageFile } from '../models/tables/StorageFile';
+import { User } from '../models/tables/User';
 import { ErrorWithCode } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
 import { fileCodes, FileCodesType } from '../static/FileCodes';
 import { StringKeyof } from '../utilities/misc';
-import { PrincipalId } from '@episto/x-core';
-import { ClassType } from './misc/advancedTypes/ClassType';
+import { PrincipalId } from '@thinkhub/x-core';
+import { ClassType } from '../models/misc/ClassType';
 import { log } from './misc/logger';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 import { StorageService } from './StorageService';
-import { EntityType } from '@episto/x-orm';
+import { EntityType } from '@thinkhub/x-orm';
 
 export type UploadFileRelatedEntityIdType = { id: Id<any>, file: UploadedFile };
 

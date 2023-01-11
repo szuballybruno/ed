@@ -1,14 +1,29 @@
-import { XViewColumn } from '@episto/x-orm';
-
+import { XViewColumn } from '@thinkhub/x-orm';
+import { Id } from '@episto/commontypes';
 
 export class ExamScoreView {
 
     @XViewColumn()
-    examVersionId: number;
+    userId: Id<'User'>;
 
-    // TODO
-    examAcquiredPoints: number;
+    @XViewColumn()
+    examVersionId: Id<'ExamVersion'>;
 
-    // TODO
-    examMaximumPoints: number;
+    @XViewColumn()
+    answerSessionId: Id<'AnswerSession'>;
+
+    @XViewColumn()
+    questionCount: number;
+
+    @XViewColumn()
+    examScore: number;
+
+    @XViewColumn()
+    examMaxScore: number;
+
+    @XViewColumn()
+    answeredQuestionCount: number;
+
+    @XViewColumn()
+    scorePercentage: number;
 }

@@ -1,135 +1,124 @@
-import { EpistoLineChartDatasetType } from '@episto/commontypes';
-import { UserCourseProgressChartDTO } from '@episto/communication';
+import { FlexProps } from '@chakra-ui/layout';
+import { instantiate } from '@episto/commonlogic';
+import { UserProgressChartStep } from '@episto/communication';
+import { EChartsOption } from 'echarts';
 import { useMemo } from 'react';
+import { Formatters } from '../../../../static/frontendHelpers';
+import { EpistoFlex2 } from '../../../controls/EpistoFlex';
 import { EpistoLineChart } from './EpistoLineChart';
-import { EpistoLineChartOptionsType } from './EpistoLineChartTypes';
 
-const useUserProgressChartOptions = (interval: number, maxYValue: number) => useMemo((): EpistoLineChartOptionsType => ({
-    legend: {
-        orient: 'horizontal',
-        icon: 'circle',
-        itemHeight: 10,
-        top: 10,
-        show: true,
-        textStyle: {
-            fontWeight: 700,
-            color: 'black'
-        }
-    },
-    xAxis: {
-        nameLocation: 'middle',
-        nameGap: 40,
-        nameTextStyle: {
-            fontWeight: 600
-        },
-        boundaryGap: false,
-        type: 'category',
-        axisLabel: {
-            show: true,
-            interval: interval,
-            showMaxLabel: true,
-            rotate: 0,
-            margin: 20
-        },
-        axisLine: {
-            show: false
-        }
-    },
-    yAxis: {
-        name: 'Haladás',
-        nameLocation: 'middle',
-        nameGap: 40,
-        nameTextStyle: {
-            fontWeight: 600
-        },
-        type: 'value',
-        max: maxYValue
-    },
-    seriesOptions: {
-        type: 'line',
-        symbolSize: 10,
-        symbol: 'circle',
-        lineStyle: {
-            width: 4,
-            shadowColor: 'rgba(0, 0, 0, 0.3)',
-            shadowOffsetX: 2,
-            shadowOffsetY: 2,
-            shadowBlur: 10
-        }
-    }
-}), [interval, maxYValue]);
+const useUserProgressChartOptions = (
+    interval: number,
+    userProgress: UserProgressChartStep[]) => useMemo(() => {
 
-const useChartDatasets = (userProgress: UserCourseProgressChartDTO) => useMemo((): EpistoLineChartDatasetType => {
+        const recommendedProgressArray = userProgress
+            .map(x => x.recommendedCompletedPercentage);
 
-    const progressItems = userProgress
-        .dates
-        .map((x, index) => ({
-            date: x,
-            actualProgress: (userProgress.actualProgress as any as (number | null)[])[index] ?? null,
-            previsionedProgress: (userProgress.previsionedProgress as any as (number | null)[])[index] ?? null
-        }));
+        const dates = userProgress
+            .map(x => Formatters
+                .toDateStringFormatted(x.date));
 
-    const previsionedRangeLength = progressItems.length - progressItems.filter(x => x.actualProgress !== null).length;
-    const orderedActualProgresses = progressItems
-        .filter(x => x.actualProgress !== null)
-        .map(x => x.actualProgress!)
-        .orderBy(x => x);
+        const maxProgressValue = recommendedProgressArray.last();
+        const maxYValue = Math.round(Math.min(100, maxProgressValue * 1.8));
 
-    const actualProgressEndIndex = orderedActualProgresses.length;
+        return instantiate<EChartsOption>({
+            color: ['orange', 'limegreen', 'green'],
+            legend: {
+                data: ['Ajánlott haladás', 'Becsült haladás', 'Valós haladás']
+            },
+            xAxis: {
+                data: dates,
+                name: 'Dátum',
+                axisLabel: {
+                    interval: interval,
+                },
+            },
+            yAxis: {
+                name: 'Haladás',
+                max: maxYValue,
+                axisLabel: {
+                    formatter: '{value}%'
+                },
+            },
+            tooltip: {
+                trigger: 'axis',
+                formatter: ([
+                    recommendedCompletedPercentage,
+                    previsionedCompletedPercentage,
+                    actualCompletedPercentage
+                ]: any) => {
 
-    const prevoiusGrowth = orderedActualProgresses.last() - orderedActualProgresses.first();
-    const growthStep = prevoiusGrowth / previsionedRangeLength;
+                    const asd = (param: any) => {
 
-    const previsinedGrowthSeries = progressItems
-        .map((x, i) => i < actualProgressEndIndex ? x.actualProgress : i * growthStep);
+                        const data = param?.data;
+                        if (data === null || data === undefined)
+                            return '-';
 
-    const actualProgressSeries = progressItems
-        .filter(x => x.actualProgress !== null)
-        .map(x => x.actualProgress);
+                        return `${Math.round(data * 10) / 10}%`;
+                    };
 
-    return [
-        {
-            name: 'Becsült haladás',
-            data: previsinedGrowthSeries,
-            lineStyle: {
-                color: 'lightgreen',
-                type: 'dotted'
-            }
-        },
-        {
-            name: 'Valós haladás',
-            data: actualProgressSeries,
-            lineStyle: {
-                color: 'green',
-                type: 'line'
-            }
-        },
-    ];
-}, [userProgress]);
+                    return `
+                ${recommendedCompletedPercentage.axisValue} <br />
+                Ajánlott haladás: ${asd(recommendedCompletedPercentage)} <br />
+                Becsült haladás: ${asd(previsionedCompletedPercentage)} <br />
+                Valós haladás: ${asd(actualCompletedPercentage)}
+            `;
+                }
+            },
+            series: [
+                {
+                    name: 'Ajánlott haladás',
+                    type: 'line',
+                    data: recommendedProgressArray,
+                    showSymbol: false,
+                    smooth: true,
+                    lineStyle: {
+                        type: 'dotted',
+                        width: 4
+                    }
+                },
+                {
+                    name: 'Becsült haladás',
+                    type: 'line',
+                    data: userProgress.map(x => x.previsionedCompletedPercentage),
+                    showSymbol: false,
+                    smooth: true,
+                    lineStyle: {
+                        type: 'dotted',
+                        width: 4
+                    }
+                },
+                {
+                    name: 'Valós haladás',
+                    type: 'line',
+                    data: userProgress.map(x => x.actualCompletedPercentage as any),
+                    showSymbol: false,
+                    smooth: true,
+                    lineStyle: {
+                        width: 4
+                    }
+                }
+            ]
+        });
+    }, [interval, userProgress]);
 
 export const UserProgressChart = ({
-    userProgress
+    userProgress,
+    ...css
 }: {
-    userProgress: UserCourseProgressChartDTO
-}) => {
+    userProgress: UserProgressChartStep[]
+} & FlexProps) => {
 
+    const interval = useMemo(() => Math.floor(userProgress.length / 7), [userProgress]);
+    const options = useUserProgressChartOptions(interval, userProgress);
 
-    const interval = useMemo(() => Math.floor(userProgress.previsionedProgress.length / 7), [userProgress.previsionedProgress.length]);
-    const datasets = useChartDatasets(userProgress);
-    const maxProgressValue = datasets[0].data.last() as any;
-    const maxYValue = Math.round(Math.min(100, maxProgressValue * 1.8));
-    const options = useUserProgressChartOptions(interval, maxYValue);
+    return (
+        <EpistoFlex2
+            id={UserProgressChart.name}
+            {...css}>
 
-    return <EpistoLineChart
-        title=''
-        options={options}
-        xAxisData={userProgress.dates}
-        xAxisLabel="Dátum"
-        yAxisLabel="Haladás"
-        yAxisLabelSuffix='%'
-        dataset={datasets}
-        style={{
-            width: '100%',
-            height: '100%'
-        }} />;
+            <EpistoLineChart
+                options={options} />
+        </EpistoFlex2>
+    );
 };

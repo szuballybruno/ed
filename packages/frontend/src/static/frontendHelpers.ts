@@ -242,6 +242,40 @@ export const dateTimeToString = (date: Date | string) => {
     return date.toLocaleString();
 };
 
+export const toDateStringFormatted = (date: Date) => {
+
+    if (!date)
+        throw new Error('Date is null or undefined!');
+
+    // getting the index of the month 0-11
+    const monthIndex = date.getMonth();
+
+    // getting day of the month 1-31
+    const dayIndex = date.getDate();
+
+    return `${getMonthName(monthIndex)}. ${dayIndex}`;
+};
+
+const formatDate = (value: string | Date) => {
+
+    const date = typeof value === 'string'
+        ? new Date(value)
+        : value;
+
+    return date
+        .toLocaleString('hu-hu', {
+            month: '2-digit',
+            day: '2-digit',
+            year: 'numeric'
+        });
+};
+
+export const Formatters = {
+    dateTimeToString,
+    toDateStringFormatted,
+    formatDate
+};
+
 export const getUrl = (path: string, params?: any, query?: any) => {
 
     let replacedPath = path;
@@ -300,16 +334,6 @@ export const parseIntOrNull = (str: string) => {
 
         return null;
     }
-};
-
-export const toDateStringFormatted = (date: Date) => {
-
-    // getting the index of the month 0-11
-    const monthIndex = date.getMonth();
-    // getting day of the month 1-31
-    const dayIndex = date.getDate();
-
-    return `${getMonthName(monthIndex)}. ${dayIndex}`;
 };
 
 export const daysUntil = (firstDate: Date, secondDate: Date) => {
@@ -484,7 +508,7 @@ export const getSubroutes = (route: ApplicationRoute<any, any>): ApplicationRout
 
 export const coalesce = <T,>(obj: T | null | undefined, defaultObj: Partial<T>): T => {
 
-    return (obj === null
+    return ((obj === null || obj === undefined)
         ? defaultObj
         : obj) as any;
 };

@@ -1,7 +1,7 @@
 import { createContext, useContext, useRef } from 'react';
 import { CompanyApiService } from '../../../services/api/CompanyApiService';
 import { useStateObject } from '../../../static/frontendHelpers';
-import { useCompanySelectorLogic } from '../users/CompanySelectorDropdown';
+import { useCompanySelectorLogic } from '../companySelector/CompanySelectorDropdown';
 
 export type AdminBreadcrumbsStateType = {
     subRouteLabel?: string;

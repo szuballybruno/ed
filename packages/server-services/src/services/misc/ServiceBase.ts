@@ -1,6 +1,6 @@
-import { ClassType } from './advancedTypes/ClassType';
+import { ClassType } from '../../models/misc/ClassType';
 import { MapperService } from '../MapperService';
-import { ORMConnectionService } from '../ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from '../ORMConnectionService';
 
 export class ServiceBase {
 

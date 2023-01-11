@@ -1,30 +1,27 @@
 import { instantiate } from '@episto/commonlogic';
-import { ErrorWithCode, Id } from '@episto/commontypes';
-import { BriefUserDataDTO, DepartmentDTO, Mutation, UserAdminListDTO, UserControlDropdownDataDTO, UserCourseStatsDTO, UserDTO, UserEditReadDTO, UserEditSaveDTO, UserEditSimpleDTO } from '@episto/communication';
-import { CourseData } from '../models/entity/course/CourseData';
-import { AnswerSession } from '../models/entity/misc/AnswerSession';
-import { CourseAccessBridge } from '../models/entity/misc/CourseAccessBridge';
-import { Department } from '../models/entity/misc/Department';
-import { StorageFile } from '../models/entity/misc/StorageFile';
-import { TeacherInfo } from '../models/entity/misc/TeacherInfo';
-import { User } from '../models/entity/misc/User';
-import { UserCourseBridge } from '../models/entity/misc/UserCourseBridge';
-import { RegistrationType } from '../models/Types';
-import { TempomatCalculationDataView } from '../models/views/TempomatCalculationDataView';
-import { UserOverviewView } from '../models/views/UserOverviewView';
+import { ErrorWithCode, Id, UserRegistrationStatusType } from '@episto/commontypes';
+import { BriefUserDataDTO, DepartmentDTO, Mutation, UserAdminListDTO, UserControlDropdownDataDTO, AdminUserCourseDTO, UserDTO, UserEditReadDTO, UserEditSaveDTO, UserEditSimpleDTO } from '@episto/communication';
+import { PrincipalId } from '@thinkhub/x-core';
+import { RegistrationType } from '../models/misc/Types';
+import { AnswerSession } from '../models/tables/AnswerSession';
+import { CourseAccessBridge } from '../models/tables/CourseAccessBridge';
+import { CourseData } from '../models/tables/CourseData';
+import { Department } from '../models/tables/Department';
+import { StorageFile } from '../models/tables/StorageFile';
+import { TeacherInfo } from '../models/tables/TeacherInfo';
+import { User } from '../models/tables/User';
+import { UserCourseBridge } from '../models/tables/UserCourseBridge';
+import { AdminUserListView } from '../models/views/AdminUserListView';
 import { getFullName } from '../utilities/helpers';
 import { InsertEntity } from '../utilities/misc';
-import { PrincipalId } from '@episto/x-core';
 import { AuthorizationService } from './AuthorizationService';
 import { HashService } from './HashService';
 import { MapperService } from './MapperService';
-import { UserLagbehindStatType } from './misc/types';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 import { RoleService } from './RoleService';
 import { TeacherInfoService } from './TeacherInfoService';
 import { TempomatService } from './TempomatService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
-import { UserStatsService } from './UserStatsService';
 
 export class UserService {
 
@@ -36,167 +33,32 @@ export class UserService {
         private _roleService: RoleService,
         private _authorizationService: AuthorizationService,
         private _userCourseBridgeService: UserCourseBridgeService,
-        private _userStatsService: UserStatsService,
         private _tempomatService: TempomatService) {
     }
 
     /**
      * Get admin user list
-     * TODO: what an absolute fucking garbage clusterfuck this is... NEEDS A SHITTON OF REFACTORING!
      */
     async getUserAdminListAsync(
         principalId: PrincipalId,
-        showReviewRequiredUsersOnly: boolean,
-        companyId: Id<'Company'> | null
+        companyId: Id<'Company'>
     ) {
 
-        /**
-         * Check permission 
-         */
-        if (companyId)
-            await this._authorizationService
-                .checkPermissionAsync(principalId, 'ADMINISTRATE_COMPANY', { companyId: companyId });
-
-        /**
-         * This is sort of a cheat way to filter by companyId, 
-         * since if the company is is null, the equasion will be: != null,
-         * meaning all rows will be returned, regardless of their companyId  
-         */
-        const companyFilterOperator = companyId === null
-            ? '!='
-            : '=';
+        await this._authorizationService
+            .checkPermissionAsync(principalId, 'ADMINISTRATE_COMPANY', { companyId: companyId });
 
         const companyUserOverviewViews = await this._ormService
-            .query(UserOverviewView, { companyId })
-            .where('companyId', companyFilterOperator, 'companyId')
+            .query(AdminUserListView, { companyId })
+            .where('companyId', '=', 'companyId')
             .getMany();
 
-        const userIds = companyUserOverviewViews
-            .map(x => x.userId);
-
-        const userProductivityAndLagBehindStats = await this
-            ._getUserLagBehindStatsAsync(companyUserOverviewViews, companyId);
-
-        const lowFlaggedUserIds = await this
-            ._getLowFlaggedUserIdsAsync(userIds, companyId);
-
-        const filterdViews = showReviewRequiredUsersOnly
-            ? companyUserOverviewViews
-                .filter(x => lowFlaggedUserIds
-                    .some(y => y === x.userId))
-            : companyUserOverviewViews;
+        const avgTempoPercentages = await this
+            ._tempomatService
+            .getAverageTempomatDataByCompanyAsync(companyId);
 
         return this
             ._mapperService
-            .mapTo(UserAdminListDTO, [filterdViews, userProductivityAndLagBehindStats]);
-    }
-
-    /**
-     * getUserLagBehindStatsAsync
-     */
-    private async _getUserLagBehindStatsAsync(
-        companyUserOverviewViews: UserOverviewView[],
-        companyId: Id<'Company'> | null) {
-
-        const userIds = companyUserOverviewViews
-            .map(x => x.userId);
-
-        const userIdRelativePaceDiffAvgRows = await this
-            ._getAvgUserRelativePaceDiffs(userIds, companyId);
-
-        const userProductivityAndLagBehindStats = companyUserOverviewViews
-            .map(({ userId, averagePerformancePercentage }) => {
-
-                const relativePaceDiffAvg = userIdRelativePaceDiffAvgRows
-                    .single(x => x.userId === userId)
-                    .relativePaceDiffAvg;
-
-                const productivityPercentage = this
-                    ._userStatsService
-                    .calculateProductivity(averagePerformancePercentage, relativePaceDiffAvg);
-
-                const invertedRelativeUserPaceDiff = (() => {
-
-                    if (!relativePaceDiffAvg)
-                        return null;
-
-                    if (relativePaceDiffAvg >= 100)
-                        return 0;
-
-                    if (relativePaceDiffAvg <= -100)
-                        return 200;
-
-                    return 100 - relativePaceDiffAvg
-                })();
-
-                return instantiate<UserLagbehindStatType>({
-                    userId,
-                    invertedRelativeUserPaceDiff,
-                    productivityPercentage
-                });
-            });
-
-        return userProductivityAndLagBehindStats;
-    }
-
-    /**
-     * getLowFlaggedUserIdsAsync
-     */
-    private async _getLowFlaggedUserIdsAsync(userIds: Id<'User'>[], companyId: Id<'Company'> | null) {
-
-        const lowUserFlags = await this
-            ._userStatsService
-            .flagUsersAsync(companyId, 'low');
-
-        const lowFlaggedUserIds = userIds
-            .filter(userId => lowUserFlags
-                .some(userFlag => userFlag.userId === userId));
-
-        return lowFlaggedUserIds;
-    }
-
-    /**
-     * getAvgUserLagBehinds
-     */
-    private async _getAvgUserRelativePaceDiffs(userIds: Id<'User'>[], companyId: Id<'Company'> | null) {
-
-        /**
-         * This is sort of a cheat way to filter by companyId, 
-         * since if the company is is null, the equasion will be: != null,
-         * meaning all rows will be returned, regardless of their companyId  
-         */
-        const companyFilterOperator = companyId === null
-            ? '!='
-            : '=';
-
-        // TODO: CHECK FOR PERMISSIONS IN VIEW
-        const companyTempomatCalculationViews = await this._ormService
-            .query(TempomatCalculationDataView, { companyId })
-            .innerJoin(User, x => x
-                .on('companyId', companyFilterOperator, 'companyId')
-                .and('id', '=', 'userId', TempomatCalculationDataView))
-            .where('startDate', 'IS NOT', 'NULL')
-            .and('originalPrevisionedCompletionDate', 'IS NOT', 'NULL')
-            .getMany();
-
-        const userIdRelativePaceDiffAvgRows = this._tempomatService
-            .getAvgRelativeUserPaceDiffs(companyTempomatCalculationViews);
-
-        const userOverviewViewsWithRelativePaceDiff = userIds
-            .map(userId => {
-
-                const relativePaceDiffAvgRow = userIdRelativePaceDiffAvgRows
-                    .firstOrNull(userIdRelativePaceDiffAvgRows => userIdRelativePaceDiffAvgRows.userId === userId);
-
-                const relativePaceDiffAvg = relativePaceDiffAvgRow?.relativeUserPaceDiff ?? 0;
-
-                return {
-                    userId,
-                    relativePaceDiffAvg
-                };
-            });
-
-        return userOverviewViewsWithRelativePaceDiff;
+            .mapTo(UserAdminListDTO, [companyUserOverviewViews, avgTempoPercentages]);
     }
 
     /**
@@ -425,7 +287,8 @@ export class UserService {
         isSurveyRequired,
         unhashedPassword,
         registrationType,
-        username
+        username,
+        registrationState
     }: {
         email: string,
         firstName: string,
@@ -436,7 +299,8 @@ export class UserService {
         isSurveyRequired: boolean,
         unhashedPassword: string,
         registrationType: RegistrationType,
-        username: string
+        registrationState: UserRegistrationStatusType,
+        username: string,
     }) {
 
         return await this
@@ -453,8 +317,7 @@ export class UserService {
                 isGod: false,
                 avatarFileId: null,
                 deletionDate: null,
-                isInvitationAccepted: false,
-                isTrusted: true,
+                registrationStatus: registrationState,
                 linkedInUrl: null,
                 phoneNumber: null,
                 refreshToken: null,
@@ -477,9 +340,12 @@ export class UserService {
 
         // check username 
         await this
-            ._checkIfUsernameTakenAsync(user.username);
+            ._checkIfUsernameTakenAsync(user.username ?? '');
 
         // hash user password
+        if (!user.password)
+            throw new Error('Password no found!');
+
         const hashedPassword = await this
             ._hashService
             .hashPasswordAsync(user.password);
@@ -524,7 +390,7 @@ export class UserService {
         await this._ormService
             .save(User, {
                 id: userId,
-                isInvitationAccepted: true,
+                registrationStatus: 'active',
                 password: await this._hashService
                     .hashPasswordAsync(rawPassword)
             });
@@ -716,14 +582,14 @@ export class UserService {
     /**
      * Saves user's courses
      */
-    async saveUserCoursesAsync(userId: Id<'User'>, muts: Mutation<UserCourseStatsDTO, 'courseId'>[]) {
+    async saveUserCoursesAsync(userId: Id<'User'>, muts: Mutation<AdminUserCourseDTO, 'courseId'>[]) {
 
         await this._saveUserCourseAccessBridgesAsync(userId, muts);
         await this._saveUserCourseBridgesAsync(userId, muts);
         await this._saveUserCourseRequiredCompletionDates(userId, muts);
     }
 
-    private async _saveUserCourseAccessBridgesAsync(userId: Id<'User'>, muts: Mutation<UserCourseStatsDTO, 'courseId'>[]) {
+    private async _saveUserCourseAccessBridgesAsync(userId: Id<'User'>, muts: Mutation<AdminUserCourseDTO, 'courseId'>[]) {
 
         /**
          * Save access bridges
@@ -771,7 +637,7 @@ export class UserService {
             .hardDelete(CourseAccessBridge, deletedBridgeIds);
     }
 
-    private async _saveUserCourseBridgesAsync(userId: Id<'User'>, muts: Mutation<UserCourseStatsDTO, 'courseId'>[]) {
+    private async _saveUserCourseBridgesAsync(userId: Id<'User'>, muts: Mutation<AdminUserCourseDTO, 'courseId'>[]) {
 
         /**
          * Save access bridges
@@ -804,7 +670,7 @@ export class UserService {
                 creationDate: new Date(),
                 currentItemCode: null,
                 lastInteractionDate: null,
-                previsionedCompletionDate: null,
+                originalEstimatedCompletionDate: null,
                 requiredCompletionDate: null,
                 stageName: 'assigned',
                 startDate: null,
@@ -817,7 +683,7 @@ export class UserService {
             .createManyAsync(UserCourseBridge, newBridges);
     }
 
-    private async _saveUserCourseRequiredCompletionDates(userId: Id<'User'>, muts: Mutation<UserCourseStatsDTO, 'courseId'>[]) {
+    private async _saveUserCourseRequiredCompletionDates(userId: Id<'User'>, muts: Mutation<AdminUserCourseDTO, 'courseId'>[]) {
 
         /**
          * Required completion dates

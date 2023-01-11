@@ -1,29 +1,22 @@
-import { XViewColumn } from '@episto/x-orm';
+import { XViewColumn } from '@thinkhub/x-orm';
 import { Id } from '@episto/commontypes';
-
 
 export class ShopItemStatefulView {
 
     @XViewColumn()
-    id: Id<'ShopItem'>;
-
-    @XViewColumn()
-    courseId: Id<'Course'>;
+    shopItemId: Id<'ShopItem'>;
 
     @XViewColumn()
     userId: Id<'User'>;
 
     @XViewColumn()
-    name: string;
-
-    @XViewColumn()
-    detailsUrl: string;
-
-    @XViewColumn()
     purchaseCount: number;
 
     @XViewColumn()
-    canPurchase: boolean;
+    courseId: Id<'Course'>;
+
+    @XViewColumn()
+    name: string;
 
     @XViewColumn()
     purchaseLimit: number;
@@ -41,5 +34,11 @@ export class ShopItemStatefulView {
     shopItemCategoryName: string;
 
     @XViewColumn()
+    detailsUrl: string;
+
+    @XViewColumn()
     coverFilePath: string;
+
+    @XViewColumn()
+    canPurchase: boolean;
 }

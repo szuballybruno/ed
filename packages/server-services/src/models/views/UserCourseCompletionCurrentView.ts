@@ -1,6 +1,5 @@
-import { XViewColumn } from '@episto/x-orm';
+import { XViewColumn } from '@thinkhub/x-orm';
 import { Id } from '@episto/commontypes';
-
 
 export class UserCourseCompletionCurrentView {
 
@@ -11,19 +10,37 @@ export class UserCourseCompletionCurrentView {
     courseId: Id<'Course'>;
 
     @XViewColumn()
-    previsionedItemsPerDay: number;
+    startDate: Date;
 
     @XViewColumn()
-    previsionedCompletionDate: Date;
+    requiredCompletionDate: Date;
 
     @XViewColumn()
-    previsionedLengthDays: number;
+    originalEstimatedLengthDays: number;
 
     @XViewColumn()
     requiredLengthDays: number;
 
     @XViewColumn()
-    requiredCompletionDate: Date;
+    daysElapsedSinceStart: number;
+
+    @XViewColumn()
+    totalItemCount: number;
+
+    @XViewColumn()
+    previsionedCompletionDate: Date;
+
+    @XViewColumn()
+    remainingDays: number;
+
+    @XViewColumn()
+    previsionedItemsPerDay: number;
+
+    @XViewColumn()
+    previsionedItemsCompletedByNow: number;
+
+    @XViewColumn()
+    previsionedPercentCompletedByNow: number;
 
     @XViewColumn()
     requiredRemainingDays: number;
@@ -36,7 +53,4 @@ export class UserCourseCompletionCurrentView {
 
     @XViewColumn()
     requiredPercentCompletedByNow: number;
-
-    @XViewColumn()
-    startDate: Date;
 }

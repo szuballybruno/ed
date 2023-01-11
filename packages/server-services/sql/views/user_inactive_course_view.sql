@@ -39,7 +39,7 @@ latest_user_sessions AS
 
 SELECT 
 	lus.user_id,
-	COUNT(lus.course_id) inactive_course_count
+	COUNT(lus.course_id)::int inactive_course_count
 FROM latest_user_sessions lus
 
 INNER JOIN public.course_progress_view AS cpv

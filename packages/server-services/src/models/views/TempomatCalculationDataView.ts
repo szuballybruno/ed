@@ -1,7 +1,5 @@
-import { XViewColumn } from '@episto/x-orm';
-import { TempomatModeType } from '@episto/commontypes';
+import { XViewColumn } from '@thinkhub/x-orm';
 import { Id } from '@episto/commontypes';
-
 
 export class TempomatCalculationDataView {
 
@@ -12,23 +10,23 @@ export class TempomatCalculationDataView {
     courseId: Id<'Course'>;
 
     @XViewColumn()
+    companyId: Id<'Company'>;
+
+    @XViewColumn()
     requiredCompletionDate: Date;
 
     @XViewColumn()
     startDate: Date;
 
     @XViewColumn()
-    tempomatMode: TempomatModeType;
+    tempomatMode: 'light' | 'strict';
 
     @XViewColumn()
-    originalPrevisionedCompletionDate: Date;
+    originalEstimatedCompletionDate: Date;
 
     @XViewColumn()
     totalItemCount: number;
 
     @XViewColumn()
     totalCompletedItemCount: number;
-
-    @XViewColumn()
-    tempomatAdjustmentValue: number;
 }

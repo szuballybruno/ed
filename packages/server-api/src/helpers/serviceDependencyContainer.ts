@@ -1,6 +1,6 @@
-import { ActivationCodeService, AnswerService, AuthenticationService, AuthorizationService, CoinAcquireService, CoinTransactionService, CommentService, CompanyService, CourseCompletionService, CourseItemService, CourseProgressService, CourseRatingService, CourseService, DailyTipService, DBSchemaProviderService, DomainProviderService, EmailService, EventService, ExamService, FileService, FileSystemService, GlobalConfigurationService, HashService, LeaderboardService, LikeService, LoggerService, MapperService, MiscService, ModuleService, ORMConnectionService, ParametrizedConstructor, PasswordChangeService, PermissionService, PersonalityAssessmentService, PlaybackService, PlayerService, PlaylistService, PractiseQuestionService, PrequizService, PretestService, QuestionAnswerService, QuestionService, RoleService, SampleMergeService, ShopService, SignupService, SQLConnectionService, SQLPoolService, StorageService, TeacherInfoService, TempomatService, TokenService, UrlService, UserCourseBridgeService, UserInvitationService, UserProgressService, UserRegistrationService, UserService, UserSessionActivityService, UserStatsService, VersionCreateService, VersionSaveService, VideoRatingService, VideoService } from '@episto/server-services';
-import { DependencyContainer, DepHierarchyFunction, XDependency } from '@episto/x-injector';
-import { XOrmConnectionService } from '@episto/x-orm';
+import { ActivationCodeService, AdminStatsService, AnswerService, AuthenticationService, AuthorizationService, CoinAcquireService, CoinTransactionService, CommentService, CompanyService, CourseCompletionService, CourseItemService, CourseProgressService, CourseRatingService, CourseService, DailyTipService, DBSchemaProviderService, DomainProviderService, EmailService, EventService, ExamService, FileService, FileSystemService, GlobalConfigurationService, HashService, LeaderboardService, LikeService, LoggerService, MapperService, MiscService, ModuleService, ORMConnectionService, ParametrizedConstructor, PasswordChangeService, PermissionService, PersonalityAssessmentService, PlaybackService, PlayerService, PlaylistService, PractiseQuestionService, PrequizService, PretestService, QuestionAnswerService, QuestionService, RoleService, SampleMergeService, ShopService, SignupService, SQLConnectionService, SQLPoolService, StorageService, TeacherInfoService, TempomatService, TokenService, UrlService, UserCourseBridgeService, UserInvitationService, UserProgressService, UserRegistrationService, UserService, UserSessionActivityService, UserStatsService, VersionCreateService, VersionSaveService, VideoRatingService, VideoService } from '@episto/server-services';
+import { DependencyContainer, DepHierarchyFunction, XDependency } from '@thinkhub/x-injector';
+import { LiveSchemaProvider, SchemaValidator } from '@thinkhub/x-orm';
 import { CookieOptionProvider } from './CookieOptionProvider';
 import { createGlobalConfiguration } from './createGlobalConfiguration';
 import { ServiceProvider } from './ServiceProvider';
@@ -47,7 +47,8 @@ export const getTransientServiceContainer = (singletonProvider: ServiceProvider)
 
         // add transient signatures
         .addClass(SQLConnectionService, [SQLPoolService, LoggerService])
-        .addClass(XOrmConnectionService, [DBSchemaProviderService, SQLConnectionService])
+        .addClass(LiveSchemaProvider, [SQLConnectionService])
+        .addClass(SchemaValidator, [DBSchemaProviderService, LiveSchemaProvider])
         .addClass(UrlService, [GlobalConfigurationService, DomainProviderService])
         .addClass(MapperService, [UrlService])
         .addClass(HashService, [GlobalConfigurationService])
@@ -67,7 +68,7 @@ export const getTransientServiceContainer = (singletonProvider: ServiceProvider)
         .addClass(TeacherInfoService, [ORMConnectionService, MapperService, AuthorizationService])
         .addClass(RoleService, [ORMConnectionService, MapperService, AuthorizationService])
         .addClass(UserStatsService, [ORMConnectionService, MapperService, TempomatService, UserProgressService])
-        .addClass(UserService, [ORMConnectionService, MapperService, TeacherInfoService, HashService, RoleService, AuthorizationService, UserCourseBridgeService, UserStatsService, TempomatService])
+        .addClass(UserService, [ORMConnectionService, MapperService, TeacherInfoService, HashService, RoleService, AuthorizationService, UserCourseBridgeService, TempomatService])
         .addClass(TokenService, [GlobalConfigurationService])
         .addClass(AuthenticationService, [ORMConnectionService, UserService, TokenService, UserSessionActivityService, HashService, PermissionService, GlobalConfigurationService, LoggerService])
         .addClass(PasswordChangeService, [UserService, TokenService, EmailService, UrlService, ORMConnectionService, GlobalConfigurationService, HashService, AuthorizationService, DomainProviderService])
@@ -90,14 +91,14 @@ export const getTransientServiceContainer = (singletonProvider: ServiceProvider)
         .addClass(PersonalityAssessmentService, [ORMConnectionService, MapperService, AuthorizationService])
         .addClass(VideoRatingService, [ORMConnectionService, AuthorizationService])
         .addClass(DailyTipService, [ORMConnectionService, MapperService, AuthorizationService])
-        .addClass(TempomatService, [ORMConnectionService, LoggerService, EventService, AuthorizationService])
+        .addClass(TempomatService, [GlobalConfigurationService, ORMConnectionService])
         .addClass(PretestService, [ORMConnectionService, MapperService, ExamService, UserCourseBridgeService, QuestionAnswerService, AuthorizationService, TempomatService, PermissionService, PlayerService])
         .addClass(VersionCreateService, [ORMConnectionService])
-        .addClass(CourseService, [ModuleService, ORMConnectionService, MapperService, FileService, UserCourseBridgeService, AuthorizationService, VersionCreateService, PlayerService, CompanyService])
+        .addClass(CourseService, [TempomatService, ModuleService, ORMConnectionService, MapperService, FileService, UserCourseBridgeService, AuthorizationService, VersionCreateService, PlayerService])
         .addClass(ShopService, [ORMConnectionService, MapperService, CoinTransactionService, CourseService, EmailService, FileService, UrlService, AuthorizationService])
         .addClass(PlayerService, [ORMConnectionService, PlaylistService, ExamService, ModuleService, VideoService, QuestionAnswerService, PlaybackService, UserCourseBridgeService, MapperService, PermissionService])
         .addClass(PractiseQuestionService, [ORMConnectionService, QuestionAnswerService, MapperService, AuthorizationService, GlobalConfigurationService, QuestionService])
-        .addClass(PrequizService, [ORMConnectionService, MapperService, UserCourseBridgeService, AuthorizationService])
+        .addClass(PrequizService, [TempomatService, ORMConnectionService, MapperService, UserCourseBridgeService, AuthorizationService])
         .addClass(UserInvitationService, [EmailService, UserService, TokenService, ORMConnectionService, LoggerService, RoleService])
         .addClass(UserRegistrationService, [ActivationCodeService, UserService, TokenService, ORMConnectionService, AuthenticationService])
         .addClass(CourseRatingService, [MapperService, ORMConnectionService, AuthorizationService, CoinTransactionService])
@@ -106,6 +107,7 @@ export const getTransientServiceContainer = (singletonProvider: ServiceProvider)
         .addClass(LikeService, [ORMConnectionService, MapperService, AuthorizationService])
         .addClass(LeaderboardService, [ORMConnectionService, CompanyService, MapperService])
         .addClass(CompanyService, [ORMConnectionService, MapperService, AuthorizationService, DomainProviderService, FileService])
+        .addClass(AdminStatsService, [ORMConnectionService, MapperService])
         .getContainer();
 
     return XDependency

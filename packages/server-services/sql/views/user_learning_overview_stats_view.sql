@@ -13,11 +13,6 @@ WITH stats AS
 			AND upv.performance_percentage IS NOT NULL
 		) performance_percentage,
 
-		urtv.reaction_time_percent_diff user_reaction_time_difference_percentage,
-		urtv.user_reaction_time_points,
-		urtv.user_exam_length_points,
-		urtv.total_user_reaction_time_points,
-
 		-- most frequent time range
 		usbv.average_session_block most_frequent_time_range,
 
@@ -100,7 +95,7 @@ WITH stats AS
 		-- completed_exam_count
 		(
 			SELECT 
-				COUNT(ecv.has_successful_session::int)
+				COUNT(ecv.has_successful_session::int)::int
 			FROM public.exam_completed_view ecv
 			WHERE ecv.user_id = u.id
 		) total_done_exams,
@@ -122,18 +117,11 @@ WITH stats AS
 	LEFT JOIN public.user_session_block_view usbv
 	ON usbv.user_id = u.id
 
-	LEFT JOIN public.user_reaction_time_view urtv
-	ON urtv.user_id = u.id
-
-	WHERE u.deletion_date IS NULL -- AND u.is_invitation_accepted = true
+	WHERE u.deletion_date IS NULL
 
 	GROUP BY 
 		u.id, 
 		u.email,
-		urtv.reaction_time_percent_diff, 
-		urtv.user_reaction_time_points, 
-		urtv.user_exam_length_points, 
-		urtv.total_user_reaction_time_points, 
 		usbv.average_session_block
 
 	ORDER BY u.id

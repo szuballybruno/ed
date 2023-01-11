@@ -1,6 +1,6 @@
 import { ErrorWithCode } from '@episto/commontypes';
 import { AuthenticationService, CompanyService, GlobalConfigurationService, LoggerService } from '@episto/server-services';
-import { IXGatewayMiddlewareInstance, IXGatewayServiceProvider, MiddlewareParams } from '@episto/x-gateway';
+import { IXGatewayMiddlewareInstance, IXGatewayServiceProvider, MiddlewareParams } from '@thinkhub/x-gateway';
 import { ActionParams } from '../helpers/ActionParams';
 import { getAuthCookies } from '../helpers/cookieHelpers';
 

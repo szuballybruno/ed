@@ -1,10 +1,14 @@
-import { XViewColumn } from '@episto/x-orm';
+import { XViewColumn } from '@thinkhub/x-orm';
 import { Id } from '@episto/commontypes';
 
 export class CourseAllItemsCompletedView {
 
     @XViewColumn()
-    courseVersionId: Id<'Course'>;
+    courseId: Id<'Course'>;
+
+    @XViewColumn()
+    courseVersionId: Id<'CourseVersion'>;
+
     @XViewColumn()
     userId: Id<'User'>;
 }

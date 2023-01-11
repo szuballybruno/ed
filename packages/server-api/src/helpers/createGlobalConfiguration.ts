@@ -1,5 +1,5 @@
 import { ExcludeFunctions, GlobalConfigurationService, LogScopeType } from '@episto/server-services';
-import { IXCookieOptions } from '@episto/x-gateway';
+import { IXCookieOptions } from '@thinkhub/x-gateway';
 import { AdvancedDotEnv } from './AdvancedDotEnv';
 
 class Helper {
@@ -96,6 +96,9 @@ export const createGlobalConfiguration = (rootDir: string) => {
                     "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/storage-admin-service-account%40gifted-country-324010.iam.gserviceaccount.com"
                 }
                   `)
+        },
+        tempomat: {
+            defaultMinutesPerDay: 20
         },
         misc: {
             hostPort: Helper.getEnvConfigEntry('HOST_PORT'),

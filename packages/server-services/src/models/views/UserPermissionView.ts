@@ -1,40 +1,41 @@
-import { XViewColumn } from '@episto/x-orm';
-import { PermissionCodeType } from '@episto/commontypes';
+import { XViewColumn } from '@thinkhub/x-orm';
 import { Id } from '@episto/commontypes';
-
 
 export class UserPermissionView {
 
     @XViewColumn()
-    assigneeUserId: Id<'User'>;
+    assigneeUserId: Id<'AssigneeUser'>;
 
     @XViewColumn()
-    contextCompanyId: Id<'Company'> | null;
+    contextCompanyId: Id<'ContextCompany'>;
 
     @XViewColumn()
-    contextCompanyName: string | null;
+    contextCompanyName: string;
 
     @XViewColumn()
-    contextCourseId: Id<'Course'> | null;
+    contextCourseId: Id<'ContextCourse'>;
 
     @XViewColumn()
-    contextCourseName: string | null;
+    contextCourseName: string;
 
     @XViewColumn()
-    contextCommentId: Id<'Comment'> | null;
+    contextCommentId: Id<'ContextComment'>;
 
     @XViewColumn()
     permissionId: Id<'Permission'>;
 
     @XViewColumn()
-    permissionCode: PermissionCodeType;
+    permissionCode: string;
 
     @XViewColumn()
-    assignmentBridgeId: Id<'PermissionAssignmentBridge'> | null;
+    permissionScope: string;
 
     @XViewColumn()
-    parentRoleId: Id<'Role'> | null;
+    parentRoleId: Id<'ParentRole'>;
 
     @XViewColumn()
-    parentRoleName: string | null;
+    parentRoleName: string;
+
+    @XViewColumn()
+    assignmentBridgeId: Id<'AssignmentBridge'>;
 }

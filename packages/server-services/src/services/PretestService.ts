@@ -4,11 +4,11 @@ import { PretestDataDTO } from '@episto/communication';
 import { PretestResultDTO } from '@episto/communication';
 import { instantiate } from '@episto/commonlogic';
 import { Id } from '@episto/commontypes';
-import { PrincipalId } from '@episto/x-core';
+import { PrincipalId } from '@thinkhub/x-core';
 import { AuthorizationService } from './AuthorizationService';
 import { ExamService } from './ExamService';
 import { MapperService } from './MapperService';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 import { PermissionService } from './PermissionService';
 import { PlayerService } from './PlayerService';
 import { QuestionAnswerService } from './QuestionAnswerService';
@@ -81,9 +81,9 @@ export class PretestService {
          * Get tempomat data
          */
         const tempomatValues = await this._tempomatService
-            .calculateTempomatValuesAsync(userId, courseId);
+            .getTempomatValuesAsync(userId, courseId);
 
-        const originalPrevisionedCompletionDate = tempomatValues?.originalPrevisionedCompletionDate || null;
+        const originalEstimatedCompletionDate = tempomatValues?.originalEstimatedCompletionDate || null;
         const recommendedItemsPerDay = tempomatValues?.recommendedItemsPerDay || null;
         const requiredCompletionDate = tempomatValues?.requiredCompletionDate || null;
 
@@ -94,11 +94,12 @@ export class PretestService {
             ._playerService
             .getFirstPlaylistItemCodeAsync(courseId);
 
-        return this._mapperSerice
+        return this
+            ._mapperSerice
             .mapTo(PretestResultDTO, [
                 pretestResultsView,
                 firstItemPlaylistCode,
-                originalPrevisionedCompletionDate,
+                originalEstimatedCompletionDate,
                 requiredCompletionDate,
                 recommendedItemsPerDay
             ]);

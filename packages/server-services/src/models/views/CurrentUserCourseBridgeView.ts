@@ -1,29 +1,41 @@
-import { CourseModeType, CourseStageNameType, Id, TempomatModeType } from '@episto/commontypes';
-import { XViewColumn } from '@episto/x-orm';
+import { XViewColumn } from '@thinkhub/x-orm';
+import { Id } from '@episto/commontypes';
 
 export class CurrentUserCourseBridgeView {
+
     @XViewColumn()
-    id: Id<'UserCourseBridge'>;
-    @XViewColumn()
-    courseId: Id<'Course'>;
-    @XViewColumn()
-    userId: Id<'User'>;
+    id: Id<'CurrentUserCourseBridge'>;
+
     @XViewColumn()
     creationDate: Date;
+
     @XViewColumn()
-    startDate: Date | null;
+    startDate: Date;
+
     @XViewColumn()
-    courseMode: CourseModeType;
+    courseMode: string;
+
     @XViewColumn()
-    lastInteractionDate: Date | null;
+    currentItemCode: string;
+
     @XViewColumn()
-    currentItemCode: string | null;
+    stageName: string;
+
     @XViewColumn()
-    stageName: CourseStageNameType;
+    tempomatMode: string;
+
     @XViewColumn()
-    tempomatMode: TempomatModeType;
+    originalEstimatedCompletionDate: Date;
+
     @XViewColumn()
-    previsionedCompletionDate: Date | null;
+    requiredCompletionDate: Date;
+
     @XViewColumn()
-    requiredCompletionDate: Date | null;
+    userId: Id<'User'>;
+
+    @XViewColumn()
+    courseId: Id<'Course'>;
+
+    @XViewColumn()
+    lastInteractionDate: Date;
 }

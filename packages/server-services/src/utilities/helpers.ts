@@ -1,8 +1,8 @@
 import { Id } from '@episto/commontypes';
-import { XORMUtils } from '@episto/x-orm';
+import { XORMUtils } from '@thinkhub/x-orm';
 import moment from 'moment';
-import { User } from '../models/entity/misc/User';
-import { ClassType } from '../services/misc/advancedTypes/ClassType';
+import { User } from '../models/tables/User';
+import { ClassType } from '../models/misc/ClassType';
 import { KeyofConstrained } from './misc';
 
 export const snoozeAsync = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
@@ -48,7 +48,7 @@ export function replaceAll(originalText: string, searchText: string, replaceText
     return result;
 }
 
-export const throwNotImplemented = (): Error => {
+export const newNotImplemented = (): Error => {
 
     throw new Error('Not implemented!');
     return {} as any;

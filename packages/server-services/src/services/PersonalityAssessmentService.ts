@@ -1,5 +1,5 @@
-import { DailyTip } from '../models/entity/misc/DailyTip';
-import { PersonalityTraitCategory } from '../models/entity/misc/PersonalityTraitCategory';
+import { DailyTip } from '../models/tables/DailyTip';
+import { PersonalityTraitCategory } from '../models/tables/PersonalityTraitCategory';
 import { PersonalityAssessmentDTO } from '@episto/communication';
 import { PersonalityCategoryTraitDTO } from '@episto/communication';
 import { PersonalityChartDataDTO } from '@episto/communication';
@@ -9,8 +9,8 @@ import { PersonalityTraitDataDTO } from '@episto/communication';
 import { PersonalityTraitCategoryView } from '../models/views/PersonalityTraitCategoryView';
 import { PersonalityTraitView } from '../models/views/PersonalityTraitView';
 import { MapperService } from './MapperService';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
-import { PrincipalId } from '@episto/x-core';
+import { ORMConnectionService } from './ORMConnectionService';
+import { PrincipalId } from '@thinkhub/x-core';
 import { Id } from '@episto/commontypes';
 import { AuthorizationService } from './AuthorizationService';
 

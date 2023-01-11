@@ -8,7 +8,7 @@ export class UserExamStatsDTO {
     answerSessionId: Id<'AnswerSession'>;
     correctAnswerRate: number;
     shouldPractiseExam: boolean;
-    correctAnswerCount: string;
+    correctAnswerCount: number;
     examLengthSeconds: number;
     lastCompletionDate: Date;
     averageReactionTime: number;

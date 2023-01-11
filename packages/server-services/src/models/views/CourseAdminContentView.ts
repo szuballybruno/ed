@@ -1,8 +1,5 @@
-import { XViewColumn } from '@episto/x-orm';
-import { CourseItemType } from '@episto/commontypes';
-import { VersionCode } from '@episto/commontypes';
+import { XViewColumn } from '@thinkhub/x-orm';
 import { Id } from '@episto/commontypes';
-
 
 export class CourseAdminContentView {
 
@@ -11,12 +8,6 @@ export class CourseAdminContentView {
 
     @XViewColumn()
     courseVersionId: Id<'CourseVersion'>;
-
-    @XViewColumn()
-    videoVersionId: Id<'VideoVersion'>;
-
-    @XViewColumn()
-    examVersionId: Id<'ExamVersion'>;
 
     @XViewColumn()
     moduleName: string;
@@ -28,6 +19,12 @@ export class CourseAdminContentView {
     moduleVersionId: Id<'ModuleVersion'>;
 
     @XViewColumn()
+    videoVersionId: Id<'VideoVersion'>;
+
+    @XViewColumn()
+    examVersionId: Id<'ExamVersion'>;
+
+    @XViewColumn()
     itemOrderIndex: number;
 
     @XViewColumn()
@@ -37,7 +34,10 @@ export class CourseAdminContentView {
     itemSubtitle: string;
 
     @XViewColumn()
-    versionCode: VersionCode;
+    itemType: string;
+
+    @XViewColumn()
+    versionCode: string;
 
     @XViewColumn()
     errors: string;
@@ -50,7 +50,4 @@ export class CourseAdminContentView {
 
     @XViewColumn()
     videoAudioText: string;
-
-    @XViewColumn()
-    itemType: CourseItemType;
 }

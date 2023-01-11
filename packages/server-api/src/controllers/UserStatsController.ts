@@ -1,10 +1,10 @@
 import { apiRoutes } from '@episto/communication';
 import { Id } from '@episto/commontypes';
 import { ActionParams } from '../helpers/ActionParams';
-import { XControllerAction } from '@episto/x-gateway';
+import { XControllerAction } from '@thinkhub/x-gateway';
 import { IController } from '../interfaces/IController';
 import { UserStatsService } from '@episto/server-services';
-import { IXGatewayServiceProvider } from '@episto/x-gateway';
+import { IXGatewayServiceProvider } from '@thinkhub/x-gateway';
 
 export class UserStatsController implements IController<UserStatsController> {
 
@@ -27,41 +27,6 @@ export class UserStatsController implements IController<UserStatsController> {
 
         return this._userStatsService
             .getUserLearningPageStatsAsync(params.principalId);
-    }
-
-    @XControllerAction(apiRoutes.userStats.getImproveYourselfPageStats)
-    getImproveYourselfPageStatsAction(params: ActionParams) {
-
-        return this._userStatsService
-            .getImproveYourselfPageStatsAsync(params.principalId);
-    }
-
-    @XControllerAction(apiRoutes.userStats.getAdminUserCourses)
-    getUserCourseStatsAction(params: ActionParams) {
-
-        const query = params
-            .getFromParameterized(apiRoutes.userStats.getAdminUserCourses)
-            .query;
-
-        return this._userStatsService
-            .getUserCourseStatsAsync(
-                params.principalId,
-                query.getValue(x => x.userId, 'int'),
-                query.getValue(x => x.loadAvailable, 'boolean'));
-    }
-
-    @XControllerAction(apiRoutes.userStats.getAdminCourseUsers)
-    getCourseUserStatsAction(params: ActionParams) {
-
-        const query = params
-            .getFromParameterized(apiRoutes.userStats.getAdminCourseUsers)
-            .query;
-
-        return this._userStatsService
-            .getCourseUserStatsAsync(
-                params.principalId,
-                query.getValue(x => x.courseId, 'int'),
-                query.getValue(x => x.preset));
     }
 
     @XControllerAction(apiRoutes.userStats.getUserVideoStats)
@@ -127,16 +92,6 @@ export class UserStatsController implements IController<UserStatsController> {
 
         return this._userStatsService
             .getUserLearningOverviewDataAsync(params.principalId, userId);
-    }
-
-    @XControllerAction(apiRoutes.userStats.getAdminHomeOverviewStats)
-    getAdminHomeOverviewStatsAction(params: ActionParams) {
-
-        const principalId = params
-            .principalId;
-
-        return this._userStatsService
-            .getAdminHomeOverviewStatsAsync(principalId);
     }
 
     @XControllerAction(apiRoutes.userStats.getUserCourseStatsOverviewData)

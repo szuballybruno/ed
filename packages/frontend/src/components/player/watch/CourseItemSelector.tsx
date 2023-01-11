@@ -1,9 +1,10 @@
 import { CourseItemStateType, CourseModeType, Id } from '@episto/commontypes';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect } from 'react';
 import { CourseApiService } from '../../../services/api/courseApiService';
 import { useTempomatMode } from '../../../services/api/tempomatApiService';
-import { useRecommendedItemQuota } from '../../../services/api/userProgressApiService';
+import { useCourseProgressOverview } from '../../../services/api/userProgressApiService';
 import { useShowErrorDialog } from '../../../services/core/notifications';
+import { coalesce } from '../../../static/frontendHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoDivider } from '../../controls/EpistoDivider';
@@ -43,14 +44,24 @@ export const CourseItemSelector = ({
 }) => {
 
     const showErrorDialog = useShowErrorDialog();
-    const [isInfoDialogOpen, setIsInfoDialogOpen] = useState(false);
-    const ref = useRef<HTMLButtonElement>(null);
 
     // http
-    const { recommendedItemQuota, refetchRecommendedItemQuota } = useRecommendedItemQuota(courseId);
+    const { courseProgressOverviewData, refetchRecommendedItemQuota } = useCourseProgressOverview(courseId);
     const { tempomatMode, refetchTempomatMode } = useTempomatMode(courseId, isVideoReady);
     const { setCourseModeAsync } = CourseApiService.useSetCourseMode();
-    const { scrollToTop, scroll, disableAutoScroll, enableAutoScroll } = useScrollIntoView();
+    const { scroll, disableAutoScroll, enableAutoScroll } = useScrollIntoView();
+
+    const {
+        completedToday,
+        deadlineDate,
+        recommendedItemsPerDay
+    } = coalesce(courseProgressOverviewData, {
+        deadlineDate: null,
+        completedToday: 0,
+        recommendedItemsPerDay: 0
+    });
+
+    const isDeadlineSet = !!deadlineDate;
 
     // dialog state
     const dialogLogic = useEpistoDialogLogic('advModeChangWarnDialog');
@@ -134,29 +145,33 @@ export const CourseItemSelector = ({
             height="100px">
 
             {/* tempomat tempo  */}
-            {!recommendedItemQuota?.isDeadlineSet && <EpistoFlex2
-                flex="1">
+            {!isDeadlineSet && (
+                <>
+                    <EpistoFlex2
+                        flex="1">
 
-                <TempomatTempoInfo
-                    tempomatMode={tempomatMode ?? 'strict'}
-                    onClick={() => tempomatDialogLogic.openDialog()} />
-            </EpistoFlex2>}
+                        <TempomatTempoInfo
+                            tempomatMode={tempomatMode ?? 'strict'}
+                            onClick={() => tempomatDialogLogic.openDialog()} />
+                    </EpistoFlex2>
 
-            {!recommendedItemQuota?.isDeadlineSet && <EpistoDivider
-                flexBasis="1px"
-                mx="10px"
-                height="calc(100% - 20px)"
-                orientation="vertical"
-                background="grey" />}
+                    <EpistoDivider
+                        flexBasis="1px"
+                        mx="10px"
+                        height="calc(100% - 20px)"
+                        orientation="vertical"
+                        background="grey" />
+                </>
+            )}
 
             {/* daily recommended video count */}
             <EpistoFlex2 flex="1">
 
                 <RecommendedItemQuota
                     isDaily
-                    isDeadlineSet={recommendedItemQuota?.isDeadlineSet ?? false}
-                    completedCount={recommendedItemQuota?.completedToday ?? 0}
-                    recommendedItemCount={recommendedItemQuota?.recommendedItemsPerDay ?? 0} />
+                    isDeadlineSet={isDeadlineSet}
+                    completedCount={completedToday}
+                    recommendedItemCount={recommendedItemsPerDay} />
             </EpistoFlex2>
 
         </EpistoFlex2>}

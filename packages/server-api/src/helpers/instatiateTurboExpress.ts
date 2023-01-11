@@ -1,6 +1,6 @@
 
 import { GlobalConfigurationService, LoggerService, ORMConnectionService, SQLConnectionService } from '@episto/server-services';
-import { ActionWrapperFunctionType, IXGatewayListener, IXGatewayServiceProvider, XGatewayBuilder } from '@episto/x-gateway';
+import { ActionWrapperFunctionType, IXGatewayListener, IXGatewayServiceProvider, XGatewayBuilder } from '@thinkhub/x-gateway';
 import { ActionParams } from './ActionParams';
 import { AuthenticationController } from '../controllers/AuthenticationController';
 import { CoinTransactionsController } from '../controllers/CoinTransactionsController';
@@ -40,6 +40,7 @@ import { VideoRatingController } from '../controllers/VideoRatingController';
 import { AuthenticationMiddleware } from '../middleware/AuthenticationMiddleware';
 import { AuthorizationMiddleware } from '../middleware/AuthorizationMiddleware';
 import { ServiceProviderInitializator } from './initApp';
+import { AdminController } from '../controllers/AdminController';
 
 export const actionWrapper: ActionWrapperFunctionType = async (serviceProvider: IXGatewayServiceProvider, action: () => Promise<any>) => {
 
@@ -143,6 +144,7 @@ export const initTurboExpress = (
         .addController(VideoController)
         .addController(LeaderboardController)
         .addController(QuestionController)
+        .addController(AdminController)
         .build();
 
     return turboExpress;

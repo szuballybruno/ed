@@ -68,7 +68,7 @@ SELECT
 	-- videos to be repeated count
 	(
 		SELECT 
-			COALESCE(SUM(is_recommended_for_practise::int), 0)
+			COALESCE(SUM(is_recommended_for_practise::int), 0)::int
 		FROM public.user_practise_recommendation_view uprv
 		WHERE uprv.user_id = u.id
 	) videos_to_be_repeated_count,
@@ -150,6 +150,6 @@ ON ast.user_id = u.id
 LEFT JOIN user_rank_inside_company uric
 ON uric.user_id = u.id
 
-WHERE u.deletion_date IS NULL -- AND u.is_invitation_accepted = true
+WHERE u.deletion_date IS NULL
 
 ORDER BY u.id

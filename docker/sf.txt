@@ -1,0 +1,20 @@
+I have a node.js monorepo project, with modules: A, B and C, which both A & B depends on.
+Each module have their own package.json files. This is a large project, with tons of dependnecies described in the package.json files. Installing all the dependencies takes on average 10 minutes. I'm sharing the dependencies using a base docker image. This image is only built when I modify the dependencies of the project. I'm using this dependency docker image (5gigs) as the base image for images A and B (built from module A and B's docker files). 
+
+Building the images sepratly, without a base image containing the dependnecies takes almost 2x as much time, since all the shared dependencies would be installed twice.
+
+I'm using a PowerShell script to build all the images (6-7) in the correct order (first the dependencies image, than the rest). This is quite slow, but manageable, especially when I skip building the dependencies image which rarely changes anyways. The build tool I'm using is `docker build`.
+
+I'm deploying the application using a Github Actions pipeline. Said pipeline calls the PowerShell script to build the images, the rest is easy. Now, as you may guess, the issue with this is that I have to wait ~15mins each time I want to deploy the application, even when the dependencies did not cahnge. This is unbearably slow and cumbersome.
+
+So `docker buildx build` to the rescue right? Or so I thought, since it has a `cache-to` attribute with `gha` (github actions) supported out of the box. 
+
+NO. It turns out, `docker buildx build` is unable to find local images, which I would need since the base image is a local image. [There's an unanswered question about this on StackOverflow.][1]
+
+As the author suggested, I've tried setting up a local registry server that can be explicitly specified for buildx ([using this tutorial][2]), but no luck there either:
+- it fails with this error: `ERROR: failed to solve: localhost:6000/parent:latest: failed to do request: Head "http://localhost:6000/v2/parent/manifests/latest": dial tcp 127.0.0.1:5000: connect: connection refused` 
+- once again, this works perfectly using the normal `docker build` command, and only fails when I'm using `docker buildx build`
+
+
+  [1]: https://stackoverflow.com/questions/74281175/docker-buildx-failing-to-find-local-docker-image?noredirect=1#comment132303923_74281175
+  [2]: https://docs.docker.com/registry/deploying/

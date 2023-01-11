@@ -37,11 +37,10 @@ export class CourseDetailsDTO {
     technicalRequirements: string[];
     skillBenefits: string[];
     humanSkillBenefits: HumanSkillBenefitDTO[];
-
     totalVideoCount: number;
     totalVideoSumLengthSeconds: number;
     totalModuleCount: number;
     totalVideoQuestionCount: number;
-
+    totalCompletionCount: number;
     modules: PlaylistModuleDTO[];
 }

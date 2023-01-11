@@ -1,6 +1,5 @@
-import { XViewColumn } from '@episto/x-orm';
+import { XViewColumn } from '@thinkhub/x-orm';
 import { Id } from '@episto/commontypes';
-
 
 export class QuestionModuleCompareView {
 
@@ -8,22 +7,22 @@ export class QuestionModuleCompareView {
     userId: Id<'User'>;
 
     @XViewColumn()
-    courseId: Id<'Course'>;
+    moduleVersionId: Id<'ModuleVersion'>;
 
     @XViewColumn()
-    moduleVersionId: Id<'ModuleVersion'>;
+    courseId: Id<'Course'>;
 
     @XViewColumn()
     moduleName: string;
 
     @XViewColumn()
-    pretestExamVersionId: Id<'ExamVersion'>;
+    pretestExamVersionId: Id<'PretestExamVersion'>;
 
     @XViewColumn()
     pretestExamScorePercentage: number;
 
     @XViewColumn()
-    finalExamVersionId: Id<'ExamVersion'>;
+    finalExamVersionId: Id<'FinalExamVersion'>;
 
     @XViewColumn()
     finalExamScorePercentage: number;

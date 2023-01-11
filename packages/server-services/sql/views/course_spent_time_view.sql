@@ -106,10 +106,10 @@ spent_time_sum_view_cte AS
 	SELECT 
 		eetc.user_id,
 		eetc.course_id,
-		SUM(eetc.exam_elapsed_time) total_exam_session_elapsed_time,
-		SUM(vwetc.video_elapsed_time) total_video_watch_elapsed_time,
-		SUM(vqetc.video_question_elapsed_time) total_video_question_elapsed_time,
-		SUM(pqetc.practise_question_elapsed_time) total_practise_question_elapsed_time
+		SUM(eetc.exam_elapsed_time)::int total_exam_session_elapsed_time,
+		SUM(vwetc.video_elapsed_time)::int total_video_watch_elapsed_time,
+		SUM(vqetc.video_question_elapsed_time)::int total_video_question_elapsed_time,
+		SUM(pqetc.practise_question_elapsed_time)::int total_practise_question_elapsed_time
 	FROM exam_elapsed_time_cte eetc
 
 	LEFT JOIN video_watch_elapsed_time_cte vwetc

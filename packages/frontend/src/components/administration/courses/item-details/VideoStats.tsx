@@ -228,43 +228,51 @@ export const AdminVideoStatisticsModalPage = () => {
             margin="10px 0 0 0"
             width="100%">
 
-            <EpistoLineChart
-                title=""
-                dataset={[
-                    {
-                        name: 'Dataset',
-                        data: iterate(300, (index) => {
-                            return [(300 - index), Math.pow(index, 2 + Math.random()) / 1000000];
-                        })
-                    }
-                ]}
-                xAxisLabel="Időpont"
-                yAxisLabel="Felhasználók"
-                style={{
-                    height: '350px',
-                    minHeight: 350,
-                    minWidth: 500,
-                    maxWidth: '100%'
-                }} />
-        </DashboardSection>
+            <EpistoFlex2
+                height='350px'
+                minHeight={350}
+                minWidth={500}
+                maxWidth='100%'>
+
+                <EpistoLineChart
+                    options={{
+                        xAxis: {
+                            name: 'Időpont',
+                        },
+                        yAxis: {
+                            name: 'Felhasználók'
+                        },
+                        series: [
+                            {
+                                name: 'Dataset',
+                                data: iterate(300, (index) => {
+                                    return [(300 - index), Math.pow(index, 2 + Math.random()) / 1000000];
+                                })
+                            }
+                        ]
+                    }} />
+            </EpistoFlex2>
+        </DashboardSection >
 
         {/* Second statistics card section */}
         <Grid
             mt="30px"
             gridTemplateColumns="repeat(auto-fill, minmax(300px, 1fr))"
             gridAutoRows="160px"
-            gridGap='10px'>
+            gridGap='10px' >
 
-            {adminExamStatistics[1].items.map((item, index) => {
-                return <StatisticsCard
-                    key={index}
-                    style={{
-                        background: 'var(--transparentWhite80)',
-                        paddingLeft: 20,
-                        minWidth: 200
-                    }}
-                    {...item} />;
-            })}
+            {
+                adminExamStatistics[1].items.map((item, index) => {
+                    return <StatisticsCard
+                        key={index}
+                        style={{
+                            background: 'var(--transparentWhite80)',
+                            paddingLeft: 20,
+                            minWidth: 200
+                        }}
+                        {...item} />;
+                })
+            }
         </Grid>
-    </EpistoFlex2>;
+    </EpistoFlex2 >;
 };

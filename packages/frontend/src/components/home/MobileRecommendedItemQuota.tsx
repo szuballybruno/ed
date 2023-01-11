@@ -1,4 +1,4 @@
-import { useRecommendedItemQuota } from '../../services/api/userProgressApiService';
+import { useCourseProgressOverview } from '../../services/api/userProgressApiService';
 import { UserActiveCourseDTO } from '@episto/communication';
 import { Environment } from '../../static/Environemnt';
 import { PagingType } from '../../static/frontendHelpers';
@@ -11,7 +11,7 @@ export const MobileRecommendedItemQuota = (props: {
     const { activeCoursesPaging } = props;
     const courseId = activeCoursesPaging?.currentItem?.courseId;
 
-    const { recommendedItemQuota } = useRecommendedItemQuota(courseId);
+    const { courseProgressOverviewData: recommendedItemQuota } = useCourseProgressOverview(courseId);
 
     const completedToday = (() => {
 

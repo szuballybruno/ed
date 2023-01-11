@@ -1,5 +1,5 @@
+import { XViewColumn } from '@thinkhub/x-orm';
 import { Id } from '@episto/commontypes';
-import { XViewColumn } from '@episto/x-orm';
 
 export class ActivationCodeListView {
 

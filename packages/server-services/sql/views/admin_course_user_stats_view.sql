@@ -36,14 +36,13 @@ summerized_answer_result AS (
 			WHEN fesv.final_exam_score_percentage IS NULL
 			THEN (
 				(
-					(COALESCE(upagv.practise_correct_answer_rate, 0)) + 
-					(COALESCE(mlea.avg_module_last_exam_score, 0) * 2)
+					(0) + (COALESCE(mlea.avg_module_last_exam_score, 0) * 2)
 				) / 3
 			)
 			WHEN fesv.final_exam_score_percentage > 0
 			THEN (
 				(
-					(COALESCE(upagv.practise_correct_answer_rate, 0)) + 
+					(0) + 
 					(COALESCE(mlea.avg_module_last_exam_score, 0) * 2) +
 					(COALESCE(fesv.final_exam_score_percentage, 0) * 3)
 				) / 6 
@@ -54,10 +53,6 @@ summerized_answer_result AS (
     LEFT JOIN public.final_exam_score_view fesv
     ON fesv.user_id = mlea.user_id
 	AND fesv.course_id = mlea.course_id
-
-    LEFT JOIN public.user_performance_answer_group_view upagv
-    ON upagv.user_id = mlea.user_id
-    AND upagv.course_id = mlea.course_id
 ),
 first_final_exam_completion_cte AS 
 (
@@ -96,24 +91,13 @@ SELECT
     u.last_name,
     sf.file_path avatar_url,
     ucpav.completed_percentage,
-    upv.performance_percentage,
     ccvcv.completed_video_count,
     ccecv.completed_exam_count,
     cvcv.video_count,
     cecv.exam_count,
     cstv.total_spent_seconds,
     fesv.final_exam_score_percentage,
-    tcdv.required_completion_date,
-    sar.summerized_score,
-    ffecc.course_completion_date completion_date,
-
-    -- tempomat
-    tcdv.start_date,
-    tcdv.tempomat_adjustment_value,
-    tcdv.tempomat_mode,
-    tcdv.original_previsioned_completion_date,
-    tcdv.total_item_count,
-    tcdv.total_completed_item_count
+    ffecc.course_completion_date completion_date
 FROM public.course_access_bridge cab
 
 LEFT JOIN public.company comp
@@ -129,10 +113,6 @@ ON co.id = cab.course_id
 LEFT JOIN public.user_course_progress_actual_view ucpav
 ON ucpav.user_id = u.id
 AND ucpav.course_id = co.id
-
-LEFT JOIN public.user_performance_view upv
-ON upv.user_id = u.id
-AND upv.course_id = co.id 
 
 LEFT JOIN public.completed_course_video_count_view ccvcv
 ON ccvcv.user_id = u.id
@@ -155,14 +135,6 @@ AND cstv.course_id = co.id
 LEFT JOIN public.final_exam_score_view fesv
 ON fesv.user_id = u.id
 AND fesv.course_id = co.id
-
-LEFT JOIN summerized_answer_result sar
-ON sar.user_id = u.id
-AND sar.course_id = co.id
-
-LEFT JOIN public.tempomat_calculation_data_view tcdv
-ON tcdv.user_id = u.id
-AND tcdv.course_id = co.id
 
 LEFT JOIN first_final_exam_completion_cte ffecc
 ON ffecc.user_id = u.id

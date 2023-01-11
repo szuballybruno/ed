@@ -1,7 +1,5 @@
-import { XViewColumn } from '@episto/x-orm';
-import { GivenAnswerStateType } from '@episto/commontypes';
+import { XViewColumn } from '@thinkhub/x-orm';
 import { Id } from '@episto/commontypes';
-
 
 export class LatestExamResultView {
 
@@ -12,16 +10,34 @@ export class LatestExamResultView {
     examVersionId: Id<'ExamVersion'>;
 
     @XViewColumn()
-    isFinalExam: boolean;
+    questionVersionId: Id<'QuestionVersion'>;
 
     @XViewColumn()
-    questionVersionId: Id<'QuestionVersion'>;
+    answerVersionId: Id<'AnswerVersion'>;
+
+    @XViewColumn()
+    answerSessionId: Id<'AnswerSession'>;
+
+    @XViewColumn()
+    givenAnswerId: Id<'GivenAnswer'>;
+
+    @XViewColumn()
+    isCorrect: boolean;
+
+    @XViewColumn()
+    givenAnswerState: string;
+
+    @XViewColumn()
+    questionScore: number;
+
+    @XViewColumn()
+    isFinalExam: boolean;
 
     @XViewColumn()
     questionText: string;
 
     @XViewColumn()
-    answerSessionId: Id<'AnswerSession'>;
+    questionMaxScore: number;
 
     @XViewColumn()
     isCompletedSession: boolean;
@@ -33,35 +49,20 @@ export class LatestExamResultView {
     onlySuccessfulSession: boolean;
 
     @XViewColumn()
-    givenAnswerId: Id<'GivenAnswer'>;
+    answerBridgeId: Id<'AnswerBridge'>;
 
     @XViewColumn()
-    questionScore: number;
-
-    @XViewColumn()
-    questionMaxScore: number;
-
-    @XViewColumn()
-    givenAnswerState: GivenAnswerStateType;
-
-    @XViewColumn()
-    answerBridgeId: Id<'AnswerGivenAnswerBridge'>;
-
-    @XViewColumn()
-    userAnswerVersionId: Id<'AnswerVersion'>;
-
-    @XViewColumn()
-    answerVersionId: Id<'AnswerVersion'>;
-
-    @XViewColumn()
-    answerId: Id<'Answer'>;
-
-    @XViewColumn()
-    isAnswerCorrect: boolean;
+    userAnswerVersionId: Id<'UserAnswerVersion'>;
 
     @XViewColumn()
     isGivenAnswer: boolean;
 
     @XViewColumn()
+    isAnswerCorrect: boolean;
+
+    @XViewColumn()
     answerText: string;
+
+    @XViewColumn()
+    answerId: Id<'Answer'>;
 }

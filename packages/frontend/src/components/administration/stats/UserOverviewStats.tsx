@@ -4,19 +4,10 @@ import { EpistoGrid } from '../../controls/EpistoGrid';
 import StatisticsCard, { StatisticsCardProps } from '../../statisticsCard/StatisticsCard';
 import { AdminStatGroup } from './AdminStatGroup';
 
-export const UserOverviewStats = ({ flaggedUsersCount }: { flaggedUsersCount: number }) => {
+export const UserOverviewStats = () => {
 
     const stats = useMemo((): StatisticsCardProps[] => [
 
-        /* Average performance */
-        {
-            title: 'Összesített teljesítmény',
-            value: '3.5',
-            suffix: 'óra',
-            iconPath: Environment.getAssetUrl('images/teacherdashboardstatistic2.png'),
-            isOpenByDefault: false,
-            isPreview: true
-        },
         /* Average time spent with learning per week */
         {
             title: 'Átlagos tanulással töltött idő/hét',
@@ -47,25 +38,17 @@ export const UserOverviewStats = ({ flaggedUsersCount }: { flaggedUsersCount: nu
         /* Dropout rate */
         {
             title: 'Áttekintés javasolt',
-            value: flaggedUsersCount,
+            value: 0,
             suffix: 'esetben',
             iconPath: Environment.getAssetUrl('/images/teacherdashboard3.png'),
             isOpenByDefault: false,
             isPreview: true
         },
-        /* Dropout rate */
-        {
-            title: 'Áttekintés javasolt',
-            value: flaggedUsersCount,
-            suffix: 'esetben',
-            iconPath: Environment.getAssetUrl('/images/teacherdashboard3.png'),
-            isOpenByDefault: false,
-            isPreview: true
-        },
-    ], [flaggedUsersCount]);
+    ], []);
 
     return (
         <AdminStatGroup
+            id={UserOverviewStats.name}
             title="Felhasznalok statisztikaja"
             padding="0"
             background="white">

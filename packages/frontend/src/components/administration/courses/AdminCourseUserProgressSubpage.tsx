@@ -2,7 +2,7 @@ import { CourseUserPresetType, Id } from '@episto/commontypes';
 import { AdminCourseUserStatsDTO } from '@episto/communication';
 import { useEffect, useMemo } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
-import { useCourseUserStatsData } from '../../../services/api/userStatsApiService';
+import { AdminApiService } from '../../../services/api/AdminApiService';
 import { Environment } from '../../../static/Environemnt';
 import { formatTimespan, usePaging } from '../../../static/frontendHelpers';
 import { useRouteParams_OLD, useRouteQuery, useSetQueryParams } from '../../../static/locationHelpers';
@@ -19,7 +19,6 @@ import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { useAdminCourseContentDialogLogic } from '../users/adminCourseContentDialog/AdminCourseContentDialogLogic';
 import { AdminUserCourseContentDialog } from '../users/adminCourseContentDialog/AdminUserCourseContentDialog';
 import { AdminCourseUserOverviewDialog, useAdminCourseUserOverviewDialogLogic } from './AdminCourseUserOverviewDialog';
-import { ChipSmall } from './ChipSmall';
 import { CourseAdministartionFrame } from './CourseAdministartionFrame';
 
 export interface AdminCourseUserRowType extends AdminCourseUserStatsDTO {
@@ -35,12 +34,10 @@ export interface AdminCourseUserRowType extends AdminCourseUserStatsDTO {
 
 export const useCourseUsersColumns = ({
     handleOpenCourseResultDetailsDialog,
-    handleOpenUserCourseStatsDialog,
-    preset
+    handleOpenUserCourseStatsDialog
 }: {
     handleOpenCourseResultDetailsDialog: (courseId: Id<'Course'>, userId: Id<'User'>, fullName: string) => void,
-    handleOpenUserCourseStatsDialog: (courseId: Id<'Course'>, userId: Id<'User'>) => void,
-    preset: CourseUserPresetType
+    handleOpenUserCourseStatsDialog: (courseId: Id<'Course'>, userId: Id<'User'>) => void
 }) => {
 
     const builder = new EpistoDataGridColumnBuilder<AdminCourseUserRowType, Id<'User'>>()
@@ -66,7 +63,7 @@ export const useCourseUsersColumns = ({
             width: 300,
             resizable: true
         })
-        .addIf(preset !== 'notstartedyet', {
+        .add({
             field: 'completedPercentage',
             headerName: 'Haladás a kurzusban',
             width: 150,
@@ -77,8 +74,8 @@ export const useCourseUsersColumns = ({
                 : <EmptyCell />
 
         })
-        .addIf(preset !== 'notstartedyet', {
-            field: 'performancePercentage',
+        .add({
+            field: 'tempoPercentage',
             headerName: 'Jelenlegi teljesítmény',
             width: 150,
             resizable: true,
@@ -87,19 +84,19 @@ export const useCourseUsersColumns = ({
                     value={value} />
                 : <EmptyCell />
         })
-        .addIf(preset !== 'notstartedyet', {
+        .add({
             field: 'completedVideoCount',
             headerName: 'Megtekintett videók',
             width: 150,
             resizable: true,
         })
-        .addIf(preset !== 'notstartedyet', {
+        .add({
             field: 'completedExamCount',
             headerName: 'Elvégzett vizsgák',
             width: 150,
             resizable: true,
         })
-        .addIf(preset !== 'notstartedyet', {
+        .add({
             field: 'totalSpentSeconds',
             headerName: 'Eltöltött idő',
             width: 150,
@@ -110,7 +107,7 @@ export const useCourseUsersColumns = ({
                 </EpistoFont>
                 : <EmptyCell />
         })
-        .addIf(preset !== 'notstartedyet', {
+        .add({
             field: 'finalExamScorePercentage',
             headerName: 'Kurzuszáró eredménye',
             width: 150,
@@ -135,61 +132,7 @@ export const useCourseUsersColumns = ({
                 </EpistoFont>
                 : <EmptyCell />
         })
-        .addIf(preset === 'inprogress', {
-            field: 'previsionedDate',
-            headerName: 'Várható befejezés',
-            width: 150,
-            resizable: true,
-            renderCell: ({ value }) => value
-                ? <EpistoFont>
-                    {new Date(value)
-                        .toLocaleString('hu-hu', {
-                            year: 'numeric',
-                            month: '2-digit',
-                            day: '2-digit'
-                        })}
-                </EpistoFont>
-                : <EmptyCell />
-        })
-        .addIf(preset === 'inprogress', {
-            field: 'actualLagBehindDays',
-            headerName: 'Eddigi lemaradás',
-            width: 150,
-            resizable: true,
-            renderCell: ({ value }) => value
-                ? <ChipSmall
-                    text={Math.ceil(value) + ' nap'}
-                    color={(() => {
-                        if (value < 3)
-                            return 'var(--mildGreen)';
-
-                        if (value < 10)
-                            return 'var(--mildOrange)';
-
-                        return 'var(--mildRed)';
-                    })()} />
-                : <EmptyCell />
-        })
-        .addIf(preset === 'inprogress', {
-            field: 'previsionedLagBehindDays',
-            headerName: 'Várható lemaradás',
-            width: 150,
-            resizable: true,
-            renderCell: ({ value }) => value
-                ? <ChipSmall
-                    text={Math.ceil(value) + ' nap'}
-                    color={(() => {
-                        if (value < 3)
-                            return 'var(--mildGreen)';
-
-                        if (value < 10)
-                            return 'var(--mildOrange)';
-
-                        return 'var(--mildRed)';
-                    })()} />
-                : <EmptyCell />
-        })
-        .addIf(preset === 'completed', {
+        .add({
             field: 'completionDate',
             headerName: 'Elvégezve',
             width: 150,
@@ -204,7 +147,7 @@ export const useCourseUsersColumns = ({
                 </EpistoFont>
                 : <EmptyCell />
         })
-        .addIf(preset === 'completed', {
+        .add({
             field: 'summerizedScore',
             headerName: 'Összesített eredmény',
             width: 150,
@@ -214,7 +157,7 @@ export const useCourseUsersColumns = ({
                     value={Math.round(value)} />
                 : <EmptyCell />
         })
-        .addIf(preset === 'completed', {
+        .add({
             field: 'courseReport',
             headerName: 'Kurzus összegző report',
             width: 220,
@@ -230,7 +173,7 @@ export const useCourseUsersColumns = ({
                     Kurzus összegző report
                 </EpistoButton>
         })
-        .addIf(preset !== 'notstartedyet', {
+        .add({
             field: 'moreDetails',
             headerName: 'Részletek',
             width: 150,
@@ -327,11 +270,11 @@ export const AdminCourseUserProgressSubpage = () => {
     const courseId = useRouteParams_OLD(applicationRoutes.administrationRoute.coursesRoute.courseUserProgressRoute)
         .getValue(x => x.courseId, 'int');
 
-    const filterLogic = useCourseUserGridFilterSettingsLogic();
     const { adminCourseContentDialogLogic } = useAdminCourseContentDialogLogic();
     const adminCourseUserOverviewDialogLogic = useAdminCourseUserOverviewDialogLogic();
 
-    const { courseUserStatsData, courseUserStatsDataError, courseUserStatsDataStatus } = useCourseUserStatsData(courseId, filterLogic.currentPreset);
+    const { courseUserStatsData, courseUserStatsDataError, courseUserStatsDataStatus } = AdminApiService
+        .useCourseUserStatsData(courseId);
 
     const columns = useCourseUsersColumns({
         handleOpenCourseResultDetailsDialog: (courseId, userId, fullName) => {
@@ -346,8 +289,7 @@ export const AdminCourseUserProgressSubpage = () => {
                 courseId: courseId,
                 userId: userId
             });
-        },
-        preset: filterLogic.currentPreset
+        }
     });
 
     const rows = courseUserStatsData ? courseUserStatsData
@@ -363,52 +305,31 @@ export const AdminCourseUserProgressSubpage = () => {
             courseReport: index
         })) : [];
 
-    return <CourseAdministartionFrame
-        isAnySelected={true}>
+    return (
+        <CourseAdministartionFrame
+            isAnySelected={true}>
 
-        <AdminUserCourseContentDialog
-            dialogLogic={adminCourseContentDialogLogic} />
+            <AdminUserCourseContentDialog
+                dialogLogic={adminCourseContentDialogLogic} />
 
-        <AdminCourseUserOverviewDialog logic={adminCourseUserOverviewDialogLogic} />
+            <AdminCourseUserOverviewDialog
+                logic={adminCourseUserOverviewDialogLogic} />
 
-        {/* Right side content */}
-        <AdminSubpageHeader
-            headerContent={
-                <EpistoFlex2
-                    justify='flex-end'
-                    align='center'
-                    height='60px'>
+            {/* Right side content */}
+            <AdminSubpageHeader
+                tabMenuItems={[
+                    applicationRoutes.administrationRoute.coursesRoute.courseDetailsRoute,
+                    applicationRoutes.administrationRoute.coursesRoute.courseContentRoute,
+                    applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute,
+                    applicationRoutes.administrationRoute.coursesRoute.courseUserProgressRoute
+                ]}
+                direction="column">
 
-                    <SegmentedButton
-                        paging={filterLogic.presetPaging}
-                        getDisplayValue={x => x.title}
-                        variant="tab" />
-
-                    {/* <EpistoFlex2
-                    flex={isSimpleView ? '1' : undefined}>
-
-                    {/* search bar 
-                    <UsersSearchFilters
-                        hideOrdering={true}
-                        setSearchKeyword={filterLogic.setSearchKeyword}
-                        setOrderBy={filterLogic.setOrderBy} />
-
-                </EpistoFlex2> */}
-                </EpistoFlex2>
-            }
-            tabMenuItems={[
-                applicationRoutes.administrationRoute.coursesRoute.courseDetailsRoute,
-                applicationRoutes.administrationRoute.coursesRoute.courseContentRoute,
-                applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute,
-                applicationRoutes.administrationRoute.coursesRoute.courseUserProgressRoute
-            ]}
-            //onSave={handleSaveCourseAsync}
-            direction="column">
-
-            <EpistoDataGrid
-                getKey={x => x.userId}
-                rows={rows}
-                columns={columns || []} />
-        </AdminSubpageHeader>
-    </CourseAdministartionFrame>;
+                <EpistoDataGrid
+                    getKey={x => x.userId}
+                    rows={rows}
+                    columns={columns || []} />
+            </AdminSubpageHeader>
+        </CourseAdministartionFrame>
+    );
 };

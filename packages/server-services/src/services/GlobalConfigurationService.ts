@@ -64,6 +64,10 @@ export class GlobalConfigurationService {
         videoCompletedPercentage: number;
     };
 
+    tempomat: {
+        defaultMinutesPerDay: number;
+    };
+
     fileStorage: {
         assetStoreUrl: string;
         bucketName: string;

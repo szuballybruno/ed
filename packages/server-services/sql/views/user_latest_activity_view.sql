@@ -22,7 +22,7 @@ user_total_session_length AS
 SELECT
 	u.id,
 	u.email,
-	usl.total_session_length_seconds * interval '1 sec' total_spent_seconds,
+	EXTRACT(EPOCH FROM (usl.total_session_length_seconds * interval '1 sec'))::int total_spent_seconds,
 	svm.latest_activity_date
 FROM public.user u
 

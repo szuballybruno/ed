@@ -1,5 +1,5 @@
 import { GlobalConfigurationService } from '@episto/server-services';
-import { IXCookieOptions, IXGatewayRequest, IXGatewayResponse } from '@episto/x-gateway';
+import { IXCookieOptions, IXGatewayRequest, IXGatewayResponse } from '@thinkhub/x-gateway';
 import dayjs from 'dayjs';
 
 export const setAuthCookies = (

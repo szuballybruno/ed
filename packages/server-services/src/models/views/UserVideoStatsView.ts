@@ -1,6 +1,5 @@
-import { XViewColumn } from '@episto/x-orm';
+import { XViewColumn } from '@thinkhub/x-orm';
 import { Id } from '@episto/commontypes';
-
 
 export class UserVideoStatsView {
 
@@ -11,13 +10,13 @@ export class UserVideoStatsView {
     videoId: Id<'Video'>;
 
     @XViewColumn()
-    videoTitle: string;
-
-    @XViewColumn()
     courseId: Id<'Course'>;
 
     @XViewColumn()
     lengthSeconds: number;
+
+    @XViewColumn()
+    videoTitle: string;
 
     @XViewColumn()
     totalSpentTimeSeconds: number;

@@ -1,6 +1,6 @@
 SELECT 
 	u.id user_id, 
-	COALESCE(SUM(amount), 0) coin_balance 
+	COALESCE(SUM(amount), 0)::int coin_balance 
 FROM public.user u
 
 LEFT JOIN public.coin_transaction ca

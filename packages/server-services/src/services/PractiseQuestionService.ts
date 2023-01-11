@@ -1,14 +1,14 @@
-import { AnswerSession } from '../models/entity/misc/AnswerSession';
+import { AnswerSession } from '../models/tables/AnswerSession';
 import { PractiseQuestionInfoView } from '../models/views/PractiseQuestionInfoView';
 import { AnswerQuestionDTO } from '@episto/communication';
 import { Id } from '@episto/commontypes';
 import { isXMinutesAgo } from '../utilities/helpers';
-import { PrincipalId } from '@episto/x-core';
+import { PrincipalId } from '@thinkhub/x-core';
 import { AuthorizationService } from './AuthorizationService';
 import { MapperService } from './MapperService';
 import { GlobalConfigurationService } from './GlobalConfigurationService';
 import { ServiceBase } from './misc/ServiceBase';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 import { QuestionAnswerService } from './QuestionAnswerService';
 import { QuestionService } from './QuestionService';
 

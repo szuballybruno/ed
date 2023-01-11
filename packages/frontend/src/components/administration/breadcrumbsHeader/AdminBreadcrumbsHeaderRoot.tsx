@@ -1,5 +1,5 @@
 import { Id } from '@episto/commontypes';
-import { getKeys } from '@episto/x-core';
+import { getKeys } from '@thinkhub/x-core';
 import { ArrowBack } from '@mui/icons-material';
 import { useCallback } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
@@ -9,7 +9,7 @@ import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { MUI } from '../../controls/MUIControls';
 import { useAuthorizationContext } from '../../system/AuthorizationContext';
-import { CompanySelectorDropdown } from '../users/CompanySelectorDropdown';
+import { CompanySelectorDropdown } from '../companySelector/CompanySelectorDropdown';
 import { AdminBreadcrumbLink } from './AdminBreadcrumbLink';
 import { AdminBreadcrumbsContext, useAdminBreadcrumbsState } from './AdminBreadcrumbsContext';
 

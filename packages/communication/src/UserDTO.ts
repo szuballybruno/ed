@@ -1,4 +1,4 @@
-import { Id } from '@episto/commontypes';
+import { Id, UserRegistrationStatusType } from '@episto/commontypes';
 import { DepartmentDTO } from './DepartmentDTO';
 
 export class UserDTO {
@@ -6,12 +6,11 @@ export class UserDTO {
     firstName: string;
     lastName: string;
     companyId: Id<'Company'>;
-    isTrusted: boolean;
     email: string;
     phoneNumber: string;
     name: string;
-    isInvitationAccepted: boolean;
     avatarUrl: string | null;
     department: DepartmentDTO | null;
     username: string;
+    registrationStatus: UserRegistrationStatusType;
 }

@@ -13,7 +13,8 @@ type ProfileImageProps = {
     url?: string | null,
     firstName?: string,
     lastName?: string,
-    className?: string
+    className?: string,
+    smallFrame?: boolean
 } & EpistoFlex2Props;
 
 export const ProfileImage = forwardRef<HTMLDivElement, ProfileImageProps>(({
@@ -21,6 +22,7 @@ export const ProfileImage = forwardRef<HTMLDivElement, ProfileImageProps>(({
     firstName,
     lastName,
     url,
+    smallFrame,
     ...css
 }: ProfileImageProps, ref) => {
 
@@ -31,7 +33,7 @@ export const ProfileImage = forwardRef<HTMLDivElement, ProfileImageProps>(({
     const showImage = !!url;
 
     return <EpistoFlex2
-        padding="4px"
+        padding={smallFrame ? '2px' : '4px'}
         className={className + ' circle'}
         boxShadow="inset -7px -2px 20px 0px rgba(124,192,194,0.9)"
         {...css}>

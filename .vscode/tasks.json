@@ -1,6 +1,4 @@
 {
-    // See https://go.microsoft.com/fwlink/?LinkId=733558
-    // for the documentation about the tasks.json format
     "version": "2.0.0",
     "tasks": [
         {
@@ -15,23 +13,29 @@
         // run
         {
             "type": "shell",
-            "label": "run frontend",
-            "command": "yarn start",
+            "label": "start-client-web",
+            "command": "yarn start-client",
             "problemMatcher": [],
-            "options": {
-                "cwd": "${workspaceFolder}/packages/frontend"
-            },
             "presentation": {
                 "group": "run"
             }
         },
         {
             "type": "shell",
-            "label": "run server-api",
-            "command": "yarn start",
+            "label": "start-server-api",
+            "command": "yarn start-server",
+            "problemMatcher": [],
+            "presentation": {
+                "group": "run"
+            }
+        },
+        {
+            "type": "shell",
+            "label": "build-x-core",
+            "command": "yarn build",
             "problemMatcher": [],
             "options": {
-                "cwd": "${workspaceFolder}/packages/server-api"
+                "cwd": "${workspaceFolder}/packages/x-core"
             },
             "presentation": {
                 "group": "run"
@@ -41,6 +45,24 @@
             "type": "shell",
             "label": "build-serve-client",
             "command": "yarn build-serve-client",
+            "problemMatcher": [],
+            "presentation": {
+                "group": "run"
+            }
+        },
+        {
+            "type": "shell",
+            "label": "build-comm",
+            "command": "yarn build-comm",
+            "problemMatcher": [],
+            "presentation": {
+                "group": "run"
+            }
+        },
+        {
+            "type": "shell",
+            "label": "build-commtypes",
+            "command": "yarn build-commtypes",
             "problemMatcher": [],
             "presentation": {
                 "group": "run"
@@ -58,13 +80,10 @@
         {
             "type": "shell",
             "label": "mon-server-services",
-            "command": "yarn tsc --watch",
-            "options": {
-                "cwd": "${workspaceFolder}/packages/server-services"
-            },
+            "command": "yarn mon-server-services",
             "problemMatcher": [],
             "presentation": {
-                "group": "deps"
+                "group": "run"
             }
         },
         {
@@ -87,10 +106,11 @@
         },
         // run-all
         {
-            "label": "run-all",
+            "label": "start-dev-mode",
             "dependsOn": [
-                "run frontend",
-                "run server-api",
+                "start-client-web",
+                "start-server-api",
+                "mon-server-services"
             ],
             "problemMatcher": []
         },
@@ -99,19 +119,6 @@
             "label": "run-mon-tests",
             "type": "shell",
             "command": "yarn mon-tests",
-            "problemMatcher": [],
-            "presentation": {
-                "group": "testing"
-            }
-        },
-        // testdev
-        {
-            "label": "testdev",
-            "dependsOn": [
-                "run-server-api-testing",
-                "run-mon-tests",
-                "mon-server-services"
-            ],
             "problemMatcher": [],
             "presentation": {
                 "group": "testing"
@@ -130,7 +137,6 @@
                 "group": "run"
             }
         },
-        // build deps
         {
             "label": "build-deps",
             "type": "shell",
@@ -138,6 +144,15 @@
             "problemMatcher": [],
             "presentation": {
                 "group": "deps"
+            }
+        },
+        {
+            "label": "scaffold",
+            "type": "shell",
+            "command": "scaffoldModels.ps1",
+            "problemMatcher": [],
+            "options": {
+                "cwd": "${workspaceFolder}/packages/server-services"
             }
         },
         {

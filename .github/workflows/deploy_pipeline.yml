@@ -7,85 +7,52 @@ env:
   BRANCH_NAME: ${{ github.ref_name }} 
   DB_NAME: epistogram_${{github.ref_name}}
 
-  FRONTEND_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/epistogram-frontend-${{ github.ref_name }}
-  FRONTEND_CLOUD_RUN_SVC_NAME: epistogram-frontend-${{ github.ref_name }}
+  CLIENT_WEB_IMAGE_NAME: gcr.io/${{secrets.GCP_PROJECT_ID}}/epistogram-frontend-${{github.ref_name}}-img
+  FRONTEND_CLOUD_RUN_SVC_NAME: epistogram-frontend-${{github.ref_name}}
 
-  BACKEND_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/epistogram-backend-${{ github.ref_name }}
-  BACKEND_CLOUD_RUN_SVC_NAME: epistogram-backend-${{ github.ref_name }}
-  
-  MIGEN_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/epistogram-migen-${{ github.ref_name }}
+  SERVER_API_IMAGE_NAME: gcr.io/${{secrets.GCP_PROJECT_ID}}/epistogram-backend-${{github.ref_name}}-img
+  BACKEND_CLOUD_RUN_SVC_NAME: epistogram-backend-${{github.ref_name}}
   
   CLOUD_SQL_CONNCETION_NAME: gifted-country-324010:europe-central2:epistogram
   GCP_PROJECT_NAME: gifted-country-324010
 
   PGPASSWORD: ${{ secrets.DB_SERVICE_USER_PASSWORD }}
+  CONFIG_ENV_PATH: ./epistogram/packages/server-api/config/${{ github.ref_name }}.config.env
 
 jobs:
 
-  # 
-  # ------ prerequisites
-  # 
+  #
+  # ---- BUILD IMAGES
+  #
 
-  generate_migration_script: 
-    name: Generate migration script
+  build_and_push_images: 
+    name: Build and push images
     runs-on: ubuntu-latest
-
+    
     steps:
+
+      # ----- checkout repo
       - name: Checkout branch
         uses: actions/checkout@v3
+        with:
+          path: './epistogram'
       
-      - name: Set up Docker Buildx for layer caching
-        uses: docker/setup-buildx-action@master
-
-      - name: Get migration versions 
-        shell: pwsh
-        working-directory: ./packages/util-script-producer/scripts
-        run: |
-          ./get_mig_versions.ps1 `
-            -dbpass '${{secrets.DB_SERVICE_USER_PASSWORD}}' `
-            -dbhost '${{secrets.DB_HOST_ADDRESS}}' `
-            -dbport '${{secrets.DB_PORT}}' `
-            -dbname '${{env.DB_NAME}}' `
-            -dbuser '${{secrets.DB_SERVICE_USER_NAME}}'
-
-      - name: Build migen
-        uses: docker/build-push-action@v3
-        with:
-          file: ./packages/util-script-producer/docker/migen.Dockerfile
-          context: .
-          cache-from: type=gha,scope=${{ env.GITHUB_REF_NAME }}-migen
-          cache-to: type=gha,scope=${{ env.GITHUB_REF_NAME }}-migen,mode=max
-          outputs: type=docker,dest=migen.tar
-          tags: |
-            migen
-
-      - name: Load migen image
-        run: |
-          docker load < migen.tar 
-
-      - name: Run migen
-        run: |
-          docker run \
-            -v ${PWD}/migen_out:/app/packages/util-script-producer/out migen
-
-      - name: Upload migration-script artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: migration-script
-          path: ./migen_out/migration-script.sql
-
-  # 
-  # ------ building 
-  # 
-
-  build_backend: 
-    name: Build backend
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout branch
+      - name: Checkout xlib
         uses: actions/checkout@v3
-        
+        with:
+          repository: Thinkhub-Software/thinkhub-xlib
+          path: './thinkhub-xlib'
+          token: ${{ secrets.XLIB_REPO_READ_PAT }}
+          ref: 'master'
+      
+      # ----- setup cacheing 
+      - name: Cache docker-cache folder
+        uses: actions/cache@v3
+        with:
+          path: /tmp/docker-cache
+          key: ${{env.BRANCH_NAME}}-docker-cache
+
+      # ------ auth
       - name: Login to GCP
         uses: google-github-actions/setup-gcloud@v0
         with:
@@ -96,96 +63,88 @@ jobs:
       - name: Configure GCP Docker
         run: gcloud auth configure-docker --quiet
 
+      # ------ set secret env variables
       - name: Set secrets to ${{ github.ref_name }}.config.env file
         run: |
-          echo "" = ${{secrets.JWT_SIGN_SECRET}} >> ./config/${{ github.ref_name }}.config.env
-          echo "" = ${{secrets.JWT_SIGN_SECRET}} >> ./config/${{ github.ref_name }}.config.env
-          echo JWT_SIGN_SECRET = ${{secrets.JWT_SIGN_SECRET}} >> ./config/${{ github.ref_name }}.config.env
-          echo MAIL_TOKEN_SECRET = ${{secrets.MAIL_TOKEN_SECRET}} >> ./config/${{ github.ref_name }}.config.env
-          echo MAIL_SERVICE_USER_NAME = ${{secrets.MAIL_SENDER_MAIL}} >> ./config/${{ github.ref_name }}.config.env
-          echo MAIL_SERVICE_USER_PASSWORD = ${{secrets.MAIL_SENDER_PASSWORD}} >> ./config/${{ github.ref_name }}.config.env
-          echo DB_HOST_ADDRESS = ${{secrets.DB_HOST_ADDRESS}} >> ./config/${{ github.ref_name }}.config.env
-          echo DB_SERVICE_USER_NAME = ${{secrets.DB_SERVICE_USER_NAME}} >> ./config/${{ github.ref_name }}.config.env
-          echo DB_SERVICE_USER_PASSWORD = ${{secrets.DB_SERVICE_USER_PASSWORD}} >> ./config/${{ github.ref_name }}.config.env
-        working-directory: ./packages/server-api
-      
-      - name: Set up Docker Buildx for layer caching
-        uses: docker/setup-buildx-action@master
+          echo "" >> ${{ env.CONFIG_ENV_PATH }}
+          echo JWT_SIGN_SECRET = ${{secrets.JWT_SIGN_SECRET}} >> ${{ env.CONFIG_ENV_PATH }}
+          echo MAIL_TOKEN_SECRET = ${{secrets.MAIL_TOKEN_SECRET}} >> ${{ env.CONFIG_ENV_PATH }}
+          echo MAIL_SERVICE_USER_NAME = ${{secrets.MAIL_SENDER_MAIL}} >> ${{ env.CONFIG_ENV_PATH }}
+          echo MAIL_SERVICE_USER_PASSWORD = ${{secrets.MAIL_SENDER_PASSWORD}} >> ${{ env.CONFIG_ENV_PATH }}
+          echo DB_HOST_ADDRESS = ${{secrets.DB_HOST_ADDRESS}} >> ${{ env.CONFIG_ENV_PATH }}
+          echo DB_SERVICE_USER_NAME = ${{secrets.DB_SERVICE_USER_NAME}} >> ${{ env.CONFIG_ENV_PATH }}
+          echo DB_SERVICE_USER_PASSWORD = ${{secrets.DB_SERVICE_USER_PASSWORD}} >> ${{ env.CONFIG_ENV_PATH }}
 
-      - uses: docker/build-push-action@v3
-        with:
-          file: ./packages/server-api/backend.Dockerfile
-          context: .
-          push: true
-          cache-from: type=gha,scope=$GITHUB_REF_NAME-${{ env.BACKEND_IMAGE_NAME }}
-          cache-to: type=gha,scope=$GITHUB_REF_NAME-${{ env.BACKEND_IMAGE_NAME }},mode=max
-          tags: |
-            ${{ env.BACKEND_IMAGE_NAME }}
-    
-  build_frontend:
-    name: Build frontend
-    runs-on: ubuntu-latest
+      # ------ setup build
+      - name: Setup build
+        shell: pwsh
+        run: |
+          ./epistogram/scripts/create-builder.ps1
+          ./epistogram/scripts/run-registry.ps1
 
-    steps:
-      - name: Checkout branch
-        uses: actions/checkout@v3
-        
-      - name: Login to GCP
-        uses: google-github-actions/setup-gcloud@v0
-        with:
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
-          service_account_email: ${{ secrets.GCP_EMAIL }}
-          service_account_key: ${{ secrets.GCP_CREDENTIALS }}
+      # ------ build images
+      - name: Build containers
+        shell: pwsh
+        run: |
+          ./epistogram/scripts/monobuild.ps1 `
+            -client_env "${{env.BRANCH_NAME}}" `
+            -builddeps
 
-      - name: Configure GCP Docker
-        run: gcloud auth configure-docker --quiet
-      
-      - name: Set up Docker Buildx for layer caching
-        uses: docker/setup-buildx-action@master
+      # ------ name public images 
+      - name: Name public images 
+        run: |
+          docker image tag localhost:6000/server:latest $SERVER_API_IMAGE_NAME
+          docker image tag localhost:6000/client:latest $CLIENT_WEB_IMAGE_NAME
 
-      - name: Build frontend container
-        uses: docker/build-push-action@v3
-        with:
-          file: ./packages/frontend/frontend.Dockerfile
-          context: .
-          build-args: ENVIRONMENT_NAME=${{ env.BRANCH_NAME }}
-          push: true
-          cache-from: type=gha,scope=$GITHUB_REF_NAME-${{ env.FRONTEND_IMAGE_NAME }}
-          cache-to: type=gha,scope=$GITHUB_REF_NAME-${{ env.FRONTEND_IMAGE_NAME }},mode=max
-          tags: |
-            ${{ env.FRONTEND_IMAGE_NAME }}
+      # ------ push images
+      - name: Push server-api
+        run: |
+          docker push $SERVER_API_IMAGE_NAME
+
+      - name: Push client-web
+        run: |
+          docker push $CLIENT_WEB_IMAGE_NAME
 
   # 
-  # ------ deploy
-  # 
+  # ----- DEPLOY DATABASE 
+  #
 
   deploy_database: 
     name: Deploy database
     runs-on: ubuntu-latest
-    needs: [build_backend, build_frontend, generate_migration_script]
+    needs: [build_and_push_images]
 
     steps:
-
-      - name: Checkout branch
+      - name: Checkout
         uses: actions/checkout@v3
-
-      - name: Download migration-script artifact
-        uses: actions/download-artifact@v3
         with:
-          name: migration-script
-          path: ./
+          path: './epistogram'
+      
+      - name: Checkout xlib
+        uses: actions/checkout@v3
+        with:
+          repository: Thinkhub-Software/thinkhub-xlib
+          path: './thinkhub-xlib'
+          token: ${{ secrets.XLIB_REPO_READ_PAT }}
+          ref: 'master'
 
-      - name: Migrate schema
+      - name: Run migen
         shell: pwsh
-        run: |
-          ./scripts/db_exec.ps1 `
-            -dbpass '${{secrets.DB_SERVICE_USER_PASSWORD}}' `
-            -dbhost '${{secrets.DB_HOST_ADDRESS}}' `
-            -dbport '${{secrets.DB_PORT}}' `
-            -dbname '${{env.DB_NAME}}' `
-            -dbuser '${{secrets.DB_SERVICE_USER_NAME}}' `
-            -scriptpath ./migration-script.sql
-  
+        run: ./thinkhub-xlib/packages/x-migen/scripts/run_migen_prod.ps1 `
+          -dbname "${{env.DB_NAME}}" `
+          -dbhost "${{secrets.DB_HOST_ADDRESS}}" `
+          -dbpassword "${{secrets.DB_SERVICE_USER_PASSWORD}}" `
+          -dbusername "${{secrets.DB_SERVICE_USER_NAME}}" `
+          -dbport "${{secrets.DB_PORT}}" `
+          -outFolderPath "${PWD}/epistogram/migen_out" `
+          -schemaFolderPath "${PWD}/epistogram/packages/server-services/sql" `
+          -migen_folder_path "${PWD}/thinkhub-xlib/packages/x-migen" `
+          -mode "EXECUTE"
+
+  #
+  # ----- DEPLOY IMAGES
+  #
+
   deploy_frontend:
     name: Deploy frontend
     runs-on: ubuntu-latest
@@ -205,7 +164,7 @@ jobs:
       - name: Deploy Docker image to GCP CloudRun
         run: |
           gcloud run deploy $FRONTEND_CLOUD_RUN_SVC_NAME \
-          --image $FRONTEND_IMAGE_NAME \
+          --image $CLIENT_WEB_IMAGE_NAME \
           --region europe-west1 \
           --platform managed \
           --max-instances 1 \
@@ -231,7 +190,7 @@ jobs:
       - name: Deploy Docker image to GCP CloudRun
         run: |
           gcloud run deploy $BACKEND_CLOUD_RUN_SVC_NAME \
-          --image $BACKEND_IMAGE_NAME \
+          --image $SERVER_API_IMAGE_NAME \
           --add-cloudsql-instances $CLOUD_SQL_CONNCETION_NAME \
           --region europe-west1 \
           --platform managed \

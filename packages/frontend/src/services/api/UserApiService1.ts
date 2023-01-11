@@ -1,24 +1,7 @@
-import { BriefUserDataDTO } from '@episto/communication';
-import { UserAdminListDTO } from '@episto/communication';
-import { UserControlDropdownDataDTO } from '@episto/communication';
-import { UserEditReadDTO } from '@episto/communication';
-import { UserEditSaveDTO } from '@episto/communication';
-import { UserEditSimpleDTO } from '@episto/communication';
-import { UserLearningOverviewDataDTO } from '@episto/communication';
-import { apiRoutes } from '@episto/communication';
 import { Id } from '@episto/commontypes';
+import { apiRoutes, BriefUserDataDTO, UserControlDropdownDataDTO, UserEditReadDTO, UserEditSaveDTO, UserEditSimpleDTO, UserStatisticsDTO } from '@episto/communication';
 import { QueryService } from '../../static/XQuery/XQueryReact';
 import { usePostDataUnsafe } from '../core/httpClient';
-
-const useSaveUserAssignedCourses = () => {
-
-    const qr = usePostDataUnsafe(apiRoutes.user.saveUserCourses);
-
-    return {
-        saveUserCourses: qr.postDataAsync,
-        saveUserCoursesState: qr.state
-    };
-};
 
 const useEditUserData = (editedUserId: Id<'User'> | null) => {
 
@@ -58,23 +41,8 @@ const useUserControlDropdownData = () => {
     };
 };
 
-export const useUserAdminList = (isToBeReviewed: boolean, companyId: Id<'Company'> | null) => {
-
-    const queryRes = QueryService
-        .useXQueryArray<UserAdminListDTO>(apiRoutes.user.getAdminUsersList, { isToBeReviewed, companyId });
-
-    return {
-        userOverviewStats: queryRes.data,
-        userOverviewStatsStatus: queryRes.state,
-        userOverviewStatsError: queryRes.error,
-        refetchOverviewStats: queryRes.refetch
-    };
-};
-
 export const UserApiService = {
-    useSaveUserAssignedCourses,
     useUserControlDropdownData,
-    useUserAdminList,
 
     useSaveUserSimple: () => {
 
@@ -101,7 +69,7 @@ export const UserApiService = {
 
     useUserLearningOverviewData: (userId: Id<'User'>) => {
 
-        const queryRes = QueryService.useXQuery<UserLearningOverviewDataDTO>(apiRoutes.userStats.getUserLearningOverviewData, { userId: userId });
+        const queryRes = QueryService.useXQuery<UserStatisticsDTO>(apiRoutes.userStats.getUserLearningOverviewData, { userId: userId });
 
         return {
             userLearningOverviewData: queryRes.data,

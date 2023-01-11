@@ -1,9 +1,9 @@
-import { VideoRating } from '../models/entity/misc/VideoRating';
+import { VideoRating } from '../models/tables/VideoRating';
 import { VideoRatingDTO } from '@episto/communication';
 import { Id } from '@episto/commontypes';
-import { PrincipalId } from '@episto/x-core';
+import { PrincipalId } from '@thinkhub/x-core';
 import { AuthorizationService } from './AuthorizationService';
-import { ORMConnectionService } from './ORMConnectionService/ORMConnectionService';
+import { ORMConnectionService } from './ORMConnectionService';
 
 export class VideoRatingService {
 

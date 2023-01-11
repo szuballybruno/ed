@@ -4,7 +4,7 @@ SELECT
 		THEN CONCAT(all_user.last_name, ' ', all_user.first_name) 
 	END full_name,
 	sf.file_path avatar_url,
-	co.id,
+	co.id comment_id,
 	co.text comment_text,
 	co.creation_date,
 	vv.video_id,
@@ -31,7 +31,7 @@ SELECT
 		WHEN co.parent_comment_id IS NULL
 		THEN co.id
 		ELSE co.parent_comment_id
-	END thread_id
+	END thread_group
 FROM public.comment co
 
 LEFT JOIN public.user all_user
@@ -51,4 +51,7 @@ AND l.user_id = owner_user.id
 AND l.deletion_date IS NULL
 
 -- first order by threads then creation_date
-ORDER BY thread_id, creation_date, parent_comment_id desc
+ORDER BY 
+	thread_group, 
+	creation_date, 
+	parent_comment_id desc

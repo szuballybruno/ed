@@ -1,6 +1,5 @@
-import { DeletionDateColumn, IsDeletedColumn, XViewColumn } from '@episto/x-orm';
+import { XViewColumn } from '@thinkhub/x-orm';
 import { Id } from '@episto/commontypes';
-
 
 export class CompanyAssociatedCoursesView {
 
@@ -11,8 +10,10 @@ export class CompanyAssociatedCoursesView {
     courseId: Id<'Course'>;
 
     @XViewColumn()
-    @IsDeletedColumn()
     isDeleted: boolean;
+
+    @XViewColumn()
+    courseVersionId: Id<'CourseVersion'>;
 
     @XViewColumn()
     isAssigned: boolean;

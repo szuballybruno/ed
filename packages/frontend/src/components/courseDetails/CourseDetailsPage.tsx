@@ -1,10 +1,11 @@
 import { Id } from '@episto/commontypes';
-import { useEffect, useState } from 'react';
+import { CourseDetailsDTO } from '@episto/communication';
+import { useCallback, useMemo } from 'react';
 import { Responsivity } from '../../helpers/responsivity';
 import { CourseApiService } from '../../services/api/courseApiService';
 import { useNavigation } from '../../services/core/navigatior';
 import { Environment } from '../../static/Environemnt';
-import { formatTimespan, useImageColor } from '../../static/frontendHelpers';
+import { coalesce, formatTimespan, useImageColor } from '../../static/frontendHelpers';
 import { useIntParam } from '../../static/locationHelpers';
 import { useCurrentUserId } from '../system/AuthenticationFrame';
 import { DesktopCourseDetailsPage } from './DesktopCourseDetailsPage';
@@ -17,6 +18,71 @@ export type CourseDetailsSidebarInfoType = {
     value: string;
 }
 
+const useSidebarInfos = (courseDetails: CourseDetailsDTO | null) => {
+
+    const sidebarInfos = useMemo((): CourseDetailsSidebarInfoType[] => {
+
+        const {
+            totalVideoSumLengthSeconds,
+            totalModuleCount,
+            totalVideoCount,
+            totalVideoQuestionCount,
+            language,
+            totalCompletionCount,
+            modificationDate
+        } = coalesce(courseDetails, {
+            totalVideoSumLengthSeconds: 0,
+            totalModuleCount: 0,
+            totalVideoCount: 0,
+            totalVideoQuestionCount: 0,
+            language: '',
+            totalCompletionCount: 0,
+            modificationDate: new Date()
+                .toLocaleDateString()
+        });
+
+        return [
+            {
+                icon: Environment.getAssetUrl('/course_page_icons/right_panel_course_lenght.svg'),
+                name: 'Kurzus hossza',
+                value: formatTimespan(totalVideoSumLengthSeconds)
+            },
+            {
+                icon: Environment.getAssetUrl('/course_page_icons/right_panel_sections.svg'),
+                name: 'Témakörök száma',
+                value: totalModuleCount.toString()
+            },
+            {
+                icon: Environment.getAssetUrl('/course_page_icons/right_panel_videos.svg'),
+                name: 'Videók száma',
+                value: totalVideoCount.toString()
+            },
+            {
+                icon: Environment.getAssetUrl('/course_page_icons/right_panel_questions.svg'),
+                name: 'Tudást felmérő kérdések',
+                value: totalVideoQuestionCount.toString()
+            },
+            {
+                icon: Environment.getAssetUrl('/course_page_icons/right_panel_language.svg'),
+                name: 'Nyelv',
+                value: language
+            },
+            {
+                icon: Environment.getAssetUrl('/course_page_icons/right_panel_enrolled.svg'),
+                name: 'Hányan végezték el eddig',
+                value: totalCompletionCount.toString()
+            },
+            {
+                icon: Environment.getAssetUrl('/course_page_icons/right_panel_updated.svg'),
+                name: 'Frissítve',
+                value: new Date(modificationDate)
+                    .toLocaleDateString()
+            }
+        ];
+    }, [courseDetails]);
+
+    return sidebarInfos;
+};
 
 const CourseDetailsPage = () => {
 
@@ -28,76 +94,50 @@ const CourseDetailsPage = () => {
     const { colors } = useImageColor(courseDetails?.thumbnailURL!);
     const { isMobile } = Responsivity.useIsMobileView();
 
-    const [color, setColor] = useState<string>('white');
+    /**
+     * Calc color 
+     */
+    const color = useMemo(() => {
 
+        if (!colors)
+            return 'white';
 
-    useEffect(() => {
-        if (colors) {
-            setColor(`rgba(${colors[0][0]}, ${colors[0][1]}, ${colors[0][2]}, 0.4)`);
-        }
+        return `rgba(${colors[0][0]}, ${colors[0][1]}, ${colors[0][2]}, 0.4)`;
     }, [colors]);
 
-    const handlePlayCourse = async () => {
+    /**
+     * Handle play course 
+     */
+    const handlePlayCourse = useCallback(async () => {
 
-        playCourse(courseId, courseDetails!.stageName, courseDetails!.currentItemCode);
-    };
+        if (!courseDetails)
+            return;
 
-    const sidebarInfos: CourseDetailsSidebarInfoType[] = [
-        {
-            icon: Environment.getAssetUrl('/course_page_icons/right_panel_course_lenght.svg'),
-            name: 'Kurzus hossza',
-            value: courseDetails?.totalVideoSumLengthSeconds
-                ? formatTimespan(courseDetails.totalVideoSumLengthSeconds)
-                : '-'
-        },
-        {
-            icon: Environment.getAssetUrl('/course_page_icons/right_panel_sections.svg'),
-            name: 'Témakörök száma',
-            value: courseDetails?.totalModuleCount.toString() ?? '-'
-        },
-        {
-            icon: Environment.getAssetUrl('/course_page_icons/right_panel_videos.svg'),
-            name: 'Videók száma',
-            value: courseDetails?.totalVideoCount.toString() ?? '-'
-        },
-        {
-            icon: Environment.getAssetUrl('/course_page_icons/right_panel_questions.svg'),
-            name: 'Tudást felmérő kérdések',
-            value: courseDetails?.totalVideoQuestionCount.toString() ?? '-'
-        },
-        {
-            icon: Environment.getAssetUrl('/course_page_icons/right_panel_language.svg'),
-            name: 'Nyelv',
-            value: courseDetails?.language ?? '-'
-        },
-        {
-            icon: Environment.getAssetUrl('/course_page_icons/right_panel_enrolled.svg'),
-            name: 'Hányan végezték el eddig',
-            value: courseDetails?.previouslyCompletedCount.toString() ?? '-'
-        },
-        {
-            icon: Environment.getAssetUrl('/course_page_icons/right_panel_updated.svg'),
-            name: 'Frissítve',
-            value: courseDetails?.modificationDate
-                ? new Date(courseDetails.modificationDate)
-                    .toLocaleDateString()
-                : '-'
-        }
-    ];
+        playCourse(courseId, courseDetails.stageName, courseDetails.currentItemCode);
+    }, [courseDetails, playCourse, courseId]);
 
-    return isMobile
-        ? <MobileCourseDetailsPage
-            userId={userId}
-            courseDetails={courseDetails!}
-            currentColor={color}
-            handlePlayCourse={handlePlayCourse}
-            sidebarInfos={sidebarInfos} />
-        : <DesktopCourseDetailsPage
-            userId={userId}
-            courseDetails={courseDetails!}
-            currentColor={color}
-            handlePlayCourse={handlePlayCourse}
-            sidebarInfos={sidebarInfos} />;
+    /**
+     * Get sidebar infos
+     */
+    const sidebarInfos = useSidebarInfos(courseDetails);
+
+    return (
+        <>
+            {courseDetails && (isMobile
+                ? <MobileCourseDetailsPage
+                    userId={userId}
+                    courseDetails={courseDetails}
+                    currentColor={color}
+                    handlePlayCourse={handlePlayCourse}
+                    sidebarInfos={sidebarInfos} />
+                : <DesktopCourseDetailsPage
+                    userId={userId}
+                    courseDetails={courseDetails}
+                    currentColor={color}
+                    handlePlayCourse={handlePlayCourse}
+                    sidebarInfos={sidebarInfos} />)}
+        </>
+    );
 };
 
 export default CourseDetailsPage;

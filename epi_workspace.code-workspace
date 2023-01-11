@@ -1,10 +1,12 @@
 {
     "folders": [
         {
-            "path": "."
+            "name": "packages",
+            "path": "packages"
         },
         {
-            "path": "packages"
+            "name": "epistogram",
+            "path": "."
         }
     ],
     "settings": {
@@ -14,6 +16,7 @@
             "**/node_modules": true,
             "node_modules": true,
         },
-        "typescript.tsdk": "epistogram\\node_modules\\typescript\\lib"
+        "typescript.tsdk": "epistogram\\node_modules\\typescript\\lib",
+        "git.ignoreLimitWarning": true
     }
 }

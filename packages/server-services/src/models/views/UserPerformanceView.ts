@@ -1,7 +1,5 @@
-import { XViewColumn } from '@episto/x-orm';
+import { XViewColumn } from '@thinkhub/x-orm';
 import { Id } from '@episto/commontypes';
-
-
 
 export class UserPerformanceView {
 
@@ -10,6 +8,15 @@ export class UserPerformanceView {
 
     @XViewColumn()
     courseId: Id<'Course'>;
+
+    @XViewColumn()
+    givenAnswerCount: number;
+
+    @XViewColumn()
+    summarizedMaxScore: number;
+
+    @XViewColumn()
+    summarizedScore: number;
 
     @XViewColumn()
     performancePercentage: number;

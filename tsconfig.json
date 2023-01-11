@@ -18,5 +18,9 @@
     "lib": [
       "ESNext"
     ]
-  }
+  },
+  "exclude": [
+    "node_modules",
+    "tests"
+  ],
 }

@@ -8,10 +8,9 @@ import { ArrayBuilder } from '../../../static/frontendHelpers';
 import { useRouteParams2 } from '../../../static/locationHelpers';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoRoutes } from '../../universal/EpistoRoutes';
-import { AdminEditUserSubpage } from './AdminEditUserSubpage';
-import { AdminUserCoursesSubpage } from './adminUserCoursesSubpage/AdminUserCoursesSubpage';
-import { AdminUserStatisticsSubpage } from './AdminUserLearningOverviewSubpage';
-import { AdminUserTeacherInfoSubpage } from './AdminUserTeacherInfoSubpage';
+import { AdminEditUserSubpage } from './addEditUser/AdminEditUserSubpage';
+import { AdminUserStatisticsSubpage } from './adminUserStatisticsSubpage/UserStatisticsSubpage';
+import { AdminUserTeacherInfoSubpage } from './teacherInfoSubpage/AdminUserTeacherInfoSubpage';
 
 export const UserDetailsRootView = ({
     refetchUsers,
@@ -36,9 +35,8 @@ export const UserDetailsRootView = ({
 
     const menuRoutes = new ArrayBuilder()
         .addMany([
-            applicationRoutes.administrationRoute.usersRoute.userRoute.editRoute,
             applicationRoutes.administrationRoute.usersRoute.userRoute.statsRoute,
-            applicationRoutes.administrationRoute.usersRoute.userRoute.courseContentRoute
+            applicationRoutes.administrationRoute.usersRoute.userRoute.editRoute,
         ])
         .addIf(userIsTeacher, applicationRoutes.administrationRoute.usersRoute.userRoute.teacherInfoRoute)
         .getArray();
@@ -49,8 +47,7 @@ export const UserDetailsRootView = ({
             icon: <EpistoIcons.Close />,
             action: () => navigate3(
                 applicationRoutes.administrationRoute.usersRoute, {
-                params: { activeCompanyId },
-                query: { preset: undefined }
+                params: { activeCompanyId }
             })
         }
     ];
@@ -62,6 +59,13 @@ export const UserDetailsRootView = ({
             <EpistoRoutes
                 renderRoutes={[
                     {
+                        route: usersAdminRoute.userRoute.statsRoute,
+                        element: <AdminUserStatisticsSubpage
+                            headerButtons={headerButtons}
+                            tabMenuItems={menuRoutes}
+                            userId={userId} />
+                    },
+                    {
                         route: usersAdminRoute.userRoute.editRoute,
                         element: <AdminEditUserSubpage
                             headerButtons={headerButtons}
@@ -72,22 +76,8 @@ export const UserDetailsRootView = ({
                             userId={userId} />
                     },
                     {
-                        route: usersAdminRoute.userRoute.statsRoute,
-                        element: <AdminUserStatisticsSubpage
-                            headerButtons={headerButtons}
-                            tabMenuItems={menuRoutes}
-                            userId={userId} />
-                    },
-                    {
                         route: usersAdminRoute.userRoute.teacherInfoRoute,
                         element: <AdminUserTeacherInfoSubpage
-                            headerButtons={headerButtons}
-                            tabMenuItems={menuRoutes}
-                            userId={userId} />
-                    },
-                    {
-                        route: usersAdminRoute.userRoute.courseContentRoute,
-                        element: <AdminUserCoursesSubpage
                             headerButtons={headerButtons}
                             tabMenuItems={menuRoutes}
                             userId={userId} />

@@ -1,4 +1,4 @@
-import { IXCookieOptions } from "@episto/x-gateway";
+import { IXCookieOptions } from "@thinkhub/x-gateway";
 
 export class CookieOptionProvider {
 

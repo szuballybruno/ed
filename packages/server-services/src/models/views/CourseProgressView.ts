@@ -1,5 +1,4 @@
-import { XViewColumn } from '@episto/x-orm';
-import { CourseStageNameType } from '@episto/commontypes';
+import { XViewColumn } from '@thinkhub/x-orm';
 import { Id } from '@episto/commontypes';
 
 export class CourseProgressView {
@@ -11,6 +10,9 @@ export class CourseProgressView {
     courseId: Id<'Course'>;
 
     @XViewColumn()
+    courseTitle: string;
+
+    @XViewColumn()
     totalCourseItemCount: number;
 
     @XViewColumn()
@@ -20,11 +22,8 @@ export class CourseProgressView {
     progressPercentage: number;
 
     @XViewColumn()
-    courseTitle: string;
-
-    @XViewColumn()
     currentItemCode: string;
 
     @XViewColumn()
-    currentStageName: CourseStageNameType;
+    currentStageName: string;
 }

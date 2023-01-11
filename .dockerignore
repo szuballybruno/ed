@@ -1,5 +1,12 @@
-.git
-.github
-.vscode
-node_modules
+**/.git
+**/.github
+**/.vscode
 **/node_modules/
+**/scripts
+**/.gitignore
+**/.gitattributes
+**/yarn.lock
+**/dist
+**/build
+**/cache
+**/*.Dockerfile

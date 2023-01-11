@@ -1,15 +1,23 @@
-import { XViewColumn } from '@episto/x-orm';
+import { XViewColumn } from '@thinkhub/x-orm';
 import { Id } from '@episto/commontypes';
-
 
 export class PretestResultView {
 
-	@XViewColumn()
-	userId: Id<'User'>;
+    @XViewColumn()
+    userId: Id<'User'>;
 
-	@XViewColumn()
-	courseId: Id<'Course'>;
+    @XViewColumn()
+    answerSessionId: Id<'AnswerSession'>;
 
-	@XViewColumn()
-	scorePercentage: number;
+    @XViewColumn()
+    examVersionId: Id<'ExamVersion'>;
+
+    @XViewColumn()
+    courseId: Id<'Course'>;
+
+    @XViewColumn()
+    scorePercentage: number;
+
+    @XViewColumn()
+    completionDate: Date;
 }

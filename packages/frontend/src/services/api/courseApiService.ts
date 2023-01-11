@@ -1,18 +1,5 @@
-import { CourseAdminListItemDTO, GreetingsDataDTO } from '@episto/communication';
-import { CourseContentAdminDTO } from '@episto/communication';
-import { SaveCourseContentDTO } from '@episto/communication';
-import { AvailableCourseDTO } from '@episto/communication';
-import { CourseBriefData } from '@episto/communication';
-import { CourseCategoryDTO } from '@episto/communication';
-import { CourseDetailsDTO } from '@episto/communication';
-import { CourseDetailsEditDataDTO } from '@episto/communication';
-import { CoursePermissionAssignDTO } from '@episto/communication';
-import { CourseStartDTO } from '@episto/communication';
-import { CreateCourseDTO } from '@episto/communication';
-import { IdResultDTO } from '@episto/communication';
-import { apiRoutes } from '@episto/communication';
-import { CourseModeType } from '@episto/commontypes';
-import { Id } from '@episto/commontypes';
+import { CourseModeType, Id } from '@episto/commontypes';
+import { apiRoutes, AvailableCourseDTO, CourseBriefData, CourseCategoryDTO, CourseContentAdminDTO, CourseDetailsDTO, CourseDetailsEditDataDTO, CoursePermissionAssignDTO, CourseStartDTO, CreateCourseDTO, GreetingsDataDTO, IdResultDTO, SaveCourseContentDTO } from '@episto/communication';
 import { QueryService } from '../../static/XQuery/XQueryReact';
 import { usePostDataUnsafe, usePostMultipartDataUnsafe } from '../core/httpClient';
 
@@ -22,19 +9,6 @@ const usePermissionAssignCourses = (userId: Id<'User'>) => {
 
     return {
         permissionAssignCourses: qr.data ?? [],
-    };
-};
-
-const useAdminCourseList = (companyId: Id<'Company'>, isEnabled?: boolean) => {
-
-    const qr = QueryService
-        .useXQueryArrayParametrized(CourseAdminListItemDTO, apiRoutes.course.getAdminCourseList, { companyId }, isEnabled);
-
-    return {
-        courses: qr.data ?? [],
-        coursesError: qr.error,
-        coursesStatus: qr.state,
-        refetchCoursesAsync: qr.refetch
     };
 };
 
@@ -201,7 +175,6 @@ const useGreetingData = (courseId: Id<'Course'>) => {
 export const CourseApiService = {
     useStartCourse,
     usePermissionAssignCourses,
-    useAdminCourseList,
     useSetCourseMode,
     useCourseDetailsEditData,
     useCourseContentAdminData,

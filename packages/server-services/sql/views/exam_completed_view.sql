@@ -4,10 +4,10 @@ SELECT
 	mv.course_version_id,
 	ed.is_final is_final_exam,
 	ed.order_index order_index,
-	SUM (asv.is_completed::int) completed_session_count,
+	SUM (asv.is_completed::int)::int completed_session_count,
 	SUM (asv.is_completed::int) > 0 has_completed_session,
 	
-	SUM (asv.is_successful::int) successful_session_count,
+	SUM (asv.is_successful::int)::int successful_session_count,
 	SUM (asv.is_successful::int) > 0 has_successful_session,
 	
 	SUM (asv.is_successful::int) = 1 single_successful_session

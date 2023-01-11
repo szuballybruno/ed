@@ -3,9 +3,9 @@ import { UserEditSaveDTO } from '@episto/communication';
 import { UserEditSimpleDTO } from '@episto/communication';
 import { apiRoutes } from '@episto/communication';
 import { Id } from '@episto/commontypes';
-import { IXGatewayServiceProvider } from '@episto/x-gateway';
+import { IXGatewayServiceProvider } from '@thinkhub/x-gateway';
 import { ActionParams } from '../helpers/ActionParams';
-import { XControllerAction } from '@episto/x-gateway';
+import { XControllerAction } from '@thinkhub/x-gateway';
 import { IController } from '../interfaces/IController';
 
 export class UserController implements IController<UserController> {
@@ -15,21 +15,6 @@ export class UserController implements IController<UserController> {
     constructor(serviceProvider: IXGatewayServiceProvider) {
 
         this._userService = serviceProvider.getService(UserService);
-    }
-
-    @XControllerAction(apiRoutes.user.getAdminUsersList)
-    getUserOverviewStatsAction(params: ActionParams) {
-
-        const isToBeReviewed = params
-            .getQuery<{ isToBeReviewed: boolean }>()
-            .getValue(x => x.isToBeReviewed, 'boolean');
-
-        const companyId = params
-            .getQuery<{ companyId?: Id<'Company'> }>()
-            .getValueOrNull(x => x.companyId, 'int') ?? null;
-
-        return this._userService
-            .getUserAdminListAsync(params.principalId, isToBeReviewed, companyId);
     }
 
     @XControllerAction(apiRoutes.user.deleteUser, { isPost: true })
@@ -95,16 +80,5 @@ export class UserController implements IController<UserController> {
 
         return this._userService
             .getBriefUserDataAsync(params.principalId, userId);
-    }
-
-    @XControllerAction(apiRoutes.user.saveUserCourses, { isPost: true })
-    async saveUserCoursesAsync(params: ActionParams) {
-
-        const data = params
-            .getFromParameterized(apiRoutes.user.saveUserCourses);
-
-        await this
-            ._userService
-            .saveUserCoursesAsync(data.body.getValue(x => x.userId, 'int'), data.body.getValue(x => x.mutations, 'any[]'));
     }
 }
