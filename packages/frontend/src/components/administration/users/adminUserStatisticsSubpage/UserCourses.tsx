@@ -97,7 +97,7 @@ export const UserCourses = ({
                 <EpistoSwitch
                     checked={editModeEnabled}
                     setChecked={setEditModeEnabled}
-                    label={editModeEnabled ? 'Disable editing' : 'Enable editing'} />
+                    label={`Szerkesztés mód: ${editModeEnabled ? 'bekapcsolva' : 'kikapcsolva'}`} />
 
                 {editModeEnabled && <EpistoButton
                     onClick={handleSaveUserCourses}>
