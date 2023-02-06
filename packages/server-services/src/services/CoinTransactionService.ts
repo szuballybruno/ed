@@ -60,7 +60,9 @@ export class CoinTransactionService {
             .where('userId', '=', 'userId')
             .getSingle();
 
-        return coinBalance.coinBalance;
+        return {
+            coinBalance: coinBalance.coinBalance
+        };
     }
 
     async giftCoinsToUserAsync(
