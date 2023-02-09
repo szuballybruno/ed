@@ -851,6 +851,7 @@ const marray = [
                     warnings,
                     videoLength: view.videoLength,
                     videoAudioText: view.videoAudioText,
+                    videoDescription: view.videoDescription,
                     itemType: view.itemType as CourseItemType,
                     questionMutations: [],
                     answerMutations: [],

@@ -9,5 +9,5 @@ echo "dump_path_abs: ${dump_path_abs}"
     -dbhost 'localhost' `
     -dbport '5432' `
     -dbuser 'dev_service_user' `
-    -dbname 'localhostDB' `
+    -dbname 'epistogram_local' `
     -dbdumppath "$dump_path/sql/database-backup.sql"

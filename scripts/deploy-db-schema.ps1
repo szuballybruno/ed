@@ -15,7 +15,7 @@ $xmigen_run_prod_script = "${xmigen_path}/scripts/run_migen_prod.ps1"
 
 # run script 
 & $xmigen_run_prod_script `
-    -dbname localhostDB `
+    -dbname epistogram_local `
     -dbhost host.docker.internal `
     -dbusername dev_service_user `
     -dbport 5432 `

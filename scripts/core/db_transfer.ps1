@@ -12,7 +12,7 @@ param (
 )
 
 # backup db
-./db_dump.ps1 `
+& $PSScriptRoot/db_dump.ps1 `
     -dbpass $src_pass `
     -dbhost $src_host `
     -dbport $src_port `
@@ -21,7 +21,7 @@ param (
     -dbdumppath './transferdump.sql'
 
 # recreate schema
-./db_exec_inline.ps1 `
+& $PSScriptRoot/db_exec_inline.ps1 `
     -dbpass $dest_pass `
     -dbhost $dest_host `
     -dbport $dest_port `
@@ -30,7 +30,7 @@ param (
     -script 'DROP SCHEMA IF EXISTS public CASCADE; CREATE SCHEMA IF NOT EXISTS public;'
 
 # restore db
-./db_exec.ps1 `
+& $PSScriptRoot/db_exec.ps1 `
     -dbpass $dest_pass `
     -dbhost $dest_host `
     -dbport $dest_port `

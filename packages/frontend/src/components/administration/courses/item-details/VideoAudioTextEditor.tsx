@@ -1,33 +1,55 @@
 import { Box } from '@chakra-ui/layout';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { translatableTexts } from '../../../../static/translatableTexts';
 import { EpistoEntry } from '../../../controls/EpistoEntry';
 import { EpistoLabel } from '../../../controls/EpistoLabel';
 
-export const useVideoAudioTextEditorLogic = ({
-    defaultText
+export const useVideoTextsEditorLogic = ({
+    initialAudioText,
+    initialDescription
 }: {
-    defaultText: string
+    initialAudioText: string,
+    initialDescription: string
 }) => {
 
-    const [audioText, setAudioText] = useState(defaultText);
+    const [audioText, setAudioText] = useState(initialAudioText);
+    const [description, setDescription] = useState(initialDescription);
 
-    useEffect(() => setAudioText(defaultText), [defaultText]);
+    useEffect(() => setAudioText(initialAudioText), [initialAudioText]);
+    useEffect(() => setDescription(initialDescription), [initialDescription]);
+
+    const isChanged = useMemo(() => {
+
+        if (audioText !== initialAudioText)
+            return true;
+
+        if (description !== initialDescription)
+            return true;
+
+        return false;
+    }, [audioText, description, initialAudioText, initialDescription]);
 
     return {
         audioText,
-        setAudioText
+        setAudioText,
+        description,
+        setDescription,
+        isChanged
     };
 };
 
-export type VideoAudioTextEditorLogicType = ReturnType<typeof useVideoAudioTextEditorLogic>;
+export type VideoTextsEditorLogicType = ReturnType<typeof useVideoTextsEditorLogic>;
 
 export const VideoAudioTextEditor = ({
-    logic
+    logic: {
+        audioText,
+        setAudioText,
+        description,
+        setDescription
+    }
 }: {
-    logic: VideoAudioTextEditorLogicType
+    logic: VideoTextsEditorLogicType
 }) => {
-
-    const { audioText, setAudioText } = logic;
 
     return (
         <>
@@ -39,9 +61,10 @@ export const VideoAudioTextEditor = ({
                 width="100%"
                 mt="10px">
 
+                {/* video audio text */}
                 <EpistoLabel
                     isOverline
-                    text="Video audio text">
+                    text={translatableTexts.administration.courseContentSubpage.video.videoAudioTextTitle}>
 
                     <EpistoEntry
                         style={{
@@ -51,6 +74,21 @@ export const VideoAudioTextEditor = ({
                         isMultiline
                         value={audioText}
                         setValue={setAudioText} />
+                </EpistoLabel>
+
+                {/* vidoe description */}
+                <EpistoLabel
+                    isOverline
+                    text={translatableTexts.administration.courseContentSubpage.video.videoDescriptionTitle}>
+
+                    <EpistoEntry
+                        style={{
+                            width: '100%'
+                        }}
+                        height="100%"
+                        isMultiline
+                        value={description}
+                        setValue={setDescription} />
                 </EpistoLabel>
             </Box>
         </>

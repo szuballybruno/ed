@@ -178,7 +178,7 @@ export class CourseItemService {
                 }),
                 overrideDataProps: (data, mutation) => {
 
-                    const { itemOrderIndex, itemTitle, itemSubtitle, videoAudioText } = XMutatorHelpers
+                    const { itemOrderIndex, itemTitle, itemSubtitle, videoAudioText, videoDescription } = XMutatorHelpers
                         .mapMutationToPartialObject(mutation);
 
                     if (itemOrderIndex !== undefined)
@@ -192,6 +192,9 @@ export class CourseItemService {
 
                     if (videoAudioText)
                         data.audioText = videoAudioText;
+
+                    if (videoDescription)
+                        data.description = videoDescription;
 
                     return data;
                 },

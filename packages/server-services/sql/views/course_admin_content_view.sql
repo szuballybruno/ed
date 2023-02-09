@@ -97,7 +97,8 @@ SELECT
 		CASE WHEN civ.item_type = 'video' AND vd.video_file_length_seconds > 480 
 			THEN 'video_too_long' END) warnings,
 	vd.video_file_length_seconds video_length,
-	vd.audio_text video_audio_text
+	vd.audio_text video_audio_text,
+	vd.description video_description
 FROM public.latest_course_version_view lcvv
 
 LEFT JOIN public.course_item_view civ

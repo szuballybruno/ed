@@ -11,4 +11,4 @@ echo "GCP 'postgres' password: $env:GCP_POSTGRES_USER_PASSWORD"
     -dest_host 'localhost' `
     -dest_port '5432' `
     -dest_user 'dev_service_user' `
-    -dest_name 'localhostDB'
+    -dest_name 'epistogram_local'

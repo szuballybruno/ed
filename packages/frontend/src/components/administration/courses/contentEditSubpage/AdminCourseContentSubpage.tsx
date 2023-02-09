@@ -24,22 +24,15 @@ import { FileSelector } from '../../../universal/fileSelector/FileSelector';
 import { SelectedFileDataType, useFileSelectorLogic } from '../../../universal/fileSelector/FileSelectorLogic';
 import { AdminSubpageHeader } from '../../AdminSubpageHeader';
 import { CourseAdministartionFrame } from '../CourseAdministartionFrame';
+import { CurrentItemDetailEditParamsType } from '../item-details/CurrentItemDetailEditParamsType';
 import { ExamDetails } from '../item-details/ExamDetails';
-import { ItemEditDialogParams } from '../item-details/ItemEditDialogTypes';
-import { VideoDetails } from '../item-details/VideoDetails';
+import { VideoDetails, VideoEditorCallbackDataType } from '../item-details/VideoDetails';
 import { ModuleEditDialog } from '../moduleEdit/ModuleEditDialog';
 import { useModuleEditDialogLogic } from '../moduleEdit/ModuleEditDialogLogic';
-import { AnswerMutationsType, QuestionMutationsType } from '../questionsEditGrid/QuestionEditGridTypes';
 import { AddNewItemPopper } from './AddNewItemPopper';
 import { useGridColumns } from './AdminCourseContentSubpageColumns';
 import { mapToRowSchema, RowSchema } from './AdminCourseContentSubpageLogic';
 import { VideoUploadProgressNotification } from './VideoUploadProgressNotification';
-
-export type CallbackParamsType = {
-    questionMutations: QuestionMutationsType;
-    answerMutations: AnswerMutationsType;
-    videoAudioText?: string;
-};
 
 export const AdminCourseContentSubpage = () => {
 
@@ -113,7 +106,7 @@ export const AdminCourseContentSubpage = () => {
     useSetBusy(CourseApiService.useSaveCourseContentData, saveCourseDataState);
     useSetBusy(CourseApiService.useCourseContentAdminData, courseContentAdminDataState);
 
-    const [currentItem, setCurrentItem] = useState<ItemEditDialogParams | null>(null);
+    const [currentItem, setCurrentItem] = useState<CurrentItemDetailEditParamsType | null>(null);
     const isDetailsPaneOpen = useMemo(() => !!currentItem, [currentItem]);
     const currentVersionCode = currentItem?.versionCode ?? null;
 
@@ -124,8 +117,9 @@ export const AdminCourseContentSubpage = () => {
     const callback = useCallback(({
         questionMutations,
         answerMutations,
-        videoAudioText
-    }: CallbackParamsType) => {
+        videoAudioText,
+        videoDescription
+    }: VideoEditorCallbackDataType) => {
 
         if (!currentItem)
             return;
@@ -155,6 +149,14 @@ export const AdminCourseContentSubpage = () => {
                     key: versionCode,
                     field: 'videoAudioText',
                     newValue: videoAudioText
+                });
+
+        if (videoDescription)
+            itemsMutatorFunctions
+                .mutate({
+                    key: versionCode,
+                    field: 'videoDescription',
+                    newValue: videoDescription
                 });
     }, [itemsMutatorFunctions, currentItem]);
 
@@ -262,7 +264,7 @@ export const AdminCourseContentSubpage = () => {
         // open exam 
         if (type === 'exam') {
 
-            const params: ItemEditDialogParams = {
+            const params: CurrentItemDetailEditParamsType = {
                 isVideo,
                 itemVersionId: isVideo ? data.videoVersionId! : data.examVersionId!,
                 versionCode: data.versionCode,
@@ -270,6 +272,8 @@ export const AdminCourseContentSubpage = () => {
                 answerMutations: data.answerMutations,
                 defaultModuleId,
                 modules,
+                videoDescription: null,
+                videoAudioText: null,
                 examType: data.itemType === 'pretest'
                     ? 'pretest'
                     : data.itemType === 'final'
@@ -283,13 +287,15 @@ export const AdminCourseContentSubpage = () => {
         // open video 
         else if (type === 'video') {
 
-            const params: ItemEditDialogParams = {
+            const params: CurrentItemDetailEditParamsType = {
                 isVideo,
                 itemVersionId: isVideo ? data.videoVersionId! : data.examVersionId!,
                 versionCode: data.versionCode,
                 questionMutations: data.questionMutations,
                 answerMutations: data.answerMutations,
                 videoAudioText: data.videoAudioText,
+                videoDescription: data.videoDescription,
+                examType: null,
                 defaultModuleId,
                 modules
             };
@@ -352,7 +358,8 @@ export const AdminCourseContentSubpage = () => {
             videoLength: 0,
             questionMutations: [],
             answerMutations: [],
-            videoAudioText: ''
+            videoAudioText: '',
+            videoDescription: ''
         };
 
         itemsMutatorFunctions
@@ -535,6 +542,7 @@ export const AdminCourseContentSubpage = () => {
                                 modules={modules}
                                 questionMutations={currentItem.questionMutations}
                                 videoAudioText={currentItem.videoAudioText!}
+                                videoDescription={currentItem.videoDescription!}
                                 videoVersionId={currentItem.itemVersionId as Id<'VideoVersion'>}
                                 cancelEdit={() => setCurrentItem(null)} />}
 
