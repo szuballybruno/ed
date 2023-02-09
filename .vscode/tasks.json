@@ -31,6 +31,15 @@
         },
         {
             "type": "shell",
+            "label": "build-server-api",
+            "command": "yarn build-server-api",
+            "problemMatcher": [],
+            "presentation": {
+                "group": "build"
+            }
+        },
+        {
+            "type": "shell",
             "label": "build-x-core",
             "command": "yarn build",
             "problemMatcher": [],
@@ -52,11 +61,11 @@
         },
         {
             "type": "shell",
-            "label": "build-comm",
+            "label": "build-communication",
             "command": "yarn build-comm",
             "problemMatcher": [],
             "presentation": {
-                "group": "run"
+                "group": "build"
             }
         },
         {

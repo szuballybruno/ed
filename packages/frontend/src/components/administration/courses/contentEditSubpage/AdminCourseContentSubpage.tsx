@@ -26,20 +26,13 @@ import { AdminSubpageHeader } from '../../AdminSubpageHeader';
 import { CourseAdministartionFrame } from '../CourseAdministartionFrame';
 import { CurrentItemDetailEditParamsType } from '../item-details/CurrentItemDetailEditParamsType';
 import { ExamDetails } from '../item-details/ExamDetails';
-import { VideoDetails } from '../item-details/VideoDetails';
+import { VideoDetails, VideoEditorCallbackDataType } from '../item-details/VideoDetails';
 import { ModuleEditDialog } from '../moduleEdit/ModuleEditDialog';
 import { useModuleEditDialogLogic } from '../moduleEdit/ModuleEditDialogLogic';
-import { AnswerMutationsType, QuestionMutationsType } from '../questionsEditGrid/QuestionEditGridTypes';
 import { AddNewItemPopper } from './AddNewItemPopper';
 import { useGridColumns } from './AdminCourseContentSubpageColumns';
 import { mapToRowSchema, RowSchema } from './AdminCourseContentSubpageLogic';
 import { VideoUploadProgressNotification } from './VideoUploadProgressNotification';
-
-export type CallbackParamsType = {
-    questionMutations: QuestionMutationsType;
-    answerMutations: AnswerMutationsType;
-    videoAudioText?: string;
-};
 
 export const AdminCourseContentSubpage = () => {
 
@@ -124,8 +117,9 @@ export const AdminCourseContentSubpage = () => {
     const callback = useCallback(({
         questionMutations,
         answerMutations,
-        videoAudioText
-    }: CallbackParamsType) => {
+        videoAudioText,
+        videoDescription
+    }: VideoEditorCallbackDataType) => {
 
         if (!currentItem)
             return;
@@ -155,6 +149,14 @@ export const AdminCourseContentSubpage = () => {
                     key: versionCode,
                     field: 'videoAudioText',
                     newValue: videoAudioText
+                });
+
+        if (videoDescription)
+            itemsMutatorFunctions
+                .mutate({
+                    key: versionCode,
+                    field: 'videoDescription',
+                    newValue: videoDescription
                 });
     }, [itemsMutatorFunctions, currentItem]);
 

@@ -1,5 +1,5 @@
 import { Box } from '@chakra-ui/layout';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { translatableTexts } from '../../../../static/translatableTexts';
 import { EpistoEntry } from '../../../controls/EpistoEntry';
 import { EpistoLabel } from '../../../controls/EpistoLabel';
@@ -16,13 +16,25 @@ export const useVideoTextsEditorLogic = ({
     const [description, setDescription] = useState(initialDescription);
 
     useEffect(() => setAudioText(initialAudioText), [initialAudioText]);
-    useEffect(() => setAudioText(initialDescription), [initialDescription]);
+    useEffect(() => setDescription(initialDescription), [initialDescription]);
+
+    const isChanged = useMemo(() => {
+
+        if (audioText !== initialAudioText)
+            return true;
+
+        if (description !== initialDescription)
+            return true;
+
+        return false;
+    }, [audioText, description, initialAudioText, initialDescription]);
 
     return {
         audioText,
         setAudioText,
         description,
-        setDescription
+        setDescription,
+        isChanged
     };
 };
 

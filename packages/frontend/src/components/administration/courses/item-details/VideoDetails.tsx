@@ -13,7 +13,8 @@ import { AdminVideoStatisticsModalPage } from './VideoStats';
 export type VideoEditorCallbackDataType = {
     questionMutations: QuestionMutationsType,
     answerMutations: AnswerMutationsType,
-    videoAudioText?: string
+    videoAudioText?: string,
+    videoDescription?: string
 }
 
 export const VideoDetails = ({
@@ -66,13 +67,15 @@ export const VideoDetails = ({
         callback({
             questionMutations: videoEditorLogic.questionMutations,
             answerMutations: videoEditorLogic.answerMutations,
-            videoAudioText: audioTextEditorLogic.audioText
+            videoAudioText: audioTextEditorLogic.audioText,
+            videoDescription: audioTextEditorLogic.description
         });
     }, [
         callback,
         videoEditorLogic.questionMutations,
         videoEditorLogic.answerMutations,
-        audioTextEditorLogic.audioText
+        audioTextEditorLogic.audioText,
+        audioTextEditorLogic.description
     ]);
 
     const isChanged = useMemo(() => {
@@ -83,17 +86,16 @@ export const VideoDetails = ({
         if (videoEditorLogic.answerMutations !== answerMutations)
             return true;
 
-        if (audioTextEditorLogic.audioText !== videoAudioText)
+        if (audioTextEditorLogic.isChanged)
             return true;
 
         return false;
     }, [
         videoEditorLogic.questionMutations,
         videoEditorLogic.answerMutations,
-        audioTextEditorLogic.audioText,
         questionMutations,
         answerMutations,
-        videoAudioText
+        audioTextEditorLogic.isChanged
     ]);
 
     const pages = courseItemEditData
