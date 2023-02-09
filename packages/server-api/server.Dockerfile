@@ -5,7 +5,7 @@ FROM localhost:6000/monodeps:latest as server-builder
 WORKDIR /app
 
 # build
-RUN yarn build-server
+RUN yarn build-server-api
 
 #
 # runner
