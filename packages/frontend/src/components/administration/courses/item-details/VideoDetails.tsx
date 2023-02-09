@@ -6,7 +6,7 @@ import { ArrayBuilder, usePaging } from '../../../../static/frontendHelpers';
 import { EditDialogSubpage } from '../EditDialogBase';
 import { AnswerMutationsType, QuestionMutationsType } from '../questionsEditGrid/QuestionEditGridTypes';
 import { DetailsLayout } from './DetailsLayout';
-import { useVideoAudioTextEditorLogic, VideoAudioTextEditor } from './VideoAudioTextEditor';
+import { useVideoTextsEditorLogic, VideoAudioTextEditor } from './VideoAudioTextEditor';
 import { useVideoEditorLogic, VideoEditor } from './VideoEditor';
 import { AdminVideoStatisticsModalPage } from './VideoStats';
 
@@ -23,6 +23,7 @@ export const VideoDetails = ({
     questionMutations,
     answerMutations,
     videoAudioText,
+    videoDescription,
     callback,
     cancelEdit
 }: {
@@ -32,6 +33,7 @@ export const VideoDetails = ({
     questionMutations: QuestionMutationsType,
     answerMutations: AnswerMutationsType,
     videoAudioText: string,
+    videoDescription: string,
     callback: (data: VideoEditorCallbackDataType) => void,
     cancelEdit: () => void
 }) => {
@@ -54,8 +56,9 @@ export const VideoDetails = ({
         videoVersionId
     });
 
-    const audioTextEditorLogic = useVideoAudioTextEditorLogic({
-        defaultText: videoAudioText ?? ''
+    const audioTextEditorLogic = useVideoTextsEditorLogic({
+        initialAudioText: videoAudioText ?? '',
+        initialDescription: videoDescription ?? ''
     });
 
     const handleOk = useCallback(() => {

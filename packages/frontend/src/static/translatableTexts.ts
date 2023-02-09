@@ -1,11 +1,13 @@
 import { huTranslation } from './translations/hu';
-import { TranslationType } from './types/TranslationType';
+import { ITranslation } from './types/ITranslation';
 
-const translations: TranslationType[] = [
+type TranslationSchema = (typeof huTranslation)['data'];
+
+const translations: ITranslation<TranslationSchema>[] = [
     huTranslation
 ];
 
-const instatiateTranslation = (code: string): TranslationType['data'] => {
+const instatiateTranslation = (code: string): TranslationSchema => {
 
     const trans = translations.filter(x => x.languageCode === code)[0];
     if (!trans)

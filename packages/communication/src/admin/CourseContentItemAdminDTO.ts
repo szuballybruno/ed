@@ -20,6 +20,7 @@ export class CourseContentItemAdminDTO {
 	warnings: CourseContentItemIssueDTO[];
 	videoLength: number;
 	videoAudioText: string;
+	videoDescription: string;
 	itemType: CourseItemType;
 	questionMutations: Mutation<QuestionEditDataReadDTO, 'questionVersionId'>[];
 	answerMutations: Mutation<AnswerEditDTO, 'answerVersionId'>[];
