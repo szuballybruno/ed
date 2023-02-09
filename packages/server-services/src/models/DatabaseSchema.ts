@@ -9,26 +9,22 @@ import { ExamVersion } from './tables/ExamVersion';
 import { CourseVersion } from './tables/CourseVersion';
 import { Company } from './tables/Company';
 import { GivenAnswer } from './tables/GivenAnswer';
-import { User } from './tables/User';
 import { QuestionData } from './tables/QuestionData';
 import { AnswerSession } from './tables/AnswerSession';
 import { ExamCompletion } from './tables/ExamCompletion';
 import { Exam } from './tables/Exam';
 import { ActivityStreak } from './tables/ActivityStreak';
 import { Activity } from './tables/Activity';
+import { User } from './tables/User';
 import { CourseCompletion } from './tables/CourseCompletion';
 import { RoleAssignmentBridge } from './tables/RoleAssignmentBridge';
-import { PermissionAssignmentBridge } from './tables/PermissionAssignmentBridge';
 import { RolePermissionBridge } from './tables/RolePermissionBridge';
 import { Course } from './tables/Course';
 import { Comment } from './tables/Comment';
-import { Role } from './tables/Role';
 import { CourseData } from './tables/CourseData';
 import { VideoPlaybackSample } from './tables/VideoPlaybackSample';
 import { Permission } from './tables/Permission';
-import { VideoData } from './tables/VideoData';
 import { Module } from './tables/Module';
-import { UserCourseBridge } from './tables/UserCourseBridge';
 import { StorageFile } from './tables/StorageFile';
 import { ModuleData } from './tables/ModuleData';
 import { AnswerVersion } from './tables/AnswerVersion';
@@ -74,268 +70,272 @@ import { CourseAccessBridge } from './tables/CourseAccessBridge';
 import { VideoCompletion } from './tables/VideoCompletion';
 import { UserVideoProgressBridge } from './tables/UserVideoProgressBridge';
 import { Video } from './tables/Video';
-import { CoinTransaction } from './tables/CoinTransaction';
 import { CourseItemCompletion } from './tables/CourseItemCompletion';
 import { PrequizAnswer } from './tables/PrequizAnswer';
 import { VideoSeekEvent } from './tables/VideoSeekEvent';
 import { CourseCategory } from './tables/CourseCategory';
 import { TempomatAdjustmentValue } from './tables/TempomatAdjustmentValue';
+import { CoinTransaction } from './tables/CoinTransaction';
+import { PermissionAssignmentBridge } from './tables/PermissionAssignmentBridge';
+import { Role } from './tables/Role';
+import { UserCourseBridge } from './tables/UserCourseBridge';
+import { VideoData } from './tables/VideoData';
 import { ActivationCodeListView } from './views/ActivationCodeListView';
 import { ActivityStreakView } from './views/ActivityStreakView';
-import { CourseItemCompletionView } from './views/CourseItemCompletionView';
-import { ExamScoreView } from './views/ExamScoreView';
-import { AnswerSessionView } from './views/AnswerSessionView';
-import { AnswerSessionEvaluationView } from './views/AnswerSessionEvaluationView';
-import { CompanyPermissionView } from './views/CompanyPermissionView';
-import { CourseCompletionView } from './views/CourseCompletionView';
-import { LatestCourseVersionView } from './views/LatestCourseVersionView';
-import { SignupCompletedView } from './views/SignupCompletedView';
-import { UserPermissionView } from './views/UserPermissionView';
-import { AdminCourseCarouselDataView } from './views/AdminCourseCarouselDataView';
-import { CompletedCourseExamCountView } from './views/CompletedCourseExamCountView';
-import { CompletedCourseVideoCountView } from './views/CompletedCourseVideoCountView';
-import { CourseItemView } from './views/CourseItemView';
-import { CourseExamCountView } from './views/CourseExamCountView';
-import { CourseItemCountView } from './views/CourseItemCountView';
-import { CourseSpentTimeView } from './views/CourseSpentTimeView';
-import { CourseVideoCountView } from './views/CourseVideoCountView';
-import { LatestAnswerSessionView } from './views/LatestAnswerSessionView';
-import { LatestExamView } from './views/LatestExamView';
-import { FinalExamScoreView } from './views/FinalExamScoreView';
-import { ModuleLastExamView } from './views/ModuleLastExamView';
-import { ModuleLastExamScoreView } from './views/ModuleLastExamScoreView';
-import { UserCourseProgressActualView } from './views/UserCourseProgressActualView';
-import { AdminCourseUserStatsView } from './views/AdminCourseUserStatsView';
-import { CompletedCourseItemCountView } from './views/CompletedCourseItemCountView';
-import { CourseQuestionsSuccessView } from './views/CourseQuestionsSuccessView';
-import { CurrentUserCourseBridgeView } from './views/CurrentUserCourseBridgeView';
-import { CourseStateView } from './views/CourseStateView';
-import { TempomatCalculationDataView } from './views/TempomatCalculationDataView';
-import { UserModulePerformanceView } from './views/UserModulePerformanceView';
-import { UserPerformanceView } from './views/UserPerformanceView';
-import { UserPractiseRecommendationView } from './views/UserPractiseRecommendationView';
-import { AdminUserCourseView } from './views/AdminUserCourseView';
-import { UserSessionView } from './views/UserSessionView';
-import { AdminUserListView } from './views/AdminUserListView';
-import { AnswerSessionGroupView } from './views/AnswerSessionGroupView';
-import { AssignablePermissionView } from './views/AssignablePermissionView';
-import { UserRoleView } from './views/UserRoleView';
-import { AssignableRoleView } from './views/AssignableRoleView';
-import { CourseVideoLengthView } from './views/CourseVideoLengthView';
-import { AvailableCourseView } from './views/AvailableCourseView';
 import { CoinAcquirePerCourseView } from './views/CoinAcquirePerCourseView';
 import { CoinBalanceView } from './views/CoinBalanceView';
-import { ShopItemStatefulView } from './views/ShopItemStatefulView';
-import { CoinTransactionView } from './views/CoinTransactionView';
 import { CommentListView } from './views/CommentListView';
-import { CompanyAssociatedCoursesView } from './views/CompanyAssociatedCoursesView';
-import { CompanyView } from './views/CompanyView';
-import { CompletedModuleItemCountView } from './views/CompletedModuleItemCountView';
+import { CompanyPermissionView } from './views/CompanyPermissionView';
 import { ConstantValuesView } from './views/ConstantValuesView';
-import { CorrectAnswerRatesSplitView } from './views/CorrectAnswerRatesSplitView';
-import { CourseAdminContentView } from './views/CourseAdminContentView';
-import { CourseAdminDetailedView } from './views/CourseAdminDetailedView';
 import { CourseCompanyBridgeView } from './views/CourseCompanyBridgeView';
-import { CourseAdminListView } from './views/CourseAdminListView';
-import { ExamHighestScoreAnswerSessionView } from './views/ExamHighestScoreAnswerSessionView';
-import { PlaylistView } from './views/PlaylistView';
-import { UserPlaylistView } from './views/UserPlaylistView';
-import { CourseAllItemsCompletedView } from './views/CourseAllItemsCompletedView';
-import { CourseDetailsView } from './views/CourseDetailsView';
-import { CourseItemEditView } from './views/CourseItemEditView';
-import { CourseLearningStatsView } from './views/CourseLearningStatsView';
-import { CourseLengthEstimationView } from './views/CourseLengthEstimationView';
+import { CourseCompletionView } from './views/CourseCompletionView';
+import { CourseItemCompletionView } from './views/CourseItemCompletionView';
 import { CourseModuleOverviewView } from './views/CourseModuleOverviewView';
-import { CourseOverviewView } from './views/CourseOverviewView';
-import { CourseProgressView } from './views/CourseProgressView';
+import { CourseQuestionsSuccessView } from './views/CourseQuestionsSuccessView';
 import { CourseRatingQuestionView } from './views/CourseRatingQuestionView';
 import { CourseShopItemListView } from './views/CourseShopItemListView';
-import { CoursesProgressListView } from './views/CoursesProgressListView';
-import { DailyTipView } from './views/DailyTipView';
-import { ExamCompletedView } from './views/ExamCompletedView';
-import { ExamPlayerDataView } from './views/ExamPlayerDataView';
-import { ExamResultStatsView } from './views/ExamResultStatsView';
-import { ExamResultView } from './views/ExamResultView';
+import { CourseVideoLengthView } from './views/CourseVideoLengthView';
+import { CurrentUserCourseBridgeView } from './views/CurrentUserCourseBridgeView';
+import { ExamScoreView } from './views/ExamScoreView';
 import { ExamVersionView } from './views/ExamVersionView';
 import { GivenAnswerView } from './views/GivenAnswerView';
-import { HomePageStatsView } from './views/HomePageStatsView';
-import { LatestExamResultView } from './views/LatestExamResultView';
+import { LatestAnswerSessionView } from './views/LatestAnswerSessionView';
+import { LatestCourseVersionView } from './views/LatestCourseVersionView';
+import { LatestExamView } from './views/LatestExamView';
 import { LatestGivenAnswerView } from './views/LatestGivenAnswerView';
 import { LatestVideoView } from './views/LatestVideoView';
 import { LeaderboardView } from './views/LeaderboardView';
-import { PersonalityTraitView } from './views/PersonalityTraitView';
 import { ModuleEditView } from './views/ModuleEditView';
-import { ModuleItemCountView } from './views/ModuleItemCountView';
 import { ModulePlayerView } from './views/ModulePlayerView';
 import { PersonalityTraitCategoryView } from './views/PersonalityTraitCategoryView';
+import { PersonalityTraitView } from './views/PersonalityTraitView';
 import { PractiseQuestionInfoView } from './views/PractiseQuestionInfoView';
 import { PractiseQuestionView } from './views/PractiseQuestionView';
 import { PrequizQuestionView } from './views/PrequizQuestionView';
-import { PretestResultView } from './views/PretestResultView';
 import { QuestionDataView } from './views/QuestionDataView';
 import { QuestionModuleCompareView } from './views/QuestionModuleCompareView';
-import { RoleListView } from './views/RoleListView';
 import { SchemaVersionView } from './views/SchemaVersionView';
+import { ShopItemStatefulView } from './views/ShopItemStatefulView';
 import { ShopItemView } from './views/ShopItemView';
 import { SignupQuestionView } from './views/SignupQuestionView';
-import { UserPrequizAnswersView } from './views/UserPrequizAnswersView';
-import { TempomatTargetDateDataView } from './views/TempomatTargetDateDataView';
-import { UserActiveCourseView } from './views/UserActiveCourseView';
-import { UserAnswerView } from './views/UserAnswerView';
 import { UserAssignedAuthItemView } from './views/UserAssignedAuthItemView';
 import { UserCourseBridgeView } from './views/UserCourseBridgeView';
-import { UserCourseCompletionCurrentView } from './views/UserCourseCompletionCurrentView';
-import { UserDailyCourseItemProgressView } from './views/UserDailyCourseItemProgressView';
-import { UserDailyProgressView } from './views/UserDailyProgressView';
-import { UserInactiveCourseView } from './views/UserInactiveCourseView';
-import { UserEngagementView } from './views/UserEngagementView';
-import { UserExamStatsView } from './views/UserExamStatsView';
-import { UserLatestActivityView } from './views/UserLatestActivityView';
-import { UserSessionBlockView } from './views/UserSessionBlockView';
-import { UserLearningOverviewStatsView } from './views/UserLearningOverviewStatsView';
-import { UserLearningPageStatsView } from './views/UserLearningPageStatsView';
-import { UserModuleStatsView } from './views/UserModuleStatsView';
-import { UserRoleAssignCompanyView } from './views/UserRoleAssignCompanyView';
-import { UserSessionDailyView } from './views/UserSessionDailyView';
-import { UserSpentTimeRatioView } from './views/UserSpentTimeRatioView';
-import { VideoPlaybackSampleView } from './views/VideoPlaybackSampleView';
-import { UserVideoPlaybackSecondsView } from './views/UserVideoPlaybackSecondsView';
-import { UserVideoPractiseProgressView } from './views/UserVideoPractiseProgressView';
-import { UserVideoStatsView } from './views/UserVideoStatsView';
-import { UserWeeklyCourseItemProgressView } from './views/UserWeeklyCourseItemProgressView';
+import { UserModulePerformanceView } from './views/UserModulePerformanceView';
+import { UserPractiseRecommendationView } from './views/UserPractiseRecommendationView';
+import { UserPrequizAnswersView } from './views/UserPrequizAnswersView';
+import { UserRoleView } from './views/UserRoleView';
+import { UserSessionView } from './views/UserSessionView';
 import { VideoCursorSecondsView } from './views/VideoCursorSecondsView';
+import { VideoPlaybackSampleView } from './views/VideoPlaybackSampleView';
 import { VideoPlayerDataView } from './views/VideoPlayerDataView';
 import { VideoVersionView } from './views/VideoVersionView';
+import { CoinTransactionView } from './views/CoinTransactionView';
+import { CompanyAssociatedCoursesView } from './views/CompanyAssociatedCoursesView';
+import { CompletedCourseExamCountView } from './views/CompletedCourseExamCountView';
+import { CompletedCourseItemCountView } from './views/CompletedCourseItemCountView';
+import { CompletedCourseVideoCountView } from './views/CompletedCourseVideoCountView';
+import { CompletedModuleItemCountView } from './views/CompletedModuleItemCountView';
+import { CourseAdminDetailedView } from './views/CourseAdminDetailedView';
+import { CourseItemView } from './views/CourseItemView';
+import { CourseExamCountView } from './views/CourseExamCountView';
+import { CourseItemCountView } from './views/CourseItemCountView';
+import { CourseItemEditView } from './views/CourseItemEditView';
+import { CourseLengthEstimationView } from './views/CourseLengthEstimationView';
+import { CourseVideoCountView } from './views/CourseVideoCountView';
+import { DailyTipView } from './views/DailyTipView';
+import { ExamHighestScoreAnswerSessionView } from './views/ExamHighestScoreAnswerSessionView';
+import { ModuleLastExamView } from './views/ModuleLastExamView';
+import { UserLatestActivityView } from './views/UserLatestActivityView';
+import { UserPerformanceView } from './views/UserPerformanceView';
+import { UserSessionBlockView } from './views/UserSessionBlockView';
+import { UserSessionDailyView } from './views/UserSessionDailyView';
+import { UserVideoPlaybackSecondsView } from './views/UserVideoPlaybackSecondsView';
+import { UserVideoPractiseProgressView } from './views/UserVideoPractiseProgressView';
+import { AnswerSessionView } from './views/AnswerSessionView';
+import { AnswerSessionEvaluationView } from './views/AnswerSessionEvaluationView';
+import { AnswerSessionGroupView } from './views/AnswerSessionGroupView';
+import { CorrectAnswerRatesSplitView } from './views/CorrectAnswerRatesSplitView';
+import { ExamCompletedView } from './views/ExamCompletedView';
+import { UserAnswerView } from './views/UserAnswerView';
+import { UserDailyProgressView } from './views/UserDailyProgressView';
+import { UserExamStatsView } from './views/UserExamStatsView';
+import { CourseAdminContentView } from './views/CourseAdminContentView';
+import { CourseSpentTimeView } from './views/CourseSpentTimeView';
+import { UserSpentTimeRatioView } from './views/UserSpentTimeRatioView';
+import { CourseStateView } from './views/CourseStateView';
+import { ModuleItemCountView } from './views/ModuleItemCountView';
+import { PlaylistView } from './views/PlaylistView';
+import { SignupCompletedView } from './views/SignupCompletedView';
+import { TempomatCalculationDataView } from './views/TempomatCalculationDataView';
+import { UserActiveCourseView } from './views/UserActiveCourseView';
+import { UserCourseCompletionCurrentView } from './views/UserCourseCompletionCurrentView';
+import { UserCourseProgressActualView } from './views/UserCourseProgressActualView';
+import { CourseProgressView } from './views/CourseProgressView';
+import { UserDailyCourseItemProgressView } from './views/UserDailyCourseItemProgressView';
+import { UserWeeklyCourseItemProgressView } from './views/UserWeeklyCourseItemProgressView';
+import { UserInactiveCourseView } from './views/UserInactiveCourseView';
+import { UserEngagementView } from './views/UserEngagementView';
+import { CourseAdminListView } from './views/CourseAdminListView';
+import { ExamPlayerDataView } from './views/ExamPlayerDataView';
+import { ExamResultStatsView } from './views/ExamResultStatsView';
+import { ExamResultView } from './views/ExamResultView';
+import { LatestExamResultView } from './views/LatestExamResultView';
+import { FinalExamScoreView } from './views/FinalExamScoreView';
+import { HomePageStatsView } from './views/HomePageStatsView';
+import { ModuleLastExamScoreView } from './views/ModuleLastExamScoreView';
+import { PretestResultView } from './views/PretestResultView';
+import { TempomatTargetDateDataView } from './views/TempomatTargetDateDataView';
+import { UserLearningPageStatsView } from './views/UserLearningPageStatsView';
+import { UserPermissionView } from './views/UserPermissionView';
+import { AssignablePermissionView } from './views/AssignablePermissionView';
+import { CompanyView } from './views/CompanyView';
+import { RoleListView } from './views/RoleListView';
+import { UserRoleAssignCompanyView } from './views/UserRoleAssignCompanyView';
+import { AssignableRoleView } from './views/AssignableRoleView';
+import { AdminCourseCarouselDataView } from './views/AdminCourseCarouselDataView';
+import { AdminUserListView } from './views/AdminUserListView';
+import { CourseDetailsView } from './views/CourseDetailsView';
+import { UserPlaylistView } from './views/UserPlaylistView';
+import { CourseAllItemsCompletedView } from './views/CourseAllItemsCompletedView';
+import { AvailableCourseView } from './views/AvailableCourseView';
+import { CoursesProgressListView } from './views/CoursesProgressListView';
+import { UserModuleStatsView } from './views/UserModuleStatsView';
+import { UserVideoStatsView } from './views/UserVideoStatsView';
+import { UserLearningOverviewStatsView } from './views/UserLearningOverviewStatsView';
+import { AdminCourseUserStatsView } from './views/AdminCourseUserStatsView';
+import { CourseLearningStatsView } from './views/CourseLearningStatsView';
+import { CourseOverviewView } from './views/CourseOverviewView';
+import { AdminUserCourseView } from './views/AdminUserCourseView';
 
 export const databaseSchema: XDBMSchemaService = {
 
     views: [
         ActivationCodeListView,
         ActivityStreakView,
-        CourseItemCompletionView,
-        ExamScoreView,
-        AnswerSessionView,
-        AnswerSessionEvaluationView,
-        CompanyPermissionView,
-        CourseCompletionView,
-        LatestCourseVersionView,
-        SignupCompletedView,
-        UserPermissionView,
-        AdminCourseCarouselDataView,
-        CompletedCourseExamCountView,
-        CompletedCourseVideoCountView,
-        CourseItemView,
-        CourseExamCountView,
-        CourseItemCountView,
-        CourseSpentTimeView,
-        CourseVideoCountView,
-        LatestAnswerSessionView,
-        LatestExamView,
-        FinalExamScoreView,
-        ModuleLastExamView,
-        ModuleLastExamScoreView,
-        UserCourseProgressActualView,
-        AdminCourseUserStatsView,
-        CompletedCourseItemCountView,
-        CourseQuestionsSuccessView,
-        CurrentUserCourseBridgeView,
-        CourseStateView,
-        TempomatCalculationDataView,
-        UserModulePerformanceView,
-        UserPerformanceView,
-        UserPractiseRecommendationView,
-        AdminUserCourseView,
-        UserSessionView,
-        AdminUserListView,
-        AnswerSessionGroupView,
-        AssignablePermissionView,
-        UserRoleView,
-        AssignableRoleView,
-        CourseVideoLengthView,
-        AvailableCourseView,
         CoinAcquirePerCourseView,
         CoinBalanceView,
-        ShopItemStatefulView,
-        CoinTransactionView,
         CommentListView,
-        CompanyAssociatedCoursesView,
-        CompanyView,
-        CompletedModuleItemCountView,
+        CompanyPermissionView,
         ConstantValuesView,
-        CorrectAnswerRatesSplitView,
-        CourseAdminContentView,
-        CourseAdminDetailedView,
         CourseCompanyBridgeView,
-        CourseAdminListView,
-        ExamHighestScoreAnswerSessionView,
-        PlaylistView,
-        UserPlaylistView,
-        CourseAllItemsCompletedView,
-        CourseDetailsView,
-        CourseItemEditView,
-        CourseLearningStatsView,
-        CourseLengthEstimationView,
+        CourseCompletionView,
+        CourseItemCompletionView,
         CourseModuleOverviewView,
-        CourseOverviewView,
-        CourseProgressView,
+        CourseQuestionsSuccessView,
         CourseRatingQuestionView,
         CourseShopItemListView,
-        CoursesProgressListView,
-        DailyTipView,
-        ExamCompletedView,
-        ExamPlayerDataView,
-        ExamResultStatsView,
-        ExamResultView,
+        CourseVideoLengthView,
+        CurrentUserCourseBridgeView,
+        ExamScoreView,
         ExamVersionView,
         GivenAnswerView,
-        HomePageStatsView,
-        LatestExamResultView,
+        LatestAnswerSessionView,
+        LatestCourseVersionView,
+        LatestExamView,
         LatestGivenAnswerView,
         LatestVideoView,
         LeaderboardView,
-        PersonalityTraitView,
         ModuleEditView,
-        ModuleItemCountView,
         ModulePlayerView,
         PersonalityTraitCategoryView,
+        PersonalityTraitView,
         PractiseQuestionInfoView,
         PractiseQuestionView,
         PrequizQuestionView,
-        PretestResultView,
         QuestionDataView,
         QuestionModuleCompareView,
-        RoleListView,
         SchemaVersionView,
+        ShopItemStatefulView,
         ShopItemView,
         SignupQuestionView,
-        UserPrequizAnswersView,
-        TempomatTargetDateDataView,
-        UserActiveCourseView,
-        UserAnswerView,
         UserAssignedAuthItemView,
         UserCourseBridgeView,
-        UserCourseCompletionCurrentView,
-        UserDailyCourseItemProgressView,
-        UserDailyProgressView,
-        UserInactiveCourseView,
-        UserEngagementView,
-        UserExamStatsView,
-        UserLatestActivityView,
-        UserSessionBlockView,
-        UserLearningOverviewStatsView,
-        UserLearningPageStatsView,
-        UserModuleStatsView,
-        UserRoleAssignCompanyView,
-        UserSessionDailyView,
-        UserSpentTimeRatioView,
+        UserModulePerformanceView,
+        UserPractiseRecommendationView,
+        UserPrequizAnswersView,
+        UserRoleView,
+        UserSessionView,
+        VideoCursorSecondsView,
         VideoPlaybackSampleView,
+        VideoPlayerDataView,
+        VideoVersionView,
+        CoinTransactionView,
+        CompanyAssociatedCoursesView,
+        CompletedCourseExamCountView,
+        CompletedCourseItemCountView,
+        CompletedCourseVideoCountView,
+        CompletedModuleItemCountView,
+        CourseAdminDetailedView,
+        CourseItemView,
+        CourseExamCountView,
+        CourseItemCountView,
+        CourseItemEditView,
+        CourseLengthEstimationView,
+        CourseVideoCountView,
+        DailyTipView,
+        ExamHighestScoreAnswerSessionView,
+        ModuleLastExamView,
+        UserLatestActivityView,
+        UserPerformanceView,
+        UserSessionBlockView,
+        UserSessionDailyView,
         UserVideoPlaybackSecondsView,
         UserVideoPractiseProgressView,
-        UserVideoStatsView,
+        AnswerSessionView,
+        AnswerSessionEvaluationView,
+        AnswerSessionGroupView,
+        CorrectAnswerRatesSplitView,
+        ExamCompletedView,
+        UserAnswerView,
+        UserDailyProgressView,
+        UserExamStatsView,
+        CourseAdminContentView,
+        CourseSpentTimeView,
+        UserSpentTimeRatioView,
+        CourseStateView,
+        ModuleItemCountView,
+        PlaylistView,
+        SignupCompletedView,
+        TempomatCalculationDataView,
+        UserActiveCourseView,
+        UserCourseCompletionCurrentView,
+        UserCourseProgressActualView,
+        CourseProgressView,
+        UserDailyCourseItemProgressView,
         UserWeeklyCourseItemProgressView,
-        VideoCursorSecondsView,
-        VideoPlayerDataView,
-        VideoVersionView
+        UserInactiveCourseView,
+        UserEngagementView,
+        CourseAdminListView,
+        ExamPlayerDataView,
+        ExamResultStatsView,
+        ExamResultView,
+        LatestExamResultView,
+        FinalExamScoreView,
+        HomePageStatsView,
+        ModuleLastExamScoreView,
+        PretestResultView,
+        TempomatTargetDateDataView,
+        UserLearningPageStatsView,
+        UserPermissionView,
+        AssignablePermissionView,
+        CompanyView,
+        RoleListView,
+        UserRoleAssignCompanyView,
+        AssignableRoleView,
+        AdminCourseCarouselDataView,
+        AdminUserListView,
+        CourseDetailsView,
+        UserPlaylistView,
+        CourseAllItemsCompletedView,
+        AvailableCourseView,
+        CoursesProgressListView,
+        UserModuleStatsView,
+        UserVideoStatsView,
+        UserLearningOverviewStatsView,
+        AdminCourseUserStatsView,
+        CourseLearningStatsView,
+        CourseOverviewView,
+        AdminUserCourseView
     ],
 
     entities: [
@@ -349,26 +349,22 @@ export const databaseSchema: XDBMSchemaService = {
         CourseVersion,
         Company,
         GivenAnswer,
-        User,
         QuestionData,
         AnswerSession,
         ExamCompletion,
         Exam,
         ActivityStreak,
         Activity,
+        User,
         CourseCompletion,
         RoleAssignmentBridge,
-        PermissionAssignmentBridge,
         RolePermissionBridge,
         Course,
         Comment,
-        Role,
         CourseData,
         VideoPlaybackSample,
         Permission,
-        VideoData,
         Module,
-        UserCourseBridge,
         StorageFile,
         ModuleData,
         AnswerVersion,
@@ -414,11 +410,15 @@ export const databaseSchema: XDBMSchemaService = {
         VideoCompletion,
         UserVideoProgressBridge,
         Video,
-        CoinTransaction,
         CourseItemCompletion,
         PrequizAnswer,
         VideoSeekEvent,
         CourseCategory,
-        TempomatAdjustmentValue
+        TempomatAdjustmentValue,
+        CoinTransaction,
+        PermissionAssignmentBridge,
+        Role,
+        UserCourseBridge,
+        VideoData
     ]
 }

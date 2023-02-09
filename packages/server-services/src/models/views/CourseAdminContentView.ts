@@ -50,4 +50,7 @@ export class CourseAdminContentView {
 
     @XViewColumn()
     videoAudioText: string;
+
+    @XViewColumn()
+    videoDescription: string;
 }
