@@ -79,14 +79,15 @@ export class UserStatsService {
      */
     async getAdminUserCoursesAsync(
         principalId: PrincipalId,
-        userId: Id<'User'>
+        userId: Id<'User'>,
+        loadAvailable: boolean
     ) {
 
         const views = await this
             ._ormService
-            .query(AdminUserCourseView, { userId })
+            .query(AdminUserCourseView, { userId, isAssigned: !loadAvailable })
             .where('userId', '=', 'userId')
-            .and('isAssigned', '=', 'true')
+            .and('isAssigned', '=', 'isAssigned')
             .getMany();
 
         const courseIds = views
@@ -96,11 +97,8 @@ export class UserStatsService {
             ._tempomatService
             .getTempomatCalculationDataViewsByCourseIdsAsync(courseIds, userId);
 
-        const tempomatValues = views
-            .map((userCourseData): TempomatDataModel => {
-
-                const tempomatCalculationData = tempomatCalcDataViews
-                    .single(x => x.courseId === userCourseData.courseId);
+        const tempomatValues = tempomatCalcDataViews
+            .map((tempomatCalculationData): TempomatDataModel => {
 
                 return this
                     ._tempomatService

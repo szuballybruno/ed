@@ -8,6 +8,7 @@
     "start-client-web": "yarn lerna run start --scope=@episto/frontend",
     "start-server-api": "lerna run start --scope=@episto/server-api",
     "build-server-api": "lerna run build --scope=@episto/server-api --include-dependencies",
+    "build-server-services": "lerna run build --scope=@episto/server-services --include-dependencies",
     "build-client-web": "lerna run build --scope=@episto/frontend --include-dependencies",
     "-----": "------",
     "build-tests-client": "lerna run build --scope=@episto/tests-client --include-dependencies",

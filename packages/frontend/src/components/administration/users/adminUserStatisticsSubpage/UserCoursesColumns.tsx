@@ -152,8 +152,8 @@ export const useUserCoursesColumns = ({
             width: 150,
             renderCell: ({ value, row: { tempoPercentage } }) => (
                 <TempoChip
-                    rating={value}
-                    value={tempoPercentage} />
+                    rating={value ?? 'average'}
+                    value={tempoPercentage ?? 0} />
             )
         })
         .add({

@@ -70,6 +70,15 @@
         },
         {
             "type": "shell",
+            "label": "build-server-services",
+            "command": "yarn build-server-services",
+            "problemMatcher": [],
+            "presentation": {
+                "group": "build"
+            }
+        },
+        {
+            "type": "shell",
             "label": "build-commtypes",
             "command": "yarn build-commtypes",
             "problemMatcher": [],

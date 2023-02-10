@@ -1,6 +1,6 @@
 import { instantiate } from '@episto/commonlogic';
 import { CourseItemStateType, CourseItemType, CourseRatingQuesitonType, CourseStageNameType, CourseVisibilityType, EventCodeType, GivenAnswerStateType, Id, LeaderboardPeriodType, PerformanceRatingType, PermissionCodeType, PermissionScopeType, TeacherBadgeNameType, TempoRatingType, UserActivityDistributionChartData, VersionCode } from '@episto/commontypes';
-import { ActivationCodeListDTO, AdminCourseCarouselDataDTO, AdminCourseUserStatsDTO, AnswerDTO, AnswerEditDTO, AvailableCourseDTO, CoinTransactionDTO, CommentListDTO, CompanyAssociatedCourseDTO, CompanyDTO, CompanyEditDataDTO, CompanyPublicDTO, CourseAdminListItemDTO, CourseBriefData, CourseCategoryDTO, CourseContentItemAdminDTO, CourseContentItemIssueDTO, CourseDetailsDTO, CourseDetailsEditDataDTO, CourseItemEditDTO, CourseLearningDTO, CourseOverviewDataDTO, CourseProgressShortDTO, CourseRatingGroupDTO, CourseRatingQuestionDTO, CourseShopItemListDTO, CourseStatDTO, DailyTipDTO, DailyTipEditDataDTO, DiscountCodeDTO, EventDTO, ExamPlayerDataDTO, ExamResultQuestionDTO, ExamResultsDTO, ExamStatsDTO, HomePageStatsDTO, LeaderboardListItemDTO, ModuleEditDTO, ModulePlayerDTO, PermissionListDTO, PersonalityTraitCategoryDTO, PersonalityTraitCategoryShortDTO, PlaylistItemDTO, PlaylistModuleDTO, PrequizAnswerDTO, PrequizQuestionDTO, PretestResultDTO, QuestionDTO, QuestionModuleCompareDTO, ResultAnswerDTO, RoleAdminListDTO, RoleDTO, ShopItemAdminShortDTO, ShopItemBriefData, ShopItemCategoryDTO, ShopItemDTO, ShopItemEditDTO, SignupAnswerDTO, SignupQuestionDTO, SurveyDataDTO, TaskDTO, TeacherInfoEditDTO, UserActiveCourseDTO, UserAdminListDTO, AdminUserCourseDTO, UserCourseStatsOverviewDTO, UserDTO, UserExamStatsDTO, UserLearningPageStatsDTO, UserModuleStatsDTO, UserProgressChartStep, UserStatisticsDTO, UserVideoStatsDTO, VideoPlayerDataDTO } from '@episto/communication';
+import { ActivationCodeListDTO, AdminCourseCarouselDataDTO, AdminCourseUserStatsDTO, AdminUserCourseDTO, AnswerDTO, AnswerEditDTO, AvailableCourseDTO, CoinTransactionDTO, CommentListDTO, CompanyAssociatedCourseDTO, CompanyDTO, CompanyEditDataDTO, CompanyPublicDTO, CourseAdminListItemDTO, CourseBriefData, CourseCategoryDTO, CourseContentItemAdminDTO, CourseContentItemIssueDTO, CourseDetailsDTO, CourseDetailsEditDataDTO, CourseItemEditDTO, CourseLearningDTO, CourseOverviewDataDTO, CourseProgressShortDTO, CourseRatingGroupDTO, CourseRatingQuestionDTO, CourseShopItemListDTO, CourseStatDTO, DailyTipDTO, DailyTipEditDataDTO, DiscountCodeDTO, EventDTO, ExamPlayerDataDTO, ExamResultQuestionDTO, ExamResultsDTO, ExamStatsDTO, HomePageStatsDTO, LeaderboardListItemDTO, ModuleEditDTO, ModulePlayerDTO, PermissionListDTO, PersonalityTraitCategoryDTO, PersonalityTraitCategoryShortDTO, PlaylistItemDTO, PlaylistModuleDTO, PrequizAnswerDTO, PrequizQuestionDTO, PretestResultDTO, QuestionDTO, QuestionModuleCompareDTO, ResultAnswerDTO, RoleAdminListDTO, RoleDTO, ShopItemAdminShortDTO, ShopItemBriefData, ShopItemCategoryDTO, ShopItemDTO, ShopItemEditDTO, SignupAnswerDTO, SignupQuestionDTO, SurveyDataDTO, TaskDTO, TeacherInfoEditDTO, UserActiveCourseDTO, UserAdminListDTO, UserCourseStatsOverviewDTO, UserDTO, UserExamStatsDTO, UserLearningPageStatsDTO, UserModuleStatsDTO, UserProgressChartStep, UserStatisticsDTO, UserVideoStatsDTO, VideoPlayerDataDTO } from '@episto/communication';
 import { Mutable, XMappingsBuilder } from '@thinkhub/x-mapper';
 import { TempomatDataAvgModel } from '../../models/misc/TempomatDataAvgModel';
 import { TempomatDataModel } from '../../models/misc/TempomatDataModel';
@@ -55,7 +55,6 @@ import { RoleListView } from '../../models/views/RoleListView';
 import { ShopItemStatefulView } from '../../models/views/ShopItemStatefulView';
 import { ShopItemView } from '../../models/views/ShopItemView';
 import { SignupQuestionView } from '../../models/views/SignupQuestionView';
-import { TempomatCalculationDataView } from '../../models/views/TempomatCalculationDataView';
 import { UserActiveCourseView } from '../../models/views/UserActiveCourseView';
 import { UserExamStatsView } from '../../models/views/UserExamStatsView';
 import { UserLearningOverviewStatsView } from '../../models/views/UserLearningOverviewStatsView';
@@ -266,14 +265,8 @@ const marray = [
             return adminUserCourseViews
                 .map((view, index) => {
 
-                    const {
-                        recommendedItemsPerWeek,
-                        estimatedCompletionDate: previsionedCompletionDate,
-                        userPerformancePercentage,
-                        tempomatMode,
-                        tempoRating
-                    } = tempomatValues
-                        .byIndex(index);
+                    const tempomatData = tempomatValues
+                        .firstOrNull(x => x.courseId === view.courseId);
 
                     return instantiate<AdminUserCourseDTO>({
                         userId: view.userId,
@@ -291,13 +284,15 @@ const marray = [
                         answeredPractiseQuestionCount: view.answeredPractiseQuestionCount,
                         isFinalExamCompleted: view.isFinalExamCompleted,
                         requiredCompletionDate: view.requiredCompletionDate,
-                        tempomatMode,
-                        tempoRating,
-                        tempoPercentage: userPerformancePercentage,
-                        recommendedItemsPerWeek: recommendedItemsPerWeek,
-                        previsionedCompletionDate: previsionedCompletionDate,
                         performancePercentage: view.performancePercentage,
-                        performanceRating: getPerformanceRating(view.performancePercentage)
+                        performanceRating: getPerformanceRating(view.performancePercentage),
+
+                        // tempomat
+                        tempomatMode: tempomatData?.tempomatMode ?? null,
+                        tempoRating: tempomatData?.tempoRating ?? null,
+                        tempoPercentage: tempomatData?.userPerformancePercentage ?? null,
+                        recommendedItemsPerWeek: tempomatData?.recommendedItemsPerWeek ?? null,
+                        previsionedCompletionDate: tempomatData?.estimatedCompletionDate ?? null,
                     });
                 });
         }),

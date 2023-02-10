@@ -16,13 +16,13 @@ export class AdminUserCourseDTO {
     answeredPractiseQuestionCount: number;
     isFinalExamCompleted: boolean;
     requiredCompletionDate: Date;
-    tempomatMode: TempomatModeType;
+    
+    // tempomat
     recommendedItemsPerWeek: number | null;
     previsionedCompletionDate: Date | null;
-    
-    // tempo
-    tempoPercentage: number;
-    tempoRating: TempoRatingType;
+    tempomatMode: TempomatModeType | null;
+    tempoPercentage: number | null;
+    tempoRating: TempoRatingType | null;
 
     // performance
     performanceRating: PerformanceRatingType;
