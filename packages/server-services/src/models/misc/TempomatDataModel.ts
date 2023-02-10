@@ -16,4 +16,5 @@ export type TempomatDataModel = {
     isStartedCourse: boolean;
     tempomatMode: TempomatModeType;
     tempoRating: TempoRatingType;
+    courseId: Id<'Course'>;
 }

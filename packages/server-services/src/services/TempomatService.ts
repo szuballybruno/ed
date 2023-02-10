@@ -201,17 +201,9 @@ export class TempomatService {
         currentDate,
         tempomatMode,
         totalCompletedItemCount,
-        userId
-    }: {
-        tempomatMode: TempomatModeType,
-        originalEstimatedCompletionDate: Date | null,
-        requiredCompletionDate: Date | null,
-        startDate: Date | null,
-        totalItemCount: number,
-        totalCompletedItemCount: number,
-        currentDate: Date,
-        userId: Id<'User'>
-    }): TempomatDataModel {
+        userId,
+        courseId
+    }: { currentDate: Date } & TempomatCalculationDataView): TempomatDataModel {
 
         try {
 
@@ -237,7 +229,8 @@ export class TempomatService {
                     recommendedPercentPerDay: 0,
                     isStartedCourse: false,
                     tempomatMode,
-                    tempoRating: 'average'
+                    tempoRating: 'average',
+                    courseId
                 });
             }
 
@@ -302,6 +295,7 @@ export class TempomatService {
                 recommendedPercentPerDay,
                 isStartedCourse: true,
                 tempomatMode,
+                courseId,
                 tempoRating: this
                     ._getTempoRating(userPerformancePercentage)
             });
