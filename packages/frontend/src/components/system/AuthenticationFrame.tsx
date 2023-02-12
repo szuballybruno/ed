@@ -3,7 +3,6 @@ import { AuthDataDTO, UserDTO } from '@episto/communication';
 import { createContext, useContext } from 'react';
 import { AuthenticationStateType, useAuthHandshake } from '../../services/api/authenticationApiService';
 import { PropsWithChildren } from '../../static/frontendHelpers';
-import { Logger } from '../../static/Logger';
 import { useEventManagerContext } from './EventManagerFrame';
 
 const userDefaults: UserDTO = {
@@ -57,9 +56,7 @@ export const AuthenticationFrame = ({ children }: PropsWithChildren) => {
     // start auth pooling
     const globalEventManager = useEventManagerContext();
     const authHanshakeState = useAuthHandshake(globalEventManager);
-    const { authData, authState } = authHanshakeState;
-
-    Logger.logScoped('AUTH', `Auth state is: '${authState}'...`, authData ?? 'undef');
+    const { authData } = authHanshakeState;
 
     return (
         <RefetchUserAsyncContext.Provider value={authHanshakeState}>

@@ -19,7 +19,7 @@ export const AuthFirewallFrame = ({ children }: PropsWithChildren): JSX.Element 
     /**
      * Check authentication 
      */
-    const authorizationResult = useMemo((): 'OK' | 'WAIT' | (() => void) => {
+    const authorizationResult = useMemo((): 'OK' | 'WAIT' | 'ERROR' | (() => void) => {
 
         const isCurrentRouteLogin = currentRoute
             .route
@@ -30,11 +30,18 @@ export const AuthFirewallFrame = ({ children }: PropsWithChildren): JSX.Element 
 
         Logger.logScoped('AUTH', `Current route: ${currentRoute.route.getAbsolutePath()} IsUnrestricted: ${isUnauthorized}`);
 
-        // error
-        if (authState === 'error' && !isCurrentRouteLogin) {
+        // unauthorized
+        if (authState === 'unauthorized' && !isCurrentRouteLogin) {
 
             Logger.logScoped('AUTH', `Auth state: ${authState}. Redirecting to login.`);
             return () => navigate2(loginRoute);
+        }
+
+        // error
+        if (authState === 'error' && !isCurrentRouteLogin) {
+
+            Logger.logScoped('AUTH', `Auth state: ${authState}. Returning error for page to handle...`);
+            return 'ERROR';
         }
 
         // if loading return blank page
@@ -88,6 +95,9 @@ export const AuthFirewallFrame = ({ children }: PropsWithChildren): JSX.Element 
         if (typeof authorizationResult === 'function')
             authorizationResult();
     }, [authorizationResult]);
+
+
+    Logger.logScoped('AUTH', `Auth frame computed result is: '${authorizationResult}'...`);
 
     /**
      * Render

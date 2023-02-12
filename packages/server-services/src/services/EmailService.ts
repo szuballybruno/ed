@@ -30,7 +30,7 @@ export class EmailService {
 
         const url = `${domain}/registration?token=${invitationToken}&isInvited=true`;
 
-        const epistoEmail = {
+        const epistoEmail: EpistoEmail = {
             to: userEmail,
             subject: 'Üdvözlünk az EpistoGram-ban!',
             template: {
@@ -41,7 +41,7 @@ export class EmailService {
                     registrationUrl: url
                 }
             }
-        } as EpistoEmail;
+        };
 
         await this.sendMailAsync(epistoEmail);
     };
@@ -163,9 +163,8 @@ export class EmailService {
                 ? email.to
                 : 'spengler.manfred@epistogram.com';
 
-            const rootParentPath = path.resolve(this._config.rootDirectory, '../')
-
-            const templatePath = `${rootParentPath}/emails/${email.template.name}.html`;
+            const emailFolderPath = `${this._config.rootDirectory}/../../server-services/emails`;
+            const templatePath = `${emailFolderPath}/${email.template.name}.html`;
             const templateHtml = readFileSync(templatePath, 'utf8');
             let replacedHtml = '' + templateHtml;
 
