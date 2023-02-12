@@ -34,10 +34,11 @@ await (async () => {
 
         const errorCallback = (data: GatewayErrorDataType) => {
 
-            const stack = getCleanerStack(data.errorin);
             const msg = `[${data.opts.controllerSignature.name}${data.req.path}] Failed, responding ${data.res.getCode()}!`
-            loggerService.logScoped('ERROR', `---------------- ${msg} ----------------`,);
-            loggerService.logScoped('ERROR', `${data.errorin.message}\n${stack}`);
+            loggerService.logScoped('ERROR', msg);
+            // const stack = getCleanerStack(data.errorin);
+            // loggerService.logScoped('ERROR', `---------------- ${msg} ----------------`,);
+            // loggerService.logScoped('ERROR', `${data.errorin.message}\n${stack}`);
         }
 
         const successCallback = (data: GatewaySuccessDataType) => {

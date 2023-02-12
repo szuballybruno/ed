@@ -41,60 +41,67 @@ export class AuthenticationService {
      */
     async establishAuthHandshakeAsync(refreshToken: string | null, companyId: Id<'Company'>) {
 
-        this._loggerService
-            .logScoped('GENERIC', 'Establishing auth handshake...');
+        try {
 
-        /**
+            this._loggerService
+                .logScoped('GENERIC', 'Establishing auth handshake...');
+
+            /**
          * Check and verify refresh token
          */
-        if (!refreshToken)
-            throw new ErrorWithCode('Refresh token not found!', 'forbidden');
+            if (!refreshToken)
+                throw new ErrorWithCode('Refresh token not found!', 'unauthorized');
 
-        const { userId } = this._tokenService
-            .verifyRefreshToken(refreshToken);
+            const { userId } = this._tokenService
+                .verifyRefreshToken(refreshToken);
 
-        /**
-         * Check user 
-         */
-        const currentUser = await this._userService
-            .getUserDTOById(userId);
+            /**
+             * Check user 
+             */
+            const currentUser = await this._userService
+                .getUserDTOById(userId);
 
-        if (!currentUser)
-            throw new Error('User not found by id.');
+            if (!currentUser)
+                throw new ErrorWithCode('User not found by id.', 'unauthorized');
 
-        /**
-         * Check user company
-         */
-        await this.authorizeUserByCompanyAsync(userId, companyId);
+            /**
+             * Check user company
+            */
+            await this.authorizeUserByCompanyAsync(userId, companyId);
 
-        /**
-         * Save activity
-         */
-        await this._userSessionActivityService
-            .saveUserSessionActivityAsync(currentUser.id, 'generic');
+            /**
+             * Save activity
+            */
+            await this._userSessionActivityService
+                .saveUserSessionActivityAsync(currentUser.id, 'generic');
 
-        /**
-         * Get user's permissions 
-         */
-        const permissions = await this._permissionService
-            .getPermissionMatrixAsync(userId, currentUser.companyId);
+            /**
+             * Get user's permissions 
+            */
+            const permissions = await this._permissionService
+                .getPermissionMatrixAsync(userId, currentUser.companyId);
 
-        /**
-         * Get new tokens for user 
-         */
-        const tokens = await this
-            ._renewUserSessionAsync(userId, refreshToken);
+            /**
+             * Get new tokens for user 
+             */
+            const tokens = await this
+                ._renewUserSessionAsync(userId, refreshToken);
 
-        const authData: AuthDataDTO = {
-            currentUser,
-            permissions
-        };
+            const authData: AuthDataDTO = {
+                currentUser,
+                permissions
+            };
 
-        return {
-            authData,
-            newAccessToken: tokens.accessToken,
-            newRefreshToken: tokens.refreshToken
-        };
+            return {
+                authData,
+                newAccessToken: tokens.accessToken,
+                newRefreshToken: tokens.refreshToken
+            };
+        }
+        catch (e) {
+
+            throw new ErrorWithCode('Handshake error.', 'unauthorized');
+        }
     }
 
     /**
@@ -166,7 +173,7 @@ export class AuthenticationService {
             : userIdOrUser as User;
 
         if (user.companyId !== companyId)
-            throw new ErrorWithCode('User company differs from provided comapny id!', 'forbidden');
+            throw new ErrorWithCode('User company differs from provided comapny id!', 'unauthorized');
     }
 
     async loginUserInternallyAsync(userId: Id<'User'>) {

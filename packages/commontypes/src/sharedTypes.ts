@@ -19,7 +19,8 @@ export type ErrorCodeType =
     'email_invalid' |
     'first_name_invalid' |
     'last_name_invalid' |
-    'username_invalid';
+    'username_invalid' |
+    'unauthorized';
 
 export type UserRegistrationStatusType = 'invited' | 'active';
 
