@@ -66,11 +66,11 @@ export const useAuthHandshake = (globalEventManager: GlobalEventManagerType) => 
         if (error?.code === 'forbidden')
             return 'forbidden';
 
-        if (isError)
-            return 'error';
-
         if (error && error?.code === 'unauthorized')
             return 'unauthorized';
+
+        if (isError)
+            return 'error';
 
         throw new Error('Something is not right...');
     })();
