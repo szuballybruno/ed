@@ -18,6 +18,15 @@ question_version_answer_counts AS
 		qv.video_version_id,
 		qv.exam_version_id
 ),
+latest_question_version AS
+(
+	SELECT 
+		qv.question_id,
+		MAX(qv.id) question_version_id
+	FROM public.question_version qv
+	
+	GROUP BY qv.question_id
+),
 questions AS 
 (
 	SELECT 
@@ -29,7 +38,10 @@ questions AS
 		qvac.correct_answer_count,
 		qvac.answer_count = 0 issue_answers_missing,
 		qvac.correct_answer_count = 0 issue_correct_answers_missing
-	FROM public.question_version qv 
+	FROM latest_question_version lqv
+	
+	LEFT JOIN public.question_version qv
+	ON qv.id = lqv.question_version_id
 
 	LEFT JOIN public.question_data qd
 	ON qd.id = qv.question_data_id
@@ -43,37 +55,38 @@ questions AS
 	LEFT JOIN question_version_answer_counts qvac
 	ON qvac.question_version_id = qv.id
 ),
+issues AS
+(
+	SELECT 
+		civ.video_version_id,
+		civ.exam_version_id,
+		COUNT(qs.question_version_id) question_count,
+		STRING_AGG(qs.question_text || CASE WHEN qs.issue_answers_missing THEN ': ans_miss' ELSE ': corr_ans_miss' END, CHR(10)) 
+			FILTER (WHERE qs.issue_answers_missing OR qs.issue_correct_answers_missing) question_issues,
+		COALESCE(SUM(qs.issue_answers_missing::int), 0) missing_answers_issues_count,
+		COALESCE(SUM(qs.issue_correct_answers_missing::int), 0) missing_correct_answers_count
+	FROM public.course_item_view civ
+
+	LEFT JOIN questions qs
+	ON qs.video_version_id = civ.video_version_id 
+	OR qs.exam_version_id = civ.exam_version_id
+
+	GROUP BY
+		civ.video_version_id,
+		civ.exam_version_id
+),
 items AS
 (
 	SELECT 
-		sq.video_version_id,
-		sq.exam_version_id,
-		sq.question_count,
-		sq.question_count = 0 issue_questions_missing,
-		sq.question_issues question_issues
-	FROM 
-	(
-		SELECT 
-			civ.video_version_id,
-			civ.exam_version_id,
-			COUNT(qs.question_version_id) question_count,
-			STRING_AGG(qs.question_text || CASE WHEN qs.issue_answers_missing THEN ': ans_miss' ELSE ': corr_ans_miss' END, CHR(10)) 
-				FILTER (WHERE qs.issue_answers_missing OR qs.issue_correct_answers_missing) question_issues,
-			COALESCE(SUM(qs.issue_answers_missing::int), 0) missing_answers_issues_count,
-			COALESCE(SUM(qs.issue_correct_answers_missing::int), 0) missing_correct_answers_count
-		FROM public.course_item_view civ
-		
-		LEFT JOIN questions qs
-		ON qs.video_version_id = civ.video_version_id 
-		OR qs.exam_version_id = civ.exam_version_id
-
-		GROUP BY
-			civ.video_version_id,
-			civ.exam_version_id
-	) sq
+		iss.video_version_id,
+		iss.exam_version_id,
+		iss.question_count,
+		iss.question_count = 0 issue_questions_missing,
+		iss.question_issues question_issues
+	FROM issues iss
 	
 	ORDER BY
-		sq.question_count DESC
+		iss.question_count DESC
 )
 SELECT 
 	lcvv.course_id,

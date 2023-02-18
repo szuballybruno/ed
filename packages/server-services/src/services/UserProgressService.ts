@@ -178,9 +178,16 @@ export class UserProgressService extends ServiceBase {
                     ? null
                     : (lastStep.actualCompletedPercentage ?? 0) + (actualProgressView?.progressPercentage ?? 0);
 
-                const previsionedCompletedPercentage = actualCompletedPercentage !== null
-                    ? actualCompletedPercentage
-                    : lastStep.previsionedCompletedPercentage + progressPercentageIncreaseInRange;
+                const previsionedCompletedPercentage = (() => {
+
+                    if (progressPercentageIncreaseInRange < 0)
+                        return 0;
+
+                    if (actualCompletedPercentage !== null)
+                        return actualCompletedPercentage;
+
+                    return lastStep.previsionedCompletedPercentage + progressPercentageIncreaseInRange
+                })()
 
                 const recommendedCompletedPercentage = actualCompletedPercentage !== null
                     ? actualCompletedPercentage
