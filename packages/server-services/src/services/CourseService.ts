@@ -341,7 +341,9 @@ export class CourseService {
                 .on('id', '=', 'courseDataId', CourseVersion))
             .where('courseId', '=', 'courseId')
             .getSingle();
-
+        console.log('isPre' + isPrecourseSurveyRequired);
+        console.log('title' + title);
+        console.log('courseId' + courseId);
         /**
          * Get first item playlist code 
          */
@@ -502,7 +504,7 @@ export class CourseService {
 
 
         await this._ormService
-            .softDelete(CourseData, [courseId]);
+            .softDelete(Course, [courseId]);
     }
 
     /**

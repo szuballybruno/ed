@@ -43,6 +43,7 @@ export class CompanyService {
         const companies = await this._ormService
             .query(CompanyView, { principalId })
             .where('userId', '=', 'principalId')
+            .and('isDeleted', '=', 'false')
             .getMany();
 
         return this._mapperService

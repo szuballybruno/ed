@@ -1,4 +1,5 @@
 import { Add } from '@mui/icons-material';
+import { Id } from '@thinkhub/x-core/dist/Id';
 import { memo } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { CompanyApiService } from '../../../services/api/CompanyApiService';
@@ -68,7 +69,7 @@ export const CompanyAdminIndexPage = memo(() => {
                             </EpistoButton>
 
                             <EpistoButton
-                                onClick={handleDeleteCompany}>
+                                onClick={() => handleDeleteCompany({ companyId: Id.read(company.id) })}>
                                 <EpistoIcons.Delete />
                             </EpistoButton>
                         </EpistoFlex2>
