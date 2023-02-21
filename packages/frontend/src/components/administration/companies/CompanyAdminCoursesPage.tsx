@@ -21,7 +21,7 @@ const useColumns = (mutatorFunctions: IXMutatorFunctions<CompanyAssociatedCourse
     return new EpistoDataGridColumnBuilder<RowType, Id<'Course'>>()
         .add({
             field: 'coverUrl',
-            headerName: 'Cover',
+            headerName: 'Borítókép',
             renderCell: ({ value }) => <EpistoImage
                 className="square70"
                 objectFit="contain"
@@ -29,12 +29,12 @@ const useColumns = (mutatorFunctions: IXMutatorFunctions<CompanyAssociatedCourse
         })
         .add({
             field: 'title',
-            headerName: 'Title',
+            headerName: 'Cím',
             width: 250
         })
         .add({
             field: 'isAssociated',
-            headerName: 'Associated?',
+            headerName: 'Hozzárendelt-e?',
             renderCell: ({ value, key }) => <EpistoCheckbox
                 setValue={value => mutatorFunctions
                     .mutate({
@@ -46,7 +46,7 @@ const useColumns = (mutatorFunctions: IXMutatorFunctions<CompanyAssociatedCourse
         })
         .add({
             field: 'isDefault',
-            headerName: 'Default?',
+            headerName: 'Alapértelmezett-e?',
             renderCell: ({ value, key }) => <EpistoCheckbox
                 setValue={value => mutatorFunctions
                     .mutate({

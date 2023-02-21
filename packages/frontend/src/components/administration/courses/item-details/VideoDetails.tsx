@@ -112,7 +112,7 @@ export const VideoDetails = ({
             .add({
                 content: () => <VideoAudioTextEditor
                     logic={audioTextEditorLogic} />,
-                title: 'Szoveg szerkesztese'
+                title: 'Szöveg szerkesztése'
             })
             .getArray()
         : [];

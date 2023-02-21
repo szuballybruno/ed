@@ -436,7 +436,7 @@ export const getApplicationRoutes = () => {
                     route: new EpistoRoute('/administration/:activeCompanyId/companies', '/:companyId/edit')
                 },
                 coursesRoute: {
-                    title: 'Ceg kurzusai',
+                    title: 'Cég kurzusai',
                     route: new EpistoRoute('/administration/:activeCompanyId/companies', '/:companyId/company-associated-courses')
                 }
             },
