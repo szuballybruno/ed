@@ -29,12 +29,14 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
         stageName,
         currentItemCode,
         startDate,
+        originalEstimatedCompletionDate
     }: {
         userId: Id<'User'>,
         courseId: Id<'Course'>,
         stageName: CourseStageNameType,
         currentItemCode: string | null,
         startDate: Date | null,
+        originalEstimatedCompletionDate: Date | null
     }) {
 
         /**
@@ -49,7 +51,7 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
                 creationDate: new Date(),
                 currentItemCode,
                 lastInteractionDate: new Date(),
-                originalEstimatedCompletionDate: null,
+                originalEstimatedCompletionDate: originalEstimatedCompletionDate,
                 requiredCompletionDate: null,
                 stageName,
                 startDate,

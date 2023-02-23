@@ -78,6 +78,7 @@ export const ModuleEditDialog = ({
                                 }));
                     }}
                     showFooter
+                    dragEnabled
                     columns={columns}
                     rows={rows}
                     getKey={x => x.moduleVersionId} />
