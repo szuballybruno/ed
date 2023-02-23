@@ -82,12 +82,24 @@ export class UserStatsService {
         userId: Id<'User'>,
         loadAvailable: boolean
     ) {
+        const isAssigned = !loadAvailable
+            ? true
+            : 0
+
+        //TODO: Refactor. This tricks the orm to show some courses or every course
+        const loadAll = !loadAvailable
+            ? '='
+            : '!='
+
+        const isAssignedOrCourseId = !loadAvailable
+            ? 'isAssigned'
+            : 'courseId'
 
         const views = await this
             ._ormService
-            .query(AdminUserCourseView, { userId, isAssigned: !loadAvailable })
+            .query(AdminUserCourseView, { userId, isAssigned })
             .where('userId', '=', 'userId')
-            .and('isAssigned', '=', 'isAssigned')
+            .and(isAssignedOrCourseId, loadAll, 'isAssigned')
             .getMany();
 
         const courseIds = views

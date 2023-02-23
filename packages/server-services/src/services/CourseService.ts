@@ -309,7 +309,10 @@ export class CourseService {
                     currentItemCode,
                     stageName,
                     userId: principalId.getId(),
-                    startDate: stageName === 'watch' ? new Date() : null
+                    startDate: stageName === 'watch' ? new Date() : null,
+                    originalEstimatedCompletionDate: new Date().addDays(45)
+                    // TODO: This is a hotfix for NO pretest/prequiz 
+                    // course start. This should be fixed in the future.
                 });
         }
 
@@ -341,9 +344,7 @@ export class CourseService {
                 .on('id', '=', 'courseDataId', CourseVersion))
             .where('courseId', '=', 'courseId')
             .getSingle();
-        console.log('isPre' + isPrecourseSurveyRequired);
-        console.log('title' + title);
-        console.log('courseId' + courseId);
+
         /**
          * Get first item playlist code 
          */
