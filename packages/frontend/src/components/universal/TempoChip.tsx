@@ -1,4 +1,4 @@
-import { TempoRatingType } from '@episto/commontypes';
+import { InvertedLagBehindRatingType, TempoRatingType } from '@episto/commontypes';
 import { PropsWithChildren, useMemo } from 'react';
 import { EpistoIcons } from '../../static/EpistoIcons';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
@@ -39,9 +39,9 @@ export const useUserTempoDisplayValues = (rating: TempoRatingType) => {
     }, [rating]);
 };
 
-export const TempoChip = ({ value, children, ...props }: { rating: TempoRatingType, value: number } & PropsWithChildren) => {
+export const TempoChip = ({ value, children, ...props }: { rating: InvertedLagBehindRatingType, value: number } & PropsWithChildren) => {
 
-    const rating: TempoRatingType = props.rating;
+    const rating: InvertedLagBehindRatingType = props.rating;
     const { color, text } = useUserTempoDisplayValues(rating);
     const showStar = rating === 'very_good' && !children;
 

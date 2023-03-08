@@ -29,7 +29,7 @@ export const apiRoutes = {
         healthcheck: '/misc/healthcheck',
         getHomePageDTO: '/misc/get-overview-page-dto',
         getCurrentCourseData: '/misc/get-current-course-data',
-        getCourseOverviewData: '/misc/get-course-overview-data' as ParametrizedRouteType<{ query: { userId?: Id<'User'>, courseId?: Id<'Course'> } }>,
+        getCourseOverviewData: '/misc/get-course-overview-data' as ParametrizedRouteType<{ query: { userId: Id<'User'> | null, courseId: Id<'Course'> | null } }>,
         getCourseOverviewModuleCompareData: '/misc/get-course-overview-module-compare-data' as ParametrizedRouteType<{ query: { userId?: Id<'User'>, courseId?: Id<'Course'> } }>,
         getActivationCodeList: '/misc/get-activation-code-list' as ParametrizedRouteType<{ query: { urlTemplate: string, companyId: Id<'Company'> } }>,
         generateActivationCodesPreview: '/misc/generate-activation-codes-preview' as ParametrizedRouteType<{ body: { count: number, prefix: string, companyId: Id<'Company'> } }>,
@@ -45,7 +45,8 @@ export const apiRoutes = {
     },
 
     permissions: {
-        getPermissions: '/permissions/get-permissions'
+        getPermissions: '/permissions/get-permissions',
+        checkPermission: '/permissions/check-permission'
     },
 
     companies: {
@@ -148,7 +149,7 @@ export const apiRoutes = {
         getCourseStatsCarouselData: '/adminstats/get-course-stats-carousel-data' as ParametrizedRouteType<{ query: { companyId: Id<'Company'> } }>,
         getAdminUserCourses: '/userstats/get-admin-user-courses' as ParametrizedRouteType<{ query: { userId: Id<'User'>, loadAvailable: boolean } }>,
         getAdminCourseUsers: '/userstats/get-admin-course-users' as ParametrizedRouteType<{ query: { courseId: Id<'Course'>, preset: CourseUserPresetType } }>,
-        getAdminUsersList: '/users/get-admin-user-list' as ParametrizedRouteType<{ query: { companyId: Id<'Company'> } }>,
+        getAdminUsersList: '/users/get-admin-user-list' as ParametrizedRouteType<{ query: { companyId: Id<'Company'>, isToBeReviewed: boolean } }>,
         saveUserCourses: '/users/save-user-courses' as ParametrizedRouteType<{ body: { mutations: Mutation<AdminUserCourseDTO, 'courseId'>[], userId: Id<'User'> } }>,
         getAdminCourseList: '/course/get-admin-course-list' as ParametrizedRouteType<{ query: { companyId: Id<'Company'> } }>,
     },
@@ -166,6 +167,7 @@ export const apiRoutes = {
     userProgress: {
         getUserProgressData: '/userprogress/get-user-progress-data' as ParametrizedRouteType<{ body: { courseId: Id<'CourseId'> } }>,
         getCourseProgressOverview: '/userprogress/get-course-progress-overview',
+        getRecommendedItemQuota: '/userprogress/get-recommended-item-quota',
         getActiveCourses: '/userprogress/get-active-courses'
     },
 

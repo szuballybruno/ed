@@ -1,8 +1,8 @@
-import { CourseUserPresetType } from "@episto/commontypes";
-import { AdminCourseCarouselDataDTO, AdminCourseUserStatsDTO, AdminUserCourseDTO, apiRoutes, CourseAdminListItemDTO, UserAdminListDTO } from "@episto/communication";
-import { Id } from "@thinkhub/x-core";
-import { QueryService } from "../../static/XQuery/XQueryReact";
-import { usePostDataUnsafe } from "../core/httpClient";
+import { CourseUserPresetType } from '@episto/commontypes';
+import { AdminCourseCarouselDataDTO, AdminCourseUserStatsDTO, AdminUserCourseDTO, apiRoutes, CourseAdminListItemDTO, UserAdminListDTO } from '@episto/communication';
+import { Id } from '@thinkhub/x-core';
+import { QueryService } from '../../static/XQuery/XQueryReact';
+import { usePostDataUnsafe } from '../core/httpClient';
 
 const adminRoutes = apiRoutes.admin;
 
@@ -29,9 +29,9 @@ const useAdminCourseList = (companyId: Id<'Company'>, isEnabled?: boolean) => {
     };
 };
 
-const useCourseUserStatsData = (courseId: Id<'Course'>) => {
+const useCourseUserStatsData = (courseId: Id<'Course'>, preset: CourseUserPresetType) => {
 
-    const queryRes = QueryService.useXQuery<AdminCourseUserStatsDTO[]>(adminRoutes.getAdminCourseUsers, { courseId });
+    const queryRes = QueryService.useXQuery<AdminCourseUserStatsDTO[]>(adminRoutes.getAdminCourseUsers, { courseId, preset });
 
     return {
         courseUserStatsData: queryRes.data,
@@ -83,4 +83,4 @@ export const AdminApiService = {
     useCourseUserStatsData,
     useUserAdminList,
     useSaveUserAssignedCourses
-}
+};

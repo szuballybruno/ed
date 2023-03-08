@@ -1,6 +1,7 @@
 import { Grid, Tooltip } from '@chakra-ui/react';
 import { FiberManualRecord } from '@mui/icons-material';
 import React, { ReactNode, useState } from 'react';
+import { defaultCharts } from '../../../../static/defaultChartOptions';
 import { iterate } from '../../../../static/frontendHelpers';
 import { EpistoDivider } from '../../../controls/EpistoDivider';
 import { EpistoFlex2 } from '../../../controls/EpistoFlex';
@@ -461,21 +462,23 @@ export const ExamStats = () => {
                 maxWidth='100%'>
 
                 <EpistoLineChart
-                    options={{
-                        series: [
-                            {
-                                name: 'Dataset',
-                                data: iterate(300, (index) => {
-                                    return [(300 - index), Math.pow(index, 2 + Math.random()) / 1000000];
-                                })
-                            }
-                        ],
-                        xAxis: {
-                            name: 'Időpont'
-                        },
-                        yAxis: {
-                            name: 'Felhasználók'
+                    title=""
+                    dataset={[
+                        {
+                            name: 'Dataset',
+                            data: iterate(300, (index) => {
+                                return [(300 - index), Math.pow(index, 2 + Math.random()) / 1000000];
+                            })
                         }
+                    ]}
+                    xAxisLabel="Időpont"
+                    yAxisLabel="Felhasználók"
+                    options={defaultCharts.simpleLineChart}
+                    style={{
+                        height: '350px',
+                        minHeight: 350,
+                        minWidth: 500,
+                        maxWidth: '100%'
                     }} />
             </EpistoFlex2>
         </DashboardSection >

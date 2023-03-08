@@ -3,7 +3,7 @@ import { Id } from "@thinkhub/x-core"
 
 export type TempomatDataModel = {
     requiredCompletionDate: Date | null,
-    originalEstimatedCompletionDate: Date,
+    originalPrevisionedCompletionDate: Date,
     estimatedCompletionDate: Date,
     recommendedItemsPerDay: number,
     recommendedItemsPerWeek: number,

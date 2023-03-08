@@ -21,8 +21,8 @@ export const AdminUserCourseStatsOverview = ({
 
     const { userCourseStatsOverviewData } = useUserCourseStatsOverviewData(userId, courseId);
 
-    const tempoPercentage = userCourseStatsOverviewData
-        ? userCourseStatsOverviewData.tempoPercentage
+    const performancePercentage = userCourseStatsOverviewData
+        ? userCourseStatsOverviewData.performancePercentage
         : 0;
 
     const courseProgressPercentage = userCourseStatsOverviewData
@@ -63,8 +63,8 @@ export const AdminUserCourseStatsOverview = ({
                     <EpistoPieChart
                         title="Tempó"
                         segments={[
-                            { value: tempoPercentage, name: `Teljesítmény ${tempoPercentage}%` },
-                            { value: 100 - tempoPercentage, name: `Teljesítmény ${tempoPercentage}%` }
+                            { value: performancePercentage, name: `Teljesítmény ${performancePercentage}%` },
+                            { value: 100 - performancePercentage, name: `Teljesítmény ${performancePercentage}%` }
                         ]}
                         variant="twoSegmentRedDoughnut" />
                 </EpistoFlex2>
@@ -100,7 +100,7 @@ export const AdminUserCourseStatsOverview = ({
                                 name: texts.activitiesPieChartTexts.noActivity
                             }
                         ]}
-                        variant="twoSegmentGreenDoughnut"/>
+                        variant="twoSegmentGreenDoughnut" />
                 </EpistoFlex2>
             </EpistoFlex2>
 
@@ -111,7 +111,7 @@ export const AdminUserCourseStatsOverview = ({
                 direction="column"
                 background="var(--transparentWhite70)">
 
-                {userCourseStatsOverviewData
+                {userCourseStatsOverviewData?.progressChartData
                     ? <UserProgressChart userProgress={userCourseStatsOverviewData.progressChartData} />
                     : <NoProgressChartYet />}
             </EpistoFlex2>

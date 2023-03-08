@@ -7,7 +7,7 @@ import { QueryService } from '../../static/XQuery/XQueryReact';
 import { usePostDataUnsafe } from '../core/httpClient';
 import { useAuthContextState } from '../../components/system/AuthenticationFrame';
 
-export const useCourseOverviewData = (userId?: Id<'User'>, courseId?: Id<'Course'>) => {
+export const useCourseOverviewData = (userId: Id<'User'> | null, courseId: Id<'Course'> | null) => {
 
     const qr = QueryService.useXQuery<CourseOverviewDataDTO>(apiRoutes.misc.getCourseOverviewData, { userId, courseId });
 

@@ -28,9 +28,6 @@ export class AnswerSessionView {
     isSuccessful: boolean;
 
     @XViewColumn()
-    answeredQuestionCount: number;
-
-    @XViewColumn()
     correctGivenAnswerCount: number;
 
     @XViewColumn()
@@ -41,6 +38,9 @@ export class AnswerSessionView {
 
     @XViewColumn()
     endDate: Date;
+
+    @XViewColumn()
+    answeredQuestionCount: number;
 
     @XViewColumn()
     answerSessionType: string;

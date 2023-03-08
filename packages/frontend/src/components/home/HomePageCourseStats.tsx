@@ -1,9 +1,9 @@
 import { Grid } from '@chakra-ui/react';
 import { UserActiveCourseDTO } from '@episto/communication';
 import { useEffect, useState } from 'react';
-import { useCourseProgressOverview, useUserCourseProgressChartData } from '../../services/api/userProgressApiService';
+import { useRecommendedItemQuota, useUserCourseProgressChartData } from '../../services/api/userProgressApiService';
 import { Environment } from '../../static/Environemnt';
-import { coalesce, Formatters, PagingType } from '../../static/frontendHelpers';
+import { PagingType } from '../../static/frontendHelpers';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import StatisticsCard, { StatisticsCardProps } from '../statisticsCard/StatisticsCard';
 import { UserProgressChart } from '../universal/charts/line-chart/UserProgressChart';
@@ -33,24 +33,26 @@ export const HomePageCourseStats = ({
     activeCoursesPaging: PagingType<UserActiveCourseDTO>,
     isSmallDesktop: boolean
 }) => {
+    const [canRenderChart, setCanRenderChart] = useState(false);
 
     const courseId = activeCoursesPaging?.currentItem?.courseId;
 
-    const { userProgressData } = useUserCourseProgressChartData(courseId ?? null, !!courseId);
+    const { userProgressData, userProgressDataIsValid } = useUserCourseProgressChartData(courseId ?? null, !!courseId);
     const currentCourse = activeCoursesPaging.currentItem;
-    const [canRenderChart, setCanRenderChart] = useState(false);
 
-    const { courseProgressOverviewData: recommendedItemQuota } = useCourseProgressOverview(courseId);
+    const { recommendedItemQuota } = useRecommendedItemQuota(courseId);
 
-    const {
-        completedThisWeek,
-        completedToday,
-        estimatedCompletionDate,
-    } = coalesce(recommendedItemQuota, {
-        completedThisWeek: 0,
-        completedToday: 0,
-        estimatedCompletionDate: new Date(),
-    });
+    const completedToday = recommendedItemQuota?.completedToday || 0;
+    const completedThisWeek = recommendedItemQuota?.completedThisWeek || 0;
+
+    const recommendedItemsPerDay = recommendedItemQuota?.recommendedItemsPerDay || null;
+    const recommendedItemsPerWeek = recommendedItemQuota?.recommendedItemsPerWeek || null;
+
+    const isDailyStrictMode = (recommendedItemsPerDay);
+    const isDailyLightMode = (!recommendedItemsPerDay && completedToday);
+
+    const isWeeklyStrictMode = (recommendedItemsPerWeek);
+    const isWeeklyLightMode = (!recommendedItemsPerWeek && completedThisWeek);
 
     useEffect(() => {
 
@@ -58,36 +60,86 @@ export const HomePageCourseStats = ({
         return () => setCanRenderChart(false);
     }, []);
 
+    const dailyVideos = (() => {
+
+        if (isDailyStrictMode)
+            return `${completedToday || 0}/${recommendedItemsPerDay}`;
+
+        if (isDailyLightMode)
+            return completedToday;
+
+        return '0';
+    })();
+
+    const dailyLabel = (() => {
+
+        if (isDailyStrictMode)
+            return 'Teljesítve az ajánlott napi videókból';
+
+        return 'Megtekintett videó ma';
+    })();
+
+    const weeklyVideos = (() => {
+
+        if (isWeeklyStrictMode)
+            return `${completedThisWeek}/${recommendedItemsPerWeek}`;
+
+        if (isWeeklyLightMode)
+            return completedThisWeek;
+
+        return '0';
+    })();
+
+    const weeklyLabel = (() => {
+
+        if (isWeeklyStrictMode)
+            return 'Teljesítve az ajánlott heti videókból';
+
+        return 'Megtekintett videó a héten';
+    })();
+
+    /*  useEffect(() => {
+ 
+         if (!userProgressDataIsValid)
+             return;
+     }, [userProgressData]); */
+
+    const estimatedCompletionDateString = recommendedItemQuota?.previsionedCompletionDate
+        ? new Date(recommendedItemQuota?.previsionedCompletionDate)
+            .toLocaleDateString('hu-hu', {
+                month: '2-digit',
+                day: '2-digit'
+            }) || 'Ismeretlen'
+        : 'Ismeretlen';
+
     const courseStatCards = [
         {
             isMobile: isSmallDesktop,
-            title: 'Megtekintett videó ma',
-            value: completedToday,
-            suffix: 'db',
+            title: dailyLabel,
+            value: dailyVideos,
+            suffix: isDailyStrictMode ? '' : 'db',
             iconPath: Environment.getAssetUrl('/images/dailyquota.png'),
             isOpenByDefault: false
         },
         {
             isMobile: isSmallDesktop,
-            title: 'Megtekintett videó a héten',
-            value: completedThisWeek,
-            suffix: 'db',
+            title: weeklyLabel,
+            value: weeklyVideos,
+            suffix: isWeeklyStrictMode ? '' : 'db',
             iconPath: Environment.getAssetUrl('/images/weeklyquota.png'),
             isOpenByDefault: false
         },
         {
             isMobile: isSmallDesktop,
             title: 'A kurzus várható befejezési ideje',
-            value: estimatedCompletionDate
-                ? Formatters.formatDate(estimatedCompletionDate)
-                : 'Ismeretlen',
+            value: estimatedCompletionDateString,
             suffix: '',
             iconPath: Environment.getAssetUrl('/images/weeklyquota.png'),
             isOpenByDefault: false
         }
     ] as StatisticsCardProps[];
 
-    const hasProgress = userProgressData.length > 0;
+    const hasProgress = userProgressData?.actualProgress ? userProgressData.actualProgress.length > 0 : false;
 
     return (
         <EpistoFlex2
@@ -122,8 +174,8 @@ export const HomePageCourseStats = ({
                                 src={currentCourse?.coverFilePath ?? ''}
                                 alt=""
                                 style={{
-                                    flex: "1",
-                                    position: "absolute",
+                                    flex: '1',
+                                    position: 'absolute',
                                     objectFit: 'cover'
                                 }}
                                 className="roundBorders whall" />

@@ -372,6 +372,30 @@ export class CompanyService {
             .mapTo(CompanyAssociatedCourseDTO, [views]);
     }
 
+    async createCompanyAssociatedCourseAsync(companyId: Id<'Company'>, courseId: Id<'Course'>) {
+
+        const { id: editCoursePermissionId } = await this
+            ._ormService
+            .query(Permission, { code: 'EDIT_COURSE' })
+            .where('code', '=', 'code')
+            .getSingle();
+
+        await this._ormService.createAsync(CourseAccessBridge, {
+            companyId,
+            userId: null,
+            courseId: courseId
+        });
+
+        await this._ormService.createAsync(PermissionAssignmentBridge, {
+            assigneeCompanyId: companyId,
+            assigneeGroupId: null,
+            assigneeUserId: null,
+            contextCompanyId: null,
+            contextCourseId: courseId,
+            permissionId: editCoursePermissionId
+        });
+    }
+
     /**
      * Get company associated courses 
      */

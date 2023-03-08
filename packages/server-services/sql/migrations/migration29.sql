@@ -1,0 +1,1 @@
+INSERT INTO public.role_permission_bridge (role_id, permission_id) VALUES (1, 13)

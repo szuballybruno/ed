@@ -15,17 +15,28 @@ export class UserProgressController implements IController<UserProgressControlle
         this._userProgressService = serviceProvider.getService(UserProgressService);
     }
 
-    @XControllerAction(apiRoutes.userProgress.getCourseProgressOverview)
-    getCourseProgressOverviewAction(params: ActionParams) {
+    @XControllerAction(apiRoutes.userProgress.getRecommendedItemQuota)
+    getRecommendedItemQuotaAction(params: ActionParams) {
 
         const courseId = Id.create<'Course'>(params
             .getQuery<any>()
             .getValue(x => x.courseId, 'int'));
 
-        return this
-            ._userProgressService
-            .getCourseProgressOverviewAsync(params.principalId, courseId);
+        return this._userProgressService
+            .getRecommendedItemQuotaAsync(params.principalId, courseId);
     }
+    /* 
+        @XControllerAction(apiRoutes.userProgress.getCourseProgressOverview)
+        getCourseProgressOverviewAction(params: ActionParams) {
+    
+            const courseId = Id.create<'Course'>(params
+                .getQuery<any>()
+                .getValue(x => x.courseId, 'int'));
+    
+            return this
+                ._userProgressService
+                .getCourseProgressOverviewAsync(params.principalId, courseId);
+        } */
 
     @XControllerAction(apiRoutes.userProgress.getActiveCourses)
     getActiveCoursesAction = (params: ActionParams) => {
@@ -42,8 +53,7 @@ export class UserProgressController implements IController<UserProgressControlle
                 .getQuery<any>()
                 .getValue(x => x.courseId, 'int'));
 
-        return await this
-            ._userProgressService
-            .getProgressChartDataByCourseAsync(params.principalId, courseId, params.principalId.getId());
+        return this._userProgressService
+            .getProgressChartDataAsync(params.principalId, courseId);
     };
 }

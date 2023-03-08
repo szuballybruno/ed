@@ -1,4 +1,4 @@
-import { Id } from "@episto/commontypes";
+import { Id, InvertedLagBehindRatingType } from "@episto/commontypes";
 
 export type OldData<TVersion, TData, TEntity> = {
     oldVersion: TVersion;
@@ -10,4 +10,5 @@ export type UserLagbehindStatType = {
     userId: Id<'User'>,
     productivityPercentage: number,
     invertedRelativeUserPaceDiff: number | null
+    invertedRelativeUserPaceDiffTextRating: InvertedLagBehindRatingType | null
 }
