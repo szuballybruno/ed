@@ -4,16 +4,16 @@ import { useEffect, useMemo } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { AdminApiService } from '../../../services/api/AdminApiService';
 import { Environment } from '../../../static/Environemnt';
-import { formatTimespan, usePaging } from '../../../static/frontendHelpers';
-import { useRouteParams_OLD, useRouteQuery, useSetQueryParams } from '../../../static/locationHelpers';
+import { ArrayBuilder, formatTimespan, usePaging } from '../../../static/frontendHelpers';
+import { useRouteParams2, useRouteQuery, useSetQueryParams } from '../../../static/locationHelpers';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoDataGrid, EpistoDataGridColumnBuilder } from '../../controls/EpistoDataGrid';
 import { EpistoDiv } from '../../controls/EpistoDiv';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoFont } from '../../controls/EpistoFont';
 import { MUI, MUICircularProgressProps } from '../../controls/MUIControls';
-import { SegmentedButton } from '../../controls/SegmentedButton';
 import { ProfileImage } from '../../ProfileImage';
+import { useAuthorizationContext } from '../../system/AuthorizationContext';
 import { EmptyCell } from '../../universal/EmptyCell';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { useAdminCourseContentDialogLogic } from '../users/adminCourseContentDialog/AdminCourseContentDialogLogic';
@@ -74,7 +74,7 @@ export const useCourseUsersColumns = ({
                 : <EmptyCell />
 
         })
-        .add({
+        /* .add({
             field: 'tempoPercentage',
             headerName: 'Jelenlegi teljesítmény',
             width: 150,
@@ -83,7 +83,7 @@ export const useCourseUsersColumns = ({
                 ? <CircularProgressWithLabel
                     value={value} />
                 : <EmptyCell />
-        })
+        }) */
         .add({
             field: 'completedVideoCount',
             headerName: 'Megtekintett videók',
@@ -267,14 +267,18 @@ export const useCourseUserGridFilterSettingsLogic = () => {
 
 export const AdminCourseUserProgressSubpage = () => {
 
-    const courseId = useRouteParams_OLD(applicationRoutes.administrationRoute.coursesRoute.courseUserProgressRoute)
+    const courseId = useRouteParams2(applicationRoutes.administrationRoute.coursesRoute.courseUserProgressRoute)
         .getValue(x => x.courseId, 'int');
+
+    console.log('courseId: ' + courseId);
+
+    const { hasPermission } = useAuthorizationContext();
 
     const { adminCourseContentDialogLogic } = useAdminCourseContentDialogLogic();
     const adminCourseUserOverviewDialogLogic = useAdminCourseUserOverviewDialogLogic();
 
     const { courseUserStatsData, courseUserStatsDataError, courseUserStatsDataStatus } = AdminApiService
-        .useCourseUserStatsData(courseId);
+        .useCourseUserStatsData(courseId, 'inprogress');
 
     const columns = useCourseUsersColumns({
         handleOpenCourseResultDetailsDialog: (courseId, userId, fullName) => {
@@ -317,12 +321,13 @@ export const AdminCourseUserProgressSubpage = () => {
 
             {/* Right side content */}
             <AdminSubpageHeader
-                tabMenuItems={[
-                    applicationRoutes.administrationRoute.coursesRoute.courseDetailsRoute,
-                    applicationRoutes.administrationRoute.coursesRoute.courseContentRoute,
-                    applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute,
-                    applicationRoutes.administrationRoute.coursesRoute.courseUserProgressRoute
-                ]}
+                tabMenuItems={new ArrayBuilder()
+                    .addIf(hasPermission('EDIT_COURSE'), applicationRoutes.administrationRoute.coursesRoute.courseDetailsRoute)
+                    .addIf(hasPermission('EDIT_COURSE'), applicationRoutes.administrationRoute.coursesRoute.courseContentRoute)
+                    .add(applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute)
+                    .add(applicationRoutes.administrationRoute.coursesRoute.courseUserProgressRoute)
+                    .getArray()
+                }
                 direction="column">
 
                 <EpistoDataGrid

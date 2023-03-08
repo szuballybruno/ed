@@ -70,10 +70,12 @@ export class AdminController implements IController<AdminController> {
     @XControllerAction(adminRoutes.getAdminUsersList)
     getUserOverviewStatsAction(params: ActionParams) {
 
-        const companyId = params
+        const query = params
             .getFromParameterized(adminRoutes.getAdminUsersList)
-            .query
-            .getValue(x => x.companyId, 'int');
+            .query;
+
+        //const isToBeReviewed = query.getValue(x => x.isToBeReviewed)
+        const companyId = query.getValue(x => x.companyId)
 
         return this._userService
             .getUserAdminListAsync(params.principalId, companyId);
@@ -86,11 +88,14 @@ export class AdminController implements IController<AdminController> {
             .getFromParameterized(adminRoutes.getAdminUserCourses)
             .query;
 
+        const userId = query.getValue(x => x.userId, 'int')
+        const loadAvailable = query.getValue(x => x.loadAvailable)
+
         return this._userStatsService
-            .getAdminUserCoursesAsync(
+            .getUserCourseStatsAsync(
                 params.principalId,
-                query.getValue(x => x.userId, 'int'),
-                query.getValue(x => x.loadAvailable, 'boolean'));
+                userId,
+                loadAvailable);
     }
 
     @XControllerAction(adminRoutes.getAdminCourseUsers)
@@ -103,6 +108,7 @@ export class AdminController implements IController<AdminController> {
         return this._userStatsService
             .getCourseUserStatsAsync(
                 params.principalId,
-                query.getValue(x => x.courseId, 'int'));
+                query.getValue(x => x.courseId, 'int'),
+                query.getValue(x => x.preset));
     }
 }

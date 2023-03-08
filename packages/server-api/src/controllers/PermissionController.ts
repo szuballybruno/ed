@@ -20,4 +20,16 @@ export class PermissionController implements IController<PermissionController> {
         return this._permissionService
             .getPermissionsAsync(params.principalId);
     }
+
+    @XControllerAction(apiRoutes.permissions.checkPermission, { isPost: true })
+    checkPermissionAction(params: ActionParams) {
+
+        const dto = params
+            .getFromParameterized(apiRoutes.permissions.checkPermission)
+            .body
+            .data
+
+        return this._permissionService
+            .checkPermissionAsync(params.principalId, dto);;
+    }
 }

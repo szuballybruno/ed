@@ -1,6 +1,6 @@
-import { PermissionListDTO } from '@episto/communication';
-import { apiRoutes } from '@episto/communication';
+import { apiRoutes, PermissionListDTO, UserCheckPermissionDTO } from '@episto/communication';
 import { QueryService } from '../../static/XQuery/XQueryReact';
+import { usePostDataUnsafe } from '../core/httpClient';
 
 export const usePermissionsList = () => {
 
@@ -11,5 +11,15 @@ export const usePermissionsList = () => {
         permissionsListError: qr.error,
         permissionsListState: qr.state,
         refetchPermissionsList: qr.refetch
+    };
+};
+
+export const useCheckPermission = () => {
+
+    const qr = usePostDataUnsafe<UserCheckPermissionDTO, boolean>(apiRoutes.permissions.checkPermission);
+
+    return {
+        checkPermissionAsync: qr.postDataAsync,
+        checkPermissionState: qr.state,
     };
 };

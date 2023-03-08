@@ -1,7 +1,12 @@
 import { Grid } from '@chakra-ui/react';
-import { useMemo } from 'react';
+import { instantiate } from '@episto/commonlogic';
+import { UserCheckPermissionDTO } from '@episto/communication';
+import { useEffect, useMemo, useState } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
+import { useCheckPermission } from '../../../services/api/permissionsApiService';
 import { Environment } from '../../../static/Environemnt';
+import { ArrayBuilder } from '../../../static/frontendHelpers';
+import { useRouteParams2 } from '../../../static/locationHelpers';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { StatisticsGroupType } from '../../learningInsights/LearningStatistics';
 import StatisticsCard from '../../statisticsCard/StatisticsCard';
@@ -11,6 +16,33 @@ import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { CourseAdministartionFrame } from './CourseAdministartionFrame';
 
 export const CourseStatisticsSubpage = () => {
+
+    const params = useRouteParams2(applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute);
+
+    const courseId = params
+        .getValue(x => x.courseId);
+
+    const { checkPermissionAsync, checkPermissionState } = useCheckPermission();
+
+    const [canEditCourse, setCanEditCourse] = useState<boolean>(false);
+
+
+
+    useEffect(() => {
+        const handleCheckPermission = async () => {
+
+            const hasPermission = await checkPermissionAsync(instantiate<UserCheckPermissionDTO>({
+                permissionCode: 'EDIT_COURSE',
+                contextCourseId: courseId,
+                contextCompanyId: null
+            }));
+
+            return setCanEditCourse(hasPermission);
+        };
+
+        handleCheckPermission();
+
+    }, [checkPermissionAsync, courseId]);
 
     const adminHomeDetailsStatistics = useMemo((): StatisticsGroupType[] => [
         {
@@ -170,12 +202,13 @@ export const CourseStatisticsSubpage = () => {
 
             <AdminSubpageHeader
                 direction="column"
-                tabMenuItems={[
-                    applicationRoutes.administrationRoute.coursesRoute.courseDetailsRoute,
-                    applicationRoutes.administrationRoute.coursesRoute.courseContentRoute,
-                    applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute,
-                    applicationRoutes.administrationRoute.coursesRoute.courseUserProgressRoute
-                ]}>
+                tabMenuItems={new ArrayBuilder()
+                    .addIf(canEditCourse, applicationRoutes.administrationRoute.coursesRoute.courseDetailsRoute)
+                    .addIf(canEditCourse, applicationRoutes.administrationRoute.coursesRoute.courseContentRoute)
+                    .add(applicationRoutes.administrationRoute.coursesRoute.statisticsCourseRoute)
+                    .add(applicationRoutes.administrationRoute.coursesRoute.courseUserProgressRoute)
+                    .getArray()
+                }>
 
                 {adminHomeDetailsStatistics
                     .map((section, index) => {

@@ -4,6 +4,9 @@ import { Id } from '@thinkhub/x-core';
 export class CourseItemEditView {
 
     @XViewColumn()
+    courseId: Id<'Course'>;
+
+    @XViewColumn()
     examVersionId: Id<'ExamVersion'>;
 
     @XViewColumn()

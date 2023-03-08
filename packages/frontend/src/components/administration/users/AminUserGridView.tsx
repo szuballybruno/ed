@@ -1,5 +1,5 @@
 import { Flex } from '@chakra-ui/react';
-import { Id, PerformanceRatingType, TempoRatingType } from '@episto/commontypes';
+import { Id, InvertedLagBehindRatingType, OverallScoreRatingType } from '@episto/commontypes';
 import { UserAdminListDTO } from '@episto/communication';
 import { Add } from '@mui/icons-material';
 import { useCallback, useState } from 'react';
@@ -12,7 +12,6 @@ import { useShowErrorDialog } from '../../../services/core/notifications';
 import { Environment } from '../../../static/Environemnt';
 import { EpistoIcons } from '../../../static/EpistoIcons';
 import { formatTimespan, getSubroutes, useIsMatchingCurrentRoute } from '../../../static/frontendHelpers';
-import { useRouteQuery } from '../../../static/locationHelpers';
 import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoDataGrid, EpistoDataGridColumnBuilder } from '../../controls/EpistoDataGrid';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
@@ -116,7 +115,7 @@ const useColumns = (
             renderCell: (value) => value?.value ? value.value + 'db' : '0db',
             width: 150
         })
-        .add({
+        /* .add({
             field: 'tempoRating',
             headerName: 'Tempó',
             width: 150,
@@ -129,8 +128,8 @@ const useColumns = (
                         : ' - '}
                 </>
             )
-        })
-        .add({
+        }) */
+        /* .add({
             field: 'avgPerformanceRating',
             headerName: 'Teljesítmény',
             width: 150,
@@ -143,7 +142,48 @@ const useColumns = (
                         : ' - '}
                 </>
             )
+        }) */
+        .add({
+            field: 'summerizedScoreAvgRatingText',
+            headerName: 'Átlagos teljesítmény',
+            renderCell: ({ value, row: { summerizedScoreAvg } }) => (
+                <>
+                    {summerizedScoreAvg > 0 && value !== null
+                        ? <PerformanceChip
+                            value={summerizedScoreAvg}
+                            rating={value} />
+                        : ' - '}
+                </>
+            )
+            //renderCell: (value) => value ? Math.round(value.value) + '%' : '-'
         })
+        .add({
+            field: 'invertedLagBehindRatingText',
+            headerName: 'Haladás',
+            renderCell: ({ value, row: { invertedLagBehind } }) => (
+                <>
+                    {value !== null
+                        ? <TempoChip
+                            value={invertedLagBehind}
+                            rating={value} />
+                        : ' - '}
+                </>
+            )
+        })
+        /*   .add({
+              field: 'productivityPercentage',
+              headerName: 'Produktivitás',
+              renderCell: (value) => value ? Math.round(value.value) + '%' : '-'
+          })
+          .add({
+              field: 'engagementPoints',
+              headerName: 'Elköteleződés',
+              renderCell: (value) => value ? Math.round(value.value) + '%' : '-'
+          })
+          .add({
+              field: 'reactionTime',
+              headerName: 'Reakcióidő'
+          }) */
         .add({
             field: 'detailsButton',
             headerName: '',
@@ -187,12 +227,14 @@ class RowType {
     completedVideoCount: number;
     detailsButton: Id<'User'>;
     username: string;
-    avgTempoPercentage: number;
-    tempoRating: TempoRatingType;
-    hasAvgTempoPercentage: boolean;
-    avgPerformanceRating: PerformanceRatingType;
-    avgPerformancePercentage: number;
-};
+    summerizedScoreAvg: number;
+    summerizedScoreAvgRatingText: OverallScoreRatingType | null;
+    invertedLagBehind: number;
+    invertedLagBehindRatingText: InvertedLagBehindRatingType | null;
+    //engagementPoints: number;
+    //productivityPercentage: number;
+    //reactionTime: number | null;
+}
 
 const mapToRow = (user: UserAdminListDTO): RowType => {
 
@@ -218,11 +260,13 @@ const mapToRow = (user: UserAdminListDTO): RowType => {
         completedVideoCount: user.completedVideoCount,
         detailsButton: user.userId,
         username: user.username,
-        avgTempoPercentage: user.avgTempoPercentage,
-        tempoRating: user.tempoRating,
-        hasAvgTempoPercentage: user.hasAvgTempoPercentage,
-        avgPerformanceRating: user.avgPerformancePercentageRating,
-        avgPerformancePercentage: user.avgPerformancePercentage
+        summerizedScoreAvg: user.summerizedScoreAvg,
+        summerizedScoreAvgRatingText: user.summerizedScoreAvgRatingText,
+        invertedLagBehind: user.invertedRelativeUserPaceDiff!,
+        invertedLagBehindRatingText: user.invertedRelativeUserPaceDiffRatingText
+        //engagementPoints: user.engagementPoints,
+        //productivityPercentage: user.productivityPercentage!,
+        //reactionTime: user.reactionTime,
     });
 };
 

@@ -46,10 +46,13 @@ export class AdminUserCourseView {
     requiredCompletionDate: Date;
 
     @XViewColumn()
+    tempomatAdjustmentValue: number;
+
+    @XViewColumn()
     tempomatMode: string;
 
     @XViewColumn()
-    originalEstimatedCompletionDate: Date;
+    originalPrevisionedCompletionDate: Date;
 
     @XViewColumn()
     totalItemCount: number;
@@ -58,13 +61,13 @@ export class AdminUserCourseView {
     totalCompletedItemCount: number;
 
     @XViewColumn()
-    performancePercentageDiff: number;
+    differenceFromAveragePerformancePercentage: number;
 
     @XViewColumn()
     performancePercentage: number;
 
     @XViewColumn()
-    avgPerformancePercentage: number;
+    avgPerformance: number;
 
     @XViewColumn()
     isFinalExamCompleted: boolean;

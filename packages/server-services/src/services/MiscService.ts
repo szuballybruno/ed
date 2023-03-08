@@ -23,15 +23,18 @@ export class MiscService {
 
     async getCourseOverviewDataAsync(
         principalId: PrincipalId,
-        userId?: Id<'User'>,
-        courseId?: Id<'Course'>
+        userId: Id<'User'> | null,
+        courseId: Id<'Course'> | null
     ) {
 
-        const uId = userId
+        console.log('userId: ' + userId);
+        console.log('courseId: ' + courseId);
+
+        const uId = userId !== null
             ? userId
             : Id.create<'User'>(principalId.toSQLValue());
 
-        const cId = courseId
+        const cId = courseId !== null
             ? courseId
             : await this._userCourseBridgeService
                 .getCurrentCourseIdOrFail(uId);

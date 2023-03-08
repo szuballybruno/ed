@@ -165,3 +165,8 @@ export { RoleEditDTO } from "./role/RoleEditDTO";
 export { UserAssignedAuthItemDTO } from "./role/UserAssignedAuthItemDTO";
 export { UserPermissionDTO } from "./role/UserPermissionDTO";
 export { UserRoleDTO } from "./role/UserRoleDTO";
+export { RecommendedItemQuotaDTO } from './RecommendedItemQuotaDTO';
+export { UserCourseProgressChartDTO } from './UserCourseProgressChartDTO';
+export { UserLearningOverviewDataDTO } from './UserLearrningOverviewDataDTO';
+export { UserCourseStatsDTO } from './UserCourseStatsDTO';
+export { UserCheckPermissionDTO } from './UserCheckPermissionDTO';

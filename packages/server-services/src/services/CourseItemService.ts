@@ -49,16 +49,16 @@ export class CourseItemService {
         videoVersionId: Id<'VideoVersion'> | null,
         examVersionId: Id<'ExamVersion'> | null) {
 
-        await this
-            ._authorizationService
-            .checkPermissionAsync(principalId, 'EDIT_COURSES');
-
         const views = await this
             ._ormService
             .query(CourseItemEditView, { videoVersionId, examVersionId })
             .where('examVersionId', '=', 'examVersionId')
             .and('videoVersionId', '=', 'videoVersionId')
             .getMany();
+
+        await this
+            ._authorizationService
+            .checkPermissionAsync(principalId, 'EDIT_COURSE', { courseId: views.first().courseId });
 
         return this
             ._mapperService

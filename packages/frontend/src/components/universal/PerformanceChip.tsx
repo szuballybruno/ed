@@ -1,4 +1,4 @@
-import { PerformanceRatingType, TempoRatingType } from '@episto/commontypes';
+import { OverallScoreRatingType, PerformanceRatingType } from '@episto/commontypes';
 import { PropsWithChildren, useMemo } from 'react';
 import { EpistoIcons } from '../../static/EpistoIcons';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
@@ -44,9 +44,9 @@ export const useUserPerformanceDisplayValues = (rating: PerformanceRatingType) =
     }, [rating]);
 };
 
-export const PerformanceChip = ({ value, children, ...props }: { rating: TempoRatingType, value: number } & PropsWithChildren) => {
+export const PerformanceChip = ({ value, children, ...props }: { rating: OverallScoreRatingType, value: number } & PropsWithChildren) => {
 
-    const rating: TempoRatingType = props.rating;
+    const rating: OverallScoreRatingType = props.rating;
     const { color, label, desc } = useUserPerformanceDisplayValues(rating);
     const showStar = rating === 'very_good' && !children;
 

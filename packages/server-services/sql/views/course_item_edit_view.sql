@@ -1,4 +1,5 @@
 SELECT 
+	cv.course_id,
 	civ.exam_version_id,
 	civ.video_version_id,
     CASE WHEN civ.item_type = 'video' 
@@ -20,6 +21,9 @@ SELECT
     ad.is_correct answer_is_correct,
 	qd.module_id
 FROM public.course_item_view civ
+
+LEFT JOIN public.course_version cv
+ON cv.id = civ.course_version_id
 
 LEFT JOIN public.question_version qv
 ON qv.exam_version_id = civ.exam_version_id

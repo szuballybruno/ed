@@ -72,15 +72,15 @@ export const permissionCodes = fn({
     },
     CREATE_COMPANY_COURSES: {
         code: 'CREATE_COMPANY_COURSES',
-        scope: 'USER'
+        scope: 'COMPANY'
     },
     LIST_COMPANY_COURSES: {
         code: 'LIST_COMPANY_COURSES',
         scope: 'COMPANY'
     },
-    EDIT_COURSES: {
-        code: 'EDIT_COURSES',
-        scope: 'USER'
+    EDIT_COURSE: {
+        code: 'EDIT_COURSE',
+        scope: 'COURSE'
     },
     WATCH_COURSE: {
         code: 'WATCH_COURSE',

@@ -1,5 +1,7 @@
+import { Id } from '@episto/commontypes';
 import { apiRoutes } from '@episto/communication';
 import { ActivationCodeService, MiscService, UserCourseBridgeService } from '@episto/server-services';
+import { User } from '@episto/server-services/dist/models/tables/User';
 import { IXGatewayServiceProvider, XControllerAction } from '@thinkhub/x-gateway';
 import { ActionParams } from '../helpers/ActionParams';
 import { IController } from '../interfaces/IController';
@@ -40,15 +42,21 @@ export class MiscController implements IController<MiscController> {
     @XControllerAction(apiRoutes.misc.getCourseOverviewData)
     getCourseOverviewDataAction(params: ActionParams) {
 
-        const query = params
+        const userId = params
             .getFromParameterized(apiRoutes.misc.getCourseOverviewData)
-            .query;
+            .query
+            .getValueOrNull(x => x.userId, 'int');
+
+        const courseId = params
+            .getFromParameterized(apiRoutes.misc.getCourseOverviewData)
+            .query
+            .getValueOrNull(x => x.courseId, 'int');
 
         return this._miscService
             .getCourseOverviewDataAsync(
                 params.principalId,
-                query.data.userId,
-                query.data.courseId
+                userId,
+                courseId
             );
     }
 
@@ -56,7 +64,7 @@ export class MiscController implements IController<MiscController> {
     getCourseOverviewModuleCompareAction(params: ActionParams) {
 
         const query = params
-            .getFromParameterized(apiRoutes.misc.getCourseOverviewData)
+            .getFromParameterized(apiRoutes.misc.getCourseOverviewModuleCompareData)
             .query;
 
         return this._miscService

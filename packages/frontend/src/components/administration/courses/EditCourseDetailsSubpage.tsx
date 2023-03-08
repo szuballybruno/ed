@@ -158,7 +158,7 @@ export const EditCourseDetailsSubpage = ({ activeCompanyId }: { activeCompanyId:
         try {
 
             await deleteCourseAsync({ id: courseId });
-            showNotification('Kurzus torolve.');
+            showNotification('Kurzus törölve.');
             navigate3(applicationRoutes.administrationRoute.coursesRoute, {
                 params: { activeCompanyId }
             });

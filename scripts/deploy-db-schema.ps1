@@ -19,7 +19,7 @@ $xmigen_run_prod_script = "${xmigen_path}/scripts/run_migen_prod.ps1"
     -dbhost host.docker.internal `
     -dbusername dev_service_user `
     -dbport 5432 `
-    -dbpassword "$env:LOCAL_POSTGRES_USER_PASSWORD" `
+    -dbpassword "local_postgres_user_pass" `
     -outFolderPath "${epi_repo_root_folder}/epitest/init/sql" `
     -schemaFolderPath "${epi_repo_root_folder}/packages/server-services/sql" `
     -migen_folder_path "$xmigen_path" `

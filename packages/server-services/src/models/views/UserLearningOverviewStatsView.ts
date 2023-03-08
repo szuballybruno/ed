@@ -13,6 +13,18 @@ export class UserLearningOverviewStatsView {
     performancePercentage: number;
 
     @XViewColumn()
+    userReactionTimeDifferencePercentage: number;
+
+    @XViewColumn()
+    userReactionTimePoints: number;
+
+    @XViewColumn()
+    userExamLengthPoints: number;
+
+    @XViewColumn()
+    totalUserReactionTimePoints: number;
+
+    @XViewColumn()
     mostFrequentTimeRange: string;
 
     @XViewColumn()
