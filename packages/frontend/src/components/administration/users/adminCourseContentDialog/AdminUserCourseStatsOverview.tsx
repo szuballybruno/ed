@@ -112,7 +112,9 @@ export const AdminUserCourseStatsOverview = ({
                 background="var(--transparentWhite70)">
 
                 {userCourseStatsOverviewData?.progressChartData
-                    ? <UserProgressChart userProgress={userCourseStatsOverviewData.progressChartData} />
+                    ? <UserProgressChart
+                        height='350px'
+                        userProgress={userCourseStatsOverviewData.progressChartData} />
                     : <NoProgressChartYet />}
             </EpistoFlex2>
         </EpistoFlex2>

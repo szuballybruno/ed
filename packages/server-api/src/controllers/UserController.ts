@@ -20,10 +20,10 @@ export class UserController implements IController<UserController> {
     @XControllerAction(apiRoutes.user.deleteUser, { isPost: true })
     async deleteUserAction(params: ActionParams) {
 
-        const deleteUserId = Id
-            .create<'User'>(params
-                .getBody()
-                .getValue(x => x.userId, 'int'));
+        const deleteUserId = params
+            .getFromParameterized(apiRoutes.user.deleteUser)
+            .body
+            .getValue(x => x.userId, 'int')
 
         return this._userService
             .deleteUserAsync(params.principalId, deleteUserId);

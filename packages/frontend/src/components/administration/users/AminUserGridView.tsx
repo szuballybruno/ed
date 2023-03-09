@@ -399,9 +399,11 @@ export const AminUserGridView = ({
                         title: 'Törlés',
                         action: async () => {
 
+                            console.log('userId: ' + userId);
+
                             try {
 
-                                await deleteUserAsync(userId!);
+                                await deleteUserAsync({ userId: userId! });
                                 await refetchUsers();
                             }
                             catch (e) {
