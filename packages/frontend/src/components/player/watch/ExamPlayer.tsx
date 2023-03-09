@@ -121,7 +121,7 @@ export const ExamPlayer = (props: {
 
             <EpistoPaging
                 slides={examWorkflowPages}
-                index={examWorkflowSlides.currentIndex} />;
+                index={examWorkflowSlides.currentIndex} />
         </EpistoFlex2>
     );
 };

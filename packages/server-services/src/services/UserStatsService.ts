@@ -167,8 +167,12 @@ export class UserStatsService {
             .query(AdminUserCourseView, { userId })
             .where('userId', '=', 'userId');
 
-        const views = await (loadAvailable ? query : query.and('isAssigned', '=', 'true'))
-            .getMany();
+        const views = await (loadAvailable
+            ? query
+                .getMany()
+            : query
+                .and('isAssigned', 'IS', 'true')
+                .getMany());
 
         const tempomatValues = views
             .map((userCourseData): CalculatedTempomatValueType => {

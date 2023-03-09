@@ -248,6 +248,8 @@ LEFT JOIN recommended_videos_for_practise_cte rvfpc
 ON rvfpc.course_id = co.id
 AND rvfpc.user_id = u.id
 
+WHERE co.deletion_date IS NULL
+
 ORDER BY
     u.id,
     ucb.id IS NULL,

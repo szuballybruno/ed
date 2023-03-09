@@ -2,7 +2,6 @@ import { Id } from '@episto/commontypes';
 import { AdminUserCourseDTO } from '@episto/communication';
 import { useCallback, useEffect, useState } from 'react';
 import { AdminApiService } from '../../../../services/api/AdminApiService';
-import { UserApiService } from '../../../../services/api/UserApiService1';
 import { showNotification } from '../../../../services/core/notifications';
 import { LocalStorageService } from '../../../../services/core/storageService';
 import { EpistoButton } from '../../../controls/EpistoButton';
@@ -74,14 +73,16 @@ export const UserCourses = ({
             moreDetails: index
         }));
     const getRowKey = useCallback((row: UserCoursesRowType) => row.courseId, []);
-    const columns = useUserCoursesColumns({
-        handleOpenUserCourseDetailsDialog: (x) => console.log(x),
-        hideStats: editModeEnabled,
-        mutatorFunctions
-    });
 
     const { adminCourseContentDialogLogic } = useAdminCourseContentDialogLogic();
 
+    const columns = useUserCoursesColumns({
+        handleOpenUserCourseDetailsDialog: (courseId) => {
+            adminCourseContentDialogLogic.openDialog({ courseId, userId });
+        },
+        hideStats: editModeEnabled,
+        mutatorFunctions
+    });
     return (
         <EpistoFlex2
             flex="1"
