@@ -89,7 +89,7 @@ export class AdminController implements IController<AdminController> {
             .query;
 
         const userId = query.getValue(x => x.userId, 'int')
-        const loadAvailable = query.getValue(x => x.loadAvailable)
+        const loadAvailable = query.getValue(x => x.loadAvailable, 'boolean')
 
         return this._userStatsService
             .getUserCourseStatsAsync(
