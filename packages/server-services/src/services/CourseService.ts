@@ -39,6 +39,7 @@ import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { VersionCreateService } from './VersionCreateService';
 import { PermissionAssignmentBridge } from '../models/tables/PermissionAssignmentBridge';
 import { Permission } from '../models/tables/Permission';
+import { UserPermissionView } from '../models/views/UserPermissionView';
 
 export class CourseService {
 
@@ -279,7 +280,8 @@ export class CourseService {
             .where('code', '=', 'code')
             .getSingle();
 
-        const hasPermission = await this
+        // TODO: REFACTOR! IT WAS A HOTFIX
+        const hasPermissionByCompany = await this
             ._ormService
             .query(PermissionAssignmentBridge, { companyId, courseId, editCoursePermissionId })
             .where('assigneeCompanyId', '=', 'companyId')
@@ -287,7 +289,15 @@ export class CourseService {
             .and('permissionId', '=', 'editCoursePermissionId')
             .getOneOrNull()
 
-        if (!hasPermission)
+        const hasPermissionByUser = await this
+            ._ormService
+            .query(UserPermissionView, { userId, courseId, editCoursePermissionId })
+            .where('assigneeUserId', '=', 'userId')
+            .and('contextCourseId', '=', 'courseId')
+            .and('permissionId', '=', 'editCoursePermissionId')
+            .getOneOrNull()
+
+        if (!(hasPermissionByCompany || hasPermissionByUser))
             throw new ErrorWithCode('no permission')
 
         // get course

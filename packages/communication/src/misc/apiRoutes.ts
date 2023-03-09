@@ -180,7 +180,7 @@ export const apiRoutes = {
 
     user: {
         getEditUserData: '/users/get-edit-user-data',
-        deleteUser: '/users/delete-user',
+        deleteUser: '/users/delete-user' as ParametrizedRouteType<{ body: { userId: Id<'User'> } }>,
         saveUser: '/users/save-user',
         saveUserSimple: '/users/save-user-simple',
         getBriefUserData: '/users/get-brief-user-data',

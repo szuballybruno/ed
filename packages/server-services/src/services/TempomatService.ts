@@ -244,6 +244,12 @@ export class TempomatService {
         requiredCompletionDate
     }: CalculateTempomatValuesArgs): CalculatedTempomatValueType {
 
+        if (!startDate)
+            return {} as CalculatedTempomatValueType;
+
+        if (!originalPrevisionedCompletionDate)
+            return {} as CalculatedTempomatValueType;
+
         try {
 
             const previsionedCompletionDate = this

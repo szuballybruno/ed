@@ -1,5 +1,7 @@
+import { TextField } from '@mui/material';
 import React from 'react';
 import { PagingType } from '../../../static/frontendHelpers';
+import { EpistoFont } from '../../controls/EpistoFont';
 import { UnderVideoInfoFrame } from '../watch/UnderVideoInfoFrame';
 
 const PlayerDescription = (props: {
@@ -13,7 +15,9 @@ const PlayerDescription = (props: {
         title='Leírás'
         paging={paging}>
 
-        {props.description}
+        <EpistoFont isMultiline>
+            {props.description}
+        </EpistoFont>
     </UnderVideoInfoFrame>;
 };
 

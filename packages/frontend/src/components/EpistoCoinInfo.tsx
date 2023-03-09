@@ -17,7 +17,7 @@ export const EpistoConinInfo = (props: {} & EpistoFlex2Props) => {
             style={{ marginRight: '5px', marginBottom: '2px' }}
             fontSize="fontHuge">
 
-            {coinBalance + '' || ''}
+            {coinBalance.coinBalance + '' || ''}
         </EpistoFont>
 
         {/* coin image */}
