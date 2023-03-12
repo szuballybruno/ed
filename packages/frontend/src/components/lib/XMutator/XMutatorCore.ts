@@ -1,6 +1,6 @@
 import { FieldMutation } from '@episto/communication';
 import { Mutation } from '@episto/communication';
-import { getKeys } from '@thinkhub/x-core';
+import { getKeys } from '@episto/x-core';
 import { clone } from '../../../static/frontendHelpers';
 import { Logger } from '../../../static/Logger';
 
@@ -408,7 +408,7 @@ export class XMutatorCore<TMutatee extends Object, TKeyField extends StringKeyof
      * Get file
      */
     getFile(key: string): File {
-        
+
         const file = this._fileStorage[key];
         if (!file)
             throw new Error(`Invalid file key: ${key}`);

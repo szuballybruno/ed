@@ -24,13 +24,13 @@ class RowType {
 export const CourseOverviewSubpage = () => {
 
 
-    const params = useRouteParams2(applicationRoutes.administrationRoute.coursesRoute.courseUserProgressRoute);
+    const params = useRouteParams2(applicationRoutes.playerRoute.courseOverviewRoute);
 
     const courseId = params
         .getValue(x => x.courseId);
 
-    const { courseOverviewData } = useCourseOverviewData(Id.create(1), courseId);
-    const { courseOverviewModuleCompareData } = useCourseOverviewModuleCompareData();
+    const { courseOverviewData } = useCourseOverviewData(null, courseId);
+    const { courseOverviewModuleCompareData } = useCourseOverviewModuleCompareData(undefined, courseId);
 
     const { navigate2 } = useNavigation();
 

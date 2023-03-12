@@ -1,6 +1,6 @@
 import { apiRoutes } from '@episto/communication';
 import { AdminStatsService, CourseService, UserService, UserStatsService } from '@episto/server-services';
-import { IXGatewayServiceProvider, XControllerAction } from '@thinkhub/x-gateway';
+import { IXGatewayServiceProvider, XControllerAction } from '@episto/x-gateway';
 import { ActionParams } from '../helpers/ActionParams';
 import { IController } from '../interfaces/IController';
 

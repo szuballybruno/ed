@@ -2,7 +2,7 @@ import { ErrorWithCode } from '@episto/commontypes';
 import { GetParamByCodeType, GetPermissionScope, PermissionScopeParamType } from '@episto/commontypes';
 import { PermissionCodeType } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
-import { PrincipalId } from '@thinkhub/x-core';
+import { PrincipalId } from '@episto/x-core';
 import { ORMConnectionService } from './ORMConnectionService';
 import { PermissionService } from './PermissionService';
 

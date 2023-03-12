@@ -1,5 +1,5 @@
 import { TempomatModeType, TempoRatingType } from "@episto/commontypes";
-import { Id } from "@thinkhub/x-core"
+import { Id } from "@episto/x-core"
 
 export type TempomatDataModel = {
     requiredCompletionDate: Date | null,

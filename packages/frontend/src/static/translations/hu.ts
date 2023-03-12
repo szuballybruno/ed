@@ -7,7 +7,7 @@ export const huTranslation = getTranslation({
     data: {
 
         misc: {
-            selectOption: 'Nincs kivalasztas...',
+            selectOption: 'Nincs kiválasztva',
             save: 'Mentés',
             savedSuccessfully: 'Sikeresen mentve!',
             close: 'Bezárás',

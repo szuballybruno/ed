@@ -1,6 +1,6 @@
 import { CourseUserPresetType } from '@episto/commontypes';
 import { AdminCourseCarouselDataDTO, AdminCourseUserStatsDTO, AdminUserCourseDTO, apiRoutes, CourseAdminListItemDTO, UserAdminListDTO } from '@episto/communication';
-import { Id } from '@thinkhub/x-core';
+import { Id } from '@episto/x-core';
 import { QueryService } from '../../static/XQuery/XQueryReact';
 import { usePostDataUnsafe } from '../core/httpClient';
 

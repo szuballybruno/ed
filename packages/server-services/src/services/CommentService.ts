@@ -4,7 +4,7 @@ import { LatestVideoView } from '../models/views/LatestVideoView';
 import { CommentCreateDTO } from '@episto/communication';
 import { CommentListDTO } from '@episto/communication';
 import { instantiate } from '@episto/commonlogic';
-import { PrincipalId } from '@thinkhub/x-core';
+import { PrincipalId } from '@episto/x-core';
 import { InsertEntity } from '../utilities/misc';
 import { MapperService } from './MapperService';
 import { readItemCode } from './misc/encodeService';

@@ -1,7 +1,7 @@
 import { FlexProps } from '@chakra-ui/layout';
 import { instantiate } from '@episto/commonlogic';
 import { UserCourseProgressChartDTO } from '@episto/communication';
-import { deepMergeObjects } from '@thinkhub/x-core';
+import { deepMergeObjects } from '@episto/x-core';
 import { useMemo } from 'react';
 import { EpistoFlex2 } from '../../../controls/EpistoFlex';
 import { EpistoLineChart } from './EpistoLineChart';

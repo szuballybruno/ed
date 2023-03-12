@@ -6,6 +6,8 @@ completed_course_item_counts AS
 		cicv.course_id,
 		COUNT(*)::int total_completed_item_count
 	FROM public.course_item_completion_view cicv
+	
+	WHERE cicv.is_pretest IS NOT true
 
 	GROUP BY cicv.user_id, cicv.course_id
 ),
@@ -23,7 +25,7 @@ SELECT
 	ucb.course_id,
 	ccic.total_completed_item_count,
 	NULLIF(ccic.total_completed_item_count, 0) / NULLIF(dess.days_elapsed_since_start::double precision, 0) avg_completed_items_per_day,
-	ROUND(NULLIF(ccic.total_completed_item_count, 0) / NULLIF(coicv.item_count::double precision, 0) * 100) completed_percentage,
+	NULLIF(ccic.total_completed_item_count, 0) / NULLIF(coicv.item_count::double precision, 0) * 100 completed_percentage,
 	coicv.item_count - ccic.total_completed_item_count remaining_item_count,
 	coicv.item_count total_item_count
 FROM public.user_course_bridge ucb

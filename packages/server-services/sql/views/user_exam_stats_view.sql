@@ -1,4 +1,4 @@
-SELECT DISTINCT ON (e.id)
+SELECT DISTINCT ON (e.id, u.id)
 	e.id exam_id,
 	ed.title exam_title,
 	u.id user_id,
@@ -46,4 +46,4 @@ WHERE u.id IS NOT NULL
 AND e.is_pretest IS FALSE
 AND e.is_signup IS FALSE
 
-ORDER BY e.id, asv.end_date desc
+ORDER BY e.id, u.id, asv.end_date desc

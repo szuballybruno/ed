@@ -1,7 +1,7 @@
 import { instantiate } from '@episto/commonlogic';
 import { ErrorWithCode, Id, InvertedLagBehindRatingType, OverallScoreRatingType, UserRegistrationStatusType } from '@episto/commontypes';
 import { BriefUserDataDTO, DepartmentDTO, Mutation, UserAdminListDTO, UserControlDropdownDataDTO, AdminUserCourseDTO, UserDTO, UserEditReadDTO, UserEditSaveDTO, UserEditSimpleDTO } from '@episto/communication';
-import { PrincipalId } from '@thinkhub/x-core';
+import { PrincipalId } from '@episto/x-core';
 import { RegistrationType } from '../models/misc/Types';
 import { AnswerSession } from '../models/tables/AnswerSession';
 import { CourseAccessBridge } from '../models/tables/CourseAccessBridge';
@@ -180,16 +180,12 @@ export class UserService {
         const userIdRelativePaceDiffAvgRows = await this
             ._getAvgUserRelativePaceDiffs(userIds, companyId);
 
-        console.log('userIdRelativePaceDiffAvgRows: ' + userIdRelativePaceDiffAvgRows);
-
         const userProductivityAndLagBehindStats = companyUserOverviewViews
             .map(({ userId, averagePerformancePercentage }) => {
 
                 const relativePaceDiffAvg = userIdRelativePaceDiffAvgRows
                     .single(x => x.userId === userId)
                     .relativePaceDiffAvg;
-
-                console.log('relativePaceDiffAvg: ' + relativePaceDiffAvg);
 
                 const productivityPercentage = this
                     ._userStatsService
@@ -210,9 +206,6 @@ export class UserService {
                     // calculates a % value from -195...200 range
                     return 100 * (relativePaceDiffAvg - (-195)) / (200 - (-195))
                 })();
-
-                console.log('invertedRelativeUserPaceDiff: ' + invertedRelativeUserPaceDiff);
-
 
                 const invertedRelativeUserPaceDiffTextRating = invertedRelativeUserPaceDiff
                     ? this._getinvertedRelativeUserPaceDiffRating(invertedRelativeUserPaceDiff)

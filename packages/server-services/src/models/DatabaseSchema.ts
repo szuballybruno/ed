@@ -1,4 +1,4 @@
-import { XDBMSchemaService } from "@thinkhub/x-orm";
+import { XDBMSchemaService } from "@episto/x-orm";
 import { CourseVersion } from './tables/CourseVersion';
 import { Company } from './tables/Company';
 import { QuestionVersion } from './tables/QuestionVersion';

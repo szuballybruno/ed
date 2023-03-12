@@ -1,6 +1,6 @@
 import { instantiate } from '@episto/commonlogic';
 import { Id, TempomatModeType } from '@episto/commontypes';
-import { PrincipalId } from '@thinkhub/x-core';
+import { PrincipalId } from '@episto/x-core';
 import { UserCourseBridge } from '../models/tables/UserCourseBridge';
 import { TempomatCalculationDataView } from '../models/views/TempomatCalculationDataView';
 import { addDays, dateDiffInDays, getArrayAverage, relativeDiffInPercentage } from '../utilities/helpers';

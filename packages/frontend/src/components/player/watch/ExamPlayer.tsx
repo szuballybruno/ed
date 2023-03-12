@@ -111,6 +111,7 @@ export const ExamPlayer = (props: {
             continueCourse={handleContinueCourse}
             setWatchSubpageState={setWatchSubpageState}
             exam={exam}
+            courseId={courseId}
             answerSessionId={answerSessionId}
             goToCourseRating={goToCourseRating} />
     ];

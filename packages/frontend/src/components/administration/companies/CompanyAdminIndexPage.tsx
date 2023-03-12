@@ -1,5 +1,5 @@
 import { Add } from '@mui/icons-material';
-import { Id } from '@thinkhub/x-core/dist/Id';
+import { Id } from '@episto/x-core/dist/Id';
 import { memo } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { CompanyApiService } from '../../../services/api/CompanyApiService';
