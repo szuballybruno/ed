@@ -10,7 +10,7 @@ param (
 
 # save repo root folder path
 $epi_repo_root_folder = "${PSScriptRoot}/../"
-$xmigen_path = "${epi_repo_root_folder}/thinkhub-xlib/packages/x-migen"
+$xmigen_path = "${epi_repo_root_folder}/packages/x-migen"
 $xmigen_run_prod_script = "${xmigen_path}/scripts/run_migen_prod.ps1"
 
 # run script 

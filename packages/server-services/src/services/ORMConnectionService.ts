@@ -3,9 +3,9 @@ import { Id } from '@episto/commontypes';
 import { InsertEntity } from '../utilities/misc';
 import { ClassType } from '../models/misc/ClassType';
 import { SQLConnectionService } from './SQLConnectionService';
-import { EntityType, ParamConstraintType, SaveEntityType } from '@thinkhub/x-orm';
-import { XQueryBuilder } from '@thinkhub/x-orm';
-import { XQueryBuilderCore } from '@thinkhub/x-orm';
+import { EntityType, ParamConstraintType, SaveEntityType } from '@episto/x-orm';
+import { XQueryBuilder } from '@episto/x-orm';
+import { XQueryBuilderCore } from '@episto/x-orm';
 import { GlobalConfigurationService } from './GlobalConfigurationService';
 
 export class ORMConnectionService {

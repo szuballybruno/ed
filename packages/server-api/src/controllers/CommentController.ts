@@ -3,8 +3,8 @@ import { LikeService } from '@episto/server-services';
 import { CommentCreateDTO } from '@episto/communication';
 import { apiRoutes } from '@episto/communication';
 import { ActionParams } from '../helpers/ActionParams';
-import { XControllerAction } from '@thinkhub/x-gateway';
-import { IXGatewayServiceProvider } from '@thinkhub/x-gateway';
+import { XControllerAction } from '@episto/x-gateway';
+import { IXGatewayServiceProvider } from '@episto/x-gateway';
 import { Id } from '@episto/commontypes';
 import { IController } from '../interfaces/IController';
 

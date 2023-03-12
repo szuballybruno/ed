@@ -1,8 +1,7 @@
 {
   "private": "true",
   "workspaces": [
-    "./packages/*",
-    "./thinkhub-xlib/packages/*"
+    "./packages/*"
   ],
   "scripts": {
     "start-client-web": "yarn lerna run start --scope=@episto/frontend",

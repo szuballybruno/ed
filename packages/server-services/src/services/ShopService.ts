@@ -20,7 +20,7 @@ import { FileService } from './FileService';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService';
 import { UrlService } from './UrlService';
-import { PrincipalId } from '@thinkhub/x-core';
+import { PrincipalId } from '@episto/x-core';
 import { StorageFile } from '../models/tables/StorageFile';
 import { Id } from '@episto/commontypes';
 import { CourseShopItemListView } from '../models/views/CourseShopItemListView';

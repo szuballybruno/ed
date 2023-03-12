@@ -4,7 +4,7 @@ import { ActivationCodeListDTO, AvailableCourseDTO, CourseOverviewDataDTO, Overv
 import { ActivationCodeListView } from '../models/views/ActivationCodeListView';
 import { CourseOverviewView } from '../models/views/CourseOverviewView';
 import { QuestionModuleCompareView } from '../models/views/QuestionModuleCompareView';
-import { PrincipalId } from '@thinkhub/x-core';
+import { PrincipalId } from '@episto/x-core';
 import { CourseProgressService } from './CourseProgressService';
 import { DomainProviderService } from './DomainProviderService';
 import { MapperService } from './MapperService';

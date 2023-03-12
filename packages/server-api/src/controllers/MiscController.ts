@@ -2,7 +2,7 @@ import { Id } from '@episto/commontypes';
 import { apiRoutes } from '@episto/communication';
 import { ActivationCodeService, MiscService, UserCourseBridgeService } from '@episto/server-services';
 import { User } from '@episto/server-services/dist/models/tables/User';
-import { IXGatewayServiceProvider, XControllerAction } from '@thinkhub/x-gateway';
+import { IXGatewayServiceProvider, XControllerAction } from '@episto/x-gateway';
 import { ActionParams } from '../helpers/ActionParams';
 import { IController } from '../interfaces/IController';
 

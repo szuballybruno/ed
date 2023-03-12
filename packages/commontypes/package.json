@@ -11,7 +11,7 @@
         "build": "tsc"
     },
     "dependencies": {
-        "@thinkhub/x-core": "1.0.0"
+        "@episto/x-core": "1.0.0"
     },
     "devDependencies": {
         "@types/node": "18.11.9"

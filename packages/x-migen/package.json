@@ -1,0 +1,25 @@
+{
+  "name": "@episto/x-migen",
+  "version": "1.0.0",
+  "private": true,
+  "license": "UNLICENSED",
+  "main": "./dist/index.js",
+  "typings": "./dist/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "start": "node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm src/index.ts"
+  },
+  "dependencies": {
+    "@episto/x-core": "1.0.0",
+    "@episto/x-injector": "1.0.0",
+    "fs-extra": "^11.1.0",
+    "pg": "^8.8.0"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^9.0.13",
+    "@types/node": "18.11.9",
+    "ts-node": "^10.9.1",
+    "@types/pg": "^8.6.5"
+  }
+}

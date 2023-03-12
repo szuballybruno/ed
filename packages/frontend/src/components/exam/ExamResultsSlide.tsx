@@ -20,13 +20,15 @@ import { QuestionAnswer } from './QuestionAnswer';
 
 export const ExamResultsSlide = (props: {
     exam: ExamPlayerDataDTO,
+    courseId: Id<'Course'>,
     setWatchSubpageState: React.Dispatch<React.SetStateAction<WatchSubpageState>>
     continueCourse: () => void,
     answerSessionId: Id<'AnswerSession'>,
     goToCourseRating: () => void
 }) => {
 
-    const { answerSessionId, goToCourseRating, continueCourse, setWatchSubpageState, exam } = props;
+
+    const { answerSessionId, goToCourseRating, continueCourse, setWatchSubpageState, exam, courseId } = props;
     const { examResults } = useExamResults(answerSessionId);
     const questionsAnswers = examResults?.questions ?? [];
     const { navigate2 } = useNavigation();
@@ -34,8 +36,6 @@ export const ExamResultsSlide = (props: {
         .useIsMobileView();
 
     const [isFullscreen, setIsFullscreen] = useVideoPlayerFullscreenContext();
-
-    const courseId = Id.create<'Course'>(1);
 
     // effects
     useEffect(() => {

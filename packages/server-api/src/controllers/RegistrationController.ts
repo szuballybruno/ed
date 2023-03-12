@@ -3,10 +3,10 @@ import { RegisterUserViaActivationCodeDTO } from '@episto/communication';
 import { RegisterUserViaInvitationTokenDTO } from '@episto/communication';
 import { RegisterUserViaPublicTokenDTO } from '@episto/communication';
 import { apiRoutes } from '@episto/communication';
-import { IXGatewayServiceProvider } from '@thinkhub/x-gateway';
+import { IXGatewayServiceProvider } from '@episto/x-gateway';
 import { setAuthCookies } from '../helpers/cookieHelpers';
 import { ActionParams } from '../helpers/ActionParams';
-import { XControllerAction } from '@thinkhub/x-gateway';
+import { XControllerAction } from '@episto/x-gateway';
 import { IController } from '../interfaces/IController';
 import { CookieOptionProvider } from '../helpers/CookieOptionProvider';
 

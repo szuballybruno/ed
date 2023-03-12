@@ -3,7 +3,7 @@ import { getPieDefaultOptions, pieChartVariantOptions } from './pieChartVariants
 import { EpistoPieChartDataType } from './EpistoPieChartTypes';
 import { EChartsOption, SeriesOption } from 'echarts';
 import { useMemo } from 'react';
-import { deepMergeObjects } from '@thinkhub/x-core';
+import { deepMergeObjects } from '@episto/x-core';
 
 /**
  * Wrapper component for ECharts

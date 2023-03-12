@@ -5,7 +5,7 @@ import { PrequizAnswerDTO } from '@episto/communication';
 import { PrequizQuestionDTO } from '@episto/communication';
 import { PrequizUserAnswerDTO } from '@episto/communication';
 import { Id } from '@episto/commontypes';
-import { PrincipalId } from '@thinkhub/x-core';
+import { PrincipalId } from '@episto/x-core';
 import { AuthorizationService } from './AuthorizationService';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService';

@@ -1,4 +1,4 @@
-import { initJsExtensions } from '@thinkhub/x-core';
+import { initJsExtensions } from '@episto/x-core';
 import { LicenseInfo } from '@mui/x-license-pro';
 import { FC } from 'react';
 import { createRoot } from 'react-dom/client';

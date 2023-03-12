@@ -1,5 +1,5 @@
-import { IXGatewayListener } from "@thinkhub/x-gateway";
-import { SchemaValidator } from "@thinkhub/x-orm";
+import { IXGatewayListener } from "@episto/x-gateway";
+import { SchemaValidator } from "@episto/x-orm";
 import { ServiceProviderInitializator } from "./initApp";
 import { initTurboExpress } from "./instatiateTurboExpress";
 

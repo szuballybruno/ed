@@ -1,10 +1,10 @@
 import { apiRoutes } from '@episto/communication';
 import { Id } from '@episto/commontypes';
 import { ActionParams } from '../helpers/ActionParams';
-import { XControllerAction } from '@thinkhub/x-gateway';
+import { XControllerAction } from '@episto/x-gateway';
 import { IController } from '../interfaces/IController';
 import { UserStatsService } from '@episto/server-services';
-import { IXGatewayServiceProvider } from '@thinkhub/x-gateway';
+import { IXGatewayServiceProvider } from '@episto/x-gateway';
 
 export class UserStatsController implements IController<UserStatsController> {
 

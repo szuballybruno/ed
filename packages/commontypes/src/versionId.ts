@@ -1,2 +1,2 @@
 
-export { Id } from '@thinkhub/x-core';
+export { Id } from '@episto/x-core';

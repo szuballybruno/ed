@@ -5,7 +5,7 @@ import { PermissionListDTO, UserPermissionDTO } from '@episto/communication';
 import { GetPermissionScope, GetParamByCodeType, PermissionScopeParamType } from '@episto/commontypes';
 import { PermissionCodeType } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
-import { PrincipalId } from '@thinkhub/x-core';
+import { PrincipalId } from '@episto/x-core';
 import { MapperService } from './MapperService';
 import { QueryServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService';

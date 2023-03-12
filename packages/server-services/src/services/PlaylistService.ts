@@ -1,7 +1,7 @@
 import { UserPlaylistView } from '../models/views/UserPlaylistView';
 import { PlaylistModuleDTO } from '@episto/communication';
 import { Id } from '@episto/commontypes';
-import { PrincipalId } from '@thinkhub/x-core';
+import { PrincipalId } from '@episto/x-core';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
