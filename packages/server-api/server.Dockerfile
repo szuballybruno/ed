@@ -19,9 +19,6 @@ COPY --from=server-builder /app/tsconfig.json .
 COPY --from=server-builder /app/package.json .
 COPY --from=server-builder /app/packages ./packages
 
-COPY --from=server-builder /app/thinkhub-xlib/tsconfig.json ./thinkhub-xlib/tsconfig.json
-COPY --from=server-builder /app/thinkhub-xlib/packages ./thinkhub-xlib/packages
-
 # expose port 5000
 EXPOSE 5000
 
