@@ -5,7 +5,7 @@ export const UserGuidingFrame = (props: PropsWithChildren) => {
 
     return (
         <>
-            {!Environment.isLocalhost && <script src="./userGuiding.js"></script>}
+            {!Environment.isLocalhost && <script src="../userGuiding.js"></script>}
             {props.children}
         </>
     );
