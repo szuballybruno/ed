@@ -5,7 +5,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "start": "tsc && vite --port 80 --host local.epistogram.com",
-    "build": "tsc && vite build",
+    "build": "tsc && vite build --mode local",
     "build-serve": "yarn build && yarn serve",
     "serve": "serve -l 80 -s build"
   },
