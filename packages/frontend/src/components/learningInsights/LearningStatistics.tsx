@@ -36,7 +36,7 @@ export const LearningStatistics = (props: {
             {
                 title: 'Haladásom',
                 iconPath: Environment.getAssetUrl('/images/learningpagestaticon1.png'),
-                value: 'text'
+                value: '-'
             }, {
                 title: 'Ismétlésre ajánlott videók',
                 iconPath: Environment.getAssetUrl('/images/learningpagestaticon2.png'),
