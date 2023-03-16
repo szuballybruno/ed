@@ -35,7 +35,7 @@ const useColumns = (
     const columns = new EpistoDataGridColumnBuilder<RowType, Id<'User'>>()
         .add({
             field: 'avatar',
-            headerName: 'Avatar',
+            headerName: 'Profilkép',
             width: isSimpleView ? 60 : 80,
             renderCell: ({ value, row }) => (
                 <EpistoFlex2
@@ -94,14 +94,50 @@ const useColumns = (
             width: 250
         })
         .add({
+            field: 'summerizedScoreAvgRatingText',
+            headerName: 'Teljesítmény',
+            width: 150,
+            renderCell: ({ value, row: { summerizedScoreAvg } }) => (
+                <>
+                    {summerizedScoreAvg > 0 && value !== null
+                        ? <PerformanceChip
+                            value={summerizedScoreAvg}
+                            rating={value} />
+                        : ' - '}
+                </>
+            )
+            //renderCell: (value) => value ? Math.round(value.value) + '%' : '-'
+        })
+        .add({
+            field: 'invertedLagBehindRatingText',
+            headerName: 'Haladás',
+            width: 150,
+            renderCell: ({ value, row: { invertedLagBehind } }) => (
+                <>
+                    {value !== null
+                        ? <TempoChip
+                            value={invertedLagBehind}
+                            rating={value} />
+                        : ' - '}
+                </>
+            )
+        })
+        /* .add({
             field: 'username',
             headerName: 'Username',
             width: 150
-        })
+        }) */
+        /*  .add({
+             field: 'signupDate',
+             headerName: 'Regisztráció ideje',
+             width: 150
+         }) */
+
         .add({
-            field: 'signupDate',
-            headerName: 'Regisztráció ideje',
-            width: 150
+            field: 'completedVideoCount',
+            headerName: 'Megtekintett videók száma',
+            renderCell: (value) => value?.value ? value.value + 'db' : '0db',
+            width: 200
         })
         .add({
             field: 'totalSessionLengthSeconds',
@@ -109,12 +145,7 @@ const useColumns = (
             renderCell: (value) => value ? formatTimespan(value.value) : '-',
             width: 150
         })
-        .add({
-            field: 'completedVideoCount',
-            headerName: 'Megtekintett videók száma',
-            renderCell: (value) => value?.value ? value.value + 'db' : '0db',
-            width: 150
-        })
+
         /* .add({
             field: 'tempoRating',
             headerName: 'Tempó',
@@ -143,33 +174,8 @@ const useColumns = (
                 </>
             )
         }) */
-        .add({
-            field: 'summerizedScoreAvgRatingText',
-            headerName: 'Átlagos teljesítmény',
-            renderCell: ({ value, row: { summerizedScoreAvg } }) => (
-                <>
-                    {summerizedScoreAvg > 0 && value !== null
-                        ? <PerformanceChip
-                            value={summerizedScoreAvg}
-                            rating={value} />
-                        : ' - '}
-                </>
-            )
-            //renderCell: (value) => value ? Math.round(value.value) + '%' : '-'
-        })
-        .add({
-            field: 'invertedLagBehindRatingText',
-            headerName: 'Haladás',
-            renderCell: ({ value, row: { invertedLagBehind } }) => (
-                <>
-                    {value !== null
-                        ? <TempoChip
-                            value={invertedLagBehind}
-                            rating={value} />
-                        : ' - '}
-                </>
-            )
-        })
+
+
         /*   .add({
               field: 'productivityPercentage',
               headerName: 'Produktivitás',
