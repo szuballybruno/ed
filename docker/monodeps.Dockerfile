@@ -35,8 +35,6 @@ RUN yarn install --immutable --immutable-cache --check-cache --network-timeout 1
 FROM node:18.12.1-alpine as monodeps-final
 WORKDIR /app
 
-COPY --from=deps /app ./
-
 # copy folders containing node_modules
 COPY --from=monodeps-npm /app/node_modules ./node_modules
 COPY --from=monodeps-npm /app/packages ./packages
