@@ -1,4 +1,4 @@
-./db_transfer `
+& $PSScriptRoot/../core/db_transfer `
     -src_pass "$env:GCP_POSTGRES_USER_PASSWORD" `
     -src_host '34.118.107.79' `
     -src_port '5432' `

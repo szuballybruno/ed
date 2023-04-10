@@ -1,9 +1,9 @@
 import { ChangePasswordDTO } from '@episto/communication';
 import { PasswordChangeService } from '@episto/server-services';
 import { ActionParams } from '../helpers/ActionParams';
-import { XControllerAction } from '@thinkhub/x-gateway';
+import { XControllerAction } from '@episto/x-gateway';
 import { apiRoutes } from '@episto/communication';
-import { IXGatewayServiceProvider } from '@thinkhub/x-gateway';
+import { IXGatewayServiceProvider } from '@episto/x-gateway';
 import { IController } from '../interfaces/IController';
 
 export class PasswordChangeController implements IController<PasswordChangeController> {

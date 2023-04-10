@@ -94,7 +94,7 @@ export const AdminUserStatisticsSubpage = ({
                         {/* correct answer percentage */}
                         <StatisticsCard
                             title={texts.statisticsCards.correctAnswerRatePercentage}
-                            value={Math.floor(correctAnsweredNonExamQuestionCount)}
+                            value={correctAnsweredNonExamQuestionCount ? Math.floor(correctAnsweredNonExamQuestionCount) : null}
                             suffix={translatableTexts.misc.suffixes.percentage}
                             iconPath={Environment.getAssetUrl('images/learningreport04.png')} />
 
@@ -120,7 +120,7 @@ export const AdminUserStatisticsSubpage = ({
 
                         <StatisticsCard
                             iconPath={Environment.getAssetUrl('images/learningreport01.png')}
-                            value={totalTimeActiveOnPlatformSecondsFormatted}
+                            value={totalTimeActiveOnPlatformSecondsFormatted ? totalTimeActiveOnPlatformSecondsFormatted : null}
                             suffix={translatableTexts.misc.suffixes.hour}
                             title={texts.statisticsCards.activeTimeSpentOnPlatform} />
 

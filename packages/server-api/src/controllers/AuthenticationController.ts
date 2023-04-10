@@ -3,9 +3,9 @@ import { apiRoutes } from '@episto/communication';
 import { AuthenticationService, GlobalConfigurationService } from '@episto/server-services';
 import { getAuthCookies, setAuthCookies } from '../helpers/cookieHelpers';
 import { CookieOptionProvider } from '../helpers/CookieOptionProvider';
-import { IXGatewayServiceProvider } from '@thinkhub/x-gateway';
+import { IXGatewayServiceProvider } from '@episto/x-gateway';
 import { IController } from '../interfaces/IController';
-import { XControllerAction } from '@thinkhub/x-gateway';
+import { XControllerAction } from '@episto/x-gateway';
 import { ActionParams } from '../helpers/ActionParams';
 
 export class AuthenticationController implements IController<AuthenticationController> {

@@ -33,7 +33,7 @@ export const useModuleEditColumns = ({
     return new EpistoDataGridColumnBuilder<ModuleEditRowType, Id<'ModuleVersion'>>()
         .add({
             field: 'imageFilePath',
-            headerName: 'Cover',
+            headerName: 'Borítókép',
             renderCell: ({ value, key, field }) => (
                 <EpistoImageSelector
                     className="whall"
@@ -56,7 +56,7 @@ export const useModuleEditColumns = ({
         })
         .add({
             field: 'name',
-            headerName: 'Name',
+            headerName: 'Modul neve',
             width: 250,
             editHandler: ({ rowKey, value, field }) => mutatorFunctions
                 .mutate({
@@ -67,7 +67,7 @@ export const useModuleEditColumns = ({
         })
         .add({
             field: 'description',
-            headerName: 'Descriotion',
+            headerName: 'Leírás',
             width: 300,
             editHandler: ({ rowKey, value, field }) => mutatorFunctions
                 .mutate({

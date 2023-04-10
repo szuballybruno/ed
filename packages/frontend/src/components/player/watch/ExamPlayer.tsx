@@ -111,6 +111,7 @@ export const ExamPlayer = (props: {
             continueCourse={handleContinueCourse}
             setWatchSubpageState={setWatchSubpageState}
             exam={exam}
+            courseId={courseId}
             answerSessionId={answerSessionId}
             goToCourseRating={goToCourseRating} />
     ];
@@ -121,7 +122,7 @@ export const ExamPlayer = (props: {
 
             <EpistoPaging
                 slides={examWorkflowPages}
-                index={examWorkflowSlides.currentIndex} />;
+                index={examWorkflowSlides.currentIndex} />
         </EpistoFlex2>
     );
 };

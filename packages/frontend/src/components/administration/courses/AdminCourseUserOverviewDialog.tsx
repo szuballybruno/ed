@@ -27,7 +27,9 @@ export const AdminCourseUserOverviewDialog = (props: {
 
     const { logic } = props;
 
-    const { courseOverviewData } = useCourseOverviewData(logic.params?.userId, logic.params?.courseId);
+    console.log(logic.params);
+
+    const { courseOverviewData } = useCourseOverviewData(logic.params?.userId || null, logic.params?.courseId || null);
 
     const courseStatsOverviewData = [
         {

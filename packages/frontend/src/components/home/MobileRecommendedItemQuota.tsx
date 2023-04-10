@@ -16,12 +16,12 @@ export const MobileRecommendedItemQuota = (props: {
     const completedToday = (() => {
 
         if (!recommendedItemQuota?.completedToday && recommendedItemQuota?.recommendedItemsPerDay)
-            return '0/' + recommendedItemQuota.recommendedItemsPerDay;
+            return '0/' + Math.round(recommendedItemQuota.recommendedItemsPerDay);
 
         if (!recommendedItemQuota?.completedToday && !recommendedItemQuota?.recommendedItemsPerDay)
             return '-';
 
-        return `${recommendedItemQuota.completedToday}/${recommendedItemQuota.recommendedItemsPerDay}`;
+        return `${recommendedItemQuota.completedToday}/${Math.round(recommendedItemQuota.recommendedItemsPerDay)}`;
     })();
 
     const completedThisWeek = (() => {

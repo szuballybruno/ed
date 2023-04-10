@@ -8,6 +8,7 @@ export class AdminCourseUserStatsDTO {
     lastName: string;
     avatarUrl: string;
     completedPercentage: number;
+    performancePercentage: number;
     completedVideoCount: number;
     completedExamCount: number;
     videoCount: number;
@@ -15,10 +16,10 @@ export class AdminCourseUserStatsDTO {
     totalSpentSeconds: number;
     finalExamScorePercentage: number;
     summerizedScore: number;
-    completionDate: Date | null;
-    tempoPercentage: number;
-    tempoRating: TempoRatingType;
     requiredCompletionDate: Date | null;
-    estimatedCompletionDate: Date | null;
+    completionDate: Date | null;
+    previsionedDate: Date | null;
+    previsionedLagBehindDays: number | null;
+    actualLagBehindDays: number | null;
 }
 

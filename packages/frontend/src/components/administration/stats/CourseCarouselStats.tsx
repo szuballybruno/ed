@@ -1,5 +1,5 @@
 import { ArrowBack, ArrowForward, FiberManualRecord } from '@mui/icons-material';
-import { Id } from '@thinkhub/x-core';
+import { Id } from '@episto/x-core';
 import { useMemo } from 'react';
 import { AdminApiService } from '../../../services/api/AdminApiService';
 import { Environment } from '../../../static/Environemnt';

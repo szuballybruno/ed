@@ -1,5 +1,5 @@
 import { AdminCourseCarouselDataDTO } from '@episto/communication';
-import { Id, PrincipalId } from '@thinkhub/x-core';
+import { Id, PrincipalId } from '@episto/x-core';
 import { AdminCourseCarouselDataView } from '../models/views/AdminCourseCarouselDataView';
 import { CompanyService } from './CompanyService';
 import { MapperService } from './MapperService';

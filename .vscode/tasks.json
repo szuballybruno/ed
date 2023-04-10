@@ -14,7 +14,7 @@
         {
             "type": "shell",
             "label": "start-client-web",
-            "command": "yarn start-client",
+            "command": "yarn start-client-web",
             "problemMatcher": [],
             "presentation": {
                 "group": "run"
@@ -23,10 +23,19 @@
         {
             "type": "shell",
             "label": "start-server-api",
-            "command": "yarn start-server",
+            "command": "yarn start-server-api",
             "problemMatcher": [],
             "presentation": {
                 "group": "run"
+            }
+        },
+        {
+            "type": "shell",
+            "label": "build-server-api",
+            "command": "yarn build-server-api",
+            "problemMatcher": [],
+            "presentation": {
+                "group": "build"
             }
         },
         {
@@ -52,11 +61,20 @@
         },
         {
             "type": "shell",
-            "label": "build-comm",
+            "label": "build-communication",
             "command": "yarn build-comm",
             "problemMatcher": [],
             "presentation": {
-                "group": "run"
+                "group": "build"
+            }
+        },
+        {
+            "type": "shell",
+            "label": "build-server-services",
+            "command": "yarn build-server-services",
+            "problemMatcher": [],
+            "presentation": {
+                "group": "build"
             }
         },
         {
@@ -104,13 +122,20 @@
             },
             "problemMatcher": []
         },
-        // run-all
         {
             "label": "start-dev-mode",
             "dependsOn": [
                 "start-client-web",
                 "start-server-api",
                 "mon-server-services"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "start-all",
+            "dependsOn": [
+                "start-client-web",
+                "start-server-api"
             ],
             "problemMatcher": []
         },
@@ -177,6 +202,18 @@
             "problemMatcher": [],
             "presentation": {
                 "group": "migarion"
+            }
+        },
+        {
+            "label": "mainToLocal",
+            "type": "shell",
+            "command": "powershell.exe ./mainToLocal.ps1",
+            "options": {
+                "cwd": "${workspaceFolder}/scripts/transfer"
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "group": "migration"
             }
         }
     ]

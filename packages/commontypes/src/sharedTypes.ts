@@ -19,12 +19,15 @@ export type ErrorCodeType =
     'email_invalid' |
     'first_name_invalid' |
     'last_name_invalid' |
-    'username_invalid';
+    'username_invalid' |
+    'unauthorized';
 
 export type UserRegistrationStatusType = 'invited' | 'active';
 
 export type TempoRatingType = 'very_good' | 'good' | 'average' | 'bad' | 'very_bad';
 export type PerformanceRatingType = 'very_good' | 'good' | 'average' | 'bad' | 'very_bad';
+export type OverallScoreRatingType = 'very_good' | 'good' | 'average' | 'bad' | 'very_bad';
+export type InvertedLagBehindRatingType = 'very_good' | 'good' | 'average' | 'bad' | 'very_bad';
 
 export type GivenAnswerStateType = 'INCORRECT' | 'CORRECT' | 'MIXED';
 

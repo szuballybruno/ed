@@ -1,5 +1,5 @@
-import { XViewColumn } from '@thinkhub/x-orm';
-import { Id } from '@episto/commontypes';
+import { XViewColumn } from '@episto/x-orm';
+import { Id } from '@episto/x-core';
 
 export class CourseAdminContentView {
 
@@ -50,4 +50,7 @@ export class CourseAdminContentView {
 
     @XViewColumn()
     videoAudioText: string;
+
+    @XViewColumn()
+    videoDescription: string;
 }

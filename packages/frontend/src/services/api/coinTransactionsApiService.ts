@@ -17,10 +17,10 @@ export const useCoinTransactions = () => {
 
 export const useCoinBalance = () => {
 
-    const qr = QueryService.useXQuery<number>(apiRoutes.coinTransactions.getCoinBalance);
+    const qr = QueryService.useXQuery<{ coinBalance: number }>(apiRoutes.coinTransactions.getCoinBalance);
 
     return {
-        coinBalance: qr.data ?? 0,
+        coinBalance: qr.data ?? { coinBalance: 0 },
         coinBalanceError: qr.error,
         coinBalanceStatus: qr.state,
         refetchCoinBalance: qr.refetch
@@ -29,10 +29,10 @@ export const useCoinBalance = () => {
 
 export const useCoinBalanceOfUser = (userId: Id<'User'> | null) => {
 
-    const qr = QueryService.useXQuery<number>(apiRoutes.coinTransactions.getCoinBalanceOfUser, { userId }, !!userId);
+    const qr = QueryService.useXQuery<{ coinBalance: number }>(apiRoutes.coinTransactions.getCoinBalanceOfUser, { userId }, !!userId);
 
     return {
-        coinBalance: qr.data ?? 0,
+        coinBalance: qr.data?.coinBalance ?? 0,
         coinBalanceError: qr.error,
         coinBalanceStatus: qr.state,
         refetchCoinBalance: qr.refetch

@@ -1,28 +1,30 @@
 -- total and total correct given answer count,
 -- and answered question count
 WITH
+answered_question_count_cte AS
+(
+	SELECT
+		ga.answer_session_id,
+		COUNT(*)::int answered_question_count
+	FROM public.question_version qv
+
+	LEFT JOIN public.given_answer ga
+	ON ga.question_version_id = qv.id
+	
+	GROUP BY ga.answer_session_id
+),
 answer_stats AS
 (
 	SELECT
 		ase.user_id,
 		ase.id answer_session_id,
 		COUNT (ga.id)::int given_answer_count,
-		SUM ((ga.state = 'CORRECT')::int)::int correct_given_answer_count,
-		(
-			SELECT
-				COUNT(*)::int
-			FROM public.question_version qv
-
-			LEFT JOIN public.given_answer ga
-			ON ga.question_version_id = qv.id
-
-			WHERE ga.answer_session_id = ase.id
-		) answered_question_count
+		SUM ((ga.state = 'CORRECT')::int)::int correct_given_answer_count
 	FROM public.given_answer ga
 
 	LEFT JOIN public.answer_session ase
 	ON ase.id = ga.answer_session_id
-
+	
 	GROUP BY ase.user_id, ase.id
 )
 SELECT
@@ -34,11 +36,11 @@ SELECT
 	esv.exam_score answer_session_acquired_points,
 	esv.score_percentage answer_session_success_rate,
 	esv.score_percentage > COALESCE(ed.acceptance_threshold, 60) is_successful,
-	ast.answered_question_count,
 	ast.correct_given_answer_count,
 	ast.given_answer_count,
 	cic.completion_date IS NOT NULL is_completed,
 	cic.completion_date end_date,
+	aqcc.answered_question_count,
 	CASE
 		WHEN ase.is_practise
 			THEN 'practise'
@@ -72,3 +74,6 @@ ON ev.exam_id = e.id
 
 LEFT JOIN public.course_item_completion_view cic
 ON cic.answer_session_id = ase.id
+
+LEFT JOIN answered_question_count_cte aqcc
+ON aqcc.answer_session_id = ase.id

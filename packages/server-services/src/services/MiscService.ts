@@ -4,7 +4,7 @@ import { ActivationCodeListDTO, AvailableCourseDTO, CourseOverviewDataDTO, Overv
 import { ActivationCodeListView } from '../models/views/ActivationCodeListView';
 import { CourseOverviewView } from '../models/views/CourseOverviewView';
 import { QuestionModuleCompareView } from '../models/views/QuestionModuleCompareView';
-import { PrincipalId } from '@thinkhub/x-core';
+import { PrincipalId } from '@episto/x-core';
 import { CourseProgressService } from './CourseProgressService';
 import { DomainProviderService } from './DomainProviderService';
 import { MapperService } from './MapperService';
@@ -23,15 +23,18 @@ export class MiscService {
 
     async getCourseOverviewDataAsync(
         principalId: PrincipalId,
-        userId?: Id<'User'>,
-        courseId?: Id<'Course'>
+        userId: Id<'User'> | null,
+        courseId: Id<'Course'> | null
     ) {
 
-        const uId = userId
+        console.log('userId: ' + userId);
+        console.log('courseId: ' + courseId);
+
+        const uId = userId !== null
             ? userId
             : Id.create<'User'>(principalId.toSQLValue());
 
-        const cId = courseId
+        const cId = courseId !== null
             ? courseId
             : await this._userCourseBridgeService
                 .getCurrentCourseIdOrFail(uId);

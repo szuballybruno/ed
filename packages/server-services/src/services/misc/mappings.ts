@@ -1,7 +1,7 @@
 import { instantiate } from '@episto/commonlogic';
-import { CourseItemStateType, CourseItemType, CourseRatingQuesitonType, CourseStageNameType, CourseVisibilityType, EventCodeType, GivenAnswerStateType, Id, LeaderboardPeriodType, PerformanceRatingType, PermissionCodeType, PermissionScopeType, TeacherBadgeNameType, TempoRatingType, UserActivityDistributionChartData, VersionCode } from '@episto/commontypes';
-import { ActivationCodeListDTO, AdminCourseCarouselDataDTO, AdminCourseUserStatsDTO, AnswerDTO, AnswerEditDTO, AvailableCourseDTO, CoinTransactionDTO, CommentListDTO, CompanyAssociatedCourseDTO, CompanyDTO, CompanyEditDataDTO, CompanyPublicDTO, CourseAdminListItemDTO, CourseBriefData, CourseCategoryDTO, CourseContentItemAdminDTO, CourseContentItemIssueDTO, CourseDetailsDTO, CourseDetailsEditDataDTO, CourseItemEditDTO, CourseLearningDTO, CourseOverviewDataDTO, CourseProgressShortDTO, CourseRatingGroupDTO, CourseRatingQuestionDTO, CourseShopItemListDTO, CourseStatDTO, DailyTipDTO, DailyTipEditDataDTO, DiscountCodeDTO, EventDTO, ExamPlayerDataDTO, ExamResultQuestionDTO, ExamResultsDTO, ExamStatsDTO, HomePageStatsDTO, LeaderboardListItemDTO, ModuleEditDTO, ModulePlayerDTO, PermissionListDTO, PersonalityTraitCategoryDTO, PersonalityTraitCategoryShortDTO, PlaylistItemDTO, PlaylistModuleDTO, PrequizAnswerDTO, PrequizQuestionDTO, PretestResultDTO, QuestionDTO, QuestionModuleCompareDTO, ResultAnswerDTO, RoleAdminListDTO, RoleDTO, ShopItemAdminShortDTO, ShopItemBriefData, ShopItemCategoryDTO, ShopItemDTO, ShopItemEditDTO, SignupAnswerDTO, SignupQuestionDTO, SurveyDataDTO, TaskDTO, TeacherInfoEditDTO, UserActiveCourseDTO, UserAdminListDTO, AdminUserCourseDTO, UserCourseStatsOverviewDTO, UserDTO, UserExamStatsDTO, UserLearningPageStatsDTO, UserModuleStatsDTO, UserProgressChartStep, UserStatisticsDTO, UserVideoStatsDTO, VideoPlayerDataDTO } from '@episto/communication';
-import { Mutable, XMappingsBuilder } from '@thinkhub/x-mapper';
+import { CourseItemStateType, CourseItemType, CourseRatingQuesitonType, CourseStageNameType, CourseVisibilityType, EventCodeType, GivenAnswerStateType, Id, LeaderboardPeriodType, OverallScoreRatingType, PerformanceRatingType, PermissionCodeType, PermissionScopeType, TeacherBadgeNameType, TempoRatingType, UserActivityDistributionChartData, VersionCode } from '@episto/commontypes';
+import { ActivationCodeListDTO, AdminCourseCarouselDataDTO, AdminCourseUserStatsDTO, AdminUserCourseDTO, AnswerDTO, AnswerEditDTO, AvailableCourseDTO, CoinTransactionDTO, CommentListDTO, CompanyAssociatedCourseDTO, CompanyDTO, CompanyEditDataDTO, CompanyPublicDTO, CourseAdminListItemDTO, CourseBriefData, CourseCategoryDTO, CourseContentItemAdminDTO, CourseContentItemIssueDTO, CourseDetailsDTO, CourseDetailsEditDataDTO, CourseItemEditDTO, CourseLearningDTO, CourseOverviewDataDTO, CourseProgressShortDTO, CourseRatingGroupDTO, CourseRatingQuestionDTO, CourseShopItemListDTO, CourseStatDTO, DailyTipDTO, DailyTipEditDataDTO, DiscountCodeDTO, EventDTO, ExamPlayerDataDTO, ExamResultQuestionDTO, ExamResultsDTO, ExamStatsDTO, HomePageStatsDTO, LeaderboardListItemDTO, ModuleEditDTO, ModulePlayerDTO, PermissionListDTO, PersonalityTraitCategoryDTO, PersonalityTraitCategoryShortDTO, PlaylistItemDTO, PlaylistModuleDTO, PrequizAnswerDTO, PrequizQuestionDTO, PretestResultDTO, QuestionDTO, QuestionModuleCompareDTO, ResultAnswerDTO, RoleAdminListDTO, RoleDTO, ShopItemAdminShortDTO, ShopItemBriefData, ShopItemCategoryDTO, ShopItemDTO, ShopItemEditDTO, SignupAnswerDTO, SignupQuestionDTO, SurveyDataDTO, TaskDTO, TeacherInfoEditDTO, UserActiveCourseDTO, UserAdminListDTO, UserCourseProgressChartDTO, UserCourseStatsDTO, UserCourseStatsOverviewDTO, UserDTO, UserExamStatsDTO, UserLearningPageStatsDTO, UserModuleStatsDTO, UserProgressChartStep, UserStatisticsDTO, UserVideoStatsDTO, VideoPlayerDataDTO } from '@episto/communication';
+import { Mutable, XMappingsBuilder } from '@episto/x-mapper';
 import { TempomatDataAvgModel } from '../../models/misc/TempomatDataAvgModel';
 import { TempomatDataModel } from '../../models/misc/TempomatDataModel';
 import { Company } from '../../models/tables/Company';
@@ -55,18 +55,20 @@ import { RoleListView } from '../../models/views/RoleListView';
 import { ShopItemStatefulView } from '../../models/views/ShopItemStatefulView';
 import { ShopItemView } from '../../models/views/ShopItemView';
 import { SignupQuestionView } from '../../models/views/SignupQuestionView';
-import { TempomatCalculationDataView } from '../../models/views/TempomatCalculationDataView';
 import { UserActiveCourseView } from '../../models/views/UserActiveCourseView';
 import { UserExamStatsView } from '../../models/views/UserExamStatsView';
 import { UserLearningOverviewStatsView } from '../../models/views/UserLearningOverviewStatsView';
 import { UserLearningPageStatsView } from '../../models/views/UserLearningPageStatsView';
 import { UserModuleStatsView } from '../../models/views/UserModuleStatsView';
+import { UserOverviewView } from '../../models/views/UserOverviewView';
 import { UserPlaylistView } from '../../models/views/UserPlaylistView';
 import { UserSpentTimeRatioView } from '../../models/views/UserSpentTimeRatioView';
 import { UserVideoStatsView } from '../../models/views/UserVideoStatsView';
 import { VideoPlayerDataView } from '../../models/views/VideoPlayerDataView';
 import { relativeDiffInPercentage, toFullName } from '../../utilities/helpers';
+import { CalculatedTempomatValueType } from '../TempomatService';
 import { UrlService } from '../UrlService';
+import { UserLagbehindStatType } from './types';
 
 export const epistoMappingsBuilder = new XMappingsBuilder<[UrlService]>();
 
@@ -88,58 +90,47 @@ const marray = [
 
     epistoMappingsBuilder
         .addArrayMapping(AdminCourseUserStatsDTO, () => (
-            views: AdminCourseUserStatsView[],
-            tempomatDatas: TempomatDataModel[]
+            views: (AdminCourseUserStatsView & {
+                previsionedDate: Date | null,
+                previsionedLagBehindDays: number | null,
+                actualLagBehindDays: number | null
+            })[],
         ) => {
 
-            return views
-                .map((view) => {
-
-                    const tempomatData = tempomatDatas
-                        .firstOrNull(x => x.userId === view.userId);
-
-                    const requiredCompletionDate = tempomatData?.requiredCompletionDate ?? null;
-                    const estimatedCompletionDate = tempomatData?.estimatedCompletionDate ?? null;
-                    const tempoPercentage = tempomatData?.userPerformancePercentage ?? 0;
-                    const tempoRating = tempomatData?.tempoRating ?? 'average';
-
-                    return instantiate<AdminCourseUserStatsDTO>({
-                        companyId: view.companyId,
-                        userId: view.userId,
-                        courseId: view.courseId,
-                        firstName: view.firstName,
-                        lastName: view.lastName,
-                        avatarUrl: view.avatarUrl,
-                        completedPercentage: view.completedPercentage,
-                        completedVideoCount: view.completedVideoCount,
-                        completedExamCount: view.completedExamCount,
-                        videoCount: view.videoCount,
-                        examCount: view.examCount,
-                        totalSpentSeconds: view.totalSpentSeconds,
-                        finalExamScorePercentage: view.finalExamScorePercentage,
-                        summerizedScore: 0,
-                        completionDate: view.completionDate,
-                        requiredCompletionDate,
-                        tempoPercentage,
-                        estimatedCompletionDate,
-                        tempoRating
-                    });
-                });
+            return views.map(x => instantiate<AdminCourseUserStatsDTO>({
+                companyId: x.companyId,
+                userId: x.userId,
+                courseId: x.courseId,
+                firstName: x.firstName,
+                lastName: x.lastName,
+                avatarUrl: x.avatarUrl,
+                completedPercentage: x.completedPercentage,
+                performancePercentage: x.performancePercentage,
+                completedVideoCount: x.completedVideoCount,
+                completedExamCount: x.completedExamCount,
+                videoCount: x.videoCount,
+                examCount: x.examCount,
+                totalSpentSeconds: x.totalSpentSeconds,
+                finalExamScorePercentage: x.finalExamScorePercentage,
+                summerizedScore: x.summerizedScore,
+                requiredCompletionDate: x.requiredCompletionDate,
+                completionDate: x.completionDate,
+                previsionedDate: x.previsionedDate,
+                previsionedLagBehindDays: x.previsionedLagBehindDays,
+                actualLagBehindDays: x.actualLagBehindDays
+            }));
         }),
     epistoMappingsBuilder
         .addArrayMapping(UserAdminListDTO, () => (
-            views: AdminUserListView[],
-            tempomatDataAvgModels: TempomatDataAvgModel[]) => {
+            views: (UserOverviewView & { summerizedScoreAvgRatingText: OverallScoreRatingType })[],
+            lagBehindStats: UserLagbehindStatType[]
+        ) => {
 
             return views
                 .map(view => {
 
-                    const pa = tempomatDataAvgModels
-                        .firstOrNull(x => x.userId === view.userId);
-
-                    const avgTempoPercentage = pa?.tempoPercentage ?? 0;
-                    const tempoRating = pa?.tempoRating ?? 'average';
-                    const hasAvgTempoPercentage = !!pa;
+                    const lagBehindStat = lagBehindStats
+                        .single(x => x.userId === view.userId);
 
                     return instantiate<UserAdminListDTO>({
                         userId: view.userId,
@@ -149,14 +140,16 @@ const marray = [
                         firstName: view.firstName,
                         lastName: view.lastName,
                         avatarFilePath: view.avatarFilePath ?? '',
+                        summerizedScoreAvg: view.summerizedScoreAvg,
+                        summerizedScoreAvgRatingText: view.summerizedScoreAvgRatingText,
                         totalSessionLengthSeconds: view.totalSessionLengthSeconds,
+                        engagementPoints: view.engagementPoints,
                         completedVideoCount: view.completedVideoCount,
+                        reactionTime: view.reactionTime,
                         username: view.username,
-                        avgTempoPercentage,
-                        hasAvgTempoPercentage,
-                        tempoRating,
-                        avgPerformancePercentage: view.averagePerformancePercentage,
-                        avgPerformancePercentageRating: getPerformanceRating(view.averagePerformancePercentage)
+                        productivityPercentage: lagBehindStat.productivityPercentage,
+                        invertedRelativeUserPaceDiff: lagBehindStat.invertedRelativeUserPaceDiff,
+                        invertedRelativeUserPaceDiffRatingText: lagBehindStat.invertedRelativeUserPaceDiffTextRating
                     });
                 });
         }),
@@ -170,7 +163,7 @@ const marray = [
                 moduleId: x.moduleId,
                 moduleName: x.moduleName,
                 moduleProgress: x.moduleProgress,
-                tempoPercentage: 0,
+                performancePercentage: x.performancePercentage,
                 lastExamScore: x.lastExamScore,
                 moduleQuestionSuccessRate: x.moduleQuestionSuccessRate,
                 videosToBeRepeatedCount: x.videosToBeRepeatedCount
@@ -181,9 +174,9 @@ const marray = [
         .addMapping(UserCourseStatsOverviewDTO, () => (
             view: AdminUserCourseView,
             userSpentTimeRatio: UserSpentTimeRatioView,
-            progressChartData: UserProgressChartStep[],
-            tempoPercentage: number,
-            tempoRating: TempoRatingType
+            progressChartData: UserCourseProgressChartDTO | null,
+            /* tempoPercentage: number,
+            tempoRating: TempoRatingType */
         ) => {
 
             return instantiate<UserCourseStatsOverviewDTO>({
@@ -194,6 +187,7 @@ const marray = [
                 answeredVideoQuestionCount: view.answeredVideoQuestionCount,
                 courseProgressPercentage: view.courseProgressPercentage,
                 correctAnswerRate: view.correctAnswerRate,
+                performancePercentage: view.performancePercentage,
                 startDate: view.startDate,
                 completedVideoCount: view.completedVideoCount,
                 totalSpentSeconds: view.totalSpentSeconds,
@@ -203,9 +197,7 @@ const marray = [
                     answeringQuestionsPercentage: userSpentTimeRatio.totalQuestionElapsedTime,
                     noActivityPercentage: userSpentTimeRatio.otherTotalSpentSeconds
                 }),
-                progressChartData: progressChartData,
-                tempoPercentage,
-                tempoRating,
+                progressChartData: progressChartData
             });
         }),
 
@@ -266,14 +258,8 @@ const marray = [
             return adminUserCourseViews
                 .map((view, index) => {
 
-                    const {
-                        recommendedItemsPerWeek,
-                        estimatedCompletionDate: previsionedCompletionDate,
-                        userPerformancePercentage,
-                        tempomatMode,
-                        tempoRating
-                    } = tempomatValues
-                        .byIndex(index);
+                    const tempomatData = tempomatValues
+                        .firstOrNull(x => x.courseId === view.courseId);
 
                     return instantiate<AdminUserCourseDTO>({
                         userId: view.userId,
@@ -291,13 +277,15 @@ const marray = [
                         answeredPractiseQuestionCount: view.answeredPractiseQuestionCount,
                         isFinalExamCompleted: view.isFinalExamCompleted,
                         requiredCompletionDate: view.requiredCompletionDate,
-                        tempomatMode,
-                        tempoRating,
-                        tempoPercentage: userPerformancePercentage,
-                        recommendedItemsPerWeek: recommendedItemsPerWeek,
-                        previsionedCompletionDate: previsionedCompletionDate,
                         performancePercentage: view.performancePercentage,
-                        performanceRating: getPerformanceRating(view.performancePercentage)
+                        performanceRating: getPerformanceRating(view.performancePercentage),
+
+                        // tempomat
+                        tempomatMode: tempomatData?.tempomatMode ?? null,
+                        tempoRating: tempomatData?.tempoRating ?? null,
+                        tempoPercentage: tempomatData?.userPerformancePercentage ?? null,
+                        recommendedItemsPerWeek: tempomatData?.recommendedItemsPerWeek ?? null,
+                        previsionedCompletionDate: tempomatData?.estimatedCompletionDate ?? null,
                     });
                 });
         }),
@@ -587,7 +575,6 @@ const marray = [
                 teacherId: view.teacherId,
                 humanSkillBenefitsDescription: view.humanSkillBenefitsDescription,
                 technicalRequirementsDescription: view.technicalRequirements,
-                isPrecourseSurveyRequired: view.isPrecourseSurveyRequired,
 
                 skillBenefits: parseCommaSeparatedStringList(view.skillBenefits),
                 technicalRequirements: parseCommaSeparatedStringList(view.technicalRequirements),
@@ -614,14 +601,12 @@ const marray = [
     epistoMappingsBuilder
         .addMapping(UserLearningPageStatsDTO, () => (
             view: UserLearningPageStatsView,
-            userPerformancePercentage: number,
-            userPerormanceRating: TempoRatingType) => {
+            avgRelativeUserPaceDiff: number | null) => {
 
             return instantiate<UserLearningPageStatsDTO>({
                 userId: view.userId,
                 userEmail: view.userEmail,
-                userPerformancePercentage,
-                userPerormanceRating,
+                avgRelativeUserPaceDiff,
                 videosToBeRepeatedCount: view.videosToBeRepeatedCount,
                 questionsToBeRepeatedCount: view.questionsToBeRepeatedCount,
                 completedVideoCount: view.completedVideoCount,
@@ -851,6 +836,7 @@ const marray = [
                     warnings,
                     videoLength: view.videoLength,
                     videoAudioText: view.videoAudioText,
+                    videoDescription: view.videoDescription,
                     itemType: view.itemType as CourseItemType,
                     questionMutations: [],
                     answerMutations: [],
@@ -1242,6 +1228,41 @@ const marray = [
                 answers
             });
         }),
+    epistoMappingsBuilder
+        .addArrayMapping(UserCourseStatsDTO, ([assetUrlService]) => (
+            adminUserCourseViews: AdminUserCourseView[],
+            tempomatValues: Partial<CalculatedTempomatValueType>[]) => adminUserCourseViews
+                .map((view, index) => {
+
+                    const { recommendedItemsPerWeek, relativeUserPaceDiff, previsionedCompletionDate } = tempomatValues
+                        .byIndex(index);
+
+                    return instantiate<UserCourseStatsDTO>({
+                        userId: view.userId,
+                        courseId: view.courseId,
+                        courseName: view.title,
+                        isAccessible: view.isAccessible,
+                        isAssigned: view.isAssigned,
+                        thumbnailImageUrl: assetUrlService.getAssetUrl(view.coverFilePath),
+                        startDate: view.startDate,
+                        differenceFromAveragePerformancePercentage: view.differenceFromAveragePerformancePercentage,
+                        courseProgressPercentage: view.courseProgressPercentage,
+                        performancePercentage: view.performancePercentage,
+                        completedVideoCount: view.completedVideoCount,
+                        completedExamCount: view.completedExamCount,
+                        totalSpentSeconds: view.totalSpentSeconds,
+                        averagePerformanceOnCourse: view.avgPerformance,
+                        answeredVideoQuestionCount: view.answeredVideoQuestionCount,
+                        answeredPractiseQuestionCount: view.answeredPractiseQuestionCount,
+                        isFinalExamCompleted: view.isFinalExamCompleted,
+                        requiredCompletionDate: view.requiredCompletionDate,
+                        tempomatMode: view.tempomatMode,
+                        recommendedItemsPerWeek: recommendedItemsPerWeek ?? null,
+                        relativeUserPaceDiff: relativeUserPaceDiff ?? null,
+                        previsionedCompletionDate: previsionedCompletionDate ?? null,
+                    });
+                })
+        ),
     epistoMappingsBuilder
         .addMapping(PrequizAnswerDTO, () => (question: PrequizQuestionView) => {
 

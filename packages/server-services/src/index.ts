@@ -66,3 +66,4 @@ export { VersionSaveService } from './services/VersionSaveService';
 export { VideoRatingService } from './services/VideoRatingService';
 export { VideoService } from './services/VideoService';
 export { DBSchemaProviderService } from './services/DBSchemaProviderService';
+export { FeatureService } from './services/FeatureService'

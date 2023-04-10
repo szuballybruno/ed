@@ -6,14 +6,15 @@ import { ArrayBuilder, usePaging } from '../../../../static/frontendHelpers';
 import { EditDialogSubpage } from '../EditDialogBase';
 import { AnswerMutationsType, QuestionMutationsType } from '../questionsEditGrid/QuestionEditGridTypes';
 import { DetailsLayout } from './DetailsLayout';
-import { useVideoAudioTextEditorLogic, VideoAudioTextEditor } from './VideoAudioTextEditor';
+import { useVideoTextsEditorLogic, VideoAudioTextEditor } from './VideoAudioTextEditor';
 import { useVideoEditorLogic, VideoEditor } from './VideoEditor';
 import { AdminVideoStatisticsModalPage } from './VideoStats';
 
 export type VideoEditorCallbackDataType = {
     questionMutations: QuestionMutationsType,
     answerMutations: AnswerMutationsType,
-    videoAudioText?: string
+    videoAudioText?: string,
+    videoDescription?: string
 }
 
 export const VideoDetails = ({
@@ -23,6 +24,7 @@ export const VideoDetails = ({
     questionMutations,
     answerMutations,
     videoAudioText,
+    videoDescription,
     callback,
     cancelEdit
 }: {
@@ -32,6 +34,7 @@ export const VideoDetails = ({
     questionMutations: QuestionMutationsType,
     answerMutations: AnswerMutationsType,
     videoAudioText: string,
+    videoDescription: string,
     callback: (data: VideoEditorCallbackDataType) => void,
     cancelEdit: () => void
 }) => {
@@ -54,8 +57,9 @@ export const VideoDetails = ({
         videoVersionId
     });
 
-    const audioTextEditorLogic = useVideoAudioTextEditorLogic({
-        defaultText: videoAudioText ?? ''
+    const audioTextEditorLogic = useVideoTextsEditorLogic({
+        initialAudioText: videoAudioText ?? '',
+        initialDescription: videoDescription ?? ''
     });
 
     const handleOk = useCallback(() => {
@@ -63,13 +67,15 @@ export const VideoDetails = ({
         callback({
             questionMutations: videoEditorLogic.questionMutations,
             answerMutations: videoEditorLogic.answerMutations,
-            videoAudioText: audioTextEditorLogic.audioText
+            videoAudioText: audioTextEditorLogic.audioText,
+            videoDescription: audioTextEditorLogic.description
         });
     }, [
         callback,
         videoEditorLogic.questionMutations,
         videoEditorLogic.answerMutations,
-        audioTextEditorLogic.audioText
+        audioTextEditorLogic.audioText,
+        audioTextEditorLogic.description
     ]);
 
     const isChanged = useMemo(() => {
@@ -80,17 +86,16 @@ export const VideoDetails = ({
         if (videoEditorLogic.answerMutations !== answerMutations)
             return true;
 
-        if (audioTextEditorLogic.audioText !== videoAudioText)
+        if (audioTextEditorLogic.isChanged)
             return true;
 
         return false;
     }, [
         videoEditorLogic.questionMutations,
         videoEditorLogic.answerMutations,
-        audioTextEditorLogic.audioText,
         questionMutations,
         answerMutations,
-        videoAudioText
+        audioTextEditorLogic.isChanged
     ]);
 
     const pages = courseItemEditData
@@ -107,7 +112,7 @@ export const VideoDetails = ({
             .add({
                 content: () => <VideoAudioTextEditor
                     logic={audioTextEditorLogic} />,
-                title: 'Szoveg szerkesztese'
+                title: 'Szöveg szerkesztése'
             })
             .getArray()
         : [];

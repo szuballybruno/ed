@@ -30,7 +30,7 @@ class SessionWatcher {
          * to get latest auth handshake date
          */
         this._globalEventManager
-            .scubscribeEvent('onAuthHandshake', 'sessionWatcher', () => {
+            .subscribeEvent('onAuthHandshake', 'sessionWatcher', () => {
 
                 const handshakeTime = new Date();
 

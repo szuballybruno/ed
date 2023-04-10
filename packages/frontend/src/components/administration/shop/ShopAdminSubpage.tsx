@@ -96,7 +96,7 @@ export const ShopAdminSubpage = () => {
         <EpistoRoutes
             renderRoutes={[
                 {
-                    route: applicationRoutes.administrationRoute.shopRoute.overviewRoute,
+                    route: applicationRoutes.administrationRoute.shopRoute,
                     element: <LoadingFrame
                         loadingState={[adminShopItemsState, createShopItemState]}
                         error={adminShopItemsError}
@@ -165,7 +165,8 @@ export const ShopAdminSubpage = () => {
 
 
                         </AdminSubpageHeader>
-                    </LoadingFrame>
+                    </LoadingFrame>,
+                    asIndexRoute: true
                 },
                 {
                     route: applicationRoutes.administrationRoute.shopRoute.editRoute,

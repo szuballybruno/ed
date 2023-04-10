@@ -4,6 +4,9 @@ import { CompanyAssociatedCourseDTO } from "../company/CompanyAssociatedCourseDT
 import { CourseStartDTO } from "../CourseStartDTO";
 import { Mutation } from "../mutations/Mutation";
 import { AdminUserCourseDTO } from "../AdminUserCourseDTO";
+import { FeatureDTO } from "../FeatureDTO";
+import { CompanyFeatureDTO } from "../CompanyFeatureDTO";
+import { CourseFeatureDTO } from "../CourseFeatureDTO";
 
 export type RouteParameterType<TBody = any, TQuery = any> = { body?: TBody, query?: TQuery };
 export type ParametrizedRouteType<T extends RouteParameterType> = string & T;
@@ -29,7 +32,7 @@ export const apiRoutes = {
         healthcheck: '/misc/healthcheck',
         getHomePageDTO: '/misc/get-overview-page-dto',
         getCurrentCourseData: '/misc/get-current-course-data',
-        getCourseOverviewData: '/misc/get-course-overview-data' as ParametrizedRouteType<{ query: { userId?: Id<'User'>, courseId?: Id<'Course'> } }>,
+        getCourseOverviewData: '/misc/get-course-overview-data' as ParametrizedRouteType<{ query: { userId: Id<'User'> | null, courseId: Id<'Course'> | null } }>,
         getCourseOverviewModuleCompareData: '/misc/get-course-overview-module-compare-data' as ParametrizedRouteType<{ query: { userId?: Id<'User'>, courseId?: Id<'Course'> } }>,
         getActivationCodeList: '/misc/get-activation-code-list' as ParametrizedRouteType<{ query: { urlTemplate: string, companyId: Id<'Company'> } }>,
         generateActivationCodesPreview: '/misc/generate-activation-codes-preview' as ParametrizedRouteType<{ body: { count: number, prefix: string, companyId: Id<'Company'> } }>,
@@ -45,7 +48,8 @@ export const apiRoutes = {
     },
 
     permissions: {
-        getPermissions: '/permissions/get-permissions'
+        getPermissions: '/permissions/get-permissions',
+        checkPermission: '/permissions/check-permission'
     },
 
     companies: {
@@ -72,6 +76,14 @@ export const apiRoutes = {
     tempomat: {
         setTempomatMode: '/tempomat/set-tempomat-mode',
         getTempomatMode: '/tempomat/get-tempomat-mode'
+    },
+
+    feature: {
+        checkFeature: '/feature/check-feature' as ParametrizedRouteType<{ body: FeatureDTO }>,
+        getCompanyFeatures: '/feature/get-company-features' as ParametrizedRouteType<{ query: { companyId: Id<'Company'> } }>,
+        saveCompanyFeatures: '/feature/save-company-feature' as ParametrizedRouteType<{ body: { companyId: Id<'Company'>, mutations: Mutation<CompanyFeatureDTO, 'featureId'>[] } }>,
+        getCourseFeatures: '/feature/get-course-features' as ParametrizedRouteType<{ query: { courseId: Id<'Course'> } }>,
+        saveCourseFeatures: '/feature/save-course-feature' as ParametrizedRouteType<{ body: { courseId: Id<'Course'>, mutations: Mutation<CourseFeatureDTO, 'featureId'>[] } }>
     },
 
     passwordChange: {
@@ -148,7 +160,7 @@ export const apiRoutes = {
         getCourseStatsCarouselData: '/adminstats/get-course-stats-carousel-data' as ParametrizedRouteType<{ query: { companyId: Id<'Company'> } }>,
         getAdminUserCourses: '/userstats/get-admin-user-courses' as ParametrizedRouteType<{ query: { userId: Id<'User'>, loadAvailable: boolean } }>,
         getAdminCourseUsers: '/userstats/get-admin-course-users' as ParametrizedRouteType<{ query: { courseId: Id<'Course'>, preset: CourseUserPresetType } }>,
-        getAdminUsersList: '/users/get-admin-user-list' as ParametrizedRouteType<{ query: { companyId: Id<'Company'> } }>,
+        getAdminUsersList: '/users/get-admin-user-list' as ParametrizedRouteType<{ query: { companyId: Id<'Company'>, isToBeReviewed: boolean } }>,
         saveUserCourses: '/users/save-user-courses' as ParametrizedRouteType<{ body: { mutations: Mutation<AdminUserCourseDTO, 'courseId'>[], userId: Id<'User'> } }>,
         getAdminCourseList: '/course/get-admin-course-list' as ParametrizedRouteType<{ query: { companyId: Id<'Company'> } }>,
     },
@@ -166,6 +178,7 @@ export const apiRoutes = {
     userProgress: {
         getUserProgressData: '/userprogress/get-user-progress-data' as ParametrizedRouteType<{ body: { courseId: Id<'CourseId'> } }>,
         getCourseProgressOverview: '/userprogress/get-course-progress-overview',
+        getRecommendedItemQuota: '/userprogress/get-recommended-item-quota',
         getActiveCourses: '/userprogress/get-active-courses'
     },
 
@@ -178,7 +191,7 @@ export const apiRoutes = {
 
     user: {
         getEditUserData: '/users/get-edit-user-data',
-        deleteUser: '/users/delete-user',
+        deleteUser: '/users/delete-user' as ParametrizedRouteType<{ body: { userId: Id<'User'> } }>,
         saveUser: '/users/save-user',
         saveUserSimple: '/users/save-user-simple',
         getBriefUserData: '/users/get-brief-user-data',
@@ -193,7 +206,8 @@ export const apiRoutes = {
         answerSurveyQuestion: '/survey/answer-question',
         getSurveyData: '/survey/get-data',
         completeSignupSurvey: '/survey/complete-signup-survey',
-        getUserPersonalityData: '/survey/get-user-personality-data'
+        getUserPersonalityData: '/survey/get-user-personality-data',
+        checkIfSurveySkippable: '/survey/check-if-survey-skippable'
     },
 
     player: {

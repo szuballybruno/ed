@@ -1,9 +1,9 @@
 import { TempomatModeType, TempoRatingType } from "@episto/commontypes";
-import { Id } from "@thinkhub/x-core"
+import { Id } from "@episto/x-core"
 
 export type TempomatDataModel = {
     requiredCompletionDate: Date | null,
-    originalEstimatedCompletionDate: Date,
+    originalPrevisionedCompletionDate: Date,
     estimatedCompletionDate: Date,
     recommendedItemsPerDay: number,
     recommendedItemsPerWeek: number,
@@ -16,4 +16,5 @@ export type TempomatDataModel = {
     isStartedCourse: boolean;
     tempomatMode: TempomatModeType;
     tempoRating: TempoRatingType;
+    courseId: Id<'Course'>;
 }

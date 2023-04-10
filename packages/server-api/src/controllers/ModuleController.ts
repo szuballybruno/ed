@@ -1,9 +1,9 @@
 import { ModuleService } from '@episto/server-services';
 import { apiRoutes } from '@episto/communication';
 import { Id } from '@episto/commontypes';
-import { IXGatewayServiceProvider } from '@thinkhub/x-gateway';
+import { IXGatewayServiceProvider } from '@episto/x-gateway';
 import { ActionParams } from '../helpers/ActionParams';
-import { XControllerAction } from '@thinkhub/x-gateway';
+import { XControllerAction } from '@episto/x-gateway';
 import { IController } from '../interfaces/IController';
 
 export class ModuleController implements IController<ModuleController> {

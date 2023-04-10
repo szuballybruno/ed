@@ -1,5 +1,5 @@
-import { XViewColumn } from '@thinkhub/x-orm';
-import { Id } from '@episto/commontypes';
+import { XViewColumn } from '@episto/x-orm';
+import { Id } from '@episto/x-core';
 
 export class UserLearningOverviewStatsView {
 
@@ -11,6 +11,18 @@ export class UserLearningOverviewStatsView {
 
     @XViewColumn()
     performancePercentage: number;
+
+    @XViewColumn()
+    userReactionTimeDifferencePercentage: number;
+
+    @XViewColumn()
+    userReactionTimePoints: number;
+
+    @XViewColumn()
+    userExamLengthPoints: number;
+
+    @XViewColumn()
+    totalUserReactionTimePoints: number;
 
     @XViewColumn()
     mostFrequentTimeRange: string;

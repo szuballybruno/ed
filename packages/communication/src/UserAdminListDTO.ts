@@ -1,4 +1,4 @@
-import { Id, PerformanceRatingType, TempoRatingType } from '@episto/commontypes';
+import { Id, InvertedLagBehindRatingType, OverallScoreRatingType } from '@episto/commontypes';
 
 export class UserAdminListDTO {
     userId: Id<'User'>;
@@ -8,16 +8,14 @@ export class UserAdminListDTO {
     firstName: string;
     lastName: string;
     avatarFilePath: string;
+    summerizedScoreAvg: number;
+    summerizedScoreAvgRatingText: OverallScoreRatingType;
     totalSessionLengthSeconds: number;
-    username: string;
+    engagementPoints: number;
     completedVideoCount: number;
-
-    // tempo 
-    avgTempoPercentage: number;
-    hasAvgTempoPercentage: boolean;
-    tempoRating: TempoRatingType;
-
-    // performance
-    avgPerformancePercentage: number;
-    avgPerformancePercentageRating: PerformanceRatingType;
+    productivityPercentage: number | null;
+    invertedRelativeUserPaceDiff: number | null;
+    invertedRelativeUserPaceDiffRatingText: InvertedLagBehindRatingType | null;
+    reactionTime: number | null;
+    username: string;
 }

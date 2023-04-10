@@ -1,4 +1,4 @@
-import { IXGatewayServiceProvider } from "@thinkhub/x-gateway";
+import { IXGatewayServiceProvider } from "@episto/x-gateway";
 
 type CTAnyArgs<T> = { new(...args: any[]): T };
 

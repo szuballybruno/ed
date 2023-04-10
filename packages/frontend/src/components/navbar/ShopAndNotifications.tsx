@@ -13,6 +13,7 @@ import { CurrentUserContext } from '../system/AuthenticationFrame';
 import { useAuthorizationContext } from '../system/AuthorizationContext';
 import { NotificationsPopper } from './NotificationsPopper';
 import { UserContextMenu } from './UserContextMenu';
+import { useCheckFeatureEnabled } from '../system/CheckFeatureFrame';
 
 export const ShopAndNotifications = (props: {
     isMinimalMode: boolean,
@@ -36,6 +37,10 @@ export const ShopAndNotifications = (props: {
     const [settingsPopperOpen, setSettingsPopperOpen] = useState(false);
     const [notificationsPopperOpen, setNotificationsPopperOpen] = useState(false);
 
+    const { isFeatureEnabled: isShopPageEnabled } = useCheckFeatureEnabled({
+        featureCode: 'SHOP_PAGE'
+    });
+
     return <>
         {!isMinimalMode && <>
 
@@ -58,7 +63,7 @@ export const ShopAndNotifications = (props: {
                 shrink={0}>
 
                 {/* shop button */}
-                <EpistoButton
+                {isShopPageEnabled && <EpistoButton
                     style={{
                         height: 40,
                         fontStyle: 'normal',
@@ -84,14 +89,14 @@ export const ShopAndNotifications = (props: {
                             objectFit: 'contain',
                         }} />
 
-                </EpistoButton>
+                </EpistoButton>}
 
                 {/* vertical divider */}
-                <EpistoDiv
+                {isShopPageEnabled && <EpistoDiv
                     width="1px"
                     height="40px"
                     margin="0 10px 0 10px"
-                    bg="var(--mildGrey)"></EpistoDiv>
+                    bg="var(--mildGrey)"></EpistoDiv>}
 
                 {/* profile pic */}
                 {isAuthenticated && (

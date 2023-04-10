@@ -8,7 +8,7 @@ import { useGetCurrentAppRoute } from '../../static/frontendHelpers';
 import { httpGetAsync, usePostDataUnsafe } from '../core/httpClient';
 import { GlobalEventManagerType } from '../../components/system/EventManagerFrame';
 
-export type AuthenticationStateType = 'idle' | 'loading' | 'authenticated' | 'forbidden' | 'error';
+export type AuthenticationStateType = 'idle' | 'loading' | 'authenticated' | 'forbidden' | 'error' | 'unauthorized';
 
 export const useLogout = () => {
 
@@ -33,7 +33,7 @@ export const useAuthHandshake = (globalEventManager: GlobalEventManagerType) => 
             .fireEvent('onAuthHandshake', {});
 
         return res;
-    }, []);
+    }, [globalEventManager]);
 
     const qr = useQuery(
         'useGetAuthHandshake',
@@ -65,6 +65,9 @@ export const useAuthHandshake = (globalEventManager: GlobalEventManagerType) => 
 
         if (error?.code === 'forbidden')
             return 'forbidden';
+
+        if (error && error?.code === 'unauthorized')
+            return 'unauthorized';
 
         if (isError)
             return 'error';

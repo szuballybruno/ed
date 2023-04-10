@@ -3,7 +3,7 @@ import { UserEditSaveDTO } from '@episto/communication';
 import { ErrorWithCode } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
 import { getFullName } from '../utilities/helpers';
-import { PrincipalId } from '@thinkhub/x-core';
+import { PrincipalId } from '@episto/x-core';
 import { EmailService } from './EmailService';
 import { LoggerService } from './LoggerService';
 import { ORMConnectionService } from './ORMConnectionService';

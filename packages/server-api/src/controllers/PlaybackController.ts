@@ -2,9 +2,9 @@ import { PlaybackService } from '@episto/server-services';
 import { VideoPlaybackSampleDTO } from '@episto/communication';
 import { VideoSeekEventDTO } from '@episto/communication';
 import { apiRoutes } from '@episto/communication';
-import { IXGatewayServiceProvider } from '@thinkhub/x-gateway';
+import { IXGatewayServiceProvider } from '@episto/x-gateway';
 import { ActionParams } from '../helpers/ActionParams';
-import { XControllerAction } from '@thinkhub/x-gateway';
+import { XControllerAction } from '@episto/x-gateway';
 import { IController } from '../interfaces/IController';
 
 export class PlaybackController implements IController<PlaybackController> {

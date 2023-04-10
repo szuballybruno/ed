@@ -1,0 +1,24 @@
+{
+    "name": "@episto/x-orm",
+    "version": "1.0.0",
+    "private": true,
+    "license": "UNLICENSED",
+    "main": "./dist/index.js",
+    "typings": "./dist/index.d.ts",
+    "type": "module",
+    "scripts": {
+        "watch": "tsc --watch",
+        "start": "tsc",
+        "build": "tsc",
+        "scaffold": "node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm src/main.ts"
+    },
+    "dependencies": {
+        "@episto/x-core": "1.0.0",
+        "pg": "^8.8.0",
+        "ts-node": "^10.9.1"
+    },
+    "devDependencies": {
+        "@types/node": "18.11.9",
+        "@types/pg": "^8.6.5"
+    }
+}

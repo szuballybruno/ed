@@ -4,6 +4,8 @@ import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { Responsivity } from '../../helpers/responsivity';
 import { AuthenticationStateType, useLogInUser } from '../../services/api/authenticationApiService';
 import { CompanyApiService } from '../../services/api/CompanyApiService';
+import { FeatureApiService } from '../../services/api/FeatureApiService';
+import { SurveyApiService } from '../../services/api/SurveyApiService';
 import { useNavigation } from '../../services/core/navigatior';
 import { useShowErrorDialog } from '../../services/core/notifications';
 import { useQueryParams } from '../../static/locationHelpers';
@@ -42,11 +44,16 @@ export const LoginScreen = () => {
 
     const passwordResetDialogLogic = useEpistoDialogLogic('pwreset');
 
+    const { checkFeature } = FeatureApiService.useCheckFeature();
+    const { surveyData } = SurveyApiService.useSurveyData();
+
     const { isMobile } = Responsivity
         .useIsMobileView();
 
     // http 
     const { loginUserAsync, loginUserState } = useLogInUser();
+
+    const { checkIfSurveySkippable, checkIfSurveySkippableStatus } = SurveyApiService.useCheckIfSurveySkippable();
 
     const qres = CompanyApiService
         .useCompanyDetailsByDomain();
@@ -94,12 +101,14 @@ export const LoginScreen = () => {
     /**
      * Navigate to app function
      */
-    const navigateToApp = useCallback(() => {
+    const navigateToApp = useCallback(async () => {
 
         /**
          * Survey can't be bypassed, navigating to survey
          */
-        if (!hasPermission('BYPASS_SURVEY')) {
+        const isSurveySkippable = await checkIfSurveySkippable();
+
+        if (!isSurveySkippable) {
 
             navigate2(applicationRoutes.surveyRoute);
             return;
@@ -118,7 +127,7 @@ export const LoginScreen = () => {
          * Survey can be bypassed, going to home
          */
         navigate2(applicationRoutes.homeRoute);
-    }, [dest, hasPermission, navigate2, navigateToHref]);
+    }, [checkIfSurveySkippable, dest, navigate2, navigateToHref]);
 
     // watch for auth state change
     // and navigate to home page if athenticated

@@ -2,14 +2,16 @@ import { ReactNode, useMemo } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { Responsivity } from '../../helpers/responsivity';
 import { AdminActiveCompanyIdType, AdminActiveCompanyRouteParamType, ApplicationRoute } from '../../models/types';
+import { FeatureApiService } from '../../services/api/FeatureApiService';
 import { useNavigation } from '../../services/core/navigatior';
 import { Environment } from '../../static/Environemnt';
-import { ArrayBuilder } from '../../static/frontendHelpers';
 import { Logger } from '../../static/Logger';
+import { ArrayBuilder } from '../../static/frontendHelpers';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { useCurrentUserContext } from '../system/AuthenticationFrame';
 import { useAuthorizationContext } from '../system/AuthorizationContext';
+import { useCheckFeatureEnabled } from '../system/CheckFeatureFrame';
 import { NavbarButton } from '../universal/NavbarButton';
 import { ContinueCourseButton } from './ContinueCourseButton';
 import { ShopAndNotifications } from './ShopAndNotifications';
@@ -35,13 +37,39 @@ export const DesktopNavbar = ({
     const { companyId } = useCurrentUserContext();
     const activeCompanyId: AdminActiveCompanyIdType = companyId;
 
+    const { checkFeature, checkFeatureState } = FeatureApiService.useCheckFeature();
+
+    const { isFeatureEnabled: isHomePageEnabled } = useCheckFeatureEnabled({
+        featureCode: 'HOME_PAGE'
+    });
+
+    const { isFeatureEnabled: isLeaderboardPageEnabled } = useCheckFeatureEnabled({
+        featureCode: 'LEADERBOARD_PAGE'
+    });
+
+    /*  const [isHomePageEnabled, setIsHomePageEnabled] = useState(true);
+ 
+     useEffect(() => {
+ 
+         const handleCheckIfSurveyEnabled = async () => {
+             const isHomePageEnabled = await checkFeature({
+                 featureCode: 'HOME_PAGE'
+             });
+ 
+             setIsHomePageEnabled(isHomePageEnabled);
+         };
+ 
+         handleCheckIfSurveyEnabled();
+ 
+     }, [checkFeature]); */
+
     const menuItems: ApplicationRoute[] = new ArrayBuilder<Omit<ApplicationRoute, 'icon'> & { icon: ReactNode }>()
         .addIf(hasPermission('ADMINISTRATE_COMPANY'), {
             title: applicationRoutes.administrationRoute.title,
             route: applicationRoutes.administrationRoute.usersRoute.route,
             icon: applicationRoutes.administrationRoute.icon
         })
-        .add({
+        .addIf(isHomePageEnabled, {
             title: applicationRoutes.homeRoute.title,
             route: applicationRoutes.homeRoute.route,
             icon: applicationRoutes.homeRoute.icon
@@ -56,7 +84,7 @@ export const DesktopNavbar = ({
             route: applicationRoutes.learningRoute.route,
             icon: applicationRoutes.learningRoute.icon
         })
-        .add({
+        .addIf(isLeaderboardPageEnabled, {
             title: applicationRoutes.leaderboardRoute.title,
             route: applicationRoutes.leaderboardRoute.route,
             icon: applicationRoutes.leaderboardRoute.icon

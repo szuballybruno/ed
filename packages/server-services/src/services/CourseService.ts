@@ -1,9 +1,9 @@
 import { instantiate } from '@episto/commonlogic';
-import { CourseVisibilityType, Id, OrderType } from '@episto/commontypes';
-import { AvailableCourseDTO, CourseAdminListItemDTO, CourseBriefData, CourseCategoryDTO, CourseContentAdminDTO, CourseContentItemAdminDTO, CourseDetailsDTO, CourseDetailsEditDataDTO, CourseStartDTO, CreateCourseDTO, GreetingsDataDTO, ModuleEditDTO, Mutation, PlaylistModuleDTO } from '@episto/communication';
-import { PrincipalId } from '@thinkhub/x-core';
+import { CourseVisibilityType, ErrorWithCode, Id, OrderType } from '@episto/commontypes';
+import { AvailableCourseDTO, CompanyAssociatedCourseDTO, CourseAdminListItemDTO, CourseBriefData, CourseCategoryDTO, CourseContentAdminDTO, CourseContentItemAdminDTO, CourseDetailsDTO, CourseDetailsEditDataDTO, CourseStartDTO, CreateCourseDTO, GreetingsDataDTO, ModuleEditDTO, Mutation, PlaylistModuleDTO } from '@episto/communication';
+import { PrincipalId } from '@episto/x-core';
 import { UploadedFile } from 'express-fileupload';
-import { TempomatService } from '..';
+import { CompanyService, FeatureService, PermissionService, TempomatService } from '..';
 import { Course } from '../models/tables/Course';
 import { CourseData } from '../models/tables/CourseData';
 import { CourseVersion } from '../models/tables/CourseVersion';
@@ -37,6 +37,9 @@ import { ORMConnectionService } from './ORMConnectionService';
 import { PlayerService } from './PlayerService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { VersionCreateService } from './VersionCreateService';
+import { PermissionAssignmentBridge } from '../models/tables/PermissionAssignmentBridge';
+import { Permission } from '../models/tables/Permission';
+import { UserPermissionView } from '../models/views/UserPermissionView';
 
 export class CourseService {
 
@@ -49,7 +52,9 @@ export class CourseService {
         private _userCourseBridgeService: UserCourseBridgeService,
         private _authorizationService: AuthorizationService,
         private _verisonCreateService: VersionCreateService,
-        private _playerService: PlayerService) {
+        private _companyService: CompanyService,
+        private _playerService: PlayerService,
+        private _featureService: FeatureService) {
     }
 
     /**
@@ -129,8 +134,8 @@ export class CourseService {
             .where('id', '=', 'userId')
             .getSingle();
 
-        await this._authorizationService
-            .checkPermissionAsync(userId, 'EDIT_COMPANY_COURSES', { companyId });
+        /*  await this._authorizationService
+             .checkPermissionAsync(userId, 'CREATE_COMPANY_COURSES', { companyId }); */
 
         // create course 
         const { versionId: courseVersionId } = await this
@@ -169,6 +174,11 @@ export class CourseService {
                     courseId: entityId
                 })
             });
+
+        const { courseId } = await this._ormService
+            .query(CourseVersion, { courseVersionId })
+            .where('id', '=', 'courseVersionId')
+            .getSingle()
 
         // create pretest module 
         const { versionId: moduleVersionId } = await this
@@ -220,6 +230,9 @@ export class CourseService {
                     moduleVersionId
                 })
             });
+
+        await this._companyService
+            .createCompanyAssociatedCourseAsync(companyId, courseId);
     }
 
     /**
@@ -257,6 +270,37 @@ export class CourseService {
         courseId: number
     ) {
 
+        const { companyId } = await this._ormService
+            .query(User, { userId })
+            .where('id', '=', 'userId')
+            .getSingle();
+
+        const { id: editCoursePermissionId } = await this
+            ._ormService
+            .query(Permission, { code: 'EDIT_COURSE' })
+            .where('code', '=', 'code')
+            .getSingle();
+
+        // TODO: REFACTOR! IT WAS A HOTFIX
+        const hasPermissionByCompany = await this
+            ._ormService
+            .query(PermissionAssignmentBridge, { companyId, courseId, editCoursePermissionId })
+            .where('assigneeCompanyId', '=', 'companyId')
+            .and('contextCourseId', '=', 'courseId')
+            .and('permissionId', '=', 'editCoursePermissionId')
+            .getOneOrNull()
+
+        const hasPermissionByUser = await this
+            ._ormService
+            .query(UserPermissionView, { userId, courseId, editCoursePermissionId })
+            .where('assigneeUserId', '=', 'userId')
+            .and('contextCourseId', '=', 'courseId')
+            .and('permissionId', '=', 'editCoursePermissionId')
+            .getOneOrNull()
+
+        if (!(hasPermissionByCompany || hasPermissionByUser))
+            throw new ErrorWithCode('no permission')
+
         // get course
         const view = await this._ormService
             .query(CourseAdminDetailedView, { courseId })
@@ -289,10 +333,6 @@ export class CourseService {
         principalId: PrincipalId
     } & CourseStartDTO) {
 
-        /**
-         * Create bridge if not created yet 
-         * - it might be created via assignment progress
-         */
         const alreadyCreated = await this
             ._ormService
             .query(UserCourseBridge, { principalId, courseId })
@@ -300,29 +340,18 @@ export class CourseService {
             .and('courseId', '=', 'courseId')
             .getOneOrNull();
 
-        if (!alreadyCreated) {
-
-            await this
-                ._userCourseBridgeService
-                .createUserCourseBridgeAsync({
-                    courseId,
-                    currentItemCode,
-                    stageName,
-                    userId: principalId.getId(),
-                    startDate: stageName === 'watch' ? new Date() : null
-                });
-        }
-
-        /**
-         * Set previsioned completion date 
-         */
-        const previsionedCompletionDate = await this
-            ._tempomatService
-            .getEstimatedCompletionDateAsync(principalId.getId(), courseId);
+        if (alreadyCreated)
+            return;
 
         await this
             ._userCourseBridgeService
-            .setPrevisionedCompletionDateAsync(principalId.getId(), courseId, previsionedCompletionDate);
+            .createUserCourseBridgeAsync({
+                courseId,
+                currentItemCode,
+                stageName,
+                userId: principalId.getId(),
+                startDate: stageName === 'watch' ? new Date() : null
+            });
     }
 
     /**
@@ -330,7 +359,7 @@ export class CourseService {
      */
     async getGreetingDataAsync(principalId: PrincipalId, courseId: Id<'Course'>) {
 
-        const { isPrecourseSurveyRequired, title } = await this
+        const { title } = await this
             ._ormService
             .withResType<CourseData>()
             .query(LatestCourseVersionView, { courseId })
@@ -341,6 +370,20 @@ export class CourseService {
                 .on('id', '=', 'courseDataId', CourseVersion))
             .where('courseId', '=', 'courseId')
             .getSingle();
+
+        const isPrequizRequired = await this._featureService
+            .checkFeatureAsync(principalId, {
+                featureCode: 'PREQUIZ_SURVEY',
+                courseId: courseId
+            })
+
+        const isPretestRequired = await this._featureService
+            .checkFeatureAsync(principalId, {
+                featureCode: 'PRETEST_SURVEY',
+                courseId: courseId
+            })
+
+        const isPrecourseSurveyRequired = isPrequizRequired && isPretestRequired;
 
         /**
          * Get first item playlist code 
@@ -401,8 +444,7 @@ export class CourseService {
                 humanSkillBenefits: createCharSeparatedList(dto
                     .humanSkillBenefits
                     .map(x => `${x.text}: ${x.value}`)),
-                visibility: dto.visibility,
-                isPrecourseSurveyRequired: dto.isPrecourseSurveyRequired
+                visibility: dto.visibility
             });
     }
 
@@ -502,7 +544,7 @@ export class CourseService {
 
 
         await this._ormService
-            .softDelete(CourseData, [courseId]);
+            .softDelete(Course, [courseId]);
     }
 
     /**

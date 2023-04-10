@@ -3,9 +3,9 @@ import { UserEditSaveDTO } from '@episto/communication';
 import { UserEditSimpleDTO } from '@episto/communication';
 import { apiRoutes } from '@episto/communication';
 import { Id } from '@episto/commontypes';
-import { IXGatewayServiceProvider } from '@thinkhub/x-gateway';
+import { IXGatewayServiceProvider } from '@episto/x-gateway';
 import { ActionParams } from '../helpers/ActionParams';
-import { XControllerAction } from '@thinkhub/x-gateway';
+import { XControllerAction } from '@episto/x-gateway';
 import { IController } from '../interfaces/IController';
 
 export class UserController implements IController<UserController> {
@@ -20,10 +20,10 @@ export class UserController implements IController<UserController> {
     @XControllerAction(apiRoutes.user.deleteUser, { isPost: true })
     async deleteUserAction(params: ActionParams) {
 
-        const deleteUserId = Id
-            .create<'User'>(params
-                .getBody()
-                .getValue(x => x.userId, 'int'));
+        const deleteUserId = params
+            .getFromParameterized(apiRoutes.user.deleteUser)
+            .body
+            .getValue(x => x.userId, 'int')
 
         return this._userService
             .deleteUserAsync(params.principalId, deleteUserId);

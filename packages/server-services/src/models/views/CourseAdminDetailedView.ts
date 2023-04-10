@@ -1,5 +1,5 @@
-import { XViewColumn } from '@thinkhub/x-orm';
-import { Id } from '@episto/commontypes';
+import { XViewColumn } from '@episto/x-orm';
+import { Id } from '@episto/x-core';
 
 export class CourseAdminDetailedView {
 
@@ -44,9 +44,6 @@ export class CourseAdminDetailedView {
 
     @XViewColumn()
     technicalRequirementsDescription: string;
-
-    @XViewColumn()
-    isPrecourseSurveyRequired: boolean;
 
     @XViewColumn()
     categoryId: Id<'CourseCategory'>;

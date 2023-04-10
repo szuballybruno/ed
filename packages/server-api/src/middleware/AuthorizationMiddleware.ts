@@ -1,6 +1,6 @@
 import { apiRoutes } from '@episto/communication';
 import { AuthorizationService } from '@episto/server-services';
-import { IXGatewayMiddlewareInstance, IXGatewayServiceProvider, MiddlewareParams } from '@thinkhub/x-gateway';
+import { IXGatewayMiddlewareInstance, IXGatewayServiceProvider, MiddlewareParams } from '@episto/x-gateway';
 import { ActionParams } from '../helpers/ActionParams';
 
 export class AuthorizationMiddleware implements IXGatewayMiddlewareInstance<ActionParams, ActionParams> {
@@ -28,11 +28,6 @@ export class AuthorizationMiddleware implements IXGatewayMiddlewareInstance<Acti
 
         if (params.req.path === apiRoutes.survey.completeSignupSurvey)
             return params.inParams;
-
-        const { companyId } = params.inParams;
-
-        await this._authorizationService
-            .checkPermissionAsync(params.inParams.principalId, 'BYPASS_SURVEY', { companyId });
 
         return params.inParams;
     }

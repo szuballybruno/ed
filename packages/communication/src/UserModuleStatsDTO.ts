@@ -6,7 +6,7 @@ export class UserModuleStatsDTO {
     moduleId: Id<'Module'>;
     moduleName: string;
     moduleProgress: number;
-    tempoPercentage: number;
+    performancePercentage: number;
     lastExamScore: number;
     moduleQuestionSuccessRate: number;
     videosToBeRepeatedCount: number;

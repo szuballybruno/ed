@@ -4,7 +4,7 @@ import { CurrentCourseDataDTO } from '@episto/communication';
 import { UserCourseBridge } from '../models/tables/UserCourseBridge';
 import { CourseStateView } from '../models/views/CourseStateView';
 import { CurrentUserCourseBridgeView } from '../models/views/CurrentUserCourseBridgeView';
-import { PrincipalId } from '@thinkhub/x-core';
+import { PrincipalId } from '@episto/x-core';
 import { MapperService } from './MapperService';
 import { QueryServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService';
@@ -28,13 +28,13 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
         courseId,
         stageName,
         currentItemCode,
-        startDate,
+        startDate
     }: {
         userId: Id<'User'>,
         courseId: Id<'Course'>,
         stageName: CourseStageNameType,
         currentItemCode: string | null,
-        startDate: Date | null,
+        startDate: Date | null
     }) {
 
         /**
@@ -49,8 +49,8 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
                 creationDate: new Date(),
                 currentItemCode,
                 lastInteractionDate: new Date(),
-                originalEstimatedCompletionDate: null,
                 requiredCompletionDate: null,
+                originalEstimatedCompletionDate: null,
                 stageName,
                 startDate,
                 tempomatMode: 'strict'
@@ -74,19 +74,19 @@ export class UserCourseBridgeService extends QueryServiceBase<UserCourseBridge> 
             });
     }
 
-    /**
-     * Set previsined completion date of user course bridge 
-     */
-    async setPrevisionedCompletionDateAsync(
-        userId: Id<'User'>,
-        courseId: Id<'Course'>,
-        originalEstimatedCompletionDate: Date) {
+    // /**
+    //  * Set previsined completion date of user course bridge 
+    //  */
+    // async setPrevisionedCompletionDateAsync(
+    //     userId: Id<'User'>,
+    //     courseId: Id<'Course'>,
+    //     originalEstimatedCompletionDate: Date) {
 
-        await this
-            ._updateBridge(userId, courseId, {
-                originalEstimatedCompletionDate
-            });
-    }
+    //     await this
+    //         ._updateBridge(userId, courseId, {
+    //             originalEstimatedCompletionDate
+    //         });
+    // }
 
     /**
      * Set current course 

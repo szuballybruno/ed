@@ -10,11 +10,11 @@ services:
     environment:
       POSTGRES_PASSWORD: "${EPITEST_POSTGRES_USER_PASSWORD}"
       POSTGRES_USER: 'dev_service_user'
-      POSTGRES_DB: 'localhostDB'
+      POSTGRES_DB: 'epistogram_local'
     expose:
       - 5432
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U dev_service_user -d localhostDB"]
+      test: ["CMD-SHELL", "pg_isready -U dev_service_user -d epistogram_local"]
       interval: 20s
       timeout: 5s
       retries: 5
@@ -22,7 +22,7 @@ services:
       - test_net
 
   server: 
-    image: server:latest
+    image: localhost:6000/server:latest
     depends_on: 
       database: 
         condition: service_healthy
@@ -41,7 +41,7 @@ services:
           - epitest.api.epistogram.com
 
   client: 
-    image: client:latest
+    image: localhost:6000/client:latest
     depends_on: 
       database: 
         condition: service_healthy
@@ -59,7 +59,7 @@ services:
           - epitest.epistogram.com
       
   tests-client: 
-    image: tests-client:latest
+    image: localhost:6000/tests-client:latest
     depends_on: 
       client:
         condition: service_healthy

@@ -6,6 +6,7 @@ import { useCourseOverviewData, useCourseOverviewModuleCompareData } from '../..
 import { useNavigation } from '../../../services/core/navigatior';
 import { Environment } from '../../../static/Environemnt';
 import { isNullOrUndefined } from '../../../static/frontendHelpers';
+import { useRouteParams2 } from '../../../static/locationHelpers';
 import { EpistoDataGrid, EpistoDataGridColumnBuilder } from '../../controls/EpistoDataGrid';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoGrid } from '../../controls/EpistoGrid';
@@ -22,8 +23,14 @@ class RowType {
 
 export const CourseOverviewSubpage = () => {
 
-    const { courseOverviewData } = useCourseOverviewData();
-    const { courseOverviewModuleCompareData } = useCourseOverviewModuleCompareData();
+
+    const params = useRouteParams2(applicationRoutes.playerRoute.courseOverviewRoute);
+
+    const courseId = params
+        .getValue(x => x.courseId);
+
+    const { courseOverviewData } = useCourseOverviewData(null, courseId);
+    const { courseOverviewModuleCompareData } = useCourseOverviewModuleCompareData(undefined, courseId);
 
     const { navigate2 } = useNavigation();
 

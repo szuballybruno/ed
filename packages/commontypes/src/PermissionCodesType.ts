@@ -72,15 +72,15 @@ export const permissionCodes = fn({
     },
     CREATE_COMPANY_COURSES: {
         code: 'CREATE_COMPANY_COURSES',
-        scope: 'USER'
+        scope: 'COMPANY'
     },
     LIST_COMPANY_COURSES: {
         code: 'LIST_COMPANY_COURSES',
         scope: 'COMPANY'
     },
-    EDIT_COURSES: {
-        code: 'EDIT_COURSES',
-        scope: 'USER'
+    EDIT_COURSE: {
+        code: 'EDIT_COURSE',
+        scope: 'COURSE'
     },
     WATCH_COURSE: {
         code: 'WATCH_COURSE',
@@ -202,10 +202,6 @@ export const permissionCodes = fn({
     SET_OWN_EMAIL_ADDRESS: {
         code: 'SET_OWN_EMAIL_ADDRESS',
         scope: 'USER'
-    },
-    BYPASS_SURVEY: {
-        code: 'BYPASS_SURVEY',
-        scope: 'COMPANY'
     },
     EDIT_COMMENT: {
         code: 'EDIT_COMMENT',

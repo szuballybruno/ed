@@ -5,7 +5,7 @@ FROM localhost:6000/monodeps:latest as server-builder
 WORKDIR /app
 
 # build
-RUN yarn build-server
+RUN yarn build-server-api
 
 #
 # runner
@@ -18,9 +18,6 @@ COPY --from=server-builder /app/lerna.json .
 COPY --from=server-builder /app/tsconfig.json .
 COPY --from=server-builder /app/package.json .
 COPY --from=server-builder /app/packages ./packages
-
-COPY --from=server-builder /app/thinkhub-xlib/tsconfig.json ./thinkhub-xlib/tsconfig.json
-COPY --from=server-builder /app/thinkhub-xlib/packages ./thinkhub-xlib/packages
 
 # expose port 5000
 EXPOSE 5000

@@ -13,8 +13,9 @@ export const RoleAdminPage = () => {
             <EpistoRoutes
                 renderRoutes={[
                     {
-                        route: applicationRoutes.administrationRoute.rolesRoute.indexRoute,
-                        element: <RoleAdminIndexPage />
+                        route: applicationRoutes.administrationRoute.rolesRoute,
+                        element: <RoleAdminIndexPage />,
+                        asIndexRoute: true
                     }
                 ]} />
         </>

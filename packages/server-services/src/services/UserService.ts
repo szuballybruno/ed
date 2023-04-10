@@ -1,7 +1,7 @@
 import { instantiate } from '@episto/commonlogic';
-import { ErrorWithCode, Id, UserRegistrationStatusType } from '@episto/commontypes';
+import { ErrorWithCode, Id, InvertedLagBehindRatingType, OverallScoreRatingType, UserRegistrationStatusType } from '@episto/commontypes';
 import { BriefUserDataDTO, DepartmentDTO, Mutation, UserAdminListDTO, UserControlDropdownDataDTO, AdminUserCourseDTO, UserDTO, UserEditReadDTO, UserEditSaveDTO, UserEditSimpleDTO } from '@episto/communication';
-import { PrincipalId } from '@thinkhub/x-core';
+import { PrincipalId } from '@episto/x-core';
 import { RegistrationType } from '../models/misc/Types';
 import { AnswerSession } from '../models/tables/AnswerSession';
 import { CourseAccessBridge } from '../models/tables/CourseAccessBridge';
@@ -12,16 +12,43 @@ import { TeacherInfo } from '../models/tables/TeacherInfo';
 import { User } from '../models/tables/User';
 import { UserCourseBridge } from '../models/tables/UserCourseBridge';
 import { AdminUserListView } from '../models/views/AdminUserListView';
-import { getFullName } from '../utilities/helpers';
+import { TempomatCalculationDataView } from '../models/views/TempomatCalculationDataView';
+import { UserOverviewView } from '../models/views/UserOverviewView';
+import { UserPerformanceComparisonStatsView } from '../models/views/UserPerformanceComparisonStatsView';
+import { UserPerformanceView } from '../models/views/UserPerformanceView';
+import { getFullName, mergeArraysByKey } from '../utilities/helpers';
 import { InsertEntity } from '../utilities/misc';
 import { AuthorizationService } from './AuthorizationService';
 import { HashService } from './HashService';
 import { MapperService } from './MapperService';
+import { UserLagbehindStatType } from './misc/types';
 import { ORMConnectionService } from './ORMConnectionService';
 import { RoleService } from './RoleService';
 import { TeacherInfoService } from './TeacherInfoService';
 import { TempomatService } from './TempomatService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
+import { UserStatsService } from './UserStatsService';
+
+interface UserFlagCalculationType extends UserPerformanceComparisonStatsView {
+    userProductivity: number,
+    companyAvgPerformancePercentage: number,
+    companyAvgProductivityPercentage: number
+}
+
+interface CompanyUserPerformance extends UserPerformanceView {
+    companyId: Id<'Company'>
+}
+
+interface CompanyTempomatCalculationData extends TempomatCalculationDataView {
+    companyId: Id<'Company'>
+}
+
+type FlaggedUserType = {
+    userId: Id<"User">;
+    flag: UserFlagType;
+};
+
+type UserFlagType = 'low' | 'avg' | 'high'
 
 export class UserService {
 
@@ -33,7 +60,8 @@ export class UserService {
         private _roleService: RoleService,
         private _authorizationService: AuthorizationService,
         private _userCourseBridgeService: UserCourseBridgeService,
-        private _tempomatService: TempomatService) {
+        private _tempomatService: TempomatService,
+        private _userStatsService: UserStatsService) {
     }
 
     /**
@@ -41,24 +69,217 @@ export class UserService {
      */
     async getUserAdminListAsync(
         principalId: PrincipalId,
-        companyId: Id<'Company'>
+        //showReviewRequiredUsersOnly: boolean,
+        companyId: Id<'Company'> | null
     ) {
 
-        await this._authorizationService
-            .checkPermissionAsync(principalId, 'ADMINISTRATE_COMPANY', { companyId: companyId });
+        /**
+          * Check permission 
+          */
+        if (companyId)
+            await this._authorizationService
+                .checkPermissionAsync(principalId, 'ADMINISTRATE_COMPANY', { companyId: companyId });
+
+        /**
+         * This is sort of a cheat way to filter by companyId, 
+         * since if the company is is null, the equasion will be: != null,
+         * meaning all rows will be returned, regardless of their companyId  
+         */
+        const companyFilterOperator = companyId === null
+            ? '!='
+            : '=';
 
         const companyUserOverviewViews = await this._ormService
-            .query(AdminUserListView, { companyId })
-            .where('companyId', '=', 'companyId')
+            .query(UserOverviewView, { companyId })
+            .where('companyId', companyFilterOperator, 'companyId')
             .getMany();
 
-        const avgTempoPercentages = await this
-            ._tempomatService
-            .getAverageTempomatDataByCompanyAsync(companyId);
+        // USER FILTERING DISABLED TEMPORARILY
+        /* const userIds = companyUserOverviewViews
+            .map(x => x.userId); */
+
+        const userProductivityAndLagBehindStats = await this
+            ._getUserLagBehindStatsAsync(companyUserOverviewViews, companyId);
+
+        /* const lowFlaggedUserIds = await this
+            ._getLowFlaggedUserIdsAsync(userIds, companyId); */
+
+        const viewsWithTextRatings = companyUserOverviewViews
+            .map(x => ({
+                ...x,
+                summerizedScoreAvgRatingText: this._getOverallScoreRating(x.summerizedScoreAvg)
+            }))
+
+        /*const filterdViews =  showReviewRequiredUsersOnly
+            ? companyUserOverviewViews
+                .filter(x => lowFlaggedUserIds
+                    .some(y => y === x.userId))
+            : companyUserOverviewViews; */
 
         return this
             ._mapperService
-            .mapTo(UserAdminListDTO, [companyUserOverviewViews, avgTempoPercentages]);
+            .mapTo(UserAdminListDTO, [viewsWithTextRatings, userProductivityAndLagBehindStats]);
+    }
+
+    /**
+     * Get overall score rating
+     */
+    private _getOverallScoreRating(overallScorePercentage: number): OverallScoreRatingType {
+
+        if (overallScorePercentage < 0)
+            throw new Error(`Overall score is not allowed to be smaller than zero!`);
+
+        if (overallScorePercentage > 80)
+            return 'very_good';
+
+        if (overallScorePercentage > 60)
+            return 'good';
+
+        if (overallScorePercentage > 40)
+            return 'average';
+
+        if (overallScorePercentage > 20)
+            return 'bad';
+
+        return 'very_bad';
+    }
+
+    /**
+  * Get performance rating
+  */
+    private _getinvertedRelativeUserPaceDiffRating(invertedRelativeUserPaceDiff: number): InvertedLagBehindRatingType {
+
+        if (invertedRelativeUserPaceDiff < 0)
+            throw new Error(`Inverted relative user pace diff is not allowed to be smaller than zero!`);
+
+        if (invertedRelativeUserPaceDiff > 90)
+            return 'very_good';
+
+        if (invertedRelativeUserPaceDiff > 70)
+            return 'good';
+
+        if (invertedRelativeUserPaceDiff > 50)
+            return 'average';
+
+        if (invertedRelativeUserPaceDiff > 30)
+            return 'bad';
+
+        return 'very_bad';
+    }
+
+    /**
+     * getUserLagBehindStatsAsync
+     */
+    private async _getUserLagBehindStatsAsync(
+        companyUserOverviewViews: UserOverviewView[],
+        companyId: Id<'Company'> | null) {
+
+        const userIds = companyUserOverviewViews
+            .map(x => x.userId);
+
+        const userIdRelativePaceDiffAvgRows = await this
+            ._getAvgUserRelativePaceDiffs(userIds, companyId);
+
+        const userProductivityAndLagBehindStats = companyUserOverviewViews
+            .map(({ userId, averagePerformancePercentage }) => {
+
+                const relativePaceDiffAvg = userIdRelativePaceDiffAvgRows
+                    .single(x => x.userId === userId)
+                    .relativePaceDiffAvg;
+
+                const productivityPercentage = this
+                    ._userStatsService
+                    .calculateProductivity(averagePerformancePercentage, relativePaceDiffAvg);
+
+                const invertedRelativeUserPaceDiff = (() => {
+
+                    if (!relativePaceDiffAvg)
+                        return null;
+
+                    if (relativePaceDiffAvg >= 200)
+                        return 100;
+
+                    // -195 means so much lag behind that it's basically 0 progress
+                    if (relativePaceDiffAvg <= -195)
+                        return 0;
+
+                    // calculates a % value from -195...200 range
+                    return 100 * (relativePaceDiffAvg - (-195)) / (200 - (-195))
+                })();
+
+                const invertedRelativeUserPaceDiffTextRating = invertedRelativeUserPaceDiff
+                    ? this._getinvertedRelativeUserPaceDiffRating(invertedRelativeUserPaceDiff)
+                    : null;
+
+                return instantiate<UserLagbehindStatType>({
+                    userId,
+                    invertedRelativeUserPaceDiff,
+                    invertedRelativeUserPaceDiffTextRating,
+                    productivityPercentage
+                });
+            });
+
+        return userProductivityAndLagBehindStats;
+    }
+
+    /**
+     * getLowFlaggedUserIdsAsync
+     */
+    private async _getLowFlaggedUserIdsAsync(userIds: Id<'User'>[], companyId: Id<'Company'> | null) {
+
+        const lowUserFlags = await this
+            ._userStatsService
+            .flagUsersAsync(companyId, 'low');
+
+        const lowFlaggedUserIds = userIds
+            .filter(userId => lowUserFlags
+                .some(userFlag => userFlag.userId === userId));
+
+        return lowFlaggedUserIds;
+    }
+
+    /**
+ * getAvgUserLagBehinds
+ */
+    private async _getAvgUserRelativePaceDiffs(userIds: Id<'User'>[], companyId: Id<'Company'> | null) {
+
+        /**
+         * This is sort of a cheat way to filter by companyId, 
+         * since if the company is is null, the equasion will be: != null,
+         * meaning all rows will be returned, regardless of their companyId  
+         */
+        const companyFilterOperator = companyId === null
+            ? '!='
+            : '=';
+
+        // TODO: CHECK FOR PERMISSIONS IN VIEW
+        const companyTempomatCalculationViews = await this._ormService
+            .query(TempomatCalculationDataView, { companyId })
+            .innerJoin(User, x => x
+                .on('companyId', companyFilterOperator, 'companyId')
+                .and('id', '=', 'userId', TempomatCalculationDataView))
+            .where('startDate', 'IS NOT', 'NULL')
+            .and('originalPrevisionedCompletionDate', 'IS NOT', 'NULL')
+            .getMany();
+
+        const userIdRelativePaceDiffAvgRows = this._tempomatService
+            .getAvgRelativeUserPaceDiffs(companyTempomatCalculationViews);
+
+        const userOverviewViewsWithRelativePaceDiff = userIds
+            .map(userId => {
+
+                const relativePaceDiffAvgRow = userIdRelativePaceDiffAvgRows
+                    .firstOrNull(userIdRelativePaceDiffAvgRows => userIdRelativePaceDiffAvgRows.userId === userId);
+
+                const relativePaceDiffAvg = relativePaceDiffAvgRow?.relativeUserPaceDiff ?? 0;
+
+                return {
+                    userId,
+                    relativePaceDiffAvg
+                };
+            });
+
+        return userOverviewViewsWithRelativePaceDiff;
     }
 
     /**
@@ -640,8 +861,8 @@ export class UserService {
     private async _saveUserCourseBridgesAsync(userId: Id<'User'>, muts: Mutation<AdminUserCourseDTO, 'courseId'>[]) {
 
         /**
-         * Save access bridges
-         */
+          * Save access bridges
+          */
         const existingBridges = await this
             ._ormService
             .query(UserCourseBridge, { userId })
@@ -670,8 +891,8 @@ export class UserService {
                 creationDate: new Date(),
                 currentItemCode: null,
                 lastInteractionDate: null,
-                originalEstimatedCompletionDate: null,
                 requiredCompletionDate: null,
+                originalEstimatedCompletionDate: null,
                 stageName: 'assigned',
                 startDate: null,
                 tempomatMode: 'strict'
@@ -733,4 +954,7 @@ export class UserService {
         if (user)
             throw new ErrorWithCode('Username is taken!', 'username_invalid');
     }
+
+
+
 }

@@ -1,8 +1,11 @@
 import { Id } from '@episto/commontypes';
-import { ReactNode, useCallback } from 'react';
+import { UserCheckPermissionDTO } from '@episto/communication';
+import { instantiate } from '@episto/x-core';
+import { ReactNode, useCallback, useState } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { AdminApiService } from '../../../services/api/AdminApiService';
 import { CourseApiService } from '../../../services/api/courseApiService';
+import { useCheckPermission } from '../../../services/api/permissionsApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { showNotification } from '../../../services/core/notifications';
 import { setPageTitle, useIsMatchingCurrentRoute } from '../../../static/frontendHelpers';
@@ -31,9 +34,19 @@ export const CourseAdministartionFrame = ({
         .create<'Course'>(useIntParam('courseId')!);
     const isMatchingCurrentUrl = useIsMatchingCurrentRoute();
 
+
+
     // http
     const { courses, coursesStatus, coursesError, refetchCoursesAsync } = AdminApiService
         .useAdminCourseList(activeCompanyId!, !!activeCompanyId);
+
+
+    const { checkPermissionAsync, checkPermissionState } = useCheckPermission();
+
+    const [canEditCourse, setCanEditCourse] = useState<boolean>(false);
+
+
+
 
     // dt
     const currentCourse = courses
@@ -45,9 +58,28 @@ export const CourseAdministartionFrame = ({
     // func
     const navToCourse = useCallback((courseId: Id<'Course'>) => {
 
+        const handleCheckPermission = async () => {
+
+            const hasPermission = await checkPermissionAsync(instantiate<UserCheckPermissionDTO>({
+                permissionCode: 'EDIT_COURSE',
+                contextCourseId: courseId,
+                contextCompanyId: null
+            }));
+
+            return setCanEditCourse(hasPermission);
+        };
+
+        if (!courseId)
+            return;
+
+        handleCheckPermission();
+
         const route = (() => {
 
             const base = applicationRoutes.administrationRoute.coursesRoute;
+
+            if (!canEditCourse)
+                return base.statisticsCourseRoute;
 
             if (isMatchingCurrentUrl(base.statisticsCourseRoute).isMatchingRoute)
                 return base.statisticsCourseRoute;
@@ -59,7 +91,7 @@ export const CourseAdministartionFrame = ({
         })();
 
         navigate3(route, { params: { activeCompanyId, courseId } });
-    }, [navigate3, isMatchingCurrentUrl, activeCompanyId]);
+    }, [navigate3, isMatchingCurrentUrl, activeCompanyId, canEditCourse, checkPermissionAsync]);
 
     const { createCourseAsync, createCourseState } = CourseApiService
         .useCreateCourse();

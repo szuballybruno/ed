@@ -1,5 +1,5 @@
-import { XViewColumn } from '@thinkhub/x-orm';
-import { Id } from '@episto/commontypes';
+import { XViewColumn } from '@episto/x-orm';
+import { Id } from '@episto/x-core';
 
 export class TempomatCalculationDataView {
 
@@ -25,8 +25,14 @@ export class TempomatCalculationDataView {
     originalEstimatedCompletionDate: Date;
 
     @XViewColumn()
+    originalPrevisionedCompletionDate: Date;
+
+    @XViewColumn()
     totalItemCount: number;
 
     @XViewColumn()
     totalCompletedItemCount: number;
+
+    @XViewColumn()
+    tempomatAdjustmentValue: number;
 }

@@ -1,11 +1,13 @@
-import { TranslationType } from '../types/TranslationType';
+import { ITranslation as ITranslation } from '../types/ITranslation';
 
-export const huTranslation: TranslationType = {
+const getTranslation = <T extends ITranslation>(t: T): T => t;
+
+export const huTranslation = getTranslation({
     languageCode: 'hu',
     data: {
 
         misc: {
-            selectOption: 'Nincs kivalasztas...',
+            selectOption: 'Nincs kiválasztva',
             save: 'Mentés',
             savedSuccessfully: 'Sikeresen mentve!',
             close: 'Bezárás',
@@ -618,8 +620,13 @@ export const huTranslation: TranslationType = {
                 doYouReallyRemoveTheModule: 'Biztosan törlöd a modult?',
                 uploadedContentWillBeLost: 'A benne lévő összes videó, és vizsga el fog veszni.',
                 removeModule: 'Modul törlése',
-                moduleRemovedSuccessfully: 'Modul sikeresen törölve!'
+                moduleRemovedSuccessfully: 'Modul sikeresen törölve!',
+
+                video: {
+                    videoAudioTextTitle: 'Videóban elhangzott szöveg',
+                    videoDescriptionTitle: 'Videó leírása'
+                }
             }
         }
     }
-};
+});

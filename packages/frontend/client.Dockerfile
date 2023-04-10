@@ -11,7 +11,7 @@ WORKDIR /app
 RUN node ./packages/frontend/setenv.js ${ENVIRONMENT_NAME}
 
 # build
-RUN yarn build-client 
+RUN yarn build-client-web
 
 #
 # CONTAINER #2 ----- RUNNER 

@@ -49,7 +49,7 @@ export const ModuleEditDialog = ({
 
                     <EpistoFont
                         fontSize2="large">
-                        Module edit
+                        Modul szerkesztése
                     </EpistoFont>
 
                     <EpistoButton
@@ -78,6 +78,7 @@ export const ModuleEditDialog = ({
                                 }));
                     }}
                     showFooter
+                    dragEnabled
                     columns={columns}
                     rows={rows}
                     getKey={x => x.moduleVersionId} />

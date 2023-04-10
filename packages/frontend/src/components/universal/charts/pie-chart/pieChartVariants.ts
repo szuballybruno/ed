@@ -1,4 +1,4 @@
-import { deepMergeObjects } from '@thinkhub/x-core';
+import { deepMergeObjects } from '@episto/x-core';
 import { EChartsOption, SeriesOption } from 'echarts';
 import { EpistoPieChartOptionsType } from './EpistoPieChartTypes';
 

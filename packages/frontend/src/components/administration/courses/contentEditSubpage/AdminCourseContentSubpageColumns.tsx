@@ -248,7 +248,7 @@ export const useGridColumns = (
         })
         .addIf(!isSimpleView, {
             field: 'isFinal',
-            headerName: 'Zaro',
+            headerName: 'Záróvizsga',
             width: 80,
             renderCell: ({ value, key, row }) => canMarkAsFinal(row)
                 ? (
@@ -282,7 +282,7 @@ export const useGridColumns = (
         })
         .addIf(!isSimpleView, {
             field: 'errors',
-            headerName: 'Hibak',
+            headerName: 'Hibák',
             width: 100,
             renderCell: ({ value }) => {
 

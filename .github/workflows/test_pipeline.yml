@@ -20,18 +20,10 @@ jobs:
         uses: actions/checkout@v3
         with:
           path: './epistogram'
-      
-      - name: Checkout xlib
-        uses: actions/checkout@v3
-        with:
-          repository: Thinkhub-Software/thinkhub-xlib
-          path: './thinkhub-xlib'
-          token: ${{ secrets.XLIB_REPO_READ_PAT }}
-          ref: 'master'
 
       - name: Run migen
         shell: pwsh
-        run: ./thinkhub-xlib/packages/x-migen/scripts/run_migen_prod.ps1 `
+        run: ./epistogram/packages/x-migen/scripts/run_migen_prod.ps1 `
           -dbname "${{env.DB_NAME}}" `
           -dbhost "${{secrets.DB_HOST_ADDRESS}}" `
           -dbpassword "${{secrets.DB_SERVICE_USER_PASSWORD}}" `
@@ -39,7 +31,7 @@ jobs:
           -dbport "${{secrets.DB_PORT}}" `
           -outFolderPath "${PWD}/epistogram/migen_out" `
           -schemaFolderPath "${PWD}/epistogram/packages/server-services/sql" `
-          -migen_folder_path "${PWD}/thinkhub-xlib/packages/x-migen" `
+          -migen_folder_path "${PWD}/epistogram/packages/x-migen" `
           -mode "SCRIPT_ONLY"
 
       - name: Upload migration-script artifact
@@ -83,17 +75,13 @@ jobs:
         uses: actions/checkout@v3
         with:
           path: './epistogram'
-      
-      - name: Checkout xlib
-        uses: actions/checkout@v3
+    
+      # ----- setup cacheing 
+      - name: Cache docker-cache folder
+        uses: actions/cache@v3
         with:
-          repository: Thinkhub-Software/thinkhub-xlib
-          path: './thinkhub-xlib'
-          token: ${{ secrets.XLIB_REPO_READ_PAT }}
-          ref: 'master'
-
-      - name: Set up Docker Buildx for layer caching
-        uses: docker/setup-buildx-action@master
+          path: /tmp/docker-cache
+          key: ${{env.BRANCH_NAME}}-docker-cache
 
       - name: Download migration-script artifact
         uses: actions/download-artifact@v3
@@ -107,7 +95,15 @@ jobs:
           name: database-backup
           path: ./epistogram/epitest/init-sql
 
-      - name: Build containers
+      # ------ setup build
+      - name: Setup build
+        shell: pwsh
+        run: |
+          ./epistogram/scripts/create-builder.ps1
+          ./epistogram/scripts/run-registry.ps1
+
+      # ------ build images
+      - name: Build images
         shell: pwsh
         run: |
           ./epistogram/scripts/monobuild.ps1 `
@@ -115,6 +111,7 @@ jobs:
             -builddeps `
             -tests
 
+      # ------ run tests via compose
       - name: Run tests
         shell: pwsh
         run: ./epistogram/scripts/compose_up_tests.ps1

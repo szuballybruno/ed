@@ -13,7 +13,7 @@ import { UserPermissionView } from '../models/views/UserPermissionView';
 import { UserRoleAssignCompanyView } from '../models/views/UserRoleAssignCompanyView';
 import { newNotImplemented } from '../utilities/helpers';
 import { InsertEntity } from '../utilities/misc';
-import { PrincipalId } from '@thinkhub/x-core';
+import { PrincipalId } from '@episto/x-core';
 import { AuthorizationService } from './AuthorizationService';
 import { DomainProviderService } from './DomainProviderService';
 import { FileService } from './FileService';
@@ -43,6 +43,7 @@ export class CompanyService {
         const companies = await this._ormService
             .query(CompanyView, { principalId })
             .where('userId', '=', 'principalId')
+            .and('isDeleted', '=', 'false')
             .getMany();
 
         return this._mapperService
@@ -369,6 +370,30 @@ export class CompanyService {
         return this
             ._mapperService
             .mapTo(CompanyAssociatedCourseDTO, [views]);
+    }
+
+    async createCompanyAssociatedCourseAsync(companyId: Id<'Company'>, courseId: Id<'Course'>) {
+
+        const { id: editCoursePermissionId } = await this
+            ._ormService
+            .query(Permission, { code: 'EDIT_COURSE' })
+            .where('code', '=', 'code')
+            .getSingle();
+
+        await this._ormService.createAsync(CourseAccessBridge, {
+            companyId,
+            userId: null,
+            courseId: courseId
+        });
+
+        await this._ormService.createAsync(PermissionAssignmentBridge, {
+            assigneeCompanyId: companyId,
+            assigneeGroupId: null,
+            assigneeUserId: null,
+            contextCompanyId: null,
+            contextCourseId: courseId,
+            permissionId: editCoursePermissionId
+        });
     }
 
     /**

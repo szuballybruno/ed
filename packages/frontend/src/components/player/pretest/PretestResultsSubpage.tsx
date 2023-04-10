@@ -206,7 +206,7 @@ export const PretestResultsSubpage = () => {
                         <EpistoFont
                             fontSize2='normal'>
 
-                            {!isBeginnerMode
+                            {correctAnswerRate < 50
                                 ? translatableTexts.exam.pretest.resultBeginnerModeDescription
                                 : translatableTexts.exam.pretest.resultAdvancedModeDescription}
                         </EpistoFont>

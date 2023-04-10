@@ -3,8 +3,7 @@ import { Id, TempoRatingType } from '@episto/commontypes';
 export class UserLearningPageStatsDTO {
     userId: Id<'User'>;
     userEmail: string;
-    userPerformancePercentage: number;
-    userPerormanceRating: TempoRatingType;
+    avgRelativeUserPaceDiff: number | null;
     videosToBeRepeatedCount: number;
     questionsToBeRepeatedCount: number;
     completedVideoCount: number;

@@ -10,8 +10,7 @@ import { CourseItemEditDTO } from '@episto/communication';
 import { Mutation } from '@episto/communication';
 import { VersionCode } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
-import { VersionMigrationContainer } from '../utilities/misc';
-import { PrincipalId } from '@thinkhub/x-core';
+import { PrincipalId } from '@episto/x-core';
 import { AnswerService } from './AnswerService';
 import { AuthorizationService } from './AuthorizationService';
 import { MapperService } from './MapperService';
@@ -19,6 +18,7 @@ import { XMutatorHelpers } from './misc/XMutatorHelpers';
 import { ORMConnectionService } from './ORMConnectionService';
 import { QuestionService } from './QuestionService';
 import { VersionSaveService } from './VersionSaveService';
+import { VersionMigrationContainer } from '../utilities/misc';
 
 type ItemMutationType = Mutation<CourseContentItemAdminDTO, 'versionCode'>;
 
@@ -49,16 +49,16 @@ export class CourseItemService {
         videoVersionId: Id<'VideoVersion'> | null,
         examVersionId: Id<'ExamVersion'> | null) {
 
-        await this
-            ._authorizationService
-            .checkPermissionAsync(principalId, 'EDIT_COURSES');
-
         const views = await this
             ._ormService
             .query(CourseItemEditView, { videoVersionId, examVersionId })
             .where('examVersionId', '=', 'examVersionId')
             .and('videoVersionId', '=', 'videoVersionId')
             .getMany();
+
+        await this
+            ._authorizationService
+            .checkPermissionAsync(principalId, 'EDIT_COURSE', { courseId: views.first().courseId });
 
         return this
             ._mapperService
@@ -178,7 +178,7 @@ export class CourseItemService {
                 }),
                 overrideDataProps: (data, mutation) => {
 
-                    const { itemOrderIndex, itemTitle, itemSubtitle, videoAudioText } = XMutatorHelpers
+                    const { itemOrderIndex, itemTitle, itemSubtitle, videoAudioText, videoDescription } = XMutatorHelpers
                         .mapMutationToPartialObject(mutation);
 
                     if (itemOrderIndex !== undefined)
@@ -192,6 +192,9 @@ export class CourseItemService {
 
                     if (videoAudioText)
                         data.audioText = videoAudioText;
+
+                    if (videoDescription)
+                        data.description = videoDescription;
 
                     return data;
                 },

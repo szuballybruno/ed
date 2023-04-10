@@ -7,7 +7,7 @@ import { HasPermissionFnType, useAuthorizationContext } from '../system/Authoriz
 export type RenderRoute = {
     element: JSX.Element;
     route: ApplicationRoute<any, any>;
-
+    asIndexRoute?: boolean;
     /**
      * @deprecated
      */
@@ -64,15 +64,16 @@ export const EpistoRoutes = ({
                     .getRelativePath();
 
                 return <Route
-                    path={relativePath}
-                    element={<>
+                    path={renderRoute.asIndexRoute ? '/' : relativePath}
+                    element={/* <>
                         <RouteRenderer
                             route={renderRoute.route}
-                            isAuthorizedToView={renderRoute.isAuthorizedToView}>
-
+                            isAuthorizedToView={renderRoute.isAuthorizedToView}> */
+                        <>
                             {renderRoute.element}
-                        </RouteRenderer>
-                    </>}
+                        </>
+                       /*  </RouteRenderer>
+                    </> */}
                     key={index} />;
             })}
     </Routes>;

@@ -1,5 +1,5 @@
-import { XViewColumn } from '@thinkhub/x-orm';
-import { Id } from '@episto/commontypes';
+import { XViewColumn } from '@episto/x-orm';
+import { Id } from '@episto/x-core';
 
 export class AnswerSessionView {
 
@@ -28,9 +28,6 @@ export class AnswerSessionView {
     isSuccessful: boolean;
 
     @XViewColumn()
-    answeredQuestionCount: number;
-
-    @XViewColumn()
     correctGivenAnswerCount: number;
 
     @XViewColumn()
@@ -41,6 +38,9 @@ export class AnswerSessionView {
 
     @XViewColumn()
     endDate: Date;
+
+    @XViewColumn()
+    answeredQuestionCount: number;
 
     @XViewColumn()
     answerSessionType: string;

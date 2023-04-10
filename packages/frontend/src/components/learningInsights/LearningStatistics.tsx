@@ -3,10 +3,8 @@ import { useMemo } from 'react';
 import { Responsivity } from '../../helpers/responsivity';
 import { useUserLearningPageStats } from '../../services/api/userStatsApiService';
 import { Environment } from '../../static/Environemnt';
-import { coalesce } from '../../static/frontendHelpers';
 import { EpistoGrid } from '../controls/EpistoGrid';
 import StatisticsCard, { StatisticsCardProps } from '../statisticsCard/StatisticsCard';
-import { useUserTempoDisplayValues } from '../universal/TempoChip';
 
 export type StatisticsGroupType = {
     title: string;
@@ -25,12 +23,12 @@ export const LearningStatistics = (props: {
     // http
     const { userLearningPageStats } = useUserLearningPageStats(userId);
 
-    const { userPerformancePercentage, userPerormanceRating } = coalesce(userLearningPageStats, {
-        userPerformancePercentage: 0,
-        userPerormanceRating: 'average'
-    });
+    /*  const { userPerformancePercentage, userPerormanceRating } = coalesce(userLearningPageStats, {
+         userPerformancePercentage: 0,
+         userPerormanceRating: 'average'
+     }); */
 
-    const { color, text } = useUserTempoDisplayValues(userPerormanceRating);
+    //const { color, text } = useUserTempoDisplayValues(userPerormanceRating);
 
     const statistics = useMemo((): StatisticsCardProps[] => {
 
@@ -38,7 +36,7 @@ export const LearningStatistics = (props: {
             {
                 title: 'Haladásom',
                 iconPath: Environment.getAssetUrl('/images/learningpagestaticon1.png'),
-                value: text
+                value: '-'
             }, {
                 title: 'Ismétlésre ajánlott videók',
                 iconPath: Environment.getAssetUrl('/images/learningpagestaticon2.png'),
@@ -80,7 +78,7 @@ export const LearningStatistics = (props: {
                 value: userLearningPageStats?.rankInsideCompany
             }
         ];
-    }, [userLearningPageStats, text]);
+    }, [userLearningPageStats]);
 
     return <EpistoGrid
         width="100%"

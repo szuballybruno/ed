@@ -1,6 +1,6 @@
 import { LoggerService } from '@episto/server-services';
-import { initJsExtensions } from '@thinkhub/x-core';
-import { ExpressListener, GatewayErrorDataType, GatewaySuccessDataType } from '@thinkhub/x-gateway';
+import { initJsExtensions } from '@episto/x-core';
+import { ExpressListener, GatewayErrorDataType, GatewaySuccessDataType } from '@episto/x-gateway';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { ServiceProviderInitializator } from './helpers/initApp';
@@ -34,10 +34,11 @@ await (async () => {
 
         const errorCallback = (data: GatewayErrorDataType) => {
 
-            const stack = getCleanerStack(data.errorin);
             const msg = `[${data.opts.controllerSignature.name}${data.req.path}] Failed, responding ${data.res.getCode()}!`
-            loggerService.logScoped('ERROR', `---------------- ${msg} ----------------`,);
-            loggerService.logScoped('ERROR', `${data.errorin.message}\n${stack}`);
+            loggerService.logScoped('ERROR', msg);
+            // const stack = getCleanerStack(data.errorin);
+            // loggerService.logScoped('ERROR', `---------------- ${msg} ----------------`,);
+            // loggerService.logScoped('ERROR', `${data.errorin.message}\n${stack}`);
         }
 
         const successCallback = (data: GatewaySuccessDataType) => {

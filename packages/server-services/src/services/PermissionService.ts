@@ -1,14 +1,15 @@
 import { Permission } from '../models/tables/Permission';
 import { PermissionAssignmentBridge } from '../models/tables/PermissionAssignmentBridge';
 import { UserPermissionView } from '../models/views/UserPermissionView';
-import { PermissionListDTO } from '@episto/communication';
+import { PermissionListDTO, UserPermissionDTO } from '@episto/communication';
 import { GetPermissionScope, GetParamByCodeType, PermissionScopeParamType } from '@episto/commontypes';
 import { PermissionCodeType } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
-import { PrincipalId } from '@thinkhub/x-core';
+import { PrincipalId } from '@episto/x-core';
 import { MapperService } from './MapperService';
 import { QueryServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService';
+import { AuthorizationService } from './AuthorizationService';
 
 export type ContextOptions = {
     companyId?: Id<'Company'>,
@@ -37,6 +38,28 @@ export class PermissionService extends QueryServiceBase<Permission> {
 
         return this._mapperService
             .mapTo(PermissionListDTO, [permissions]);
+    }
+
+    async checkPermissionAsync(principalId: PrincipalId, dto: UserPermissionDTO) {
+
+        const scope = await this
+            .getPermissionScope(dto.permissionCode);
+
+        if (scope === 'COMPANY' && dto.contextCompanyId === null)
+            throw new Error('Company context id is missing!');
+
+        if (scope === 'COURSE' && dto.contextCourseId === null)
+            throw new Error('Course context id is missing!');
+
+        const hasPermission = await this
+            .getPermissionByOptionsAsync({
+                userId: principalId.getId(),
+                code: dto.permissionCode,
+                contextCompanyId: dto.contextCompanyId,
+                contextCourseId: dto.contextCourseId
+            });
+
+        return hasPermission;
     }
 
     /**
@@ -131,9 +154,11 @@ export class PermissionService extends QueryServiceBase<Permission> {
     /**
      * Assignes a permission  
      */
-    async assignPermission<TCode extends PermissionCodeType>(...args: GetPermissionScope<TCode> extends 'USER'
-        ? [Id<'User'>, TCode]
-        : [Id<'User'>, TCode, GetParamByCodeType<TCode>]) {
+    async assignPermission<TCode extends PermissionCodeType>(
+        ...args: GetPermissionScope<TCode> extends 'USER'
+            ? [Id<'User'>, TCode]
+            : [Id<'User'>, TCode, GetParamByCodeType<TCode>]
+    ) {
 
         const { code, contextCompanyId, contextCourseId, userId } = this._getParams(args);
 

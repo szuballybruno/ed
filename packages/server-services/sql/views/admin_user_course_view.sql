@@ -1,6 +1,3 @@
--- [ADMIN / USER LIST / COURSES] this view is used to query the data 
--- that will be displayed on the admin / main user list / courses details page.
-
 WITH
 question_answer_cte AS
 (
@@ -36,12 +33,22 @@ question_answer_cte AS
 		asv.user_id,
 		cv.course_id
 ),
+avg_performance_cte AS
+(
+    SELECT
+        upv.course_id,
+        AVG(upv.performance_percentage) avg_performance
+    FROM public.user_performance_view upv
+    WHERE upv.performance_percentage != 0
+    GROUP BY
+        upv.course_id
+),
 completed_video_count AS
 (
 	SELECT
 		cicv.user_id,
 		cicv.course_id,
-		COUNT(cicv.video_version_id)::int completed_video_count
+		COUNT(cicv.video_version_id) completed_video_count
 	FROM public.course_item_completion_view cicv
 
 	GROUP BY cicv.user_id, cicv.course_id
@@ -132,16 +139,7 @@ recommended_videos_for_practise_cte AS
     GROUP BY
         cv.course_id,
         uprv.user_id
-),
-avg_user_performance_per_course_cte AS 
-(
-    SELECT 
-        upv.course_id,
-        AVG(upv.performance_percentage) avg_performance_percentage
-    FROM public.user_performance_view upv
-    GROUP BY
-        upv.course_id
-)
+) 
 SELECT
     u.id user_id,
     co.id course_id,
@@ -154,16 +152,17 @@ SELECT
     ucpav.completed_percentage course_progress_percentage,
     cvc.completed_video_count,
     cstv.total_spent_seconds total_spent_seconds,
-    COALESCE(qac.video_quesiton_answer_count, 0)::int answered_video_question_count,
-    COALESCE(qac.practise_quesiton_answer_count, 0)::int answered_practise_question_count,
+    COALESCE(qac.video_quesiton_answer_count, 0) answered_video_question_count,
+    COALESCE(qac.practise_quesiton_answer_count, 0) answered_practise_question_count,
     tcdv.required_completion_date,
+    tcdv.tempomat_adjustment_value,
     tcdv.tempomat_mode,
-    tcdv.original_estimated_completion_date,
+    tcdv.original_previsioned_completion_date,
     tcdv.total_item_count,
     tcdv.total_completed_item_count,
-    (upv.performance_percentage - uperv.avg_performance_percentage) performance_percentage_diff,
+    upv.performance_percentage - apc.avg_performance difference_from_average_performance_percentage,
     upv.performance_percentage,
-    uperv.avg_performance_percentage,
+    apc.avg_performance,
     ifecc.is_final_exam_completed,
     carc.correct_answer_rate,
     cecc.completed_exam_count,
@@ -224,12 +223,14 @@ LEFT JOIN public.user_performance_view upv
 ON upv.user_id = u.id
 AND upv.course_id = co.id
 
-LEFT JOIN avg_user_performance_per_course_cte uperv
-ON uperv.course_id = co.id
+-- CTE joins
 
 LEFT JOIN completed_video_count cvc
 ON cvc.user_id = u.id
 AND cvc.course_id = co.id
+
+LEFT JOIN avg_performance_cte apc
+ON apc.course_id = co.id
 
 LEFT JOIN is_final_exam_completed_cte ifecc
 ON ifecc.course_id = co.id 
@@ -246,6 +247,8 @@ AND cecc.user_id = u.id
 LEFT JOIN recommended_videos_for_practise_cte rvfpc
 ON rvfpc.course_id = co.id
 AND rvfpc.user_id = u.id
+
+WHERE co.deletion_date IS NULL
 
 ORDER BY
     u.id,

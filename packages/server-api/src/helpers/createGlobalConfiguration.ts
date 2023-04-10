@@ -1,5 +1,5 @@
 import { ExcludeFunctions, GlobalConfigurationService, LogScopeType } from '@episto/server-services';
-import { IXCookieOptions } from '@thinkhub/x-gateway';
+import { IXCookieOptions } from '@episto/x-gateway';
 import { AdvancedDotEnv } from './AdvancedDotEnv';
 
 class Helper {

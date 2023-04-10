@@ -200,7 +200,7 @@ export const ShopPage = () => {
                                 return <GridItem key={index}>
                                     <ShopItem
                                         shopItem={shopItem}
-                                        isSufficientFundsAvailable={coinBalance >= shopItem.coinPrice}
+                                        isSufficientFundsAvailable={coinBalance.coinBalance >= shopItem.coinPrice}
                                         handlePurchaseItem={handlePurchaseItem}
                                         key={index} />
                                 </GridItem>;

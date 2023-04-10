@@ -2,9 +2,9 @@ import { AnswerSignupQuestionDTO } from '@episto/communication';
 import { PersonalityAssessmentService } from '@episto/server-services';
 import { SignupService } from '@episto/server-services';
 import { ActionParams } from '../helpers/ActionParams';
-import { XControllerAction } from '@thinkhub/x-gateway';
+import { XControllerAction } from '@episto/x-gateway';
 import { apiRoutes } from '@episto/communication';
-import { IXGatewayServiceProvider } from '@thinkhub/x-gateway';
+import { IXGatewayServiceProvider } from '@episto/x-gateway';
 import { IController } from '../interfaces/IController';
 
 export class SurveyController implements IController<SurveyController> {
@@ -35,18 +35,25 @@ export class SurveyController implements IController<SurveyController> {
         return this._signupService
             .getSignupDataAsync(params.principalId);
     };
-
-    @XControllerAction(apiRoutes.survey.completeSignupSurvey, { isPost: true })
-    completeSignupSurveyAction = (params: ActionParams) => {
-
-        return this._signupService
-            .completeSignupSurveyAsync(params.principalId);
-    };
+    /* 
+        @XControllerAction(apiRoutes.survey.completeSignupSurvey, { isPost: true })
+        completeSignupSurveyAction = (params: ActionParams) => {
+    
+            return this._signupService
+                .completeSignupSurveyAsync(params.principalId);
+        }; */
 
     @XControllerAction(apiRoutes.survey.getUserPersonalityData)
     getUserPersonalityDataAction(params: ActionParams) {
 
         return this._personalityAssessmentService
             .getUserPersonalityAssessmentDTOAsync(params.principalId);
+    }
+
+    @XControllerAction(apiRoutes.survey.checkIfSurveySkippable, { isPost: true })
+    checkIfSurveySkippableAction(params: ActionParams) {
+
+        return this._signupService
+            .checkIfSurveySkippableAsync(params.principalId)
     }
 }
