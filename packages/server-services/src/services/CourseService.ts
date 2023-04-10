@@ -166,8 +166,7 @@ export class CourseService {
                     skillBenefits: '',
                     coverFileId: null,
                     isFeatured: false,
-                    modificationDate: new Date(),
-                    isPrecourseSurveyRequired: true
+                    modificationDate: new Date()
                 }),
                 createVersion: ({ entityId, dataId }) => ({
                     courseDataId: dataId,
