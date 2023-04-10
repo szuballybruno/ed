@@ -8,15 +8,17 @@ export class XEventManager<TEventKey extends string> {
 
     private _store: DictionaryOfT<EventStoreItemType<any>> = {};
 
-    scubscribeEvent<T>(eventKey: TEventKey, subscriberKey: string, callback: EventCallbackType<T>) {
+    subscribeEvent<T>(eventKey: TEventKey, subscriberKey: string, callback: EventCallbackType<T>) {
 
         Logger.logScoped('EVENTS', `Subscribing to event ${eventKey} by ${subscriberKey}`);
 
         const previousSubscriptions = this
             ._store[eventKey] ?? {};
 
-        if (previousSubscriptions[subscriberKey] !== undefined)
-            throw new Error(`Already subscribed by key: ${subscriberKey}`);
+        /* if (previousSubscriptions[subscriberKey] !== undefined)
+            return () => {
+
+            }; *///throw new Error(`Already subscribed by key: ${subscriberKey}`);
 
         this._store[eventKey] = {
             ...previousSubscriptions,

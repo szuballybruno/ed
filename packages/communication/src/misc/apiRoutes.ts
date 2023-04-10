@@ -4,6 +4,9 @@ import { CompanyAssociatedCourseDTO } from "../company/CompanyAssociatedCourseDT
 import { CourseStartDTO } from "../CourseStartDTO";
 import { Mutation } from "../mutations/Mutation";
 import { AdminUserCourseDTO } from "../AdminUserCourseDTO";
+import { FeatureDTO } from "../FeatureDTO";
+import { CompanyFeatureDTO } from "../CompanyFeatureDTO";
+import { CourseFeatureDTO } from "../CourseFeatureDTO";
 
 export type RouteParameterType<TBody = any, TQuery = any> = { body?: TBody, query?: TQuery };
 export type ParametrizedRouteType<T extends RouteParameterType> = string & T;
@@ -73,6 +76,14 @@ export const apiRoutes = {
     tempomat: {
         setTempomatMode: '/tempomat/set-tempomat-mode',
         getTempomatMode: '/tempomat/get-tempomat-mode'
+    },
+
+    feature: {
+        checkFeature: '/feature/check-feature' as ParametrizedRouteType<{ body: FeatureDTO }>,
+        getCompanyFeatures: '/feature/get-company-features' as ParametrizedRouteType<{ query: { companyId: Id<'Company'> } }>,
+        saveCompanyFeatures: '/feature/save-company-feature' as ParametrizedRouteType<{ body: { companyId: Id<'Company'>, mutations: Mutation<CompanyFeatureDTO, 'featureId'>[] } }>,
+        getCourseFeatures: '/feature/get-course-features' as ParametrizedRouteType<{ query: { courseId: Id<'Course'> } }>,
+        saveCourseFeatures: '/feature/save-course-feature' as ParametrizedRouteType<{ body: { courseId: Id<'Course'>, mutations: Mutation<CourseFeatureDTO, 'featureId'>[] } }>
     },
 
     passwordChange: {
@@ -195,7 +206,8 @@ export const apiRoutes = {
         answerSurveyQuestion: '/survey/answer-question',
         getSurveyData: '/survey/get-data',
         completeSignupSurvey: '/survey/complete-signup-survey',
-        getUserPersonalityData: '/survey/get-user-personality-data'
+        getUserPersonalityData: '/survey/get-user-personality-data',
+        checkIfSurveySkippable: '/survey/check-if-survey-skippable'
     },
 
     player: {

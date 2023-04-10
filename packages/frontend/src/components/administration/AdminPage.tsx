@@ -75,8 +75,9 @@ export const AdminPage = () => {
                             element: <EpistoRoutes
                                 renderRoutes={[
                                     {
-                                        route: adminRoute.personalityAssessmentRoute.indexRoute,
-                                        element: <PersonalityTraitCategoriesSubpage />
+                                        route: adminRoute.personalityAssessmentRoute,
+                                        element: <PersonalityTraitCategoriesSubpage />,
+                                        asIndexRoute: true
                                     },
                                     {
                                         route: adminRoute.personalityAssessmentRoute.editTipsRoute,

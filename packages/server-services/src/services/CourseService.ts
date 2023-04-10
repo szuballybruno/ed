@@ -3,7 +3,7 @@ import { CourseVisibilityType, ErrorWithCode, Id, OrderType } from '@episto/comm
 import { AvailableCourseDTO, CompanyAssociatedCourseDTO, CourseAdminListItemDTO, CourseBriefData, CourseCategoryDTO, CourseContentAdminDTO, CourseContentItemAdminDTO, CourseDetailsDTO, CourseDetailsEditDataDTO, CourseStartDTO, CreateCourseDTO, GreetingsDataDTO, ModuleEditDTO, Mutation, PlaylistModuleDTO } from '@episto/communication';
 import { PrincipalId } from '@episto/x-core';
 import { UploadedFile } from 'express-fileupload';
-import { CompanyService, PermissionService, TempomatService } from '..';
+import { CompanyService, FeatureService, PermissionService, TempomatService } from '..';
 import { Course } from '../models/tables/Course';
 import { CourseData } from '../models/tables/CourseData';
 import { CourseVersion } from '../models/tables/CourseVersion';
@@ -53,7 +53,8 @@ export class CourseService {
         private _authorizationService: AuthorizationService,
         private _verisonCreateService: VersionCreateService,
         private _companyService: CompanyService,
-        private _playerService: PlayerService) {
+        private _playerService: PlayerService,
+        private _featureService: FeatureService) {
     }
 
     /**
@@ -358,7 +359,7 @@ export class CourseService {
      */
     async getGreetingDataAsync(principalId: PrincipalId, courseId: Id<'Course'>) {
 
-        const { isPrecourseSurveyRequired, title } = await this
+        const { title } = await this
             ._ormService
             .withResType<CourseData>()
             .query(LatestCourseVersionView, { courseId })
@@ -369,6 +370,20 @@ export class CourseService {
                 .on('id', '=', 'courseDataId', CourseVersion))
             .where('courseId', '=', 'courseId')
             .getSingle();
+
+        const isPrequizRequired = await this._featureService
+            .checkFeatureAsync(principalId, {
+                featureCode: 'PREQUIZ_SURVEY',
+                courseId: courseId
+            })
+
+        const isPretestRequired = await this._featureService
+            .checkFeatureAsync(principalId, {
+                featureCode: 'PRETEST_SURVEY',
+                courseId: courseId
+            })
+
+        const isPrecourseSurveyRequired = isPrequizRequired && isPretestRequired;
 
         /**
          * Get first item playlist code 
@@ -429,8 +444,7 @@ export class CourseService {
                 humanSkillBenefits: createCharSeparatedList(dto
                     .humanSkillBenefits
                     .map(x => `${x.text}: ${x.value}`)),
-                visibility: dto.visibility,
-                isPrecourseSurveyRequired: dto.isPrecourseSurveyRequired
+                visibility: dto.visibility
             });
     }
 

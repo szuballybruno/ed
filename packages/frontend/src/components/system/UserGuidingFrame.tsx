@@ -17,10 +17,10 @@ export const UserGuidingFrame = (props: PropsWithChildren) => {
 
     return (
         <>
-            {/*Environment.isLocalhost && <script
+            {!Environment.isLocalhost && <script
                 src="./userGuiding.js"
                 async
-    defer></script>*/}
+                defer></script>}
             {props.children}
         </>
     );

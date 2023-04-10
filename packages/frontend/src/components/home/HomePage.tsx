@@ -1,6 +1,7 @@
 import { useContext, useState } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { Responsivity } from '../../helpers/responsivity';
+
 import { useOverviewPageDTO } from '../../services/api/miscApiService';
 import { useActiveCourses } from '../../services/api/userProgressApiService';
 import { useNavigation } from '../../services/core/navigatior';

@@ -1,5 +1,6 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
+import { SurveyApiService } from '../../services/api/SurveyApiService';
 import { useNavigation } from '../../services/core/navigatior';
 import { PropsWithChildren, useCurrentUrlPathname, useGetCurrentAppRoute } from '../../static/frontendHelpers';
 import { Logger } from '../../static/Logger';
@@ -15,6 +16,20 @@ export const AuthFirewallFrame = ({ children }: PropsWithChildren): JSX.Element 
     const currentRoute = useGetCurrentAppRoute();
     const { hasPermission } = useAuthorizationContext();
     const isUnauthorized = !!currentRoute.isUnauthorized;
+    const { checkIfSurveySkippable, checkIfSurveySkippableStatus } = SurveyApiService.useCheckIfSurveySkippable();
+    const [isSurveySkippable, setIsSurveySkippable] = useState(true);
+
+    useEffect(() => {
+
+        const handleCheckIfSurveyEnabled = async () => {
+            const isSurveySkippable = await checkIfSurveySkippable();
+
+            setIsSurveySkippable(isSurveySkippable);
+        };
+
+        handleCheckIfSurveyEnabled();
+
+    }, [checkIfSurveySkippable]);
 
     /**
      * Check authentication 
@@ -38,14 +53,16 @@ export const AuthFirewallFrame = ({ children }: PropsWithChildren): JSX.Element 
         }
 
         // error
-        if (authState === 'error' && !isCurrentRouteLogin) {
+        if ((authState === 'error' && !isCurrentRouteLogin) || checkIfSurveySkippableStatus === 'error') {
 
             Logger.logScoped('AUTH', `Auth state: ${authState}. Returning error for page to handle...`);
             return 'ERROR';
         }
 
         // if loading return blank page
-        if (authState === 'loading') {
+        if (authState === 'loading' || checkIfSurveySkippableStatus === 'loading') {
+
+            console.log('isSurveySkippable: ' + isSurveySkippable);
 
             Logger.logScoped('AUTH', `Auth state: ${authState}. Rendering empty div until loaded.`);
             return 'WAIT';
@@ -59,7 +76,7 @@ export const AuthFirewallFrame = ({ children }: PropsWithChildren): JSX.Element 
         }
 
         // if skip survey is enabled, let execution continue
-        if (hasPermission('BYPASS_SURVEY')) {
+        if (isSurveySkippable) {
 
             Logger.logScoped('AUTH', `Auth state: ${authState}. Survey bypassed. Rendering...`);
             return 'OK';
@@ -85,7 +102,7 @@ export const AuthFirewallFrame = ({ children }: PropsWithChildren): JSX.Element 
         Logger.logScoped('AUTH', 'Redirecting to survey...');
         return () => navigate2(surveyRoute);
 
-    }, [authState, navigate2, loginRoute, currentRoute, dest, isUnauthorized, hasPermission, surveyRoute]);
+    }, [currentRoute.route, currentRoute.isSurvey, isUnauthorized, authState, checkIfSurveySkippableStatus, isSurveySkippable, navigate2, loginRoute, dest, surveyRoute]);
 
     /**
      * Exec auth returned navigation function 

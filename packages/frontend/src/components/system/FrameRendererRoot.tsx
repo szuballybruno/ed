@@ -6,6 +6,7 @@ import { AuthenticationFrame } from './AuthenticationFrame';
 import { AuthFirewallFrame } from './AuthFirewallFrame';
 import { AuthorizationFrame } from './AuthorizationFrame';
 import { AutoScrollFrame } from './AutoScrollContext';
+import { CheckFeatureFrame } from './CheckFeatureFrame';
 import { CurrentCourseItemFrame } from './CurrentCourseItemFrame';
 import { ErrorDialogFrame } from './ErrorDialogFrame';
 import { EventListener } from './EventListener';
@@ -80,6 +81,13 @@ const getFrames = (): FrameType[] => {
         {children}
     </DepsWrapper>;
 
+    const CheckFeatureFrameWrapper: FrameType = ({ children, prevFrameNames }) => <DepsWrapper
+        prevFrameNames={prevFrameNames}
+        deps={[RoutingFrame]}
+        frame={CheckFeatureFrame}>
+        {children}
+    </DepsWrapper>;
+
     return [
         MUISetupFrame,
         ChakraProviderFrame,
@@ -89,6 +97,7 @@ const getFrames = (): FrameType[] => {
         LocalizationFrame,
         QueryClienProviderFrame,
         RoutingFrame,
+        CheckFeatureFrameWrapper,
         // TawkToFrame,
         XDialogHosterFrame,
         TitleSetterFrame,

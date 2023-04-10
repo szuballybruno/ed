@@ -61,7 +61,8 @@ const useColumns = (mutatorFunctions: IXMutatorFunctions<CompanyAssociatedCourse
 
 export const CompanyAdminCoursesPage = () => {
 
-    const { indexRoute, editRoute, coursesRoute } = applicationRoutes.administrationRoute.companiesRoute;
+    const { companiesRoute } = applicationRoutes.administrationRoute;
+    const { editRoute, coursesRoute, featuresRoute } = companiesRoute;
 
     const companyId = useRouteParams_OLD(editRoute)
         .getValue(x => x.companyId, 'int');
@@ -100,9 +101,10 @@ export const CompanyAdminCoursesPage = () => {
             direction="column"
             pb="20px"
             tabMenuItems={[
-                indexRoute,
+                companiesRoute,
                 editRoute,
-                coursesRoute
+                coursesRoute,
+                featuresRoute
             ]}
             navigationQueryParams={{
                 companyId

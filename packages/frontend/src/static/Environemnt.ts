@@ -16,7 +16,8 @@ export type LoggingKeysType =
     'QUERY' |
     'SESSION' |
     'EVENTS' |
-    'PLAYER DEBUG';
+    'PLAYER DEBUG' |
+    'FEATURE CHECKER';
 
 
 const getEnvVar = (name: string): string => {
@@ -46,7 +47,7 @@ export const Environment = (() => {
     const eventPoolingIntervalInMs = 5 * 60 * 1000; // 5 mins
     const sessionHangThresholdInMs = 2 * 60 * 60 * 1000; // 2 hours
     const loggingEnabled = true;
-    const loggingEnabledKeys: LoggingKeysType[] = ['WARNING', 'AUTH'];
+    const loggingEnabledKeys: LoggingKeysType[] = ['WARNING', 'AUTH', 'ROUTING', 'FEATURE CHECKER', 'EVENTS'];
 
     const getAssetUrl = (path: string, assetUrlPath?: string) => {
 

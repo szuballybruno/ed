@@ -6,12 +6,14 @@ export const EditSection = (props: {
     title: string,
     children: ReactNode,
     hidden?: boolean,
-    rightSideComponent?: ReactNode
+    rightSideComponent?: ReactNode,
+    showContent?: boolean
 } & EpistoFlex2Props) => {
 
-    const { children, title, rightSideComponent, ...css } = props;
+    const { children, title, rightSideComponent, showContent, ...css } = props;
 
     return <EpistoFlex2
+        className='mildShadow roundBorders'
         direction="column"
         padding="20px"
         mb="10px"
@@ -19,7 +21,7 @@ export const EditSection = (props: {
         {...css}>
 
         <EpistoFlex2
-            align="flex-start"
+            align={showContent ? 'flex-start' : 'center'}
             justify="space-between">
 
             <EpistoFont
@@ -34,6 +36,6 @@ export const EditSection = (props: {
             {rightSideComponent}
         </EpistoFlex2>
 
-        {children}
+        {!(showContent === false) && children}
     </EpistoFlex2>;
 };

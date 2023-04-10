@@ -8,6 +8,7 @@ import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 import { SmallStat } from './SmallStat';
 import { VerticalTile } from './verticalTile/VerticalTile';
 import { VerticalTileImage } from './verticalTile/VerticalTileImage';
+import { useCheckFeatureEnabled } from '../system/CheckFeatureFrame';
 
 export const CourseTileIsCompletedBadge = () => {
 
@@ -102,23 +103,25 @@ export const CourseTileStats = (props: {
 export const CourseTileButtons = (props: {
     onDetails: () => void,
     onPlay: () => void,
+    isCourseDetailsEnabled: boolean;
     isStartedCourse: boolean | string
 }) => {
 
     const {
         onDetails,
         onPlay,
+        isCourseDetailsEnabled,
         isStartedCourse
     } = props;
 
     return <EpistoFlex2 mb="10px">
 
         {/* details */}
-        <EpistoButton
+        {isCourseDetailsEnabled && <EpistoButton
             onClick={onDetails}
             style={{ flex: '1' }}>
             {translatableTexts.availableCourses.courseDataSheet}
-        </EpistoButton>
+        </EpistoButton>}
 
         {/* start course */}
         <EpistoButton
@@ -149,6 +152,11 @@ export const CourseTile = ({
     const isComplete = course.isComplete;
     const isStartedCourse = course.currentItemCode || (course.stageName !== null && course.stageName !== 'assigned');
 
+    const { isFeatureEnabled: isCourseDetailsEnabled } = useCheckFeatureEnabled({
+        courseId: course.courseId,
+        featureCode: 'COURSE_DETAILS_PAGE'
+    });
+
     return <VerticalTile
         title={course.title}
         subTitle={course.categoryName}
@@ -160,6 +168,7 @@ export const CourseTile = ({
         buttonsComponent={<CourseTileButtons
             onPlay={onPlay}
             onDetails={onDetails}
+            isCourseDetailsEnabled={isCourseDetailsEnabled}
             isStartedCourse={isStartedCourse} />
         } />;
 };

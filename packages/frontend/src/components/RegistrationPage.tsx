@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { applicationRoutes } from '../configuration/applicationRoutes';
 import { Responsivity } from '../helpers/responsivity';
+import { FeatureApiService } from '../services/api/FeatureApiService';
 import { useRegisterInvitedUser, useRegisterUser } from '../services/api/registrationApiService';
 import browser from '../services/core/browserSniffingService';
 import { useNavigation } from '../services/core/navigatior';
@@ -14,7 +15,6 @@ import { EpistoFont } from './controls/EpistoFont';
 import { EpistoImage } from './controls/EpistoImage';
 import { MUI } from './controls/MUIControls';
 import { ContentPane } from './pageRootContainer/ContentPane';
-import { useAuthContextState } from './system/AuthenticationFrame';
 import { LoadingFrame } from './system/LoadingFrame';
 import { PasswordEntry, usePasswordEntryState } from './universal/PasswordEntry';
 
@@ -41,8 +41,9 @@ export const RegistrationPage = () => {
     const showErrorDialog = useShowErrorDialog();
     const { registerUserAsync, registerUserState } = useRegisterUser();
     const { registerInvitedUserAsync, registerInvitedUserState } = useRegisterInvitedUser();
+    const { checkFeature } = FeatureApiService.useCheckFeature();
 
-    const { refetchAuthHandshake } = useAuthContextState();
+    //const { refetchAuthHandshake } = useAuthContextState();
 
     const handleRegisterUser = async () => {
 
@@ -67,15 +68,19 @@ export const RegistrationPage = () => {
             }
 
             showNotification(translatableTexts.registrationPage.successfulRegistration);
-            const { permissions } = await refetchAuthHandshake();
 
-            if (permissions.some(x => x === 'BYPASS_SURVEY')) {
+            // TODO:2 CHECKFEATURE
+            const isSurveyEnabled = await checkFeature({
+                featureCode: 'SIGNUP_SURVEY'
+            });
 
-                navigate2(applicationRoutes.homeRoute);
+            if (isSurveyEnabled) {
+
+                navigate2(applicationRoutes.surveyRoute);
             }
             else {
 
-                navigate2(applicationRoutes.surveyRoute);
+                navigate2(applicationRoutes.homeRoute);
             }
         }
         catch (e) {

@@ -1,5 +1,5 @@
-import { Add } from '@mui/icons-material';
 import { Id } from '@episto/x-core/dist/Id';
+import { Add } from '@mui/icons-material';
 import { memo } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { CompanyApiService } from '../../../services/api/CompanyApiService';
@@ -16,7 +16,8 @@ import { useAdminBreadcrumbsContext } from '../breadcrumbsHeader/AdminBreadcrumb
 export const CompanyAdminIndexPage = memo(() => {
 
     const { navigate2 } = useNavigation();
-    const { indexRoute, editRoute, coursesRoute } = applicationRoutes.administrationRoute.companiesRoute;
+    const { companiesRoute } = applicationRoutes.administrationRoute;
+    const { editRoute, coursesRoute } = companiesRoute;
     const { activeCompanyId } = useAdminBreadcrumbsContext();
 
     // http
@@ -38,7 +39,7 @@ export const CompanyAdminIndexPage = memo(() => {
                 direction="column"
                 pb="20px"
                 tabMenuItems={[
-                    indexRoute
+                    companiesRoute
                 ]}
                 headerButtons={[
                     {

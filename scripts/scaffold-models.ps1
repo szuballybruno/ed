@@ -1,5 +1,5 @@
 
-$xorm = "${PSScriptRoot}/../epistogram/packages/x-orm"
+$xorm = "${PSScriptRoot}/../packages/x-orm"
 
 yarn --cwd $xorm scaffold `
     --dbhost=localhost `

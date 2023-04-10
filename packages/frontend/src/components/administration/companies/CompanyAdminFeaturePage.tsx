@@ -1,57 +1,43 @@
-import { CompanyAssociatedCourseDTO, FeatureDTO } from '@episto/communication';
+import { CompanyFeatureDTO } from '@episto/communication';
+import { Id } from '@episto/x-core';
 import { useEffect } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
-import { CompanyApiService } from '../../../services/api/CompanyApiService';
+import { FeatureApiService } from '../../../services/api/FeatureApiService';
 import { showNotification } from '../../../services/core/notifications';
 import { EpistoIcons } from '../../../static/EpistoIcons';
 import { useRouteParams_OLD } from '../../../static/locationHelpers';
+import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoCheckbox } from '../../controls/EpistoCheckbox';
 import { EpistoDataGrid, EpistoDataGridColumnBuilder } from '../../controls/EpistoDataGrid';
-import { EpistoImage } from '../../controls/EpistoImage';
 import { IXMutatorFunctions } from '../../lib/XMutator/XMutatorCore';
 import { useXMutatorNew } from '../../lib/XMutator/XMutatorReact';
 import { useSetBusy } from '../../system/LoadingFrame/BusyBarContext';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
-import { Id } from '@episto/x-core';
 
-type RowType = FeatureDTO;
+type RowType = CompanyFeatureDTO;
 
-const useColumns = (mutatorFunctions: IXMutatorFunctions<FeatureDTO, 'featureId', Id<'Feature'>>) => {
+const useColumns = (mutatorFunctions: IXMutatorFunctions<CompanyFeatureDTO, 'featureId', Id<'Feature'>>) => {
 
     return new EpistoDataGridColumnBuilder<RowType, Id<'Feature'>>()
-        .add({
-            field: 'coverUrl',
-            headerName: 'Borítókép',
-            renderCell: ({ value }) => <EpistoImage
-                className="square70"
-                objectFit="contain"
-                src={value} />
-        })
+
         .add({
             field: 'featureCode',
-            headerName: 'Cím',
+            headerName: 'Funkció kódja',
             width: 250
         })
         .add({
-            field: 'fea',
+            field: 'featureDescription',
+            headerName: 'Leírás',
+            width: 250
+        })
+        .add({
+            field: 'isEnabled',
             headerName: 'Hozzárendelt-e?',
             renderCell: ({ value, key }) => <EpistoCheckbox
                 setValue={value => mutatorFunctions
                     .mutate({
                         key,
-                        field: 'isAssociated',
-                        newValue: value
-                    })}
-                value={value} />,
-        })
-        .add({
-            field: 'isDefault',
-            headerName: 'Alapértelmezett-e?',
-            renderCell: ({ value, key }) => <EpistoCheckbox
-                setValue={value => mutatorFunctions
-                    .mutate({
-                        key,
-                        field: 'isDefault',
+                        field: 'isEnabled',
                         newValue: value
                     })}
                 value={value} />,
@@ -59,39 +45,39 @@ const useColumns = (mutatorFunctions: IXMutatorFunctions<FeatureDTO, 'featureId'
         .getColumns();
 };
 
-export const CompanyAdminCoursesPage = () => {
+export const CompanyAdminFeaturePage = () => {
 
     const { companiesRoute } = applicationRoutes.administrationRoute;
-    const { editRoute, coursesRoute } = companiesRoute;
+    const { editRoute, coursesRoute, featuresRoute } = companiesRoute;
 
     const companyId = useRouteParams_OLD(editRoute)
         .getValue(x => x.companyId, 'int');
 
-    const { courseAssociations, refetchCourseAssociations, courseAssociationsState, courseAssociationsError } = CompanyApiService
-        .useCourseAssociations(companyId);
+    const { companyFeatures, companyFeaturesError, companyFeaturesState, refetchCompanyFeatureResults } = FeatureApiService
+        .useGetCompanyFeatures(companyId);
 
-    const { saveCourseAssociationsAsync, saveCourseAssociationsState } = CompanyApiService
-        .useSaveCourseAssociations();
+    const { saveCompanyFeaturesAsync, saveCompanyFeaturesState } = FeatureApiService
+        .useSaveCompanyFeatures();
 
-    useSetBusy(CompanyApiService.useCourseAssociations, courseAssociationsState, courseAssociationsError);
-    useSetBusy(CompanyApiService.useSaveCourseAssociations, saveCourseAssociationsState);
+    useSetBusy(FeatureApiService.useGetCompanyFeatures, companyFeaturesState, companyFeaturesError);
+    useSetBusy(FeatureApiService.useSaveCompanyFeatures, saveCompanyFeaturesState);
 
-    const [mutatorState, mutatorFunctions] = useXMutatorNew(CompanyAssociatedCourseDTO, 'courseId', 'CompanyAssociatedCourses');
+    const [mutatorState, mutatorFunctions] = useXMutatorNew(CompanyFeatureDTO, 'featureId', 'CompanyFeatures');
 
     useEffect(() => {
 
         mutatorFunctions
-            .setOriginalItems(courseAssociations);
+            .setOriginalItems(companyFeatures);
 
-    }, [courseAssociations, mutatorFunctions]);
+    }, [companyFeatures, mutatorFunctions]);
 
     const save = async () => {
 
-        await saveCourseAssociationsAsync({ companyId, mutations: mutatorState.mutations });
+        await saveCompanyFeaturesAsync({ companyId, mutations: mutatorState.mutations });
 
         showNotification('Saved');
 
-        await refetchCourseAssociations();
+        await refetchCompanyFeatureResults();
     };
 
     const columns = useColumns(mutatorFunctions);
@@ -103,14 +89,15 @@ export const CompanyAdminCoursesPage = () => {
             tabMenuItems={[
                 companiesRoute,
                 editRoute,
-                coursesRoute
+                coursesRoute,
+                featuresRoute
             ]}
             navigationQueryParams={{
                 companyId
             }}
             headerButtons={[
                 {
-                    title: 'Save',
+                    title: translatableTexts.misc.save,
                     icon: <EpistoIcons.Save />,
                     action: save
                 }
@@ -118,7 +105,7 @@ export const CompanyAdminCoursesPage = () => {
             <EpistoDataGrid
                 columns={columns}
                 rows={mutatorState.mutatedItems}
-                getKey={x => x.courseId} />
+                getKey={x => x.featureId} />
         </AdminSubpageHeader>
     );
 };
