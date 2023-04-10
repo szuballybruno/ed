@@ -2,8 +2,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { SurveyApiService } from '../../services/api/SurveyApiService';
 import { useNavigation } from '../../services/core/navigatior';
-import { PropsWithChildren, useCurrentUrlPathname, useGetCurrentAppRoute } from '../../static/frontendHelpers';
 import { Logger } from '../../static/Logger';
+import { PropsWithChildren, useCurrentUrlPathname, useGetCurrentAppRoute } from '../../static/frontendHelpers';
 import { useAuthContextState } from './AuthenticationFrame';
 import { useAuthorizationContext } from './AuthorizationContext';
 
@@ -27,9 +27,10 @@ export const AuthFirewallFrame = ({ children }: PropsWithChildren): JSX.Element 
             setIsSurveySkippable(isSurveySkippable);
         };
 
-        handleCheckIfSurveyEnabled();
+        if (!loginRoute)
+            handleCheckIfSurveyEnabled();
 
-    }, [checkIfSurveySkippable]);
+    }, [checkIfSurveySkippable, loginRoute]);
 
     /**
      * Check authentication 
