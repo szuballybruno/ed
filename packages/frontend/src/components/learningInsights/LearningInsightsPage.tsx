@@ -1,18 +1,18 @@
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { Navigator } from '../../services/core/navigatior';
 import { useRedirectOnExactMatch } from '../../static/frontendHelpers';
-import { LearningInsightsOverview } from '../LearningInsightsOverview';
 import { NavigationLinkList } from '../NavigationLinkList';
 import { ContentPane } from '../pageRootContainer/ContentPane';
 import { LeftPane } from '../pageRootContainer/LeftPane';
 import { EpistoRoutes } from '../universal/EpistoRoutes';
-import { LearningCourseStats } from './LearningCourseStats';
+import { MyProgressCompletedCourses } from './MyProgressCompletedCourses';
+import { MyProgressStartedCourses } from './MyProgressStartedCourses';
 
 const LearningInsightsPage = () => {
 
     useRedirectOnExactMatch({
-        route: applicationRoutes.learningRoute,
-        redirectRoute: applicationRoutes.learningRoute.overviewRoute
+        route: applicationRoutes.myProgressRoute,
+        redirectRoute: applicationRoutes.myProgressRoute.startedCoursesRoute
     });
 
     const { navigate3 } = Navigator
@@ -25,8 +25,8 @@ const LearningInsightsPage = () => {
             <NavigationLinkList
                 onNav={route => navigate3(route)}
                 routes={[
-                    applicationRoutes.learningRoute.overviewRoute,
-                    applicationRoutes.learningRoute.myCoursesRoute
+                    applicationRoutes.myProgressRoute.startedCoursesRoute,
+                    applicationRoutes.myProgressRoute.completedCoursesRoute
                 ]} />
         </LeftPane>
 
@@ -35,12 +35,12 @@ const LearningInsightsPage = () => {
             <EpistoRoutes
                 renderRoutes={[
                     {
-                        route: applicationRoutes.learningRoute.overviewRoute,
-                        element: <LearningInsightsOverview />
+                        route: applicationRoutes.myProgressRoute.startedCoursesRoute,
+                        element: <MyProgressStartedCourses />
                     },
                     {
-                        route: applicationRoutes.learningRoute.myCoursesRoute,
-                        element: <LearningCourseStats />
+                        route: applicationRoutes.myProgressRoute.completedCoursesRoute,
+                        element: <MyProgressCompletedCourses />
                     }
                 ]} />
         </ContentPane>

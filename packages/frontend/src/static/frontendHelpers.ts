@@ -495,6 +495,12 @@ export const coalesce = <T,>(obj: T | null | undefined, defaultObj: Partial<T>):
 
 export const useGetCurrentAppRoute = () => {
 
+    /*  console.log('---------------------');
+     console.log('---------------------');
+     console.log('useGetCurrentAppRoute');
+     console.log('---------------------');
+     console.log('---------------------'); */
+
     const isMatching = useIsMatchingCurrentRoute();
     const currentUrl = useCurrentUrlPathname();
 
@@ -536,12 +542,16 @@ export const useGetCurrentAppRoute = () => {
 
             if (match.isMatchingRouteExactly)
                 return x;
-        });
+        })
+        .filter(x => x);
+
+    /* console.log(matchingRoutes.map(x => x?.route.getAbsolutePath())); */
 
     if (matchingRoutes.length !== 1)
         return applicationRoutes.matchAll;
 
-    const matchingRoute = matchingRoutes.single(x => !!x);
+    const matchingRoute = matchingRoutes
+        .single(x => !!x);
 
     /* console.log(routes.map(x => x.route.getAbsolutePath()));
     console.log(matchingRoute?.route.getAbsolutePath()); */

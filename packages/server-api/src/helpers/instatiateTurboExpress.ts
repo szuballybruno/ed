@@ -42,6 +42,7 @@ import { AuthorizationMiddleware } from '../middleware/AuthorizationMiddleware';
 import { ServiceProviderInitializator } from './initApp';
 import { AdminController } from '../controllers/AdminController';
 import { FeatureController } from '../controllers/FeatureController';
+import { CourseCategoryController } from '../controllers/CourseCategoryController';
 
 export const actionWrapper: ActionWrapperFunctionType = async (serviceProvider: IXGatewayServiceProvider, action: () => Promise<any>) => {
 
@@ -147,6 +148,7 @@ export const initTurboExpress = (
         .addController(QuestionController)
         .addController(AdminController)
         .addController(FeatureController)
+        .addController(CourseCategoryController)
         .build();
 
     return turboExpress;

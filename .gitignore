@@ -6,6 +6,8 @@ node_modules_old
 /node_modules/.yarn-integrity
 /deploy/temp
 /deploy/out
+.idea
+/.idea
 error.log
 yarn-error.log
 yarn.lock

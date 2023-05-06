@@ -28,6 +28,7 @@ import { HomePageUserStats } from './HomePageUserStats';
 import { MobileRecommendedItemQuota } from './MobileRecommendedItemQuota';
 import { MobileWelcomeHeader } from './MobileWelcomeHeader';
 import { PractiseQuestions } from './PractiseQuestions';
+import { PersonalityAssessment } from '../learningInsights/PersonalityAssessment';
 
 const ActiveCourseSelectorHeader = ({ activeCoursesPaging }: { activeCoursesPaging: any }) => {
 
@@ -215,6 +216,8 @@ const HomePage = () => {
 
             {/* stats */}
             {!isMobile && <DashboardSection
+                className="largeSoftShadow"
+                marginBottom="10px"
                 title={activeCoursesPaging.currentItem?.title
                     ? `Kurzus során nyújtott teljesítményed: ${activeCoursesPaging.currentItem.title}`
                     : 'Kurzus során nyújtott teljesítményed'}
@@ -226,6 +229,17 @@ const HomePage = () => {
                     isSmallDesktop={isSmallerThan1320}
                     activeCoursesPaging={activeCoursesPaging} />
             </DashboardSection>}
+
+            <DashboardSection
+                title='Egyedi tanulási analízised'
+                background="var(--transparentWhite70)"
+                borderRadius="6px"
+                showDivider
+                className="largeSoftShadow"
+                marginBottom="10px">
+
+                <PersonalityAssessment />
+            </DashboardSection>
         </ContentPane>
     </ >;
 };

@@ -1,5 +1,5 @@
 import { CourseUserPresetType, Id, LeaderboardPeriodType, LeaderboardScopeType } from '@episto/commontypes';
-import { AdminPanelSettings, Build, Equalizer, Home, Person, School, Search, Settings, Subscriptions } from '@mui/icons-material';
+import { AdminPanelSettings, Build, Done, Equalizer, Home, Person, PlayArrow, School, Search, Settings, Subscriptions } from '@mui/icons-material';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import LocalPoliceIcon from '@mui/icons-material/LocalPolice';
@@ -8,7 +8,6 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import SortIcon from '@mui/icons-material/Sort';
 import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
 import { AdminActiveCompanyRouteParamType, ApplicationRoute, EpistoRoute } from '../models/types';
-import { Environment } from '../static/Environemnt';
 import { EpistoIcons } from '../static/EpistoIcons';
 import { translatableTexts } from '../static/translatableTexts';
 
@@ -36,11 +35,9 @@ export type ApplicationRoutesType = {
         courseOverviewRoute: ApplicationRoute<{ courseId: Id<'Course'> }>;
     };
     leaderboardRoute: ApplicationRoute<void, { period?: LeaderboardPeriodType, scope?: LeaderboardScopeType }>;
-    learningRoute: ApplicationRoute & {
-        overviewRoute: ApplicationRoute;
-        myStatisticsRoute: ApplicationRoute;
-        myCoursesRoute: ApplicationRoute;
-        myExamsRoute: ApplicationRoute;
+    myProgressRoute: ApplicationRoute & {
+        startedCoursesRoute: ApplicationRoute;
+        completedCoursesRoute: ApplicationRoute;
     };
     administrationRoute: ApplicationRoute<AdminActiveCompanyRouteParamType> & {
         statsRoute: ApplicationRoute<AdminActiveCompanyRouteParamType, void> & {
@@ -75,6 +72,7 @@ export type ApplicationRoutesType = {
         companiesRoute: ApplicationRoute<AdminActiveCompanyRouteParamType, void> & {
             editRoute: ApplicationRoute<AdminActiveCompanyRouteParamType & { companyId: Id<'Company'> }>;
             coursesRoute: ApplicationRoute<AdminActiveCompanyRouteParamType & { companyId: Id<'Company'> }>;
+            courseCategoriesRoute: ApplicationRoute<AdminActiveCompanyRouteParamType & { companyId: Id<'Company'> }>;
             featuresRoute: ApplicationRoute<AdminActiveCompanyRouteParamType & { companyId: Id<'Company'> }>;
         };
         rolesRoute: ApplicationRoute<AdminActiveCompanyRouteParamType, void> & {
@@ -220,62 +218,27 @@ export const getApplicationRoutes = () => {
             fallbackRoute: new EpistoRoute('/', 'home'),
         },
 
-        learningRoute: {
-            title: translatableTexts.routeTitles.learning,
-            route: new EpistoRoute('/', 'learning', '*'),
+        myProgressRoute: {
+            title: translatableTexts.routeTitles.myProgress,
+            route: new EpistoRoute('/', 'my-progress', '*'),
             icon: <School />,
 
-            overviewRoute: {
-                title: translatableTexts.routeTitles.learningOverview,
-                route: new EpistoRoute('/learning', 'overview'),
-                icon: <img
-                    src={Environment.getAssetUrl('images/overview3D.png')}
-                    alt=""
-                    style={{
-                        width: 45,
-                        height: 45,
-                        objectFit: 'contain'
-                    }} />
+            startedCoursesRoute: {
+                title: translatableTexts.routeTitles.myProgressStartedCourses,
+                route: new EpistoRoute('/my-progress', 'started-courses'),
+                icon: <PlayArrow
+                    className="fontXXL"
+                    color={'secondary'} />,
             },
 
-            myStatisticsRoute: {
-                title: translatableTexts.routeTitles.learningStatistics,
-                route: new EpistoRoute('/learning', 'myStatistics'),
-                icon: <img
-                    src={Environment.getAssetUrl('images/mystatsicon3D.png')}
-                    alt=""
-                    style={{
-                        width: 45,
-                        height: 45,
-                        objectFit: 'contain'
-                    }} />,
+            completedCoursesRoute: {
+                title: translatableTexts.routeTitles.myProgressCompletedCourses,
+                route: new EpistoRoute('/my-progress', 'completed-courses'),
+                icon: <Done
+                    className="fontXXL"
+                    color={'secondary'} />,
             },
 
-            myCoursesRoute: {
-                title: translatableTexts.routeTitles.learningCourses,
-                route: new EpistoRoute('/learning', 'myCourses'),
-                icon: <img
-                    src={Environment.getAssetUrl('images/watchedvideos3Dsmaller.png')}
-                    alt=""
-                    style={{
-                        width: 45,
-                        height: 45,
-                        objectFit: 'contain'
-                    }} />,
-            },
-
-            myExamsRoute: {
-                title: translatableTexts.routeTitles.learningExams,
-                route: new EpistoRoute('/learning', 'myExams'),
-                icon: <img
-                    src={Environment.getAssetUrl('images/examsicon3D.png')}
-                    alt=""
-                    style={{
-                        width: 45,
-                        height: 45,
-                        objectFit: 'contain'
-                    }} />,
-            }
         },
 
         administrationRoute: {
@@ -439,6 +402,10 @@ export const getApplicationRoutes = () => {
                 coursesRoute: {
                     title: 'Cég kurzusai',
                     route: new EpistoRoute('/administration/:activeCompanyId/companies', ':companyId/company-associated-courses')
+                },
+                courseCategoriesRoute: {
+                    title: 'Céghez rendelt kurzus kategóriák',
+                    route: new EpistoRoute('/administration/:activeCompanyId/companies', ':companyId/company-associated-course-categories')
                 },
                 featuresRoute: {
                     title: 'Cég funkciói',

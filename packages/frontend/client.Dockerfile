@@ -11,6 +11,7 @@ WORKDIR /app
 RUN node ./packages/frontend/setenv.js ${ENVIRONMENT_NAME}
 
 # build
+RUN yarn bootstrap
 RUN yarn build-client-web
 
 #

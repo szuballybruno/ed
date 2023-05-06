@@ -26,8 +26,7 @@ echo "Client env: ${client_env}"
 & $apply_dockerignore
 
 # build monodeps
-if ($builddeps) 
-{
+if ($builddeps) {
     & $imgbuild `
         -dockerfile "${episto_root}/docker/monodeps.Dockerfile" `
         -tag "localhost:6000/monodeps:latest" `
@@ -58,7 +57,7 @@ if ($builddeps)
     -cachefrom "type=${cachetype},${cacheopt_from}cache-client"
 
 # build tests-client
-if($tests){
+if ($tests) {
 
     & $imgbuild `
         -dockerfile "${episto_root}/packages/tests-client/testsclient.Dockerfile" `

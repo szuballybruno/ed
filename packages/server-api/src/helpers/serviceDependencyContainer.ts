@@ -1,9 +1,9 @@
-import { ActivationCodeService, AdminStatsService, AnswerService, AuthenticationService, AuthorizationService, CoinAcquireService, CoinTransactionService, CommentService, CompanyService, CourseCompletionService, CourseItemService, CourseProgressService, CourseRatingService, CourseService, DailyTipService, DBSchemaProviderService, DomainProviderService, EmailService, EventService, ExamService, FeatureService, FileService, FileSystemService, GlobalConfigurationService, HashService, LeaderboardService, LikeService, LoggerService, MapperService, MiscService, ModuleService, ORMConnectionService, ParametrizedConstructor, PasswordChangeService, PermissionService, PersonalityAssessmentService, PlaybackService, PlayerService, PlaylistService, PractiseQuestionService, PrequizService, PretestService, QuestionAnswerService, QuestionService, RoleService, SampleMergeService, ShopService, SignupService, SQLConnectionService, SQLPoolService, StorageService, TeacherInfoService, TempomatService, TokenService, UrlService, UserCourseBridgeService, UserInvitationService, UserProgressService, UserRegistrationService, UserService, UserSessionActivityService, UserStatsService, VersionCreateService, VersionSaveService, VideoRatingService, VideoService } from '@episto/server-services';
-import { DependencyContainer, DepHierarchyFunction, XDependency } from '@episto/x-injector';
+import { ActivationCodeService, AdminStatsService, AnswerService, AuthenticationService, AuthorizationService, CoinAcquireService, CoinTransactionService, CommentService, CompanyService, CourseCategoryService, CourseCompletionService, CourseItemService, CourseProgressService, CourseRatingService, CourseService, DBSchemaProviderService, DailyTipService, DomainProviderService, EmailService, EventService, ExamService, FeatureService, FileService, FileSystemService, GlobalConfigurationService, HashService, LeaderboardService, LikeService, LoggerService, MapperService, MiscService, ModuleService, ORMConnectionService, ParametrizedConstructor, PasswordChangeService, PermissionService, PersonalityAssessmentService, PlaybackService, PlayerService, PlaylistService, PractiseQuestionService, PrequizService, PretestService, QuestionAnswerService, QuestionService, RoleService, SQLConnectionService, SQLPoolService, SampleMergeService, ShopService, SignupService, StorageService, TeacherInfoService, TempomatService, TokenService, UrlService, UserCourseBridgeService, UserInvitationService, UserProgressService, UserRegistrationService, UserService, UserSessionActivityService, UserStatsService, VersionCreateService, VersionSaveService, VideoRatingService, VideoService } from '@episto/server-services';
+import { DepHierarchyFunction, DependencyContainer, XDependency } from '@episto/x-injector';
 import { LiveSchemaProvider, SchemaValidator } from '@episto/x-orm';
 import { CookieOptionProvider } from './CookieOptionProvider';
-import { createGlobalConfiguration } from './createGlobalConfiguration';
 import { ServiceProvider } from './ServiceProvider';
+import { createGlobalConfiguration } from './createGlobalConfiguration';
 
 export const instansiateSingletonServices = (rootDir: string) => {
 
@@ -109,6 +109,7 @@ export const getTransientServiceContainer = (singletonProvider: ServiceProvider)
         .addClass(CompanyService, [ORMConnectionService, MapperService, AuthorizationService, DomainProviderService, FileService])
         .addClass(AdminStatsService, [ORMConnectionService, MapperService])
         .addClass(FeatureService, [ORMConnectionService, CompanyService, MapperService])
+        .addClass(CourseCategoryService, [ORMConnectionService, MapperService])
         .getContainer();
 
     return XDependency

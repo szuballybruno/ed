@@ -7,12 +7,13 @@ import { CompanyAdminCoursesPage } from './CompanyAdminCoursesPage';
 import { CompanyAdminEditPage } from './CompanyAdminEditPage';
 import { CompanyAdminIndexPage } from './CompanyAdminIndexPage';
 import { CompanyAdminFeaturePage } from './CompanyAdminFeaturePage';
+import { CompanyAdminCourseCategoriesPage } from './CompanyAdminCourseCategoriesPage';
 
 export const CompanyAdminPage = memo(() => {
 
     const isMatchingCurrentRoute = useIsMatchingCurrentRoute();
     const { companiesRoute } = applicationRoutes.administrationRoute;
-    const { editRoute, coursesRoute, featuresRoute } = companiesRoute;
+    const { editRoute, coursesRoute, courseCategoriesRoute, featuresRoute } = companiesRoute;
     const [companyName, setCompanyName] = useState<string | null>(null);
 
     const subRouteLabel = (() => {
@@ -49,6 +50,10 @@ export const CompanyAdminPage = memo(() => {
                     {
                         route: coursesRoute,
                         element: <CompanyAdminCoursesPage />
+                    },
+                    {
+                        route: courseCategoriesRoute,
+                        element: <CompanyAdminCourseCategoriesPage />
                     },
                     {
                         route: featuresRoute,

@@ -62,7 +62,4 @@ export class CourseData {
 
     @XViewColumn()
     coverFileId: Id<'StorageFile'> | null;
-
-    @XViewColumn()
-    isPrecourseSurveyRequired: boolean;
 }

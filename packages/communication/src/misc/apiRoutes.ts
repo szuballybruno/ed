@@ -7,6 +7,8 @@ import { AdminUserCourseDTO } from "../AdminUserCourseDTO";
 import { FeatureDTO } from "../FeatureDTO";
 import { CompanyFeatureDTO } from "../CompanyFeatureDTO";
 import { CourseFeatureDTO } from "../CourseFeatureDTO";
+import { CreateCourseCategoryDTO } from "../CreateCourseCategoryDTO";
+import { CompanyCourseCategoriesDTO } from "../CompanyCourseCategoriesDTO";
 
 export type RouteParameterType<TBody = any, TQuery = any> = { body?: TBody, query?: TQuery };
 export type ParametrizedRouteType<T extends RouteParameterType> = string & T;
@@ -234,8 +236,15 @@ export const apiRoutes = {
         createCourse: '/course/create-course',
         getCourseDetails: '/course/get-course-details',
         setCourseMode: '/course/set-course-mode',
-        getAvailableCourseCategories: '/course/get-available-course-categories',
-        startCourse: '/course/start-course' as ParametrizedRouteType<{ body: CourseStartDTO }>
+        startCourse: '/course/start-course' as ParametrizedRouteType<{ body: CourseStartDTO }>,
+    },
+
+    courseCategory: {
+        getAvailableCourseCategories: '/coursecategory/get-available-course-categories',
+        createCourseCategory: '/coursecategory/create-course-category' as ParametrizedRouteType<{ body: CreateCourseCategoryDTO }>,
+        deleteCourseCategory: '/coursecategory/delete-course-category' as ParametrizedRouteType<{ body: { courseCategoryId: Id<'CourseCategory'>, companyId: Id<'Company'> } }>,
+        getCompanyCourseCategories: '/coursecategory/get-company-course-categories' as ParametrizedRouteType<{ query: { companyId: Id<'Company'> } }>,
+        saveCompanyCourseCategories: '/coursecategory/save-company-course-categories' as ParametrizedRouteType<{ body: { companyId: Id<'Company'>, mutations: Mutation<CompanyCourseCategoriesDTO, 'courseCategoryId'>[] } }>
     },
 
     courseProgress: {

@@ -30,6 +30,7 @@ import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { SimpleEditList } from '../SimpleEditList';
 import { CourseAdministartionFrame } from './CourseAdministartionFrame';
 import { EditSection } from './EditSection';
+import { CourseCategoryApiService } from '../../../services/api/CourseCategoryApiService';
 
 type RowType = CourseFeatureDTO;
 
@@ -97,6 +98,7 @@ export const EditCourseDetailsSubpage = ({ activeCompanyId }: { activeCompanyId:
     const { saveCourseDataAsync, saveCourseDataState } = CourseApiService.useSaveCourseDetailsData();
     const { saveCourseThumbnailAsync, saveCourseThumbnailState } = CourseApiService.useUploadCourseThumbnailAsync();
     const { deleteCourseAsync, deleteCourseState } = CourseApiService.useDeleteCourse();
+    const { createCourseCategoryAsync, createCourseCategoryState } = CourseCategoryApiService.useCreateCourseCategory();
 
     // calc
     const categories = courseDetailsEditData?.categories ?? EMPTY_ARRAY;

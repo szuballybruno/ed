@@ -80,9 +80,9 @@ export const DesktopNavbar = ({
             icon: applicationRoutes.availableCoursesRoute.icon
         })
         .add({
-            title: applicationRoutes.learningRoute.title,
-            route: applicationRoutes.learningRoute.route,
-            icon: applicationRoutes.learningRoute.icon
+            title: applicationRoutes.myProgressRoute.title,
+            route: applicationRoutes.myProgressRoute.route,
+            icon: applicationRoutes.myProgressRoute.icon
         })
         .addIf(isLeaderboardPageEnabled, {
             title: applicationRoutes.leaderboardRoute.title,
