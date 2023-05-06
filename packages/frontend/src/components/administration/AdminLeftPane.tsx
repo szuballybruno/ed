@@ -21,10 +21,10 @@ export const AdminLeftPane = ({
     const navToAdminPage = (route: ApplicationRoute<AdminActiveCompanyRouteParamType, any>) => {
 
         if (!activeCompanyId)
-            throw new Error(`No active company id!`);
+            throw new Error('No active company id!');
 
         navigate3<any, any>(route, { params: { activeCompanyId } });
-    }
+    };
 
     const menuItems = new ArrayBuilder<ApplicationRoute<AdminActiveCompanyRouteParamType, any>>()
         .addIf(hasPermission('ADMINISTRATE_COMPANY'), administrationRoutes.usersRoute)

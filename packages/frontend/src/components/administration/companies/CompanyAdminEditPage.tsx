@@ -19,7 +19,7 @@ type CompanyAdminEditPagePropsType = { onNameLoaded: (name: string) => void };
 export const CompanyAdminEditPage = memo(({ onNameLoaded }: CompanyAdminEditPagePropsType) => {
 
     const { companiesRoute } = applicationRoutes.administrationRoute;
-    const { editRoute, coursesRoute, featuresRoute } = companiesRoute;
+    const { editRoute, coursesRoute, courseCategoriesRoute, featuresRoute } = companiesRoute;
 
     const companyId = useRouteParams_OLD(editRoute)
         .getValue(x => x.companyId, 'int');
@@ -111,6 +111,7 @@ export const CompanyAdminEditPage = memo(({ onNameLoaded }: CompanyAdminEditPage
                 companiesRoute,
                 editRoute,
                 coursesRoute,
+                courseCategoriesRoute,
                 featuresRoute
             ]}
             navigationQueryParams={{
