@@ -12,6 +12,7 @@ import { CompanyService } from './CompanyService';
 import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService';
 import { PermissionService } from './PermissionService';
+import { FeatureService } from './FeatureService';
 
 export class SignupService {
 
@@ -19,17 +20,20 @@ export class SignupService {
     private _mapperService: MapperService;
     private _permissionService: PermissionService;
     private _companyService: CompanyService;
+    private _featureService: FeatureService;
 
     constructor(
         ormService: ORMConnectionService,
         mapperService: MapperService,
         permissionService: PermissionService,
-        companyService: CompanyService) {
+        companyService: CompanyService,
+        featureService: FeatureService) {
 
         this._ormService = ormService;
         this._mapperService = mapperService;
         this._permissionService = permissionService;
         this._companyService = companyService;
+        this._featureService = featureService;
     }
 
     /**
@@ -64,23 +68,49 @@ export class SignupService {
         );
     }
 
-    async completeSignupSurveyAsync(principalId: PrincipalId) {
+    async checkIfSurveySkippableAsync(principalId: PrincipalId) {
 
-        const companyId = await this._companyService
-            .getPrincipalCompanyId(principalId);
+        const isSignupEnabled = await this._featureService
+            .checkFeatureAsync(principalId, {
+                featureCode: 'SIGNUP_SURVEY'
+            })
 
-        const userId = principalId.getId();
+        const userSignupCompltedView = await this._ormService
+            .query(SignupCompletedView, { userId: principalId })
+            .where('userId', '=', 'userId')
+            .getOneOrNull();
 
-        const isPermAssigned = await this
-            ._permissionService
-            .getPermissionAsync(userId, 'BYPASS_SURVEY', { companyId });
+        const isSignupCompleted = !!userSignupCompltedView?.isSignupComplete;
 
-        if (isPermAssigned)
-            return;
+        console.log('isSignupCompleted: ' + isSignupCompleted);
+        console.log('isSignupEnabled: ' + isSignupEnabled);
 
-        await this._permissionService
-            .assignPermission(userId, 'BYPASS_SURVEY', { companyId: companyId });
+        if (isSignupCompleted)
+            return true;
+
+        if (!isSignupEnabled)
+            return true;
+
+        return false;
     }
+
+    /*     async completeSignupSurveyAsync(principalId: PrincipalId) {
+    
+            const companyId = await this._companyService
+                .getPrincipalCompanyId(principalId);
+    
+            const userId = principalId.getId();
+    
+            const isPermAssigned = await this
+                ._permissionService
+                .getPermissionAsync(userId, 'BYPASS_SURVEY', { companyId });
+    
+            if (isPermAssigned)
+                return;
+    
+            await this._permissionService
+                .assignPermission(userId, 'BYPASS_SURVEY', { companyId: companyId });
+        } */
 
     async getSignupDataAsync(principalId: PrincipalId) {
 

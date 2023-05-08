@@ -1,9 +1,10 @@
+import { Id } from '@episto/commontypes';
+import { CompanyDTO } from '@episto/communication';
 import { ReactNode } from 'react';
 import { EpistoButtonPropsType } from '../components/controls/EpistoButton';
 import { HasPermissionFnType } from '../components/system/AuthorizationContext';
+import { Logger } from '../static/Logger';
 import { trimEndChar } from '@episto/commonlogic';
-import { Id } from '@episto/commontypes';
-import { CompanyDTO } from '@episto/communication';
 
 export type LoadingStateType = 'idle' | 'loading' | 'error' | 'success';
 
@@ -17,12 +18,12 @@ export class EpistoRoute {
     private _absolutePath: string;
     private _relativePath: string;
     private _matchMore: boolean;
+    private _root: string;
 
     constructor(root: string, relativePath: string, matchMore?: '*') {
 
-        this._absolutePath = trimEndChar(this
-            .removeDuplicateBreak(root + '/' + relativePath), '/');
-
+        this._absolutePath = trimEndChar(this.removeDuplicateBreak(root + '/' + relativePath), '/');
+        this._root = root;
         this._relativePath = relativePath;
         this._matchMore = !!matchMore;
     }
@@ -34,6 +35,8 @@ export class EpistoRoute {
 
     getRelativePath() {
 
+        Logger.logScoped('ROUTING', 'REL_absolutePath: ' + this._absolutePath);
+        Logger.logScoped('ROUTING', 'getRelativePath: ' + this.removeDuplicateBreak(this._relativePath + (this._matchMore ? '/*' : '')));
         return this.removeDuplicateBreak(this._relativePath + (this._matchMore ? '/*' : ''));
     }
 
@@ -56,6 +59,8 @@ export type ApplicationRoute<TParams = void, TQuery = void> = {
     name?: string;
     title: string;
     route: EpistoRoute;
+    featureCode?: string;
+    fallbackRoute?: EpistoRoute;
     icon?: JSX.Element;
     navAction?: () => void;
     paramsType?: TParams;

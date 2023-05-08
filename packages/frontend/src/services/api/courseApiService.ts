@@ -1,5 +1,5 @@
 import { CourseModeType, Id } from '@episto/commontypes';
-import { apiRoutes, AvailableCourseDTO, CourseBriefData, CourseCategoryDTO, CourseContentAdminDTO, CourseDetailsDTO, CourseDetailsEditDataDTO, CoursePermissionAssignDTO, CourseStartDTO, CreateCourseDTO, GreetingsDataDTO, IdResultDTO, SaveCourseContentDTO } from '@episto/communication';
+import { AvailableCourseDTO, CourseBriefData, CourseContentAdminDTO, CourseDetailsDTO, CourseDetailsEditDataDTO, CoursePermissionAssignDTO, CourseStartDTO, CreateCourseDTO, GreetingsDataDTO, IdResultDTO, SaveCourseContentDTO, apiRoutes } from '@episto/communication';
 import { QueryService } from '../../static/XQuery/XQueryReact';
 import { usePostDataUnsafe, usePostMultipartDataUnsafe } from '../core/httpClient';
 
@@ -149,17 +149,6 @@ const useUserCourses = (
     };
 };
 
-const useAvailableCourseCategories = () => {
-
-    const qr = QueryService.useXQueryArray<CourseCategoryDTO>(apiRoutes.course.getAvailableCourseCategories);
-
-    return {
-        courseCategories: qr.data,
-        courseCategoriesError: qr.error,
-        courseCategoriesState: qr.state
-    };
-};
-
 const useGreetingData = (courseId: Id<'Course'>) => {
 
     const qr = QueryService
@@ -171,6 +160,8 @@ const useGreetingData = (courseId: Id<'Course'>) => {
         greetingsDataState: qr.state
     };
 };
+
+
 
 export const CourseApiService = {
     useStartCourse,
@@ -186,6 +177,5 @@ export const CourseApiService = {
     useCourseBriefData,
     useCourseDetails,
     useUserCourses,
-    useAvailableCourseCategories,
     useGreetingData
 };

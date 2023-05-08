@@ -11,7 +11,7 @@ param (
 
 Write-Host "------ Building image: ${tag}" -ForegroundColor Magenta
 
-if($buildx){
+if ($buildx) {
 
     echo "-- BUILDX is enabled!"
     echo "-- Cache-to: ${cacheto}"
@@ -27,7 +27,7 @@ if($buildx){
         --build-arg ${buildarg}
 
     # push it to localhost repo
-    if($push){
+    if ($push) {
 
         Write-Host "-- Pushing image: ${tag}" -ForegroundColor Cyan
         docker push "$tag"

@@ -231,11 +231,4 @@ export class CourseController implements IController<CourseController> {
             );
     };
 
-    @XControllerAction(apiRoutes.course.getAvailableCourseCategories)
-    getAvailableCourseCategoriesAction = (params: ActionParams) => {
-
-        return this
-            ._courseService
-            .getAvailableCourseCategoriesAsync(params.principalId);
-    };
 }

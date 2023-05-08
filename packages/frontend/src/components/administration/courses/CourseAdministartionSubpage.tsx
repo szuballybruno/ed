@@ -16,8 +16,9 @@ export const CourseAdministartionSubpage = ({ activeCompanyId }: { activeCompany
         <EpistoRoutes
             renderRoutes={new ArrayBuilder()
                 .add({
-                    route: applicationRoutes.administrationRoute.coursesRoute.landingRoute,
-                    element: <AdminCourseContentSubpage />
+                    route: applicationRoutes.administrationRoute.coursesRoute,
+                    element: <AdminCourseContentSubpage />,
+                    asIndexRoute: true
                 })
                 .addIf(hasPermission('EDIT_COURSE'), {
                     route: applicationRoutes.administrationRoute.coursesRoute.courseDetailsRoute,

@@ -2,7 +2,7 @@ import { ErrorCodeType, ErrorWithCode, Id, RoleIdEnum } from '@episto/commontype
 import quantize from 'quantize';
 import React, { ComponentType, MutableRefObject, ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { rootRoute } from '../configuration/applicationRoutes';
+import { applicationRoutes, rootRoute } from '../configuration/applicationRoutes';
 import { ApplicationRoute } from '../models/types';
 import { useNavigation } from '../services/core/navigatior';
 import { useShowErrorDialog } from '../services/core/notifications';
@@ -421,6 +421,8 @@ export const useIsMatchingCurrentRoute = () => {
 
     return (appRoute: ApplicationRoute<any, any>) => {
 
+        //console.log('isMatching called');
+
         if (!appRoute)
             throw new Error('Route is null or undefined!');
 
@@ -428,26 +430,50 @@ export const useIsMatchingCurrentRoute = () => {
             throw new Error(`Application route (${JSON.stringify(appRoute.title)}) /route property is null or undefined!`);
 
         const compareRoute = appRoute.route.getAbsolutePath();
-        const currentUrlSegments = currentUrl.split('/');
-        const compareRouteSegments = compareRoute.split('/');
-        const segmentsLengthMatch = currentUrlSegments.length === compareRouteSegments.length;
+
+        const currentUrlSegments = currentUrl
+            .split('/')
+            .filter(x => x);
+
+        /* console.log('currentUrlSegments: ');
+        console.log(currentUrlSegments); */
+
+        const compareRouteSegments = compareRoute
+            .split('/')
+            .filter(x => x);
+
+        /* console.log('compareRouteSegments: ');
+        console.log(compareRouteSegments); */
+
+        if (compareRouteSegments.length === 0)
+            return {
+                isMatchingRoute: false,
+                isMatchingRouteExactly: false,
+                currentUrl: currentUrl
+            };
+
+        const segmentsCountMatch = currentUrlSegments.length === compareRouteSegments.length;
 
         const isSegmentsMismatch = compareRouteSegments
             .some((routeSegment, index) => {
 
                 // url param
-                if (routeSegment.startsWith(':'))
-                    return false;
+                if (routeSegment.startsWith(':') && isInteger(currentUrlSegments[index])) {
 
-                if (routeSegment === currentUrlSegments[index])
                     return false;
+                }
+
+                if (routeSegment === currentUrlSegments[index]) {
+                    return false;
+                }
 
                 return true;
             });
 
         return {
+            appRoute: appRoute,
             isMatchingRoute: !isSegmentsMismatch,
-            isMatchingRouteExactly: !isSegmentsMismatch && segmentsLengthMatch,
+            isMatchingRouteExactly: !isSegmentsMismatch && segmentsCountMatch,
             currentUrl
         };
     };
@@ -460,52 +486,6 @@ export const getSubroutes = (route: ApplicationRoute<any, any>): ApplicationRout
         .filter(x => !!x.route);
 };
 
-// export const useGetCurrentAppRoute2 = (): ApplicationRoute<any, any> => {
-
-//     const currentUrl = useCurrentUrlPathname();
-//     const isMatchingCurrent = useIsMatchingCurrentRoute();
-
-//     const traverse = (appRoute: ApplicationRoute<any, any>): { depth: number, route: ApplicationRoute<any, any> | null } => {
-
-//         /**
-//          * If not matching this route, 
-//          * return null
-//     */
-//         if (!isMatchingCurrent(appRoute))
-//             return { depth: 0, route: null };
-
-//         /**
-//          * If matching route, and route is exact,
-//          * that's the result 
-//     */
-//         if (appRoute.route.isExact())
-//             return { depth: 0, route: appRoute };
-
-//         /**
-//          * If matching route but it's not exact, 
-//          * result could be a child route 
-//     */
-//         const result = getSubroutes(appRoute)
-//             .map(traverse)
-//             .firstOrNull();
-
-//         if (result)
-//             return result;
-
-//         /**
-//          * If no subroute is matching,
-//          * use this as the result 
-//     */
-//         return appRoute;
-//     };
-
-//     const result = traverse(rootRoute);
-//     if (!result)
-//         throw new Error(`Current route (${currentUrl}) did not match any of the application routes!`);
-
-//     return result;
-// };
-
 export const coalesce = <T,>(obj: T | null | undefined, defaultObj: Partial<T>): T => {
 
     return ((obj === null || obj === undefined)
@@ -515,56 +495,67 @@ export const coalesce = <T,>(obj: T | null | undefined, defaultObj: Partial<T>):
 
 export const useGetCurrentAppRoute = () => {
 
-    const currentUrl = useCurrentUrlPathname();
+    /*  console.log('---------------------');
+     console.log('---------------------');
+     console.log('useGetCurrentAppRoute');
+     console.log('---------------------');
+     console.log('---------------------'); */
+
     const isMatching = useIsMatchingCurrentRoute();
-    const isRouteProp = (x: any) => !!x.route;
+    const currentUrl = useCurrentUrlPathname();
 
-    const isMatchingRoute = (route: ApplicationRoute<any>) => {
+    /* const filterObject = (obj: any, key: string) => {
 
-        const match = route.route.getAbsolutePath() === '/'
-            ? {
-                isMatchingRouteExactly: true,
-                isMatchingRoute: true
+        return Object.keys(obj)
+            .filter(k => k === key)
+            .reduce((acc, key) => {
+                acc[key] = obj[key].getAbsolutePath();
+                return acc[key];
+            }, {});
+    }; */
+
+    function filterNestedObjectsByProperty(obj: any, key: string) {
+        const results: any[] = [];
+
+        if (obj[key]) {
+            results.push(obj);
+        }
+
+        for (const prop in obj) {
+            if (obj[prop] && typeof obj[prop] === 'object') {
+                const nestedObj = obj[prop];
+                const nestedResults = filterNestedObjectsByProperty(nestedObj, key);
+                results.push(...nestedResults);
             }
-            : isMatching(route);
+        }
 
-        const didmatch = route.route.isExact()
-            ? match.isMatchingRouteExactly
-            : match.isMatchingRoute;
+        return results;
+    }
 
-        return didmatch;
-    };
+    //const routes = filterObject(new Object(applicationRoutes.settingsRoute), 'route');
+    const routes: ApplicationRoute[] = filterNestedObjectsByProperty(new Object(rootRoute), 'route');
 
-    const getMatchingRoute = (appRoute: ApplicationRoute<any>): ApplicationRoute<any> | null => {
+    const matchingRoutes = routes
+        .map(x => {
 
-        /**
-         * If not matching route, return
-         */
-        if (!isMatchingRoute(appRoute))
-            return null;
+            const match = isMatching(x);
 
-        /**
-         * Matching route, and it's not an exact route, 
-         * return the matched route 
-         */
-        if (appRoute.route.isExact())
-            return appRoute;
+            if (match.isMatchingRouteExactly)
+                return x;
+        })
+        .filter(x => x);
 
-        /**
-         * get matching subroute
-         */
-        const subRoutes = Object
-            .values(appRoute)
-            .filter(x => isRouteProp(x)) as ApplicationRoute<any>[];
+    /* console.log(matchingRoutes.map(x => x?.route.getAbsolutePath())); */
 
-        const matchingSubRoute = subRoutes
-            .map(x => getMatchingRoute(x))
-            .firstOrNull(x => !!x);
+    if (matchingRoutes.length !== 1)
+        return applicationRoutes.matchAll;
 
-        return matchingSubRoute;
-    };
+    const matchingRoute = matchingRoutes
+        .single(x => !!x);
 
-    const matchingRoute = getMatchingRoute(rootRoute);
+    /* console.log(routes.map(x => x.route.getAbsolutePath()));
+    console.log(matchingRoute?.route.getAbsolutePath()); */
+
     if (!matchingRoute)
         throw new Error(`No route matched "${currentUrl}"`);
 
@@ -605,6 +596,10 @@ export const useRedirectOnExactMatch = (opts: {
 
 export const isString = (obj: any) => typeof obj === 'string' || obj instanceof String;
 export const isNumber = (obj: any) => typeof obj === 'number' || obj instanceof Number;
+
+function isInteger(value) {
+    return /^\d+$/.test(value);
+}
 
 export function distinct<T>(array: T[]) {
 

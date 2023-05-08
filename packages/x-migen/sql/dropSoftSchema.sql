@@ -84,7 +84,8 @@ BEGIN
 		FROM pg_indexes
 		WHERE tablename NOT LIKE 'pg%'
 		AND indexname NOT LIKE '%REL_%'
-		AND indexname NOT LIKE '%PK_%'
+		AND indexname NOT LIKE '%PK_%' -- typeorm generated primary key
+		AND indexname NOT LIKE '%_pkey%' -- postgresql generated primary key
 		AND indexname != 'migration_version_version_name_unique'
 	) sq
 	INTO var_drop_indices_script;

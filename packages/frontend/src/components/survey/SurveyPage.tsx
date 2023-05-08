@@ -1,7 +1,6 @@
 import { useCallback, useMemo } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { Responsivity } from '../../helpers/responsivity';
-import { SurveyApiService } from '../../services/api/SurveyApiService';
 import browser from '../../services/core/browserSniffingService';
 import { useNavigation } from '../../services/core/navigatior';
 import { startUserGuide } from '../../services/core/userGuidingService';
@@ -23,12 +22,11 @@ export const SurveyPage = () => {
     // slides
     const slidesState = usePaging({ items: pagingItems });
     const { refetchAuthHandshake, authState } = useAuthContextState();
-    const { completeSurveyAsync, completeSurveyStatus } = SurveyApiService.useCompleteSurvey();
     const isInvitedUser = true;
     const { isMobile } = Responsivity
         .useIsMobileView();
     const isIPhone = browser.isIPhone;
-    const isSomethingLoading = useMemo(() => authState === 'loading' || completeSurveyStatus === 'loading', [authState, completeSurveyStatus]);
+    const isSomethingLoading = useMemo(() => authState === 'loading', [authState]);
 
     const { navigate2 } = useNavigation();
 
@@ -59,12 +57,11 @@ export const SurveyPage = () => {
      */
     const handleGoToSummary = useCallback(async () => {
 
-        await completeSurveyAsync();
+        //await completeSurveyAsync();
         await refetchAuthHandshake();
         handleNext();
     }, [
         handleNext,
-        completeSurveyAsync,
         refetchAuthHandshake
     ]);
 

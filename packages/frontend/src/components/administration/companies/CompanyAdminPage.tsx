@@ -6,12 +6,14 @@ import { AdminBreadcrumbsHeader } from '../breadcrumbsHeader/AdminBreadcrumbsHea
 import { CompanyAdminCoursesPage } from './CompanyAdminCoursesPage';
 import { CompanyAdminEditPage } from './CompanyAdminEditPage';
 import { CompanyAdminIndexPage } from './CompanyAdminIndexPage';
+import { CompanyAdminFeaturePage } from './CompanyAdminFeaturePage';
+import { CompanyAdminCourseCategoriesPage } from './CompanyAdminCourseCategoriesPage';
 
 export const CompanyAdminPage = memo(() => {
 
     const isMatchingCurrentRoute = useIsMatchingCurrentRoute();
     const { companiesRoute } = applicationRoutes.administrationRoute;
-    const { indexRoute, editRoute, coursesRoute } = companiesRoute;
+    const { editRoute, coursesRoute, courseCategoriesRoute, featuresRoute } = companiesRoute;
     const [companyName, setCompanyName] = useState<string | null>(null);
 
     const subRouteLabel = (() => {
@@ -37,8 +39,9 @@ export const CompanyAdminPage = memo(() => {
             <EpistoRoutes
                 renderRoutes={[
                     {
-                        route: indexRoute,
-                        element: <CompanyAdminIndexPage />
+                        route: companiesRoute,
+                        element: <CompanyAdminIndexPage />,
+                        asIndexRoute: true
                     },
                     {
                         route: editRoute,
@@ -47,6 +50,14 @@ export const CompanyAdminPage = memo(() => {
                     {
                         route: coursesRoute,
                         element: <CompanyAdminCoursesPage />
+                    },
+                    {
+                        route: courseCategoriesRoute,
+                        element: <CompanyAdminCourseCategoriesPage />
+                    },
+                    {
+                        route: featuresRoute,
+                        element: <CompanyAdminFeaturePage />
                     }
                 ]} />
         </>

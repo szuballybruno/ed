@@ -81,7 +81,7 @@ export const MainRouting = () => {
                     element: <LeaderboardPage />,
                 },
                 {
-                    route: applicationRoutes.learningRoute,
+                    route: applicationRoutes.myProgressRoute,
                     element: <LearningInsightsPage />,
                 },
                 {

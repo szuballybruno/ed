@@ -203,6 +203,18 @@
             "presentation": {
                 "group": "migarion"
             }
+        },
+        {
+            "label": "mainToLocal",
+            "type": "shell",
+            "command": "powershell.exe ./mainToLocal.ps1",
+            "options": {
+                "cwd": "${workspaceFolder}/scripts/transfer"
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "group": "migration"
+            }
         }
     ]
 }

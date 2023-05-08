@@ -8,6 +8,7 @@ import { useShowErrorDialog } from '../../services/core/notifications';
 import { useSetBusy } from '../system/LoadingFrame/BusyBarContext';
 import { DesktopAvailableCoursesPage } from './DesktopAvailableCoursesPage';
 import { MobileAvailableCoursesPage } from './MobileAvailableCoursesPage';
+import { CourseCategoryApiService } from '../../services/api/CourseCategoryApiService';
 
 export class AvailableCoursesPageFilterType {
     searchText: string;
@@ -41,7 +42,7 @@ const AvailableCoursesPage = () => {
     const { courses, coursesState, coursesError } = CourseApiService
         .useUserCourses(searchText, filterCategoryId, isFeatured, isRecommended, orderBy);
 
-    const { courseCategories, courseCategoriesState, courseCategoriesError } = CourseApiService
+    const { courseCategories, courseCategoriesState, courseCategoriesError } = CourseCategoryApiService
         .useAvailableCourseCategories();
 
     const { continueCourse, navigateToCourseDetails } = useNavigation();

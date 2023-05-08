@@ -9,7 +9,7 @@ const useSubscribeEvent = <T extends string,>(eventManager: XEventManager<T>, ke
         Logger.logScoped('EVENTS', `Subscribing in useEffect: ${key} - ${tag}.`);
 
         const unsubscribe = eventManager
-            .scubscribeEvent(key, tag, fn);
+            .subscribeEvent(key, tag, fn);
 
         return () => {
 

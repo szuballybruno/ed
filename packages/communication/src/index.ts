@@ -170,3 +170,8 @@ export { UserCourseProgressChartDTO } from './UserCourseProgressChartDTO';
 export { UserLearningOverviewDataDTO } from './UserLearrningOverviewDataDTO';
 export { UserCourseStatsDTO } from './UserCourseStatsDTO';
 export { UserCheckPermissionDTO } from './UserCheckPermissionDTO';
+export { FeatureDTO } from './FeatureDTO';
+export { CompanyFeatureDTO } from './CompanyFeatureDTO';
+export { CourseFeatureDTO } from './CourseFeatureDTO';
+export { CreateCourseCategoryDTO } from './CreateCourseCategoryDTO';
+export { CompanyCourseCategoriesDTO } from './CompanyCourseCategoriesDTO';

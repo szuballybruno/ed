@@ -21,11 +21,11 @@ $xlib_repo_root_folder_path = "${migen_folder_path}/../../"
 $migen_root_abs = Resolve-Path $migen_folder_path
 $repo_root_abs = Resolve-Path $xlib_repo_root_folder_path
 
-echo "Mode: ${mode}"
-echo "Out folder: ${outFolderPath}"
-echo "Schema folder: ${schemaFolderPath}"
-echo "Migen root: ${migen_root_abs}"
-echo "Xlib repo root: ${repo_root_abs}"
+Write-Output "Mode: ${mode}"
+Write-Output "Out folder: ${outFolderPath}"
+Write-Output "Schema folder: ${schemaFolderPath}"
+Write-Output "Migen root: ${migen_root_abs}"
+Write-Output "Xlib repo root: ${repo_root_abs}"
 
 docker build ${repo_root_abs} `
     -f ${migen_folder_path}/docker/migen.Dockerfile `
@@ -43,4 +43,4 @@ docker run `
     --env mode=${mode} `
     migen
 
-echo "Find the results in: \n${outFolderPath}"
+Write-Output "Find the results in: \n${outFolderPath}"

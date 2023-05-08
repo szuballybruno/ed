@@ -33,7 +33,7 @@ export const useAuthHandshake = (globalEventManager: GlobalEventManagerType) => 
             .fireEvent('onAuthHandshake', {});
 
         return res;
-    }, []);
+    }, [globalEventManager]);
 
     const qr = useQuery(
         'useGetAuthHandshake',

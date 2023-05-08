@@ -51,6 +51,18 @@ describe('Registration tests', () => {
             },
         });
 
+        cy.request({
+            method: 'POST',
+            url: `${apiOrigin}/feature/check-feature`,
+            body: {
+                featureCode: 'SIGNUP_SURVEY',
+                companyId: 2
+            },
+            headers: {
+                'Origin': origin
+            },
+        });
+
         cy.visit('/survey');
         cy.wait(4000);
 

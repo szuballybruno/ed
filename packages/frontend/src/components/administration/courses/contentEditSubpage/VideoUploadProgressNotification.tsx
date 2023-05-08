@@ -45,7 +45,7 @@ export const VideoUploadProgressNotification = ({
     useEffect(() => {
 
         eventManager
-            .scubscribeEvent('onProgressChanged', subscriberId, ({ progress, buffer, videoVersionId }: { progress: number, buffer: number, videoVersionId: Id<'VideoVersion'> }) => {
+            .subscribeEvent('onProgressChanged', subscriberId, ({ progress, buffer, videoVersionId }: { progress: number, buffer: number, videoVersionId: Id<'VideoVersion'> }) => {
 
                 if (state.videoVersionId !== videoVersionId)
                     return;
@@ -57,7 +57,7 @@ export const VideoUploadProgressNotification = ({
             });
 
         eventManager
-            .scubscribeEvent('onError', subscriberId, ({ videoVersionId }: { videoVersionId: Id<'VideoVersion'> }) => {
+            .subscribeEvent('onError', subscriberId, ({ videoVersionId }: { videoVersionId: Id<'VideoVersion'> }) => {
 
                 if (state.videoVersionId !== videoVersionId)
                     return;
@@ -68,7 +68,7 @@ export const VideoUploadProgressNotification = ({
             });
 
         eventManager
-            .scubscribeEvent('onDone', subscriberId, ({ videoVersionId }: { videoVersionId: Id<'VideoVersion'> }) => {
+            .subscribeEvent('onDone', subscriberId, ({ videoVersionId }: { videoVersionId: Id<'VideoVersion'> }) => {
 
                 if (state.videoVersionId !== videoVersionId)
                     return;

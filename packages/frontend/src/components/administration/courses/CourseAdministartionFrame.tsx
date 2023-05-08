@@ -1,7 +1,7 @@
 import { Id } from '@episto/commontypes';
 import { UserCheckPermissionDTO } from '@episto/communication';
 import { instantiate } from '@episto/x-core';
-import { ReactNode, useCallback, useEffect, useState } from 'react';
+import { ReactNode, useCallback, useState } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { AdminApiService } from '../../../services/api/AdminApiService';
 import { CourseApiService } from '../../../services/api/courseApiService';

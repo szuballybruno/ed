@@ -1,45 +1,45 @@
 import { instantiate } from '@episto/commonlogic';
-import { CourseVisibilityType, ErrorWithCode, Id, OrderType } from '@episto/commontypes';
-import { AvailableCourseDTO, CompanyAssociatedCourseDTO, CourseAdminListItemDTO, CourseBriefData, CourseCategoryDTO, CourseContentAdminDTO, CourseContentItemAdminDTO, CourseDetailsDTO, CourseDetailsEditDataDTO, CourseStartDTO, CreateCourseDTO, GreetingsDataDTO, ModuleEditDTO, Mutation, PlaylistModuleDTO } from '@episto/communication';
-import { PrincipalId } from '@episto/x-core';
+import { CourseVisibilityType, ErrorWithCode, OrderType } from '@episto/commontypes';
+import { AvailableCourseDTO, CourseAdminListItemDTO, CourseBriefData, CourseContentAdminDTO, CourseContentItemAdminDTO, CourseDetailsDTO, CourseDetailsEditDataDTO, CourseStartDTO, CreateCourseDTO, GreetingsDataDTO, ModuleEditDTO, Mutation, PlaylistModuleDTO } from '@episto/communication';
+import { Id, PrincipalId } from '@episto/x-core';
 import { UploadedFile } from 'express-fileupload';
-import { CompanyService, PermissionService, TempomatService } from '..';
+import { CompanyService, FeatureService, TempomatService } from '..';
 import { Course } from '../models/tables/Course';
+import { CourseAccessBridge } from '../models/tables/CourseAccessBridge';
+import { CourseCategory } from '../models/tables/CourseCategory';
 import { CourseData } from '../models/tables/CourseData';
 import { CourseVersion } from '../models/tables/CourseVersion';
 import { Exam } from '../models/tables/Exam';
 import { ExamData } from '../models/tables/ExamData';
 import { ExamVersion } from '../models/tables/ExamVersion';
-import { CourseAccessBridge } from '../models/tables/CourseAccessBridge';
-import { CourseCategory } from '../models/tables/CourseCategory';
-import { TeacherInfo } from '../models/tables/TeacherInfo';
-import { User } from '../models/tables/User';
-import { UserCourseBridge } from '../models/tables/UserCourseBridge';
 import { Module } from '../models/tables/Module';
 import { ModuleData } from '../models/tables/ModuleData';
 import { ModuleVersion } from '../models/tables/ModuleVersion';
+import { Permission } from '../models/tables/Permission';
+import { PermissionAssignmentBridge } from '../models/tables/PermissionAssignmentBridge';
+import { TeacherInfo } from '../models/tables/TeacherInfo';
+import { User } from '../models/tables/User';
+import { UserCourseBridge } from '../models/tables/UserCourseBridge';
 import { AvailableCourseView } from '../models/views/AvailableCourseView';
 import { CourseAdminContentView } from '../models/views/CourseAdminContentView';
 import { CourseAdminDetailedView } from '../models/views/CourseAdminDetailedView';
 import { CourseAdminListView } from '../models/views/CourseAdminListView';
 import { CourseDetailsView } from '../models/views/CourseDetailsView';
 import { LatestCourseVersionView } from '../models/views/LatestCourseVersionView';
+import { UserPermissionView } from '../models/views/UserPermissionView';
 import { UserPlaylistView } from '../models/views/UserPlaylistView';
-import { filterByProperty, orderByProperty, newNotImplemented } from '../utilities/helpers';
+import { filterByProperty, newNotImplemented, orderByProperty } from '../utilities/helpers';
 import { VersionMigrationContainer } from '../utilities/misc';
 import { AuthorizationService } from './AuthorizationService';
 import { FileService } from './FileService';
 import { MapperService } from './MapperService';
-import { FilesObjectType } from './misc/FilesObjectType';
-import { createCharSeparatedList } from './misc/mappings';
 import { ModuleService } from './ModuleService';
 import { ORMConnectionService } from './ORMConnectionService';
 import { PlayerService } from './PlayerService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { VersionCreateService } from './VersionCreateService';
-import { PermissionAssignmentBridge } from '../models/tables/PermissionAssignmentBridge';
-import { Permission } from '../models/tables/Permission';
-import { UserPermissionView } from '../models/views/UserPermissionView';
+import { FilesObjectType } from './misc/FilesObjectType';
+import { createCharSeparatedList } from './misc/mappings';
 
 export class CourseService {
 
@@ -53,7 +53,8 @@ export class CourseService {
         private _authorizationService: AuthorizationService,
         private _verisonCreateService: VersionCreateService,
         private _companyService: CompanyService,
-        private _playerService: PlayerService) {
+        private _playerService: PlayerService,
+        private _featureService: FeatureService) {
     }
 
     /**
@@ -165,8 +166,7 @@ export class CourseService {
                     skillBenefits: '',
                     coverFileId: null,
                     isFeatured: false,
-                    modificationDate: new Date(),
-                    isPrecourseSurveyRequired: true
+                    modificationDate: new Date()
                 }),
                 createVersion: ({ entityId, dataId }) => ({
                     courseDataId: dataId,
@@ -358,7 +358,7 @@ export class CourseService {
      */
     async getGreetingDataAsync(principalId: PrincipalId, courseId: Id<'Course'>) {
 
-        const { isPrecourseSurveyRequired, title } = await this
+        const { title } = await this
             ._ormService
             .withResType<CourseData>()
             .query(LatestCourseVersionView, { courseId })
@@ -369,6 +369,20 @@ export class CourseService {
                 .on('id', '=', 'courseDataId', CourseVersion))
             .where('courseId', '=', 'courseId')
             .getSingle();
+
+        const isPrequizRequired = await this._featureService
+            .checkFeatureAsync(principalId, {
+                featureCode: 'PREQUIZ_SURVEY',
+                courseId: courseId
+            })
+
+        const isPretestRequired = await this._featureService
+            .checkFeatureAsync(principalId, {
+                featureCode: 'PRETEST_SURVEY',
+                courseId: courseId
+            })
+
+        const isPrecourseSurveyRequired = isPrequizRequired && isPretestRequired;
 
         /**
          * Get first item playlist code 
@@ -429,8 +443,7 @@ export class CourseService {
                 humanSkillBenefits: createCharSeparatedList(dto
                     .humanSkillBenefits
                     .map(x => `${x.text}: ${x.value}`)),
-                visibility: dto.visibility,
-                isPrecourseSurveyRequired: dto.isPrecourseSurveyRequired
+                visibility: dto.visibility
             });
     }
 
@@ -577,7 +590,7 @@ export class CourseService {
 
         return this._mapperService
             .mapTo(AvailableCourseDTO, [orderedCourses]);
-    }
+    };
 
     /**
      * Creates a course access bridge,
@@ -597,15 +610,6 @@ export class CourseService {
             } as CourseAccessBridge);
     }
 
-    async getAvailableCourseCategoriesAsync(principalId: PrincipalId) {
-
-        const courseCategories = await this._ormService
-            .query(CourseCategory)
-            .getMany();
-
-        return this._mapperService
-            .mapTo(CourseCategoryDTO, [courseCategories]);
-    }
 
     /**
      * --------------- PRIVATE

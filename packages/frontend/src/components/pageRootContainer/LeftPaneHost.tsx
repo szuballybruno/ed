@@ -95,8 +95,7 @@ export const LeftPaneHost = memo(({
                             alt=""
                             onClick={() => {
 
-                                if (hasPermission('BYPASS_SURVEY'))
-                                    navigate2(applicationRoutes.homeRoute);
+                                navigate2(applicationRoutes.homeRoute);
                             }} />
                     </EpistoFlex2>}
 

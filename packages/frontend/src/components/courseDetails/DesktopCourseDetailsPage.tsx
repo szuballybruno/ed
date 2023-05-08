@@ -3,7 +3,10 @@ import { CourseDetailsDTO } from '@episto/communication';
 import { useEffect, useState } from 'react';
 import { Responsivity } from '../../helpers/responsivity';
 import { Environment } from '../../static/Environemnt';
+import { ArrayBuilder } from '../../static/frontendHelpers';
 import { translatableTexts } from '../../static/translatableTexts';
+import { EpistoHeader } from '../EpistoHeader';
+import { ProfileImage } from '../ProfileImage';
 import { useAdminCourseContentDialogLogic } from '../administration/users/adminCourseContentDialog/AdminCourseContentDialogLogic';
 import { AdminUserCourseContentDialog } from '../administration/users/adminCourseContentDialog/AdminUserCourseContentDialog';
 import { EpistoButton } from '../controls/EpistoButton';
@@ -11,10 +14,9 @@ import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoGrid } from '../controls/EpistoGrid';
 import { EpistoTabs } from '../controls/EpistoTabs';
-import { EpistoHeader } from '../EpistoHeader';
 import { ContentPane } from '../pageRootContainer/ContentPane';
 import { RootContainerBackground } from '../pageRootContainer/RootContainerBackground';
-import { ProfileImage } from '../ProfileImage';
+import { useCheckFeatureEnabled } from '../system/CheckFeatureFrame';
 import { FlexListItem } from '../universal/FlexListItem';
 import { CourseDetailsBriefingInfoItem } from './CourseDetailsBriefingInfoItem';
 import { CourseDetailsContentSection } from './CourseDetailsContentSection';
@@ -42,39 +44,83 @@ export const DesktopCourseDetailsPage = ({
     const [currentTab, setCurrentTab] = useState(0);
     const isSmallerThan1320 = Responsivity.useIsSmallerThan('1320px');
 
-    useEffect(() => {
+    const { isFeatureEnabled: isCourseDetailsSummarySectionEnabled } = useCheckFeatureEnabled({
+        courseId: courseDetails.courseId,
+        featureCode: 'COURSE_DETAILS_PAGE_SUMMARY_SECTION'
+    });
+    const { isFeatureEnabled: isCourseDetailsRequirementsSectionEnabled } = useCheckFeatureEnabled({
+        courseId: courseDetails.courseId,
+        featureCode: 'COURSE_DETAILS_PAGE_REQUIREMENTS_SECTION'
+    });
+    const { isFeatureEnabled: isCourseDetailsContentSectionEnabled } = useCheckFeatureEnabled({
+        courseId: courseDetails.courseId,
+        featureCode: 'COURSE_DETAILS_PAGE_CONTENT_SECTION'
+    });
+    const { isFeatureEnabled: isCourseDetailsTeacherSectionEnabled } = useCheckFeatureEnabled({
+        courseId: courseDetails.courseId,
+        featureCode: 'COURSE_DETAILS_PAGE_TEACHER_SECTION'
+    });
 
-        if (courseDetails?.currentItemCode) {
-            setCurrentTab(2);
-        }
+    const { isFeatureEnabled: isCourseDetailsCategoryTileEnabled } = useCheckFeatureEnabled({
+        courseId: courseDetails.courseId,
+        featureCode: 'COURSE_DETAILS_PAGE_CATEGORY_TILE'
+    });
+    const { isFeatureEnabled: isCourseDetailsTeacherTileEnabled } = useCheckFeatureEnabled({
+        courseId: courseDetails.courseId,
+        featureCode: 'COURSE_DETAILS_PAGE_TEACHER_TILE'
+    });
+    const { isFeatureEnabled: isCourseDetailsDifficultyTileEnabled } = useCheckFeatureEnabled({
+        courseId: courseDetails.courseId,
+        featureCode: 'COURSE_DETAILS_PAGE_DIFFICULTY_TILE'
+    });
+    const { isFeatureEnabled: isCourseDetailsLearningExperienceTileEnabled } = useCheckFeatureEnabled({
+        courseId: courseDetails.courseId,
+        featureCode: 'COURSE_DETAILS_PAGE_LEARNING_EXPERIENCE_TILE'
+    });
 
-        if (!courseDetails?.currentItemCode) {
-            setCurrentTab(0);
-        }
-    }, [courseDetails]);
 
-    const desktopTabs = [
-        {
-            title: translatableTexts.courseDetails.tabLabels.overview,
-            component: <CourseDetailsSummarySection
-                courseDetails={courseDetails} />
-        },
-        {
+    const desktopTabs = new ArrayBuilder()
+        .addIf(isCourseDetailsSummarySectionEnabled,
+            {
+                title: translatableTexts.courseDetails.tabLabels.overview,
+                component: <CourseDetailsSummarySection
+                    courseDetails={courseDetails} />
+            }
+        )
+        .addIf(isCourseDetailsRequirementsSectionEnabled, {
             title: translatableTexts.courseDetails.tabLabels.requirements,
             component: <CourseDetailsRequirementsSection
                 courseDetails={courseDetails} />
-        },
-        {
-            title: translatableTexts.courseDetails.tabLabels.content,
-            component: <CourseDetailsContentSection
-                courseDetails={courseDetails} />
-        },
-        {
-            title: translatableTexts.courseDetails.tabLabels.teacher,
-            component: <CourseDetailsTeacherSection
-                courseDetails={courseDetails} />
+        })
+        .addIf(isCourseDetailsContentSectionEnabled,
+            {
+                title: translatableTexts.courseDetails.tabLabels.content,
+                component: <CourseDetailsContentSection
+                    courseDetails={courseDetails} />
+            })
+        .addIf(isCourseDetailsTeacherSectionEnabled,
+            {
+                title: translatableTexts.courseDetails.tabLabels.teacher,
+                component: <CourseDetailsTeacherSection
+                    courseDetails={courseDetails} />
+            })
+        .getArray();
+
+    useEffect(() => {
+
+        if (courseDetails?.currentItemCode && isCourseDetailsContentSectionEnabled) {
+            setCurrentTab(2);
         }
-    ];
+
+        if (!courseDetails?.currentItemCode && isCourseDetailsSummarySectionEnabled) {
+            setCurrentTab(0);
+        }
+
+        setCurrentTab(0);
+        //return setCurrentTab(desktopTabs.first());
+    }, [courseDetails, desktopTabs, isCourseDetailsContentSectionEnabled, isCourseDetailsSummarySectionEnabled]);
+
+
 
     return (
         <>
@@ -127,12 +173,12 @@ export const DesktopCourseDetailsPage = ({
                             gridTemplateColumns={isSmallerThan1320 ? 'repeat(2, minmax(0, 1fr))' : 'repeat(4, minmax(0, 1fr))'}
                             gap='10px'>
 
-                            <CourseDetailsBriefingInfoItem
+                            {isCourseDetailsCategoryTileEnabled && <CourseDetailsBriefingInfoItem
                                 icon={Environment.getAssetUrl('/course_page_icons/about_category.svg')}
                                 title={translatableTexts.courseDetails.briefingInfoItems.category}
-                                subTitle={courseDetails?.subCategoryName} />
+                                subTitle={courseDetails?.subCategoryName} />}
 
-                            {courseDetails && <CourseDetailsBriefingInfoItem
+                            {(courseDetails && isCourseDetailsTeacherTileEnabled) && <CourseDetailsBriefingInfoItem
                                 icon={<ProfileImage
                                     className="square50"
                                     url={courseDetails!.teacherData.teacherAvatarFilePath}
@@ -141,15 +187,15 @@ export const DesktopCourseDetailsPage = ({
                                 title={translatableTexts!.courseDetails.briefingInfoItems.teacher}
                                 subTitle={courseDetails!.teacherData.teacherFullName} />}
 
-                            <CourseDetailsBriefingInfoItem
+                            {isCourseDetailsDifficultyTileEnabled && <CourseDetailsBriefingInfoItem
                                 icon={Environment.getAssetUrl('/course_page_icons/about_difficulty.svg')}
                                 title={translatableTexts.courseDetails.briefingInfoItems.difficulty}
-                                subTitle={courseDetails?.difficulty + ' / 10 pont'} />
+                                subTitle={courseDetails?.difficulty + ' / 10 pont'} />}
 
-                            <CourseDetailsBriefingInfoItem
+                            {isCourseDetailsLearningExperienceTileEnabled && <CourseDetailsBriefingInfoItem
                                 icon={Environment.getAssetUrl('/course_page_icons/about_learning_experience.svg')}
                                 title={translatableTexts.courseDetails.briefingInfoItems.learningExperience}
-                                subTitle={courseDetails?.benchmark + ' / 5 pont'} />
+                                subTitle={courseDetails?.benchmark + ' / 5 pont'} />}
                         </EpistoGrid>
 
                         {/* tabs */}

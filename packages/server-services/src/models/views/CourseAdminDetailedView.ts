@@ -46,9 +46,6 @@ export class CourseAdminDetailedView {
     technicalRequirementsDescription: string;
 
     @XViewColumn()
-    isPrecourseSurveyRequired: boolean;
-
-    @XViewColumn()
     categoryId: Id<'CourseCategory'>;
 
     @XViewColumn()

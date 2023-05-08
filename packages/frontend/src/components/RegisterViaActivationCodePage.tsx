@@ -90,14 +90,7 @@ export const RegisterViaActivationCodePage = () => {
             .hasCredentialError;
 
         return entriesValid && pwStateValid;
-    }, [
-        emailEntryState.value,
-        firstNameEntryState.value,
-        lastNameEntryState.value,
-        usernameEntryState.value,
-        activationCodeEntryState.value,
-        passwordState
-    ]);
+    }, [emailEntryState, firstNameEntryState, lastNameEntryState, activationCodeEntryState, usernameEntryState, passwordState.hasCredentialError]);
 
     const isAllFilled = useMemo(() => {
 

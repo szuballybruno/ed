@@ -575,7 +575,6 @@ const marray = [
                 teacherId: view.teacherId,
                 humanSkillBenefitsDescription: view.humanSkillBenefitsDescription,
                 technicalRequirementsDescription: view.technicalRequirements,
-                isPrecourseSurveyRequired: view.isPrecourseSurveyRequired,
 
                 skillBenefits: parseCommaSeparatedStringList(view.skillBenefits),
                 technicalRequirements: parseCommaSeparatedStringList(view.technicalRequirements),

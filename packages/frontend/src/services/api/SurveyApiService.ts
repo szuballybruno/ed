@@ -30,6 +30,16 @@ const useSurveyData = () => {
     };
 };
 
+const useCheckIfSurveySkippable = () => {
+
+    const qr = usePostDataUnsafe<void, boolean>(apiRoutes.survey.checkIfSurveySkippable);
+
+    return {
+        checkIfSurveySkippable: qr.postDataAsync,
+        checkIfSurveySkippableStatus: qr.state
+    };
+};
+
 const useCompleteSurvey = () => {
 
     const qr = usePostDataUnsafe(apiRoutes.survey.completeSignupSurvey);
@@ -55,5 +65,6 @@ export const SurveyApiService = {
     usePersonalityData,
     useCompleteSurvey,
     useSurveyData,
-    useAnswerSurveyQuestion
+    useAnswerSurveyQuestion,
+    useCheckIfSurveySkippable
 };

@@ -1,10 +1,10 @@
 
-$xorm = "${PSScriptRoot}/../epistogram/packages/x-orm"
+$xorm = "${PSScriptRoot}/../packages/x-orm"
 
 yarn --cwd $xorm scaffold `
     --dbhost=localhost `
     --dbname=epistogram_local `
-    --dbpassword=$env:LOCAL_POSTGRES_USER_PASSWORD `
+    --dbpassword="local_postgres_user_pass" `
     --dbport=5432 `
     --dbuser=dev_service_user `
     --typemapPath="${PSScriptRoot}/../packages/server-services/typemap.json" `

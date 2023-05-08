@@ -1,10 +1,11 @@
 import { instantiate, parseIntOrFail } from '@episto/commonlogic';
 import { CourseVisibilityType, Id } from '@episto/commontypes';
-import { CourseCategoryDTO, CourseDetailsEditDataDTO } from '@episto/communication';
+import { CourseCategoryDTO, CourseDetailsEditDataDTO, CourseFeatureDTO } from '@episto/communication';
 import { useEffect, useMemo } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { EMPTY_ARRAY } from '../../../helpers/emptyArray';
 import { AdminActiveCompanyIdType } from '../../../models/types';
+import { FeatureApiService } from '../../../services/api/FeatureApiService';
 import { CourseApiService } from '../../../services/api/courseApiService';
 import { useNavigation } from '../../../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../../../services/core/notifications';
@@ -12,19 +13,73 @@ import { iterate, useStateObject } from '../../../static/frontendHelpers';
 import { useRouteParams2 } from '../../../static/locationHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoCheckbox } from '../../controls/EpistoCheckbox';
-import { EpistoCheckboxLabel } from '../../controls/EpistoCheckboxLabel';
+import { EpistoDataGrid, EpistoDataGridColumnBuilder } from '../../controls/EpistoDataGrid';
 import { EpistoEntry } from '../../controls/EpistoEntry';
 import { EpistoFlex2 } from '../../controls/EpistoFlex';
 import { EpistoImage } from '../../controls/EpistoImage';
 import { EpistoLabel } from '../../controls/EpistoLabel';
 import { EpistoSelect } from '../../controls/EpistoSelect';
 import { EpistoSlider } from '../../controls/EpistoSlider';
+import { EpistoSwitch } from '../../controls/EpistoSwitch';
+import { IXMutatorFunctions } from '../../lib/XMutator/XMutatorCore';
+import { useXMutatorNew } from '../../lib/XMutator/XMutatorReact';
 import { LoadingFrame } from '../../system/LoadingFrame';
+import { useSetBusy } from '../../system/LoadingFrame/BusyBarContext';
 import { EpistoImageSelector } from '../../universal/EpistoImageSelector';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
 import { SimpleEditList } from '../SimpleEditList';
 import { CourseAdministartionFrame } from './CourseAdministartionFrame';
 import { EditSection } from './EditSection';
+import { CourseCategoryApiService } from '../../../services/api/CourseCategoryApiService';
+
+type RowType = CourseFeatureDTO;
+
+const useColumns = (mutatorFunctions: IXMutatorFunctions<CourseFeatureDTO, 'featureId', Id<'Feature'>>) => {
+
+    return new EpistoDataGridColumnBuilder<RowType, Id<'Feature'>>()
+
+        .add({
+            field: 'featureCode',
+            headerName: 'Funkció kódja',
+            width: 250
+        })
+        .add({
+            field: 'featureDescription',
+            headerName: 'Leírás',
+            width: 250
+        })
+        .add({
+            field: 'isEnabled',
+            headerName: 'Hozzárendelt-e?',
+            renderCell: ({ value, key }) => <EpistoCheckbox
+                setValue={value => mutatorFunctions
+                    .mutate({
+                        key,
+                        field: 'isEnabled',
+                        newValue: value
+                    })}
+                value={value} />,
+        })
+        .getColumns();
+};
+
+const ToggleFeatureLabel = (props: {
+    title: string,
+    checked: boolean,
+    setChecked: (x: boolean) => void
+}) => {
+    return <EpistoFlex2
+        justify='space-between'>
+
+        <EpistoLabel
+            text={props.title}>
+        </EpistoLabel>
+
+        <EpistoSwitch
+            checked={props.checked}
+            setChecked={props.setChecked} />
+    </EpistoFlex2>;
+};
 
 export const EditCourseDetailsSubpage = ({ activeCompanyId }: { activeCompanyId: AdminActiveCompanyIdType }) => {
 
@@ -43,11 +98,23 @@ export const EditCourseDetailsSubpage = ({ activeCompanyId }: { activeCompanyId:
     const { saveCourseDataAsync, saveCourseDataState } = CourseApiService.useSaveCourseDetailsData();
     const { saveCourseThumbnailAsync, saveCourseThumbnailState } = CourseApiService.useUploadCourseThumbnailAsync();
     const { deleteCourseAsync, deleteCourseState } = CourseApiService.useDeleteCourse();
+    const { createCourseCategoryAsync, createCourseCategoryState } = CourseCategoryApiService.useCreateCourseCategory();
 
     // calc
     const categories = courseDetailsEditData?.categories ?? EMPTY_ARRAY;
     const teachers = courseDetailsEditData?.teachers ?? EMPTY_ARRAY;
 
+
+    const { courseFeatures, courseFeaturesError, courseFeaturesState, refetchCourseFeatureResults } = FeatureApiService
+        .useGetCourseFeatures(courseId);
+
+    const { saveCourseFeaturesAsync, saveCourseFeaturesState } = FeatureApiService
+        .useSaveCourseFeatures();
+
+    useSetBusy(FeatureApiService.useGetCourseFeatures, courseFeaturesState, courseFeaturesError);
+    useSetBusy(FeatureApiService.useSaveCourseFeatures, saveCourseFeaturesState);
+
+    const [mutatorState, mutatorFunctions] = useXMutatorNew(CourseFeatureDTO, 'featureId', 'CourseFeatures');
     // defaults
     const defaultHumanSkillBenefits = useMemo(() => iterate(10, () => ({
         text: '',
@@ -78,12 +145,10 @@ export const EditCourseDetailsSubpage = ({ activeCompanyId }: { activeCompanyId:
         skillBenefits,
         technicalRequirements,
         humanSkillBenefitsDescription,
-        humanSkillBenefits,
-        isPrecourseSurveyRequired
+        humanSkillBenefits
     }, setState, stateObj] = useStateObject({
         title: '',
         thumbnailSrc: '',
-        isPrecourseSurveyRequired: false,
         thumbnailImageFile: null as File | null,
         category: null as CourseCategoryDTO | null,
         subCategory: null as CourseCategoryDTO | null,
@@ -105,6 +170,16 @@ export const EditCourseDetailsSubpage = ({ activeCompanyId }: { activeCompanyId:
     // func
     const handleSaveCourseAsync = async () => {
 
+        if (mutatorState.isAnyItemsMutated) {
+
+            await saveCourseFeaturesAsync({ courseId, mutations: mutatorState.mutations });
+
+            showNotification('Saved');
+
+            await refetchCourseFeatureResults();
+        }
+
+
         if (!courseDetailsEditData)
             return;
 
@@ -125,7 +200,6 @@ export const EditCourseDetailsSubpage = ({ activeCompanyId }: { activeCompanyId:
             teacherId: teacherId,
             previouslyCompletedCount: parseIntOrFail(prevCompletedCount),
             technicalRequirementsDescription: technicalRequirementsDescription,
-            isPrecourseSurveyRequired,
             categories: [],
             teachers: [],
 
@@ -167,6 +241,40 @@ export const EditCourseDetailsSubpage = ({ activeCompanyId }: { activeCompanyId:
             showError(e);
         }
     };
+
+    const toggleFeatureByCode = (code: string, value: boolean) => {
+
+        const feature = courseFeatures
+            .find(x => x.featureCode === code);
+
+        if (!feature)
+            return;
+
+        mutatorFunctions.mutate({
+            key: feature.featureId,
+            field: 'isEnabled',
+            newValue: value
+        });
+    };
+
+    const isMutatedFeatureEnabled = (code: string) => {
+        const feature = mutatorState.mutatedItems
+            .find(x => x.featureCode === code);
+
+        if (feature?.isEnabled)
+            return true;
+
+        return false;
+    };
+
+    useEffect(() => {
+
+        mutatorFunctions
+            .setOriginalItems(courseFeatures);
+
+    }, [courseFeatures, mutatorFunctions]);
+
+    const columns = useColumns(mutatorFunctions);
 
     // effects
     useEffect(() => {
@@ -315,28 +423,55 @@ export const EditCourseDetailsSubpage = ({ activeCompanyId }: { activeCompanyId:
                                     onSelected={x => setState(state => state.teacherId = x.id)} />
                             </EpistoLabel>
 
-                            {/* is pretest required  */}
-                            {/* is prequiz required  */}
-                            <EpistoLabel
-                                isOverline
-                                text='Előzetes tesztek'>
 
-                                <EpistoCheckboxLabel
-                                    label="Prequiz és Pretest kitöltendő">
 
-                                    <EpistoCheckbox
-                                        value={isPrecourseSurveyRequired}
-                                        setValue={x => setState(s => s.isPrecourseSurveyRequired = x)} />
-                                </EpistoCheckboxLabel>
+                            {/* Short description */}
+                            <EpistoEntry
+                                labelVariant={'top'}
+                                isMultiline={true}
+                                value={shortDescription}
+                                label="Rövid leírás"
+                                setValue={x => setState(s => s.shortDescription = x)} />
 
-                                {/* <EpistoCheckboxLabel
-                                    label="Is prequiz required?">
 
-                                    <EpistoCheckbox
-                                        value={isPrequizRequired}
-                                        setValue={x => setState(s => s.isPrequizRequired = x)} />
-                                </EpistoCheckboxLabel> */}
-                            </EpistoLabel>
+                        </EditSection>
+
+                        <EditSection title="Funkciók">
+
+                            <ToggleFeatureLabel
+                                title='Kurzus adatlap megjelenítése'
+                                checked={isMutatedFeatureEnabled('COURSE_DETAILS_PAGE')}
+                                setChecked={x => toggleFeatureByCode('COURSE_DETAILS_PAGE', x)} />
+
+                            <ToggleFeatureLabel
+                                title='Kategória csempe a kurzus adatlapon'
+                                checked={isMutatedFeatureEnabled('COURSE_DETAILS_PAGE_CATEGORY_TILE')}
+                                setChecked={x => toggleFeatureByCode('COURSE_DETAILS_PAGE_CATEGORY_TILE', x)} />
+
+                            <ToggleFeatureLabel
+                                title='Tanár csempe a kurzus adatlapon'
+                                checked={isMutatedFeatureEnabled('COURSE_DETAILS_PAGE_TEACHER_TILE')}
+                                setChecked={x => toggleFeatureByCode('COURSE_DETAILS_PAGE_TEACHER_TILE', x)} />
+
+                            <ToggleFeatureLabel
+                                title='Tanár szekció mutatása a kurzus adatlapon'
+                                checked={isMutatedFeatureEnabled('COURSE_DETAILS_PAGE_TEACHER_SECTION')}
+                                setChecked={x => toggleFeatureByCode('COURSE_DETAILS_PAGE_TEACHER_SECTION', x)} />
+
+                            <ToggleFeatureLabel
+                                title='Tartalom szekció mutatása a kurzus adatlapon'
+                                checked={isMutatedFeatureEnabled('COURSE_DETAILS_PAGE_CONTENT_SECTION')}
+                                setChecked={x => toggleFeatureByCode('COURSE_DETAILS_PAGE_CONTENT_SECTION', x)} />
+
+                            <ToggleFeatureLabel
+                                title='Prequiz és Pretest kitöltendő'
+                                checked={isMutatedFeatureEnabled('PREQUIZ_SURVEY') && isMutatedFeatureEnabled('PRETEST_SURVEY')}
+                                setChecked={x => {
+                                    toggleFeatureByCode('PREQUIZ_SURVEY', x);
+                                    toggleFeatureByCode('PRETEST_SURVEY', x);
+                                }} />
+
+
                         </EditSection>
 
                         <EditSection title="Jogosultságkezelés">
@@ -354,57 +489,46 @@ export const EditCourseDetailsSubpage = ({ activeCompanyId }: { activeCompanyId:
                             </EpistoLabel>
                         </EditSection>
 
+                        <EditSection
+                            title="Nehézség"
+                            rightSideComponent={
+                                <EpistoSwitch
+                                    checked={isMutatedFeatureEnabled('COURSE_DETAILS_PAGE_DIFFICULTY_TILE')}
+                                    setChecked={x => toggleFeatureByCode('COURSE_DETAILS_PAGE_DIFFICULTY_TILE', x)} />
+                            }
+                            showContent={isMutatedFeatureEnabled('COURSE_DETAILS_PAGE_DIFFICULTY_TILE')}>
+                            <EpistoSlider
+                                aria-label="Nehézség"
+                                defaultValue={0}
+                                valueLabelDisplay="off"
+                                step={0.5}
+                                value={difficulty}
+                                onChange={(_, val) => setState(s => s.difficulty = val as number)}
+                                marks
+                                min={0}
+                                max={10} />
+                        </EditSection>
+
+                        <EditSection
+                            title="Tanulási élmény"
+                            rightSideComponent={
+                                <EpistoSwitch
+                                    checked={isMutatedFeatureEnabled('COURSE_DETAILS_PAGE_LEARNING_EXPERIENCE_TILE')}
+                                    setChecked={x => toggleFeatureByCode('COURSE_DETAILS_PAGE_LEARNING_EXPERIENCE_TILE', x)} />
+                            }
+                            showContent={isMutatedFeatureEnabled('COURSE_DETAILS_PAGE_LEARNING_EXPERIENCE_TILE')}>
+
+                            <EpistoSlider
+                                defaultValue={0}
+                                valueLabelDisplay="off"
+                                value={benchmark}
+                                step={0.5}
+                                onChange={(_, val) => setState(s => s.benchmark = val as number)}
+                                marks
+                                min={0}
+                                max={5} />
+                        </EditSection>
                         <EditSection title="Tartalmi információk">
-
-                            {/* Short description */}
-                            <EpistoEntry
-                                labelVariant={'top'}
-                                isMultiline={true}
-                                value={shortDescription}
-                                label="Áttekintés"
-                                setValue={x => setState(s => s.shortDescription = x)} />
-
-                            {/* Overview description */}
-                            <EpistoEntry
-                                labelVariant={'top'}
-                                isMultiline={true}
-                                value={description}
-                                label="Részletes leírás"
-                                setValue={x => setState(s => s.description = x)} />
-
-                            {/* Difficulty */}
-                            <EpistoLabel
-                                isOverline
-                                text="Nehézség">
-
-                                <EpistoSlider
-                                    aria-label="Nehézség"
-                                    defaultValue={0}
-                                    valueLabelDisplay="auto"
-                                    step={0.5}
-                                    value={difficulty}
-                                    onChange={(_, val) => setState(s => s.difficulty = val as number)}
-                                    marks
-                                    min={0}
-                                    max={10} />
-                            </EpistoLabel>
-
-                            {/* Benchmark index */}
-                            <EpistoLabel
-                                isOverline
-                                text="Tanulási élmény">
-
-                                <EpistoSlider
-                                    defaultValue={0}
-                                    valueLabelDisplay="auto"
-                                    value={benchmark}
-                                    step={0.5}
-                                    onChange={(_, val) => setState(s => s.benchmark = val as number)}
-                                    marks
-                                    min={0}
-                                    max={5} />
-                            </EpistoLabel>
-
 
 
                             {/* previously completed count */}
@@ -425,8 +549,13 @@ export const EditCourseDetailsSubpage = ({ activeCompanyId }: { activeCompanyId:
                         ml="5px">
 
                         <EditSection
-                            className="roundBorders"
                             title="Követelmények és ajánlás"
+                            rightSideComponent={
+                                <EpistoSwitch
+                                    checked={isMutatedFeatureEnabled('COURSE_DETAILS_PAGE_REQUIREMENTS_SECTION')}
+                                    setChecked={x => toggleFeatureByCode('COURSE_DETAILS_PAGE_REQUIREMENTS_SECTION', x)} />
+                            }
+                            showContent={isMutatedFeatureEnabled('COURSE_DETAILS_PAGE_REQUIREMENTS_SECTION')}
                             style={{
                                 marginBottom: 50
                             }}>
@@ -449,12 +578,23 @@ export const EditCourseDetailsSubpage = ({ activeCompanyId }: { activeCompanyId:
 
                         {/* requirements section */}
                         <EditSection
-                            className="roundBorders"
-                            title="Előnyök"
+                            title="Összegzés"
+                            rightSideComponent={
+                                <EpistoSwitch
+                                    checked={isMutatedFeatureEnabled('COURSE_DETAILS_PAGE_SUMMARY_SECTION')}
+                                    setChecked={x => toggleFeatureByCode('COURSE_DETAILS_PAGE_SUMMARY_SECTION', x)} />
+                            }
+                            showContent={isMutatedFeatureEnabled('COURSE_DETAILS_PAGE_SUMMARY_SECTION')}
                             style={{
                                 marginBottom: 50
                             }}>
-
+                            {/* Overview description */}
+                            <EpistoEntry
+                                labelVariant={'top'}
+                                isMultiline={true}
+                                value={description}
+                                label="Részletes leírás"
+                                setValue={x => setState(s => s.description = x)} />
                             <SimpleEditList
                                 mt="10px"
                                 title="Elsajátítható technikai ismeretek"
@@ -514,6 +654,17 @@ export const EditCourseDetailsSubpage = ({ activeCompanyId }: { activeCompanyId:
                             </EpistoFlex2>
                         </EditSection>
                     </EpistoFlex2>
+                </EpistoFlex2>
+
+                <EpistoFlex2
+                    height='700px'
+                    mb='100px'>
+
+                    <EpistoDataGrid
+                        columns={columns}
+                        rows={mutatorState.mutatedItems}
+                        getKey={x => x.featureId}
+                    />
                 </EpistoFlex2>
             </AdminSubpageHeader>
         </CourseAdministartionFrame>

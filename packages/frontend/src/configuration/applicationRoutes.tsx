@@ -1,5 +1,5 @@
 import { CourseUserPresetType, Id, LeaderboardPeriodType, LeaderboardScopeType } from '@episto/commontypes';
-import { AdminPanelSettings, Build, Equalizer, Home, Person, School, Search, Settings, Subscriptions } from '@mui/icons-material';
+import { AdminPanelSettings, Build, Done, Equalizer, Home, Person, PlayArrow, School, Search, Settings, Subscriptions } from '@mui/icons-material';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import LocalPoliceIcon from '@mui/icons-material/LocalPolice';
@@ -8,7 +8,6 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import SortIcon from '@mui/icons-material/Sort';
 import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
 import { AdminActiveCompanyRouteParamType, ApplicationRoute, EpistoRoute } from '../models/types';
-import { Environment } from '../static/Environemnt';
 import { EpistoIcons } from '../static/EpistoIcons';
 import { translatableTexts } from '../static/translatableTexts';
 
@@ -36,11 +35,9 @@ export type ApplicationRoutesType = {
         courseOverviewRoute: ApplicationRoute<{ courseId: Id<'Course'> }>;
     };
     leaderboardRoute: ApplicationRoute<void, { period?: LeaderboardPeriodType, scope?: LeaderboardScopeType }>;
-    learningRoute: ApplicationRoute & {
-        overviewRoute: ApplicationRoute;
-        myStatisticsRoute: ApplicationRoute;
-        myCoursesRoute: ApplicationRoute;
-        myExamsRoute: ApplicationRoute;
+    myProgressRoute: ApplicationRoute & {
+        startedCoursesRoute: ApplicationRoute;
+        completedCoursesRoute: ApplicationRoute;
     };
     administrationRoute: ApplicationRoute<AdminActiveCompanyRouteParamType> & {
         statsRoute: ApplicationRoute<AdminActiveCompanyRouteParamType, void> & {
@@ -48,7 +45,6 @@ export type ApplicationRoutesType = {
             detailsRoute: ApplicationRoute<AdminActiveCompanyRouteParamType>;
         };
         usersRoute: ApplicationRoute<AdminActiveCompanyRouteParamType> & {
-            indexRoute: ApplicationRoute<AdminActiveCompanyRouteParamType>;
             addRoute: ApplicationRoute<AdminActiveCompanyRouteParamType>;
             userRoute: ApplicationRoute<AdminActiveCompanyRouteParamType & { userId: Id<'User'> }> & {
                 editRoute: ApplicationRoute<AdminActiveCompanyRouteParamType & { userId: Id<'User'> }>;
@@ -56,8 +52,7 @@ export type ApplicationRoutesType = {
                 teacherInfoRoute: ApplicationRoute<AdminActiveCompanyRouteParamType & { userId: Id<'User'> }>;
             };
         };
-        coursesRoute: ApplicationRoute<AdminActiveCompanyRouteParamType, void> & {
-            landingRoute: ApplicationRoute<AdminActiveCompanyRouteParamType>;
+        coursesRoute: ApplicationRoute<AdminActiveCompanyRouteParamType> & {
             addRoute: ApplicationRoute<AdminActiveCompanyRouteParamType>;
             courseDetailsRoute: ApplicationRoute<AdminActiveCompanyRouteParamType & { courseId: Id<'Course'> }>;
             courseContentRoute: ApplicationRoute<AdminActiveCompanyRouteParamType & { courseId: Id<'Course'> }>;
@@ -66,29 +61,25 @@ export type ApplicationRoutesType = {
             interactiveCourseRoute: ApplicationRoute<AdminActiveCompanyRouteParamType>;
         };
         shopRoute: ApplicationRoute<AdminActiveCompanyRouteParamType, void> & {
-            overviewRoute: ApplicationRoute<AdminActiveCompanyRouteParamType>;
             addRoute: ApplicationRoute<AdminActiveCompanyRouteParamType>;
             editRoute: ApplicationRoute<AdminActiveCompanyRouteParamType & { shopItemId: Id<'ShopItem'> }>;
         };
         personalityAssessmentRoute: ApplicationRoute<AdminActiveCompanyRouteParamType, void> & {
-            indexRoute: ApplicationRoute<AdminActiveCompanyRouteParamType>,
             editTipsRoute: ApplicationRoute<AdminActiveCompanyRouteParamType & { traitCategoryId: Id<'PersonalityTraitCategory'>, isMax: boolean }> & {
                 editTipRoute: ApplicationRoute<AdminActiveCompanyRouteParamType & { traitCategoryId: Id<'PersonalityTraitCategory'>, isMax: boolean, dailyTipId: Id<'DailyTip'> }>;
             };
         };
         companiesRoute: ApplicationRoute<AdminActiveCompanyRouteParamType, void> & {
-            indexRoute: ApplicationRoute<AdminActiveCompanyRouteParamType>;
             editRoute: ApplicationRoute<AdminActiveCompanyRouteParamType & { companyId: Id<'Company'> }>;
             coursesRoute: ApplicationRoute<AdminActiveCompanyRouteParamType & { companyId: Id<'Company'> }>;
+            courseCategoriesRoute: ApplicationRoute<AdminActiveCompanyRouteParamType & { companyId: Id<'Company'> }>;
+            featuresRoute: ApplicationRoute<AdminActiveCompanyRouteParamType & { companyId: Id<'Company'> }>;
         };
         rolesRoute: ApplicationRoute<AdminActiveCompanyRouteParamType, void> & {
-            indexRoute: ApplicationRoute<AdminActiveCompanyRouteParamType>;
             editRoute: ApplicationRoute<AdminActiveCompanyRouteParamType & { roleId: Id<'Role'> }>;
         };
         activationCodesRoute: ApplicationRoute<AdminActiveCompanyRouteParamType, void>;
-        debugRoute: ApplicationRoute<AdminActiveCompanyRouteParamType, void> & {
-            indexRoute: ApplicationRoute<AdminActiveCompanyRouteParamType>;
-        };
+        debugRoute: ApplicationRoute<AdminActiveCompanyRouteParamType, void>;
     };
     settingsRoute: ApplicationRoute & {
         preferencesRoute: ApplicationRoute;
@@ -144,16 +135,22 @@ export const getApplicationRoutes = () => {
         homeRoute: {
             title: translatableTexts.routeTitles.homePage,
             route: new EpistoRoute('/', 'home'),
+            featureCode: 'HOME_PAGE',
+            fallbackRoute: new EpistoRoute('/', 'courses'),
             icon: <Home />
         },
 
         shopRoute: {
             title: translatableTexts.routeTitles.shopPage,
-            route: new EpistoRoute('/', 'shop')
+            route: new EpistoRoute('/', 'shop'),
+            featureCode: 'SHOP_PAGE',
+            fallbackRoute: new EpistoRoute('/', 'home'),
         },
 
         rootHomeRoute: {
             title: translatableTexts.routeTitles.homePage,
+            featureCode: 'HOME_PAGE',
+            fallbackRoute: new EpistoRoute('/', 'courses'),
             route: new EpistoRoute('', '/'),
         },
 
@@ -216,65 +213,32 @@ export const getApplicationRoutes = () => {
         leaderboardRoute: {
             title: translatableTexts.routeTitles.leaderboard,
             route: new EpistoRoute('/', 'leaderboard'),
-            icon: <SortIcon />
+            icon: <SortIcon />,
+            featureCode: 'LEADERBOARD_PAGE',
+            fallbackRoute: new EpistoRoute('/', 'home'),
         },
 
-        learningRoute: {
-            title: translatableTexts.routeTitles.learning,
-            route: new EpistoRoute('/', 'learning', '*'),
+        myProgressRoute: {
+            title: translatableTexts.routeTitles.myProgress,
+            route: new EpistoRoute('/', 'my-progress', '*'),
             icon: <School />,
 
-            overviewRoute: {
-                title: translatableTexts.routeTitles.learningOverview,
-                route: new EpistoRoute('/learning', 'overview'),
-                icon: <img
-                    src={Environment.getAssetUrl('images/overview3D.png')}
-                    alt=""
-                    style={{
-                        width: 45,
-                        height: 45,
-                        objectFit: 'contain'
-                    }} />
+            startedCoursesRoute: {
+                title: translatableTexts.routeTitles.myProgressStartedCourses,
+                route: new EpistoRoute('/my-progress', 'started-courses'),
+                icon: <PlayArrow
+                    className="fontXXL"
+                    color={'secondary'} />,
             },
 
-            myStatisticsRoute: {
-                title: translatableTexts.routeTitles.learningStatistics,
-                route: new EpistoRoute('/learning', 'myStatistics'),
-                icon: <img
-                    src={Environment.getAssetUrl('images/mystatsicon3D.png')}
-                    alt=""
-                    style={{
-                        width: 45,
-                        height: 45,
-                        objectFit: 'contain'
-                    }} />,
+            completedCoursesRoute: {
+                title: translatableTexts.routeTitles.myProgressCompletedCourses,
+                route: new EpistoRoute('/my-progress', 'completed-courses'),
+                icon: <Done
+                    className="fontXXL"
+                    color={'secondary'} />,
             },
 
-            myCoursesRoute: {
-                title: translatableTexts.routeTitles.learningCourses,
-                route: new EpistoRoute('/learning', 'myCourses'),
-                icon: <img
-                    src={Environment.getAssetUrl('images/watchedvideos3Dsmaller.png')}
-                    alt=""
-                    style={{
-                        width: 45,
-                        height: 45,
-                        objectFit: 'contain'
-                    }} />,
-            },
-
-            myExamsRoute: {
-                title: translatableTexts.routeTitles.learningExams,
-                route: new EpistoRoute('/learning', 'myExams'),
-                icon: <img
-                    src={Environment.getAssetUrl('images/examsicon3D.png')}
-                    alt=""
-                    style={{
-                        width: 45,
-                        height: 45,
-                        objectFit: 'contain'
-                    }} />,
-            }
         },
 
         administrationRoute: {
@@ -284,18 +248,18 @@ export const getApplicationRoutes = () => {
 
             statsRoute: {
                 title: translatableTexts.routeTitles.administrationHomeOverview,
-                route: new EpistoRoute('/administration/:activeCompanyId', 'stats'),
+                route: new EpistoRoute('/administration/:activeCompanyId', 'stats', '*'),
                 icon: <Equalizer className="fontXXL"
                     color={'secondary'} />,
 
                 overviewRoute: {
                     title: translatableTexts.routeTitles.administrationHomeOverview,
-                    route: new EpistoRoute('/administration/:activeCompanyId/users', 'add'),
+                    route: new EpistoRoute('/administration/:activeCompanyId/stats', 'overview'),
                 },
 
                 detailsRoute: {
                     title: translatableTexts.routeTitles.administrationHomeDetails,
-                    route: new EpistoRoute('/administration/:activeCompanyId/users', 'add'),
+                    route: new EpistoRoute('/administration/:activeCompanyId/stats', 'details'),
                 },
             },
 
@@ -305,10 +269,10 @@ export const getApplicationRoutes = () => {
                 icon: <Person className="fontXXL"
                     color={'secondary'} />,
 
-                indexRoute: {
-                    title: translatableTexts.routeTitles.administrationUserIndex,
-                    route: new EpistoRoute('/administration/:activeCompanyId/users', ''),
-                },
+                /*  indexRoute: {
+                     title: translatableTexts.routeTitles.administrationUserIndex,
+                     route: new EpistoRoute('/administration/:activeCompanyId/users', ''),
+                 }, */
                 addRoute: {
                     title: translatableTexts.routeTitles.administrationAddUser,
                     route: new EpistoRoute('/administration/:activeCompanyId/users', 'add'),
@@ -343,10 +307,10 @@ export const getApplicationRoutes = () => {
                     className="fontXXL"
                     color={'secondary'} />,
 
-                landingRoute: {
+                /* landingRoute: {
                     title: translatableTexts.routeTitles.administrationCourseAdmin,
                     route: new EpistoRoute('/administration/:activeCompanyId/courses', '/')
-                },
+                }, */
                 addRoute: {
                     title: translatableTexts.routeTitles.administrationAddCourse,
                     route: new EpistoRoute('/administration/:activeCompanyId/courses', 'add'),
@@ -380,11 +344,11 @@ export const getApplicationRoutes = () => {
                 route: new EpistoRoute('/administration/:activeCompanyId', 'shop', '*'),
                 icon: <ShoppingCartIcon className="fontXXL"
                     color={'secondary'} />,
-
-                overviewRoute: {
-                    title: translatableTexts.routeTitles.administrationShopAdd,
-                    route: new EpistoRoute('/administration/:activeCompanyId/shop', '/'),
-                },
+                /* 
+                                overviewRoute: {
+                                    title: translatableTexts.routeTitles.administrationShopAdd,
+                                    route: new EpistoRoute('/administration/:activeCompanyId/shop', '/'),
+                                }, */
 
                 addRoute: {
                     title: translatableTexts.routeTitles.administrationShopAdd,
@@ -404,10 +368,10 @@ export const getApplicationRoutes = () => {
                     className="fontXXL"
                     color={'secondary'} />,
 
-                indexRoute: {
-                    title: translatableTexts.routeTitles.administrationPersonalityAssessmentMain,
-                    route: new EpistoRoute('/administration/:activeCompanyId/personality-assessment', ''),
-                },
+                /*  indexRoute: {
+                     title: translatableTexts.routeTitles.administrationPersonalityAssessmentMain,
+                     route: new EpistoRoute('/administration/:activeCompanyId/personality-assessment', ''),
+                 }, */
 
                 editTipsRoute: {
                     title: translatableTexts.routeTitles.administrationPersonalityAssessmentTips,
@@ -425,19 +389,27 @@ export const getApplicationRoutes = () => {
                 route: new EpistoRoute('/administration/:activeCompanyId', 'companies', '*'),
                 icon: <LocationCityIcon
                     className="fontXXL"
-                    color={'secondary'} />,
+                    color={'secondary'} />,/* 
 
                 indexRoute: {
                     title: 'Cégek',
                     route: new EpistoRoute('/administration/:activeCompanyId/companies', '/')
-                },
+                }, */
                 editRoute: {
                     title: 'Cég szerkesztese',
-                    route: new EpistoRoute('/administration/:activeCompanyId/companies', '/:companyId/edit')
+                    route: new EpistoRoute('/administration/:activeCompanyId/companies', ':companyId/edit')
                 },
                 coursesRoute: {
                     title: 'Cég kurzusai',
-                    route: new EpistoRoute('/administration/:activeCompanyId/companies', '/:companyId/company-associated-courses')
+                    route: new EpistoRoute('/administration/:activeCompanyId/companies', ':companyId/company-associated-courses')
+                },
+                courseCategoriesRoute: {
+                    title: 'Céghez rendelt kurzus kategóriák',
+                    route: new EpistoRoute('/administration/:activeCompanyId/companies', ':companyId/company-associated-course-categories')
+                },
+                featuresRoute: {
+                    title: 'Cég funkciói',
+                    route: new EpistoRoute('/administration/:activeCompanyId/companies', ':companyId/company-features')
                 }
             },
 
@@ -448,13 +420,13 @@ export const getApplicationRoutes = () => {
                     className="fontXXL"
                     color={'secondary'} />,
 
-                indexRoute: {
-                    title: 'Roles',
-                    route: new EpistoRoute('/administration/:activeCompanyId/roles', '/')
-                },
+                /*  indexRoute: {
+                     title: 'Roles',
+                     route: new EpistoRoute('/administration/:activeCompanyId/roles', '/')
+                 }, */
                 editRoute: {
                     title: 'Role edit',
-                    route: new EpistoRoute('/administration/:activeCompanyId/roles', '/:roleId/edit')
+                    route: new EpistoRoute('/administration/:activeCompanyId/roles', ':roleId/edit')
                 },
             },
 
@@ -471,11 +443,11 @@ export const getApplicationRoutes = () => {
                 route: new EpistoRoute('/administration/:activeCompanyId', 'debug'),
                 icon: <Build
                     className='fontXXL'
-                    color='secondary' />,
+                    color='secondary' />/* ,
                 indexRoute: {
                     title: 'Debug',
                     route: new EpistoRoute('/administration/:activeCompanyId/roles', '/')
-                },
+                }, */
             }
         },
 

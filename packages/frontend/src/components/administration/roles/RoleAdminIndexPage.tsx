@@ -150,7 +150,7 @@ export const RoleAdminIndexPage = memo(() => {
                 direction="column"
                 pb="20px"
                 tabMenuItems={[
-                    applicationRoutes.administrationRoute.companiesRoute.indexRoute
+                    applicationRoutes.administrationRoute.companiesRoute
                 ]}
                 headerButtons={[
                     {

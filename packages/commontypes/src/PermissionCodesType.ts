@@ -203,10 +203,6 @@ export const permissionCodes = fn({
         code: 'SET_OWN_EMAIL_ADDRESS',
         scope: 'USER'
     },
-    BYPASS_SURVEY: {
-        code: 'BYPASS_SURVEY',
-        scope: 'COMPANY'
-    },
     EDIT_COMMENT: {
         code: 'EDIT_COMMENT',
         scope: 'COMMENT'
