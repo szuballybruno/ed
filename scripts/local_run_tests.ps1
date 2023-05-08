@@ -1,9 +1,9 @@
 
 # migen 
-./local_run_migen.ps1 -mode "SCRIPT_ONLY"
+../packages/x-migen/scripts/local_run_migen_prod.ps1 -mode "SCRIPT_ONLY" `
 
 # backup db
-./local_get_test_db_backup.ps1
+./local_get_test_db_backup.ps1 `
 
 # compose
-./run_tests.ps1 # -builddeps
+./run_tests.ps1 ` # -builddeps

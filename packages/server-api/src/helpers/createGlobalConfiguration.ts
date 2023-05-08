@@ -133,7 +133,7 @@ export const createGlobalConfiguration = (rootDir: string) => {
             isHostedOnGCP: Helper.getEnvConfigEntry('IS_HOSTED_ON_GCP', 'bool'),
         },
         logging: {
-            enabledScopes: ['GENERIC', 'ERROR', 'ORM'] as LogScopeType[],
+            enabledScopes: ['GENERIC', 'ERROR'] as LogScopeType[],
         },
         practiseQuestions: {
             incorrectQuestionDelayMinutes: 1,
