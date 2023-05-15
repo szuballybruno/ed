@@ -63,7 +63,7 @@ export class UserController implements IController<UserController> {
     saveUserAction(params: ActionParams) {
 
         const dto = params
-            .getBody<UserEditSaveDTO>(['firstName', 'lastName', 'companyId', 'email', 'userId', 'isTeacher', 'isSurveyRequired'])
+            .getBody<UserEditSaveDTO>(['firstName', 'lastName', 'companyId', 'email', 'userId', 'isTeacher'])
             .data;
 
         return this._userService

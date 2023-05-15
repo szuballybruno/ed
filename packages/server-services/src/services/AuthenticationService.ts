@@ -31,7 +31,7 @@ export class AuthenticationService {
 
         const tokenPayload = this._tokenService.verifyAccessToken(accessToken);
         if (!tokenPayload)
-            throw new ErrorWithCode('Token is invalid.', 'bad request');
+            throw new ErrorWithCode('Hibás token.', 'bad request');
 
         return tokenPayload;
     }
@@ -50,7 +50,7 @@ export class AuthenticationService {
          * Check and verify refresh token
          */
             if (!refreshToken)
-                throw new ErrorWithCode('Refresh token not found!', 'unauthorized');
+                throw new ErrorWithCode('Hiányzó refresh token.', 'unauthorized');
 
             const { userId } = this._tokenService
                 .verifyRefreshToken(refreshToken);
@@ -62,7 +62,7 @@ export class AuthenticationService {
                 .getUserDTOById(userId);
 
             if (!currentUser)
-                throw new ErrorWithCode('User not found by id.', 'unauthorized');
+                throw new ErrorWithCode('A felhasználó nem található egyedi azonosító alapján.', 'unauthorized');
 
             /**
              * Check user company
@@ -100,7 +100,7 @@ export class AuthenticationService {
         }
         catch (e) {
 
-            throw new ErrorWithCode('Handshake error.', 'unauthorized');
+            throw new ErrorWithCode('Azonosítási kézfogás sikertelen.', 'unauthorized');
         }
     }
 
@@ -114,7 +114,7 @@ export class AuthenticationService {
          * Check if sent credentials are valid 
          */
         if (!email || !password)
-            throw new ErrorWithCode('Email or password is null.', 'corrupt_credentials');
+            throw new ErrorWithCode('Az e-mail cím vagy a jelszó helytelen.', 'corrupt_credentials');
 
         /**
          * Check if user exists by email
@@ -123,7 +123,7 @@ export class AuthenticationService {
             .getUserByEmailAsync(email);
 
         if (!user)
-            throw new ErrorWithCode('Invalid email.', 'corrupt_credentials');
+            throw new ErrorWithCode('Hibás e-mail cím.', 'corrupt_credentials');
 
         /**
          * Check company
@@ -137,7 +137,7 @@ export class AuthenticationService {
             .comparePasswordAsync(password, user.password!);
 
         if (!isPasswordCorrect)
-            throw new ErrorWithCode('Invalid password.', 'corrupt_credentials');
+            throw new ErrorWithCode('Hibás jelszó.', 'corrupt_credentials');
 
         /**
          * Login user 
@@ -173,7 +173,7 @@ export class AuthenticationService {
             : userIdOrUser as User;
 
         if (user.companyId !== companyId)
-            throw new ErrorWithCode('User company differs from provided comapny id!', 'unauthorized');
+            throw new ErrorWithCode('A felhasználó nem ehhez a céghez tartozik.', 'unauthorized');
     }
 
     async loginUserInternallyAsync(userId: Id<'User'>) {
@@ -183,7 +183,7 @@ export class AuthenticationService {
             .getUserById(userId);
 
         if (!user)
-            throw new ErrorWithCode('User not found by id ' + userId, 'internal server error');
+            throw new ErrorWithCode('A felhasználó nem található a következő egyedi azonosító alapján: ' + userId, 'internal server error');
 
         // Save session activity
         await this
@@ -227,7 +227,7 @@ export class AuthenticationService {
                 .getUserRefreshTokenById(userId);
 
             if (!refreshTokenFromDb)
-                throw new ErrorWithCode(`User has no active token, or it's not the same as the one in request! User id '${userId}', active token '${refreshTokenFromDb}'`, 'forbidden');
+                throw new ErrorWithCode(`A felhasználó nem rendelkezik aktív tokennel, vagy a felhasználó tokenje eltér a lekérésben foglalttól. A felhasználó egyedi azonosítója: '${userId}', active token '${refreshTokenFromDb}'`, 'forbidden');
         }
 
         const tokens = await this

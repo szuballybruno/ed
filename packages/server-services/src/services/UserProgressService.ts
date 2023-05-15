@@ -1,5 +1,5 @@
 import { instantiate } from '@episto/commonlogic';
-import { Id } from '@episto/commontypes';
+import { ErrorWithCode, Id } from '@episto/commontypes';
 import { CourseProgressOverviewDTO, RecommendedItemQuotaDTO, UserActiveCourseDTO, UserCourseProgressChartDTO, UserProgressChartStep } from '@episto/communication';
 import { DateHelpers, PrincipalId } from '@episto/x-core';
 import { DailyProgressModel } from '../models/misc/DailyProgressModel';
@@ -44,48 +44,56 @@ export class UserProgressService extends ServiceBase {
             .mapTo(UserActiveCourseDTO, [views]);
     }
 
-    // /**
-    //  * Get user course progress dashboard obverview stats 
-    //  */
-    // async getCourseProgressOverviewAsync(principalId: PrincipalId, courseId: Id<'Course'>) {
+    /**
+     * Get user course progress dashboard obverview stats 
+     */
+    async getCourseProgressOverviewAsync(principalId: PrincipalId, courseId: Id<'Course'>) {
 
-    //     const userId = principalId
-    //         .getId();
+        const userId = principalId
+            .getId();
 
-    //     const {
-    //         tempomatMode,
-    //         requiredCompletionDate,
-    //         estimatedCompletionDate,
-    //         recommendedItemsPerDay,
-    //         recommendedItemsPerWeek
-    //     } = await this
-    //         ._tempomatService
-    //         .getTempomatValuesAsync(userId, courseId);
+        const tempomatValues = await this
+            ._tempomatService
+            .calculateTempomatValuesAsync(userId, courseId)
 
-    //     const currentDailyCompletedView = await this._ormService
-    //         .query(UserDailyCourseItemProgressView, { userId, courseId })
-    //         .where('userId', '=', 'userId')
-    //         .and('courseId', '=', 'courseId')
-    //         .and('isCurrent', 'IS', 'true')
-    //         .getOneOrNull();
+        if (!tempomatValues)
+            throw new ErrorWithCode('', 'internal server error')
 
-    //     const getCurrentWeeklyCompletedView = await this._ormService
-    //         .query(UserWeeklyCourseItemProgressView, { userId, courseId })
-    //         .where('userId', '=', 'userId')
-    //         .and('courseId', '=', 'courseId')
-    //         .and('isCurrent', 'IS', 'true')
-    //         .getOneOrNull();
+        const tempomatCalculationData = await this
+            ._tempomatService
+            .getTempomatCalculationDataAsync(userId, courseId)
 
-    //     return instantiate<CourseProgressOverviewDTO>({
-    //         tempomatMode,
-    //         deadlineDate: requiredCompletionDate,
-    //         estimatedCompletionDate,
-    //         recommendedItemsPerDay,
-    //         recommendedItemsPerWeek,
-    //         completedThisWeek: getCurrentWeeklyCompletedView?.completedItemCount ?? 0,
-    //         completedToday: currentDailyCompletedView?.completedItemCount ?? 0
-    //     });
-    // }
+        const {
+            previsionedCompletionDate,
+            requiredCompletionDate,
+            recommendedItemsPerDay,
+            recommendedItemsPerWeek
+        } = tempomatValues
+
+        const currentDailyCompletedView = await this._ormService
+            .query(UserDailyCourseItemProgressView, { userId, courseId })
+            .where('userId', '=', 'userId')
+            .and('courseId', '=', 'courseId')
+            .and('isCurrent', 'IS', 'true')
+            .getOneOrNull();
+
+        const getCurrentWeeklyCompletedView = await this._ormService
+            .query(UserWeeklyCourseItemProgressView, { userId, courseId })
+            .where('userId', '=', 'userId')
+            .and('courseId', '=', 'courseId')
+            .and('isCurrent', 'IS', 'true')
+            .getOneOrNull();
+
+        return instantiate<CourseProgressOverviewDTO>({
+            tempomatMode: tempomatCalculationData.tempomatMode,
+            deadlineDate: requiredCompletionDate,
+            estimatedCompletionDate: previsionedCompletionDate,
+            recommendedItemsPerDay,
+            recommendedItemsPerWeek,
+            completedThisWeek: getCurrentWeeklyCompletedView?.completedItemCount ?? 0,
+            completedToday: currentDailyCompletedView?.completedItemCount ?? 0
+        });
+    }
 
     async getRecommendedItemQuotaAsync(principalId: PrincipalId, courseId: Id<'Course'>) {
 

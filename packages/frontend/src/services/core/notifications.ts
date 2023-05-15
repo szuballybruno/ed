@@ -2,7 +2,7 @@ import { ReactNode, useCallback, useContext } from 'react';
 import { toast, ToastOptions, ToastPosition } from 'react-toastify';
 import { ErrorDialogContext } from '../../components/system/ErrorDialogFrame';
 
-export type NotificationType = 'error' | 'info' | 'warning';
+export type NotificationType = 'error' | 'info' | 'warning' | 'success';
 
 const defaultNotiProps = {
     position: 'bottom-right' as ToastPosition,
@@ -26,7 +26,7 @@ export const showNotification = (text: string, opt?: {
             : opt?.type === undefined
                 ? 2000
                 : 3000,
-        type: opt?.type === 'warning' ? 'warning' : 'info',
+        type: opt?.type,
         ...(opt?.options ?? {})
     });
 };

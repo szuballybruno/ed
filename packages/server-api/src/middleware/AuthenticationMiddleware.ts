@@ -58,7 +58,7 @@ export class AuthenticationMiddleware implements IXGatewayMiddlewareInstance<voi
 
             try {
                 if (!accessToken)
-                    throw new Error('Access token not found!');
+                    throw new ErrorWithCode('Az azonosításhoz szükséges token nem található.', 'forbidden');
 
                 // get userId from access token
                 const { userId } = this._authenticationService

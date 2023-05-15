@@ -56,7 +56,7 @@ export class PasswordChangeService {
             .getUserByEmailAsync(email);
 
         if (!user)
-            throw new ErrorWithCode('User does not exist with this email!', 'corrupt_credentials');
+            throw new ErrorWithCode('Nem létezik felhasználó a megadott e-mail címmel.', 'corrupt_credentials');
 
         const token = this
             ._tokenService
@@ -96,7 +96,7 @@ export class PasswordChangeService {
             .getUserById(userId);
 
         if (!await this._hashService.comparePasswordAsync(oldPassword, user.password!))
-            throw new ErrorWithCode('Wrong password!', 'bad request');
+            throw new ErrorWithCode('Hibás jelszó!', 'bad request');
 
         await this._ormService
             .save(User, {
@@ -124,7 +124,7 @@ export class PasswordChangeService {
 
         // verify new password with compare password 
         if (getPassowrdValidationError(password, passwordCompare))
-            throw new ErrorWithCode('Password is invalid.', 'bad request');
+            throw new ErrorWithCode('Hibás jelszó!', 'bad request');
 
         // verify token
         const tokenPayload = this._tokenService
@@ -138,7 +138,7 @@ export class PasswordChangeService {
 
         // verify user reset password token
         if (user.resetPasswordToken !== passwordResetToken)
-            throw new ErrorWithCode('Wrong token.', 'bad request');
+            throw new ErrorWithCode('Hibás token!', 'bad request');
 
         // hash new password
         const hashedPassword = await this._hashService

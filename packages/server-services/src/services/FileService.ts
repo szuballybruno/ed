@@ -27,7 +27,7 @@ export class FileService {
 
         //TODO: Create a validation function
         if (!['image/png', 'image/jpeg'].includes(file.mimetype))
-            throw new ErrorWithCode('File upload failed: Only jpeg or png', 'bad request');
+            throw new ErrorWithCode('Feltöltés sikertelen: Kizárólat jpeg vagy png formátum megengedett.', 'bad request');
 
         await this
             .uploadAssigendFileAsync({

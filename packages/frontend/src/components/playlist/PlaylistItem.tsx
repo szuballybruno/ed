@@ -111,7 +111,7 @@ export const PlaylistItem = (
                             color: 'var(--intenseOrange)'
                         }} />}
 
-                {(type === 'exam' && correctAnswerRate)
+                {(type === 'exam' && correctAnswerRate !== null)
                     && <ChipSmall text={correctAnswerRate + '%'} />}
             </EpistoFlex2>
             }>

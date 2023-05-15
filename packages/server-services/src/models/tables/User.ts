@@ -61,8 +61,5 @@ export class User {
     departmentId: Id<'Department'> | null;
 
     @XViewColumn()
-    isSurveyRequired: boolean;
-
-    @XViewColumn()
     registrationStatus: string;
 }

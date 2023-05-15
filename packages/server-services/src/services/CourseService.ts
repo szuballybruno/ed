@@ -298,7 +298,7 @@ export class CourseService {
             .getOneOrNull()
 
         if (!(hasPermissionByCompany || hasPermissionByUser))
-            throw new ErrorWithCode('no permission')
+            throw new ErrorWithCode('A felhasználónak nincs engedélye a kurzus adatainak szerkesztéséhez.', 'no permission')
 
         // get course
         const view = await this._ormService

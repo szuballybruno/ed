@@ -1,29 +1,35 @@
-SELECT 
-    rns.user_id,
-    rns.exam_id,
-    rns.exam_version_id,
-    rns.answer_session_id,
-    rns.exam_score,
-    rns.is_highest_score
-FROM 
+WITH highest_exam_score AS 
 (
-    SELECT
-        esv.user_id,
-        ev.exam_id,
-        ev.id exam_version_id,
-        esv.answer_session_id,
-        esv.exam_score,
-        ROW_NUMBER() OVER (
-            PARTITION BY 
-                esv.user_id,
-                ev.exam_id 
-            ORDER BY 
-                esv.exam_score DESC
-        ) = 1 is_highest_score
-    FROM public.exam_score_view esv
+	SELECT
+		esv.user_id,
+		ev.exam_id,
+		ev.id exam_version_id,
+		esv.answer_session_id,
+		esv.exam_score,
+		ROW_NUMBER() OVER (
+			PARTITION BY 
+				esv.user_id,
+				ev.exam_id,
+				ev.id
+			ORDER BY 
+				esv.exam_score DESC
+		) = 1 is_highest_score
+	FROM public.exam_score_view esv
 
-    LEFT JOIN public.exam_version ev
-    ON ev.id = esv.exam_version_id 
-) rns 
+	INNER JOIN public.latest_exam_view lev
+	ON lev.exam_version_id = esv.exam_version_id
+	
+	LEFT JOIN public.exam_version ev
+	ON ev.id = lev.exam_version_id
+)
 
-WHERE rns.is_highest_score
+SELECT 
+    hes.user_id,
+    hes.exam_id,
+    hes.exam_version_id,
+    hes.answer_session_id,
+    hes.exam_score,
+    hes.is_highest_score
+FROM highest_exam_score hes
+
+WHERE hes.is_highest_score

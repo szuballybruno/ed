@@ -2,7 +2,7 @@ import { CourseItemStateType, CourseModeType, Id } from '@episto/commontypes';
 import { useEffect } from 'react';
 import { CourseApiService } from '../../../services/api/courseApiService';
 import { useTempomatMode } from '../../../services/api/tempomatApiService';
-import { useCourseProgressOverview } from '../../../services/api/userProgressApiService';
+import { useRecommendedItemQuota } from '../../../services/api/userProgressApiService';
 import { useShowErrorDialog } from '../../../services/core/notifications';
 import { coalesce } from '../../../static/frontendHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
@@ -46,22 +46,20 @@ export const CourseItemSelector = ({
     const showErrorDialog = useShowErrorDialog();
 
     // http
-    const { courseProgressOverviewData, refetchRecommendedItemQuota } = useCourseProgressOverview(courseId);
+    const { recommendedItemQuota, refetchRecommendedItemQuota } = useRecommendedItemQuota(courseId);
     const { tempomatMode, refetchTempomatMode } = useTempomatMode(courseId, isVideoReady);
     const { setCourseModeAsync } = CourseApiService.useSetCourseMode();
     const { scroll, disableAutoScroll, enableAutoScroll } = useScrollIntoView();
 
     const {
         completedToday,
-        deadlineDate,
+        isDeadlineSet,
         recommendedItemsPerDay
-    } = coalesce(courseProgressOverviewData, {
-        deadlineDate: null,
+    } = coalesce(recommendedItemQuota, {
+        isDeadlineSet: false,
         completedToday: 0,
         recommendedItemsPerDay: 0
     });
-
-    const isDeadlineSet = !!deadlineDate;
 
     // dialog state
     const dialogLogic = useEpistoDialogLogic('advModeChangWarnDialog');

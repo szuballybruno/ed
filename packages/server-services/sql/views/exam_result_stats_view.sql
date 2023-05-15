@@ -36,6 +36,7 @@ answer_session_lengths AS
 
 	WHERE asv.start_date IS NOT NULL
 	AND asv.end_date IS NOT NULL
+	AND EXTRACT(EPOCH FROM (asv.end_date::time - asv.start_date::time))::double precision > 0
 ),
 avg_exam_score_per_company_cte AS
 (
@@ -74,9 +75,9 @@ SELECT
 	u.id user_id,
 	ev.id exam_version_id,
 	ase.id answer_session_id,
-	fcaq.fully_correctly_answered_questions_count,
+	COALESCE(fcaq.fully_correctly_answered_questions_count, 0) fully_correctly_answered_questions_count,
     qc.question_count question_count,
-	asl.length_seconds::int exam_length_seconds,
+	COALESCE(asl.length_seconds::int, 0) exam_length_seconds,
 	esv.score_percentage,
 	esv.exam_score,
 	esv.exam_max_score,
@@ -109,7 +110,7 @@ LEFT JOIN fully_correctly_answered_questions fcaq
 ON fcaq.answer_session_id = ase.id
 
 LEFT JOIN question_count qc
-ON qc.exam_version_id = ase.id
+ON qc.exam_version_id = ase.exam_version_id
 
 LEFT JOIN public.exam_score_view esv
 ON esv.answer_session_id = ase.id

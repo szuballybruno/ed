@@ -14,8 +14,7 @@ export const UserOverviewStats = () => {
             value: '3.5',
             suffix: 'óra',
             iconPath: Environment.getAssetUrl('images/teacherdashboardstatistic2.png'),
-            isOpenByDefault: false,
-            isPreview: true
+            isOpenByDefault: false
         },
         /* Average time spent per sessions */
         {
@@ -23,8 +22,7 @@ export const UserOverviewStats = () => {
             value: '38',
             suffix: 'perc',
             iconPath: Environment.getAssetUrl('images/teacherdashboardstatistic4.png'),
-            isOpenByDefault: false,
-            isPreview: true
+            isOpenByDefault: false
         },
         /* Dropout rate */
         {
@@ -32,8 +30,7 @@ export const UserOverviewStats = () => {
             value: '12',
             suffix: '%',
             iconPath: Environment.getAssetUrl('images/teacherdashboardstatistic7.png'),
-            isOpenByDefault: false,
-            isPreview: true
+            isOpenByDefault: false
         },
         /* Dropout rate */
         {
@@ -41,15 +38,14 @@ export const UserOverviewStats = () => {
             value: 0,
             suffix: 'esetben',
             iconPath: Environment.getAssetUrl('/images/teacherdashboard3.png'),
-            isOpenByDefault: false,
-            isPreview: true
+            isOpenByDefault: false
         },
     ], []);
 
     return (
         <AdminStatGroup
             id={UserOverviewStats.name}
-            title="Felhasznalok statisztikaja"
+            title="Felhasználók statisztikája"
             padding="0"
             background="white">
 

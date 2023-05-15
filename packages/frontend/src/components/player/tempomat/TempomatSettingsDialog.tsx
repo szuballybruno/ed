@@ -106,7 +106,7 @@ export const TempomatSettingsDialog = (props: {
                                 fontWeight: 600
                             }}>
 
-                            {Formatters.formatDate(estimatedCompletionDate)}
+                            {estimatedCompletionDate ? Formatters.formatDate(estimatedCompletionDate) : 'Ismeretlen'}
                         </EpistoFont>
                     </EpistoFlex2>
                 </EpistoFlex2>

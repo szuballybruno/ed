@@ -16,6 +16,9 @@ export class UserFeatureView {
     courseId: Id<'Course'>;
 
     @XViewColumn()
+    isDeassigning: boolean;
+
+    @XViewColumn()
     featureId: Id<'Feature'>;
 
     @XViewColumn()

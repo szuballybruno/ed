@@ -26,23 +26,26 @@ export const AdminUserExamsDataGridControl = (props: {
 
     const getRowKey = useCallback((row: Partial<UserExamStatsDTO>) => `${row.examId}`, []);
 
-    const getRowsFromExams = () => userExams.map((exam) => {
-        return {
-            userId: exam.userId,
-            examId: exam.examId,
-            examTitle: exam.examTitle,
-            courseId: exam.courseId,
-            answerSessionId: exam.answerSessionId,
-            correctAnswerRate: exam.correctAnswerRate,
-            shouldPractiseExam: exam.shouldPractiseExam,
-            correctAnswerCount: exam.correctAnswerCount,
-            examLengthSeconds: exam.examLengthSeconds,
-            lastCompletionDate: exam.lastCompletionDate,
-            averageReactionTime: exam.averageReactionTime,
-        } as Partial<UserExamStatsDTO>;
-    });
+    const getRowsFromExams = () => userExams
+        .map((exam) => {
+            return {
+                userId: exam.userId,
+                examId: exam.examId,
+                examTitle: exam.examTitle,
+                courseId: exam.courseId,
+                answerSessionId: exam.answerSessionId,
+                correctAnswerRate: exam.correctAnswerRate,
+                shouldPractiseExam: exam.shouldPractiseExam,
+                correctAnswerCount: exam.correctAnswerCount,
+                examLengthSeconds: exam.examLengthSeconds,
+                lastCompletionDate: exam.lastCompletionDate,
+                averageReactionTime: exam.averageReactionTime,
+            } as Partial<UserExamStatsDTO>;
+        });
 
     const rows: Partial<UserExamStatsDTO>[] = getRowsFromExams();
+
+    console.log(rows);
 
     const columnDefGen = <TField extends keyof Partial<UserExamStatsDTO & { moreDetails: string }>>(
         field: TField,

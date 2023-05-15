@@ -22,7 +22,7 @@ exam_elapsed_time_cte AS
 
 	WHERE asev.answer_session_type = 'exam'
 	AND cicv.completion_date IS NOT NULL
-
+	
 	GROUP BY asev.user_id, cv.course_id
 ),
 video_watch_elapsed_time_cte AS
@@ -163,6 +163,8 @@ AND pqetc.course_id = co.id
 LEFT JOIN spent_time_sum_view_cte stsvc
 ON stsvc.user_id = u.id
 AND stsvc.course_id = co.id
+
+WHERE stsvc.total_exam_session_elapsed_time >= 0
 
 ORDER BY 
 	u.id,

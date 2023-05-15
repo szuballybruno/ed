@@ -37,8 +37,5 @@ export class Company {
     coverFileId: Id<'StorageFile'> | null;
 
     @XViewColumn()
-    isSurveyRequired: boolean;
-
-    @XViewColumn()
     productionDomainPrefix: string;
 }

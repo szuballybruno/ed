@@ -1,13 +1,12 @@
+import { CompanyEditDataDTO } from '@episto/communication';
 import { Save } from '@mui/icons-material';
 import { memo, useCallback, useEffect } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { CompanyApiService } from '../../../services/api/CompanyApiService';
 import { showNotification } from '../../../services/core/notifications';
-import { CompanyEditDataDTO } from '@episto/communication';
 import { usePostCallback, useStateObject } from '../../../static/frontendHelpers';
 import { useRouteParams_OLD } from '../../../static/locationHelpers';
-import { EpistoCheckbox } from '../../controls/EpistoCheckbox';
-import { EpistoCheckboxLabel } from '../../controls/EpistoCheckboxLabel';
+import { translatableTexts } from '../../../static/translatableTexts';
 import { EpistoColorPicker } from '../../controls/EpistoColorPicker';
 import { EpistoEntry } from '../../controls/EpistoEntry';
 import { useSetBusy } from '../../system/LoadingFrame/BusyBarContext';
@@ -34,8 +33,7 @@ export const CompanyAdminEditPage = memo(({ onNameLoaded }: CompanyAdminEditPage
         primaryColor,
         secondaryColor,
         logoFile,
-        coverFile,
-        isSurveyRequired
+        coverFile
     }, setState] = useStateObject({
         ...{
             name: '',
@@ -45,8 +43,7 @@ export const CompanyAdminEditPage = memo(({ onNameLoaded }: CompanyAdminEditPage
             logoUrl: '',
             secondaryColor: '',
             primaryColor: '',
-            backdropColor: '',
-            isSurveyRequired: true
+            backdropColor: ''
         } as CompanyEditDataDTO,
         ...{
             logoFile: null as File | null,
@@ -72,8 +69,7 @@ export const CompanyAdminEditPage = memo(({ onNameLoaded }: CompanyAdminEditPage
         primaryColor,
         secondaryColor,
         logoFile,
-        coverFile,
-        isSurveyRequired
+        coverFile
     }), [
         saveCompanyAsync,
         companyId,
@@ -84,11 +80,10 @@ export const CompanyAdminEditPage = memo(({ onNameLoaded }: CompanyAdminEditPage
         primaryColor,
         secondaryColor,
         logoFile,
-        coverFile,
-        isSurveyRequired
+        coverFile
     ]);
 
-    const handleSaveCompanyAsync = usePostCallback(saveCompanyAsyncWithData, [() => showNotification('Sikeresen mentve!')]);
+    const handleSaveCompanyAsync = usePostCallback(saveCompanyAsyncWithData, [() => showNotification('Sikeresen mentve!', { type: 'success' })]);
 
     /**
      * set state from loaded data
@@ -119,19 +114,19 @@ export const CompanyAdminEditPage = memo(({ onNameLoaded }: CompanyAdminEditPage
             }}
             headerButtons={[
                 {
-                    title: 'Save',
+                    title: translatableTexts.misc.save,
                     icon: <Save></Save>,
                     action: handleSaveCompanyAsync
                 }
             ]}>
 
             <EpistoEntry
-                label="Short name"
+                label="Cég rövid neve"
                 value={name}
                 setValue={x => setState(state => state.name = x)} />
 
             <EpistoEntry
-                label="Legal name"
+                label="Cég teljes neve"
                 value={legalName}
                 setValue={x => setState(state => state.legalName = x)} />
 
@@ -139,14 +134,6 @@ export const CompanyAdminEditPage = memo(({ onNameLoaded }: CompanyAdminEditPage
                 label="Domain"
                 value={domain}
                 setValue={x => setState(state => state.domain = x)} />
-
-            <EpistoCheckboxLabel
-                label='Is survey required'>
-
-                <EpistoCheckbox
-                    value={isSurveyRequired}
-                    setValue={x => setState(state => state.isSurveyRequired = x)} />
-            </EpistoCheckboxLabel>
 
             <EpistoColorPicker
                 width="200px"

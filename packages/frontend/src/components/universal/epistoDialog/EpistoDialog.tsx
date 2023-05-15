@@ -64,6 +64,7 @@ export const EpistoDialog = <TParams = any>({
             background="rgba(255,255,255,0.8)"
             backdropFilter="blur(10px)"
             borderRadius="7px"
+            minWidth='300px'
             boxShadow="0px 0px 30px 0px rgb(0 0 0 / 20%)">
 
             {title && <EpistoHeader

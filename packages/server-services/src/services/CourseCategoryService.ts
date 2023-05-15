@@ -165,7 +165,7 @@ export class CourseCategoryService {
             const conflictingCourseTitles = conflictingCourses
                 .map(x => x.title)
 
-            return new ErrorWithCode('Cannot delete course category, because it\'s conflicting with the following courses: ' + conflictingCourseTitles.map(x => x), 'internal server error')
+            throw new ErrorWithCode('A kategória törlése sikertelen, mivel az alábbi kurzus(ok)hoz hozzá van rendelve: ' + conflictingCourseTitles.map(x => x), 'internal server error')
         }
 
         const deletableBridges = await this._ormService
@@ -188,10 +188,17 @@ export class CourseCategoryService {
             const conflictingCompanyIds = conflictingCompanies
                 .map(x => x.companyId)
 
-            return new ErrorWithCode('Cannot delete course category, because it\'s referenced with the following companies: ' + conflictingCompanyIds.map(x => x), 'internal server error')
+            throw new ErrorWithCode('A kategória törlése sikertelen, mivel az alábbi cég(ek)hez hozzá van rendelve: ' + conflictingCompanyIds.map(x => x), 'internal server error')
         }
 
-        await this._ormService
-            .hardDelete(CourseCategory, [courseCategoryId]);
+        try {
+
+            await this._ormService
+                .hardDelete(CourseCategory, [courseCategoryId]);
+        } catch (e) {
+
+            console.error(e)
+            throw new ErrorWithCode('A kategória törlése sikertelen, mivel feltehetőleg egy kurzus tartozik hozzá.', 'internal server error')
+        }
     }
 }

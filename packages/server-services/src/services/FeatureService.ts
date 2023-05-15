@@ -1,17 +1,17 @@
 import { CompanyFeatureDTO, CourseFeatureDTO, FeatureDTO, Mutation } from '@episto/communication';
 import { Id, PrincipalId } from '@episto/x-core';
+import { ClassType } from '../models/misc/ClassType';
 import { Feature } from '../models/tables/Feature';
 import { FeatureAssignmentBridge } from '../models/tables/FeatureAssignmentBridge';
-import { Permission } from '../models/tables/Permission';
+import { User } from '../models/tables/User';
+import { CompanyFeatureView } from '../models/views/CompanyFeatureView';
+import { CourseFeatureView } from '../models/views/CourseFeatureView';
 import { UserFeatureView } from '../models/views/UserFeatureView';
+import { InsertEntity } from '../utilities/misc';
 import { CompanyService } from './CompanyService';
 import { MapperService } from './MapperService';
-import { QueryServiceBase } from './misc/ServiceBase';
 import { ORMConnectionService } from './ORMConnectionService';
-import { CompanyFeatureView } from '../models/views/CompanyFeatureView';
-import { InsertEntity } from '../utilities/misc';
-import { ClassType } from '../models/misc/ClassType';
-import { CourseFeatureView } from '../models/views/CourseFeatureView';
+import { QueryServiceBase } from './misc/ServiceBase';
 
 export class FeatureService extends QueryServiceBase<Feature> {
 
@@ -29,15 +29,35 @@ export class FeatureService extends QueryServiceBase<Feature> {
 
     async checkFeatureAsync(principalId: PrincipalId, dto: FeatureDTO) {
 
+        //console.log('dto');
+        //console.log(dto);
+
         const type = await this
             ._getFeatureTypeAsync(dto.featureCode);
 
-        const companyId = await this
+        const user = await this._ormService
+            .query(User, { userId: dto.userId || principalId.getId() })
+            .where('id', '=', 'userId')
+            .getSingle();
+
+        const userCompanyId = user.companyId;
+
+        const principalCompanyId = await this
             ._companyService
             .getPrincipalCompanyId(principalId);
 
-        console.log('companyId: ' + companyId);
-        console.log('dto: ' + JSON.stringify(dto));
+        const usedCompanyId = (() => {
+
+            if (dto.userId)
+                return userCompanyId;
+
+            if (dto.companyId)
+                return dto.companyId;
+
+            return principalCompanyId;
+        })()
+
+        //console.log(usedCompanyId);
 
         if (type === 'COURSE' && dto.courseId === null)
             throw new Error('This feature is course specific but the courseId is missing');
@@ -51,24 +71,61 @@ export class FeatureService extends QueryServiceBase<Feature> {
         if (type === 'SHOP_ITEM' && dto.shopItemId === null)
             throw new Error('This feature is shop item specific but the shopItemId is missing');
 
-        const isEnabled = await this._ormService
+        const isEnabledByCompany = await this._ormService
             .query(UserFeatureView, {
-                userId: principalId,
                 featureCode: dto.featureCode,
-                companyId,
+                companyId: usedCompanyId,
+            })
+            .where('featureCode', '=', 'featureCode')
+            .and('companyId', '=', 'companyId')
+            .getOneOrNull();
+
+        //console.log('isencom');
+        console.log('Enabled by company: ' + !!isEnabledByCompany);
+
+        const isEnabledByUser = await this._ormService
+            .query(UserFeatureView, {
+                userId: dto.userId ? dto.userId : principalId,
+                featureCode: dto.featureCode
+            })
+            .where('featureCode', '=', 'featureCode')
+            .and('userId', '=', 'userId')
+            .and('isDeassigning', 'IS NOT', 'true')
+            .getOneOrNull();
+
+        console.log('Enabled by user: ' + !!isEnabledByUser);
+
+        const isDeassignedAtUserLevel = await this._ormService
+            .query(UserFeatureView, {
+                userId: dto.userId ? dto.userId : principalId,
+                featureCode: dto.featureCode
+            })
+            .where('featureCode', '=', 'featureCode')
+            .and('userId', '=', 'userId')
+            .and('isDeassigning', 'IS', 'true')
+            .getOneOrNull();
+
+        //console.log('isenus');
+        console.log('Deassigned at user level: ' + !!isDeassignedAtUserLevel);
+
+        const isEnabledByItem = await this._ormService
+            .query(UserFeatureView, {
+                featureCode: dto.featureCode,
                 courseId: dto.courseId || -1
             })
             .where('featureCode', '=', 'featureCode')
-            .openBracket()
-            .and('userId', '=', 'userId')
-            .or('companyId', '=', 'companyId')
             .or('courseId', '=', 'courseId')
-            .closeBracket()
             .getOneOrNull();
 
-        console.log('isEnabled: ' + JSON.stringify(isEnabled));
+        console.log('Enabled by item: ' + !!isEnabledByItem);
 
-        return !!isEnabled;
+        if (isDeassignedAtUserLevel) {
+
+            console.log('Enabled by company, but disabled by user');
+            return false;
+        }
+
+        return !!(isEnabledByCompany || isEnabledByUser || isEnabledByItem);
 
     }
 
@@ -153,7 +210,8 @@ export class FeatureService extends QueryServiceBase<Feature> {
                 courseId: null,
                 examId: null,
                 shopItemId: null,
-                videoId: null
+                videoId: null,
+                isDeassigning: null
             })
         });
 
@@ -240,7 +298,8 @@ export class FeatureService extends QueryServiceBase<Feature> {
                 companyId: null,
                 examId: null,
                 shopItemId: null,
-                videoId: null
+                videoId: null,
+                isDeassigning: false
             })
         });
 

@@ -1,5 +1,6 @@
 import { CompanyCourseCategoriesDTO } from '@episto/communication';
 import { Id } from '@episto/x-core';
+import { Delete } from '@mui/icons-material';
 import { useEffect } from 'react';
 import { applicationRoutes } from '../../../configuration/applicationRoutes';
 import { CourseCategoryApiService } from '../../../services/api/CourseCategoryApiService';
@@ -7,14 +8,13 @@ import { showNotification } from '../../../services/core/notifications';
 import { EpistoIcons } from '../../../static/EpistoIcons';
 import { useRouteParams_OLD } from '../../../static/locationHelpers';
 import { translatableTexts } from '../../../static/translatableTexts';
+import { EpistoButton } from '../../controls/EpistoButton';
 import { EpistoCheckbox } from '../../controls/EpistoCheckbox';
 import { EpistoDataGrid, EpistoDataGridColumnBuilder } from '../../controls/EpistoDataGrid';
 import { IXMutatorFunctions } from '../../lib/XMutator/XMutatorCore';
 import { useXMutatorNew } from '../../lib/XMutator/XMutatorReact';
 import { useSetBusy } from '../../system/LoadingFrame/BusyBarContext';
 import { AdminSubpageHeader } from '../AdminSubpageHeader';
-import { EpistoButton } from '../../controls/EpistoButton';
-import { Delete } from '@mui/icons-material';
 
 type RowType = CompanyCourseCategoriesDTO;
 
@@ -109,33 +109,61 @@ export const CompanyAdminCourseCategoriesPage = () => {
 
     const save = async () => {
 
-        await saveCompanyCourseCategoriesAsync({ companyId, mutations: mutatorState.mutations });
+        try {
 
-        showNotification('Saved');
+            await saveCompanyCourseCategoriesAsync({ companyId, mutations: mutatorState.mutations });
+        } catch (e: any) {
+
+            return showNotification(e?.message || 'Hozzárendelés mentése sikertelen', {
+                type: 'error'
+            });
+        }
+
+        showNotification('Hozzárendelés mentése sikeres', {
+            type: 'success'
+        });
 
         await refetchCompanyCourseCategoriesResults();
     };
 
     const createCourseCategory = async () => {
 
-        await createCourseCategoryAsync({
-            name: 'Új kategória',
-            parentCategoryId: undefined
-        });
+        try {
+            await createCourseCategoryAsync({
+                name: 'Új kategória',
+                parentCategoryId: undefined
+            });
+        } catch (e: any) {
 
-        showNotification('Új kategória hozzáadva');
+            return showNotification(e?.message || 'Kategória hozzáadása sikertelen', {
+                type: 'error'
+            });
+        }
+
+        showNotification('Új kategória hozzáadva', {
+            type: 'success'
+        });
 
         await refetchCompanyCourseCategoriesResults();
     };
 
     const deleteCourseCategory = async (courseCategoryId: Id<'CourseCategory'>, companyId: Id<'Company'>) => {
 
-        await deleteCourseCategoryAsync({
-            courseCategoryId,
-            companyId
-        });
+        try {
+            await deleteCourseCategoryAsync({
+                courseCategoryId,
+                companyId
+            });
+        } catch (e: any) {
 
-        showNotification('Kategória sikeresen törölve');
+            return showNotification(e?.message || 'Kategória törlése sikertelen', {
+                type: 'error'
+            });
+        }
+
+        showNotification('Kategória sikeresen törölve', {
+            type: 'success'
+        });
 
         await refetchCompanyCourseCategoriesResults();
     };

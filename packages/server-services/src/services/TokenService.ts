@@ -104,7 +104,7 @@ export class TokenService {
         const payload = JsonWebToken.verify(token, secret) as any as TTokenPayload;
 
         if (!payload)
-            throw new ErrorWithCode('Token verification failed!', 'forbidden');
+            throw new ErrorWithCode('A token ellenőrzése sikertelen!', 'forbidden');
 
         return payload;
     };

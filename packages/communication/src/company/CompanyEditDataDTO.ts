@@ -11,5 +11,4 @@ export class CompanyEditDataDTO {
     isCustomDomainCompany: boolean;
     logoUrl: string | null;
     coverUrl: string | null;
-    isSurveyRequired: boolean;
 }

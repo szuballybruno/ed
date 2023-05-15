@@ -1,6 +1,6 @@
 import { instantiate } from '@episto/commonlogic';
 import { ErrorWithCode, Id, InvertedLagBehindRatingType, OverallScoreRatingType, UserRegistrationStatusType } from '@episto/commontypes';
-import { BriefUserDataDTO, DepartmentDTO, Mutation, UserAdminListDTO, UserControlDropdownDataDTO, AdminUserCourseDTO, UserDTO, UserEditReadDTO, UserEditSaveDTO, UserEditSimpleDTO } from '@episto/communication';
+import { AdminUserCourseDTO, BriefUserDataDTO, DepartmentDTO, Mutation, UserAdminListDTO, UserControlDropdownDataDTO, UserDTO, UserEditReadDTO, UserEditSaveDTO, UserEditSimpleDTO } from '@episto/communication';
 import { PrincipalId } from '@episto/x-core';
 import { RegistrationType } from '../models/misc/Types';
 import { AnswerSession } from '../models/tables/AnswerSession';
@@ -11,23 +11,28 @@ import { StorageFile } from '../models/tables/StorageFile';
 import { TeacherInfo } from '../models/tables/TeacherInfo';
 import { User } from '../models/tables/User';
 import { UserCourseBridge } from '../models/tables/UserCourseBridge';
-import { AdminUserListView } from '../models/views/AdminUserListView';
 import { TempomatCalculationDataView } from '../models/views/TempomatCalculationDataView';
 import { UserOverviewView } from '../models/views/UserOverviewView';
 import { UserPerformanceComparisonStatsView } from '../models/views/UserPerformanceComparisonStatsView';
 import { UserPerformanceView } from '../models/views/UserPerformanceView';
-import { getFullName, mergeArraysByKey } from '../utilities/helpers';
+import { getFullName } from '../utilities/helpers';
 import { InsertEntity } from '../utilities/misc';
 import { AuthorizationService } from './AuthorizationService';
 import { HashService } from './HashService';
 import { MapperService } from './MapperService';
-import { UserLagbehindStatType } from './misc/types';
 import { ORMConnectionService } from './ORMConnectionService';
 import { RoleService } from './RoleService';
 import { TeacherInfoService } from './TeacherInfoService';
 import { TempomatService } from './TempomatService';
 import { UserCourseBridgeService } from './UserCourseBridgeService';
 import { UserStatsService } from './UserStatsService';
+import { UserLagbehindStatType } from './misc/types';
+import { SignupService } from './SignupService';
+import { FeatureService } from './FeatureService';
+import { FeatureAssignmentBridge } from '../models/tables/FeatureAssignmentBridge';
+import { Feature } from '../models/tables/Feature';
+import { LoggerService } from './LoggerService';
+import { UserFeatureView } from '../models/views/UserFeatureView';
 
 interface UserFlagCalculationType extends UserPerformanceComparisonStatsView {
     userProductivity: number,
@@ -61,7 +66,9 @@ export class UserService {
         private _authorizationService: AuthorizationService,
         private _userCourseBridgeService: UserCourseBridgeService,
         private _tempomatService: TempomatService,
-        private _userStatsService: UserStatsService) {
+        private _userStatsService: UserStatsService,
+        private _signupService: SignupService,
+        private _featureService: FeatureService) {
     }
 
     /**
@@ -351,6 +358,14 @@ export class UserService {
             ._roleService
             .getUserRolesAsync(principalId, editedUserId);
 
+        const isSurveyRequired = await this._featureService
+            .checkFeatureAsync(principalId, {
+                userId: editedUserId!,
+                featureCode: 'SIGNUP_SURVEY'
+            })
+
+        console.log('isSurveyRequired: ' + isSurveyRequired);
+
         return instantiate<UserEditReadDTO>({
             userId: editedUserId,
             firstName: res.firstName,
@@ -359,8 +374,8 @@ export class UserService {
             isTeacher: !!res.teacherInfoId,
             departmentId: res.departmentId,
             companyId: res.companyId,
-            roleIds: userRoles.map(x => x.roleId),
-            isSurveyRequired: res.isSurveyRequired
+            isSurveyRequired: isSurveyRequired,
+            roleIds: userRoles.map(x => x.roleId)
         });
     }
 
@@ -395,16 +410,94 @@ export class UserService {
                 firstName,
                 email,
                 companyId,
-                departmentId,
-                isSurveyRequired
+                departmentId
             });
 
         // save teacher info
         await this.saveTeacherInfoAsync(userId, isTeacher);
 
+        await this._saveIsSurveyRequiredForUser(principalId, userId, isSurveyRequired)
+
         // save auth items
         await this._roleService
             .saveUserRolesAsync(principalId, userId, assignedRoleIds);
+    }
+
+    private async _saveIsSurveyRequiredForUser(principalId: PrincipalId, userId: Id<'User'>, isSurveyRequired: boolean) {
+
+        const user = await this._ormService
+            .query(User, { userId })
+            .where('id', '=', 'userId')
+            .getSingle();
+
+        const companyId = user.companyId;
+
+        const isSurveyEnabledForUsersCompany = await this._ormService
+            .query(UserFeatureView, {
+                featureCode: 'SIGNUP_SURVEY',
+                companyId: companyId,
+            })
+            .where('featureCode', '=', 'featureCode')
+            .and('companyId', '=', 'companyId')
+            .getOneOrNull();
+
+        if (!isSurveyEnabledForUsersCompany)
+            throw new ErrorWithCode('A regisztrációs kérdőív ki van kapcsolva a megadott felhasználó cégénél.', 'bad request')
+
+        const isSurveyEnabledForUser = await this._featureService
+            .checkFeatureAsync(principalId, {
+                userId,
+                featureCode: 'SIGNUP_SURVEY'
+            })
+
+        //console.log('isSurveyEnabledForUser ' + isSurveyEnabledForUser)
+
+        const saveFeatureAssignmentForUser = async (userId: Id<'User'>, isDeassigning: boolean) => {
+
+            console.log('Saving feature assignment');
+
+            const feature = await this._ormService
+                .query(Feature, { featureCode: 'SIGNUP_SURVEY' })
+                .where('code', '=', 'featureCode')
+                .getSingle();
+
+            const featureAssignmentBridge = await this._ormService
+                .query(FeatureAssignmentBridge, { featureId: feature.id, userId })
+                .where('userId', '=', 'userId')
+                .and('featureId', '=', 'featureId')
+                .getOneOrNull()
+
+            if (!featureAssignmentBridge) {
+                return this._ormService
+                    .createAsync(FeatureAssignmentBridge, {
+                        userId: userId,
+                        featureId: feature.id,
+                        isDeassigning: isDeassigning,
+                        companyId: null,
+                        courseId: null,
+                        examId: null,
+                        shopItemId: null,
+                        videoId: null
+                    })
+            }
+
+            await this._ormService
+                .save(FeatureAssignmentBridge, {
+                    id: featureAssignmentBridge.id,
+                    isDeassigning: isDeassigning
+                })
+        }
+
+        if (isSurveyEnabledForUser === true && isSurveyRequired === false) {
+
+            return saveFeatureAssignmentForUser(userId, true)
+        }
+
+        if (isSurveyEnabledForUser === false && isSurveyRequired === true) {
+
+            return saveFeatureAssignmentForUser(userId, false)
+        }
+
     }
 
     /**
@@ -505,7 +598,6 @@ export class UserService {
         companyId,
         departmentId,
         invitationToken,
-        isSurveyRequired,
         unhashedPassword,
         registrationType,
         username,
@@ -517,7 +609,6 @@ export class UserService {
         companyId: Id<'Company'>,
         departmentId: Id<'Department'>,
         invitationToken: string | null,
-        isSurveyRequired: boolean,
         unhashedPassword: string,
         registrationType: RegistrationType,
         registrationState: UserRegistrationStatusType,
@@ -544,8 +635,7 @@ export class UserService {
                 refreshToken: null,
                 resetPasswordToken: null,
                 userDescription: null,
-                username,
-                isSurveyRequired
+                username
             });
     }
 
@@ -557,7 +647,7 @@ export class UserService {
         // check if user already exists with email
         const existingUser = await this.getUserByEmailAsync(user.email);
         if (existingUser)
-            throw new ErrorWithCode('User already exists. Email: ' + user.email, 'email_taken');
+            throw new ErrorWithCode('Már létezik felhasználó a(z) ' + user.email + ' e-mail címmel.', 'email_taken');
 
         // check username 
         await this
@@ -565,7 +655,7 @@ export class UserService {
 
         // hash user password
         if (!user.password)
-            throw new Error('Password no found!');
+            throw new ErrorWithCode('Nem volt jelszó megadva!', 'corrupt_credentials');
 
         const hashedPassword = await this
             ._hashService
@@ -651,7 +741,7 @@ export class UserService {
             .getMany();
 
         if (connectedCourses.length > 0)
-            throw new ErrorWithCode('Cannot delete user when it\'s set as teacher on undeleted courses!', 'bad request');
+            throw new ErrorWithCode('A felhasználó nem törölhető, mert valószínűleg be van állítva tanárnak bizonyos kurzusoknál.', 'bad request');
 
         return this._ormService
             .softDelete(User, [deletedUserId]);
@@ -952,7 +1042,7 @@ export class UserService {
             .getOneOrNull();
 
         if (user)
-            throw new ErrorWithCode('Username is taken!', 'username_invalid');
+            throw new ErrorWithCode('Ez a felhasználónév foglalt.', 'username_invalid');
     }
 
 

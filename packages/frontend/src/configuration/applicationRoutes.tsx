@@ -93,7 +93,7 @@ export const getApplicationRoutes = () => {
     const applicationRoutes: ApplicationRoutesType = {
 
         matchAll: {
-            title: 'Match all',
+            title: 'Betöltés folyamatban...',
             route: new EpistoRoute('', '*')
         },
 

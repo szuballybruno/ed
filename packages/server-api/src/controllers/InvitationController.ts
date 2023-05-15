@@ -25,7 +25,6 @@ export class InvitationController implements IController<InvitationController> {
                 'firstName',
                 'lastName',
                 'departmentId',
-                'isSurveyRequired',
                 'assignedRoleIds',
                 'isTeacher',
                 'userId',

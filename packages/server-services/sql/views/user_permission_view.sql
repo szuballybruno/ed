@@ -87,8 +87,7 @@ survey_permissions AS
     LEFT JOIN public.permission pe 
 	ON pe.code = 'BYPASS_SURVEY'
 	
-	WHERE u.is_survey_required = false 
-	OR scv.is_signup_complete
+	WHERE scv.is_signup_complete
 ),
 user_god_permissions AS (
 	SELECT 
