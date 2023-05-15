@@ -47,6 +47,6 @@ export class AuthorizationService {
             });
 
         if (!hasPermission)
-            throw new ErrorWithCode(`User (${principalId.toSQLValue()}) has no permission to access resource, protected by: "${searchPermissionCode}" permission.`, 'no permission');
+            throw new ErrorWithCode(`A következő felhasználónak: (${principalId.toSQLValue()}) nincs engedélye a megadott erőforráshoz, amelyet a következő kód véd: "${searchPermissionCode}"`, 'no permission');
     }
 }

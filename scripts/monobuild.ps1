@@ -1,7 +1,7 @@
 param ( 
-    [switch] $builddeps = $True,
-    [switch] $buildx = $True, #NO BUILDX LOCALLY
-    [switch] $tests = $True,
+    [switch] $builddeps = $false,
+    [switch] $buildx = $false,
+    [switch] $tests = $false,
     [string] $client_env = "epitest",
     [string] $cacheopt_to = 'dest=/tmp/docker-cache/',
     [string] $cacheopt_from = 'src=/tmp/docker-cache/',

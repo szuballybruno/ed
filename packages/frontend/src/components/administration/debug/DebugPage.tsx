@@ -41,11 +41,12 @@ export const DebugPage = () => {
 
     return <>
         <AdminBreadcrumbsHeader>
-        </AdminBreadcrumbsHeader>;
+        </AdminBreadcrumbsHeader>
 
         <EpistoGrid
             width="100%"
             minColumnWidth={'200px'}
+            gridAutoRows='100px'
             gap={'10px'}
             auto={'fill'}>
 
@@ -115,6 +116,7 @@ export const DebugPage = () => {
                 className='roundBorders'
                 align='center'
                 justify='center'
+                maxHeight='100px'
                 background={getLoadingStateColor()}>
 
                 Current loading state: {loadingState}
@@ -126,5 +128,5 @@ export const DebugPage = () => {
             coinRewardAmount={100}
             dialogLogic={dialogLogic}
             text={translatableTexts.eventListener.threeDaysStreak} />
-    </>
+    </>;
 };

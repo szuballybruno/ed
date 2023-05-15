@@ -1,5 +1,5 @@
 import { Id } from '@episto/commontypes';
-import { apiRoutes, BriefUserDataDTO, UserControlDropdownDataDTO, UserEditReadDTO, UserEditSaveDTO, UserEditSimpleDTO, UserStatisticsDTO } from '@episto/communication';
+import { apiRoutes, BriefUserDataDTO, UserControlDropdownDataDTO, UserEditReadDTO, UserEditSaveDTO, UserEditSimpleDTO, UserLearningOverviewDataDTO } from '@episto/communication';
 import { QueryService } from '../../static/XQuery/XQueryReact';
 import { usePostDataUnsafe } from '../core/httpClient';
 
@@ -69,7 +69,7 @@ export const UserApiService = {
 
     useUserLearningOverviewData: (userId: Id<'User'>) => {
 
-        const queryRes = QueryService.useXQuery<UserStatisticsDTO>(apiRoutes.userStats.getUserLearningOverviewData, { userId: userId });
+        const queryRes = QueryService.useXQuery<UserLearningOverviewDataDTO>(apiRoutes.userStats.getUserLearningOverviewData, { userId: userId });
 
         return {
             userLearningOverviewData: queryRes.data,

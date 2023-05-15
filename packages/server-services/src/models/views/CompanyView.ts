@@ -17,7 +17,4 @@ export class CompanyView {
 
     @XViewColumn()
     canManage: boolean;
-
-    @XViewColumn()
-    isSurveyRequired: boolean;
 }

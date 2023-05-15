@@ -131,6 +131,7 @@ export const usePostDataUnsafe = <TData = any, TResult = void>(url: string | Par
         catch (e) {
 
             setState('idle');
+            handleHttpError(e);
             throw e;
         }
     }, [setState, setResult]);
@@ -257,21 +258,21 @@ const handleHttpError = (error: any) => {
         // get & check error response data
         const error = response.data as HttpErrorResponseDTO;
         if (!error)
-            throw new ErrorWithCode(`Http response code (${responseCode}) did not indicate success.`, getErrorTypeByHTTPCode(responseCode));
+            throw new ErrorWithCode(`Ismeretlen hiba történt. Hibakód: ${responseCode}`, getErrorTypeByHTTPCode(responseCode));
 
         // get & check error response data properties
         if (!error.message && !error.code)
-            throw new ErrorWithCode(`Http response code (${responseCode}) did not indicate success.`, getErrorTypeByHTTPCode(responseCode));
+            throw new ErrorWithCode(`Ismeretlen hiba történt. Hibakód: ${responseCode}`, getErrorTypeByHTTPCode(responseCode));
 
         // message only
         // throw with a more informative message
         if (error.message && !error.code)
-            throw new ErrorWithCode(`Http response code (${responseCode}) did not indicate success. Message: ${error.message}`, getErrorTypeByHTTPCode(responseCode));
+            throw new ErrorWithCode(`Hiba történt a következő hibakóddal: ${responseCode}. A hiba oka: ${error.message}`, getErrorTypeByHTTPCode(responseCode));
 
         // error type and maybe message as well
         const message = error.message
-            ? `Http response code (${responseCode}) did not indicate success. Message: ${error.message}`
-            : `Http response code (${responseCode}) did not indicate success. Code: ${error.code}`;
+            ? error.message
+            : `Hiba történt, (${responseCode}) melynek oka: ${error.code}`;
 
         // throw with a more informative message
         // and error type

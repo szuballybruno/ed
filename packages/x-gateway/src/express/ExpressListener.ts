@@ -101,9 +101,11 @@ export class ExpressListener implements IXGatewayListener {
     private _setErrorResponse = (res: IXGatewayResponse, error: any) => {
 
         const errorCode = error?.code ?? 'internal server error';
+        const errorMessage = error?.message ?? 'internal server error';
 
         const errorDTO = {
             code: errorCode,
+            message: errorMessage
         };
 
         switch (errorCode) {

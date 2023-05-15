@@ -26,6 +26,12 @@ import { CourseDetailsSummarySection } from './CourseDetailsSummarySection';
 import { CourseDetailsTeacherSection } from './CourseDetailsTeacherSection';
 import { TabPanel } from './TabPanel';
 
+type SectionType =
+    'COURSE_DETAILS_PAGE_SUMMARY_SECTION'
+    | 'COURSE_DETAILS_PAGE_REQUIREMENTS_SECTION'
+    | 'COURSE_DETAILS_PAGE_CONTENT_SECTION'
+    | 'COURSE_DETAILS_PAGE_TEACHER_SECTION'
+
 export const DesktopCourseDetailsPage = ({
     userId,
     courseDetails,
@@ -41,7 +47,8 @@ export const DesktopCourseDetailsPage = ({
 }) => {
 
     const { adminCourseContentDialogLogic } = useAdminCourseContentDialogLogic();
-    const [currentTab, setCurrentTab] = useState(0);
+    const [currentTab, setCurrentTab] = useState<SectionType | undefined>();
+    const isCourseStarted = courseDetails?.currentItemCode;
     const isSmallerThan1320 = Responsivity.useIsSmallerThan('1320px');
 
     const { isFeatureEnabled: isCourseDetailsSummarySectionEnabled } = useCheckFeatureEnabled({
@@ -82,24 +89,29 @@ export const DesktopCourseDetailsPage = ({
     const desktopTabs = new ArrayBuilder()
         .addIf(isCourseDetailsSummarySectionEnabled,
             {
+                key: 'COURSE_DETAILS_PAGE_SUMMARY_SECTION',
                 title: translatableTexts.courseDetails.tabLabels.overview,
                 component: <CourseDetailsSummarySection
                     courseDetails={courseDetails} />
             }
         )
-        .addIf(isCourseDetailsRequirementsSectionEnabled, {
-            title: translatableTexts.courseDetails.tabLabels.requirements,
-            component: <CourseDetailsRequirementsSection
-                courseDetails={courseDetails} />
-        })
+        .addIf(isCourseDetailsRequirementsSectionEnabled,
+            {
+                key: 'COURSE_DETAILS_PAGE_REQUIREMENTS_SECTION',
+                title: translatableTexts.courseDetails.tabLabels.requirements,
+                component: <CourseDetailsRequirementsSection
+                    courseDetails={courseDetails} />
+            })
         .addIf(isCourseDetailsContentSectionEnabled,
             {
+                key: 'COURSE_DETAILS_PAGE_CONTENT_SECTION',
                 title: translatableTexts.courseDetails.tabLabels.content,
                 component: <CourseDetailsContentSection
                     courseDetails={courseDetails} />
             })
         .addIf(isCourseDetailsTeacherSectionEnabled,
             {
+                key: 'COURSE_DETAILS_PAGE_TEACHER_SECTION',
                 title: translatableTexts.courseDetails.tabLabels.teacher,
                 component: <CourseDetailsTeacherSection
                     courseDetails={courseDetails} />
@@ -108,17 +120,23 @@ export const DesktopCourseDetailsPage = ({
 
     useEffect(() => {
 
-        if (courseDetails?.currentItemCode && isCourseDetailsContentSectionEnabled) {
-            setCurrentTab(2);
+        if (isCourseStarted && isCourseDetailsContentSectionEnabled && currentTab === undefined) {
+            return setCurrentTab('COURSE_DETAILS_PAGE_CONTENT_SECTION');
         }
 
-        if (!courseDetails?.currentItemCode && isCourseDetailsSummarySectionEnabled) {
-            setCurrentTab(0);
+        if (!isCourseStarted && isCourseDetailsSummarySectionEnabled && currentTab === undefined) {
+            return setCurrentTab('COURSE_DETAILS_PAGE_SUMMARY_SECTION');
         }
 
-        setCurrentTab(0);
+        if (isCourseDetailsRequirementsSectionEnabled && currentTab === undefined)
+            return setCurrentTab('COURSE_DETAILS_PAGE_REQUIREMENTS_SECTION');
+
+        if (isCourseDetailsTeacherSectionEnabled && currentTab === undefined)
+            return setCurrentTab('COURSE_DETAILS_PAGE_TEACHER_SECTION');
+
+        //setCurrentTab(0);
         //return setCurrentTab(desktopTabs.first());
-    }, [courseDetails, desktopTabs, isCourseDetailsContentSectionEnabled, isCourseDetailsSummarySectionEnabled]);
+    }, [courseDetails, currentTab, desktopTabs, isCourseDetailsContentSectionEnabled, isCourseDetailsRequirementsSectionEnabled, isCourseDetailsSummarySectionEnabled, isCourseDetailsTeacherSectionEnabled, isCourseStarted]);
 
 
 
@@ -199,7 +217,7 @@ export const DesktopCourseDetailsPage = ({
                         </EpistoGrid>
 
                         {/* tabs */}
-                        <EpistoFlex2
+                        {currentTab && <EpistoFlex2
                             direction="column"
                             flex="1"
                             mt='30px'
@@ -218,7 +236,7 @@ export const DesktopCourseDetailsPage = ({
                                 <EpistoTabs
                                     tabItems={desktopTabs
                                         .map((x, index) => ({
-                                            key: index,
+                                            key: x.key,
                                             label: x.title
                                         }))}
                                     selectedTabKey={currentTab}
@@ -234,12 +252,12 @@ export const DesktopCourseDetailsPage = ({
                                         }}
                                         value={currentTab}
                                         key={index}
-                                        index={index}>
+                                        index={x.key}>
 
                                         {courseDetails && x.component}
                                     </TabPanel>)}
                             </EpistoFlex2>
-                        </EpistoFlex2>
+                        </EpistoFlex2>}
                     </EpistoFlex2>
 
                     {/* Right pane */}

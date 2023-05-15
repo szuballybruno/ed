@@ -3,6 +3,7 @@ SELECT
     fab.user_id,
     fab.company_id,
     fab.course_id,
+	fab.is_deassigning,
     fe.id feature_id,
     fe.code feature_code
 FROM public.feature_assignment_bridge fab

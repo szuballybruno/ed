@@ -53,7 +53,7 @@ const withValueOrBadRequest = <T>(obj: any, type?: ParsableValueType) => {
 
     const objWithValue = withValue<T>(obj, () => {
 
-        throw new ErrorWithCode('Requied field has no value!', 'bad request');
+        throw new ErrorWithCode('A mező kitöltése kötelező!', 'bad request');
     });
 
     return parseType(objWithValue, type ?? 'any') as T;
@@ -140,7 +140,7 @@ export class ActionParams<
 
         const file = this.req.files?.file;
         if (!file)
-            throw new ErrorWithCode('File not sent!', 'bad request');
+            throw new ErrorWithCode('Nem érkezett fájl!', 'bad request');
 
         return file as UploadedFile;
     }

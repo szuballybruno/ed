@@ -3,8 +3,7 @@ SELECT
 	co.id company_id,
 	co.deletion_date IS NOT NULL is_deleted,
 	co.name company_name,
-	upv.assignee_user_id IS NOT NULL can_manage,
-	co.is_survey_required
+	upv.assignee_user_id IS NOT NULL can_manage
 FROM company co 
 
 CROSS JOIN public.user u

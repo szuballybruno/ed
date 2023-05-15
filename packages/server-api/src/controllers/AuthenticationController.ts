@@ -26,7 +26,7 @@ export class AuthenticationController implements IController<AuthenticationContr
 
         // check request 
         if (!params.req.body)
-            throw new ErrorWithCode('Body is null.', 'bad request');
+            throw new ErrorWithCode('Nem érkeztek be felhasználói adatok a szerverre.', 'bad request');
 
         // get credentials from request
         const { email, password } = params.req.body;

@@ -3,7 +3,6 @@ import { Environment } from '../../static/Environemnt';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
-import { PreviewOverlay } from '../universal/PreviewOverlay';
 
 export const NoProgressChartYet = () => {
 
@@ -14,7 +13,7 @@ export const NoProgressChartYet = () => {
             justify='center'
             position="relative">
 
-            <PreviewOverlay />
+            {/* <PreviewOverlay /> */}
 
             <img
                 src={Environment.getAssetUrl('/images/learningcurve3D.png')}

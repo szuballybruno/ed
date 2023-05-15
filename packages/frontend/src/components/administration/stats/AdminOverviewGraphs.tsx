@@ -99,7 +99,6 @@ export const AdminOverviewGraphs = () => {
                     return (
                         <AdminStatGroup
                             id={`${AdminOverviewGraphs.name}-${index}}`}
-                            isPreview
                             title={item.title}
                             padding="0px"
                             background="white"

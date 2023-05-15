@@ -67,30 +67,26 @@ export const CourseCarouselStats = ({
         {
             iconPath: Environment.getAssetUrl('/images/teacherdashboard6.png'),
             title: 'Hagyta félbe a tanfolyamot',
-            value: 0,
-            suffix: 'tanuló',
-            isPreview: true
+            value: 2,
+            suffix: 'tanuló'
         },
         {
             iconPath: Environment.getAssetUrl('/images/teacherdashboard7.png'),
             title: 'Átlagos teljesítmény',
-            value: 0,
-            suffix: '%',
-            isPreview: true
+            value: 45,
+            suffix: '%'
         },
         {
             iconPath: Environment.getAssetUrl('/images/teacherdashboard8.png'),
             title: 'Nehéznek megjelölve',
-            value: 0,
-            suffix: 'videó',
-            isPreview: true
+            value: 5,
+            suffix: 'videó'
         },
         {
             iconPath: Environment.getAssetUrl('/images/teacherdashboard9.png'),
             title: 'Vár válaszokra a tanártól',
             value: 0,
-            suffix: 'kérdés',
-            isPreview: true
+            suffix: 'kérdés'
         }
     ], [
         courseCompletionCount,

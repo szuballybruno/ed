@@ -75,8 +75,7 @@ export const AdminEditUserControl = ({
             return;
 
         const {
-            id: defaultCompanyId,
-            isSurveyRequired: defaultIsSurveyRequired
+            id: defaultCompanyId
         } = defaultCompany;
 
         const {
@@ -86,8 +85,8 @@ export const AdminEditUserControl = ({
             isTeacher,
             departmentId,
             roleIds,
-            isSurveyRequired,
-            companyId
+            companyId,
+            isSurveyRequired
         } = editDTO ?? {
             firstName: '',
             lastName: '',
@@ -96,7 +95,7 @@ export const AdminEditUserControl = ({
             departmentId: null,
             companyId: defaultCompanyId,
             roleIds: [] as Id<'Role'>[],
-            isSurveyRequired: defaultIsSurveyRequired
+            isSurveyRequired: false
         };
 
         setFirstName(firstName);

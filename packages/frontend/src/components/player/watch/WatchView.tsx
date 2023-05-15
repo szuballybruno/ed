@@ -355,7 +355,9 @@ export const WatchView = ({
                     zIndex={17}
                     isVisible={!!currentStillWatchingMarker}
                     hasPointerEvents={true}>
+
                     <OverlayDialog showCloseButton={false}>
+
                         <StillWatching
                             optionIndex={currentStillWatchingMarker?.answerOptionIndex!}
                             onClose={() => {

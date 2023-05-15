@@ -15,6 +15,8 @@ import { EpistoFlex2 } from './controls/EpistoFlex';
 import { EpistoFont } from './controls/EpistoFont';
 import { ContentPane } from './pageRootContainer/ContentPane';
 import { PasswordEntry, usePasswordEntryState } from './universal/PasswordEntry';
+import { FeatureApiService } from '../services/api/FeatureApiService';
+import { ErrorWithCode } from '@episto/commontypes';
 
 const validateAllEntries = (entryStates: EpistoEntryStateType[]) => {
 
@@ -54,6 +56,7 @@ export const RegisterViaActivationCodePage = () => {
     const lastNameEntryState = useEpistoEntryState({ isMandatory: true });
     const activationCodeEntryState = useEpistoEntryState({ isMandatory: true });
     const passwordState = usePasswordEntryState();
+    const { checkFeature } = FeatureApiService.useCheckFeature();
 
     const { companyDetails } = CompanyApiService
         .useCompanyDetailsByDomain();
@@ -122,7 +125,7 @@ export const RegisterViaActivationCodePage = () => {
     const handleRegisterAsync = useCallback(async () => {
 
         if (!isAllValid)
-            throw new Error('Not all fields are valid!');
+            throw new ErrorWithCode('Valamely mező nem megfelelő.', 'corrupt_credentials');
 
         await registerUserViaActivationCodeAsync({
             activationCode: activationCodeEntryState.value,
@@ -134,24 +137,21 @@ export const RegisterViaActivationCodePage = () => {
             passwordCompare: passwordState.passwordCompare
         });
 
-        showNotification(translatableTexts.registerViaActivationCodePage.successfulSignup);
+        showNotification(translatableTexts.registerViaActivationCodePage.successfulSignup, { type: 'success' });
 
-        navigate2(companyDetails?.isSurveyRequired
-            ? applicationRoutes.surveyRoute
-            : applicationRoutes.homeRoute);
-    }, [
-        navigate2,
-        registerUserViaActivationCodeAsync,
-        isAllValid,
-        activationCodeEntryState.value,
-        companyDetails?.isSurveyRequired,
-        emailEntryState.value,
-        firstNameEntryState.value,
-        lastNameEntryState.value,
-        usernameEntryState.value,
-        passwordState.password,
-        passwordState.passwordCompare
-    ]);
+        const isSurveyEnabled = await checkFeature({
+            featureCode: 'SIGNUP_SURVEY'
+        });
+
+        if (isSurveyEnabled) {
+
+            navigate2(applicationRoutes.surveyRoute);
+        }
+        else {
+
+            navigate2(applicationRoutes.homeRoute);
+        }
+    }, [isAllValid, registerUserViaActivationCodeAsync, activationCodeEntryState.value, emailEntryState.value, firstNameEntryState.value, lastNameEntryState.value, usernameEntryState.value, passwordState.password, passwordState.passwordCompare, checkFeature, navigate2]);
 
     /**
      * Prepare error handler wrapper 

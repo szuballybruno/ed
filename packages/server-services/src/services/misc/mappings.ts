@@ -970,8 +970,7 @@ const marray = [
                 primaryColor: company.primaryColor,
                 secondaryColor: company.secondaryColor,
                 logoUrl: urlService.getAssetUrlNullable(logoFilePath),
-                coverUrl: urlService.getAssetUrlNullable(coverFilePath),
-                isSurveyRequired: company.isSurveyRequired
+                coverUrl: urlService.getAssetUrlNullable(coverFilePath)
             });
         }),
     epistoMappingsBuilder
@@ -983,8 +982,7 @@ const marray = [
             primaryColor: company.primaryColor,
             secondaryColor: company.secondaryColor,
             logoUrl: urlService.getAssetUrlNullable(logoFilePath),
-            coverUrl: urlService.getAssetUrlNullable(coverFilePath),
-            isSurveyRequired: company.isSurveyRequired
+            coverUrl: urlService.getAssetUrlNullable(coverFilePath)
         })),
     // TODO: unused mapping, check DTO's and endpoints too
     epistoMappingsBuilder
@@ -1309,8 +1307,7 @@ const marray = [
             return views.map(view => {
                 return instantiate<CompanyDTO>({
                     id: view.companyId,
-                    name: view.companyName,
-                    isSurveyRequired: view.isSurveyRequired
+                    name: view.companyName
                 });
             });
         }),
@@ -1318,8 +1315,7 @@ const marray = [
         .addArrayMapping(CompanyDTO, () => (companies: Company[]) => companies
             .map(company => instantiate<CompanyDTO>({
                 id: company.id,
-                name: company.name,
-                isSurveyRequired: company.isSurveyRequired
+                name: company.name
             }))
         ),
     epistoMappingsBuilder

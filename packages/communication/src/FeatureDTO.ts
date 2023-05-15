@@ -8,4 +8,5 @@ export class FeatureDTO {
     shopItemId?: Id<'ShopItem'>;
     userId?: Id<'User'>;
     companyId?: Id<'Company'>;
+    isDeassigning?: boolean;
 }

@@ -68,22 +68,22 @@ export class SignupService {
         );
     }
 
-    async checkIfSurveySkippableAsync(principalId: PrincipalId) {
+    async checkIfSurveySkippableAsync(principalId: PrincipalId, userId?: Id<'User'>) {
+
+        const userIdOrPrincipalId = userId ? userId : principalId;
 
         const isSignupEnabled = await this._featureService
             .checkFeatureAsync(principalId, {
+                userId: userId,
                 featureCode: 'SIGNUP_SURVEY'
             })
 
         const userSignupCompltedView = await this._ormService
-            .query(SignupCompletedView, { userId: principalId })
+            .query(SignupCompletedView, { userId: userIdOrPrincipalId })
             .where('userId', '=', 'userId')
             .getOneOrNull();
 
         const isSignupCompleted = !!userSignupCompltedView?.isSignupComplete;
-
-        console.log('isSignupCompleted: ' + isSignupCompleted);
-        console.log('isSignupEnabled: ' + isSignupEnabled);
 
         if (isSignupCompleted)
             return true;

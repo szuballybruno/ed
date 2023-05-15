@@ -73,7 +73,7 @@ export class CompanyService {
      */
     async getUserInvitationCompanyDataAsync(principalId: PrincipalId) {
 
-        const { isSurveyRequired, id: companyId } = await this
+        const { id: companyId } = await this
             ._ormService
             .query(Company, { principalId })
             .innerJoin(User, x => x
@@ -81,7 +81,7 @@ export class CompanyService {
                 .and('id', '=', 'principalId'))
             .getSingle();
 
-        return { isSurveyRequired, companyId };
+        return { companyId };
     }
 
     /**
@@ -230,7 +230,6 @@ export class CompanyService {
                 logoFileId: null,
                 primaryColor: null,
                 secondaryColor: null,
-                isSurveyRequired: true,
                 productionDomainPrefix: ''
             });
     }
@@ -266,8 +265,7 @@ export class CompanyService {
             legalName,
             name,
             primaryColor,
-            secondaryColor,
-            isSurveyRequired
+            secondaryColor
         } = dto;
 
         if (logoFile)
@@ -300,8 +298,7 @@ export class CompanyService {
                 domain,
                 backdropColor,
                 primaryColor,
-                secondaryColor,
-                isSurveyRequired
+                secondaryColor
             });
 
         // set users isSurveyRequired according to company's 
@@ -311,8 +308,7 @@ export class CompanyService {
             .where('companyId', '=', 'companyId')
             .getMany())
             .map(x => ({
-                id: x.id,
-                isSurveyRequired
+                id: x.id
             } as User));
 
         await this

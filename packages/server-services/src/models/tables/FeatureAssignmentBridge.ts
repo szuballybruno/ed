@@ -26,4 +26,7 @@ export class FeatureAssignmentBridge {
 
     @XViewColumn()
     courseId: Id<'Course'> | null;
+
+    @XViewColumn()
+    isDeassigning: boolean | null;
 }

@@ -8,6 +8,6 @@ export class UserEditReadDTO {
     isTeacher: boolean;
     companyId: Id<'Company'>;
     departmentId: Id<'Department'> | null;
-    roleIds: Id<'Role'>[];
     isSurveyRequired: boolean;
+    roleIds: Id<'Role'>[];
 }

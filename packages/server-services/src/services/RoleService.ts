@@ -193,7 +193,7 @@ export class RoleService {
             .getMany();
 
         if (roles.none())
-            throw new ErrorWithCode('forbidden');
+            throw new ErrorWithCode('A felhasználónak nincs engedélye a jogosultság szerkesztéséhez.', 'forbidden');
 
         const group = roles
             .groupBy(x => x.roleId)

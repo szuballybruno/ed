@@ -1,5 +1,5 @@
 import { getPassowrdValidationError } from '@episto/commonlogic';
-import { ErrorWithCode } from '@episto/commontypes';
+import { ErrorWithCode, PasswordValidationIssueType } from '@episto/commontypes';
 import { Company } from '../models/tables/Company';
 import { TokenPair } from '../models/misc/TokenPair';
 import { newNotImplemented } from '../utilities/helpers';
@@ -38,38 +38,64 @@ export class UserRegistrationService {
             ._activationCodeService
             .isValidCodeAsync(activationCode);
         if (!activationCodeEntity)
-            throw new ErrorWithCode(`Activation code ${activationCode} not found in DB, or already used.`, 'activation_code_issue');
+            throw new ErrorWithCode(`Az aktivációs kód: ${activationCode} nem található az adatbázisban, vagy már felhasználásra került.`, 'activation_code_issue');
+
+        const getPasswordValidationErrorMessage = (passwordValidationError: PasswordValidationIssueType) => {
+
+            if (passwordValidationError === 'tooShort') {
+                return 'A jelszónak legalább 6 karakter hosszúnak kell lennie.'
+            }
+
+            if (passwordValidationError === 'passwordIsEmpty') {
+                return 'Nem adtál meg jelszót.'
+            }
+
+            if (passwordValidationError === 'hasNoNumber') {
+                return 'A jelszónak legalább egy számot kell tartalmaznia.'
+            }
+
+            if (passwordValidationError === 'tooLong') {
+                return 'A jelszó maximum 30 karakter hosszú lehet.'
+            }
+
+            if (passwordValidationError === 'doesNotMatchControlPassword') {
+                return 'A két jelszó nem egyezik.'
+            }
+
+            if (passwordValidationError === 'controlPasswordIsEmpty') {
+                return 'A jelszót kétszer kell megadni.'
+            }
+
+            return 'A megadott jelszó helytelen.'
+
+        }
 
         // check given password
         const passwordValidationError = getPassowrdValidationError(password, passwordCompare);
         if (passwordValidationError)
-            throw new ErrorWithCode(`Given password is invalid. Issue code: ${passwordValidationError}`, 'corrupt_credentials');
+            throw new ErrorWithCode(getPasswordValidationErrorMessage(passwordValidationError), 'corrupt_credentials');
 
         // check email
         const isEmailValid = this._validateEmail(email);
         if (!isEmailValid)
-            throw new ErrorWithCode('Given email is invalid.', 'email_invalid');
+            throw new ErrorWithCode('Nem valós e-mail címet adtál meg.', 'email_invalid');
 
         // check fisrst name
         const isFirstNameValid = this._validateName(firstName);
         if (!isFirstNameValid)
-            throw new ErrorWithCode('Given first name is invalid.', 'first_name_invalid');
+            throw new ErrorWithCode('A keresztnév formátuma nem megfelelő.', 'first_name_invalid');
 
         // check last name
         const isLastNameValid = this._validateName(firstName);
         if (!isLastNameValid)
-            throw new ErrorWithCode('Given last name is invalid.', 'last_name_invalid');
+            throw new ErrorWithCode('A vezetéknév formátuma nem megfelelő.', 'last_name_invalid');
 
         // check username
         const isUsernameValid = this._validateName(username);
         if (!isUsernameValid)
-            throw new ErrorWithCode('Given username is invalid.', 'username_invalid');
+            throw new ErrorWithCode('Ez a felhasználónév már foglalt, vagy nem megfelelő a formátuma.', 'username_invalid');
 
         const { companyId } = activationCodeEntity;
-
-        const { isSurveyRequired } = await this
-            ._ormService
-            .getSingleById(Company, companyId);
 
         // TODO
         // default depatment
@@ -93,7 +119,6 @@ export class UserRegistrationService {
                 departmentId: 26 as any,
                 registrationType: 'ActivationCode',
                 invitationToken: null,
-                isSurveyRequired,
                 unhashedPassword: password,
                 username,
                 registrationState: 'active'
@@ -129,13 +154,13 @@ export class UserRegistrationService {
             .getUserByEmailAsync(userEmail);
 
         if (!user)
-            throw new ErrorWithCode('No such user!', 'bad request');
+            throw new ErrorWithCode('Nincs ilyen felhasználó.', 'bad request');
 
         const userId = user.id;
 
         // check passwords
         if (getPassowrdValidationError(password, passwordControl))
-            throw new ErrorWithCode('Password is invalid.', 'corrupt_credentials');
+            throw new ErrorWithCode('Helytelen jelszó.', 'corrupt_credentials');
 
         // update user
         await this._userService

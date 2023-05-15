@@ -80,7 +80,7 @@ export class TempomatService {
     /**
     * Get single tempomat calculation data
     */
-    async getTempomatCalculationDataAsync(userId: Id<'User'>, courseId: number) {
+    async getTempomatCalculationDataAsync(userId: Id<'User'>, courseId: Id<'Course'>) {
 
         return await this
             ._ormService

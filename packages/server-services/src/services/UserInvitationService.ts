@@ -34,15 +34,15 @@ export class UserInvitationService {
             email,
             firstName,
             lastName,
-            isSurveyRequired,
             isTeacher,
             assignedRoleIds
         } = dto;
 
         if (!companyId)
-            throw new ErrorWithCode(`Current user is not an administrator, 
-                but has rights to add users, but has no company,  
-                in which he/she could add users.`, 'bad request');
+            throw new ErrorWithCode(`A jelenlegi felhasználó nem adminisztrátor, 
+            ugyanakkor van jogosultsága felhasználót hozzáadni. 
+            A hiba oka, hogy a felhasználó nem rendelkezik céggel 
+            ahova felhasználót adhatna hozzá`, 'bad request');
 
         // create user 
         const { invitationToken, createdUser } = await this
@@ -52,7 +52,6 @@ export class UserInvitationService {
                 firstName,
                 lastName,
                 companyId,
-                isSurveyRequired,
                 noEmailNotification: true
             });
 
@@ -83,7 +82,6 @@ export class UserInvitationService {
         firstName,
         departmentId,
         lastName,
-        isSurveyRequired,
         noEmailNotification
     }: {
         email: string;
@@ -91,7 +89,6 @@ export class UserInvitationService {
         lastName: string;
         companyId: Id<'Company'>;
         departmentId: Id<'Department'>;
-        isSurveyRequired: boolean;
         noEmailNotification?: boolean;
     }) {
 
@@ -109,7 +106,6 @@ export class UserInvitationService {
                 departmentId,
                 registrationType: 'Invitation',
                 invitationToken,
-                isSurveyRequired,
                 registrationState: 'invited',
                 unhashedPassword: 'guest',
                 username: normalizeToEnglishLowercase(`${lastName}${firstName}`)

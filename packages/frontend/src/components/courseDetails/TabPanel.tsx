@@ -2,8 +2,8 @@ import { EpistoDiv } from '../controls/EpistoDiv';
 
 interface TabPanelProps {
     children?: React.ReactNode;
-    index: number;
-    value: number;
+    index: any;
+    value: any;
     style?: React.CSSProperties;
 }
 

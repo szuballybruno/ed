@@ -61,7 +61,7 @@ export const AdminUserCourseStatsOverview = ({
                 <EpistoFlex2 flex="1">
 
                     <EpistoPieChart
-                        title="Tempó"
+                        title="Teljesítmény"
                         segments={[
                             { value: performancePercentage, name: `Teljesítmény ${performancePercentage}%` },
                             { value: 100 - performancePercentage, name: `Teljesítmény ${performancePercentage}%` }
