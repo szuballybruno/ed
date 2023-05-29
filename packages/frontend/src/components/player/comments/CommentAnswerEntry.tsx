@@ -118,7 +118,7 @@ export const CommentAnswerEntry = (props: {
 
                 <EpistoFlex2>
                     <EpistoButton
-                        variant="outlined"
+                        variant="plain"
                         style={{
                             marginRight: 10
                         }}
@@ -127,7 +127,7 @@ export const CommentAnswerEntry = (props: {
                         Mégsem
                     </EpistoButton>
                     <EpistoButton
-                        variant="colored"
+                        variant="action"
                         onClick={() => handleNewComment()}>
 
                         Közzététel

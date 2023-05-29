@@ -240,9 +240,8 @@ export const AdminEditUserControl = ({
                             getDisplayValue={x => '' + x.name}
                             getCompareKey={company => '' + company?.id} />
                         : <EpistoFont
-                            margin={{
-                                top: 'px5'
-                            }}>
+                            margin='5px'>
+
                             {company?.name ?? '-'}
                         </EpistoFont>}
                 </EpistoFlex2>
@@ -255,10 +254,10 @@ export const AdminEditUserControl = ({
                     width="100%">
 
                     <EpistoFont
+                        margin='10px 0 0 0'
                         isUppercase
                         fontSize="fontSmall"
                         style={{
-                            marginTop: '10px',
                             letterSpacing: '1.2px'
                         }}>
 
@@ -372,7 +371,7 @@ export const AdminEditUserControl = ({
                 text="Egyenleg">
 
                 <EpistoFont
-                    fontSize="fontLargePlus"
+                    fontSize="font19"
                     style={{
                         display: 'flex',
                         flexDirection: 'row',
@@ -409,7 +408,7 @@ export const AdminEditUserControl = ({
                     <EpistoButton
                         isDisabled={!!coinAmountEntryState.errorMsg}
                         onClick={handleAddCoinsAsync}
-                        variant="colored">
+                        variant="action">
 
                         Hozzáadás
                     </EpistoButton>

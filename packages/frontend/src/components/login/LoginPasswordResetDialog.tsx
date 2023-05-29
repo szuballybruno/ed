@@ -92,7 +92,7 @@ export const LoginPasswordResetDialog = (params: {
 
                         <AlternateEmailIcon
                             style={{
-                                color: 'var(--epistoTeal)',
+                                color: 'var(--eduptiveYellowGreen)',
                                 margin: '10px'
                             }} />
 
@@ -108,7 +108,7 @@ export const LoginPasswordResetDialog = (params: {
                 {/* error */}
                 {errorMessage && <EpistoFont
                     fontSize="fontSmall"
-                    color="fontError"
+                    textColor='decline'
                     style={{
                         padding: '5px',
                     }}>
@@ -119,9 +119,9 @@ export const LoginPasswordResetDialog = (params: {
                 {/* affirmation */}
                 <EpistoFont
                     fontSize="fontSmall"
-                    color="fontGray"
+                    textColor='eduptiveMildDarkGreen'
+                    margin='20px 0 0 0'
                     style={{
-                        marginTop: '20px',
                         padding: '15px',
                     }}>
 
@@ -132,7 +132,7 @@ export const LoginPasswordResetDialog = (params: {
                 <EpistoButton
                     style={{ margin: '10px' }}
                     onClick={handleResetPw}
-                    variant="colored">
+                    variant="action">
 
                     Mehet
                 </EpistoButton>

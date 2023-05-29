@@ -28,7 +28,7 @@ export const Greetings = () => {
             height="100%">
 
             <EpistoFont
-                fontSize2="small"
+                fontSize="fontSmall"
                 style={{
                     padding: '20px 20px 10px 10px'
                 }}>
@@ -37,7 +37,7 @@ export const Greetings = () => {
             </EpistoFont>
 
             <EpistoFont
-                fontSize2="small"
+                fontSize="fontSmall"
                 style={{
                     padding: '20px 20px 10px 10px'
                 }}>
@@ -46,7 +46,7 @@ export const Greetings = () => {
             </EpistoFont>
 
             <EpistoFont
-                fontSize2="small"
+                fontSize="fontSmall"
                 style={{
                     padding: '20px 20px 10px 10px'
                 }}>
@@ -58,7 +58,7 @@ export const Greetings = () => {
                 direction="column"
                 width="100%"
                 alignItems="center"
-                color='black'
+                color='var(--eduptiveDeepDarkGreen)'
                 mt="10px">
 
                 <EpistoButton

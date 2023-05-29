@@ -43,7 +43,7 @@ export const CourseProgressDisplay = ({
 
                     <PlayArrowIcon
                         style={{
-                            color: 'var(--epistoTeal)'
+                            color: 'var(--eduptiveYellowGreen)'
                         }} />
                 </EpistoButton>
             </EpistoFlex2>

@@ -2,16 +2,18 @@ import { Button, ButtonProps } from '@mui/material';
 import { CSSProperties, forwardRef, ReactNode } from 'react';
 import { useCSSOptionClasses } from '../../static/frontendHelpers';
 import { CSSOptionsType } from '../../styles/globalCssTypes';
+import { CompanyPublicDTO } from '@episto/communication';
 
 export type EpistoButtonPropsType = {
     children?: string | ReactNode,
+    companyDetails?: CompanyPublicDTO,
     onClick?: () => void,
     onClickNoPropagation?: () => void,
     size?: string,
     isRound?: boolean,
     padding?: string,
     fontSize?: string,
-    variant?: 'outlined' | 'plain' | 'colored' | 'light',
+    variant?: 'outlined' | 'plain' | 'colored' | 'light' | 'highlight' | 'action',
     sx?: {
         [key: string]: CSSProperties
     },
@@ -33,6 +35,7 @@ export type EpistoButtonPropsType = {
 
 export const EpistoButton = forwardRef<HTMLButtonElement, EpistoButtonPropsType>(({
     children,
+    companyDetails,
     onClick,
     isRound,
     size,
@@ -97,14 +100,40 @@ export const EpistoButton = forwardRef<HTMLButtonElement, EpistoButtonPropsType>
         style={{
             overflow: 'hidden',
             whiteSpace: 'nowrap',
-            fontWeight: 500,
+            fontWeight: (() => {
+
+                if (variant === 'action')
+                    return 'bold';
+
+                return 'normal';
+
+            })(),
             minWidth: '0px',
-            background: variant === 'light' ? 'white' : undefined,
-            color: isDisabled
-                ? 'white'
-                : variant === 'colored'
-                    ? 'white'
-                    : 'black',
+            background: (() => {
+
+                if (companyDetails?.primaryColor)
+                    return companyDetails.primaryColor;
+
+                if (variant === 'light')
+                    return 'white';
+
+                if (variant === 'action' || variant === 'highlight')
+                    return 'var(--eduptiveYellowGreen)';
+
+                return undefined;
+
+            })(),
+            color: (() => {
+
+                if (isDisabled)
+                    return 'white';
+
+                if (variant === 'action' || variant === 'highlight')
+                    return 'var(--eduptiveDeepDarkGreen)';
+
+                return 'var(--eduptiveDeepDarkGreen)';
+
+            })(),
             // background: isDisabled && variant === "colored" ? "var(--mildGrey)" : undefined,
             margin: '0px',
             borderRadius: isRound ? '50%' : '7px',

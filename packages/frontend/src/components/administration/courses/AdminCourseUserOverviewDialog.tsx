@@ -19,7 +19,7 @@ export const useAdminCourseUserOverviewDialogLogic = () => {
     return adminCourseUserOverviewDialogLogic;
 };
 
-export type AdminCourseUserOverviewDialogLogicType = ReturnType<typeof useAdminCourseUserOverviewDialogLogic>
+type AdminCourseUserOverviewDialogLogicType = ReturnType<typeof useAdminCourseUserOverviewDialogLogic>
 
 export const AdminCourseUserOverviewDialog = (props: {
     logic: AdminCourseUserOverviewDialogLogicType

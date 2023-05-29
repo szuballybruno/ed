@@ -176,7 +176,7 @@ export const PrequizSubpage = () => {
                                 valueLabelFormat={value => `${value}${paging.currentIndex === 2 ? ' óra' : ''}`}
                                 marks={true}
                                 style={{
-                                    color: 'var(--deepBlue)'
+                                    color: 'var(--eduptiveDeepDarkGreen)'
                                 }}
                                 onChange={(_, value) => setNumericValue(value as any)}
                                 value={numericValue} />

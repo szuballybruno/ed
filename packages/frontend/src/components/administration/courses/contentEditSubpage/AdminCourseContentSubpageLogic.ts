@@ -7,7 +7,7 @@ import { VersionCode } from '@episto/commontypes';
 import { Id } from '@episto/commontypes';
 import { formatTime } from '../../../../static/frontendHelpers';
 
-export type RowSchemaModule = {
+type RowSchemaModule = {
     versionId: Id<'ModuleVersion'>;
     isPretestModule: boolean;
     name: string;
@@ -57,7 +57,7 @@ const getItemTypeValues = (itemType: CourseItemType): { label: string, color: an
 
     if (itemType === 'video')
         return {
-            color: 'var(--deepBlue)',
+            color: 'var(--eduptiveDeepDarkGreen)',
             label: 'Videó'
         };
 
@@ -79,16 +79,16 @@ const getItemTypeValues = (itemType: CourseItemType): { label: string, color: an
 const getIssueText = (dto: CourseContentItemIssueDTO) => {
 
     if (dto.code === 'ans_miss')
-        return `Valaszok hianyoznak ebbol a kerdesbol: ${dto.questionName}`;
+        return `Válaszok hiányoznak ebből a kérdésből: ${dto.questionName}`;
 
     if (dto.code === 'corr_ans_miss')
-        return `Helyesnek megjelolt valaszok hianyoznak ebbol a kerdesbol: ${dto.questionName}`;
+        return `Helyesnek megjelölt válaszok hiányoznak ebből a kérdésből: ${dto.questionName}`;
 
     if (dto.code === 'questions_missing')
-        return 'Kerdesek hianyoznak';
+        return 'Kérdések hiányoznak a videóból';
 
     if (dto.code === 'video_too_long')
-        return 'Video tul hosszu';
+        return 'A videó túl hosszú';
 
     return null;
 };

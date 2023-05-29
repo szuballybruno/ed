@@ -3,7 +3,7 @@ import { CompanyApiService } from '../../../services/api/CompanyApiService';
 import { useStateObject } from '../../../static/frontendHelpers';
 import { useCompanySelectorLogic } from '../companySelector/CompanySelectorDropdown';
 
-export type AdminBreadcrumbsStateType = {
+type AdminBreadcrumbsStateType = {
     subRouteLabel?: string;
     backButtonProps?: any;
     disabled?: boolean;
@@ -31,7 +31,7 @@ export const useAdminBreadcrumbsState = () => {
     };
 };
 
-export type AdminBreadcrumbsContextType = ReturnType<typeof useAdminBreadcrumbsState>;
+type AdminBreadcrumbsContextType = ReturnType<typeof useAdminBreadcrumbsState>;
 
 export const AdminBreadcrumbsContext = createContext<AdminBreadcrumbsContextType>({} as any);
 

@@ -197,7 +197,7 @@ export const DesktopNavbar = ({
             {/* logo link */}
             {showLogo && (
                 <img
-                    src={Environment.getAssetUrl('/images/logo.svg')}
+                    src={Environment.getAssetUrl('/images/logo.png')}
                     style={{
                         width: isMinimalMode ? '80px' : '150px',
                         height: isMinimalMode ? '50px' : '50px',

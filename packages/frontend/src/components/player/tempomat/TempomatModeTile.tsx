@@ -22,7 +22,7 @@ export const TempomatModeTile = (props: {
         align="center"
         cursor="pointer"
         className="shadowOnHover"
-        //bg={isSelected ? "var(--deepBlue)" : undefined}
+        //bg={isSelected ? "var(--eduptiveDeepDarkGreen)" : undefined}
         onClick={onClick}>
 
         <TempomatModeImage

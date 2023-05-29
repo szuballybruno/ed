@@ -16,7 +16,7 @@ export type EditDialogSubpage = {
     content: (isCurrent: boolean) => JSX.Element
 };
 
-export const EditDialogBase = <TParams,>({
+const EditDialogBase = <TParams,>({
     title,
     subTitle,
     chipText,

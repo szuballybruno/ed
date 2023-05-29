@@ -1,5 +1,5 @@
-import {EpistoFlex2} from '../controls/EpistoFlex';
-import {EpistoFont} from '../controls/EpistoFont';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
+import { EpistoFont } from '../controls/EpistoFont';
 
 export const SmallStat = (props: { title?: string, iconUrl: string, text: string }) => {
 
@@ -20,9 +20,7 @@ export const SmallStat = (props: { title?: string, iconUrl: string, text: string
 
         {/* spent time stat */}
         <EpistoFont
-            style={{
-                color: 'grey'
-            }}>
+            textColor='eduptiveMildDarkGreen'>
 
             {props.text}
         </EpistoFont>

@@ -164,7 +164,7 @@ export const CourseRatingSubpage = (props: {
                                                 valueLabelDisplay="auto"
                                                 marks={true}
                                                 style={{
-                                                    color: 'var(--deepBlue)'
+                                                    color: 'var(--eduptiveDeepDarkGreen)'
                                                 }}
                                                 onChange={(_, value) => setCurrentAnswer(value as any, null)}
                                                 value={currentAnswer?.value ?? 0} />

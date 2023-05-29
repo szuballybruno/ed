@@ -5,18 +5,21 @@ import { MUI } from '../controls/MUIControls';
 // mui theme
 const muiTheme = MUI
     .createTheme({
+        typography: {
+            fontFamily: 'Poppins'
+        },
         palette: {
             mode: 'light',
             primary: {
-                light: '#c8e8ff',
-                main: '#97c9cc',
-                dark: '#c8e8ff',
-                contrastText: '#000000',
+                light: '#CEDC00',
+                main: '#CEDC00',
+                dark: '#CEDC00',
+                contrastText: '#00352F',
             },
             secondary: {
-                light: '#5495b4',
-                main: '#1d6784',
-                dark: '#5495b4',
+                light: '#00594F',
+                main: '#00594F',//main: '#1d6784',
+                dark: '#00594F',
                 contrastText: '#fff',
             },
         },

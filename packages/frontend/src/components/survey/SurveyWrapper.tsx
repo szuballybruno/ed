@@ -71,7 +71,7 @@ export const SurveyWrapper = ({
                 align={'center'}>
 
                 <EpistoImage maxH='60px'
-                    src={Environment.getAssetUrl('/images/logo.svg')} />
+                    src={Environment.getAssetUrl('/images/logo.png')} />
             </EpistoFlex2>
 
             {/* header top */}
@@ -88,7 +88,7 @@ export const SurveyWrapper = ({
                     alignItems={'center'}>
 
                     <EpistoImage maxH='80px'
-                        src={Environment.getAssetUrl('/images/logo.svg')} />
+                        src={Environment.getAssetUrl('/images/logo.png')} />
                 </EpistoFlex2>
 
             </EpistoFlex2>
@@ -173,8 +173,8 @@ export const SurveyWrapper = ({
                         {
                             isString(description!)
                                 ? <EpistoFont
-                                    isMultiline
-                                    fontSize2="normal">
+                                    isMultiline>
+
                                     {description!}
                                 </EpistoFont>
                                 : description
@@ -208,7 +208,7 @@ export const SurveyWrapper = ({
             {/* back button */}
             {onNavPrevious && <EpistoButton
                 onClick={() => onNavPrevious()}
-                variant="outlined"
+                variant="plain"
                 style={{
                     marginTop: '0',
                     height: 40,
@@ -232,7 +232,7 @@ export const SurveyWrapper = ({
 
             {/* next button */}
             {onNext && <EpistoButton
-                variant={'outlined'}
+                variant={'plain'}
                 dataTestid={`${testid}-survey-next-button`}
                 onClick={onNext}
                 style={{

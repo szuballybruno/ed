@@ -260,7 +260,7 @@ export const LoginScreen = () => {
                                     width="100%"
                                     alignItems="flex-start">
 
-                                    <EpistoFont fontSize={'fontLargePlus'}>
+                                    <EpistoFont fontSize={'font19'}>
 
                                         Örülünk, hogy ismét itt vagy velünk!
                                     </EpistoFont>
@@ -293,7 +293,7 @@ export const LoginScreen = () => {
 
                                         <EpistoFont
                                             fontSize="fontSmall"
-                                            color="fontGray"
+                                            textColor='eduptiveMildDarkGreen'
                                             style={{
                                                 textTransform: 'none',
                                                 marginTop: '5px',
@@ -311,7 +311,7 @@ export const LoginScreen = () => {
                                 </EpistoDiv>
 
                                 <EpistoButton
-                                    variant="colored"
+                                    variant="action"
                                     padding="10px"
                                     type="submit"
                                     style={{

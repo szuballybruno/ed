@@ -90,7 +90,7 @@ export const PersonalityAssessment = (props: EpistoFlex2Props) => {
                         variant={'colored'}
                         style={{
                             background: 'var(--transparentWhite70)',
-                            color: 'black',
+                            color: 'var(--eduptiveDeepDarkGreen)',
                             marginRight: 5,
                             flex: 3
                         }}
@@ -133,7 +133,7 @@ export const PersonalityAssessment = (props: EpistoFlex2Props) => {
                         variant={'colored'}
                         style={{
                             background: 'var(--transparentWhite70)',
-                            color: 'black',
+                            color: 'var(--eduptiveDeepDarkGreen)',
                             flex: 2
                         }}
                         onClick={() => {

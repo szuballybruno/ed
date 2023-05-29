@@ -50,7 +50,7 @@ export const EpistoTabs = <TKey,>({ tabItems, selectedTabKey, onChange }: Episto
                         value={index}
                         disableRipple={segmentedButtonStyles.tab.disableRipple}
                         sx={segmentedButtonStyles.tab.toggleButtonSx}
-                        style={{ ...segmentedButtonStyles.tab.toggleButtonGroupStyle, color: isSelected ? 'white' : undefined }}
+                        style={{ ...segmentedButtonStyles.tab.toggleButtonGroupStyle, color: isSelected ? 'var(--eduptiveDeepDarkGreen)' : undefined }}
                         selected={isSelected}
                         onClick={() => onChange(tabItem.key)}
                         {...tabItemProps}>

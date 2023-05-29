@@ -86,7 +86,9 @@ export const LearningCurves = () => {
                 value={currentTab}
                 index={0}>
 
-                <EpistoFont fontSize="fontSmall">
+                <EpistoFont
+                    textColor='eduptiveDeepDarkGreen'
+                    fontSize="fontSmall">
 
                     {translatableTexts.learningOverview.learningCurveDescription}
                 </EpistoFont>
@@ -95,7 +97,9 @@ export const LearningCurves = () => {
             <TabPanel value={currentTab}
                 index={1}>
 
-                <EpistoFont fontSize="fontSmall">
+                <EpistoFont
+                    textColor='eduptiveDeepDarkGreen'
+                    fontSize="fontSmall">
 
                     {translatableTexts.learningOverview.forgettingCurveDescription}
                 </EpistoFont>
@@ -126,9 +130,11 @@ export const LearningCurves = () => {
                     margin: '0 10px 0 0',
                 }} />
 
-            <EpistoFont style={{
-                textAlign: 'center'
-            }}>
+            <EpistoFont
+                textColor='eduptiveDeepDarkGreen'
+                style={{
+                    textAlign: 'center'
+                }}>
 
                 {translatableTexts.homePage.noStatsYet}
             </EpistoFont>

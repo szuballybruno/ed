@@ -101,7 +101,7 @@ export const MobileCourseDetailsPage = (props: {
                     flex='1'>
 
                     <EpistoFont
-                        fontSize='fontLargePlus'>
+                        fontSize='font19'>
 
                         A tanfolyam adatlapja
                     </EpistoFont>
@@ -140,7 +140,7 @@ export const MobileCourseDetailsPage = (props: {
                 padding='0 10px 10px 10px'>
 
                 <EpistoFont
-                    fontSize='fontLargePlus'
+                    fontSize='font19'
                     fontWeight='heavy'>
 
                     {courseDetails?.title ?? ''}
@@ -200,7 +200,7 @@ export const MobileCourseDetailsPage = (props: {
                 <EpistoButton
                     style={{
                         flex: '1',
-                        color: 'var(--epistoTeal)',
+                        color: 'var(--eduptiveYellowGreen)',
                         height: 40,
                         display: courseDetails?.canStartCourse ? undefined : 'none'
                     }}
@@ -209,7 +209,7 @@ export const MobileCourseDetailsPage = (props: {
                             background: 'white'
                         }
                     }}
-                    variant="colored"
+                    variant="action"
                     onClick={handlePlayCourse}
                     icon={(
                         <img

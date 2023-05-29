@@ -46,8 +46,7 @@ export const UserOverviewStats = () => {
         <AdminStatGroup
             id={UserOverviewStats.name}
             title="Felhasználók statisztikája"
-            padding="0"
-            background="white">
+            padding="0">
 
             <EpistoGrid
                 auto="fill"

@@ -1,5 +1,5 @@
-import { Done, LocalOffer } from '@mui/icons-material';
 import { ShopItemDTO } from '@episto/communication';
+import { Done, LocalOffer } from '@mui/icons-material';
 
 import { useNavigation } from '../../services/core/navigatior';
 import { Environment } from '../../static/Environemnt';
@@ -31,7 +31,7 @@ export const ShopItemIsPurchasedLabel = () => {
             }} />
 
         <EpistoFont
-            color="fontLight"
+            textColor="white"
             isUppercase
             fontSize="fontSmall"
             fontWeight="normal">
@@ -110,7 +110,7 @@ export const ShopItemButtons = (props: {
         {/* purcahase item */}
         {canPurchase && <EpistoButton
             onClick={() => handlePurchaseItem(shopItem)}
-            variant="colored"
+            variant="action"
             isDisabled={!isSufficientFundsAvailable}
             style={{ flex: '3', overflowWrap: 'break-word' }}>
 

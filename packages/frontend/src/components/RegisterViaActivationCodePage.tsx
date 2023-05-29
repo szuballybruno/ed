@@ -215,7 +215,7 @@ export const RegisterViaActivationCodePage = () => {
 
                     {/* epi logo */}
                     <img
-                        src={Environment.getAssetUrl('/images/logo.svg')}
+                        src={Environment.getAssetUrl('/images/logo.png')}
                         style={{
                             width: isMobile ? '120px' : '250px',
                             maxHeight: '100px',
@@ -256,9 +256,8 @@ export const RegisterViaActivationCodePage = () => {
                         align="center">
 
                         <EpistoFont
-                            style={{
-                                textAlign: 'left'
-                            }}
+                            textColor='eduptiveDeepDarkGreen'
+                            textAlign='left'
                             fontSize={20}>
 
                             {translatableTexts.registerViaActivationCodePage.redeemYourCode}
@@ -323,12 +322,11 @@ export const RegisterViaActivationCodePage = () => {
                             dataTestid="register-button"
                             style={{
                                 width: '100%',
-                                backgroundColor: isAllValid ? '#324658' : undefined,
                                 height: 60
                             }}
-                            // isDisabled={!isAllValid}
+                            isDisabled={!isAllValid}
                             onClick={handleRegisterAsync}
-                            variant="colored">
+                            variant="action">
 
                             {translatableTexts.registerViaActivationCodePage.register}
                         </EpistoButton>
@@ -341,16 +339,16 @@ export const RegisterViaActivationCodePage = () => {
                         height='80px'>
 
                         <EpistoFont
-                            color="fontGray">
+                            textColor='eduptiveMildDarkGreen'>
 
                             {translatableTexts.registerViaActivationCodePage.dontHaveAccount}
                         </EpistoFont>
 
                         <EpistoFont
+                            textColor='eduptiveYellowGreen'
+                            textAlign='right'
                             style={{
-                                maxWidth: '250px',
-                                textAlign: 'right',
-                                color: 'var(--epistoTeal)'
+                                maxWidth: '250px'
                             }}>
 
                             <a

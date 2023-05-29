@@ -58,13 +58,14 @@ export const LeftPaneHost = memo(({
 
                 {/* logo link */}
                 {isCollapsed
-                    ? <EpistoFlex2 width="100%"
+                    ? <EpistoFlex2
+                        width="100%"
                         alignItems={'center'}
                         justifyContent="center"
                         mt="10px"
-                        mb="20px">
+                        mb="45px">
                         <img
-                            src={Environment.getAssetUrl('/images/logo_min.svg')}
+                            src={Environment.getAssetUrl('/images/logo_min.png')}
                             style={{
                                 height: '50px',
                                 objectFit: 'cover',
@@ -79,17 +80,17 @@ export const LeftPaneHost = memo(({
                     </EpistoFlex2>
                     : <EpistoFlex2
                         width="100%"
+                        height='80px'
+                        pl='9px'
                         alignItems={'center'}
-                        justifyContent="flex-start"
-                        mb="20px">
+                        justifyContent="flex-start">
 
                         <img
-                            src={Environment.getAssetUrl('/images/logo.svg')}
+                            src={Environment.getAssetUrl('/images/logo.png')}
                             style={{
                                 height: '50px',
                                 objectFit: 'cover',
                                 cursor: 'pointer',
-                                margin: '10px 10px',
                                 padding: 0
                             }}
                             alt=""

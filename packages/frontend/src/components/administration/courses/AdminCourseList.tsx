@@ -20,10 +20,8 @@ const ChangeLabel = ({ change, value, tooltip }: { value: number, change: number
             </EpistoFont>
 
             {change != 0 && <EpistoFont
-                margin={{
-                    left: 'px5'
-                }}
-                color={positiveChange ? 'goodGreen' : 'mildRed'}>
+                margin='0 0 0 5px'
+                textColor={positiveChange ? 'accept' : 'decline'}>
                 {positiveChange ? '+' : ''}{change}
             </EpistoFont>}
         </EpistoFlex2>
@@ -97,7 +95,7 @@ export const AdminCourseList = ({
                 renderCell: ({ row }) => (
                     <EpistoButton
                         onClick={() => onCourseClick(row.courseId)}
-                        variant="outlined">
+                        variant="plain">
                         Bővebben
                     </EpistoButton>
                 )
@@ -107,8 +105,7 @@ export const AdminCourseList = ({
 
     return (
         <EpistoFlex2
-            className="whall roundBorders"
-            background="var(--transparentWhite90)">
+            className="whall roundBorders">
 
             <EpistoDataGrid
                 columns={columns}

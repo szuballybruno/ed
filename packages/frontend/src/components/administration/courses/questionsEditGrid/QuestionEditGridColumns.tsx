@@ -55,14 +55,15 @@ export const useQuestionEditGridColumns = (logic: QuestionEditGridLogicType) => 
                         background='deepBlue'
                         align='center'>
                         <EpistoFont
-                            margin={{ left: 'px10' }}
-                            color='fontLight'>
+                            margin='0 0 0 10px'
+                            textColor='white'>
 
                             {row.questionText}
                         </EpistoFont>
                     </EpistoFlex>
                     : <EpistoFlex2>
-                        <EpistoFont margin={{ left: 'px20' }}>
+                        <EpistoFont
+                            margin='0 0 0 10px'>
                             {row.text}
                         </EpistoFont>
                     </EpistoFlex2>;

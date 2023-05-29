@@ -51,7 +51,8 @@ export const AdminListEditHeader = ({
                         value={!!isAllSelected} />
 
                     <EpistoFont
-                        style={{ marginLeft: '20px', color: 'black' }}>
+                        textColor='eduptiveDeepDarkGreen'
+                        margin='0 0 0 20px'>
 
                         Összes kijelölése
                     </EpistoFont>
@@ -69,7 +70,8 @@ export const AdminListEditHeader = ({
                 <div className="h-flex align-center fontLight">
 
                     <EpistoFont
-                        style={{ marginLeft: '20px', color: 'black' }}>
+                        textColor='eduptiveDeepDarkGreen'
+                        margin='0 0 0 20px'>
 
                         {`${selectionCount} ${itemLabel} kijelölve`}
                     </EpistoFont>

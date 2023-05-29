@@ -1,9 +1,9 @@
-import {css, Text} from '@chakra-ui/react';
-import {Environment} from '../../static/Environemnt';
-import {EpistoButton} from '../controls/EpistoButton';
-import {EpistoDiv} from '../controls/EpistoDiv';
-import {EpistoFlex2, EpistoFlex2Props} from '../controls/EpistoFlex';
-import {EpistoFont} from '../controls/EpistoFont';
+import { css, Text } from '@chakra-ui/react';
+import { Environment } from '../../static/Environemnt';
+import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoDiv } from '../controls/EpistoDiv';
+import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
+import { EpistoFont } from '../controls/EpistoFont';
 
 export const ExamTile = (props: {
     className?: string,
@@ -26,7 +26,7 @@ export const ExamTile = (props: {
             <Text
                 fontSize="0.85em"
                 textTransform={'uppercase'}
-                color="var(--epistoTeal)">
+                color="var(--eduptiveYellowGreen)">
                 65%-os eredmény
             </Text>
         </EpistoFlex2>
@@ -44,7 +44,7 @@ export const ExamTile = (props: {
             alignItems="center"
             padding="4px"
             width='160px'
-            bg="var(--epistoTeal)"
+            bg="var(--eduptiveYellowGreen)"
             borderRadius="7px 0 0 7px">
             <Text
                 fontSize="0.85em"
@@ -245,7 +245,7 @@ export const ExamTile = (props: {
                 }}>Részletek</EpistoButton> */}
 
                 <EpistoButton
-                    variant="colored"
+                    variant="action"
                     style={{
                         backgroundColor: 'white',
                         width: '100%',

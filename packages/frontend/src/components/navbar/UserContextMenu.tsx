@@ -79,7 +79,7 @@ export const UserContextMenu = (props: {
             <EpistoDivider
                 height={1}
                 width="100%"
-                bgColor={'black'} />
+                bgColor={'var(--eduptiveDeepDarkGreen)'} />
 
             {/* menu items */}
             {userMenuItems

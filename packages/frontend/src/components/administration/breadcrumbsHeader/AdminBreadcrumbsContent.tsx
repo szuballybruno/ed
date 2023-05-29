@@ -23,6 +23,7 @@ export const AdminBreadcrumbsContent = ({
             </EpistoFlex2>}
 
             <EpistoFont
+                textColor='eduptiveDeepDarkGreen'
                 style={{
                     display: 'flex',
                     flexDirection: 'row',

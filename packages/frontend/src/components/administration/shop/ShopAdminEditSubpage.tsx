@@ -306,7 +306,7 @@ export const ShopAdminEditSubpage = () => {
 
                             <EpistoFlex2>
                                 <EpistoButton
-                                    variant="colored"
+                                    variant="action"
                                     onClick={handleDeleteAll}>
 
                                     <EpistoFlex2>
@@ -355,7 +355,7 @@ export const ShopAdminEditSubpage = () => {
                                 </EpistoFont>
 
                                 <EpistoButton
-                                    variant="colored"
+                                    variant="action"
                                     onClick={addCodes}>
 
                                     {translatableTexts.misc.add}

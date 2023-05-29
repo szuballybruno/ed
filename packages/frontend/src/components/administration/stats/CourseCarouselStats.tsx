@@ -97,11 +97,10 @@ export const CourseCarouselStats = ({
         <AdminStatGroup
             id={CourseCarouselStats.name}
             padding="0"
-            background="white"
             title="Kurzusok teljesítménye"
             headerContent={(
                 <EpistoButton
-                    variant="colored">
+                    variant="action">
                     Összes kurzus
                 </EpistoButton>
             )}>
@@ -113,6 +112,7 @@ export const CourseCarouselStats = ({
 
                 <EpistoFlex2
                     flex="1">
+
                     <img
                         src={coverFilePath}
                         alt=""
@@ -158,7 +158,7 @@ export const CourseCarouselStats = ({
                                     width: '10px',
                                     height: '8px',
                                     color: index === currentIndex
-                                        ? 'black'
+                                        ? 'var(--eduptiveDeepDarkGreen)'
                                         : 'gray'
                                 }} />)}
 

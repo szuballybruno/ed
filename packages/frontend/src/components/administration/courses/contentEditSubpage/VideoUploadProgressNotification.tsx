@@ -98,10 +98,10 @@ export const VideoUploadProgressNotification = ({
                 <EpistoIcons.Upload />
 
                 <EpistoFont
-                    margin={{
-                        left: 'px10'
-                    }}
-                    flex="1">
+                    margin='0 0 0 10px'
+                    style={{
+                        flex: 1
+                    }}>
 
                     Video {`'${trim(videoTitle, 20)}'`}
                 </EpistoFont>

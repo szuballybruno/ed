@@ -174,7 +174,7 @@ export const EditRoleControl = (props: {
 
                 <EpistoFlex2 justify="flex-end">
                     <EpistoButton
-                        variant='colored'
+                        variant='action'
                         style={{
                             marginTop: '10px'
                         }}

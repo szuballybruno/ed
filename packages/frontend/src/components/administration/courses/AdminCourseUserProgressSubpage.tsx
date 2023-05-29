@@ -21,7 +21,7 @@ import { AdminUserCourseContentDialog } from '../users/adminCourseContentDialog/
 import { AdminCourseUserOverviewDialog, useAdminCourseUserOverviewDialogLogic } from './AdminCourseUserOverviewDialog';
 import { CourseAdministartionFrame } from './CourseAdministartionFrame';
 
-export interface AdminCourseUserRowType extends AdminCourseUserStatsDTO {
+interface AdminCourseUserRowType extends AdminCourseUserStatsDTO {
     avatar: {
         avatarUrl: string,
         firstName: string,
@@ -32,7 +32,7 @@ export interface AdminCourseUserRowType extends AdminCourseUserStatsDTO {
     courseReport: number
 }
 
-export const useCourseUsersColumns = ({
+const useCourseUsersColumns = ({
     handleOpenCourseResultDetailsDialog,
     handleOpenUserCourseStatsDialog
 }: {
@@ -164,7 +164,7 @@ export const useCourseUsersColumns = ({
             renderCell: ({ row }) =>
 
                 <EpistoButton
-                    variant='outlined'
+                    variant='plain'
                     onClick={() => {
 
                         handleOpenCourseResultDetailsDialog(row.courseId, row.userId, row.fullName);
@@ -180,7 +180,7 @@ export const useCourseUsersColumns = ({
             renderCell: ({ row }) =>
 
                 <EpistoButton
-                    variant='outlined'
+                    variant='plain'
                     onClick={() => {
 
                         handleOpenUserCourseStatsDialog(row.courseId, row.userId);
@@ -222,7 +222,7 @@ export const CircularProgressWithLabel = (
     );
 };
 
-export const useCourseUserGridFilterSettingsLogic = () => {
+const useCourseUserGridFilterSettingsLogic = () => {
 
     const presets = useMemo(() => [
         {

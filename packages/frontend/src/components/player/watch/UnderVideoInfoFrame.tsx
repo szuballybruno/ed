@@ -31,7 +31,7 @@ export const UnderVideoInfoFrame = (props: {
                 style={{
                     fontWeight: '500'
                 }}
-                fontSize={'fontHuge'}>
+                fontSize={'font22'}>
 
                 {title}
             </EpistoFont>

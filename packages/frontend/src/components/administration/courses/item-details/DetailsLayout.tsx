@@ -89,7 +89,7 @@ export const DetailsLayout = ({
 
                     {/* save button */}
                     <EpistoButton
-                        variant="colored"
+                        variant="action"
                         isDisabled={!okEnabled}
                         onClick={okEdit}>
                         {translatableTexts.misc.ok}

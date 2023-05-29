@@ -54,7 +54,7 @@ export const ShouldRotatePhoneOverlay = (props: {
             onClick={() => {
                 onExitFullScreen();
             }}
-            variant='outlined'>
+            variant='plain'>
 
             Kilépés a teljes képernyős módból
         </EpistoButton>

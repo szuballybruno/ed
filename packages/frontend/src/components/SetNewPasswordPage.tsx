@@ -93,13 +93,13 @@ export const SetNewPasswordPage = () => {
                     state={passwordEntryState} />
 
                 <EpistoButton
-                    variant="colored"
+                    variant="action"
+                    companyDetails={companyDetails || undefined}
                     padding="10px"
                     type="submit"
                     style={{
                         marginTop: '20px',
-                        width: '100%',
-                        backgroundColor: companyDetails?.primaryColor!
+                        width: '100%'
                     }}
                     onClick={handleSetNewPassword}>
 

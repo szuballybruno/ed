@@ -146,7 +146,7 @@ export const PractiseQuestions = (props: {
                 </EpistoFont>}
 
                 <EpistoButton
-                    variant="colored"
+                    variant="action"
                     style={{
                         fontSize: isMobile ? undefined : 15
                     }}

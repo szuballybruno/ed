@@ -1,11 +1,12 @@
 {
-    "name": "EpistoGram",
-    "short_name": "EpistoGram",
-    "description": "EpistoGram Learning Platform",
+    "name": "Eduptive",
+    "short_name": "Eduptive",
+    "description": "Eduptive Learning Platform",
     "display": "fullscreen",
     "start_url": "/home",
+    "id": "/home",
     "background_color": "#000000",
-    "theme_color": "#1d6784",
+    "theme_color": "#00594F",
     "icons": [
         {
             "src": "logo_min.png",

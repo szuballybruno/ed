@@ -30,7 +30,7 @@ export const OverlayDialog = (props: {
             justify="flex-end"
             display={props.showCloseButton ? 'flex' : 'none'}>
             <EpistoButton
-                variant="outlined"
+                variant="plain"
                 onClick={() => {
 
                     if (props.closeButtonAction)

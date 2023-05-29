@@ -13,7 +13,7 @@ import { CompanySelectorDropdown } from '../companySelector/CompanySelectorDropd
 import { AdminBreadcrumbLink } from './AdminBreadcrumbLink';
 import { AdminBreadcrumbsContext, useAdminBreadcrumbsState } from './AdminBreadcrumbsContext';
 
-export type CompanySelectorDropdownType = {
+type CompanySelectorDropdownType = {
     id: Id<'Company'> | null,
     name: string
 }
@@ -57,7 +57,7 @@ export const useAdminBreadcrumbsRootLogic = () => {
     };
 };
 
-export type AdminBreadcrumbsRootLogicType = ReturnType<typeof useAdminBreadcrumbsRootLogic>;
+type AdminBreadcrumbsRootLogicType = ReturnType<typeof useAdminBreadcrumbsRootLogic>;
 
 export const AdminBreadcrumbsHeaderRoot = ({ children, logic }: PropsWithChildren & { logic: AdminBreadcrumbsRootLogicType }) => {
 
@@ -93,7 +93,7 @@ export const AdminBreadcrumbsHeaderRoot = ({ children, logic }: PropsWithChildre
                     <EpistoButton
                         id={'BackButton'}
                         style={{
-                            color: 'var(--mildDeepBlue)',
+                            color: 'var(--eduptiveMildDarkGreen)',
                             cursor: 'pointer',
                             padding: '6px 16px',
                             borderRadius: '5px',

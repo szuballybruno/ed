@@ -44,7 +44,7 @@ export const PretestGreetingSubpage = () => {
                     }} />
 
                 <EpistoFont
-                    fontSize="fontHuge">
+                    fontSize="font22">
 
                     {'Szintfelmérő vizsga'}
                 </EpistoFont>

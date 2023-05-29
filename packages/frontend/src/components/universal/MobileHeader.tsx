@@ -16,7 +16,7 @@ export const MobileHeader = (props: {
 
             <EpistoFont
                 fontWeight='heavy'
-                fontSize='fontLargePlus'>
+                fontSize='font19'>
 
                 {props.title}
             </EpistoFont>

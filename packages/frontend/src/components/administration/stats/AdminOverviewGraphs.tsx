@@ -100,13 +100,13 @@ export const AdminOverviewGraphs = () => {
                         <AdminStatGroup
                             id={`${AdminOverviewGraphs.name}-${index}}`}
                             title={item.title}
-                            padding="0px"
-                            background="white"
+                            padding="0"
                             key={index}>
 
                             <StatisticsCard
                                 noShadow
                                 key={index}
+                                margin='20px'
                                 flex="1"
                                 {...item} />
                         </AdminStatGroup>

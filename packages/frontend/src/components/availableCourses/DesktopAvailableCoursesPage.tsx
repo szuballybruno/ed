@@ -3,17 +3,16 @@ import { OrderType } from '@episto/commontypes';
 import { AvailableCourseDTO, CourseCategoryDTO } from '@episto/communication';
 import { Responsivity } from '../../helpers/responsivity';
 import { translatableTexts } from '../../static/translatableTexts';
-import { ContentPane } from '../pageRootContainer/ContentPane';
 import { EpistoDiv } from '../controls/EpistoDiv';
 import { EpistoFlex, EpistoFlex2 } from '../controls/EpistoFlex';
 import { EpistoFont } from '../controls/EpistoFont';
 import { EpistoGrid } from '../controls/EpistoGrid';
 import { EpistoSearch } from '../controls/EpistoSearch';
 import { MUI } from '../controls/MUIControls';
+import { ContentPane } from '../pageRootContainer/ContentPane';
 import { LeftPane } from '../pageRootContainer/LeftPane';
 import { CourseTile } from '../universal/CourseTile';
 import { AvailableCoursesPageFilterType } from './AvailableCoursesPage';
-
 export const DesktopAvailableCoursesPage = ({
     courseCategories,
     courses,
@@ -47,6 +46,7 @@ export const DesktopAvailableCoursesPage = ({
 
                 {/* categories title */}
                 <EpistoFont
+                    textColor='eduptiveMildDarkGreen'
                     fontSize="fontSmall"
                     isUppercase
                     style={{ margin: '10px' }}>
@@ -89,9 +89,10 @@ export const DesktopAvailableCoursesPage = ({
                                     padding="3px"
                                     height="30px"
                                     margin="2px 10px 2px 0px"
+                                    color='var(--eduptiveMildDarkGreen)'
                                     bgColor={filterProps.filterCategoryId === categoryOption.id
-                                        ? 'var(--deepBlue)'
-                                        : 'var(--epistoTeal)'} />
+                                        ? 'var(--eduptiveDeepDarkGreen)'
+                                        : 'var(--eduptiveYellowGreen)'} />
 
                                 {categoryOption.name}
                             </MUI.ToggleButton>;
@@ -216,8 +217,7 @@ export const DesktopAvailableCoursesPage = ({
 
                                 return <GridItem
                                     key={index}
-                                    className="roundBorders"
-                                    background="var(--transparentWhite70)">
+                                    className="roundBorders">
 
                                     <CourseTile
                                         onDetails={() => navigateToDetailsPage(course)}

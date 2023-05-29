@@ -55,7 +55,8 @@ export const CompanyAdminIndexPage = memo(() => {
                             key={index}
                             align='center'>
 
-                            <EpistoFont>
+                            <EpistoFont
+                                textColor='eduptiveDeepDarkGreen'>
                                 {company.name}
                             </EpistoFont>
 

@@ -79,7 +79,7 @@ export const RecommendedItemQuota = ({
 
                 {/* count */}
                 <EpistoFont
-                    fontSize={'fontLargePlus'}
+                    fontSize={'font19'}
                     style={{
                         fontWeight: 500,
                         marginRight: 2

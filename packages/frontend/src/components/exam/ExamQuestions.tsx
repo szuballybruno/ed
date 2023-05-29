@@ -202,7 +202,9 @@ export const ExamQuestions = ({
                         src={Environment.getAssetUrl('course_page_icons/curriculum_test.svg')}
                         className="square35" />
 
-                    <EpistoFont style={{ marginLeft: '10px' }}>
+                    <EpistoFont
+                        textColor='eduptiveMildDarkGreen'
+                        style={{ marginLeft: '10px' }}>
                         {questions.length}/{questionPaging.currentIndex + 1}
                     </EpistoFont>
                 </EpistoFlex2>

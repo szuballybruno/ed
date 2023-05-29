@@ -16,7 +16,7 @@ export const PlayerTitleSubtitle = (props: {
         flex={'5'}>
 
         <EpistoFont
-            fontSize={isMobile ? 'fontLarge' : 'fontLargePlus'}
+            fontSize={isMobile ? 'fontLarge' : 'font19'}
             style={{
                 fontWeight: 500,
                 margin: isMobile ? '10px 0 5px 0' : '0'

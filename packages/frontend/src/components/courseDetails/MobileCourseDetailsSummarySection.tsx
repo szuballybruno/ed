@@ -62,7 +62,7 @@ export const MobileCourseDetailsSummarySection = (props: {
                             className="square30"
                             style={{
                                 marginRight: '10px',
-                                color: 'var(--deepBlue)'
+                                color: 'var(--eduptiveDeepDarkGreen)'
                             }} />
 
                         {/* text */}
@@ -108,7 +108,7 @@ export const MobileCourseDetailsSummarySection = (props: {
                             align="center">
 
                             <SettingsSuggest
-                                style={{ color: 'var(--deepBlue)', marginRight: '10px' }}
+                                style={{ color: 'var(--eduptiveDeepDarkGreen)', marginRight: '10px' }}
                                 className="square35" />
 
                             <EpistoFont>

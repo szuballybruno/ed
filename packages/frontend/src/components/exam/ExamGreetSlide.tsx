@@ -73,7 +73,7 @@ export const ExamGreetSlide = (props: {
                 }} />
 
             <EpistoFont
-                fontSize="fontHuge">
+                fontSize="font22">
 
                 {exam.title}
             </EpistoFont>

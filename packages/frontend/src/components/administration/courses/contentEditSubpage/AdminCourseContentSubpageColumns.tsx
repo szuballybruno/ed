@@ -160,6 +160,7 @@ export const useGridColumns = (
                     style={{ cursor: 'pointer' }}
                     onClick={() => handleViewDetails(row)}
                     align="center">
+
                     <EpistoFont
                         fontWeight={currentVersionCode === row.data.versionCode ? 'heavy' : undefined}>
                         {value}
@@ -305,7 +306,7 @@ export const useGridColumns = (
                     return <></>;
 
                 return <EpistoButton
-                    variant="outlined"
+                    variant="plain"
                     onClick={() => onSelectVideoFile(row)}>
 
                     Fájl kiválasztása

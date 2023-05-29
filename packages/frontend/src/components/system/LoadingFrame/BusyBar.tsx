@@ -22,7 +22,7 @@ export const BusyBar = ({
                     color='inherit'
                     className='whall'
                     style={{
-                        color: 'var(--deepBlue)',
+                        color: 'var(--eduptiveDeepDarkGreen)',
                         height: 3
                     }} />
             )}

@@ -48,12 +48,12 @@ export const ModuleEditDialog = ({
                     margin={{ all: 'px5' }}>
 
                     <EpistoFont
-                        fontSize2="large">
+                        fontSize="fontLarge">
                         Modul szerkesztése
                     </EpistoFont>
 
                     <EpistoButton
-                        variant='colored'
+                        variant='action'
                         onClick={handleCreateModule}>
 
                         {translatableTexts.misc.add}
@@ -89,7 +89,7 @@ export const ModuleEditDialog = ({
                     mt="5px"
                     margin={{ all: 'px5' }}>
                     <EpistoButton
-                        variant='colored'
+                        variant='action'
                         onClick={handleOk}>
 
                         {translatableTexts.misc.ok}

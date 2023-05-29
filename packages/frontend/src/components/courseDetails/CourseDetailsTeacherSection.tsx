@@ -1,11 +1,11 @@
 import React from 'react';
-import {CourseDetailsDTO} from '@episto/communication';
-import {Environment} from '../../static/Environemnt';
-import {EpistoFlex2} from '../controls/EpistoFlex';
+import { CourseDetailsDTO } from '@episto/communication';
+import { Environment } from '../../static/Environemnt';
+import { EpistoFlex2 } from '../controls/EpistoFlex';
 
-import {EpistoFont} from '../controls/EpistoFont';
-import {EpistoHeader} from '../EpistoHeader';
-import {ProfileImage} from '../ProfileImage';
+import { EpistoFont } from '../controls/EpistoFont';
+import { EpistoHeader } from '../EpistoHeader';
+import { ProfileImage } from '../ProfileImage';
 
 export const CourseDetailsTeacherSection = (props: {
     courseDetails: CourseDetailsDTO
@@ -64,9 +64,7 @@ export const CourseDetailsTeacherSection = (props: {
 
                     {/* full name */}
                     <EpistoFont
-                        style={{
-                            fontWeight: 'bold'
-                        }}>
+                        fontWeight='heavy'>
 
                         {courseDetails.teacherData.teacherFullName}
                     </EpistoFont>
@@ -104,7 +102,7 @@ export const CourseDetailsTeacherSection = (props: {
                                 src={Environment.getAssetUrl('/course_page_icons/teacher_award.svg')} />
 
                             <EpistoFont
-                                color='fontLight'>
+                                textColor='white'>
 
                                 {badge}
                             </EpistoFont>
@@ -135,9 +133,7 @@ export const CourseDetailsTeacherSection = (props: {
 
                     {/* text */}
                     <EpistoFont
-                        style={{
-                            marginLeft: 5
-                        }}>
+                        margin='0 0 0 5px'>
 
                         {infoCard.title}
                     </EpistoFont>

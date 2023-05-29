@@ -21,9 +21,7 @@ export const EpistoCheckboxLabel = ({
             {boxFirst && children}
 
             <EpistoFont
-                margin={{
-                    right: 'px5'
-                }}>
+                margin='0 5px 0 0'>
                 {label}
             </EpistoFont>
 

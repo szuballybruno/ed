@@ -20,7 +20,7 @@ export const TailingAdminButtons = ({
 
             {/* delete button */}
             {onDeleteCallback && <EpistoButton
-                variant='outlined'
+                variant='plain'
                 onClick={onDeleteCallback}
                 style={{
                     color: 'var(--deepRed)'
@@ -31,7 +31,7 @@ export const TailingAdminButtons = ({
 
             {/* save button */}
             <EpistoButton
-                variant='colored'
+                variant='action'
                 margin={{
                     left: 'px5'
                 }}

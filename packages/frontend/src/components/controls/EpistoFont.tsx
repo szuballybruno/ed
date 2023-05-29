@@ -1,12 +1,14 @@
 import { CSSProperties, ReactNode, RefObject, useCallback, useEffect, useRef, useState } from 'react';
 import { createClassBuiler } from '../../helpers/classBuilder';
-import { isNumber, isString, useCSSOptionClasses } from '../../static/frontendHelpers';
-import { CSSOptionsFont } from '../../styles/globalCssTypes';
+import { isNumber, isString } from '../../static/frontendHelpers';
 import styles from './css/EpistoFont.module.css';
 
-export type FontSizeType = number | 'fontSmall' | 'fontSmall' | 'fontLarge' | 'fontMidPlus' | 'fontLarge' | 'fontLargePlus' | 'fontHuge' | 'fontGiant' | 'fontXXL'
+export type FontSizeType = number | 'fontSmall' | 'fontSmall' | 'fontLarge' | 'fontMidPlus' | 'fontLarge' | 'font19' | 'font22' | 'font26' | 'font30'
 
 export const EpistoFont = ({
+    margin,
+    textAlign,
+    fontWeight,
     className,
     style,
     fontSize,
@@ -19,9 +21,14 @@ export const EpistoFont = ({
     isAutoFontSize,
     children,
     tooltip,
+    textColor,
     ...cssOptions
 }: {
     children: ReactNode,
+    textColor?: 'white' | 'eduptiveMildDarkGreen' | 'eduptiveDeepDarkGreen' | 'eduptiveYellowGreen' | 'accept' | 'decline',
+    textAlign?: 'left' | 'center' | 'right',
+    fontWeight?: 'normal' | 'heavy'
+    margin?: string,
 
     /**
      * @deprecated use globalCss
@@ -48,10 +55,10 @@ export const EpistoFont = ({
      */
     isUppercase?: boolean,
     isAutoFontSize?: boolean,
-    tooltip?: string
-} & CSSOptionsFont) => {
+    tooltip?: string,
+}) => {
 
-    const { cssOptionClasses } = useCSSOptionClasses(cssOptions);
+    /* const { cssOptionClasses } = useCSSOptionClasses(cssOptions); */
 
     const ref = useRef<HTMLParagraphElement>(null);
 
@@ -80,6 +87,35 @@ export const EpistoFont = ({
         return undefined;
     })();
 
+    const textColorValue = (() => {
+
+        if (textColor === 'white') {
+            return 'white';
+        }
+
+        if (textColor === 'eduptiveMildDarkGreen') {
+            return 'var(--eduptiveMildDarkGreen)';
+        }
+
+        if (textColor === 'eduptiveDeepDarkGreen') {
+            return 'var(--eduptiveDeepDarkGreen)';
+        }
+
+        if (textColor === 'eduptiveYellowGreen') {
+            return 'var(--eduptiveYellowGreen)';
+        }
+
+        if (textColor === 'accept') {
+            return 'var(--goodGreen)';
+        }
+
+        if (textColor === 'decline') {
+            return 'var(--deepRed)';
+        }
+
+        return 'var(--eduptiveDeepDarkGreen)';
+    })();
+
     // NOTES
     // whiteSpace: "pre-line" is required for new lines
     // whiteSpace: "normal" is required for autoFontSize
@@ -93,6 +129,16 @@ export const EpistoFont = ({
                 ? 'uppercase'
                 : undefined,
             fontSize: calcFontSize,
+            fontWeight: (() => {
+
+                if (fontWeight === 'heavy')
+                    return 'bold';
+
+                return 'normal';
+            })(),
+            color: textColorValue,
+            margin,
+            textAlign,
             ...style
         }}
         title={tooltip}
@@ -102,7 +148,7 @@ export const EpistoFont = ({
                 .custom(fontSize as string))
             .if(!!className, builder => builder
                 .custom(className!))
-            .build() + ' ' + cssOptionClasses}>
+            .build()}>
 
         {children}
     </p>;

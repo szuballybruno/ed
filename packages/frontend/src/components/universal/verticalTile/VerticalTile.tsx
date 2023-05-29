@@ -26,8 +26,8 @@ export const VerticalTile = (props: {
         direction="column"
         position="relative"
         overflow="hidden"
-        shadow="0 0 10px 1px #CCC"
-        background="var(--transparentWhite70)"
+        //shadow="0 0 10px 1px #CCC"
+        background="var(--transparentWhite50)"
         justifyContent="space-between"
         padding="5px"
         {...css}>
@@ -44,9 +44,9 @@ export const VerticalTile = (props: {
 
                 {/* category  */}
                 <EpistoFont
+                    textColor='eduptiveMildDarkGreen'
                     style={{
-                        fontSize: '13px',
-                        color: 'gray'
+                        fontSize: '13px'
                     }}>
                     {subTitle}
                 </EpistoFont>
@@ -55,6 +55,7 @@ export const VerticalTile = (props: {
                 <EpistoFlex2 direction="column">
 
                     <EpistoFont
+                        textColor='eduptiveMildDarkGreen'
                         fontWeight={'heavy'}
                         fontSize="fontLarge">
 

@@ -115,7 +115,7 @@ export const ShopPage = () => {
                                 padding="3px"
                                 height="30px"
                                 margin="2px 10px 2px 0px"
-                                bgColor="var(--epistoTeal)" />
+                                bgColor="var(--eduptiveYellowGreen)" />
 
                             {category.name}
                         </MUI.ToggleButton>;

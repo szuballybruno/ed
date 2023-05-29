@@ -115,6 +115,7 @@ export const QuesitionView = ({
                     onClick={() => handleSelectedAnswerVersionAsync(answer.answerVersionId)} >
 
                     <EpistoFont
+                        textColor='eduptiveDeepDarkGreen'
                         isAutoFontSize
                         maxFontSize={15}
                         style={{
@@ -132,7 +133,8 @@ export const QuesitionView = ({
             padding="7px"
             align="center">
 
-            <EpistoFont>
+            <EpistoFont
+                textColor='eduptiveDeepDarkGreen' >
                 +1 EpistoCoinnal gazdagodtál!
             </EpistoFont>
 

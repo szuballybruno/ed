@@ -18,6 +18,7 @@
         },
         "typescript.tsdk": "epistogram\\node_modules\\typescript\\lib",
         "git.ignoreLimitWarning": true,
-        "powershell.cwd": "c:\\dev\\epistogram"
+        "powershell.cwd": "c:\\dev\\epistogram",
+        "findUnusedExports.detectCircularImports": true
     }
 }

@@ -2,7 +2,6 @@ import { useNavigation } from '../../services/core/navigatior';
 import { Environment } from '../../static/Environemnt';
 import { translatableTexts } from '../../static/translatableTexts';
 import { EpistoButton } from '../controls/EpistoButton';
-import { EpistoFont } from '../controls/EpistoFont';
 import { useCurrentCourseItemCodeContext } from '../system/CurrentCourseItemFrame';
 
 export const ContinueCourseButton = () => {
@@ -17,12 +16,13 @@ export const ContinueCourseButton = () => {
             <EpistoButton
                 className="mildShadow"
                 style={{
-                    color: '--epistoTeal',
+                    color: 'var(--eduptiveDeepDarkGreen)',
                     background:
-                        'var(--transparentWhite70)',
+                        'var(--eduptiveYellowGreen)',
                     border: 'none',
+                    padding: '0 20px'
                 }}
-                variant="outlined"
+                variant="action"
                 onClick={() => continueCourse(
                     currentCourseData.courseId,
                     currentCourseData.stageName,
@@ -36,17 +36,12 @@ export const ContinueCourseButton = () => {
                         style={{
                             width: '25px',
                             height: '25px',
+                            margin: '0 10px 0 0'
                         }}
                     />}>
 
-                <EpistoFont
-                    style={{
-                        margin: '0 0 0 5px'
-                    }}
-                    isUppercase>
 
-                    {translatableTexts.navbar.currentCourse}
-                </EpistoFont>
+                {translatableTexts.navbar.currentCourse}
             </EpistoButton>
         )}
     </>;

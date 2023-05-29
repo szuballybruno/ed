@@ -88,7 +88,7 @@ export const Playlist = ({
                             zIndex: 0
                         }}
                         header={() => <EpistoFlex2
-                            bg={isSelected ? 'var(--deepBlue)' : undefined}
+                            bg={isSelected ? 'var(--eduptiveDeepDarkGreen)' : undefined}
                             color={headercolor}
                             justify="space-between"
                             borderBottom="1px solid var(--mildGrey)"
@@ -124,9 +124,9 @@ export const Playlist = ({
                                 {isStartable && <EpistoButton
                                     padding="3px"
                                     onClick={() => startModule(module.moduleCode)}
-                                    variant="outlined">
+                                    variant="plain">
 
-                                    <PlayArrowIcon style={{ color: 'var(--epistoTeal)' }} />
+                                    <PlayArrowIcon style={{ color: 'var(--eduptiveYellowGreen)' }} />
                                 </EpistoButton>}
                             </EpistoDiv>
                         </EpistoFlex2>}>

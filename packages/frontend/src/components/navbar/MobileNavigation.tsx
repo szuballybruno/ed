@@ -22,7 +22,7 @@ const MobileNavigationButton = (props: {
             flexDirection: 'column',
             fontSize: '11px',
             color: isSelected
-                ? 'var(--epistoTeal)'
+                ? 'var(--eduptiveYellowGreen)'
                 : 'black'
         }}
         onClick={() => navigate2(props.to)}>
