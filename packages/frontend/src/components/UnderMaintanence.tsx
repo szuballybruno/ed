@@ -26,7 +26,8 @@ export const UnderMaintanence = () => {
                 variant="giant"
                 text="Ez egy előre tervezett leállás, és átlagosan maximum 30 percig tart."></EpistoHeader>
 
-            <EpistoFont>
+            <EpistoFont
+                textColor='eduptiveDeepDarkGreen'>
 
                 Ha bármilyen kérdésed lenne, írj bátran a <a style={{ color: 'blue' }}
                     href="mailto:support@epistogram.com">support@epistogram.com</a> e-mail címre

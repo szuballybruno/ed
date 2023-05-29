@@ -90,7 +90,7 @@ export const VideoQuestionnaire = (props: {
             justify="flex-end">
 
             <EpistoButton
-                variant="colored"
+                variant="action"
                 style={{
                     padding: '0'
                 }}

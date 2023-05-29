@@ -99,8 +99,9 @@ export const AdminSubpageHeader = ({
         id={AdminSubpageHeader.name}
         direction={'column'}
         className="whall roundBorders"
-        background={!isInverseBackground ? 'var(--transparentWhite70)' : undefined}
-        px="5px"
+        background={!isInverseBackground ? 'var(--transparentWhite50)' : undefined}
+        px="10px"
+        ml='5px'
         position="relative">
 
         {/* header section */}
@@ -153,7 +154,7 @@ export const AdminSubpageHeader = ({
 
                     {/* save button */}
                     {onSave && <EpistoButton
-                        variant="colored"
+                        variant="action"
                         onClick={() => onSave()}>
 
                         {translatableTexts.misc.save}

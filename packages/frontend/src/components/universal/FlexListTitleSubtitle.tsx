@@ -12,7 +12,6 @@ export const FlexListTitleSubtitle = ({ title, subTitle, isSelected }: {
     return <EpistoFlex2 direction="column">
 
         <EpistoFont
-            fontSize2='normal'
             isUppercase
             fontWeight={isSelected ? 'heavy' : undefined}>
 
@@ -22,7 +21,7 @@ export const FlexListTitleSubtitle = ({ title, subTitle, isSelected }: {
         {isString(subTitle)
             ? <EpistoFont
                 fontWeight={isSelected ? 'heavy' : undefined}
-                fontSize2='small'>
+                fontSize='fontSmall'>
 
                 {subTitle}
             </EpistoFont>

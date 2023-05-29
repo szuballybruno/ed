@@ -62,7 +62,7 @@ export const CourseDetailsSummarySection = (props: {
                         className="square30"
                         style={{
                             marginRight: '10px',
-                            color: 'var(--deepBlue)'
+                            color: 'var(--eduptiveDeepDarkGreen)'
                         }} />
 
                     {/* text */}
@@ -105,7 +105,7 @@ export const CourseDetailsSummarySection = (props: {
                     }]}
                     radarIndicators={courseDetails.humanSkillBenefits.map(x => ({
                         name: x.text,
-                        color: 'black',
+                        color: 'var(--eduptiveDeepDarkGreen)',
                         max: 10
                     }))}
                     style={{

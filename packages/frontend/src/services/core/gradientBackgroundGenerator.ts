@@ -57,12 +57,12 @@ export const gradientBackgroundGenerator = (color?: string, options?: GridGradie
 
     const defaultRadius = 1000;
 
-    const regex = /\(([^()]*)(,[^()]*)\)/gm;
+    const regex = /\(([^()]*)(,[^()]*)*\)/gm;
     const plainColorValue = color ? regex.exec(color) : undefined;
     const isIPhone = browser.isIPhone;
 
-    const defaultCenterColor = color && plainColorValue ? plainColorValue[1] : '0,100,255';
-    const defaultBackgroundColor = color && plainColorValue ? `rgba(${plainColorValue[1]}, 0.1)` : 'rgba(0, 100, 255, 0.1)';
+    const defaultCenterColor = color && plainColorValue ? plainColorValue[1] : '0,89,79';
+    const defaultBackgroundColor = color && plainColorValue ? `rgba(${plainColorValue[1]}, 0.1)` : 'rgba(0, 89, 79, 0.1)';
 
     const rgbaToHex = (color: string): string => {
 
@@ -111,15 +111,15 @@ export const gradientBackgroundGenerator = (color?: string, options?: GridGradie
 
     {/* Default gradient options */ }
     const gradientOptions: GradientType[] = [
-        getGradientOptionsOrDefault('topLeft', '70%', '400%', 0.4, 0.7),
-        getGradientOptionsOrDefault('topCenter', '', '320%', 0.5, 0.6),
-        getGradientOptionsOrDefault('topRight', '30%', '400%', 0.4, 0.7),
+        getGradientOptionsOrDefault('topLeft', '70%', '100%', 0.4, 0.7),
+        getGradientOptionsOrDefault('topCenter', '', '150%', 0.5, 0.6),
+        getGradientOptionsOrDefault('topRight', '30%', '200%', 0.4, 0.7),
         getGradientOptionsOrDefault('centerLeft', '70%', '50%', 0.3, 0.4),
         getGradientOptionsOrDefault('centerCenter', '', '', 0.5, 0.6),
         getGradientOptionsOrDefault('centerRight', '30%', '50%', 0.4, 0.5),
-        getGradientOptionsOrDefault('bottomLeft', '70%', 'calc(33vh - 320%)', 0.6, 0.7),
-        getGradientOptionsOrDefault('bottomCenter', '', 'calc(33vh - 300%)', 0.6, 0.7),
-        getGradientOptionsOrDefault('bottomRight', '30%', 'calc(33vh - 400%)', 0.4, 0.5)
+        getGradientOptionsOrDefault('bottomLeft', '130%', '-70%', 0.6, 0.7),
+        getGradientOptionsOrDefault('bottomCenter', '', '-70%', 0.5, 0.6),
+        getGradientOptionsOrDefault('bottomRight', '-30%', '-70%', 0.4, 0.5)
     ];
 
     const createRadialGradient = (gradient: GradientType) => {

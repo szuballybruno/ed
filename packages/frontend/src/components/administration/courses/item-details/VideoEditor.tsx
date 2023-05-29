@@ -57,7 +57,7 @@ export const useVideoEditorLogic = ({
     };
 };
 
-export type VideoEditorLogicType = ReturnType<typeof useVideoEditorLogic>;
+type VideoEditorLogicType = ReturnType<typeof useVideoEditorLogic>;
 
 export const VideoEditor = ({
     logic: {

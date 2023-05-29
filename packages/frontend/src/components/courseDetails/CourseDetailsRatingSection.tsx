@@ -15,8 +15,8 @@ export const CourseDetailsRatingSection = () => {
                     height='70px'
                     margin='10px'
                     className={'circle'}
-                    border="2px solid var(--epistoTeal)"
-                    bg="var(--deepBlue)"
+                    border="2px solid var(--eduptiveYellowGreen)"
+                    bg="var(--eduptiveDeepDarkGreen)"
                     color="white"
                     alignItems={'center'}
                     justifyContent={'center'}>
@@ -45,7 +45,7 @@ export const CourseDetailsRatingSection = () => {
                     </EpistoFlex2>
                     <EpistoFlex2>
                         <MUI.Rating value={5}
-                            style={{ color: 'var(--epistoTeal)' }} />
+                            style={{ color: 'var(--eduptiveYellowGreen)' }} />
                     </EpistoFlex2>
                 </EpistoFlex2>
                 <EpistoFlex2 mt='20px'>
@@ -112,15 +112,15 @@ export const CourseDetailsRatingSection = () => {
                 alignItems={'center'}
                 justifyContent={'center'}>
                 <MUI.Rating value={5}
-                    style={{ color: 'var(--epistoTeal)' }} />
+                    style={{ color: 'var(--eduptiveYellowGreen)' }} />
                 <MUI.Rating value={4}
-                    style={{ color: 'var(--epistoTeal)' }} />
+                    style={{ color: 'var(--eduptiveYellowGreen)' }} />
                 <MUI.Rating value={3}
-                    style={{ color: 'var(--epistoTeal)' }} />
+                    style={{ color: 'var(--eduptiveYellowGreen)' }} />
                 <MUI.Rating value={2}
-                    style={{ color: 'var(--epistoTeal)' }} />
+                    style={{ color: 'var(--eduptiveYellowGreen)' }} />
                 <MUI.Rating value={1}
-                    style={{ color: 'var(--epistoTeal)' }} />
+                    style={{ color: 'var(--eduptiveYellowGreen)' }} />
             </EpistoFlex2>
         </EpistoFlex2>
         <EpistoFlex2 width="100%"

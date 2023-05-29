@@ -107,7 +107,7 @@ export const EpistoDialog = <TParams = any>({
                     {dialogButtons
                         .map((x, index) => <EpistoButton
                             key={index}
-                            variant="outlined"
+                            variant="plain"
                             onClick={() => {
 
                                 if (x.action)

@@ -9,7 +9,7 @@ import { DetailsLayout } from './DetailsLayout';
 import { ExamEditor, useExamEditorLogic } from './ExamEditor';
 import { ExamStats } from './ExamStats';
 
-export type ExamEditorCallbackDataType = {
+type ExamEditorCallbackDataType = {
     questionMutations: QuestionMutationsType,
     answerMutations: AnswerMutationsType,
 }

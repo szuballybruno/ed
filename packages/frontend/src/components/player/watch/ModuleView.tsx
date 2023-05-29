@@ -71,7 +71,7 @@ export const ModuleView = (params: {
             justify="flex-end"
             padding="10px">
 
-            <EpistoButton variant="colored"
+            <EpistoButton variant="action"
                 onClick={startModule}
                 padding="0">
 

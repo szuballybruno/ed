@@ -35,12 +35,12 @@ export const EpistoStepper = <T,>({
                         justify='center'
                         className='square20 circle'
                         background={(isCurrent || isCompleted)
-                            ? 'var(--epistoTeal)'
+                            ? 'var(--eduptiveYellowGreen)'
                             : isSkipped
                                 ? 'var(--deepOrange)'
                                 : 'lightgrey'}>
 
-                        {!isCompleted && <EpistoFont fontSize2='normal'>
+                        {!isCompleted && <EpistoFont>
                             {index + 1}
                         </EpistoFont>}
 

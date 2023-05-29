@@ -47,7 +47,7 @@ export const useExamEditorLogic = ({
     };
 };
 
-export type ExamEditorLogicType = ReturnType<typeof useExamEditorLogic>;
+type ExamEditorLogicType = ReturnType<typeof useExamEditorLogic>;
 
 export const ExamEditor = ({
     logic

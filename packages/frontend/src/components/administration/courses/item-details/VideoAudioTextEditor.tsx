@@ -38,7 +38,7 @@ export const useVideoTextsEditorLogic = ({
     };
 };
 
-export type VideoTextsEditorLogicType = ReturnType<typeof useVideoTextsEditorLogic>;
+type VideoTextsEditorLogicType = ReturnType<typeof useVideoTextsEditorLogic>;
 
 export const VideoAudioTextEditor = ({
     logic: {

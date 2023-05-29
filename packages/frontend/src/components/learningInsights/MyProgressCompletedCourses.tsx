@@ -67,7 +67,7 @@ export const MyProgressCompletedCourses = () => {
                                 })
                         }, {
                             children: course.isComplete ? 'Újrakezdem' : 'Folytatom',
-                            variant: 'colored',
+                            variant: 'action',
                             onClick: () => handleStartCourse(course)
                         }]}
                         key={index}
@@ -83,7 +83,7 @@ export const MyProgressCompletedCourses = () => {
                 flex='1'
                 mb='20px'>
 
-                <EpistoFont fontSize="fontHuge">
+                <EpistoFont fontSize="font22">
 
                     Még nem végeztél el egyetlen kurzust sem.
                 </EpistoFont>

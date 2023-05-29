@@ -182,7 +182,7 @@ export const CourseItemSelector = ({
                     margin: '30px',
                     padding: '20px 0'
                 }}
-                variant="colored"
+                variant="action"
                 onClick={changeToAdvancedModePermanently}>
 
                 Váltás haladó módra

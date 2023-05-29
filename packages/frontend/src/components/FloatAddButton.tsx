@@ -3,10 +3,10 @@ import { EpistoButton } from './controls/EpistoButton';
 import { EpistoDiv } from './controls/EpistoDiv';
 
 export const FloatAddButton = (props: { onClick: () => void }) => <EpistoDiv position="absolute"
-bottom="45"
-right="45">
+    bottom="45"
+    right="45">
     <EpistoButton
-        variant="colored"
+        variant="action"
         size="60px"
         padding="0px"
         isRound

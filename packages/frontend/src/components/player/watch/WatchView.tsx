@@ -310,7 +310,7 @@ export const WatchView = ({
                             padding: '0'
                         }}
                         onClick={continueCourse}
-                        variant="colored">
+                        variant="action">
 
                         <TimeoutFrame reactTimer={reactTimer}>
 
@@ -422,7 +422,7 @@ export const WatchView = ({
 
             {!isMobile && <EpistoDivider
                 style={{
-                    background: 'var(--epistoTeal)',
+                    background: 'var(--eduptiveYellowGreen)',
                     width: '100%',
                     height: '4px',
                     borderRadius: '10px',

@@ -123,7 +123,7 @@ export const AdminUserCourseContentDialog = (props: {
                                 align='center'>
 
                                 <EpistoButton
-                                    variant='outlined'
+                                    variant='plain'
                                     height='stretch'
                                     onClick={() => setCurrentTab(2)}>
 

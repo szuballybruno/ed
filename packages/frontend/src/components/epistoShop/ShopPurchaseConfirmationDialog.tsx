@@ -92,7 +92,7 @@ export const ShopPurchaseConfirmationDialog = (props: {
                 style={{
                     margin: '15px 0'
                 }}
-                variant="colored"
+                variant="action"
                 onClick={onConfirmPurchaseAsync}>
 
                 {translatableTexts.shop.purchaseConfirmationDialog.unlock}
@@ -137,7 +137,7 @@ export const ShopPurchaseConfirmationDialog = (props: {
 
                     navigateToPlayer(code);
                 }}
-                variant="colored">
+                variant="action">
 
                 {translatableTexts.shop.purchaseConfirmationDialog.letsGoToCourse}
             </EpistoButton> : <EpistoButton

@@ -59,7 +59,7 @@ export const PlaylistItem = (
 
     const borderColor = type === 'exam'
         ? 'var(--intenseOrange)'
-        : 'var(--epistoTeal)';
+        : 'var(--eduptiveYellowGreen)';
 
     const playlistItemTypeColor = (() => {
 

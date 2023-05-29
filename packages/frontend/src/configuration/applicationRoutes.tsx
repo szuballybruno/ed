@@ -227,7 +227,7 @@ export const getApplicationRoutes = () => {
                 title: translatableTexts.routeTitles.myProgressStartedCourses,
                 route: new EpistoRoute('/my-progress', 'started-courses'),
                 icon: <PlayArrow
-                    className="fontXXL"
+                    className="font30"
                     color={'secondary'} />,
             },
 
@@ -235,7 +235,7 @@ export const getApplicationRoutes = () => {
                 title: translatableTexts.routeTitles.myProgressCompletedCourses,
                 route: new EpistoRoute('/my-progress', 'completed-courses'),
                 icon: <Done
-                    className="fontXXL"
+                    className="font30"
                     color={'secondary'} />,
             },
 
@@ -249,7 +249,7 @@ export const getApplicationRoutes = () => {
             statsRoute: {
                 title: translatableTexts.routeTitles.administrationHomeOverview,
                 route: new EpistoRoute('/administration/:activeCompanyId', 'stats', '*'),
-                icon: <Equalizer className="fontXXL"
+                icon: <Equalizer className="font30"
                     color={'secondary'} />,
 
                 overviewRoute: {
@@ -266,7 +266,7 @@ export const getApplicationRoutes = () => {
             usersRoute: {
                 title: translatableTexts.routeTitles.administrationUserAdmin,
                 route: new EpistoRoute('/administration/:activeCompanyId', 'users', '*'),
-                icon: <Person className="fontXXL"
+                icon: <Person className="font30"
                     color={'secondary'} />,
 
                 /*  indexRoute: {
@@ -280,13 +280,13 @@ export const getApplicationRoutes = () => {
                 userRoute: {
                     title: translatableTexts.routeTitles.administrationEditUser,
                     route: new EpistoRoute('/administration/:activeCompanyId/users', ':userId', '*'),
-                    icon: <Person className="fontXXL"
+                    icon: <Person className="font30"
                         color={'secondary'} />,
 
                     editRoute: {
                         title: translatableTexts.routeTitles.administrationEditUser,
                         route: new EpistoRoute('/administration/:activeCompanyId/users/:userId', ''),
-                        icon: <Person className="fontXXL"
+                        icon: <Person className="font30"
                             color={'secondary'} />,
                     },
                     statsRoute: {
@@ -304,7 +304,7 @@ export const getApplicationRoutes = () => {
                 title: translatableTexts.routeTitles.administrationCourseAdmin,
                 route: new EpistoRoute('/administration/:activeCompanyId', 'courses', '*'),
                 icon: <Subscriptions
-                    className="fontXXL"
+                    className="font30"
                     color={'secondary'} />,
 
                 /* landingRoute: {
@@ -318,7 +318,7 @@ export const getApplicationRoutes = () => {
                 courseDetailsRoute: {
                     title: translatableTexts.routeTitles.administrationCourseDetails,
                     route: new EpistoRoute('/administration/:activeCompanyId/courses', ':courseId/details'),
-                    icon: <Subscriptions className="fontXXL"
+                    icon: <Subscriptions className="font30"
                         color={'secondary'} />,
                 },
                 courseContentRoute: {
@@ -342,7 +342,7 @@ export const getApplicationRoutes = () => {
             shopRoute: {
                 title: translatableTexts.routeTitles.administrationShopMain,
                 route: new EpistoRoute('/administration/:activeCompanyId', 'shop', '*'),
-                icon: <ShoppingCartIcon className="fontXXL"
+                icon: <ShoppingCartIcon className="font30"
                     color={'secondary'} />,
                 /* 
                                 overviewRoute: {
@@ -365,7 +365,7 @@ export const getApplicationRoutes = () => {
                 title: translatableTexts.routeTitles.administrationPersonalityAssessmentMain,
                 route: new EpistoRoute('/administration/:activeCompanyId', 'personality-assessment', '*'),
                 icon: <SupervisedUserCircleIcon
-                    className="fontXXL"
+                    className="font30"
                     color={'secondary'} />,
 
                 /*  indexRoute: {
@@ -388,7 +388,7 @@ export const getApplicationRoutes = () => {
                 title: 'Cégek',
                 route: new EpistoRoute('/administration/:activeCompanyId', 'companies', '*'),
                 icon: <LocationCityIcon
-                    className="fontXXL"
+                    className="font30"
                     color={'secondary'} />,/* 
 
                 indexRoute: {
@@ -417,7 +417,7 @@ export const getApplicationRoutes = () => {
                 title: 'Roles',
                 route: new EpistoRoute('/administration/:activeCompanyId', 'roles'),
                 icon: <LocalPoliceIcon
-                    className="fontXXL"
+                    className="font30"
                     color={'secondary'} />,
 
                 /*  indexRoute: {
@@ -434,7 +434,7 @@ export const getApplicationRoutes = () => {
                 title: 'Activation Codes',
                 route: new EpistoRoute('/administration/:activeCompanyId', 'activation-codes'),
                 icon: <EpistoIcons.Link
-                    className="fontXXL"
+                    className="font30"
                     color={'secondary'} />
             },
 
@@ -442,7 +442,7 @@ export const getApplicationRoutes = () => {
                 title: 'Debug',
                 route: new EpistoRoute('/administration/:activeCompanyId', 'debug'),
                 icon: <Build
-                    className='fontXXL'
+                    className='font30'
                     color='secondary' />/* ,
                 indexRoute: {
                     title: 'Debug',

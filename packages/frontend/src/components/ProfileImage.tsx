@@ -29,20 +29,20 @@ export const ProfileImage = forwardRef<HTMLDivElement, ProfileImageProps>(({
     const user = useContext(CurrentUserContext);
 
     const signature = getSignature(firstName ?? user.firstName, lastName ?? user.lastName);
-    const showSingature = !url;
+    const showSignature = !url;
     const showImage = !!url;
 
     return <EpistoFlex2
         padding={smallFrame ? '2px' : '4px'}
         className={className + ' circle'}
-        boxShadow="inset -7px -2px 20px 0px rgba(124,192,194,0.9)"
+        boxShadow="inset -7px -2px 20px 0px var(--eduptiveMildDarkGreen)"
         {...css}>
 
         <EpistoFlex2
             className={'circle'}
             flex="1"
             ref={ref}
-            bg="var(--deepBlue)"
+            bg="var(--eduptiveDeepDarkGreen)"
             color="white"
             align="center"
             justify="center"
@@ -55,13 +55,11 @@ export const ProfileImage = forwardRef<HTMLDivElement, ProfileImageProps>(({
                 src={url ?? ''}
                 display={showImage ? undefined : 'none'} />
 
-            <EpistoFont
-                style={{
-                    display: showSingature ? undefined : 'none'
-                }}>
+            {showSignature && <EpistoFont
+                textColor='white'>
 
                 {signature.toUpperCase()}
-            </EpistoFont>
+            </EpistoFont>}
         </EpistoFlex2>
     </EpistoFlex2 >;
 });

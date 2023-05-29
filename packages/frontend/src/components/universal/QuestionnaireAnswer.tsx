@@ -31,7 +31,7 @@ export const QuestionnaierAnswer = ({
             return { bg: '#FFFFFF', fg: 'black', border: '#7cf25e' };
 
         if (isSelected)
-            return { bg: 'var(--deepBlue)', fg: 'white' };
+            return { bg: 'var(--eduptiveDeepDarkGreen)', fg: 'white' };
 
         return { bg: 'white', fg: 'black' };
     })();
@@ -39,7 +39,7 @@ export const QuestionnaierAnswer = ({
     return <EpistoDiv {...css}>
         <EpistoButton
             className="whall tinyShadow"
-            variant="outlined"
+            variant="plain"
             onClick={() => onClick()}
             style={{
                 pointerEvents: disabled ? 'none' : 'all',

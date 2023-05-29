@@ -195,7 +195,7 @@ const PasswordChangeSection = ({
                         width: '100%'
                     }}
                     onClick={() => setIsPasswordChangeOpen(true)}
-                    variant="colored">
+                    variant="action">
 
                     {translatableTexts.preferences.changePassword}
                 </EpistoButton>}
@@ -216,7 +216,7 @@ const PasswordChangeSection = ({
                         width="100%">
 
                         <EpistoButton
-                            variant="colored"
+                            variant="action"
                             style={{
                                 background: 'var(--transparentWhite70)',
                                 color: 'black',
@@ -228,7 +228,7 @@ const PasswordChangeSection = ({
                         </EpistoButton>
 
                         <EpistoButton
-                            variant="colored"
+                            variant="action"
                             onClick={handleRequestChangePasswordAsync}
                             style={{
                                 marginLeft: '20px',
@@ -367,7 +367,7 @@ export const Preferences = () => {
                     {/* save button */}
                     <EpistoButton
                         isDisabled={!isChanged}
-                        variant="colored"
+                        variant="action"
                         style={{
                             marginTop: isMobile ? '20px' : '50px',
                         }}
@@ -378,14 +378,15 @@ export const Preferences = () => {
 
                     {/* error display */}
                     {errorMessage && <EpistoFont
-                        color="mildRed">
+                        textColor='decline'>
+
                         {errorMessage}
                     </EpistoFont>}
 
                     {/* Logout */}
                     {isMobile && (
                         <EpistoButton
-                            variant='colored'
+                            variant='action'
                             onClick={handleLogout}
                             style={{
                                 background: 'var(--mildRed)',

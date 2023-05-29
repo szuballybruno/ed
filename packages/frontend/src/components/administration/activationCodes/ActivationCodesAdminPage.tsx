@@ -77,13 +77,15 @@ export const ActivationCodesAdminPage = ({ activeCompany }: { activeCompany: Adm
     return (
         <>
             <AdminBreadcrumbsHeader>
+
                 <EpistoButton
                     margin={{
                         right: 'px10'
                     }}
                     onClick={openAddDialog}
                     icon={<EpistoIcons.Add />}>
-                    Generate codes
+
+                    Aktivációs kódok generálása
                 </EpistoButton>
             </AdminBreadcrumbsHeader>
 

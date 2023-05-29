@@ -253,7 +253,7 @@ export const useUserCoursesColumns = ({
             renderCell: ({ row }) =>
 
                 <EpistoButton
-                    variant='outlined'
+                    variant='plain'
                     onClick={() => {
 
                         handleOpenUserCourseDetailsDialog(row.courseId);

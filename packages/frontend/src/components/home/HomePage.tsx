@@ -50,7 +50,7 @@ const ActiveCourseSelectorHeader = ({ activeCoursesPaging }: { activeCoursesPagi
                     style={{
                         width: '10px',
                         height: '8px',
-                        color: index === activeCoursesPaging.currentIndex ? 'black' : 'gray'
+                        color: index === activeCoursesPaging.currentIndex ? 'var(--eduptiveDeepDarkGreen)' : 'gray'
                     }} />)}
 
             <EpistoButton onClick={() => activeCoursesPaging.next()}>
@@ -148,7 +148,7 @@ const HomePage = () => {
                         boxShadow="inset -1px -1px 2px 1px rgba(0,0,0,0.10)"
                         padding="3px"
                         margin="7px 10px 7px 0px"
-                        bgColor={'var(--epistoTeal)'} />
+                        bgColor={'var(--eduptiveYellowGreen)'} />
 
                     <FlexListTitleSubtitle
                         isSelected={false}
@@ -182,7 +182,7 @@ const HomePage = () => {
                     title={translatableTexts.homePage.practiseTitle}
                     headerContent={!isMobile && <CoinsAcquiredHeaderContent
                         coinsAcquired={coinsAcquired} />}
-                    background={isMobile ? '#1d6784' : '#1d6784'} //#7CC0C2
+                    background={isMobile ? 'var(--eduptiveMildDarkGreen)' : 'var(--eduptiveMildDarkGreen)'} //#7CC0C2
                     className="largeSoftShadow roundBorders"
                     color="white"
                     showDivider
@@ -201,7 +201,7 @@ const HomePage = () => {
                 <DashboardSection
                     isMobile={isMobile}
                     title={translatableTexts.homePage.mostRelevantStatistics}
-                    background={isMobile ? 'transparent' : 'var(--transparentWhite70)'}
+                    background={isMobile ? 'transparent' : 'var(--transparentWhite50)'}
                     borderRadius="6px"
                     showDivider
                     boxShadow={isMobile ? 'none' : undefined}
@@ -223,7 +223,7 @@ const HomePage = () => {
                     : 'Kurzus során nyújtott teljesítményed'}
                 headerContent={<ActiveCourseSelectorHeader
                     activeCoursesPaging={activeCoursesPaging} />}
-                background="var(--transparentWhite70)">
+                background="var(--transparentWhite50)">
 
                 <HomePageCourseStats
                     isSmallDesktop={isSmallerThan1320}
@@ -232,7 +232,7 @@ const HomePage = () => {
 
             <DashboardSection
                 title='Egyedi tanulási analízised'
-                background="var(--transparentWhite70)"
+                background="var(--transparentWhite50)"
                 borderRadius="6px"
                 showDivider
                 className="largeSoftShadow"

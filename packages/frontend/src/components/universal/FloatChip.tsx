@@ -13,7 +13,7 @@ export const FloatChip = (props: EpistoFlex2Props & { name: string, icon: any })
         margin="5px"
         {...css}>
         <svg width="40px"
-            color={css.color as any ?? 'var(--epistoTeal)'}>
+            color={css.color as any ?? 'var(--eduptiveYellowGreen)'}>
             {icon}
         </svg>
         <EpistoFont

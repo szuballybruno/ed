@@ -22,14 +22,14 @@ const NotFound = () => {
                 background='var(--transparentWhite70)'>
 
                 <EpistoFont
-                    fontSize={'fontXXL'}
+                    fontSize={'font30'}
                     fontWeight='heavy'>
 
                     A keresett oldal nem található!
                 </EpistoFont>
 
                 <EpistoButton
-                    variant='colored'
+                    variant='action'
                     style={{
                         margin: '20px 0 0 0'
                     }}

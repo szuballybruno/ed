@@ -23,7 +23,7 @@ export const AdminStatGroup = ({
         direction="column"
         flex="1"
         className="roundBorders"
-        background="var(--transparentWhite70)"
+        background="var(--transparentWhite50)"
         padding="20px"
         position="relative"
         {...css}>
@@ -43,7 +43,7 @@ export const AdminStatGroup = ({
 
         {children}
 
-        {isPreview && <PreviewOverlay/>}
+        {isPreview && <PreviewOverlay />}
 
     </EpistoFlex2>;
 };

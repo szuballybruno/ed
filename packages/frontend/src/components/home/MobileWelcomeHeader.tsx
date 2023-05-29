@@ -20,7 +20,7 @@ export const MobileWelcomeHeader = (props: {
 
             <EpistoFont
                 fontWeight='heavy'
-                fontSize='fontLargePlus'>
+                fontSize='font19'>
 
                 Szia {user.firstName}!
             </EpistoFont>

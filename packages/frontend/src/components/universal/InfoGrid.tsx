@@ -16,7 +16,7 @@ export const InfoGrid = (props: { infos: string[] }) => {
                 padding="10px"
                 boxShadow="0"
                 borderRadius="0"
-                borderLeft="4px solid var(--epistoTeal)">
+                borderLeft="4px solid var(--eduptiveYellowGreen)">
                 {info}
             </FlexFloat>)}
     </EpistoGrid>;

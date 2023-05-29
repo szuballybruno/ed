@@ -116,7 +116,7 @@ export const ExamResultsSlide = (props: {
 
             {/* title */}
             <EpistoFont
-                className="fontHuge"
+                className="font22"
                 style={{
                     padding: '20px 0 20px 0'
                 }}>
@@ -141,7 +141,7 @@ export const ExamResultsSlide = (props: {
 
                     <EpistoFlex2 flex='1'>
                         <EpistoFont
-                            className="fontHuge">
+                            className="font22">
                             {translatableTexts.exam.questionsLabel}
                         </EpistoFont>
                     </EpistoFlex2>
@@ -185,7 +185,9 @@ export const ExamResultsSlide = (props: {
                                     id="panel1a-header">
 
                                     <EpistoFlex2 flex={isMobile ? '2' : '1'}>
-                                        <EpistoFont margin={{ right: 'px5' }}>
+
+                                        <EpistoFont
+                                            margin='0 5px 0 0'>
                                             {question.text}
                                         </EpistoFont>
                                     </EpistoFlex2>

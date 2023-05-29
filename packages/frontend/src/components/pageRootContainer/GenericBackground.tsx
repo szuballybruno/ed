@@ -14,11 +14,11 @@ export const GenericBackground = (props: {
     const { isMobile } = Responsivity
         .useIsMobileView();
 
-    const isIPhone = Responsivity
+    const { isIPhone } = Responsivity
         .useIsIPhone();
 
-    const defaultMobileColor = 'rgba(80, 150, 255, 0.1)';
-    const defaultDesktopColor = 'rgba(0, 100, 255, 0.1)';
+    const defaultMobileColor = 'rgba(0, 89, 79, 0.1)';
+    const defaultDesktopColor = 'rgba(0, 89, 79, 0.1)';
 
     const getRgbFromRgba = (rgb: string) => {
 
@@ -29,7 +29,7 @@ export const GenericBackground = (props: {
 
     /* Getting r,g,b values without the alpha */
     const defaultMobileBaseColor = getRgbFromRgba(defaultMobileColor);
-    const plainCustomBaseColor = customBaseColor ? getRgbFromRgba(customBaseColor) : '0,100,255';
+    const plainCustomBaseColor = customBaseColor ? getRgbFromRgba(customBaseColor) : '0,89,79';
 
     /* You can set a custom color e.g. for a company */
     const currentColor = (() => {
@@ -40,7 +40,7 @@ export const GenericBackground = (props: {
         if (customBaseColor)
             return 'rgb(' + plainCustomBaseColor + ')';
 
-        if (isIPhone && !customBaseColor)
+        if (!customBaseColor)
             return 'rgb(' + defaultMobileBaseColor + ')';
 
         if (isMobile)

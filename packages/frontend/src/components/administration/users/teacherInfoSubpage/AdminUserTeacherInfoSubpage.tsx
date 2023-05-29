@@ -216,7 +216,7 @@ export const AdminUserTeacherInfoSubpage = ({
                     <EpistoButton
                         variant={'colored'}
                         onClick={() => handleSaveAsync()}
-                        style={{ marginTop: '20px', background: 'var(--deepBlue)' }}>
+                        style={{ marginTop: '20px', background: 'var(--eduptiveDeepDarkGreen)' }}>
 
                         {translatableTexts.misc.save}
                     </EpistoButton>

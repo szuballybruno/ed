@@ -15,8 +15,8 @@ const config: ThemeConfig = {
 const chakraTheme = extendTheme({
     config,
     fonts: {
-        heading: 'Raleway',
-        body: 'Raleway',
+        heading: 'Poppins',
+        body: 'Poppins',
     },
 });
 

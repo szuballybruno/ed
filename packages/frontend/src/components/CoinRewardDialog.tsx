@@ -23,7 +23,7 @@ export const CoinRewardDialog = (props: {
         <EpistoFlex2
             direction="column"
             borderRadius="5px"
-            border="solid 5px var(--epistoTeal)"
+            border="solid 5px var(--eduptiveYellowGreen)"
             align="center"
             justify="center"
             pb="40px"
@@ -42,7 +42,7 @@ export const CoinRewardDialog = (props: {
             </EpistoDiv>
 
             <EpistoFont
-                color="fontDark">
+                textColor='eduptiveDeepDarkGreen'>
 
                 {text}
             </EpistoFont>
@@ -50,13 +50,15 @@ export const CoinRewardDialog = (props: {
             <EpistoFlex2 align="flex-end"
                 mt="10px">
 
-                <EpistoFont fontSize="fontGiant"
-                    style={{ color: 'var(--epistoTeal)', fontWeight: 'bold' }}>
+                <EpistoFont
+                    fontSize="font26"
+                    textColor='white'
+                    style={{ color: 'var(--eduptiveYellowGreen)', fontWeight: 'bold' }}>
                     {coinRewardAmount}
                 </EpistoFont>
 
                 <EpistoFont
-                    color='fontDark'
+                    textColor='eduptiveDeepDarkGreen'
                     style={{ margin: '0px 0px 4px 4px' }}>
 
                     EpistoCoin
@@ -68,7 +70,7 @@ export const CoinRewardDialog = (props: {
                     style={{ margin: '0px 0px 4px 4px' }} />
 
                 <EpistoButton
-                    variant="colored"
+                    variant="action"
                     style={{ margin: '0px 0px 0px 15px' }}
                     onClick={() => dialogLogic.closeDialog()}>
 

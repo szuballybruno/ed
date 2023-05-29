@@ -51,17 +51,13 @@ export const ExamAbortDialog = ({
                 padding='20px'>
 
                 <EpistoFont
-                    margin={{
-                        top: 'px20'
-                    }}>
+                    margin='20px 0 0 0'>
 
                     {'A \'Befejezem\' gombra való kattintás után már nem módosíthatod a válaszaidat'}
                 </EpistoFont>
 
                 <EpistoFont
-                    margin={{
-                        top: 'px20'
-                    }}>
+                    margin='20px 0 0 0'>
 
                     {!isCompletedProperly && `Átugrott kérdések száma: ${skippedQuestionsCount} db`}
                 </EpistoFont>
@@ -99,7 +95,7 @@ export const ExamAbortDialog = ({
 
                 {/* cancel */}
                 <EpistoButton
-                    variant='colored'
+                    variant='action'
                     onClick={handleCancel}>
 
                     Átnézem mégegyszer

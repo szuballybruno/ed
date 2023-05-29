@@ -148,7 +148,7 @@ export const AdminUserExamsDataGridControl = (props: {
             renderCell: ({ row }) =>
 
                 <EpistoButton
-                    variant="outlined"
+                    variant="plain"
                     onClick={() => {
                         handleMoreButton(row.examTitle + '', row.answerSessionId);
                     }} >

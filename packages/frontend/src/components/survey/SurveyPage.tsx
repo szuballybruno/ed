@@ -1,7 +1,6 @@
 import { useCallback, useMemo } from 'react';
 import { applicationRoutes } from '../../configuration/applicationRoutes';
 import { Responsivity } from '../../helpers/responsivity';
-import browser from '../../services/core/browserSniffingService';
 import { useNavigation } from '../../services/core/navigatior';
 import { startUserGuide } from '../../services/core/userGuidingService';
 import { Environment } from '../../static/Environemnt';
@@ -14,7 +13,6 @@ import { useAuthContextState } from '../system/AuthenticationFrame';
 import { EpistoPaging } from '../universal/EpistoPaging';
 import { SurveyQuestions } from './SurveyQuestions';
 import { SurveyWrapper } from './SurveyWrapper';
-
 const pagingItems = [1, 2, 3];
 
 export const SurveyPage = () => {
@@ -25,7 +23,7 @@ export const SurveyPage = () => {
     const isInvitedUser = true;
     const { isMobile } = Responsivity
         .useIsMobileView();
-    const isIPhone = browser.isIPhone;
+    const { isIPhone } = Responsivity.useIsIPhone();
     const isSomethingLoading = useMemo(() => authState === 'loading', [authState]);
 
     const { navigate2 } = useNavigation();
@@ -35,7 +33,8 @@ export const SurveyPage = () => {
             <EpistoFlex2
                 key={i}>
 
-                <EpistoFont>
+                <EpistoFont
+                    textColor='eduptiveMildDarkGreen'>
                     {x}
                 </EpistoFont>
 

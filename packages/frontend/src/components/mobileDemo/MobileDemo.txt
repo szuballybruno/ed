@@ -20,7 +20,7 @@ export const MobileDemo = () => {
             "menuPath": ""
         }
     }
-    const logoUrl = globalConfig.assetStorageUrl + "/application/logo.svg"
+    const logoUrl = globalConfig.assetStorageUrl + "/application/logo.png"
 
     return <div className={classes.mobileDemoWrapper}>
         <div className={classes.navbar}>

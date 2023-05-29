@@ -1,4 +1,4 @@
-import {CSSProperties} from 'react';
+import { CSSProperties } from 'react';
 
 export type SegmentedButtonStyleType = {
     toggleButtonGroupSx: {
@@ -37,9 +37,9 @@ export const segmentedButtonStyles = {
             },
 
             '&.Mui-selected, &.Mui-selected:hover': {
-                color: '#444',
+                color: 'var(--eduptiveDeepDarkGreen)',
                 fontWeight: 'bold',
-                background: 'var(--transparentIntenseTeal)'
+                background: 'var(--eduptiveTransparentYellowGreen)'
 
             }
         },
@@ -65,7 +65,7 @@ export const segmentedButtonStyles = {
         toggleButtonSx: {
 
             '&.MuiToggleButton-root': {
-                color: '#444',
+                color: 'var(--eduptiveDeepDarkGreen)',
                 cursor: 'pointer',
                 backgroundColor: 'transparent',
                 padding: '6px 16px',
@@ -82,15 +82,15 @@ export const segmentedButtonStyles = {
             },
 
             '&.Mui-selected': {
-                color: 'white',
+                color: 'var(--eduptiveDeepDarkGreen)',
                 fontWeight: 'bold',
-                background: 'var(--transparentIntenseTeal)'
+                background: 'var(--eduptiveTransparentYellowGreen)'
 
             },
             '&.Mui-selected, &.Mui-selected:hover': {
-                background: 'var(--transparentIntenseTeal)', // theme.palette.primary.main
-                color: 'white',
-                fontWeight: 'bold'
+                color: 'var(--eduptiveDeepDarkGreen)',
+                fontWeight: 'bold',
+                background: 'var(--eduptiveTransparentYellowGreen)' // theme.palette.primary.main
             }
         },
         toggleButtonGroupSx: {

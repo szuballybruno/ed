@@ -1,14 +1,16 @@
 import { EpistoFont } from '../controls/EpistoFont';
 
-export const AdminSectionHeader = (props: {
+// TODO: UNUSED
+const AdminSectionHeader = (props: {
     title: string
 }) => {
     const { title } = props;
 
     return <EpistoFont
-        fontSize={'fontHuge'}
+        margin='50px 0 0 0'
+        textColor='eduptiveDeepDarkGreen'
+        fontSize={'font22'}
         style={{
-            marginTop: 50,
             fontWeight: 600
         }}>
 

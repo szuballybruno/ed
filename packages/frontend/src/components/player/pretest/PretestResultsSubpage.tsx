@@ -36,7 +36,8 @@ export const PretestDateInfo = (props: {
             flex='1'
             marginRight='20px'>
 
-            <EpistoFont fontSize={'fontLarge'}>
+            <EpistoFont
+                fontSize={'fontLarge'}>
 
                 {props.description}
             </EpistoFont>
@@ -116,7 +117,7 @@ export const PretestResultsSubpage = () => {
                     height="50px">
 
                     <EpistoFont
-                        fontSize="fontLargePlus"
+                        fontSize="font19"
                         style={{
                         }}>
 
@@ -203,8 +204,7 @@ export const PretestResultsSubpage = () => {
                         justify="center"
                         align="center">
 
-                        <EpistoFont
-                            fontSize2='normal'>
+                        <EpistoFont>
 
                             {correctAnswerRate < 50
                                 ? translatableTexts.exam.pretest.resultBeginnerModeDescription

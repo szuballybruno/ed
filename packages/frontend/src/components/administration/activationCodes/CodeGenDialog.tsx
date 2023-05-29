@@ -84,7 +84,7 @@ export const useCodeGenDialogLogic = (activeCompany: AdminActiveCompanyType, ref
     };
 };
 
-export type CodeGenDialogLogicType = ReturnType<typeof useCodeGenDialogLogic>;
+type CodeGenDialogLogicType = ReturnType<typeof useCodeGenDialogLogic>;
 
 export const CodeGenDialog = ({
     logic: {
@@ -142,7 +142,7 @@ export const CodeGenDialog = ({
                     justify="center">
 
                     <EpistoButton
-                        variant="colored"
+                        variant="action"
                         isDisabled={isPreviewingLatest}
                         onClick={handleGenerateActivationCodesPreviewAsync}>
 
@@ -150,7 +150,7 @@ export const CodeGenDialog = ({
                     </EpistoButton>
 
                     <EpistoButton
-                        variant="colored"
+                        variant="action"
                         isDisabled={!isPreviewingLatest}
                         onClick={handleGenerateActivationCodesAsync}>
 
@@ -164,6 +164,7 @@ export const CodeGenDialog = ({
                     text="Preview">
 
                     <EpistoFont
+                        textColor='eduptiveDeepDarkGreen'
                         isMultiline>
 
                         {activationCodesPreviewList.join('\n')}

@@ -61,7 +61,7 @@ export const SimpleEditList = <T,>(props: {
                 </FlexList>
 
                 <EpistoButton
-                    variant={'colored'}
+                    variant={'action'}
                     style={{ alignSelf: 'center', width: '100%' }}
                     onClick={() => {
 
@@ -74,8 +74,6 @@ export const SimpleEditList = <T,>(props: {
                     Elem hozzáadása
                 </EpistoButton>
             </EpistoLabel>
-
-
         </EpistoFlex2>
     );
 };

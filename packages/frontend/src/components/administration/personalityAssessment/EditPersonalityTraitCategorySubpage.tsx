@@ -107,7 +107,7 @@ export const EditPersonalityTraitCategorySubpage = () => {
                 subRouteLabel={pageLabel ?? ''}>
 
                 <EpistoFlex2
-                    bg="var(--deepBlue)"
+                    bg="var(--eduptiveDeepDarkGreen)"
                     align="center"
                     justify="flex-end"
                     className="dividerBorderBottom">

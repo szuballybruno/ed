@@ -220,9 +220,8 @@ export const LeaderboardPage = () => {
                     <EpistoConinImage />
 
                     <EpistoFont
-                        margin={{
-                            left: 'px10'
-                        }}>
+                        margin='0 0 0 10px'>
+
                         {row.acquiredCoins}
                     </EpistoFont>
                 </EpistoFlex2>
@@ -250,14 +249,6 @@ export const LeaderboardPage = () => {
                             text='Ranglista' />}
 
                     <EpistoFlex2>
-
-                        {/*                <SegmentedButton
-                            paging={leaderboardScopePaging}
-                            variant="default"
-                            getDisplayValue={x => x.name} />
-
-                        <EpistoFlex2
-                            margin="2px" /> */}
 
                         <SegmentedButton
                             paging={leaderboardPeriodPaging}

@@ -312,7 +312,7 @@ export const EpistoDataGrid = typedMemo(<TSchema, TKey>({
             columns={muiDataGridColumnDefs}
             style={{
                 height: '100%',
-                background: 'var(--transparentWhite70)'
+                background: 'var(--transparentWhite50)'
             }} />
     );
 }, (prev, next) => {

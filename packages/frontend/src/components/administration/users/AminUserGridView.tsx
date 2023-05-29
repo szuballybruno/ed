@@ -197,7 +197,7 @@ const useColumns = (
             renderCell: ({ value, row }) => <EpistoFlex2
                 align="center">
                 <EpistoButton
-                    variant="outlined"
+                    variant="plain"
                     onClick={() => navigate2(applicationRoutes.administrationRoute.usersRoute.userRoute.statsRoute, { activeCompanyId, userId: value })}>
 
                     Bővebben
@@ -206,7 +206,7 @@ const useColumns = (
                     margin={{
                         left: 'px5'
                     }}
-                    variant="outlined"
+                    variant="plain"
                     onClick={() => showDeleteUserDialog(row)}>
 
                     <EpistoIcons.Delete />
@@ -394,8 +394,8 @@ export const AminUserGridView = ({
         <Flex
             direction={'column'}
             className="whall roundBorders"
-            background={'var(--transparentWhite70)'}
             px="5px"
+            background='var(--transparentWhite50)'
             position="relative">
 
             <EpistoDialog

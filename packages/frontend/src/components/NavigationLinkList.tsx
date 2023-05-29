@@ -32,7 +32,7 @@ export const NavigationLinkList = <TRoute extends ApplicationRoute<any, any>>({
 
                         width='100%'
                         align="center"
-                        borderLeft={isCurrent ? 'solid 4px var(--mildDeepBlue)' : 'solid 4px transparent'}
+                        borderLeft={isCurrent ? 'solid 4px var(--eduptiveMildDarkGreen)' : 'solid 4px transparent'}
                         className={isCurrent ? 'mildShadow' : undefined}
                         borderRadius="0px 5px 5px 0px">
 
@@ -44,7 +44,7 @@ export const NavigationLinkList = <TRoute extends ApplicationRoute<any, any>>({
                             isUppercase
                             style={{
                                 marginLeft: '10px',
-                                color: 'var(--mildDeepBlue)',
+                                color: 'var(--eduptiveMildDarkGreen)',
                                 fontWeight: isCurrent ? 'bold' : 500,
                             }}>
                             {route.title}

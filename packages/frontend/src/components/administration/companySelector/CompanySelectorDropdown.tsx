@@ -37,7 +37,7 @@ export const useCompanySelectorLogic = ({
     };
 };
 
-export type CompanySelectorLogicType = ReturnType<typeof useCompanySelectorLogic>;
+type CompanySelectorLogicType = ReturnType<typeof useCompanySelectorLogic>;
 
 export const CompanySelectorDropdown = ({
     logic: {

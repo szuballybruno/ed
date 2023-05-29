@@ -338,13 +338,13 @@ export const DesktopCourseDetailsPage = ({
                                 <EpistoButton
                                     style={{
                                         flex: '1',
-                                        color: 'var(--epistoTeal)',
+                                        color: 'var(--eduptiveYellowGreen)',
                                         maxHeight: 40,
                                         marginTop: 15,
                                         marginBottom: 15,
                                         display: courseDetails?.canStartCourse ? undefined : 'none'
                                     }}
-                                    variant="outlined"
+                                    variant="plain"
                                     onClick={handlePlayCourse}
                                     icon={(
                                         <img
@@ -370,7 +370,7 @@ export const DesktopCourseDetailsPage = ({
                                         marginLeft: 10,
                                         display: courseDetails?.canStartCourse ? undefined : 'none'
                                     }}
-                                    variant="outlined"
+                                    variant="plain"
                                     onClick={() => {
 
                                         if (!courseDetails.courseId)

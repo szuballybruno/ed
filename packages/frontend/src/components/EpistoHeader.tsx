@@ -31,14 +31,15 @@ export const EpistoHeader = ({
             height={textHeight ?? '25px'}>
 
             <EpistoFont
+                textColor='eduptiveDeepDarkGreen'
                 fontSize={variant === 'giant'
-                    ? 'fontGiant'
+                    ? 'font26'
                     : variant === 'xxl'
-                        ? 'fontXXL'
+                        ? 'font30'
                         : 'fontLarge'}
                 style={{
                     fontWeight: type === 'strong' ? 600 : 'normal',
-                    color: variant === 'sub' ? 'black' : undefined
+                    color: variant === 'sub' ? 'var(--eduptiveDeepDarkGreen)' : undefined
                 }}>
 
                 {text}

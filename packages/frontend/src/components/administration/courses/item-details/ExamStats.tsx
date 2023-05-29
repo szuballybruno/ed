@@ -404,7 +404,7 @@ export const ExamStats = () => {
 
                             <EpistoDivider
                                 orientation="vertical"
-                                background="black"
+                                background="var(--eduptiveDeepDarkGreen)"
                                 width="1px"
                                 margin="0 10px" />
 
@@ -450,7 +450,7 @@ export const ExamStats = () => {
             background="var(--transparentWhite80)"
             className="mildShadow roundBorders"
             //boxShadow="inset -1px -1px 7px rgba(0,0,0,0.20)"
-            color="black"
+            color="var(--eduptiveDeepDarkGreen)"
             showDivider
             margin="10px 0 0 0"
             width="100%">

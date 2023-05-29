@@ -51,7 +51,7 @@ export const VideoContent = () => {
                 </Box>
             </Flex>}
             endContent={<Flex align="center">
-                <EpistoButton variant="colored"
+                <EpistoButton variant="action"
                     style={{ padding: '3px' }}>
                     <Download className="square25" />
                 </EpistoButton>

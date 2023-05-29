@@ -100,7 +100,7 @@ export const SessionWatcherFrame: FC<PropsWithChildren> = ({ children }) => {
                         margin={{
                             top: 'px10'
                         }}
-                        variant="colored"
+                        variant="action"
                         icon={<Refresh></Refresh>}
                         onClick={() => reloadPage()}>
 

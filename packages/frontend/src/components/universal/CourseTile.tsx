@@ -55,7 +55,8 @@ export const CourseTileStats = (props: {
     return <>
 
         {/* small stats  */}
-        <EpistoFlex2 mt='7px'
+        <EpistoFlex2
+            mt='7px'
             mb="3px"
             justify="space-between">
 
@@ -114,20 +115,26 @@ export const CourseTileButtons = (props: {
         isStartedCourse
     } = props;
 
-    return <EpistoFlex2 mb="10px">
+    return <EpistoFlex2
+        mb="10px">
 
         {/* details */}
         {isCourseDetailsEnabled && <EpistoButton
             onClick={onDetails}
-            style={{ flex: '1' }}>
+            style={{ flex: '1', color: 'var(--eduptiveDeepDarkGreen)' }}>
             {translatableTexts.availableCourses.courseDataSheet}
         </EpistoButton>}
 
         {/* start course */}
         <EpistoButton
             onClick={onPlay}
-            variant="colored"
-            style={{ flex: '1' }}>
+            variant="action"
+            style={{
+                flex: '1',
+                color: 'var(--eduptiveDeepDarkGreen)',
+                fontWeight: 'bold'
+            }}>
+
 
             {isStartedCourse
                 ? translatableTexts.availableCourses.continueCourse

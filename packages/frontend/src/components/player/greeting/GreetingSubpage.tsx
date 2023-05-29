@@ -113,7 +113,7 @@ export const GreetingSubpage = () => {
                     }} />
 
                 <EpistoFont
-                    fontSize="fontHuge">
+                    fontSize="font22">
                     {nextTitle}
                 </EpistoFont>
 

@@ -220,11 +220,15 @@ export const useVideoPlayerState = (
 
         Logger.logScoped('PLAYBACK', 'Triggering mobile playback control effect...');
 
-        if (!isReady)
+        if (!isReady) {
+            Logger.logScoped('PLAYBACK', 'Not ready, doing nothing...');
             return;
+        }
 
-        if (!isMobile)
+        if (!isMobile) {
+            Logger.logScoped('PLAYBACK', 'Not mobile, doing nothing...');
             return;
+        }
 
         if (isLandscape && isFullscreen) {
 
@@ -341,10 +345,9 @@ export const useVideoPlayerState = (
 
         Logger.logScoped('PLAYBACK', 'Trick unmuted autoplay callback runs...');
         if (isIPhone) {
+            Logger.logScoped('PLAYBACK', 'iPhone, isPlaying has set to true');
             setIsPlaying(true);
         }
-        setIsPlaying(true);
-        setIsPlaying(false);
     }, [isIPhone]);
 
     /**

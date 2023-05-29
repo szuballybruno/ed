@@ -3,7 +3,6 @@ import { applicationRoutes } from '../configuration/applicationRoutes';
 import { Responsivity } from '../helpers/responsivity';
 import { FeatureApiService } from '../services/api/FeatureApiService';
 import { useRegisterInvitedUser, useRegisterUser } from '../services/api/registrationApiService';
-import browser from '../services/core/browserSniffingService';
 import { useNavigation } from '../services/core/navigatior';
 import { showNotification, useShowErrorDialog } from '../services/core/notifications';
 import { Environment } from '../static/Environemnt';
@@ -27,7 +26,7 @@ export const RegistrationPage = () => {
     const isInvitedString = queryParams.getValue(x => x.isInvited, 'string');
     const isInvited = isInvitedString === 'true' ? true : false;
     const { isMobile } = Responsivity.useIsMobileView();
-    const isIPhone = browser.isIPhone;
+    const { isIPhone } = Responsivity.useIsIPhone();
 
     // state 
     const [isPrivacyPolicyAccepted, setIsPrivacyPolicyAccepted] = useState(false);
@@ -117,15 +116,20 @@ export const RegistrationPage = () => {
 
                 <EpistoImage
                     width="50%"
-                    src={Environment.getAssetUrl('/images/logo.svg')} />
+                    src={Environment.getAssetUrl('/images/logo.png')} />
             </EpistoFlex2>
 
             {/* some label idk TODO */}
             {isInvited
-                ? <EpistoFont isMultiline>
+                ? <EpistoFont
+                    textColor='eduptiveDeepDarkGreen'
+                    isMultiline>
+
                     {translatableTexts.registrationPage.setPasswordDescription}
                 </EpistoFont>
-                : <EpistoFont>
+                : <EpistoFont
+                    textColor='eduptiveDeepDarkGreen'>
+
                     {translatableTexts.registrationPage.learningStyleSurvey}
                 </EpistoFont>}
 
@@ -166,6 +170,7 @@ export const RegistrationPage = () => {
                     onClick={() => setIsPrivacyPolicyAccepted(p => !p)} />
 
                 <EpistoFont
+                    textColor='eduptiveDeepDarkGreen'
                     style={{
                         userSelect: 'none'
                     }}>
@@ -188,7 +193,7 @@ export const RegistrationPage = () => {
 
             <EpistoButton
                 onClick={handleRegisterUser}
-                variant="outlined"
+                variant="action"
                 isDisabled={!isPrivacyPolicyAccepted || (isInvited && passwordEntryState.hasCredentialError)}
                 style={{
                     width: '200px',
