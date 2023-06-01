@@ -65,7 +65,7 @@ export const VideoControls = (props: {
         };
 
     return <EpistoFlex2
-        background="linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.6814075972185749) 100%)"
+        background="linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.8) 100%)"
         color="white"
         display="flex"
         justify="flex-start"
@@ -85,6 +85,9 @@ export const VideoControls = (props: {
 
         {/* play/pause */}
         <EpistoButton
+            style={{
+                color: 'white'
+            }}
             onClick={toggleIsPlaying}>
 
             {isPlaying
@@ -94,6 +97,7 @@ export const VideoControls = (props: {
 
         {/* timestamp */}
         <EpistoFont
+            textColor='white'
             fontSize={isMobile ? 'fontLarge' : 'fontSmall'} >
             {`${secondsToTime(playedSeconds)}/${secondsToTime(videoLength)}`}
         </EpistoFont>
@@ -144,6 +148,7 @@ export const VideoControls = (props: {
         {/* volume */}
         <EpistoButton
             style={{
+                color: 'white',
                 height: '100%',
                 margin: '0 5px 0 0'
             }}

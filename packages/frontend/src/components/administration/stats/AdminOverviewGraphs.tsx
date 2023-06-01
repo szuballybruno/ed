@@ -30,6 +30,7 @@ export const AdminOverviewGraphs = () => {
                 yAxisLabelSuffix="db"
                 dataset={[{
                     name: 'Jelenlegi hét',
+                    color: '#00594F',
                     data: [[0, 6], [1, 9], [2, 10], [3, 9], [4, 3], [5, 4]]
                 }]}
                 variant="blueGreenBarChart" />,
@@ -44,10 +45,12 @@ export const AdminOverviewGraphs = () => {
                 dataset={[
                     {
                         name: 'Jelenlegi hét',
+                        color: '#CEDC00',
                         data: [[0, 6], [1, 7], [2, 10], [3, 9], [4, 6], [5, 4], [6, 3]],
                     },
                     {
                         name: 'Előző hét',
+                        color: '#00594F',
                         data: [[0, 4], [1, 9], [2, 8], [3, 11], [4, 10], [5, 2], [6, 5]],
                     }
                 ]}

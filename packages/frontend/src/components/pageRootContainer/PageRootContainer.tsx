@@ -14,7 +14,7 @@ export const PageRootContainer = ({
 
     useEffect(() => {
 
-        document.title = 'EpistoGram';
+        document.title = 'Eduptive';
     }, []);
 
     const { isIPhone } = Responsivity

@@ -183,7 +183,10 @@ export const PersonalityAssessment = (props: EpistoFlex2Props) => {
                                         fontSize="15px"
                                         textAlign='left'>
 
-                                        {item.title}
+                                        <EpistoFont fontSize='fontLarge'>
+
+                                            {item.title}
+                                        </EpistoFont>
                                     </EpistoDiv>
 
                                     <AccordionIcon />
@@ -195,7 +198,9 @@ export const PersonalityAssessment = (props: EpistoFlex2Props) => {
                                     //mt="10px"
                                     fontSize="13px">
 
-                                    {item.description}
+                                    <EpistoFont>
+                                        {item.description}
+                                    </EpistoFont>
                                 </AccordionPanel>
                             </AccordionItem>;
                         })}

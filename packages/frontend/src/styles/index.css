@@ -50,6 +50,11 @@
     --eduptiveMildDarkGreen: #00594F;
     --eduptiveYellowGreen: #CEDC00;
 
+    /* CHART COLORS */
+    --eduptiveChartMildDarkGreen2: #10776b;
+    --eduptiveChartMildDarkGreen2: #209b8c;
+    --eduptiveChartYellowGreen: #9ba515;
+
     /* TRANSPARENT COLORS */
 
     --eduptiveTransparentYellowGreen: rgba(206, 200, 0, 0.7);
@@ -138,6 +143,14 @@ body * ::-webkit-scrollbar {
 
 .fontLarge {
     font-size: 1.1rem !important;
+}
+
+.font13 {
+    font-size: 13px !important;
+}
+
+.font14 {
+    font-size: 14px !important;
 }
 
 .font19 {

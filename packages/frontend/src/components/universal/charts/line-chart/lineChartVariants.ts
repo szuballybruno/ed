@@ -1,6 +1,7 @@
 import { EChartsOption } from 'echarts';
 
 export const defaultOptions: EChartsOption = {
+    backgroundColor: 'rgba(255,255,255,0.5)',
     xAxis: {
         nameLocation: 'middle',
         nameGap: 40,

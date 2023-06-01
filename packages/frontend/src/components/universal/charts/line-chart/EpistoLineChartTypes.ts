@@ -7,6 +7,7 @@ export type EpistoLineChartDataType = number[] | number[][] | (number | null)[]
 export type EpistoLineChartDatasetType = {
     name: string,
     data: EpistoLineChartDataType,
+    color?: any,
     lineStyle?: {
         color?: string,
         type?: string

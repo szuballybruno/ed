@@ -108,7 +108,7 @@ export const UserProgressChart = ({
                         name: 'Valós haladás',
                         data: userProgress.actualProgress,
                         lineStyle: {
-                            color: 'orange',
+                            color: '#00594F',
                             type: 'line'
                         }
                     },
@@ -116,7 +116,7 @@ export const UserProgressChart = ({
                         name: 'Becsült haladás',
                         data: userProgress.previsionedProgress,
                         lineStyle: {
-                            color: 'lightgreen',
+                            color: '#CEDC00',
                             type: 'dotted'
                         }
                     }

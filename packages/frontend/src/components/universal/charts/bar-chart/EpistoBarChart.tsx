@@ -36,7 +36,8 @@ export const EpistoBarChart = ({
         legend,
         tooltip,
         xAxis,
-        yAxis
+        yAxis,
+        backgroundColor
     } = barChartVariants[variant];
 
     const defaultStyle = {
@@ -50,6 +51,7 @@ export const EpistoBarChart = ({
                 show: !!title,
                 text: title
             },
+            backgroundColor,
             legend:
                 legend
                     ? Object.assign(

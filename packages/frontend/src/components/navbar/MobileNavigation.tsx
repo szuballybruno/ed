@@ -61,7 +61,7 @@ export const MobileNavigation = () => {
                 to={applicationRoutes.availableCoursesRoute} />
 
             <MobileNavigationButton
-                title='Ranglista'
+                title='Top tanulók'
                 icon={<Sort className='square30' />}
                 to={applicationRoutes.leaderboardRoute} />
 

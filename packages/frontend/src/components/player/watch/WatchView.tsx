@@ -285,6 +285,7 @@ export const WatchView = ({
 
         {/* video player */}
         <EpistoFlex2
+            className='roundBorders'
             direction='column'
             zIndex={12}
             position={isMobile ? 'sticky' : undefined}

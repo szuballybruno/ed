@@ -1,7 +1,7 @@
 import { EpistoRadarChartOptionsType } from './EpistoRadarChartTypes';
 
-const averageGraphColor = '#ffa565';
-const userGraphColor = '#97deef';
+const averageGraphColor = '#00594F';
+const userGraphColor = '#CEDC00';
 const gridColor = '#969fb7';
 const shadowColor = 'rgba(0, 0, 0, .4)';
 
