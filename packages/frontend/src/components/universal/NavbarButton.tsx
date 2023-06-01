@@ -1,5 +1,5 @@
-import {EpistoButton} from '../controls/EpistoButton';
-import {EpistoFlex2, EpistoFlex2Props} from '../controls/EpistoFlex';
+import { EpistoButton } from '../controls/EpistoButton';
+import { EpistoFlex2, EpistoFlex2Props } from '../controls/EpistoFlex';
 
 export const NavbarButton = (props: {
     menuName?: string,
@@ -15,8 +15,11 @@ export const NavbarButton = (props: {
         {children
             ? children
             : <EpistoButton
+                className='font14'
                 onClick={() => onClick()}
                 style={{
+                    letterSpacing: 0.8,
+                    textTransform: 'lowercase',
                     flex: '1'
                 }}
                 variant="plain" >

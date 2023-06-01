@@ -29,9 +29,6 @@ export class FeatureService extends QueryServiceBase<Feature> {
 
     async checkFeatureAsync(principalId: PrincipalId, dto: FeatureDTO) {
 
-        //console.log('dto');
-        //console.log(dto);
-
         const type = await this
             ._getFeatureTypeAsync(dto.featureCode);
 
@@ -57,8 +54,6 @@ export class FeatureService extends QueryServiceBase<Feature> {
             return principalCompanyId;
         })()
 
-        //console.log(usedCompanyId);
-
         if (type === 'COURSE' && dto.courseId === null)
             throw new Error('This feature is course specific but the courseId is missing');
 
@@ -80,9 +75,6 @@ export class FeatureService extends QueryServiceBase<Feature> {
             .and('companyId', '=', 'companyId')
             .getOneOrNull();
 
-        //console.log('isencom');
-        console.log('Enabled by company: ' + !!isEnabledByCompany);
-
         const isEnabledByUser = await this._ormService
             .query(UserFeatureView, {
                 userId: dto.userId ? dto.userId : principalId,
@@ -92,8 +84,6 @@ export class FeatureService extends QueryServiceBase<Feature> {
             .and('userId', '=', 'userId')
             .and('isDeassigning', 'IS NOT', 'true')
             .getOneOrNull();
-
-        console.log('Enabled by user: ' + !!isEnabledByUser);
 
         const isDeassignedAtUserLevel = await this._ormService
             .query(UserFeatureView, {
@@ -105,9 +95,6 @@ export class FeatureService extends QueryServiceBase<Feature> {
             .and('isDeassigning', 'IS', 'true')
             .getOneOrNull();
 
-        //console.log('isenus');
-        console.log('Deassigned at user level: ' + !!isDeassignedAtUserLevel);
-
         const isEnabledByItem = await this._ormService
             .query(UserFeatureView, {
                 featureCode: dto.featureCode,
@@ -117,11 +104,8 @@ export class FeatureService extends QueryServiceBase<Feature> {
             .or('courseId', '=', 'courseId')
             .getOneOrNull();
 
-        console.log('Enabled by item: ' + !!isEnabledByItem);
-
         if (isDeassignedAtUserLevel) {
 
-            console.log('Enabled by company, but disabled by user');
             return false;
         }
 

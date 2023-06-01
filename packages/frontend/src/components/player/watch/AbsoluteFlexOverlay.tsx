@@ -26,8 +26,7 @@ export const AbsoluteFlexOverlay = (props: {
             width='100vw'
             height='100vh'
             position='fixed'
-            top='0'
-            zIndex='5'/>
+            top='0' />
 
         {isVisible && children}
     </EpistoFlex2>;

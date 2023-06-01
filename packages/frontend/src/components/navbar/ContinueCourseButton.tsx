@@ -14,13 +14,14 @@ export const ContinueCourseButton = () => {
         {currentCourseData && (
 
             <EpistoButton
-                className="mildShadow"
+                className="mildShadow font14"
                 style={{
                     color: 'var(--eduptiveDeepDarkGreen)',
                     background:
                         'var(--eduptiveYellowGreen)',
                     border: 'none',
-                    padding: '0 20px'
+                    padding: '0 20px',
+                    margin: '0 0 0 20px'
                 }}
                 variant="action"
                 onClick={() => continueCourse(

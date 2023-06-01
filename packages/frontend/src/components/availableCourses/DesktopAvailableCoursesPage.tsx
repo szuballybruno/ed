@@ -85,7 +85,7 @@ export const DesktopAvailableCoursesPage = ({
                                 key={index}>
                                 <EpistoFlex2
                                     className="roundBorders"
-                                    boxShadow="inset -1px -1px 2px 1px rgba(0,0,0,0.10)"
+                                    //boxShadow="inset -1px -1px 2px 1px rgba(0,0,0,0.10)"
                                     padding="3px"
                                     height="30px"
                                     margin="2px 10px 2px 0px"

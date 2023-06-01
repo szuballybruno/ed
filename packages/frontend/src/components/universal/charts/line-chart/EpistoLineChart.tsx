@@ -35,14 +35,15 @@ export const EpistoLineChart = (props: {
             tooltip,
             xAxis,
             yAxis,
-            seriesOptions
+            seriesOptions,
+            backgroundColor
         }
     } = props;
 
 
     const defaultStyle = {
         width: '100%',
-        height: '100%',
+        height: '100%'
     };
 
     return <ReactECharts
@@ -52,6 +53,7 @@ export const EpistoLineChart = (props: {
                 show: !!title,
                 text: title
             },
+            backgroundColor,
             legend:
                 legend
                     ? Object.assign(

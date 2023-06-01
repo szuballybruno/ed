@@ -74,15 +74,15 @@ export const huTranslation = getTranslation({
 
         navbar: {
             signout: 'Kijelentkezés',
-            currentCourse: 'Aktuális kurzus',
-            shop: 'Áruház',
+            currentCourse: 'Folytatom',
+            shop: 'eduMarkt',
             version: 'Verzió: '
         },
 
         preventMobileFrame: {
             descriptions: [
                 'Kedves Látogató!',
-                'Az optimális felhasználási élmény érdekében az EpistoGram webalkalmazása jelenleg csak asztali számítógépeken, notebookokon, vagy olyan táblagépeken fut el, melyek felbontása minimum 1280 x 720 pixeles.',
+                'Az optimális felhasználási élmény érdekében az Eduptive webalkalmazása jelenleg csak asztali számítógépeken, notebookokon, vagy olyan táblagépeken fut el, melyek felbontása minimum 1280 x 720 pixeles.',
                 'Egyéb okoseszközökön hamarosan debütáló mobilalkalmazásunkon keresztül érheted majd el platformunkat.'
             ]
         },
@@ -139,7 +139,7 @@ export const huTranslation = getTranslation({
         signupPage: {
 
             greetSlideTitle: 'Regisztráció',
-            greetSlideDescription: 'A következő kérdéssorozat segítségével felmérjük tanulási stílusodat, hogy a lehető leghatékonyabban tudd használni az EpistoGramot',
+            greetSlideDescription: 'A következő kérdéssorozat segítségével felmérjük tanulási stílusodat, hogy a lehető leghatékonyabban tudd használni az Eduptive-ot',
             greetSlideNextButton: 'Tovább',
 
             summarySlideDescriptionParts: [
@@ -156,13 +156,13 @@ export const huTranslation = getTranslation({
             javaCourseTitle: 'Java mesterkurzus',
             activeCourseContinue: 'Folytatom',
             activeCourseEmpty: 'Új tanfolyam kiválasztása',
-            availableCoursesLinkTitle: 'Tanfolyamkereső',
+            availableCoursesLinkTitle: 'Tanfolyamok',
             availableCoursesText: 'Válaszd ki a legszimpatikusabb tanfolyamot',
             currentCourseTitle: 'Jelenlegi kurzus',
-            practiseTitle: 'Gyakorolj, hogy a legjobb lehess!',
+            practiseTitle: 'Azonnali ismétlő kérdéseid',
             noTipOfTheDayYet: 'Személyes tanulási tipped 48 óra múlva válik elérhetővé',
             tipOfTheDay: 'Személyre szabott tipped',
-            mostRelevantStatistics: 'Havi statisztikáim',
+            mostRelevantStatistics: 'Aktivitásod a hónapban',
             tasks: 'Feladatok',
             stats: 'Legfontosabb statisztikáid',
             noStatsYet: 'A haladási becslésed megtekintéséhez minimum 5 nap szükséges',
@@ -223,9 +223,9 @@ export const huTranslation = getTranslation({
             registerViaActivationCode: 'Kód beváltása',
             homePage: 'Kezdőlap',
             shopPage: 'Bolt',
-            availableCourses: 'Tanfolyamkereső',
-            leaderboard: 'Ranglista',
-            myProgress: 'Haladásom',
+            availableCourses: 'Tanfolyamok',
+            leaderboard: 'Top tanulók',
+            myProgress: 'Kurzusaim',
             myProgressStartedCourses: 'Elkezdett kurzusaim',
             myProgressCompletedCourses: 'Befejezett kurzusaim',
             administration: 'Adminisztráció',
@@ -288,11 +288,11 @@ export const huTranslation = getTranslation({
             noMoreQuestionsGoWatchVideosTwo: 'Jelenleg nincs több elérhető kérdés számodra.',
             noMoreQuestionsGoWatchVideosFour: 'Tekints meg videókat új kérdésekért, így pedig EpistoCoinjaidat is gyarapíthatod! ',
             noMoreQuestionsGoWatchVideosThree: 'Folytass egy már elkezdett, vagy indíts el egy új tanfolyomot az alábbi gombra kattintva:',
-            noMoreQuestionsGoWatchVideosButton: 'Irány a Tanfolyamkereső!',
+            noMoreQuestionsGoWatchVideosButton: 'Irány a Tanfolyamok!',
             initialGreetingsFirst: 'Kedves',
             initialGreetingsSecond: 'Nagy örömünkre szolgál, hogy platformunkon köszönthetünk! Reméljük, hogy tanfolyamaink segítségével mind a munkádban, mind pedig a hétköznapokban is fejlődést érhetsz el.',
             initialGreetingsThird: 'Készen állsz, hogy belekezdj első tanfolyamodba?',
-            goToCourses: 'Irány a Tanfolyamkereső!'
+            goToCourses: 'Irány a Tanfolyamok!'
         },
 
         editUserControl: {
@@ -422,7 +422,7 @@ export const huTranslation = getTranslation({
                 courseSuccessfullyUnlocked: 'Sikeresen feloldottad a tanfolyamot',
                 itemSuccessfullyPurchased: 'Sikeresen megvásároltad a terméket',
 
-                canBeFoundInTheCourseSearch: 'Mostantól megtalálhatod a Tanfolyamkeresőben is!',
+                canBeFoundInTheCourseSearch: 'Mostantól megtalálhatod a Tanfolyamok között is!',
                 yourCode: 'Kódod amit beválthatsz a partnerünknél: ',
 
                 codeHasBeenSent: 'A kódod e-mailben is elküldtük neked, hogy később könnyen megtalálhasd.',

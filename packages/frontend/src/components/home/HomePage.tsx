@@ -219,8 +219,8 @@ const HomePage = () => {
                 className="largeSoftShadow"
                 marginBottom="10px"
                 title={activeCoursesPaging.currentItem?.title
-                    ? `Kurzus során nyújtott teljesítményed: ${activeCoursesPaging.currentItem.title}`
-                    : 'Kurzus során nyújtott teljesítményed'}
+                    ? `Jelenlegi haladásod: ${activeCoursesPaging.currentItem.title}`
+                    : 'Jelenlegi haladásod'}
                 headerContent={<ActiveCourseSelectorHeader
                     activeCoursesPaging={activeCoursesPaging} />}
                 background="var(--transparentWhite50)">
@@ -231,7 +231,7 @@ const HomePage = () => {
             </DashboardSection>}
 
             <DashboardSection
-                title='Egyedi tanulási analízised'
+                title='Tanulási profilod'
                 background="var(--transparentWhite50)"
                 borderRadius="6px"
                 showDivider

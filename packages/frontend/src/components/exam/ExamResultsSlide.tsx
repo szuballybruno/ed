@@ -64,7 +64,7 @@ export const ExamResultsSlide = (props: {
                 }
             })
             .addIf(!!exam.isFinalExam && !isMobile, {
-                title: 'Vissza a tanfolyamkeresőbe',
+                title: 'Vissza a tanfolyamokhoz',
                 action: () => {
 
                     if (isMobile) {
@@ -92,7 +92,7 @@ export const ExamResultsSlide = (props: {
                 }
             })
             .addIf(!!exam.isFinalExam, {
-                title: 'Vissza a tanfolyamkeresőbe',
+                title: 'Vissza a tanfolyamokhoz',
                 action: () => {
 
                     if (isMobile) {

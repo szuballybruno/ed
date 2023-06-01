@@ -466,6 +466,7 @@ export const ExamStats = () => {
                     dataset={[
                         {
                             name: 'Dataset',
+                            color: '#00594F',
                             data: iterate(300, (index) => {
                                 return [(300 - index), Math.pow(index, 2 + Math.random()) / 1000000];
                             })

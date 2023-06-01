@@ -9,7 +9,6 @@ export const PlaylistItemTypeIcon = (props: {
     return <EpistoFlex2
         alignSelf="stretch"
         className="roundBorders"
-        boxShadow="inset -1px -1px 2px 1px rgba(0,0,0,0.10)"
         padding="3px"
         margin="7px 10px 7px 0px"
         bgColor={color}

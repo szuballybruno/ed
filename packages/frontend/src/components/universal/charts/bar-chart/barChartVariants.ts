@@ -4,6 +4,7 @@ export const barChartVariants: { [K: string]: EpistoBarChartOptionsType } = {
 
     /* Stacked bar chart */
     blueGreenBarChart: {
+        backgroundColor: 'transparent',
         legend: {
             orient: 'horizontal',
             icon: 'circle',
@@ -52,6 +53,7 @@ export const barChartVariants: { [K: string]: EpistoBarChartOptionsType } = {
     },
 
     blueGreenBarChart2: {
+        backgroundColor: 'transparent',
         legend: {
             orient: 'horizontal',
             icon: 'circle',

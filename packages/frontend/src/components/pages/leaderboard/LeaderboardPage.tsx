@@ -243,10 +243,10 @@ export const LeaderboardPage = () => {
 
                     {isMobile
                         ? <MobileHeader
-                            title='Ranglista' />
+                            title='Top tanulók' />
                         : <EpistoHeader
                             variant='giant'
-                            text='Ranglista' />}
+                            text='Top tanulók' />}
 
                     <EpistoFlex2>
 

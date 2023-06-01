@@ -4,16 +4,15 @@ import { useNavigation } from '../../services/core/navigatior';
 import { Environment } from '../../static/Environemnt';
 
 import { translatableTexts } from '../../static/translatableTexts';
+import { ProfileImage } from '../ProfileImage';
 import { EpistoButton } from '../controls/EpistoButton';
 import { EpistoDiv } from '../controls/EpistoDiv';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
-import { EpistoFont } from '../controls/EpistoFont';
-import { ProfileImage } from '../ProfileImage';
 import { CurrentUserContext } from '../system/AuthenticationFrame';
 import { useAuthorizationContext } from '../system/AuthorizationContext';
+import { useCheckFeatureEnabled } from '../system/CheckFeatureFrame';
 import { NotificationsPopper } from './NotificationsPopper';
 import { UserContextMenu } from './UserContextMenu';
-import { useCheckFeatureEnabled } from '../system/CheckFeatureFrame';
 
 export const ShopAndNotifications = (props: {
     isMinimalMode: boolean,
@@ -64,29 +63,24 @@ export const ShopAndNotifications = (props: {
 
                 {/* shop button */}
                 {isShopPageEnabled && <EpistoButton
+                    className='font14'
                     style={{
                         height: 40,
-                        fontStyle: 'normal',
+                        letterSpacing: 0.8,
+                        textTransform: 'lowercase',
                     }}
                     onClick={() => navigate2(applicationRoutes.shopRoute)}
                     variant={'plain'}>
 
-                    <EpistoFont
-                        isUppercase
-                        style={{
-                            margin: '0 7px',
-                            fontWeight: 500,
-                        }}>
-
-                        {translatableTexts.navbar.shop}
-                    </EpistoFont>
+                    {translatableTexts.navbar.shop}
 
                     <img
                         className="square50"
                         src={Environment.getAssetUrl('/images/shop3D.png')}
                         alt=""
                         style={{
-                            objectFit: 'contain',
+                            margin: '0 0 0 10px',
+                            objectFit: 'contain'
                         }} />
 
                 </EpistoButton>}

@@ -80,7 +80,7 @@ export const VideoPlayer = ({
             id="fullScreenRoot"
             width='100%'
             ref={playerContainerRef}
-            className="largeSoftShadow"
+            className="largeSoftShadow roundBorders"
             {...fullScreenRootProps}>
 
             {/* player debug info */}
@@ -101,15 +101,16 @@ export const VideoPlayer = ({
 
             {/* playback */}
             <EpistoDiv
+                className='whall roundBorders'
                 id="playbackWrapper"
                 filter={isShowingOverlay ? 'blur(4px)' : 'blur(0px)'}
                 transition="0.3s"
                 position="relative"
-                zIndex={12}
-                className="whall">
+                zIndex={12}>
 
                 {/* video wrapper */}
                 <EpistoDiv
+                    className='roundBorders'
                     id="videoWrapper"
                     maxHeight={(!isMobile && !isFullscreen) ? 'calc(100vh - 200px)' : undefined}
                     onClick={() => {
@@ -126,7 +127,7 @@ export const VideoPlayer = ({
                         playerRef={playerRef}
                         url={isVideoReady ? videoUrl : undefined}
                         style={{
-                            borderRadius: 6,
+                            borderRadius: 7,
                             overflow: 'hidden',
                             aspectRatio: !isMobile ? '16 / 9' : undefined,
                             maxHeight: (!isMobile && !isFullscreen) ? 'calc(100vh - 200px)' : undefined

@@ -6,5 +6,5 @@ export const Copyright = () => <EpistoFlex2
     justify="center"
     py="10px">
 
-    <p>EpistoGram 2022 &#8226; Minden jog fenntartva</p>
+    <p>Eduptive 2023 &#8226; Minden jog fenntartva</p>
 </EpistoFlex2>;

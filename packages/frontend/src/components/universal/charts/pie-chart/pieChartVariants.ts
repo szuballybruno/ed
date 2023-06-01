@@ -5,6 +5,7 @@ import { EpistoPieChartOptionsType } from './EpistoPieChartTypes';
 export const pieChartVariantOptions: { [K: string]: EpistoPieChartOptionsType } = {
     /* Donut chart */
     donut: {
+        backgroundColor: 'rgba(255,255,255,0.5)',
         legend: {
             top: '7%',
             left: 'center'
@@ -28,17 +29,18 @@ export const pieChartVariantOptions: { [K: string]: EpistoPieChartOptionsType } 
             labelLine: {
                 show: false
             },
-            color: ['#FAF33E', '#55505C', '#5D737E', '#7FC6A4', '#D6F8D6'],
+            color: ['#CEDC00', '#00594F', '#10776b', '#9ba515', '#209b8c'],
 
         }
     },
 
     pie: {
+        backgroundColor: 'rgba(255,255,255,0.5)',
         seriesOptions: {
             radius: '70%',
             center: ['50%', '50%'],
             roseType: 'radius',
-            color: ['#FB4D3D', '#03CEA4', '#345995', '#EAC435'],
+            color: ['#CEDC00', '#10776b', '#209b8c', '#9ba515'],
             label: {
                 color: 'rgba(0,0,0, 0.6)'
             },
@@ -64,12 +66,13 @@ export const pieChartVariantOptions: { [K: string]: EpistoPieChartOptionsType } 
     },
 
     pie2: {
+        backgroundColor: 'rgba(255,255,255,0.5)',
         seriesOptions: {
             radius: '40%',
             center: ['50%', '50%'],
             roseType: 'radius',
 
-            color: ['#FB4D3D', '#03CEA4', '#345995', '#EAC435'],
+            color: ['#CEDC00', '#10776b', '#209b8c', '#9ba515'],
             label: {
                 color: 'rgba(0,0,0, 0.6)'
             },
@@ -95,10 +98,11 @@ export const pieChartVariantOptions: { [K: string]: EpistoPieChartOptionsType } 
     },
 
     pie3: {
+        backgroundColor: 'rgba(255,255,255,0.5)',
         seriesOptions: {
             radius: '70%',
             center: ['50%', '50%'],
-            color: ['#FB4D3D', '#03CEA4', '#345995', '#EEE'],
+            color: ['#CEDC00', '#10776b', '#209b8c', '#9ba515'],
             label: {
                 color: 'rgba(0,0,0, 0.6)'
             },
@@ -123,10 +127,11 @@ export const pieChartVariantOptions: { [K: string]: EpistoPieChartOptionsType } 
     },
 
     redRadiusPie: {
+        backgroundColor: 'rgba(255,255,255,0.5)',
         visualMap: {
             show: false,
             min: 0,
-            max: 50,
+            max: 100,
             inRange: {
                 colorLightness: [0, 1]
             }
@@ -147,7 +152,7 @@ export const pieChartVariantOptions: { [K: string]: EpistoPieChartOptionsType } 
                 length2: 20
             },
             itemStyle: {
-                color: '#c23531',
+                color: '#00594F',
             },
             animationType: 'scale',
             animationEasing: 'elasticOut',
@@ -159,6 +164,7 @@ export const pieChartVariantOptions: { [K: string]: EpistoPieChartOptionsType } 
     },
 
     twoSegmentRedDoughnut: {
+        backgroundColor: 'rgba(255,255,255,0.5)',
         seriesOptions: {
             type: 'pie',
             radius: ['60%', '80%'],
@@ -189,11 +195,12 @@ export const pieChartVariantOptions: { [K: string]: EpistoPieChartOptionsType } 
             labelLine: {
                 show: false
             },
-            color: ['#933E55', 'grey'],
+            color: ['#00594F', 'grey'],
         }
     },
 
     twoSegmentGreenDoughnut: {
+        backgroundColor: 'rgba(255,255,255,0.5)',
         seriesOptions: {
             type: 'pie',
             radius: ['60%', '80%'],
@@ -224,7 +231,7 @@ export const pieChartVariantOptions: { [K: string]: EpistoPieChartOptionsType } 
             labelLine: {
                 show: false
             },
-            color: ['#3EAA93', 'grey'],
+            color: ['#00594F', 'grey'],
         }
     },
 };

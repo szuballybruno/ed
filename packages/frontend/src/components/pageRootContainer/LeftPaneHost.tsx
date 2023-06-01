@@ -51,7 +51,7 @@ export const LeftPaneHost = memo(({
                 bg="white"
                 direction="column"
                 align="stretch"
-                padding={'25px 15px 0 15px'}
+                padding={'20px 15px 0 15px'}
                 className="whall dividerBorderRight"
                 position="relative"
                 boxShadow="3px 0px 15px 5px rgba(0,0,0,0.1)">
@@ -64,6 +64,7 @@ export const LeftPaneHost = memo(({
                         justifyContent="center"
                         mt="10px"
                         mb="45px">
+
                         <img
                             src={Environment.getAssetUrl('/images/logo_min.png')}
                             style={{
@@ -82,13 +83,14 @@ export const LeftPaneHost = memo(({
                         width="100%"
                         height='80px'
                         pl='9px'
-                        alignItems={'center'}
-                        justifyContent="flex-start">
+                        alignItems='center'
+                        justifyContent="flex-start"
+                        margin='0 0 15px 0'>
 
                         <img
                             src={Environment.getAssetUrl('/images/logo.png')}
                             style={{
-                                height: '50px',
+                                height: '30px',
                                 objectFit: 'cover',
                                 cursor: 'pointer',
                                 padding: 0

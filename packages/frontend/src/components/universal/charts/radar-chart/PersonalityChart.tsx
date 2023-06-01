@@ -20,7 +20,7 @@ export const PersonalityChart = (props: {
 
     const traitAreas = [{
         name: translatableTexts.learningOverview.usersAverage,
-        value: [3, 4, 5, 7, 4, 2, 4, 5, 4, 4],
+        value: [3, 4, 5, 7, 4, 2, 4, 5, 4, 4]
     }, {
         name: translatableTexts.learningOverview.yourLearningAnalysis,
         value: traitValues
@@ -39,7 +39,7 @@ export const PersonalityChart = (props: {
         radarIndicators={traitNames
             .map(traitName => ({
                 name: traitName,
-                color: 'black',
+                color: '#00352F',
                 max: 7
             }))
         } />;

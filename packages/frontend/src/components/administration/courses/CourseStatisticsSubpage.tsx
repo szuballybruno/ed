@@ -133,6 +133,7 @@ export const CourseStatisticsSubpage = () => {
                         yAxisLabel="Kurzus megtekintések"
                         dataset={[{
                             name: 'Jelenlegi hét',
+                            color: '#00594F',
                             data: [[0, 90], [1, 80], [2, 65], [3, 60], [4, 55], [5, 40], [6, 30], [7, 15]]
                         }]} />,
                 },
