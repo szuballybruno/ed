@@ -101,7 +101,7 @@ export class FeatureService extends QueryServiceBase<Feature> {
                 courseId: dto.courseId || -1
             })
             .where('featureCode', '=', 'featureCode')
-            .or('courseId', '=', 'courseId')
+            .and('courseId', '=', 'courseId')
             .getOneOrNull();
 
         if (isDeassignedAtUserLevel) {
@@ -109,7 +109,14 @@ export class FeatureService extends QueryServiceBase<Feature> {
             return false;
         }
 
-        return !!(isEnabledByCompany || isEnabledByUser || isEnabledByItem);
+        const isEnabled = !!(!!isEnabledByCompany || !!isEnabledByUser || !!isEnabledByItem);
+
+        /*   console.log("isEnabledByCompany: " + isEnabledByCompany);
+          console.log("isEnabledByUser: " + isEnabledByUser);
+          console.log("isEnabledByItem: " + JSON.stringify(isEnabledByItem));
+          console.log("isEnabled: " + isEnabled); */
+
+        return isEnabled;
 
     }
 
