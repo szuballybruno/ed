@@ -30,7 +30,7 @@ describe('Registration tests', () => {
 
         clickByTestId('register-button');
 
-        cy.url({ timeout: 20 * 1000 }).should('include', '/survey');
+        cy.url({ timeout: 20 * 1000 }).should('include', '/home');
     });
 
     it('Visit survey, and complete it, and wait for redirect to home', () => {
