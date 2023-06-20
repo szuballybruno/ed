@@ -10,6 +10,8 @@ import { MapperService } from './MapperService';
 import { ORMConnectionService } from './ORMConnectionService';
 import { CourseData } from '../models/tables/CourseData';
 import { ErrorWithCode } from '@episto/commontypes';
+import { CourseCategoryView } from '../models/views/CourseCategoryView';
+import { User } from '../models/tables/User';
 
 export class CourseCategoryService {
 
@@ -22,11 +24,16 @@ export class CourseCategoryService {
 
     async getAvailableCourseCategoriesAsync(principalId: PrincipalId) {
 
-        const courseCategories = await this._ormService
-            .query(CourseCategory)
-            .where('parentCategoryId', 'IS', 'NULL')
-            .getMany();
+        const principalUser = await this._ormService
+            .query(User, { principalId })
+            .where('id', '=', 'principalId')
+            .getSingle()
 
+        const courseCategories = await this._ormService
+            .query(CourseCategoryView, { companyId: principalUser.companyId })
+            .where('parentCategoryId', 'IS', 'NULL')
+            .and('companyId', '=', 'companyId')
+            .getMany();
 
         return this._mapperService
             .mapTo(CourseCategoryDTO, [courseCategories]);

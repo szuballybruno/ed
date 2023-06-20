@@ -50,7 +50,9 @@ SELECT
 	cvlv.sum_length_seconds total_video_sum_length_seconds,
 	cvcv.video_count total_video_count,
 	cd.difficulty,
-	cd.benchmark
+	cd.benchmark,
+	cab.company_id,
+    cab.id IS NOT NULL is_assigned
 FROM assigned_courses ac
 
 LEFT JOIN public.course co
@@ -101,6 +103,9 @@ AND cov.course_version_id = cv.id
 LEFT JOIN final_exam_score_view fesv
 ON fesv.user_id = u.id
 AND fesv.course_id = co.id
+
+LEFT JOIN public.course_access_bridge cab
+ON cab.course_id = co.id
 
 WHERE co.deletion_date IS NULL
 
