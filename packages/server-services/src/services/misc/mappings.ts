@@ -69,6 +69,7 @@ import { relativeDiffInPercentage, toFullName } from '../../utilities/helpers';
 import { CalculatedTempomatValueType } from '../TempomatService';
 import { UrlService } from '../UrlService';
 import { UserLagbehindStatType } from './types';
+import { CourseCategoryView } from '../../models/views/CourseCategoryView';
 
 export const epistoMappingsBuilder = new XMappingsBuilder<[UrlService]>();
 
@@ -547,9 +548,9 @@ const marray = [
         }),
 
     epistoMappingsBuilder
-        .addArrayMapping(CourseCategoryDTO, () => (entities: CourseCategory[]) => {
+        .addArrayMapping(CourseCategoryDTO, () => (view: CourseCategoryView[]) => {
 
-            return toCourseCategoryDTO(entities);
+            return toCourseCategoryDTO(view);
         }),
 
     epistoMappingsBuilder
@@ -1427,7 +1428,7 @@ export const toRoleDTO = (role: Role) => {
     } as RoleDTO;
 };
 
-export const toCourseCategoryDTO = (cc: CourseCategory[]): CourseCategoryDTO[] => {
+export const toCourseCategoryDTO = (cc: CourseCategoryView[] | CourseCategory[]): CourseCategoryDTO[] => {
 
     return cc
         .filter(x => !x.parentCategoryId)

@@ -558,10 +558,17 @@ export class CourseService {
         orderBy: OrderType | null
     ) {
 
+        const principalUser = await this._ormService
+            .query(User, { principalId })
+            .where('id', '=', 'principalId')
+            .getSingle()
+
         const courses = await this._ormService
-            .query(AvailableCourseView, { principalId })
+            .query(AvailableCourseView, { principalId, companyId: principalUser.companyId })
             .where('userId', '=', 'principalId')
             .and('canView', '=', 'true')
+            .and('isAssigned', '=', 'true')
+            .and('companyId', '=', 'companyId')
             .getMany();
 
         // TODO refactor

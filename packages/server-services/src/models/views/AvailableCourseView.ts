@@ -77,4 +77,10 @@ export class AvailableCourseView {
 
     @XViewColumn()
     benchmark: number;
+
+    @XViewColumn()
+    companyId: Id<'Company'>;
+
+    @XViewColumn()
+    isAssigned: boolean;
 }

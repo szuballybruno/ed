@@ -16,7 +16,7 @@ export const MobileAvailableCoursesPage = (props: {
 
         <ContentPane>
 
-            <MobileHeader title={'Tanfolyamok'} />
+            <MobileHeader title={'Kereső'} />
 
             {courses
                 .map(course => {
