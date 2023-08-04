@@ -1,7 +1,7 @@
 import { Grid } from '@chakra-ui/react';
 import { UserActiveCourseDTO } from '@episto/communication';
 import { useEffect, useState } from 'react';
-import { useRecommendedItemQuota, useUserCourseProgressChartData } from '../../services/api/userProgressApiService';
+import { useRecommendedItemQuota } from '../../services/api/userProgressApiService';
 import { Environment } from '../../static/Environemnt';
 import { PagingType } from '../../static/frontendHelpers';
 import { EpistoFlex2 } from '../controls/EpistoFlex';
@@ -37,7 +37,24 @@ export const HomePageCourseStats = ({
 
     const courseId = activeCoursesPaging?.currentItem?.courseId;
 
-    const { userProgressData, userProgressDataIsValid } = useUserCourseProgressChartData(courseId ?? null, !!courseId);
+    //const { userProgressData, userProgressDataIsValid } = useUserCourseProgressChartData(courseId ?? null, !!courseId);
+    const userProgressData = {
+        dates: [
+            '2023. 07. 15.',
+            '2023. 07. 18.',
+            '2023. 07. 21.',
+            '2023. 07. 24.',
+            '2023. 07. 27.',
+            '2023. 07. 30.',
+            '2023. 08. 04.',
+            '2023. 08. 06.',
+            '2023. 08. 09.',
+            '2023. 09. 12.',
+        ],
+        previsionedProgress: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+        actualProgress: [10, 26, 32, 32, 59, 70, 75]
+
+    };
     const currentCourse = activeCoursesPaging.currentItem;
 
     const { recommendedItemQuota } = useRecommendedItemQuota(courseId);
@@ -161,12 +178,13 @@ export const HomePageCourseStats = ({
                     <Grid
                         id="Grid"
                         flex="1"
+                        pt='10px'
                         minWidth="500px"
                         gridTemplateColumns="repeat(auto-fit, minmax(300px, 1fr))">
 
                         <EpistoFlex2
                             minWidth="200px"
-                            minHeight="150px"
+                            minHeight="190px"
                             margin="5px"
                             position="relative">
 
@@ -187,7 +205,7 @@ export const HomePageCourseStats = ({
                                     key={index}
                                     margin="5px"
                                     minWidth="200px"
-                                    minHeight="150px"
+                                    minHeight="190px"
                                     {...props} />
                             ))}
                     </Grid>
