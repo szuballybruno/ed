@@ -30,7 +30,7 @@ export const UnderMaintanence = () => {
                 textColor='eduptiveDeepDarkGreen'>
 
                 Ha bármilyen kérdésed lenne, írj bátran a <a style={{ color: 'blue' }}
-                    href="mailto:support@epistogram.com">support@epistogram.com</a> e-mail címre
+                    href="mailto:support@dtraining.hu">support@dtraining.hu</a> e-mail címre
             </EpistoFont>
         </EpistoFlex2>
     </EpistoFlex2>;

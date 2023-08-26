@@ -97,8 +97,8 @@ const getConfig = (isInDocker: boolean) => {
 
     const environmentName = isInDocker ? 'epitest' : 'local';
 
-    const origin = `http://${environmentName}.epistogram.com`;
-    const apiOrigin = `http://${environmentName}.api.epistogram.com:5000`;
+    const origin = `http://${environmentName}.dtraining.hu`;
+    const apiOrigin = `http://${environmentName}.api.dtraining.hu:5000`;
 
     return {
         origin,

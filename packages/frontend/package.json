@@ -4,7 +4,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "start": "tsc && vite --port 80 --host local.epistogram.com",
+    "start": "tsc && vite --port 80 --host local.dtraining.hu",
     "build": "tsc && vite build --mode local",
     "build-serve": "yarn build && yarn serve",
     "serve": "serve -l 80 -s build"

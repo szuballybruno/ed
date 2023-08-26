@@ -173,7 +173,7 @@ export const createGlobalConfiguration = (rootDir: string) => {
         sameSite: 'strict',
         secure: globalConfigService.misc.useSecureCookies,
         httpOnly: true,
-        domain: '.epistogram.com'
+        domain: '.dtraining.hu'
     };
 
     return {

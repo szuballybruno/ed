@@ -161,7 +161,7 @@ export class EmailService {
 
             const to = sendRealEmails
                 ? email.to
-                : 'spengler.manfred@epistogram.com';
+                : 'private@spenglermanfred.com';
 
             const emailFolderPath = `${this._config.rootDirectory}/../../server-services/emails`;
             const templatePath = `${emailFolderPath}/${email.template.name}.html`;
@@ -182,7 +182,7 @@ export class EmailService {
             const result = await transporter
                 .sendMail({
                     to: to,
-                    from: 'noreply@epistogram.com',
+                    from: 'noreply@dtraining.hu',
                     subject: email.subject,
                     html: replacedHtml
                 });

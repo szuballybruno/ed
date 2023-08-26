@@ -1,0 +1,1 @@
+UPDATE public.company AS co SET domain = 'dtraining.hu' WHERE domain = 'epistogram.com'
