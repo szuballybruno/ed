@@ -258,15 +258,15 @@ Array.prototype.byIndex = function <T>(index: number) {
 };
 
 // eslint-disable-next-line no-extend-native
-Array.prototype.findLastIndex = function <T>(func: (item: T) => boolean) {
+/* Array.prototype.findLastIndex = function <T>(func: (item: T, index: any, array: any[]) => boolean) {
 
     const filtered = this.filter(func);
 
     if (filtered.length === 0)
-        return null;
+        return 0;
 
     return filtered.length - 1;
-};
+}; */
 
 // eslint-disable-next-line no-extend-native
 Array.prototype.all = function <T>(func: (item: T) => boolean) {
