@@ -23,6 +23,6 @@ export default defineConfig({
   hosts: isInDocker
     ? undefined
     : {
-      "local.epistogram.com": "127.0.0.1"
+      "local.dtraining.hu": "127.0.0.1"
     }
 });

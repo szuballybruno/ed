@@ -38,7 +38,7 @@ services:
     networks:
       test_net: 
         aliases: 
-          - epitest.api.epistogram.com
+          - epitest.api.dtraining.hu
 
   client: 
     image: localhost:6000/client:latest
@@ -49,14 +49,14 @@ services:
     expose: 
       - 80
     healthcheck:
-      test: ["CMD-SHELL", "curl --fail http://epitest.epistogram.com || exit 1"]
+      test: ["CMD-SHELL", "curl --fail http://epitest.dtraining.hu || exit 1"]
       interval: 15s
       timeout: 10s
       retries: 5
     networks:
       test_net: 
         aliases: 
-          - epitest.epistogram.com
+          - epitest.dtraining.hu
       
   tests-client: 
     image: localhost:6000/tests-client:latest

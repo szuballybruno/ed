@@ -1428,10 +1428,10 @@ export const toRoleDTO = (role: Role) => {
     } as RoleDTO;
 };
 
-export const toCourseCategoryDTO = (cc: CourseCategoryView[] | CourseCategory[]): CourseCategoryDTO[] => {
+export const toCourseCategoryDTO = (cc: any[]): CourseCategoryDTO[] => {
 
     return cc
-        .filter(x => !x.parentCategoryId)
+        .filter((x: CourseCategoryView | CourseCategory) => !x.parentCategoryId)
         .map(parent => {
 
             const children = cc

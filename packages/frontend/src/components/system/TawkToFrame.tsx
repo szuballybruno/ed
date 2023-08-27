@@ -1,5 +1,5 @@
-import React, {createContext, useContext, useEffect, useRef} from 'react';
-import {PropsWithChildren} from '../../static/frontendHelpers';
+import React, { createContext, useContext, useEffect, useRef } from 'react';
+import { PropsWithChildren } from '../../static/frontendHelpers';
 
 type TawkAttributes = {
     name: string,
@@ -107,7 +107,7 @@ export const TawkToFrame = (props: PropsWithChildren) => {
             .current
             .setAttributesAsync({
                 name: 'Mpengler Sanfréd',
-                email: 'endre.marosi@epistogram.com'
+                email: 'endre.marosi@dtraining.hu'
             });
     }, [tawkApiRef]);
 

@@ -352,7 +352,7 @@ export const RegisterViaActivationCodePage = () => {
                             }}>
 
                             <a
-                                href="https://epistogram.com/officekupa"
+                                href="https://dtraining.hu/officekupa"
                                 target="_blank"
                                 rel="noreferrer">
 

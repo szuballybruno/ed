@@ -10,7 +10,7 @@ export class CourseCategoryView {
     name: string;
 
     @XViewColumn()
-    parentCategoryId: Id<'CourseCategory'>;
+    parentCategoryId: Id<'ParentCategory'>;
 
     @XViewColumn()
     courseId: Id<'Course'>;
